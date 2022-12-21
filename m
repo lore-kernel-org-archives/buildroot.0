@@ -1,60 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85580C10F1B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 21:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6F63C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 21:16:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 051AC82056;
-	Wed, 21 Dec 2022 21:07:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 051AC82056
+	by smtp3.osuosl.org (Postfix) with ESMTP id 642ED610D3;
+	Wed, 21 Dec 2022 21:16:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 642ED610D3
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ON2jXydNmsiY; Wed, 21 Dec 2022 21:16:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92A03610CF;
+	Wed, 21 Dec 2022 21:16:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92A03610CF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F42081BF2F5
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 21:16:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF60582027
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 21:16:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF60582027
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XE73FIcR0ad9; Wed, 21 Dec 2022 21:07:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4380E82055;
-	Wed, 21 Dec 2022 21:07:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4380E82055
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A7BD31BF2F5
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 21:07:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83A7040364
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 21:07:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83A7040364
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4lhqC3pNw5ap for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 21:07:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3C3D40339
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D3C3D40339
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 21:07:11 +0000 (UTC)
-Received: from fwd86.dcpf.telekom.de (fwd86.aul.t-online.de [10.223.144.112])
- by mailout02.t-online.de (Postfix) with SMTP id 3D7B1180DF;
- Wed, 21 Dec 2022 22:07:08 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd86.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p86Iq-3eZkTx0; Wed, 21 Dec 2022 22:07:04 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46524)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p86Iq-0006DR-1A;
- Wed, 21 Dec 2022 22:07:04 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BmmkB7gU0SCz for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 21:16:20 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE23D82026
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 21:16:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE23D82026
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BC95286CF3; Wed, 21 Dec 2022 21:16:20 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 22:07:04 +0100
-Message-Id: <20221221210704.1868595-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1671656824-D8A4C9D3-D9C86B79/0/0 CLEAN NORMAL
-X-TOI-MSGID: 0668cfb1-023d-4a04-83b1-85201db57f1e
-Subject: [Buildroot] [PATCH 1/1] package/libcurl: security bump version to
- 7.87.0
+Date: Wed, 21 Dec 2022 22:10:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ff0fd90c3e42dd00283a4eb192ce832f7c03ac30
+X-Git-Newrev: 8cbfbe487ac6fb00c037475ed8aaca3d89899769
+X-Patchwork-Hint: ignore
+Message-Id: <20221221211620.BC95286CF3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/skeleton-systemd: systemd-ify
+ mounting /var tmpfs with ro rootfs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,57 +57,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4779044746006484441=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+--===============4779044746006484441==
+Content-Type: text/plain
 
-- CVE-2022-43551: Another HSTS bypass via IDN
-  https://curl.se/docs/CVE-2022-43551.html
+commit: https://git.buildroot.net/buildroot/commit/?id=8cbfbe487ac6fb00c037475ed8aaca3d89899769
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- CVE-2022-43552: HTTP Proxy deny use-after-free
-  https://curl.se/docs/CVE-2022-43552.html
+To mount our /var tmpfs when the rootfs is mounted read-only (really,
+not remounted read-write), we use an entry in fstab.
 
-Changelog: https://curl.se/changes.html
+However, /etc could also be a tmpfs (for full state-less systems, or
+easy factory-reset, see [0]). It also prevents easily ordering other
+systemd units until after /var is mounted (not impossible, but less
+easy).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+So, we register /var as a systemd mount unit, so that we can also have
+the /var factory populated and functional even when /etc is empty. The
+var.mount unit is heavily modelled after systemd's own tmp.mount one, so
+we carry the same license for that file (in case that may apply).
+
+This has two side effects:
+  - as hinted previously, it simplifies writing other systemd units to
+    order them after /var is mounted
+  - user can easily replace it with their own, which mounts an actual
+    filesystem
+
+[0] http://0pointer.de/blog/projects/stateless.html
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Jérémy Rosen <jeremy.rosen@smile.fr>
+[yann.morin.1998@free.fr:
+  - split original patch in two
+  - this one only handles converting /var mounting into a systemd unit
+  - adapt commit log accordingly
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Norbert Lange <nolange79@gmail.com>
+[yann.morin.1998@free.fr (as suggested by Norbert):
+  - fix Before= dependencies
+  - drop [Install] section
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/skeleton-init-systemd/skeleton-init-systemd.mk |  3 ++-
+ package/skeleton-init-systemd/var.mount                | 15 +++++++++++++++
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index c0e2378cac..230ec8d704 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-7.84.0.tar.xz.asc
-+# https://curl.se/download/curl-7.87.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  2d61116e5f485581f6d59865377df4463f2e788677ac43222b496d4e49fb627b  curl-7.86.0.tar.xz
-+sha256  ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff  curl-7.87.0.tar.xz
- sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 8de4358107..994b685d34 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index ec908b4fac..ff8bc528c0 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -30,7 +30,6 @@ else
+ # back there by the tmpfiles.d mechanism.
+ define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+ 	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
+-	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
+ endef
  
--LIBCURL_VERSION = 7.86.0
-+LIBCURL_VERSION = 7.87.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
--- 
-2.34.1
+ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+@@ -52,6 +51,8 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 			|| exit 1; \
+ 		fi; \
+ 	done >$(TARGET_DIR)/usr/lib/tmpfiles.d/00-buildroot-var.conf
++	$(INSTALL) -D -m 0644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/var.mount \
++		$(TARGET_DIR)/usr/lib/systemd/system/var.mount
+ endef
+ SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 
+diff --git a/package/skeleton-init-systemd/var.mount b/package/skeleton-init-systemd/var.mount
+new file mode 100644
+index 0000000000..e97accef93
+--- /dev/null
++++ b/package/skeleton-init-systemd/var.mount
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: LGPL-2.1-or-later
++# Modelled after systemd's tmp.mount
++
++[Unit]
++Description=Buildroot /var tmpfs
++DefaultDependencies=no
++Conflicts=umount.target
++Before=local-fs.target umount.target
++After=swap.target
++
++[Mount]
++What=tmpfs
++Where=/var
++Type=tmpfs
++Options=mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m
+
+--===============4779044746006484441==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4779044746006484441==--
