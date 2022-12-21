@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F469C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 08:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8337DC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 08:10:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E87FF60FC7;
-	Wed, 21 Dec 2022 08:10:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E87FF60FC7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 113F361002;
+	Wed, 21 Dec 2022 08:10:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 113F361002
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Whiyo0fTwuYp; Wed, 21 Dec 2022 08:10:15 +0000 (UTC)
+	with ESMTP id yKi30hfmjGnd; Wed, 21 Dec 2022 08:10:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33A3960FD5;
-	Wed, 21 Dec 2022 08:10:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33A3960FD5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 60A1D1BF3F6
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:10:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 034E16102E;
+	Wed, 21 Dec 2022 08:10:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 034E16102E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DF5A71BF3F6
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B4EE41548
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B4EE41548
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB0FE61020
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:10:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB0FE61020
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MiJUfcvdeQDS for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 08:10:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6B3C414C8
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D6B3C414C8
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 08:10:10 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B9CA540004;
- Wed, 21 Dec 2022 08:10:08 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p7uAx-000Nno-Rq; Wed, 21 Dec 2022 09:10:07 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UJXWxR4vWtoT for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 08:10:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C272160FD5
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 08:10:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C272160FD5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AE4AA86B23; Wed, 21 Dec 2022 08:10:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221208202104.3041-1-fontaine.fabrice@gmail.com>
-Date: Wed, 21 Dec 2022 09:10:07 +0100
-In-Reply-To: <20221208202104.3041-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 8 Dec 2022 21:21:04 +0100")
-Message-ID: <87wn6lqisg.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/capnproto: security bump to
- version 0.9.2
+To: buildroot@buildroot.org
+Date: Wed, 21 Dec 2022 09:07:05 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: c463cfc0fbf9c0acbf7464eb70f421a9e3fc4ec2
+X-Git-Newrev: b61f781e5057a1f56565250def900e1ae1a9a03c
+X-Patchwork-Hint: ignore
+Message-Id: <20221221081019.AE4AA86B23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/exempi: bump to
+ version 2.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +57,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Koen Martens <gmc@sonologic.nl>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b61f781e5057a1f56565250def900e1ae1a9a03c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix CVE-2022-46149: Cap'n Proto is a data interchange format and remote
- > procedure call (RPC) system. Cap'n Proro prior to versions 0.7.1, 0.8.1,
- > 0.9.2, and 0.10.3, as well as versions of Cap'n Proto's Rust
- > implementation prior to 0.13.7, 0.14.11, and 0.15.2 are vulnerable to
- > out-of-bounds read due to logic error handling list-of-list. This issue
- > may lead someone to remotely segfault a peer by sending it a malicious
- > message, if the victim performs certain actions on a list-of-pointer
- > type. Exfiltration of memory is possible if the victim performs
- > additional certain actions on a list-of-pointer type. To be vulnerable,
- > an application must perform a specific sequence of actions, described in
- > the GitHub Security Advisory. The bug is present in inlined code,
- > therefore the fix will require rebuilding dependent applications. Cap'n
- > Proto has C++ fixes available in versions 0.7.1, 0.8.1, 0.9.2, and
- > 0.10.3.
+Samples can be disabled since version 2.6.2 and
+https://gitlab.freedesktop.org/libopenraw/exempi/-/commit/a8db9f4e7e4156ee7e52def01f1f83ca5fa7de40
 
- > https://github.com/capnproto/capnproto/security/advisories/GHSA-qqff-4vw4-f6hx
- > https://dwrensha.github.io/capnproto-rust/2022/11/30/out_of_bounds_memory_access_bug.html
+This bump will fix the following build failure on arm with gcc 10 raised
+since bump to version 2.6.0 in commit
+55f1d0a3592253df2a356c195e5131a970eade9b and
+https://gitlab.freedesktop.org/libopenraw/exempi/-/commit/0872e35a30457d2ecf746a1bebdb7d94636d0e2f
+https://github.com/adobe/XMP-Toolkit-SDK/commit/0872e35a30457d2ecf746a1bebdb7d94636d0e2f
+thanks to
+https://gitlab.freedesktop.org/libopenraw/exempi/-/commit/f26d77ba26a7245a95068bca2eea9608f4e79f80:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../../XMPFiles/source/.libs/libXMPFiles.a(XMPFiles_Impl.o):(.rodata+0x5c): multiple definition of `typeinfo name for TXMPMeta<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >'; XMPFilesCoverage.o:(.rodata+0x0): first defined here
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+https://gitlab.freedesktop.org/libopenraw/exempi/-/blob/2.6.3/NEWS
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+ - http://autobuild.buildroot.org/results/c440719de02a154c6bdae11bda06ea30c131c71d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 63b540638c72969bf8c3eb6c06e1c49c4fbcbb9a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/exempi/exempi.hash | 2 +-
+ package/exempi/exempi.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/exempi/exempi.hash b/package/exempi/exempi.hash
+index 5df610de17..772d9130d4 100644
+--- a/package/exempi/exempi.hash
++++ b/package/exempi/exempi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  072451ac1e0dc97ed69a2e5bfc235fd94fe093d837f65584d0e3581af5db18cd  exempi-2.6.1.tar.bz2
++sha256  80b3aa0b7f54978c6a49cc5f5f1d3b6e9524b59de74ef92b3bf0abeba4c28fb1  exempi-2.6.3.tar.xz
+ sha256  3d3c3593c15e0d35bdae0df7c642106250f6be3adc61477419413900f23ae607  COPYING
+diff --git a/package/exempi/exempi.mk b/package/exempi/exempi.mk
+index 56fbe20379..f808afd53c 100644
+--- a/package/exempi/exempi.mk
++++ b/package/exempi/exempi.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-EXEMPI_VERSION = 2.6.1
+-EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.bz2
++EXEMPI_VERSION = 2.6.3
++EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.xz
+ EXEMPI_SITE = https://libopenraw.freedesktop.org/download
+ EXEMPI_INSTALL_STAGING = YES
+-EXEMPI_CONF_OPTS = --disable-unittest
++EXEMPI_CONF_OPTS = --disable-samples --disable-unittest
+ EXEMPI_DEPENDENCIES = host-pkgconf expat zlib \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ EXEMPI_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
