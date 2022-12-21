@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D52C8C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 14:20:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23F60C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 14:21:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72E396106C;
-	Wed, 21 Dec 2022 14:20:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72E396106C
+	by smtp1.osuosl.org (Postfix) with ESMTP id C357881F21;
+	Wed, 21 Dec 2022 14:21:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C357881F21
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E80uNyrN3gaI; Wed, 21 Dec 2022 14:21:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16D3F81EEB;
+	Wed, 21 Dec 2022 14:21:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16D3F81EEB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DB5C41BF5D7
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:20:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7E1161059
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:20:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7E1161059
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oftHXA9USxPC; Wed, 21 Dec 2022 14:20:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4FED61059;
-	Wed, 21 Dec 2022 14:20:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4FED61059
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7D17F1BF5D7
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:19:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 574A5417B4
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 574A5417B4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IJhlQmGDa9sZ for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 14:19:31 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9W1vkAd4tCX6 for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 14:20:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C107417AC
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 14:19:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C107417AC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 019D16106B
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 14:20:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 019D16106B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 395FA86BCC; Wed, 21 Dec 2022 14:19:31 +0000 (UTC)
+ id E618286BD3; Wed, 21 Dec 2022 14:20:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 15:18:59 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e57617fbce5bb6577e8d9a07101a0387ad7bc4eb
-X-Git-Newrev: b7ccb8decc1ef97eb3dca967c1bf36de2e9dbead
+Date: Wed, 21 Dec 2022 15:18:52 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 785ebc18cf374316ff012157809cd7b9e13f737c
+X-Git-Newrev: d4882016b7e829a7b83b6b9f23664d7a2ebff1b8
 X-Patchwork-Hint: ignore
-Message-Id: <20221221141931.395FA86BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/docker-cli:
+Message-Id: <20221221142052.E618286BD3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/docker-cli:
  security bump to version 20.10.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7ccb8decc1ef97eb3dca967c1bf36de2e9dbead
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d4882016b7e829a7b83b6b9f23664d7a2ebff1b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 Partial mitigations for CVE-2022-39253 Git vulnerability and other fixes:
 
