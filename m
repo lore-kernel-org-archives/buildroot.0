@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5D8DC10F1B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 13:11:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82D85C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 13:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42DE381EE3;
-	Wed, 21 Dec 2022 13:11:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42DE381EE3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 317C38200E;
+	Wed, 21 Dec 2022 13:12:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 317C38200E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vIEw2sp0kZIy; Wed, 21 Dec 2022 13:11:16 +0000 (UTC)
+	with ESMTP id gPfdSLPh-W9v; Wed, 21 Dec 2022 13:12:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B921F81FFD;
-	Wed, 21 Dec 2022 13:11:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B921F81FFD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC6091BF284
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:11:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CFDF81FFE;
+	Wed, 21 Dec 2022 13:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CFDF81FFE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D6CC1BF284
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B29834186D
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:11:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B29834186D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3928F81FFE
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 13:12:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3928F81FFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7kKD4Mj6KOrn for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 13:11:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Peim-Z5clNgg for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 13:12:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 749A1417BC
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 13:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 749A1417BC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 592E181EE3
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 13:12:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 592E181EE3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6379A86B9A; Wed, 21 Dec 2022 13:11:11 +0000 (UTC)
+ id 4470B86BA6; Wed, 21 Dec 2022 13:12:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 14:09:46 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fcf082ef0d0398f8e509e9876fdc29dc6f7cd934
-X-Git-Newrev: 9b0eb58758ac284669d9f55c15a18a2168bf5b79
+Date: Wed, 21 Dec 2022 14:09:36 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: b6965012f3990bfbd0cd77cfd98dc60e9ea8ab10
+X-Git-Newrev: ca73cd87c885af2e0ded07a0736f5745ba326435
 X-Patchwork-Hint: ignore
-Message-Id: <20221221131111.6379A86B9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/lttng-tools: bump
+Message-Id: <20221221131217.4470B86BA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/lttng-tools: bump
  to version 2.13.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b0eb58758ac284669d9f55c15a18a2168bf5b79
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ca73cd87c885af2e0ded07a0736f5745ba326435
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 This bump will fix the following build failure without NPTL thanks to
 https://github.com/lttng/lttng-tools/commit/27f2b8400c9db484cd195c4240c379e845b1413d
