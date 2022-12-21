@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11D1EC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 14:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 997FBC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 14:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 949A1404ED;
-	Wed, 21 Dec 2022 14:16:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 949A1404ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C845417BB;
+	Wed, 21 Dec 2022 14:17:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C845417BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SlmxcfXKEfIr; Wed, 21 Dec 2022 14:16:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DXP_m7vYdbsD; Wed, 21 Dec 2022 14:17:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E29FE40B85;
-	Wed, 21 Dec 2022 14:16:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E29FE40B85
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D4BD81BF5D7
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:16:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18F7C417C9;
+	Wed, 21 Dec 2022 14:17:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F7C417C9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D3E901BF5D7
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:17:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD4D040393
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:16:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD4D040393
+ by smtp1.osuosl.org (Postfix) with ESMTP id A7ED181ED7
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:17:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7ED181ED7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o37wfnNYmoHE for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 14:16:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gsg89-0dwJOV for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 14:17:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C655D40150
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 14:16:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C655D40150
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBA2781E6E
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 14:17:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBA2781E6E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B267F86BBF; Wed, 21 Dec 2022 14:16:04 +0000 (UTC)
+ id BB92186BC2; Wed, 21 Dec 2022 14:17:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 15:15:31 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 9b0eb58758ac284669d9f55c15a18a2168bf5b79
-X-Git-Newrev: c1ab42087c9f9f6225db4ef613b8496f638a9a14
+Date: Wed, 21 Dec 2022 14:31:43 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: ca73cd87c885af2e0ded07a0736f5745ba326435
+X-Git-Newrev: b912c01a7d804291fca3c4e2cb7b09b45631a253
 X-Patchwork-Hint: ignore
-Message-Id: <20221221141604.B267F86BBF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/containerd:
- security bump to version 1.5.16
+Message-Id: <20221221141727.BB92186BC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/containerd:
+ security bump to version 1.6.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,15 +63,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1ab42087c9f9f6225db4ef613b8496f638a9a14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b912c01a7d804291fca3c4e2cb7b09b45631a253
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 CVE-2022-23471: https://github.com/advisories/GHSA-2qjp-425j-52j9
 
 and other bugfixes, see:
 
-https://github.com/containerd/containerd/releases/tag/v1.5.16
+https://github.com/containerd/containerd/releases/tag/v1.6.12
 
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4634a22cf70ec957ceabbb0dcd9611c824bc7a60)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/containerd/containerd.hash | 2 +-
@@ -79,24 +82,24 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 39d040016c..ced95f2aff 100644
+index 285519441a..04a29949d7 100644
 --- a/package/containerd/containerd.hash
 +++ b/package/containerd/containerd.hash
 @@ -1,3 +1,3 @@
  # Computed locally
--sha256  ac75e2a5552163c203f836f5e9feac349f78f7956e8da228c372a12554b1ee40  containerd-1.5.13.tar.gz
-+sha256  d14c703ea6d60a45ef2db8f2275ddae6a3538305117c7813fa24dcf12f4b7d85  containerd-1.5.16.tar.gz
+-sha256  f5f938513c28377f64f85e84f2750d39f26b01262f3a062b7e8ce35b560ca407  containerd-1.6.8.tar.gz
++sha256  b86e5c42f58b8348422c972513ff49783c0d505ed84e498d0d0245c5992e4320  containerd-1.6.12.tar.gz
  sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
 diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 5f91d089b8..aa5e89df03 100644
+index 89bbbf5c03..192175800c 100644
 --- a/package/containerd/containerd.mk
 +++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONTAINERD_VERSION = 1.5.13
-+CONTAINERD_VERSION = 1.5.16
+-CONTAINERD_VERSION = 1.6.8
++CONTAINERD_VERSION = 1.6.12
  CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
  CONTAINERD_LICENSE = Apache-2.0
  CONTAINERD_LICENSE_FILES = LICENSE
