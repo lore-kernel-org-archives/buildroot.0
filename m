@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F7BC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:01:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 335DDC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:02:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A70E340523;
-	Wed, 21 Dec 2022 18:01:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A70E340523
+	by smtp2.osuosl.org (Postfix) with ESMTP id C807340BC3;
+	Wed, 21 Dec 2022 18:02:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C807340BC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OVon1eVRATn1; Wed, 21 Dec 2022 18:01:57 +0000 (UTC)
+	with ESMTP id zBh89fezICZx; Wed, 21 Dec 2022 18:02:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE28D40441;
-	Wed, 21 Dec 2022 18:01:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE28D40441
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D68551BF844
+	by smtp2.osuosl.org (Postfix) with ESMTP id EAAE040BC1;
+	Wed, 21 Dec 2022 18:02:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAAE040BC1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DFD561BF8C7
  for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B19614050C
+ by smtp1.osuosl.org (Postfix) with ESMTP id BBAE582019
  for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B19614050C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBAE582019
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RFZmsSeBw8E4 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P52EaS6gFJ1l for <buildroot@lists.busybox.net>;
  Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 122DC400A6
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 122DC400A6
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA96181EE3
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:01:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA96181EE3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00AD486C5E; Wed, 21 Dec 2022 18:01:53 +0000 (UTC)
+ id D6EF386C5B; Wed, 21 Dec 2022 18:01:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 18:58:54 +0100
+Date: Wed, 21 Dec 2022 18:56:59 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: e16a6a0dfa030c7cd7e93648862edcd3aa30cbfe
-X-Git-Newrev: d6352a905a9037611184d1acc34d76d0a3426034
+X-Git-Oldrev: 2dcbce7be1605ba8301661c6fe950755e5ad1517
+X-Git-Newrev: 205885d0e9640095830d0baf84fc38dfbc38a071
 X-Patchwork-Hint: ignore
-Message-Id: <20221221180154.00AD486C5E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] DEVELOPERS: add Bernd
- Kuhls to package intel-microcode
+Message-Id: <20221221180153.D6EF386C5B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/cairo: fix
+ CVE-2019-6462
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6352a905a9037611184d1acc34d76d0a3426034
+commit: https://git.buildroot.net/buildroot/commit/?id=205885d0e9640095830d0baf84fc38dfbc38a071
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add an upstream patch to fix CVE-2019-6462:
+
+An issue was discovered in cairo 1.16.0. There is an infinite loop in
+the function _arc_error_normalized in the file cairo-arc.c, related to
+_arc_max_angle_for_tolerance_normalized.
+
+Cc: Quentin Schulz <foss+buildroot@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit aa409d82fc64ee28e7ef9a649875fc577c33f01b)
+(cherry picked from commit b38286d7e5919693cad2dc5b19024b1c03d29c18)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ ...gle_for_tolerance_normalized-fix-infinite.patch | 39 ++++++++++++++++++++++
+ package/cairo/cairo.mk                             |  2 ++
+ 2 files changed, 41 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 48a24c4cea..9adfa2e268 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -349,6 +349,7 @@ F:	package/inih/
- F:	package/intel-gmmlib/
- F:	package/intel-mediadriver/
- F:	package/intel-mediasdk/
-+F:	package/intel-microcode/
- F:	package/jsoncpp/
- F:	package/kodi*
- F:	package/lame/
+diff --git a/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch b/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+new file mode 100644
+index 0000000000..078e90fa42
+--- /dev/null
++++ b/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+@@ -0,0 +1,39 @@
++From ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0 Mon Sep 17 00:00:00 2001
++From: Heiko Lewin <hlewin@gmx.de>
++Date: Sun, 1 Aug 2021 11:16:03 +0000
++Subject: [PATCH] _arc_max_angle_for_tolerance_normalized: fix infinite loop
++
++[Retrieved from:
++https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0]
++Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
++---
++ src/cairo-arc.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/cairo-arc.c b/src/cairo-arc.c
++index 390397bae..1c891d1a0 100644
++--- a/src/cairo-arc.c
+++++ b/src/cairo-arc.c
++@@ -90,16 +90,18 @@ _arc_max_angle_for_tolerance_normalized (double tolerance)
++ 	{ M_PI / 11.0,  9.81410988043554039085e-09 },
++     };
++     int table_size = ARRAY_LENGTH (table);
+++    const int max_segments = 1000; /* this value is chosen arbitrarily. this gives an error of about 1.74909e-20 */
++ 
++     for (i = 0; i < table_size; i++)
++ 	if (table[i].error < tolerance)
++ 	    return table[i].angle;
++ 
++     ++i;
+++
++     do {
++ 	angle = M_PI / i++;
++ 	error = _arc_error_normalized (angle);
++-    } while (error > tolerance);
+++    } while (error > tolerance && i < max_segments);
++ 
++     return angle;
++ }
++-- 
++2.38.1
++
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index f479aa252a..8bb7ca121d 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -14,6 +14,8 @@ CAIRO_INSTALL_STAGING = YES
+ 
+ # 0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
+ CAIRO_IGNORE_CVES += CVE-2018-19876
++# 0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
++CAIRO_IGNORE_CVES += CVE-2019-6462
+ 
+ CAIRO_CONF_ENV = LIBS="$(CAIRO_LIBS)"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
