@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46EFAC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:02:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFD9CC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E75B340ACE;
-	Wed, 21 Dec 2022 18:02:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E75B340ACE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7588A82016;
+	Wed, 21 Dec 2022 18:02:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7588A82016
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mf-HQ1harlDn; Wed, 21 Dec 2022 18:02:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1dJCncryRsPD; Wed, 21 Dec 2022 18:02:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26BAF4050C;
-	Wed, 21 Dec 2022 18:02:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26BAF4050C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1AF641BF95C
+	by smtp1.osuosl.org (Postfix) with ESMTP id A454582012;
+	Wed, 21 Dec 2022 18:02:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A454582012
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4061A1BF844
  for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EAA2F400A6
+ by smtp1.osuosl.org (Postfix) with ESMTP id D771981EE3
  for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAA2F400A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D771981EE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m2VNQUGkdaF6 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dYKQO-aFj0qB for <buildroot@lists.busybox.net>;
  Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 25B5C40441
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25B5C40441
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2A8782012
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:01:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2A8782012
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1600486C5C; Wed, 21 Dec 2022 18:01:54 +0000 (UTC)
+ id E0AC986C5C; Wed, 21 Dec 2022 18:01:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 19:00:10 +0100
+Date: Wed, 21 Dec 2022 18:57:05 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 738d05904cecec9a5d2fa1fce5f92a465d36519d
-X-Git-Newrev: a15a4c66a86f6fcce4d16f81551e0ecc7e64a676
+X-Git-Oldrev: 205885d0e9640095830d0baf84fc38dfbc38a071
+X-Git-Newrev: fed0532cb8be5cee9f4c929fee6a49ffc4258847
 X-Patchwork-Hint: ignore
-Message-Id: <20221221180154.1600486C5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] Revert "package/gperf:
- add _CPE_ID_VENDOR and _CPE_ID_PRODUCT"
+Message-Id: <20221221180153.E0AC986C5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/cairo: fix
+ CVE-2020-35492
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a15a4c66a86f6fcce4d16f81551e0ecc7e64a676
+commit: https://git.buildroot.net/buildroot/commit/?id=fed0532cb8be5cee9f4c929fee6a49ffc4258847
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-This reverts commit 3712e1dee7626b0c3262c054b5b9c2769fd2a61e.
+Add an upstream patch to fix CVE-2020-35492:
+A flaw was found in cairo's image-compositor.c in all versions prior to
+1.17.4. This flaw allows an attacker who can provide a crafted input
+file to cairo's image-compositor (for example, by convincing a user to
+open a file in an application using cairo, or if an application uses
+cairo on untrusted input) to cause a stack buffer overflow ->
+out-of-bounds WRITE. The highest impact from this vulnerability is to
+confidentiality, integrity, as well as system availability.
 
-gperf -- the GNU perfect hash function generator
-https://www.gnu.org/software/gperf/
+Important note: this is not the exact upstream patch. Indeed, the
+upstream patch[1] contains a png file which appears as a binary diff
+inside the patch. The `patch` tool which is used by Buildroot to apply
+patches does not handle that kind of diff. Since it is just a test, it
+shouldn't impact the quality of the CVE fix and all changes related to
+the test are removed from the patch.
 
-and
-
-gperftools -- the Google Performance Tools
-https://github.com/gperftools/gperftools
-
-are two different and unrelated projects.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+[1] https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be
+Cc: Quentin Schulz <foss+buildroot@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7aeb6c654e16863dc9d7f0d5b92414b52669299f)
+(cherry picked from commit 111ab56d840a6c82367b4a3306494faccd7f934b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gperf/gperf.mk | 2 --
- 1 file changed, 2 deletions(-)
+ .../0004-Fix-mask-usage-in-image-compositor.patch  | 56 ++++++++++++++++++++++
+ package/cairo/cairo.mk                             |  2 +
+ 2 files changed, 58 insertions(+)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index c2f042c464..4b928a0ebd 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -8,8 +8,6 @@ GPERF_VERSION = 3.1
- GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
- GPERF_LICENSE = GPL-3.0+
- GPERF_LICENSE_FILES = COPYING
--GPERF_CPE_ID_VENDOR = gperftools_project
--GPERF_CPE_ID_PRODUCT = gperftools
+diff --git a/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch b/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
+new file mode 100644
+index 0000000000..54a95593c5
+--- /dev/null
++++ b/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
+@@ -0,0 +1,56 @@
++From 03a820b173ed1fdef6ff14b4468f5dbc02ff59be Mon Sep 17 00:00:00 2001
++From: Heiko Lewin <heiko.lewin@worldiety.de>
++Date: Tue, 15 Dec 2020 16:48:19 +0100
++Subject: [PATCH] Fix mask usage in image-compositor
++
++[Retrieved from
++https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be]
++[Removed changes in test/ directory to remove binary diff so that the
++patch can be applied by `patch` tool]
++Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
++---
++ src/cairo-image-compositor.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/cairo-image-compositor.c b/src/cairo-image-compositor.c
++index bbf4cf228..2352c478e 100644
++--- a/src/cairo-image-compositor.c
+++++ b/src/cairo-image-compositor.c
++@@ -2601,14 +2601,14 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
++ 		    unsigned num_spans)
++ {
++     cairo_image_span_renderer_t *r = abstract_renderer;
++-    uint8_t *m;
+++    uint8_t *m, *base = (uint8_t*)pixman_image_get_data(r->mask);
++     int x0;
++ 
++     if (num_spans == 0)
++ 	return CAIRO_STATUS_SUCCESS;
++ 
++     x0 = spans[0].x;
++-    m = r->_buf;
+++    m = base;
++     do {
++ 	int len = spans[1].x - spans[0].x;
++ 	if (len >= r->u.composite.run_length && spans[0].coverage == 0xff) {
++@@ -2646,7 +2646,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
++ 				      spans[0].x, y,
++ 				      spans[1].x - spans[0].x, h);
++ 
++-	    m = r->_buf;
+++	    m = base;
++ 	    x0 = spans[1].x;
++ 	} else if (spans[0].coverage == 0x0) {
++ 	    if (spans[0].x != x0) {
++@@ -2675,7 +2675,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
++ #endif
++ 	    }
++ 
++-	    m = r->_buf;
+++	    m = base;
++ 	    x0 = spans[1].x;
++ 	} else {
++ 	    *m++ = spans[0].coverage;
++-- 
++2.38.1
++
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 8bb7ca121d..e8a704c7da 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -16,6 +16,8 @@ CAIRO_INSTALL_STAGING = YES
+ CAIRO_IGNORE_CVES += CVE-2018-19876
+ # 0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
+ CAIRO_IGNORE_CVES += CVE-2019-6462
++# 0004-Fix-mask-usage-in-image-compositor.patch
++CAIRO_IGNORE_CVES += CVE-2020-35492
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ CAIRO_CONF_ENV = LIBS="$(CAIRO_LIBS)"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
