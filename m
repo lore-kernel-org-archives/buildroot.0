@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66A76C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C4B9C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:14:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13EFC8305A;
-	Mon, 20 Feb 2023 23:14:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13EFC8305A
+	by smtp1.osuosl.org (Postfix) with ESMTP id C07E3813DF;
+	Mon, 20 Feb 2023 23:14:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C07E3813DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id reXGlA790Jd1; Mon, 20 Feb 2023 23:14:01 +0000 (UTC)
+	with ESMTP id 6WjAKy6Q1II6; Mon, 20 Feb 2023 23:14:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 332D281FD6;
-	Mon, 20 Feb 2023 23:14:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 332D281FD6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 845A81BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id A706B83054;
+	Mon, 20 Feb 2023 23:14:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A706B83054
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D099C1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 211E14173E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 211E14173E
+ by smtp3.osuosl.org (Postfix) with ESMTP id E88B361377
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E88B361377
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vtLppBscPzkU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fIpXRroyrJZw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5EB9B41737
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EB9B41737
+ by smtp3.osuosl.org (Postfix) with ESMTP id F01EB612B9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F01EB612B9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F50A86495; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id EADB781979; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:35:07 +0100
+Date: Wed, 21 Dec 2022 22:10:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9103c8f2e94f69d7ef392746aa53bbf2f468a008
-X-Git-Newrev: 035f18db042d218777394b868beadc575976a5ac
+X-Git-Oldrev: add21fd600b2db4dbb930e2e62b9fbb1b72cceb9
+X-Git-Newrev: ff0fd90c3e42dd00283a4eb192ce832f7c03ac30
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205231.4F50A86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/crun: needs gcc >= 4.9
+Message-Id: <20230220205213.EADB781979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/skeleton-systemd: move
+ /var factory tmpfiles out of /etc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,57 +58,94 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3950422273906196686=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=035f18db042d218777394b868beadc575976a5ac
+--===============3950422273906196686==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=ff0fd90c3e42dd00283a4eb192ce832f7c03ac30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-crun unconditionally uses atomic_bool when libgcrypt is found since
-version 1.7.1 and
-https://github.com/containers/crun/commit/40f66c0a74b8d918ecc7ae9228dca32a4fd71084
-resulting in the following build failure with gcc 4.8 since commit
-6987b92da510a8c8b9534a22506850c163d0f035:
+When the rootfs is not remounted read-write (thus assuming a read-only
+rootfs like squashfs), we create a tmpfiles.d factory for /var.
 
-src/libcrun/seccomp.c: In function 'calculate_seccomp_checksum':
-src/libcrun/seccomp.c:374:3: error: unknown type name 'atomic_bool'
-   static atomic_bool initialized = false;
-   ^
+However, we register those in /etc/tmpfiles.d/, but /etc could also be
+a tmpfs (for full state-less systems, or easy factory-reset, see [0]).
 
-Fixes:
- - http://autobuild.buildroot.org/results/924806ffd6d83cd6d8226577c3877b0b8ca2722d
+So, we move our var factory to /usr/lib/tmpfiles.d/, which is also the
+location where systemd itself places its own tmpfiles, and where we
+already put all our other tmpfiles (see audit, avahi, cryptsetup, dhcp,
+lighttpd, nfs-utils, quagga, samba4, swupdate) and our handling of
+systemd's catalog files too. We also rename the file to a better name,
+so that it is obvious it is generated by us (systemd already installs a
+var.conf of its own, so we want to avoid name clashing).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Last little detail: there is no need or reason to create .../tmpfiles.d/
+at install time; it is only needed in the rootfs-pre-cmd hook, so we
+only create it just before we need it.
+
+[0] http://0pointer.de/blog/projects/stateless.html
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Jérémy Rosen <jeremy.rosen@smile.fr>
+[yann.morin.1998@free.fr:
+  - split original patch in two
+  - this one only moves out of /etc and into /usr/lib
+  - adapt commit log accordingly
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Norbert Lange <nolange79@gmail.com>
+[yann.morin.1998@free.fr:
+  - rename to 00-buildroot-var.conf as suggested by Norbert
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/crun/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/skeleton-init-systemd/skeleton-init-systemd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/crun/Config.in b/package/crun/Config.in
-index fa0894e126..45c86f0655 100644
---- a/package/crun/Config.in
-+++ b/package/crun/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CRUN
- 	bool "crun"
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_YAJL # libocispec
- 	help
-@@ -8,5 +9,6 @@ config BR2_PACKAGE_CRUN
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index 795a171809..ec908b4fac 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -29,7 +29,6 @@ else
+ # a real (but empty) directory, and the "factory files" will be copied
+ # back there by the tmpfiles.d mechanism.
+ define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+-	mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
+ 	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
+ 	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
+ endef
+@@ -38,6 +37,7 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 	rm -rf $(TARGET_DIR)/usr/share/factory/var
+ 	mv $(TARGET_DIR)/var $(TARGET_DIR)/usr/share/factory/var
+ 	mkdir -p $(TARGET_DIR)/var
++	mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
+ 	for i in $(TARGET_DIR)/usr/share/factory/var/* \
+ 		 $(TARGET_DIR)/usr/share/factory/var/lib/* \
+ 		 $(TARGET_DIR)/usr/share/factory/var/lib/systemd/*; do \
+@@ -51,7 +51,7 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 			printf "C! %s - - - -\n" "$${j}" \
+ 			|| exit 1; \
+ 		fi; \
+-	done >$(TARGET_DIR)/etc/tmpfiles.d/var-factory.conf
++	done >$(TARGET_DIR)/usr/lib/tmpfiles.d/00-buildroot-var.conf
+ endef
+ SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
  
- 	  https://github.com/containers/crun
- 
--comment "crun needs a glibc or musl toolchain"
--	depends on BR2_TOOLCHAIN_USES_UCLIBC
-+comment "crun needs a glibc or musl toolchain, gcc >= 4.9"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+
+--===============3950422273906196686==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3950422273906196686==--
