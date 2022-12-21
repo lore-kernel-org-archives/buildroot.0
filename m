@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 856DDC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0061BC4167B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:04:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32F7182067;
-	Wed, 21 Dec 2022 18:04:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32F7182067
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB7A640BC1;
+	Wed, 21 Dec 2022 18:04:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB7A640BC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VjrgwY6W1ewY; Wed, 21 Dec 2022 18:04:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SmvBAuxr8Paz; Wed, 21 Dec 2022 18:04:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AE6F82054;
-	Wed, 21 Dec 2022 18:04:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AE6F82054
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E86A40BD7;
+	Wed, 21 Dec 2022 18:04:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E86A40BD7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2C1811BF844
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:03:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D21D1BF844
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D00861093
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD3CF61094
  for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:03:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D00861093
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD3CF61094
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mN_huUkpf7k4 for <buildroot@lists.busybox.net>;
+ with ESMTP id c75za3rntPYP for <buildroot@lists.busybox.net>;
  Wed, 21 Dec 2022 18:03:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 015BD61089
+ by smtp3.osuosl.org (Postfix) with ESMTP id 185EE6108A
  for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:03:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 015BD61089
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 185EE6108A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5B9B86C78; Wed, 21 Dec 2022 18:03:02 +0000 (UTC)
+ id 0744D86C75; Wed, 21 Dec 2022 18:03:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 18:58:30 +0100
+Date: Wed, 21 Dec 2022 18:59:40 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f0be849c72a62131e3753b74aae6769eb3b32907
-X-Git-Newrev: a2ee5c6bcadf3b27665c464174ba781eaeb0d37c
+X-Git-Oldrev: 0922bbf9055e23bb6bf6b09c5ff08dc76486e3f1
+X-Git-Newrev: aaea3f2c3136c0eb4d91a7e0db6d41ec72235367
 X-Patchwork-Hint: ignore
-Message-Id: <20221221180302.E5B9B86C78@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/intel-microcode:
- security bump version to 20221108
+Message-Id: <20221221180303.0744D86C75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/mbedtls: security
+ bump to version 2.28.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,84 +58,155 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5446880866188936966=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2ee5c6bcadf3b27665c464174ba781eaeb0d37c
+--===============5446880866188936966==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=aaea3f2c3136c0eb4d91a7e0db6d41ec72235367
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes the following security issues:
+Fix the following security issues:
+- Fix potential heap buffer overread and overwrite in DTLS if
+  MBEDTLS_SSL_DTLS_CONNECTION_ID is enabled and
+  MBEDTLS_SSL_CID_IN_LEN_MAX > 2 * MBEDTLS_SSL_CID_OUT_LEN_MAX.
+- An adversary with access to precise enough information about memory
+  accesses (typically, an untrusted operating system attacking a secure
+  enclave) could recover an RSA private key after observing the victim
+  performing a single private-key operation if the window size used for
+  the exponentiation was 3 or smaller.
 
-- CVE-2021-0146: Hardware allows activation of test or debug logic at
-  runtime for some Intel(R) processors which may allow an unauthenticated
-  user to potentially enable escalation of privilege via physical access.
+Drop patch (already in version:
+https://github.com/Mbed-TLS/mbedtls/commit/9d9d45c6b2aeaedfdfdadfec3d05d168db685968)
 
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00528.html
+https://github.com/Mbed-TLS/mbedtls/releases/tag/v2.28.2
 
-- CVE-2021-0127: Insufficient control flow management in some Intel(R)
-  Processors may allow an authenticated user to potentially enable a denial
-  of service via local access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00532.html
-
-- CVE-2022-21151: Processor optimization removal or modification of
-  security-critical code for some Intel(R) Processors may allow an
-  authenticated user to potentially enable information disclosure via local
-  access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00617.html
-
-- CVE-2022-0005: Sensitive information accessible by physical probing of
-  JTAG interface for some Intel(R) Processors with SGX may allow an
-  unprivileged user to potentially enable information disclosure via
-  physical access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00614.html
-
-- CVE-2022-21233: Improper isolation of shared resources in some Intel(R)
-  Processors may allow a privileged user to potentially enable information
-  disclosure via local access.
-
-  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00657.html
-
-For more details, see the release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/releasenote.md
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: extend commit message with security fix details]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f83377b7b30c82da363c7937f693fe979318f598)
+(cherry picked from commit c2baa583c350b9d594e87f9cab1db597789904df)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...x-x86-PIC-inline-ASM-compilation-with-GCC.patch | 74 ----------------------
+ package/mbedtls/mbedtls.hash                       |  4 +-
+ package/mbedtls/mbedtls.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 77 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 6687d4c0eb..56f0237277 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fd85b6b769efd029dec6a2c07106fd18fb4dcb548b7bc4cde09295a8344ef6d7  intel-microcode-20210608.tar.gz
-+sha256  8d14a914815f56c27b1f41be0fd699d1afcfdbc05432056427e455100798975e  intel-microcode-20221108.tar.gz
- sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index af7f6fa804..787537da78 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
+diff --git a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch b/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
+deleted file mode 100644
+index 60bf53f6e4..0000000000
+--- a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From a0ae2ba37ca479c6edddec8634b25686be965e0d Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Mon, 27 Aug 2018 22:50:57 +0200
+-Subject: [PATCH] bn_mul.h: fix x86 PIC inline ASM compilation with GCC < 5
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes #1910
+-
+-With ebx added to the MULADDC_STOP clobber list to fix #1550, the inline
+-assembly fails to build with GCC < 5 in PIC mode with the following error:
+-
+-include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ‘ebx’ in ‘asm’
+-
+-This is because older GCC versions treated the x86 ebx register (which is
+-used for the GOT) as a fixed reserved register when building as PIC.
+-
+-This is fixed by an improved register allocator in GCC 5+.  From the release
+-notes:
+-
+-Register allocation improvements: Reuse of the PIC hard register, instead of
+-using a fixed register, was implemented on x86/x86-64 targets.  This
+-improves generated PIC code performance as more hard registers can be used.
+-
+-https://www.gnu.org/software/gcc/gcc-5/changes.html
+-
+-As a workaround, detect this situation and disable the inline assembly,
+-similar to the MULADDC_CANNOT_USE_R7 logic.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Upstream: https://github.com/ARMmbed/mbedtls/pull/1986
+----
+- include/mbedtls/bn_mul.h | 18 +++++++++++++++++-
+- 1 file changed, 17 insertions(+), 1 deletion(-)
+-
+-diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
+-index b587317d9..74a2d29be 100644
+---- a/include/mbedtls/bn_mul.h
+-+++ b/include/mbedtls/bn_mul.h
+-@@ -50,13 +50,29 @@
+- #if defined(__GNUC__) && \
+-     ( !defined(__ARMCC_VERSION) || __ARMCC_VERSION >= 6000000 )
+- 
+-+/*
+-+ * GCC < 5.0 treated the x86 ebx (which is used for the GOT) as a
+-+ * fixed reserved register when building as PIC, leading to errors
+-+ * like: bn_mul.h:46:13: error: PIC register clobbered by ‘ebx’ in ‘asm’
+-+ *
+-+ * This is fixed by an improved register allocator in GCC 5+. From the
+-+ * release notes:
+-+ * Register allocation improvements: Reuse of the PIC hard register,
+-+ * instead of using a fixed register, was implemented on x86/x86-64
+-+ * targets. This improves generated PIC code performance as more hard
+-+ * registers can be used.
+-+ */
+-+#if defined(__GNUC__) && __GNUC__ < 5 && defined(__PIC__)
+-+#define MULADDC_CANNOT_USE_EBX
+-+#endif
+-+
+- /*
+-  * Disable use of the i386 assembly code below if option -O0, to disable all
+-  * compiler optimisations, is passed, detected with __OPTIMIZE__
+-  * This is done as the number of registers used in the assembly code doesn't
+-  * work with the -O0 option.
+-  */
+--#if defined(__i386__) && defined(__OPTIMIZE__)
+-+#if defined(__i386__) && defined(__OPTIMIZE__) && !defined(MULADDC_CANNOT_USE_EBX)
+- 
+- #define MULADDC_INIT                        \
+-     asm(                                    \
+--- 
+-2.11.0
+-
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 38182fe119..876cd7b77e 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.1:
+-sha256  6797a7b6483ef589deeab8d33d401ed235d7be25eeecda1be8ddfed406d40ff4  mbedtls-2.28.1.tar.gz
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.2:
++sha256  bc55232bf71fd66045122ba9050a29ea7cb2e8f99b064a9e6334a82f715881a0  mbedtls-2.28.2.tar.gz
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index af87d62b30..743664a060 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = 20210608
-+INTEL_MICROCODE_VERSION = 20221108
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+-MBEDTLS_VERSION = 2.28.1
++MBEDTLS_VERSION = 2.28.2
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
+
+--===============5446880866188936966==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5446880866188936966==--
