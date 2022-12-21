@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8337DC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 08:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05052C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 08:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 113F361002;
-	Wed, 21 Dec 2022 08:10:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 113F361002
+	by smtp2.osuosl.org (Postfix) with ESMTP id A105640A62;
+	Wed, 21 Dec 2022 08:11:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A105640A62
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yKi30hfmjGnd; Wed, 21 Dec 2022 08:10:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FGeZrqdx3_T3; Wed, 21 Dec 2022 08:11:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 034E16102E;
-	Wed, 21 Dec 2022 08:10:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 034E16102E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF5A71BF3F6
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:10:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C222E404AB;
+	Wed, 21 Dec 2022 08:10:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C222E404AB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 414741BF3F6
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB0FE61020
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:10:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB0FE61020
+ by smtp4.osuosl.org (Postfix) with ESMTP id 28BD541548
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:10:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28BD541548
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UJXWxR4vWtoT for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 08:10:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lYj4vQI9McRY for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 08:10:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C272160FD5
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC4CF414C8
  for <buildroot@buildroot.org>; Wed, 21 Dec 2022 08:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C272160FD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC4CF414C8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE4AA86B23; Wed, 21 Dec 2022 08:10:19 +0000 (UTC)
+ id C627786B25; Wed, 21 Dec 2022 08:10:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 09:07:05 +0100
+Date: Wed, 21 Dec 2022 09:09:00 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: c463cfc0fbf9c0acbf7464eb70f421a9e3fc4ec2
-X-Git-Newrev: b61f781e5057a1f56565250def900e1ae1a9a03c
+X-Git-Oldrev: b25aa7c065463881997209c52515bc2f7789e0f3
+X-Git-Newrev: 689015d71e5f515faa10d7bf48ff8bc609c7fb16
 X-Patchwork-Hint: ignore
-Message-Id: <20221221081019.AE4AA86B23@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/exempi: bump to
- version 2.6.3
+Message-Id: <20221221081019.C627786B25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/x11r7/xserver_xorg-server: add upstream security fixes for
+ CVE-2022-355{0, 1}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,64 +64,158 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b61f781e5057a1f56565250def900e1ae1a9a03c
+commit: https://git.buildroot.net/buildroot/commit/?id=689015d71e5f515faa10d7bf48ff8bc609c7fb16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Samples can be disabled since version 2.6.2 and
-https://gitlab.freedesktop.org/libopenraw/exempi/-/commit/a8db9f4e7e4156ee7e52def01f1f83ca5fa7de40
+Fixes the following security issues:
 
-This bump will fix the following build failure on arm with gcc 10 raised
-since bump to version 2.6.0 in commit
-55f1d0a3592253df2a356c195e5131a970eade9b and
-https://gitlab.freedesktop.org/libopenraw/exempi/-/commit/0872e35a30457d2ecf746a1bebdb7d94636d0e2f
-https://github.com/adobe/XMP-Toolkit-SDK/commit/0872e35a30457d2ecf746a1bebdb7d94636d0e2f
-thanks to
-https://gitlab.freedesktop.org/libopenraw/exempi/-/commit/f26d77ba26a7245a95068bca2eea9608f4e79f80:
+- CVE-2022-3550: A vulnerability classified as critical was found in X.org
+  Server.  Affected by this vulnerability is the function _GetCountedString
+  of the file xkb/xkb.c.  The manipulation leads to buffer overflow.  It is
+  recommended to apply a patch to fix this issue.  The associated identifier
+  of this vulnerability is VDB-211051.
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../../XMPFiles/source/.libs/libXMPFiles.a(XMPFiles_Impl.o):(.rodata+0x5c): multiple definition of `typeinfo name for TXMPMeta<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >'; XMPFilesCoverage.o:(.rodata+0x0): first defined here
+- CVE-2022-3551: A vulnerability, which was classified as problematic, has
+  been found in X.org Server.  Affected by this issue is the function
+  ProcXkbGetKbdByName of the file xkb/xkb.c.  The manipulation leads to
+  memory leak.  It is recommended to apply a patch to fix this issue.  The
+  identifier of this vulnerability is VDB-211052.
 
-https://gitlab.freedesktop.org/libopenraw/exempi/-/blob/2.6.3/NEWS
-
-Fixes:
- - http://autobuild.buildroot.org/results/c440719de02a154c6bdae11bda06ea30c131c71d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 63b540638c72969bf8c3eb6c06e1c49c4fbcbb9a)
+(cherry picked from commit 66f3cc0b96baff46d3a136f9d8bf2a3b44037bdc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exempi/exempi.hash | 2 +-
- package/exempi/exempi.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...etCountedString-against-request-length-at.patch | 35 +++++++++++++
+ ...some-possible-memleaks-in-XkbGetKbdByName.patch | 60 ++++++++++++++++++++++
+ .../xserver_xorg-server/xserver_xorg-server.mk     |  7 +++
+ 3 files changed, 102 insertions(+)
 
-diff --git a/package/exempi/exempi.hash b/package/exempi/exempi.hash
-index 5df610de17..772d9130d4 100644
---- a/package/exempi/exempi.hash
-+++ b/package/exempi/exempi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  072451ac1e0dc97ed69a2e5bfc235fd94fe093d837f65584d0e3581af5db18cd  exempi-2.6.1.tar.bz2
-+sha256  80b3aa0b7f54978c6a49cc5f5f1d3b6e9524b59de74ef92b3bf0abeba4c28fb1  exempi-2.6.3.tar.xz
- sha256  3d3c3593c15e0d35bdae0df7c642106250f6be3adc61477419413900f23ae607  COPYING
-diff --git a/package/exempi/exempi.mk b/package/exempi/exempi.mk
-index 56fbe20379..f808afd53c 100644
---- a/package/exempi/exempi.mk
-+++ b/package/exempi/exempi.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--EXEMPI_VERSION = 2.6.1
--EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.bz2
-+EXEMPI_VERSION = 2.6.3
-+EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.xz
- EXEMPI_SITE = https://libopenraw.freedesktop.org/download
- EXEMPI_INSTALL_STAGING = YES
--EXEMPI_CONF_OPTS = --disable-unittest
-+EXEMPI_CONF_OPTS = --disable-samples --disable-unittest
- EXEMPI_DEPENDENCIES = host-pkgconf expat zlib \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- EXEMPI_LICENSE = BSD-3-Clause
+diff --git a/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
+new file mode 100644
+index 0000000000..8c1869504c
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
+@@ -0,0 +1,35 @@
++From 11beef0b7f1ed290348e45618e5fa0d2bffcb72e Mon Sep 17 00:00:00 2001
++From: Peter Hutterer <peter.hutterer@who-t.net>
++Date: Tue, 5 Jul 2022 12:06:20 +1000
++Subject: [PATCH] xkb: proof GetCountedString against request length attacks
++
++GetCountedString did a check for the whole string to be within the
++request buffer but not for the initial 2 bytes that contain the length
++field. A swapped client could send a malformed request to trigger a
++swaps() on those bytes, writing into random memory.
++
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ xkb/xkb.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/xkb/xkb.c b/xkb/xkb.c
++index f42f59ef3..1841cff26 100644
++--- a/xkb/xkb.c
+++++ b/xkb/xkb.c
++@@ -5137,6 +5137,11 @@ _GetCountedString(char **wire_inout, ClientPtr client, char **str)
++     CARD16 len;
++ 
++     wire = *wire_inout;
+++
+++    if (client->req_len <
+++        bytes_to_int32(wire + 2 - (char *) client->requestBuffer))
+++        return BadValue;
+++
++     len = *(CARD16 *) wire;
++     if (client->swapped) {
++         swaps(&len);
++-- 
++2.30.2
++
+diff --git a/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
+new file mode 100644
+index 0000000000..39afec0988
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
+@@ -0,0 +1,60 @@
++From 18f91b950e22c2a342a4fbc55e9ddf7534a707d2 Mon Sep 17 00:00:00 2001
++From: Peter Hutterer <peter.hutterer@who-t.net>
++Date: Wed, 13 Jul 2022 11:23:09 +1000
++Subject: [PATCH] xkb: fix some possible memleaks in XkbGetKbdByName
++
++GetComponentByName returns an allocated string, so let's free that if we
++fail somewhere.
++
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ xkb/xkb.c | 26 ++++++++++++++++++++------
++ 1 file changed, 20 insertions(+), 6 deletions(-)
++
++diff --git a/xkb/xkb.c b/xkb/xkb.c
++index 4692895db..b79a269e3 100644
++--- a/xkb/xkb.c
+++++ b/xkb/xkb.c
++@@ -5935,18 +5935,32 @@ ProcXkbGetKbdByName(ClientPtr client)
++     xkb = dev->key->xkbInfo->desc;
++     status = Success;
++     str = (unsigned char *) &stuff[1];
++-    if (GetComponentSpec(&str, TRUE, &status))  /* keymap, unsupported */
++-        return BadMatch;
+++    {
+++        char *keymap = GetComponentSpec(&str, TRUE, &status);  /* keymap, unsupported */
+++        if (keymap) {
+++            free(keymap);
+++            return BadMatch;
+++        }
+++    }
++     names.keycodes = GetComponentSpec(&str, TRUE, &status);
++     names.types = GetComponentSpec(&str, TRUE, &status);
++     names.compat = GetComponentSpec(&str, TRUE, &status);
++     names.symbols = GetComponentSpec(&str, TRUE, &status);
++     names.geometry = GetComponentSpec(&str, TRUE, &status);
++-    if (status != Success)
+++    if (status == Success) {
+++        len = str - ((unsigned char *) stuff);
+++        if ((XkbPaddedSize(len) / 4) != stuff->length)
+++            status = BadLength;
+++    }
+++
+++    if (status != Success) {
+++        free(names.keycodes);
+++        free(names.types);
+++        free(names.compat);
+++        free(names.symbols);
+++        free(names.geometry);
++         return status;
++-    len = str - ((unsigned char *) stuff);
++-    if ((XkbPaddedSize(len) / 4) != stuff->length)
++-        return BadLength;
+++    }
++ 
++     CHK_MASK_LEGAL(0x01, stuff->want, XkbGBN_AllComponentsMask);
++     CHK_MASK_LEGAL(0x02, stuff->need, XkbGBN_AllComponentsMask);
++-- 
++2.30.2
++
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 18ddd1cb07..8dba9f1ed0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -11,6 +11,13 @@ XSERVER_XORG_SERVER_LICENSE = MIT
+ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
+ XSERVER_XORG_SERVER_SELINUX_MODULES = xdg xserver
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
++
++# 0002-xkb-proof-GetCountedString-against-request-length-at.patch
++XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3550
++
++# 0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
++XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3551
++
+ XSERVER_XORG_SERVER_DEPENDENCIES = \
+ 	xutil_util-macros \
+ 	xlib_libX11 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
