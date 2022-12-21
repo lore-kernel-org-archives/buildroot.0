@@ -1,52 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6277FC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 08:13:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43287C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 08:32:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FE686101D;
-	Wed, 21 Dec 2022 08:13:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FE686101D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4L62NeZgdpEC; Wed, 21 Dec 2022 08:13:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 440CE60FC7;
-	Wed, 21 Dec 2022 08:13:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 440CE60FC7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C07DB1BF3F6
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:12:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98585416FA
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98585416FA
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAF634186E;
+	Wed, 21 Dec 2022 08:32:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAF634186E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BD3BUY26-Ic4 for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 08:12:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B33541722
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 08:12:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B33541722
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3855086B90; Wed, 21 Dec 2022 08:12:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 09:08:26 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: bad78c3213c053cd43b4f6f8fcfbc7865b3d29ba
-X-Git-Newrev: a82341836e80ca113d3d6f7448e9f16080e5a74e
-X-Patchwork-Hint: ignore
-Message-Id: <20221221081226.3855086B90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- package/x11r7/xserver_xorg-server: add upstream security fixes for
- CVE-2022-355{0, 1}
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mdbgxlkMowsk; Wed, 21 Dec 2022 08:32:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD2E84186B;
+	Wed, 21 Dec 2022 08:32:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD2E84186B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 74E011BF3F6
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:32:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F17981F9B
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 08:32:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F17981F9B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id crKcwL2gucgB for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 08:32:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5739481F95
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5739481F95
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 08:32:36 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id m19so10607062wms.5
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 00:32:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=aDlvre/FbgGbClEoBVBlhSSnlR7DB1VVbl9MVHefk4w=;
+ b=sELZjC+qER5pWrDzYFaoGjywqgXMs8fTmBlqxMBg66AZ274ebh6e0h5kesTaAu9LXi
+ pbYAt6ZbujIYbAqkxJLXzZiqUbCFL+oBQw15e5LrwsLXcGmQqIGpcp5LnTig+OlZ5M1Z
+ HJqqx0t8vteVtC67XNv2acsEfbP3wK1UIfm+8NLmPe+HIA0I7PSOWQL2wMoE2hqTrWEM
+ wBmPe+dbllx6n7dS9pvUr5gFOxgK59faXLv2rOEyUAgmBE4huMG4iKR93siICTJELhNN
+ Lt5UfRg0W7aEv9TK/bsyqC9gfQpdQOGVbA4xg+XEp1HuZtzk+GjctO3qiMf2lu4JqFO8
+ q3TA==
+X-Gm-Message-State: AFqh2kp4qgG+gdmYMcgEwh1IXwpv7K6gXH/Axj2zUYqpdgVRIoU2Ja2/
+ WMCm0UBXmJu0sBWmtuTGxPD9nQ==
+X-Google-Smtp-Source: AMrXdXvUwgrMZcIOEu5qM9aXca5UzpkIY9gIMHOIjtjzZbvTi4iuHLbdmIbZkmquprOkZb2eh7rRGg==
+X-Received: by 2002:a05:600c:1e8c:b0:3d6:2952:679b with SMTP id
+ be12-20020a05600c1e8c00b003d62952679bmr967248wmb.34.1671611554298; 
+ Wed, 21 Dec 2022 00:32:34 -0800 (PST)
+Received: from p1g2 (2a01cb000f892400bac0522898b75ff0.ipv6.abo.wanadoo.fr.
+ [2a01:cb00:f89:2400:bac0:5228:98b7:5ff0])
+ by smtp.gmail.com with ESMTPSA id
+ m16-20020a05600c3b1000b003c5571c27a1sm2052108wms.32.2022.12.21.00.32.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 21 Dec 2022 00:32:33 -0800 (PST)
+Date: Wed, 21 Dec 2022 09:32:32 +0100
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+To: Christian Hitz <christian@klarinett.li>
+Message-ID: <Y6LEoC1iXjhW77XR@p1g2>
+References: <20221220133454.1931855-1-christian@klarinett.li>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221220133454.1931855-1-christian@klarinett.li>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=boundarydevices.com; s=google;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=aDlvre/FbgGbClEoBVBlhSSnlR7DB1VVbl9MVHefk4w=;
+ b=YuVlMnRPMbJMzV2SyLxoqxt623wAKUEeRaYAacJdCKL0N9h1oYpw0DAhLQli2NOKbm
+ h1hG54BDkOeAUlIuD7+uzZ7jJR3lZoQbkotGJxzPkOZJM7i+eCt8UQddzPbkFGKi10Qy
+ qIzrlsudiyb1eTa1jHR4mlOXMuaRPEiOUepPc=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=boundarydevices.com
+ header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
+ header.b=YuVlMnRP
+Subject: Re: [Buildroot] [PATCH] package/freescale-imx/firmware-imx: fix
+ installation with merged usr dirs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,164 +95,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Gary Bisson <bisson.gary@gmail.com>, Christian Hitz <christian.hitz@bbv.ch>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a82341836e80ca113d3d6f7448e9f16080e5a74e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+Hi Christian,
 
-Fixes the following security issues:
+On Tue, Dec 20, 2022 at 02:34:53PM +0100, Christian Hitz wrote:
+> From: Christian Hitz <christian.hitz@bbv.ch>
+> 
+> Currently, the firmware files are installed to /lib/firmware/imx. With
+> BR2_ROOTFS_MERGED_USR=y /lib is replaced with a symlink to /usr/lib
+> effectively deleting the installed firmware files.
+> 
+> Install the firmware files into the /usr/lib/firmware/imx prefix instead.
+> 
+> Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+> ---
+> Backport to: 2022.02.x, 2022.11.x
+> ---
 
-- CVE-2022-3550: A vulnerability classified as critical was found in X.org
-  Server.  Affected by this vulnerability is the function _GetCountedString
-  of the file xkb/xkb.c.  The manipulation leads to buffer overflow.  It is
-  recommended to apply a patch to fix this issue.  The associated identifier
-  of this vulnerability is VDB-211051.
+Thanks for your contribution, looks good to me! That brings the question
+about linux-firmware that doesn't seem to handle that case either.
+Thomas, should we have a generic TARGET_FIRMWARE_DIR that switches from
+/lib/firmware to /usr/lib/firmware automatically? That way it would fix
+it for all packages at once.
 
-- CVE-2022-3551: A vulnerability, which was classified as problematic, has
-  been found in X.org Server.  Affected by this issue is the function
-  ProcXkbGetKbdByName of the file xkb/xkb.c.  The manipulation leads to
-  memory leak.  It is recommended to apply a patch to fix this issue.  The
-  identifier of this vulnerability is VDB-211052.
+Otherwise:
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 66f3cc0b96baff46d3a136f9d8bf2a3b44037bdc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...etCountedString-against-request-length-at.patch | 35 +++++++++++++
- ...some-possible-memleaks-in-XkbGetKbdByName.patch | 60 ++++++++++++++++++++++
- .../xserver_xorg-server/xserver_xorg-server.mk     |  7 +++
- 3 files changed, 102 insertions(+)
-
-diff --git a/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
-new file mode 100644
-index 0000000000..8c1869504c
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
-@@ -0,0 +1,35 @@
-+From 11beef0b7f1ed290348e45618e5fa0d2bffcb72e Mon Sep 17 00:00:00 2001
-+From: Peter Hutterer <peter.hutterer@who-t.net>
-+Date: Tue, 5 Jul 2022 12:06:20 +1000
-+Subject: [PATCH] xkb: proof GetCountedString against request length attacks
-+
-+GetCountedString did a check for the whole string to be within the
-+request buffer but not for the initial 2 bytes that contain the length
-+field. A swapped client could send a malformed request to trigger a
-+swaps() on those bytes, writing into random memory.
-+
-+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ xkb/xkb.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/xkb/xkb.c b/xkb/xkb.c
-+index f42f59ef3..1841cff26 100644
-+--- a/xkb/xkb.c
-++++ b/xkb/xkb.c
-+@@ -5137,6 +5137,11 @@ _GetCountedString(char **wire_inout, ClientPtr client, char **str)
-+     CARD16 len;
-+ 
-+     wire = *wire_inout;
-++
-++    if (client->req_len <
-++        bytes_to_int32(wire + 2 - (char *) client->requestBuffer))
-++        return BadValue;
-++
-+     len = *(CARD16 *) wire;
-+     if (client->swapped) {
-+         swaps(&len);
-+-- 
-+2.30.2
-+
-diff --git a/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
-new file mode 100644
-index 0000000000..39afec0988
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
-@@ -0,0 +1,60 @@
-+From 18f91b950e22c2a342a4fbc55e9ddf7534a707d2 Mon Sep 17 00:00:00 2001
-+From: Peter Hutterer <peter.hutterer@who-t.net>
-+Date: Wed, 13 Jul 2022 11:23:09 +1000
-+Subject: [PATCH] xkb: fix some possible memleaks in XkbGetKbdByName
-+
-+GetComponentByName returns an allocated string, so let's free that if we
-+fail somewhere.
-+
-+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ xkb/xkb.c | 26 ++++++++++++++++++++------
-+ 1 file changed, 20 insertions(+), 6 deletions(-)
-+
-+diff --git a/xkb/xkb.c b/xkb/xkb.c
-+index 4692895db..b79a269e3 100644
-+--- a/xkb/xkb.c
-++++ b/xkb/xkb.c
-+@@ -5935,18 +5935,32 @@ ProcXkbGetKbdByName(ClientPtr client)
-+     xkb = dev->key->xkbInfo->desc;
-+     status = Success;
-+     str = (unsigned char *) &stuff[1];
-+-    if (GetComponentSpec(&str, TRUE, &status))  /* keymap, unsupported */
-+-        return BadMatch;
-++    {
-++        char *keymap = GetComponentSpec(&str, TRUE, &status);  /* keymap, unsupported */
-++        if (keymap) {
-++            free(keymap);
-++            return BadMatch;
-++        }
-++    }
-+     names.keycodes = GetComponentSpec(&str, TRUE, &status);
-+     names.types = GetComponentSpec(&str, TRUE, &status);
-+     names.compat = GetComponentSpec(&str, TRUE, &status);
-+     names.symbols = GetComponentSpec(&str, TRUE, &status);
-+     names.geometry = GetComponentSpec(&str, TRUE, &status);
-+-    if (status != Success)
-++    if (status == Success) {
-++        len = str - ((unsigned char *) stuff);
-++        if ((XkbPaddedSize(len) / 4) != stuff->length)
-++            status = BadLength;
-++    }
-++
-++    if (status != Success) {
-++        free(names.keycodes);
-++        free(names.types);
-++        free(names.compat);
-++        free(names.symbols);
-++        free(names.geometry);
-+         return status;
-+-    len = str - ((unsigned char *) stuff);
-+-    if ((XkbPaddedSize(len) / 4) != stuff->length)
-+-        return BadLength;
-++    }
-+ 
-+     CHK_MASK_LEGAL(0x01, stuff->want, XkbGBN_AllComponentsMask);
-+     CHK_MASK_LEGAL(0x02, stuff->need, XkbGBN_AllComponentsMask);
-+-- 
-+2.30.2
-+
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 18ddd1cb07..8dba9f1ed0 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -11,6 +11,13 @@ XSERVER_XORG_SERVER_LICENSE = MIT
- XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
- XSERVER_XORG_SERVER_SELINUX_MODULES = xdg xserver
- XSERVER_XORG_SERVER_INSTALL_STAGING = YES
-+
-+# 0002-xkb-proof-GetCountedString-against-request-length-at.patch
-+XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3550
-+
-+# 0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
-+XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3551
-+
- XSERVER_XORG_SERVER_DEPENDENCIES = \
- 	xutil_util-macros \
- 	xlib_libX11 \
+Regards,
+Gary
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
