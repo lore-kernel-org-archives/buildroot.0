@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 239FDC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 17:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5264C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 17:42:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC69D81F45;
-	Wed, 21 Dec 2022 17:42:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC69D81F45
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46DF761013;
+	Wed, 21 Dec 2022 17:42:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46DF761013
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JBZm4rYXgPed; Wed, 21 Dec 2022 17:42:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1Ct6F_ao-bWD; Wed, 21 Dec 2022 17:42:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1920E81E71;
-	Wed, 21 Dec 2022 17:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1920E81E71
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 64DF41BF844
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C45861072;
+	Wed, 21 Dec 2022 17:42:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C45861072
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CB8301BF844
  for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 17:41:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 417E4400A6
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 17:41:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 417E4400A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 860B4418A5
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 17:41:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 860B4418A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qmLPl07IuS3y for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pjmiCH_i-hLm for <buildroot@lists.busybox.net>;
  Wed, 21 Dec 2022 17:41:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8542B40516
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B4F44189C
  for <buildroot@buildroot.org>; Wed, 21 Dec 2022 17:41:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8542B40516
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B4F44189C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73ABE86C2F; Wed, 21 Dec 2022 17:41:43 +0000 (UTC)
+ id 58FF586C33; Wed, 21 Dec 2022 17:41:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 18:41:15 +0100
+Date: Wed, 21 Dec 2022 18:22:58 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 10b5882e30b845ca4e9dfbf65c58454b98244e2d
-X-Git-Newrev: 2dcbce7be1605ba8301661c6fe950755e5ad1517
+X-Git-Oldrev: 9f4f004edc849c764b1d10101d1404fc61b83927
+X-Git-Newrev: adb2ed642ae56d540dd764d933e0668234b1f256
 X-Patchwork-Hint: ignore
-Message-Id: <20221221174143.73ABE86C2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- package/x11r7/xserver_xorg-server: security bump version to 21.1.5
+Message-Id: <20221221174143.58FF586C33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/php: bump version
+ to 8.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dcbce7be1605ba8301661c6fe950755e5ad1517
+commit: https://git.buildroot.net/buildroot/commit/?id=adb2ed642ae56d540dd764d933e0668234b1f256
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-December/003303.html
-
-Security advisory:
-https://lists.x.org/archives/xorg-announce/2022-December/003302.html
-
-Fixes CVE-2022-46340, CVE-2022-46341, CVE-2022-46342, CVE-2022-46343,
-CVE-2022-46344 and CVE-2022-4283.
+Release notes: https://news-web.php.net/php.announce/341
+Changelog: https://www.php.net/ChangeLog-8.php#8.1.13
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b8881d4d7e4822337c222fadf4630a49eec1e9ce)
+(cherry picked from commit 148ae3338c70881cc2caebdd9b45cc6212362a2b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 7 +++----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 4b2090fa99..654552c8b6 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-July/003193.html
--sha256  5cc4be8ee47edb58d4a90e603a59d56b40291ad38371b0bd2471fc3cbee1c587  xorg-server-21.1.4.tar.xz
--sha512  eb5b8520d02908f72719e6ecfbf7a9bf139acb65ccae04d1db4223a8a2384cd3a94bd5afef10cce327b751b800cc2b79bfaa5ae35c95c3a217f775168082e68f  xorg-server-21.1.4.tar.xz
--
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003303.html
-+sha256  05b0c8301cee7c5a78083df421ba3a071891553541a417b3d85adf5cf20f8720  xorg-server-21.1.5.tar.xz
-+sha512  a39c6ba36f94241d330b679a9a6fe2c5fda73fc3f5a9308a7a9cfd0d58503e407291759c9e553455c07cf5a3862952ae3904334eeca29c97ff5af7cffd2e6953  xorg-server-21.1.5.tar.xz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 8dba9f1ed0..16b7438ee6 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index bf81ebf3e8..461dc36031 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  08243359e2204d842082269eedc15f08d2eca726d0e65b93fb11f4bfc51bbbab  php-8.1.12.tar.xz
++sha256  b15ef0ccdd6760825604b3c4e3e73558dcf87c75ef1d68ef4289d8fd261ac856  php-8.1.13.tar.xz
+ 
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index a400a38af7..1fdf5c68a2 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 21.1.4
-+XSERVER_XORG_SERVER_VERSION = 21.1.5
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+-PHP_VERSION = 8.1.12
++PHP_VERSION = 8.1.13
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
