@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05F97C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:03:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 856DDC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 18:04:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF9C98202D;
-	Wed, 21 Dec 2022 18:03:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF9C98202D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32F7182067;
+	Wed, 21 Dec 2022 18:04:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32F7182067
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VA5O4hr1RXGq; Wed, 21 Dec 2022 18:03:51 +0000 (UTC)
+	with ESMTP id VjrgwY6W1ewY; Wed, 21 Dec 2022 18:04:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E766782019;
-	Wed, 21 Dec 2022 18:03:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E766782019
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AE6F82054;
+	Wed, 21 Dec 2022 18:04:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AE6F82054
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1BC331BF844
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:03:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2C1811BF844
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D34260BD0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D00861093
  for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 18:03:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D34260BD0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D00861093
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kE8ImIFP8T95 for <buildroot@lists.busybox.net>;
+ with ESMTP id mN_huUkpf7k4 for <buildroot@lists.busybox.net>;
  Wed, 21 Dec 2022 18:03:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 272CE61093
+ by smtp3.osuosl.org (Postfix) with ESMTP id 015BD61089
  for <buildroot@buildroot.org>; Wed, 21 Dec 2022 18:03:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 272CE61093
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 015BD61089
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11B3A86C76; Wed, 21 Dec 2022 18:03:03 +0000 (UTC)
+ id E5B9B86C78; Wed, 21 Dec 2022 18:03:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 19:00:06 +0100
+Date: Wed, 21 Dec 2022 18:58:30 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: aaea3f2c3136c0eb4d91a7e0db6d41ec72235367
-X-Git-Newrev: d8665eaa194bb3f0b561a4a2f75c827a0c68e40f
+X-Git-Oldrev: f0be849c72a62131e3753b74aae6769eb3b32907
+X-Git-Newrev: a2ee5c6bcadf3b27665c464174ba781eaeb0d37c
 X-Patchwork-Hint: ignore
-Message-Id: <20221221180303.11B3A86C76@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Revert "package/gperf:
- add _CPE_ID_VENDOR and _CPE_ID_PRODUCT"
+Message-Id: <20221221180302.E5B9B86C78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/intel-microcode:
+ security bump version to 20221108
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8665eaa194bb3f0b561a4a2f75c827a0c68e40f
+commit: https://git.buildroot.net/buildroot/commit/?id=a2ee5c6bcadf3b27665c464174ba781eaeb0d37c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This reverts commit 3712e1dee7626b0c3262c054b5b9c2769fd2a61e.
+Fixes the following security issues:
 
-gperf -- the GNU perfect hash function generator
-https://www.gnu.org/software/gperf/
+- CVE-2021-0146: Hardware allows activation of test or debug logic at
+  runtime for some Intel(R) processors which may allow an unauthenticated
+  user to potentially enable escalation of privilege via physical access.
 
-and
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00528.html
 
-gperftools -- the Google Performance Tools
-https://github.com/gperftools/gperftools
+- CVE-2021-0127: Insufficient control flow management in some Intel(R)
+  Processors may allow an authenticated user to potentially enable a denial
+  of service via local access.
 
-are two different and unrelated projects.
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00532.html
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+- CVE-2022-21151: Processor optimization removal or modification of
+  security-critical code for some Intel(R) Processors may allow an
+  authenticated user to potentially enable information disclosure via local
+  access.
+
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00617.html
+
+- CVE-2022-0005: Sensitive information accessible by physical probing of
+  JTAG interface for some Intel(R) Processors with SGX may allow an
+  unprivileged user to potentially enable information disclosure via
+  physical access.
+
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00614.html
+
+- CVE-2022-21233: Improper isolation of shared resources in some Intel(R)
+  Processors may allow a privileged user to potentially enable information
+  disclosure via local access.
+
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00657.html
+
+For more details, see the release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/releasenote.md
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: extend commit message with security fix details]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7aeb6c654e16863dc9d7f0d5b92414b52669299f)
+(cherry picked from commit f83377b7b30c82da363c7937f693fe979318f598)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gperf/gperf.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index c2f042c464..4b928a0ebd 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -8,8 +8,6 @@ GPERF_VERSION = 3.1
- GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
- GPERF_LICENSE = GPL-3.0+
- GPERF_LICENSE_FILES = COPYING
--GPERF_CPE_ID_VENDOR = gperftools_project
--GPERF_CPE_ID_PRODUCT = gperftools
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 6687d4c0eb..56f0237277 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fd85b6b769efd029dec6a2c07106fd18fb4dcb548b7bc4cde09295a8344ef6d7  intel-microcode-20210608.tar.gz
++sha256  8d14a914815f56c27b1f41be0fd699d1afcfdbc05432056427e455100798975e  intel-microcode-20221108.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index af7f6fa804..787537da78 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-INTEL_MICROCODE_VERSION = 20210608
++INTEL_MICROCODE_VERSION = 20221108
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
