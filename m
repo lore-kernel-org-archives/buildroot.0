@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E029C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 14:21:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCB06C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 21 Dec 2022 14:23:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 251506106B;
-	Wed, 21 Dec 2022 14:21:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 251506106B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7168861059;
+	Wed, 21 Dec 2022 14:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7168861059
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JRgELH6VAQnd; Wed, 21 Dec 2022 14:21:17 +0000 (UTC)
+	with ESMTP id ktbqdykIErEh; Wed, 21 Dec 2022 14:23:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72AD360B8A;
-	Wed, 21 Dec 2022 14:21:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72AD360B8A
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCD9360B8A;
+	Wed, 21 Dec 2022 14:23:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCD9360B8A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 08B521BF8C7
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:20:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 147E81BF5D7
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4F6E417BD
- for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:20:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4F6E417BD
+ by smtp4.osuosl.org (Postfix) with ESMTP id DABC1417BD
+ for <buildroot@lists.busybox.net>; Wed, 21 Dec 2022 14:23:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DABC1417BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lGOOKzBO9aGa for <buildroot@lists.busybox.net>;
- Wed, 21 Dec 2022 14:20:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA58D417BC
- for <buildroot@buildroot.org>; Wed, 21 Dec 2022 14:20:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA58D417BC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8FE586BD2; Wed, 21 Dec 2022 14:20:52 +0000 (UTC)
+ with ESMTP id dtTvPS83k2k1 for <buildroot@lists.busybox.net>;
+ Wed, 21 Dec 2022 14:23:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E235417BC
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7E235417BC
+ for <buildroot@buildroot.org>; Wed, 21 Dec 2022 14:23:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 37959240002;
+ Wed, 21 Dec 2022 14:23:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1p800Z-0024f3-V1; Wed, 21 Dec 2022 15:23:47 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 15:18:47 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: b912c01a7d804291fca3c4e2cb7b09b45631a253
-X-Git-Newrev: 785ebc18cf374316ff012157809cd7b9e13f737c
-X-Patchwork-Hint: ignore
-Message-Id: <20221221142052.D8FE586BD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/docker-engine:
- security bump to version 20.10.21
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20221211151913.2984E8641C@busybox.osuosl.org>
+Date: Wed, 21 Dec 2022 15:23:47 +0100
+In-Reply-To: <20221211151913.2984E8641C@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 11 Dec 2022 15:59:24 +0100")
+Message-ID: <87bknwrg24.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] package/opensc: propagate dependencies
+ from pcsc-lite
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +64,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=785ebc18cf374316ff012157809cd7b9e13f737c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Partial mitigations for CVE-2022-39253 Git vulnerability and other fixes:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=071fdbf963228590b453e5111eadc8a74b579aa2
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/moby/moby/releases/tag/v20.10.21
+ > Commit d590003e31dd (package/pcsc-lite: needs gcc >= 4.9) propagated
+ > that new dependency to a bunch of packages that select pcsc-lite.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 309bc5d2d4b0f3ca133b40e36ee949411b3d532d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Then commit 8aaa7ecbce1d (package/opensc: new package) introduced
+ > opensc, which selects pcsc-lite. However, the package was submitted
+ > before the dependency to gcc 4.8+ was added to pcsc-lite, and that was
+ > missed during the review.
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index dfd4f4e365..10e9727a08 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  228caadac1b37a5ba310eb25418cf1fdd8878336f1d8faf0a2daa87fcc577577  docker-engine-20.10.19.tar.gz
-+sha256  61f4c3a2d0426e1bbbda1b0e5dd33ec203776f7d99d1a61522c77c04c4ed09fe  docker-engine-20.10.21.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index dc45baf055..36c66485ba 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 20.10.19
-+DOCKER_ENGINE_VERSION = 20.10.21
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ > Add it now.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2022.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
