@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8484CC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1596BC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:16:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32CCA831F8;
-	Mon, 20 Feb 2023 23:16:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32CCA831F8
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1A4283252;
+	Mon, 20 Feb 2023 23:16:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1A4283252
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WI8dLhlgYmju; Mon, 20 Feb 2023 23:16:18 +0000 (UTC)
+	with ESMTP id CLCX9sijR4Sk; Mon, 20 Feb 2023 23:16:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 412AF8322E;
-	Mon, 20 Feb 2023 23:16:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 412AF8322E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C836B1BF8C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFDF2831AE;
+	Mon, 20 Feb 2023 23:16:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFDF2831AE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E67C21BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A519409D6
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A519409D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 596D76137D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 596D76137D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rHHFn7svshBM for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YMwcyvcjamen for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AA4241740
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AA4241740
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B060612DE
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B060612DE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47C1C86495; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+ id 37D0681979; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 21:02:14 +0100
+Date: Thu, 22 Dec 2022 11:07:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 113e3a8fed6c89e947bea2f44672c47338d08c96
-X-Git-Newrev: 06aa16e23490d03ef9098e61cdcf698af7317a96
+X-Git-Oldrev: 0245d30e569cc88875f7ed5b162029064128e89e
+X-Git-Newrev: 3f79611b3037cf505f00cc67011626deb4d8f5b8
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205232.47C1C86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/netopeer2: bump
- version to 2.1.42
+Message-Id: <20230220205214.37D0681979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] system: add options for /var
+ factory and tmpfiles pre-seed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,103 +57,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5611510309992808913=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06aa16e23490d03ef9098e61cdcf698af7317a96
+--===============5611510309992808913==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3f79611b3037cf505f00cc67011626deb4d8f5b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop patch that is in upstream.
+Currently, when one does not enable remounting the rootfs read-write,
+i.e. keep it read-only, for example because the filesystem is actually
+read-only by design, like squashfs, then two things happen:
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  - we create a factory from the content of /var at build time, register
+    tmpfiles entries for it, and mount a tmpfs on /var at runtime, so
+    that systemd-tmpfiles does populate /var from the factory; this is
+    only done when the rootfs is not remounted r/w;
+
+  - we trigger systemd-tmpfiles at build time, which uses the tmpfiles
+    db, of which our /var entries, to pre-populate the filesystem; this
+    is always done, whether the rootfs is remounted r/w or not.
+
+Note that Buildroot mounts a tmpfs on /var, and leaves to the integrator
+to care for providing an actual filesystem, as there are too many
+variants and is very specific to each use-case.
+
+These two mechanisms are conflicting, semantically, but also
+technically: the files from the factory will be duplicated, but that
+may help in some situations when the actual /var filesystem is not
+mountable.
+
+In some cases, it might be preferable to have none, either, or both
+mechanisms enabled; it highly depends on the ultimate integration scheme
+chosen for a device.
+
+For example, some people will be very happy with a /var that is actually
+on a tmpfs and that it gets reseeded form scratch at every boot, while
+others may want to ensure that their system continue to work even when
+they can't mount something that makes /var writable.
+
+YMMV, as they used to say back in the day...
+
+So, we introduce two new options, in the system sub-menu, each to drive
+each mechanism. We default those options to y, to keep the previous
+behaviour by default, except the var factory is only available when the
+rootfs is not remounted r/w, as it were so far.
+
+We still hint in the help text that there might be some conflict between
+the two mechanisms, but since it has been that way for some time, it
+does not look too broken for most people.
+
+Since that introduces more options related to systemd being chosen as an
+init system, we gather those two options and the existing one inside a
+if-endif block, rather than adding more 'depends on' on each options.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Jérémy Rosen <jeremy.rosen@smile.fr>
+Cc: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...BUGFIX-use-DESTDIR-when-executing-scripts.patch | 47 ----------------------
- package/netopeer2/netopeer2.hash                   |  2 +-
- package/netopeer2/netopeer2.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 49 deletions(-)
+ .../skeleton-init-systemd/skeleton-init-systemd.mk |  7 ++--
+ system/Config.in                                   | 42 +++++++++++++++++++++-
+ 2 files changed, 46 insertions(+), 3 deletions(-)
 
-diff --git a/package/netopeer2/0001-build-BUGFIX-use-DESTDIR-when-executing-scripts.patch b/package/netopeer2/0001-build-BUGFIX-use-DESTDIR-when-executing-scripts.patch
-deleted file mode 100644
-index 99febb56ad..0000000000
---- a/package/netopeer2/0001-build-BUGFIX-use-DESTDIR-when-executing-scripts.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 696b6be8a623f4466def2a161baa26094e5592a4 Mon Sep 17 00:00:00 2001
--From: Michal Vasko <mvasko@cesnet.cz>
--Date: Wed, 18 May 2022 09:14:35 +0200
--Subject: [PATCH] build BUGFIX use DESTDIR when executing scripts
--
--Fixes #1217
--
--[Upstream accepted 696b6be8a623f4466def2a161baa26094e5592a4]
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-----
-- CMakeLists.txt | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index efe922d..60e3150 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -351,7 +351,7 @@ if(INSTALL_MODULES)
--         set(ENV{NP2_MODULE_GROUP} \"${MODULES_GROUP}\")
--         set(ENV{SYSREPOCTL_EXECUTABLE} \"${SYSREPOCTL_EXECUTABLE}\")
--         set(ENV{SYSREPOCFG_EXECUTABLE} \"${SYSREPOCFG_EXECUTABLE}\")
---        execute_process(COMMAND \"${SCRIPT_DIR}/setup.sh\" RESULT_VARIABLE SETUP_RES)
--+        execute_process(COMMAND \"\$ENV{DESTDIR}${SCRIPT_DIR}/setup.sh\" RESULT_VARIABLE SETUP_RES)
--         if(NOT SETUP_RES EQUAL \"0\")
--             message(FATAL_ERROR \" scripts/setup.sh failed: \${SETUP_RES}\")
--         endif()
--@@ -364,7 +364,7 @@ if(GENERATE_HOSTKEY)
--         message(STATUS \"Generating a new RSA host key \\\"genkey\\\" if not already added...\")
--         set(ENV{SYSREPOCTL_EXECUTABLE} \"${SYSREPOCTL_EXECUTABLE}\")
--         set(ENV{SYSREPOCFG_EXECUTABLE} \"${SYSREPOCFG_EXECUTABLE}\")
---        execute_process(COMMAND ${SCRIPT_DIR}/merge_hostkey.sh RESULT_VARIABLE MERGE_HOSTKEY_RES)
--+        execute_process(COMMAND \"\$ENV{DESTDIR}${SCRIPT_DIR}/merge_hostkey.sh\" RESULT_VARIABLE MERGE_HOSTKEY_RES)
--         if(NOT MERGE_HOSTKEY_RES EQUAL \"0\")
--             message(FATAL_ERROR \" scripts/merge_hostkey.sh failed: \${MERGE_HOSTKEY_RES}\")
--         endif()
--@@ -375,7 +375,7 @@ if(MERGE_LISTEN_CONFIG)
--         message(STATUS \"Merging default server listen configuration if there is none...\")
--         set(ENV{SYSREPOCTL_EXECUTABLE} \"${SYSREPOCTL_EXECUTABLE}\")
--         set(ENV{SYSREPOCFG_EXECUTABLE} \"${SYSREPOCFG_EXECUTABLE}\")
---        execute_process(COMMAND ${SCRIPT_DIR}/merge_config.sh RESULT_VARIABLE MERGE_CONFIG_RES)
--+        execute_process(COMMAND \"\$ENV{DESTDIR}${SCRIPT_DIR}/merge_config.sh\" RESULT_VARIABLE MERGE_CONFIG_RES)
--         if(NOT MERGE_CONFIG_RES EQUAL \"0\")
--             message(FATAL_ERROR \" scripts/merge_config.sh failed: \${MERGE_CONFIG_RES}\")
--         endif()
---- 
--2.30.2
--
-diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
-index b352bbb239..cc71a2dab8 100644
---- a/package/netopeer2/netopeer2.hash
-+++ b/package/netopeer2/netopeer2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  89f7572d188e7b04be4b10656d7161d65fb557bac222d8c4596a97eaf833b691  netopeer2-2.1.23.tar.gz
-+sha256  b166fe3425bb55b5f330fb7f53158f613bffc07493925ac437193e4d2defb3e7  netopeer2-2.1.42.tar.gz
- sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
-diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
-index d9a20d9969..7cb9202575 100644
---- a/package/netopeer2/netopeer2.mk
-+++ b/package/netopeer2/netopeer2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index 559a169aee..30783dfd26 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -32,6 +32,7 @@ define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+ 	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
+ endef
  
--NETOPEER2_VERSION = 2.1.23
-+NETOPEER2_VERSION = 2.1.42
- NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
- NETOPEER2_DL_SUBDIR = netopeer2
- NETOPEER2_LICENSE = BSD-3-Clause
++ifeq ($(BR2_INIT_SYSTEMD_VAR_FACTORY),y)
+ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 	rm -rf $(TARGET_DIR)/usr/share/factory/var
+ 	mv $(TARGET_DIR)/var $(TARGET_DIR)/usr/share/factory/var
+@@ -55,14 +56,16 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 		$(TARGET_DIR)/usr/lib/systemd/system/var.mount
+ endef
+ SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
++endif  # BR2_INIT_SYSTEMD_VAR_FACTORY
++endif  # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+ 
+-endif
+-
++ifeq ($(BR2_INIT_SYSTEMD_POPULATE_TMPFILES),y)
+ define SKELETON_INIT_SYSTEMD_CREATE_TMPFILES_HOOK
+ 	HOST_SYSTEMD_TMPFILES=$(HOST_DIR)/bin/systemd-tmpfiles \
+ 		$(SKELETON_INIT_SYSTEMD_PKGDIR)/fakeroot_tmpfiles.sh $(TARGET_DIR)
+ endef
+ SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_CREATE_TMPFILES_HOOK
++endif  # BR2_INIT_SYSTEMD_POPULATE_TMPFILES
+ 
+ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/home
+diff --git a/system/Config.in b/system/Config.in
+index 888c24ce81..806a747315 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -154,10 +154,48 @@ source "$BR2_BASE_DIR/.br2-external.in.init"
+ 
+ endchoice
+ 
++if BR2_INIT_SYSTEMD
++
++config BR2_INIT_SYSTEMD_VAR_FACTORY
++	bool "build a factory to populate a tmpfs on /var"
++	default y  # legacy
++	depends on !BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
++	help
++	  Build a factory of the content of /var as installed by
++	  packages, mount a tmpfs on /var at runtime, so that
++	  systemd-tmpfiles can populate it from the factory.
++
++	  This may help on a read-only rootfs.
++
++	  It probably does not play very well with triggering a call
++	  to systemd-tmpfiles at build time (below).
++
++	  Note: Buildroot mounts a tmpfs on /var to at least make the
++	  system bootable out of the box; mounting a filesystem from
++	  actual storage is left to the integration, as it is too
++	  specific and may need preparatory work like partitionning a
++	  device and/or formatting a filesystem first, so that falls
++	  out of the scope of Buildroot.
++
++	  To use persistent storage, provide a systemd dropin for the
++	  var.mount unit, that overrides the What and Type, and possibly
++	  the Options and After, fields.
++
++config BR2_INIT_SYSTEMD_POPULATE_TMPFILES
++	bool "trigger systemd-tmpfiles during build"
++	default y  # legacy
++	help
++	  Act on the systemd-tmpfiles.d database at build time, when
++	  assembling the root filesystems.
++
++	  This may help on a read-only filesystem.
++
++	  It probably does not play very well with the /var factory
++	  (above).
++
+ config BR2_PACKAGE_SYSTEMD_DEFAULT_TARGET
+ 	string "The default unit systemd starts at bootup"
+ 	default "multi-user.target"
+-	depends on BR2_INIT_SYSTEMD
+ 	help
+ 	  Specify the name of the unit configuration file to be started
+ 	  at bootup by systemd. Should end in ".target".
+@@ -165,6 +203,8 @@ config BR2_PACKAGE_SYSTEMD_DEFAULT_TARGET
+ 
+ 	  https://www.freedesktop.org/software/systemd/man/systemd.special.html#default.target
+ 
++endif # BR2_INIT_SYSTEMD
++
+ choice
+ 	prompt "/dev management" if !BR2_INIT_SYSTEMD
+ 	default BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
+
+--===============5611510309992808913==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5611510309992808913==--
