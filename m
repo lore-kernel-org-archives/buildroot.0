@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F610C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 16:42:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E5ACC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 16:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DC0E4190E;
-	Thu, 22 Dec 2022 16:42:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DC0E4190E
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4E1E60D69;
+	Thu, 22 Dec 2022 16:42:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4E1E60D69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uYLNFKAkiSq8; Thu, 22 Dec 2022 16:42:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3Ju3T-gGwPt9; Thu, 22 Dec 2022 16:42:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B87064190A;
-	Thu, 22 Dec 2022 16:42:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B87064190A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 235D51BF4D7
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 16:42:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D87360D4E;
+	Thu, 22 Dec 2022 16:42:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D87360D4E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CEF851BF4D7
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 16:42:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F2A66404AF
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 16:42:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2A66404AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id A984660D6A
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 16:42:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A984660D6A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iiFsd3cejxhx for <buildroot@lists.busybox.net>;
- Thu, 22 Dec 2022 16:42:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E36C6400CE
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E36C6400CE
- for <buildroot@buildroot.org>; Thu, 22 Dec 2022 16:42:16 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B61661BF20D;
- Thu, 22 Dec 2022 16:42:13 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p8Oe4-002d0P-R2; Thu, 22 Dec 2022 17:42:12 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A1qW_KHKJ46Z for <buildroot@lists.busybox.net>;
+ Thu, 22 Dec 2022 16:42:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D0A7760D68
+ for <buildroot@buildroot.org>; Thu, 22 Dec 2022 16:42:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0A7760D68
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BD18886D44; Thu, 22 Dec 2022 16:42:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221222134633.103213-1-fontaine.fabrice@gmail.com>
-Date: Thu, 22 Dec 2022 17:42:12 +0100
-In-Reply-To: <20221222134633.103213-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 22 Dec 2022 14:46:33 +0100")
-Message-ID: <87pmcbl7a3.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/nasm: bump to version 2.16.01
+To: buildroot@buildroot.org
+Date: Thu, 22 Dec 2022 17:41:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d668cd0b2967346668423b564e4e149f14787def
+X-Git-Newrev: 5b62ea01369b11f5a4320bb2c909168b21c2642c
+X-Patchwork-Hint: ignore
+Message-Id: <20221222164225.BD18886D44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tiff: security bump to version
+ 4.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,21 +57,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5b62ea01369b11f5a4320bb2c909168b21c2642c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > https://nasm.us/doc/nasmdocc.html
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix CVE-2022-2056, CVE-2022-2057, CVE-2022-2058, CVE-2022-2519,
+CVE-2022-2520, CVE-2022-2521, CVE-2022-2953, CVE-2022-34526,
+CVE-2022-3570, CVE-2022-3597, CVE-2022-3598, CVE-2022-3599,
+CVE-2022-3626, CVE-2022-3627 and CVE-2022-3970
 
-Committed, thanks.
+- COPYRIGHT renamed to LICENSE.md and year updated with
+  https://gitlab.com/libtiff/libtiff/-/commit/fa1d6d787fc67a1eeb3abccb790b5bee969d424b
+- Use new --{en,dis}able options added by
+  https://gitlab.com/libtiff/libtiff/-/commit/1ab0e2696a368a556b793a0941b5365e4d9f56ef
 
--- 
-Bye, Peter Korsgaard
+http://www.simplesystems.org/libtiff/releases/v4.5.0.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tiff/tiff.hash |  4 ++--
+ package/tiff/tiff.mk   | 16 +++++++++-------
+ 2 files changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+index 6bd28a0f59..73732892a5 100644
+--- a/package/tiff/tiff.hash
++++ b/package/tiff/tiff.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  917223b37538959aca3b790d2d73aa6e626b688e02dcda272aec24c2f498abed  tiff-4.4.0.tar.gz
+-sha256  fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  COPYRIGHT
++sha256  c7a1d9296649233979fa3eacffef3fa024d73d05d589cb622727b5b08c423464  tiff-4.5.0.tar.gz
++sha256  0780558a8bfba0af1160ec1ff11ade4f41c0d7deafd6ecfc796b492a788e380d  LICENSE.md
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 525712c9e9..7981bdf2c9 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -4,16 +4,18 @@
+ #
+ ################################################################################
+ 
+-TIFF_VERSION = 4.4.0
++TIFF_VERSION = 4.5.0
+ TIFF_SITE = http://download.osgeo.org/libtiff
+ TIFF_LICENSE = tiff license
+-TIFF_LICENSE_FILES = COPYRIGHT
++TIFF_LICENSE_FILES = LICENSE.md
+ TIFF_CPE_ID_VENDOR = libtiff
+ TIFF_CPE_ID_PRODUCT = libtiff
+ TIFF_INSTALL_STAGING = YES
+ 
+ TIFF_CONF_OPTS = \
++	--disable-contrib \
+ 	--disable-cxx \
++	--disable-tests \
+ 	--without-x
+ 
+ TIFF_DEPENDENCIES = host-pkgconf
+@@ -23,7 +25,8 @@ HOST_TIFF_CONF_OPTS = \
+ 	--without-x \
+ 	--disable-zlib \
+ 	--disable-lzma \
+-	--disable-jpeg
++	--disable-jpeg \
++	--disable-tests
+ HOST_TIFF_DEPENDENCIES = host-pkgconf
+ 
+ ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
+@@ -84,12 +87,11 @@ ifneq ($(BR2_PACKAGE_TIFF_JBIG),y)
+ TIFF_CONF_OPTS += --disable-jbig
+ endif
+ 
+-TIFF_SUBDIRS = port libtiff
+ ifeq ($(BR2_PACKAGE_TIFF_UTILITIES),y)
+-TIFF_SUBDIRS += tools
++TIFF_CONF_OPTS += --enable-tools
++else
++TIFF_CONF_OPTS += --disable-tools
+ endif
+ 
+-TIFF_MAKE = $(MAKE) SUBDIRS="$(TIFF_SUBDIRS)"
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
