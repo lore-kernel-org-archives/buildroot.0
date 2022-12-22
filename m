@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 605F8C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 07:38:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F401C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 07:40:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAA34610E3;
-	Thu, 22 Dec 2022 07:38:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAA34610E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF20981DF1;
+	Thu, 22 Dec 2022 07:40:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF20981DF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eTSY7fNRcV-g; Thu, 22 Dec 2022 07:38:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZvEP3BSW610Z; Thu, 22 Dec 2022 07:40:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14BDB610E1;
-	Thu, 22 Dec 2022 07:38:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14BDB610E1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 369E08146B;
+	Thu, 22 Dec 2022 07:39:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 369E08146B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1DD661BF36D
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 07:38:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0E88F1BF36D
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 07:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E69B382038
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 07:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E69B382038
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2B688146B
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 07:39:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2B688146B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id no0vDx29dzay for <buildroot@lists.busybox.net>;
- Thu, 22 Dec 2022 07:38:38 +0000 (UTC)
+ with ESMTP id a0JjE9nP0os3 for <buildroot@lists.busybox.net>;
+ Thu, 22 Dec 2022 07:39:57 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFA8582032
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BFA8582032
- for <buildroot@buildroot.org>; Thu, 22 Dec 2022 07:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06D0A8109C
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 06D0A8109C
+ for <buildroot@buildroot.org>; Thu, 22 Dec 2022 07:39:56 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5075E40002;
- Thu, 22 Dec 2022 07:38:34 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id E150B20005;
+ Thu, 22 Dec 2022 07:39:53 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p8G9x-002QH7-AO; Thu, 22 Dec 2022 08:38:33 +0100
+ id 1p8GBE-002QJy-RT; Thu, 22 Dec 2022 08:39:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20221221210704.1868595-1-bernd.kuhls@t-online.de>
-Date: Thu, 22 Dec 2022 08:38:33 +0100
-In-Reply-To: <20221221210704.1868595-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 21 Dec 2022 22:07:04 +0100")
-Message-ID: <87ili3nb0m.fsf@dell.be.48ers.dk>
+References: <20221221211644.2760390-1-bernd.kuhls@t-online.de>
+Date: Thu, 22 Dec 2022 08:39:52 +0100
+In-Reply-To: <20221221211644.2760390-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 21 Dec 2022 22:16:44 +0100")
+Message-ID: <87edsrnayf.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: security bump version
- to 7.87.0
+Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: 5.{4, 10,
+ 15}.x / 6.{0, 1}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,22 +64,13 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
-
- > Fixes the following security issues:
- > - CVE-2022-43551: Another HSTS bypass via IDN
- >   https://curl.se/docs/CVE-2022-43551.html
-
- > - CVE-2022-43552: HTTP Proxy deny use-after-free
- >   https://curl.se/docs/CVE-2022-43552.html
-
- > Changelog: https://curl.se/changes.html
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
