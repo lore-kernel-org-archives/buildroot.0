@@ -1,59 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB290C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 19:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D480C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 19:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3426B60D70;
-	Thu, 22 Dec 2022 19:55:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3426B60D70
+	by smtp2.osuosl.org (Postfix) with ESMTP id A71314031E;
+	Thu, 22 Dec 2022 19:55:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A71314031E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JVu4BmaKcHXE; Thu, 22 Dec 2022 19:55:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id crJ-Vm4P3uKu; Thu, 22 Dec 2022 19:55:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83A7760B5A;
-	Thu, 22 Dec 2022 19:55:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83A7760B5A
+	by smtp2.osuosl.org (Postfix) with ESMTP id D37D340260;
+	Thu, 22 Dec 2022 19:55:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D37D340260
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 486BC1BF3EC
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 19:55:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DA121BF3EC
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 19:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30FDA40260
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 19:55:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30FDA40260
+ by smtp2.osuosl.org (Postfix) with ESMTP id 095F040260
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 19:55:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 095F040260
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RGohFT9sQlcw for <buildroot@lists.busybox.net>;
- Thu, 22 Dec 2022 19:55:39 +0000 (UTC)
+ with ESMTP id by7DWzlypNx8 for <buildroot@lists.busybox.net>;
+ Thu, 22 Dec 2022 19:55:49 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD67F40165
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD67F40165
- for <buildroot@buildroot.org>; Thu, 22 Dec 2022 19:55:38 +0000 (UTC)
-Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout01.t-online.de (Postfix) with SMTP id B37DD11FEF
- for <buildroot@buildroot.org>; Thu, 22 Dec 2022 20:55:35 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd89.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC6EF40165
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EC6EF40165
+ for <buildroot@buildroot.org>; Thu, 22 Dec 2022 19:55:48 +0000 (UTC)
+Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
+ by mailout11.t-online.de (Postfix) with SMTP id 03B6E1BAA4
+ for <buildroot@buildroot.org>; Thu, 22 Dec 2022 20:55:37 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd88.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1p8RfD-1FqDNB0; Thu, 22 Dec 2022 20:55:35 +0100
+ esmtp id 1p8RfD-10PYDx0; Thu, 22 Dec 2022 20:55:35 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40746)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1p8RfD-0003SF-0u
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p8RfD-0003SF-15
  for buildroot@buildroot.org; Thu, 22 Dec 2022 20:55:35 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 22 Dec 2022 20:55:34 +0100
-Message-Id: <20221222195535.2277358-1-bernd.kuhls@t-online.de>
+Date: Thu, 22 Dec 2022 20:55:35 +0100
+Message-Id: <20221222195535.2277358-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221222195535.2277358-1-bernd.kuhls@t-online.de>
+References: <20221222195535.2277358-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1671738935-FA45C742-6E5A914F/0/0 CLEAN NORMAL
-X-TOI-MSGID: 37d9130d-2ddf-4beb-bfb3-0883e5ec9cd6
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.20
+X-TOI-EXPURGATEID: 150726::1671738935-E28B3E65-9FD3F1A6/0/0 CLEAN NORMAL
+X-TOI-MSGID: cab39421-912d-414a-ab8e-a945460d0ca3
+Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: bump version to
+ 0.5.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,38 +74,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://dovecot.org/pipermail/dovecot-news/2022-December/000479.html
+https://dovecot.org/pipermail/dovecot-news/2022-December/000480.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 124f834dca..7036df57a8 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 635e221481..5c7ba322b2 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
  # Locally computed after checking signature
--sha256  db5abcd87d7309659ea6b45b2cb6ee9c5f97486b2b719a5dd05a759e1f6a5c51  dovecot-2.3.19.1.tar.gz
-+sha256  caa832eb968148abdf35ee9d0f534b779fa732c0ce4a913d9ab8c3469b218552  dovecot-2.3.20.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index e28f500b7b..4b17784f93 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+-sha256  10b923efcc6f3c4d92ecdbb780e12a5c33e6d0fdbe3aba5fcd3ecde4179c730c  dovecot-2.3-pigeonhole-0.5.19.tar.gz
++sha256  ae32bd4870ea2c1328ae09ba206e9ec12128046d6afca52fbbc9ef7f75617c98  dovecot-2.3-pigeonhole-0.5.20.tar.gz
+ sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index c25cd60b21..0b64cb0d6f 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19.1
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).20
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.19
++DOVECOT_PIGEONHOLE_VERSION = 0.5.20
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
 -- 
 2.34.1
 
