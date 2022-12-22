@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1737C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:15:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6B31C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:16:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56F90831A5;
-	Mon, 20 Feb 2023 23:15:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56F90831A5
+	by smtp1.osuosl.org (Postfix) with ESMTP id A02AB83224;
+	Mon, 20 Feb 2023 23:16:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A02AB83224
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Anm1mj16nBsG; Mon, 20 Feb 2023 23:15:53 +0000 (UTC)
+	with ESMTP id Q6JpZI6ZHItn; Mon, 20 Feb 2023 23:16:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CD48831EF;
-	Mon, 20 Feb 2023 23:15:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CD48831EF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C59B91BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2BFC83218;
+	Mon, 20 Feb 2023 23:16:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2BFC83218
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D6F971BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2E3641743
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2E3641743
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59B8C6137E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59B8C6137E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DLpbkLfitPFq for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SlcUN8kovtrB for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08127414E9
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08127414E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8813C61374
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8813C61374
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 05A1786495; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+ id 823B48648F; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 21:00:16 +0100
+Date: Thu, 22 Dec 2022 22:24:06 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 16d83fa724e97c51b78d516674842a1f33c9a71b
-X-Git-Newrev: fbddd126011611e97cc920e40cd58784e29f242d
+X-Git-Oldrev: e02fdfe26b2ad36166379c444e017f832946f30d
+X-Git-Newrev: 31b7aecd7ef0b34095e72a1d4fbf41a05d5bd10b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205232.05A1786495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/download: fix
- concurrent cargo vendor
+Message-Id: <20230220205214.823B48648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/luaexpat: bump to
+ version 1.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,90 +57,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbddd126011611e97cc920e40cd58784e29f242d
+commit: https://git.buildroot.net/buildroot/commit/?id=31b7aecd7ef0b34095e72a1d4fbf41a05d5bd10b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 8450b7691870 (package/pkg-cargo: move CARGO_HOME into DL_DIR)
-allowed for a shared cargo cache of crates. Internally, cargo is
-supposed to lock themselves when accessing that cache, and that commit
-even had some research in that area, pointing at [0] for complaints
-about too-coarse the lock, so it was deemed safe to have a shared cargo
-home.
-
-However, in practice, the locking as implemented by cargo, fails to
-properly protect the concurrent accesses to the crates cache, with random
-failures that manifest themselves like so:
-
-        Blocking waiting for file lock on package cache
-        Blocking waiting for file lock on package cache
-     Downloading crates ...
-    error: failed to sync
-    Caused by:
-      failed to download packages
-    Caused by:
-      failed to download `autocfg v1.1.0`
-    Caused by:
-      unable to get packages from source
-    Caused by:
-      failed to unpack package `autocfg v1.1.0`
-    Caused by:
-      failed to unpack entry at `autocfg-1.1.0/src/tests.rs`
-    Caused by:
-      No such file or directory (os error 2) while canonicalizing [...]
-
-with the last few errors sometime being:
-
-    Caused by:
-      failed to parse manifest at `[...]/aho-corasick-0.7.18/Cargo.toml`
-    Caused by:
-      can't find library `aho_corasick`, rename file to `src/lib.rs` or specify lib.path
-
-So, as we do not systematically use our own cargo build (we can use a
-pre-built one with host-rust-bin), we can't patch cargo (even if we knew
-what to do!).
-
-Instead, we implement a lock ourselves, by wrapping the call to "cargo
-vendor" with a flock(1) on cargo home.
-
-Note: the download wrapper is already flock-ed, but it is a per-package
-lock, so it does not prevent different packages from being downloaded in
-parallel; if those packages need cargo vendoring, that will not be
-protected by the flock on the dl wrapper. So we really do need a flock
-on cargo home.
-
-[0] https://github.com/rust-lang/cargo/issues/6930
-
-Fixes: 8450b769187087751f83cbefcf0a88f70d9da670
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Moritz Bitsch <moritz@h6t.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/cargo-post-process | 2 ++
- 1 file changed, 2 insertions(+)
+ package/luaexpat/luaexpat.hash | 2 +-
+ package/luaexpat/luaexpat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
-index 21a6be8dbe..aea2d8da7a 100755
---- a/support/download/cargo-post-process
-+++ b/support/download/cargo-post-process
-@@ -26,6 +26,8 @@ pushd "${base_name}" > /dev/null
+diff --git a/package/luaexpat/luaexpat.hash b/package/luaexpat/luaexpat.hash
+index be67e9be6f..621293a0b9 100644
+--- a/package/luaexpat/luaexpat.hash
++++ b/package/luaexpat/luaexpat.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  536a5eda09bb070d2de8ecdd15566d3a55e2afa5ded2ef183cd453bac8c41e98  luaexpat-1.5.0-1.src.rock
++sha256  eb7abc4cc39dd50eecb30896686bac84e66fd3c0774d0749b391e7ac5d222f45  luaexpat-1.5.1-1.src.rock
+ sha256  7e6a727e5b57cca713a2f2633f05d7e0cc1e261cc6a7613bbe266e625b2f14da  luaexpat/LICENSE
+diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
+index f56bf604b3..73675a8ee6 100644
+--- a/package/luaexpat/luaexpat.mk
++++ b/package/luaexpat/luaexpat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Create the local .cargo/config with vendor info
- mkdir -p .cargo/
-+mkdir -p "${CARGO_HOME}"
-+flock "${CARGO_HOME}"/.br-lock \
- cargo vendor \
-     --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} \
-     --locked VENDOR \
+-LUAEXPAT_VERSION = 1.5.0-1
++LUAEXPAT_VERSION = 1.5.1-1
+ LUAEXPAT_SUBDIR = luaexpat
+ LUAEXPAT_LICENSE = MIT
+ LUAEXPAT_LICENSE_FILES = $(LUAEXPAT_SUBDIR)/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
