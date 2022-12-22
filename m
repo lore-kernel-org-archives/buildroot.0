@@ -4,86 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1759EC4167B
-	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 16:51:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB290C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 19:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC8B360D67;
-	Thu, 22 Dec 2022 16:51:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC8B360D67
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3426B60D70;
+	Thu, 22 Dec 2022 19:55:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3426B60D70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O8cBU84eRXYs; Thu, 22 Dec 2022 16:51:29 +0000 (UTC)
+	with ESMTP id JVu4BmaKcHXE; Thu, 22 Dec 2022 19:55:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04E5160BE5;
-	Thu, 22 Dec 2022 16:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04E5160BE5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 612111BF4D7
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 16:51:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83A7760B5A;
+	Thu, 22 Dec 2022 19:55:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83A7760B5A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 486BC1BF3EC
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 19:55:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3ACFA41843
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 16:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3ACFA41843
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30FDA40260
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 19:55:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30FDA40260
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZoTYdfFU9HEB for <buildroot@lists.busybox.net>;
- Thu, 22 Dec 2022 16:51:25 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04A29417FC
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 04A29417FC
- for <buildroot@buildroot.org>; Thu, 22 Dec 2022 16:51:24 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- b24-20020a05600c4a9800b003d21efdd61dso1724326wmp.3
- for <buildroot@buildroot.org>; Thu, 22 Dec 2022 08:51:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=e0c7gtPxZjO4ZOUjh0VDMk1Q25hwtGyl9gDw4Axdibc=;
- b=lT0Gywvletmr3u43UKZGzLEqItoOtez76akv7k7RSLjIoIC24PTP71DRTpn8ijwFp1
- gr/VahxmzpB+/QpzyD5LI82OtYkCU8+z4oyjpnCAG8SKqQhb7B75UnmHAFKpiV9irVae
- dYkUaT+iETM/L3m86J99IzBaqiDtQ5j1WKhjwOIGuIEwZfmVODHi88SbdB4R1OT4WupI
- n1TS7nf/o1ipyjj6vC5FMuKaJ8lJyV3Pz6t5xDw21TRaZCR5Xd5E2T9ov3BQTfEg/4Ff
- 9cFnyMIii4QCe+B3eTzKJHE1jmsWfc54jgPcvFOgbgfihY8b00nETqCyQLEsa+qU0hsF
- IRLA==
-X-Gm-Message-State: AFqh2kqyi7mBFKdYcv31spt4nHE1i7/sw4EQwnflKp4BpAlzF1uTyKBe
- QcVcuDFx4u7mJqCTSvLDtcV4pB8Yt5c=
-X-Google-Smtp-Source: AMrXdXtw/Cry30tZcBQyUeKBmy9euVBZcXBSCSEfE8eMhNLCkQ8Ozgm/W34P1VLfjly9a24gf4QLzQ==
-X-Received: by 2002:a05:600c:4e14:b0:3c6:c6c9:d75e with SMTP id
- b20-20020a05600c4e1400b003c6c6c9d75emr5505129wmq.0.1671727882826; 
- Thu, 22 Dec 2022 08:51:22 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- c12-20020a05600c0a4c00b003cfa3a12660sm12342695wmq.1.2022.12.22.08.51.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Dec 2022 08:51:22 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RGohFT9sQlcw for <buildroot@lists.busybox.net>;
+ Thu, 22 Dec 2022 19:55:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD67F40165
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD67F40165
+ for <buildroot@buildroot.org>; Thu, 22 Dec 2022 19:55:38 +0000 (UTC)
+Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
+ by mailout01.t-online.de (Postfix) with SMTP id B37DD11FEF
+ for <buildroot@buildroot.org>; Thu, 22 Dec 2022 20:55:35 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd89.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p8RfD-1FqDNB0; Thu, 22 Dec 2022 20:55:35 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40746)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p8RfD-0003SF-0u
+ for buildroot@buildroot.org; Thu, 22 Dec 2022 20:55:35 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 22 Dec 2022 17:51:17 +0100
-Message-Id: <20221222165117.62002-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Thu, 22 Dec 2022 20:55:34 +0100
+Message-Id: <20221222195535.2277358-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=e0c7gtPxZjO4ZOUjh0VDMk1Q25hwtGyl9gDw4Axdibc=;
- b=DNqhBhDC5OgJOxn1HFQTe9YEIArrWS8H3Ix53SVhp/LkGgvRDHIi/7EzRkGRWuUJEN
- CBJ6mt6WbJMW2b5d/JacprWG2ws/L+1s2YIgZu8Jiw3s8ZZxVBu8+1s/hW8dkp/Kd+TW
- dBrnZ6Z14J+roesOZqfZsQb9Lj1xV+khCSDCOdY+UhxH0zvQLuU1/DK3oIFehjmpv6Q7
- 9ZS48xHwJVgGjQcBzooOjb8KSt8uP8gwG4O99A/W0PYf8HmxwRUfh9eItPXEEqz7OZhA
- f8gL02uEKMvwZl0oaSPNgoLGbaCYzEhHa5weQqjQ07o7/fnnI55WNxUgUzH7xup0yoxs
- llJg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=DNqhBhDC
-Subject: [Buildroot] [PATCH 1/1] package/tiff: add libdeflate optional
- dependency
+X-TOI-EXPURGATEID: 150726::1671738935-FA45C742-6E5A914F/0/0 CLEAN NORMAL
+X-TOI-MSGID: 37d9130d-2ddf-4beb-bfb3-0883e5ec9cd6
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,59 +65,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libdeflate is an optional dependency which is enabled by default since
-version 4.2.0 and
-https://gitlab.com/libtiff/libtiff/-/commit/3a2de853a932bd0ea79d1677d319841edb736c38
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2022-December/000479.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tiff/Config.in | 6 ++++++
- package/tiff/tiff.mk   | 7 +++++++
- 2 files changed, 13 insertions(+)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tiff/Config.in b/package/tiff/Config.in
-index f842c2ead8..58e2052ea5 100644
---- a/package/tiff/Config.in
-+++ b/package/tiff/Config.in
-@@ -11,6 +11,12 @@ config BR2_PACKAGE_TIFF_CCITT
- 	bool "CCITT Group 3 & 4 support"
- 	default y
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 124f834dca..7036df57a8 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256  db5abcd87d7309659ea6b45b2cb6ee9c5f97486b2b719a5dd05a759e1f6a5c51  dovecot-2.3.19.1.tar.gz
++sha256  caa832eb968148abdf35ee9d0f534b779fa732c0ce4a913d9ab8c3469b218552  dovecot-2.3.20.tar.gz
+ sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index e28f500b7b..4b17784f93 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_PACKAGE_TIFF_LIBDEFLATE
-+	bool "Libdeflate usage (still requires Zlib)"
-+	default y
-+	select BR2_PACKAGE_LIBDEFLATE
-+	select BR2_PACKAGE_TIFF_ZLIB
-+
- config BR2_PACKAGE_TIFF_PACKBITS
- 	bool "Macintosh PackBits algorithm"
- 	default y
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 7981bdf2c9..a753065fde 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -33,6 +33,13 @@ ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
- TIFF_CONF_OPTS += --disable-ccitt
- endif
- 
-+ifeq ($(BR2_PACKAGE_TIFF_LIBDEFLATE),y)
-+TIFF_CONF_OPTS += --enable-libdeflate
-+TIFF_DEPENDENCIES += libdeflate
-+else
-+TIFF_CONF_OPTS += --disable-libdeflate
-+endif
-+
- ifneq ($(BR2_PACKAGE_TIFF_PACKBITS),y)
- TIFF_CONF_OPTS += --disable-packbits
- endif
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19.1
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).20
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
