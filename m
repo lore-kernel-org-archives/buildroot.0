@@ -4,48 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9477DC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 10:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B5D7C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 22 Dec 2022 10:09:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1233460AB9;
-	Thu, 22 Dec 2022 10:08:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1233460AB9
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB5EA60AB9;
+	Thu, 22 Dec 2022 10:09:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB5EA60AB9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 332BMP06ijon; Thu, 22 Dec 2022 10:08:28 +0000 (UTC)
+	with ESMTP id 504-ptszZ7iT; Thu, 22 Dec 2022 10:09:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A49560ABE;
-	Thu, 22 Dec 2022 10:08:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A49560ABE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B36051BF2A0
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 10:08:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBA3760ABE;
+	Thu, 22 Dec 2022 10:09:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBA3760ABE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 89AFC1BF2A0
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 10:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E5CB82073
- for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 10:08:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E5CB82073
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F3B660ABE
+ for <buildroot@lists.busybox.net>; Thu, 22 Dec 2022 10:09:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F3B660ABE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d2fZDWrOYh4J for <buildroot@lists.busybox.net>;
- Thu, 22 Dec 2022 10:08:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 825D88206E
- for <buildroot@buildroot.org>; Thu, 22 Dec 2022 10:08:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 825D88206E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 68BDB86D3A; Thu, 22 Dec 2022 10:08:24 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 22 Dec 2022 11:07:59 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0245d30e569cc88875f7ed5b162029064128e89e
-X-Git-Newrev: 3f79611b3037cf505f00cc67011626deb4d8f5b8
-X-Patchwork-Hint: ignore
-Message-Id: <20221222100824.68BDB86D3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] system: add options for /var factory and
- tmpfiles pre-seed
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 77ONy9oTOFm0 for <buildroot@lists.busybox.net>;
+ Thu, 22 Dec 2022 10:08:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95D6C60AB9
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 95D6C60AB9
+ for <buildroot@buildroot.org>; Thu, 22 Dec 2022 10:08:59 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:11b5:850a:c0e4:4863])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 7655B200411;
+ Thu, 22 Dec 2022 11:08:51 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 22 Dec 2022 11:08:51 +0100
+Date: Thu, 22 Dec 2022 11:08:51 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: yann.morin@orange.com
+Message-ID: <20221222100851.GQ2909@scaer>
+References: <10881_1666122188_634F01CC_10881_33_1_cover.1666122184.git.yann.morin@orange.com>
+ <30918_1666122199_634F01D7_30918_364_1_3fe68afdbb79505161ac76e31e6054dc44dd340d.1666122184.git.yann.morin@orange.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <30918_1666122199_634F01D7_30918_364_1_3fe68afdbb79505161ac76e31e6054dc44dd340d.1666122184.git.yann.morin@orange.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1671703736;
+ bh=9ZffmUhxZ6232TOA0jHQ8ciGPtSQ6Z+K0y6Btg9jf1M=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=TfjQkyAevjBrGOMchjPNW2UFrkE5uMvGcUj4Pp+ngA5YIzFrt0Af1gQqnV8xoa9c9
+ 3sXeStNw7HLJQpGi7MUUWAcA28h3EilyvGvqmbdF44Ah2b6nMAXQFKh4h8BgUSacCl
+ PkSlznkPMMZ+Xtnfsk18wZmbd46Hz9KH7DlvMMA3UrRJYnvB6wH+NVcL0imTB1H1dV
+ aM0M+HVYjN2M5OnXkEAwL0DKyVQH9wFsGYyJY7XFpDkS4OtlJlIUcc7cHRa6na332G
+ sGZQ+VHOqSq+AFPC8CeU9e6UxYuFzpLtLMCtKyB+vXCn/u+FhNB6cW3vJEfK07S+lU
+ tf4rYyfnf96Wg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=TfjQkyAe
+Subject: Re: [Buildroot] [PATCH 4/6 v3] system: add options for /var factory
+ and tmpfiles pre-seed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,179 +78,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3366958636680336533=="
+Cc: Romain Naour <romain.naour@smile.fr>,
+ =?utf-8?B?SmXMgXJlzIFteQ==?= Rosen <jeremy.rosen@smile.fr>,
+ Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3366958636680336533==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3f79611b3037cf505f00cc67011626deb4d8f5b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Currently, when one does not enable remounting the rootfs read-write,
-i.e. keep it read-only, for example because the filesystem is actually
-read-only by design, like squashfs, then two things happen:
-
-  - we create a factory from the content of /var at build time, register
-    tmpfiles entries for it, and mount a tmpfs on /var at runtime, so
-    that systemd-tmpfiles does populate /var from the factory; this is
-    only done when the rootfs is not remounted r/w;
-
-  - we trigger systemd-tmpfiles at build time, which uses the tmpfiles
-    db, of which our /var entries, to pre-populate the filesystem; this
-    is always done, whether the rootfs is remounted r/w or not.
-
-Note that Buildroot mounts a tmpfs on /var, and leaves to the integrator
-to care for providing an actual filesystem, as there are too many
-variants and is very specific to each use-case.
-
-These two mechanisms are conflicting, semantically, but also
-technically: the files from the factory will be duplicated, but that
-may help in some situations when the actual /var filesystem is not
-mountable.
-
-In some cases, it might be preferable to have none, either, or both
-mechanisms enabled; it highly depends on the ultimate integration scheme
-chosen for a device.
-
-For example, some people will be very happy with a /var that is actually
-on a tmpfs and that it gets reseeded form scratch at every boot, while
-others may want to ensure that their system continue to work even when
-they can't mount something that makes /var writable.
-
-YMMV, as they used to say back in the day...
-
-So, we introduce two new options, in the system sub-menu, each to drive
-each mechanism. We default those options to y, to keep the previous
-behaviour by default, except the var factory is only available when the
-rootfs is not remounted r/w, as it were so far.
-
-We still hint in the help text that there might be some conflict between
-the two mechanisms, but since it has been that way for some time, it
-does not look too broken for most people.
-
-Since that introduces more options related to systemd being chosen as an
-init system, we gather those two options and the existing one inside a
-if-endif block, rather than adding more 'depends on' on each options.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Norbert Lange <nolange79@gmail.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: Jérémy Rosen <jeremy.rosen@smile.fr>
-Cc: Yann E. MORIN <yann.morin@orange.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../skeleton-init-systemd/skeleton-init-systemd.mk |  7 ++--
- system/Config.in                                   | 42 +++++++++++++++++++++-
- 2 files changed, 46 insertions(+), 3 deletions(-)
-
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index 559a169aee..30783dfd26 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -32,6 +32,7 @@ define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
- 	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
- endef
- 
-+ifeq ($(BR2_INIT_SYSTEMD_VAR_FACTORY),y)
- define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 	rm -rf $(TARGET_DIR)/usr/share/factory/var
- 	mv $(TARGET_DIR)/var $(TARGET_DIR)/usr/share/factory/var
-@@ -55,14 +56,16 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 		$(TARGET_DIR)/usr/lib/systemd/system/var.mount
- endef
- SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
-+endif  # BR2_INIT_SYSTEMD_VAR_FACTORY
-+endif  # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- 
--endif
--
-+ifeq ($(BR2_INIT_SYSTEMD_POPULATE_TMPFILES),y)
- define SKELETON_INIT_SYSTEMD_CREATE_TMPFILES_HOOK
- 	HOST_SYSTEMD_TMPFILES=$(HOST_DIR)/bin/systemd-tmpfiles \
- 		$(SKELETON_INIT_SYSTEMD_PKGDIR)/fakeroot_tmpfiles.sh $(TARGET_DIR)
- endef
- SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_CREATE_TMPFILES_HOOK
-+endif  # BR2_INIT_SYSTEMD_POPULATE_TMPFILES
- 
- define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/home
-diff --git a/system/Config.in b/system/Config.in
-index 888c24ce81..806a747315 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -154,10 +154,48 @@ source "$BR2_BASE_DIR/.br2-external.in.init"
- 
- endchoice
- 
-+if BR2_INIT_SYSTEMD
-+
-+config BR2_INIT_SYSTEMD_VAR_FACTORY
-+	bool "build a factory to populate a tmpfs on /var"
-+	default y  # legacy
-+	depends on !BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
-+	help
-+	  Build a factory of the content of /var as installed by
-+	  packages, mount a tmpfs on /var at runtime, so that
-+	  systemd-tmpfiles can populate it from the factory.
-+
-+	  This may help on a read-only rootfs.
-+
-+	  It probably does not play very well with triggering a call
-+	  to systemd-tmpfiles at build time (below).
-+
-+	  Note: Buildroot mounts a tmpfs on /var to at least make the
-+	  system bootable out of the box; mounting a filesystem from
-+	  actual storage is left to the integration, as it is too
-+	  specific and may need preparatory work like partitionning a
-+	  device and/or formatting a filesystem first, so that falls
-+	  out of the scope of Buildroot.
-+
-+	  To use persistent storage, provide a systemd dropin for the
-+	  var.mount unit, that overrides the What and Type, and possibly
-+	  the Options and After, fields.
-+
-+config BR2_INIT_SYSTEMD_POPULATE_TMPFILES
-+	bool "trigger systemd-tmpfiles during build"
-+	default y  # legacy
-+	help
-+	  Act on the systemd-tmpfiles.d database at build time, when
-+	  assembling the root filesystems.
-+
-+	  This may help on a read-only filesystem.
-+
-+	  It probably does not play very well with the /var factory
-+	  (above).
-+
- config BR2_PACKAGE_SYSTEMD_DEFAULT_TARGET
- 	string "The default unit systemd starts at bootup"
- 	default "multi-user.target"
--	depends on BR2_INIT_SYSTEMD
- 	help
- 	  Specify the name of the unit configuration file to be started
- 	  at bootup by systemd. Should end in ".target".
-@@ -165,6 +203,8 @@ config BR2_PACKAGE_SYSTEMD_DEFAULT_TARGET
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd.special.html#default.target
- 
-+endif # BR2_INIT_SYSTEMD
-+
- choice
- 	prompt "/dev management" if !BR2_INIT_SYSTEMD
- 	default BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
-
---===============3366958636680336533==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3366958636680336533==--
+WWFubiwgQWxsLAoKT24gMjAyMi0xMC0xOCAyMTo0MyArMDIwMCwgeWFubi5tb3JpbkBvcmFuZ2Uu
+Y29tIHNwYWtlIHRodXNseToKPiBGcm9tOiAiWWFubiBFLiBNT1JJTiIgPHlhbm4ubW9yaW4uMTk5
+OEBmcmVlLmZyPgo+IAo+IEN1cnJlbnRseSwgd2hlbiBvbmUgZG9lcyBub3QgZW5hYmxlIHJlbW91
+bnRpbmcgdGhlIHJvb3RmcyByZWFkLXdyaXRlLAo+IGkuZS4ga2VlcCBpdCByZWFkLW9ubHksIGZv
+ciBleGFtcGxlIGJlY2F1c2UgdGhlIGZpbGVzeXN0ZW0gaXMgYWN0dWFseWwKPiByZWFkLW9ubHkg
+YnkgZGVzaWduLCBsaWtlIHNxdWFzaGZzLCB0aGVuIHR3byB0aGluZ3MgaGFwcGVuOgo+IAo+ICAg
+LSB3ZSBjcmVhdGUgYSBmYWN0b3J5IGZyb20gdGhlIGNvbnRlbnQgb2YgL3ZhciBhdCBidWlsZCB0
+aW1lLCByZWdpc3Rlcgo+ICAgICB0bXBmaWxlcyBlbnRyaWVzIGZvciBpdCwgYW5kIG1vdW50IGEg
+dG1wZnMgb24gL3ZhciBhdCBydW50aW1lLCBzbwo+ICAgICB0aGF0IHN5c3RlbWQtdG1wZmlsZXMg
+ZG9lcyBwb3B1bGF0ZSAvdmFyIGZyb20gdGhlIGZhY3Rvcnk7IHRoaXMgaXMKPiAgICAgb25seSBk
+b25lIHdoZW4gdGhlIHJvb3RmcyBpcyBub3QgcmVtb3VudGVkIHIvdzsKPiAKPiAgIC0gd2UgdHJp
+Z2dlciBzeXN0ZW1kLXRtcGZpbGVzIGF0IGJ1aWxkIHRpbWUsIHdoaWNoIHVzZXMgdGhlIHRtcGZp
+bGVzCj4gICAgIGRiLCBvZiB3aGljaCBvdXIgL3ZhciBlbnRyaWVzLCB0byBwcmUtcG9wdWxhdGUg
+dGhlIGZpbGVzeXN0ZW07IHRoaXMKPiAgICAgaXMgYWx3YXlzIGRvbmUsIHdoZXRoZXIgdGhlIHJv
+b3RmcyBpcyByZW1vdW50ZWQgci93IG9yIG5vdC4KPiAKPiBOb3RlIHRoYXQgQnVpbGRyb290IG1v
+dW50cyBhIHRtcGZzIG9uIC92YXIsIGFuZCBsZWF2ZXMgdG8gdGhlIGludGVncmF0b3IKPiB0byBj
+YXJlIGZvciBwcm92aWRpbmcgYW4gYWN0dWFsIGZpbGVzeXN0ZW0sIGFzIHRoZXJlIGFyZSB0b28g
+bWFueQo+IHZhcmlhbnRzIGFuZCBpcyB2ZXJ5IHNwZWNpZmljIHRvIGVhY2ggdXNlLWNhc2UuCj4g
+Cj4gVGhlc2UgdHdvIG1lY2hhbmlzbXMgYXJlIGNvbmZsaWN0aW5nLCBzZW1hbnRpY2FsbHksIGJp
+dCBhbHNvCj4gdGVjaG5pY2FsbHk6IHRoZSBmaWxlcyBmcm9tIHRoZSBmYWN0b3J5IHdpbGwgYmUg
+ZHVwbGljYXRlZCwgYnV0IHRoYXQKPiBtYXkgaGVscCBpbiBzb21lIHNpdHVhdGlvbnMgd2hlbiB0
+aGUgYWN0dWFsIC92YXIgZmlsZXN5c3RlbSBpcyBub3QKPiBtb3VudGFibGUuCj4gCj4gSW4gc29t
+ZSBjYXNlcywgaXQgbWlnaHQgYmUgcHJlZmVyYWJsZSB0byBoYXZlIG5vbmUsIGVpdGhlciwgb3Ig
+Ym90aAo+IG1lY2hhbmlzbXMgZW5hYmxlZDsgaXQgaGlnaGx5IGRlcGVuZHMgb24gdGhlIHVsdGlt
+YXRlIGludGVncmF0aW9uIHNjaGVtZQo+IGNob3NlbiBmb3IgYSBkZXZpY2UuCj4gCj4gRm9yIGV4
+YW1wbGUsIHNvbWUgcGVvcGxlIHdpbGwgYmUgdmVyeSBoYXBweSB3aXRoIGEgL3ZhciB0aGF0IGlz
+IGFjdHVhbGx5Cj4gb24gYSB0bXBmcyBhbmQgdGhhdCBpdCBnZXRzIHJlc2VlZGVkIGZvcm0gc2Ny
+YXRjaCBhdCBldmVyeSBib290LCB3aGlsZQo+IG90aGVycyBtYXkgd2FudCB0byBlbnN1cmUgdGhh
+dCB0aGVpciBzeXN0ZW0gY29udGludWUgdG8gd29yayBldmVuIHdoZW4KPiB0aGV5IGNhbid0IG1v
+dW50IHNvbWV0aGluZyB0aGF0IG1ha2VzIC92YXIgd3JpdGFibGUuCj4gCj4gWU1NViwgYXMgdGhl
+eSB1c2VkIHRvIHNheSBiYWNrIGluIHRoZSBkYXkuLi4KPiAKPiBTbywgd2UgaW50cm9kdWNlIHR3
+byBuZXcgb3B0aW9ucywgaW4gdGhlIHN5c3RlbSBzdWItbWVudSwgZWFjaCB0byBkcml2ZQo+IGVh
+Y2ggbWVjaGFuaXNtLiBXZSBkZWZhdWx0IHRob3NlIG9wdGlvbnMgdG8geSwgdG8ga2VlcCB0aGUg
+cHJldmlvdXMKPiBiZWhhdmlvdXIgYnkgZGVmYXVsdCwgZXhjZXB0IHRoZSB2YXIgZmFjdG9yeSBp
+cyBvbmx5IGF2YWlsYWJsZSB3aGVuIHRoZQo+IHJvb3RmcyBpcyBub3QgcmVtb3VudGVkIHIvdywg
+YXMgaXQgd2VyZSBzbyBmYXIuCj4gCj4gV2Ugc3RpbGwgaGludCBpbiB0aGUgaGVscCB0ZXh0IHRo
+YXQgdGhlcmUgbWlnaHQgYmUgc29tZSBjb25mbGljdCBiZXR3ZWVuCj4gdGhlIHR3byBtZWNoYW5p
+c21zLCBidCBzaW5jZSBpdCBoYXMgYmVlbiB0aGF0IHdheSBmb3Igc29tZSB0aW1lLCBpdCBkb2Vz
+Cj4gbm90IGxvb2sgdG9vIGJyb2tlbiBmb3IgbW9zdCBwZW9wbGUuCj4gCj4gU2luY2UgdGhhdCBp
+bnRyb2R1Y2VzIG1vcmUgb3B0aW9ucyByZWxhdGVkIHRvIHN5c3RlbWQgYmVpbmcgY2hvc2VuIGFz
+IGFuCj4gaW5pdCBzeXN0ZW0sIHdlIGdhdGhlciB0aG9zZSB0d28gb3B0aW9ucyBhbmQgdGhlIGV4
+aXN0aW5nIG9uZSBpbnNpZGUgYQo+IGlmLWVuZGlmIGJsb2NrLCByYXRoZXIgdGhhbiBhZGRpbmcg
+bW9yZSAnZGVwZW5kcyBvbicgb24gZWFjaCBvcHRpb25zLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFlh
+bm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPgo+IENjOiBOb3JiZXJ0IExhbmdl
+IDxub2xhbmdlNzlAZ21haWwuY29tPgo+IENjOiBBcm5vdXQgVmFuZGVjYXBwZWxsZSAoRXNzZW5z
+aXVtL01pbmQpIDxhcm5vdXRAbWluZC5iZT4KPiBDYzogUm9tYWluIE5hb3VyIDxyb21haW4ubmFv
+dXJAc21pbGUuZnI+Cj4gQ2M6IEplzIFyZcyBbXkgUm9zZW4gPGplcmVteS5yb3NlbkBzbWlsZS5m
+cj4KPiBDYzogWWFubiBFLiBNT1JJTiA8eWFubi5tb3JpbkBvcmFuZ2UuY29tPgoKQXBwbGllZCB0
+byBtYXN0ZXIsIGFmdGVyIGZpeGluZyBteSBtYW55IHVzdWFsIHR5cG9lcywgdGhhbmtzLgoKUmVn
+YXJkcywKWWFubiBFLiBNT1JJTi4KCj4gLS0tCj4gIC4uLi9za2VsZXRvbi1pbml0LXN5c3RlbWQu
+bWsgICAgICAgICAgICAgICAgICB8ICA3ICsrKy0KPiAgc3lzdGVtL0NvbmZpZy5pbiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgNDIgKysrKysrKysrKysrKysrKysrLQo+ICAyIGZpbGVz
+IGNoYW5nZWQsIDQ2IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdp
+dCBhL3BhY2thZ2Uvc2tlbGV0b24taW5pdC1zeXN0ZW1kL3NrZWxldG9uLWluaXQtc3lzdGVtZC5t
+ayBiL3BhY2thZ2Uvc2tlbGV0b24taW5pdC1zeXN0ZW1kL3NrZWxldG9uLWluaXQtc3lzdGVtZC5t
+awo+IGluZGV4IDg5YTI4ZDE3ODAuLjY5OTkxMjY1YTUgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9z
+a2VsZXRvbi1pbml0LXN5c3RlbWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1rCj4gKysrIGIvcGFj
+a2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1rCj4gQEAg
+LTMyLDYgKzMyLDcgQEAgZGVmaW5lIFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9ST09UX1JPX09SX1JX
+Cj4gIAllY2hvICIvZGV2L3Jvb3QgLyBhdXRvIHJvIDAgMSIgPiQoVEFSR0VUX0RJUikvZXRjL2Zz
+dGFiCj4gIGVuZGVmCj4gIAo+ICtpZmVxICgkKEJSMl9JTklUX1NZU1RFTURfVkFSX0ZBQ1RPUlkp
+LHkpCj4gIGRlZmluZSBTS0VMRVRPTl9JTklUX1NZU1RFTURfUFJFX1JPT1RGU19WQVIKPiAgCXJt
+IC1yZiAkKFRBUkdFVF9ESVIpL3Vzci9zaGFyZS9mYWN0b3J5L3Zhcgo+ICAJbXYgJChUQVJHRVRf
+RElSKS92YXIgJChUQVJHRVRfRElSKS91c3Ivc2hhcmUvZmFjdG9yeS92YXIKPiBAQCAtNTUsMTQg
+KzU2LDE2IEBAIGRlZmluZSBTS0VMRVRPTl9JTklUX1NZU1RFTURfUFJFX1JPT1RGU19WQVIKPiAg
+CQkkKFRBUkdFVF9ESVIpL3Vzci9saWIvc3lzdGVtZC9zeXN0ZW0vdmFyLm1vdW50Cj4gIGVuZGVm
+Cj4gIFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9ST09URlNfUFJFX0NNRF9IT09LUyArPSBTS0VMRVRP
+Tl9JTklUX1NZU1RFTURfUFJFX1JPT1RGU19WQVIKPiArZW5kaWYgICMgQlIyX0lOSVRfU1lTVEVN
+RF9WQVJfRkFDVE9SWQo+ICtlbmRpZiAgIyBCUjJfVEFSR0VUX0dFTkVSSUNfUkVNT1VOVF9ST09U
+RlNfUlcKPiAgCj4gLWVuZGlmCj4gLQo+ICtpZmVxICgkKEJSMl9JTklUX1NZU1RFTURfUE9QVUxB
+VEVfVE1QRklMRVMpLHkpCj4gIGRlZmluZSBTS0VMRVRPTl9JTklUX1NZU1RFTURfQ1JFQVRFX1RN
+UEZJTEVTX0hPT0sKPiAgCUhPU1RfU1lTVEVNRF9UTVBGSUxFUz0kKEhPU1RfRElSKS9iaW4vc3lz
+dGVtZC10bXBmaWxlcyBcCj4gIAkJJChTS0VMRVRPTl9JTklUX1NZU1RFTURfUEtHRElSKS9mYWtl
+cm9vdF90bXBmaWxlcy5zaCAkKFRBUkdFVF9ESVIpCj4gIGVuZGVmCj4gIFNLRUxFVE9OX0lOSVRf
+U1lTVEVNRF9ST09URlNfUFJFX0NNRF9IT09LUyArPSBTS0VMRVRPTl9JTklUX1NZU1RFTURfQ1JF
+QVRFX1RNUEZJTEVTX0hPT0sKPiArZW5kaWYgICMgQlIyX0lOSVRfU1lTVEVNRF9QT1BVTEFURV9U
+TVBGSUxFUwo+ICAKPiAgZGVmaW5lIFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9JTlNUQUxMX1RBUkdF
+VF9DTURTCj4gIAlta2RpciAtcCAkKFRBUkdFVF9ESVIpL2hvbWUKPiBkaWZmIC0tZ2l0IGEvc3lz
+dGVtL0NvbmZpZy5pbiBiL3N5c3RlbS9Db25maWcuaW4KPiBpbmRleCA4ODhjMjRjZTgxLi44MDZh
+NzQ3MzE1IDEwMDY0NAo+IC0tLSBhL3N5c3RlbS9Db25maWcuaW4KPiArKysgYi9zeXN0ZW0vQ29u
+ZmlnLmluCj4gQEAgLTE1NCwxMCArMTU0LDQ4IEBAIHNvdXJjZSAiJEJSMl9CQVNFX0RJUi8uYnIy
+LWV4dGVybmFsLmluLmluaXQiCj4gIAo+ICBlbmRjaG9pY2UKPiAgCj4gK2lmIEJSMl9JTklUX1NZ
+U1RFTUQKPiArCj4gK2NvbmZpZyBCUjJfSU5JVF9TWVNURU1EX1ZBUl9GQUNUT1JZCj4gKwlib29s
+ICJidWlsZCBhIGZhY3RvcnkgdG8gcG9wdWxhdGUgYSB0bXBmcyBvbiAvdmFyIgo+ICsJZGVmYXVs
+dCB5ICAjIGxlZ2FjeQo+ICsJZGVwZW5kcyBvbiAhQlIyX1RBUkdFVF9HRU5FUklDX1JFTU9VTlRf
+Uk9PVEZTX1JXCj4gKwloZWxwCj4gKwkgIEJ1aWxkIGEgZmFjdG9yeSBvZiB0aGUgY29udGVudCBv
+ZiAvdmFyIGFzIGluc3RhbGxlZCBieQo+ICsJICBwYWNrYWdlcywgbW91bnQgYSB0bXBmcyBvbiAv
+dmFyIGF0IHJ1bnRpbWUsIHNvIHRoYXQKPiArCSAgc3lzdGVtZC10bXBmaWxlcyBjYW4gcG9wdWxh
+dGUgaXQgZnJvbSB0aGUgZmFjdG9yeS4KPiArCj4gKwkgIFRoaXMgbWF5IGhlbHAgb24gYSByZWFk
+LW9ubHkgcm9vdGZzLgo+ICsKPiArCSAgSXQgcHJvYmFibHkgZG9lcyBub3QgcGxheSB2ZXJ5IHdl
+bGwgd2l0aCB0cmlnZ2VyaW5nIGEgY2FsbAo+ICsJICB0byBzeXN0ZW1kLXRtcGZpbGVzIGF0IGJ1
+aWxkIHRpbWUgKGJlbG93KS4KPiArCj4gKwkgIE5vdGU6IEJ1aWxkcm9vdCBtb3VudHMgYSB0bXBm
+cyBvbiAvdmFyIHRvIGF0IGxlYXN0IG1ha2UgdGhlCj4gKwkgIHN5c3RlbSBib290YWJsZSBvdXQg
+b2YgdGhlIGJveDsgbW91bnRpbmcgYSBmaWxlc3lzdGVtIGZyb20KPiArCSAgYWN0dWFsIHN0b3Jh
+Z2UgaXMgbGVmdCB0byB0aGUgaW50ZWdyYXRpb24sIGFzIGl0IGlzIHRvbwo+ICsJICBzcGVjaWZp
+YyBhbmQgbWF5IG5lZWQgcHJlcGFyYXRvcnkgd29yayBsaWtlIHBhcnRpdGlvbm5pbmcgYQo+ICsJ
+ICBkZXZpY2UgYW5kL29yIGZvcm1hdHRpbmcgYSBmaWxlc3lzdGVtIGZpcnN0LCBzbyB0aGF0IGZh
+bGxzCj4gKwkgIG91dCBvZiB0aGUgc2NvcGUgb2YgQnVpbGRyb290Lgo+ICsKPiArCSAgVG8gdXNl
+IHBlcnNpc3RlbnQgc3RvcmFnZSwgcHJvdmlkZSBhIHN5c3RlbWQgZHJvcGluIGZvciB0aGUKPiAr
+CSAgdmFyLm1vdW50IHVuaXQsIHRoYXQgb3ZlcnJpZGVzIHRoZSBXaGF0IGFuZCBUeXBlLCBhbmQg
+cG9zc2libHkKPiArCSAgdGhlIE9wdGlvbnMgYW5kIEFmdGVyLCBmaWVsZHMuCj4gKwo+ICtjb25m
+aWcgQlIyX0lOSVRfU1lTVEVNRF9QT1BVTEFURV9UTVBGSUxFUwo+ICsJYm9vbCAidHJpZ2dlciBz
+eXN0ZW1kLXRtcGZpbGVzIGR1cmluZyBidWlsZCIKPiArCWRlZmF1bHQgeSAgIyBsZWdhY3kKPiAr
+CWhlbHAKPiArCSAgQWN0IG9uIHRoZSBzeXN0ZW1kLXRtcGZpbGVzLmQgZGF0YWJhc2UgYXQgYnVp
+bGQgdGltZSwgd2hlbgo+ICsJICBhc3NlbWJsaW5nIHRoZSByb290IGZpbGVzeXN0ZW1zLgo+ICsK
+PiArCSAgVGhpcyBtYXkgaGVscCBvbiBhIHJlYWQtb25seSBmaWxlc3lzdGVtLgo+ICsKPiArCSAg
+SXQgcHJvYmFibHkgZG9lcyBub3QgcGxheSB2ZXJ5IHdlbGwgd2l0aCB0aGUgL3ZhciBmYWN0b3J5
+Cj4gKwkgIChhYm92ZSkuCj4gKwo+ICBjb25maWcgQlIyX1BBQ0tBR0VfU1lTVEVNRF9ERUZBVUxU
+X1RBUkdFVAo+ICAJc3RyaW5nICJUaGUgZGVmYXVsdCB1bml0IHN5c3RlbWQgc3RhcnRzIGF0IGJv
+b3R1cCIKPiAgCWRlZmF1bHQgIm11bHRpLXVzZXIudGFyZ2V0Igo+IC0JZGVwZW5kcyBvbiBCUjJf
+SU5JVF9TWVNURU1ECj4gIAloZWxwCj4gIAkgIFNwZWNpZnkgdGhlIG5hbWUgb2YgdGhlIHVuaXQg
+Y29uZmlndXJhdGlvbiBmaWxlIHRvIGJlIHN0YXJ0ZWQKPiAgCSAgYXQgYm9vdHVwIGJ5IHN5c3Rl
+bWQuIFNob3VsZCBlbmQgaW4gIi50YXJnZXQiLgo+IEBAIC0xNjUsNiArMjAzLDggQEAgY29uZmln
+IEJSMl9QQUNLQUdFX1NZU1RFTURfREVGQVVMVF9UQVJHRVQKPiAgCj4gIAkgIGh0dHBzOi8vd3d3
+LmZyZWVkZXNrdG9wLm9yZy9zb2Z0d2FyZS9zeXN0ZW1kL21hbi9zeXN0ZW1kLnNwZWNpYWwuaHRt
+bCNkZWZhdWx0LnRhcmdldAo+ICAKPiArZW5kaWYgIyBCUjJfSU5JVF9TWVNURU1ECj4gKwo+ICBj
+aG9pY2UKPiAgCXByb21wdCAiL2RldiBtYW5hZ2VtZW50IiBpZiAhQlIyX0lOSVRfU1lTVEVNRAo+
+ICAJZGVmYXVsdCBCUjJfUk9PVEZTX0RFVklDRV9DUkVBVElPTl9EWU5BTUlDX0RFVlRNUEZTCj4g
+LS0gCj4gMi4yNS4xCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IAo+IENlIG1lc3NhZ2UgZXQgc2VzIHBpZWNl
+cyBqb2ludGVzIHBldXZlbnQgY29udGVuaXIgZGVzIGluZm9ybWF0aW9ucyBjb25maWRlbnRpZWxs
+ZXMgb3UgcHJpdmlsZWdpZWVzIGV0IG5lIGRvaXZlbnQgZG9uYwo+IHBhcyBldHJlIGRpZmZ1c2Vz
+LCBleHBsb2l0ZXMgb3UgY29waWVzIHNhbnMgYXV0b3Jpc2F0aW9uLiBTaSB2b3VzIGF2ZXogcmVj
+dSBjZSBtZXNzYWdlIHBhciBlcnJldXIsIHZldWlsbGV6IGxlIHNpZ25hbGVyCj4gYSBsJ2V4cGVk
+aXRldXIgZXQgbGUgZGV0cnVpcmUgYWluc2kgcXVlIGxlcyBwaWVjZXMgam9pbnRlcy4gTGVzIG1l
+c3NhZ2VzIGVsZWN0cm9uaXF1ZXMgZXRhbnQgc3VzY2VwdGlibGVzIGQnYWx0ZXJhdGlvbiwKPiBP
+cmFuZ2UgZGVjbGluZSB0b3V0ZSByZXNwb25zYWJpbGl0ZSBzaSBjZSBtZXNzYWdlIGEgZXRlIGFs
+dGVyZSwgZGVmb3JtZSBvdSBmYWxzaWZpZS4gTWVyY2kuCj4gCj4gVGhpcyBtZXNzYWdlIGFuZCBp
+dHMgYXR0YWNobWVudHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIG9yIHByaXZpbGVnZWQgaW5m
+b3JtYXRpb24gdGhhdCBtYXkgYmUgcHJvdGVjdGVkIGJ5IGxhdzsKPiB0aGV5IHNob3VsZCBub3Qg
+YmUgZGlzdHJpYnV0ZWQsIHVzZWQgb3IgY29waWVkIHdpdGhvdXQgYXV0aG9yaXNhdGlvbi4KPiBJ
+ZiB5b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRo
+ZSBzZW5kZXIgYW5kIGRlbGV0ZSB0aGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRhY2htZW50cy4KPiBB
+cyBlbWFpbHMgbWF5IGJlIGFsdGVyZWQsIE9yYW5nZSBpcyBub3QgbGlhYmxlIGZvciBtZXNzYWdl
+cyB0aGF0IGhhdmUgYmVlbiBtb2RpZmllZCwgY2hhbmdlZCBvciBmYWxzaWZpZWQuCj4gVGhhbmsg
+eW91Lgo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAK
+Li0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
+LS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1i
+ZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYy
+IDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAg
+ICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAg
+WCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlz
+LWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFj
+eS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0t
+LS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
