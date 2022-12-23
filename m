@@ -4,54 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27EB3C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 09:29:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 862B8C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 09:29:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5BD961135;
-	Fri, 23 Dec 2022 09:29:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5BD961135
+	by smtp3.osuosl.org (Postfix) with ESMTP id 396F561149;
+	Fri, 23 Dec 2022 09:29:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 396F561149
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R-Si3PQ8JfZX; Fri, 23 Dec 2022 09:29:42 +0000 (UTC)
+	with ESMTP id J04i0AMHFi_H; Fri, 23 Dec 2022 09:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF9CE607A4;
-	Fri, 23 Dec 2022 09:29:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF9CE607A4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 387E51BF34C
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 09:29:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8586D61135;
+	Fri, 23 Dec 2022 09:29:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8586D61135
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EF3D1BF34C
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 09:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1409E607A4
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 09:29:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1409E607A4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 37B7640C1B
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 09:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37B7640C1B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fmEEjgnw-CYc for <buildroot@lists.busybox.net>;
- Fri, 23 Dec 2022 09:29:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q_mdq5zVnYzm for <buildroot@lists.busybox.net>;
+ Fri, 23 Dec 2022 09:29:41 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E80036068A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C2E340C07
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E80036068A
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 09:29:37 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3C2E340C07
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 09:29:40 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C170CE000C;
- Fri, 23 Dec 2022 09:29:34 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4CA50E0009;
+ Fri, 23 Dec 2022 09:29:39 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1p8eMv-002qir-Oy; Fri, 23 Dec 2022 10:29:33 +0100
+ id 1p8eN0-002qiy-FC; Fri, 23 Dec 2022 10:29:38 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
 References: <20221222195535.2277358-1-bernd.kuhls@t-online.de>
-Date: Fri, 23 Dec 2022 10:29:33 +0100
-In-Reply-To: <20221222195535.2277358-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 22 Dec 2022 20:55:34 +0100")
-Message-ID: <874jtmlb7m.fsf@dell.be.48ers.dk>
+ <20221222195535.2277358-2-bernd.kuhls@t-online.de>
+Date: Fri, 23 Dec 2022 10:29:38 +0100
+In-Reply-To: <20221222195535.2277358-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 22 Dec 2022 20:55:35 +0100")
+Message-ID: <87zgbejwn1.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.20
+Subject: Re: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: bump
+ version to 0.5.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,7 +74,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
  > Release notes:
- > https://dovecot.org/pipermail/dovecot-news/2022-December/000479.html
+ > https://dovecot.org/pipermail/dovecot-news/2022-December/000480.html
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
