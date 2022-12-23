@@ -4,87 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97EEBC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 17:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F347EC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 17:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F94B61169;
-	Fri, 23 Dec 2022 17:38:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F94B61169
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A1D6600D4;
+	Fri, 23 Dec 2022 17:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A1D6600D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NMOVebAylWMB; Fri, 23 Dec 2022 17:38:45 +0000 (UTC)
+	with ESMTP id z6xkoHrKT0BH; Fri, 23 Dec 2022 17:49:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69B8061167;
-	Fri, 23 Dec 2022 17:38:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69B8061167
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4A45B1BF3F7
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 17:38:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72D92606C6;
+	Fri, 23 Dec 2022 17:49:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72D92606C6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 544161BF3F7
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 17:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 201FB41BC0
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 17:38:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 201FB41BC0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C750401CC
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 17:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C750401CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aNzHDjkp6KyK for <buildroot@lists.busybox.net>;
- Fri, 23 Dec 2022 17:38:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BldhgCjjIdw9 for <buildroot@lists.busybox.net>;
+ Fri, 23 Dec 2022 17:49:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDD1F418B4
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DDD1F418B4
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 17:38:31 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id bg10so4057082wmb.1
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 09:38:31 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1EBE400F2
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F1EBE400F2
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 17:49:27 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id a17so5152326wrt.11
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 09:49:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=qIoPIMjb4+bDtxeXI9FSV4tSZuMCJ69ZMW+4HwKR1hQ=;
- b=4U0lh0yfMNFWIENtoF/LfnKrfA0tNjGS3xLhAIxEcITDiDjQJ/riLEdEECPXqGCnM+
- smXbdn7OENfEXD1s/uoETXkellC3K/I+wW6TRoMIjycqbclUlM8eSgfM+mpxjQcOL48p
- j17TFLGES7FH0neEagtfobGKaxjUsZYPQYszQbA4+KEUEznT1iqHe5hGmAwQwnrH7OoL
- SRiDipce0Hwo6DxVrt4HxGCeINc9kTMzoGZQJkX2G6vq8gHMMwwUmxhmHJEQdPIuliU4
- 7fr73AAdbmYxwzwlgva2ItB50hKcwZcNZRqBUgk962zXi0pRxLJqwxIAe8PI6kgTin0z
- MgrQ==
-X-Gm-Message-State: AFqh2kpqg9RX68EHJzzqKSeCnlWQnmSSmkETS480z8+SiJB+o5POoxDr
- /xtEBLX+JOAMaSUTljQ1cDSVvsIK2AU=
-X-Google-Smtp-Source: AMrXdXsylqY720hEGVlSRC28jXpudc7j+dKr8RLNXB/pbwQU7rIuZ9hnMESpdiNJeI9BbytOuCQy9Q==
-X-Received: by 2002:a05:600c:a4f:b0:3d2:196c:270c with SMTP id
- c15-20020a05600c0a4f00b003d2196c270cmr8043836wmq.31.1671817109729; 
- Fri, 23 Dec 2022 09:38:29 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- l42-20020a05600c1d2a00b003d23928b654sm11256734wms.11.2022.12.23.09.38.28
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8Uwe2oMPfwGip9MI8zzenFyPnXBpBfw31dgBzbai1gY=;
+ b=wzN1SWZS2lMCh3eQxJMrMBHiM66KWOZjQgW9LZAywTa7rSg+mTSGUWDSh7AzoOiLF0
+ Plq/RTJ6C26igMH1OxTzm7gv6/L69rQ6cbRgZGQAw5sE/D8Kb5ee82SERgS12fQb5R37
+ nUgX/OnMTUX6/eplopBNPeUdEABeHLA6koybsSgJz1COsXtGU0I+bOSpK2a4IJ9XhhN7
+ /h3l8+9M4KWvRgDGSCNwit6BSawD8SAl7vTHCLeODkfPJ8l811YnP0iuB62BjkyH5TBd
+ RMzObztej6lbjtUKgt9DYcb5rdUz2hxr/uJNkRrgZf5U/QvD4aoYsDpXeUVhrvB60MDe
+ xVng==
+X-Gm-Message-State: AFqh2ko969m/AVvpmzNZOrRmVmhe4IQ6CQDbrnk82B6sEeW3xex7/xC4
+ DRHZP9ncXiYVXiNW9XPkgonMzwjCleZxsw==
+X-Google-Smtp-Source: AMrXdXt2L9Zr185tImpD8hbeSiBuGtfUgTWtENIZmjuP9BFfzQ7HMMVmcw6zhYw53H3dRgT82tK5tA==
+X-Received: by 2002:adf:9dd1:0:b0:242:f3f:28df with SMTP id
+ q17-20020adf9dd1000000b002420f3f28dfmr7226576wre.58.1671817765711; 
+ Fri, 23 Dec 2022 09:49:25 -0800 (PST)
+Received: from gleb-linux..
+ (cpc76906-dals22-2-0-cust400.20-2.cable.virginm.net. [81.106.81.145])
+ by smtp.gmail.com with ESMTPSA id
+ m17-20020a056000181100b002422202fa7fsm3480417wrh.39.2022.12.23.09.49.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Dec 2022 09:38:29 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Fri, 23 Dec 2022 09:49:25 -0800 (PST)
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 18:38:18 +0100
-Message-Id: <20221223173818.51581-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221223173818.51581-1-fontaine.fabrice@gmail.com>
-References: <20221223173818.51581-1-fontaine.fabrice@gmail.com>
+Date: Fri, 23 Dec 2022 17:49:21 +0000
+Message-Id: <20221223174922.12131-1-glex.spb@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=qIoPIMjb4+bDtxeXI9FSV4tSZuMCJ69ZMW+4HwKR1hQ=;
- b=FKmyyt9WUSvfPvtHF8duQST2NS8ddpedw6vEZu1XTl1IxTL0zPJ6pLW7Hr3uEp16qs
- Lme7dbJX9c8Gyv2h3Xsq4Ywy92rwuD5Q70poaq7z0B0Q57TPI6hjN3n8I+NFWqvPjon9
- VPDRFBPMTU/BSSphrKOyyDSmdmPDMAtjNbRfK280R2gnNGBLRpezOkqwoq9TGxTC87lc
- a1xydwUuX4o1PM7LkzOi56fI7UWb7OwlAAUJx5zUnb3nSEhI9JaKaYC+gGsJkZpO+XRt
- RBAnJLtoA2uRcYT7qExsu1exmr0X3uhELcau3ZBUMOb4Ra46n/479nOa5oMccr6rW96a
- GXwQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8Uwe2oMPfwGip9MI8zzenFyPnXBpBfw31dgBzbai1gY=;
+ b=aKLGeYi7z9irroCORKixorajc1728M0VaJ5B3jFy9pDyoS7he8kZrGDaWWbZJaM5im
+ 4AgTjd6m5Dy6eyUZjq7eE8S5qxkDtavEaakHlvYOchPNZCed2ZDk2qmnttxKA/Ic5gGL
+ o26tDfxnAit0j8OiW9cNUY1+wmsqx8m/k+4crIYjIHWuDM6Tu8w1ly2bkHaECARxlEqW
+ NZbvmKKNJDnAmxJ5O1DMySaem95slX3WipV3d6rjOjgbUQhfbIio1IVEJuhBwPxCdaso
+ /kOF7IlJae+wzRoUQid34UPyLjX03CTSHVqOERWRPJluugbaYr3mojkwotD0dPTILeP6
+ J20A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=FKmyyt9W
-Subject: [Buildroot] [PATCH 2/2] package/ucl: drop package
+ header.a=rsa-sha256 header.s=20210112 header.b=aKLGeYi7
+Subject: [Buildroot] [PATCH] package/gcc: fix gcc12 with uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,56 +94,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Gleb Mazovetskiy <glex.spb@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ucl is directly vendored in upx since version 3.99 and
-https://github.com/upx/upx/commit/61e1366122f8d1b9e2434a8103e7af00a35ea902
+GCC 12 produces broken binaries when used with uClibc.
+E.g. `gdb` crashes on startup.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+GCC HEAD fixes this in:
+https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;h=ee4af2ed0b7322884ec4ff537564683c3749b813
+
+Adds the commit as patch for GCC 12.
+
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 ---
- package/ucl/ucl.hash |  3 ---
- package/ucl/ucl.mk   | 15 ---------------
- 2 files changed, 18 deletions(-)
- delete mode 100644 package/ucl/ucl.hash
- delete mode 100644 package/ucl/ucl.mk
+ package/gcc/12.2.0/0002-fix-condvar.patch | 80 +++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+ create mode 100644 package/gcc/12.2.0/0002-fix-condvar.patch
 
-diff --git a/package/ucl/ucl.hash b/package/ucl/ucl.hash
-deleted file mode 100644
-index 0252f69297..0000000000
---- a/package/ucl/ucl.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350348  ucl-1.03.tar.gz
--sha256  70439f6e2b47057a408d2390ed6663b9875f5a08066a06a060a357ef1df89a8c  COPYING
-diff --git a/package/ucl/ucl.mk b/package/ucl/ucl.mk
-deleted file mode 100644
-index aac068ef60..0000000000
---- a/package/ucl/ucl.mk
-+++ /dev/null
-@@ -1,15 +0,0 @@
--################################################################################
--#
--# ucl
--#
--################################################################################
--
--UCL_VERSION = 1.03
--UCL_SITE = http://www.oberhumer.com/opensource/ucl/download
--UCL_LICENSE = GPL-2.0+
--UCL_LICENSE_FILES = COPYING
--
--# Fix ACC conformance test failure for host gcc 6.x
--HOST_UCL_CONF_ENV += CPPFLAGS="$(HOST_CPPFLAGS) -std=iso9899:1990"
--
--$(eval $(host-autotools-package))
+diff --git a/package/gcc/12.2.0/0002-fix-condvar.patch b/package/gcc/12.2.0/0002-fix-condvar.patch
+new file mode 100644
+index 0000000000..b5575e5df2
+--- /dev/null
++++ b/package/gcc/12.2.0/0002-fix-condvar.patch
+@@ -0,0 +1,80 @@
++From ee4af2ed0b7322884ec4ff537564683c3749b813 Mon Sep 17 00:00:00 2001
++From: Jonathan Wakely <jwakely@redhat.com>
++Date: Thu, 22 Dec 2022 09:56:47 +0000
++Subject: [PATCH] libstdc++: Avoid recursion in __nothrow_wait_cv::wait
++ [PR105730]
++
++The commit r12-5877-g9e18a25331fa25 removed the incorrect
++noexcept-specifier from std::condition_variable::wait and gave the new
++symbol version @@GLIBCXX_3.4.30. It also redefined the original symbol
++std::condition_variable::wait(unique_lock<mutex>&)@GLIBCXX_3.4.11 as an
++alias for a new symbol, __gnu_cxx::__nothrow_wait_cv::wait, which still
++has the incorrect noexcept guarantee. That __nothrow_wait_cv::wait is
++just a wrapper around the real condition_variable::wait which adds
++noexcept and so terminates on a __forced_unwind exception.
++
++This doesn't work on uclibc, possibly due to a dynamic linker bug. When
++__nothrow_wait_cv::wait calls the condition_variable::wait function it
++binds to the alias symbol, which means it just calls itself recursively
++until the stack overflows.
++
++This change avoids the possibility of a recursive call by changing the
++__nothrow_wait_cv::wait function so that instead of calling
++condition_variable::wait it re-implements it. This requires accessing
++the private _M_cond member of condition_variable, so we need to use the
++trick of instantiating a template with the member-pointer of the private
++member.
++
++libstdc++-v3/ChangeLog:
++
++	PR libstdc++/105730
++	* src/c++11/compatibility-condvar.cc (__nothrow_wait_cv::wait):
++	Access private data member of base class and call its wait
++	member.
++---
++ .../src/c++11/compatibility-condvar.cc        | 22 ++++++++++++++++++-
++ 1 file changed, 21 insertions(+), 1 deletion(-)
++
++diff --git a/libstdc++-v3/src/c++11/compatibility-condvar.cc b/libstdc++-v3/src/c++11/compatibility-condvar.cc
++index e3a8b8403ca..3cef3bc0714 100644
++--- a/libstdc++-v3/src/c++11/compatibility-condvar.cc
+++++ b/libstdc++-v3/src/c++11/compatibility-condvar.cc
++@@ -67,6 +67,24 @@ _GLIBCXX_END_NAMESPACE_VERSION
++     && defined(_GLIBCXX_HAVE_SYMVER_SYMBOL_RENAMING_RUNTIME_SUPPORT)
++ namespace __gnu_cxx _GLIBCXX_VISIBILITY(default)
++ {
+++namespace
+++{
+++  // Pointer-to-member for private std::condition_variable::_M_cond member.
+++  std::__condvar std::condition_variable::* __base_member;
+++
+++  template<std::__condvar std::condition_variable::*X>
+++    struct cracker
+++    { static std::__condvar std::condition_variable::* value; };
+++
+++  // Initializer for this static member also initializes __base_member.
+++  template<std::__condvar std::condition_variable::*X>
+++    std::__condvar std::condition_variable::*
+++      cracker<X>::value = __base_member = X;
+++
+++  // Explicit instantiation is allowed to access the private member.
+++  template class cracker<&std::condition_variable::_M_cond>;
+++}
+++
++ struct __nothrow_wait_cv : std::condition_variable
++ {
++   void wait(std::unique_lock<std::mutex>&) noexcept;
++@@ -76,7 +94,9 @@ __attribute__((used))
++ void
++ __nothrow_wait_cv::wait(std::unique_lock<std::mutex>& lock) noexcept
++ {
++-  this->condition_variable::wait(lock);
+++  // In theory this could be simply this->std::condition_variable::wait(lock)
+++  // but with uclibc that binds to the @GLIBCXX_3.4.11 symbol, see PR 105730.
+++  (this->*__base_member).wait(*lock.mutex());
++ }
++ } // namespace __gnu_cxx
++ 
++-- 
++2.31.1
++
 -- 
-2.35.1
+2.37.2
 
 _______________________________________________
 buildroot mailing list
