@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E3FFC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 17:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79AF9C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 17:38:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7F3941761;
-	Fri, 23 Dec 2022 17:14:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7F3941761
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD2D282184;
+	Fri, 23 Dec 2022 17:38:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD2D282184
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sa43sZYsCtGa; Fri, 23 Dec 2022 17:14:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CM1AYF-YYUjX; Fri, 23 Dec 2022 17:38:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B1604177D;
-	Fri, 23 Dec 2022 17:13:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B1604177D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D0FF41BF3F7
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 17:13:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0895782032;
+	Fri, 23 Dec 2022 17:38:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0895782032
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B26281BF3F7
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 17:38:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A837F4026E
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 17:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A837F4026E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8785F61167
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 17:38:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8785F61167
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sO6_DMbu1i_Q for <buildroot@lists.busybox.net>;
- Fri, 23 Dec 2022 17:13:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fPDLmXQuf9mo for <buildroot@lists.busybox.net>;
+ Fri, 23 Dec 2022 17:38:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57C67401CC
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 57C67401CC
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 17:13:57 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id z10so5088489wrh.10
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 09:13:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 340BA60AE5
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 340BA60AE5
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 17:38:29 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ c65-20020a1c3544000000b003cfffd00fc0so6677631wma.1
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 09:38:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7bnQrc+UgTQTSkb5yieTODxhBonv2t65gop7brOLjbE=;
- b=WSt7u2WO0dzcSTp3eOV64mURU3QXMEfQpAJJ+HpOvKAhNZYwTQFNkk34udkIRUMBSF
- 14R67nsyigtNnMziJ+RFIEmCGEohjIzIqzTxdq1qJ7Ni6z1FkQ2SoyA2UQW3rh45cPpi
- sz9Q9a0GesEMugAjur5Zkzdr9Lv935ST1mzdfYh0XQJ8FHttx27AlnVaoRP4mO1xEGBh
- EeQGJOLjDrbQtUopYNzfbElwwPC9LTz3JMIQyek05tP4NUKD/2lRuDO9EPuRLIWm6lrd
- 5bn6QQdgbTemkyjdtmmY2HUAuT8kf7aDV+45ngHxnj6Uc9goEGPqMBkHi3DTK/zkvlGI
- WATA==
-X-Gm-Message-State: AFqh2kqn6RA1g67zonQ6o9PMHYJAKqRvhdh63cmfu7pYkHaeSmbB16Ra
- bCz+GFlpHg9uxxud+1jHSCxVqwmVoJI=
-X-Google-Smtp-Source: AMrXdXvczW7rg5cAKowCf7FMQxFAKmddvxFtX0Onf25I5OfwtFqwdRpxOmlM3xSnsCLFOJh6zO1VeA==
-X-Received: by 2002:a5d:5c12:0:b0:242:800:9a7f with SMTP id
- cc18-20020a5d5c12000000b0024208009a7fmr7151517wrb.65.1671815635167; 
- Fri, 23 Dec 2022 09:13:55 -0800 (PST)
+ bh=mhbB0uDzbeFEDsjEcUXFONdvzNxEzMYjrvjHlTXVxHc=;
+ b=Hr6UjMLiZ2voQhJb3ZXHZ96AxKq975uwFPa7WvXryGSR1YgZaSZvpR7V9JmYlLPOgp
+ Ysx6yJgQXtYWv5USIwn+X2cOfND1WTlKFJWa6eMxUVgAdhNGUgWl3rNFxagB5gZAyPT3
+ puoVob04nZHoqUrf+3VAAKvYaXOJdwaER6Anrs/RPC/7CElqp6MsDmVRceIbvnn9St0w
+ ewAhUY2ndYJYIZIp3vTqiojDg5j4+c1dy1enNwacje4X2N1LwgLrDuPRxx4CPdNgszks
+ Mt9dHPZF/05pDVqYO0ZgHnbtsn2RIM8VyBzNMTcqfOgUyuZFL1fwzeZv6A47DCOswT4e
+ nz3w==
+X-Gm-Message-State: AFqh2kp/t5GSm3PAkHdS+9nzl6NkuIQlg0cmGTDEtjXsbFDY1ZRDi8Gv
+ Dhc1iLvOLon8VB6msKSuJddtmAKtN/k=
+X-Google-Smtp-Source: AMrXdXuLBTcwshn1IQX5zRyJXxpfWrmZtNhkDUwZnVgzcLWafNDrtj4XLiYgR6FZ0iqCqiCyrmiiGw==
+X-Received: by 2002:a05:600c:4e08:b0:3cf:a41d:844b with SMTP id
+ b8-20020a05600c4e0800b003cfa41d844bmr7783480wmq.5.1671817106946; 
+ Fri, 23 Dec 2022 09:38:26 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- w12-20020a5d680c000000b002302dc43d77sm3432847wru.115.2022.12.23.09.13.54
+ l42-20020a05600c1d2a00b003d23928b654sm11256734wms.11.2022.12.23.09.38.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Dec 2022 09:13:54 -0800 (PST)
+ Fri, 23 Dec 2022 09:38:26 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 18:13:51 +0100
-Message-Id: <20221223171351.24867-1-fontaine.fabrice@gmail.com>
+Date: Fri, 23 Dec 2022 18:38:17 +0100
+Message-Id: <20221223173818.51581-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7bnQrc+UgTQTSkb5yieTODxhBonv2t65gop7brOLjbE=;
- b=GGea8v7sjmeTGV34izKtgtxPckB0GHV/splxyKhKrNzDlmcKQUD2AtyhvKcc5Yh1cm
- z9iZY98rS5XO0Qu3YtFC0vny/56m4pVyrxsF79Cm1FFZsaz/scdEFOrPJm08jLoJ+fHO
- Lr2FHE7ZJCOK/KOm4oU+2gmV/qwQDbtU+ou5cBEnLLQ44650eRzVg/Bk2WPa4Rz3xAsW
- O8Ui35TeXDqdMMm6MaUiEqGLWqJBFqO2eCNwLCjkzDtqXBzID8uvhR53uWof3+g2KFAB
- QaJCOul6tydBveH1kPu9OSR1FE/V3AupRBrPvCFxwxVkYVYmquWF4rIxYATXnEq8PLnQ
- hENg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=mhbB0uDzbeFEDsjEcUXFONdvzNxEzMYjrvjHlTXVxHc=;
+ b=OqlXVm9qXJPsnMbdr8CzmcSB2pWrthbfEiJ2DAr/Dc3uLvQfjVBO1vWwvKMyKY+ELp
+ j5mrnp96ctGea186juoe8X0la7fw4MMsybpGGDG7YxqElWxXlG8wJb8yIiz41hhSIFix
+ dUk5KZvIsBHQ+Fxwiu+DO9acb1J8ThmmIWAoXLtAP9w+nU/7bwWgRdG/x5sVs6pbBuLe
+ SVGWM8AG7iaQaRkQ2Ze8Hh7Sp6BUeeiYmwkHJ04zJTE8Q534YK0M590Ai4R08H2WHeVy
+ tzmWsPx5Hgpo8nl1fpVTUQzK2MJYbEutuwRrgAEFjb6pieRGuD1NPwl3knZfph8QxnVJ
+ rCJA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=GGea8v7s
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: bump to version 0.9.14
+ header.a=rsa-sha256 header.s=20210112 header.b=OqlXVm9q
+Subject: [Buildroot] [PATCH 1/2] package/upx: bump to version 4.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,174 +94,160 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patches (already in version)
-- examples and tests can be disabled since
-  https://github.com/LibVNC/libvncserver/commit/0b8990784a81823eecc9089263ac1966d17bf399
+- Drop patch (already in version)
+- cmake must be used since
+  https://github.com/upx/upx/commit/c7d8b6fed1b551158540e1d2e884dc224fce474c
+- ucl and zlib are directly included in upx since
+  https://github.com/upx/upx/commit/61e1366122f8d1b9e2434a8103e7af00a35ea902
 
-https://github.com/LibVNC/libvncserver/releases/tag/LibVNCServer-0.9.14
+https://github.com/upx/upx/blob/v4.0.1/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...enssl.c-fix-build-with-libressl-3.5..patch | 66 -------------------
- ...ee-vncRec-memory-in-rfbClientCleanup.patch | 28 --------
- package/libvncserver/libvncserver.hash        |  2 +-
- package/libvncserver/libvncserver.mk          |  9 ++-
- 4 files changed, 5 insertions(+), 100 deletions(-)
- delete mode 100644 package/libvncserver/0001-common-crypto_openssl.c-fix-build-with-libressl-3.5..patch
- delete mode 100644 package/libvncserver/0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch
+ ...ck-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch | 80 -------------------
+ package/upx/upx.hash                          |  2 +-
+ package/upx/upx.mk                            | 22 +----
+ 3 files changed, 4 insertions(+), 100 deletions(-)
+ delete mode 100644 package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
 
-diff --git a/package/libvncserver/0001-common-crypto_openssl.c-fix-build-with-libressl-3.5..patch b/package/libvncserver/0001-common-crypto_openssl.c-fix-build-with-libressl-3.5..patch
+diff --git a/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch b/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
 deleted file mode 100644
-index 110976c4bb..0000000000
---- a/package/libvncserver/0001-common-crypto_openssl.c-fix-build-with-libressl-3.5..patch
+index 6fae9cac0e..0000000000
+--- a/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
 +++ /dev/null
-@@ -1,66 +0,0 @@
--From 97fbbd678b2012e64acddd523677bc55a177bc58 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 12 May 2022 20:41:50 +0200
--Subject: [PATCH] common/crypto_openssl.c: fix build with libressl >= 3.5.0
-- (#522)
+@@ -1,80 +0,0 @@
+-From 3781df9da23840e596d5e9e8493f22666802fe6c Mon Sep 17 00:00:00 2001
+-From: John Reiser <jreiser@BitWagon.com>
+-Date: Fri, 11 Dec 2020 13:38:18 -0800
+-Subject: [PATCH] Check DT_REL/DT_RELA, DT_RELSZ/DT_RELASZ
 -
--Fix the following build failure with libressl >= 3.5.0:
--
--/nvmedata/autobuild/instance-26/output-1/build/libvncserver-0.9.13/common/crypto_openssl.c: In function 'dh_generate_keypair':
--/nvmedata/autobuild/instance-26/output-1/build/libvncserver-0.9.13/common/crypto_openssl.c:149:7: error: dereferencing pointer to incomplete type 'DH' {aka 'struct dh_st'}
--  149 |     dh->p = BN_bin2bn(prime, keylen, NULL);
--      |       ^~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/49b3940b9d0432cb5fb0c5d22dfa017b18c6e233
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/LibVNC/libvncserver/commit/97fbbd678b2012e64acddd523677bc55a177bc58]
-----
-- common/crypto_openssl.c | 12 ++++++++----
-- 1 file changed, 8 insertions(+), 4 deletions(-)
--
--diff --git a/common/crypto_openssl.c b/common/crypto_openssl.c
--index 60d4bd4df..51d7ec2d9 100644
----- a/common/crypto_openssl.c
--+++ b/common/crypto_openssl.c
--@@ -138,14 +138,16 @@ int dh_generate_keypair(uint8_t *priv_out, uint8_t *pub_out, const uint8_t *gen,
-- {
--     int result = 0;
--     DH *dh;
---#if OPENSSL_VERSION_NUMBER >= 0x10100000L
--+#if OPENSSL_VERSION_NUMBER >= 0x10100000L || \
--+	(defined (LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x30500000)
--     const BIGNUM *pub_key = NULL;
--     const BIGNUM *priv_key = NULL;
-- #endif
-- 
--     if(!(dh = DH_new()))
-- 	goto out;
---#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined LIBRESSL_VERSION_NUMBER
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
--+	(defined (LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000)
--     dh->p = BN_bin2bn(prime, keylen, NULL);
--     dh->g = BN_bin2bn(gen, gen_len, NULL);
-- #else
--@@ -154,7 +156,8 @@ int dh_generate_keypair(uint8_t *priv_out, uint8_t *pub_out, const uint8_t *gen,
-- #endif
--     if(!DH_generate_key(dh))
-- 	goto out;
---#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined LIBRESSL_VERSION_NUMBER
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
--+	(defined (LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000)
--     if(BN_bn2bin(dh->priv_key, priv_out) == 0)
-- 	goto out;
--     if(BN_bn2bin(dh->pub_key, pub_out) == 0)
--@@ -181,7 +184,8 @@ int dh_compute_shared_key(uint8_t *shared_out, const uint8_t *priv, const uint8_
-- 
--     if(!(dh = DH_new()))
-- 	goto out;
---#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined LIBRESSL_VERSION_NUMBER
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
--+	(defined LIBRESSL_VERSION_NUMBER && LIBRESSL_VERSION_NUMBER < 0x30500000)
--     dh->p = BN_bin2bn(prime, keylen, NULL);
--     dh->priv_key = BN_bin2bn(priv, keylen, NULL);
-- #else
-diff --git a/package/libvncserver/0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch b/package/libvncserver/0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch
-deleted file mode 100644
-index 7658c112f3..0000000000
---- a/package/libvncserver/0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From bef41f6ec4097a8ee094f90a1b34a708fbd757ec Mon Sep 17 00:00:00 2001
--From: Christian Beier <info@christianbeier.net>
--Date: Sat, 21 Nov 2020 12:52:31 +0100
--Subject: [PATCH] libvncclient: free vncRec memory in rfbClientCleanup()
--
--Otherwise we leak memory. Spotted by Ramin Farajpour Cami
--<ramin.blackhat@gmail.com>, thanks!
+-https://github.com/upx/upx/issues/421
+-	modified:   p_lx_elf.cpp
 -
 -[Retrieved from:
--https://github.com/LibVNC/libvncserver/commit/bef41f6ec4097a8ee094f90a1b34a708fbd757ec]
+-https://github.com/upx/upx/commit/3781df9da23840e596d5e9e8493f22666802fe6c]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- libvncclient/vncviewer.c | 2 ++
-- 1 file changed, 2 insertions(+)
+- src/p_lx_elf.cpp | 34 +++++++++++++++++++++++++++++-----
+- 1 file changed, 29 insertions(+), 5 deletions(-)
 -
--diff --git a/libvncclient/vncviewer.c b/libvncclient/vncviewer.c
--index d6b91f02b..0a1bdcf6a 100644
----- a/libvncclient/vncviewer.c
--+++ b/libvncclient/vncviewer.c
--@@ -534,6 +534,8 @@ void rfbClientCleanup(rfbClient* client) {
--     client->clientData = next;
--   }
-- 
--+  free(client->vncRec);
--+
--   if (client->sock != RFB_INVALID_SOCKET)
--     rfbCloseSocket(client->sock);
--   if (client->listenSock != RFB_INVALID_SOCKET)
-diff --git a/package/libvncserver/libvncserver.hash b/package/libvncserver/libvncserver.hash
-index 8e61a3d0ea..225c42e46a 100644
---- a/package/libvncserver/libvncserver.hash
-+++ b/package/libvncserver/libvncserver.hash
+-diff --git a/src/p_lx_elf.cpp b/src/p_lx_elf.cpp
+-index 182db192f..3a4101cf7 100644
+---- a/src/p_lx_elf.cpp
+-+++ b/src/p_lx_elf.cpp
+-@@ -2222,8 +2222,20 @@ bool PackLinuxElf32::canPack()
+-                         int z_rsz = dt_table[Elf32_Dyn::DT_RELSZ];
+-                         if (z_rel && z_rsz) {
+-                             unsigned rel_off = get_te32(&dynseg[-1+ z_rel].d_val);
+-+                            if ((unsigned)file_size <= rel_off) {
+-+                                char msg[70]; snprintf(msg, sizeof(msg),
+-+                                     "bad Elf32_Dynamic[DT_REL] %#x\n",
+-+                                     rel_off);
+-+                                throwCantPack(msg);
+-+                            }
+-                             Elf32_Rel *rp = (Elf32_Rel *)&file_image[rel_off];
+-                             unsigned relsz   = get_te32(&dynseg[-1+ z_rsz].d_val);
+-+                            if ((unsigned)file_size <= relsz) {
+-+                                char msg[70]; snprintf(msg, sizeof(msg),
+-+                                     "bad Elf32_Dynamic[DT_RELSZ] %#x\n",
+-+                                     relsz);
+-+                                throwCantPack(msg);
+-+                            }
+-                             Elf32_Rel *last = (Elf32_Rel *)(relsz + (char *)rp);
+-                             for (; rp < last; ++rp) {
+-                                 unsigned r_va = get_te32(&rp->r_offset);
+-@@ -2562,14 +2574,26 @@ PackLinuxElf64::canPack()
+-                         int z_rel = dt_table[Elf64_Dyn::DT_RELA];
+-                         int z_rsz = dt_table[Elf64_Dyn::DT_RELASZ];
+-                         if (z_rel && z_rsz) {
+--                            unsigned rel_off = get_te64(&dynseg[-1+ z_rel].d_val);
+-+                            upx_uint64_t rel_off = get_te64(&dynseg[-1+ z_rel].d_val);
+-+                            if ((u64_t)file_size <= rel_off) {
+-+                                char msg[70]; snprintf(msg, sizeof(msg),
+-+                                     "bad Elf64_Dynamic[DT_RELA] %#llx\n",
+-+                                     rel_off);
+-+                                throwCantPack(msg);
+-+                            }
+-                             Elf64_Rela *rp = (Elf64_Rela *)&file_image[rel_off];
+--                            unsigned relsz   = get_te64(&dynseg[-1+ z_rsz].d_val);
+-+                            upx_uint64_t relsz   = get_te64(&dynseg[-1+ z_rsz].d_val);
+-+                            if ((u64_t)file_size <= relsz) {
+-+                                char msg[70]; snprintf(msg, sizeof(msg),
+-+                                     "bad Elf64_Dynamic[DT_RELASZ] %#llx\n",
+-+                                     relsz);
+-+                                throwCantPack(msg);
+-+                            }
+-                             Elf64_Rela *last = (Elf64_Rela *)(relsz + (char *)rp);
+-                             for (; rp < last; ++rp) {
+--                                unsigned r_va = get_te64(&rp->r_offset);
+-+                                upx_uint64_t r_va = get_te64(&rp->r_offset);
+-                                 if (r_va == user_init_ava) { // found the Elf64_Rela
+--                                    unsigned r_info = get_te64(&rp->r_info);
+-+                                    upx_uint64_t r_info = get_te64(&rp->r_info);
+-                                     unsigned r_type = ELF64_R_TYPE(r_info);
+-                                     if (Elf64_Ehdr::EM_AARCH64 == e_machine
+-                                     &&  R_AARCH64_RELATIVE == r_type) {
+-@@ -2581,7 +2605,7 @@ PackLinuxElf64::canPack()
+-                                     }
+-                                     else {
+-                                         char msg[50]; snprintf(msg, sizeof(msg),
+--                                            "bad relocation %#x DT_INIT_ARRAY[0]",
+-+                                            "bad relocation %#llx DT_INIT_ARRAY[0]",
+-                                             r_info);
+-                                         throwCantPack(msg);
+-                                     }
+diff --git a/package/upx/upx.hash b/package/upx/upx.hash
+index 7f3698ca0d..9f7c40c819 100644
+--- a/package/upx/upx.hash
++++ b/package/upx/upx.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256  0ae5bb9175dc0a602fe85c1cf591ac47ee5247b87f2bf164c16b05f87cbfa81a  LibVNCServer-0.9.13.tar.gz
-+sha256  83104e4f7e28b02f8bf6b010d69b626fae591f887e949816305daebae527c9a5  LibVNCServer-0.9.14.tar.gz
- sha256  4d23c8c814e5baf007d854f01d8502e77dc56a41144934e003fb32c4e052d20f  COPYING
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 8f24e2d098..700e26a8d6 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -4,7 +4,7 @@
+-sha256  47774df5c958f2868ef550fb258b97c73272cb1f44fe776b798e393465993714  upx-3.96-src.tar.xz
++sha256  77003c8e2e29aa9804e2fbaeb30f055903420b3e01d95eafe01aed957fb7e190  upx-4.0.1-src.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index e693a70db1..ef346b2310 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -4,28 +4,12 @@
  #
  ################################################################################
  
--LIBVNCSERVER_VERSION = 0.9.13
-+LIBVNCSERVER_VERSION = 0.9.14
- LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
- LIBVNCSERVER_SITE = https://github.com/LibVNC/libvncserver/archive
- LIBVNCSERVER_LICENSE = GPL-2.0+
-@@ -14,14 +14,13 @@ LIBVNCSERVER_INSTALL_STAGING = YES
- LIBVNCSERVER_DEPENDENCIES = host-pkgconf lzo
- LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
+-UPX_VERSION = 3.96
++UPX_VERSION = 4.0.1
+ UPX_SITE = https://github.com/upx/upx/releases/download/v$(UPX_VERSION)
+ UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
+ UPX_LICENSE = GPL-2.0+
+ UPX_LICENSE_FILES = COPYING
+ UPX_CPE_ID_VENDOR = upx_project
++UPX_SUPPORTS_IN_SOURCE_BUILD = NO
  
--# 0002-libvncclient-free-vncRec-memory-in-rfbClientCleanup.patch
--LIBVNCSERVER_IGNORE_CVES += CVE-2020-29260
+-# 0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
+-UPX_IGNORE_CVES += CVE-2021-20285
 -
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += \
-+	-DWITH_EXAMPLES=OFF \
- 	-DWITH_FFMPEG=OFF \
- 	-DWITH_GTK=OFF \
--	-DWITH_SDL=OFF
-+	-DWITH_SDL=OFF \
-+	-DWITH_TESTS=OFF
- 
- ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBVNCSERVER_CONF_OPTS += -DWITH_THREADS=ON
+-HOST_UPX_DEPENDENCIES = host-ucl host-zlib
+-
+-# We need to specify all, otherwise the default target only prints a message
+-# stating to "please choose a target for 'make'"... :-(
+-define HOST_UPX_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+-		UPX_UCLDIR=$(HOST_DIR) CXXFLAGS_WERROR= -C $(@D) all
+-endef
+-
+-# UPX has no install procedure, so install it manually.
+-define HOST_UPX_INSTALL_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/src/upx.out $(HOST_DIR)/bin/upx
+-endef
+-
+-$(eval $(host-generic-package))
++$(eval $(host-cmake-package))
 -- 
 2.35.1
 
