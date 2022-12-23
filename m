@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EE14C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 11:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9DEAC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 12:02:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC89761104;
-	Fri, 23 Dec 2022 11:40:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC89761104
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50345404AE;
+	Fri, 23 Dec 2022 12:02:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50345404AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id woOxZDR76L0Q; Fri, 23 Dec 2022 11:40:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TyynCUOWSOue; Fri, 23 Dec 2022 12:01:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F0DB610F1;
-	Fri, 23 Dec 2022 11:40:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F0DB610F1
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9BD84018B;
+	Fri, 23 Dec 2022 12:01:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9BD84018B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 66FE51BF2F8
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 11:40:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15FB11BF2F8
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 12:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3327F610F1
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 11:40:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3327F610F1
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4EA96112C
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 12:01:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4EA96112C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ab2ol4DVVu7f for <buildroot@lists.busybox.net>;
- Fri, 23 Dec 2022 11:40:29 +0000 (UTC)
+ with ESMTP id kBMB2zGayjbm for <buildroot@lists.busybox.net>;
+ Fri, 23 Dec 2022 12:01:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76D8160BD1
- for <buildroot@uclibc.org>; Fri, 23 Dec 2022 11:40:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76D8160BD1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C7E46110C
+ for <buildroot@uclibc.org>; Fri, 23 Dec 2022 12:01:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C7E46110C
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 65AC086ADC; Fri, 23 Dec 2022 11:40:29 +0000 (UTC)
+ id 0560086D4A; Fri, 23 Dec 2022 12:01:56 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 23 Dec 2022 11:40:29 +0000
+Date: Fri, 23 Dec 2022 12:01:55 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -54,8 +54,8 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.isobsolete
-Message-ID: <bug-15201-163-hYtbh3JnP1@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-15201-163-E7NblGIs3v@https.bugs.busybox.net/>
 In-Reply-To: <bug-15201-163@https.bugs.busybox.net/>
 References: <bug-15201-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,12 +81,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15201
 
-davorin.ucakar@gmail.com changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #9426|0                           |1
-        is obsolete|                            |
+--- Comment #1 from davorin.ucakar@gmail.com ---
+Created attachment 9431
+  --> https://bugs.busybox.net/attachment.cgi?id=9431&action=edit
+Update python-sip to 6.7.5
 
 -- 
 You are receiving this mail because:
