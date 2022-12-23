@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 909BCC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 21:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCA11C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 22:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D784782155;
-	Fri, 23 Dec 2022 21:56:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D784782155
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DBDE40122;
+	Fri, 23 Dec 2022 22:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DBDE40122
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n5LI8pWeXlJN; Fri, 23 Dec 2022 21:56:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Wuojwi4z8sXX; Fri, 23 Dec 2022 22:01:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F44B82141;
-	Fri, 23 Dec 2022 21:56:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F44B82141
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C4A521BF297
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 21:56:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68C9440162;
+	Fri, 23 Dec 2022 22:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68C9440162
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B62F1BF297
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 22:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACF8461177
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 21:56:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACF8461177
+ by smtp4.osuosl.org (Postfix) with ESMTP id E65FE41BD5
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 22:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E65FE41BD5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JkRx61aEoUQK for <buildroot@lists.busybox.net>;
- Fri, 23 Dec 2022 21:56:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pAiFy7WcjG_O for <buildroot@lists.busybox.net>;
+ Fri, 23 Dec 2022 22:01:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73FDB61166
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 73FDB61166
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 21:56:21 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id y8so5556237wrl.13
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 13:56:21 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 570AD41BD4
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 570AD41BD4
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 22:01:07 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id w15so5579517wrl.9
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 14:01:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qslAbLIr1xF3zfAkFKgAVkbiS2X4WszpmMf88614SME=;
- b=OLfWHwlMbXczQsghAbEyCGepVGYqY3WnObg+KY3oTSqlLqn2ZfvMQF8MdeTIKhIHPS
- 5minTqONXtOPFSWqovaaF6rsn1AlmcZZu3ahF1u6UxnZOdzxvuNAKTa5zZsQqT38tJI2
- d2VHUxd3UQrCmjtziF26imvhKh1bUnMCh+IXx65pGpBQbBBmrNnfEaXt9WUFzLsqfqpG
- MIkv6RtD1+pm0TVfZ0L2bjX2cVOGAa0HOyAzWTpMBzhPefB6yB0Fg9cj8NiWwR5/TlSs
- VNOrsMxnwvAyv3aCgGBUEKRguq5UpW63VYRvpFV4ZvXjPf+woeMgQr3C4fBLEDJ8xj/k
- 5J0g==
-X-Gm-Message-State: AFqh2krtjrp47qpd8VSSAjDlJ/IEAVRHomuxLxaOaBa9unMz/GVHz7+6
- 0QhAWAn6vEktT8yUeOiaGkW5kyvktOY=
-X-Google-Smtp-Source: AMrXdXvmh8oltfy9lhU6dz0l+KHqN6TLp8PXo5quY0BWfBvKfov9KJt/uzFkcrxEm7BT39gL5rfryA==
-X-Received: by 2002:adf:fec6:0:b0:26a:ed4c:e3af with SMTP id
- q6-20020adffec6000000b0026aed4ce3afmr7852439wrs.49.1671832579105; 
- Fri, 23 Dec 2022 13:56:19 -0800 (PST)
+ bh=1cTLIRzBbI4LfjmW0FUoQ6PRYsv6V7M8FVI9pdZj98o=;
+ b=bxMMnuIbfBO4/3O/rtWs6yLo1MuPhOBHUPo3Km6nzQfRqcqy90JX1bA0do04rhLUeH
+ E/Esl8YvpfJQs3oI0YGoi6x1+TBwuucjVrO9Dh50TzNqt0v5JMHrPHvVFJ6Tc76riptS
+ GydRZWT7hu21emRqxUwWdApqdm58ppz2S3yT4tW0tGS+YU0x+6YDfROsBElEL5MGAao+
+ 4Ef51YhgMbpiNFI1m8+YFrOuV2L99Jihc44TKqjj+EP0TZfdlWA88ksl5DqCOOxLZKVR
+ 0R5ts6sVqx3JMx0snIBsnbQqsXn/n05hiJrhtuNyA7xe56zbgrZ+XlJ8Bvim2/BajEkC
+ 2uNA==
+X-Gm-Message-State: AFqh2kqHscDqqIVGWrruHTDmhoPlCUbTwz7mYMoMTrayrc8LHF2WCQlO
+ TKiZ74FFQ5f0db0By0Q8H0jHph6lUQ8=
+X-Google-Smtp-Source: AMrXdXuEE6qqB1ZNDrsRKYejdR9cxNU7L9vQtwOJX87U2kInFvHnqG+cQip3e9va/OTytXpJHF/MEw==
+X-Received: by 2002:adf:f244:0:b0:242:6588:3aa9 with SMTP id
+ b4-20020adff244000000b0024265883aa9mr6927382wrp.32.1671832865153; 
+ Fri, 23 Dec 2022 14:01:05 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- d12-20020a5d4f8c000000b002421a8f4fa6sm3821932wru.92.2022.12.23.13.56.18
+ z8-20020a056000110800b00241dd5de644sm3871340wrw.97.2022.12.23.14.01.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Dec 2022 13:56:18 -0800 (PST)
+ Fri, 23 Dec 2022 14:01:04 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 22:56:07 +0100
-Message-Id: <20221223215607.12924-1-fontaine.fabrice@gmail.com>
+Date: Fri, 23 Dec 2022 23:01:00 +0100
+Message-Id: <20221223220100.58811-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qslAbLIr1xF3zfAkFKgAVkbiS2X4WszpmMf88614SME=;
- b=BMpUY19pxmYOCx7LNZp4LJLXrS/XRmjVmDmKigkplxuplWh5lesjsPD6akEXpREaCM
- F7pjudRFjwA5jAVEdDu0lMkjYW3YBs4svt5m1eBMzPzQg/JlKJkIMffT6TK9ElUT60X8
- mjUxIer416EbYXA987B7geTdJt55IEQJQJqO6ZHO06uAz573M6ZwfoLa8Ia0CYbmwOPs
- 9q7DPkD+6HnPG3rKaUKksemMcUBBAS+5keHpIG2DeFU3IgxVYevzpYOBkAnPxgGu6QDA
- v+08Jgz/eiw7h8Ffotcy8jeRtwH89GO3oalb2w24dQ9kKqD/13EG5Z7Y0nbMRKHP0HvR
- i9dw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=1cTLIRzBbI4LfjmW0FUoQ6PRYsv6V7M8FVI9pdZj98o=;
+ b=NTDModsQLl4wF6kUdI0LO5/YrOGN28r5d7MY2sKY1siKAbjGjb3HH1DP6b/S/Ao77S
+ b/C69j+QmMVNYN147lC9YCBZ/9C0aw+oS3ISSuFhlmZ0cC9LKhOhtNv1l4BCw7z2awoP
+ DeK1btDJpBTqkDpgiI1bXE1y+EDduUbzHnpVQbkiRYABJEpoAiaWbfVY0E+r1RN0nKYn
+ /XkbMcOPWaP8oFTDr2tYPWcvafXqT+BB3jDiW8VqNtzacWXJyDOaQHmjxH/+j+aju4co
+ FPtmSDa1NYifAPCf7BBh4ew8r2LzZYLAsmJ8xFxiaOY5+U4FMcDJo5yZI5db2GJrIdoV
+ jA3Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BMpUY19p
-Subject: [Buildroot] [PATCH 1/1] package/jitterentropy-library: bump to
- version 3.4.1
+ header.a=rsa-sha256 header.s=20210112 header.b=NTDModsQ
+Subject: [Buildroot] [PATCH 1/1] package/orc: bump to version 0.4.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,110 +93,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (already in version)
-- Update hash of LICENSE file (year updated with
-  https://github.com/smuellerDD/jitterentropy-library/commit/2e5019cfe63038faaa405ce53715effe4ea580e4)
+Drop patch (already in version)
 
-https://github.com/smuellerDD/jitterentropy-library/blob/v3.4.1/CHANGES.md
+https://gitlab.freedesktop.org/gstreamer/orc/-/blob/0.4.33/RELEASE
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-Makefile-add-ENABLE_STACK_PROTECTOR.patch | 52 -------------------
- .../jitterentropy-library.hash                |  4 +-
- .../jitterentropy-library.mk                  |  2 +-
- 3 files changed, 3 insertions(+), 55 deletions(-)
- delete mode 100644 package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch
+ ...powerpc.c-fix-build-with-kernel-4.11.patch | 70 -------------------
+ package/orc/orc.hash                          |  4 +-
+ package/orc/orc.mk                            |  2 +-
+ 3 files changed, 3 insertions(+), 73 deletions(-)
+ delete mode 100644 package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
 
-diff --git a/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch b/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch
+diff --git a/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch b/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
 deleted file mode 100644
-index c4388663b0..0000000000
---- a/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch
+index 0a4e7010f2..0000000000
+--- a/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
 +++ /dev/null
-@@ -1,52 +0,0 @@
--From 272ee47892563e849f6b1bf59b0173f8aa33b631 Mon Sep 17 00:00:00 2001
+@@ -1,70 +0,0 @@
+-From a45f6d49ec090ad94333c0865c378d2d96ab2af4 Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 19 Dec 2021 11:36:13 +0100
--Subject: [PATCH] Makefile: add ENABLE_STACK_PROTECTOR
+-Date: Mon, 15 Feb 2021 20:17:43 +0100
+-Subject: [PATCH] orc/orccpu-powerpc.c: fix build with kernel < 4.11
 -
--Add ENABLE_STACK_PROTECTOR as build on embedded toolchains without
--stack-protector is again broken since
--https://github.com/smuellerDD/jitterentropy-library/commit/5b3cb7f35e41ba2f34a75d004cf095c965a1a0c4:
+-Build with powerpc and kernel < 4.11 is broken since version 0.4.30 and
+-https://gitlab.freedesktop.org/gstreamer/orc/-/commit/a999325abea6a5549d60d99ddeb0271d2aa00235:
 -
--/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: src/jitterentropy-base.o: in function `jent_fips_enabled':
--jitterentropy-base.c:(.text+0x131): undefined reference to `__stack_chk_fail_local'
+-FAILED: orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc-linux-gcc -Iorc/liborc-0.4.so.0.32.0.p -Iorc -I../orc -I. -I.. -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -std=gnu99 -O3 -DHAVE_CONFIG_H -fvisibility=hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -fPIC -pthread -DORC_ENABLE_UNSTABLE_API -D_GNU_SOURCE -DBUILDING_ORC -MD -MQ orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o -MF orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o.d -o orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o -c ../orc/orccpu-powerpc.c
+-../orc/orccpu-powerpc.c: In function 'orc_check_powerpc_proc_auxv':
+-../orc/orccpu-powerpc.c:164:21: error: 'AT_L1D_CACHESIZE' undeclared (first use in this function); did you mean 'AT_DCACHEBSIZE'?
+-  164 |       if (buf[i] == AT_L1D_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~~
+-      |                     AT_DCACHEBSIZE
+-../orc/orccpu-powerpc.c:164:21: note: each undeclared identifier is reported only once for each function it appears in
+-../orc/orccpu-powerpc.c:168:21: error: 'AT_L2_CACHESIZE' undeclared (first use in this function); did you mean 'AT_ICACHEBSIZE'?
+-  168 |       if (buf[i] == AT_L2_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~
+-      |                     AT_ICACHEBSIZE
+-../orc/orccpu-powerpc.c:172:21: error: 'AT_L3_CACHESIZE' undeclared (first use in this function); did you mean 'AT_ICACHEBSIZE'?
+-  172 |       if (buf[i] == AT_L3_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~
+-      |                     AT_ICACHEBSIZE
+-
+-Indeed, AT_{L1D,L2,L3}_CACHESIZE is only defined since kernel 4.11 and
+-https://github.com/torvalds/linux/commit/98a5f361b8625c6f4841d6ba013bbf0e80d08147
 -
 -Fixes:
-- - http://autobuild.buildroot.org/results/8dee462d16d934dd173d58f17933c6911e4336bf
+- - http://autobuild.buildroot.org/results/0821e96cba3e455edd47b87485501d892fc7ac6a
 -
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Stephan Mueller <smueller@chronox.de>
--[Retrieved from:
--https://github.com/smuellerDD/jitterentropy-library/commit/272ee47892563e849f6b1bf59b0173f8aa33b631]
+-[Upstream status:
+-https://gitlab.freedesktop.org/gstreamer/orc/-/merge_requests/56]
 ----
-- Makefile | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
+- orc/orccpu-powerpc.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
 -
--diff --git a/Makefile b/Makefile
--index dfb96a8..c999ef5 100644
----- a/Makefile
--+++ b/Makefile
--@@ -2,6 +2,7 @@
-- 
-- CC ?= gcc
-- #Hardening
--+ENABLE_STACK_PROTECTOR ?= 1
-- CFLAGS ?= -fwrapv --param ssp-buffer-size=4 -fvisibility=hidden -fPIE -Wcast-align -Wmissing-field-initializers -Wshadow -Wswitch-enum
-- CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0 -fwrapv -Wconversion
-- LDFLAGS +=-Wl,-z,relro,-z,now -lpthread
--@@ -13,10 +14,12 @@ else
--   GCC_GTEQ_490 := $(shell expr `$(CC) -dumpfullversion | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/'` \>= 40900)
-- endif
-- 
---ifeq "$(GCC_GTEQ_490)" "1"
---  CFLAGS += -fstack-protector-strong
---else
---  CFLAGS += -fstack-protector-all
--+ifeq "$(ENABLE_STACK_PROTECTOR)" "1"
--+  ifeq "$(GCC_GTEQ_490)" "1"
--+    CFLAGS += -fstack-protector-strong
--+  else
--+    CFLAGS += -fstack-protector-all
--+  endif
-- endif
-- 
-- # Change as necessary
-diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
-index 760befab53..c7833f1428 100644
---- a/package/jitterentropy-library/jitterentropy-library.hash
-+++ b/package/jitterentropy-library/jitterentropy-library.hash
+-diff --git a/orc/orccpu-powerpc.c b/orc/orccpu-powerpc.c
+-index 6796f17..340cf05 100644
+---- a/orc/orccpu-powerpc.c
+-+++ b/orc/orccpu-powerpc.c
+-@@ -161,18 +161,24 @@ orc_check_powerpc_proc_auxv (void)
+-         _orc_cpu_name = (char*)buf[i + 1];
+-         found++;
+-       }
+-+#ifdef AT_L1D_CACHESIZE
+-       if (buf[i] == AT_L1D_CACHESIZE) {
+-         _orc_data_cache_size_level1 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-+#ifdef AT_L2_CACHESIZE
+-       if (buf[i] == AT_L2_CACHESIZE) {
+-         _orc_data_cache_size_level2 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-+#ifdef AT_L3_CACHESIZE
+-       if (buf[i] == AT_L3_CACHESIZE) {
+-         _orc_data_cache_size_level3 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-       if (found == 6)
+-         break;
+-     }
+--- 
+-2.30.0
+-
+diff --git a/package/orc/orc.hash b/package/orc/orc.hash
+index f48c2932ab..136fc3ece4 100644
+--- a/package/orc/orc.hash
++++ b/package/orc/orc.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  9fcc954763a1dd4afe614a1b360f53b600d3376bbcc4b19177f27abf191ebad5  jitterentropy-library-3.3.1.tar.xz
--sha256  7e06574ff822594269083a796d06fa4e5e78c40efe5ca01a72d2a4662e8206df  LICENSE
-+sha256  802f025f766c38abf663fd5a21482b8313b6d6e2c68c36a4ffd6bc105fe975ab  jitterentropy-library-3.4.1.tar.xz
-+sha256  7a89069066f6c0b8767d3256e5ec5d765b2c7f3354a5a06fc8d5bd7b8103d8a3  LICENSE
- sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  LICENSE.bsd
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE.gplv2
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index 4cdebf46a3..f405082d08 100644
---- a/package/jitterentropy-library/jitterentropy-library.mk
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
+-# From https://gstreamer.freedesktop.org/data/src/orc/orc-0.4.32.tar.xz.sha256sum
+-sha256  a66e3d8f2b7e65178d786a01ef61f2a0a0b4d0b8370de7ce134ba73da4af18f0  orc-0.4.32.tar.xz
++# From https://gstreamer.freedesktop.org/data/src/orc/orc-0.4.33.tar.xz.sha256sum
++sha256  844e6d7db8086f793f57618d3d4b68d29d99b16034e71430df3c21cfd3c3542a  orc-0.4.33.tar.xz
+ 
+ # Locally calculated
+ sha256  4f5dabb1b44bb6fc5cd53820b1f103147ad61b395a57903991325bd1b85d97bf  COPYING
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index a93a4f875a..be718e6f85 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JITTERENTROPY_LIBRARY_VERSION = 3.3.1
-+JITTERENTROPY_LIBRARY_VERSION = 3.4.1
- JITTERENTROPY_LIBRARY_SOURCE = \
- 	jitterentropy-library-$(JITTERENTROPY_LIBRARY_VERSION).tar.xz
- JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent
+-ORC_VERSION = 0.4.32
++ORC_VERSION = 0.4.33
+ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2-Clause, BSD-3-Clause
 -- 
 2.35.1
 
