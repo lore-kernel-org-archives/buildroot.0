@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A9CC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29827C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:17:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8363E828EF;
-	Mon, 20 Feb 2023 23:17:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8363E828EF
+	by smtp1.osuosl.org (Postfix) with ESMTP id C71D482D14;
+	Mon, 20 Feb 2023 23:17:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C71D482D14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L4O_MODevzqB; Mon, 20 Feb 2023 23:17:33 +0000 (UTC)
+	with ESMTP id avItUH_rk6Ir; Mon, 20 Feb 2023 23:17:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C5F983342;
-	Mon, 20 Feb 2023 23:17:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C5F983342
+	by smtp1.osuosl.org (Postfix) with ESMTP id 076B083386;
+	Mon, 20 Feb 2023 23:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 076B083386
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F0D9C1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15AC01BF94D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C50E612DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id A23A761383
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C50E612DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A23A761383
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JhvlLMaS4U7w for <buildroot@lists.busybox.net>;
+ with ESMTP id DraGVeZUJFGU for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F990612C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABD9D612B4
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F990612C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABD9D612B4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9DB1C81979; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+ id A9DB48648F; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 10:27:47 +0100
+Date: Fri, 23 Dec 2022 10:29:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1381a4d2884cd7abdda45253b871cddd995a3e4b
-X-Git-Newrev: 183de9155b138497783717383418544da00e0da7
+X-Git-Oldrev: 183de9155b138497783717383418544da00e0da7
+X-Git-Newrev: de584a78a37b99b99a4011020a17b3ae99f002c7
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205214.9DB1C81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8821cu: new package
+Message-Id: <20230220205214.A9DB48648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dovecot: bump version
+ to 2.3.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,106 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=183de9155b138497783717383418544da00e0da7
+commit: https://git.buildroot.net/buildroot/commit/?id=de584a78a37b99b99a4011020a17b3ae99f002c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Adds support for USB rtl8821cu wifi cards.
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2022-December/000479.html
 
-Similar to rtl8821au and rtl8812au-aircrack-ng packages.
-
-https://github.com/morrownr/8821cu-20210118
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/rtl8821cu/Config.in      | 10 ++++++++++
- package/rtl8821cu/rtl8821cu.hash |  3 +++
- package/rtl8821cu/rtl8821cu.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 40 insertions(+)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a200edb7f5..5eed4a8455 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -564,6 +564,7 @@ F:	package/mosh/
- F:	package/nerdctl/
- F:	package/pkg-golang.mk
- F:	package/rtl8821au/
-+F:	package/rtl8821cu/
- F:	package/runc/
- F:	package/tini/
- F:	support/testing/tests/package/test_docker_compose.py
-diff --git a/package/Config.in b/package/Config.in
-index 999feae08a..0c77f7c022 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -588,6 +588,7 @@ endmenu
- 	source "package/rtl8723ds-bt/Config.in"
- 	source "package/rtl8812au-aircrack-ng/Config.in"
- 	source "package/rtl8821au/Config.in"
-+	source "package/rtl8821cu/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/sedutil/Config.in"
-diff --git a/package/rtl8821cu/Config.in b/package/rtl8821cu/Config.in
-new file mode 100644
-index 0000000000..a5a7b9d255
---- /dev/null
-+++ b/package/rtl8821cu/Config.in
-@@ -0,0 +1,10 @@
-+comment "rtl8821cu needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_RTL8821CU
-+	bool "rtl8821cu"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  rtl8821cu wifi driver
-+
-+	  https://github.com/brektrou/rtl8821CU
-diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
-new file mode 100644
-index 0000000000..efb9871472
---- /dev/null
-+++ b/package/rtl8821cu/rtl8821cu.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  09b9fb4160003502d564d0d0d85d6f19b8b6d1627d1a339b3ddfca6a948d84fb  rtl8821cu-86cc5ceb7c28b9b997838e1c796847f6c395c382.tar.gz
-+sha256  af54d00efc57cfce664171ac8be2a20c0f290b1b5c1a67bb2eba7b6380276c4e  LICENSE
-diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-new file mode 100644
-index 0000000000..18222e0014
---- /dev/null
-+++ b/package/rtl8821cu/rtl8821cu.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# rtl8821cu
-+#
-+################################################################################
-+
-+RTL8821CU_VERSION = 86cc5ceb7c28b9b997838e1c796847f6c395c382
-+RTL8821CU_SITE = $(call github,morrownr,8821cu-20210118,$(RTL8821CU_VERSION))
-+RTL8821CU_LICENSE = GPL-2.0
-+RTL8821CU_LICENSE_FILES = LICENSE
-+
-+RTL8821CU_USER_EXTRA_CFLAGS = \
-+	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
-+	-DCONFIG_IOCTL_CFG80211 \
-+	-DRTW_USE_CFG80211_STA_EVENT \
-+	-Wno-error
-+
-+RTL8821CU_MODULE_MAKE_OPTS = \
-+	CONFIG_PLATFORM_GENERIC=n \
-+	CONFIG_RTL8821CU=m \
-+	KVER=$(LINUX_VERSION_PROBED) \
-+	USER_EXTRA_CFLAGS="$(RTL8821CU_USER_EXTRA_CFLAGS)"
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 124f834dca..7036df57a8 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256  db5abcd87d7309659ea6b45b2cb6ee9c5f97486b2b719a5dd05a759e1f6a5c51  dovecot-2.3.19.1.tar.gz
++sha256  caa832eb968148abdf35ee9d0f534b779fa732c0ce4a913d9ab8c3469b218552  dovecot-2.3.20.tar.gz
+ sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index e28f500b7b..4b17784f93 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19.1
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).20
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
