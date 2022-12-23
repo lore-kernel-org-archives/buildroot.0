@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA8EC4167B
-	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 09:37:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A5F0C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 09:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07E3B6113B;
-	Fri, 23 Dec 2022 09:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07E3B6113B
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6E7B6113B;
+	Fri, 23 Dec 2022 09:37:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6E7B6113B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bGzX8KdVDXJI; Fri, 23 Dec 2022 09:37:22 +0000 (UTC)
+	with ESMTP id KTGXu8nifV0R; Fri, 23 Dec 2022 09:37:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC10F6113D;
-	Fri, 23 Dec 2022 09:37:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC10F6113D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AE08B1BF973
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 09:36:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E16061135;
+	Fri, 23 Dec 2022 09:37:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E16061135
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F8551BF34C
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 09:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C25678217A
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 09:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C25678217A
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA1AC61132
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 09:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA1AC61132
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sYt6Z-WjubNd for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id csMsGIjEZl7T for <buildroot@lists.busybox.net>;
  Fri, 23 Dec 2022 09:36:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2CCA82179
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AD2061135
  for <buildroot@buildroot.org>; Fri, 23 Dec 2022 09:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2CCA82179
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AD2061135
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FC5D86DD2; Fri, 23 Dec 2022 09:36:14 +0000 (UTC)
+ id 88F0586DDA; Fri, 23 Dec 2022 09:36:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 10:34:46 +0100
+Date: Fri, 23 Dec 2022 10:29:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd7e90779861bb603fc1cca03f6fad4d951f7bd9
-X-Git-Newrev: 53f2999edfa5e67923d4d8a102c15fa3200e089c
+X-Git-Oldrev: de584a78a37b99b99a4011020a17b3ae99f002c7
+X-Git-Newrev: b30eb2f763ac98b4c44d38097bc6da8d9a9a550b
 X-Patchwork-Hint: ignore
-Message-Id: <20221223093614.9FC5D86DD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xtables-addons: bump to version
- 3.22
+Message-Id: <20221223093614.88F0586DDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
+ to 0.5.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,68 +58,47 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6264430379737664057=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6264430379737664057==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=53f2999edfa5e67923d4d8a102c15fa3200e089c
+commit: https://git.buildroot.net/buildroot/commit/?id=b30eb2f763ac98b4c44d38097bc6da8d9a9a550b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support for up to Linux 6.1 by fixing the following build failure:
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2022-December/000480.html
 
-/tmp/instance-5/output-1/build/xtables-addons-3.21/extensions/xt_CHAOS.c: In function ‘xt_chaos_total’:
-/tmp/instance-5/output-1/build/xtables-addons-3.21/extensions/xt_CHAOS.c:70:46: error: implicit declaration of function ‘prandom_u32’; did you mean ‘prandom_u32_max’? [-Werror=implicit-function-declaration]
-   70 |         if (!ret || hotdrop || (unsigned int)prandom_u32() > delude_percentage)
-      |                                              ^~~~~~~~~~~
-      |                                              prandom_u32_max
-
-https://fossies.org/linux/privat/xtables-addons-3.22.tar.xz/xtables-addons-3.22/doc/changelog.rst
-
-Fixes:
- - http://autobuild.buildroot.org/results/4564ba888156710819f6bd86117e0c0bdd513dba
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xtables-addons/xtables-addons.hash | 2 +-
- package/xtables-addons/xtables-addons.mk   | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 0d2434eeb1..840a31f947 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 635e221481..5c7ba322b2 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2e09ac129a14f5e9c23b115ebcdfff4aa84e2aeba1268dbdf39b2d752bd71e19  xtables-addons-3.21.tar.xz
-+sha256  faa16a27166275afbfe8df605f55c3a81ac693bf19da674d45ceded4137ae217  xtables-addons-3.22.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index 83cc3266c4..77dcfd741c 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
+ # Locally computed after checking signature
+-sha256  10b923efcc6f3c4d92ecdbb780e12a5c33e6d0fdbe3aba5fcd3ecde4179c730c  dovecot-2.3-pigeonhole-0.5.19.tar.gz
++sha256  ae32bd4870ea2c1328ae09ba206e9ec12128046d6afca52fbbc9ef7f75617c98  dovecot-2.3-pigeonhole-0.5.20.tar.gz
+ sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index c25cd60b21..0b64cb0d6f 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTABLES_ADDONS_VERSION = 3.21
-+XTABLES_ADDONS_VERSION = 3.22
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
- XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
-
---===============6264430379737664057==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.19
++DOVECOT_PIGEONHOLE_VERSION = 0.5.20
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6264430379737664057==--
