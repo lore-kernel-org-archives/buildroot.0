@@ -1,91 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7834C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 15:24:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30681C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 15:42:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57D9D606E7;
-	Fri, 23 Dec 2022 15:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57D9D606E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B2D88213E;
+	Fri, 23 Dec 2022 15:42:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B2D88213E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w9iAKuufMxq0; Fri, 23 Dec 2022 15:24:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aMhZm5koK9Qs; Fri, 23 Dec 2022 15:42:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55BC9606EC;
-	Fri, 23 Dec 2022 15:24:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55BC9606EC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F6CF82140;
+	Fri, 23 Dec 2022 15:42:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F6CF82140
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E2591BF5E6
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 15:24:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D2C9B1BF5E6
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 15:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38F45402E7
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 15:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38F45402E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA9814015F
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 15:42:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA9814015F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5loT_p7zl_pB for <buildroot@lists.busybox.net>;
- Fri, 23 Dec 2022 15:24:08 +0000 (UTC)
+ with ESMTP id qYg7oLXWYNTD for <buildroot@lists.busybox.net>;
+ Fri, 23 Dec 2022 15:42:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCB244011D
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BCB244011D
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 15:24:07 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- k26-20020a05600c1c9a00b003d972646a7dso120277wms.5
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 07:24:07 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 308BA4011D
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 308BA4011D
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 15:42:11 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id l10so1503665wrv.7
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 07:42:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=SpLb7j57dWy1hGmtpRscBAbjUWo0iYo2FhdX7k1GZeQ=;
- b=gQm3286C1+JWcLimCnry2vyuH149QT+QE5XzfJWq0QIkqhD7sWst5y/vmHiRavF6+4
- Cs6l4o/TNP4wxdvJbFlZeAcpzw/a0mSUADW6tST3lpSrdrRjJ6U2J/b17YDEXoda03Ev
- rB+ncuufzFkUfMSoA7CDum+Og7mathIBbY6swxv+KmvNphlOL1E71DN/UaC5nncuVrf2
- IS0sz5FCc0PM5rIjJMb01JeSChFTRApARNvyssb+S2nqSC1C5M2145C2fhDirG35ohvI
- wZpL92q3eF1JWapoZQTS3yk8GUGh4RLn9pwomRma9YNSU9GdoDxlA7Hlgdr1MSxtnkxt
- CPbA==
-X-Gm-Message-State: AFqh2kq1ObzyWPhjeGqE9k4MdhqczsQ8iz7+8OHN2rHAI9TkN4kwsIa1
- U2oYvcAV5i1H9Cpt4YEC1pLBAXRCWM0=
-X-Google-Smtp-Source: AMrXdXvapZ7cNBH7GngRQtpF/GjBnoAZvv5dL6WN0PbBaXD7tzVzQjVY6g2JXwZrcclLVJTCzAFL2g==
-X-Received: by 2002:a05:600c:1f15:b0:3cf:98e5:f72 with SMTP id
- bd21-20020a05600c1f1500b003cf98e50f72mr10224152wmb.3.1671809045571; 
- Fri, 23 Dec 2022 07:24:05 -0800 (PST)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=l2lTnWS4aWdClB7/g7m51h8ORnMyW4Rv+i9S9KSGrv8=;
+ b=Tp3OdOfdOBUcd/0NTUozZFluiZCvQA38Exw3Ie2vs70pLmQbiJ/u7R+sSMecRbfbQ4
+ hUSwllFb8Xw4B/lSxUxA0o6+gCOmI/z61zl5wAP5iM3XH/Q8/XscIdiOBS6AKi9GiVCI
+ 7GDAkc8S/l5vRJ/E7t0JL3CTPGjIr/O7rVzK4qbYq5pv8xvAXkMWrjqV87bD6PnZluGb
+ +EFVdtD8on+K/q7M6uBsTXq0pHcVMWhIwwErO6HJcU0W9LhEvKSP0EKDdTtYpEiJTKVY
+ x6b9o24E7ABuzvaiX5+iGA7reoCUssPG4/rA9Y1hHpEgjbxg3hQ6nomCrzhKmENQOjtS
+ vw9w==
+X-Gm-Message-State: AFqh2ko4w269XGEII15lHrlrnI8MWKGyJco+6GTndsRzY7HFvmrcxOEg
+ gOdwF0ERER1GnNaSh3+pJBZIYxAswGE=
+X-Google-Smtp-Source: AMrXdXsqq2MUsvaQwjzSaEF5fCLSR6x8INT5Flaw7auj5nn84fDmDXT8sAzcE4g0arLM0l5Hn8i7FA==
+X-Received: by 2002:adf:d4c7:0:b0:25d:6628:debc with SMTP id
+ w7-20020adfd4c7000000b0025d6628debcmr6701199wrk.10.1671810128857; 
+ Fri, 23 Dec 2022 07:42:08 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- o2-20020a5d58c2000000b0026a4bb75477sm3308928wrf.28.2022.12.23.07.24.04
+ x10-20020a5d490a000000b00242710c9910sm3389601wrq.8.2022.12.23.07.42.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Dec 2022 07:24:05 -0800 (PST)
+ Fri, 23 Dec 2022 07:42:08 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 16:23:57 +0100
-Message-Id: <20221223152357.272307-2-fontaine.fabrice@gmail.com>
+Date: Fri, 23 Dec 2022 16:42:04 +0100
+Message-Id: <20221223154204.306897-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221223152357.272307-1-fontaine.fabrice@gmail.com>
-References: <20221223152357.272307-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=SpLb7j57dWy1hGmtpRscBAbjUWo0iYo2FhdX7k1GZeQ=;
- b=UgaI9mOhNOv/eIztH0LsReG3o2uvM2UcMhItwxyojtcq8bV2hLQUmVrgCEbw99NZ2T
- pCR/LEVMTdEkf5pxOJZWouxFweelLE1qRcE47/JrSaKxBbLbeXwLXwQHWypRx7l1mYkB
- Xu20o4VPHjCo6GJCPaKw9DMJ2e5a/0koRHqLn2SWV5wEIDVJrIEe7TxqqG5ok3O2nOB0
- YoWGTujVts1YeCnsQI85e6B9fCiRDgOgm4rLhCieXA+KESYhnKWxTcvAI3sjO+TiVbf/
- j0R8Ffijl6aOeo7ClNU8/nkXq9s3SsDBcqf+EOfJaz5pqIeTEGaDgo/rl2mPqjpsV6GH
- YDWw==
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=l2lTnWS4aWdClB7/g7m51h8ORnMyW4Rv+i9S9KSGrv8=;
+ b=pXgb8JEK8zeuxr103h38x9p8zHztIjQWKLPHvwD8FrhKrw33Y5+iZ4mCIM6rZ3U87L
+ DtgYd/bAu6Jj/RnKoDqoRmGJHl8zbqrN5kgeRx4ZxzIO7V5wAUnbBu9ZdaAM1ffHIrSc
+ rzgAIybJp7917h4NKHIDrBCUQGyspdDNBMiBH3a0qxx+OFCtPGB2YCBLd0auMjZhczoW
+ lo5rip2mzBFvVhKhC2m4o0cQz7n6WXiY2KbeguLOG4BDm8s2TdVYyc6njCp721UrUb40
+ flak7+BuEqAyosrh2H4li9PkAsGnjTTRCQAfNo0U13LShMFq4OM3Bc3cgep0HZj4H8dK
+ LVrg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UgaI9mOh
-Subject: [Buildroot] [PATCH 2/2] package/rtl_433: bump to version 22.11
+ header.a=rsa-sha256 header.s=20210112 header.b=pXgb8JEK
+Subject: [Buildroot] [PATCH 1/1] package/memcached: bump to version 1.6.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,272 +99,258 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop all patches (already in version)
-- Threads is not mandatory since
-  https://github.com/merbanan/rtl_433/commit/4f5231bef29f42acc0ce5700584e8c4df5dc0aa2
+- Refresh second patch
+- Drop fourth patch (already in version)
 
-https://github.com/merbanan/rtl_433/releases/tag/22.11
+https://github.com/memcached/memcached/wiki/ReleaseNotes1617
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...inor-Fix-a-compiler-flag-needs-GCC-7.patch | 27 ---------
- ....c-fix-build-without-__has_attribute.patch | 34 -----------
- ...low-in-Clipsal-CMR113-and-Somfy-IOHC.patch | 58 -------------------
- ...0004-Fix-overflow-in-Acurite-00275rm.patch | 35 -----------
- package/rtl_433/Config.in                     |  5 --
- package/rtl_433/rtl_433.hash                  |  2 +-
- package/rtl_433/rtl_433.mk                    | 14 ++---
- 7 files changed, 8 insertions(+), 167 deletions(-)
- delete mode 100644 package/rtl_433/0001-minor-Fix-a-compiler-flag-needs-GCC-7.patch
- delete mode 100644 package/rtl_433/0002-src-optparse.c-fix-build-without-__has_attribute.patch
- delete mode 100644 package/rtl_433/0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch
- delete mode 100644 package/rtl_433/0004-Fix-overflow-in-Acurite-00275rm.patch
+ .../memcached/0002-check-for-sys-auxv.h.patch |  10 +-
+ ...c-use-pkg-config-to-retrieve-openssl.patch | 181 ------------------
+ package/memcached/memcached.hash              |   6 +-
+ package/memcached/memcached.mk                |   2 +-
+ 4 files changed, 9 insertions(+), 190 deletions(-)
+ delete mode 100644 package/memcached/0004-configure-ac-use-pkg-config-to-retrieve-openssl.patch
 
-diff --git a/package/rtl_433/0001-minor-Fix-a-compiler-flag-needs-GCC-7.patch b/package/rtl_433/0001-minor-Fix-a-compiler-flag-needs-GCC-7.patch
-deleted file mode 100644
-index dd3debf7ee..0000000000
---- a/package/rtl_433/0001-minor-Fix-a-compiler-flag-needs-GCC-7.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 2010e8f949ab7b4555b99dbf184e149a3f33df46 Mon Sep 17 00:00:00 2001
--From: "Christian W. Zuckschwerdt" <christian@zuckschwerdt.org>
--Date: Fri, 24 Dec 2021 11:03:06 +0100
--Subject: [PATCH] minor: Fix a compiler flag needs GCC 7
--
--[Retrieved from:
--https://github.com/merbanan/rtl_433/commit/2010e8f949ab7b4555b99dbf184e149a3f33df46]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CMakeLists.txt | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index a3f11ac99..bfa6595ca 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -74,7 +74,9 @@ if(("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_C_COMPILER_ID}" MATCHES
--     ADD_DEFINITIONS(-pedantic)
--     ADD_DEFINITIONS(-Wshadow)
--     ADD_DEFINITIONS(-Wmissing-prototypes)
---    ADD_DEFINITIONS(-Wimplicit-fallthrough)
--+    if("${CMAKE_C_COMPILER_ID}" MATCHES "Clang" OR NOT "7.0.0" VERSION_GREATER CMAKE_C_COMPILER_VERSION)
--+        ADD_DEFINITIONS(-Wimplicit-fallthrough)
--+    endif()
--     #ADD_DEFINITIONS(-Wfloat-equal)
--     #ADD_DEFINITIONS(-Wbad-function-cast)
--     #ADD_DEFINITIONS(-Wdocumentation)
-diff --git a/package/rtl_433/0002-src-optparse.c-fix-build-without-__has_attribute.patch b/package/rtl_433/0002-src-optparse.c-fix-build-without-__has_attribute.patch
-deleted file mode 100644
-index 683754845f..0000000000
---- a/package/rtl_433/0002-src-optparse.c-fix-build-without-__has_attribute.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 1b74826f155406f86846d5c97b3534aab87cf6da Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 26 Dec 2021 15:21:39 +0100
--Subject: [PATCH] src/optparse.c: fix build without __has_attribute
--
--Fix build failure without __has_attribute (e.g. gcc 4.8) which is raised
--since
--https://github.com/merbanan/rtl_433/commit/6c8af75c757712bd58b169317795484a72e9a16c
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/merbanan/rtl_433/pull/1918]
-----
-- src/optparse.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/optparse.c b/src/optparse.c
--index aa3d0b53..b5e2d37e 100644
----- a/src/optparse.c
--+++ b/src/optparse.c
--@@ -232,9 +232,11 @@ int atoi_time(char const *str, char const *error_hint)
--             }
--             // intentional fallthrough
-- #if defined(__GNUC__) || defined(__clang__)
--+#if defined __has_attribute
-- #if __has_attribute(fallthrough)
--             __attribute__((fallthrough));
-- #endif
--+#endif
-- #endif
--         case ':':
--             ++colons;
---- 
--2.33.0
--
-diff --git a/package/rtl_433/0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch b/package/rtl_433/0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch
-deleted file mode 100644
-index e2088b29e7..0000000000
---- a/package/rtl_433/0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From 2dad7b9fc67a1d0bfbe520fbd821678b8f8cc7a8 Mon Sep 17 00:00:00 2001
--From: "Christian W. Zuckschwerdt" <christian@zuckschwerdt.org>
--Date: Mon, 24 Jan 2022 15:53:20 +0100
--Subject: [PATCH] minor: Fix overflow in Clipsal-CMR113 and Somfy-IOHC reported
-- by aug5t7
--
--[Retrieved from:
--https://github.com/merbanan/rtl_433/commit/2dad7b9fc67a1d0bfbe520fbd821678b8f8cc7a8]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/devices/cmr113.c     | 4 ++--
-- src/devices/somfy_iohc.c | 9 +++++----
-- 2 files changed, 7 insertions(+), 6 deletions(-)
--
--diff --git a/src/devices/cmr113.c b/src/devices/cmr113.c
--index c85dfac56..19ec5d421 100644
----- a/src/devices/cmr113.c
--+++ b/src/devices/cmr113.c
--@@ -42,8 +42,8 @@ Kudos to Jon Oxer for decoding this stream and putting it here:
-- 
-- */
-- 
---#define COMPARE_BITS 83
---#define COMPARE_BYTES (COMPARE_BITS/8)
--+#define COMPARE_BITS  83
--+#define COMPARE_BYTES ((COMPARE_BITS + 7) / 8)
-- 
-- static int cmr113_decode(r_device *decoder, bitbuffer_t *bitbuffer)
-- {
--diff --git a/src/devices/somfy_iohc.c b/src/devices/somfy_iohc.c
--index 906cae53e..2c88067b5 100644
----- a/src/devices/somfy_iohc.c
--+++ b/src/devices/somfy_iohc.c
--@@ -100,11 +100,12 @@ static int somfy_iohc_decode(r_device *decoder, bitbuffer_t *bitbuffer)
--     if (bitbuffer->num_rows != 1)
--         return DECODE_ABORT_EARLY;
-- 
---    int offset = bitbuffer_search(bitbuffer, 0, 0, preamble_pattern, 24) + 24;
---    if (offset >= bitbuffer->bits_per_row[0] - 19 * 10)
--+    unsigned offset = bitbuffer_search(bitbuffer, 0, 0, preamble_pattern, 24) + 24;
--+    if (offset + 19 * 10 >= bitbuffer->bits_per_row[0])
--         return DECODE_ABORT_EARLY;
-- 
---    int num_bits = bitbuffer->bits_per_row[0] - offset;
--+    unsigned num_bits = bitbuffer->bits_per_row[0] - offset;
--+    num_bits = MIN(num_bits, sizeof (b) * 8);
-- 
--     int len = extract_bytes_uart(bitbuffer->bb[0], offset, num_bits, b);
--     if (len < 19)
--@@ -120,7 +121,7 @@ static int somfy_iohc_decode(r_device *decoder, bitbuffer_t *bitbuffer)
--     // calculate and verify checksum
--     if (crc16lsb(b, len, 0x8408, 0x0000) != 0) // unreflected poly 0x1021
--         return DECODE_FAIL_MIC;
---    bitrow_printf(b, len * 8, "%s: offset %d, num_bits %d, len %d, msg_len %d\n", __func__, offset, num_bits, len, msg_len);
--+    bitrow_printf(b, len * 8, "%s: offset %u, num_bits %u, len %d, msg_len %d\n", __func__, offset, num_bits, len, msg_len);
-- 
--     int msg_type = (b[0]);
--     int dst_id   = ((unsigned)b[4] << 24) | (b[3] << 16) | (b[2] << 8) | (b[1]); // assume Little-Endian
-diff --git a/package/rtl_433/0004-Fix-overflow-in-Acurite-00275rm.patch b/package/rtl_433/0004-Fix-overflow-in-Acurite-00275rm.patch
-deleted file mode 100644
-index 057bf9cf64..0000000000
---- a/package/rtl_433/0004-Fix-overflow-in-Acurite-00275rm.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 37455483889bd1c641bdaafc493d1cc236b74904 Mon Sep 17 00:00:00 2001
--From: "Christian W. Zuckschwerdt" <christian@zuckschwerdt.org>
--Date: Fri, 18 Mar 2022 08:09:15 +0100
--Subject: [PATCH] Fix overflow in Acurite-00275rm (closes #2012)
--
--[Retrieved from:
--https://github.com/merbanan/rtl_433/commit/37455483889bd1c641bdaafc493d1cc236b74904]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/devices/acurite.c | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/devices/acurite.c b/src/devices/acurite.c
--index 6879e52da..4f3e83eb3 100644
----- a/src/devices/acurite.c
--+++ b/src/devices/acurite.c
--@@ -1318,15 +1318,15 @@ static int acurite_00275rm_decode(r_device *decoder, bitbuffer_t *bitbuffer)
-- 
--     // Combine signal if exactly three repeats were found
--     if (n_rows == 3) {
---        uint8_t *b = bitbuffer->bb[bitbuffer->num_rows];
--+        bitbuffer_add_row(bitbuffer);
--+        uint8_t *b = bitbuffer->bb[bitbuffer->num_rows - 1];
--         for (int i = 0; i < 11; ++i) {
--             // The majority bit count wins
--             b[i] = (b_rows[0][i] & b_rows[1][i]) |
--                     (b_rows[1][i] & b_rows[2][i]) |
--                     (b_rows[2][i] & b_rows[0][i]);
--         }
---        bitbuffer->bits_per_row[bitbuffer->num_rows] = 88;
---        bitbuffer->num_rows += 1;
--+        bitbuffer->bits_per_row[bitbuffer->num_rows - 1] = 88;
+diff --git a/package/memcached/0002-check-for-sys-auxv.h.patch b/package/memcached/0002-check-for-sys-auxv.h.patch
+index 8c41bb4f01..a7d0dfdd00 100644
+--- a/package/memcached/0002-check-for-sys-auxv.h.patch
++++ b/package/memcached/0002-check-for-sys-auxv.h.patch
+@@ -37,14 +37,14 @@ index 26df879..05e61ff 100644
+ --- a/crc32c.c
+ +++ b/crc32c.c
+ @@ -273,7 +273,7 @@ void crc32c_init(void) {
 -     }
+  }
+  
+--#elif defined(__aarch64__) && defined(__linux__)
+-+#elif defined(__aarch64__) && defined(__linux__) && defined(HAVE_SYS_AUX_H)
++ #elif defined(__aarch64__) && (defined(__linux__) || defined(__APPLE__))
++-#if defined(__linux__)
+++#if defined(__linux__) && defined(HAVE_SYS_AUX_H)
+  #include <sys/auxv.h>
 - 
--     // Output the first valid row
-diff --git a/package/rtl_433/Config.in b/package/rtl_433/Config.in
-index a6db00f477..01c1e2f5cd 100644
---- a/package/rtl_433/Config.in
-+++ b/package/rtl_433/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_RTL_433
- 	bool "rtl_433"
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  rtl_433 (despite the name) is a generic data receiver, mainly
-@@ -9,7 +8,3 @@ config BR2_PACKAGE_RTL_433
- 	  MHz ISM bands.
+- #if defined(HWCAP_CRC32)
++ #elif defined(__APPLE__)
++ #include <sys/sysctl.h>
+ -- 
+ 2.35.1
  
- 	  https://github.com/merbanan/rtl_433
+diff --git a/package/memcached/0004-configure-ac-use-pkg-config-to-retrieve-openssl.patch b/package/memcached/0004-configure-ac-use-pkg-config-to-retrieve-openssl.patch
+deleted file mode 100644
+index 402fa03b3b..0000000000
+--- a/package/memcached/0004-configure-ac-use-pkg-config-to-retrieve-openssl.patch
++++ /dev/null
+@@ -1,181 +0,0 @@
+-From 656dedad48c81541060448d008b90290196263c5 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 6 Sep 2020 23:38:19 +0200
+-Subject: [PATCH] configure.ac: use pkg-config to retrieve openssl
 -
--comment "rtl_433 needs a toolchain w/ threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/rtl_433/rtl_433.hash b/package/rtl_433/rtl_433.hash
-index fd479dfd21..51fb29c78e 100644
---- a/package/rtl_433/rtl_433.hash
-+++ b/package/rtl_433/rtl_433.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  b362ef3410adec64aee7ad8e6d4d74875f1b3d59ef6fb4856e96adc03876dc65  rtl_433-21.12.tar.gz
-+sha256  61a9163d69cc4b1da46aebbcaf969bd180a055a6b90f42ad281218cc4fbefb86  rtl_433-22.11.tar.gz
- # License file, locally calculated
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
-index 74a0b54a3d..e3be0e5ecf 100644
---- a/package/rtl_433/rtl_433.mk
-+++ b/package/rtl_433/rtl_433.mk
+-Use pkg-config to retrieve openssl dependencies such as -latomic or -lz
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/memcached/memcached/commit/656dedad48c81541060448d008b90290196263c5]
+----
+- README.md    |   2 +-
+- configure.ac | 133 ++++++++++++++++++++++++++-------------------------
+- 2 files changed, 69 insertions(+), 66 deletions(-)
+-
+-diff --git a/README.md b/README.md
+-index 3ce1bc2156..8fe067b767 100644
+---- a/README.md
+-+++ b/README.md
+-@@ -21,7 +21,7 @@ list to ask questions, github issues aren't seen by everyone!
+- * libseccomp (optional, experimental, linux) - enables process restrictions for
+-   better security. Tested only on x86-64 architectures.
+- * openssl (optional) - enables TLS support. need relatively up to date
+--  version.
+-+  version. pkg-config is needed to find openssl dependencies (such as -lz).
+- 
+- ## Environment
+- 
+-diff --git a/configure.ac b/configure.ac
+-index a0851f2131..2959a86c89 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -437,80 +437,83 @@ AC_ARG_WITH(libssl,
+- dnl ----------------------------------------------------------------------------
+- dnl libssl detection.  swiped from libevent.  modified for openssl detection.
+- 
+-+PKG_PROG_PKG_CONFIG
+- OPENSSL_URL=https://www.openssl.org/
+- if test "x$enable_tls" = "xyes"; then
+--  AC_CACHE_CHECK([for libssl directory], ac_cv_libssl_dir, [
+--    saved_LIBS="$LIBS"
+--    saved_LDFLAGS="$LDFLAGS"
+--    saved_CPPFLAGS="$CPPFLAGS"
+--    le_found=no
+--    for ledir in $trylibssldir "" $prefix /usr/local ; do
+-+  PKG_CHECK_MODULES(OPENSSL, openssl, [LIBS="$LIBS $OPENSSL_LIBS" CFLAGS="$CFLAGS $OPENSSL_CFLAGS"], [
+-+    AC_CACHE_CHECK([for libssl directory], ac_cv_libssl_dir, [
+-+      saved_LIBS="$LIBS"
+-+      saved_LDFLAGS="$LDFLAGS"
+-+      saved_CPPFLAGS="$CPPFLAGS"
+-+      le_found=no
+-+      for ledir in $trylibssldir "" $prefix /usr/local ; do
+-+        LDFLAGS="$saved_LDFLAGS"
+-+        LIBS="-lssl -lcrypto $saved_LIBS"
+-+
+-+        # Skip the directory if it isn't there.
+-+        if test ! -z "$ledir" -a ! -d "$ledir" ; then
+-+          continue;
+-+        fi
+-+        if test ! -z "$ledir" ; then
+-+          if test -d "$ledir/lib" ; then
+-+            LDFLAGS="-L$ledir/lib $LDFLAGS"
+-+          else
+-+            LDFLAGS="-L$ledir $LDFLAGS"
+-+          fi
+-+          if test -d "$ledir/include" ; then
+-+            CPPFLAGS="-I$ledir/include $CPPFLAGS"
+-+          else
+-+            CPPFLAGS="-I$ledir $CPPFLAGS"
+-+          fi
+-+        fi
+-+        # Can I compile and link it?
+-+        AC_TRY_LINK([#include <sys/time.h>
+-+    #include <sys/types.h>
+-+    #include <assert.h>
+-+    #include <openssl/ssl.h>], [ SSL_CTX* ssl_ctx = SSL_CTX_new(TLS_server_method());
+-+                                assert(OPENSSL_VERSION_NUMBER >= 0x10100000L);],
+-+           [ libssl_linked=yes ], [ libssl_linked=no ])
+-+        if test $libssl_linked = yes; then
+-+          if test ! -z "$ledir" ; then
+-+            ac_cv_libssl_dir=$ledir
+-+            _myos=`echo $target_os | cut -f 1 -d .`
+-+            AS_IF(test "$SUNCC" = "yes" -o "x$_myos" = "xsolaris2",
+-+                  [saved_LDFLAGS="$saved_LDFLAGS -Wl,-R$ledir/lib"],
+-+                  [AS_IF(test "$GCC" = "yes",
+-+                        [saved_LDFLAGS="$saved_LDFLAGS -Wl,-rpath,$ledir/lib"])])
+-+           else
+-+             ac_cv_libssl_dir="(system)"
+-+           fi
+-+           le_found=yes
+-+           break
+-+        fi
+-+      done
+-+      LIBS="$saved_LIBS"
+-       LDFLAGS="$saved_LDFLAGS"
+--      LIBS="-lssl -lcrypto $saved_LIBS"
+-+      CPPFLAGS="$saved_CPPFLAGS"
+-+      if test $le_found = no ; then
+-+        AC_MSG_ERROR([libssl (at least version 1.1.0) is required.  You can get it from $OPENSSL_URL
+- 
+--      # Skip the directory if it isn't there.
+--      if test ! -z "$ledir" -a ! -d "$ledir" ; then
+--         continue;
+-+          If it's already installed, specify its path using --with-libssl=/dir/
+-+    ])
+-       fi
+--      if test ! -z "$ledir" ; then
+--        if test -d "$ledir/lib" ; then
+--          LDFLAGS="-L$ledir/lib $LDFLAGS"
+--        else
+--          LDFLAGS="-L$ledir $LDFLAGS"
+--        fi
+--        if test -d "$ledir/include" ; then
+--          CPPFLAGS="-I$ledir/include $CPPFLAGS"
+--        else
+--          CPPFLAGS="-I$ledir $CPPFLAGS"
+--        fi
+-+    ])
+-+    LIBS="-lssl -lcrypto $LIBS"
+-+    if test $ac_cv_libssl_dir != "(system)"; then
+-+      if test -d "$ac_cv_libssl_dir/lib" ; then
+-+        LDFLAGS="-L$ac_cv_libssl_dir/lib $LDFLAGS"
+-+        le_libdir="$ac_cv_libssl_dir/lib"
+-+      else
+-+        LDFLAGS="-L$ac_cv_libssl_dir $LDFLAGS"
+-+        le_libdir="$ac_cv_libssl_dir"
+-       fi
+--      # Can I compile and link it?
+--      AC_TRY_LINK([#include <sys/time.h>
+--  #include <sys/types.h>
+--  #include <assert.h>
+--  #include <openssl/ssl.h>], [ SSL_CTX* ssl_ctx = SSL_CTX_new(TLS_server_method());
+--                              assert(OPENSSL_VERSION_NUMBER >= 0x10100000L);],
+--         [ libssl_linked=yes ], [ libssl_linked=no ])
+--      if test $libssl_linked = yes; then
+--         if test ! -z "$ledir" ; then
+--           ac_cv_libssl_dir=$ledir
+--           _myos=`echo $target_os | cut -f 1 -d .`
+--           AS_IF(test "$SUNCC" = "yes" -o "x$_myos" = "xsolaris2",
+--                 [saved_LDFLAGS="$saved_LDFLAGS -Wl,-R$ledir/lib"],
+--                 [AS_IF(test "$GCC" = "yes",
+--                       [saved_LDFLAGS="$saved_LDFLAGS -Wl,-rpath,$ledir/lib"])])
+--         else
+--           ac_cv_libssl_dir="(system)"
+--         fi
+--         le_found=yes
+--         break
+-+      if test -d "$ac_cv_libssl_dir/include" ; then
+-+        CPPFLAGS="-I$ac_cv_libssl_dir/include $CPPFLAGS"
+-+      else
+-+        CPPFLAGS="-I$ac_cv_libssl_dir $CPPFLAGS"
+-       fi
+--    done
+--    LIBS="$saved_LIBS"
+--    LDFLAGS="$saved_LDFLAGS"
+--    CPPFLAGS="$saved_CPPFLAGS"
+--    if test $le_found = no ; then
+--      AC_MSG_ERROR([libssl (at least version 1.1.0) is required.  You can get it from $OPENSSL_URL
+--
+--        If it's already installed, specify its path using --with-libssl=/dir/
+--  ])
+-     fi
+-   ])
+--  LIBS="-lssl -lcrypto $LIBS"
+--  if test $ac_cv_libssl_dir != "(system)"; then
+--    if test -d "$ac_cv_libssl_dir/lib" ; then
+--      LDFLAGS="-L$ac_cv_libssl_dir/lib $LDFLAGS"
+--      le_libdir="$ac_cv_libssl_dir/lib"
+--    else
+--      LDFLAGS="-L$ac_cv_libssl_dir $LDFLAGS"
+--      le_libdir="$ac_cv_libssl_dir"
+--    fi
+--    if test -d "$ac_cv_libssl_dir/include" ; then
+--      CPPFLAGS="-I$ac_cv_libssl_dir/include $CPPFLAGS"
+--    else
+--      CPPFLAGS="-I$ac_cv_libssl_dir $CPPFLAGS"
+--    fi
+--  fi
+- fi
+- 
+- if test "x$enable_static" = "xyes"; then
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 3bdd1e5e33..78875dde66 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,6 +1,6 @@
+-# From http://www.memcached.org/files/memcached-1.6.16.tar.gz.sha1
+-sha1  724f31c3462fb6b07264d72d0043fd65545fd84a  memcached-1.6.16.tar.gz
++# From http://www.memcached.org/files/memcached-1.6.17.tar.gz.sha1
++sha1  e25639473e15f1bd9516b915fb7e03ab8209030f  memcached-1.6.17.tar.gz
+ 
+ # Locally computed
+-sha256  3051a93bf1dd0c3af2d0e589ff6ef6511f876385a35b18e9ff8741e4a1ab34da  memcached-1.6.16.tar.gz
++sha256  2055e373613d8fc21529aff9f0adce3e23b9ce01ba0478d30e7941d9f2bd1224  memcached-1.6.17.tar.gz
+ sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 7b4069e820..7183da6c14 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL_433_VERSION = 21.12
-+RTL_433_VERSION = 22.11
- RTL_433_SITE = $(call github,merbanan,rtl_433,$(RTL_433_VERSION))
- RTL_433_LICENSE = GPL-2.0+
- RTL_433_LICENSE_FILES = COPYING
-@@ -18,12 +18,6 @@ RTL_433_CONF_OPTS = \
- 	-DBUILD_TESTING_ANALYZER=OFF \
- 	-DENABLE_SOAPYSDR=OFF
- 
--# 0003-minor-Fix-overflow-in-Clipsal-CMR113-and-Somfy-IOHC.patch
--RTL_433_IGNORE_CVES += CVE-2022-25051
--
--# 0004-Fix-overflow-in-Acurite-00275rm.patch
--RTL_433_IGNORE_CVES += CVE-2022-27419
--
- ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
- RTL_433_DEPENDENCIES += librtlsdr
- RTL_433_CONF_OPTS += -DENABLE_RTLSDR=ON
-@@ -38,4 +32,10 @@ else
- RTL_433_CONF_OPTS += -DENABLE_OPENSSL=OFF
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+RTL_433_CONF_OPTS += -DENABLE_THREADS=ON
-+else
-+RTL_433_CONF_OPTS += -DENABLE_THREADS=OFF
-+endif
-+
- $(eval $(cmake-package))
+-MEMCACHED_VERSION = 1.6.16
++MEMCACHED_VERSION = 1.6.17
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 -- 
 2.35.1
 
