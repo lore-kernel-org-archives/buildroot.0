@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6564BC3DA79
-	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 15:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95701C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 23 Dec 2022 15:57:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 054A74015F;
-	Fri, 23 Dec 2022 15:57:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 054A74015F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2673E416C2;
+	Fri, 23 Dec 2022 15:57:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2673E416C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7cJYuMbm1fuB; Fri, 23 Dec 2022 15:57:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m7Ov2geJFF7K; Fri, 23 Dec 2022 15:57:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C5B6402E7;
-	Fri, 23 Dec 2022 15:57:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C5B6402E7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00ADA4171C;
+	Fri, 23 Dec 2022 15:57:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00ADA4171C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A94B71BF5E6
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 15:56:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DAA9D1BF5E6
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 15:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 837B7416C2
- for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 15:56:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 837B7416C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id C1B55416C2
+ for <buildroot@lists.busybox.net>; Fri, 23 Dec 2022 15:57:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1B55416C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f2kffOcEJmSB for <buildroot@lists.busybox.net>;
- Fri, 23 Dec 2022 15:56:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56179416A3
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 56179416A3
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 15:56:56 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F1DA8100005;
- Fri, 23 Dec 2022 15:56:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1p8kPk-00314b-16; Fri, 23 Dec 2022 16:56:52 +0100
+ with ESMTP id 2wcUZ5VbYIuj for <buildroot@lists.busybox.net>;
+ Fri, 23 Dec 2022 15:57:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D93CA416A3
+ for <buildroot@buildroot.org>; Fri, 23 Dec 2022 15:57:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93CA416A3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C570A86DDD; Fri, 23 Dec 2022 15:57:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221223152357.272307-1-fontaine.fabrice@gmail.com>
- <20221223152357.272307-2-fontaine.fabrice@gmail.com>
-Date: Fri, 23 Dec 2022 16:56:52 +0100
-In-Reply-To: <20221223152357.272307-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 23 Dec 2022 16:23:57 +0100")
-Message-ID: <87r0wqi057.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/rtl_433: bump to version 22.11
+To: buildroot@buildroot.org
+Date: Fri, 23 Dec 2022 16:55:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f81b1358fc115fc854a9c9699daaca4be713f873
+X-Git-Newrev: 7967755fbf25fe4d5860884bedb3e01fcd7e9855
+X-Patchwork-Hint: ignore
+Message-Id: <20221223155713.C570A86DDD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl_433: drop dynamic library
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,26 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7967755fbf25fe4d5860884bedb3e01fcd7e9855
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - Drop all patches (already in version)
- > - Threads is not mandatory since
- >   https://github.com/merbanan/rtl_433/commit/4f5231bef29f42acc0ce5700584e8c4df5dc0aa2
+rtl_433 can be built statically since its addition in commit
+4634e84978a3e64e9050021d209a41cd88a1ad16
 
- > https://github.com/merbanan/rtl_433/releases/tag/22.11
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtl_433/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rtl_433/Config.in b/package/rtl_433/Config.in
+index 5664227c82..a6db00f477 100644
+--- a/package/rtl_433/Config.in
++++ b/package/rtl_433/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_RTL_433
+ 	bool "rtl_433"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK if BR2_PACKAGE_LIBOPENSSL
+ 	help
+@@ -11,6 +10,6 @@ config BR2_PACKAGE_RTL_433
+ 
+ 	  https://github.com/merbanan/rtl_433
+ 
+-comment "rtl_433 needs a toolchain w/ dynamic library, threads"
++comment "rtl_433 needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
