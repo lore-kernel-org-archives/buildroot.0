@@ -1,91 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BCDAC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Dec 2022 09:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AA41C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Dec 2022 12:57:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A8ED4016F;
-	Sat, 24 Dec 2022 09:18:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A8ED4016F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BD3F81427;
+	Sat, 24 Dec 2022 12:57:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BD3F81427
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9ttjPl16rD5Q; Sat, 24 Dec 2022 09:18:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AxBwwxpej9LP; Sat, 24 Dec 2022 12:57:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7CB2740588;
-	Sat, 24 Dec 2022 09:18:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CB2740588
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E747C1BF296
- for <buildroot@lists.busybox.net>; Sat, 24 Dec 2022 09:18:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86D4A813CD;
+	Sat, 24 Dec 2022 12:57:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86D4A813CD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 573231BF5DD
+ for <buildroot@lists.busybox.net>; Sat, 24 Dec 2022 12:57:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6535A607C7
- for <buildroot@lists.busybox.net>; Sat, 24 Dec 2022 09:18:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6535A607C7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 322D281423
+ for <buildroot@lists.busybox.net>; Sat, 24 Dec 2022 12:57:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 322D281423
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wtBUWBd1PiNw for <buildroot@lists.busybox.net>;
- Sat, 24 Dec 2022 09:18:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EEB360AF4
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0EEB360AF4
- for <buildroot@buildroot.org>; Sat, 24 Dec 2022 09:18:16 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id l26so3402718wme.5
- for <buildroot@buildroot.org>; Sat, 24 Dec 2022 01:18:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=1nGDDRvTiLIBAr/ecgdm7TI3PGONFNalTPZGfzB7ZoI=;
- b=TS3RmYBd9c1zX5wu0JMkJP6651nlsyNICgvpRYDA79BRXxdyAs7hW3kOuNbfMr2nXw
- 8NqLf7tu92mzmvN6kmF7DH5judlx9Cdx35symFSThVdqRkJCjfDn65+KMMUoUfXOgo0H
- ujz2ip8AI8Cr78zw5NWD1VBrX7kv2pCZy17y0hCfoSwAL8LqaVSf4ojj/gJ2JHIBspIw
- qqldIkAj4fq59YhwxOo58LlnO4G49uhvunb3KeKdVdx1VgkCHtcIUyYjD6/qwesM5cj4
- kbSAvT5qGHRByfpGQrr9oZh2PGA9bPSV+ZsHKz2ekwQhGl1zJkwkoU7CF7Brpf5o7hPP
- IQ5w==
-X-Gm-Message-State: AFqh2kp9WFcG/QaX2f+5q/D2k/v3fI8OYTxIzrQHVfujEQYnktFZgqK5
- o56zwBDwBZAi69xXiDf94x4MNh0MVGg=
-X-Google-Smtp-Source: AMrXdXuyCkJYU/BQ+/J6f5AO2rfgyo9L8z4NoGxBqJGh1BUOVXINZryZqcDuzadYKmjlhxRsEAUtRg==
-X-Received: by 2002:a05:600c:348b:b0:3d1:fcb4:4074 with SMTP id
- a11-20020a05600c348b00b003d1fcb44074mr10385464wmq.22.1671873495320; 
- Sat, 24 Dec 2022 01:18:15 -0800 (PST)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:9ce0:1380:e1bd:a6d1])
- by smtp.gmail.com with ESMTPSA id
- r9-20020a05600c35c900b003d6b71c0c92sm16526202wmq.45.2022.12.24.01.18.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Dec 2022 01:18:15 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1ZNc3O3U-4Af for <buildroot@lists.busybox.net>;
+ Sat, 24 Dec 2022 12:57:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BB18813A5
+Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9BB18813A5
+ for <buildroot@buildroot.org>; Sat, 24 Dec 2022 12:57:24 +0000 (UTC)
+Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
+ by mailout11.t-online.de (Postfix) with SMTP id F40D9B37E
+ for <buildroot@buildroot.org>; Sat, 24 Dec 2022 13:57:20 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd73.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p945Y-2X2qlF0; Sat, 24 Dec 2022 13:57:20 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59670)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p945Y-0002mI-0H
+ for buildroot@buildroot.org; Sat, 24 Dec 2022 13:57:20 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 24 Dec 2022 10:18:13 +0100
-Message-Id: <9b491a410b4067fb2107567b79329ec541f8b241.1671873478.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1671873478.git.yann.morin.1998@free.fr>
-References: <cover.1671873478.git.yann.morin.1998@free.fr>
+Date: Sat, 24 Dec 2022 13:57:19 +0100
+Message-Id: <20221224125720.2905231-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=1nGDDRvTiLIBAr/ecgdm7TI3PGONFNalTPZGfzB7ZoI=;
- b=FkD0ZKgTufR+TOMWXDfLYa0NCapWDxG3nV8+YCvSKyu0wmLzBoEJRivtNPjYkG4xLa
- OAf6W0zh6Anxznfp9AmhIISzTHhWuSjqBUJnKJinhuDZrBK/LzdUGZfC2HrQTTvrn+4T
- lnerkE5ZG3n6X4yqIyaYsN+mibsP9g4adNjcVgtgo3SPdPX+1VQMwGzqZ84UIxUNBP5l
- ZxRbdr8s8lrzbR70+Z2/TN/8cVoMcJupTyxCbxXiopuAY1wc2Cf90akWuOA98x4dKukv
- fUSqiozQDOAeAM5zkKylJjXMF2rCWYAYaZXVYeN+zu0JbVF3LRmLvp3ocabOvUhOPS8S
- SlJQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=FkD0ZKgT
-Subject: [Buildroot] [PATCH 3/3] support/tests: enable PPD, and thus TLPB,
- for systemd tests
+X-TOI-EXPURGATEID: 150726::1671886640-2508E98D-F7F76BA4/0/0 CLEAN NORMAL
+X-TOI-MSGID: 051feabb-276a-4c1c-a214-afcb7b5a5d2c
+Subject: [Buildroot] [PATCH 1/2] package/kodi: bump version to 19.5-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,33 +65,176 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/tests/init/test_systemd.py | 1 +
- 1 file changed, 1 insertion(+)
+Removed two upstream patches included in this version.
 
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index 06c42736ae..ddc32b0838 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -13,6 +13,7 @@ class InitSystemSystemdBase(InitSystemBase):
-         BR2_INIT_SYSTEMD=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PER_PACKAGE_DIRECTORIES=y
-         """
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../kodi-jsonschemabuilder.mk                 |  2 +-
+ .../kodi-texturepacker/kodi-texturepacker.mk  |  2 +-
+ ...char-as-formatting-of-non-void-point.patch | 54 -------------------
+ ...t-as-char-as-formatting-of-non-void-.patch | 33 ------------
+ package/kodi/kodi.hash                        |  2 +-
+ package/kodi/kodi.mk                          |  2 +-
+ 6 files changed, 4 insertions(+), 91 deletions(-)
+ delete mode 100644 package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
+ delete mode 100644 package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch
+
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 8cc2297bdb..a13fb91afe 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
-     def check_systemd(self, fs):
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 19.4-Matrix
++KODI_JSONSCHEMABUILDER_VERSION = 19.5-Matrix
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 4733399edc..9432e4bbd6 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 19.4-Matrix
++KODI_TEXTUREPACKER_VERSION = 19.5-Matrix
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch b/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
+deleted file mode 100644
+index af68de220c..0000000000
+--- a/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 44b30c116682968bacf8aec566fc9c193026ecc9 Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Wed, 6 Jul 2022 22:48:35 +1000
+-Subject: [PATCH] GLUtils: cast as char as formatting of non-void pointers
+- is disallowed
+-
+-Downloaded from upstream commit:
+-https://github.com/xbmc/xbmc/commit/44b30c116682968bacf8aec566fc9c193026ecc9
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- xbmc/utils/GLUtils.cpp | 10 +++++-----
+- 1 file changed, 5 insertions(+), 5 deletions(-)
+-
+-diff --git a/xbmc/utils/GLUtils.cpp b/xbmc/utils/GLUtils.cpp
+-index 1ef804709f..c36dcf6a20 100644
+---- a/xbmc/utils/GLUtils.cpp
+-+++ b/xbmc/utils/GLUtils.cpp
+-@@ -148,27 +148,27 @@ void _VerifyGLState(const char* szfile, const char* szfunction, int lineno)
+- void LogGraphicsInfo()
+- {
+- #if defined(HAS_GL) || defined(HAS_GLES)
+--  const GLubyte *s;
+-+  const char* s;
+- 
+--  s = glGetString(GL_VENDOR);
+-+  s = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+-   if (s)
+-     CLog::Log(LOGINFO, "GL_VENDOR = %s", s);
+-   else
+-     CLog::Log(LOGINFO, "GL_VENDOR = NULL");
+- 
+--  s = glGetString(GL_RENDERER);
+-+  s = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+-   if (s)
+-     CLog::Log(LOGINFO, "GL_RENDERER = %s", s);
+-   else
+-     CLog::Log(LOGINFO, "GL_RENDERER = NULL");
+- 
+--  s = glGetString(GL_VERSION);
+-+  s = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+-   if (s)
+-     CLog::Log(LOGINFO, "GL_VERSION = %s", s);
+-   else
+-     CLog::Log(LOGINFO, "GL_VERSION = NULL");
+- 
+--  s = glGetString(GL_SHADING_LANGUAGE_VERSION);
+-+  s = reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION));
+-   if (s)
+-     CLog::Log(LOGINFO, "GL_SHADING_LANGUAGE_VERSION = %s", s);
+-   else
+--- 
+-2.30.2
+-
+diff --git a/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch b/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch
+deleted file mode 100644
+index 41dc3356bd..0000000000
+--- a/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 651c82853fe69dc5aa3e6a50f2eb2f752caafba0 Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Mon, 11 Jul 2022 09:39:02 +0000
+-Subject: [PATCH] WinSystemX11: cast as char as formatting of non-void
+- pointers is disallowed
+-
+-Downloaded from upstream commit:
+-https://github.com/xbmc/xbmc/commit/651c82853fe69dc5aa3e6a50f2eb2f752caafba0
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- xbmc/windowing/X11/WinSystemX11.cpp | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/xbmc/windowing/X11/WinSystemX11.cpp b/xbmc/windowing/X11/WinSystemX11.cpp
+-index 8a18288fd8..033c0f77bf 100644
+---- a/xbmc/windowing/X11/WinSystemX11.cpp
+-+++ b/xbmc/windowing/X11/WinSystemX11.cpp
+-@@ -1038,7 +1038,10 @@ bool CWinSystemX11::HasWindowManager()
+- 
+-   if(status == Success && items_read)
+-   {
+--    CLog::Log(LOGDEBUG,"Window Manager Name: %s", data);
+-+    const char* s;
+-+
+-+    s = reinterpret_cast<const char*>(data);
+-+    CLog::Log(LOGDEBUG, "Window Manager Name: {}", s);
+-   }
+-   else
+-     CLog::Log(LOGDEBUG,"Window Manager Name: ");
+--- 
+-2.30.2
+-
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index a17e0fb29f..e0f548879e 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  cc026f59fd6e37ae90f3449df50810f1cefa37da9444e1188302d910518710da  kodi-19.4-Matrix.tar.gz
++sha256  56e0074f27f08496b2a21af5704a15378a2f0979ae3e9fa9a50a2630d0313d19  kodi-19.5-Matrix.tar.gz
+ sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+ sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+ sha256  a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 7326cd536d..812c4be6e8 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION_MAJOR = 19.4
++KODI_VERSION_MAJOR = 19.5
+ KODI_VERSION_NAME = Matrix
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
