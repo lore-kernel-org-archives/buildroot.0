@@ -1,87 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 615DEC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Dec 2022 03:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 551D3C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Dec 2022 04:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91A7560AD8;
-	Sat, 24 Dec 2022 03:35:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91A7560AD8
+	by smtp1.osuosl.org (Postfix) with ESMTP id C87F182163;
+	Sat, 24 Dec 2022 04:47:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C87F182163
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TR-7imFXyEoe; Sat, 24 Dec 2022 03:35:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 66ZycUMVC2Z2; Sat, 24 Dec 2022 04:47:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D6AAA60AA5;
-	Sat, 24 Dec 2022 03:35:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6AAA60AA5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 614601BF2A0
- for <buildroot@lists.busybox.net>; Sat, 24 Dec 2022 03:35:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1336482112;
+	Sat, 24 Dec 2022 04:47:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1336482112
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EE5C1BF294
+ for <buildroot@lists.busybox.net>; Sat, 24 Dec 2022 04:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3734A60AA5
- for <buildroot@lists.busybox.net>; Sat, 24 Dec 2022 03:35:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3734A60AA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 393A340192
+ for <buildroot@lists.busybox.net>; Sat, 24 Dec 2022 04:47:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 393A340192
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pbxjkoDzV9jQ for <buildroot@lists.busybox.net>;
- Sat, 24 Dec 2022 03:34:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F94560758
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F94560758
- for <buildroot@buildroot.org>; Sat, 24 Dec 2022 03:34:59 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id r72so3357439iod.5
- for <buildroot@buildroot.org>; Fri, 23 Dec 2022 19:34:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=WnclN/SdhIBp7Sbns5acIiQfjh7a6MZez2iryMqtDnc=;
- b=nz1qEa56GvBPIY+61/CFQAljgkWK0Ai+6sBLXuqKzXwKuU08Thcuq+ldmjQx4k48kU
- m0l+qx8uitTGLJ7Rw6oxG7rHfrQhVi3vAaOqrYsXwtCkh5YUzS1URzsGyuzSmHvVTbQj
- 71wW6ww1f2HmTKHYul0F4X7rtgXyellqhZg+zYC28EzJmCqpgnytTKe/KAtb6ruYLRaK
- T5s62WCTl+X/JTmVE7U5q3be/BnNcsck+E207+ao9JF1WHVQNYOgvhUeszm8RjLvEgaQ
- p74nbKzQp4kVGsgeJyRWUqvxT4jyi49waUO2zBDo+FtSSpkwx9nCCS1C4lZ9HAix0law
- uLZw==
-X-Gm-Message-State: AFqh2kpfIIs3Fdms1FpkmpZS1z+lojWPuFrE5XqDGzSm8e22InBDSKld
- sfLtZ1ezIYTxAkIlQv6SCmv8+5rvw1jD3g==
-X-Google-Smtp-Source: AMrXdXvmHXjBQ8b9NWxmq2lPshpY5ftmgrpkrFdJhed2dpultPWxf1bA4Zi1zHVndqCn4JQU8M4LWw==
-X-Received: by 2002:a6b:e813:0:b0:6e4:e13d:199c with SMTP id
- f19-20020a6be813000000b006e4e13d199cmr7169936ioh.14.1671852898149; 
- Fri, 23 Dec 2022 19:34:58 -0800 (PST)
-Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
- [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- f27-20020a056638329b00b003758bcba4b5sm1433934jav.153.2022.12.23.19.34.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Dec 2022 19:34:57 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 20:34:52 -0700
-Message-Id: <20221224033452.3079697-1-james.hilliard1@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c8cL_U9pBBlf for <buildroot@lists.busybox.net>;
+ Sat, 24 Dec 2022 04:47:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C0D540105
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com
+ [61.152.239.71])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C0D540105
+ for <buildroot@buildroot.org>; Sat, 24 Dec 2022 04:47:07 +0000 (UTC)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+ (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+ (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+ by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5E93924DEED;
+ Sat, 24 Dec 2022 12:46:57 +0800 (CST)
+Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 24 Dec
+ 2022 12:46:57 +0800
+Received: from localhost.localdomain (180.75.241.125) by EXMBX161.cuchost.com
+ (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42;
+ Sat, 24 Dec 2022 12:46:55 +0800
+From: Tan En De <ende.tan@starfivetech.com>
+To: <buildroot@buildroot.org>
+Date: Sat, 24 Dec 2022 12:46:16 +0800
+Message-ID: <20221224044616.3909215-1-ende.tan@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WnclN/SdhIBp7Sbns5acIiQfjh7a6MZez2iryMqtDnc=;
- b=DOcy41v6D+VpTtLva7xroWJChdbOh3rxa6F8ffX5xgRccH3ynTNyfR3KnmzCbKmyKj
- HVSTucMQlFmn1NeeI0vMCuTQGFidX/yx7I8xT/9bermLJczZqRxW+c6chdDH3dKl1YEy
- yTxL6Lgqc0zDFu6rY6+RXozdz57ke3gmux2+VeIUhZVg8etLmA5CthnAEDQ8MQZpq8QV
- oA+NeOWj/7ZIhHO5OqZ0+pbj11W1lENhZO+3nYVGSA7jeS8olQygIgB43dcXMvTg62a7
- +ySnXfwZG3Mz0PM2dET4MptEcgzVM1/qEm9XUnrks3BJ8W75DHagmWuTzDYvKoKgdTCA
- 7M9Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=DOcy41v6
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 1.0.0
+X-Originating-IP: [180.75.241.125]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX161.cuchost.com
+ (172.16.6.71)
+X-YovoleRuleAgent: yovoleflag
+Subject: [Buildroot] [1/1] package/libkcapi: Fix symver build error on
+ non-ELF platforms
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,43 +70,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: Stephan Mueller <smueller@chronox.de>,
+ Tan En De <ende.tan@starfivetech.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The following error is observed on Microblaze [1] build:
+```
+error: symver is only supported on ELF platforms
+```
+due to using __attribute__((symver)) on non-ELF platform.
+So, revert to using .symver in such case.
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 1544bb3897..6993b756ae 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.64.1/meson-0.64.1.tar.gz.asc
--sha256  3a8e030c2334f782085f81627062cc6d4a6771edf31e055ffe374f9e6b089ab9  meson-0.64.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/1.0.0/meson-1.0.0.tar.gz.asc
-+sha256  aa50a4ba4557c25e7d48446abfde857957dcdf58385fffbe670ba0e8efacce05  meson-1.0.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 5aae95973a..e417d8d627 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.64.1
-+MESON_VERSION = 1.0.0
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+[1]: http://autobuild.buildroot.net/results/447/4470efb5a078c0e368f6bd4f5ec455eea5eeebb5/build-end.log
+
+Upstream status: commit f630ed1f807e26de04b3a5dfd7f1b39d1c5cb642
+https://github.com/smuellerDD/libkcapi/pull/147
+
+Signed-off-by: Tan En De <ende.tan@starfivetech.com>
+Signed-off-by: Stephan Mueller <smueller@chronox.de>
+---
+ ...ver-build-error-on-non-ELF-platforms.patch | 84 +++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+ create mode 100644 package/libkcapi/0003-Fix-symver-build-error-on-non-ELF-platforms.patch
+
+diff --git a/package/libkcapi/0003-Fix-symver-build-error-on-non-ELF-platforms.patch b/package/libkcapi/0003-Fix-symver-build-error-on-non-ELF-platforms.patch
+new file mode 100644
+index 0000000000..206ac7ec4a
+--- /dev/null
++++ b/package/libkcapi/0003-Fix-symver-build-error-on-non-ELF-platforms.patch
+@@ -0,0 +1,84 @@
++From f630ed1f807e26de04b3a5dfd7f1b39d1c5cb642 Mon Sep 17 00:00:00 2001
++From: Tan En De <ende.tan@starfivetech.com>
++Date: Sat, 26 Nov 2022 07:47:39 +0800
++Subject: [PATCH] Fix symver build error on non-ELF platforms
++
++The following error is observed on Microblaze [1] build:
++```
++error: symver is only supported on ELF platforms
++```
++due to using __attribute__((symver)) on non-ELF platform.
++So, revert to using .symver in such case.
++
++[1]: http://autobuild.buildroot.net/results/447/4470efb5a078c0e368f6bd4f5ec455eea5eeebb5/build-end.log
++
++Signed-off-by: Tan En De <ende.tan@starfivetech.com>
++Signed-off-by: Stephan Mueller <smueller@chronox.de>
++---
++Upstream status: commit f630ed1f807e26de04b3a5dfd7f1b39d1c5cb642
++
++ configure.ac                    |  2 ++
++ lib/internal.h                  |  2 +-
++ m4/ac_check_attribute_symver.m4 | 24 ++++++++++++++++++++++++
++ 3 files changed, 27 insertions(+), 1 deletion(-)
++ create mode 100644 m4/ac_check_attribute_symver.m4
++
++diff --git a/configure.ac b/configure.ac
++index e230577..ba17404 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -76,6 +76,8 @@ AX_ADD_FORTIFY_SOURCE
++ 
++ AC_CHECK_API_VERSION
++ 
+++AC_CHECK_ATTRIBUTE_SYMVER
+++
++ AC_ARG_ENABLE([werror], [AS_HELP_STRING([--disable-werror], [Disable -Werror])], [with_werror=$enableval], [with_werror=yes])
++ AM_CONDITIONAL([ENABLE_WERROR], [test "x$with_werror" = "xyes"])
++ 
++diff --git a/lib/internal.h b/lib/internal.h
++index 14844a9..7977b04 100644
++--- a/lib/internal.h
+++++ b/lib/internal.h
++@@ -352,7 +352,7 @@ static inline int io_getevents(__attribute__((unused)) aio_context_t ctx,
++  * Auxiliary macros
++  ************************************************************/
++ 
++-#if __GNUC__ >= 10
+++#if HAVE_ATTRIBUTE_SYMVER && __GNUC__ >= 10
++ # define IMPL_SYMVER(name, version) \
++     __attribute__((__symver__("kcapi_" #name "@@LIBKCAPI_" version)))
++ 
++diff --git a/m4/ac_check_attribute_symver.m4 b/m4/ac_check_attribute_symver.m4
++new file mode 100644
++index 0000000..b484c5e
++--- /dev/null
+++++ b/m4/ac_check_attribute_symver.m4
++@@ -0,0 +1,24 @@
+++dnl Check compiler support for symver function attribute
+++AC_DEFUN([AC_CHECK_ATTRIBUTE_SYMVER], [
+++	saved_CFLAGS=$CFLAGS
+++	CFLAGS="-O0 -Werror"
+++	AC_COMPILE_IFELSE(
+++		[AC_LANG_PROGRAM(
+++			[[
+++				void _test_attribute_symver(void);
+++				__attribute__((__symver__("sym@VER_1.2.3"))) void _test_attribute_symver(void) {}
+++			]],
+++			[[ 
+++				_test_attribute_symver()
+++			]]
+++		)],
+++		[
+++			AC_DEFINE([HAVE_ATTRIBUTE_SYMVER], 1, [Define to 1 if __attribute__((symver)) is supported])
+++		],
+++		[
+++			AC_DEFINE([HAVE_ATTRIBUTE_SYMVER], 0, [Define to 0 if __attribute__((symver)) is not supported])
+++		]
+++	)
+++	CFLAGS=$saved_CFLAGS
+++])
+++
++-- 
++2.34.1
++
 -- 
 2.34.1
 
