@@ -1,88 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 544A6C4167B
-	for <buildroot@archiver.kernel.org>; Sun, 25 Dec 2022 22:48:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5AEBC4167B
+	for <buildroot@archiver.kernel.org>; Sun, 25 Dec 2022 23:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AED06607FE;
-	Sun, 25 Dec 2022 22:48:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AED06607FE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35EDF812F5;
+	Sun, 25 Dec 2022 23:12:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35EDF812F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qZaYq6eYnkQ6; Sun, 25 Dec 2022 22:48:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AAVVn88ob0QC; Sun, 25 Dec 2022 23:12:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E95ED60A6B;
-	Sun, 25 Dec 2022 22:48:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E95ED60A6B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B157812F1;
+	Sun, 25 Dec 2022 23:12:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B157812F1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 745EB1BF381
- for <buildroot@lists.busybox.net>; Sun, 25 Dec 2022 22:48:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CBD261BF591
+ for <buildroot@lists.busybox.net>; Sun, 25 Dec 2022 23:12:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 490F240017
- for <buildroot@lists.busybox.net>; Sun, 25 Dec 2022 22:48:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 490F240017
+ by smtp2.osuosl.org (Postfix) with ESMTP id AEEC340195
+ for <buildroot@lists.busybox.net>; Sun, 25 Dec 2022 23:12:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEEC340195
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c6PVGcOLh7UI for <buildroot@lists.busybox.net>;
- Sun, 25 Dec 2022 22:48:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BB2F40190
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4BB2F40190
- for <buildroot@buildroot.org>; Sun, 25 Dec 2022 22:48:30 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- m8-20020a05600c3b0800b003d96f801c48so4159516wms.0
- for <buildroot@buildroot.org>; Sun, 25 Dec 2022 14:48:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gLLhAnyBoJczVmj1ZHmthsHOoWE1sELfjuesOt+u3OI=;
- b=0uzMmZD+p+hg8/7Hn60imL2hrUhzRpw6sm80G8VBMZVKBbtn/A50kv5TnOHe9KrxdX
- mNjboindOM90DJEkPFsMlWwU0p13qdWQPZYQC4on3PR5lfUu1GZQHj8QNy3MJ0Ql6mAQ
- 9k8LKqUNf0s7o3ShrtNGr4T4GoRU8wE0z69jkHXjBApWgkhps5Vc8T1Rj9MYQLAFhTnr
- YTJ3KqM+x6/ptGBXhGn8QB3U7uoKCzJuo54BwK7LZ4DVOY+5n4ifyBrhB429eTpV8kSm
- ueg8AFwQN7mW4oAjgmWE2C3S7gzQwm7zq7fBscMHNGzJ5Px1lBX6zY07joPwMrDSG5rv
- vQaA==
-X-Gm-Message-State: AFqh2krwYWlglv8Vu42GaHHOqRPi9STGXNty9suQmPX3FLOXaglWh6GG
- 4h4wKDFXa+m0SU7AywIA98AXR2jj5yo=
-X-Google-Smtp-Source: AMrXdXt8uc8Vc97Mtg9ZZKGapJ3KlwzFojYDDIl3EFeaSOyjDPh6NEjuB/tuNZYXqhVxrb1KDPNn2w==
-X-Received: by 2002:a05:600c:224b:b0:3cf:ae53:b1e0 with SMTP id
- a11-20020a05600c224b00b003cfae53b1e0mr11909996wmm.9.1672008507848; 
- Sun, 25 Dec 2022 14:48:27 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- o15-20020a05600c4fcf00b003c6f3f6675bsm18197996wmq.26.2022.12.25.14.48.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 25 Dec 2022 14:48:26 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 5VUe_pFLoidZ for <buildroot@lists.busybox.net>;
+ Sun, 25 Dec 2022 23:12:09 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4DC340017
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D4DC340017
+ for <buildroot@buildroot.org>; Sun, 25 Dec 2022 23:12:08 +0000 (UTC)
+Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
+ by mailout04.t-online.de (Postfix) with SMTP id BB522E343;
+ Mon, 26 Dec 2022 00:11:35 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd87.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1p9a9N-0aJpVB0; Mon, 26 Dec 2022 00:11:25 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45128)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1p9a9N-0004KT-1a;
+ Mon, 26 Dec 2022 00:11:25 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 25 Dec 2022 23:48:24 +0100
-Message-Id: <20221225224824.814957-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Mon, 26 Dec 2022 00:11:25 +0100
+Message-Id: <20221225231125.3955545-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gLLhAnyBoJczVmj1ZHmthsHOoWE1sELfjuesOt+u3OI=;
- b=PRfo0l71oeZKq6KGl/lGsotWytlrQgC5xTA9zBOQjPRc053A+YLX3kXWyDWJMSbyyA
- LlbcOZdQINqsMHl2TNGwIy3G35FrVxrDFl7erqe1Y2/SZ2rDOlEeB+vtnIFoe8MHy0gC
- kSAAfWtNwxwll+pKdgPC9Km+LipHY5tpv/29BiMrNF2rFWj/B0QhlwQkUIKJqJvx74Ow
- xfeiIRm9AgVkf+APFEUBh5l5doJ/ayjVHUIRc9uhmfVU1zNeysIlG4HjPOFZ7fgvGExD
- TOKalK0zvbbVVi7x0EQHESBLbW3GPUFXFVBrRmXwWDIP4OSqTrvaqyevqiPD9yPLTYo/
- D6Rg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PRfo0l71
-Subject: [Buildroot] [PATCH 1/1] package/ncurses: fix legal info
+X-TOI-EXPURGATEID: 150726::1672009885-3BFEC81E-5C79AD36/0/0 CLEAN NORMAL
+X-TOI-MSGID: 265c6af8-19b9-40cc-80fb-623f3eb61347
+Subject: [Buildroot] [PATCH 1/1] package/liboping: fix build with ncurses-6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,29 +71,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit a38a30eb3a46570705642dc37235ddcc1471b434 forgot to update hash of
-COPYING (update in year)
+https://git.busybox.net/buildroot/commit/?id=a38a30eb3a46570705642dc37235ddcc1471b434
+bumped ncurses to version 6.3 which breaks build of liboping.
 
-Fixes:
- - http://autobuild.buildroot.org/results/18ed032d1b7e0492ed90f09873cd260997c1deae
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ncurses/ncurses.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...ys-use-s-style-format-for-printf-sty.patch | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/liboping/0005-src-oping.c-always-use-s-style-format-for-printf-sty.patch
 
-diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
-index 1029c1ddcb..c72a2abf46 100644
---- a/package/ncurses/ncurses.hash
-+++ b/package/ncurses/ncurses.hash
-@@ -62,4 +62,4 @@ sha256  32dc21b671ead8b199d66111ebd3404e8cd5f8c4ca5587cfeb5c6a4913b2d103  ncurse
- sha256  8fe3bcacaea784ac7971e102a8eb8ca58c4c2c4c13c1ec33f32334600b9e4f56  ncurses-6.3-20221203.patch.gz
- 
- # Locally computed
--sha256  4d1fde61868c73776a539366dccf5d5a4857e7fd7299efb1f02e07c2afe9ea87  COPYING
-+sha256  63de87399e9fc8860236082b6b0520e068e9eb1fad0ebd30202aa30bb6f690ac  COPYING
+diff --git a/package/liboping/0005-src-oping.c-always-use-s-style-format-for-printf-sty.patch b/package/liboping/0005-src-oping.c-always-use-s-style-format-for-printf-sty.patch
+new file mode 100644
+index 0000000000..3b68feea3d
+--- /dev/null
++++ b/package/liboping/0005-src-oping.c-always-use-s-style-format-for-printf-sty.patch
+@@ -0,0 +1,59 @@
++From 670834fd8fbd2533ea25ca83065800e924116579 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyich@gmail.com>
++Date: Mon, 15 Nov 2021 08:05:43 +0000
++Subject: [PATCH] src/oping.c: always use "%s"-style format for
++ printf()-style functions
++
++`ncuses-6.3` added printf-style function attributes and now makes
++it easier to catch cases when user input is used in palce of format
++string when built with CFLAGS=-Werror=format-security:
++
++    oping.c:1265:41: error: format not a string literal and no format arguments [-Werror=format-security]
++     1265 |                                         hist_symbols_utf8[index]);
++          |                                         ^~~~~~~~~~~~~~~~~
++
++Let's wrap all the missing places with "%s" format.
++
++Downloaded from upstream PR https://github.com/octo/liboping/pull/61
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for liboping version 1.10.0]
++---
++ src/oping.c | 7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/src/oping.c b/src/oping.c
++index c087c80..af4a0cb 100644
++--- a/src/oping.c
+++++ b/src/oping.c
++@@ -1156,7 +1156,7 @@ static int update_graph_prettyping (ping_context_t *ctx, /* {{{ */
++ 			wattron (ctx->window, COLOR_PAIR(color));
++ 
++ 		if (has_utf8())
++-			mvwprintw (ctx->window, /* y = */ 3, /* x = */ x + 2, symbol);
+++			mvwprintw (ctx->window, /* y = */ 3, /* x = */ x + 2, "%s", symbol);
++ 		else
++ 			mvwaddch (ctx->window, /* y = */ 3, /* x = */ x + 2, symbolc);
++ 
++@@ -1262,7 +1262,7 @@ static int update_graph_histogram (ping_context_t *ctx) /* {{{ */
++ 			mvwaddch (ctx->window, /* y = */ 3, /* x = */ x + 2, ' ');
++ 		else if (has_utf8 ())
++ 			mvwprintw (ctx->window, /* y = */ 3, /* x = */ x + 2,
++-					hist_symbols_utf8[index]);
+++					"%s", hist_symbols_utf8[index]);
++ 		else
++ 			mvwaddch (ctx->window, /* y = */ 3, /* x = */ x + 2,
++ 					hist_symbols_acs[index] | A_ALTCHARSET);
++@@ -1639,8 +1639,7 @@ static void update_host_hook (pingobj_iter_t *iter, /* {{{ */
++ 
++ 			HOST_PRINTF ("%zu bytes from %s (%s): icmp_seq=%u ttl=%i ",
++ 					data_len, context->host, context->addr,
++-					sequence, recv_ttl,
++-					format_qos (recv_qos, recv_qos_str, sizeof (recv_qos_str)));
+++					sequence, recv_ttl);
++ 			if ((recv_qos != 0) || (opt_send_qos != 0))
++ 			{
++ 				HOST_PRINTF ("qos=%s ",
++-- 
++2.34.1
++
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
