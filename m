@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87A56C4167B
-	for <buildroot@archiver.kernel.org>; Sun, 25 Dec 2022 22:08:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DCE1C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 25 Dec 2022 22:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A31B8403C8;
-	Sun, 25 Dec 2022 22:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A31B8403C8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27120404F7;
+	Sun, 25 Dec 2022 22:09:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27120404F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n4R7MI7rHusn; Sun, 25 Dec 2022 22:08:55 +0000 (UTC)
+	with ESMTP id B2IfITy3bg9z; Sun, 25 Dec 2022 22:09:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8059240580;
-	Sun, 25 Dec 2022 22:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8059240580
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E42C81BF381
- for <buildroot@lists.busybox.net>; Sun, 25 Dec 2022 22:08:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 433EC40580;
+	Sun, 25 Dec 2022 22:09:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 433EC40580
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 79CCB1BF381
+ for <buildroot@lists.busybox.net>; Sun, 25 Dec 2022 22:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF9F3812F4
- for <buildroot@lists.busybox.net>; Sun, 25 Dec 2022 22:08:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF9F3812F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62D5F401CA
+ for <buildroot@lists.busybox.net>; Sun, 25 Dec 2022 22:08:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62D5F401CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eQxDXMxlD9ji for <buildroot@lists.busybox.net>;
- Sun, 25 Dec 2022 22:08:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zeUuw1gkMA8b for <buildroot@lists.busybox.net>;
+ Sun, 25 Dec 2022 22:08:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99E9E8130E
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 99E9E8130E
- for <buildroot@buildroot.org>; Sun, 25 Dec 2022 22:08:28 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- m8-20020a05600c3b0800b003d96f801c48so4129472wms.0
- for <buildroot@buildroot.org>; Sun, 25 Dec 2022 14:08:28 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3851D40017
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3851D40017
+ for <buildroot@buildroot.org>; Sun, 25 Dec 2022 22:08:29 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ c65-20020a1c3544000000b003cfffd00fc0so9576668wma.1
+ for <buildroot@buildroot.org>; Sun, 25 Dec 2022 14:08:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=M1UoemtKveNCrOrChU6ZD5/FpFDjzaG9oTlRPIqUC6I=;
- b=5gNn720Ym0R4tCT+WdFmYay2EmUZ6LihgmLqIjCt0TlnHXV9R/h9c5KmML8h8kwBgX
- oX7xNMvUVK75b+hM78pDIARafi5tJSfZSxZgWf54hUTomrBUgI/+doR0Jc+K2RotnB4S
- IWs3MihvJWZ515yzsqQT/pNb/N1tPuQeMWUntrw8hZoyggfjAVUHgdqxOSUnCInzyhES
- AipPjVWo9VLpIaqPpRxAaOP54bLchWkgCwp4hG3dililCKq5z0w+oQTIn/01e44mvJVS
- djXVuk0Pjatj4guASzay+pm82wl4H3pi8yzc2K4rUv74zIsl2dvS1F56tuBncdLbmjZc
- IZBw==
-X-Gm-Message-State: AFqh2kpKMl5+NkvMGB28Rnkb2xEGaGm9FqtxQJDPZVBd1Xoitj44rqgJ
- Q4IEoD8nzyoybIsf3YL0Y0t/JMAMQLY=
-X-Google-Smtp-Source: AMrXdXuuRu7SnqjyDoPK2EutOKEw7OrvwwncSgOfhBh0VnQ/qoEnrucJ+pX75dzArz4gzZmuuBdIIA==
-X-Received: by 2002:a05:600c:1f12:b0:3d2:267d:64bd with SMTP id
- bd18-20020a05600c1f1200b003d2267d64bdmr13909505wmb.3.1672006106798; 
- Sun, 25 Dec 2022 14:08:26 -0800 (PST)
+ bh=0OSrADj9JjYa8L/y0dvp0fD+W7meFSH25qPavxL1E0s=;
+ b=5m+CXUG87PfgZ9Lvwj26l3UUmPb29UU6Hr2G/n1qA1JKnjVv7EejwMmQMUXGggmn0Y
+ fD85y3VeqdnwyIkDd6WLbwxgobmNYnOTMCX7dRcwu8UNBwc3kFanIMxMLF6fAyZNWlnJ
+ CXjSEGSXyjcWn89W09ILcKkroI6lcZdQ8njwA0P9/MRojFx7Nfa6LXhP6i0LFdchaEQa
+ rsjU29uLqMnEez4EKmq4X2hs+V6Dh+WWX07VNyjAS9HDQ/v+Z+E8pCW5E86pbrpgUEXq
+ iZblRFs39cWb6/wMgboKT8rD/wv71rUnnPvTw9N9zNYPbf5o2asFGoCNArzDETDVMom8
+ Tu8w==
+X-Gm-Message-State: AFqh2kqNQIqB2leDQPdHPLnRT6G8Lh/Oerhmjkt71Q9+Pnl/CSWJ1BNm
+ O6EKBgYAI8rjHEAddhRYAJu5hDbQRSg=
+X-Google-Smtp-Source: AMrXdXvtTdNsxYxO4jX+QrnwSI09Np065/OWsiCeRdhBxcigFVrdgvZ9qVJfkvi2So3Chuc+x1SzRA==
+X-Received: by 2002:a05:600c:3844:b0:3d3:4406:8a3a with SMTP id
+ s4-20020a05600c384400b003d344068a3amr13919030wmr.30.1672006107472; 
+ Sun, 25 Dec 2022 14:08:27 -0800 (PST)
 Received: from scaer.home ([2a01:cb19:8b51:cb00:bc00:ef48:c4a5:90b])
  by smtp.gmail.com with ESMTPSA id
  w20-20020a1cf614000000b003cf4d99fd2asm11835446wmc.6.2022.12.25.14.08.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 25 Dec 2022 14:08:26 -0800 (PST)
+ Sun, 25 Dec 2022 14:08:27 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 25 Dec 2022 23:08:23 +0100
-Message-Id: <c429b33d532df8723f6477d17bbaedff495abc1e.1672006091.git.yann.morin.1998@free.fr>
+Date: Sun, 25 Dec 2022 23:08:24 +0100
+Message-Id: <b28f0529b781e07baaeadb24fa474c49ac73706a.1672006091.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1672006091.git.yann.morin.1998@free.fr>
 References: <cover.1672006091.git.yann.morin.1998@free.fr>
@@ -75,18 +75,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=M1UoemtKveNCrOrChU6ZD5/FpFDjzaG9oTlRPIqUC6I=;
- b=Iw+Kc5ldxQPswLNIX0t6+cErUiXAP8rrPRb9TvlwJ5UXY7D7hWSqGiWCaEhAW9XnyA
- NY1HE4WaaFPh0XLD/+JhVukRe5p31vo+bHLkH5Q4q9Djq/6Gc5cMZfLHCcF0dC5U9iS9
- gSrWI9yimU9YuC4bJ1aDwAPelPvc76c97zIi9n5ZSpIIRQGDen0AAnPcfv3ebjzt0p9p
- oxqw/wCXhNXbf4OnEhjWdktvJZlbu7+GUxXkUvOeXMBNVR1GLJI+FIXTxiFtJh1HOjSS
- i8KvFWNJLXZHJUhe48uYsewE3isTt3izN79S/jMHwD5JesAxlbRlbuSzmgdumTpxJOej
- j0DA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=0OSrADj9JjYa8L/y0dvp0fD+W7meFSH25qPavxL1E0s=;
+ b=JU4ijfB2n2FMzE/iEpgsmShO3bEEqbDlNaMB6yZZxYj53zgsrggmqW4GISinedBOrA
+ mtrLTEWt6qHxqPhnm18IGVhwEFhGthYuvNBTUhrbyupYP8cJnWIArNPr5UTOLdHnVAd5
+ cRhOQWK2/CeNjo7FvzR1RD0Rk/C0Q+gp9NR0W/0ZPKLL9Y1yHO3VcMyjWjy2ahMVW/Qz
+ csJcb+bGh9t+itnrpZyW4phhwClZoGpeBEs8jBOp/5BaaF2qL4mh1p0dHUxWVdOxei2Y
+ JiBzJmp7jD9n7IZRpdCV+o2Ctff5Ta9hdzxrjV9SDSyM2bM6raqvzsSLvQF71KlWESuP
+ P/zg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Iw+Kc5ld
-Subject: [Buildroot] [PATCH 2/3 v4] system: add option to use an overlayfs
- on /var on a r/o root w/ systemd
+ header.a=rsa-sha256 header.s=20210112 header.b=JU4ijfB2
+Subject: [Buildroot] [PATCH 3/3 v4] support/testing: add systemd tests for
+ factory and overlayfs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,204 +98,284 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- "Yann E. MORIN" <yann.morin@orange.com>,
- =?UTF-8?q?Je=CC=81re=CC=81my=20Rosen?= <jeremy.rosen@smile.fr>,
- Romain Naour <romain.naour@smile.fr>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmluQG9yYW5nZS5jb20+CgpXaGlsZSB0aGUg
-L3ZhciBmYWN0b3J5IHNlZW1zIHRvIGJlIHdvcmtpbmcgaW4gbW9zdCBjYXNlcywgdGhlcmUgaGF2
-ZQpiZWVuIHN1Z2dlc3Rpb25zIHRoYXQgaXQgbWF5IGJlIHNsaWdodGx5IGFuZCBzdWJ0ZWx5IGJv
-cmtlbiBpbiBzb21lCihyYXJlPyBlZGdlPykgY2FzZXMsIGVzcGVjaWFsbHkgYWJvdXQgc3ltbGlu
-a3MuCgpBbiBvdGhlciBzb2x1dGlvbiBpcyB0byBwcmUtcG9wdWxhdGUgL3ZhciBhdCBidWlsZCB0
-aW1lLCBieSB3YXkgb2YKY2FsbGluZyBzeXN0ZW1kLXRtcGZpbGVzLCBhbmQgbW91bnRpbmcgYW4g
-b3ZlcmxheWZzIG9uLXRvcCBvZiBpdCBhdApydW50aW1lLiBUaGUgZmlyc3QgcGFydCBpcyBhbHJl
-YWR5IGRvbmUsIGFuZCB0aGlzIGNoYW5nZSBmb2N1c2VzIG9uCm1vdW50aWcgdGhlIG92ZXJsYXlm
-cy4KClRoaXMgaXMgc2xpZ2h0bHkgYWNjcm9iYXRpYywgdGhvdWdoLCBhbmQgcmVxdWlyZXMgYSBm
-ZXcgaG9vcHM6CgogIC0gZmlyc3QsIHdlIGNyZWF0ZSBhIHRtcGZzOyB0aGlzIHdpbGwgc2VydmVy
-IGFzIHRoZSBiYWNraW5nIHN0b3JlIGZvcgogICAgdGhlIHdyaXRhYmxlIHBhcnQgb2YgdGhlIG92
-ZXJsYXlmczsKCiAgLSB0aGVyZSwgd2UgY3JlYXRlIHRocmVlIGRpcmVjdG9yaWVzIGZvciB0aGUg
-b3ZlcmxheWZzOgogICAgLSBsb3dlci8sIHVwcGVyLywgYW5kIHdvcmsvLCB0byBzZXJ2ZSBhcyB0
-aGUgcmVzcGVjdGl2ZSBvdmVybGF5ZnMKICAgICAgIGRpcmVjdG9yaWVzLAogICAgLSBub3RlOiB0
-aGUgJ3VwcGVyJyBhbmQgJ3dvcmsnIGhhdmUgdG8gYmUgb24gdGhlIHNhbWUgZmlsZXN5c3RlbTsK
-CiAgLSB0aGVuIHdlIGJpbmQtbW91bnQgL3ZhciBvbnRvIGxvd2VyLwoKICAtIGV2ZW50dWFsbHkg
-d2UgbW91bnQgdGhlIG92ZXJsYXlmcwoKV2UgYXJlIGRvaW5nIHRoYXQgd2l0aCB0aHJlZSBzeXN0
-ZW1kIHVuaXRzLCB3aXRoIHRoZSBsYXR0ZXIgaGF2aW5nIGEKZGVwZW5kZW5jeSBvbiB0aGUgcHJl
-dmlvdXMgb25lOgoKICAtIHRoZSB0bXBmcyBpcyBjcmVhdGVkIGFzIGEgc3RhbmRhbG9uZSBtb3Vu
-dCB1bml0LCBmaXJzdCBiZWNhdXNlIHRoYXQKICAgIGp1c3QgbWFrZXMgc2Vuc2UgdG8gdXNlIHN5
-c3RlbWQgdG8gZG8gdGhlIG1vdW50LCBhbmQgc2Vjb25kIGJlY2F1c2UKICAgIHRoYXQgd2lsbCBt
-YWtlIGl0IGVhc3kgZ2ZvciB1c2VycyB0byBwcm92aWRlIGFuIGFjdHVhbCBiYWNraW5nIHN0b3Jl
-CiAgICBmb3IgL3ZhciwgYnkganVzdCBwcm92aWRpbmcgYSBkcm9waW4gdGhhdCBvdmVycmlkZXMg
-dGhlIFdoYXQgd2l0aAogICAgdGhlIGRlc2l0cmVkIGJhY2tpbmcgc3RvcmUsIGFuZCBvcHRpb25h
-bGx5IGFkZGluZyBkZXBlbmRlbmNpZXMgb24KICAgIG90aGVyIHNlcnZpY2VzIHRvIGNyZWF0ZS9p
-bml0aWFsaXNlIHRoZSBiYWNraW5nIHN0b3JlIGlmIG5lZWRlZC4KCiAgLSBjcmVhdGluZyB0aGUg
-ZGlyZWN0b3JpZXMgaXMgZG9uZSB3aXRoIHRoZWlyIG93biBzZXJ2aWNlIGZpbGUsIGFzCiAgICB0
-aGVyZSBpcyBubyBvdGhlciBlYXN5IHdheSB0byByZWF0ZSB0aGVtIGF1dG9tYXRpY2FsbHkuIFdl
-IGFsc28KICAgIGJpbmQtbW91bnQgL3ZhciBvbnRvIHRoZSBsb3dlciBpbiB0aGF0IHNlcnZpY2Ug
-ZmlsZSwgaW5zdGVhZCBvZgogICAgdXNpbmcgYSBzeXN0ZW1kIG1vdW50IHVuaXQuIFNlZSBbMF0g
-Zm9yIHRoZSByYXRpb25hbGUuCgogIC0gZmluYWxseSwgd2UgbW91bnQgYW4gb3ZlcmxheSBvbiAv
-dmFyIHdpdGggYSBjbGFzc2ljIHN5c3RlbWQgbW91bnQKICAgIHVuaXQuCgpbMF0gaWYgd2UgaGFk
-IGEgc3lzdGVtZCBtb3VudCB1bml0IHRvIGRvIHRoZSBiaW5kIG1vdW50LCB0aGVuIGl0IHNvdWxk
-Cmxvb2sgbGlrZToKICAgICMgcnVuLWJ1aWxkcm9vdC1tb3VudHMtdmFyLWxvd2VyLm1vdW50CiAg
-ICBbTW91bnRdCiAgICBXaGF0PS92YXIKICAgIFdoZXJlPS9ydW4vYnVpbGRyb290L21vdW50cy92
-YXIvbG93ZXIKICAgIE9wdGlvbnM9YmluZAoKYW5kIHRoZW4gdGhlIHZhci5tb3VudCB1bml0IHdv
-dWxkIG5lZWQgdG8gaGF2ZSBhIGRlcGVuZGVuY3kgb24gdGhhdAp1bml0OgogICAgIyB2YXIubW91
-bnQKICAgIFtVbml0XQogICAgQWZ0ZXI9cnVuLWJ1aWxkcm9vdC1tb3VudHMtdmFyLWxvd2VyLm1v
-dW50CiAgICBbTW91bnRdCiAgICBXaGVyZT0vdmFyCgpIb3dldmVyLCB0aGUgV2hhdD0vdmFyIG9m
-IHRoZSBmaXJzdCB1bml0IGF1dG9tYXRpY2FsbHkgYWRkcyBhbiBpbXBsaWNpdApkZXBlbmRlbmN5
-IG9uIC92YXIsIGFuZCBzaW5jZSB0aGVyZSBpcyBhIHVuaXQgcHJvdmlkaW5nIFdoZXJlPS92YXIs
-IHdlCndvdWxkIGhhdmUgcnVuLWJ1aWxkcm9vdC1tb3VudHMtdmFyLWxvd2VyLm1vdW50IGRlcGVu
-ZCBvbiB2YXIubW91bnQsIGJ1dAp3ZSBuZWVkIHZhci5tb3VudCB0byBkZXBlbmQgb24gcnVuLWJ1
-aWxkcm9vdC1tb3VudHMtdmFyLWxvd2VyLm1vdW50LCBzbwp0aGlzIGlzIGEgY2lyY3VsYXIgZGVw
-ZW5kZW5jeS4gVGhlcmUgaXMgbm8gd2F5IHRvIHRlbGwgc3lzdGVtZCBubyB0byBhZGQKdGhlIGlt
-cGxpY2l0IGRlcGVuZGVuY3kuIFNvIHdlIGRvIHRoZSBiaW5kIG1vbnQgbWFudWFsbHkgaW4gdGhl
-IHNlcnZpY2UKdW5pdCB0aGF0IHByZXBhcmVzIHRoZSBvdmVybGF5IHN0cnVjdHVyZS4KCk5vcmJl
-cnQgcHJvdmlkZWQgc29tZSBzeXN0ZW1kIHVuaXRzIGFzIGEgc3RhcnRpbmcgcG9pbnQsIGFuZCB0
-aGF0IHdhcwpxdWl0ZSBhIGh1Z2UgaGVscCBpbiB1bmRlcnN0YW5kaW5nIGhvdyB0byBmaXQgYWxs
-IHRob3NlIHRoaW5ncyB0b2dldGhlci4KCkNvLWF1dGhvcmVkLWJ5OiBOb3JiZXJ0IExhbmdlIDxu
-b2xhbmdlNzlAZ21haWwuY29tPgpTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1v
-cmluQG9yYW5nZS5jb20+CkNjOiBOb3JiZXJ0IExhbmdlIDxub2xhbmdlNzlAZ21haWwuY29tPgpD
-YzogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+CkNjOiBKZcyBcmXMgW15IFJv
-c2VuIDxqZXJlbXkucm9zZW5Ac21pbGUuZnI+ClNpZ25lZC1vZmYtYnk6IFlhbm4gRS4gTU9SSU4g
-PHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPgotLS0KIC4uLi97ID0+IGZhY3Rvcnl9L3Zhci5tb3Vu
-dCAgICAgICAgICAgICAgICAgICB8ICAwCiAuLi4vb3ZlcmxheWZzL3ByZXBhcmUtdmFyLW92ZXJs
-YXkuc2VydmljZSAgICAgfCAxOSArKysrKysrKysrKysrCiAuLi4vb3ZlcmxheWZzL3J1bi1idWls
-ZHJvb3QtbW91bnRzLXZhci5tb3VudCAgfCAxMiArKysrKysrKwogLi4uL3NrZWxldG9uLWluaXQt
-c3lzdGVtZC9vdmVybGF5ZnMvdmFyLm1vdW50IHwgMTQgKysrKysrKysrKwogLi4uL3NrZWxldG9u
-LWluaXQtc3lzdGVtZC5tayAgICAgICAgICAgICAgICAgIHwgMjggKysrKysrKysrKysrKysrKyst
-LQogc3lzdGVtL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgMjYgKysr
-KysrKysrKysrLS0tLS0KIDYgZmlsZXMgY2hhbmdlZCwgODkgaW5zZXJ0aW9ucygrKSwgMTAgZGVs
-ZXRpb25zKC0pCiByZW5hbWUgcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQveyA9PiBmYWN0
-b3J5fS92YXIubW91bnQgKDEwMCUpCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9za2VsZXRv
-bi1pbml0LXN5c3RlbWQvb3ZlcmxheWZzL3ByZXBhcmUtdmFyLW92ZXJsYXkuc2VydmljZQogY3Jl
-YXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvc2tlbGV0b24taW5pdC1zeXN0ZW1kL292ZXJsYXlmcy9y
-dW4tYnVpbGRyb290LW1vdW50cy12YXIubW91bnQKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L3NrZWxldG9uLWluaXQtc3lzdGVtZC9vdmVybGF5ZnMvdmFyLm1vdW50CgpkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvdmFyLm1vdW50IGIvcGFja2FnZS9za2VsZXRv
-bi1pbml0LXN5c3RlbWQvZmFjdG9yeS92YXIubW91bnQKc2ltaWxhcml0eSBpbmRleCAxMDAlCnJl
-bmFtZSBmcm9tIHBhY2thZ2Uvc2tlbGV0b24taW5pdC1zeXN0ZW1kL3Zhci5tb3VudApyZW5hbWUg
-dG8gcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvZmFjdG9yeS92YXIubW91bnQKZGlmZiAt
-LWdpdCBhL3BhY2thZ2Uvc2tlbGV0b24taW5pdC1zeXN0ZW1kL292ZXJsYXlmcy9wcmVwYXJlLXZh
-ci1vdmVybGF5LnNlcnZpY2UgYi9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9vdmVybGF5
-ZnMvcHJlcGFyZS12YXItb3ZlcmxheS5zZXJ2aWNlCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IDAwMDAwMDAwMDAuLjI4MWFhMGVmYjUKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3NrZWxl
-dG9uLWluaXQtc3lzdGVtZC9vdmVybGF5ZnMvcHJlcGFyZS12YXItb3ZlcmxheS5zZXJ2aWNlCkBA
-IC0wLDAgKzEsMTkgQEAKK1tVbml0XQorRGVzY3JpcHRpb249VmFyaWFibGUgc3RvcmFnZSBvdmVy
-bGF5IHNldHVwCitDb25kaXRpb25QYXRoSXNTeW1ib2xpY0xpbms9IS92YXIKK0RlZmF1bHREZXBl
-bmRlbmNpZXM9bm8KK1JlcXVpcmVzTW91bnRzRm9yPS9ydW4vYnVpbGRyb290L21vdW50cy92YXIK
-KworW1NlcnZpY2VdCitUeXBlPW9uZXNob3QKK1JlbWFpbkFmdGVyRXhpdD15ZXMKK0V4ZWNTdGFy
-dD0vdXNyL2Jpbi9ta2RpciAtcCAvcnVuL2J1aWxkcm9vdC9tb3VudHMvdmFyL2xvd2VyIC9ydW4v
-YnVpbGRyb290L21vdW50cy92YXIvdXBwZXIgL3J1bi9idWlsZHJvb3QvbW91bnRzL3Zhci93b3Jr
-CisKKyMgSWRlYWxseSwgd2Ugd291bGQgbGlrZSB0byB1c2UgYSBzeXN0ZW1kIG1vdW50IHVuaXQg
-dG8gbWFuYWdlIHRoZSBiaW5kCisjIG1vdW50LiBVbmZvcnR1bmF0ZWx5LCB0aGF0IGNyZWF0ZXMg
-YSBjaXJjdWxhciBkZXBlbmRlbmN5OiBzdWNoIGEgdW5pdAorIyB3b3VsZCBoYXZlIFdoYXQ9L3Zh
-ciB3aGlsZSB2YXIubW91bnQgaGFzIFdoZXJlPS92YXIgc28gdGhhdCBpbnRyb2R1Y2VzCisjIGFu
-IGltcGxpY2l0IGRlcGVuZGVuY3kgZnJvbSB0aGF0IHVuaXQgdG8gdmFyLm1vdW50LCBidXQgdmFy
-Lm1vdW50CisjIHdvdWxkIGhhdmUgYW4gZXhwbGljaXQgZGVwZW5kZW5jeSB0byBiZSBvcmRlcmVk
-IGFmdGVyIHRoYXQgdW5pdC4KKyMgU28gd2UgaGFuZGxlIHRoZSBiaW5kIG1vdW50IG1hbnVhbGx5
-LgorRXhlY1N0YXJ0PS91c3IvYmluL21vdW50IC1uIC1vIGJpbmQscHJpdmF0ZSAvdmFyIC9ydW4v
-YnVpbGRyb290L21vdW50cy92YXIvbG93ZXIKK0V4ZWNTdG9wPS91c3IvYmluL3Vtb3VudCAtbCAv
-cnVuL2J1aWxkcm9vdC9tb3VudHMvdmFyL2xvd2VyCmRpZmYgLS1naXQgYS9wYWNrYWdlL3NrZWxl
-dG9uLWluaXQtc3lzdGVtZC9vdmVybGF5ZnMvcnVuLWJ1aWxkcm9vdC1tb3VudHMtdmFyLm1vdW50
-IGIvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvb3ZlcmxheWZzL3J1bi1idWlsZHJvb3Qt
-bW91bnRzLXZhci5tb3VudApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi41
-NTQ5NzVhMDUyCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3Rl
-bWQvb3ZlcmxheWZzL3J1bi1idWlsZHJvb3QtbW91bnRzLXZhci5tb3VudApAQCAtMCwwICsxLDEy
-IEBACitbVW5pdF0KK0Rlc2NyaXB0aW9uPVZhcmlhYmxlIHN0b3JhZ2Ugb3ZlcmxheSB0bXBmcwor
-Q29uZGl0aW9uUGF0aElzU3ltYm9saWNMaW5rPSEvdmFyCitEZWZhdWx0RGVwZW5kZW5jaWVzPW5v
-CitBZnRlcj1sb2NhbC1mcy1wcmUudGFyZ2V0CisKK1tNb3VudF0KK1doYXQ9dmFyX292ZXJsYXlf
-dG1wZnMKK1doZXJlPS9ydW4vYnVpbGRyb290L21vdW50cy92YXIKK1R5cGU9dG1wZnMKK09wdGlv
-bnM9cHJpdmF0ZQorTGF6eVVubW91bnQ9dHJ1ZQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9za2VsZXRv
-bi1pbml0LXN5c3RlbWQvb3ZlcmxheWZzL3Zhci5tb3VudCBiL3BhY2thZ2Uvc2tlbGV0b24taW5p
-dC1zeXN0ZW1kL292ZXJsYXlmcy92YXIubW91bnQKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
-MDAwMDAwMDAwMC4uODEyZTZjZTdiZgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uvc2tlbGV0
-b24taW5pdC1zeXN0ZW1kL292ZXJsYXlmcy92YXIubW91bnQKQEAgLTAsMCArMSwxNCBAQAorW1Vu
-aXRdCitEZXNjcmlwdGlvbj1WYXJpYWJsZSBzdG9yYWdlIG92ZXJsYXkKK0RvY3VtZW50YXRpb249
-bWFuOmZpbGUtaGllcmFyY2h5KDcpCitDb25kaXRpb25QYXRoSXNTeW1ib2xpY0xpbms9IS92YXIK
-K0RlZmF1bHREZXBlbmRlbmNpZXM9bm8KK0FmdGVyPXByZXBhcmUtdmFyLW92ZXJsYXkuc2Vydmlj
-ZQorQmluZHNUbz1wcmVwYXJlLXZhci1vdmVybGF5LnNlcnZpY2UKKworW01vdW50XQorV2hhdD1v
-dmVybGF5X3ZhcgorV2hlcmU9L3ZhcgorVHlwZT1vdmVybGF5CitPcHRpb25zPWxvd2VyZGlyPS9y
-dW4vYnVpbGRyb290L21vdW50cy92YXIvbG93ZXIsdXBwZXJkaXI9L3J1bi9idWlsZHJvb3QvbW91
-bnRzL3Zhci91cHBlcix3b3JrZGlyPS9ydW4vYnVpbGRyb290L21vdW50cy92YXIvd29yayxyZWRp
-cmVjdF9kaXI9b24saW5kZXg9b24seGlubz1vbgorTGF6eVVubW91bnQ9dHJ1ZQpkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1r
-IGIvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1r
-CmluZGV4IGZiMTU1NTJmOTkuLmNjMzI5NjBkYmYgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uvc2tlbGV0
-b24taW5pdC1zeXN0ZW1kL3NrZWxldG9uLWluaXQtc3lzdGVtZC5taworKysgYi9wYWNrYWdlL3Nr
-ZWxldG9uLWluaXQtc3lzdGVtZC9za2VsZXRvbi1pbml0LXN5c3RlbWQubWsKQEAgLTMzLDcgKzMz
-LDcgQEAgZW5kZWYKICMgYSByZWFsIChidXQgZW1wdHkpIGRpcmVjdG9yeSwgYW5kIHRoZSAiZmFj
-dG9yeSBmaWxlcyIgd2lsbCBiZSBjb3BpZWQKICMgYmFjayB0aGVyZSBieSB0aGUgdG1wZmlsZXMu
-ZCBtZWNoYW5pc20uCiBpZmVxICgkKEJSMl9JTklUX1NZU1RFTURfVkFSX0ZBQ1RPUlkpLHkpCi1k
-ZWZpbmUgU0tFTEVUT05fSU5JVF9TWVNURU1EX1BSRV9ST09URlNfVkFSCitkZWZpbmUgU0tFTEVU
-T05fSU5JVF9TWVNURU1EX1BSRV9ST09URlNfVkFSX0ZBQ1RPUlkKIAlybSAtcmYgJChUQVJHRVRf
-RElSKS91c3Ivc2hhcmUvZmFjdG9yeS92YXIKIAltdiAkKFRBUkdFVF9ESVIpL3ZhciAkKFRBUkdF
-VF9ESVIpL3Vzci9zaGFyZS9mYWN0b3J5L3ZhcgogCW1rZGlyIC1wICQoVEFSR0VUX0RJUikvdmFy
-CkBAIC01MiwxMSArNTIsMzMgQEAgZGVmaW5lIFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9QUkVfUk9P
-VEZTX1ZBUgogCQkJfHwgZXhpdCAxOyBcCiAJCWZpOyBcCiAJZG9uZSA+JChUQVJHRVRfRElSKS91
-c3IvbGliL3RtcGZpbGVzLmQvMDAtYnVpbGRyb290LXZhci5jb25mCi0JJChJTlNUQUxMKSAtRCAt
-bSAwNjQ0ICQoU0tFTEVUT05fSU5JVF9TWVNURU1EX1BLR0RJUikvdmFyLm1vdW50IFwKKwkkKElO
-U1RBTEwpIC1EIC1tIDA2NDQgJChTS0VMRVRPTl9JTklUX1NZU1RFTURfUEtHRElSKS9mYWN0b3J5
-L3Zhci5tb3VudCBcCiAJCSQoVEFSR0VUX0RJUikvdXNyL2xpYi9zeXN0ZW1kL3N5c3RlbS92YXIu
-bW91bnQKIGVuZGVmCi1TS0VMRVRPTl9JTklUX1NZU1RFTURfUk9PVEZTX1BSRV9DTURfSE9PS1Mg
-Kz0gU0tFTEVUT05fSU5JVF9TWVNURU1EX1BSRV9ST09URlNfVkFSCitTS0VMRVRPTl9JTklUX1NZ
-U1RFTURfUk9PVEZTX1BSRV9DTURfSE9PS1MgKz0gU0tFTEVUT05fSU5JVF9TWVNURU1EX1BSRV9S
-T09URlNfVkFSX0ZBQ1RPUlkKIGVuZGlmICAjIEJSMl9JTklUX1NZU1RFTURfVkFSX0ZBQ1RPUlkK
-KworaWZlcSAoJChCUjJfSU5JVF9TWVNURU1EX1ZBUl9PVkVSTEFZRlMpLHkpCisKK2RlZmluZSBT
-S0VMRVRPTl9JTklUX1NZU1RFTURfTElOVVhfQ09ORklHX0ZJWFVQUworCSQoY2FsbCBLQ09ORklH
-X0VOQUJMRV9PUFQsQ09ORklHX09WRVJMQVlfRlMpCitlbmRlZgorCitkZWZpbmUgU0tFTEVUT05f
-SU5JVF9TWVNURU1EX1BSRV9ST09URlNfVkFSX09WRVJMQVlGUworCSQoSU5TVEFMTCkgLUQgLW0g
-MDY0NCBcCisJCSQoU0tFTEVUT05fSU5JVF9TWVNURU1EX1BLR0RJUikvb3ZlcmxheWZzL3J1bi1i
-dWlsZHJvb3QtbW91bnRzLXZhci5tb3VudCBcCisJCSQoVEFSR0VUX0RJUikvdXNyL2xpYi9zeXN0
-ZW1kL3N5c3RlbS9ydW4tYnVpbGRyb290LW1vdW50cy12YXIubW91bnQKKwkkKElOU1RBTEwpIC1E
-IC1tIDA2NDQgXAorCQkkKFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9QS0dESVIpL292ZXJsYXlmcy9w
-cmVwYXJlLXZhci1vdmVybGF5LnNlcnZpY2UgXAorCQkkKFRBUkdFVF9ESVIpL3Vzci9saWIvc3lz
-dGVtZC9zeXN0ZW0vcHJlcGFyZS12YXItb3ZlcmxheS5zZXJ2aWNlCisJJChJTlNUQUxMKSAtRCAt
-bSAwNjQ0IFwKKwkJJChTS0VMRVRPTl9JTklUX1NZU1RFTURfUEtHRElSKS9vdmVybGF5ZnMvdmFy
-Lm1vdW50IFwKKwkJJChUQVJHRVRfRElSKS91c3IvbGliL3N5c3RlbWQvc3lzdGVtL3Zhci5tb3Vu
-dAorZW5kZWYKK1NLRUxFVE9OX0lOSVRfU1lTVEVNRF9QT1NUX0lOU1RBTExfVEFSR0VUX0hPT0tT
-ICs9IFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9QUkVfUk9PVEZTX1ZBUl9PVkVSTEFZRlMKKworZW5k
-aWYgICMgQlIyX0lOSVRfU1lTVEVNRF9WQVJfT1ZFUkxBWUZTCisKIGVuZGlmICAjIEJSMl9UQVJH
-RVRfR0VORVJJQ19SRU1PVU5UX1JPT1RGU19SVwogCiBpZmVxICgkKEJSMl9JTklUX1NZU1RFTURf
-UE9QVUxBVEVfVE1QRklMRVMpLHkpCmRpZmYgLS1naXQgYS9zeXN0ZW0vQ29uZmlnLmluIGIvc3lz
-dGVtL0NvbmZpZy5pbgppbmRleCA4N2RmMDMxNTQ1Li41YzliNDFhOGQzIDEwMDY0NAotLS0gYS9z
-eXN0ZW0vQ29uZmlnLmluCisrKyBiL3N5c3RlbS9Db25maWcuaW4KQEAgLTE2NCw2ICsxNjQsMTQg
-QEAgY2hvaWNlCiAJICBTZWxlY3QgaG93IEJ1aWxkcm9vdCBwcm92aWRlcyBhIHJlYWQtd3JpdGUg
-L3ZhciB3aGVuIHRoZQogCSAgcm9vdGZzIGlzIG5vdCByZW1vdW50ZWQgcmVhZC13cml0ZS4KIAor
-CSAgTm90ZTogQnVpbGRyb290IHVzZXMgYSB0bXBmcywgZWl0aGVyIGFzIGEgbW91bnQgcG9pbnQg
-b3IgYXMKKwkgIHRoZSB1cHBlciBvZiBhbiBvdmVybGF5ZnMsIHNvIGFzIHRvIGF0IGxlYXN0IG1h
-a2UgdGhlIHN5c3RlbQorCSAgYm9vdGFibGUgb3V0IG9mIHRoZSBib3g7IG1vdW50aW5nIGEgZmls
-ZXN5c3RlbSBmcm9tIGFjdHVhbAorCSAgc3RvcmFnZSBpcyBsZWZ0IHRvIHRoZSBpbnRlZ3JhdGlv
-biwgYXMgaXQgaXMgdG9vIHNwZWNpZmljIGFuZAorCSAgbWF5IG5lZWQgcHJlcGFyYXRvcnkgd29y
-ayBsaWtlIHBhcnRpdGlvbm5pbmcgYSBkZXZpY2UgYW5kL29yCisJICBmb3JtYXR0aW5nIGEgZmls
-ZXN5c3RlbSBmaXJzdCwgd2hpY2ggZmFsbHMgb3V0IG9mIHRoZSBzY29wZQorCSAgb2YgQnVpbGRy
-b290LgorCiBjb25maWcgQlIyX0lOSVRfU1lTVEVNRF9WQVJfRkFDVE9SWQogCWJvb2wgImJ1aWxk
-IGEgZmFjdG9yeSB0byBwb3B1bGF0ZSBhIHRtcGZzIgogCWhlbHAKQEAgLTE3NiwxNyArMTg0LDIx
-IEBAIGNvbmZpZyBCUjJfSU5JVF9TWVNURU1EX1ZBUl9GQUNUT1JZCiAJICBJdCBwcm9iYWJseSBk
-b2VzIG5vdCBwbGF5IHZlcnkgd2VsbCB3aXRoIHRyaWdnZXJpbmcgYSBjYWxsCiAJICB0byBzeXN0
-ZW1kLXRtcGZpbGVzIGF0IGJ1aWxkIHRpbWUgKGJlbG93KS4KIAotCSAgTm90ZTogQnVpbGRyb290
-IG1vdW50cyBhIHRtcGZzIG9uIC92YXIgdG8gYXQgbGVhc3QgbWFrZSB0aGUKLQkgIHN5c3RlbSBi
-b290YWJsZSBvdXQgb2YgdGhlIGJveDsgbW91bnRpbmcgYSBmaWxlc3lzdGVtIGZyb20KLQkgIGFj
-dHVhbCBzdG9yYWdlIGlzIGxlZnQgdG8gdGhlIGludGVncmF0aW9uLCBhcyBpdCBpcyB0b28KLQkg
-IHNwZWNpZmljIGFuZCBtYXkgbmVlZCBwcmVwYXJhdG9yeSB3b3JrIGxpa2UgcGFydGl0aW9ubmlu
-ZyBhCi0JICBkZXZpY2UgYW5kL29yIGZvcm1hdHRpbmcgYSBmaWxlc3lzdGVtIGZpcnN0LCBzbyB0
-aGF0IGZhbGxzCi0JICBvdXQgb2YgdGhlIHNjb3BlIG9mIEJ1aWxkcm9vdC4KLQogCSAgVG8gdXNl
-IHBlcnNpc3RlbnQgc3RvcmFnZSwgcHJvdmlkZSBhIHN5c3RlbWQgZHJvcGluIGZvciB0aGUKIAkg
-IHZhci5tb3VudCB1bml0LCB0aGF0IG92ZXJyaWRlcyB0aGUgV2hhdCBhbmQgVHlwZSwgYW5kIHBv
-c3NpYmx5CiAJICB0aGUgT3B0aW9ucyBhbmQgQWZ0ZXIsIGZpZWxkcy4KIAorY29uZmlnIEJSMl9J
-TklUX1NZU1RFTURfVkFSX09WRVJMQVlGUworCWJvb2wgIm1vdW50IGFuIG92ZXJsYXlmcyBiYWNr
-ZWQgYnkgYSB0bXBmcyIKKwlzZWxlY3QgQlIyX0lOSVRfU1lTVEVNRF9QT1BVTEFURV9UTVBGSUxF
-UworCWhlbHAKKwkgIE1vdW50IGFuIG92ZXJsYXlmcyBvbiAvdmFyLCB3aXRoIHRoZSB1cHBlciBh
-cyBhIHRtcGZzLgorCisJICBUbyB1c2UgYSBwZXJzaXN0ZW50IHN0b3JhZ2UsIHByb3ZpZGUgYSBz
-eXN0ZW1kIGRyb3BpbiBmb3IgdGhlCisJICBydW4tYnVpbGRyb290LW1vdW50cy12YXIubW91bnQg
-dW5pdCwgdGhhdCBvdmVycmlkZXMgdGhlIFdoYXQKKwkgIGFuZCBUeXBlLCBhbmQgcG9zc2libHkg
-T3B0aW9ucywgZmllbGRzLCBhbmQgYWRkcyBuZWNlc3NhcnkKKwkgIGRlcGVuZGVuY2llcyBvbiBv
-dGhlciBzZXJ2aWNlcy4KKwogY29uZmlnIEJSMl9JTklUX1NZU1RFTURfVkFSX05PTkUKIAlib29s
-ICJkbyBub3RoaW5nIgogCWhlbHAKLS0gCjIuMjUuMQoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../conf/overlayfs-kernel-fragment.config     |   1 +
+ .../base.conf                                 |   2 +
+ support/testing/tests/init/test_systemd.py    | 209 +++++++++++++++++-
+ 3 files changed, 203 insertions(+), 9 deletions(-)
+ create mode 100644 support/testing/conf/overlayfs-kernel-fragment.config
+ create mode 100644 support/testing/tests/init/systemd-overlay/usr/lib/systemd/system/run-buildroot-mounts-var.mount.d/base.conf
+
+diff --git a/support/testing/conf/overlayfs-kernel-fragment.config b/support/testing/conf/overlayfs-kernel-fragment.config
+new file mode 100644
+index 0000000000..9122238993
+--- /dev/null
++++ b/support/testing/conf/overlayfs-kernel-fragment.config
+@@ -0,0 +1 @@
++CONFIG_OVERLAY_FS=y
+diff --git a/support/testing/tests/init/systemd-overlay/usr/lib/systemd/system/run-buildroot-mounts-var.mount.d/base.conf b/support/testing/tests/init/systemd-overlay/usr/lib/systemd/system/run-buildroot-mounts-var.mount.d/base.conf
+new file mode 100644
+index 0000000000..5953c71947
+--- /dev/null
++++ b/support/testing/tests/init/systemd-overlay/usr/lib/systemd/system/run-buildroot-mounts-var.mount.d/base.conf
+@@ -0,0 +1,2 @@
++[Mount]
++What=other-var-backing-store
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index ddc32b0838..2f704791ca 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -1,7 +1,15 @@
+ import infra.basetest
++import re
+ from tests.init.base import InitSystemBase as InitSystemBase
+ 
+ 
++# In the following tests, the read-only cases use the default settings,
++# which historically used both a factory to populate a tmpfs on /var,
++# and pre-populated /var at buildtime. Since these are the default
++# settings, and they proved to generate a system that ultimately boots,
++# we still want to keep testing that. See later, below, for the
++# specialised test cases.
++
+ class InitSystemSystemdBase(InitSystemBase):
+     config = \
+         """
+@@ -17,7 +25,10 @@ class InitSystemSystemdBase(InitSystemBase):
+         """
+ 
+     def check_systemd(self, fs):
+-        self.start_emulator(fs)
++        if "BR2_LINUX_KERNEL=y" in self.config:
++            self.start_emulator(fs, "zImage", "vexpress-v2p-ca9")
++        else:
++            self.start_emulator(fs)
+         self.check_init("/lib/systemd/systemd")
+ 
+         # Test all units are OK
+@@ -40,19 +51,12 @@ class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
+         """
+         BR2_SYSTEM_DHCP="eth0"
+         # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+-        BR2_ROOTFS_OVERLAY="{}"
+         BR2_TARGET_ROOTFS_SQUASHFS=y
+-        """.format(infra.filepath("tests/init/systemd-factory"))
++        """
+ 
+     def test_run(self):
+         self.check_systemd("squashfs")
+ 
+-        # This one must be executed on the target, to check that
+-        # the factory feature works as expected
+-        out, exit_code = self.emulator.run("cat /var/foo/bar")
+-        self.assertEqual(exit_code, 0)
+-        self.assertEqual(out[0], "foobar")
+-
+ 
+ class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+@@ -191,3 +195,190 @@ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
+ 
+     def test_run(self):
+         self.check_systemd("ext2")
++
++
++# The following tests are all about read-only rootfs, and exercise either
++# using an un-populated factory for /var, or an overlaysfs ontop of a
++# pre-populated /var. They all specialise the TestInitSystemSystemdRo*
++# test cases above.
++
++
++# Helper class for factory-based tests
++class InitSystemSystemdBaseFactory():
++    config = \
++        """
++        # BR2_INIT_SYSTEMD_POPULATE_TMPFILES is not set
++        BR2_ROOTFS_OVERLAY="{}"
++        """.format(infra.filepath("tests/init/systemd-factory"))
++
++    def test_run(self):
++        super().test_run()
++
++        # This one must be executed on the target, to check that
++        # the factory feature works as expected
++        out, exit_code = self.emulator.run("cat /var/foo/bar")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "foobar")
++
++        # /var/foo/bar is from the /var factory
++        _, exit_code = self.emulator.run("test -e /usr/share/factory/var/foo/bar")
++        self.assertEqual(exit_code, 0)
++
++        # We can write in /var/foo/bar
++        _, exit_code = self.emulator.run("echo barfoo >/var/foo/bar")
++        self.assertEqual(exit_code, 0)
++        # ... and it contains the new content
++        out, exit_code = self.emulator.run("cat /var/foo/bar")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "barfoo")
++        # ... but the factory is umodified
++        out, exit_code = self.emulator.run("cat /usr/share/factory/var/foo/bar")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "foobar")
++
++
++class TestInitSystemSystemdRoNetworkdFactory(
++    InitSystemSystemdBaseFactory,
++    TestInitSystemSystemdRoNetworkd,
++):
++    config = InitSystemSystemdBaseFactory.config + \
++        TestInitSystemSystemdRoNetworkd.config
++
++
++class TestInitSystemSystemdRoIfupdownFactory(
++    InitSystemSystemdBaseFactory,
++    TestInitSystemSystemdRoIfupdown,
++):
++    config = InitSystemSystemdBaseFactory.config + \
++        TestInitSystemSystemdRoIfupdown.config
++
++
++class TestInitSystemSystemdRoIfupdownDbusbrokerFactory(
++    InitSystemSystemdBaseFactory,
++    TestInitSystemSystemdRoIfupdownDbusbroker,
++):
++    config = InitSystemSystemdBaseFactory.config + \
++        TestInitSystemSystemdRoIfupdownDbusbroker.config
++
++
++class TestInitSystemSystemdRoIfupdownDbusbrokerDbusFactory(
++    InitSystemSystemdBaseFactory,
++    TestInitSystemSystemdRoIfupdownDbusbrokerDbus,
++):
++    config = InitSystemSystemdBaseFactory.config + \
++        TestInitSystemSystemdRoIfupdownDbusbrokerDbus.config
++
++
++class TestInitSystemSystemdRoFullFactory(
++    InitSystemSystemdBaseFactory,
++    TestInitSystemSystemdRoFull,
++):
++    config = InitSystemSystemdBaseFactory.config + \
++        TestInitSystemSystemdRoFull.config
++
++
++# Helper class for overlayfs-based tests
++class InitSystemSystemdBaseOverlayfs():
++    config = \
++        """
++        # BR2_INIT_SYSTEMD_VAR_FACTORY is not set
++        BR2_INIT_SYSTEMD_VAR_OVERLAYFS=y
++        BR2_ROOTFS_OVERLAY="{}"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        """.format(infra.filepath("tests/init/systemd-factory"),
++                   infra.filepath("conf/overlayfs-kernel-fragment.config"))
++
++    def test_run(self):
++        super().test_run()
++
++        # This one must be executed on the target, to check that
++        # the tmpfiles pre-populate works as expected
++        out, exit_code = self.emulator.run("cat /var/foo/bar")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "foobar")
++
++        # /var/foo/bar is from the pre-populated /var, so it should
++        # not be present in the upper of the overlay
++        _, exit_code = self.emulator.run("test -e /run/buildroot/mounts/var/upper/foo/bar")
++        self.assertNotEqual(exit_code, 0)
++
++        # We can write in /var/foo/bar
++        _, exit_code = self.emulator.run("echo barfoo >/var/foo/bar")
++        self.assertEqual(exit_code, 0)
++        # ... and it contains the new content
++        out, exit_code = self.emulator.run("cat /var/foo/bar")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "barfoo")
++        # ... and it to appears in the upper
++        _, exit_code = self.emulator.run("test -e /run/buildroot/mounts/var/upper/foo/bar")
++        self.assertEqual(exit_code, 0)
++        # ... with the new content
++        out, exit_code = self.emulator.run("cat /run/buildroot/mounts/var/upper/foo/bar")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "barfoo")
++        # ... while the lower still has the oldcontent
++        out, exit_code = self.emulator.run("cat /run/buildroot/mounts/var/lower/foo/bar")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "foobar")
++
++
++class TestInitSystemSystemdRoNetworkdOverlayfs(
++    InitSystemSystemdBaseOverlayfs,
++    TestInitSystemSystemdRoNetworkd,
++):
++    config = InitSystemSystemdBaseOverlayfs.config + \
++        TestInitSystemSystemdRoNetworkd.config
++
++
++class TestInitSystemSystemdRoIfupdownOverlayfs(
++    InitSystemSystemdBaseOverlayfs,
++    TestInitSystemSystemdRoIfupdown,
++):
++    config = InitSystemSystemdBaseOverlayfs.config + \
++        TestInitSystemSystemdRoIfupdown.config
++
++
++class TestInitSystemSystemdRoIfupdownDbusbrokerOverlayfs(
++    InitSystemSystemdBaseOverlayfs,
++    TestInitSystemSystemdRoIfupdownDbusbroker,
++):
++    config = InitSystemSystemdBaseOverlayfs.config + \
++        TestInitSystemSystemdRoIfupdownDbusbroker.config
++
++
++class TestInitSystemSystemdRoIfupdownDbusbrokerDbusOverlayfs(
++    InitSystemSystemdBaseOverlayfs,
++    TestInitSystemSystemdRoIfupdownDbusbrokerDbus,
++):
++    config = InitSystemSystemdBaseOverlayfs.config + \
++        TestInitSystemSystemdRoIfupdownDbusbrokerDbus.config
++
++
++class TestInitSystemSystemdRoFullOverlayfs(
++    InitSystemSystemdBaseOverlayfs,
++    TestInitSystemSystemdRoFull,
++):
++    config = InitSystemSystemdBaseOverlayfs.config + \
++        TestInitSystemSystemdRoFull.config
++
++
++class TestInitSystemSystemdRoFullOverlayfsVarBacking(
++    TestInitSystemSystemdRoFullOverlayfs,
++):
++    config = re.sub(
++        r'^\s*BR2_ROOTFS_OVERLAY="(.*)"$',
++        'BR2_ROOTFS_OVERLAY="\\1 {}"'.format(infra.filepath('tests/init/systemd-overlay')),
++        TestInitSystemSystemdRoFullOverlayfs.config,
++        flags=re.MULTILINE,
++    )
++
++    def test_run(self):
++        super().test_run()
++
++        self.assertRunOk("mount |grep other-var-backing-store")
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
