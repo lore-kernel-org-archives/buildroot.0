@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0634C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:41:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7100EC6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52C644F22A;
-	Mon, 20 Feb 2023 22:41:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52C644F22A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 002734F247;
+	Mon, 20 Feb 2023 22:42:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 002734F247
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XJLYAl9Vw6PY; Mon, 20 Feb 2023 22:41:57 +0000 (UTC)
+	with ESMTP id 9l4uhEa7DAgj; Mon, 20 Feb 2023 22:42:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F09794F23D;
-	Mon, 20 Feb 2023 22:41:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F09794F23D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B1EB81BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24E7D4F257;
+	Mon, 20 Feb 2023 22:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24E7D4F257
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ACB8E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9940961246
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9940961246
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7300241703
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7300241703
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2LwBeni2hVwz for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v7qKs7jh35H1 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8706861185
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8706861185
+ by smtp2.osuosl.org (Postfix) with ESMTP id A320D416F7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A320D416F7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 780E4828C8; Mon, 20 Feb 2023 20:52:06 +0000 (UTC)
+ id 92F6286494; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 14:33:18 +0100
+Date: Mon, 26 Dec 2022 22:10:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c833234cb4eb46cf95dbc3d4f32e1d2d2dab23b2
-X-Git-Newrev: 155d3ac6e52aa3ecec83780bb72561d6cb6b9626
+X-Git-Oldrev: eda08c6b88ca466c27cb02004e92ac5ae6e60998
+X-Git-Newrev: 7145d04349fbc92588984a01180fc35f044f879a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205206.780E4828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/batman-adv: bump to
- version 2022.3
+Message-Id: <20230220205215.92F6286494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lua-datafile: bump to
+ version 0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,53 +57,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=155d3ac6e52aa3ecec83780bb72561d6cb6b9626
+commit: https://git.buildroot.net/buildroot/commit/?id=7145d04349fbc92588984a01180fc35f044f879a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bug fixes and code cleanups.
-
-https://www.open-mesh.org/news/110
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/batman-adv/batman-adv.hash | 2 +-
- package/batman-adv/batman-adv.mk   | 2 +-
+ package/lua-datafile/lua-datafile.hash | 2 +-
+ package/lua-datafile/lua-datafile.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-index c5add4cdea..14a92c231a 100644
---- a/package/batman-adv/batman-adv.hash
-+++ b/package/batman-adv/batman-adv.hash
-@@ -2,6 +2,6 @@
- sha1  e1829e10fc37ea674a20cb9ba1d6c1483042fbfa  batman-adv-2022.2.tar.gz
- 
- # Hash for license files
--sha256  8aca27c6f168b137a7ed7031d58169396c1a97f958c2ea95b9c30a9b92576fe0  batman-adv-2022.2.tar.gz
-+sha256  218ffb534fead1c9b5b0d90ec1b2fba688209cdf00e861bece1cbf469fe69953  batman-adv-2022.3.tar.gz
- sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index d279694bf5..75b8292ee1 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
+diff --git a/package/lua-datafile/lua-datafile.hash b/package/lua-datafile/lua-datafile.hash
+index 07a13e7e8a..e3b415ad4d 100644
+--- a/package/lua-datafile/lua-datafile.hash
++++ b/package/lua-datafile/lua-datafile.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  4f7d58c50267b5ebd2145e52aaa5fb63fbf63a74ae765f08e2d0dddd570b6b6a  datafile-0.6-1.src.rock
++sha256  b511ce5a4f4072bb6c496bd42760fa92a0576d0c77828b6a2600d68fe9d7e998  datafile-0.7-1.src.rock
+ sha256  0443ddabab14f69d4c5e2641860343784a0ccbe5ae7a3743f20de9a13991da66  datafile/LICENSE
+diff --git a/package/lua-datafile/lua-datafile.mk b/package/lua-datafile/lua-datafile.mk
+index 5d30fdcf97..3b4c65d3e3 100644
+--- a/package/lua-datafile/lua-datafile.mk
++++ b/package/lua-datafile/lua-datafile.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BATMAN_ADV_VERSION = 2022.2
-+BATMAN_ADV_VERSION = 2022.3
- BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
- BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
- BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
+-LUA_DATAFILE_VERSION = 0.6-1
++LUA_DATAFILE_VERSION = 0.7-1
+ LUA_DATAFILE_NAME_UPSTREAM = datafile
+ LUA_DATAFILE_SUBDIR = datafile
+ LUA_DATAFILE_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
