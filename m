@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEB3C4167B
-	for <buildroot@archiver.kernel.org>; Mon, 26 Dec 2022 21:09:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C96BAC4167B
+	for <buildroot@archiver.kernel.org>; Mon, 26 Dec 2022 21:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF43880F97;
-	Mon, 26 Dec 2022 21:09:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF43880F97
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F312813A8;
+	Mon, 26 Dec 2022 21:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F312813A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Q-g1qM55Ump; Mon, 26 Dec 2022 21:09:57 +0000 (UTC)
+	with ESMTP id SVYvUUqqLQso; Mon, 26 Dec 2022 21:10:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2D2681272;
-	Mon, 26 Dec 2022 21:09:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2D2681272
+	by smtp1.osuosl.org (Postfix) with ESMTP id 756B0813A0;
+	Mon, 26 Dec 2022 21:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 756B0813A0
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A70801BF3B9
- for <buildroot@lists.busybox.net>; Mon, 26 Dec 2022 21:09:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5A0381BF3B9
+ for <buildroot@lists.busybox.net>; Mon, 26 Dec 2022 21:10:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8167C40190
- for <buildroot@lists.busybox.net>; Mon, 26 Dec 2022 21:09:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8167C40190
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22E2D4016D
+ for <buildroot@lists.busybox.net>; Mon, 26 Dec 2022 21:10:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22E2D4016D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JSv6N9SfTbUj for <buildroot@lists.busybox.net>;
- Mon, 26 Dec 2022 21:09:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4618F4016D
- for <buildroot@buildroot.org>; Mon, 26 Dec 2022 21:09:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4618F4016D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3260086DD9; Mon, 26 Dec 2022 21:09:54 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 26 Dec 2022 22:09:40 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54a8cb19331c8e75f6a48cb529c18619379414d7
-X-Git-Newrev: 5dc7e1fc363b217683f009f6470519b751675083
-X-Patchwork-Hint: ignore
-Message-Id: <20221226210954.3260086DD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdeflate: fix aarch64 build
+ with ESMTP id MyMDvHVDs4gq for <buildroot@lists.busybox.net>;
+ Mon, 26 Dec 2022 21:10:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC7924054E
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AC7924054E
+ for <buildroot@buildroot.org>; Mon, 26 Dec 2022 21:10:19 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [92.184.110.42])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id E3E2E7802E5;
+ Mon, 26 Dec 2022 22:10:13 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 26 Dec 2022 22:10:13 +0100
+Date: Mon, 26 Dec 2022 22:10:13 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221226211013.GF2893@scaer>
+References: <20221226102305.406593-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221226102305.406593-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672089017;
+ bh=iHymNF7NdELv6LRnJHFBZAD9xvp6/aNy1AUQVItCC6E=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ZjTpeEc0W6KYiy3G+Cyidud/XiiQtxKqjKhhcFjd8D6fnPhCGs1jef4vi1vUXBSsK
+ Z9gW48cpEgURw5AOumBpRaMu4++f0SkKpgijeeHjNT7HijQyutF8kl4BEobnDH7eOO
+ uRW3KEd7yECNMRQbkf2rNEK+y//WoXhC2Tp44FrTytf/7SV7176I2fK6+/J226EK3r
+ 88eKKqCMi6wkY5byjz7Nej5f5Vew/sQbI4oOKzL+7Cu3rGEly2/fu8gQ/Uyk36WRgG
+ NDRp9s6FxPabFFMxelqS7okUi7Hz3Ujh0xptlYN+NQzAvzcFvi4dJdYywExoscSmNw
+ gxmD7uXc5YEVQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZjTpeEc0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libdeflate: fix aarch64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,149 +75,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5990476361582416770=="
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5990476361582416770==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5dc7e1fc363b217683f009f6470519b751675083
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fix the following aarch64 build failure raised since the addition of the
-package in commit 4231e7b10b87de71e33bb9906eede3751bed5dfe:
-
-In file included from /home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h:256,
-                 from /home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/crc32.c:227:
-/home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h: In function 'clmul_u32':
-/home/autobuild/autobuild/instance-22/output-1/host/lib/gcc/aarch64-buildroot-linux-gnu/10.4.0/include/arm_neon.h:26723:1: error: inlining failed in call to 'always_inline' 'vmull_p64': target specific option mismatch
-26723 | vmull_p64 (poly64_t __a, poly64_t __b)
-      | ^~~~~~~~~
-In file included from /home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/crc32.c:227:
-/home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h:262:19: note: called from here
-  262 |  uint64x2_t res = vreinterpretq_u64_p128(
-      |                   ^~~~~~~~~~~~~~~~~~~~~~~
-  263 |     compat_vmull_p64((poly64_t)a, (poly64_t)b));
-      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/9aee8dafea614db77209818b913a571534466506
- - http://autobuild.buildroot.org/results/951d5a1a2959a0cc65ca7e52967ec07bc1cc00f1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...rypto-target-when-required-due-to-gcc-bug.patch | 90 ++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
-
-diff --git a/package/libdeflate/0001-lib-arm-crc32-use-crypto-target-when-required-due-to-gcc-bug.patch b/package/libdeflate/0001-lib-arm-crc32-use-crypto-target-when-required-due-to-gcc-bug.patch
-new file mode 100644
-index 0000000000..8823ec4b39
---- /dev/null
-+++ b/package/libdeflate/0001-lib-arm-crc32-use-crypto-target-when-required-due-to-gcc-bug.patch
-@@ -0,0 +1,90 @@
-+From f8f022e5bc574088ae80327ea5f88a8fe09b48c8 Mon Sep 17 00:00:00 2001
-+From: Eric Biggers <ebiggers3@gmail.com>
-+Date: Sun, 25 Dec 2022 15:05:52 -0800
-+Subject: [PATCH] lib/arm/crc32: use crypto target when required due to gcc bug
-+
-+Fixes https://github.com/ebiggers/libdeflate/issues/280
-+Fixes: 6db64ab7afd2 ("lib/crc32: CRC-32 optimizations and other improvements")
-+[Retrieved from:
-+https://github.com/ebiggers/libdeflate/commit/f8f022e5bc574088ae80327ea5f88a8fe09b48c8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/arm/cpu_features.h | 23 +++++++++++++++++++++++
-+ lib/arm/crc32_impl.h   |  9 +++++----
-+ 2 files changed, 28 insertions(+), 4 deletions(-)
-+
-+diff --git a/lib/arm/cpu_features.h b/lib/arm/cpu_features.h
-+index 204c0cd5..4092eba8 100644
-+--- a/lib/arm/cpu_features.h
-++++ b/lib/arm/cpu_features.h
-+@@ -116,6 +116,29 @@ static inline u32 get_arm_cpu_features(void) { return 0; }
-+ #else
-+ #  define HAVE_PMULL_INTRIN	0
-+ #endif
-++/*
-++ * Set USE_PMULL_TARGET_EVEN_IF_NATIVE if a workaround for a gcc bug that was
-++ * fixed by commit 11a113d501ff ("aarch64: Simplify feature definitions") in gcc
-++ * 13 is needed.  A minimal program that fails to build due to this bug when
-++ * compiled with -mcpu=emag, at least with gcc 10 through 12, is:
-++ *
-++ *    static inline __attribute__((always_inline,target("+crypto"))) void f() {}
-++ *    void g() { f(); }
-++ *
-++ * The error is:
-++ *
-++ *    error: inlining failed in call to ‘always_inline’ ‘f’: target specific option mismatch
-++ *
-++ * The workaround is to explicitly add the crypto target to the non-inline
-++ * function g(), even though this should not be required due to -mcpu=emag
-++ * enabling 'crypto' natively and causing __ARM_FEATURE_CRYPTO to be defined.
-++ */
-++#if HAVE_PMULL_NATIVE && defined(ARCH_ARM64) && \
-++		GCC_PREREQ(6, 1) && !GCC_PREREQ(13, 1)
-++#  define USE_PMULL_TARGET_EVEN_IF_NATIVE	1
-++#else
-++#  define USE_PMULL_TARGET_EVEN_IF_NATIVE	0
-++#endif
-+ 
-+ /* CRC32 */
-+ #ifdef __ARM_FEATURE_CRC32
-+diff --git a/lib/arm/crc32_impl.h b/lib/arm/crc32_impl.h
-+index e426a63d..b9300e4b 100644
-+--- a/lib/arm/crc32_impl.h
-++++ b/lib/arm/crc32_impl.h
-+@@ -236,7 +236,7 @@ crc32_arm_crc(u32 crc, const u8 *p, size_t len)
-+  * for implementations that use pmull for folding the data itself.
-+  */
-+ #if HAVE_CRC32_INTRIN && HAVE_PMULL_INTRIN
-+-#  if HAVE_CRC32_NATIVE && HAVE_PMULL_NATIVE
-++#  if HAVE_CRC32_NATIVE && HAVE_PMULL_NATIVE && !USE_PMULL_TARGET_EVEN_IF_NATIVE
-+ #    define ATTRIBUTES
-+ #  else
-+ #    ifdef ARCH_ARM32
-+@@ -438,7 +438,7 @@ crc32_arm_crc_pmullcombine(u32 crc, const u8 *p, size_t len)
-+ #if HAVE_PMULL_INTRIN
-+ #  define crc32_arm_pmullx4	crc32_arm_pmullx4
-+ #  define SUFFIX			 _pmullx4
-+-#  if HAVE_PMULL_NATIVE
-++#  if HAVE_PMULL_NATIVE && !USE_PMULL_TARGET_EVEN_IF_NATIVE
-+ #    define ATTRIBUTES
-+ #  else
-+ #    ifdef ARCH_ARM32
-+@@ -558,7 +558,7 @@ crc32_arm_pmullx4(u32 crc, const u8 *p, size_t len)
-+ #if defined(ARCH_ARM64) && HAVE_PMULL_INTRIN && HAVE_CRC32_INTRIN
-+ #  define crc32_arm_pmullx12_crc	crc32_arm_pmullx12_crc
-+ #  define SUFFIX				 _pmullx12_crc
-+-#  if HAVE_PMULL_NATIVE && HAVE_CRC32_NATIVE
-++#  if HAVE_PMULL_NATIVE && HAVE_CRC32_NATIVE && !USE_PMULL_TARGET_EVEN_IF_NATIVE
-+ #    define ATTRIBUTES
-+ #  else
-+ #    ifdef __clang__
-+@@ -584,7 +584,8 @@ crc32_arm_pmullx4(u32 crc, const u8 *p, size_t len)
-+ 	(HAVE_SHA3_TARGET || HAVE_SHA3_NATIVE)
-+ #  define crc32_arm_pmullx12_crc_eor3	crc32_arm_pmullx12_crc_eor3
-+ #  define SUFFIX				 _pmullx12_crc_eor3
-+-#  if HAVE_PMULL_NATIVE && HAVE_CRC32_NATIVE && HAVE_SHA3_NATIVE
-++#  if HAVE_PMULL_NATIVE && HAVE_CRC32_NATIVE && HAVE_SHA3_NATIVE && \
-++	!USE_PMULL_TARGET_EVEN_IF_NATIVE
-+ #    define ATTRIBUTES
-+ #  else
-+ #    ifdef __clang__
-
---===============5990476361582416770==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5990476361582416770==--
+RmFicmljZSwgQWxsLAoKT24gMjAyMi0xMi0yNiAxMToyMyArMDEwMCwgRmFicmljZSBGb250YWlu
+ZSBzcGFrZSB0aHVzbHk6Cj4gRml4IHRoZSBmb2xsb3dpbmcgYWFyY2g2NCBidWlsZCBmYWlsdXJl
+IHJhaXNlZCBzaW5jZSB0aGUgYWRkaXRpb24gb2YgdGhlCj4gcGFja2FnZSBpbiBjb21taXQgNDIz
+MWU3YjEwYjg3ZGU3MWUzM2JiOTkwNmVlZGUzNzUxYmVkNWRmZToKPiAKPiBJbiBmaWxlIGluY2x1
+ZGVkIGZyb20gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS0yMi9vdXRwdXQtMS9i
+dWlsZC9saWJkZWZsYXRlLTEuMTUvbGliL2FybS9jcmMzMl9pbXBsLmg6MjU2LAo+ICAgICAgICAg
+ICAgICAgICAgZnJvbSAvaG9tZS9hdXRvYnVpbGQvYXV0b2J1aWxkL2luc3RhbmNlLTIyL291dHB1
+dC0xL2J1aWxkL2xpYmRlZmxhdGUtMS4xNS9saWIvY3JjMzIuYzoyMjc6Cj4gL2hvbWUvYXV0b2J1
+aWxkL2F1dG9idWlsZC9pbnN0YW5jZS0yMi9vdXRwdXQtMS9idWlsZC9saWJkZWZsYXRlLTEuMTUv
+bGliL2FybS9jcmMzMl9pbXBsLmg6IEluIGZ1bmN0aW9uICdjbG11bF91MzInOgo+IC9ob21lL2F1
+dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtMjIvb3V0cHV0LTEvaG9zdC9saWIvZ2NjL2FhcmNo
+NjQtYnVpbGRyb290LWxpbnV4LWdudS8xMC40LjAvaW5jbHVkZS9hcm1fbmVvbi5oOjI2NzIzOjE6
+IGVycm9yOiBpbmxpbmluZyBmYWlsZWQgaW4gY2FsbCB0byAnYWx3YXlzX2lubGluZScgJ3ZtdWxs
+X3A2NCc6IHRhcmdldCBzcGVjaWZpYyBvcHRpb24gbWlzbWF0Y2gKPiAyNjcyMyB8IHZtdWxsX3A2
+NCAocG9seTY0X3QgX19hLCBwb2x5NjRfdCBfX2IpCj4gICAgICAgfCBefn5+fn5+fn4KPiBJbiBm
+aWxlIGluY2x1ZGVkIGZyb20gL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5jZS0yMi9v
+dXRwdXQtMS9idWlsZC9saWJkZWZsYXRlLTEuMTUvbGliL2NyYzMyLmM6MjI3Ogo+IC9ob21lL2F1
+dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtMjIvb3V0cHV0LTEvYnVpbGQvbGliZGVmbGF0ZS0x
+LjE1L2xpYi9hcm0vY3JjMzJfaW1wbC5oOjI2MjoxOTogbm90ZTogY2FsbGVkIGZyb20gaGVyZQo+
+ICAgMjYyIHwgIHVpbnQ2NHgyX3QgcmVzID0gdnJlaW50ZXJwcmV0cV91NjRfcDEyOCgKPiAgICAg
+ICB8ICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+Cj4gICAyNjMgfCAg
+ICAgY29tcGF0X3ZtdWxsX3A2NCgocG9seTY0X3QpYSwgKHBvbHk2NF90KWIpKTsKPiAgICAgICB8
+ICAgICB+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+Cj4gCj4gRml4
+ZXM6Cj4gIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvOWFlZThkYWZl
+YTYxNGRiNzcyMDk4MThiOTEzYTU3MTUzNDQ2NjUwNgo+ICAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVp
+bGRyb290Lm9yZy9yZXN1bHRzLzk1MWQ1YTFhMjk1OWEwY2M2NWNhN2U1Mjk2N2VjMDdiYzFjYzAw
+ZjEKPiAKPiBTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNl
+QGdtYWlsLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUu
+IE1PUklOLgoKPiAtLS0KPiAgLi4uLXRhcmdldC13aGVuLXJlcXVpcmVkLWR1ZS10by1nY2MtYnVn
+LnBhdGNoIHwgOTAgKysrKysrKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgOTAgaW5z
+ZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJkZWZsYXRlLzAwMDEt
+bGliLWFybS1jcmMzMi11c2UtY3J5cHRvLXRhcmdldC13aGVuLXJlcXVpcmVkLWR1ZS10by1nY2Mt
+YnVnLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliZGVmbGF0ZS8wMDAxLWxpYi1h
+cm0tY3JjMzItdXNlLWNyeXB0by10YXJnZXQtd2hlbi1yZXF1aXJlZC1kdWUtdG8tZ2NjLWJ1Zy5w
+YXRjaCBiL3BhY2thZ2UvbGliZGVmbGF0ZS8wMDAxLWxpYi1hcm0tY3JjMzItdXNlLWNyeXB0by10
+YXJnZXQtd2hlbi1yZXF1aXJlZC1kdWUtdG8tZ2NjLWJ1Zy5wYXRjaAo+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uODgyM2VjNGIzOQo+IC0tLSAvZGV2L251bGwKPiAr
+KysgYi9wYWNrYWdlL2xpYmRlZmxhdGUvMDAwMS1saWItYXJtLWNyYzMyLXVzZS1jcnlwdG8tdGFy
+Z2V0LXdoZW4tcmVxdWlyZWQtZHVlLXRvLWdjYy1idWcucGF0Y2gKPiBAQCAtMCwwICsxLDkwIEBA
+Cj4gK0Zyb20gZjhmMDIyZTViYzU3NDA4OGFlODAzMjdlYTVmODhhOGZlMDliNDhjOCBNb24gU2Vw
+IDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogRXJpYyBCaWdnZXJzIDxlYmlnZ2VyczNAZ21haWwu
+Y29tPgo+ICtEYXRlOiBTdW4sIDI1IERlYyAyMDIyIDE1OjA1OjUyIC0wODAwCj4gK1N1YmplY3Q6
+IFtQQVRDSF0gbGliL2FybS9jcmMzMjogdXNlIGNyeXB0byB0YXJnZXQgd2hlbiByZXF1aXJlZCBk
+dWUgdG8gZ2NjIGJ1Zwo+ICsKPiArRml4ZXMgaHR0cHM6Ly9naXRodWIuY29tL2ViaWdnZXJzL2xp
+YmRlZmxhdGUvaXNzdWVzLzI4MAo+ICtGaXhlczogNmRiNjRhYjdhZmQyICgibGliL2NyYzMyOiBD
+UkMtMzIgb3B0aW1pemF0aW9ucyBhbmQgb3RoZXIgaW1wcm92ZW1lbnRzIikKPiArW1JldHJpZXZl
+ZCBmcm9tOgo+ICtodHRwczovL2dpdGh1Yi5jb20vZWJpZ2dlcnMvbGliZGVmbGF0ZS9jb21taXQv
+ZjhmMDIyZTViYzU3NDA4OGFlODAzMjdlYTVmODhhOGZlMDliNDhjOF0KPiArU2lnbmVkLW9mZi1i
+eTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4gKy0tLQo+
+ICsgbGliL2FybS9jcHVfZmVhdHVyZXMuaCB8IDIzICsrKysrKysrKysrKysrKysrKysrKysrCj4g
+KyBsaWIvYXJtL2NyYzMyX2ltcGwuaCAgIHwgIDkgKysrKystLS0tCj4gKyAyIGZpbGVzIGNoYW5n
+ZWQsIDI4IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEv
+bGliL2FybS9jcHVfZmVhdHVyZXMuaCBiL2xpYi9hcm0vY3B1X2ZlYXR1cmVzLmgKPiAraW5kZXgg
+MjA0YzBjZDUuLjQwOTJlYmE4IDEwMDY0NAo+ICstLS0gYS9saWIvYXJtL2NwdV9mZWF0dXJlcy5o
+Cj4gKysrKyBiL2xpYi9hcm0vY3B1X2ZlYXR1cmVzLmgKPiArQEAgLTExNiw2ICsxMTYsMjkgQEAg
+c3RhdGljIGlubGluZSB1MzIgZ2V0X2FybV9jcHVfZmVhdHVyZXModm9pZCkgeyByZXR1cm4gMDsg
+fQo+ICsgI2Vsc2UKPiArICMgIGRlZmluZSBIQVZFX1BNVUxMX0lOVFJJTgkwCj4gKyAjZW5kaWYK
+PiArKy8qCj4gKysgKiBTZXQgVVNFX1BNVUxMX1RBUkdFVF9FVkVOX0lGX05BVElWRSBpZiBhIHdv
+cmthcm91bmQgZm9yIGEgZ2NjIGJ1ZyB0aGF0IHdhcwo+ICsrICogZml4ZWQgYnkgY29tbWl0IDEx
+YTExM2Q1MDFmZiAoImFhcmNoNjQ6IFNpbXBsaWZ5IGZlYXR1cmUgZGVmaW5pdGlvbnMiKSBpbiBn
+Y2MKPiArKyAqIDEzIGlzIG5lZWRlZC4gIEEgbWluaW1hbCBwcm9ncmFtIHRoYXQgZmFpbHMgdG8g
+YnVpbGQgZHVlIHRvIHRoaXMgYnVnIHdoZW4KPiArKyAqIGNvbXBpbGVkIHdpdGggLW1jcHU9ZW1h
+ZywgYXQgbGVhc3Qgd2l0aCBnY2MgMTAgdGhyb3VnaCAxMiwgaXM6Cj4gKysgKgo+ICsrICogICAg
+c3RhdGljIGlubGluZSBfX2F0dHJpYnV0ZV9fKChhbHdheXNfaW5saW5lLHRhcmdldCgiK2NyeXB0
+byIpKSkgdm9pZCBmKCkge30KPiArKyAqICAgIHZvaWQgZygpIHsgZigpOyB9Cj4gKysgKgo+ICsr
+ICogVGhlIGVycm9yIGlzOgo+ICsrICoKPiArKyAqICAgIGVycm9yOiBpbmxpbmluZyBmYWlsZWQg
+aW4gY2FsbCB0byDigJhhbHdheXNfaW5saW5l4oCZIOKAmGbigJk6IHRhcmdldCBzcGVjaWZpYyBv
+cHRpb24gbWlzbWF0Y2gKPiArKyAqCj4gKysgKiBUaGUgd29ya2Fyb3VuZCBpcyB0byBleHBsaWNp
+dGx5IGFkZCB0aGUgY3J5cHRvIHRhcmdldCB0byB0aGUgbm9uLWlubGluZQo+ICsrICogZnVuY3Rp
+b24gZygpLCBldmVuIHRob3VnaCB0aGlzIHNob3VsZCBub3QgYmUgcmVxdWlyZWQgZHVlIHRvIC1t
+Y3B1PWVtYWcKPiArKyAqIGVuYWJsaW5nICdjcnlwdG8nIG5hdGl2ZWx5IGFuZCBjYXVzaW5nIF9f
+QVJNX0ZFQVRVUkVfQ1JZUFRPIHRvIGJlIGRlZmluZWQuCj4gKysgKi8KPiArKyNpZiBIQVZFX1BN
+VUxMX05BVElWRSAmJiBkZWZpbmVkKEFSQ0hfQVJNNjQpICYmIFwKPiArKwkJR0NDX1BSRVJFUSg2
+LCAxKSAmJiAhR0NDX1BSRVJFUSgxMywgMSkKPiArKyMgIGRlZmluZSBVU0VfUE1VTExfVEFSR0VU
+X0VWRU5fSUZfTkFUSVZFCTEKPiArKyNlbHNlCj4gKysjICBkZWZpbmUgVVNFX1BNVUxMX1RBUkdF
+VF9FVkVOX0lGX05BVElWRQkwCj4gKysjZW5kaWYKPiArIAo+ICsgLyogQ1JDMzIgKi8KPiArICNp
+ZmRlZiBfX0FSTV9GRUFUVVJFX0NSQzMyCj4gK2RpZmYgLS1naXQgYS9saWIvYXJtL2NyYzMyX2lt
+cGwuaCBiL2xpYi9hcm0vY3JjMzJfaW1wbC5oCj4gK2luZGV4IGU0MjZhNjNkLi5iOTMwMGU0YiAx
+MDA2NDQKPiArLS0tIGEvbGliL2FybS9jcmMzMl9pbXBsLmgKPiArKysrIGIvbGliL2FybS9jcmMz
+Ml9pbXBsLmgKPiArQEAgLTIzNiw3ICsyMzYsNyBAQCBjcmMzMl9hcm1fY3JjKHUzMiBjcmMsIGNv
+bnN0IHU4ICpwLCBzaXplX3QgbGVuKQo+ICsgICogZm9yIGltcGxlbWVudGF0aW9ucyB0aGF0IHVz
+ZSBwbXVsbCBmb3IgZm9sZGluZyB0aGUgZGF0YSBpdHNlbGYuCj4gKyAgKi8KPiArICNpZiBIQVZF
+X0NSQzMyX0lOVFJJTiAmJiBIQVZFX1BNVUxMX0lOVFJJTgo+ICstIyAgaWYgSEFWRV9DUkMzMl9O
+QVRJVkUgJiYgSEFWRV9QTVVMTF9OQVRJVkUKPiArKyMgIGlmIEhBVkVfQ1JDMzJfTkFUSVZFICYm
+IEhBVkVfUE1VTExfTkFUSVZFICYmICFVU0VfUE1VTExfVEFSR0VUX0VWRU5fSUZfTkFUSVZFCj4g
+KyAjICAgIGRlZmluZSBBVFRSSUJVVEVTCj4gKyAjICBlbHNlCj4gKyAjICAgIGlmZGVmIEFSQ0hf
+QVJNMzIKPiArQEAgLTQzOCw3ICs0MzgsNyBAQCBjcmMzMl9hcm1fY3JjX3BtdWxsY29tYmluZSh1
+MzIgY3JjLCBjb25zdCB1OCAqcCwgc2l6ZV90IGxlbikKPiArICNpZiBIQVZFX1BNVUxMX0lOVFJJ
+Tgo+ICsgIyAgZGVmaW5lIGNyYzMyX2FybV9wbXVsbHg0CWNyYzMyX2FybV9wbXVsbHg0Cj4gKyAj
+ICBkZWZpbmUgU1VGRklYCQkJIF9wbXVsbHg0Cj4gKy0jICBpZiBIQVZFX1BNVUxMX05BVElWRQo+
+ICsrIyAgaWYgSEFWRV9QTVVMTF9OQVRJVkUgJiYgIVVTRV9QTVVMTF9UQVJHRVRfRVZFTl9JRl9O
+QVRJVkUKPiArICMgICAgZGVmaW5lIEFUVFJJQlVURVMKPiArICMgIGVsc2UKPiArICMgICAgaWZk
+ZWYgQVJDSF9BUk0zMgo+ICtAQCAtNTU4LDcgKzU1OCw3IEBAIGNyYzMyX2FybV9wbXVsbHg0KHUz
+MiBjcmMsIGNvbnN0IHU4ICpwLCBzaXplX3QgbGVuKQo+ICsgI2lmIGRlZmluZWQoQVJDSF9BUk02
+NCkgJiYgSEFWRV9QTVVMTF9JTlRSSU4gJiYgSEFWRV9DUkMzMl9JTlRSSU4KPiArICMgIGRlZmlu
+ZSBjcmMzMl9hcm1fcG11bGx4MTJfY3JjCWNyYzMyX2FybV9wbXVsbHgxMl9jcmMKPiArICMgIGRl
+ZmluZSBTVUZGSVgJCQkJIF9wbXVsbHgxMl9jcmMKPiArLSMgIGlmIEhBVkVfUE1VTExfTkFUSVZF
+ICYmIEhBVkVfQ1JDMzJfTkFUSVZFCj4gKysjICBpZiBIQVZFX1BNVUxMX05BVElWRSAmJiBIQVZF
+X0NSQzMyX05BVElWRSAmJiAhVVNFX1BNVUxMX1RBUkdFVF9FVkVOX0lGX05BVElWRQo+ICsgIyAg
+ICBkZWZpbmUgQVRUUklCVVRFUwo+ICsgIyAgZWxzZQo+ICsgIyAgICBpZmRlZiBfX2NsYW5nX18K
+PiArQEAgLTU4NCw3ICs1ODQsOCBAQCBjcmMzMl9hcm1fcG11bGx4NCh1MzIgY3JjLCBjb25zdCB1
+OCAqcCwgc2l6ZV90IGxlbikKPiArIAkoSEFWRV9TSEEzX1RBUkdFVCB8fCBIQVZFX1NIQTNfTkFU
+SVZFKQo+ICsgIyAgZGVmaW5lIGNyYzMyX2FybV9wbXVsbHgxMl9jcmNfZW9yMwljcmMzMl9hcm1f
+cG11bGx4MTJfY3JjX2VvcjMKPiArICMgIGRlZmluZSBTVUZGSVgJCQkJIF9wbXVsbHgxMl9jcmNf
+ZW9yMwo+ICstIyAgaWYgSEFWRV9QTVVMTF9OQVRJVkUgJiYgSEFWRV9DUkMzMl9OQVRJVkUgJiYg
+SEFWRV9TSEEzX05BVElWRQo+ICsrIyAgaWYgSEFWRV9QTVVMTF9OQVRJVkUgJiYgSEFWRV9DUkMz
+Ml9OQVRJVkUgJiYgSEFWRV9TSEEzX05BVElWRSAmJiBcCj4gKysJIVVTRV9QTVVMTF9UQVJHRVRf
+RVZFTl9JRl9OQVRJVkUKPiArICMgICAgZGVmaW5lIEFUVFJJQlVURVMKPiArICMgIGVsc2UKPiAr
+ICMgICAgaWZkZWYgX19jbGFuZ19fCj4gLS0gCj4gMi4zNS4xCj4gCj4gX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
+Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
+LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8
+ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04g
+fCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNp
+Z25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEg
+MDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBU
+aGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8g
+XCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
+LS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
