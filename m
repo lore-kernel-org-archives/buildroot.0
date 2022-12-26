@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1D78C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:42:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC468C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:43:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 896134DD08;
-	Mon, 20 Feb 2023 22:42:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 896134DD08
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CEE14F24A;
+	Mon, 20 Feb 2023 22:43:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CEE14F24A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id emCqAm9Jqkd3; Mon, 20 Feb 2023 22:42:52 +0000 (UTC)
+	with ESMTP id OYYpUl1-Gtik; Mon, 20 Feb 2023 22:43:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80A9A4F263;
-	Mon, 20 Feb 2023 22:42:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80A9A4F263
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C63F91BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FE604F26B;
+	Mon, 20 Feb 2023 22:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FE604F26B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BF96C1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B85DC61247
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B85DC61247
+ by smtp2.osuosl.org (Postfix) with ESMTP id 962F441705
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 962F441705
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yhyqrelXxOnR for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mnRFMtM4qfjI for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B8A7611DF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B8A7611DF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98256416DB
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98256416DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 07413828C8; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+ id 870B586495; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 16:38:34 +0100
+Date: Mon, 26 Dec 2022 22:10:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 071fdbf963228590b453e5111eadc8a74b579aa2
-X-Git-Newrev: d23d6fde81b3a8bf701d0382d55fe60e2334c934
+X-Git-Oldrev: 5dc7e1fc363b217683f009f6470519b751675083
+X-Git-Newrev: eda08c6b88ca466c27cb02004e92ac5ae6e60998
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205207.07413828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pkg-meson.mk: add
- 'setup' as meson command in config step
+Message-Id: <20230220205215.870B586495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lua-cjson: bump to
+ version 2.1.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d23d6fde81b3a8bf701d0382d55fe60e2334c934
+commit: https://git.buildroot.net/buildroot/commit/?id=eda08c6b88ca466c27cb02004e92ac5ae6e60998
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When building/configure meson packages the following warning is
-displayed:
-    WARNING: Running the setup command as meson [options] instead
-    of meson setup [options] is ambiguous and deprecated.
-
-This warning was introduced in meson release 0.64.0 [0], which we are
-using since commit 9afa3e3c7d07 (package/meson: bump to version 0.64.0),
-and is dpcumented in the manual [1].
-
-Follow the advise and the manual, and add the 'setup' argument as the
-meson command.
-
-[0] https://github.com/mesonbuild/meson/commit/3c7ab542c0c4770241eae149b0d4cd8de329aee0
-[1] https://mesonbuild.com/Commands.html#setup
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-meson.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lua-cjson/Config.in      | 2 +-
+ package/lua-cjson/lua-cjson.hash | 2 +-
+ package/lua-cjson/lua-cjson.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index d675f7f733..4aa6e44afa 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -149,7 +149,7 @@ define $(2)_CONFIGURE_CMDS
- 	CC_FOR_BUILD="$$(HOSTCC)" \
- 	CXX_FOR_BUILD="$$(HOSTCXX)" \
- 	$$($$(PKG)_CONF_ENV) \
--	$$(MESON) \
-+	$$(MESON) setup \
- 		--prefix=/usr \
- 		--libdir=lib \
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
-@@ -169,7 +169,7 @@ define $(2)_CONFIGURE_CMDS
- 	rm -rf $$($$(PKG)_SRCDIR)/build
- 	mkdir -p $$($$(PKG)_SRCDIR)/build
- 	$$(HOST_CONFIGURE_OPTS) \
--	$$($$(PKG)_CONF_ENV) $$(MESON) \
-+	$$($$(PKG)_CONF_ENV) $$(MESON) setup \
- 		--prefix=$$(HOST_DIR) \
- 		--libdir=lib \
- 		--sysconfdir=$$(HOST_DIR)/etc \
+diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
+index 9474b3176c..1c153fa46a 100644
+--- a/package/lua-cjson/Config.in
++++ b/package/lua-cjson/Config.in
+@@ -12,4 +12,4 @@ config BR2_PACKAGE_LUA_CJSON
+ 
+ 	  (C-module)
+ 
+-	  http://www.kyne.com.au/~mark/software/lua-cjson.php
++	  https://www.kyne.com.au/~mark/software/lua-cjson.php
+diff --git a/package/lua-cjson/lua-cjson.hash b/package/lua-cjson/lua-cjson.hash
+index b052c5199c..5ddc07bcc6 100644
+--- a/package/lua-cjson/lua-cjson.hash
++++ b/package/lua-cjson/lua-cjson.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  455fa7d07d8ac9d61f68f538958f8e28972256f38b0a1c2740873daf809d1837  lua-cjson-2.1.0.6-1.src.rock
++sha256  02dea368d07753647c75bd9e6660dd4d06ff7d09956d90d5afc4c3f5b78ed187  lua-cjson-2.1.0.10-1.src.rock
+ sha256  9576e82ef5013fbe80b3bd446a7d9ddd47328baa2186c31d3d885e2a9a8cd31e  lua-cjson/LICENSE
+diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
+index e029dab5cb..e08d230060 100644
+--- a/package/lua-cjson/lua-cjson.mk
++++ b/package/lua-cjson/lua-cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_CJSON_VERSION = 2.1.0.6-1
++LUA_CJSON_VERSION = 2.1.0.10-1
+ LUA_CJSON_SUBDIR = lua-cjson
+ LUA_CJSON_LICENSE = MIT
+ LUA_CJSON_LICENSE_FILES = $(LUA_CJSON_SUBDIR)/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
