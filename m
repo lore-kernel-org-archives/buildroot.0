@@ -1,70 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71CA6C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5CFCC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:50:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B49881420;
-	Tue, 27 Dec 2022 20:50:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B49881420
+	by smtp3.osuosl.org (Postfix) with ESMTP id 831FE60BB0;
+	Tue, 27 Dec 2022 20:50:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 831FE60BB0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id g2k92jyI5ygm; Tue, 27 Dec 2022 20:50:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9162F60B35;
+	Tue, 27 Dec 2022 20:50:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9162F60B35
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 708F61BF37A
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:50:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C70181272
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:50:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C70181272
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7cu-DhNAnPxL; Tue, 27 Dec 2022 20:50:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07DD280C2B;
-	Tue, 27 Dec 2022 20:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07DD280C2B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 41A2B1BF37A
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:50:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CE5B40386
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:50:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CE5B40386
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fvwvy605fozc for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 20:50:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7CD340260
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E7CD340260
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:50:00 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E33D360004;
- Tue, 27 Dec 2022 20:49:58 +0000 (UTC)
-Date: Tue, 27 Dec 2022 21:49:57 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20221227214957.3ec9866e@windsurf>
-In-Reply-To: <20221224013507.2479567-1-james.hilliard1@gmail.com>
-References: <20221224013507.2479567-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672174199;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=597JQycjeN0267VKpoiMWmduT2PH4++W0dKGj6KdhHQ=;
- b=WjOhDjVW+8j8jVgZwVJzKRVUk9S1VjvZs/kLTd5WmLO/ADFkwmrESIFIlzlagUHWlWBRWJ
- kI6zIup+FirB+S7WewtH4x6ARyOZHAyZiN6aVbYRKwrQxaR+U58LV/1Zc6KR1ZlC8gFkV+
- TK6bRcHnZl7vPRS9iSuaEKScmS9kDZHjx6OChQJHAVNqXJ8aoAtb8fHUuFP4VRjK30ElgF
- h9+ZaF7pPAeZjKE1kiOSYPtvWoEDxbA+J5vM3khOcBkZds7UgiRIsaIjB3bCjLTfVtg1JE
- o5fXagiH7eszYPFDf9+yIf4xHpJcLN52IjpjqouGAN9nWGoRoBjDjJ1Jff+K9A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WjOhDjVW
-Subject: Re: [Buildroot] [PATCH 1/1] package/{rust,
- rust-bin}: bump to version 1.66.0
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UmIwYjnz7YYr for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 20:50:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5597080C2B
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:50:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5597080C2B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4419B86EBE; Tue, 27 Dec 2022 20:50:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Dec 2022 21:50:16 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: de4cf253752d2225b7d258cbaee0ddebf64901fa
+X-Git-Newrev: 92a4f080b2721cc84248ebc98d41229469787688
+X-Patchwork-Hint: ignore
+Message-Id: <20221227205025.4419B86EBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/orc: bump to version 0.4.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,65 +57,128 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+commit: https://git.buildroot.net/buildroot/commit/?id=92a4f080b2721cc84248ebc98d41229469787688
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 23 Dec 2022 18:35:07 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Drop patch (already in version)
 
-> Link to Rust 1.66.0 annoucement: https://blog.rust-lang.org/2022/12/15/Rust-1.66.0.html
-> 
-> Newest version of the source archives have been retrieved with their hash values,
-> and the signature of the .asc files have been verified as follows:
-> $ curl -fsSL https://static.rust-lang.org/rust-key.gpg.ascii | gpg --import
-> $ gpg --verify <filename.asc> <filename>
-> 
-> There is no typographical error in the packages according to the check-pakage utility:
-> $ ./utils/check-package package/rust-bin/*
-> $ ./utils/check-package package/rust/*
-> 
-> The testsuite tool were successfully run for rust and rust-bin packages to test
-> the Rust toolchain under 1.66.0:
-> $ ./support/testing/run-tests -k -d dl/ -o testsuite tests.package.test_rust.TestRustBin
-> $ ./support/testing/run-tests -k -d dl/ -o testsuite tests.package.test_rust.TestRust
-> 
-> In order to verify the compatibility of packages depending on Rust 1.66.0,
-> tests using `./utils/test-pkg` were run.
-> You may want to execute the test-pkg command after creating a `.config` file
-> enabling the corresponding BR2_PACKAGE, for example:
-> Create a file `buildroot/ripgrep.config` containing "BR2_PACKAGE_RIPGREP=y"
-> Then execute:
-> $ ./utils/test-pkg -d test-pkg -c ripgrep.config -p ripgrep
-> 
-> Results:
-> librsvg OK
-> ripgrep OK
-> suricata OK
-> bat OK
+https://gitlab.freedesktop.org/gstreamer/orc/-/blob/0.4.33/RELEASE
 
-Hmm, you know that instead of creating one snippet for each package,
-you can create a single snippet that enables all those packages? It
-would actually be a useful snippet to add in the commit log as it could
-be useful for future updates of the Rust compiler.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ccpu-powerpc.c-fix-build-with-kernel-4.11.patch | 70 ----------------------
+ package/orc/orc.hash                               |  4 +-
+ package/orc/orc.mk                                 |  2 +-
+ 3 files changed, 3 insertions(+), 73 deletions(-)
 
->  package/rust-bin/rust-bin.hash | 252 ++++++++++++++++-----------------
->  package/rust-bin/rust-bin.mk   |   2 +-
->  package/rust/rust.hash         |   6 +-
->  package/rust/rust.mk           |   2 +-
->  4 files changed, 131 insertions(+), 131 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch b/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
+deleted file mode 100644
+index 0a4e7010f2..0000000000
+--- a/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From a45f6d49ec090ad94333c0865c378d2d96ab2af4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 15 Feb 2021 20:17:43 +0100
+-Subject: [PATCH] orc/orccpu-powerpc.c: fix build with kernel < 4.11
+-
+-Build with powerpc and kernel < 4.11 is broken since version 0.4.30 and
+-https://gitlab.freedesktop.org/gstreamer/orc/-/commit/a999325abea6a5549d60d99ddeb0271d2aa00235:
+-
+-FAILED: orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc-linux-gcc -Iorc/liborc-0.4.so.0.32.0.p -Iorc -I../orc -I. -I.. -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -std=gnu99 -O3 -DHAVE_CONFIG_H -fvisibility=hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -fPIC -pthread -DORC_ENABLE_UNSTABLE_API -D_GNU_SOURCE -DBUILDING_ORC -MD -MQ orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o -MF orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o.d -o orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o -c ../orc/orccpu-powerpc.c
+-../orc/orccpu-powerpc.c: In function 'orc_check_powerpc_proc_auxv':
+-../orc/orccpu-powerpc.c:164:21: error: 'AT_L1D_CACHESIZE' undeclared (first use in this function); did you mean 'AT_DCACHEBSIZE'?
+-  164 |       if (buf[i] == AT_L1D_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~~
+-      |                     AT_DCACHEBSIZE
+-../orc/orccpu-powerpc.c:164:21: note: each undeclared identifier is reported only once for each function it appears in
+-../orc/orccpu-powerpc.c:168:21: error: 'AT_L2_CACHESIZE' undeclared (first use in this function); did you mean 'AT_ICACHEBSIZE'?
+-  168 |       if (buf[i] == AT_L2_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~
+-      |                     AT_ICACHEBSIZE
+-../orc/orccpu-powerpc.c:172:21: error: 'AT_L3_CACHESIZE' undeclared (first use in this function); did you mean 'AT_ICACHEBSIZE'?
+-  172 |       if (buf[i] == AT_L3_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~
+-      |                     AT_ICACHEBSIZE
+-
+-Indeed, AT_{L1D,L2,L3}_CACHESIZE is only defined since kernel 4.11 and
+-https://github.com/torvalds/linux/commit/98a5f361b8625c6f4841d6ba013bbf0e80d08147
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/0821e96cba3e455edd47b87485501d892fc7ac6a
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/gstreamer/orc/-/merge_requests/56]
+----
+- orc/orccpu-powerpc.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/orc/orccpu-powerpc.c b/orc/orccpu-powerpc.c
+-index 6796f17..340cf05 100644
+---- a/orc/orccpu-powerpc.c
+-+++ b/orc/orccpu-powerpc.c
+-@@ -161,18 +161,24 @@ orc_check_powerpc_proc_auxv (void)
+-         _orc_cpu_name = (char*)buf[i + 1];
+-         found++;
+-       }
+-+#ifdef AT_L1D_CACHESIZE
+-       if (buf[i] == AT_L1D_CACHESIZE) {
+-         _orc_data_cache_size_level1 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-+#ifdef AT_L2_CACHESIZE
+-       if (buf[i] == AT_L2_CACHESIZE) {
+-         _orc_data_cache_size_level2 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-+#ifdef AT_L3_CACHESIZE
+-       if (buf[i] == AT_L3_CACHESIZE) {
+-         _orc_data_cache_size_level3 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-       if (found == 6)
+-         break;
+-     }
+--- 
+-2.30.0
+-
+diff --git a/package/orc/orc.hash b/package/orc/orc.hash
+index f48c2932ab..136fc3ece4 100644
+--- a/package/orc/orc.hash
++++ b/package/orc/orc.hash
+@@ -1,5 +1,5 @@
+-# From https://gstreamer.freedesktop.org/data/src/orc/orc-0.4.32.tar.xz.sha256sum
+-sha256  a66e3d8f2b7e65178d786a01ef61f2a0a0b4d0b8370de7ce134ba73da4af18f0  orc-0.4.32.tar.xz
++# From https://gstreamer.freedesktop.org/data/src/orc/orc-0.4.33.tar.xz.sha256sum
++sha256  844e6d7db8086f793f57618d3d4b68d29d99b16034e71430df3c21cfd3c3542a  orc-0.4.33.tar.xz
+ 
+ # Locally calculated
+ sha256  4f5dabb1b44bb6fc5cd53820b1f103147ad61b395a57903991325bd1b85d97bf  COPYING
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index a93a4f875a..be718e6f85 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ORC_VERSION = 0.4.32
++ORC_VERSION = 0.4.33
+ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2-Clause, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
