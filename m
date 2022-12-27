@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3248C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:40:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A12F0C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:42:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 722FD60C0C;
-	Tue, 27 Dec 2022 20:40:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 722FD60C0C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 330F840165;
+	Tue, 27 Dec 2022 20:42:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 330F840165
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DBNwxv_QjaDs; Tue, 27 Dec 2022 20:42:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 576C74018F;
+	Tue, 27 Dec 2022 20:42:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 576C74018F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B1571BF37A
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:42:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4362860C23
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:42:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4362860C23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kHI3n98xzXg6; Tue, 27 Dec 2022 20:40:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D29C660B35;
-	Tue, 27 Dec 2022 20:40:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D29C660B35
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0BB8D1BF37A
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:40:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D906D401ED
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:40:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D906D401ED
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s6GxvivcrSml for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 20:39:59 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tAWnV-8QAdiu for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 20:42:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 772FA401DF
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 772FA401DF
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:39:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F03D60B35
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F03D60B35
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:42:29 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 98A9E40004;
- Tue, 27 Dec 2022 20:39:57 +0000 (UTC)
-Date: Tue, 27 Dec 2022 21:39:56 +0100
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20221227213956.4e867eb6@windsurf>
-In-Reply-To: <20221225215509.981425-1-bernd.kuhls@t-online.de>
-References: <20221225215509.981425-1-bernd.kuhls@t-online.de>
+ by mail.gandi.net (Postfix) with ESMTPSA id 5F024240002;
+ Tue, 27 Dec 2022 20:42:26 +0000 (UTC)
+Date: Tue, 27 Dec 2022 21:42:25 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20221227214225.11528c12@windsurf>
+In-Reply-To: <3e3ef4e45b435317b2a6e60da1007ef6b4cf774d.1671873478.git.yann.morin.1998@free.fr>
+References: <cover.1671873478.git.yann.morin.1998@free.fr>
+ <3e3ef4e45b435317b2a6e60da1007ef6b4cf774d.1671873478.git.yann.morin.1998@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672173597;
+ d=bootlin.com; s=gm1; t=1672173746;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=zGqwOnQBKQbTuOIz7DHqavYizQqq1GmE4GzEIvIsgvI=;
- b=DxqUfXIIeUHJzFzrzvy7ZIngYO7wWbVzSKWqSRfZ7dpoXzoVpFzJrKsTTXnII5RBsodqwh
- /ekNvAATKiG1PSUCOodkKGtoG5P7r82E+ciZC9HA//R9EYUyI2JHT7swfjSzltQ0zU7X44
- 4aUGnEBeOXdiWT18btsoUfnUdEmFujgLdf4TRSyrTaV1dLNsivjy+0+l1bAsqol0h6ZkKP
- 0olC7UTju+Wiboa15Stxm6tPrAVpbMc4JVOX4PZ9QSjD/eQ6jGERsZijOnCarfRcXFBYLM
- saxtp8x/Aqn9tlk6JUsdfUpbmp55qhuKULayYwSS7HuVpXGXVi5aMuFzruR7vg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=xB2UWQ/qvl4/WpD221wf5qe6nfUE6LCkX+yi0KOdtcc=;
+ b=Im7qmJgeJbDv7ruvJiLujloOGn945iVGuyweh2XDWEn2rkVOkuXCYXMIhQ1ew/Jx5NWBwg
+ s5IO4+IgOR0Y8ZB6LNrYolZ3LLarJXboRiOIpJdx2XE+MyejP0j3MJaa+9X9uCyfz0Eol4
+ mQ8zXUWOqG7FCx51YVCFJwCyvS4reGTKDugdFmj9cAiJ+Z/QTKuN0uSOzb6j1fyfaUpRyZ
+ qIHci0TKDYIhc0qRRww6+Ot2ZIC51IOpxW3SAKE92TY+eqOZ26eUIqrbGDg5Xdr242SEVF
+ 3E/ioRSMd0c8IdYJUKNTPJYjEpsdKsPNsqhRdpKPXvFOWqf0Ja2mYVFKDgHBtA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DxqUfXII
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/stellarium: bump version to
- 1.2
+ header.s=gm1 header.b=Im7qmJge
+Subject: Re: [Buildroot] [PATCH 1/3] support/tests: print failed command and
+ output on assertRunOK error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,19 +85,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 25 Dec 2022 22:55:09 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sat, 24 Dec 2022 10:18:11 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Add patch to fix build error.
+> Currently, when asserting that a command succeeded, we just capture the
+> return code of the command. If that is not zero, the assertion fails,
+> but the error message is not very splicit:
+>     AssertionError: 1 != 0
 > 
-> Removed sha1 hash.
+> Replace the error message with an explicit message that dumps the failed
+> command, the error code, and the resulting output.
 > 
-> Add configure option to disable searching for qt6 as of now due to
-> incomplete implementation of qt6 modules, like gui, in buildroot.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
-> v2: updated patch after upstream comment
+>  support/testing/infra/basetest.py | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
