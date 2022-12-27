@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA992C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0DA0C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:28:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BEF683955;
-	Mon, 20 Feb 2023 23:28:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BEF683955
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D973828B5;
+	Mon, 20 Feb 2023 23:28:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D973828B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LeaFCYX--nzK; Mon, 20 Feb 2023 23:28:38 +0000 (UTC)
+	with ESMTP id X2FSQsIpbkIP; Mon, 20 Feb 2023 23:28:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC290828B5;
-	Mon, 20 Feb 2023 23:28:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC290828B5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4FF9C1BF94D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D506839BB;
+	Mon, 20 Feb 2023 23:28:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D506839BB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7988D1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1AF341756
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1AF341756
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CAC3612B4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CAC3612B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7qvu8YNRkd_k for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z0Qqde2g8FEb for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2EE0A4174E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EE0A4174E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EE14613B3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EE14613B3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C93886495; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 6C0CF828C8; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 20 Jan 2023 08:19:07 +0100
+Date: Tue, 27 Dec 2022 21:50:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 60d8585570c8caf3267c702b902bbe847d713342
-X-Git-Newrev: 51e98499ff54496126d89e34751297ea9e1f61bd
+X-Git-Oldrev: de4cf253752d2225b7d258cbaee0ddebf64901fa
+X-Git-Newrev: 92a4f080b2721cc84248ebc98d41229469787688
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205237.2C93886495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sudo: security bump to
- version 1.9.12p2
+Message-Id: <20230220205216.6C0CF828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/orc: bump to version
+ 0.4.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,47 +56,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51e98499ff54496126d89e34751297ea9e1f61bd
+commit: https://git.buildroot.net/buildroot/commit/?id=92a4f080b2721cc84248ebc98d41229469787688
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix https://nvd.nist.gov/vuln/detail/CVE-2023-22809
+Drop patch (already in version)
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+https://gitlab.freedesktop.org/gstreamer/orc/-/blob/0.4.33/RELEASE
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sudo/sudo.hash | 2 +-
- package/sudo/sudo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ccpu-powerpc.c-fix-build-with-kernel-4.11.patch | 70 ----------------------
+ package/orc/orc.hash                               |  4 +-
+ package/orc/orc.mk                                 |  2 +-
+ 3 files changed, 3 insertions(+), 73 deletions(-)
 
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index a3476df96b..c920b9fe74 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,4 +1,4 @@
- # From: https://www.sudo.ws/getting/download/
--sha256  475a18a8eb3da8b2917ceab063a6baf51ea09128c3c47e3e0e33ab7497bab7d8  sudo-1.9.12p1.tar.gz
-+sha256  b9a0b1ae0f1ddd9be7f3eafe70be05ee81f572f6f536632c44cd4101bb2a8539  sudo-1.9.12p2.tar.gz
+diff --git a/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch b/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
+deleted file mode 100644
+index 0a4e7010f2..0000000000
+--- a/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From a45f6d49ec090ad94333c0865c378d2d96ab2af4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 15 Feb 2021 20:17:43 +0100
+-Subject: [PATCH] orc/orccpu-powerpc.c: fix build with kernel < 4.11
+-
+-Build with powerpc and kernel < 4.11 is broken since version 0.4.30 and
+-https://gitlab.freedesktop.org/gstreamer/orc/-/commit/a999325abea6a5549d60d99ddeb0271d2aa00235:
+-
+-FAILED: orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc-linux-gcc -Iorc/liborc-0.4.so.0.32.0.p -Iorc -I../orc -I. -I.. -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -std=gnu99 -O3 -DHAVE_CONFIG_H -fvisibility=hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -fPIC -pthread -DORC_ENABLE_UNSTABLE_API -D_GNU_SOURCE -DBUILDING_ORC -MD -MQ orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o -MF orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o.d -o orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o -c ../orc/orccpu-powerpc.c
+-../orc/orccpu-powerpc.c: In function 'orc_check_powerpc_proc_auxv':
+-../orc/orccpu-powerpc.c:164:21: error: 'AT_L1D_CACHESIZE' undeclared (first use in this function); did you mean 'AT_DCACHEBSIZE'?
+-  164 |       if (buf[i] == AT_L1D_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~~
+-      |                     AT_DCACHEBSIZE
+-../orc/orccpu-powerpc.c:164:21: note: each undeclared identifier is reported only once for each function it appears in
+-../orc/orccpu-powerpc.c:168:21: error: 'AT_L2_CACHESIZE' undeclared (first use in this function); did you mean 'AT_ICACHEBSIZE'?
+-  168 |       if (buf[i] == AT_L2_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~
+-      |                     AT_ICACHEBSIZE
+-../orc/orccpu-powerpc.c:172:21: error: 'AT_L3_CACHESIZE' undeclared (first use in this function); did you mean 'AT_ICACHEBSIZE'?
+-  172 |       if (buf[i] == AT_L3_CACHESIZE) {
+-      |                     ^~~~~~~~~~~~~~~
+-      |                     AT_ICACHEBSIZE
+-
+-Indeed, AT_{L1D,L2,L3}_CACHESIZE is only defined since kernel 4.11 and
+-https://github.com/torvalds/linux/commit/98a5f361b8625c6f4841d6ba013bbf0e80d08147
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/0821e96cba3e455edd47b87485501d892fc7ac6a
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/gstreamer/orc/-/merge_requests/56]
+----
+- orc/orccpu-powerpc.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/orc/orccpu-powerpc.c b/orc/orccpu-powerpc.c
+-index 6796f17..340cf05 100644
+---- a/orc/orccpu-powerpc.c
+-+++ b/orc/orccpu-powerpc.c
+-@@ -161,18 +161,24 @@ orc_check_powerpc_proc_auxv (void)
+-         _orc_cpu_name = (char*)buf[i + 1];
+-         found++;
+-       }
+-+#ifdef AT_L1D_CACHESIZE
+-       if (buf[i] == AT_L1D_CACHESIZE) {
+-         _orc_data_cache_size_level1 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-+#ifdef AT_L2_CACHESIZE
+-       if (buf[i] == AT_L2_CACHESIZE) {
+-         _orc_data_cache_size_level2 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-+#ifdef AT_L3_CACHESIZE
+-       if (buf[i] == AT_L3_CACHESIZE) {
+-         _orc_data_cache_size_level3 = buf[i + 1];
+-         found++;
+-       }
+-+#endif
+-       if (found == 6)
+-         break;
+-     }
+--- 
+-2.30.0
+-
+diff --git a/package/orc/orc.hash b/package/orc/orc.hash
+index f48c2932ab..136fc3ece4 100644
+--- a/package/orc/orc.hash
++++ b/package/orc/orc.hash
+@@ -1,5 +1,5 @@
+-# From https://gstreamer.freedesktop.org/data/src/orc/orc-0.4.32.tar.xz.sha256sum
+-sha256  a66e3d8f2b7e65178d786a01ef61f2a0a0b4d0b8370de7ce134ba73da4af18f0  orc-0.4.32.tar.xz
++# From https://gstreamer.freedesktop.org/data/src/orc/orc-0.4.33.tar.xz.sha256sum
++sha256  844e6d7db8086f793f57618d3d4b68d29d99b16034e71430df3c21cfd3c3542a  orc-0.4.33.tar.xz
+ 
  # Locally calculated
- sha256  d2f93a3b17ed5586fddd07be33ad767146c1a81a22682baa68bb4360a31d020a  LICENSE.md
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index a16b6863aa..c4eaafa6b1 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -5,7 +5,7 @@
+ sha256  4f5dabb1b44bb6fc5cd53820b1f103147ad61b395a57903991325bd1b85d97bf  COPYING
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index a93a4f875a..be718e6f85 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SUDO_VERSION_MAJOR = 1.9.12
--SUDO_VERSION_MINOR = p1
-+SUDO_VERSION_MINOR = p2
- SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
- SUDO_SITE = https://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC, BSD-3-Clause
+-ORC_VERSION = 0.4.32
++ORC_VERSION = 0.4.33
+ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2-Clause, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
