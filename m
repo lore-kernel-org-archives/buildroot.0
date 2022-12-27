@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46BD6C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:45:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06771C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE8BA40462;
-	Tue, 27 Dec 2022 20:45:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE8BA40462
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84BF24081F;
+	Tue, 27 Dec 2022 20:45:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84BF24081F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5l9um1La_39b; Tue, 27 Dec 2022 20:45:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3Y0hZ1UNE5rq; Tue, 27 Dec 2022 20:45:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F88940472;
-	Tue, 27 Dec 2022 20:45:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F88940472
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99140402BB;
+	Tue, 27 Dec 2022 20:45:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99140402BB
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E48A41BF37A
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:45:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F3BE11BF37A
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC84B8140F
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC84B8140F
+ by smtp1.osuosl.org (Postfix) with ESMTP id DCA758140F
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:45:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCA758140F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3r_p7ugy0kb0 for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 20:45:41 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B697F80F50
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B697F80F50
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:45:40 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 10880240008;
- Tue, 27 Dec 2022 20:45:38 +0000 (UTC)
-Date: Tue, 27 Dec 2022 21:45:38 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20221227214538.56ca7609@windsurf>
-In-Reply-To: <a04f80a248fb1452841a424e850a694419e3a6dd.1671873478.git.yann.morin.1998@free.fr>
-References: <cover.1671873478.git.yann.morin.1998@free.fr>
- <a04f80a248fb1452841a424e850a694419e3a6dd.1671873478.git.yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672173939;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=U4VkjglUwNDwN97mu6zakoXEF86tXGZKUuH04+4Rc+E=;
- b=OhNmrD2+dSFDD+20Ib3YEg/1QnAkcjh/mhlO6y9SATO8VOgiugvaSIepkssXMnncneHRaw
- 5ldpirk5ksHMk0gh/mJeiL0QJv1MlNvzGbKYK9cPiSKHiRt5nqdMiZ8cDZMCj1UEeHRAeN
- rPhiRzX6Vl8l7j3ScQObEb8ciQlwbEo8CBdWpA2mcKlJuJX3NUEruvd3MADMkdtf8Zod9i
- Pa0KD8f39j2S855JZV4GQcGtYfCzGh6RbG3Aey83lKgQgobCOz8qndMrb9lC633bnCACM+
- djrdlQXlIl9Jt0AisN+bNdYQ5P/HPcg6YKAfUfaIR+PAL7uRsUbAfjJfn3JwBA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OhNmrD2+
-Subject: Re: [Buildroot] [PATCH 2/3] support/tests: allow top-level parallel
- builds
+ with ESMTP id crqJsz0WBjx3 for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 20:45:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A40580F50
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:45:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A40580F50
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E6F4286EA0; Tue, 27 Dec 2022 20:45:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Dec 2022 21:40:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 319c56dfe3309dbf24be01fed3afff6259a2c5dd
+X-Git-Newrev: 44161560dd52ebe9a41ee6e5ec8cacb2a9fe48ec
+X-Patchwork-Hint: ignore
+Message-Id: <20221227204552.E6F4286EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/tests: print failed command and
+ output on assertRunOK error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,44 +58,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 24 Dec 2022 10:18:12 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=44161560dd52ebe9a41ee6e5ec8cacb2a9fe48ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Running tests with top-level parallel builds can speed up running some
-> tests, expecially those that have a lot of packages like the systemd
-> init tests.
-> 
-> Trigger TLPB when the configuration enables per-package directories.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Currently, when asserting that a command succeeded, we just capture the
+return code of the command. If that is not zero, the assertion fails,
+but the error message is not very splicit:
+    AssertionError: 1 != 0
 
-I certainly support the idea of running some tests with TLPB. However,
-this implementation makes a confusion between two different settings:
+Replace the error message with an explicit message that dumps the failed
+command, the error code, and the resulting output.
 
-- The existing BRConfigTest.jlevel, which is set by run-tests -j, and
-  used to define BR2_JLEVEL in the Buildroot configuration of each test
-  case. This determines the number of parallel jobs used to build each
-  independent package.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/infra/basetest.py | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-- Your new work, which uses "make -j" to do TLPB... but relies on the
-  same above value, even though it's a completely different setting.
-
-Is this expected?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 96c6848dfc..45bcd4c2e2 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -88,7 +88,12 @@ class BRTest(BRConfigTest):
+         super(BRTest, self).tearDown()
+ 
+     # Run the given 'cmd' with a 'timeout' on the target and
+-    # assert that the command succeeded
++    # assert that the command succeeded; on error, print the
++    # faulty command and its output
+     def assertRunOk(self, cmd, timeout=-1):
+-        _, exit_code = self.emulator.run(cmd, timeout)
+-        self.assertEqual(exit_code, 0)
++        out, exit_code = self.emulator.run(cmd, timeout)
++        self.assertEqual(
++            exit_code,
++            0,
++            "\nFailed to run: {}\noutput was:\n{}".format(cmd, '  '+'\n  '.join(out))
++        )
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
