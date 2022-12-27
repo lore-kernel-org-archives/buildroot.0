@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E81C4C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A693C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 974F64F2E2;
-	Mon, 20 Feb 2023 22:47:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974F64F2E2
+	by smtp4.osuosl.org (Postfix) with ESMTP id D69F04ED80;
+	Mon, 20 Feb 2023 22:47:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D69F04ED80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wVnffc1kZ-mT; Mon, 20 Feb 2023 22:46:59 +0000 (UTC)
+	with ESMTP id OmScLREmys-J; Mon, 20 Feb 2023 22:47:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 718704F2F1;
-	Mon, 20 Feb 2023 22:46:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 718704F2F1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 655A51BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 882BE4EEF7;
+	Mon, 20 Feb 2023 22:47:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 882BE4EEF7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A7C51BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FF496126D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FF496126D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79518416F8
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79518416F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BjKftcJjZeXU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9h3jX4fQQspc for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC39161185
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC39161185
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9384B416C3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9384B416C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B461E8648F; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+ id 8618E86494; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 17:51:18 +0100
+Date: Tue, 27 Dec 2022 22:22:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c4fc5e48521082d1b3cd9d96efc34979969d745b
-X-Git-Newrev: 8f8592b686e4aa1085ace7c7f25c7c777a3fd2ec
+X-Git-Oldrev: a8807ddbe269ef9aeee7b72f6d0a64719f8e6782
+X-Git-Newrev: 327fab5b9d45891233ff647d5b352cc94b3c27ac
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205207.B461E8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/postgresql: bump
- version to 14.6
+Message-Id: <20230220205216.8618E86494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gcc: fix gcc12 with
+ uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +64,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f8592b686e4aa1085ace7c7f25c7c777a3fd2ec
+commit: https://git.buildroot.net/buildroot/commit/?id=327fab5b9d45891233ff647d5b352cc94b3c27ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://www.postgresql.org/docs/release/14.6/
+GCC 12 produces broken binaries when used with uClibc.
+E.g. `gdb` crashes on startup.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+GCC HEAD fixes this in:
+https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;h=ee4af2ed0b7322884ec4ff537564683c3749b813
+
+Adds the commit as patch for GCC 12.
+
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gcc/12.2.0/0002-fix-condvar.patch | 82 +++++++++++++++++++++++++++++++
+ 1 file changed, 82 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 8fdaadde99..26bb626943 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v14.5/postgresql-14.5.tar.bz2.sha256
--sha256  d4f72cb5fb857c9a9f75ec8cf091a1771272802f2178f0b2e65b7b6ff64f4a30  postgresql-14.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-14.6.tar.bz2.sha256
-+sha256  508840fc1809d39ab72274d5f137dabb9fd7fb4f933da4168aeebb20069edf22  postgresql-14.6.tar.bz2
- # License file, Locally calculated
- sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 631a959122..502860bc99 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 14.5
-+POSTGRESQL_VERSION = 14.6
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/package/gcc/12.2.0/0002-fix-condvar.patch b/package/gcc/12.2.0/0002-fix-condvar.patch
+new file mode 100644
+index 0000000000..5044942e9f
+--- /dev/null
++++ b/package/gcc/12.2.0/0002-fix-condvar.patch
+@@ -0,0 +1,82 @@
++From ee4af2ed0b7322884ec4ff537564683c3749b813 Mon Sep 17 00:00:00 2001
++From: Jonathan Wakely <jwakely@redhat.com>
++Date: Thu, 22 Dec 2022 09:56:47 +0000
++Subject: [PATCH] libstdc++: Avoid recursion in __nothrow_wait_cv::wait
++ [PR105730]
++
++The commit r12-5877-g9e18a25331fa25 removed the incorrect
++noexcept-specifier from std::condition_variable::wait and gave the new
++symbol version @@GLIBCXX_3.4.30. It also redefined the original symbol
++std::condition_variable::wait(unique_lock<mutex>&)@GLIBCXX_3.4.11 as an
++alias for a new symbol, __gnu_cxx::__nothrow_wait_cv::wait, which still
++has the incorrect noexcept guarantee. That __nothrow_wait_cv::wait is
++just a wrapper around the real condition_variable::wait which adds
++noexcept and so terminates on a __forced_unwind exception.
++
++This doesn't work on uclibc, possibly due to a dynamic linker bug. When
++__nothrow_wait_cv::wait calls the condition_variable::wait function it
++binds to the alias symbol, which means it just calls itself recursively
++until the stack overflows.
++
++This change avoids the possibility of a recursive call by changing the
++__nothrow_wait_cv::wait function so that instead of calling
++condition_variable::wait it re-implements it. This requires accessing
++the private _M_cond member of condition_variable, so we need to use the
++trick of instantiating a template with the member-pointer of the private
++member.
++
++libstdc++-v3/ChangeLog:
++
++	PR libstdc++/105730
++	* src/c++11/compatibility-condvar.cc (__nothrow_wait_cv::wait):
++	Access private data member of base class and call its wait
++	member.
++
++Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
++---
++ .../src/c++11/compatibility-condvar.cc        | 22 ++++++++++++++++++-
++ 1 file changed, 21 insertions(+), 1 deletion(-)
++
++diff --git a/libstdc++-v3/src/c++11/compatibility-condvar.cc b/libstdc++-v3/src/c++11/compatibility-condvar.cc
++index e3a8b8403ca..3cef3bc0714 100644
++--- a/libstdc++-v3/src/c++11/compatibility-condvar.cc
+++++ b/libstdc++-v3/src/c++11/compatibility-condvar.cc
++@@ -67,6 +67,24 @@ _GLIBCXX_END_NAMESPACE_VERSION
++     && defined(_GLIBCXX_HAVE_SYMVER_SYMBOL_RENAMING_RUNTIME_SUPPORT)
++ namespace __gnu_cxx _GLIBCXX_VISIBILITY(default)
++ {
+++namespace
+++{
+++  // Pointer-to-member for private std::condition_variable::_M_cond member.
+++  std::__condvar std::condition_variable::* __base_member;
+++
+++  template<std::__condvar std::condition_variable::*X>
+++    struct cracker
+++    { static std::__condvar std::condition_variable::* value; };
+++
+++  // Initializer for this static member also initializes __base_member.
+++  template<std::__condvar std::condition_variable::*X>
+++    std::__condvar std::condition_variable::*
+++      cracker<X>::value = __base_member = X;
+++
+++  // Explicit instantiation is allowed to access the private member.
+++  template class cracker<&std::condition_variable::_M_cond>;
+++}
+++
++ struct __nothrow_wait_cv : std::condition_variable
++ {
++   void wait(std::unique_lock<std::mutex>&) noexcept;
++@@ -76,7 +94,9 @@ __attribute__((used))
++ void
++ __nothrow_wait_cv::wait(std::unique_lock<std::mutex>& lock) noexcept
++ {
++-  this->condition_variable::wait(lock);
+++  // In theory this could be simply this->std::condition_variable::wait(lock)
+++  // but with uclibc that binds to the @GLIBCXX_3.4.11 symbol, see PR 105730.
+++  (this->*__base_member).wait(*lock.mutex());
++ }
++ } // namespace __gnu_cxx
++ 
++-- 
++2.31.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
