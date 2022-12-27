@@ -1,65 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 805FEC4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 19:54:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AC6DC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 19:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD961408BB;
-	Tue, 27 Dec 2022 19:54:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD961408BB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4ZTZgkn2_NaH; Tue, 27 Dec 2022 19:54:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3781408C3;
-	Tue, 27 Dec 2022 19:54:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3781408C3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5ABCE1BF5A4
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 19:54:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36B4E605B1
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 19:54:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36B4E605B1
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2CC760C1C;
+	Tue, 27 Dec 2022 19:57:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2CC760C1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dB40phlI7RRO for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 19:54:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D275F60595
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D275F60595
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 19:54:14 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net (unknown
- [IPv6:2a01:e0a:43e:e970:8763:f5a3:4adf:bb86])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 9F68EB0051E;
- Tue, 27 Dec 2022 20:54:08 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uK3Jit0RuOnL; Tue, 27 Dec 2022 19:57:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D62B460A69;
+	Tue, 27 Dec 2022 19:57:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D62B460A69
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E3FAF1BF5A4
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 19:57:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE07F408C3
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 19:57:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE07F408C3
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DTKbz13ZeP2w for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 19:57:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73D63408C0
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 19:57:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73D63408C0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5BEC986E4A; Tue, 27 Dec 2022 19:57:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 Dec 2022 20:53:39 +0100
-Message-Id: <20221227195339.86514-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672170851;
- bh=TZH4pzp+evbfl7wBXJWEWc70tUwr2VPoTxtKXqboCY0=;
- h=From:To:Cc:Subject:Date:From;
- b=SIpuD1qwhR02EUbP28jBpEK+M61tBB/BPoFHiSLqP1xoMJd/PtS3TOTA+LCPhqx29
- Rv+2+B4JU6JMnbhMSM6JUqqtZ7bUgMt1Qadqu2ZW9mLr5FXHTygPi93C8aF0wJ0DJi
- w+xvano72wMhAtB57cJ83bKzaulrElKY9OsE1jHxUXjPnGQPjfKVLnqaysakpVJurt
- eFhkCj2J6TD+CBKSwjfic0odqd1SllZxD5XbAYkBNRN5sz08Dq1yE4cxRsJzEcSHXN
- gGc3LLWXzoh5SWNLbVrdLQY28+S/LTEYs8UuLCYCx0hRf7P5qXvCFGvzWie9ATQ3HP
- 9q6qGwYcwDMYg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SIpuD1qw
-Subject: [Buildroot] [PATCH 1/1] package/fmlib: fix build for ppc e500mc
+Date: Tue, 27 Dec 2022 20:56:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 83b2e53dcde56d478928d917604bf3af1f903d9f
+X-Git-Newrev: c181878a84e9531f25d8dd1f5cb10b86f8bf9e51
+X-Patchwork-Hint: ignore
+Message-Id: <20221227195719.5BEC986E4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdeflate: fix build with arm
+ soft float
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,49 +56,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Matt Weber <matthew.weber@collins.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When BR2_powerpc_e500mc=y, fmlib package compilation fails with output:
+commit: https://git.buildroot.net/buildroot/commit/?id=c181878a84e9531f25d8dd1f5cb10b86f8bf9e51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-    make[2]: *** No rule to make target 'libfm-e500mc.a'.  Stop.
+Fix the following build failure with arm soft float raised since bump to
+version 1.15 in commit c31087182fa545784d9a0a01f0b32715d78c3955 and
+https://github.com/ebiggers/libdeflate/commit/84c76f6f2cf5e5ac4deca0b1c25faebb42469f58:
 
-The fmlib package "make help" command shows:
+In file included from /home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h:256,
+                 from /home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/crc32.c:227:
+/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/11.3.0/include/arm_neon.h:31:2: error: #error "NEON intrinsics not available with the soft-float ABI.  Please use -mfloat-abi=softfp or -mfloat-abi=hard"
+   31 | #error "NEON intrinsics not available with the soft-float ABI.  Please use -mfloat-abi=softfp or -mfloat-abi=hard"
+      |  ^~~~~
+In file included from /home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/crc32.c:227:
+/home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h: In function 'clmul_u32':
+/home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h:262:9: error: unknown type name 'uint64x2_t'; did you mean 'uint16x2_t'?
+  262 |         uint64x2_t res = vreinterpretq_u64_p128(
+      |         ^~~~~~~~~~
+      |         uint16x2_t
 
-    The available make libfm-<arch>.a targets are:
-	    libfm-ppce500mc.a		(P2, P3, P4)
-    ...
+Fixes:
+ - http://autobuild.buildroot.org/results/1445dcbf676893133f311a92ac21b29237fb75df
 
-The package Config.in incorrectly sets BR2_PACKAGE_FMLIB_ARCHTYPE
-to "e500mc", which is then passed as the package make target.
-The correct value should be "ppce500mc".
-
-The commit fixes this build issue.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fmlib/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...d-error-due-to-PMULL-enabled-without-NEON.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
-index df4ae440ea..7bccfd7c83 100644
---- a/package/fmlib/Config.in
-+++ b/package/fmlib/Config.in
-@@ -37,7 +37,7 @@ endchoice
- 
- config BR2_PACKAGE_FMLIB_ARCHTYPE
- 	string
--	default "e500mc" if BR2_powerpc_e500mc
-+	default "ppce500mc" if BR2_powerpc_e500mc
- 	default "ppc64e6500" if BR2_powerpc_e6500 && BR2_powerpc64
- 	default "ppc32e6500" if BR2_powerpc_e6500 && BR2_powerpc
- 
--- 
-2.39.0
-
+diff --git a/package/libdeflate/0002-lib-arm-cpu_features-fix-build-error-due-to-PMULL-enabled-without-NEON.patch b/package/libdeflate/0002-lib-arm-cpu_features-fix-build-error-due-to-PMULL-enabled-without-NEON.patch
+new file mode 100644
+index 0000000000..b13cbc48af
+--- /dev/null
++++ b/package/libdeflate/0002-lib-arm-cpu_features-fix-build-error-due-to-PMULL-enabled-without-NEON.patch
+@@ -0,0 +1,35 @@
++From 079a6dd171583c1953017b703ec63c5367a284b4 Mon Sep 17 00:00:00 2001
++From: Eric Biggers <ebiggers3@gmail.com>
++Date: Mon, 26 Dec 2022 11:32:47 -0800
++Subject: [PATCH] lib/arm/cpu_features: fix build error due to PMULL enabled
++ without NEON
++
++When building for soft float arm32, HAVE_PMULL_INTRIN is being set when
++it shouldn't be, causing a build error:
++
++    #error "NEON intrinsics not available with the soft-float ABI..."
++
++Fix this by making HAVE_PMULL_INTRIN depend on HAVE_NEON_INTRIN, as used
++to be the case, in order to get the 'defined(__ARM_FP)' dependency,
++
++Fixes https://github.com/ebiggers/libdeflate/issues/282
++Fixes: 84c76f6f2cf5 ("lib/arm: make crc32 code work with MSVC")
++[Retrieved from:
++https://github.com/ebiggers/libdeflate/commit/079a6dd171583c1953017b703ec63c5367a284b4]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/arm/cpu_features.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/arm/cpu_features.h b/lib/arm/cpu_features.h
++index 4092eba8..edcf7359 100644
++--- a/lib/arm/cpu_features.h
+++++ b/lib/arm/cpu_features.h
++@@ -97,6 +97,7 @@ static inline u32 get_arm_cpu_features(void) { return 0; }
++ #endif
++ #if HAVE_PMULL_NATIVE || \
++ 	(HAVE_DYNAMIC_ARM_CPU_FEATURES && \
+++	 HAVE_NEON_INTRIN /* needed to exclude soft float arm32 case */ && \
++ 	 (GCC_PREREQ(6, 1) || __has_builtin(__builtin_neon_vmull_p64) || \
++ 	  defined(_MSC_VER)) && \
++ 	  /*
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
