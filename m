@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8F45C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47F9EC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A1284F2F9;
-	Mon, 20 Feb 2023 22:47:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A1284F2F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECD044F2E5;
+	Mon, 20 Feb 2023 22:47:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECD044F2E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lDe0SZfRSEUD; Mon, 20 Feb 2023 22:47:27 +0000 (UTC)
+	with ESMTP id NI1nx5sb1EGA; Mon, 20 Feb 2023 22:47:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37BFF4F2FE;
-	Mon, 20 Feb 2023 22:47:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37BFF4F2FE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7577B1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id B66294F308;
+	Mon, 20 Feb 2023 22:47:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B66294F308
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AA2991BF94D
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF8E9611EE
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF8E9611EE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 91C034170D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91C034170D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fMfMVkYOMgi0 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O1Ps94QMC7JX for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F226B611DC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F226B611DC
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1F1A416DB
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1F1A416DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F090F828C8; Mon, 20 Feb 2023 20:52:07 +0000 (UTC)
+ id AF01786494; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 18:04:54 +0100
+Date: Tue, 27 Dec 2022 22:32:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c19e0bdc5621518986dfa04ced0dadd3c53e193c
-X-Git-Newrev: 5dd4caaa011b1efffc522d0d313725a195cfee7f
+X-Git-Oldrev: 85c5af46ad6c18841576c0f7abe241a617a44cb7
+X-Git-Newrev: 56763ca01229ead2dba2cfb27025b41c0a5e18ed
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205207.F090F828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-nextpvr: bump
- version to 19.0.5-Matrix
+Message-Id: <20230220205216.AF01786494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rtl_433: fix static
+ openssl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5dd4caaa011b1efffc522d0d313725a195cfee7f
+commit: https://git.buildroot.net/buildroot/commit/?id=56763ca01229ead2dba2cfb27025b41c0a5e18ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fix the following static openssl build failure raised since commit
+7967755fbf25fe4d5860884bedb3e01fcd7e9855:
+
+/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-13/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a(ssl_cert.o): in function `ssl_cert_free':
+ssl_cert.c:(.text+0x384): undefined reference to `__atomic_fetch_sub_4'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/417c86963ffe038aa052ea3cf19fd52c3e9b7396
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...txt-use-pkg-config-to-detect-openssl-when.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 74f15e6d9b..79921da503 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  278411430d41ac24f28e05f76d2d46a90cb3989202a450399ac0495c264a6846  kodi-pvr-nextpvr-19.0.4-Matrix.tar.gz
-+sha256  49df97d2e566dc044d3027e4ee6ed8e1ff122f4c38c82325e20ac91e148d5558  kodi-pvr-nextpvr-19.0.5-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index c2f54e0c2c..dc62040b02 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_NEXTPVR_VERSION = 19.0.4-Matrix
-+KODI_PVR_NEXTPVR_VERSION = 19.0.5-Matrix
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
- KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
+diff --git a/package/rtl_433/0001-CMakeLists.txt-use-pkg-config-to-detect-openssl-when.patch b/package/rtl_433/0001-CMakeLists.txt-use-pkg-config-to-detect-openssl-when.patch
+new file mode 100644
+index 0000000000..00858c8ff9
+--- /dev/null
++++ b/package/rtl_433/0001-CMakeLists.txt-use-pkg-config-to-detect-openssl-when.patch
+@@ -0,0 +1,42 @@
++From b860de9e207d8fe2ea37dad28fdd014493d87703 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 27 Dec 2022 16:29:16 +0100
++Subject: [PATCH] build: Fix CMake to use pkg-config openssl when possible
++ (#2290)
++
++In order to take into account the libraries used by openssl when
++building statically, using pkg-config is recommended. This patch
++therefore improves the CMakeLists.txt to use pkg-config to detect
++openssl when pkg-config is available. This will avoid
++static build failure when openssl needs to link with -latomic.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/417c86963ffe038aa052ea3cf19fd52c3e9b7396
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/merbanan/rtl_433/commit/b860de9e207d8fe2ea37dad28fdd014493d87703]
++---
++ CMakeLists.txt | 9 ++++++++-
++ 1 file changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d47a3eda2..cf30d8be2 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -175,7 +175,14 @@ set(ENABLE_OPENSSL AUTO CACHE STRING "Enable OpenSSL TLS support")
++ set_property(CACHE ENABLE_OPENSSL PROPERTY STRINGS AUTO ON OFF)
++ if(ENABLE_OPENSSL) # AUTO / ON
++ 
++-find_package(OpenSSL)
+++find_package(PkgConfig)
+++if(PKG_CONFIG_FOUND)
+++    pkg_check_modules(OPENSSL openssl)
+++    set(OPENSSL_LIBRARIES ${OPENSSL_LINK_LIBRARIES})
+++    set(OPENSSL_INCLUDE_DIR ${OPENSSL_INCLUDE_DIRS})
+++else()
+++    find_package(OpenSSL)
+++endif()
++ if(OPENSSL_FOUND)
++     message(STATUS "OpenSSL TLS support will be compiled. Found version ${OPENSSL_VERSION}")
++     include_directories(${OPENSSL_INCLUDE_DIR})
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
