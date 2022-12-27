@@ -1,87 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0117C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 21:53:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D971C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 21:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80B3960C30;
-	Tue, 27 Dec 2022 21:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80B3960C30
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F4EB81438;
+	Tue, 27 Dec 2022 21:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F4EB81438
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dAtf0WqaPqid; Tue, 27 Dec 2022 21:53:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XxWXVnlOEN0T; Tue, 27 Dec 2022 21:58:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD63760C26;
-	Tue, 27 Dec 2022 21:53:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD63760C26
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8FC5813CA;
+	Tue, 27 Dec 2022 21:58:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8FC5813CA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 356A81BF847
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:53:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D40E71BF847
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CFD84031E
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CFD84031E
+ by smtp2.osuosl.org (Postfix) with ESMTP id AEB0B4031E
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:58:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEB0B4031E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HWmGq9qPUsFi for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 21:53:25 +0000 (UTC)
+ with ESMTP id TDx1ElC-AZ5d for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 21:58:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E6774018F
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com
- [IPv6:2607:f8b0:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1E6774018F
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 21:53:24 +0000 (UTC)
-Received: by mail-pg1-x52e.google.com with SMTP id r18so9494932pgr.12
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 13:53:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=qG4JjH0fb8coCQTvTi9fVAYt1rHa2RFPYwDGyzSCFLY=;
- b=ct/Jhu9FCVJxxhL43h/3vGHwDK6MJoIvzSkxy7kbGiG9qmJrvoNhwrHuVii/YWrZ3j
- I2D0rpgoN/NCu2mpI2wSfoHXV6cd2SD1ep9Lezc5ayXNgjgwBOX4uFWk5JIEaC4fV7hM
- DjR3lpGagvK7p4TPMrvquVm9Gj+/MfTrgqCU2PzUt2iI6tt25Sqo9SW/JmDv2LqXY5eE
- I2nvabGHHxBZPro/LLEiLKl1+B3BJkTDRDKVTbuzGIIH6oKoRsABfn9HB0hc7Qvqpsnx
- A2AFngbDHHGftcBI4o/rVcBr032aDgCuzx0O6SDxeBbXEaH2zlhIez4qECykuQ7czqDA
- VNOQ==
-X-Gm-Message-State: AFqh2kqQMdrdJLRpuqaC0t6ogflGiaIZxUI22lLMSBlS25UcvXyZWfiT
- lHm81Xa8/BqILMt2KjGbSpcYlIPzCRzEEVeCnvg=
-X-Google-Smtp-Source: AMrXdXtmjc/L1O0MXGefO3TVNkC+9IdK4Q2VoZ97U0ok8Dj8MB2c0BUYcsFMD+aD/7AIy5/LeEuZHTJAD6M3G5kf9vo=
-X-Received: by 2002:a63:e056:0:b0:497:edf8:d4f9 with SMTP id
- n22-20020a63e056000000b00497edf8d4f9mr541961pgj.513.1672178004436; Tue, 27
- Dec 2022 13:53:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20221222165117.62002-1-fontaine.fabrice@gmail.com>
- <20221227223514.503ad1c2@windsurf>
- <CAPi7W82v_acXo1qva_7No-_0+zm-k79PyZ2k28tfi8sFP=EbrA@mail.gmail.com>
- <20221227224447.67dea6f0@windsurf>
-In-Reply-To: <20221227224447.67dea6f0@windsurf>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 27 Dec 2022 22:53:13 +0100
-Message-ID: <CAPi7W809JKHTZrtCQL-xgBtKkz5v4uukGOET3A9cpRALxoJMRw@mail.gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8009F4018F
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8009F4018F
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 21:58:10 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [92.184.110.54])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id E22B82003C6;
+ Tue, 27 Dec 2022 22:58:02 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 27 Dec 2022 22:58:02 +0100
+Date: Tue, 27 Dec 2022 22:58:02 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=qG4JjH0fb8coCQTvTi9fVAYt1rHa2RFPYwDGyzSCFLY=;
- b=IK3rz8Kij0uye+RlVlLNusXivqxGUfmkG2RtqH69m00unkcm5PuaNRTLEVUX47jAJv
- bhepc2GYpQnUH6UhGoDFIxtApuIeaKBPN4aFa9xuIlZdFDAa0Vj8B3XI9hWZomjC6C1R
- AlQ2ePBanIwFDWI76bOR0mkeMat3WO5GnJ5/gk8okLpHfapRxWqKnfY3GkVCUPqs+GdA
- Lwgh2QY6a6PicPyFqz3OBD2CbAK65idnphdL7VnCY8Y0hYTRAxWCdc6BhMU7xPLJLNu1
- jAly6fR/z50qZ6UN+G1s66LoLQjnJ2AQHg2Las/a4uxHSCD7jQQ62zwRMGK6OPWhlorw
- Q/Zw==
+Message-ID: <20221227215802.GC2498764@scaer>
+References: <20221226180353.1897840-1-bernd.kuhls@t-online.de>
+ <20221227224354.3b1d1fdf@windsurf>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221227224354.3b1d1fdf@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672178287;
+ bh=kRlr49TRDLo9UVrspZF6oFCvT4+u+LtZeP8avTvC4oI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DcVbWALINQEXQ3bpE1TxZXCPz+d/TWlHv6XqmMo/IciSU8LEHTC2kF12G7X23RV4q
+ jBy4q43bBuGyslqPxOjd5Sy5wpVjfmsBNsUxrFLkXs1SuYUdARcLPsMCVjJ9MFZYzc
+ UTSTVRQ6r2c/fyTMEesTqJiv9mq5sr33GVYj5y+7ksL0EXn52PWLCLXRSAjkiUVOLQ
+ z30XvpJmjls5/oXddOkxcxS1IY+612tEhskztI2FKkdWwj75//2z6zi3JnH0gUrrlW
+ lMATfFZAaBE0sisy2ZKCAdb+WAE6A+CPzo0l1aCQPU0TVA6TayBsCEcHsBSKQG44+D
+ 549Y13vuuCeOA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=IK3rz8Ki
-Subject: Re: [Buildroot] [PATCH 1/1] package/tiff: add libdeflate optional
- dependency
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DcVbWALI
+Subject: Re: [Buildroot] [PATCH 1/1] package/dvb-firmware: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,120 +76,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8517906169260696018=="
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8517906169260696018==
-Content-Type: multipart/alternative; boundary="000000000000f4abe105f0d647e3"
+Bernd, Thomas, All,
 
---000000000000f4abe105f0d647e3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 2022-12-27 22:43 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 26 Dec 2022 19:03:53 +0100
+> Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Do we know why these firmware files are not part of the linux-firmware
+> project? They are needed in conjunction with which kernel drivers?
 
-Le mar. 27 d=C3=A9c. 2022 =C3=A0 22:44, Thomas Petazzoni <thomas.petazzoni@=
-bootlin.com>
-a =C3=A9crit :
+And there is some overlap. For example, dvb-usb-dib0700-1.20.fw is
+present in both packages.
 
-> On Tue, 27 Dec 2022 22:40:52 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > > I see it's a policy that has not been really applied to the tiff
-> > > package, but I'm wondering if there's a particular reason to not appl=
-y
-> > > our normal policy to this new option?
-> >
-> > I decided to enable it by default for backward compatibility and becaus=
-e
-> > (for an unknown reason) most tiff options are enabled by default but I
-> can
-> > send a v2 if needed.
->
-> Could you expand a bit on the backward compatibility reason? Is that
-> feature today enabled by default?
->
+> > +DVB_FIRMWARE_VERSION = 1.4.2
+> > +DVB_FIRMWARE_SITE = $(call github,LibreELEC,dvb-firmware,$(DVB_FIRMWARE_VERSION))
+> > +DVB_FIRMWARE_LICENSE = PROPRIETARY
+> > +DVB_FIRMWARE_REDISTRIBUTE = NO
+> 
+> This DVB_FIRMWARE_REDISTRIBUTE = NO is not good, as it would actually
+> encourage people to violate the license of those firmware files. Indeed
+> what DVB_FIRMWARE_REDISTRIBUTE = NO says is "to not mention this
+> package in the manifest" and "do not copy the license files".
 
-Yes, as I wrote in the commit message, libdeflate is enabled by default
-since its addition in version 4.2.0.
-However, obviously, libdeflate has to be built before tiff and libdeflate
-has only been added to buildroot in August so I assume that most of the
-time tiff is built without libdeflate support.
-So, disabling it by default as you suggested is probably better.
+Wrong. _REDISTRIBUTE = NO does not exclude the package from the manifest
+or from copying the license files; it only restricts copying the source
+tarball and the applied patches. The entry in the manifest is still
+added, and the license files are still copied.
 
+See the comment in package/pkg-generic@1137:
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+  1137 # We save the license files for any kind of package: normal, local,
+  1138 # overridden, or non-redistributable alike.
+  1139 # The reason to save license files even for no-redistribute packages
+  1140 # is that the license still applies to the files distributed as part
+  1141 # of the rootfs, even if the sources are not themselves redistributed.
 
+> However,
+> several license files in dvb-firmware explicitly *require* that the
+> license file should be distributed.
+> 
+> Quoting from LICENCE.go7007:
+> 
+> =====
+> The firmware files included in the firmware/ directory may be freely
+> redistributed only in conjunction with this document; but modification,
+> tampering and reverse engineering are prohibited.
+> =====
+> 
+> Quoting from LICENCE.xc5000
+> 
+> =====
+> // Permission to use, copy, modify, and/or distribute this software, only
+> // for use with Xceive ICs, for any purpose with or without fee is hereby
+> // granted, provided that the above copyright notice and this permission
+> // notice appear in all source code copies.
+> =====
 
-Best Regards,
+"all source code copies" would not apply to binary files, I would say.
 
-Fabrice
+> Quoting from LICENCE.siano
+> 
+> =====
+> * Redistributions must reproduce the above copyright notice and the
+> following disclaimer in the documentation and/or other materials
+> provided with the distribution.
+> =====
+> 
+> If we want to create a package for this properly, we need to have a
+> mapping between the firmware files and the specific license file that
+> applies to them, so that we know which conditions apply to which
+> firmware file. As it is done today in this Github repo, it looks like
+> some firmware files are random binaries from the Internet, with no
+> clear licensing... which makes their redistribution not legal.
 
---000000000000f4abe105f0d647e3
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I had a first look at that package a while back too, and it is a bit of
+a mess license-wise.
 
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mar. 27 d=C3=A9c. 2022 =C3=A0=
-=C2=A022:44, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootli=
-n.com">thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><b=
-lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
-ft:1px solid rgb(204,204,204);padding-left:1ex">On Tue, 27 Dec 2022 22:40:5=
-2 +0100<br>
-Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gmail.com" target=
-=3D"_blank">fontaine.fabrice@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; &gt; I see it&#39;s a policy that has not been really applied to the t=
-iff<br>
-&gt; &gt; package, but I&#39;m wondering if there&#39;s a particular reason=
- to not apply<br>
-&gt; &gt; our normal policy to this new option?<br>
-&gt; <br>
-&gt; I decided to enable it by default for backward compatibility and becau=
-se<br>
-&gt; (for an unknown reason) most tiff options are enabled by default but I=
- can<br>
-&gt; send a v2 if needed.<br>
-<br>
-Could you expand a bit on the backward compatibility reason? Is that<br>
-feature today enabled by default?<br></blockquote><div><br></div><div>Yes, =
-as I wrote in the commit message, libdeflate is enabled by default since it=
-s addition in version 4.2.0.</div><div>However, obviously, libdeflate has t=
-o be built before tiff and libdeflate has only been added to buildroot in A=
-ugust so I assume that most of the time tiff is built without libdeflate su=
-pport.</div><div>So, disabling it by default as you suggested is probably b=
-etter.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D=
-"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-le=
-ft:1ex">
-<br>
-Best regards,<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a></blockquote><div><br></div><div>Best Regards,</div><div><=
-br></div><div>Fabrice <br></div></div></div>
+At the very least, indeed, we should restrict the way the files are
+installed, a bit like we do for linux-firmware.
 
---000000000000f4abe105f0d647e3--
+Regards,
+Yann E. MORIN.
 
---===============8517906169260696018==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8517906169260696018==--
