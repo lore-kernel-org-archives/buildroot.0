@@ -1,69 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 898A5C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 22:00:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4177C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 22:23:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25BD040922;
-	Tue, 27 Dec 2022 22:00:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25BD040922
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D86E60C31;
+	Tue, 27 Dec 2022 22:23:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D86E60C31
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ftFwW8zPCqnf; Tue, 27 Dec 2022 22:22:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 893F660B2C;
+	Tue, 27 Dec 2022 22:22:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 893F660B2C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BF0311BF2E4
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 22:22:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94FEA408C3
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 22:22:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94FEA408C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LneeElr0g95J; Tue, 27 Dec 2022 22:00:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F66440183;
-	Tue, 27 Dec 2022 22:00:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F66440183
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 332A01BF847
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 22:00:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0690581437
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 22:00:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0690581437
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 06fNPVbOjfAW for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 22:00:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6BCB8141E
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D6BCB8141E
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 22:00:34 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CA5F1C0004;
- Tue, 27 Dec 2022 22:00:32 +0000 (UTC)
-Date: Tue, 27 Dec 2022 23:00:31 +0100
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20221227230031.51c69c8f@windsurf>
-In-Reply-To: <20221227213631.1751392-1-bernd.kuhls@t-online.de>
-References: <20221227213631.1751392-1-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EqrAnT3OTqKx for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 22:22:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8224408C0
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8224408C0
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 22:22:55 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id ja17so10182433wmb.3
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 14:22:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JmWflwb2wlH/d2btA1iJSPpcjCWHX0TV65s5AYc4S2Y=;
+ b=Y9+19Bnzy3wZR0HYdtYhBNuptLia9yBvZjiuTzQuYf5TLGAQCy3oyZyanf8YBGAKgC
+ 2sE0u2rqUWwHiqj63Bibga0SDZxZIfPGD61wG9PaZ0wYJen7mUXQUJxkdwHkL7Jh3D8P
+ 1pCyfr/Eg59jGi1k6Q8uH0Av2XoFJnOf4WGa0A5L/LXsX+nJznopetCuKXTbcvMjXcRc
+ EmtU+viEnC7gU5zNgTI6tcjqilnUS3FHtNu4t4C+C24XQwEGbwA9I/fbj2P7yxFVKl61
+ mD+da7SNaBZU1dakEftww1MkE+8uBdzYc0koXv/8SvdxowUX5Or6npsGiHWUJu6LJwWM
+ IwJA==
+X-Gm-Message-State: AFqh2kqOeTte02G0wNa8Y7oTlzbbyrfC44aP+/EL4rQySKmwbE9tDIhm
+ hsg3vQiLCIG0oA9mxgd9cUrU3yEjQQE=
+X-Google-Smtp-Source: AMrXdXsRZVQjLTrgIkDEfBzhv442+w3/J/l0r7HcNtpKNIfEdT0i16omtWHZ6i+XDMlPeX03kb0wfQ==
+X-Received: by 2002:a05:600c:500e:b0:3cf:88c3:d008 with SMTP id
+ n14-20020a05600c500e00b003cf88c3d008mr19472748wmr.28.1672179773462; 
+ Tue, 27 Dec 2022 14:22:53 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ k5-20020a05600c080500b003d208eb17ecsm17577384wmp.26.2022.12.27.14.22.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 27 Dec 2022 14:22:52 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 27 Dec 2022 23:22:46 +0100
+Message-Id: <20221227222246.373638-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672178433;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=TODUgQvmlfSF32T/TerFmmCZEfL/0GyXlq39kb9C7GE=;
- b=IMF7yhHs1URzNSIzZoir45NBjzx+tkg4z6JHDQlBf8BQzQ34Qv1ZnI6G+YK3RVBWVKqXe8
- OK0qezYFD3jw7umLhLfGyUnEfhxmWwhhCeCzk2lkM0QUH1fOPK2Hd/Vw3rzEd2Jh5HBk7Y
- xOnLXsa5hnNiYmNK2lqcliceeq5zy7YbG83GL9zFor0nhuHqxVpuXfyiPKQ2P5920fdJfc
- iYyYhfjiLk2QxiMLSgyMWYR5PHE47JC3oO51NyrfePWhG0z7ll/E60xq6YRcAqE1E9bXGF
- TkMiy9DYs3gtOa2ujnqEv79Ib+3VFnzpY0Ux5D32WKeHovOOKRyR6fh2Pgyr6A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IMF7yhHs
-Subject: Re: [Buildroot] [PATCH 1/1] package/collectd: add rrdcached support
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JmWflwb2wlH/d2btA1iJSPpcjCWHX0TV65s5AYc4S2Y=;
+ b=XdMBAMT+nIzKUUzZ8m2EDIoytlBDVimD7DQXTmpGX6Yso0m3IVOe4cGD/GkccUBk6T
+ +Xr+PqtxZr6SbYd/G64ILKSJhCBozFqSoTNyB1lUugeA312epA7AuRKDJUbw/WqY4Zwq
+ AqL6SCWMrMyzXPeTQhnpxqKQjFqzEC7Q1b9uqViO44H4xAcUjs/FyImyxsOZZljc32YG
+ I9ZYm/43Aa4OaGzdqhnAxvwf3ak57YRqsMj0eIob1ljdHiNfAg1BATnEqADgWPaefYog
+ pH8ef8QscApOsJ+FbG69puuus2GcommC6fCMr6J+SSxZc3hTiwcoAVFXhiykqfBuFZdi
+ fEvQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=XdMBAMT+
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: drop upx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,33 +93,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 27 Dec 2022 22:36:31 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Commit 85c5af46ad6c18841576c0f7abe241a617a44cb7 forgot to drop upx from
+DEVELOPERS file
 
-> The rrdcached plugin has status "supported":
-> https://collectd.org/wiki/index.php/Plugin:RRDCacheD
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/collectd/Config.in   | 9 +++++++++
->  package/collectd/collectd.mk | 3 ++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 277f0043e1..c2de0447c0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1094,7 +1094,6 @@ F:	package/php-amqp/
+ F:	package/python-cherrypy/
+ F:	package/sane-backends/
+ F:	package/ucl/
+-F:	package/upx/
+ F:	package/zxing-cpp/
+ 
+ N:	Frank Vanbever <frank.vanbever@essensium.com>
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
