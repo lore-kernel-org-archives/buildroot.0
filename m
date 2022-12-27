@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D45CFC4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A6E2C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 668AE408AC;
-	Tue, 27 Dec 2022 20:48:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 668AE408AC
+	by smtp1.osuosl.org (Postfix) with ESMTP id F40C48141D;
+	Tue, 27 Dec 2022 20:48:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F40C48141D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FBybA15ztDsC; Tue, 27 Dec 2022 20:48:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0308B8141A;
+	Tue, 27 Dec 2022 20:48:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0308B8141A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F7611BF37A
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:48:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1DC604090E
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:48:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DC604090E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tx15PHuJXRji; Tue, 27 Dec 2022 20:48:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52E0B40891;
-	Tue, 27 Dec 2022 20:48:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52E0B40891
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BEB581BF37A
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:48:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A57A140260
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:48:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A57A140260
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yVU9AjDkW4GU for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 20:48:28 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6-6fs5yDQbnt for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 20:48:47 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FA174018F
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6FA174018F
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00B8740891
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 00B8740891
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:48:46 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A9C9460007;
- Tue, 27 Dec 2022 20:48:25 +0000 (UTC)
-Date: Tue, 27 Dec 2022 21:48:24 +0100
-To: Tan En De <ende.tan@starfivetech.com>
-Message-ID: <20221227214824.5068674c@windsurf>
-In-Reply-To: <20221224044616.3909215-1-ende.tan@starfivetech.com>
-References: <20221224044616.3909215-1-ende.tan@starfivetech.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 90618240009;
+ Tue, 27 Dec 2022 20:48:44 +0000 (UTC)
+Date: Tue, 27 Dec 2022 21:48:43 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221227214843.1d7b5864@windsurf>
+In-Reply-To: <20221224033452.3079697-1-james.hilliard1@gmail.com>
+References: <20221224033452.3079697-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672174106;
+ d=bootlin.com; s=gm1; t=1672174124;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=yM0/dP0NIQrZnBGkVRPEFhfYIn/0SqDHFA/YrsUvwbc=;
- b=dihq/N2oo29dwOcww6He1Esn405mCuC21gqjM07UfAIvHp1OhdwoxjREvcGxxfx3jdgnZn
- AyekOm/qTKnCQT1DHZ1euh+tUHWEEGkIrzjoAKbGX4bSrfJDXH4cPMm1LNOhWrzXKP7Plw
- 7G55OLLb0xOE1tCOWFIZVAKCYr1dzdz2lmdGDKTqdaQQcsBLe8fFMiryRSa4lDH44RQQDo
- reA5EPMd77nVLZ6+ewZdoSUzKE0Ppww1tv8f8RXujlGM+4f9fOtQTlWwNCBeIEi861aQYZ
- 5hx2OP0yMKjthITSv2mrldG4BNvS5ngspmPJUNUJzjA8mmrUW+PTnscEZJ/RRA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=aQzLTAcXjPxSpX6r3CYaz79iGMqTEkHUa/lCm9rjdkc=;
+ b=iWJMbbmlDwvlAtYo1LQ5++RHq3K30raJImWF62zCxg2KeApEkpsJFRRKDkLHIRSWF+bdue
+ +QY9MLIj65M0PsqdjXaYlvqQ79mEw7jrF2Gk7wylUEFcLBnNR38wwHNYfgmO71fHPm1QxN
+ vYSeKs4TkPSjlgek96hYbwMgSMXnx7A6Xq3byiIQVVQ9wuYUx2kVJz5H/rMXXYv8QWqFyg
+ aIIW8MojzQRoECgB4OOz+Vb3/aVveMAUJiWvnVWYIV1aVim/pANT687qAYW20pzRdMQ4uC
+ XAf4m1a0c7rclRcGNTXOTaj9Kq7h8/sCIBidaRCe3b8kBTLFUybYuxvibIushw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dihq/N2o
-Subject: Re: [Buildroot] [1/1] package/libkcapi: Fix symver build error on
- non-ELF platforms
+ header.s=gm1 header.b=iWJMbbml
+Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump to version 1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,37 +77,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Stephan Mueller <smueller@chronox.de>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 24 Dec 2022 12:46:16 +0800
-Tan En De <ende.tan@starfivetech.com> wrote:
+On Fri, 23 Dec 2022 20:34:52 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> The following error is observed on Microblaze [1] build:
-> ```
-> error: symver is only supported on ELF platforms
-> ```
-> due to using __attribute__((symver)) on non-ELF platform.
-> So, revert to using .symver in such case.
-> 
-> [1]: http://autobuild.buildroot.net/results/447/4470efb5a078c0e368f6bd4f5ec455eea5eeebb5/build-end.log
-> 
-> Upstream status: commit f630ed1f807e26de04b3a5dfd7f1b39d1c5cb642
-> https://github.com/smuellerDD/libkcapi/pull/147
-> 
-> Signed-off-by: Tan En De <ende.tan@starfivetech.com>
-> Signed-off-by: Stephan Mueller <smueller@chronox.de>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  ...ver-build-error-on-non-ELF-platforms.patch | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 package/libkcapi/0003-Fix-symver-build-error-on-non-ELF-platforms.patch
+>  package/meson/meson.hash | 4 ++--
+>  package/meson/meson.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks. This macro AC_CHECK_ATTRIBUTE_SYMVER is
-actually very good, and I believe a few other packages in Buildroot
-could potentially benefit from it.
+Applied to master, thanks.
 
 Thomas
 -- 
