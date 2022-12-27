@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87B1C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 824D2C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:28:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 936F383963;
-	Mon, 20 Feb 2023 23:27:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 936F383963
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31ED481767;
+	Mon, 20 Feb 2023 23:28:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31ED481767
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f0gGGOsCYTce; Mon, 20 Feb 2023 23:27:48 +0000 (UTC)
+	with ESMTP id G-p_PhvjCFcL; Mon, 20 Feb 2023 23:28:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8D5583926;
-	Mon, 20 Feb 2023 23:27:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8D5583926
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0EB421BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CE2481366;
+	Mon, 20 Feb 2023 23:28:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CE2481366
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E31981BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD06F41753
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD06F41753
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3420661072
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3420661072
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sDicv_YEPooq for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AQhc-5QXfNaa for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EEB1A4174C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEB1A4174C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BF68612B4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BF68612B4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBCAE828C8; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0E78D8648F; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Jan 2023 22:03:33 +0100
+Date: Tue, 27 Dec 2022 21:04:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 94b66fb49cd57d0863245fbe0a3dc0833e76aad0
-X-Git-Newrev: e7797603d260b498c864d089b107d01679edf0a6
+X-Git-Oldrev: 1df9d42bdd8cc2e594d6337ee62c3f31499baf80
+X-Git-Newrev: 95a16926ed78c905d38f6eeb8bc46c9d3d3bb5a0
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205236.EBCAE828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/proftpd: sftpd does
- not build with libressl
+Message-Id: <20230220205216.0E78D8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi: bump version to
+ 19.5-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,54 +56,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7797603d260b498c864d089b107d01679edf0a6
+commit: https://git.buildroot.net/buildroot/commit/?id=95a16926ed78c905d38f6eeb8bc46c9d3d3bb5a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-sftp doesn't build with libressl >= 3.5.0 resulting in the following
-build failure since commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+Removed two upstream patches included in this version.
 
-mac.c: In function 'init_mac':
-mac.c:189:3: warning: implicit declaration of function 'HMAC_CTX_init'; did you mean 'HMAC_CTX_new'? [-Wimplicit-function-declaration]
-  189 |   HMAC_CTX_init(hmac_ctx);
-      |   ^~~~~~~~~~~~~
-      |   HMAC_CTX_new
-mac.c: In function 'set_mac_key':
-mac.c:435:14: error: storage size of 'ctx' isn't known
-  435 |   EVP_MD_CTX ctx;
-      |              ^~~
-
-So force use of openssl for sftpd, as no feedback was received on
-https://github.com/proftpd/proftpd/pull/1481
-
-Fixes:
- - http://autobuild.buildroot.org/results/a16ccd7cc78eb63de06a6d738fccc6b947da13e7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/proftpd/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../kodi-jsonschemabuilder.mk                      |  2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk   |  2 +-
+ ...t-as-char-as-formatting-of-non-void-point.patch | 54 ----------------------
+ ...1-cast-as-char-as-formatting-of-non-void-.patch | 33 -------------
+ package/kodi/kodi.hash                             |  2 +-
+ package/kodi/kodi.mk                               |  2 +-
+ 6 files changed, 4 insertions(+), 91 deletions(-)
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index 83094028a0..aed1958b8d 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -29,7 +29,8 @@ config BR2_PACKAGE_PROFTPD_MOD_REDIS
- config BR2_PACKAGE_PROFTPD_MOD_SFTP
- 	bool "mod_sftp support"
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160
- 	help
- 	  Compile ProFTPD with mod_sftp support
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 8cc2297bdb..a13fb91afe 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 19.4-Matrix
++KODI_JSONSCHEMABUILDER_VERSION = 19.5-Matrix
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 4733399edc..9432e4bbd6 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 19.4-Matrix
++KODI_TEXTUREPACKER_VERSION = 19.5-Matrix
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch b/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
+deleted file mode 100644
+index af68de220c..0000000000
+--- a/package/kodi/0005-GLUtils-cast-as-char-as-formatting-of-non-void-point.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 44b30c116682968bacf8aec566fc9c193026ecc9 Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Wed, 6 Jul 2022 22:48:35 +1000
+-Subject: [PATCH] GLUtils: cast as char as formatting of non-void pointers
+- is disallowed
+-
+-Downloaded from upstream commit:
+-https://github.com/xbmc/xbmc/commit/44b30c116682968bacf8aec566fc9c193026ecc9
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- xbmc/utils/GLUtils.cpp | 10 +++++-----
+- 1 file changed, 5 insertions(+), 5 deletions(-)
+-
+-diff --git a/xbmc/utils/GLUtils.cpp b/xbmc/utils/GLUtils.cpp
+-index 1ef804709f..c36dcf6a20 100644
+---- a/xbmc/utils/GLUtils.cpp
+-+++ b/xbmc/utils/GLUtils.cpp
+-@@ -148,27 +148,27 @@ void _VerifyGLState(const char* szfile, const char* szfunction, int lineno)
+- void LogGraphicsInfo()
+- {
+- #if defined(HAS_GL) || defined(HAS_GLES)
+--  const GLubyte *s;
+-+  const char* s;
+- 
+--  s = glGetString(GL_VENDOR);
+-+  s = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+-   if (s)
+-     CLog::Log(LOGINFO, "GL_VENDOR = %s", s);
+-   else
+-     CLog::Log(LOGINFO, "GL_VENDOR = NULL");
+- 
+--  s = glGetString(GL_RENDERER);
+-+  s = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+-   if (s)
+-     CLog::Log(LOGINFO, "GL_RENDERER = %s", s);
+-   else
+-     CLog::Log(LOGINFO, "GL_RENDERER = NULL");
+- 
+--  s = glGetString(GL_VERSION);
+-+  s = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+-   if (s)
+-     CLog::Log(LOGINFO, "GL_VERSION = %s", s);
+-   else
+-     CLog::Log(LOGINFO, "GL_VERSION = NULL");
+- 
+--  s = glGetString(GL_SHADING_LANGUAGE_VERSION);
+-+  s = reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION));
+-   if (s)
+-     CLog::Log(LOGINFO, "GL_SHADING_LANGUAGE_VERSION = %s", s);
+-   else
+--- 
+-2.30.2
+-
+diff --git a/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch b/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch
+deleted file mode 100644
+index 41dc3356bd..0000000000
+--- a/package/kodi/0006-WinSystemX11-cast-as-char-as-formatting-of-non-void-.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 651c82853fe69dc5aa3e6a50f2eb2f752caafba0 Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Mon, 11 Jul 2022 09:39:02 +0000
+-Subject: [PATCH] WinSystemX11: cast as char as formatting of non-void
+- pointers is disallowed
+-
+-Downloaded from upstream commit:
+-https://github.com/xbmc/xbmc/commit/651c82853fe69dc5aa3e6a50f2eb2f752caafba0
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- xbmc/windowing/X11/WinSystemX11.cpp | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/xbmc/windowing/X11/WinSystemX11.cpp b/xbmc/windowing/X11/WinSystemX11.cpp
+-index 8a18288fd8..033c0f77bf 100644
+---- a/xbmc/windowing/X11/WinSystemX11.cpp
+-+++ b/xbmc/windowing/X11/WinSystemX11.cpp
+-@@ -1038,7 +1038,10 @@ bool CWinSystemX11::HasWindowManager()
+- 
+-   if(status == Success && items_read)
+-   {
+--    CLog::Log(LOGDEBUG,"Window Manager Name: %s", data);
+-+    const char* s;
+-+
+-+    s = reinterpret_cast<const char*>(data);
+-+    CLog::Log(LOGDEBUG, "Window Manager Name: {}", s);
+-   }
+-   else
+-     CLog::Log(LOGDEBUG,"Window Manager Name: ");
+--- 
+-2.30.2
+-
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index a17e0fb29f..e0f548879e 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  cc026f59fd6e37ae90f3449df50810f1cefa37da9444e1188302d910518710da  kodi-19.4-Matrix.tar.gz
++sha256  56e0074f27f08496b2a21af5704a15378a2f0979ae3e9fa9a50a2630d0313d19  kodi-19.5-Matrix.tar.gz
+ sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+ sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+ sha256  a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index c41c515d10..dbe6c1e8f6 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION_MAJOR = 19.4
++KODI_VERSION_MAJOR = 19.5
+ KODI_VERSION_NAME = Matrix
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
