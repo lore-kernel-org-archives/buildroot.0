@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AC0CC4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 21:27:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0AEAC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 21:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 808DB40260;
-	Tue, 27 Dec 2022 21:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 808DB40260
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AF8440948;
+	Tue, 27 Dec 2022 21:32:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF8440948
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D25ZKayYL2E2; Tue, 27 Dec 2022 21:27:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gAcyLqRgURt9; Tue, 27 Dec 2022 21:32:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADF1140386;
-	Tue, 27 Dec 2022 21:27:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADF1140386
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 20FCB1BF847
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:27:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1342440946;
+	Tue, 27 Dec 2022 21:32:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1342440946
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 37D1F1BF847
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:32:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00D72402B1
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00D72402B1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2107D60BB0
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:32:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2107D60BB0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eUoeVr4xMWQB for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 21:27:16 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE15B40260
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AE15B40260
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 21:27:15 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 361D81BF203;
- Tue, 27 Dec 2022 21:27:12 +0000 (UTC)
-Date: Tue, 27 Dec 2022 22:27:11 +0100
-To: Gleb Mazovetskiy <glex.spb@gmail.com>
-Message-ID: <20221227222711.234afc0e@windsurf>
-In-Reply-To: <20221223174922.12131-1-glex.spb@gmail.com>
-References: <20221223174922.12131-1-glex.spb@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672176432;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WMxZP0cXa4GDbM8ygRlik3nf5EWNbuHZCfOcqS5K3ac=;
- b=C8StHXjbcJZkb/0huZbW0U6LVLxG70hTbf5ma04Lm3ZGN7yBBkHjNQC2plbeTDmdAVq44q
- fDLzW+K31Qtx9g9hekEqjzfaQA2D7zFL93fMbKwi8wgppaUJvBI746eeyNzmkFnAa4uKbr
- Ag0mud3zxipEAjkOa5ubbGerPB1nwpvbbWN47WhXr/XPFAUkKmTFVxoTEWg7DJAuwyiewW
- /R05bB5X5wmQPxbMx/9AootrXGBZon4Ud6pRBcCSR1g7nNdk6yNAKkv4wLn43ro6TSibc6
- tGi1vPazvKBc9a9BVrO3F9tcs+7Whth1OzVQltoxm/4lgASvpTaSHL4jx+jkmA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=C8StHXjb
-Subject: Re: [Buildroot] [PATCH] package/gcc: fix gcc12 with uClibc
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4KSpo0hHF7UD for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 21:32:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43F9360B2C
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 21:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43F9360B2C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 32A6686EE1; Tue, 27 Dec 2022 21:32:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Dec 2022 22:32:21 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1567516d8984a4bddfbee30ee69c771cf3f8e224
+X-Git-Newrev: 85c5af46ad6c18841576c0f7abe241a617a44cb7
+X-Patchwork-Hint: ignore
+Message-Id: <20221227213230.32A6686EE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ucl: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,38 +57,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 23 Dec 2022 17:49:21 +0000
-Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=85c5af46ad6c18841576c0f7abe241a617a44cb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> GCC 12 produces broken binaries when used with uClibc.
-> E.g. `gdb` crashes on startup.
-> 
-> GCC HEAD fixes this in:
-> https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;h=ee4af2ed0b7322884ec4ff537564683c3749b813
-> 
-> Adds the commit as patch for GCC 12.
-> 
-> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-> ---
->  package/gcc/12.2.0/0002-fix-condvar.patch | 80 +++++++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 package/gcc/12.2.0/0002-fix-condvar.patch
+ucl is directly vendored in upx since version 3.99 and
+https://github.com/upx/upx/commit/61e1366122f8d1b9e2434a8103e7af00a35ea902
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ucl/ucl.hash |  3 ---
+ package/ucl/ucl.mk   | 15 ---------------
+ 2 files changed, 18 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ucl/ucl.hash b/package/ucl/ucl.hash
+deleted file mode 100644
+index 0252f69297..0000000000
+--- a/package/ucl/ucl.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350348  ucl-1.03.tar.gz
+-sha256  70439f6e2b47057a408d2390ed6663b9875f5a08066a06a060a357ef1df89a8c  COPYING
+diff --git a/package/ucl/ucl.mk b/package/ucl/ucl.mk
+deleted file mode 100644
+index aac068ef60..0000000000
+--- a/package/ucl/ucl.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# ucl
+-#
+-################################################################################
+-
+-UCL_VERSION = 1.03
+-UCL_SITE = http://www.oberhumer.com/opensource/ucl/download
+-UCL_LICENSE = GPL-2.0+
+-UCL_LICENSE_FILES = COPYING
+-
+-# Fix ACC conformance test failure for host gcc 6.x
+-HOST_UCL_CONF_ENV += CPPFLAGS="$(HOST_CPPFLAGS) -std=iso9899:1990"
+-
+-$(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
