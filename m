@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB0FFC4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 21:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AC0CC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 21:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E0504031E;
-	Tue, 27 Dec 2022 21:27:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E0504031E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 808DB40260;
+	Tue, 27 Dec 2022 21:27:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 808DB40260
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RD4zmlUb3uzQ; Tue, 27 Dec 2022 21:27:13 +0000 (UTC)
+	with ESMTP id D25ZKayYL2E2; Tue, 27 Dec 2022 21:27:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67F5F40260;
-	Tue, 27 Dec 2022 21:27:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67F5F40260
+	by smtp2.osuosl.org (Postfix) with ESMTP id ADF1140386;
+	Tue, 27 Dec 2022 21:27:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADF1140386
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0BB491BF847
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:27:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 20FCB1BF847
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBB2440260
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBB2440260
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00D72402B1
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 21:27:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00D72402B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MGT2QVbQEfgG for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 21:27:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84ED44018F
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 21:27:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84ED44018F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CBA386ECF; Tue, 27 Dec 2022 21:27:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 27 Dec 2022 22:22:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a8807ddbe269ef9aeee7b72f6d0a64719f8e6782
-X-Git-Newrev: 327fab5b9d45891233ff647d5b352cc94b3c27ac
-X-Patchwork-Hint: ignore
-Message-Id: <20221227212709.6CBA386ECF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: fix gcc12 with uClibc
+ with ESMTP id eUoeVr4xMWQB for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 21:27:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE15B40260
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AE15B40260
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 21:27:15 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 361D81BF203;
+ Tue, 27 Dec 2022 21:27:12 +0000 (UTC)
+Date: Tue, 27 Dec 2022 22:27:11 +0100
+To: Gleb Mazovetskiy <glex.spb@gmail.com>
+Message-ID: <20221227222711.234afc0e@windsurf>
+In-Reply-To: <20221223174922.12131-1-glex.spb@gmail.com>
+References: <20221223174922.12131-1-glex.spb@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1672176432;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=WMxZP0cXa4GDbM8ygRlik3nf5EWNbuHZCfOcqS5K3ac=;
+ b=C8StHXjbcJZkb/0huZbW0U6LVLxG70hTbf5ma04Lm3ZGN7yBBkHjNQC2plbeTDmdAVq44q
+ fDLzW+K31Qtx9g9hekEqjzfaQA2D7zFL93fMbKwi8wgppaUJvBI746eeyNzmkFnAa4uKbr
+ Ag0mud3zxipEAjkOa5ubbGerPB1nwpvbbWN47WhXr/XPFAUkKmTFVxoTEWg7DJAuwyiewW
+ /R05bB5X5wmQPxbMx/9AootrXGBZon4Ud6pRBcCSR1g7nNdk6yNAKkv4wLn43ro6TSibc6
+ tGi1vPazvKBc9a9BVrO3F9tcs+7Whth1OzVQltoxm/4lgASvpTaSHL4jx+jkmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=C8StHXjb
+Subject: Re: [Buildroot] [PATCH] package/gcc: fix gcc12 with uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,117 +77,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=327fab5b9d45891233ff647d5b352cc94b3c27ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 23 Dec 2022 17:49:21 +0000
+Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
 
-GCC 12 produces broken binaries when used with uClibc.
-E.g. `gdb` crashes on startup.
+> GCC 12 produces broken binaries when used with uClibc.
+> E.g. `gdb` crashes on startup.
+> 
+> GCC HEAD fixes this in:
+> https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;h=ee4af2ed0b7322884ec4ff537564683c3749b813
+> 
+> Adds the commit as patch for GCC 12.
+> 
+> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+> ---
+>  package/gcc/12.2.0/0002-fix-condvar.patch | 80 +++++++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 package/gcc/12.2.0/0002-fix-condvar.patch
 
-GCC HEAD fixes this in:
-https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;h=ee4af2ed0b7322884ec4ff537564683c3749b813
+Applied to master, thanks.
 
-Adds the commit as patch for GCC 12.
-
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc/12.2.0/0002-fix-condvar.patch | 82 +++++++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
-
-diff --git a/package/gcc/12.2.0/0002-fix-condvar.patch b/package/gcc/12.2.0/0002-fix-condvar.patch
-new file mode 100644
-index 0000000000..5044942e9f
---- /dev/null
-+++ b/package/gcc/12.2.0/0002-fix-condvar.patch
-@@ -0,0 +1,82 @@
-+From ee4af2ed0b7322884ec4ff537564683c3749b813 Mon Sep 17 00:00:00 2001
-+From: Jonathan Wakely <jwakely@redhat.com>
-+Date: Thu, 22 Dec 2022 09:56:47 +0000
-+Subject: [PATCH] libstdc++: Avoid recursion in __nothrow_wait_cv::wait
-+ [PR105730]
-+
-+The commit r12-5877-g9e18a25331fa25 removed the incorrect
-+noexcept-specifier from std::condition_variable::wait and gave the new
-+symbol version @@GLIBCXX_3.4.30. It also redefined the original symbol
-+std::condition_variable::wait(unique_lock<mutex>&)@GLIBCXX_3.4.11 as an
-+alias for a new symbol, __gnu_cxx::__nothrow_wait_cv::wait, which still
-+has the incorrect noexcept guarantee. That __nothrow_wait_cv::wait is
-+just a wrapper around the real condition_variable::wait which adds
-+noexcept and so terminates on a __forced_unwind exception.
-+
-+This doesn't work on uclibc, possibly due to a dynamic linker bug. When
-+__nothrow_wait_cv::wait calls the condition_variable::wait function it
-+binds to the alias symbol, which means it just calls itself recursively
-+until the stack overflows.
-+
-+This change avoids the possibility of a recursive call by changing the
-+__nothrow_wait_cv::wait function so that instead of calling
-+condition_variable::wait it re-implements it. This requires accessing
-+the private _M_cond member of condition_variable, so we need to use the
-+trick of instantiating a template with the member-pointer of the private
-+member.
-+
-+libstdc++-v3/ChangeLog:
-+
-+	PR libstdc++/105730
-+	* src/c++11/compatibility-condvar.cc (__nothrow_wait_cv::wait):
-+	Access private data member of base class and call its wait
-+	member.
-+
-+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-+---
-+ .../src/c++11/compatibility-condvar.cc        | 22 ++++++++++++++++++-
-+ 1 file changed, 21 insertions(+), 1 deletion(-)
-+
-+diff --git a/libstdc++-v3/src/c++11/compatibility-condvar.cc b/libstdc++-v3/src/c++11/compatibility-condvar.cc
-+index e3a8b8403ca..3cef3bc0714 100644
-+--- a/libstdc++-v3/src/c++11/compatibility-condvar.cc
-++++ b/libstdc++-v3/src/c++11/compatibility-condvar.cc
-+@@ -67,6 +67,24 @@ _GLIBCXX_END_NAMESPACE_VERSION
-+     && defined(_GLIBCXX_HAVE_SYMVER_SYMBOL_RENAMING_RUNTIME_SUPPORT)
-+ namespace __gnu_cxx _GLIBCXX_VISIBILITY(default)
-+ {
-++namespace
-++{
-++  // Pointer-to-member for private std::condition_variable::_M_cond member.
-++  std::__condvar std::condition_variable::* __base_member;
-++
-++  template<std::__condvar std::condition_variable::*X>
-++    struct cracker
-++    { static std::__condvar std::condition_variable::* value; };
-++
-++  // Initializer for this static member also initializes __base_member.
-++  template<std::__condvar std::condition_variable::*X>
-++    std::__condvar std::condition_variable::*
-++      cracker<X>::value = __base_member = X;
-++
-++  // Explicit instantiation is allowed to access the private member.
-++  template class cracker<&std::condition_variable::_M_cond>;
-++}
-++
-+ struct __nothrow_wait_cv : std::condition_variable
-+ {
-+   void wait(std::unique_lock<std::mutex>&) noexcept;
-+@@ -76,7 +94,9 @@ __attribute__((used))
-+ void
-+ __nothrow_wait_cv::wait(std::unique_lock<std::mutex>& lock) noexcept
-+ {
-+-  this->condition_variable::wait(lock);
-++  // In theory this could be simply this->std::condition_variable::wait(lock)
-++  // but with uclibc that binds to the @GLIBCXX_3.4.11 symbol, see PR 105730.
-++  (this->*__base_member).wait(*lock.mutex());
-+ }
-+ } // namespace __gnu_cxx
-+ 
-+-- 
-+2.31.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
