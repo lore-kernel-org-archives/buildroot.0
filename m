@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CA80C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0095C46467
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D71240905;
-	Tue, 27 Dec 2022 20:50:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D71240905
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5BED840390;
+	Tue, 27 Dec 2022 20:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BED840390
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x8BMqQUt3l-R; Tue, 27 Dec 2022 20:50:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id acZ8A6D4vGjZ; Tue, 27 Dec 2022 20:52:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 286DD408F3;
-	Tue, 27 Dec 2022 20:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 286DD408F3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F0C940260;
+	Tue, 27 Dec 2022 20:52:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F0C940260
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4398A1BF37A
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:50:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CEC361BF37A
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:52:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2841560B35
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:50:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2841560B35
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D3E760C23
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:52:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D3E760C23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KuSOQSsoV-Py for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 20:50:30 +0000 (UTC)
+ with ESMTP id eUrYwRybMkBw for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 20:52:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB0D560B8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9994F600D4
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DB0D560B8C
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:50:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9994F600D4
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:52:18 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 017CB100005;
- Tue, 27 Dec 2022 20:50:27 +0000 (UTC)
-Date: Tue, 27 Dec 2022 21:50:27 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id DF49A100003;
+ Tue, 27 Dec 2022 20:52:16 +0000 (UTC)
+Date: Tue, 27 Dec 2022 21:52:16 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221227215027.2c9874c0@windsurf>
-In-Reply-To: <20221223220100.58811-1-fontaine.fabrice@gmail.com>
-References: <20221223220100.58811-1-fontaine.fabrice@gmail.com>
+Message-ID: <20221227215216.67475c1f@windsurf>
+In-Reply-To: <20221223215607.12924-1-fontaine.fabrice@gmail.com>
+References: <20221223215607.12924-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672174228;
+ d=bootlin.com; s=gm1; t=1672174337;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=tYdDZX/3MDbG15sfVRonlQkwATZu1Ueeu2zMUEF2QOY=;
- b=C7NTgmw/gsyr1rPxKArHUjFSKxa5JfgDUiD12l92SElosqz7o1dYHbHKSVleykBMdJiglu
- CAJ3NyfBJk6wCXNrY/SL41+UzFkJm26lcPmtejPLu14eSE9rZYCxiuIcSSNglYzUCtibwo
- IVa57D3rkkognlbfkRIcA5tM/SbOBGoWdF+rtYqirZGxBfLQCFc1WLZOYgBlk80dL67zSc
- 7mF02SHE4CF1Ky6n3jlhOE6vWfjfsiWMBLWWZDABsY1A6QYIMJve9VUNhiwjeh94KSGC2W
- xNmcVjjZ+BtjNEjfeuloW4lIbr3Mu0q7M7DV+tPrE5F/DGKOfYLa9DNkouRMaQ==
+ bh=09BbFTCkE5beSJUfAUkbDmS5IeC+GU+ruWWFQoy/GFo=;
+ b=dEKmRAS6V4/pdrlTLBKdRU0zzDBLYvAAPSvcHssE9FuWY3WygYDSGza3Ymq0ytR47N/ovI
+ IPrsBESXlFminFBuAPUbX5bbwtVjgHYdBJiZhWLVIUJgjpWhn4VLbFz5efmlSl16BxR1xb
+ QBpg197/JSnm3IrLx0pUm0ArNM+06R1u1nirsVc3B8WTkla7s5ucDO1vaJv+WeITfqMw5A
+ MNIZQUOLVNNb/CqIwOn1NWXpYbefXaTj4vgEPQ39l0Lwwv5ntK3i/Z+ZHTzmoZGkwuuRPU
+ 7ONooVHoM9m7t9jb53jq8wuTLhiwKFwoIMz3t+drCeoytuk77jHiTNxMk5VH5Q==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=C7NTgmw/
-Subject: Re: [Buildroot] [PATCH 1/1] package/orc: bump to version 0.4.33
+ header.s=gm1 header.b=dEKmRAS6
+Subject: Re: [Buildroot] [PATCH 1/1] package/jitterentropy-library: bump to
+ version 3.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,26 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 23 Dec 2022 23:01:00 +0100
+On Fri, 23 Dec 2022 22:56:07 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Drop patch (already in version)
+> - Drop patch (already in version)
+> - Update hash of LICENSE file (year updated with
+>   https://github.com/smuellerDD/jitterentropy-library/commit/2e5019cfe63038faaa405ce53715effe4ea580e4)
 > 
-> https://gitlab.freedesktop.org/gstreamer/orc/-/blob/0.4.33/RELEASE
+> https://github.com/smuellerDD/jitterentropy-library/blob/v3.4.1/CHANGES.md
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...powerpc.c-fix-build-with-kernel-4.11.patch | 70 -------------------
->  package/orc/orc.hash                          |  4 +-
->  package/orc/orc.mk                            |  2 +-
->  3 files changed, 3 insertions(+), 73 deletions(-)
->  delete mode 100644 package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
+>  ...-Makefile-add-ENABLE_STACK_PROTECTOR.patch | 52 -------------------
+>  .../jitterentropy-library.hash                |  4 +-
+>  .../jitterentropy-library.mk                  |  2 +-
+>  3 files changed, 3 insertions(+), 55 deletions(-)
+>  delete mode 100644 package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch
 
 Applied to master, thanks.
 
