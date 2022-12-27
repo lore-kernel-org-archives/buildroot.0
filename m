@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4702DC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:29:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BEEAC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:29:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC32583927;
-	Mon, 20 Feb 2023 23:29:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC32583927
+	by smtp1.osuosl.org (Postfix) with ESMTP id B933B83E10;
+	Mon, 20 Feb 2023 23:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B933B83E10
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nltdu3sXhgrG; Mon, 20 Feb 2023 23:29:29 +0000 (UTC)
+	with ESMTP id DEG6hp5H5rQU; Mon, 20 Feb 2023 23:29:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC86783139;
-	Mon, 20 Feb 2023 23:29:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC86783139
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6FB951BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9318838F0;
+	Mon, 20 Feb 2023 23:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9318838F0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BF4F1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 611CB41757
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 611CB41757
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FE1F61791
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FE1F61791
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yqLU_OGxcBLf for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vfaYQdCTiq0E for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 710D841750
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 710D841750
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E1456137C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E1456137C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6192F86495; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 795978648F; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 20 Jan 2023 08:52:51 +0100
+Date: Tue, 27 Dec 2022 21:52:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9d18ef6a0cbe81c01118f12c72eb99c09fce0994
-X-Git-Newrev: a49f00010da29e904c07debea9fd1ab54f2f6c50
+X-Git-Oldrev: 92a4f080b2721cc84248ebc98d41229469787688
+X-Git-Newrev: a8807ddbe269ef9aeee7b72f6d0a64719f8e6782
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205237.6192F86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/flashrom: bump to
- version 1.2.1
+Message-Id: <20230220205216.795978648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/jitterentropy-library:
+ bump to version 3.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,152 +56,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a49f00010da29e904c07debea9fd1ab54f2f6c50
+commit: https://git.buildroot.net/buildroot/commit/?id=a8807ddbe269ef9aeee7b72f6d0a64719f8e6782
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop patch (already in version)
+- Drop patch (already in version)
+- Update hash of LICENSE file (year updated with
+  https://github.com/smuellerDD/jitterentropy-library/commit/2e5019cfe63038faaa405ce53715effe4ea580e4)
 
-https://github.com/flashrom/flashrom/compare/v1.2...v1.2.1
+https://github.com/smuellerDD/jitterentropy-library/blob/v3.4.1/CHANGES.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...01-Makefile-Fix-building-on-AArch64-NixOS.patch | 95 ----------------------
- package/flashrom/flashrom.hash                     |  4 +-
- package/flashrom/flashrom.mk                       |  2 +-
- 3 files changed, 3 insertions(+), 98 deletions(-)
+ .../0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch | 52 ----------------------
+ .../jitterentropy-library.hash                     |  4 +-
+ .../jitterentropy-library/jitterentropy-library.mk |  2 +-
+ 3 files changed, 3 insertions(+), 55 deletions(-)
 
-diff --git a/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch b/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
+diff --git a/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch b/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch
 deleted file mode 100644
-index f835172e61..0000000000
---- a/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
+index c4388663b0..0000000000
+--- a/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch
 +++ /dev/null
-@@ -1,95 +0,0 @@
--From da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d Mon Sep 17 00:00:00 2001
--From: Pyry Kontio <pyry.kontio@drasa.eu>
--Date: Mon, 6 Jul 2020 12:57:35 +0900
--Subject: [PATCH] Makefile: Fix building on AArch64 NixOS
+@@ -1,52 +0,0 @@
+-From 272ee47892563e849f6b1bf59b0173f8aa33b631 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 19 Dec 2021 11:36:13 +0100
+-Subject: [PATCH] Makefile: add ENABLE_STACK_PROTECTOR
 -
--The parsing of the output of archtest.c produced an unexpected
--value on AArch64 NixOS. For example, the make variable ARCH was set to:
+-Add ENABLE_STACK_PROTECTOR as build on embedded toolchains without
+-stack-protector is again broken since
+-https://github.com/smuellerDD/jitterentropy-library/commit/5b3cb7f35e41ba2f34a75d004cf095c965a1a0c4:
 -
--```
--bit outside of fd_set selected
--arm
--```
+-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: src/jitterentropy-base.o: in function `jent_fips_enabled':
+-jitterentropy-base.c:(.text+0x131): undefined reference to `__stack_chk_fail_local'
 -
--This made the arch and OS checks fail.
+-Fixes:
+- - http://autobuild.buildroot.org/results/8dee462d16d934dd173d58f17933c6911e4336bf
 -
--This commit simplifies the parsing, making it more robust.
--
--The C files archtest.c, endiantest.c and os.h used to set the
--TARGET_OS, ARCH and ENDIAN variables, respectively, output
--the result of the test as the final line, so just extracting
--the final line and removing double quoting is enough.
--
--This commit also fixes a bug with debug_shell lacking escaping
--single quotes, which prevented using the single quote in the
--debug_shell calls. It used to work by accident before this fix;
--the line in the call happened to contain a balanced pair of double
--quotes and lacked other characters that needed escaping, which
--didn't break the debug_shell, but this was accidental and very
--brittle.
--
--Signed-off-by: Pyry Kontio <pyry.kontio@drasa.eu>
--Change-Id: Iaa4477a71e758cf9ecad2c22f3b77bc6508a3510
--Reviewed-on: https://review.coreboot.org/c/flashrom/+/43140
--Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
--Reviewed-by: Angel Pons <th3fanbus@gmail.com>
--
--[Retrieved from:
--https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Stephan Mueller <smueller@chronox.de>
+-[Retrieved from:
+-https://github.com/smuellerDD/jitterentropy-library/commit/272ee47892563e849f6b1bf59b0173f8aa33b631]
 ----
-- Makefile | 16 ++++++++++------
-- 1 file changed, 10 insertions(+), 6 deletions(-)
+- Makefile | 11 +++++++----
+- 1 file changed, 7 insertions(+), 4 deletions(-)
 -
 -diff --git a/Makefile b/Makefile
--index f3f7717e2..e475cbdbd 100644
+-index dfb96a8..c999ef5 100644
 ---- a/Makefile
 -+++ b/Makefile
--@@ -83,7 +83,8 @@ dummy_for_make_3_80:=$(shell printf "Build started on %s\n\n" "$$(date)" >$(BUIL
+-@@ -2,6 +2,7 @@
 - 
-- # Provide an easy way to execute a command, print its output to stdout and capture any error message on stderr
-- # in the build details file together with the original stdout output.
---debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(1) ; }' >&2;  { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
--+debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(subst ','\'',$(1)) ; }' >&2; \
--+    { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
+- CC ?= gcc
+- #Hardening
+-+ENABLE_STACK_PROTECTOR ?= 1
+- CFLAGS ?= -fwrapv --param ssp-buffer-size=4 -fvisibility=hidden -fPIE -Wcast-align -Wmissing-field-initializers -Wshadow -Wswitch-enum
+- CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0 -fwrapv -Wconversion
+- LDFLAGS +=-Wl,-z,relro,-z,now -lpthread
+-@@ -13,10 +14,12 @@ else
+-   GCC_GTEQ_490 := $(shell expr `$(CC) -dumpfullversion | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/'` \>= 40900)
+- endif
 - 
-- ###############################################################################
-- # General OS-specific settings.
--@@ -106,7 +107,8 @@ endif
-- # IMPORTANT: The following line must be placed before TARGET_OS is ever used
-- # (of course), but should come after any lines setting CC because the line
-- # below uses CC itself.
---override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
--+override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null \
--+    | tail -1 | cut -f 2 -d'"'))
+--ifeq "$(GCC_GTEQ_490)" "1"
+--  CFLAGS += -fstack-protector-strong
+--else
+--  CFLAGS += -fstack-protector-all
+-+ifeq "$(ENABLE_STACK_PROTECTOR)" "1"
+-+  ifeq "$(GCC_GTEQ_490)" "1"
+-+    CFLAGS += -fstack-protector-strong
+-+  else
+-+    CFLAGS += -fstack-protector-all
+-+  endif
+- endif
 - 
-- ifeq ($(TARGET_OS), Darwin)
-- override CPPFLAGS += -I/opt/local/include -I/usr/local/include
--@@ -490,8 +492,10 @@ endif
-- # IMPORTANT: The following line must be placed before ARCH is ever used
-- # (of course), but should come after any lines setting CC because the line
-- # below uses CC itself.
---override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
---override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null | grep -v '^\#'))
--+override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null \
--+    | tail -1 | cut -f 2 -d'"'))
--+override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null \
--+    | tail -1))
-- 
-- # Disable the internal programmer on unsupported architectures (everything but x86 and mipsel)
-- ifneq ($(ARCH)-little, $(filter $(ARCH),x86 mips)-$(ENDIAN))
--@@ -1299,12 +1303,12 @@ compiler: featuresavailable
-- 	@printf "Target arch is "
-- 	@# FreeBSD wc will output extraneous whitespace.
-- 	@echo $(ARCH)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
---		( echo "unknown. Aborting."; exit 1)
--+		( echo "unknown (\"$(ARCH)\"). Aborting."; exit 1)
-- 	@printf "%s\n" '$(ARCH)'
-- 	@printf "Target OS is "
-- 	@# FreeBSD wc will output extraneous whitespace.
-- 	@echo $(TARGET_OS)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
---		( echo "unknown. Aborting."; exit 1)
--+		( echo "unknown (\"$(TARGET_OS)\"). Aborting."; exit 1)
-- 	@printf "%s\n" '$(TARGET_OS)'
-- ifeq ($(TARGET_OS), libpayload)
-- 	@$(CC) --version 2>&1 | grep -q coreboot || \
-diff --git a/package/flashrom/flashrom.hash b/package/flashrom/flashrom.hash
-index 97df4fe9a4..2ab463d93a 100644
---- a/package/flashrom/flashrom.hash
-+++ b/package/flashrom/flashrom.hash
-@@ -1,4 +1,4 @@
- # Locally computed after checking pgp signature
--# https://download.flashrom.org/releases/flashrom-v1.2.tar.bz2.asc
--sha256  e1f8d95881f5a4365dfe58776ce821dfcee0f138f75d0f44f8a3cd032d9ea42b  flashrom-v1.2.tar.bz2
-+# https://download.flashrom.org/releases/flashrom-v1.2.1.tar.bz2.asc
-+sha256  89a7ff5beb08c89b8795bbd253a51b9453547a864c31793302296b56bbc56d65  flashrom-v1.2.1.tar.bz2
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 5554082bca..dd505987ed 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
+- # Change as necessary
+diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
+index 760befab53..c7833f1428 100644
+--- a/package/jitterentropy-library/jitterentropy-library.hash
++++ b/package/jitterentropy-library/jitterentropy-library.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  9fcc954763a1dd4afe614a1b360f53b600d3376bbcc4b19177f27abf191ebad5  jitterentropy-library-3.3.1.tar.xz
+-sha256  7e06574ff822594269083a796d06fa4e5e78c40efe5ca01a72d2a4662e8206df  LICENSE
++sha256  802f025f766c38abf663fd5a21482b8313b6d6e2c68c36a4ffd6bc105fe975ab  jitterentropy-library-3.4.1.tar.xz
++sha256  7a89069066f6c0b8767d3256e5ec5d765b2c7f3354a5a06fc8d5bd7b8103d8a3  LICENSE
+ sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  LICENSE.bsd
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE.gplv2
+diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
+index 4cdebf46a3..f405082d08 100644
+--- a/package/jitterentropy-library/jitterentropy-library.mk
++++ b/package/jitterentropy-library/jitterentropy-library.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FLASHROM_VERSION = 1.2
-+FLASHROM_VERSION = 1.2.1
- FLASHROM_SOURCE = flashrom-v$(FLASHROM_VERSION).tar.bz2
- FLASHROM_SITE = https://download.flashrom.org/releases
- FLASHROM_LICENSE = GPL-2.0+
+-JITTERENTROPY_LIBRARY_VERSION = 3.3.1
++JITTERENTROPY_LIBRARY_VERSION = 3.4.1
+ JITTERENTROPY_LIBRARY_SOURCE = \
+ 	jitterentropy-library-$(JITTERENTROPY_LIBRARY_VERSION).tar.xz
+ JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
