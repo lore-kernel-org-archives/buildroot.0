@@ -1,50 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACFACC4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:52:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFF9CC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B21B408F3;
-	Tue, 27 Dec 2022 20:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B21B408F3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6850840472;
+	Tue, 27 Dec 2022 20:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6850840472
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uN35SeX8HTdf; Tue, 27 Dec 2022 20:52:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r2-Ngh6iLN-9; Tue, 27 Dec 2022 20:53:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2258F40907;
-	Tue, 27 Dec 2022 20:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2258F40907
+	by smtp2.osuosl.org (Postfix) with ESMTP id B06DF4018F;
+	Tue, 27 Dec 2022 20:53:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B06DF4018F
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42EF81BF37A
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:52:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 244BB1BF37A
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1AD878142B
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AD878142B
+ by smtp1.osuosl.org (Postfix) with ESMTP id F306781257
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F306781257
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xUPtK1WTj-Rc for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 20:52:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03A3881420
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03A3881420
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4C7F86EC6; Tue, 27 Dec 2022 20:52:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 27 Dec 2022 21:52:12 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92a4f080b2721cc84248ebc98d41229469787688
-X-Git-Newrev: a8807ddbe269ef9aeee7b72f6d0a64719f8e6782
-X-Patchwork-Hint: ignore
-Message-Id: <20221227205226.E4C7F86EC6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jitterentropy-library: bump to
- version 3.4.1
+ with ESMTP id 5HPv4npnML-I for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 20:53:37 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E4CE80BC1
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9E4CE80BC1
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:53:36 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [92.184.110.54])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 9BDFE2003CE;
+ Tue, 27 Dec 2022 21:53:30 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 27 Dec 2022 21:53:30 +0100
+Date: Tue, 27 Dec 2022 21:53:30 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20221227205330.GA2498764@scaer>
+References: <cover.1671873478.git.yann.morin.1998@free.fr>
+ <a04f80a248fb1452841a424e850a694419e3a6dd.1671873478.git.yann.morin.1998@free.fr>
+ <20221227214538.56ca7609@windsurf>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221227214538.56ca7609@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672174413;
+ bh=8cDbUGxAACmb7WR1pbZxXt/twcpo+jCUxObv/V97ID4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=LzbaujmW8X9XK/6KqSY2IhYFXFuqF6utpxH8SFuv64Kefm0gjcwrl3zC+gbLInfox
+ OcRDK/SzhguBmsfAxrnCYK6qbum7ruQd0wKeyCo+QsyDiCGETankVIVNk5ofTUBAV+
+ n+70AeVaPjEWmlYutF4Y7+alIs8tMNC9Yb2C+13ytI1iojO2MQvfSWsuB3/lSqERHq
+ ztBaoibvZjq/l88N/fhNfLgosJLbfkBsiNK7UWjIeuFBGe2JkeUhCEa3euWQjGetjf
+ JfeYCJOOCTQaSTYotAR5SI5isD7MaTNW9rsVcMYt5mtBseeXR6rvl9BXDnvnwRsJAi
+ frMRQk6K14L8w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=LzbaujmW
+Subject: Re: [Buildroot] [PATCH 2/3] support/tests: allow top-level parallel
+ builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,114 +78,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8807ddbe269ef9aeee7b72f6d0a64719f8e6782
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-- Drop patch (already in version)
-- Update hash of LICENSE file (year updated with
-  https://github.com/smuellerDD/jitterentropy-library/commit/2e5019cfe63038faaa405ce53715effe4ea580e4)
+On 2022-12-27 21:45 +0100, Thomas Petazzoni via buildroot spake thusly:
+> On Sat, 24 Dec 2022 10:18:12 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > Running tests with top-level parallel builds can speed up running some
+> > tests, expecially those that have a lot of packages like the systemd
+> > init tests.
+> > 
+> > Trigger TLPB when the configuration enables per-package directories.
+> > 
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> I certainly support the idea of running some tests with TLPB. However,
+> this implementation makes a confusion between two different settings:
+> 
+> - The existing BRConfigTest.jlevel, which is set by run-tests -j, and
+>   used to define BR2_JLEVEL in the Buildroot configuration of each test
+>   case. This determines the number of parallel jobs used to build each
+>   independent package.
+> 
+> - Your new work, which uses "make -j" to do TLPB... but relies on the
+>   same above value, even though it's a completely different setting.
+> 
+> Is this expected?
 
-https://github.com/smuellerDD/jitterentropy-library/blob/v3.4.1/CHANGES.md
+Yes, this is the intended behaviour, which I was explicitly seeking.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch | 52 ----------------------
- .../jitterentropy-library.hash                     |  4 +-
- .../jitterentropy-library/jitterentropy-library.mk |  2 +-
- 3 files changed, 3 insertions(+), 55 deletions(-)
+So, if one runs with PPD and TLPB (outside the run-time infra), one
+would do something like:
 
-diff --git a/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch b/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch
-deleted file mode 100644
-index c4388663b0..0000000000
---- a/package/jitterentropy-library/0001-Makefile-add-ENABLE_STACK_PROTECTOR.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 272ee47892563e849f6b1bf59b0173f8aa33b631 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 19 Dec 2021 11:36:13 +0100
--Subject: [PATCH] Makefile: add ENABLE_STACK_PROTECTOR
--
--Add ENABLE_STACK_PROTECTOR as build on embedded toolchains without
--stack-protector is again broken since
--https://github.com/smuellerDD/jitterentropy-library/commit/5b3cb7f35e41ba2f34a75d004cf095c965a1a0c4:
--
--/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: src/jitterentropy-base.o: in function `jent_fips_enabled':
--jitterentropy-base.c:(.text+0x131): undefined reference to `__stack_chk_fail_local'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/8dee462d16d934dd173d58f17933c6911e4336bf
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Stephan Mueller <smueller@chronox.de>
--[Retrieved from:
--https://github.com/smuellerDD/jitterentropy-library/commit/272ee47892563e849f6b1bf59b0173f8aa33b631]
-----
-- Makefile | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index dfb96a8..c999ef5 100644
----- a/Makefile
--+++ b/Makefile
--@@ -2,6 +2,7 @@
-- 
-- CC ?= gcc
-- #Hardening
--+ENABLE_STACK_PROTECTOR ?= 1
-- CFLAGS ?= -fwrapv --param ssp-buffer-size=4 -fvisibility=hidden -fPIE -Wcast-align -Wmissing-field-initializers -Wshadow -Wswitch-enum
-- CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0 -fwrapv -Wconversion
-- LDFLAGS +=-Wl,-z,relro,-z,now -lpthread
--@@ -13,10 +14,12 @@ else
--   GCC_GTEQ_490 := $(shell expr `$(CC) -dumpfullversion | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/'` \>= 40900)
-- endif
-- 
---ifeq "$(GCC_GTEQ_490)" "1"
---  CFLAGS += -fstack-protector-strong
---else
---  CFLAGS += -fstack-protector-all
--+ifeq "$(ENABLE_STACK_PROTECTOR)" "1"
--+  ifeq "$(GCC_GTEQ_490)" "1"
--+    CFLAGS += -fstack-protector-strong
--+  else
--+    CFLAGS += -fstack-protector-all
--+  endif
-- endif
-- 
-- # Change as necessary
-diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
-index 760befab53..c7833f1428 100644
---- a/package/jitterentropy-library/jitterentropy-library.hash
-+++ b/package/jitterentropy-library/jitterentropy-library.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  9fcc954763a1dd4afe614a1b360f53b600d3376bbcc4b19177f27abf191ebad5  jitterentropy-library-3.3.1.tar.xz
--sha256  7e06574ff822594269083a796d06fa4e5e78c40efe5ca01a72d2a4662e8206df  LICENSE
-+sha256  802f025f766c38abf663fd5a21482b8313b6d6e2c68c36a4ffd6bc105fe975ab  jitterentropy-library-3.4.1.tar.xz
-+sha256  7a89069066f6c0b8767d3256e5ec5d765b2c7f3354a5a06fc8d5bd7b8103d8a3  LICENSE
- sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  LICENSE.bsd
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE.gplv2
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index 4cdebf46a3..f405082d08 100644
---- a/package/jitterentropy-library/jitterentropy-library.mk
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JITTERENTROPY_LIBRARY_VERSION = 3.3.1
-+JITTERENTROPY_LIBRARY_VERSION = 3.4.1
- JITTERENTROPY_LIBRARY_SOURCE = \
- 	jitterentropy-library-$(JITTERENTROPY_LIBRARY_VERSION).tar.xz
- JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent
+    $ make -jN
+
+This spawns a top-level make process that is parallel. In turn, in
+rules, when we call $(MAKE), this is the magic that tells make that
+it is recursive, but that it should use the jobserver from the calling
+process.
+
+So, in this case, the BR2_JLEVEL is unused by whatever uses the make
+jobserver; only the number of jobs in the top-level jobserver is
+meaningful, i.e. whatever we pass as -jN.
+
+The exception, of course, is whatever uses BR2_JLEVEL but does not talk
+to the jobserver, but this is mostly a few packages (scons, waf et al.).
+Even ninja packages do talk to the top-level jobserver, now that we use
+the ninja fork that knows to talk to it.
+
+So, yes, using top-level -jN with the same value as BR2_JLEVEL is
+exactly what I intended to do.
+
+Unless I totally missed something...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
