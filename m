@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD79C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FD1BC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E920540462;
-	Tue, 27 Dec 2022 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E920540462
+	by smtp2.osuosl.org (Postfix) with ESMTP id DAB5440472;
+	Tue, 27 Dec 2022 20:03:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAB5440472
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CkAhqjc0_32Q; Tue, 27 Dec 2022 20:01:25 +0000 (UTC)
+	with ESMTP id qqhxepX1FWrj; Tue, 27 Dec 2022 20:03:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 374ED403FD;
-	Tue, 27 Dec 2022 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 374ED403FD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8F9D61BF5A4
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:01:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D870404AF;
+	Tue, 27 Dec 2022 20:03:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D870404AF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 46B361BF5A4
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DDA5813E2
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:01:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DDA5813E2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FC89404C0
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:03:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FC89404C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AL0_dT8543Cw for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 20:01:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6365280BE9
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6365280BE9
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:01:11 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6BC211C0002;
- Tue, 27 Dec 2022 20:01:09 +0000 (UTC)
-Date: Tue, 27 Dec 2022 21:01:08 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221227210108.3de4a783@windsurf>
-In-Reply-To: <20221226231208.849619-1-fontaine.fabrice@gmail.com>
-References: <20221226231208.849619-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672171269;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tmkZ+Hh9aPFtmHtUa70BPDyiBP1VHarrdIjG2zWTDfg=;
- b=I1QrqmsBnnlGoSzE939NQq9WysUDw4wUcXFaBM8MIvbfKo19My/UOcZnb/OdlxrW9fkLnb
- uWsD0G3qzs7WhyIhqlk0uPYvwQjCWLQhmj0pDnmMZH/seIw/E4zL5NR2XRxNv1GeXSmf/S
- 9EhgLfsbHM9rIaGJqvsiEFkx576bl/H4BbzSUyCiITCuKnjBTlow/46UAfCpbtp49RKSnd
- CGk+xmzpqc0LnYkW5j5heTgfxKLKv0A0k+97ZdKkS0/J0EknpjyHB5QOWI+nR7vtfEdKzB
- 0fOti/1Ie5lbgLAtype7zzHuTzUO+liBS+QttJYX3dxHX/Ra7rGaRF7ggJw2fA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=I1QrqmsB
-Subject: Re: [Buildroot] [PATCH 1/1] package/libpwquality: bump to version
- 1.4.5
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gfFCe0c5wxu8 for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 20:03:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5236040472
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:03:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5236040472
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3D93286E72; Tue, 27 Dec 2022 20:03:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Dec 2022 20:57:36 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c181878a84e9531f25d8dd1f5cb10b86f8bf9e51
+X-Git-Newrev: 99127efe6ec2c8c056e252845326cc374859fa74
+X-Patchwork-Hint: ignore
+Message-Id: <20221227200353.3D93286E72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dump1090: bump to version 8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,31 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Stefan =?UTF-8?B?U8O4cmVuc2Vu?= <stefan.sorensen@spectralink.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 27 Dec 2022 00:12:08 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=99127efe6ec2c8c056e252845326cc374859fa74
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/libpwquality/libpwquality/blob/libpwquality-1.4.5/NEWS
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libpwquality/libpwquality.hash | 2 +-
->  package/libpwquality/libpwquality.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+https://github.com/flightaware/dump1090/compare/v7.2...v8.2
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dump1090/dump1090.hash | 2 +-
+ package/dump1090/dump1090.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dump1090/dump1090.hash b/package/dump1090/dump1090.hash
+index 23178567ac..8a4c3a4818 100644
+--- a/package/dump1090/dump1090.hash
++++ b/package/dump1090/dump1090.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  dfcf57b19f43e0262b1a03b0dc5069a9ddc48427d85378b7ef52fb4e74911eef  dump1090-7.2.tar.gz
++sha256  1ab8a5acd891bdbba586e2e9f2d9b056210940bd47b5c1a19d133eb091f31555  dump1090-8.2.tar.gz
+ sha256  804f68c803eb5c127c53ad17c4f4e5033ef158e514bb76950dc7b1773f9ce4b0  LICENSE
+diff --git a/package/dump1090/dump1090.mk b/package/dump1090/dump1090.mk
+index 82eaaf2cb8..60ef4a9bcb 100644
+--- a/package/dump1090/dump1090.mk
++++ b/package/dump1090/dump1090.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DUMP1090_VERSION = 7.2
++DUMP1090_VERSION = 8.2
+ DUMP1090_SITE = $(call github,flightaware,dump1090,v$(DUMP1090_VERSION))
+ DUMP1090_LICENSE = GPL-2.0+
+ DUMP1090_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
