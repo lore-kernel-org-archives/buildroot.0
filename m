@@ -1,68 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2E28C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 887E4C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Dec 2022 20:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F26B60C25;
-	Tue, 27 Dec 2022 20:28:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F26B60C25
+	by smtp2.osuosl.org (Postfix) with ESMTP id 19CDA40462;
+	Tue, 27 Dec 2022 20:39:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19CDA40462
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SJXU8bIpIQgN; Tue, 27 Dec 2022 20:28:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q_8KhDzXzNmx; Tue, 27 Dec 2022 20:39:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAF7760C0C;
-	Tue, 27 Dec 2022 20:28:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAF7760C0C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 125271BF37A
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:28:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 507B14018F;
+	Tue, 27 Dec 2022 20:39:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 507B14018F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CD5041BF37A
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D903181412
- for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D903181412
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7A63401ED
+ for <buildroot@lists.busybox.net>; Tue, 27 Dec 2022 20:39:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7A63401ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1WWN6T0HHuVG for <buildroot@lists.busybox.net>;
- Tue, 27 Dec 2022 20:28:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A49BC81410
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A49BC81410
- for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:28:27 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 77634100004;
- Tue, 27 Dec 2022 20:28:24 +0000 (UTC)
-Date: Tue, 27 Dec 2022 21:28:23 +0100
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Message-ID: <20221227212823.72ec5039@windsurf>
-In-Reply-To: <20221225211355.6668-1-buildroot@heine.tech>
-References: <20221225211355.6668-1-buildroot@heine.tech>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672172904;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=pXGHIHaIxUIzK8O9CxN7sXS0HdghHxCJt10TUH85ZFQ=;
- b=OSCZEukDIvmi00GbcfXJdJqvg7iRhuVErp+l32vasY+7oaSL+dLVjxRGBczkrJ816DvpaB
- ZiW1n6IFLd+p8la0rkaHO/Wgihbxwh7nxWfg/UT3QVJ20FZsgUO/eAi6AnFiArH/z6PJRl
- G9MglnY12E/44+jjoNPE9dSEZ1lZ/WSk9bI4vr8AziIGJBbTDw+LLQBJYCPMgb6eOIMGow
- k6qoV2xWOcRHHwpW1dgAxBJf5IFwXeTrzmg0QmVr+wl2HLJE/azoknMOlorQeRT56IDwvB
- Sun0RONaVNYgdUAWbErSCjb66dr+V7VRPwTKBVh4UnIqxdtXGIwg86vY+ttiJA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OSCZEukD
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add myself to more packages
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PZmJOXsBG6zd for <buildroot@lists.busybox.net>;
+ Tue, 27 Dec 2022 20:39:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C198401DF
+ for <buildroot@buildroot.org>; Tue, 27 Dec 2022 20:39:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C198401DF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 751D886E97; Tue, 27 Dec 2022 20:39:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Dec 2022 21:37:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 02cc05e757970a23da3c0818f275d465a4c1f280
+X-Git-Newrev: 319c56dfe3309dbf24be01fed3afff6259a2c5dd
+X-Patchwork-Hint: ignore
+Message-Id: <20221227203952.751D886E97@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/stellarium: bump version to 1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,25 +57,101 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 25 Dec 2022 22:13:54 +0100
-Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=319c56dfe3309dbf24be01fed3afff6259a2c5dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> ---
->  DEVELOPERS | 4 ++++
->  1 file changed, 4 insertions(+)
+Add patch to fix build error.
 
-Applied to master, thanks.
+Removed sha1 hash.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Add configure option to disable searching for qt6 as of now due to
+incomplete implementation of qt6 modules, like gui, in buildroot.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/stellarium/0001-add-missing-include.patch | 32 +++++++++++++++++++++++
+ package/stellarium/stellarium.hash                |  3 +--
+ package/stellarium/stellarium.mk                  |  4 ++-
+ 3 files changed, 36 insertions(+), 3 deletions(-)
+
+diff --git a/package/stellarium/0001-add-missing-include.patch b/package/stellarium/0001-add-missing-include.patch
+new file mode 100644
+index 0000000000..822fc50367
+--- /dev/null
++++ b/package/stellarium/0001-add-missing-include.patch
+@@ -0,0 +1,32 @@
++From f36ce55e7a0fbba11fb7e1d4107ef61a79dc95d3 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 25 Dec 2022 20:38:17 +0100
++Subject: [PATCH] add missing include
++
++Fixes build error:
++
++stellarium-1.2/plugins/MeteorShowers/src/MeteorShowersMgr.hpp:331:12:
++ error: field 'm_lastUpdate' has incomplete type 'QDateTime'
++
++Patch sent upstream: https://github.com/Stellarium/stellarium/pull/2933
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ plugins/MeteorShowers/src/MeteorShowersMgr.hpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/plugins/MeteorShowers/src/MeteorShowersMgr.hpp b/plugins/MeteorShowers/src/MeteorShowersMgr.hpp
++index 8096856b6d..17716a68b0 100644
++--- a/plugins/MeteorShowers/src/MeteorShowersMgr.hpp
+++++ b/plugins/MeteorShowers/src/MeteorShowersMgr.hpp
++@@ -20,6 +20,7 @@
++ #ifndef METEORSHOWERSMGR_HPP
++ #define METEORSHOWERSMGR_HPP
++ 
+++#include <QDateTime>
++ #include <QNetworkReply>
++ #include <QNetworkAccessManager>
++ 
++-- 
++2.34.1
++
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+index f33dd385ca..2488b611a4 100644
+--- a/package/stellarium/stellarium.hash
++++ b/package/stellarium/stellarium.hash
+@@ -1,5 +1,4 @@
+ # From https://github.com/Stellarium/stellarium/releases
+-sha1  3661b4e8a94e7a520873fa22ddc79f39904eb1c4  stellarium-0.22.2.tar.gz
+-sha256  31e965d32cafc0fbad212c7ef4efbeac988f909206013554e1fe35123ebb9376  stellarium-0.22.2.tar.gz
++sha256  802a0e8231cae41ec04f697f70105c291d9719aa6e7fd8cbe1f15068c3324e09  stellarium-1.2.tar.xz
+ # Locally computed
+ sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index 769e7049c1..a62488907f 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-STELLARIUM_VERSION = 0.22.2
++STELLARIUM_VERSION = 1.2
++STELLARIUM_SOURCE = stellarium-$(STELLARIUM_VERSION).tar.xz
+ STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
+ STELLARIUM_LICENSE = GPL-2.0+
+ STELLARIUM_LICENSE_FILES = COPYING
+@@ -18,6 +19,7 @@ STELLARIUM_CONF_OPTS = \
+ 	-DENABLE_MEDIA=ON \
+ 	-DENABLE_NLS=OFF \
+ 	-DENABLE_QTWEBENGINE=OFF \
++	-DENABLE_QT6=OFF \
+ 	-DUSE_SYSTEM_ZLIB=ON
+ 
+ ifeq ($(BR2_PACKAGE_QT5SCRIPT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
