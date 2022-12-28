@@ -1,67 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17C2BC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 20:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADB20C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 20:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 74C618146A;
-	Wed, 28 Dec 2022 20:53:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74C618146A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cyOLn8zaA3jY; Wed, 28 Dec 2022 20:53:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37AE78146B;
-	Wed, 28 Dec 2022 20:53:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37AE78146B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EE0ED1BF2F2
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 20:53:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6D1B400D3
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 20:53:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6D1B400D3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E48640179;
+	Wed, 28 Dec 2022 20:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E48640179
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CPuDdB-rWapn for <buildroot@lists.busybox.net>;
- Wed, 28 Dec 2022 20:53:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8918640002
-Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8918640002
- for <buildroot@buildroot.org>; Wed, 28 Dec 2022 20:53:27 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.66.6])
- by Aruba Outgoing Smtp  with ESMTPSA
- id AdQRpSM8jU5qIAdQSpf6kv; Wed, 28 Dec 2022 21:53:24 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Wed, 28 Dec 2022 21:53:23 +0100
-Message-Id: <20221228205323.71420-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j0c4-CTnOGTo; Wed, 28 Dec 2022 20:55:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54B014014E;
+	Wed, 28 Dec 2022 20:55:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54B014014E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B03221BF2F2
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 20:55:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 985918146B
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 20:55:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 985918146B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pygXEu8_L_gR for <buildroot@lists.busybox.net>;
+ Wed, 28 Dec 2022 20:55:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DA6C81259
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com
+ [209.85.222.47])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9DA6C81259
+ for <buildroot@busybox.net>; Wed, 28 Dec 2022 20:55:07 +0000 (UTC)
+Received: by mail-ua1-f47.google.com with SMTP id q3so3001320uao.2
+ for <buildroot@busybox.net>; Wed, 28 Dec 2022 12:55:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OvPK6fXy+KzncfiFtm98uQvSuRr0a5cmsVthE1c214g=;
+ b=GF7Hx2f/kvKtEu1HlBQZTfk5CFGyc3TEKdPsJdCAsyXffktcUIXWcl1J7uePkO3n+x
+ oYIu6MbjcsWephsPpvR9zh/exQOoLSsAUUmd68NGEZ4s3ES89SJBI9CZ5fujtfAZn3Xg
+ bcYEagE64dycTuZJHEaWFEJNWuLbo4ZYoTqm6ociz9VdO7HCZE/ensIU5RH6Casjwtxm
+ uzwRdQhcNdcPWGz4OQZg+C3YyrtpE0OvGN4VcC+o0LPh7Tc4rDmIRL6r9TsN7zz3T1rD
+ /tr/kvWbp2Co1v9psXCOieHHuPNczV738Ta/4cRbaVXOasxaO1WdsSevEKfEMH0hZX6m
+ FXCQ==
+X-Gm-Message-State: AFqh2kqakKKj7tA9JcKmeuS7H5lKantdQ3RbLTcjB65+IIhebPS0Dms9
+ PgCg2qPp+fVFwnLZUIxNVohjoCkB6hV3gglAHKZggQ==
+X-Google-Smtp-Source: AMrXdXthEe/o5er2kPc9RHGkGWVogf9CccRWaSb48qDAvC94Wlb/PKdss6efBJQa6/f/vCuPh4+r4sodqNnoQe4qhjM=
+X-Received: by 2002:a9f:3861:0:b0:419:c3a3:9d0 with SMTP id
+ q30-20020a9f3861000000b00419c3a309d0mr2463066uad.98.1672260906239; Wed, 28
+ Dec 2022 12:55:06 -0800 (PST)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfMSEJcVXN7OUGBQ+rgAgEeHV70t2MCfuEfzA2nVC0QRKjVtevcyXjVPCBmbEt6dWZdMaLz7UyEF074e233Qf9OF/YaxLtP3rf+pT3MhJIl26K2DyXPRa
- ZA/BUN4LBSSI5wuUcoLKBKesGrRDGn/2kioMy3kYsdGRJS9YffeSBQdxte4Qc9BHyEZ3sUh8XZqaycyT6Tihl5dCVBDumnjE/Pb/1usi1DAnNmkeEFT7VRck
- AdZB3AqEN0L3iSuKofU4OrDOklHHBNDQGNgnPh+7m64c4Dp27ttjU6YZa3sEkXv3Jbi/MmVXF7cfVbj2mUa0Lw==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1672260804; bh=hKQ4+u+hOxhX5L37dUMed88kKlXn45JMlh7H1lI7llQ=;
- h=From:To:Subject:Date:MIME-Version;
- b=kwnR9W0YcI6lrsIj8JVqmGQ/Cj8Yge+yqGHsk5mNCAv17uOlJpeQC/m7wqbgiiSMN
- VsQYU7wtRuehchNx+MwRyIb09ouz2iNPupDihK/L6w1ZkUeBmUJ3RWqARFYf6APddB
- C7I3J3YvJYDeqpaKLSIxXUnMXYOfnQhgZb2GFOThObQr842W46p62E3/d8V7eNlH70
- JbkDfxzio9qZ/00mdLQ/ya1hv+Pj/oNOaHtHEnzpyScjJ2xldoC3HHXPN2DbjmQd7U
- 1fRsuCuUrNd97A5cB1KHyR0cN0+rXWE4sTfczkKNIGtasFBnOIM5cui6TeexxRKcr2
- XHfjS37+MJWHw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=kwnR9W0Y
-Subject: [Buildroot] [PATCH] package/wilc-driver: fix build failure up to
- Linux 6.1
+References: <20221228071734.737602-1-francois.perrad@gadz.org>
+ <20221228205626.65dc0189@windsurf>
+In-Reply-To: <20221228205626.65dc0189@windsurf>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 28 Dec 2022 21:54:54 +0100
+Message-ID: <CAB0FRssnVbsouUrhWSzZa2W4jGE0a2WaPzeDMdXWkJjrz9yYFg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,453 +76,166 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Kris Bahnsen <kris@embeddedTS.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net, Francois Perrad <fperrad@gmail.com>
+Content-Type: multipart/mixed; boundary="===============8517477963771290729=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add patches pending upstream[0] to handle various data types and api
-changes up to Linux 6.1.
+--===============8517477963771290729==
+Content-Type: multipart/alternative; boundary="00000000000049dd1805f0e9951e"
 
-[0]: https://github.com/embeddedTS/wilc3000-external-module/pull/2
+--00000000000049dd1805f0e9951e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes:
-http://autobuild.buildroot.net/results/6aa7475a21a6060e9fce3552f73e6e7100a8b2aa
+Le mer. 28 d=C3=A9c. 2022 =C3=A0 20:56, Thomas Petazzoni via buildroot <
+buildroot@buildroot.org> a =C3=A9crit :
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...missing-prandom_u32-with-Linux-6.1.0.patch |  34 +++
- ...fix-build-failure-on-remove-callback.patch |  44 ++++
- ...uild-failure-with-Linux-5.19-and-6.1.patch |  98 ++++++++
- ...on_parameters-Linux-6.1-build-failur.patch | 216 ++++++++++++++++++
- 4 files changed, 392 insertions(+)
- create mode 100644 package/wilc-driver/0001-cfg80211.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch
- create mode 100644 package/wilc-driver/0002-spi.c-fix-build-failure-on-remove-callback.patch
- create mode 100644 package/wilc-driver/0003-cfg80211.c-fix-build-failure-with-Linux-5.19-and-6.1.patch
- create mode 100644 package/wilc-driver/0004-Fix-struct-station_parameters-Linux-6.1-build-failur.patch
+> Hello Fran=C3=A7ois,
+>
+> Thanks for looking into this!
+>
+> On Wed, 28 Dec 2022 08:17:34 +0100
+> Francois Perrad <fperrad@gmail.com> wrote:
+>
+> > switch to meson infra
+> > remove autotools specific patches
+>
+> Is the version bump related/tied to the switch to meson? If they are
+> not, they should be in separate patches.
+>
 
-diff --git a/package/wilc-driver/0001-cfg80211.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch b/package/wilc-driver/0001-cfg80211.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch
-new file mode 100644
-index 0000000000..2f10627301
---- /dev/null
-+++ b/package/wilc-driver/0001-cfg80211.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch
-@@ -0,0 +1,34 @@
-+From f80e4343fa0a4d8b22933d1704c85a771fe234a4 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 28 Dec 2022 19:56:46 +0100
-+Subject: [PATCH] cfg80211.c: fix missing prandom_u32() with Linux >= 6.1.0
-+
-+prandom_u32() previously was only calling get_random_u32() so it's been
-+dropped with Linux 6.1.0. So let's directly call get_random_u32() if Linux
-+version >= 6.1.0.
-+
-+[Upstream status: https://github.com/embeddedTS/wilc3000-external-module/pull/2]
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ cfg80211.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/cfg80211.c b/cfg80211.c
-+index 016aa06..41edd02 100644
-+--- a/cfg80211.c
-++++ b/cfg80211.c
-+@@ -1422,7 +1422,11 @@ static int mgmt_tx(struct wiphy *wiphy,
-+ 	const u8 *vendor_ie;
-+ 	int ret = 0;
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
-++	*cookie = get_random_u32();
-++#else
-+ 	*cookie = prandom_u32();
-++#endif
-+ 	priv->tx_cookie = *cookie;
-+ 	mgmt = (const struct ieee80211_mgmt *)buf;
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/package/wilc-driver/0002-spi.c-fix-build-failure-on-remove-callback.patch b/package/wilc-driver/0002-spi.c-fix-build-failure-on-remove-callback.patch
-new file mode 100644
-index 0000000000..87306dfa12
---- /dev/null
-+++ b/package/wilc-driver/0002-spi.c-fix-build-failure-on-remove-callback.patch
-@@ -0,0 +1,44 @@
-+From a88819bd63f977b5a33d72a2b9e264ce104726bd Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 28 Dec 2022 21:02:12 +0100
-+Subject: [PATCH] spi.c: fix build failure on remove callback
-+
-+Starting from Linux 5.18 remove callback returns void, so let's deal with
-+it depending on Linux version >= 5.18.
-+
-+[Upstream status: https://github.com/embeddedTS/wilc3000-external-module/pull/2]
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ spi.c | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/spi.c b/spi.c
-+index 96c51fe..f7b43e2 100644
-+--- a/spi.c
-++++ b/spi.c
-+@@ -211,7 +211,11 @@ free:
-+ 	return ret;
-+ }
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,18,0))
-++static void wilc_bus_remove(struct spi_device *spi)
-++#else
-+ static int wilc_bus_remove(struct spi_device *spi)
-++#endif
-+ {
-+ 	struct wilc *wilc = spi_get_drvdata(spi);
-+ 
-+@@ -220,7 +224,10 @@ static int wilc_bus_remove(struct spi_device *spi)
-+ 
-+ 	wilc_netdev_cleanup(wilc);
-+ 	wilc_bt_deinit();
-++
-++#if (LINUX_VERSION_CODE < KERNEL_VERSION(5,18,0))
-+ 	return 0;
-++#endif
-+ }
-+ 
-+ static int wilc_spi_suspend(struct device *dev)
-+-- 
-+2.34.1
-+
-diff --git a/package/wilc-driver/0003-cfg80211.c-fix-build-failure-with-Linux-5.19-and-6.1.patch b/package/wilc-driver/0003-cfg80211.c-fix-build-failure-with-Linux-5.19-and-6.1.patch
-new file mode 100644
-index 0000000000..785b8904b2
---- /dev/null
-+++ b/package/wilc-driver/0003-cfg80211.c-fix-build-failure-with-Linux-5.19-and-6.1.patch
-@@ -0,0 +1,98 @@
-+From a608cdd7903505217529317c04b5b58cb7e25081 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 28 Dec 2022 21:06:43 +0100
-+Subject: [PATCH] cfg80211.c: fix build failure with Linux 5.19 and 6.1
-+
-+Starting from Linux 5.19 stop_ap() requires unsigned int link_id as
-+parameter. Then from Linux 6.1 on lot of other cfg80211 APIs require
-+int link_id to deal with MLO, so let's add that parameter too.
-+
-+[Upstream status: https://github.com/embeddedTS/wilc3000-external-module/pull/2]
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ cfg80211.c | 35 +++++++++++++++++++++++++++++------
-+ 1 file changed, 29 insertions(+), 6 deletions(-)
-+
-+diff --git a/cfg80211.c b/cfg80211.c
-+index 41edd02..57c777d 100644
-+--- a/cfg80211.c
-++++ b/cfg80211.c
-+@@ -674,8 +674,12 @@ static int wilc_wfi_cfg_copy_wpa_info(struct wilc_wfi_key *key_info,
-+ 	return 0;
-+ }
-+ 
-+-static int add_key(struct wiphy *wiphy, struct net_device *netdev, u8 key_index,
-+-		   bool pairwise, const u8 *mac_addr, struct key_params *params)
-++static int add_key(struct wiphy *wiphy, struct net_device *netdev,
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,1,0))
-++		   int link_id,
-++#endif
-++		   u8 key_index,  bool pairwise, const u8 *mac_addr,
-++		   struct key_params *params)
-+ 
-+ {
-+ 	int ret = 0, keylen = params->key_len, seqlen = params->seq_len;
-+@@ -792,6 +796,9 @@ static int add_key(struct wiphy *wiphy, struct net_device *netdev, u8 key_index,
-+ }
-+ 
-+ static int del_key(struct wiphy *wiphy, struct net_device *netdev,
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,1,0))
-++		   int link_id,
-++#endif
-+ 		   u8 key_index,
-+ 		   bool pairwise,
-+ 		   const u8 *mac_addr)
-+@@ -833,9 +840,13 @@ static int del_key(struct wiphy *wiphy, struct net_device *netdev,
-+ 	return ret;
-+ }
-+ 
-+-static int get_key(struct wiphy *wiphy, struct net_device *netdev, u8 key_index,
-+-		   bool pairwise, const u8 *mac_addr, void *cookie,
-+-		   void (*callback)(void *cookie, struct key_params *))
-++static int get_key(struct wiphy *wiphy, struct net_device *netdev,
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,1,0))
-++		   int link_id,
-++#endif
-++		   u8 key_index, bool pairwise, const u8 *mac_addr,
-++		   void *cookie, void (*callback)(void *cookie,
-++		   struct key_params *))
-+ {
-+ 	struct wilc_vif *vif = netdev_priv(netdev);
-+ 	struct wilc_priv *priv = &vif->priv;
-+@@ -877,12 +888,18 @@ static int get_key(struct wiphy *wiphy, struct net_device *netdev, u8 key_index,
-+ 
-+ /* wiphy_new() will WARN if not present*/
-+ static int set_default_key(struct wiphy *wiphy, struct net_device *netdev,
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,1,0))
-++			   int link_id,
-++#endif
-+ 			   u8 key_index, bool unicast, bool multicast)
-+ {
-+ 	return 0;
-+ }
-+ 
-+ static int set_default_mgmt_key (struct wiphy *wiphy,struct net_device *netdev,
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,1,0))
-++				 int link_id,
-++#endif
-+ 				 u8 key_index)
-+ {
-+     return 0;
-+@@ -1814,7 +1831,13 @@ static int change_beacon(struct wiphy *wiphy, struct net_device *dev,
-+ 	return wilc_add_beacon(vif, 0, 0, beacon);
-+ }
-+ 
-+-static int stop_ap(struct wiphy *wiphy, struct net_device *dev)
-++static int stop_ap(struct wiphy *wiphy, struct net_device *dev
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,19,0))
-++		   , unsigned int link_id
-++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(6,1,0))
-++		   , int link_id
-++#endif
-++		  )
-+ {
-+ 	int ret;
-+ 	struct wilc_vif *vif = netdev_priv(dev);
-+-- 
-+2.34.1
-+
-diff --git a/package/wilc-driver/0004-Fix-struct-station_parameters-Linux-6.1-build-failur.patch b/package/wilc-driver/0004-Fix-struct-station_parameters-Linux-6.1-build-failur.patch
-new file mode 100644
-index 0000000000..faee805b5a
---- /dev/null
-+++ b/package/wilc-driver/0004-Fix-struct-station_parameters-Linux-6.1-build-failur.patch
-@@ -0,0 +1,216 @@
-+From 5f022c4d3be32493d500be82f51032ef4fb3cdc0 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 28 Dec 2022 21:08:45 +0100
-+Subject: [PATCH] Fix struct station_parameters Linux 6.1 build failure
-+
-+Starting from Linux 6.1 struct station_parameters has changed by moving
-+some member to its child struct link_station_parameters. Let's extract the
-+values of the needed members into local values at the beginning of
-+functions and substitute the member access with the local variables.
-+
-+[Upstream status: https://github.com/embeddedTS/wilc3000-external-module/pull/2]
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ cfg80211.c | 48 ++++++++++++++++++++++++++++++++----------------
-+ hif.c      | 44 ++++++++++++++++++++++++++++++++------------
-+ 2 files changed, 64 insertions(+), 28 deletions(-)
-+
-+diff --git a/cfg80211.c b/cfg80211.c
-+index 57c777d..bdd480c 100644
-+--- a/cfg80211.c
-++++ b/cfg80211.c
-+@@ -1866,6 +1866,14 @@ static int add_station(struct wiphy *wiphy, struct net_device *dev,
-+ 	struct wilc_vif *vif = netdev_priv(dev);
-+ 	struct wilc_priv *priv = &vif->priv;
-+ 	u8 *assoc_bss = priv->assoc_stainfo.sta_associated_bss[params->aid];
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
-++	struct link_station_parameters *link_sta_params = &params->link_sta_params;
-++	const struct ieee80211_ht_cap *ht_capa = link_sta_params->ht_capa;
-++	u8 supported_rates_len = link_sta_params->supported_rates_len;
-++#else
-++	const struct ieee80211_ht_cap *ht_capa = params->ht_capa;
-++	u8 supported_rates_len = params->supported_rates_len;
-++#endif
-+ 
-+ 	if (vif->iftype == WILC_AP_MODE || vif->iftype == WILC_GO_MODE) {
-+ 		memcpy(assoc_bss, mac, ETH_ALEN);
-+@@ -1879,27 +1887,27 @@ static int add_station(struct wiphy *wiphy, struct net_device *dev,
-+ 			   params->aid);
-+ 		PRINT_INFO(vif->ndev, HOSTAPD_DBG,
-+ 			   "Number of supported rates = %d\n",
-+-			   params->supported_rates_len);
-++			   supported_rates_len);
-+ 
-+ 		PRINT_INFO(vif->ndev, CFG80211_DBG, "IS HT supported = %d\n",
-+-			   (!params->ht_capa) ? false : true);
-++			   (!ht_capa) ? false : true);
-+ 
-+-		if (params->ht_capa) {
-++		if (ht_capa) {
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "Capability Info = %d\n",
-+-				   params->ht_capa->cap_info);
-++				   ht_capa->cap_info);
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "AMPDU Params = %d\n",
-+-				   params->ht_capa->ampdu_params_info);
-++				   ht_capa->ampdu_params_info);
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "HT Extended params= %d\n",
-+-				   params->ht_capa->extended_ht_cap_info);
-++				   ht_capa->extended_ht_cap_info);
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "Tx Beamforming Cap= %d\n",
-+-				   params->ht_capa->tx_BF_cap_info);
-++				   ht_capa->tx_BF_cap_info);
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "Antenna selection info = %d\n",
-+-				   params->ht_capa->antenna_selection_info);
-++				   ht_capa->antenna_selection_info);
-+ 		}
-+ 
-+ 		PRINT_INFO(vif->ndev, CFG80211_DBG, "Flag Mask = %d\n",
-+@@ -1966,6 +1974,14 @@ static int change_station(struct wiphy *wiphy, struct net_device *dev,
-+ {
-+ 	int ret = 0;
-+ 	struct wilc_vif *vif = netdev_priv(dev);
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
-++	struct link_station_parameters *link_sta_params = &params->link_sta_params;
-++	const struct ieee80211_ht_cap *ht_capa = link_sta_params->ht_capa;
-++	u8 supported_rates_len = link_sta_params->supported_rates_len;
-++#else
-++	const struct ieee80211_ht_cap *ht_capa = params->ht_capa;
-++	u8 supported_rates_len = params->supported_rates_len;
-++#endif
-+ 
-+ 	PRINT_D(vif->ndev, CFG80211_DBG, "Change station parameters\n");
-+ 
-+@@ -1976,25 +1992,25 @@ static int change_station(struct wiphy *wiphy, struct net_device *dev,
-+ 			   params->aid);
-+ 		PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 			   "Number of supported rates = %d\n",
-+-			   params->supported_rates_len);
-++			   supported_rates_len);
-+ 		PRINT_INFO(vif->ndev, CFG80211_DBG, "IS HT supported = %d\n",
-+-			   (!params->ht_capa) ? false : true);
-+-		if (params->ht_capa) {
-++			   (!ht_capa) ? false : true);
-++		if (ht_capa) {
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "Capability Info = %d\n",
-+-				   params->ht_capa->cap_info);
-++				   ht_capa->cap_info);
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "AMPDU Params = %d\n",
-+-				   params->ht_capa->ampdu_params_info);
-++				   ht_capa->ampdu_params_info);
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "HT Extended params= %d\n",
-+-				   params->ht_capa->extended_ht_cap_info);
-++				   ht_capa->extended_ht_cap_info);
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "Tx Beamforming Cap= %d\n",
-+-				   params->ht_capa->tx_BF_cap_info);
-++				   ht_capa->tx_BF_cap_info);
-+ 			PRINT_INFO(vif->ndev, CFG80211_DBG,
-+ 				   "Antenna selection info = %d\n",
-+-				   params->ht_capa->antenna_selection_info);
-++				   ht_capa->antenna_selection_info);
-+ 		}
-+ 		PRINT_INFO(vif->ndev, CFG80211_DBG, "Flag Mask = %d\n",
-+ 			   params->sta_flags_mask);
-+diff --git a/hif.c b/hif.c
-+index 3f672a0..1a7365b 100644
-+--- a/hif.c
-++++ b/hif.c
-+@@ -2249,6 +2249,16 @@ int wilc_add_station(struct wilc_vif *vif, const u8 *mac,
-+ 	int result;
-+ 	struct host_if_msg *msg;
-+ 	struct add_sta_param *sta_params;
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
-++	struct link_station_parameters *link_sta_params = &params->link_sta_params;
-++	const struct ieee80211_ht_cap *ht_capa = link_sta_params->ht_capa;
-++	u8 supported_rates_len = link_sta_params->supported_rates_len;
-++	const u8 *supported_rates = link_sta_params->supported_rates;
-++#else
-++	const struct ieee80211_ht_cap *ht_capa = params->ht_capa;
-++	u8 supported_rates_len = params->supported_rates_len;
-++	const u8 *supported_rates = params->supported_rates;
-++#endif
-+ 
-+ 	PRINT_INFO(vif->ndev, HOSTINF_DBG,
-+ 		   "Setting adding station message queue params\n");
-+@@ -2260,20 +2270,20 @@ int wilc_add_station(struct wilc_vif *vif, const u8 *mac,
-+ 	sta_params = &msg->body.add_sta_info;
-+ 	memcpy(sta_params->bssid, mac, ETH_ALEN);
-+ 	sta_params->aid = params->aid;
-+-	if (!params->ht_capa) {
-++	if (!ht_capa) {
-+ 		sta_params->ht_supported = false;
-+ 	} else {
-+ 		sta_params->ht_supported = true;
-+-		memcpy(&sta_params->ht_capa, params->ht_capa,
-++		memcpy(&sta_params->ht_capa, ht_capa,
-+ 		       sizeof(struct ieee80211_ht_cap));
-+ 	}
-+ 	sta_params->flags_mask = params->sta_flags_mask;
-+ 	sta_params->flags_set = params->sta_flags_set;
-+ 
-+-	sta_params->supported_rates_len = params->supported_rates_len;
-+-	if (params->supported_rates_len > 0) {
-+-		sta_params->supported_rates = kmemdup(params->supported_rates,
-+-					    params->supported_rates_len,
-++	sta_params->supported_rates_len = supported_rates_len;
-++	if (supported_rates_len > 0) {
-++		sta_params->supported_rates = kmemdup(supported_rates,
-++					    supported_rates_len,
-+ 					    GFP_KERNEL);
-+ 		if (!sta_params->supported_rates) {
-+ 			kfree(msg);
-+@@ -2397,6 +2407,16 @@ int wilc_edit_station(struct wilc_vif *vif, const u8 *mac,
-+ 	int result;
-+ 	struct host_if_msg *msg;
-+ 	struct add_sta_param *sta_params;
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
-++	struct link_station_parameters *link_sta_params = &params->link_sta_params;
-++	const struct ieee80211_ht_cap *ht_capa = link_sta_params->ht_capa;
-++	u8 supported_rates_len = link_sta_params->supported_rates_len;
-++	const u8 *supported_rates = link_sta_params->supported_rates;
-++#else
-++	const struct ieee80211_ht_cap *ht_capa = params->ht_capa;
-++	u8 supported_rates_len = params->supported_rates_len;
-++	const u8 *supported_rates = params->supported_rates;
-++#endif
-+ 
-+ 	PRINT_INFO(vif->ndev, HOSTINF_DBG,
-+ 		   "Setting editing station message queue params\n");
-+@@ -2408,20 +2428,20 @@ int wilc_edit_station(struct wilc_vif *vif, const u8 *mac,
-+ 	sta_params = &msg->body.edit_sta_info;
-+ 	memcpy(sta_params->bssid, mac, ETH_ALEN);
-+ 	sta_params->aid = params->aid;
-+-	if (!params->ht_capa) {
-++	if (!ht_capa) {
-+ 		sta_params->ht_supported = false;
-+ 	} else {
-+ 		sta_params->ht_supported = true;
-+-		memcpy(&sta_params->ht_capa, params->ht_capa,
-++		memcpy(&sta_params->ht_capa, ht_capa,
-+ 		       sizeof(struct ieee80211_ht_cap));
-+ 	}
-+ 	sta_params->flags_mask = params->sta_flags_mask;
-+ 	sta_params->flags_set = params->sta_flags_set;
-+ 
-+-	sta_params->supported_rates_len = params->supported_rates_len;
-+-	if (params->supported_rates_len > 0) {
-+-		sta_params->supported_rates = kmemdup(params->supported_rates,
-+-					    params->supported_rates_len,
-++	sta_params->supported_rates_len = supported_rates_len;
-++	if (supported_rates_len > 0) {
-++		sta_params->supported_rates = kmemdup(supported_rates,
-++					    supported_rates_len,
-+ 					    GFP_KERNEL);
-+ 		if (!sta_params->supported_rates) {
-+ 			kfree(msg);
-+-- 
-+2.34.1
-+
--- 
-2.34.1
+The release 3.24.36 is the first release to exclusively use the meson build
+system (see NEWS).
+
+
+> >
+> > host-libgtk3 is a hack which build only gtk-update-icon-cache
+>
+> Yes, and?
+>
+>
+> > -LIBGTK3_CONF_OPTS =3D \
+> > -     --disable-glibtest \
+> > -     --enable-explicit-deps=3Dno
+> > -HOST_LIBGTK3_CONF_OPTS =3D --disable-introspection
+>
+> Where is introspection now being disabled for the host package?
+>
+> Also, there were quite a few tweaks for the host build, which you have
+> removed. How does it work now? We build a full Gtk for the host? It
+> doesn't need any extra dependency?
+>
+>
+I don't change the build process of host-libgtk3.
+The only change is now the explicit use of host-generic-package instead of
+host-autotools-package (with all _CMDS overloaded).
+So, host-libgtk3 does not build a full GTK, but only 2 tools:
+gtk-update-icon-cache & gtk-encode-symbolic-svg.
+
+HOST_LIBGTK3_CONF_OPTS was not used, see in HOST_LIBGTK3_CONFIGURE_CMDS,
+there are only 3 echo.
+Again, the statement host-autotools-package is very disturbing, because
+none stuff from autotools is used.
+
+Fran=C3=A7ois
+
+
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+--00000000000049dd1805f0e9951e
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 28 d=C3=A9c. 2022 =C3=A0=
+=C2=A020:56, Thomas Petazzoni via buildroot &lt;<a href=3D"mailto:buildroot=
+@buildroot.org">buildroot@buildroot.org</a>&gt; a =C3=A9crit=C2=A0:<br></di=
+v><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;borde=
+r-left:1px solid rgb(204,204,204);padding-left:1ex">Hello Fran=C3=A7ois,<br=
+>
+<br>
+Thanks for looking into this!<br>
+<br>
+On Wed, 28 Dec 2022 08:17:34 +0100<br>
+Francois Perrad &lt;<a href=3D"mailto:fperrad@gmail.com" target=3D"_blank">=
+fperrad@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; switch to meson infra<br>
+&gt; remove autotools specific patches<br>
+<br>
+Is the version bump related/tied to the switch to meson? If they are<br>
+not, they should be in separate patches.<br></blockquote><div><br></div><di=
+v>The release 3.24.36 is the first release to exclusively use the meson bui=
+ld system (see NEWS).</div><div>=C2=A0</div><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
+;padding-left:1ex">
+&gt; <br>
+&gt; host-libgtk3 is a hack which build only gtk-update-icon-cache<br>
+<br>
+Yes, and?<br>
+<br>
+<br>
+&gt; -LIBGTK3_CONF_OPTS =3D \<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0--disable-glibtest \<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0--enable-explicit-deps=3Dno<br>
+&gt; -HOST_LIBGTK3_CONF_OPTS =3D --disable-introspection<br>
+<br>
+Where is introspection now being disabled for the host package?<br>
+<br>
+Also, there were quite a few tweaks for the host build, which you have<br>
+removed. How does it work now? We build a full Gtk for the host? It<br>
+doesn&#39;t need any extra dependency?<br>
+<br></blockquote><div><br></div><div>I don&#39;t change the build process o=
+f host-libgtk3.<br>The only change is now the explicit use of host-generic-=
+package instead of host-autotools-package (with all _CMDS overloaded).<br>S=
+o, host-libgtk3 does not build a full GTK, but only 2 tools: gtk-update-ico=
+n-cache &amp; gtk-encode-symbolic-svg.</div><div><br></div><div>HOST_LIBGTK=
+3_CONF_OPTS was not used, see in HOST_LIBGTK3_CONFIGURE_CMDS, there are onl=
+y 3 echo.</div><div>Again, the statement host-autotools-package is very dis=
+turbing, because none stuff from autotools is used.</div><div><br></div><di=
+v>Fran=C3=A7ois<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
+adding-left:1ex">
+Thanks!<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div></div>
+
+--00000000000049dd1805f0e9951e--
+
+--===============8517477963771290729==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8517477963771290729==--
