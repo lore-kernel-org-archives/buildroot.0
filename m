@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 339F7C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8EEDC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:49:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D17504F21A;
-	Mon, 20 Feb 2023 22:48:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D17504F21A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60F884F32A;
+	Mon, 20 Feb 2023 22:49:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60F884F32A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8V7lr5umr5Yz; Mon, 20 Feb 2023 22:48:49 +0000 (UTC)
+	with ESMTP id ljzlQCbWDw5p; Mon, 20 Feb 2023 22:49:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A52944F305;
-	Mon, 20 Feb 2023 22:48:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A52944F305
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8ABCB1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B6814F32E;
+	Mon, 20 Feb 2023 22:49:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B6814F32E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CFEF1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6D0C61287
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6D0C61287
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8FBB4170E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8FBB4170E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IdiuixFTQSyk for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rqgyUtY9eGyJ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20BAE6109D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20BAE6109D
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2EC0416FE
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2EC0416FE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E03F828C8; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+ id EF51386496; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 18:05:46 +0100
+Date: Wed, 28 Dec 2022 20:49:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 889c7815ed5fca418ca02dda9a8f5fcf8674fac4
-X-Git-Newrev: c0e09a1b0a6a57f3bda48d87f7292af136d59949
+X-Git-Oldrev: 620a77dc9d93365d87c7b18545f091c8e962509e
+X-Git-Newrev: e2468404c76e5d56d14f7e2afea8e2641f036e30
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205208.1E03F828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pep517: drop
- host-python-tomli dependency
+Message-Id: <20230220205216.EF51386496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/slang: add option to
+ enable/disable slsh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,29 +64,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0e09a1b0a6a57f3bda48d87f7292af136d59949
+commit: https://git.buildroot.net/buildroot/commit/?id=e2468404c76e5d56d14f7e2afea8e2641f036e30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The host-python-tomli dependency is not required on python version
-3.11 and newer.
+The S-lang shell is currently installed by default but most packages are
+typically interested in the shared libraries only. Add a configuration
+option to disable the slsh program and its supporting files.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pep517/python-pep517.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/slang/Config.in | 9 +++++++++
+ package/slang/slang.mk  | 9 +++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
-index 1fd294fbb4..c43b09faaa 100644
---- a/package/python-pep517/python-pep517.mk
-+++ b/package/python-pep517/python-pep517.mk
-@@ -10,6 +10,5 @@ PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/4d/19/e11fcc88288f6
- PYTHON_PEP517_LICENSE = MIT
- PYTHON_PEP517_LICENSE_FILES = LICENSE
- PYTHON_PEP517_SETUP_TYPE = flit-bootstrap
--HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
+diff --git a/package/slang/Config.in b/package/slang/Config.in
+index a500ff5b7d..0b2c987f73 100644
+--- a/package/slang/Config.in
++++ b/package/slang/Config.in
+@@ -5,3 +5,12 @@ config BR2_PACKAGE_SLANG
+ 	  Multi-platform console display library.
  
- $(eval $(host-python-package))
+ 	  http://www.jedsoft.org/slang/index.html
++
++if BR2_PACKAGE_SLANG
++
++config BR2_PACKAGE_SLANG_SLSH
++	bool "enable slsh"
++	help
++	  Enable the S-lang interpreter
++
++endif
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index e0f5968b46..2b3cbdf27a 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -60,4 +60,13 @@ SLANG_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
+ SLANG_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SLANG_SLSH),)
++define SLANG_REMOVE_SLSH
++	rm -rf $(TARGET_DIR)/etc/slsh.rc \
++		$(TARGET_DIR)/usr/share/slsh \
++		$(TARGET_DIR)/usr/bin/slsh
++endef
++SLANG_POST_INSTALL_TARGET_HOOKS += SLANG_REMOVE_SLSH
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
