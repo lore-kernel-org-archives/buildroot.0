@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F2CBC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 19:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1767C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 19:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A4BB2404D8;
-	Wed, 28 Dec 2022 19:50:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4BB2404D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 475DE404AE;
+	Wed, 28 Dec 2022 19:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 475DE404AE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uuMLzOZw0TFi; Wed, 28 Dec 2022 19:50:47 +0000 (UTC)
+	with ESMTP id CafmFmVypXCV; Wed, 28 Dec 2022 19:50:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 104114055A;
-	Wed, 28 Dec 2022 19:50:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 104114055A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6AFD71BF59F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EDEB40575;
+	Wed, 28 Dec 2022 19:50:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EDEB40575
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FE761BF909
  for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5362860A9F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59876404D8
  for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:50:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5362860A9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59876404D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hwiQdsWhDRll for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P-CQPUB95TFA for <buildroot@lists.busybox.net>;
  Wed, 28 Dec 2022 19:50:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8BC78605AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F39340002
  for <buildroot@buildroot.org>; Wed, 28 Dec 2022 19:50:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BC78605AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F39340002
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B7EB86F3E; Wed, 28 Dec 2022 19:50:43 +0000 (UTC)
+ id 8DBB286F41; Wed, 28 Dec 2022 19:50:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
 Date: Wed, 28 Dec 2022 20:50:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2468404c76e5d56d14f7e2afea8e2641f036e30
-X-Git-Newrev: f603aa8514279b56f7454726c95601b31e6064dd
+X-Git-Oldrev: a04be749374c99790ee7d185427b352db84fb07a
+X-Git-Newrev: ad71850aa039e344a1c32cd07876c1a83bdf5d5d
 X-Patchwork-Hint: ignore
-Message-Id: <20221228195043.7B7EB86F3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/slirp: add host variant for
- host-qemu
+Message-Id: <20221228195043.8DBB286F41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: reorder dependencies
+ alphabetically
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f603aa8514279b56f7454726c95601b31e6064dd
+commit: https://git.buildroot.net/buildroot/commit/?id=ad71850aa039e344a1c32cd07876c1a83bdf5d5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Qemu 7.2 removed the slirp submodule from their sources [1]
-so we have to provide slirp library as host package for
-host-qemu.
-
-[1] https://wiki.qemu.org/ChangeLog/7.2#GIT_submodules
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/slirp/slirp.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/qemu/qemu.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index 10d367587d..2ad71f13d9 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -14,4 +14,7 @@ SLIRP_CPE_ID_PRODUCT = libslirp
- SLIRP_INSTALL_STAGING = YES
- SLIRP_DEPENDENCIES = libglib2
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index cbcbbc2bc5..be84452862 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -23,10 +23,10 @@ QEMU_CPE_ID_VENDOR = qemu
+ QEMU_DEPENDENCIES = \
+ 	host-meson \
+ 	host-pkgconf \
++	host-python3 \
+ 	libglib2 \
+-	zlib \
+ 	pixman \
+-	host-python3
++	zlib
  
-+HOST_SLIRP_DEPENDENCIES = host-libglib2
-+
- $(eval $(meson-package))
-+$(eval $(host-meson-package))
+ # Need the LIBS variable because librt and libm are
+ # not automatically pulled. :-(
+@@ -253,12 +253,12 @@ $(eval $(generic-package))
+ # Host-qemu
+ 
+ HOST_QEMU_DEPENDENCIES = \
+-	host-meson \
+-	host-pkgconf \
+-	host-zlib \
+ 	host-libglib2 \
++	host-meson \
+ 	host-pixman \
+-	host-python3
++	host-pkgconf \
++	host-python3 \
++	host-zlib
+ 
+ #       BR ARCH         qemu
+ #       -------         ----
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
