@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2CC9C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 19:54:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69833C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 19:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 589A4403CC;
-	Wed, 28 Dec 2022 19:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 589A4403CC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10CDD81435;
+	Wed, 28 Dec 2022 19:54:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10CDD81435
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UuG6T_hll0hD; Wed, 28 Dec 2022 19:54:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V8Ub_oIu2pu9; Wed, 28 Dec 2022 19:54:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76809402EF;
-	Wed, 28 Dec 2022 19:54:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76809402EF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5ED688142E;
+	Wed, 28 Dec 2022 19:54:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ED688142E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D6141BF59F
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:54:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 44C741BF59F
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5443E402EF
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:54:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5443E402EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29D2E401FF
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29D2E401FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1V433NRwZu0E for <buildroot@lists.busybox.net>;
- Wed, 28 Dec 2022 19:54:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFB954027B
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EFB954027B
- for <buildroot@buildroot.org>; Wed, 28 Dec 2022 19:54:29 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C682340002;
- Wed, 28 Dec 2022 19:54:26 +0000 (UTC)
-Date: Wed, 28 Dec 2022 20:54:25 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20221228205425.16d9a202@windsurf>
-In-Reply-To: <20221228083918.3762-1-fontaine.fabrice@gmail.com>
-References: <20221228083918.3762-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672257267;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=n37DdBE1LsLUnccNG7uCMy91CoVyFI4xP+DqzaKkM6o=;
- b=Zxz+mboCKXGeG0NN4y4HiNrYbEuNXa40q7WEdDrH7A9uWhmmhCv1ElzWS1nGtul+hqK7bW
- Jvtm9BcnV+2wN/Ap9ak1ix21Wy/yClW19x4LIYrmeGeyx7ohPtXhVMZedG4hLyXmDvqLEe
- UXPTvA/rhV3vL6cv5iDbEfxiefcBKmCS91AD4bF6M/5MBecTt+Y/rj+CW+MdGTng1EKKe/
- DflCgfHcUic5uL2+inqvHFejHt08p254UQUcd9vlMmp85qZhzBecQzQLIXjMfNb+5hiBk9
- Zst7vmbRTCKj4fPgofUjhFeR7XfbQwmA6AnvaYQDKB3BTwzg5Id75echTSwcbw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Zxz+mboC
-Subject: Re: [Buildroot] [PATCH v2,1/1] DEVELOPERS: drop ucl
+ with ESMTP id exmzGpOYg0ni for <buildroot@lists.busybox.net>;
+ Wed, 28 Dec 2022 19:54:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5001740106
+ for <buildroot@buildroot.org>; Wed, 28 Dec 2022 19:54:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5001740106
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3DBF186F51; Wed, 28 Dec 2022 19:54:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 28 Dec 2022 20:54:14 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ef3052674a7104990037b7da60cbbcb9d316e764
+X-Git-Newrev: be69066d8fee8b30dad8317bb4aad425bc005623
+X-Patchwork-Hint: ignore
+Message-Id: <20221228195445.3DBF186F51@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: drop ucl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,30 +57,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 28 Dec 2022 09:39:18 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=be69066d8fee8b30dad8317bb4aad425bc005623
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Commit 85c5af46ad6c18841576c0f7abe241a617a44cb7 forgot to drop ucl from
-> DEVELOPERS file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Fix typo: upx -> ucl
+Commit 85c5af46ad6c18841576c0f7abe241a617a44cb7 forgot to drop ucl from
+DEVELOPERS file
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 48e7e08b3a..0eea9c33d9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1091,7 +1091,6 @@ F:	package/libsodium/
+ F:	package/php-amqp/
+ F:	package/python-cherrypy/
+ F:	package/sane-backends/
+-F:	package/ucl/
+ F:	package/upx/
+ F:	package/zxing-cpp/
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
