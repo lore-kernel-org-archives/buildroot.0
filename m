@@ -4,84 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEFD9C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 08:39:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68BF3C4708D
+	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 08:56:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39C4060A46;
-	Wed, 28 Dec 2022 08:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C4060A46
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D81660767;
+	Wed, 28 Dec 2022 08:56:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D81660767
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 69nYtIOx8_jy; Wed, 28 Dec 2022 08:39:27 +0000 (UTC)
+	with ESMTP id IRqYb1IIfQBg; Wed, 28 Dec 2022 08:56:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F0EE60709;
-	Wed, 28 Dec 2022 08:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F0EE60709
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 461641BF316
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 08:39:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B89B606FF;
+	Wed, 28 Dec 2022 08:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B89B606FF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 55AC61BF316
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 08:56:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 201FF408BB
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 08:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 201FF408BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35E59606FF
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 08:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35E59606FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m8udYdiHAr0E for <buildroot@lists.busybox.net>;
- Wed, 28 Dec 2022 08:39:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B76640243
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2B76640243
- for <buildroot@buildroot.org>; Wed, 28 Dec 2022 08:39:24 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id co23so14346848wrb.4
- for <buildroot@buildroot.org>; Wed, 28 Dec 2022 00:39:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=PAkv9M27ROUo/0vmTBDOLgAoGBLB5UnLMTzS0h7PCeg=;
- b=eDBpw/PV7Bt2pudnHslTB5R+L5dySlmtf6Sfx2vr1Wpt/gj4zNjq3bV73hEJAUq/rp
- VoeCdoHi2gbh3unJdEMzXVt0vCoV9O0chghX+D5sIPaEXvnpLdT1zfeEqpQcSOf+/Vr5
- 3C4Y0ArXdjNli65K0/LayDu2dOW/FM0zUzgTNrMArnm7/qAEuRdutDFOZrjiZ14SYULJ
- E2WLE4vYYFYHqXXEUlrHIOa1eD8Ww/FihQQ2CaDFhjEOegp93ShJg54dV+JguZDtDqxM
- viJhTDh7ip6ick/CLhHEWa5pse5MPCwtLZPH8smL8o43NVB1DLCgBw34Z/O6cbjqHUVH
- ME5Q==
-X-Gm-Message-State: AFqh2kpDFlgbh3OmYtfSORGJo01/xDw4gyXH3K+3SZfH8I7gw2stzgNp
- rrrFkCWRtZfJtWN4AHi/fOkITValHiQ=
-X-Google-Smtp-Source: AMrXdXvfS1K3wWzXSsHR6sEu6Rd5nUcX/cTxOD0rGBU5C5G7wZnlsI5oWgPT9SklOZaM/kTfH5AUEw==
-X-Received: by 2002:a05:6000:18a6:b0:280:4a9:c8dd with SMTP id
- b6-20020a05600018a600b0028004a9c8ddmr7807493wri.18.1672216761858; 
- Wed, 28 Dec 2022 00:39:21 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- o15-20020adfe80f000000b0028965dc7c6bsm5565wrm.73.2022.12.28.00.39.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 28 Dec 2022 00:39:21 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 28 Dec 2022 09:39:18 +0100
-Message-Id: <20221228083918.3762-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iUqT2zdwI6UJ for <buildroot@lists.busybox.net>;
+ Wed, 28 Dec 2022 08:56:32 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03EE36068F
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03EE36068F
+ for <buildroot@buildroot.org>; Wed, 28 Dec 2022 08:56:31 +0000 (UTC)
+Received: from booty (unknown [77.244.183.192])
+ (Authenticated sender: luca.ceresoli@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7FB97240006;
+ Wed, 28 Dec 2022 08:56:28 +0000 (UTC)
+Date: Wed, 28 Dec 2022 09:56:26 +0100
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20221228095626.2976f2b3@booty>
+In-Reply-To: <20221222133350.13402-1-neal.frager@amd.com>
+References: <20221222133350.13402-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PAkv9M27ROUo/0vmTBDOLgAoGBLB5UnLMTzS0h7PCeg=;
- b=XF7TlMxExd5FAMzqx6/CXWR8TMI6nwr64Nou+Glk7uWTwKnYvTseVXMindN7QMlAl+
- QlSfbz2yKXX06Uwi/n4lqYvjI05D6F+mr3O2/i6vEri4JtzmqubCgFmhTlNl8STNwTmV
- 4Cczd5bQLPJtKKrLPqkoeUlVB8Smu4lu9QPu9r0TSMbVvL22RedKw7ft2IqkiV2GeR6o
- btXC7pK+dIxUmJL4MPGzwZ0aceK+/xOJt+uYYaVeeulgPjpsRSwlyI4vfx0dMKAt0DcR
- Fbh9WyeuJwnzoeYa+bxoKkow9Gy+03XwoPzsCxxiccK/BmsruNKOVATkdhSddJ4C1LHV
- iggg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=XF7TlMxE
-Subject: [Buildroot] [PATCH v2,1/1] DEVELOPERS: drop ucl
+ d=bootlin.com; s=gm1; t=1672217789;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=F9r84bUJUW3kMvPP8/2CbqjrHCuzVHA5aP2eloV1xgI=;
+ b=EU6Md3UfWhiOkIRMPD6W9S11Vk6LaggRhuR5lAzDGGrUPaVjmuvVaPwWdSy0CVuyuKQnaS
+ Lhan6Om7SL8PXywPl1SBMxXtPtH3diTYcChHHOtuofr9dBUqeT2/SZgv+Dk7cFFlzB83zm
+ YLiX3a6JqZl56JZzd2wNL3qsQ+wa+30Z3qZwVd4GRBAhXAOi6bbZU/FCL84uVOuK2Zrlsi
+ /+w04Fc7aKWKeddF5e08iSu72+4PxbrBHDNWTw+JO+equYpDqFWYj4vozI306lDk0ZgeVz
+ jlbLlne5/KtnfbOvs8NoQzh40OiiRSpCGY5Y2B+YwZ2qMR3e4K07KU3nnm3OCw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EU6Md3Uf
+Subject: Re: [Buildroot] [PATCH v4 1/1] configs/zynqmp_kria_kr260_defconfig:
+ new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,38 +77,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: michal.simek@amd.com, thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 85c5af46ad6c18841576c0f7abe241a617a44cb7 forgot to drop ucl from
-DEVELOPERS file
+On Thu, 22 Dec 2022 13:33:50 +0000
+Neal Frager <neal.frager@amd.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Fix typo: upx -> ucl
+> This patch adds support for Xilinx Kria KR260 starter kit.
+> 
+> KR260 features can be found here:
+> https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
+> 
+> While the Kria SOM is based on a ZynqMP SoC, there are some key
+> boot config differences from the other ZynqMP evaluation boards.
+> 
+> 1. There are no boot switches on Kria SOMs. The boot mode is thus
+> hard configured for QSPI flash. A pre-programmed boot.bin comes
+> with every Starter Kit. U-Boot can then find the Linux kernel and
+> file system on the SD card.
+> 
+> Optional instructions for updating the boot.bin in the QSPI flash
+> can be found in the readme.txt file and the link below.
+> 
+> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM
+> 
+> 2. Kria SOMs use UART1 for the console instead of UART0. For this
+> reason, Kria Starter Kits will use a separate extlinux.conf file
+> from other ZynqMP evaluation boards.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 277f0043e1..65014a9926 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1093,7 +1093,6 @@ F:	package/libsodium/
- F:	package/php-amqp/
- F:	package/python-cherrypy/
- F:	package/sane-backends/
--F:	package/ucl/
- F:	package/upx/
- F:	package/zxing-cpp/
- 
 -- 
-2.35.1
-
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
