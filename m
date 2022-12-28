@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FD92C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 336F2C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:49:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FF6D4F326;
-	Mon, 20 Feb 2023 22:49:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FF6D4F326
+	by smtp4.osuosl.org (Postfix) with ESMTP id D014D4EDE9;
+	Mon, 20 Feb 2023 22:49:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D014D4EDE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fu1tKmoQwaXd; Mon, 20 Feb 2023 22:49:44 +0000 (UTC)
+	with ESMTP id a9lp1IVjgZgu; Mon, 20 Feb 2023 22:49:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E323A4F351;
-	Mon, 20 Feb 2023 22:49:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E323A4F351
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 906771BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:55:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE6E54F360;
+	Mon, 20 Feb 2023 22:49:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE6E54F360
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F6BA1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1FE836109A
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FE836109A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A14741711
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A14741711
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 22R4q6A_5c92 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 874xHXcfjp4d for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C2466125F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C2466125F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63A0E4170A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63A0E4170A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2CF2C8648F; Mon, 20 Feb 2023 20:52:08 +0000 (UTC)
+ id 5190386494; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Dec 2022 18:05:49 +0100
+Date: Wed, 28 Dec 2022 20:54:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c0e09a1b0a6a57f3bda48d87f7292af136d59949
-X-Git-Newrev: ef708b0c195d168c311b1096c1ab2b7bf6c2aa1e
+X-Git-Oldrev: ef3052674a7104990037b7da60cbbcb9d316e764
+X-Git-Newrev: be69066d8fee8b30dad8317bb4aad425bc005623
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205208.2CF2C8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-maturin: drop
- host-python-tomli dependency
+Message-Id: <20230220205217.5190386494@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] DEVELOPERS: drop ucl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,30 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef708b0c195d168c311b1096c1ab2b7bf6c2aa1e
+commit: https://git.buildroot.net/buildroot/commit/?id=be69066d8fee8b30dad8317bb4aad425bc005623
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The host-python-tomli dependency is not required on python version
-3.11 and newer.
+Commit 85c5af46ad6c18841576c0f7abe241a617a44cb7 forgot to drop ucl from
+DEVELOPERS file
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-maturin/python-maturin.mk | 1 -
+ DEVELOPERS | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index ab87df3842..3dedfdce11 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
-@@ -12,7 +12,6 @@ PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
- PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
- HOST_PYTHON_MATURIN_DEPENDENCIES = \
- 	host-python-setuptools-rust \
--	host-python-tomli \
- 	host-rustc
- HOST_PYTHON_MATURIN_ENV = \
- 	$(HOST_PKG_CARGO_ENV) \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 48e7e08b3a..0eea9c33d9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1091,7 +1091,6 @@ F:	package/libsodium/
+ F:	package/php-amqp/
+ F:	package/python-cherrypy/
+ F:	package/sane-backends/
+-F:	package/ucl/
+ F:	package/upx/
+ F:	package/zxing-cpp/
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
