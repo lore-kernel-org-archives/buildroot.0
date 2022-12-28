@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14DFDC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 19:52:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59681C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 19:52:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ABCDB815AC;
-	Wed, 28 Dec 2022 19:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABCDB815AC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0555060BFE;
+	Wed, 28 Dec 2022 19:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0555060BFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jRVPJLoVTXSa; Wed, 28 Dec 2022 19:52:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w366Uqp9GEYR; Wed, 28 Dec 2022 19:52:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2E4981584;
-	Wed, 28 Dec 2022 19:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2E4981584
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 904221BF59F
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:52:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5146C60A9F;
+	Wed, 28 Dec 2022 19:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5146C60A9F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 06D921BF59F
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E7F1404DA
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E7F1404DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9B864027B
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 19:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9B864027B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8PEJ7jza1ozf for <buildroot@lists.busybox.net>;
- Wed, 28 Dec 2022 19:52:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DE42404D8
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0DE42404D8
- for <buildroot@buildroot.org>; Wed, 28 Dec 2022 19:52:13 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C6098C0004;
- Wed, 28 Dec 2022 19:52:10 +0000 (UTC)
-Date: Wed, 28 Dec 2022 20:52:09 +0100
-To: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <20221228205209.5ed73ae5@windsurf>
-In-Reply-To: <20221220200805.2686768-1-f.fainelli@gmail.com>
-References: <20221220200805.2686768-1-f.fainelli@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tIrvqhGRt87b for <buildroot@lists.busybox.net>;
+ Wed, 28 Dec 2022 19:52:33 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADE47402EF
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ADE47402EF
+ for <buildroot@buildroot.org>; Wed, 28 Dec 2022 19:52:33 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:58a9:4a7:c920:8cca])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id D98012003F7;
+ Wed, 28 Dec 2022 20:52:28 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 28 Dec 2022 20:52:24 +0100
+Date: Wed, 28 Dec 2022 20:52:23 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20221228195223.GF2498764@scaer>
+References: <20221217153729.545952-1-romain.naour@gmail.com>
+ <20221217153729.545952-2-romain.naour@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672257131;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=RH9GOsYqRIFo2/VvmHdgOUb9izqmuM6dqZxqr6uZrJs=;
- b=IDy0EeJSIWGxTfWF4KAMnYvmL6nxM7dbyb2DEhaBUvip/H7i6ttFOVidCV13TkZ4TprV0P
- sQf5ZefkoL1JBD34c1RplsvOqISw51srW4OLYZkKSpFpNZak0rhdUUjMRt6srxTVfWfa68
- 4opes+MCmNIkw9ViGRj/8ckE2zjnukryJIi2RCL+rCDjSiSpuQ6hDf3RrM9t3kk3j8/mfy
- vcT2tVeVI0y0P68wSyQO0FjWBZhSJ0scPNH2RSVGTZHOHAs9X4LGyCWmYZJfkIrTVt3vKU
- 9yJdshAbP+MQQipY8NMfLN1grMGv2cmKlNRnYSnof6NXXcEwu/qiaxmOFqGTUQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IDy0EeJS
-Subject: Re: [Buildroot] [PATCH] package/slang: Add option to enable/disable
- slsh
+Content-Disposition: inline
+In-Reply-To: <20221217153729.545952-2-romain.naour@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672257151;
+ bh=jm36AM7eotPVjgf2OuLZVoyMV9VhIR36qtJ2Oh9fAOc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=UXUANLN5RV6QfPRnCIhgGgbk1hZLaUmZssqm5+wQG4Kh8GdNqpA5qC3yXEM8YZiCg
+ L24jrpQM/f46f+Q4qotcEX4k+kv1cfdn0I/zqBem0sxQF0L/O98skHAqD5AAmoSAVa
+ SNA1oHBcjS5eLWpYd/mP0te0tLtxSM2QoZFJY+VPCTgbrw9D6QG1iFQceDXSTQTLx8
+ GFLvRkDmDrliYzajS2/Qsdm4Ey0ZwZzmnM5B2/5S6eFucW/7PJMimqibdcd7SRJbd9
+ W9Fmwg3pfPnLx6dD92VvUpx0yocUDfrsfHq5IAHC2x65stq+MaAoODTobJmp1fkrrm
+ gd8rNgTouSN3Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=UXUANLN5
+Subject: Re: [Buildroot] [PATCH 2/4] package/qemu: split long lines
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,77 +77,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: bernd.kuhls@t-online.de, chrismcc@gmail.com, yann.morin.1998@free.fr,
- mmayer@broadcom.com, buildroot@buildroot.org, fontaine.fabrice@gmail.com
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Florian,
+Romain, All,
 
-(Hope you're doing well!)
-
-On Tue, 20 Dec 2022 12:08:05 -0800
-Florian Fainelli <f.fainelli@gmail.com> wrote:
-
-> The S-lang shell is currently installed by default but most packages are
-> typically interested in the shared libraries only. Add a configuration
-> option to disable the slsh program and its supporting files.
+On 2022-12-17 16:37 +0100, Romain Naour spake thusly:
+> Split the list of dependencies to ease further addition.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-I've applied to master, with some small changes, see below.
-
-> diff --git a/package/slang/Config.in b/package/slang/Config.in
-> index a500ff5b7d75..b09b0cd8fc84 100644
-> --- a/package/slang/Config.in
-> +++ b/package/slang/Config.in
-> @@ -5,3 +5,10 @@ config BR2_PACKAGE_SLANG
->  	  Multi-platform console display library.
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/qemu/qemu.mk | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index a991d49993..e800f31e7e 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -20,7 +20,12 @@ QEMU_CPE_ID_VENDOR = qemu
+>  # However, building is still done with configure and make as in previous versions of QEMU.
 >  
->  	  http://www.jedsoft.org/slang/index.html
-> +
-> +config BR2_PACKAGE_SLANG_SLSH
-> +	bool "enable slsh"
-> +	default y
+>  # Target-qemu
+> -QEMU_DEPENDENCIES = host-meson host-pkgconf libglib2 zlib pixman host-python3
+> +QEMU_DEPENDENCIES = host-meson \
 
-I dropped this "default y". I know you added it to preserve existing
-behavior, but we also try in Buildroot to aim for minimalism. Since I
-believe most people who had slang enabled needed only the shared
-library, it makes sense to have slsh disabled by default. We'll see if
-some users complain about this.
+I like that the first item is also on its own line, and this is what we
+do elsewhere most of the time too, so I also changed that.
 
-> +	depends on BR2_PACKAGE_SLANG
+Applied to master, thanks.
 
-Changed to a if ... endif block.
+Regards,
+Yann E. MORIN.
 
-> +ifneq ($(BR2_PACKAGE_SLANG_SLSH),y)
+> +	host-pkgconf \
+> +	libglib2 \
+> +	zlib \
+> +	pixman \
+> +	host-python3
+>  
+>  # Need the LIBS variable because librt and libm are
+>  # not automatically pulled. :-(
+> @@ -246,7 +251,12 @@ $(eval $(generic-package))
+>  #-------------------------------------------------------------
+>  # Host-qemu
+>  
+> -HOST_QEMU_DEPENDENCIES = host-meson host-pkgconf host-zlib host-libglib2 host-pixman host-python3
+> +HOST_QEMU_DEPENDENCIES = host-meson \
+> +	host-pkgconf \
+> +	host-zlib \
+> +	host-libglib2 \
+> +	host-pixman \
+> +	host-python3
+>  
+>  #       BR ARCH         qemu
+>  #       -------         ----
+> -- 
+> 2.38.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Changed to positive logic:
-
-ifeq ($(BR2_PACKAGE_SLANG_SLSH),)
-
-> +define SLANG_REMOVE_SLSH
-> +	rm -rf $(TARGET_DIR)/etc/slsh.rc \
-> +		$(TARGET_DIR)/usr/share/slsh \
-> +		$(TARGET_DIR)/usr/bin/slsh
-> +endef
-> +endif
-> +
-> +SLANG_POST_INSTALL_TARGET_HOOKS += SLANG_REMOVE_SLSH
-
-Hook registration moved inside the ifeq ... endif block.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
