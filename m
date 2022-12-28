@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E188DC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:33:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0812C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9865F83EB5;
-	Mon, 20 Feb 2023 23:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9865F83EB5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D23583EBE;
+	Mon, 20 Feb 2023 23:33:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D23583EBE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vDWZyCrp-Cdc; Mon, 20 Feb 2023 23:33:28 +0000 (UTC)
+	with ESMTP id YFyyHVdbUugt; Mon, 20 Feb 2023 23:33:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 886DA833A0;
-	Mon, 20 Feb 2023 23:33:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 886DA833A0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 139191BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9471C83313;
+	Mon, 20 Feb 2023 23:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9471C83313
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C24241BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3202B4175D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3202B4175D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 830AC61779
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 830AC61779
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6LV9q5_oQsri for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cGQegZpdzxbO for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69C6E41759
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69C6E41759
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E1A561784
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E1A561784
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62D2A7FF06; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 6D858828C8; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:58:03 +0100
+Date: Wed, 28 Dec 2022 21:02:11 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: dc967784ccb3aa378d597098750c9a643e9d2850
-X-Git-Newrev: 65c47725b02d00b6ffa5acf88176b6b1365c3f7a
+X-Git-Oldrev: 16b27f7cdbc8c203b3b957a33ade03739149021f
+X-Git-Newrev: d47f7279f516ba2bbc6d1fd9dd37636902b9bad3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205238.62D2A7FF06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gvfs: switch to https
- download
+Message-Id: <20230220205217.6D858828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rng-tools: fix build
+ with updated jitterentropy-library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +56,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65c47725b02d00b6ffa5acf88176b6b1365c3f7a
+commit: https://git.buildroot.net/buildroot/commit/?id=d47f7279f516ba2bbc6d1fd9dd37636902b9bad3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gvfs/gvfs.hash | 2 +-
- package/gvfs/gvfs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Commit a8807ddbe2 bumped package jitterentropy-library to version 3.4.1
+which broke building rng-tools.
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index f4a5364f1f..fc068ddb94 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
-@@ -1,4 +1,4 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.48/gvfs-1.48.1.sha256sum
-+# From https://download.gnome.org/sources/gvfs/1.48/gvfs-1.48.1.sha256sum
- sha256  b2ea4f271aad2711f16b43c03151e2ec5a9874ff1a21142ef6d6406486a19dc2  gvfs-1.48.1.tar.xz
- 
- # Hash for license file
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 4174592455..50efed1abb 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -7,7 +7,7 @@
- GVFS_VERSION_MAJOR = 1.48
- GVFS_VERSION = $(GVFS_VERSION_MAJOR).1
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
--GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
-+GVFS_SITE = https://download.gnome.org/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
- GVFS_DEPENDENCIES = \
- 	host-pkgconf \
+Add two upstream patches which improve jitterentropy-library detection.
+
+Fixes:
+http://autobuild.buildroot.net/results/a6f/a6f1381b3d1aa2a27412286167f5c8be5f6fdaf8/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...erentropy-detection-to-look-for-the-setti.patch | 30 +++++++++++++++++
+ ...erentropy-library-to-timeout-fail-on-long.patch | 39 ++++++++++++++++++++++
+ 2 files changed, 69 insertions(+)
+
+diff --git a/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch b/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
+new file mode 100644
+index 0000000000..553842640d
+--- /dev/null
++++ b/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
+@@ -0,0 +1,30 @@
++From e2698477e8abf623c18ab28d33cc894ec882a706 Mon Sep 17 00:00:00 2001
++From: Neil Horman <neil.horman@privafy.com>
++Date: Fri, 18 Mar 2022 18:59:52 -0400
++Subject: [PATCH] Adjust jitterentropy detection to look for the settick
++ function
++
++Theres no great way to detect if jitterentropy has the internal timer
++feature enabled so we have to look for a function that is only defined
++when it is enabled
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[downloaded from upstream commit
++ https://github.com/nhorman/rng-tools/commit/e2698477e8abf623c18ab28d33cc894ec882a706]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index e16e1a0..0f5a38e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -94,7 +94,7 @@ AS_IF(
++ 		AC_SEARCH_LIBS(jent_version,jitterentropy,
++ 				[AM_CONDITIONAL([JITTER], [true])
++ 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
++-				AC_CHECK_LIB(jitterentropy, jent_entropy_switch_notime_impl,
+++				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
++ 				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
++ 				[],-lpthread)],
++ 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
+diff --git a/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch b/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
+new file mode 100644
+index 0000000000..9d8dbe2d0b
+--- /dev/null
++++ b/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
+@@ -0,0 +1,39 @@
++From c29424f10a0dcbd18ac25607fa1c81c18a960e81 Mon Sep 17 00:00:00 2001
++From: Neil Horman <nhorman@tuxdriver.com>
++Date: Mon, 16 May 2022 13:38:54 -0400
++Subject: [PATCH] Adjust jitterentropy library to timeout/fail on long delay
++
++[Bernd: removed description of unrelated part of the patch]
++
++Also while we're at it, I might have a build solution for the presence
++of internal timers.  When jitterentropy is built without internal
++timers, jent_notime_init is defined publically, but when it is built
++with timers, its declared as a static symbol, preenting resolution, so
++we can test to see if the function exists.  If it does we _don't_ have
++notime support. The logic is a bit backwards, but i think it works
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[downloaded configure.ac patch from upstream commit
++ https://github.com/nhorman/rng-tools/commit/57be6d4c90e78ea9ad036a3a6e9b09822ed4d219]
++---
++ configure.ac  |  6 ++---
++ rngd_jitter.c | 62 ++++++++++++++++++++++++++++++++++++++-------------
++ 2 files changed, 49 insertions(+), 19 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 52f2bb5..0af64e7 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -101,9 +101,9 @@ AS_IF(
++ 		AC_SEARCH_LIBS(jent_version,jitterentropy,
++ 				[AM_CONDITIONAL([JITTER], [true])
++ 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
++-				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
++-				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
++-				[],-lpthread)],
+++				AC_CHECK_LIB(jitterentropy, jent_notime_init,
+++				[],
+++				[AC_DEFINE([HAVE_JITTER_NOTIME],1, [Enable JITTER_NOTIME])],-lpthread)],
++ 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
++ 	], [AC_MSG_NOTICE([Disabling JITTER entropy source])]
++ )
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
