@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68BF3C4708D
-	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 08:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2EC6C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 10:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D81660767;
-	Wed, 28 Dec 2022 08:56:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D81660767
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C80B606FF;
+	Wed, 28 Dec 2022 10:01:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C80B606FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IRqYb1IIfQBg; Wed, 28 Dec 2022 08:56:35 +0000 (UTC)
+	with ESMTP id tzouwY28PLXQ; Wed, 28 Dec 2022 10:01:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B89B606FF;
-	Wed, 28 Dec 2022 08:56:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B89B606FF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 55AC61BF316
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 08:56:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9490A6070A;
+	Wed, 28 Dec 2022 10:01:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9490A6070A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A9BD41BF3FB
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 10:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35E59606FF
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 08:56:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35E59606FF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92C7740256
+ for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 10:01:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92C7740256
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iUqT2zdwI6UJ for <buildroot@lists.busybox.net>;
- Wed, 28 Dec 2022 08:56:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03EE36068F
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 03EE36068F
- for <buildroot@buildroot.org>; Wed, 28 Dec 2022 08:56:31 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7FB97240006;
- Wed, 28 Dec 2022 08:56:28 +0000 (UTC)
-Date: Wed, 28 Dec 2022 09:56:26 +0100
-To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20221228095626.2976f2b3@booty>
-In-Reply-To: <20221222133350.13402-1-neal.frager@amd.com>
-References: <20221222133350.13402-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672217789;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=F9r84bUJUW3kMvPP8/2CbqjrHCuzVHA5aP2eloV1xgI=;
- b=EU6Md3UfWhiOkIRMPD6W9S11Vk6LaggRhuR5lAzDGGrUPaVjmuvVaPwWdSy0CVuyuKQnaS
- Lhan6Om7SL8PXywPl1SBMxXtPtH3diTYcChHHOtuofr9dBUqeT2/SZgv+Dk7cFFlzB83zm
- YLiX3a6JqZl56JZzd2wNL3qsQ+wa+30Z3qZwVd4GRBAhXAOi6bbZU/FCL84uVOuK2Zrlsi
- /+w04Fc7aKWKeddF5e08iSu72+4PxbrBHDNWTw+JO+equYpDqFWYj4vozI306lDk0ZgeVz
- jlbLlne5/KtnfbOvs8NoQzh40OiiRSpCGY5Y2B+YwZ2qMR3e4K07KU3nnm3OCw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EU6Md3Uf
-Subject: Re: [Buildroot] [PATCH v4 1/1] configs/zynqmp_kria_kr260_defconfig:
- new defconfig
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WCudgkig_mB5 for <buildroot@lists.busybox.net>;
+ Wed, 28 Dec 2022 10:01:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CCE4D40004
+ for <buildroot@buildroot.org>; Wed, 28 Dec 2022 10:01:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCE4D40004
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B965E86F04; Wed, 28 Dec 2022 10:01:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 28 Dec 2022 11:01:03 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d77db2df74a3ccb430cbc326edef2c4a588878b0
+X-Git-Newrev: 6264dfae49af69d7358f2d6fef21bd720e62440f
+X-Patchwork-Hint: ignore
+Message-Id: <20221228100115.B965E86F04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/aubio: switch to external waf
+ script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,47 +56,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: michal.simek@amd.com, thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 22 Dec 2022 13:33:50 +0000
-Neal Frager <neal.frager@amd.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6264dfae49af69d7358f2d6fef21bd720e62440f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This patch adds support for Xilinx Kria KR260 starter kit.
-> 
-> KR260 features can be found here:
-> https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
-> 
-> While the Kria SOM is based on a ZynqMP SoC, there are some key
-> boot config differences from the other ZynqMP evaluation boards.
-> 
-> 1. There are no boot switches on Kria SOMs. The boot mode is thus
-> hard configured for QSPI flash. A pre-programmed boot.bin comes
-> with every Starter Kit. U-Boot can then find the Linux kernel and
-> file system on the SD card.
-> 
-> Optional instructions for updating the boot.bin in the QSPI flash
-> can be found in the readme.txt file and the link below.
-> 
-> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM
-> 
-> 2. Kria SOMs use UART1 for the console instead of UART0. For this
-> reason, Kria Starter Kits will use a separate extlinux.conf file
-> from other ZynqMP evaluation boards.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+Since the python 3.11 version bump [1], the waf script
+bundled in aubio 0.4.9 can't be executed anymore due
+to a waf bug [2].
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Use the waf script provided by the Buildroot waf package
+infrastructure after removing the old waf script and its
+libraries.
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+http://autobuild.buildroot.org/results/e2b/e2be18415ca794c68e708f2fdfd0a1a1ff5be714
+
+[1] 738500c296c8b1206f20e94ca3e7c5932a6a0486
+[2] https://gitlab.com/ita1024/waf/-/commit/68997828c850ce7fb30b73b4adfde35053e539d1
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/aubio/aubio.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+index b2eb2b5e6d..c995fdfac7 100644
+--- a/package/aubio/aubio.mk
++++ b/package/aubio/aubio.mk
+@@ -16,6 +16,17 @@ AUBIO_CONF_OPTS = \
+ 	--disable-docs \
+ 	--disable-atlas
+ 
++# The waf script bundled in aubio 0.4.9 is too old for python3.11
++# Similar issue with Jack:
++# https://github.com/jackaudio/jack2/issues/898
++AUBIO_NEEDS_EXTERNAL_WAF = YES
++
++# The old waf script bundled in aubio 0.4.9 need to be removed first.
++define AUBIO_REMOVE_OLD_WAF
++	$(RM) -fr $(@D)/waf $(@D)/waflib
++endef
++AUBIO_POST_EXTRACT_HOOKS = AUBIO_REMOVE_OLD_WAF
++
+ # Add --notests for each build step to avoid running unit tests on the
+ # build machine.
+ AUBIO_WAF_OPTS = --notests
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
