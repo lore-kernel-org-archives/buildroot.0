@@ -1,67 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53335C3DA79
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 20:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7914C46467
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 20:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3F2A408BA;
-	Thu, 29 Dec 2022 20:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3F2A408BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3ED75606C0;
+	Thu, 29 Dec 2022 20:18:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ED75606C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4pU4152rtMYN; Thu, 29 Dec 2022 20:09:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id smTh6-xitC7q; Thu, 29 Dec 2022 20:18:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7726E408BF;
-	Thu, 29 Dec 2022 20:09:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7726E408BF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DAE941BF386
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 20:08:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7157F60669;
+	Thu, 29 Dec 2022 20:18:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7157F60669
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E607C1BF386
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 20:18:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6AD4401F3
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 20:08:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6AD4401F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id C146A81992
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 20:18:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C146A81992
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id My0f0BBBtFaf for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 20:08:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dcY-jDM7dk4Q for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 20:18:50 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDF62401E1
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BDF62401E1
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 20:08:57 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.171.174.182])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 7A04A2003F3;
- Thu, 29 Dec 2022 21:08:54 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AB1681772
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7AB1681772
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 20:18:50 +0000 (UTC)
+Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
+ by mailout09.t-online.de (Postfix) with SMTP id 44BE321D5F
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 21:18:47 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd85.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1pAzMU-2ZJdnl0; Thu, 29 Dec 2022 21:18:46 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46660)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pAzMU-0000Rc-1B
+ for buildroot@buildroot.org; Thu, 29 Dec 2022 21:18:46 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 21:08:18 +0100
-Message-Id: <20221229200830.12305-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221229194729.8085-1-ju.o@free.fr>
-References: <20221229194729.8085-1-ju.o@free.fr>
+Date: Thu, 29 Dec 2022 21:18:43 +0100
+Message-Id: <20221229201846.3498030-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672344536;
- bh=76KTElExXD7XkTUArwejIgA0fZctQM18JuApN2vM64s=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=QjoEBoxRkJRqkp5Tv0yf6/THHFc12NHmQHODuYq8B5JS4WGUSYaRwHWh1y1nxfWxv
- SguRkZlL4bKXmqhRjExLf9qc13NXmCtMWqAXIeBSI+aPDUWWqtS5h/5ilvaBzIQoZm
- 5zp4BVsue/Qw9ugTwnbxDsXlUkIUrXIHTiNKTUDd6Pb7FYc3GUXLBpg9AiZcuAzWvX
- l5UInsEKyhPx5u6KwlLVqaSbjFOnrGu3xSZ/Yuv8V23Cm0HfufrkTIrUr8UdjTvOVA
- xp7xO6Kzv/ibBXLYO0oyGUfwUNa/URsruQ+PX3GtnRhlSAqu4cw9mCF/3Jaw7YdfVl
- Fyx/o/P8WSsKQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QjoEBoxR
-Subject: [Buildroot] [PATCH 15/27] configs/freescale_imx6sxsabresd: update
- codeaurora URLs to github
+X-TOI-EXPURGATEID: 150726::1672345126-17FF2EA1-2629ABFF/0/0 CLEAN NORMAL
+X-TOI-MSGID: d5a05493-4b36-481b-86a3-42437ed49333
+Subject: [Buildroot] [PATCH 1/4] package/x11r7/xapp_xdriinfo: bump version
+ to 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,77 +66,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-NXP moved all its open source code repositories from Code Aurora Forum
-to github. See for example:
-https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
+Release notes:
+https://lists.x.org/archives/xorg-announce/2022-December/003308.html
 
-Software packages are now grouped in several NXP github
-projects/organizations (nxp-imx, nxp-qoriq, ...). See:
-https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
+Switched tarball to xz, updated _SITE.
 
-The NXP code published on Code Aurora is still present (at the time of
-this commit) but is no longer receiving updates. It is also expected
-to be shut down on 2023-03-31. The Code Aurora website
-https://source.codeaurora.org/ currently show the following message:
-"""
-Note: Qualcomm Innovation Center Inc. maintained repositories have
-migrated to git.codelinaro.org. QUIC repositories on this site will
-not receive any updates after March 31, 2022, and will be deleted on
-March 31, 2023. If your project depends on these repositories, please
-adjust your tooling configuration to use the new, up-to-date project
-location.
-"""
-
-For this reason, the NXP recipes using codeaurora.org urls need to be
-updated to the correct github.com replacement.
-
-Note: this commit does not change the component version. Only the
-download URL is updated. The archive content is expected to be the
-same.
-
-Note 2: this commit updates the Kernel and U-Boot download urls.
-The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- configs/freescale_imx6sxsabresd_defconfig | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash | 8 +++-----
+ package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
-index 9f48ef2da5..0c585c97f0 100644
---- a/configs/freescale_imx6sxsabresd_defconfig
-+++ b/configs/freescale_imx6sxsabresd_defconfig
-@@ -16,9 +16,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash
+index 21c50184c7..ce11d06977 100644
+--- a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash
++++ b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002858.html
+-md5  480e63cd365f03eb2515a6527d5f4ca6  xdriinfo-1.0.6.tar.bz2
+-sha1  11682ae1f04a311b832651d78bbf4c6ac77f0ed9  xdriinfo-1.0.6.tar.bz2
+-sha256  d9ccd2c3e87899417acc9ea1f3e319a4198112babe1dc711273584f607449d51  xdriinfo-1.0.6.tar.bz2
+-sha512  7ddd9e19abaef93e4d85004293528ec3814ef84c470d496dbb8dc8313d804bb7520406de8d33d2bc2b3af942bd0a5d5032a109b2726438a966af63ea680a102f  xdriinfo-1.0.6.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2022-December/003308.html
++sha256  dd838bae9d2b19ddd71fe6d30ed33abc7c85e19d223e79d35600db3fa44bf734  xdriinfo-1.0.7.tar.xz
++sha512  a368cf32c606ca78f3a23bc5d88fb57b9c1a3827d0fec3e48cee153703135e47cecd3db8ee0eba93f309d7f03b4306c3f2e7f46f36d0d2970671c5e5b78093ad  xdriinfo-1.0.7.tar.xz
+ # Locally computed
+ sha256  de2fbb160bbb64c48975d7a3ebe3636a312b73227df1efe37488a8cecb9c1932  COPYING
+diff --git a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
+index 7f7aac9e15..7672dc8899 100644
+--- a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
++++ b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-sdb"
-@@ -36,8 +35,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
- # bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+-XAPP_XDRIINFO_VERSION = 1.0.6
+-XAPP_XDRIINFO_SOURCE = xdriinfo-$(XAPP_XDRIINFO_VERSION).tar.bz2
+-XAPP_XDRIINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XDRIINFO_VERSION = 1.0.7
++XAPP_XDRIINFO_SOURCE = xdriinfo-$(XAPP_XDRIINFO_VERSION).tar.xz
++XAPP_XDRIINFO_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XDRIINFO_LICENSE = MIT
+ XAPP_XDRIINFO_LICENSE_FILES = COPYING
+ XAPP_XDRIINFO_DEPENDENCIES = libgl xlib_libX11 xorgproto
 -- 
-2.39.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
