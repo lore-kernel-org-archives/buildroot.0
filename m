@@ -1,91 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5855BC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C53E7C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:31:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0779140102;
-	Thu, 29 Dec 2022 09:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0779140102
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xq5a3ys-vZNk; Thu, 29 Dec 2022 09:31:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3180140597;
-	Thu, 29 Dec 2022 09:31:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3180140597
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1EC9E1BF393
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:30:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07A8280DC5
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:30:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07A8280DC5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73A24818BE;
+	Thu, 29 Dec 2022 09:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73A24818BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JP1fnYn55QL1 for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 09:30:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DF6D80DD1
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3DF6D80DD1
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:30:39 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- i17-20020a05600c355100b003d99434b1cfso2616510wmq.1
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 01:30:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=lFftVb9omcPQwzJplw9Ji8z2XYpRSJ3gAZsrRE3/3i8=;
- b=70xO07DO2pRNpKnZwUVpcW4dfWrPeud4+hlwcwr3LqQ9iZ98Zj3qwn3M2PlkGSbirE
- N7FtsFYfnOStwihNCowLerOPlBmmL/cUKdKhqF2op9oh8mmA7jEUkC5iCXDerTUkXcxC
- udFUgJ7m2xbzJqrVKsrqyb+Yqqb/ogBEYwaGJEBo3O6hC/a6bkAV4TMzb+DCapbV0jLR
- QDIlqn8L0MzSS7MFkRn/F3uNhojb6piSdo4uvnste956ffFgh7ZmHOhyYNzMvDPLqMwZ
- 4zNlWpMYVWgRdR8uJbcQ0WOVRm5G8Afcwvl8D8kXSyPZC79t9VijFRlpnuqm3P+CIVEU
- HXgg==
-X-Gm-Message-State: AFqh2kq4EAUhdbWNf+Jljx7xkTTHyb35m7jzglBJOc2Ij4OvUgNvLPeH
- Ru7Q1fd6a/6JpBTtD1sHSIp3aOMkESg=
-X-Google-Smtp-Source: AMrXdXufT1TJ3RrjZIcDjabCBye4lmnyqMVCHWBEG1FRo/rLAtMVBbdIrxWfpUeTzEGBPT3cFoozhA==
-X-Received: by 2002:a05:600c:42d4:b0:3d0:6d39:c62e with SMTP id
- j20-20020a05600c42d400b003d06d39c62emr19907696wme.12.1672306238546; 
- Thu, 29 Dec 2022 01:30:38 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- c4-20020a05600c0a4400b003cf75213bb9sm33101739wmq.8.2022.12.29.01.30.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 29 Dec 2022 01:30:38 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wEcRX1Fc8tO7; Thu, 29 Dec 2022 09:31:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD1F0818AC;
+	Thu, 29 Dec 2022 09:31:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD1F0818AC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EE9241BF393
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:30:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C76D340887
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:30:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C76D340887
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZYOe1b8hufBA for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 09:30:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 982194047D
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:30:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 982194047D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8405C87028; Thu, 29 Dec 2022 09:30:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 10:30:29 +0100
-Message-Id: <20221229093029.264681-3-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221229093029.264681-1-fontaine.fabrice@gmail.com>
-References: <20221229093029.264681-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=lFftVb9omcPQwzJplw9Ji8z2XYpRSJ3gAZsrRE3/3i8=;
- b=CwJwu7sxIH0SgGsZCIqqFPDMErznOooOXpDak+6owiGzNcceMfgAHXbSCEswaFMFGg
- 6Z673KcHpXE0Tgu/524Fs1oKbMKg8gagv27L0SQu/d2yvUQLsv5Ea/S6TGBVGTZcYsEJ
- WbvyV/w4WPaCe5s9fmxr83fyLXkCiyMz5zaGpOErfe+qkXucGZjW56SGLVkBOhlez2qR
- Lu/B3hYizow8rVsnck1kWsEj+fO76SoX+VxGrcj0EcuTEHH/mO/Id/S4IfloCdMjGExA
- Ekn0JwH6ZqRw4LHCHDp8CZ/9ggaNCddD2uP4WEjtc/ljnXS3n3zzsAq9nBRXDiHfAxBM
- Ahsw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=CwJwu7sx
-Subject: [Buildroot] [PATCH 3/3] package/tiff: add C++ support
+Date: Thu, 29 Dec 2022 10:30:46 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7e4b0d8be54ce6dd9c54f1c04eeb752db2f0dcf3
+X-Git-Newrev: 65d14c82db6e6c4555cc83b65ff22578e4525601
+X-Patchwork-Hint: ignore
+Message-Id: <20221229093055.8405C87028@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiohttp-remotes: bump to
+ version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,45 +56,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=65d14c82db6e6c4555cc83b65ff22578e4525601
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Migrate from distutils to flit package infrastructure.
+
+Add a patch fixing incorrect flit requires/build-backend in
+pyproject.toml.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tiff/tiff.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ ...0001-Fix-flit_core-build-requires-backend.patch | 32 ++++++++++++++++++++++
+ .../python-aiohttp-remotes.hash                    |  4 +--
+ .../python-aiohttp-remotes.mk                      |  6 ++--
+ 3 files changed, 37 insertions(+), 5 deletions(-)
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 6d761ad678..c2a4108f35 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -14,7 +14,6 @@ TIFF_INSTALL_STAGING = YES
- 
- TIFF_CONF_OPTS = \
- 	--disable-contrib \
--	--disable-cxx \
- 	--disable-tests \
- 	--without-x
- 
-@@ -29,6 +28,12 @@ HOST_TIFF_CONF_OPTS = \
- 	--disable-tests
- HOST_TIFF_DEPENDENCIES = host-pkgconf
- 
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+TIFF_CONF_OPTS += --enable-cxx
-+else
-+TIFF_CONF_OPTS += --disable-cxx
-+endif
+diff --git a/package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch b/package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch
+new file mode 100644
+index 0000000000..cf940eaf87
+--- /dev/null
++++ b/package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch
+@@ -0,0 +1,32 @@
++From 3d39ee9a03a1c96b8e798dc6acf98165da31da1f Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Fri, 11 Mar 2022 12:59:53 -0700
++Subject: [PATCH] Fix flit_core build requires/backend.
 +
- ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
- TIFF_CONF_OPTS += --disable-ccitt
- endif
--- 
-2.35.1
-
++Only flit_core should be required by pyproject.toml, the regular flit
++package is the pep517 frontend which is not what should be set for the
++build system.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/aio-libs/aiohttp-remotes/pull/355]
++---
++ pyproject.toml     | 4 ++--
++ 1 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/pyproject.toml b/pyproject.toml
++index 214d64d..8c6b882 100644
++--- a/pyproject.toml
+++++ b/pyproject.toml
++@@ -1,6 +1,6 @@
++ [build-system]
++-requires=["flit"]
++-build-backend="flit.buildapi"
+++requires=["flit_core"]
+++build-backend="flit_core.buildapi"
++ 
++ [tool.flit.metadata]
++ module="aiohttp_remotes"
++-- 
++2.38.1
++
+diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
+index 595340d5d8..51c5cf08b4 100644
+--- a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
++++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-remotes/json
+-md5  da13880f25ec3b9cf98c7baff92835a2  aiohttp_remotes-1.1.0.tar.gz
+-sha256  e44f2c5fd5fc3305477c89bb25f14570589100cc58c48b36745d4239839d3174  aiohttp_remotes-1.1.0.tar.gz
++md5  c46a71df656e7f1e111684ced68a85d0  aiohttp_remotes-1.2.0.tar.gz
++sha256  f95c3a6be5e2de746a85ce9af49ec548da6db8378d7e81bb171ec77b13562a6c  aiohttp_remotes-1.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4e7d0edf250abe2a28027788b8c55a53d1b5c9ff961b8a00643c76aed637ba13  LICENSE
+diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
+index e2bc3e1c18..e0ec789f41 100644
+--- a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
++++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOHTTP_REMOTES_VERSION = 1.1.0
++PYTHON_AIOHTTP_REMOTES_VERSION = 1.2.0
+ PYTHON_AIOHTTP_REMOTES_SOURCE = aiohttp_remotes-$(PYTHON_AIOHTTP_REMOTES_VERSION).tar.gz
+-PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/e3/fc/5523010172e2d8685a8934fbb49d564118c9ebc1e4233a62b77310f979db
+-PYTHON_AIOHTTP_REMOTES_SETUP_TYPE = distutils
++PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/54/05/7c4be6171cc78a13171a4f89e5d308c4a636bdd8ee36101367e99e410ed8
++PYTHON_AIOHTTP_REMOTES_SETUP_TYPE = flit
+ PYTHON_AIOHTTP_REMOTES_LICENSE = MIT
+ PYTHON_AIOHTTP_REMOTES_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
