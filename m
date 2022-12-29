@@ -1,72 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 747DEC3DA79
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C112AC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:34:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F8D740580;
-	Thu, 29 Dec 2022 09:32:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F8D740580
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E78360D5C;
+	Thu, 29 Dec 2022 09:34:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E78360D5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VCEkFZLThTlg; Thu, 29 Dec 2022 09:32:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6O09EuvsoG1C; Thu, 29 Dec 2022 09:34:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 770FD40573;
-	Thu, 29 Dec 2022 09:32:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 770FD40573
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E09EB1BF393
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:32:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BFC960D54;
+	Thu, 29 Dec 2022 09:34:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BFC960D54
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EB15F1BF393
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:34:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AEEBB40573
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:32:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEEBB40573
+ by smtp1.osuosl.org (Postfix) with ESMTP id D3E1C818AC
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:34:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3E1C818AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yKe5VjiYwOLa for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 09:32:21 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6D68400DD
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B6D68400DD
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:32:20 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BB69C240004;
- Thu, 29 Dec 2022 09:32:18 +0000 (UTC)
-Date: Thu, 29 Dec 2022 10:32:17 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20221229103217.11ddb405@windsurf>
-In-Reply-To: <20221212150610.2794627-1-james.hilliard1@gmail.com>
-References: <20221212150610.2794627-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sv1gXOk34dHO for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 09:34:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D972C818A1
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D972C818A1
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:34:00 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id ay40so12786885wmb.2
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 01:34:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=q3DA2reA4iGg+OxXzbjOrcMfS+yjLwlQVL0ENLJDL04=;
+ b=32Bnu+mZj6HC0za8i6ZUTCNIt+MKmhIc9ziH/4N0avPymdeW+djtgQVnlG4+h6lEBz
+ 0YbsWKcJEahRgL8jF8WLJLv+F4u35NkXBSjT7Dya+TpwaRJ/pXWlKuZglt4lxNQGX7h5
+ wMwGp2JREU2bYKOwT1Qk4BmTXLiLscvnKeYEM5BIu4ltXwednu+SJ1dEjc5rauwQjTqN
+ 8OuyKFQZduLTvRt1xnAC3U2mHSRLOecjW2asQa8s/tPTKxGCaIT+CcQu7x5Qj5DgUhhZ
+ /3UerBBS4ZesUz+Xe8Q/wksKQFFXNPgsAsgvsv4AZFk8AZHvnOHkRoC4ol1BM7k2ZNlH
+ 5pKw==
+X-Gm-Message-State: AFqh2kpnNkCeu5mZqMEl4OPjfuKEVqsxPYwwU6RxQ45PgsePO3uwpRy4
+ Kb/mT+w4awbALJU6yKm5U29cRyGHxUQ=
+X-Google-Smtp-Source: AMrXdXvFBOeb0xgoP07g3NpBgMx3M93pC2cuTDbO0W+ZOxLc2PBpX5JK19eb5W4PzrYfp7BN6mW6aw==
+X-Received: by 2002:a05:600c:c0d:b0:3d9:7667:c0e4 with SMTP id
+ fm13-20020a05600c0c0d00b003d97667c0e4mr11145349wmb.31.1672306438766; 
+ Thu, 29 Dec 2022 01:33:58 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ i25-20020a1c5419000000b003c6c182bef9sm33712013wmb.36.2022.12.29.01.33.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 29 Dec 2022 01:33:58 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 29 Dec 2022 10:33:55 +0100
+Message-Id: <20221229093355.292967-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-GND-Spam-Score: 200
-X-GND-Status: SPAM
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672306339;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mwGytoXndJ1mq8oMrYyeFa4/oG15vKOQmVjEOyjtmVs=;
- b=A58OcXbUsarelG7nrENrHOrHCXlP5SfpimiyxFgTQO8RP/vTk58jB/dhyKspQ3KzIYvv7M
- mhE7K5urkDaGPV8rp6zDqxlPjFZ9KqhHy+Ay247rj/0UzA2G6v1a1CB87SMGm0DHYuewSD
- Ol3+LJoD98u+qLGbt+W/jFf9HaxWJRDfIdthnSlp5Rv9YRn+fQKGQfKdjdcYEKeq61t1OP
- wm2AsVW7amY2cD4nwszt2gnW+w9FqOUbpudPuTQVAdGrFkBuxDlDPeTjc5QgMh8bU+ONtm
- 20Hoi1wZB+edX1BH0POvWaB+hBJDZFpfhFW7fH2t3dV1oDXvEpzPIx/mhzeE2g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=A58OcXbU
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiohttp-remotes: bump to
- version 1.2.0
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=q3DA2reA4iGg+OxXzbjOrcMfS+yjLwlQVL0ENLJDL04=;
+ b=jHG5u435xWHbnYKUPn6VkJ4OcsHs3AnXYF0sWsViZ/1StC6J6SasZqoU5bt/LcJJ0s
+ mHpHdqXY+Bolc7AVdlwbfskLv/hHKy3gIgPrD0fOa8zkF3FzBUZgwXuW/St9iGCQ/pBL
+ Hdyts96I53mRoAg9krTqqLHnqqzcWxQmDtFfBMticahOje8KTWU8WavKeeymSVjzMiG7
+ IdLlu+w0UgmL7N5VWqqWsekgPrs/J6gsWZW9Q4HGaUxG/oSL+vzZM55SQJfHClzcBpq7
+ IvkxuQabMUYjGQ3upSf/6fEXpyNxlB+0X+aIZbFlAwlDhjm3EiP8kxFQV2s0KMiyU5up
+ +1Mg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=jHG5u435
+Subject: [Buildroot] [PATCH 1/1] package/ulogd: add libdbi support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,37 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 12 Dec 2022 08:06:10 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ulogd/ulogd.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> Migrate from distutils to flit package infrastructure.
-> 
-> Add a patch fixing incorrect flit requires/build-backend in
-> pyproject.toml.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...Fix-flit_core-build-requires-backend.patch | 32 +++++++++++++++++++
->  .../python-aiohttp-remotes.hash               |  4 +--
->  .../python-aiohttp-remotes.mk                 |  6 ++--
->  3 files changed, 37 insertions(+), 5 deletions(-)
->  create mode 100644 package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 65280a2ba6..561429599c 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -7,7 +7,6 @@
+ ULOGD_VERSION = 2.0.8
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
+-ULOGD_CONF_OPTS = --disable-dbi
+ ULOGD_DEPENDENCIES = host-pkgconf \
+ 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+ 	libnfnetlink
+@@ -17,6 +16,12 @@ ULOGD_SELINUX_MODULES = ulogd
+ 
+ # DB backends need threads
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++ifeq ($(BR2_PACKAGE_LIBDBI),y)
++ULOGD_CONF_OPTS += --enable-dbi
++ULOGD_DEPENDENCIES += libdbi
++else
++ULOGD_CONF_OPTS += --disable-dbi
++endif
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ ULOGD_CONF_OPTS += --enable-mysql
+ ULOGD_DEPENDENCIES += mysql
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
