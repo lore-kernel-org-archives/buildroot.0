@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 315A0C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9413C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:06:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CCD3D4057F;
-	Thu, 29 Dec 2022 09:06:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCD3D4057F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5997340498;
+	Thu, 29 Dec 2022 09:06:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5997340498
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ShjpGj15PHpN; Thu, 29 Dec 2022 09:06:39 +0000 (UTC)
+	with ESMTP id IPfNtxsbxdOX; Thu, 29 Dec 2022 09:06:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 17E0140498;
-	Thu, 29 Dec 2022 09:06:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17E0140498
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A65EF1BF393
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:05:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7ECFB4057F;
+	Thu, 29 Dec 2022 09:06:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7ECFB4057F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CF9F1BF393
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8083240579
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:05:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8083240579
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB04E402B8
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:05:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB04E402B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8UWNZZVMy722 for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 09:05:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C79840498
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:05:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C79840498
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0595C86FEE; Thu, 29 Dec 2022 09:05:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 10:04:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7a2afdb7b1180bed3b6ad92c22c908805467ead3
-X-Git-Newrev: 96d3e5fd2f5310e9f626084669a9ddaa55c92eda
-X-Patchwork-Hint: ignore
-Message-Id: <20221229090543.0595C86FEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/capnproto: bump version to 0.10.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pnY7NARaJ0_7 for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 09:05:49 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A7E840201
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7A7E840201
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:05:49 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id AFA7F240008;
+ Thu, 29 Dec 2022 09:05:46 +0000 (UTC)
+Date: Thu, 29 Dec 2022 10:05:45 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20221229100545.00b3e43a@windsurf>
+In-Reply-To: <20221229084814.3302-1-fontaine.fabrice@gmail.com>
+References: <20221229084814.3302-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1672304746;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=xFTCd5lD3+rMHA6cLEc9qgW4s7WGEVzhz9Cx5pW/bXI=;
+ b=RxDz+/59A9wH708T/eTaiH8pGrQ4t+JmYZb6QQg8JI+OuiTibpHlc4DCL+hbJHWWA6lgNW
+ qEx7heWBVXDipugjD6ai+sNjnd+i8ngJzhY83xExXHCWTgvJnJmHC3OOIjNk5FKmGg+R3v
+ HpuILVDcIMPcy0DTYyAhN96dzfiyBWxEOhzeuj6+WwgDik0aZ+Ts6rWtRy9BladZP/PmdO
+ 6FGo2HfKwlSN9gFkQtsxutAZbvu25txRnn491p/siX+7s/At3Uyr70hC3OFsRZig3SPNzA
+ Sc9Gsllk7HApKhuIb7j7Wbm2M4nowM4wB18NE/8kX5hA8RqnDrrKc6h9ugLC2g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RxDz+/59
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/tiff: add libdeflate optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +78,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96d3e5fd2f5310e9f626084669a9ddaa55c92eda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 29 Dec 2022 09:48:14 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-The 0.10 line offers minor improvements and bug fixes.
+> libdeflate is an optional dependency which is enabled by default since
+> version 4.2.0 and
+> https://gitlab.com/libtiff/libtiff/-/commit/3a2de853a932bd0ea79d1677d319841edb736c38
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Drop default y
 
-The previous security bump from 0.9.1 to 0.9.2 fixed CVE-2022-46149,
-which was also present in 0.10.2, but is fixed within 0.10.3.
+Applied to master, thanks.
 
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/capnproto/capnproto.hash | 2 +-
- package/capnproto/capnproto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
-index c3233e7c8b..0faf69d069 100644
---- a/package/capnproto/capnproto.hash
-+++ b/package/capnproto/capnproto.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4fe1ca8ab90859f33f08d2c4fcd7099e2983b0b946beecebd2fe051e3a64c67e  capnproto-0.9.2.tar.gz
-+sha256  e07446f56043c983e009038e69d18ff86a2924909f0b518ccf47eccf5ac03919  capnproto-0.10.3.tar.gz
- sha256  9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10  LICENSE
-diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
-index 23f128455a..84acf5fc65 100644
---- a/package/capnproto/capnproto.mk
-+++ b/package/capnproto/capnproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CAPNPROTO_VERSION = 0.9.2
-+CAPNPROTO_VERSION = 0.10.3
- CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
- CAPNPROTO_LICENSE = MIT
- CAPNPROTO_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
