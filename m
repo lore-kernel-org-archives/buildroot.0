@@ -1,68 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB396C4167B
-	for <buildroot@archiver.kernel.org>; Wed, 28 Dec 2022 12:50:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3DD4C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 17:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFFD740249;
-	Wed, 28 Dec 2022 12:50:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFFD740249
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JLGHAVbSwvvW; Wed, 28 Dec 2022 12:50:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA61440242;
-	Wed, 28 Dec 2022 12:50:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA61440242
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D4A1B1BF3D9
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 12:50:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B65126068B
- for <buildroot@lists.busybox.net>; Wed, 28 Dec 2022 12:50:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B65126068B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E2FE60758;
+	Thu, 29 Dec 2022 17:54:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E2FE60758
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EUnjOcgwb6cY for <buildroot@lists.busybox.net>;
- Wed, 28 Dec 2022 12:50:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A3FB260674
- for <buildroot@uclibc.org>; Wed, 28 Dec 2022 12:50:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3FB260674
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 8C32086D6F; Wed, 28 Dec 2022 12:50:47 +0000 (UTC)
-From: bugzilla@busybox.net
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Wph2R-yjzuUF; Thu, 29 Dec 2022 17:54:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 670146066D;
+	Thu, 29 Dec 2022 17:54:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 670146066D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 42E791BF389
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 17:54:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EDAA817A4
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 17:54:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EDAA817A4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zgThDDf620Lo for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 17:54:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DAD381773
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3DAD381773
+ for <buildroot@uclibc.org>; Thu, 29 Dec 2022 17:54:52 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1pAx7B-0005Uv-J8
+ for buildroot@uclibc.org; Thu, 29 Dec 2022 18:54:49 +0100
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Wed, 28 Dec 2022 12:50:47 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Outdated package
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: davorin.ucakar@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15201-163-52RXSExlfU@https.bugs.busybox.net/>
-In-Reply-To: <bug-15201-163@https.bugs.busybox.net/>
-References: <bug-15201-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15201] package/python-sip out of date,
- fails to compile with GCC 12
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 29 Dec 2022 18:53:40 +0100
+Message-ID: <pan$aaf4e$5422814b$c7c50bb1$109f6e8e@ID-313208.user.individual.net>
+References: <20221218130225.353325-1-fontaine.fabrice__19944.8251792759$1671368580$gmane$org@gmail.com>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 1/1] package/libarchive: do not add iconv
+ for Requires.private
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,17 +64,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15201
+Am Sun, 18 Dec 2022 14:02:25 +0100 schrieb Fabrice Fontaine:
 
---- Comment #3 from davorin.ucakar@gmail.com ---
-Unfortunately, no, the patch doesn't work. pyqt5 fails to build
-(host-python-sip is used in its build process).
+> Fix the following build failure with fwup raised since bump to version
+> 3.6.2 in commit 380341b249175382691f268de4b41d3843ff0acc and
+> https://github.com/libarchive/libarchive/commit/
+a83f3d327aefe8d628230f326621b014d82f55b4:
+> 
+> checking for pkg-config... /tmp/instance-19/output-1/host/bin/pkg-config
+> checking pkg-config is at least version 0.9.0... yes checking for
+> ARCHIVE... no configure: error: Requires libarchive. Libarchive must be
+> built with zlib support.
 
-I'm still investigating it/trying to fix it.
+Hi,
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+upstream committed a different fix:
+http://patchwork.ozlabs.org/project/buildroot/patch/
+20221229175254.224876-1-bernd.kuhls@t-online.de/
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
