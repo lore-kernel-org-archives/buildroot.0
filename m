@@ -1,67 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9757FC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 18:45:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E0F4C3DA7A
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 19:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 299EF40181;
-	Thu, 29 Dec 2022 18:45:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 299EF40181
+	by smtp3.osuosl.org (Postfix) with ESMTP id B76B1607B5;
+	Thu, 29 Dec 2022 19:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B76B1607B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HAoHmlTdy8J8; Thu, 29 Dec 2022 18:45:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s5ahrIztKclF; Thu, 29 Dec 2022 19:45:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2958140143;
-	Thu, 29 Dec 2022 18:45:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2958140143
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D23381BF390
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 18:45:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07F0C607A4;
+	Thu, 29 Dec 2022 19:45:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07F0C607A4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C7051BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A720440181
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 18:45:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A720440181
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06E58401B0
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06E58401B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1pYGKWOZpexF for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 18:45:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B299240143
-Received: from smtpdh18-2.aruba.it (smtpdh18-2.aruba.it [62.149.155.133])
- by smtp2.osuosl.org (Postfix) with ESMTP id B299240143
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 18:45:22 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.66.6])
- by Aruba Outgoing Smtp  with ESMTPSA
- id Axu4pYtj2AZ2DAxu4pfmHb; Thu, 29 Dec 2022 19:45:20 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k4q7v2rSooMw for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 19:45:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3F2C401A0
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D3F2C401A0
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:45:09 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout04.t-online.de (Postfix) with SMTP id CF6501F58A;
+ Thu, 29 Dec 2022 20:45:06 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd80.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1pAypt-0awbOj0; Thu, 29 Dec 2022 20:45:06 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47848)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pAypt-0002wg-21;
+ Thu, 29 Dec 2022 20:45:05 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 19:45:20 +0100
-Message-Id: <20221229184520.68111-1-giulio.benetti@benettiengineering.com>
+Date: Thu, 29 Dec 2022 20:45:05 +0100
+Message-Id: <20221229194505.3315137-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfOIG0DxkMOsSEAyNQAzYmy7HFUBWdwmfu6kdTzFFZr6w42QeifWSCqIY+726jF9RPcvGzukWhDDlBoks1vGzfQArmHOFr9q3lVSW7wZv/WdMfRoYTyo6
- pxEFqxqrJZgs/3hK2Fi5ahbWmL8Xyt4GWJnwRIy9UkGT2FmlAcblMw9WOkdEcr7o4+jHUYbV0jRKjH03BCvOJkBcSMwR6cMB09jwhpZhqj345CAwUqvNnKif
- iSnX3XZ2GUZDO6H8FK5GYeYAihWWG9bLfTXUqg7RcJ4GONGFLEeRrPTYkxf5NG0l6xE97O7h/34nWke4zrY8Hw==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1672339520; bh=cIcGDpy7TvGPnXSosy5EEgpXoEm4xDiAcf84dYIEQzI=;
- h=From:To:Subject:Date:MIME-Version;
- b=HOmuWBAoYAifBDUjwTLNELPBH0mbVSbujEq9d7hZpH8uk6qRTIQiIKDHRFLFkvKtH
- DPgePKnIOCXToQKjzAv4m9dawCkNzPAGijAa5FdnSpJ/x44sOCTp3nyyendnM8ju4l
- +dLGpjwslnVhGUDpM+PshY8YO4ine5mAz6hR2qAyBAoTmo4lc/oK+55G0MPHixUdpY
- PCvxyiW6AmS9BqG4MHc9r43jV8Yfqrct6DFs/ll2B1//8RRp4KA/mnqaWDNHMopV6L
- tOgu+KduaAd1e6RuBjwaPBkWNz8R3aNkXQI4zWEIfrMc2F9R89DHNVoRZ6vevPZSDY
- 4pyxIVTxRD6EQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=HOmuWBAo
-Subject: [Buildroot] [PATCH] package/rtl8192eu: bump to 2022-12-29 version
- on branch 5.11.2.1
+X-TOI-EXPURGATEID: 150726::1672343106-C0B261D1-4C9032E0/0/0 CLEAN NORMAL
+X-TOI-MSGID: 0548f278-3f6e-47c8-9ace-3195d2f63d50
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,160 +65,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop local patch since it's been merged[0].
-
-[0]: https://github.com/clnhub/rtl8192eu-linux/pull/69
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...e-due-to-redefition-of-local-sha256-.patch | 108 ------------------
- package/rtl8192eu/rtl8192eu.hash              |   2 +-
- package/rtl8192eu/rtl8192eu.mk                |   2 +-
- 3 files changed, 2 insertions(+), 110 deletions(-)
- delete mode 100644 package/rtl8192eu/0001-Fix-build-failure-due-to-redefition-of-local-sha256-.patch
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8192eu/0001-Fix-build-failure-due-to-redefition-of-local-sha256-.patch b/package/rtl8192eu/0001-Fix-build-failure-due-to-redefition-of-local-sha256-.patch
-deleted file mode 100644
-index 52ef8c9005..0000000000
---- a/package/rtl8192eu/0001-Fix-build-failure-due-to-redefition-of-local-sha256-.patch
-+++ /dev/null
-@@ -1,108 +0,0 @@
--From 1f968bd58656f200347bd398b34aa9f1b6393302 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 28 Dec 2022 18:54:48 +0100
--Subject: [PATCH] Fix build failure due to redefition of local sha256 data
-- types and functions
--
--Linux provides sha256_init() and 'struct sha256_state' in file
--include/crypto/sha2.h so this leads to a build failure due to redefinition.
--To avoid this let's prepend to all local exposed functions and data types
--rtl_. sha256_process() and sha256_done() are not required to be renamed but
--let's change them for consistency.
--
--[Upstream status: https://github.com/clnhub/rtl8192eu-linux/pull/69]
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- core/crypto/sha256-internal.c | 16 ++++++++--------
-- core/crypto/sha256_i.h        |  8 ++++----
-- 2 files changed, 12 insertions(+), 12 deletions(-)
--
--diff --git a/core/crypto/sha256-internal.c b/core/crypto/sha256-internal.c
--index 4d61cb1..537bb2e 100644
----- a/core/crypto/sha256-internal.c
--+++ b/core/crypto/sha256-internal.c
--@@ -26,17 +26,17 @@
-- int sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
-- 		  u8 *mac)
-- {
---	struct sha256_state ctx;
--+	struct rtl_sha256_state ctx;
-- 	size_t i;
-- 
-- 	if (TEST_FAIL())
-- 		return -1;
-- 
---	sha256_init(&ctx);
--+	rtl_sha256_init(&ctx);
-- 	for (i = 0; i < num_elem; i++)
---		if (sha256_process(&ctx, addr[i], len[i]))
--+		if (rtl_sha256_process(&ctx, addr[i], len[i]))
-- 			return -1;
---	if (sha256_done(&ctx, mac))
--+	if (rtl_sha256_done(&ctx, mac))
-- 		return -1;
-- 	return 0;
-- }
--@@ -82,7 +82,7 @@ static const unsigned long K[64] = {
-- #endif
-- 
-- /* compress 512-bits */
---static int sha256_compress(struct sha256_state *md, unsigned char *buf)
--+static int sha256_compress(struct rtl_sha256_state *md, unsigned char *buf)
-- {
-- 	u32 S[8], W[64], t0, t1;
-- 	u32 t;
--@@ -125,7 +125,7 @@ static int sha256_compress(struct sha256_state *md, unsigned char *buf)
-- 
-- 
-- /* Initialize the hash state */
---void sha256_init(struct sha256_state *md)
--+void rtl_sha256_init(struct rtl_sha256_state *md)
-- {
-- 	md->curlen = 0;
-- 	md->length = 0;
--@@ -146,7 +146,7 @@ void sha256_init(struct sha256_state *md)
--    @param inlen  The length of the data (octets)
--    @return CRYPT_OK if successful
-- */
---int sha256_process(struct sha256_state *md, const unsigned char *in,
--+int rtl_sha256_process(struct rtl_sha256_state *md, const unsigned char *in,
-- 		   unsigned long inlen)
-- {
-- 	unsigned long n;
--@@ -186,7 +186,7 @@ int sha256_process(struct sha256_state *md, const unsigned char *in,
--    @param out [out] The destination of the hash (32 bytes)
--    @return CRYPT_OK if successful
-- */
---int sha256_done(struct sha256_state *md, unsigned char *out)
--+int rtl_sha256_done(struct rtl_sha256_state *md, unsigned char *out)
-- {
-- 	int i;
-- 
--diff --git a/core/crypto/sha256_i.h b/core/crypto/sha256_i.h
--index a502d2b..93a8858 100644
----- a/core/crypto/sha256_i.h
--+++ b/core/crypto/sha256_i.h
--@@ -11,15 +11,15 @@
-- 
-- #define SHA256_BLOCK_SIZE 64
-- 
---struct sha256_state {
--+struct rtl_sha256_state {
-- 	u64 length;
-- 	u32 state[8], curlen;
-- 	u8 buf[SHA256_BLOCK_SIZE];
-- };
-- 
---void sha256_init(struct sha256_state *md);
---int sha256_process(struct sha256_state *md, const unsigned char *in,
--+void rtl_sha256_init(struct rtl_sha256_state *md);
--+int rtl_sha256_process(struct rtl_sha256_state *md, const unsigned char *in,
-- 		   unsigned long inlen);
---int sha256_done(struct sha256_state *md, unsigned char *out);
--+int rtl_sha256_done(struct rtl_sha256_state *md, unsigned char *out);
-- 
-- #endif /* SHA256_I_H */
---- 
--2.34.1
--
-diff --git a/package/rtl8192eu/rtl8192eu.hash b/package/rtl8192eu/rtl8192eu.hash
-index 0cb9961345..2d6498f19d 100644
---- a/package/rtl8192eu/rtl8192eu.hash
-+++ b/package/rtl8192eu/rtl8192eu.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 98499eb955..45c8bd62b0 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  827e9592336744cbcfca5de988d8f4e14a62690302d3cabf72aa4bedebded2b7  rtl8192eu-94bce7798bbb18de6d8b1646dedb2511f24867d3.tar.gz
-+sha256  72d1d97c6d2038885e5666f3271609b4dcbe45633c19a5606dc59745ff8ab543  rtl8192eu-865656c3a1d1aee8c4ba459ce7608756d17c712f.tar.gz
-diff --git a/package/rtl8192eu/rtl8192eu.mk b/package/rtl8192eu/rtl8192eu.mk
-index d967db90b8..da6fe42e99 100644
---- a/package/rtl8192eu/rtl8192eu.mk
-+++ b/package/rtl8192eu/rtl8192eu.mk
+-sha256  ed32401d1ed85f9e2d28d122a046c3f2c01b6ca5c0da1a7d78fa8f400e858107  tvheadend-fbc94aee8bfdd25baba87ab62a39234da20e8dd2.tar.gz
++sha256  06c6d33a8e9d1d645cea9c63a06f6bddb309e5546177966d7b9285f68313bf5b  tvheadend-c9a156a25a07f1f84c2f48a1b03b481430c8257d.tar.gz
+ sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 8ceb7493c8..0ca8f46dc5 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8192EU_VERSION = 94bce7798bbb18de6d8b1646dedb2511f24867d3
-+RTL8192EU_VERSION = 865656c3a1d1aee8c4ba459ce7608756d17c712f
- RTL8192EU_SITE = $(call github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
- RTL8192EU_LICENSE = GPL-2.0
- 
+-TVHEADEND_VERSION = fbc94aee8bfdd25baba87ab62a39234da20e8dd2
++TVHEADEND_VERSION = c9a156a25a07f1f84c2f48a1b03b481430c8257d
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
 2.34.1
 
