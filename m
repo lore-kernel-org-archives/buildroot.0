@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B33FC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD4DAC3DA7D
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:35:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A8314085B;
-	Thu, 29 Dec 2022 09:35:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A8314085B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 570A140573;
+	Thu, 29 Dec 2022 09:35:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 570A140573
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kom1q9HihO-H; Thu, 29 Dec 2022 09:35:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 64B2XjUZhicK; Thu, 29 Dec 2022 09:35:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41D6C4047D;
-	Thu, 29 Dec 2022 09:35:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41D6C4047D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F53F40102;
+	Thu, 29 Dec 2022 09:35:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F53F40102
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 670F31BF393
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:34:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7731A1BF393
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB1104010F
+ by smtp2.osuosl.org (Postfix) with ESMTP id C68E940573
  for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:34:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB1104010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C68E940573
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DlkCD2n4-e-a for <buildroot@lists.busybox.net>;
+ with ESMTP id T4eLXScTJ8hp for <buildroot@lists.busybox.net>;
  Thu, 29 Dec 2022 09:34:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBF7640584
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBB7940586
  for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:34:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBF7640584
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBB7940586
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAB298705D; Thu, 29 Dec 2022 09:34:20 +0000 (UTC)
+ id D6E1E8705E; Thu, 29 Dec 2022 09:34:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 10:32:59 +0100
+Date: Thu, 29 Dec 2022 10:33:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9511fe9b1c8fbb797f50dde708f7aae50e6d6a46
-X-Git-Newrev: 80fa5672da85a110e60be0d2143e85f9e08a0f4a
+X-Git-Oldrev: 80fa5672da85a110e60be0d2143e85f9e08a0f4a
+X-Git-Newrev: f934a00928b413fb3c190749a5bda578c6c02255
 X-Patchwork-Hint: ignore
-Message-Id: <20221229093420.CAB298705D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsync: add openssl support
+Message-Id: <20221229093420.D6E1E8705E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tiff: add zstd optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80fa5672da85a110e60be0d2143e85f9e08a0f4a
+commit: https://git.buildroot.net/buildroot/commit/?id=f934a00928b413fb3c190749a5bda578c6c02255
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+zstd is an optional dependency which is enabled by default since version
+4.0.10 and
+https://gitlab.com/libtiff/libtiff/-/commit/62b9df5d2af68262fa6fcfb66086bf128f7d67c3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rsync/rsync.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/tiff/Config.in | 4 ++++
+ package/tiff/tiff.mk   | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 9c7824f575..d2fa47d39a 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -18,7 +18,6 @@ RSYNC_CONF_OPTS = \
- 	--with-included-zlib=no \
- 	--with-included-popt=no \
- 	--disable-roll-simd \
--	--disable-openssl \
- 	--disable-md5-asm
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index cc9aa5cfd0..d1004d6668 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -72,4 +72,8 @@ config BR2_PACKAGE_TIFF_UTILITIES
+ 	help
+ 	  Install all tiff utilities.
  
- ifeq ($(BR2_PACKAGE_ACL),y)
-@@ -34,6 +33,13 @@ else
- RSYNC_CONF_OPTS += --disable-lz4
++config BR2_PACKAGE_TIFF_ZSTD
++	bool "ZSTD compression"
++	select BR2_PACKAGE_ZSTD
++
+ endif
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index a753065fde..90b28ff37a 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -100,5 +100,12 @@ else
+ TIFF_CONF_OPTS += --disable-tools
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+RSYNC_DEPENDENCIES += openssl
-+RSYNC_CONF_OPTS += --enable-openssl
++ifeq ($(BR2_PACKAGE_TIFF_ZSTD),y)
++TIFF_CONF_OPTS += --enable-zstd
++TIFF_DEPENDENCIES += zstd
 +else
-+RSYNC_CONF_OPTS += --disable-openssl
++TIFF_CONF_OPTS += --disable-zstd
 +endif
 +
- ifeq ($(BR2_PACKAGE_XXHASH),y)
- RSYNC_DEPENDENCIES += xxhash
- RSYNC_CONF_OPTS += --enable-xxhash
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
