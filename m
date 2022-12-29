@@ -1,49 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B110FC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA071C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:17:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 588B081871;
-	Thu, 29 Dec 2022 09:09:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 588B081871
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5283560D4D;
+	Thu, 29 Dec 2022 09:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5283560D4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a8KqdgjPudlj; Thu, 29 Dec 2022 09:09:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a0ezexri3Vz2; Thu, 29 Dec 2022 09:17:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95D8981852;
-	Thu, 29 Dec 2022 09:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95D8981852
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D325D1BF96B
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:08:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88FBE60C31;
+	Thu, 29 Dec 2022 09:17:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88FBE60C31
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B9F81BF393
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:17:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEB8081852
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:08:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEB8081852
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2111940573
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:17:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2111940573
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f0H6CaxpnBeL for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 09:08:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9B2081826
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9B2081826
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C89CF87003; Thu, 29 Dec 2022 09:08:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KqnqaGXiChix for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 09:17:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F92040102
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F92040102
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:17:39 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id o15so12734314wmr.4
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 01:17:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0oWLV9vvhNCwuw7/aW6lXWxBpQgisVHoCoJN8bJRQE8=;
+ b=V0ZHvE1cJkbWsQC2+n/SLFp9pxYFM7EWaXURnYDz1edb4eLS6/VJF2GKpEayyyiiJ9
+ INJYm1lLQkPobn0Te2NHqrHq/Hla+e15YlL8x3PEY/s2JUOdfqubpIA7uIbQduobtDiL
+ wEndAHtIdClUue7RXpUGOxZcnuKbfMudUlcB9YC16FWx4dKSNT2iGHKsuj1V7USaE/ca
+ k3ULcjkNxJ6RWr3ghI9aTpEYS1pZAeAYYBTptoEIuu/et22s5bLgZPIFN6HdlMbTszCH
+ 9VjlQiYBd43jIZnkLPzTgYUudg8cTksVPzNiwtBB3CphmBud8UrB0ugXqL2iL4SewML6
+ XL/A==
+X-Gm-Message-State: AFqh2kpJ4baa09TX3q5yr+/ICKJ9VimlYkN8W0Oy7pB8YgUAMukWc169
+ v4FW8esODp6aCk4SNSMz7PayVEEpAOk=
+X-Google-Smtp-Source: AMrXdXvTPUEx569VrMAgJGBpls5pm2eCQwxkXksADIksZTNqFdNMy1GvNn+CMYYLgmciDW8DjfiiBA==
+X-Received: by 2002:a05:600c:218f:b0:3d1:fbf9:3bd4 with SMTP id
+ e15-20020a05600c218f00b003d1fbf93bd4mr19967930wme.10.1672305457815; 
+ Thu, 29 Dec 2022 01:17:37 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ m8-20020a05600c4f4800b003cfaae07f68sm30363844wmq.17.2022.12.29.01.17.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 29 Dec 2022 01:17:37 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 10:06:56 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7854488512a96cbcb2d48313b89c7d085a1c2cfb
-X-Git-Newrev: f99714d90e08994c697576ca2030cb9392d7b63e
-X-Patchwork-Hint: ignore
-Message-Id: <20221229090833.C89CF87003@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus-cxx: bump to version 2.3.1
+Date: Thu, 29 Dec 2022 10:17:35 +0100
+Message-Id: <20221229091735.216076-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0oWLV9vvhNCwuw7/aW6lXWxBpQgisVHoCoJN8bJRQE8=;
+ b=jLHWRTQUnH9ES3hgK/3jwlrTniVpXvjczD2TBTdnWoVqx/KxkORE3XoeW8YIZ6eqSh
+ cKo1Q0B/sNeSvPAdi28C/JYLjWSRwj7OZg8Ue0IO//QNyz0G7bMyu28BDemOLZuN9Pu2
+ sy/TevoEcW1vBom5rVATF6AoK3SzsjrKzAyiQlpOd9p+VGod2ZZfm+jklXiScgcEr0BF
+ RtbKvptBXE+23qcu/K0/A0kaV9N9UPDaq7x5fC3i2iaGqjAzjsKYnBGw/y6DQf2kwSUj
+ mSeTy4qCJHqk/AWD4olG+eTEFY/nGK5oqg7BxwsPaHJGsuK/mwGN72zI3esZqmBrPxID
+ zXpA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=jLHWRTQU
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 3.4.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,48 +94,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f99714d90e08994c697576ca2030cb9392d7b63e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix CVE-2022-3190: Infinite loop in the F5 Ethernet Trailer protocol
+dissector in Wireshark 3.6.0 to 3.6.7 and 3.4.0 to 3.4.15 allows denial
+of service via packet injection or crafted capture file
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+https://www.wireshark.org/security/wnpa-sec-2022-06.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dbus-cxx/dbus-cxx.hash | 2 +-
- package/dbus-cxx/dbus-cxx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus-cxx/dbus-cxx.hash b/package/dbus-cxx/dbus-cxx.hash
-index acb059b91d..6a7a634ced 100644
---- a/package/dbus-cxx/dbus-cxx.hash
-+++ b/package/dbus-cxx/dbus-cxx.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  45663b6dbc289f133dfdcd8b8de771de3a2d54588954c2eec3f97888b03bd8ad  dbus-cxx-2.3.0.tar.gz
-+sha256  88d4bd1d9af8563bda03f24b26ffe4efbc555ca82ac664ced572b053928f739a  dbus-cxx-2.3.1.tar.gz
- sha256  99e5d0ad951d96567a6f9a17f3f17ac000c0582f53357c7f3601851c2dcbb786  COPYING
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  cmake-modules/LICENSE_1_0.txt
- sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  tools/libcppgenerate/LICENSE
-diff --git a/package/dbus-cxx/dbus-cxx.mk b/package/dbus-cxx/dbus-cxx.mk
-index 43556195c7..554acaa67d 100644
---- a/package/dbus-cxx/dbus-cxx.mk
-+++ b/package/dbus-cxx/dbus-cxx.mk
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index db1f71e9ef..56363e717f 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.12.txt
+-sha1  91ca69b0029e58b9c824266237ab392a62f0a248  wireshark-3.4.12.tar.xz
+-sha256  881a13303e263b7dc7fe337534c8a541d4914552287879bed30bbe76c5bf68ca  wireshark-3.4.12.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.16.txt
++sha1  b0e64d5fdd6701106d94bdc8f59dd40a34c7c807  wireshark-3.4.16.tar.xz
++sha256  6acb3155b89b65bcdbcdac7a9e6a59013a6e21d8ae6a8249a9af4fe9ce3d91ba  wireshark-3.4.16.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index e5d5e6f677..5da344fc55 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DBUS_CXX_VERSION = 2.3.0
-+DBUS_CXX_VERSION = 2.3.1
- DBUS_CXX_SITE = $(call github,dbus-cxx,dbus-cxx,$(DBUS_CXX_VERSION))
- DBUS_CXX_LICENSE = LGPL-3.0+ or BSD-3-Clause, Boost license (cmake-modules), Apache 2.0 (libcppgenerate)
- DBUS_CXX_LICENSE_FILES = COPYING cmake-modules/LICENSE_1_0.txt tools/libcppgenerate/LICENSE
+-WIRESHARK_VERSION = 3.4.12
++WIRESHARK_VERSION = 3.4.16
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
