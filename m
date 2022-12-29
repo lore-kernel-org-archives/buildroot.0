@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9482AC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06974C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:39:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48B3083F06;
-	Mon, 20 Feb 2023 23:39:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48B3083F06
+	by smtp1.osuosl.org (Postfix) with ESMTP id B408783104;
+	Mon, 20 Feb 2023 23:39:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B408783104
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NBhgXShoRZ1b; Mon, 20 Feb 2023 23:39:20 +0000 (UTC)
+	with ESMTP id IbTysdTVLmxd; Mon, 20 Feb 2023 23:39:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77A6F83F82;
-	Mon, 20 Feb 2023 23:39:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77A6F83F82
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C6DCA1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6F5F83F75;
+	Mon, 20 Feb 2023 23:39:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6F5F83F75
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5139C1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D96641751
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D96641751
+ by smtp3.osuosl.org (Postfix) with ESMTP id 14D4061ADF
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14D4061ADF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id urD2GKsyRFZA for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4avhwNELdpOq for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4698841759
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4698841759
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF5F861784
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF5F861784
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4409081979; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id D580C86495; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 26 Jan 2023 17:10:54 +0100
+Date: Thu, 29 Dec 2022 10:33:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: eb6ad853d67d3c3a83093924ae305f35213793bc
-X-Git-Newrev: 58cc22a6d095b9b589e5b001e005032589749084
+X-Git-Oldrev: f934a00928b413fb3c190749a5bda578c6c02255
+X-Git-Newrev: 3fd6ada8dbca3370b9bb67feb2971e637cb4b11f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205240.4409081979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/c-icap-modules: bump
- to version 0.5.5
+Message-Id: <20230220205218.D580C86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tiff: add webp
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +56,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58cc22a6d095b9b589e5b001e005032589749084
+commit: https://git.buildroot.net/buildroot/commit/?id=3fd6ada8dbca3370b9bb67feb2971e637cb4b11f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://sourceforge.net/p/c-icap/news/2021/03/the-c-icap-modules-055-is-released
+webp is an optional dependency which is enabled by default since version
+4.0.10 and
+https://gitlab.com/libtiff/libtiff/-/commit/9eacd59fecc4ef593ac17689bc530ab451c8ec14
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/c-icap-modules/c-icap-modules.hash | 6 +++---
- package/c-icap-modules/c-icap-modules.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tiff/Config.in | 4 ++++
+ package/tiff/tiff.mk   | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/c-icap-modules/c-icap-modules.hash b/package/c-icap-modules/c-icap-modules.hash
-index cc7949a092..110ffd4de3 100644
---- a/package/c-icap-modules/c-icap-modules.hash
-+++ b/package/c-icap-modules/c-icap-modules.hash
-@@ -1,7 +1,7 @@
- # From http://sourceforge.net/projects/c-icap/files/c-icap-modules/0.5.x/
--md5  2f8c174f7a5414616f5a0a976ac4a221  c_icap_modules-0.5.4.tar.gz
--sha1  ec7bb138d7775895cd8b2e12adc41dbf48eba1b7  c_icap_modules-0.5.4.tar.gz
-+md5  ca6d5d124a4668d63affcaa5ab083e57  c_icap_modules-0.5.5.tar.gz
-+sha1  67be484a93fe662a7735ee06e1d34d82b54469a8  c_icap_modules-0.5.5.tar.gz
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index d1004d6668..b9e3656e6f 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -72,6 +72,10 @@ config BR2_PACKAGE_TIFF_UTILITIES
+ 	help
+ 	  Install all tiff utilities.
  
- # Locally calculated
--sha256  87409920c66027204e9cca5f20e137b63cd12daf6dfcd85c1fa62ab2bd1c57cc  c_icap_modules-0.5.4.tar.gz
-+sha256  6a42f1fdd8c35ad38d29f7d3c10f925471977f217086352e146cf95e45f2b5b5  c_icap_modules-0.5.5.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
-index 2eaa141afe..e9bbbdb284 100644
---- a/package/c-icap-modules/c-icap-modules.mk
-+++ b/package/c-icap-modules/c-icap-modules.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++config BR2_PACKAGE_TIFF_WEBP
++	bool "WEBP compression"
++	select BR2_PACKAGE_WEBP
++
+ config BR2_PACKAGE_TIFF_ZSTD
+ 	bool "ZSTD compression"
+ 	select BR2_PACKAGE_ZSTD
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 90b28ff37a..6d761ad678 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -100,6 +100,13 @@ else
+ TIFF_CONF_OPTS += --disable-tools
+ endif
  
--C_ICAP_MODULES_VERSION = 0.5.4
-+C_ICAP_MODULES_VERSION = 0.5.5
- C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
- C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap
- C_ICAP_MODULES_LICENSE = GPL-2.0+
++ifeq ($(BR2_PACKAGE_TIFF_WEBP),y)
++TIFF_CONF_OPTS += --enable-webp
++TIFF_DEPENDENCIES += webp
++else
++TIFF_CONF_OPTS += --disable-webp
++endif
++
+ ifeq ($(BR2_PACKAGE_TIFF_ZSTD),y)
+ TIFF_CONF_OPTS += --enable-zstd
+ TIFF_DEPENDENCIES += zstd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
