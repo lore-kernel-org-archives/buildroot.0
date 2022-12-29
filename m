@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53850C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:08:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F90FC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0366A60D4D;
-	Thu, 29 Dec 2022 09:08:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0366A60D4D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ViyxGv86Kf8U; Thu, 29 Dec 2022 09:08:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 567BE60C31;
-	Thu, 29 Dec 2022 09:08:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 567BE60C31
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 916791BF393
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:08:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B39E404F9
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:08:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B39E404F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id C876240346;
+	Thu, 29 Dec 2022 09:08:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C876240346
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CS5lEQuP5rx2 for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 09:08:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2201D4034E
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2201D4034E
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:08:18 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F0BC31BF20B;
- Thu, 29 Dec 2022 09:08:16 +0000 (UTC)
-Date: Thu, 29 Dec 2022 10:08:16 +0100
-To: Lang Daniel via buildroot <buildroot@buildroot.org>
-Message-ID: <20221229100816.436ab1b9@windsurf>
-In-Reply-To: <VI1P190MB0493FD977027E500C3EB8CAC9FE59@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-References: <VI1P190MB0493FD977027E500C3EB8CAC9FE59@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672304897;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Apj44t0NrGzre+jRp4+2AZNkHuWkTKBr5Ml7PYxFc3o=;
- b=cvDDb+kwabboOTzPnRuNX/eRje/Vwr+Q2+D1oDOhQtBKiqkCQZe1z/S+/bMXgrL1zSZ8yh
- wf8TgVSbKlUbknIEWG75F+PzRM8Lc8bDTtCWdfwW7durPM/ALXIZGXWrOs4iCs+JGz3cwq
- u/XB6Ti9ewTC4lmZ30yhPbTpun/5aScTP+ipBw9bSkQ40Cub7v3eKSPaIN4SUAOPpgKsL9
- cL3xVsi8qr2vOcR6EecsjRUZq+HV30fcV9wqqQdSXAGzqfNFIs9kXC+VlIs6qKejRpRtdC
- VYHrWEhpfZaB9iFZ0oXTlgxXOhNXEvCEQMnXuB1EYoOiMhhYyOlkzHvNEgYHRw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cvDDb+kw
-Subject: Re: [Buildroot] [PATCH 1/1] package/dbus-cxx: bump to version 2.3.1
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LAbAQE8WReBJ; Thu, 29 Dec 2022 09:08:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEBCA402B8;
+	Thu, 29 Dec 2022 09:08:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEBCA402B8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C2F721BF393
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:08:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9EA2D40498
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:08:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EA2D40498
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BRq5rQRUCr_B for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 09:08:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF07640470
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:08:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF07640470
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BD8E687001; Thu, 29 Dec 2022 09:08:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 29 Dec 2022 10:06:23 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 909e10a422df33cd67e6f0fc6ad628ee2c1fb933
+X-Git-Newrev: 7854488512a96cbcb2d48313b89c7d085a1c2cfb
+X-Patchwork-Hint: ignore
+Message-Id: <20221229090833.BD8E687001@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: bump to version
+ 20221214
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +58,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Lang Daniel <d.lang@abatec.at>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 19 Dec 2022 12:11:30 +0000
-Lang Daniel via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7854488512a96cbcb2d48313b89c7d085a1c2cfb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Daniel Lang <d.lang@abatec.at>
-> ---
->  package/dbus-cxx/dbus-cxx.hash | 2 +-
->  package/dbus-cxx/dbus-cxx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Update WHENCE file hash due to date/firmware file updates:
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=32d8681d21f2eef052cadfdfafc47e02eed6c2b2
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.hash | 4 ++--
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 321436fb61..6bbc2f9c77 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  c0ddffbbcf30f2e015bddd5c6d3ce1f13976b906aceabda4a57e3c41a3190701  linux-firmware-20221109.tar.xz
++sha256  e793783e92acbde549965521462d1d1327827360664cf242dbda08f075654331  linux-firmware-20221214.tar.xz
+ 
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -35,6 +35,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  3461a8c8bddaa7b77f489f339abf90e4930fc0cde27915324781d12bd0828f1c  WHENCE
++sha256  744babd4eae138ccfb5bd343b1589912b9839274f8a794af0b6c9b451df73579  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 526e8c1c44..6990ef38ad 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 20221109
++LINUX_FIRMWARE_VERSION = 20221214
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
