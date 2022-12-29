@@ -1,67 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02EAFC3DA79
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 19:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19F37C3DA79
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 19:50:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85BB240257;
-	Thu, 29 Dec 2022 19:50:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85BB240257
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BIHhbpXiSVkS; Thu, 29 Dec 2022 19:50:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6006240881;
-	Thu, 29 Dec 2022 19:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6006240881
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EEB741BF2B4
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:50:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CA81740181
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:50:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA81740181
+	by smtp2.osuosl.org (Postfix) with ESMTP id B2183401E1;
+	Thu, 29 Dec 2022 19:50:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2183401E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ciPv8JSOnbGv for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 19:50:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C276E40111
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C276E40111
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:50:32 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 58Bc-xDGyI4c; Thu, 29 Dec 2022 19:50:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E64334019D;
+	Thu, 29 Dec 2022 19:50:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E64334019D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CDB001BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:50:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9AE960640
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:50:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9AE960640
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UUgmAbXZJQ49 for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 19:50:49 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A444460593
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A444460593
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:50:49 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.171.174.182])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 1BC1F2003F2;
- Thu, 29 Dec 2022 20:50:14 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 3D6EC2003CC;
+ Thu, 29 Dec 2022 20:50:31 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 20:47:11 +0100
-Message-Id: <20221229194729.8085-9-ju.o@free.fr>
+Date: Thu, 29 Dec 2022 20:47:12 +0100
+Message-Id: <20221229194729.8085-10-ju.o@free.fr>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221229194729.8085-1-ju.o@free.fr>
 References: <20221229194729.8085-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672343431;
- bh=sT8kox5tnB94LV0S9FAZ3ZCbf1SlHltTIBSfVTR7wW4=;
+ d=free.fr; s=smtp-20201208; t=1672343448;
+ bh=PtPSH5pTesYmVa7izNObxb2pApusacSX6wRAMc+ixM8=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=fPN5ET9FrrWYI7JAS1Cfd4e911rsKZb7E3ZcBQFOUnddIBnkJ0847WdeATG3ZOYXR
- k9RwsVLa4U/2TaFg+MAW/GHM9c676dqRE6Jn6b2cqRkhY97VKu+5+yryrGaKWs0dxU
- R2spqnGoGMotKDiPgooaX0EfBHf3o8XeLNzCc81+XRJ7f3iufhwUDLJwCqS3tRpYgH
- 5VzSUOyqTZuMbOFDXTMqdYG8DQiotahyAU9iQ2lBKRU7prjo0OlP6dgZK/zq6Z3HxR
- RCdi+DxqyXV7oHDed0qeS2Prk6xLoH6xUucQANs4XOZRo9hTl5YA504Jxdd2Z5n2ii
- QwvlwI96DemQw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=RuAtPcC2A6si/gSMant8HNUbr3dKkUhCmgqv687hiN8pUjuwbQufMkxffl+Aydcht
+ dlDLI0jBTGB9tNKsJa7hTJrZgN8LYCQEZpZvGQL+xnxt2ePwpQDO2zvGCYJI4CH69S
+ b4JMPDrx8fk5SOkzVxBzaw0b0cWR69cu7UOQfvvsSCG0zBQoj66B8vDLUsDCbdlFUW
+ H4+7AXvGMOXkO/zbiLnQR1pma5G8EeziwQVZX4QkHuOrT/a5OxYjYBeevGFrKuH0Ly
+ 9tIC9ojOUvp59NKBCTIcyzNKf4lZRD9NT3n+a7Hxp6ZNCef+QZyxyI/E4uwuDqGZ72
+ HVvHza4NMgTsA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fPN5ET9F
-Subject: [Buildroot] [PATCH 09/27] package/qoriq-rcw: update codeaurora URLs
- to github
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=RuAtPcC2
+Subject: [Buildroot] [PATCH 10/27] package/x11r7/xdriver_xf86-video-imx-viv:
+ update codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -119,47 +119,33 @@ changed.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/qoriq-rcw/Config.in.host | 2 +-
- package/qoriq-rcw/qoriq-rcw.hash | 2 +-
- package/qoriq-rcw/qoriq-rcw.mk   | 3 +--
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ .../xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash | 2 +-
+ .../xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/qoriq-rcw/Config.in.host b/package/qoriq-rcw/Config.in.host
-index 08fc83acd0..58c16d495b 100644
---- a/package/qoriq-rcw/Config.in.host
-+++ b/package/qoriq-rcw/Config.in.host
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_HOST_QORIQ_RCW
- 	  $(HOST_DIR)/share/rcw. Either a SDK or post scripts can
- 	  then use this toolset and examples.
- 
--	  https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
-+	  https://github.com/nxp-qoriq/rcw
- 
- if BR2_PACKAGE_HOST_QORIQ_RCW
- 
-diff --git a/package/qoriq-rcw/qoriq-rcw.hash b/package/qoriq-rcw/qoriq-rcw.hash
-index f34c771d11..2a887d57d4 100644
---- a/package/qoriq-rcw/qoriq-rcw.hash
-+++ b/package/qoriq-rcw/qoriq-rcw.hash
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+index 5873b4b11c..b79c236478 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  caa6802f2ba5ea92fd27e7c977749010a91c9091fcc3fe626f96d9cacfba1f0a  qoriq-rcw-LSDK-21.08-br1.tar.gz
-+sha256  f199c10e50bd18d7bed0d60f5b68194240dea4f1aa164cec98332723727a4796  qoriq-rcw-LSDK-21.08.tar.gz
- sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
-diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
-index 0501c36f46..8b1ceacfce 100644
---- a/package/qoriq-rcw/qoriq-rcw.mk
-+++ b/package/qoriq-rcw/qoriq-rcw.mk
+-sha256  638a8aa8b64f860900d003527529689bc342d18ff5e41a9e1750884544898e67  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga-br1.tar.gz
++sha256  8fe1f57334b22926d4ff3b0b9fdf50af835a99cdfd0ad3ba6a604b226b723e89  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga.tar.gz
+ sha256  9d3e373f0440cc0c58853e963636a7c1ffda9308ec5f30ebe9adfb9c16a8a1e4  COPYING-MIT
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index 0913427542..3b346f323a 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
 @@ -5,8 +5,7 @@
  ################################################################################
  
- QORIQ_RCW_VERSION = LSDK-21.08
--QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
--QORIQ_RCW_SITE_METHOD = git
-+QORIQ_RCW_SITE = $(call github,nxp-qoriq,rcw,$(QORIQ_RCW_VERSION))
- QORIQ_RCW_LICENSE = BSD-3-Clause
- QORIQ_RCW_LICENSE_FILES = LICENSE
- 
+ XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_4.9.x_1.0.0_ga
+-XDRIVER_XF86_VIDEO_IMX_VIV_SITE = https://source.codeaurora.org/external/imx/xf86-video-imx-vivante
+-XDRIVER_XF86_VIDEO_IMX_VIV_SITE_METHOD = git
++XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(call github,nxp-imx,xf86-video-imx-vivante,$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION))
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv imx-gpu-g2d xserver_xorg-server \
+ 	xorgproto libdrm
+ XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = MIT
 -- 
 2.39.0
 
