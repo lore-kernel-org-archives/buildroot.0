@@ -1,70 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E555C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:05:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3E27C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA6E440573;
-	Thu, 29 Dec 2022 09:05:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA6E440573
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IPeWsknoDORj; Thu, 29 Dec 2022 09:05:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1304140480;
-	Thu, 29 Dec 2022 09:05:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1304140480
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 333F51BF393
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:05:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A04640201
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:05:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A04640201
+	by smtp4.osuosl.org (Postfix) with ESMTP id 958AE4016D;
+	Thu, 29 Dec 2022 09:05:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 958AE4016D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t_Dr6VahNxH5 for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 09:05:09 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB7FD4016D
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BB7FD4016D
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:05:08 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C1D9E1BF20B;
- Thu, 29 Dec 2022 09:05:06 +0000 (UTC)
-Date: Thu, 29 Dec 2022 10:05:05 +0100
-To: Joel Carlson <joelsoncarl@gmail.com>
-Message-ID: <20221229100505.4d6ead32@windsurf>
-In-Reply-To: <20221228230326.3799157-1-JoelsonCarl@gmail.com>
-References: <20221228230326.3799157-1-JoelsonCarl@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1672304707;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=gawbI0JWXgi46sytHZSFBGV15vvh60+EAEGjDUxFScs=;
- b=NUN12DbSgJlNjAJYzBAU+e0VH7ThrBGWv430fYsEWxH+Vb/7UAswGj8+Ca3HH+vRtkeW1r
- N3Vu4NyrZt8mnMWBNPccUa1mLImP2coBgDKi+6emctIUOn1+JpiX3q8NuAuhzfTHa3D6NH
- j8TXUgKeEbVPp4qaaeIppC1YU+fWwH8Hrh/XK06gVxpv/nQza72Nn9l3kHfIVRbSi51pQP
- RryXLGJ5Jz8ODMsf0FZrwjAeYHgnOwvrSN16n2DLL6ZX6skSbu3byWEJb9TqgoJSJr54CM
- VP31QzTFq0Y0998V1B5LEQo1t9eEfzp1BkOiZcezCytjgR4yrKcaj+KMFBWeCA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NUN12DbS
-Subject: Re: [Buildroot] [PATCH 1/1] package/capnproto: bump version to
- 0.10.3
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1nN8zs6N1tKb; Thu, 29 Dec 2022 09:05:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A15740201;
+	Thu, 29 Dec 2022 09:05:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A15740201
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AC7A1BF393
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:05:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DAB8681297
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAB8681297
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vn8LdpENyISp for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 09:05:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0ADD181289
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ADD181289
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EB9A986FEC; Thu, 29 Dec 2022 09:05:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 29 Dec 2022 10:03:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cdb77d0b86ca7e62b61d7f7e7947af591fe47e71
+X-Git-Newrev: 7a2afdb7b1180bed3b6ad92c22c908805467ead3
+X-Patchwork-Hint: ignore
+Message-Id: <20221229090542.EB9A986FEC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mutt: bump to version 2.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,33 +57,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Koen Martens <gmc@sonologic.nl>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 28 Dec 2022 16:03:26 -0700
-Joel Carlson <joelsoncarl@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7a2afdb7b1180bed3b6ad92c22c908805467ead3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The 0.10 line offers minor improvements and bug fixes.
-> 
-> The previous security bump from 0.9.1 to 0.9.2 fixed CVE-2022-46149,
-> which was also present in 0.10.2, but is fixed within 0.10.3.
-> 
-> Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-> ---
->  package/capnproto/capnproto.hash | 2 +-
->  package/capnproto/capnproto.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Mutt 2.2.9 was released on November 12, 2022. This is a bug-fix release,
+fixing a build issue with recent GPGME releases.
 
-Applied to master, thanks.
+Mutt 2.2.8 was released on November 5, 2022. This is a bug-fix release,
+fixing a possible crash when using GPGME to view an application/pgp key
+block. It also makes some changes to resizing and window size logic, and
+enables batch-mode IMAP Fcc'ing.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://gitlab.com/muttmua/mutt/-/blob/mutt-2-2-9-rel/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 27e439183a..c475641ab5 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  eb13858f58bb369f477bf652d90e9b6aaddd0d610acbea3455049e5efad36df1  mutt-2.2.7.tar.gz
++sha256  fa531b231d58fe1f30ceda0ed626683ea9ebdfb76ce47ef8bb27c2f77422cffb  mutt-2.2.9.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 7a4bc1b10c..0a98396d88 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUTT_VERSION = 2.2.7
++MUTT_VERSION = 2.2.9
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
