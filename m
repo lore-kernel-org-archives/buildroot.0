@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 567E4C3DA79
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 19:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D22E4C3DA79
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 19:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE178607F7;
-	Thu, 29 Dec 2022 19:49:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE178607F7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77E1860AF4;
+	Thu, 29 Dec 2022 19:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77E1860AF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ESX0zarJDgQL; Thu, 29 Dec 2022 19:49:11 +0000 (UTC)
+	with ESMTP id OEBrJ7gCHJxs; Thu, 29 Dec 2022 19:49:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E615F607B5;
-	Thu, 29 Dec 2022 19:49:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E615F607B5
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD04260AE1;
+	Thu, 29 Dec 2022 19:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD04260AE1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 436441BF2B4
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:49:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DDA131BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:49:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B3EC4088C
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B3EC4088C
+ by smtp4.osuosl.org (Postfix) with ESMTP id B630240891
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:49:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B630240891
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aFX5BWHLYy5r for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 19:49:08 +0000 (UTC)
+ with ESMTP id EiWL4VlT1jml for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 19:49:25 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C07E840891
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 804C340881
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C07E840891
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:49:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 804C340881
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:49:25 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.171.174.182])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id C5F722003C6;
- Thu, 29 Dec 2022 20:48:48 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 3489B200385;
+ Thu, 29 Dec 2022 20:49:06 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 20:47:06 +0100
-Message-Id: <20221229194729.8085-4-ju.o@free.fr>
+Date: Thu, 29 Dec 2022 20:47:07 +0100
+Message-Id: <20221229194729.8085-5-ju.o@free.fr>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221229194729.8085-1-ju.o@free.fr>
 References: <20221229194729.8085-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672343346;
- bh=Svh9iGEf7quLMUsMAlmxoTsfA1dFeWAvAwSaH/1mZTw=;
+ d=free.fr; s=smtp-20201208; t=1672343363;
+ bh=HtWq8u4lYNiyJ0b6Wj+8rnTeQXiPZVXiuCI7eB0jecs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Bd+E5DyOIk/eJ2auTscJALtv/4V6qKFhQydbg574UL1roXtaB+p3Y96diXbF1Hio1
- Y1Iyqg9EzsTL5eLXDMddDHgFiz23h7QWXOUSM0eweb08oxX+kZZwu2LMe5LnAYD+Wp
- NTSXDLkWrEunYf/0LUNnOJFqoWtOH+tMaup2dv0X4zuijynkUO0vHx5LY+LXQtrlB7
- CnDUDkfwrVRMmRpwuGgscXq6A4E0QujXioCV10DLmQJ6XvHbWf5G5xOCJXvqcT9CHE
- 86oCpyB/tx/VTQs3teQ78hj6XSTkUZsbVx1DHnoarqXLngGCtT57xazCyiJQiUJxid
- V0LhzsRGmKGBA==
+ b=Q6ZlVGlj1HGx/URoj7jwszBhPB5fruKuS87PGzrBbkzaJ0GjvDFtBg9vQ4lNiqpIM
+ osFyLR1XaG6/f4jHCwOfv1MNHbK+hLX0dzKdwDuVDdr6nabV4/Ca0YKZ8kFM2rmjHu
+ cb9Jvi8ixAbzkeQatePbGKjkWJykwOZGBgaoN0U9jN3eM1I+uTtoa7QSuKYIAcs+mm
+ p7F5lzVlqRTkTai/1KAXi5voi221UrlUni10CDZbh6fkJfUH/jfsaU/oywA55aWRX8
+ QVr+sktCSPVLzlbvYkpp4Gn7O+M/8gBTfigAP/7Vc5b5fYNRm0nIvlRXadD65MbcCX
+ /Pajog7pzLrlg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Bd+E5DyO
-Subject: [Buildroot] [PATCH 04/27] package/freescale-imx/imx-alsa-plugins:
- update codeaurora URLs to github
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Q6ZlVGlj
+Subject: [Buildroot] [PATCH 05/27] package/freescale-imx/imx-kobs: update to
+ NXPmicro github organization
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,84 +85,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-NXP moved all its open source code repositories from Code Aurora Forum
-to github. See for example:
-https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
+imx-kobs was removed from the github codeauroraforum organization.
+It is now redirecting to NXPmicro. This patch updates the link to
+directly point to the correct place.
 
-Software packages are now grouped in several NXP github
-projects/organizations (nxp-imx, nxp-qoriq, ...). See:
-https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
-
-The NXP code published on Code Aurora is still present (at the time of
-this commit) but is no longer receiving updates. It is also expected
-to be shut down on 2023-03-31. The Code Aurora website
-https://source.codeaurora.org/ currently show the following message:
-"""
-Note: Qualcomm Innovation Center Inc. maintained repositories have
-migrated to git.codelinaro.org. QUIC repositories on this site will
-not receive any updates after March 31, 2022, and will be deleted on
-March 31, 2023. If your project depends on these repositories, please
-adjust your tooling configuration to use the new, up-to-date project
-location.
-"""
-
-For this reason, the NXP recipes using codeaurora.org urls need to be
-updated to the correct github.com replacement.
-
-Note: this commit does not change the component version. Only the
-download URL is updated. The archive content is expected to be the
-same.
-
-Note 2: the _SITE_METHOD is also changed from "git" to the default
-"wget", for faster downloads. This is why the package hash has
-changed.
-
-Note 3: this commit also adds the github as project homepage in
-Config.in.
+The commit also replaces the Config.in comment saying the package does
+not have an upstream by the github.com project page.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/freescale-imx/imx-alsa-plugins/Config.in             | 2 ++
- package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash | 2 +-
- package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk   | 3 +--
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/freescale-imx/imx-kobs/Config.in   | 3 +--
+ package/freescale-imx/imx-kobs/imx-kobs.mk | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/freescale-imx/imx-alsa-plugins/Config.in b/package/freescale-imx/imx-alsa-plugins/Config.in
-index ec9b5b19cf..df47edd16d 100644
---- a/package/freescale-imx/imx-alsa-plugins/Config.in
-+++ b/package/freescale-imx/imx-alsa-plugins/Config.in
-@@ -13,6 +13,8 @@ config BR2_PACKAGE_IMX_ALSA_PLUGINS
- 	    * Rate Converter Plugin Using Freescale ASRC Hardware
- 	      Resampler (i.MX53 and most i.MX6)
+diff --git a/package/freescale-imx/imx-kobs/Config.in b/package/freescale-imx/imx-kobs/Config.in
+index 61be9f26d4..a81842b9a5 100644
+--- a/package/freescale-imx/imx-kobs/Config.in
++++ b/package/freescale-imx/imx-kobs/Config.in
+@@ -5,5 +5,4 @@ config BR2_PACKAGE_IMX_KOBS
+ 	  The imx-kobs tool is used for writing images to NAND on i.MX
+ 	  platforms.
  
-+	  https://github.com/nxp-imx/imx-alsa-plugins
-+
- comment "imx-alsa-libs needs an imx-specific Linux kernel to be built"
- 	depends on BR2_arm
- 	depends on !BR2_LINUX_KERNEL
-diff --git a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
-index bb7beede9d..1ca7697f03 100644
---- a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
-+++ b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  a9a5ef408a7329c2c5fa2a084ae7824afbfbebed68612bd72509488ccb0b94b3  imx-alsa-plugins-rel_imx_4.9.x_1.0.0_ga-br1.tar.gz
-+sha256  089bba009f82bf5e4a1e34b77a7d3badce2948619d92bec7a7ad42e766442d4c  imx-alsa-plugins-rel_imx_4.9.x_1.0.0_ga.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING.GPL
-diff --git a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
-index 9c81ff0df0..912cc7c68b 100644
---- a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
-+++ b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
-@@ -5,8 +5,7 @@
+-	  This library is provided by Freescale as-is and doesn't have
+-	  an upstream.
++	  https://github.com/NXPmicro/imx-kobs
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
+index d6a250cf72..91b39f6fa4 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.mk
++++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
- IMX_ALSA_PLUGINS_VERSION = rel_imx_4.9.x_1.0.0_ga
--IMX_ALSA_PLUGINS_SITE = https://source.codeaurora.org/external/imx/imx-alsa-plugins
--IMX_ALSA_PLUGINS_SITE_METHOD = git
-+IMX_ALSA_PLUGINS_SITE = $(call github,nxp-imx,imx-alsa-plugins,$(IMX_ALSA_PLUGINS_VERSION))
- IMX_ALSA_PLUGINS_LICENSE = GPL-2.0+
- IMX_ALSA_PLUGINS_LICENSE_FILES = COPYING.GPL
- IMX_ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib
+ IMX_KOBS_VERSION = a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b
+-IMX_KOBS_SITE = $(call github,codeauroraforum,imx-kobs,$(IMX_KOBS_VERSION))
++IMX_KOBS_SITE = $(call github,NXPmicro,imx-kobs,$(IMX_KOBS_VERSION))
+ IMX_KOBS_LICENSE = GPL-2.0+
+ IMX_KOBS_LICENSE_FILES = COPYING
+ 
 -- 
 2.39.0
 
