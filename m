@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E53CC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:38:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F264CC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:38:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2BE2680C37;
-	Mon, 20 Feb 2023 23:38:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BE2680C37
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D61683F7C;
+	Mon, 20 Feb 2023 23:38:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D61683F7C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HyZJF6cHtjob; Mon, 20 Feb 2023 23:38:18 +0000 (UTC)
+	with ESMTP id 2n2lGSLouzfn; Mon, 20 Feb 2023 23:38:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DAB283F5D;
-	Mon, 20 Feb 2023 23:38:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DAB283F5D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A42161BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D60218144A;
+	Mon, 20 Feb 2023 23:38:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D60218144A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 628B61BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CEE741769
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CEE741769
+ by smtp3.osuosl.org (Postfix) with ESMTP id 14D1D61ADC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14D1D61ADC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3f_Zh2mMwFiq for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HIj4ZAd9TbJL for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D958541763
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D958541763
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A90961761
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A90961761
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1ADC86495; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 046358648F; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 26 Jan 2023 14:25:14 +0100
+Date: Thu, 29 Dec 2022 10:38:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cc47da516cf5b76752d63361a8a7579d93e6fbbb
-X-Git-Newrev: f5d73033b8683df83d0ca9eb172b885d33a5ea64
+X-Git-Oldrev: db853e24b534d54f281cecbed0eb17412cdfc710
+X-Git-Newrev: 72576a661faf8e9d8021a8b110ce9318a9bc8f38
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205239.D1ADC86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
- version to 2.9.1
+Message-Id: <20230220205219.046358648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-munch: select
+ missing runtime dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +56,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5d73033b8683df83d0ca9eb172b885d33a5ea64
+commit: https://git.buildroot.net/buildroot/commit/?id=72576a661faf8e9d8021a8b110ce9318a9bc8f38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://github.com/timescale/timescaledb/releases/tag/2.9.1
+munch requires python-setuptools and python-six packages at
+runtime.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-munch/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index a970ffa1ad..a6560eb326 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  666f5427cb036500bca731d24d845285299cff82f576ad4474f85da682b2ee78  timescaledb-2.9.0.tar.gz
-+sha256  883638f2e79d25ec88ee58f603f3c81c999b6364cb4c799919d363f04089b47b  timescaledb-2.9.1.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 7530368498..44e365285b 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TIMESCALEDB_VERSION = 2.9.0
-+TIMESCALEDB_VERSION = 2.9.1
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+diff --git a/package/python-munch/Config.in b/package/python-munch/Config.in
+index 9db2623674..ceb9fbaf32 100644
+--- a/package/python-munch/Config.in
++++ b/package/python-munch/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_MUNCH
+ 	bool "python-munch"
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  Munch is a dictionary that supports attribute-style access,
+ 	  a la JavaScript.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
