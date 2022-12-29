@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61CD8C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68A3CC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 09:35:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CE25401D6;
-	Thu, 29 Dec 2022 09:34:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CE25401D6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C5A4818AC;
+	Thu, 29 Dec 2022 09:35:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C5A4818AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MX782i8zoeCx; Thu, 29 Dec 2022 09:34:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gSj9PwQdr8QB; Thu, 29 Dec 2022 09:35:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22ECC40170;
-	Thu, 29 Dec 2022 09:34:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22ECC40170
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B2DA8176A;
+	Thu, 29 Dec 2022 09:35:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B2DA8176A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F2E761BF393
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:34:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 112EB1BF96B
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:34:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD0764047D
+ by smtp4.osuosl.org (Postfix) with ESMTP id E07C4404CC
  for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 09:34:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD0764047D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E07C4404CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vBxyZeGV4B9L for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 09:34:20 +0000 (UTC)
+ with ESMTP id N4u5TS0s-LAt for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 09:34:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D343540346
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2DF2403F5
  for <buildroot@buildroot.org>; Thu, 29 Dec 2022 09:34:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D343540346
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2DF2403F5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C019087061; Thu, 29 Dec 2022 09:34:20 +0000 (UTC)
+ id E1FA987060; Thu, 29 Dec 2022 09:34:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 10:32:58 +0100
+Date: Thu, 29 Dec 2022 10:33:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 83a3744c73d5630ded3f85dc801fe3827ab82889
-X-Git-Newrev: 9511fe9b1c8fbb797f50dde708f7aae50e6d6a46
+X-Git-Oldrev: f934a00928b413fb3c190749a5bda578c6c02255
+X-Git-Newrev: 3fd6ada8dbca3370b9bb67feb2971e637cb4b11f
 X-Patchwork-Hint: ignore
-Message-Id: <20221229093420.C019087061@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsync: add lz4 support
+Message-Id: <20221229093420.E1FA987060@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tiff: add webp optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9511fe9b1c8fbb797f50dde708f7aae50e6d6a46
+commit: https://git.buildroot.net/buildroot/commit/?id=3fd6ada8dbca3370b9bb67feb2971e637cb4b11f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+webp is an optional dependency which is enabled by default since version
+4.0.10 and
+https://gitlab.com/libtiff/libtiff/-/commit/9eacd59fecc4ef593ac17689bc530ab451c8ec14
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rsync/rsync.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/tiff/Config.in | 4 ++++
+ package/tiff/tiff.mk   | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 7a32c4f8b1..9c7824f575 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -19,7 +19,6 @@ RSYNC_CONF_OPTS = \
- 	--with-included-popt=no \
- 	--disable-roll-simd \
- 	--disable-openssl \
--	--disable-lz4 \
- 	--disable-md5-asm
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index d1004d6668..b9e3656e6f 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -72,6 +72,10 @@ config BR2_PACKAGE_TIFF_UTILITIES
+ 	help
+ 	  Install all tiff utilities.
  
- ifeq ($(BR2_PACKAGE_ACL),y)
-@@ -28,6 +27,13 @@ else
- RSYNC_CONF_OPTS += --disable-acl-support
++config BR2_PACKAGE_TIFF_WEBP
++	bool "WEBP compression"
++	select BR2_PACKAGE_WEBP
++
+ config BR2_PACKAGE_TIFF_ZSTD
+ 	bool "ZSTD compression"
+ 	select BR2_PACKAGE_ZSTD
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 90b28ff37a..6d761ad678 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -100,6 +100,13 @@ else
+ TIFF_CONF_OPTS += --disable-tools
  endif
  
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+RSYNC_DEPENDENCIES += lz4
-+RSYNC_CONF_OPTS += --enable-lz4
++ifeq ($(BR2_PACKAGE_TIFF_WEBP),y)
++TIFF_CONF_OPTS += --enable-webp
++TIFF_DEPENDENCIES += webp
 +else
-+RSYNC_CONF_OPTS += --disable-lz4
++TIFF_CONF_OPTS += --disable-webp
 +endif
 +
- ifeq ($(BR2_PACKAGE_XXHASH),y)
- RSYNC_DEPENDENCIES += xxhash
- RSYNC_CONF_OPTS += --enable-xxhash
+ ifeq ($(BR2_PACKAGE_TIFF_ZSTD),y)
+ TIFF_CONF_OPTS += --enable-zstd
+ TIFF_DEPENDENCIES += zstd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
