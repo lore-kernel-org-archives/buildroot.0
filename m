@@ -1,65 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F8CC3DA79
-	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 19:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA529C3DA79
+	for <buildroot@archiver.kernel.org>; Thu, 29 Dec 2022 19:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8718B401C9;
-	Thu, 29 Dec 2022 19:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8718B401C9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6699C812FD;
+	Thu, 29 Dec 2022 19:48:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6699C812FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dH7-L9yYj3fa; Thu, 29 Dec 2022 19:48:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nt8ooGdApk21; Thu, 29 Dec 2022 19:48:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 338DA4022A;
-	Thu, 29 Dec 2022 19:48:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 338DA4022A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BE6BF1BF2B4
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 862F4813CA;
+	Thu, 29 Dec 2022 19:48:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 862F4813CA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 42D4C1BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99F286068B
- for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:48:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99F286068B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B0FC812F8
+ for <buildroot@lists.busybox.net>; Thu, 29 Dec 2022 19:48:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B0FC812F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jhl4OQJ1ZdkP for <buildroot@lists.busybox.net>;
- Thu, 29 Dec 2022 19:48:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2831D605B5
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2831D605B5
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:48:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tmfXZqbXVMyW for <buildroot@lists.busybox.net>;
+ Thu, 29 Dec 2022 19:48:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EF6181289
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0EF6181289
+ for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:48:33 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.171.174.182])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 94FA42003D0;
- Thu, 29 Dec 2022 20:47:57 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 45BE2200385;
+ Thu, 29 Dec 2022 20:48:14 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 20:47:03 +0100
-Message-Id: <20221229194729.8085-1-ju.o@free.fr>
+Date: Thu, 29 Dec 2022 20:47:04 +0100
+Message-Id: <20221229194729.8085-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221229194729.8085-1-ju.o@free.fr>
+References: <20221229194729.8085-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672343294;
- bh=PKVZtFqYAsy0AY194itwhVKu79LkvO627/w0PJnmm4o=;
- h=From:To:Cc:Subject:Date:From;
- b=s9itZ5sakfeNL80+byTqX/YbHZIgRQQZT/8DOmFNyG2cYjYUvA1BISCwL7A0e+Fce
- aaJg/+DtlYrpPXFR06uzX79q7KmgHLIoWBcJRzJjSWD+YLYKFCTVp1njOmj5nSQPF6
- YtqQrXid+t7ROkR/kSOGDXY7+qhukuwNrHO87RC+a3xEkK/+qey+5L7DHTYjh68zAt
- w0AcEDCZuXJdljatKwj6T36CSPRMEdkGKTqHiPK7/yM3vInpV9jH8fPcnEU3AkDqum
- JptQQ0BnYa4+5A0lSpWf5SxA7rKnjEQhHnMbf3ulsGM3M5hd8mHav8eOTTCk3KShGJ
- w6jNq833+zFOA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1672343311;
+ bh=bgbr8rNRnemXyYHsVdLCL6oYWgOqleD5fxSHIHRqTl0=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=X0AGREuA92ZCqwgK+Q3z85hYekqHGy9L4z5/KrKzv6oMpzPDJthmeAoKGKhz6SoLr
+ 0tSI5r7Fo6GMdaIXBVa0aV2GG2oKrN644x+jlygxoZ9sEnz60NFKUeKar50O+1Bn7f
+ oLLDfiXUtzzaXdpMI1upSjRgzmAHmXKG0THY2huvWdJwQJIkKQVjR7VpRxCLVIeGHr
+ M7i3OpX/j13bwMArauLUvaMjGUztU8/1Jo9WZ4cQgxfHKV2EbZtxkLfRW6r+/lJnPr
+ CF/26ceaZ7t/NCdIgc1zKX5CXfMWSrJgcUY5GspMYnspN+8YtmQzaMcx6JqB6mNp+J
+ WAMZucnwQl2hA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=s9itZ5sa
-Subject: [Buildroot] [PATCH 01/27] package/imx-mkimage: update codeaurora
- URLs to github
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=X0AGREuA
+Subject: [Buildroot] [PATCH 02/27] package/fmc: update codeaurora URLs to
+ github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,54 +109,68 @@ location.
 For this reason, the NXP recipes using codeaurora.org urls need to be
 updated to the correct github.com replacement.
 
+This commit also:
+- changes the _SITE_METHOD from "git" to the default "wget",
+- updates an old and broken freescale.com app note link,
+- adds the github project page as project url.
+
 Note: this commit does not change the component version. Only the
 download URL is updated. The archive content is expected to be the
-same.
+same. The version "fsl-sdk-v2.0" is an old tag from 2015. It was not
+migrated to github. This commit use instead the commit id
+corresponding to this tag.
 
-Note 2: the _SITE_METHOD is also changed from "git" to the default
-"wget", for faster downloads. This is why the package hash has
-changed.
+See:
+https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmc/commit/?h=fsl-sdk-v2.0&id=a079d2c844edd85dff85a317a63198e7988bcd09
+
+The commit id exists on github:
+https://github.com/nxp-qoriq/fmc/commit/a079d2c844edd85dff85a317a63198e7988bcd09
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/imx-mkimage/Config.in.host   | 2 +-
- package/imx-mkimage/imx-mkimage.hash | 2 +-
- package/imx-mkimage/imx-mkimage.mk   | 3 +--
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ package/fmc/Config.in | 4 +++-
+ package/fmc/fmc.hash  | 2 +-
+ package/fmc/fmc.mk    | 5 ++---
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/imx-mkimage/Config.in.host b/package/imx-mkimage/Config.in.host
-index 8d273557a1..09df2a3c29 100644
---- a/package/imx-mkimage/Config.in.host
-+++ b/package/imx-mkimage/Config.in.host
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_HOST_IMX_MKIMAGE
- 	  imx-mkimage is used to combine input images and generate
- 	  final boot image with appropriate IVT set.
+diff --git a/package/fmc/Config.in b/package/fmc/Config.in
+index 4399aa2cab..c89a87c99e 100644
+--- a/package/fmc/Config.in
++++ b/package/fmc/Config.in
+@@ -21,5 +21,7 @@ config BR2_PACKAGE_FMC
+ 	  packets flow into hardware configuration. The tool provides an
+ 	  abstraction layer between the end customer's vision of the PCD
+ 	  task definition and real hardware implementation.
++	  See application note:
++	  https://www.nxp.com/docs/en/application-note/AN4760.pdf
  
--	  https://source.codeaurora.org/external/imx/imx-mkimage
-+	  https://github.com/nxp-imx/imx-mkimage
-diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
-index 81d99a5d1c..8346fd64b1 100644
---- a/package/imx-mkimage/imx-mkimage.hash
-+++ b/package/imx-mkimage/imx-mkimage.hash
+-	  http://cache.freescale.com/files/32bit/doc/app_note/AN4760.pdf
++	  https://github.com/nxp-qoriq/fmc
+diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
+index fed33091cd..7309562b09 100644
+--- a/package/fmc/fmc.hash
++++ b/package/fmc/fmc.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  769b3d7376a1f7107ce2958a1babe361bfd29e2cbfbe47eeb2911acc460058e5  imx-mkimage-lf-5.10.72_2.2.0-br1.tar.gz
-+sha256  593bd94aac027844bc58c62aae55557c14e1f8a99e68ba235a46f083759df3d4  imx-mkimage-lf-5.10.72_2.2.0.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index 0bfca72504..54c948e0d3 100644
---- a/package/imx-mkimage/imx-mkimage.mk
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -5,8 +5,7 @@
+-sha256  cb896ec1fac2fe9a3a9bb8be2221b79acf5f9b75841609a681db0d9e7bec02a0  fmc-fsl-sdk-v2.0-br1.tar.gz
++sha256  e8594e37eb81e5b1f492f8494b98086f65180637b1e2e08d8a4475c23653a404  fmc-a079d2c844edd85dff85a317a63198e7988bcd09.tar.gz
+ sha256  f92862ceb95db5492f50a59d7c799c9395b714db88db92d11891dc0233e2ac42  COPYING
+diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
+index b385730138..6ac8c768df 100644
+--- a/package/fmc/fmc.mk
++++ b/package/fmc/fmc.mk
+@@ -4,9 +4,8 @@
+ #
  ################################################################################
  
- IMX_MKIMAGE_VERSION = lf-5.10.72_2.2.0
--IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
--IMX_MKIMAGE_SITE_METHOD = git
-+IMX_MKIMAGE_SITE = $(call github,nxp-imx,imx-mkimage,$(IMX_MKIMAGE_VERSION))
- IMX_MKIMAGE_LICENSE = GPL-2.0+
- IMX_MKIMAGE_LICENSE_FILES = COPYING
- HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
+-FMC_VERSION = fsl-sdk-v2.0
+-FMC_SITE = https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmc
+-FMC_SITE_METHOD = git
++FMC_VERSION = a079d2c844edd85dff85a317a63198e7988bcd09
++FMC_SITE = $(call github,nxp-qoriq,fmc,$(FMC_VERSION))
+ FMC_LICENSE = MIT
+ FMC_LICENSE_FILES = COPYING
+ FMC_DEPENDENCIES = libxml2 tclap fmlib
 -- 
 2.39.0
 
