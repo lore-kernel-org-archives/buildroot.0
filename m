@@ -1,87 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74D8FC4167B
-	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 09:34:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D3FBC4167B
+	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 09:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5526400DE;
-	Fri, 30 Dec 2022 09:34:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5526400DE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B95A400FD;
+	Fri, 30 Dec 2022 09:58:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B95A400FD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v2o28ySM0NWZ; Fri, 30 Dec 2022 09:58:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9001440124;
+	Fri, 30 Dec 2022 09:58:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9001440124
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 542CE1BF271
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 09:58:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E7CE400EB
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 09:58:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E7CE400EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7H70ZBaoyITP; Fri, 30 Dec 2022 09:34:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEE15400E8;
-	Fri, 30 Dec 2022 09:34:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEE15400E8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1620F1BF271
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 09:34:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E61A360669
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 09:34:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E61A360669
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ND-N2jB146RJ for <buildroot@lists.busybox.net>;
- Fri, 30 Dec 2022 09:34:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDA4160655
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DDA4160655
- for <buildroot@buildroot.org>; Fri, 30 Dec 2022 09:34:41 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id bs20so17329561wrb.3
- for <buildroot@buildroot.org>; Fri, 30 Dec 2022 01:34:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=SAOyYd2yRZBAa5Qpn3jAcl8GGkb6ZJdyxblnadtSKh4=;
- b=PYyKoG6U3gORrppi+KlCj67ndy0fjtpWI155swV3llM8Yno2qkuiT8seEe3rB4z7Gj
- KDZNkpNYifBd3mVl3h6sQx3pK9u3c5DSpNEKwPzOyViQhRYWnWP6zUoaKrVkbfB+Ss8S
- Kn7i/XJQmvukuI6xi6Xr1nlbv+KVuuHwXwanH2+fDqaYfnCbftt7bWpfVAaap0XVVZka
- Ogi5gQOwRlBTb6Jj6/hObn3SOaUEuWOJ7wSosToEpMyR2uBOfXuaWNAJEvZeR4HJiw3a
- VfgCFrg+6JuP4CU3n1Zl0vTqFsKEAyyuBIjPBn3qePlxZJgVvuhsfrVyDQxazn6HWlOM
- j8QQ==
-X-Gm-Message-State: AFqh2kq493rN1xkfUoC4CjBj/q7vs8tJ7n4GFmt1njoTH8nLp+qj+mlT
- UYfRwCEQWwdDovR+U6cQSWpi6Za+mMI=
-X-Google-Smtp-Source: AMrXdXslLTbAk1Io1B+MS4EGOGt06udzSOM/CbB81e7B2uqilLxkwB9ePKkxZVkUsc/LvqoxB0VAIw==
-X-Received: by 2002:a05:6000:14a:b0:278:25c7:e844 with SMTP id
- r10-20020a056000014a00b0027825c7e844mr12462660wrx.45.1672392879548; 
- Fri, 30 Dec 2022 01:34:39 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- b2-20020adff242000000b0023662245d3csm20323605wrp.95.2022.12.30.01.34.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Dec 2022 01:34:38 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J3_Gus7GP3zO for <buildroot@lists.busybox.net>;
+ Fri, 30 Dec 2022 09:57:59 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ED0240151
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5ED0240151
+ for <buildroot@buildroot.org>; Fri, 30 Dec 2022 09:57:59 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.167.224.71])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id C95D05FFB4;
+ Fri, 30 Dec 2022 10:57:40 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 30 Dec 2022 10:34:35 +0100
-Message-Id: <20221230093435.118865-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Fri, 30 Dec 2022 10:57:23 +0100
+Message-Id: <20221230095728.5941-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221229194729.8085-1-ju.o@free.fr>
+References: <20221229194729.8085-1-ju.o@free.fr>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=SAOyYd2yRZBAa5Qpn3jAcl8GGkb6ZJdyxblnadtSKh4=;
- b=eL5TfFhdvC6Eq82YSqF2BaXnTxE0Dn1E81qHDndKA7fOYM6Fmpl9BGwBSUMmYzXvGG
- zOCI4lWIYlCZAx/FfD1Ucjr+JvHyHpNc5EYA2EZ0WxYEn0z0my2YYr9BPmHDwKSL1Nju
- vSTZFv3gOOLn/pAE2T6a1PTt3JuYpM7niuak5JLQeV6ZM5ekbyviadGa3emYlFb3xKqr
- AgSA6idJCXfatJH2ms0HO82XFSvApolt/J3hdVLGbsgR7Co4eTUcPYXGUu6sjaA1kP1H
- 7QQfPsUgpO/fBu2TveZt7t+11/tYVTw6S+awH8hDZMoTIqOWEan8wiM+7Mi/uuAbnyo2
- 7eYQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=eL5TfFhd
-Subject: [Buildroot] [PATCH 1/1] package/tiff: fix host package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672394275;
+ bh=55GDeDSmkYMcuJ2eME8jVuZgS8CGlFiWgzXqbSTHj6o=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=GZjghEbB2vhsAPQYX5JRLd+lm9xb19mAss+sgSqj/kjxitzQnhcxM4RReXj+0DuHT
+ 2r/rEnUvKCB83rQ1QX1XZ4snxTpsSuGmVziXyGEE1wvHlP7hFE13+BRCvPH64PIb+e
+ AwELCrVKDfepcCh9QajtZfeX1WqhebfXQeulKnkHFXF3ZCGpU12zy6yTIzk2EWl2n7
+ vqQd1JMM6WxciGhjkdhv+FJhKeKINxM4KotGdVYBAgCFu7A/CGySt1EfHYhRpXBm76
+ QAeCAxEKRtoc5/kDXMoA5GyQd17A6LcZ5lviecH2AvrhH0vphpEy/fCJpPW7RCFula
+ XTNXDfTrxx3Ng==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GZjghEbB
+Subject: [Buildroot] [PATCH 22/27] configs/freescale_imx8qmmek: update
+ codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,66 +73,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Gary Bisson <bisson.gary@gmail.com>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
+ Gilles Talis <gilles.talis@gmail.com>, Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Julien Olivain <ju.o@free.fr>, Erik Larsson <karl.erik.larsson@gmail.com>,
+ Fabrice Goucem <fabrice.goucem@oss.nxp.com>,
+ Stephane Viau <stephane.viau@oss.nxp.com>, Fabio Estevam <festevam@gmail.com>,
+ Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable webp and zstd on host package to avoid the following build
-failure with host-gdk-pixbuf raised since bump to version 4.5.0 in
-commit 5b62ea01369b11f5a4320bb2c909168b21c2642c:
+NXP moved all its open source code repositories from Code Aurora Forum
+to github. See for example:
+https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
 
-Run-time dependency libtiff-4 found: NO (tried cmake)
+Software packages are now grouped in several NXP github
+projects/organizations (nxp-imx, nxp-qoriq, ...). See:
+https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
 
-../output-1/build/host-gdk-pixbuf-2.42.10/meson.build:330:2: ERROR: Dependency lookup for libtiff-4 with method 'pkgconfig' failed: Could not generate cargs for libtiff-4:
-Package libwebp was not found in the pkg-config search path.
-Perhaps you should add the directory containing `libwebp.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'libwebp', required by 'libtiff-4', not found
+The NXP code published on Code Aurora is still present (at the time of
+this commit) but is no longer receiving updates. It is also expected
+to be shut down on 2023-03-31. The Code Aurora website
+https://source.codeaurora.org/ currently show the following message:
+"""
+Note: Qualcomm Innovation Center Inc. maintained repositories have
+migrated to git.codelinaro.org. QUIC repositories on this site will
+not receive any updates after March 31, 2022, and will be deleted on
+March 31, 2023. If your project depends on these repositories, please
+adjust your tooling configuration to use the new, up-to-date project
+location.
+"""
 
-[...]
+For this reason, the NXP recipes using codeaurora.org urls need to be
+updated to the correct github.com replacement.
 
-Run-time dependency libtiff-4 found: NO (tried cmake)
+Note: this commit does not change the component version. Only the
+download URL is updated. The archive content is expected to be the
+same.
 
-../output-1/build/host-gdk-pixbuf-2.42.10/meson.build:330:2: ERROR: Dependency lookup for libtiff-4 with method 'pkgconfig' failed: Could not generate cargs for libtiff-4:
-Package libzstd was not found in the pkg-config search path.
-Perhaps you should add the directory containing `libzstd.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'libzstd', required by 'libtiff-4', not found
+Note 2: this commit updates the Kernel, U-Boot and ATF download urls.
+The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
 
-While at it, also disable libdeflate even if no build failures are
-raised by autobuilders
-
-Fixes:
- - http://autobuild.buildroot.org/results/320083dfec4d126043b036cbaec7c7b85069a50a
- - http://autobuild.buildroot.org/results/8ff1cfa254920749a43e235c4084b8524d0edf6f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/tiff/tiff.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ configs/freescale_imx8qmmek_defconfig | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index d3ab50b79e..e7de51ea1e 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -26,9 +26,12 @@ HOST_TIFF_CONF_OPTS = \
- 	--disable-cxx \
- 	--without-x \
- 	--disable-zlib \
-+	--disable-libdeflate \
- 	--disable-lzma \
- 	--disable-jpeg \
--	--disable-tests
-+	--disable-tests \
-+	--disable-webp \
-+	--disable-zstd
- HOST_TIFF_DEPENDENCIES = host-pkgconf
- 
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
+index 8a0e866cee..75777646df 100644
+--- a/configs/freescale_imx8qmmek_defconfig
++++ b/configs/freescale_imx8qmmek_defconfig
+@@ -4,9 +4,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qm-mek.dtb"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qm-mek"
+@@ -20,16 +19,14 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qm"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qm_mek"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -- 
-2.35.1
+2.39.0
 
 _______________________________________________
 buildroot mailing list
