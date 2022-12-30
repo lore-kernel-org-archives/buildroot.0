@@ -1,89 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 769EBC4167B
-	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 18:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59DA7C4167B
+	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 20:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BCFA60DE5;
-	Fri, 30 Dec 2022 18:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BCFA60DE5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C4784025A;
+	Fri, 30 Dec 2022 20:03:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C4784025A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VYx-YDdAFei9; Fri, 30 Dec 2022 18:08:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kc_eprVyyr8X; Fri, 30 Dec 2022 20:03:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E51560DCB;
-	Fri, 30 Dec 2022 18:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E51560DCB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AC1131BF364
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 18:08:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91DCF4086E;
+	Fri, 30 Dec 2022 20:03:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91DCF4086E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 215E81BF3A8
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 20:03:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9414860DDF
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 18:08:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9414860DDF
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF043817A5
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 20:03:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF043817A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6hQdj-rNSbMF for <buildroot@lists.busybox.net>;
- Fri, 30 Dec 2022 18:08:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0Q1isLCbJ_xQ for <buildroot@lists.busybox.net>;
+ Fri, 30 Dec 2022 20:03:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1FCB60A97
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A1FCB60A97
- for <buildroot@buildroot.org>; Fri, 30 Dec 2022 18:08:48 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- g25-20020a7bc4d9000000b003d97c8d4941so10180259wmk.4
- for <buildroot@buildroot.org>; Fri, 30 Dec 2022 10:08:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=sgtEDGZ9DD//cTy7k089TukBwuAukI+gHhO4n6Md2u8=;
- b=NOPTH3bBSH9Y1I2dMK+nixAztZ6NXDcsI6c76xEhiwlDGjJYcCr9tIiSySSilC3mA5
- +efS6VEngYNzYuCnDvf8PDSs2EGbRHpb35YOAMZzov2eunPztTxuHeoEV2r3lwPizHbf
- fHXiPD6tV+CeA67BavIuJXYldhEwNlVjNvve5nOmOvPCCf9ylEkcDxoQWcvox2a1RtAr
- lUAViBx0XAR3f3d5s6Q76FxFBWHanSDUqaOtEjLw1TwnJNZQlALwEJBzIkEax8H8LRI5
- ra9My2llTD2a86Qkxdmi6gTPI6mUZ+UfndcWOvK01IgvoObr3uBZfSodVpnGfhEM4I0q
- Prxw==
-X-Gm-Message-State: AFqh2ko8iCnUJdOY3M8GBs0+EICqEOfQNMSavmL7EApvQca0C0DPL3/N
- h07IcIjve4l3MvkwWs9SeV68FZKKB9I=
-X-Google-Smtp-Source: AMrXdXvsaUvk/S3SIQYFWS9XeeHnOBo6AkLqe3+0QQOkiHLyn/ov7WVz/ZITcROGAXYPnyHaDkYXJQ==
-X-Received: by 2002:a7b:c7c8:0:b0:3d7:889:7496 with SMTP id
- z8-20020a7bc7c8000000b003d708897496mr22963296wmk.17.1672423726471; 
- Fri, 30 Dec 2022 10:08:46 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- o8-20020a05600c4fc800b003d99a39b846sm8605980wmq.5.2022.12.30.10.08.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Dec 2022 10:08:45 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F00881775
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7F00881775
+ for <buildroot@buildroot.org>; Fri, 30 Dec 2022 20:03:45 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.167.229.211])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 983CC780306;
+ Fri, 30 Dec 2022 21:03:40 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 30 Dec 2022 19:08:43 +0100
-Message-Id: <20221230180843.521147-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Fri, 30 Dec 2022 21:03:32 +0100
+Message-Id: <20221230200332.6598-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=sgtEDGZ9DD//cTy7k089TukBwuAukI+gHhO4n6Md2u8=;
- b=FeClZ0pMcC851DVLn7g+5tC9hIDOOZG+9RXpU5n2g1OgVSr6C+Rr+JCG+oegdN0DIe
- SLqtT3J0kiMI3kgQVCz9IZSfBCXF90EVlWiAd+KYtOPOyWv547eW9tyuJjIr7m+GPANJ
- v1FCU16PUnQgr6+RNlcAVJnBeA0dNrtK72LbWe66Z/I4Ezj2BJe75seRG6jUNSGPjgK2
- 9tCVS7s69oeP5nTn2em1H+r04pjl47+U7PPGeX84LDZtrV9OXUYkHTmBGTJHL4YYGJVZ
- BjrFztFKxynjaBiNnFozyEFJSRa1egCcI2zkK6Fehj5HygU0aygSVenj0WgxPy/7laN4
- YwTA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=FeClZ0pM
-Subject: [Buildroot] [PATCH 1/1] package/crun: add libgcrypt optional
- dependency
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672430622;
+ bh=MZAXxfS7+T8Ea9TAnDl6b2zXD5KF+glYhq8rrC79lio=;
+ h=From:To:Cc:Subject:Date:From;
+ b=W/rU4Om7doQD8xBlvxUVuigKHUScud/abKbPWQdPJK7aeithQE9FL0YaHYsoSOnTT
+ 0fhDwm5kcn96MvprZx7SHou0TNVXAhqTw9j6D/c4HoC0Ka00T5+i9vfHtBZCvtVDsN
+ 3In9NBOXdezbEJBebXMqJedba1A2BzDYW2lNO47YdoETjaumc+BztE4VsP9pafhlKs
+ dhYREw0TjL3MNG5WqzeSKogD/8o3AvOeRtEi0QQ5U3a6Z0vt0clgkXPfx3nyQwMGTA
+ DqeDYAGhCfLGBcIc4i0X3ODnMhN7W0459vEZgFHZTI2RzC+FijxfNP+uv+4kn/oxnu
+ rG8dNsTYcPxSg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=W/rU4Om7
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,38 +70,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libgcrypt is an optional dependency which is enabled by default since
-version 1.7 and
-https://github.com/containers/crun/commit/dd310aaf5aee336d0f6236c1c2add7b7cb030482
+For change log since v2.3.0, see:
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/crun/crun.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Patch tested on branch master at commit 44be514 with commands:
 
-diff --git a/package/crun/crun.mk b/package/crun/crun.mk
-index 8c9993993c..fd8bfb0981 100644
---- a/package/crun/crun.mk
-+++ b/package/crun/crun.mk
-@@ -26,6 +26,10 @@ else
- CRUN_CONF_OPTS += --disable-caps
- endif
+    make check-package
+    ...
+    0 warnings generated
+
+    ./utils/test-pkg -p fluidsynth
+    ...
+    6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index fdb0cf4117..3de41b1682 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  1df5a1afb91acf3b945b7fdb89ac0d99877622161d9b5155533da59113eaaa20  fluidsynth-2.3.0.tar.gz
++sha256  d734e4cf488be763cf123e5976f3154f0094815093eecdf71e0e9ae148431883  fluidsynth-2.3.1.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 20fbb644f5..ad1ed7df11 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+CRUN_DEPENDENCIES += libgcrypt
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- CRUN_DEPENDENCIES += libseccomp
- CRUN_CONF_OPTS += --enable-seccomp
+-FLUIDSYNTH_VERSION = 2.3.0
++FLUIDSYNTH_VERSION = 2.3.1
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
 -- 
-2.35.1
+2.39.0
 
 _______________________________________________
 buildroot mailing list
