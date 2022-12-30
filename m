@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F12C4167B
-	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 17:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23714C4167B
+	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 17:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29440817B0;
-	Fri, 30 Dec 2022 17:46:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29440817B0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84B5D81AF3;
+	Fri, 30 Dec 2022 17:53:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84B5D81AF3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5T8zz2bQbflq; Fri, 30 Dec 2022 17:46:58 +0000 (UTC)
+	with ESMTP id wtlUkczCHanu; Fri, 30 Dec 2022 17:53:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 690BD81990;
-	Fri, 30 Dec 2022 17:46:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 690BD81990
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B8531BF3BC
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 17:46:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF39F81A23;
+	Fri, 30 Dec 2022 17:53:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF39F81A23
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BAFE81BF3BC
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 17:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB1D3405C4
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 17:46:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB1D3405C4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94E5A40990
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 17:53:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94E5A40990
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C8TupRH1mqVz for <buildroot@lists.busybox.net>;
- Fri, 30 Dec 2022 17:46:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OjjDOwjRsSyK for <buildroot@lists.busybox.net>;
+ Fri, 30 Dec 2022 17:53:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8517405C0
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B8517405C0
- for <buildroot@buildroot.org>; Fri, 30 Dec 2022 17:46:53 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- b24-20020a05600c4a9800b003d21efdd61dso15608571wmp.3
- for <buildroot@buildroot.org>; Fri, 30 Dec 2022 09:46:53 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5364D40981
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5364D40981
+ for <buildroot@buildroot.org>; Fri, 30 Dec 2022 17:53:54 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id j17so15077983wrr.7
+ for <buildroot@buildroot.org>; Fri, 30 Dec 2022 09:53:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Xh9VXO7VFpYurUVKsdO0nia3eUJ5CzXQFA9TYJfVYCw=;
- b=Rz8p3fmKvDhHjh2r2Gui+JKAFqLv1Jv0Qc4iM8y1hxsduEGu/e/JQaaydkPtECJjlL
- fni49rAOC8Gn33pl7v4W1mK2a8r6CEJQ6aufF4NcLSy6MbC3N3JubD2OzEJMiCbUynHN
- p9cj7jE+6+5UgblYMkpGUY3+12zAebFO2kiIKEPL5QKpKyCNIjdrq0bBNEZuzBzEDMlZ
- 174i8wRoUAS0+N80oZSkdoRwWmoImP8MHFzkxnn/g6Vyiig0nbA9iubtJ0ztQgl6endw
- UfF0FCLK/I2AjUVPcBnjLJFTJklP84u1075T4RY/LfzPmZqOGXOWcyyoSOWCccm+pIYI
- od5Q==
-X-Gm-Message-State: AFqh2koj0onmvaLnrnM10kFks5r3WFk++iZTW81mpKjaKHGR31r5MFkw
- V1uGJ1l/hbXdZgSJ2KNoV5fbmk1rU8w=
-X-Google-Smtp-Source: AMrXdXtkHVdXNp+ufyN0qU7ls8UOlGzk1VCKHF8aiM+dH815C//u5JUqf+UiW0ixnlT3CxLaiLQSBw==
-X-Received: by 2002:a05:600c:4f48:b0:3d6:8570:1239 with SMTP id
- m8-20020a05600c4f4800b003d685701239mr29319700wmq.16.1672422411551; 
- Fri, 30 Dec 2022 09:46:51 -0800 (PST)
+ bh=LL0Z8cw3rquIK086x1hS9WHSsjVxZeLKxChEJ9dyz9w=;
+ b=Te+9vg3NXmLgtnoh4Vb66s/LWOrlZ1xwEQYQCLIbs/gjLOf0zt8ZF6cL/DBhZs2zWu
+ JvXf9IGOeMPDT2dbQpDHnlaH8NFFR0/oZhWCdfzH8C1/j06Kf+34Sy8WdD6FPRJII6ZR
+ lOnMUBD2mWilJYK63WfvBp6leblQmM/6FufBdi0gwu0tdt+z2lMR3KcXQWITtDoc6hta
+ i/V5MkdphWz5my5IP4ZiNhs+lVnwe+KoztU88gG+x+BMvbiYUrAXzj/673O+3uBEKVgw
+ tIDClUtbiM2V9xfU0f35jQK+uNcxrt61qFDiBlAUDjoihJoDl/fLeHcX4w+YVcO1FIJE
+ TiCw==
+X-Gm-Message-State: AFqh2krbU1hYpeYzINL8zVGY1MP99hjOWSwbK2fJ7Z2RlbT5iTKNNLHG
+ DGal4r7fGFNB1/ERW1QsfFjQH6Ukzl0=
+X-Google-Smtp-Source: AMrXdXvJV+1ZaI0pahva/U8agD+tDbbf5oAGNgsFS6YkRbX+BdUKoUQrDd2FYGacC1Q+IEeEu8umDg==
+X-Received: by 2002:a5d:4008:0:b0:242:17d3:a9fc with SMTP id
+ n8-20020a5d4008000000b0024217d3a9fcmr20107851wrp.30.1672422832293; 
+ Fri, 30 Dec 2022 09:53:52 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- m16-20020adffe50000000b00241bd7a7165sm23727044wrs.82.2022.12.30.09.46.50
+ t13-20020adfe44d000000b002365b759b65sm20886924wrm.86.2022.12.30.09.53.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Dec 2022 09:46:50 -0800 (PST)
+ Fri, 30 Dec 2022 09:53:51 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Dec 2022 18:46:46 +0100
-Message-Id: <20221230174646.409970-1-fontaine.fabrice@gmail.com>
+Date: Fri, 30 Dec 2022 18:53:50 +0100
+Message-Id: <20221230175350.412551-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Xh9VXO7VFpYurUVKsdO0nia3eUJ5CzXQFA9TYJfVYCw=;
- b=o3hdpxdJyL+AJYbZXping50FkR9uNT1qUAFEmfsEW93Ak4YreHPZMCGXMuZ6Otgdx5
- TzdPU/VeQykJls0GcRC79DPl5lLItKFl31PocQwZ+JU4UfjRvggf5SLp+6OOzJ79V0dd
- egRWiJq0ifup4rcjMIfHBoUzUGTjRzR6jkp+H6A36we99fw1a4OiJbhJwoSuXGO5cuCa
- xdzJ+mbLf2yaVuICWRJb8GjIXXGW3YqnenSAC8sh0uQIqOzNygrxI+Jo2PAe/gz1SFAu
- K4omWZQj2uWbaFoUhspaC2CgLfNBgj/4XtfZqv8TNaPgtaNlCd4bUwcqF8xKeq6b7FhG
- x/Ww==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=LL0Z8cw3rquIK086x1hS9WHSsjVxZeLKxChEJ9dyz9w=;
+ b=GjsCbsPZWH1uqYZJgbCQK+BnAccwq6lNC1uxSpVFbJL6HmbwBR7lgWBvrmF4zIbEFP
+ e303+qllJ2fYo9XySWuJxhUXwh6sZpdtNOU0dH+IociC95FhqZBphZSh+h3EN0eCn64b
+ TArlvjVqsL0WkREN3g5ptzXo98q3KkaH3YoDwpdFQQ8l2nZOhRDcYPhEFinhWYyxa5Nv
+ T2rvzwCIiPHNRVzs9r/kzO1QyjRC1x7Mrv0sRmHAxj4mwpTvQh3ml8if8nGic4eMldee
+ 9V/YYNm/ONzD/LhgDR3MzNW7E40iqvNSm7yHIeeyCDJFtnZnD1XyD+LvaCj5hdfNp1P+
+ CTHg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=o3hdpxdJ
-Subject: [Buildroot] [PATCH 1/1] package/crun: fix static build
+ header.a=rsa-sha256 header.s=20210112 header.b=GjsCbsPZ
+Subject: [Buildroot] [PATCH 1/1] package/crun: needs fexecve
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,68 +99,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following static build failure raised since bump to version
-1.7.2 in commit 6987b92da510a8c8b9534a22506850c163d0f035 and
-https://github.com/containers/crun/commit/5837234e9840cd067edd9f6cd2ed9cae9a0e6570:
+crun unconditionally uses fexecve since its addition in commit
+530d6f661e506a4774b7236cb93d65f669adbc92 and
+https://github.com/containers/crun/commit/ce4dfbb97a8a05bef125030eaa6c46c07a5f9344:
+resulting in the following uclibc build failure:
 
-src/crun.c:26:10: fatal error: dlfcn.h: No such file or directory
-   26 | #include <dlfcn.h>
-      |          ^~~~~~~~~
+/tmp/instance-11/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arceb-snps-linux-uclibc/9.2.1/../../../../arceb-snps-linux-uclibc/bin/ld: src/libcrun/crun-cloned_binary.o: in function `ensure_cloned_binary':
+cloned_binary.c:(.text+0x1006): undefined reference to `fexecve'
 
 Fixes:
- - http://autobuild.buildroot.org/results/a5f52a7ee757c92c9571261c0ed884d05caeaf2f
+ - http://autobuild.buildroot.org/results/e1f4ef2b392c0e7161390ba0f97d6eef3bd12e9c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...src-crun.c-fix-build-without-dlfcn.h.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
+ package/crun/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch b/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
-new file mode 100644
-index 0000000000..3e8d3f4c4b
---- /dev/null
-+++ b/package/crun/0001-src-crun.c-fix-build-without-dlfcn.h.patch
-@@ -0,0 +1,39 @@
-+From 278b9b447bec3fb81bf252eb2fe2c856892ec802 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 30 Dec 2022 18:40:15 +0100
-+Subject: [PATCH] src/crun.c: fix build without dlfcn.h
+diff --git a/package/crun/Config.in b/package/crun/Config.in
+index 5def7001c1..fa0894e126 100644
+--- a/package/crun/Config.in
++++ b/package/crun/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_CRUN
+ 	bool "crun"
+-	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_YAJL # libocispec
+ 	help
+ 	  crun is a fast and low-memory OCI Container Runtime in C.
+ 
+ 	  https://github.com/containers/crun
 +
-+Fix the following build failure without dlfcn.h raised since version 1.7
-+and
-+https://github.com/containers/crun/commit/5837234e9840cd067edd9f6cd2ed9cae9a0e6570:
-+
-+src/crun.c:26:10: fatal error: dlfcn.h: No such file or directory
-+   26 | #include <dlfcn.h>
-+      |          ^~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a5f52a7ee757c92c9571261c0ed884d05caeaf2f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/containers/crun/pull/1110]
-+---
-+ src/crun.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/crun.c b/src/crun.c
-+index cbfe900..af0cc97 100644
-+--- a/src/crun.c
-++++ b/src/crun.c
-+@@ -23,7 +23,9 @@
-+ #include <string.h>
-+ #include <libgen.h>
-+ 
-++#ifdef HAVE_DLOPEN
-+ #include <dlfcn.h>
-++#endif
-+ 
-+ #include "crun.h"
-+ #include "libcrun/utils.h"
-+-- 
-+2.35.1
-+
++comment "crun needs a glibc or musl toolchain"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
 -- 
 2.35.1
 
