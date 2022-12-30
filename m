@@ -1,96 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 231C5C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 03:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB4CDC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 05:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E0B240354;
-	Fri, 30 Dec 2022 03:46:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E0B240354
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p61b5bIqA_SK; Fri, 30 Dec 2022 03:46:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA6D74020B;
-	Fri, 30 Dec 2022 03:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA6D74020B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF38E1BF59C
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 03:46:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A79B60B04
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 03:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A79B60B04
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C89860AC0;
+	Fri, 30 Dec 2022 05:19:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C89860AC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u_9gGi5c7LDJ for <buildroot@lists.busybox.net>;
- Fri, 30 Dec 2022 03:46:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D28960AEC
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5D28960AEC
- for <buildroot@buildroot.org>; Fri, 30 Dec 2022 03:46:43 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id kw15so48909656ejc.10
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:46:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=YLIOTDIWht8qiCJmbNDeW/q1fRP+4GNxKz0brNnh7gU=;
- b=OSvGObYtFq8Z0YabsExIJLbfnkyT+Q9kkhwEQEi48/Uns9B/dBbJxzcSyoPKvgzkPU
- boK42H9KvLUapL9SjQEEH2KpwBqVkbBLSZbDcaZMc80uiBMy2seER5Pnh2ibov7SvRBa
- c76+MaSXGBbSNvXFtqGTvBvq1a2U46KkLSgUko5fP198yK+USeNQxDQ+09h+X2zCPpN/
- 7mF98THv8I2QO88Y5vmkyIregLdGof7V4vY/NAeHk6PJsAk2yhSh4nthXLJiAVtsH1NE
- OuxrucPo+8T0ToScFW/y+uecrJhq18vS+5/A1UXNOKfyq0St78BP6Ns+x3QoQdqg/Jwq
- 57vQ==
-X-Gm-Message-State: AFqh2kprIrzMcIJwXqquvbqUM1K5IYS5YOjKhGj/4yx722P2R6wjaCTX
- U7f7Q9pCd6oq8/ALVgSryVUbTzvFPl7FZuE0l68=
-X-Google-Smtp-Source: AMrXdXsdgO2skbtGy3NqZVkuuEPMaS4syczDcI3Ku1ICQ0ltpqLrnMpKVvj4ZhAWiLlTTGwuxJ2gow==
-X-Received: by 2002:a17:906:36ce:b0:7c1:727c:5f70 with SMTP id
- b14-20020a17090636ce00b007c1727c5f70mr26453898ejc.46.1672372001317; 
- Thu, 29 Dec 2022 19:46:41 -0800 (PST)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com.
- [209.85.218.54]) by smtp.gmail.com with ESMTPSA id
- c19-20020a170906341300b007a8de84ce36sm9156908ejb.206.2022.12.29.19.46.40
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 29 Dec 2022 19:46:40 -0800 (PST)
-Received: by mail-ej1-f54.google.com with SMTP id ud5so49006846ejc.4
- for <buildroot@buildroot.org>; Thu, 29 Dec 2022 19:46:40 -0800 (PST)
-X-Received: by 2002:a17:907:c388:b0:7c1:8fa0:527 with SMTP id
- tm8-20020a170907c38800b007c18fa00527mr4019305ejc.180.1672372000412; Thu, 29
- Dec 2022 19:46:40 -0800 (PST)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id myYhoHISIMty; Fri, 30 Dec 2022 05:19:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64D9F606AA;
+	Fri, 30 Dec 2022 05:19:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64D9F606AA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 215211BF2FB
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 05:19:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F10B340137
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 05:19:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F10B340137
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H2P3AYg-BqrC for <buildroot@lists.busybox.net>;
+ Fri, 30 Dec 2022 05:19:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8C09400FC
+Received: from smtpdh17-1.aruba.it (smtpdh17-1.aruba.it [62.149.155.116])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8C09400FC
+ for <buildroot@buildroot.org>; Fri, 30 Dec 2022 05:19:51 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.66.6])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id B7o4ph98UYttnB7o4pjFTY; Fri, 30 Dec 2022 06:19:48 +0100
+Message-ID: <de387784-9c6e-ce40-d98b-467e2de152a1@benettiengineering.com>
+Date: Fri, 30 Dec 2022 06:19:48 +0100
 MIME-Version: 1.0
-References: <20221230032520.1066282-1-christian@paral.in>
-In-Reply-To: <20221230032520.1066282-1-christian@paral.in>
-Date: Thu, 29 Dec 2022 19:46:29 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2q-UFnEMLeN-_MbDbyCGvVe9_y9eg5pV4xm2Rq-G0u6Cg@mail.gmail.com>
-Message-ID: <CA+h8R2q-UFnEMLeN-_MbDbyCGvVe9_y9eg5pV4xm2Rq-G0u6Cg@mail.gmail.com>
-To: Christian Stewart <christian@paral.in>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=paral.in; s=google;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=YLIOTDIWht8qiCJmbNDeW/q1fRP+4GNxKz0brNnh7gU=;
- b=byt2tSbV32da8rvZizyeNQsn/lIivM6YlLCGwfHyWHtVhdNzaY4aoojdWlxSEaqAOx
- +XwzI85Wx3KfskoDVnPISV1jxlUm+wQdj9V9W8XUiqdAdFDSlih0vh4wstlpbPKrcMKL
- zXth6bhfZ+vkZNPmScZ4Z0IfqpGkqGXe9PoMD4070SRrWj9NHkSeaHX7/UULOYRgSICu
- I5IJ7cO8EQBxhfIxF9TNuha/UQI7BID/2mGBvqqzKOkiGbaxILuosdGVwblLuEuO3D1w
- ED7a3aMitBf8hkSR+wy7r6StkWwyUfANoEjft8GBc6zH5pDKPtuFmhBovU3z8OEensuD
- 0HuQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
- header.a=rsa-sha256 header.s=google header.b=byt2tSbV
-Subject: Re: [Buildroot] [PATCH 1/1] package/rng-tools: fix build failure:
- undefined jent_notime_ctx
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20221229235834.321957-1-giulio.benetti@benettiengineering.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20221229235834.321957-1-giulio.benetti@benettiengineering.com>
+X-CMAE-Envelope: MS4xfDdLzVQKQLGOYoZy4I4pGnnbNawL6j2kjhMdtPGG+mIT01DR06NuRD/LM5ZMX5+0cSCc7W5hXvk7msoLBcCq2pmfIqk9Upp6c2sbDjFCrj/KrWSLuop0
+ JF8HM/2xp0Wxc4NfMyA7sWB9TO1iugX1oMe133k2X9rQ/qc5oO4OkBHjrjhaMsHaI8lro95U7Q5W+OEYBbsHZKWWPU3V9SjQiZAo9eabLUsoXPqkl7kO/jV5
+ fCh7Y0xOUAD/dgMsUHpDNQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1672377588; bh=eExmbLVjPiY6/HJyYtg1T8d0VUig71e8i7ag0ZoSdEs=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=ZeD0zK0sY1af4B7BXBOEce1KylmHDI4mwUa2kH9D+EwLjWg0pT02bgTfSao5YrJRU
+ L+8GC9XRVtYC29SmMX7hKMR5ozn+O1/+H4wR4KZ6UQYdQLHzM5aaKVtq2a2z3Zlnt8
+ SDYxH44T99ZQ1QjM08XfOZWE+D2el0Sqw3jOeTnR8CQHDCj7xssFSR9r1EnyhgI7rc
+ TXV9rIlvDnXHr9xfXLLiwM82So9BIhdQ1wT5MYu0+IazxvfXA3WWKPlWfn3Zqpn2Xv
+ AIZKFYnjbFidFqsKwh1jK8F6iL/E5xxK1xV7RfAm4y6F2Lcw/RxduRuuKnl2mE5LXg
+ 49yFpYAov9giw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=ZeD0zK0s
+Subject: Re: [Buildroot] [PATCH] package/xr819-xradio: fix build failure on
+ Linux 6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,71 +77,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Matt Weber <matthew.weber@collins.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxsOgoKSSBzZWUgdGhhdCB0aGlzIHdhcyBhY3R1YWxseSBmaXhlZCB1cHN0cmVhbSwgYnV0IHRo
-ZXJlJ3Mgbm90IGJlZW4gYQpuZXcgcmVsZWFzZSB0YWdnZWQgc2luY2UuCgpJJ2xsIHJlcGxhY2Ug
-dGhlIHBhdGNoIHdpdGggdGhlIG9uZSB1cHN0cmVhbSAoY2hlcnJ5LXBpY2spLgoKVGhhbmtzLApD
-aHJpc3RpYW4gU3Rld2FydAoKCk9uIFRodSwgRGVjIDI5LCAyMDIyIGF0IDc6MjUgUE0gQ2hyaXN0
-aWFuIFN0ZXdhcnQgPGNocmlzdGlhbkBwYXJhbC5pbj4gd3JvdGU6Cj4KPiBTaW5jZSBjb21taXQg
-YTg4MDdkIHVwZGF0ZWQgaml0dGVyZW50cm9weS1saWJyYXJ5IHRvIHZlcnNpb24gMy40LjE6Cj4K
-PiBUaGUgdXBkYXRlIHJlcXVpcmVzIHNldHRpbmcgdGhlIG1hY3JvIEpFTlRfQ09ORl9FTkFCTEVf
-SU5URVJOQUxfVElNRVIsIG90aGVyd2lzZQo+IHRoZSBidWlsZCBjYW4gZmFpbCB3aXRoIHRoZSBm
-b2xsb3dpbmcgdHlwZSBvZiBlcnJvcjoKPgo+IGppdHRlcmVudHJvcHktbGlicmFyeSByZXF1aXJl
-cyBzZXR0aW5nIHRoZSBtYWNybyBKRU5UX0NPTkZfRU5BQkxFX0lOVEVSTkFMX1RJTUVSCj4gdG8g
-ZGVmaW5lIGplbnRfbm90aW1lX2N0eC4gSWYgbm90IHNldCwgdGhlIGJ1aWxkIGZhaWxzIHdpdGgg
-dGhlIGZvbGxvd2luZyBlcnJvcjoKPgo+IHJuZ2Rfaml0dGVyLmM6IEluIGZ1bmN0aW9uIOKAmHJu
-Z2Rfbm90aW1lX3N0b3DigJk6Cj4gcm5nZF9qaXR0ZXIuYzo5NzozMjogZXJyb3I6IGludmFsaWQg
-dXNlIG9mIHVuZGVmaW5lZCB0eXBlIOKAmHN0cnVjdCBqZW50X25vdGltZV9jdHjigJkKPiAgICA5
-NyB8ICAgICAgICAgcHRocmVhZF9qb2luKHRocmVhZF9jdHgtPm5vdGltZV90aHJlYWRfaWQsIE5V
-TEwpOwo+Cj4gUmVmZXJlbmNlOgo+IGh0dHBzOi8vd3d3Lm1haWwtYXJjaGl2ZS5jb20vb3BlbmVt
-YmVkZGVkLWNvcmVAbGlzdHMub3BlbmVtYmVkZGVkLm9yZy9tc2cxNjA1MzEuaHRtbAo+Cj4gU2ln
-bmVkLW9mZi1ieTogQ2hyaXN0aWFuIFN0ZXdhcnQgPGNocmlzdGlhbkBwYXJhbC5pbj4KPiAtLS0K
-PiAgLi4uYWJsZS1KRU5UX0NPTkZfRU5BQkxFX0lOVEVSTkFMX1RJTUVSLnBhdGNoIHwgMzkgKysr
-KysrKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgMzkgaW5zZXJ0aW9ucygrKQo+ICBj
-cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9ybmctdG9vbHMvMDAwNC1qaXR0ZXJlbnRyb3B5LWVu
-YWJsZS1KRU5UX0NPTkZfRU5BQkxFX0lOVEVSTkFMX1RJTUVSLnBhdGNoCj4KPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9ybmctdG9vbHMvMDAwNC1qaXR0ZXJlbnRyb3B5LWVuYWJsZS1KRU5UX0NPTkZf
-RU5BQkxFX0lOVEVSTkFMX1RJTUVSLnBhdGNoIGIvcGFja2FnZS9ybmctdG9vbHMvMDAwNC1qaXR0
-ZXJlbnRyb3B5LWVuYWJsZS1KRU5UX0NPTkZfRU5BQkxFX0lOVEVSTkFMX1RJTUVSLnBhdGNoCj4g
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4wOGY5M2IwM2ZhCj4gLS0t
-IC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2Uvcm5nLXRvb2xzLzAwMDQtaml0dGVyZW50cm9weS1l
-bmFibGUtSkVOVF9DT05GX0VOQUJMRV9JTlRFUk5BTF9USU1FUi5wYXRjaAo+IEBAIC0wLDAgKzEs
-MzkgQEAKPiArRnJvbSA0OWYyNzBiYWY3ZmZmMjg1NWUzOWIyMDg0MTIxZDc2NWQyYTk5OTBjIE1v
-biBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBDaHJpc3RpYW4gU3Rld2FydCA8Y2hyaXN0
-aWFuQHBhcmFsLmluPgo+ICtEYXRlOiBUaHUsIDI5IERlYyAyMDIyIDE5OjIxOjA0IC0wODAwCj4g
-K1N1YmplY3Q6IFtQQVRDSF0gaml0dGVyZW50cm9weTogZW5hYmxlIEpFTlRfQ09ORl9FTkFCTEVf
-SU5URVJOQUxfVElNRVIKPiArIGRlZmluaXRpb24KPiArTUlNRS1WZXJzaW9uOiAxLjAKPiArQ29u
-dGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gK0NvbnRlbnQtVHJhbnNmZXIt
-RW5jb2Rpbmc6IDhiaXQKPiArCj4gK2ppdHRlcmVudHJvcHktbGlicmFyeSByZXF1aXJlcyBzZXR0
-aW5nIHRoZSBtYWNybyBKRU5UX0NPTkZfRU5BQkxFX0lOVEVSTkFMX1RJTUVSCj4gK3RvIGRlZmlu
-ZSBqZW50X25vdGltZV9jdHguIElmIG5vdCBzZXQsIHRoZSBidWlsZCBmYWlscyB3aXRoIHRoZSBm
-b2xsb3dpbmcgZXJyb3I6Cj4gKwo+ICtybmdkX2ppdHRlci5jOiBJbiBmdW5jdGlvbiDigJhybmdk
-X25vdGltZV9zdG9w4oCZOgo+ICtybmdkX2ppdHRlci5jOjk3OjMyOiBlcnJvcjogaW52YWxpZCB1
-c2Ugb2YgdW5kZWZpbmVkIHR5cGUg4oCYc3RydWN0IGplbnRfbm90aW1lX2N0eOKAmQo+ICsgICA5
-NyB8ICAgICAgICAgcHRocmVhZF9qb2luKHRocmVhZF9jdHgtPm5vdGltZV90aHJlYWRfaWQsIE5V
-TEwpOwo+ICsKPiArRGVmaW5lIEpFTlRfQ09ORl9FTkFCTEVfSU5URVJOQUxfVElNRVIgaWYgaml0
-dGVyZW50cm9weSBpcyBlbmFibGVkLgo+ICsKPiArU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIFN0
-ZXdhcnQgPGNocmlzdGlhbkBwYXJhbC5pbj4KPiArLS0tCj4gKyBjb25maWd1cmUuYWMgfCAyICst
-Cj4gKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiArCj4g
-K2RpZmYgLS1naXQgYS9jb25maWd1cmUuYWMgYi9jb25maWd1cmUuYWMKPiAraW5kZXggNmVjM2Mz
-YS4uMjUxMzZmMiAxMDA2NDQKPiArLS0tIGEvY29uZmlndXJlLmFjCj4gKysrKyBiL2NvbmZpZ3Vy
-ZS5hYwo+ICtAQCAtODcsNyArODcsNyBAQCBBQ19BUkdfRU5BQkxFKGppdHRlcmVudHJvcHksCj4g
-KyAgICAgICBbRGlzYWJsZSBqaXR0ZXJlbnRyb3B5IHNvdXJjZSwgb3Igc3BlY2lmeSBpdHMgbG9j
-YXRpb25dKSwKPiArICAgICAgIFtpZiBbIHRlc3QgLWQgJGVuYWJsZV9qaXR0ZXJlbnRyb3B5IF07
-IHRoZW4KPiArICAgICAgICAgICAgICAgZXhwb3J0IExERkxBR1MrPS1MJGVuYWJsZV9qaXR0ZXJl
-bnRyb3B5Owo+ICstICAgICAgICAgICAgICBleHBvcnQgQ0ZMQUdTKz0iIC1JJGVuYWJsZV9qaXR0
-ZXJlbnRyb3B5IjsKPiArKyAgICAgICAgICAgICAgZXhwb3J0IENGTEFHUys9IiAtSSRlbmFibGVf
-aml0dGVyZW50cm9weSAtREpFTlRfQ09ORl9FTkFCTEVfSU5URVJOQUxfVElNRVIiOwo+ICsgICAg
-ICAgZmldLFtdKQo+ICsKPiArIEFTX0lGKAo+ICstLQo+ICsyLjM5LjAKPiArCj4gLS0KPiAyLjM5
-LjAKPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Please drop this patch since local patches have already been upstreamed.
+I will wait some day next time before submitting local patches and see
+if upstream merge them soon.
+
+Patch with version bump comes soon.
+
+Sorry for the noise
+Best regards
+-- 
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
+
+On 30/12/22 00:58, Giulio Benetti wrote:
+> Add 2 local patches pending upstream[0] to fix build failure with Linux 6.1
+> 
+> [0]: https://github.com/fifteenhex/xradio/pull/19
+> 
+> Fixes:
+> Still not produced
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   ...missing-prandom_u32-with-Linux-6.1.0.patch | 34 +++++++++++++++++++
+>   ...ailure-due-to-ieee80211_nullfunc_get.patch | 34 +++++++++++++++++++
+>   2 files changed, 68 insertions(+)
+>   create mode 100644 package/xr819-xradio/0001-wsm.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch
+>   create mode 100644 package/xr819-xradio/0002-ap.c-fix-build-failure-due-to-ieee80211_nullfunc_get.patch
+> 
+> diff --git a/package/xr819-xradio/0001-wsm.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch b/package/xr819-xradio/0001-wsm.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch
+> new file mode 100644
+> index 0000000000..ac07074034
+> --- /dev/null
+> +++ b/package/xr819-xradio/0001-wsm.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch
+> @@ -0,0 +1,34 @@
+> +From d336006f0d9e9663a5ff61d38e98ddd33e175167 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +Date: Fri, 30 Dec 2022 00:44:30 +0100
+> +Subject: [PATCH] wsm.c: fix missing prandom_u32() with Linux >= 6.1.0
+> +
+> +prandom_u32() previously was only calling get_random_u32() so it's been
+> +dropped with Linux 6.1.0. So let's directly call get_random_u32() if Linux
+> +version >= 6.1.0.
+> +
+> +[Upstream status: https://github.com/fifteenhex/xradio/pull/19]
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + wsm.c | 4 ++++
+> + 1 file changed, 4 insertions(+)
+> +
+> +diff --git a/wsm.c b/wsm.c
+> +index 85eeef8..ea73770 100644
+> +--- a/wsm.c
+> ++++ b/wsm.c
+> +@@ -2609,7 +2609,11 @@ static int xradio_get_prio_queue(struct xradio_vif *priv,
+> + 		edca = &priv->edca.params[i];
+> + 		score = ((edca->aifns + edca->cwMin) << 16) +
+> + 				(edca->cwMax - edca->cwMin) *
+> ++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+> ++				(get_random_u32() & 0xFFFF);
+> ++#else
+> + 				(prandom_u32() & 0xFFFF);
+> ++#endif
+> + 		if (score < best && (winner < 0 || i != 3)) {
+> + 			best = score;
+> + 			winner = i;
+> +--
+> +2.34.1
+> +
+> diff --git a/package/xr819-xradio/0002-ap.c-fix-build-failure-due-to-ieee80211_nullfunc_get.patch b/package/xr819-xradio/0002-ap.c-fix-build-failure-due-to-ieee80211_nullfunc_get.patch
+> new file mode 100644
+> index 0000000000..cb3cab113f
+> --- /dev/null
+> +++ b/package/xr819-xradio/0002-ap.c-fix-build-failure-due-to-ieee80211_nullfunc_get.patch
+> @@ -0,0 +1,34 @@
+> +From 5f0dd19dc8acad9816bb1b857551f3289e386d32 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +Date: Fri, 30 Dec 2022 00:52:30 +0100
+> +Subject: [PATCH] ap.c: fix build failure due to ieee80211_nullfunc_get()
+> + change in Linux 6.1
+> +
+> +Starting from Linux 6.1 it's been added 'int link_id' parameter to
+> +ieee80211_nullfunc_get() to comply to MSO, but this module doesn't support
+> +it. So let's handle this case by passing default 0 as link_id parameter.
+> +
+> +[Upstream status: https://github.com/fifteenhex/xradio/pull/19]
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + ap.c | 4 +++-
+> + 1 file changed, 3 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/ap.c b/ap.c
+> +index 51b8a44..649d6bf 100644
+> +--- a/ap.c
+> ++++ b/ap.c
+> +@@ -1145,7 +1145,9 @@ static int xradio_upload_null(struct xradio_vif *priv)
+> + 		.rate = 0xFF,
+> + 	};
+> +
+> +-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 17))
+> ++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+> ++	frame.skb = ieee80211_nullfunc_get(priv->hw, priv->vif, 0, false);
+> ++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 17))
+> + 	frame.skb = ieee80211_nullfunc_get(priv->hw, priv->vif, false);
+> + #else
+> + 	frame.skb = ieee80211_nullfunc_get(priv->hw, priv->vif);
+> +--
+> +2.34.1
+> +
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
