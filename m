@@ -4,63 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D3FBC4167B
-	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 09:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8985C4167B
+	for <buildroot@archiver.kernel.org>; Fri, 30 Dec 2022 09:58:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B95A400FD;
-	Fri, 30 Dec 2022 09:58:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B95A400FD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B4C940445;
+	Fri, 30 Dec 2022 09:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B4C940445
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v2o28ySM0NWZ; Fri, 30 Dec 2022 09:58:03 +0000 (UTC)
+	with ESMTP id exYn8ALeBZut; Fri, 30 Dec 2022 09:58:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9001440124;
-	Fri, 30 Dec 2022 09:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9001440124
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 542CE1BF271
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 09:58:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8BEF0401B1;
+	Fri, 30 Dec 2022 09:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BEF0401B1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C4A261BF271
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 09:58:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E7CE400EB
- for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 09:58:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E7CE400EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id A12E64040D
+ for <buildroot@lists.busybox.net>; Fri, 30 Dec 2022 09:58:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A12E64040D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J3_Gus7GP3zO for <buildroot@lists.busybox.net>;
- Fri, 30 Dec 2022 09:57:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ED0240151
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5ED0240151
- for <buildroot@buildroot.org>; Fri, 30 Dec 2022 09:57:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qQrWIdcb0AyA for <buildroot@lists.busybox.net>;
+ Fri, 30 Dec 2022 09:58:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A9F440124
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9A9F440124
+ for <buildroot@buildroot.org>; Fri, 30 Dec 2022 09:58:13 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.167.224.71])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C95D05FFB4;
- Fri, 30 Dec 2022 10:57:40 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id F26CF5FF9E;
+ Fri, 30 Dec 2022 10:57:55 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 30 Dec 2022 10:57:23 +0100
-Message-Id: <20221230095728.5941-1-ju.o@free.fr>
+Date: Fri, 30 Dec 2022 10:57:24 +0100
+Message-Id: <20221230095728.5941-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221229194729.8085-1-ju.o@free.fr>
+In-Reply-To: <20221230095728.5941-1-ju.o@free.fr>
 References: <20221229194729.8085-1-ju.o@free.fr>
+ <20221230095728.5941-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672394275;
- bh=55GDeDSmkYMcuJ2eME8jVuZgS8CGlFiWgzXqbSTHj6o=;
+ d=free.fr; s=smtp-20201208; t=1672394291;
+ bh=C8uGZWvu6KBm4Daz0au3dWNL2y1+YRjP8GIC0KTu9TQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=GZjghEbB2vhsAPQYX5JRLd+lm9xb19mAss+sgSqj/kjxitzQnhcxM4RReXj+0DuHT
- 2r/rEnUvKCB83rQ1QX1XZ4snxTpsSuGmVziXyGEE1wvHlP7hFE13+BRCvPH64PIb+e
- AwELCrVKDfepcCh9QajtZfeX1WqhebfXQeulKnkHFXF3ZCGpU12zy6yTIzk2EWl2n7
- vqQd1JMM6WxciGhjkdhv+FJhKeKINxM4KotGdVYBAgCFu7A/CGySt1EfHYhRpXBm76
- QAeCAxEKRtoc5/kDXMoA5GyQd17A6LcZ5lviecH2AvrhH0vphpEy/fCJpPW7RCFula
- XTNXDfTrxx3Ng==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=JUpGrNZJrxXAnZooZ1NrdRd8QPX28irUKEoJQCUs7H5pDtD0XFsJAU20xBSsKMw4D
+ g8sxsA/G/ZKc6pYTEh046g9iHvGt4jIBiNwO2AcKUfpujwpIKm29QMwKGMc9qoteks
+ OuY0PSsKYwKIvS3QI6lfKM666dS8c6iwxQXhUdQgUxgj9dInwnWYk6xS7dtfrKuu/H
+ +hZS21vrlI3ZJetDXP8WiCF0GojPuWbSV6my22rbVf6iPdqKqx5aXO5P8Gmz84QOsD
+ 2RAj2Utv1r39jA8LZJzwOYHRWvH0IMfxx5yOrh1vx4UXVQNyDSHqGwf8I+bgh4+iHv
+ tHJRG1nxQD7pg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=GZjghEbB
-Subject: [Buildroot] [PATCH 22/27] configs/freescale_imx8qmmek: update
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JUpGrNZJ
+Subject: [Buildroot] [PATCH 23/27] configs/freescale_imx8qxpmek: update
  codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -118,16 +119,16 @@ The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/freescale_imx8qmmek_defconfig | 15 ++++++---------
+ configs/freescale_imx8qxpmek_defconfig | 15 ++++++---------
  1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
-index 8a0e866cee..75777646df 100644
---- a/configs/freescale_imx8qmmek_defconfig
-+++ b/configs/freescale_imx8qmmek_defconfig
-@@ -4,9 +4,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
+index 1ffbd123e0..ce8f6b7c84 100644
+--- a/configs/freescale_imx8qxpmek_defconfig
++++ b/configs/freescale_imx8qxpmek_defconfig
+@@ -6,9 +6,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qm-mek.dtb"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qxp-mek.dtb"
  BR2_LINUX_KERNEL=y
 -BR2_LINUX_KERNEL_CUSTOM_GIT=y
 -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
@@ -136,8 +137,8 @@ index 8a0e866cee..75777646df 100644
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
  BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qm-mek"
-@@ -20,16 +19,14 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qxp-mek"
+@@ -22,16 +21,14 @@ BR2_TARGET_ROOTFS_EXT2=y
  BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
@@ -146,7 +147,7 @@ index 8a0e866cee..75777646df 100644
 -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qm"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qx"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
@@ -155,7 +156,7 @@ index 8a0e866cee..75777646df 100644
 -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qm_mek"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qxp_mek"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
  BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -- 
