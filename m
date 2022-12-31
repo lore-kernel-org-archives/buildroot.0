@@ -1,73 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE9C9C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 17:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B809FC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 19:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63EB580C39;
-	Sat, 31 Dec 2022 17:58:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63EB580C39
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED75E40319;
+	Sat, 31 Dec 2022 19:32:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED75E40319
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t2VbpX6-JE0i; Sat, 31 Dec 2022 17:58:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eOTTfnjkHWgs; Sat, 31 Dec 2022 19:32:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BACBD80BAF;
-	Sat, 31 Dec 2022 17:58:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BACBD80BAF
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2D4340320;
+	Sat, 31 Dec 2022 19:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2D4340320
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7F6B31BF33F
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 17:58:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 212EF1BF3C9
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 19:32:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5736440148
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 17:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5736440148
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA68240445
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 19:32:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA68240445
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qb6a_A8DipfT for <buildroot@lists.busybox.net>;
- Sat, 31 Dec 2022 17:58:40 +0000 (UTC)
-X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF3A640131
-Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF3A640131
- for <buildroot@buildroot.org>; Sat, 31 Dec 2022 17:58:39 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.66.6])
- by Aruba Outgoing Smtp  with ESMTPSA
- id Bg18pY53bydI8Bg19pcnVd; Sat, 31 Dec 2022 18:51:35 +0100
-Message-ID: <40df416d-7db3-4053-28ea-a98316551069@benettiengineering.com>
-Date: Sat, 31 Dec 2022 18:51:34 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <CB65BA13-5218-4C00-86E0-CB128E71F322@benettiengineering.com>
- <BCF6BFBB-EE5A-43FA-B64A-E2513A4A3BCF@benettiengineering.com>
- <20221231142342.1189ede4@windsurf>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20221231142342.1189ede4@windsurf>
-X-CMAE-Envelope: MS4xfP0yjhGLtczzC11DLsXepUWZRDDre0cSXwM85x67qriZm3Uu1cAJ2tpX3rB43inWZ3gMtKjKkuWdv/a0Zh39VT43xO0a2RObuwLJw42Hs22wvZ2WicoE
- C3Wu5R0YMR6Eqf8UB3+1/QoML8UOiBRgEGylcNTi/G3Wbox6Nt4T0LcHXpx3oynQ6ubFBkGE91L9woCNDh811x455wYvmzlINuOom9bWjZieTTBJyUTND41d
- +xUW59KplJXQPGhkhpdO+/rFmBdGITb7a8guFmu9idsnqUdzSnxvnN314AZ1FgID
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1672509095; bh=BZ2ULRqP/u+1lcsca6bjPb5l8cXzAURVpQTiMlhr60A=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=mycJfOX+haSWzoBvV9ZmkweR8GQWEpQeJURr/UTCEEHzJOEnqc8b0bGvXu9xL6KnK
- DBbPLmO375AbSWYglP141OGP/YUw0tVShgxCWYybw7EcypbV3+vyrSDnOZxhUpUpbW
- NIQQVHf6ANsksAIyGZ5hwfjJBgxbM994RKz7FY35dChLpLJhvn1mflF3yxm+h/bWaK
- 5RyPUKwp0T3xEblVbyM1ZneIEmKN4oqKDuJd6B16I6hHgrw7vAtAZHJnQ300NIVADr
- DghBdPfdS5VZA7FiXJVQVLbOhYylpUeB4ReQGX9RwarbKjmlKCZYzxzP5L/qAfsnHy
- 56ZD+s7DOmKbQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=mycJfOX+
-Subject: Re: [Buildroot] [PATCH] package/wilc-driver: fix build failure up
- to Linux 6.1
+ with ESMTP id 7u1-IScytujI for <buildroot@lists.busybox.net>;
+ Sat, 31 Dec 2022 19:32:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDC7F403FF
+ for <buildroot@buildroot.org>; Sat, 31 Dec 2022 19:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDC7F403FF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D55FE869E0; Sat, 31 Dec 2022 19:32:20 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 31 Dec 2022 20:24:32 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2f54c2a841861ba587c9bbdd66d5164b6774d9e5
+X-Git-Newrev: e75f3962084045cf50f38f0adf8bfaa8da71dfd5
+X-Patchwork-Hint: ignore
+Message-Id: <20221231193220.D55FE869E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: fix builds for kernels < 5.6 and
+ host-gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,23 +57,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kris Bahnsen <kris@embeddedts.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLAoKT24gMzEvMTIvMjIgMTQ6MjMsIFRob21hcyBQZXRhenpvbmkgdmlhIGJ1
-aWxkcm9vdCB3cm90ZToKPiBPbiBUaHUsIDI5IERlYyAyMDIyIDIzOjA2OjU1ICswMTAwCj4gR2l1
-bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+IHdyb3Rl
-Ogo+IAo+Pj4gSG93IGNhbiBJIHBvaW50IG15IGZpeGVzPyBEbyB5b3UgdGhpbmsgaXTigJlzIGVu
-b3VnaCB0byBvcGVuIGFuIElzc3VlIGluIGxpbnV4LWF0OTEgR2l0SHViPwo+Pgo+PiBUaGV5IGRv
-buKAmXQgaGF2ZSB0aGUgSXNzdWUgYXZhaWxhYmxlIGluIEdpdEh1YiwgSSBzZW5kIGFuIGVtYWls
-IHRvIHRoZSBtYWludGFpbmVyIHRoZW4uCj4gCj4gT3BlbiBhIHB1bGwgcmVxdWVzdC4KCkRvIHlv
-dSBtZWFuIG9uY2UgdGhleSBjcmVhdGUgYSBicmFuY2ggZm9yIDYuMT8KT3IgZXZlbiBhZ2FpbnN0
-IDUuMTUsIDUuMTAgZXRjLiBpZiB0aGVyZSBhcmUgY2hhbmdlcyB0aGF0IHJlZ2FyZCB0aG9zZQp2
-ZXJzaW9ucz8KClNvcnJ5IGJ1dCBpdCdzIG5vdCBjbGVhciB0byBtZSB3aGF0IHlvdSBtZWFuLgoK
-QmVzdCByZWdhcmRzCi0tIApHaXVsaW8gQmVuZXR0aQpDRU8vQ1RPQEJlbmV0dGkgRW5naW5lZXJp
-bmcgc2FzCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
-aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=e75f3962084045cf50f38f0adf8bfaa8da71dfd5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+During a linux-backports update, it was found that kernel v3.10.108 was
+failing to compile. See:
+https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
+
+This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
+"linux: fix build with host-gcc 10+", which removes all declarations of
+"yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
+"%locations" directive is provided in the parser. See:
+https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
+
+Kernel versions < 5.6 did not include this directive, so removing all
+yylloc declararions in the parser also was failing for those version.
+
+In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
+This commit is included in kernel v5.6.
+
+This dtc update include the dtc commit:
+https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
+which adds the '%locations' directive.
+
+This commit fixes the issue by programmatically adding the '%locations'
+Bison directive, if it's not found in the parser file.
+
+Fixes:
+- https://bugs.busybox.net/show_bug.cgi?id=14971
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ linux/linux.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6b547a68ed..7645b5f507 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	WERROR=0 \
++	REGENERATE_PARSERS=1 \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
+ 
+ ifeq ($(BR2_REPRODUCIBLE),y)
+@@ -286,6 +287,19 @@ define LINUX_DROP_YYLLOC
+ endef
+ LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
+ 
++# Kernel version < 5.6 breaks if host-gcc version is >= 10 and
++# 'yylloc' symbol is removed in previous hook, due to missing
++# '%locations' bison directive in dtc-parser.y.  See:
++# https://bugs.busybox.net/show_bug.cgi?id=14971
++define LINUX_ADD_DTC_LOCATIONS
++	$(Q)DTC_PARSER=$(@D)/scripts/dtc/dtc-parser.y; \
++	if test -e "$${DTC_PARSER}" \
++		&& ! grep -Eq '^%locations$$' "$${DTC_PARSER}" ; then \
++		$(SED) '/^%{$$/i %locations' "$${DTC_PARSER}"; \
++	fi
++endef
++LINUX_POST_PATCH_HOOKS += LINUX_ADD_DTC_LOCATIONS
++
+ # Older linux kernels use deprecated perl constructs in timeconst.pl
+ # that were removed for perl 5.22+ so it breaks on newer distributions
+ # Try a dry-run patch to see if this applies, if it does go ahead
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
