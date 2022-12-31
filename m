@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5745CC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 919F1C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3B0782CCB;
-	Mon, 20 Feb 2023 23:39:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3B0782CCB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C3B7833B7;
+	Mon, 20 Feb 2023 23:39:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C3B7833B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bZwL9oPF6UNv; Mon, 20 Feb 2023 23:39:45 +0000 (UTC)
+	with ESMTP id 8lIJ1PnY3QMl; Mon, 20 Feb 2023 23:39:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A2DA83F79;
-	Mon, 20 Feb 2023 23:39:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A2DA83F79
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D69FD1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E9A783F79;
+	Mon, 20 Feb 2023 23:39:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E9A783F79
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 610671BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FAAC41759
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FAAC41759
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42496617B5
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42496617B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t-9WYOTfOiU5 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z4hgxBE2e2cx for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68B2341765
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68B2341765
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60540617B1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60540617B1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5767C86495; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 489F28648F; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 11:23:24 +0100
+Date: Sat, 31 Dec 2022 17:04:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fa341f029832a658865ed4b5849efc4b765452f9
-X-Git-Newrev: a200fc4ee34fa82a7f48107e6b76acd0db600c9f
+X-Git-Oldrev: 4bb4288dd08c688072a25bf60c3a60e0047c1668
+X-Git-Newrev: ed631bc7525356c2e086a307e93df7d71d2fdde7
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205240.5767C86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/zynqmp_kria_kv260_defconfig: use Xilinx github for pmufw.elf
+Message-Id: <20230220205219.489F28648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/modem-manager: disable
+ tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a200fc4ee34fa82a7f48107e6b76acd0db600c9f
+commit: https://git.buildroot.net/buildroot/commit/?id=ed631bc7525356c2e086a307e93df7d71d2fdde7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Migrate kv260_pmufw.elf location from nealfrager github to Xilinx github.
-The image is identical, so this patch has zero impact on functionality.
+tests can be disabled since version 1.20.0 and
+https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/commit/ba96ccc61587b7b6c31b94826ee7a3c44d795364
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/zynqmp_kria_kv260_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/modem-manager/modem-manager.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index 94631da034..e180d5e7e7 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.2/kv260/kv260_pmufw.elf"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/kv260/kv260_pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 8ef85b9b1d..5b8b9c5576 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -14,6 +14,7 @@ MODEM_MANAGER_DEPENDENCIES = host-pkgconf dbus libglib2 $(TARGET_NLS_DEPENDENCIE
+ MODEM_MANAGER_INSTALL_STAGING = YES
+ MODEM_MANAGER_CONF_OPTS = \
+ 	-Dpowerd_suspend_resume=false \
++	-Dtests=false \
+ 	-Dudevdir=/usr/lib/udev
+ 
+ ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
