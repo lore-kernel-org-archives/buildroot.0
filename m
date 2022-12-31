@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87843C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 16:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54C1BC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 16:36:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17BCE40400;
-	Sat, 31 Dec 2022 16:36:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17BCE40400
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA074403B8;
+	Sat, 31 Dec 2022 16:36:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA074403B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q8IfjWHGEpp5; Sat, 31 Dec 2022 16:36:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id udVgea7i8QZR; Sat, 31 Dec 2022 16:36:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B334B404CA;
-	Sat, 31 Dec 2022 16:36:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B334B404CA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F0C721BF47D
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:35:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E5EC403A9;
+	Sat, 31 Dec 2022 16:36:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E5EC403A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D8B31BF855
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:35:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4CC780BCB
+ by smtp2.osuosl.org (Postfix) with ESMTP id EFB0C40327
  for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:35:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4CC780BCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFB0C40327
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 32-F9-eJ5xSW for <buildroot@lists.busybox.net>;
- Sat, 31 Dec 2022 16:35:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wbF5IwZrgPMo for <buildroot@lists.busybox.net>;
+ Sat, 31 Dec 2022 16:35:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C947B81292
- for <buildroot@buildroot.org>; Sat, 31 Dec 2022 16:35:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C947B81292
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0490D403BF
+ for <buildroot@buildroot.org>; Sat, 31 Dec 2022 16:35:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0490D403BF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5DB386FB3; Sat, 31 Dec 2022 16:35:00 +0000 (UTC)
+ id 027CA86F8A; Sat, 31 Dec 2022 16:35:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 17:22:44 +0100
+Date: Sat, 31 Dec 2022 17:22:56 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 774c39caf093943aa9416c636fe3b2ec31a64e21
-X-Git-Newrev: a94678cfd965ed11a4e2d18d840c03a41c148d6b
+X-Git-Oldrev: a03e57ccbf432f73275869cf9a3e6a7a234cb5de
+X-Git-Newrev: a019e5e460f0d85b0b44163ba80be7cd6a53738a
 X-Patchwork-Hint: ignore
-Message-Id: <20221231163500.B5DB386FB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmlib: update codeaurora URLs to
- github
+Message-Id: <20221231163501.027CA86F8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qoriq-rcw: update codeaurora URLs
+ to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a94678cfd965ed11a4e2d18d840c03a41c148d6b
+commit: https://git.buildroot.net/buildroot/commit/?id=a019e5e460f0d85b0b44163ba80be7cd6a53738a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 NXP moved all its open source code repositories from Code Aurora Forum
@@ -92,66 +92,57 @@ updated to the correct github.com replacement.
 
 Note: this commit does not change the component version. Only the
 download URL is updated. The archive content is expected to be the
-same. The version fsl-sdk-v2.0 is an old tag from 2016. It was not
-migrated to github. This commit use instead the commit id
-corresponding to this tag.
-
-See:
-https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmlib/commit/?h=fsl-sdk-v2.0&id=43fa98fdbf0c697167e415c3f060896d5b482791
-
-The commit id exists on github:
-https://github.com/nxp-qoriq/fmlib/commit/43fa98fdbf0c697167e415c3f060896d5b482791
+same.
 
 Note 2: the _SITE_METHOD is also changed from "git" to the default
 "wget", for faster downloads. This is why the package hash has
 changed.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/fmlib/Config.in  | 2 +-
- package/fmlib/fmlib.hash | 2 +-
- package/fmlib/fmlib.mk   | 5 ++---
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/qoriq-rcw/Config.in.host | 2 +-
+ package/qoriq-rcw/qoriq-rcw.hash | 2 +-
+ package/qoriq-rcw/qoriq-rcw.mk   | 3 +--
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
-index 7bccfd7c83..97d55d1250 100644
---- a/package/fmlib/Config.in
-+++ b/package/fmlib/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_FMLIB
- 	  configure driver parameters and PCD (parse - classify -
- 	  distribute) rules.
+diff --git a/package/qoriq-rcw/Config.in.host b/package/qoriq-rcw/Config.in.host
+index 08fc83acd0..58c16d495b 100644
+--- a/package/qoriq-rcw/Config.in.host
++++ b/package/qoriq-rcw/Config.in.host
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_HOST_QORIQ_RCW
+ 	  $(HOST_DIR)/share/rcw. Either a SDK or post scripts can
+ 	  then use this toolset and examples.
  
--	  http://git.freescale.com/git/cgit.cgi/ppc/sdk/fmlib.git/tree/README
-+	  https://github.com/nxp-qoriq/fmlib
+-	  https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
++	  https://github.com/nxp-qoriq/rcw
  
- if BR2_PACKAGE_FMLIB
- choice
-diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
-index 47460d091c..d4dcf3be5c 100644
---- a/package/fmlib/fmlib.hash
-+++ b/package/fmlib/fmlib.hash
+ if BR2_PACKAGE_HOST_QORIQ_RCW
+ 
+diff --git a/package/qoriq-rcw/qoriq-rcw.hash b/package/qoriq-rcw/qoriq-rcw.hash
+index f34c771d11..2a887d57d4 100644
+--- a/package/qoriq-rcw/qoriq-rcw.hash
++++ b/package/qoriq-rcw/qoriq-rcw.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  59415d346af1d22f510f2785be4c7e3606dc3181476a666e832270550f7d44a6  fmlib-fsl-sdk-v2.0-br1.tar.gz
-+sha256  6e9e6bdb42dc2a6a76cfd756a2d4cdfcc2be90925c1f439e8a11eafa871896a6  fmlib-43fa98fdbf0c697167e415c3f060896d5b482791.tar.gz
- sha256  837559e20d83910a005e7883b876cc5c42805fe4abcf7e5c5b3c8d036b7f61c8  COPYING
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index 8cb779201d..9509f3de56 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
-@@ -4,9 +4,8 @@
- #
+ # Locally calculated
+-sha256  caa6802f2ba5ea92fd27e7c977749010a91c9091fcc3fe626f96d9cacfba1f0a  qoriq-rcw-LSDK-21.08-br1.tar.gz
++sha256  f199c10e50bd18d7bed0d60f5b68194240dea4f1aa164cec98332723727a4796  qoriq-rcw-LSDK-21.08.tar.gz
+ sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
+diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
+index 0501c36f46..8b1ceacfce 100644
+--- a/package/qoriq-rcw/qoriq-rcw.mk
++++ b/package/qoriq-rcw/qoriq-rcw.mk
+@@ -5,8 +5,7 @@
  ################################################################################
  
--FMLIB_VERSION = fsl-sdk-v2.0
--FMLIB_SITE = https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmlib
--FMLIB_SITE_METHOD = git
-+FMLIB_VERSION = 43fa98fdbf0c697167e415c3f060896d5b482791
-+FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
- FMLIB_LICENSE = BSD-3-Clause, GPL-2.0+
- FMLIB_LICENSE_FILES = COPYING
- FMLIB_DEPENDENCIES = linux
+ QORIQ_RCW_VERSION = LSDK-21.08
+-QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
+-QORIQ_RCW_SITE_METHOD = git
++QORIQ_RCW_SITE = $(call github,nxp-qoriq,rcw,$(QORIQ_RCW_VERSION))
+ QORIQ_RCW_LICENSE = BSD-3-Clause
+ QORIQ_RCW_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
