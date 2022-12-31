@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1EE8C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 16:40:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40EA1C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 16:41:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7972A404CA;
-	Sat, 31 Dec 2022 16:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7972A404CA
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC5268129B;
+	Sat, 31 Dec 2022 16:41:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC5268129B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LkRSuEMpj_vS; Sat, 31 Dec 2022 16:40:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fXA6wP8f8tPV; Sat, 31 Dec 2022 16:41:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49A1D40895;
-	Sat, 31 Dec 2022 16:40:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49A1D40895
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29885812AF;
+	Sat, 31 Dec 2022 16:41:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29885812AF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DACCE1BF47D
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:35:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EF7DD1BF47D
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B45874033A
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:35:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B45874033A
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6BF540895
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:41:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6BF540895
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IpmXzqbUUMkM for <buildroot@lists.busybox.net>;
- Sat, 31 Dec 2022 16:35:15 +0000 (UTC)
+ with ESMTP id ihVMRnqu5_c5 for <buildroot@lists.busybox.net>;
+ Sat, 31 Dec 2022 16:41:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47C46402A6
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 47C46402A6
- for <buildroot@buildroot.org>; Sat, 31 Dec 2022 16:35:15 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:37e6:2c2e:a294:8f1b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id A956A13F88D;
- Sat, 31 Dec 2022 17:35:00 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 31 Dec 2022 17:35:00 +0100
-Date: Sat, 31 Dec 2022 17:35:00 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20221231163500.GQ2498764@scaer>
-References: <20221229194729.8085-1-ju.o@free.fr>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6B77404CA
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A6B77404CA
+ for <buildroot@buildroot.org>; Sat, 31 Dec 2022 16:41:46 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id n3so21993944wrc.5
+ for <buildroot@buildroot.org>; Sat, 31 Dec 2022 08:41:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=W5fsmmORd8cG+FZyqq3g+ZUQz51ZqlyuxEKsrj7cVHU=;
+ b=gCbeoduVmNSprycd7cRJ2BDxs8aJRN3kl0qhh5Q5kfIUd3EEyVJaKdOYDRj/y37c+w
+ qw5YPJZxlSJC/GXZqqBzRe7y19hHnrTz2sS+U1YA6/i+ZjmTqhugAfpWMUn0V+bsJsSC
+ 8tms3/3dKTdRGEAudb1jZZtwmnDyPnyVXhcwTTwBketHGMeTnaYf6J5wwLMsiMyU3vJq
+ Ia3qbTXK/3LEN+2YGnXHyWJXk+l8l2xB4arXSNk7zRaMEmDjw8CQWZbYkTxfAcnPi9Wm
+ sw80MZqq7Oc4uXxrxwz/D3rYhyvqs3QYGivELg6HSIm0gOmljb3L+vNCgfpRNcUc4UAR
+ IRIg==
+X-Gm-Message-State: AFqh2kqGTYhs57jV00pQ3d9qbjBEOX7jATYpGOG0tdA/3HK5vA7cKELb
+ D1Fa8nOZTuY5EDE1aSdQ5N2mIDeb6Sk=
+X-Google-Smtp-Source: AMrXdXvN+C8U/+4zf3n9M4Lww1eHm2EN6UtpSnTa9XjNIpNrkB2HByHBtPpob47o0ubQnvySRBwmyQ==
+X-Received: by 2002:a5d:49c9:0:b0:28f:5aa6:8d97 with SMTP id
+ t9-20020a5d49c9000000b0028f5aa68d97mr4144371wrs.22.1672504904345; 
+ Sat, 31 Dec 2022 08:41:44 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ j1-20020adfff81000000b0024cb961b6aesm23054482wrr.104.2022.12.31.08.41.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 31 Dec 2022 08:41:43 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 31 Dec 2022 17:41:41 +0100
+Message-Id: <20221231164141.160482-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221229194729.8085-1-ju.o@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672504513;
- bh=t61/datRhd45nQEm3q/jnl7A4kSf+V5ABgh6Hu5Rk4E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=jJnyq0Cq9RCD2VdL451h3shNtobJKbWk5mySH9r8DXW62kRYvi5D14URYhVcekTuH
- m9BonZQi7EItlf6KcXOZ6rUWkMRZOG/AW1aApSYLdg0dsNGJ/Nj0ivGGM164WoGR6h
- KFO6F1usEQWCUwlpnu7nK1LtbjlyNpqBTe1ruxDkcABXOcCn8DKKhWhyb9C/8NjLMD
- B4RBM+X7wz8DBCSKrfTTlX1pHKratTjIj1qYUK8MOm+6eBzb3DFRe1XGIwxZiIZuB3
- J3x0P4aF7eyBGjs5IpVKCmXt4PawzZtnkqYJMtsGh9pRyCfaVyG7blmGcyg/cIC9YT
- NeW0XRjRVM1IA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=W5fsmmORd8cG+FZyqq3g+ZUQz51ZqlyuxEKsrj7cVHU=;
+ b=cbvdn7Nl1Yk86gEw2ct2bPfxkgCe4tdd1qDs4ELFBd9XLigmq8HFGGXAzoAHB8ayUg
+ i3PF1wtztKszVt29uvd6KifsQJBATHc9c+bIBprHijkw4CZ6HGOqu4CecOYTT578daZb
+ dUWBpkzQiXC1idXQr12rP1hiqQ88i6csvoTGQBjaaIUx0NN/tjzwNfLET64qno97q6rK
+ BF1IkwBbK1O6wgrtOAmnBqLN28cct6HJ+ZP9v0SD898iE4j/t+D5kBoA1408GFD0+3Vz
+ chFRL0vVNz4OZ60Nmsnl39+AaAjEEAhlbL/yWP5o4btCKs0O4uK4NBSYWDQwb0TooYkv
+ V1xw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jJnyq0Cq
-Subject: Re: [Buildroot] [PATCH 01/27] package/imx-mkimage: update
- codeaurora URLs to github
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=cbvdn7Nl
+Subject: [Buildroot] [PATCH 1/1] package/janus-gateway: bump to version 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,114 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Gary Bisson <bisson.gary@gmail.com>,
- =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
- Gilles Talis <gilles.talis@gmail.com>, Refik Tuzakli <tuzakli.refik@gmail.com>,
- Erik Larsson <karl.erik.larsson@gmail.com>,
- Fabrice Goucem <fabrice.goucem@oss.nxp.com>,
- Stephane Viau <stephane.viau@oss.nxp.com>, buildroot@buildroot.org,
- Fabio Estevam <festevam@gmail.com>, Matt Weber <matthew.weber@collins.com>
+Cc: Gregory Dymarek <gregd72002@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+https://github.com/meetecho/janus-gateway/blob/v1.1.1/CHANGELOG.md
 
-On 2022-12-29 20:47 +0100, Julien Olivain spake thusly:
-> NXP moved all its open source code repositories from Code Aurora Forum
-> to github. See for example:
-> https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
-> 
-> Software packages are now grouped in several NXP github
-> projects/organizations (nxp-imx, nxp-qoriq, ...). See:
-> https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
-> 
-> The NXP code published on Code Aurora is still present (at the time of
-> this commit) but is no longer receiving updates. It is also expected
-> to be shut down on 2023-03-31. The Code Aurora website
-> https://source.codeaurora.org/ currently show the following message:
-> """
-> Note: Qualcomm Innovation Center Inc. maintained repositories have
-> migrated to git.codelinaro.org. QUIC repositories on this site will
-> not receive any updates after March 31, 2022, and will be deleted on
-> March 31, 2023. If your project depends on these repositories, please
-> adjust your tooling configuration to use the new, up-to-date project
-> location.
-> """
-> 
-> For this reason, the NXP recipes using codeaurora.org urls need to be
-> updated to the correct github.com replacement.
-> 
-> Note: this commit does not change the component version. Only the
-> download URL is updated. The archive content is expected to be the
-> same.
-> 
-> Note 2: the _SITE_METHOD is also changed from "git" to the default
-> "wget", for faster downloads. This is why the package hash has
-> changed.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/janus-gateway/janus-gateway.hash | 2 +-
+ package/janus-gateway/janus-gateway.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Whole series of 27 patches applied to master, thanks!
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/imx-mkimage/Config.in.host   | 2 +-
->  package/imx-mkimage/imx-mkimage.hash | 2 +-
->  package/imx-mkimage/imx-mkimage.mk   | 3 +--
->  3 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/imx-mkimage/Config.in.host b/package/imx-mkimage/Config.in.host
-> index 8d273557a1..09df2a3c29 100644
-> --- a/package/imx-mkimage/Config.in.host
-> +++ b/package/imx-mkimage/Config.in.host
-> @@ -4,4 +4,4 @@ config BR2_PACKAGE_HOST_IMX_MKIMAGE
->  	  imx-mkimage is used to combine input images and generate
->  	  final boot image with appropriate IVT set.
->  
-> -	  https://source.codeaurora.org/external/imx/imx-mkimage
-> +	  https://github.com/nxp-imx/imx-mkimage
-> diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
-> index 81d99a5d1c..8346fd64b1 100644
-> --- a/package/imx-mkimage/imx-mkimage.hash
-> +++ b/package/imx-mkimage/imx-mkimage.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  769b3d7376a1f7107ce2958a1babe361bfd29e2cbfbe47eeb2911acc460058e5  imx-mkimage-lf-5.10.72_2.2.0-br1.tar.gz
-> +sha256  593bd94aac027844bc58c62aae55557c14e1f8a99e68ba235a46f083759df3d4  imx-mkimage-lf-5.10.72_2.2.0.tar.gz
->  sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-> diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-> index 0bfca72504..54c948e0d3 100644
-> --- a/package/imx-mkimage/imx-mkimage.mk
-> +++ b/package/imx-mkimage/imx-mkimage.mk
-> @@ -5,8 +5,7 @@
->  ################################################################################
->  
->  IMX_MKIMAGE_VERSION = lf-5.10.72_2.2.0
-> -IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
-> -IMX_MKIMAGE_SITE_METHOD = git
-> +IMX_MKIMAGE_SITE = $(call github,nxp-imx,imx-mkimage,$(IMX_MKIMAGE_VERSION))
->  IMX_MKIMAGE_LICENSE = GPL-2.0+
->  IMX_MKIMAGE_LICENSE_FILES = COPYING
->  HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
-> -- 
-> 2.39.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 5d73ede87f..7a87ae737a 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5b8a7304761783585bfa8db7471bf8c393fa2a0ffc346747afadc0c1a9d213f5  janus-gateway-1.0.3.tar.gz
++sha256  bb83c19d6137e39833e8eb2b1deeecb33b5d19d4f503d51703bdcc478c447940  janus-gateway-1.1.1.tar.gz
+ sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 9a74350b2c..0d906f1b62 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANUS_GATEWAY_VERSION = 1.0.3
++JANUS_GATEWAY_VERSION = 1.1.1
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
