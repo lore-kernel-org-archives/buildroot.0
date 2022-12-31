@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27BCFC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9371C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:51:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D21C7835CA;
-	Mon, 20 Feb 2023 23:51:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D21C7835CA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F4E983E5A;
+	Mon, 20 Feb 2023 23:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F4E983E5A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9DDk2IN5x8Pb; Mon, 20 Feb 2023 23:51:18 +0000 (UTC)
+	with ESMTP id ZOJrCc4trtjv; Mon, 20 Feb 2023 23:51:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B5DF83F64;
-	Mon, 20 Feb 2023 23:51:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B5DF83F64
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E87D1BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9111B843B1;
+	Mon, 20 Feb 2023 23:51:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9111B843B1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 53BE41BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D170641790
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D170641790
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6FE061AFB
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6FE061AFB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rN6NP64XLWch for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lr1_U9lChy_l for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E143841781
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E143841781
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA1A8617B1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA1A8617B1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE7428648F; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+ id B839D8648F; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 21:40:26 +0100
+Date: Sat, 31 Dec 2022 17:23:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 15864d79130479aa8d0c6990a95d9921892e822c
-X-Git-Newrev: e9fb89785b9bbf4a3f7dba9e511332ba9b068146
+X-Git-Oldrev: 1e96e3c95452aa69dbaad2597146c6da520299fd
+X-Git-Newrev: 76e610ef59f2c25577265a103dc37dce79b3e856
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205243.DE7428648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mono: bump to version
- 6.12.0.182
+Message-Id: <20230220205221.B839D8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/ls1028ardb: update
+ codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9fb89785b9bbf4a3f7dba9e511332ba9b068146
+commit: https://git.buildroot.net/buildroot/commit/?id=76e610ef59f2c25577265a103dc37dce79b3e856
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+NXP moved all its open source code repositories from Code Aurora Forum
+to github. See for example:
+https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
+
+Software packages are now grouped in several NXP github
+projects/organizations (nxp-imx, nxp-qoriq, ...). See:
+https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
+
+The NXP code published on Code Aurora is still present (at the time of
+this commit) but is no longer receiving updates. It is also expected
+to be shut down on 2023-03-31. The Code Aurora website
+https://source.codeaurora.org/ currently show the following message:
+"""
+Note: Qualcomm Innovation Center Inc. maintained repositories have
+migrated to git.codelinaro.org. QUIC repositories on this site will
+not receive any updates after March 31, 2022, and will be deleted on
+March 31, 2023. If your project depends on these repositories, please
+adjust your tooling configuration to use the new, up-to-date project
+location.
+"""
+
+For this reason, the NXP recipes using codeaurora.org urls need to be
+updated to the correct github.com replacement.
+
+Note: this commit does not change the component version. Only the
+download URL is updated. The archive content is expected to be the
+same.
+
+Note 2: this commit updates the Kernel, U-Boot and ATF download urls.
+The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mono/mono.hash | 2 +-
- package/mono/mono.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/ls1028ardb_defconfig | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index 8b72ae68ed..1010f6d0ab 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  29c277660fc5e7513107aee1cbf8c5057c9370a4cdfeda2fc781be6986d89d23  mono-6.12.0.122.tar.xz
-+sha256  57366a6ab4f3b5ecf111d48548031615b3a100db87c679fc006e8c8a4efd9424  mono-6.12.0.182.tar.xz
- sha256  923c7053ad0d430cd9b0b69a0ccf3abb7170a1ce50ecbf01915b565a35823d10  LICENSE
- sha256  fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
- sha256  2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 219effc5d3..b88f2b379e 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+index 1bc84f7b80..a46b94511a 100644
+--- a/configs/ls1028ardb_defconfig
++++ b/configs/ls1028ardb_defconfig
+@@ -17,9 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1028ardb/genimage.cfg"
  
--MONO_VERSION = 6.12.0.122
-+MONO_VERSION = 6.12.0.182
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.xz
- MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/linux"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="LSDK-21.08"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,LSDK-21.08)/linux-LSDK-21.08.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -37,9 +36,8 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ 
+ # Bootloaders
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="LSDK-21.08"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,LSDK-21.08)/atf-LSDK-21.08.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW=y
+@@ -48,9 +46,8 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BOOT_MODE=sd"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/u-boot"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="LSDK-21.08"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,LSDK-21.08)/u-boot-LSDK-21.08.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1028ardb_tfa"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
