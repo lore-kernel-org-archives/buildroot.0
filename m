@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AFD5C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43920C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30FED83E14;
-	Mon, 20 Feb 2023 23:41:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30FED83E14
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA5B9832C2;
+	Mon, 20 Feb 2023 23:41:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA5B9832C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MG5RG8AMstxV; Mon, 20 Feb 2023 23:41:38 +0000 (UTC)
+	with ESMTP id Ems69B23aGPZ; Mon, 20 Feb 2023 23:41:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4257181D46;
-	Mon, 20 Feb 2023 23:41:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4257181D46
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4681D1BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id D503283FE6;
+	Mon, 20 Feb 2023 23:41:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D503283FE6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 981BA1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F0FA341762
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0FA341762
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AA5261382
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AA5261382
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8QbKdl5loAo5 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mFijryoxHJNO for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D5CF4158C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D5CF4158C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6AF8561AC8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AF8561AC8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 28B478648F; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 68DA4828C8; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 13:54:32 +0100
+Date: Sat, 31 Dec 2022 17:17:06 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b9735d0e74fb8588ebbf2d888b40caac0aa8fa98
-X-Git-Newrev: 22e926e9af915303180d35b5c41ea5fbf411d753
+X-Git-Oldrev: d769cfc13f6c2544f8bc5b6339d23763319a2383
+X-Git-Newrev: dc23c61e4d3fa9557db4977b8d30905a3f55e83d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205241.28B478648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mariadb: fix build
- with libressl >= 3.5.0
+Message-Id: <20230220205219.68DA4828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/freescale-imx: update
+ SITE to directly use https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,72 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22e926e9af915303180d35b5c41ea5fbf411d753
+commit: https://git.buildroot.net/buildroot/commit/?id=dc23c61e4d3fa9557db4977b8d30905a3f55e83d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure with libressl raised since bump to
-version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+http://www.nxp.com/ has a redirect to https://www.nxp.com/ for quite
+some time now. It is also quite common to directly hit https:// urls
+now.
 
-In file included from /tmp/instance-10/output-1/build/mariadb-10.3.36/vio/viosslfactories.c:18:
-/tmp/instance-10/output-1/build/mariadb-10.3.36/vio/viosslfactories.c: In function 'get_dh2048':
-/tmp/instance-10/output-1/build/mariadb-10.3.36/include/ssl_compat.h:68:45: error: invalid use of incomplete typedef 'DH' {aka 'struct dh_st'}
-   68 | #define DH_set0_pqg(D,P,Q,G)            ((D)->p= (P), (D)->g= (G))
-      |                                             ^~
-
-Fixes:
- - http://autobuild.buildroot.org/results/524198344aafca58d214537af64c5961c407b0f8
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...sl_compat.h-fix-build-with-libressl-3.5.0.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/freescale-imx/freescale-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mariadb/0002-include-ssl_compat.h-fix-build-with-libressl-3.5.0.patch b/package/mariadb/0002-include-ssl_compat.h-fix-build-with-libressl-3.5.0.patch
-new file mode 100644
-index 0000000000..fd3e6e6607
---- /dev/null
-+++ b/package/mariadb/0002-include-ssl_compat.h-fix-build-with-libressl-3.5.0.patch
-@@ -0,0 +1,39 @@
-+From 79ed770a37c8669390a58a4485dd8f5565fe2497 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 15 Jan 2023 19:12:05 +0100
-+Subject: [PATCH] include/ssl_compat.h: fix build with libressl >= 3.5.0
-+
-+Fix the following build failure with libressl >= 3.5.0:
-+
-+In file included from /tmp/instance-10/output-1/build/mariadb-10.3.36/vio/viosslfactories.c:18:
-+/tmp/instance-10/output-1/build/mariadb-10.3.36/vio/viosslfactories.c: In function 'get_dh2048':
-+/tmp/instance-10/output-1/build/mariadb-10.3.36/include/ssl_compat.h:68:45: error: invalid use of incomplete typedef 'DH' {aka 'struct dh_st'}
-+   68 | #define DH_set0_pqg(D,P,Q,G)            ((D)->p= (P), (D)->g= (G))
-+      |                                             ^~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/524198344aafca58d214537af64c5961c407b0f8
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/MariaDB/server/pull/2435]
-+---
-+ include/ssl_compat.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/include/ssl_compat.h b/include/ssl_compat.h
-+index 664f3aac87c..3678e5fa084 100644
-+--- a/include/ssl_compat.h
-++++ b/include/ssl_compat.h
-+@@ -19,7 +19,8 @@
-+ /* OpenSSL version specific definitions */
-+ #if defined(OPENSSL_VERSION_NUMBER)
-+ 
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && \
-++	!(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
-+ #define HAVE_OPENSSL11 1
-+ #define SSL_LIBRARY OpenSSL_version(OPENSSL_VERSION)
-+ #define ERR_remove_state(X) ERR_clear_error()
-+-- 
-+2.39.0
-+
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index 5f32a098a2..b119d90ec3 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -4,6 +4,6 @@
+ #
+ ################################################################################
+ 
+-FREESCALE_IMX_SITE = http://www.nxp.com/lgfiles/NMG/MAD/YOCTO
++FREESCALE_IMX_SITE = https://www.nxp.com/lgfiles/NMG/MAD/YOCTO
+ 
+ include $(sort $(wildcard package/freescale-imx/*/*.mk))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
