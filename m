@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F52C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:00:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 571B6C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F132823E2;
-	Mon, 20 Feb 2023 23:00:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F132823E2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EC468248F;
+	Mon, 20 Feb 2023 23:00:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EC468248F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 077102UUijLw; Mon, 20 Feb 2023 23:00:31 +0000 (UTC)
+	with ESMTP id PGBcre-ppESk; Mon, 20 Feb 2023 23:00:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94ED48248F;
-	Mon, 20 Feb 2023 23:00:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94ED48248F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 272BC1BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1365F8249B;
+	Mon, 20 Feb 2023 23:00:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1365F8249B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 81E671BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4015361203
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4015361203
+ by smtp2.osuosl.org (Postfix) with ESMTP id 802A64171A
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 802A64171A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3zyUhbAe3kuj for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id trq-77TkVaXJ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 606576129F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 606576129F
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0F4B4171C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0F4B4171C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 470668648F; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 9E8A8828C8; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 14 Dec 2022 19:57:52 +0100
+Date: Sat, 31 Dec 2022 17:23:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0a3a7169d66b610c968128688b6475ffc333cc96
-X-Git-Newrev: b8881d4d7e4822337c222fadf4630a49eec1e9ce
+X-Git-Oldrev: e840a811e5c21f36524a1e334ba76cc90ae53411
+X-Git-Newrev: a8fd6036e3b2847f378363b8c0f0ba2cf1a30d1c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205210.470668648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xserver_xorg-server: security bump version to 21.1.5
+Message-Id: <20230220205221.9E8A8828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/imx8mpico: update
+ codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8881d4d7e4822337c222fadf4630a49eec1e9ce
+commit: https://git.buildroot.net/buildroot/commit/?id=a8fd6036e3b2847f378363b8c0f0ba2cf1a30d1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-December/003303.html
+NXP moved all its open source code repositories from Code Aurora Forum
+to github. See for example:
+https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
 
-Security advisory:
-https://lists.x.org/archives/xorg-announce/2022-December/003302.html
+Software packages are now grouped in several NXP github
+projects/organizations (nxp-imx, nxp-qoriq, ...). See:
+https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
 
-Fixes CVE-2022-46340, CVE-2022-46341, CVE-2022-46342, CVE-2022-46343,
-CVE-2022-46344 and CVE-2022-4283.
+The NXP code published on Code Aurora is still present (at the time of
+this commit) but is no longer receiving updates. It is also expected
+to be shut down on 2023-03-31. The Code Aurora website
+https://source.codeaurora.org/ currently show the following message:
+"""
+Note: Qualcomm Innovation Center Inc. maintained repositories have
+migrated to git.codelinaro.org. QUIC repositories on this site will
+not receive any updates after March 31, 2022, and will be deleted on
+March 31, 2023. If your project depends on these repositories, please
+adjust your tooling configuration to use the new, up-to-date project
+location.
+"""
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+For this reason, the NXP recipes using codeaurora.org urls need to be
+updated to the correct github.com replacement.
+
+Note: this commit does not change the component version. Only the
+download URL is updated. The archive content is expected to be the
+same.
+
+Note 2: this commit updates only the ATF download urls.
+The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 7 +++----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ configs/imx8mpico_defconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 4b2090fa99..654552c8b6 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-July/003193.html
--sha256  5cc4be8ee47edb58d4a90e603a59d56b40291ad38371b0bd2471fc3cbee1c587  xorg-server-21.1.4.tar.xz
--sha512  eb5b8520d02908f72719e6ecfbf7a9bf139acb65ccae04d1db4223a8a2384cd3a94bd5afef10cce327b751b800cc2b79bfaa5ae35c95c3a217f775168082e68f  xorg-server-21.1.4.tar.xz
--
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003303.html
-+sha256  05b0c8301cee7c5a78083df421ba3a071891553541a417b3d85adf5cf20f8720  xorg-server-21.1.5.tar.xz
-+sha512  a39c6ba36f94241d330b679a9a6fe2c5fda73fc3f5a9308a7a9cfd0d58503e407291759c9e553455c07cf5a3862952ae3904334eeca29c97ff5af7cffd2e6953  xorg-server-21.1.5.tar.xz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 8dba9f1ed0..16b7438ee6 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 21.1.4
-+XSERVER_XORG_SERVER_VERSION = 21.1.5
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+diff --git a/configs/imx8mpico_defconfig b/configs/imx8mpico_defconfig
+index 55746fb67e..1df8c104ec 100644
+--- a/configs/imx8mpico_defconfig
++++ b/configs/imx8mpico_defconfig
+@@ -17,9 +17,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.72-2.2.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.72-2.2.0)/imx-atf-lf-5.10.72-2.2.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
