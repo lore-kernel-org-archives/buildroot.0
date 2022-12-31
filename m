@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4601C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B69BC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 22:59:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 542678235B;
-	Mon, 20 Feb 2023 22:59:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 542678235B
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4FEC82419;
+	Mon, 20 Feb 2023 22:59:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4FEC82419
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G-BooGZQDr5J; Mon, 20 Feb 2023 22:59:16 +0000 (UTC)
+	with ESMTP id Am3gFAEnn2t5; Mon, 20 Feb 2023 22:59:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73460823CF;
-	Mon, 20 Feb 2023 22:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73460823CF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB8101BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1AF082400;
+	Mon, 20 Feb 2023 22:59:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1AF082400
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 717A41BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 054036109D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 054036109D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3263540C1B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3263540C1B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OogDl8g0ZkCL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id be-gJEXL2nSK for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06F746129D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06F746129D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 506DC40C2E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 506DC40C2E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F0EF08648F; Mon, 20 Feb 2023 20:52:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 4CBC486495; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 13 Dec 2022 21:15:50 +0100
+Date: Sat, 31 Dec 2022 17:23:17 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3e250593ceabbdbc19365e56c679948f80ed6b9c
-X-Git-Newrev: acf4a7d1c72c468e269058ba52df40c9734c8801
+X-Git-Oldrev: a01cb853fe978d85037d9a4dd762113c9132dc4c
+X-Git-Newrev: e5f10b73007487d5d19e34914ee0e1c35a127c4c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205209.F0EF08648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libglfw: bump version
- to 3.3.8
+Message-Id: <20230220205221.4CBC486495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/freescale_imx8mpevk:
+ update codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acf4a7d1c72c468e269058ba52df40c9734c8801
+commit: https://git.buildroot.net/buildroot/commit/?id=e5f10b73007487d5d19e34914ee0e1c35a127c4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://www.glfw.org/changelog.html
+NXP moved all its open source code repositories from Code Aurora Forum
+to github. See for example:
+https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Software packages are now grouped in several NXP github
+projects/organizations (nxp-imx, nxp-qoriq, ...). See:
+https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
+
+The NXP code published on Code Aurora is still present (at the time of
+this commit) but is no longer receiving updates. It is also expected
+to be shut down on 2023-03-31. The Code Aurora website
+https://source.codeaurora.org/ currently show the following message:
+"""
+Note: Qualcomm Innovation Center Inc. maintained repositories have
+migrated to git.codelinaro.org. QUIC repositories on this site will
+not receive any updates after March 31, 2022, and will be deleted on
+March 31, 2023. If your project depends on these repositories, please
+adjust your tooling configuration to use the new, up-to-date project
+location.
+"""
+
+For this reason, the NXP recipes using codeaurora.org urls need to be
+updated to the correct github.com replacement.
+
+Note: this commit does not change the component version. Only the
+download URL is updated. The archive content is expected to be the
+same.
+
+Note 2: this commit updates the Kernel, U-Boot and ATF download urls.
+The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libglfw/libglfw.hash | 2 +-
- package/libglfw/libglfw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/freescale_imx8mpevk_defconfig | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
-index 5bffc55d26..9d38946f3c 100644
---- a/package/libglfw/libglfw.hash
-+++ b/package/libglfw/libglfw.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ed07b90e334dcd39903e6288d90fa1ae0cf2d2119fec516cf743a0a404527c02  libglfw-3.3.6.tar.gz
-+sha256  f30f42e05f11e5fc62483e513b0488d5bceeab7d9c5da0ffe2252ad81816c713  libglfw-3.3.8.tar.gz
- sha256  149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462  LICENSE.md
-diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
-index 0a3986f662..eee8e7b298 100644
---- a/package/libglfw/libglfw.mk
-+++ b/package/libglfw/libglfw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGLFW_VERSION = 3.3.6
-+LIBGLFW_VERSION = 3.3.8
- LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
- LIBGLFW_INSTALL_STAGING = YES
- LIBGLFW_LICENSE = Zlib
+diff --git a/configs/freescale_imx8mpevk_defconfig b/configs/freescale_imx8mpevk_defconfig
+index 8d0e6e0f3e..5a72406b67 100644
+--- a/configs/freescale_imx8mpevk_defconfig
++++ b/configs/freescale_imx8mpevk_defconfig
+@@ -5,9 +5,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mp-evk.dtb"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mp-evk"
+@@ -19,16 +18,14 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mp_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
