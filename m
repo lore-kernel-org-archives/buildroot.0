@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3555DC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 16:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 433B5C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 16:35:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC1FA8129A;
-	Sat, 31 Dec 2022 16:35:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC1FA8129A
+	by smtp2.osuosl.org (Postfix) with ESMTP id DCC5840445;
+	Sat, 31 Dec 2022 16:35:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCC5840445
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lol_V-dZwD1u; Sat, 31 Dec 2022 16:35:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xcs2LHJ4c9pX; Sat, 31 Dec 2022 16:35:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F11BF81467;
-	Sat, 31 Dec 2022 16:35:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F11BF81467
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B09C41BF47D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93E12405F5;
+	Sat, 31 Dec 2022 16:35:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93E12405F5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BB3E01BF855
  for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:35:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BDC581467
+ by smtp2.osuosl.org (Postfix) with ESMTP id A41B9405C7
  for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:35:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BDC581467
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A41B9405C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6d_xCidEU67N for <buildroot@lists.busybox.net>;
- Sat, 31 Dec 2022 16:35:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1B_KLwftoAVB for <buildroot@lists.busybox.net>;
+ Sat, 31 Dec 2022 16:35:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2C5880BCB
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE89F40347
  for <buildroot@buildroot.org>; Sat, 31 Dec 2022 16:35:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2C5880BCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE89F40347
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9DD8086F96; Sat, 31 Dec 2022 16:35:00 +0000 (UTC)
+ id CCABD86F96; Sat, 31 Dec 2022 16:35:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 17:22:40 +0100
+Date: Sat, 31 Dec 2022 17:22:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: faa8c35d117348f35c129c62a3d02447f47bde88
-X-Git-Newrev: 153b91ed13174a9013393a8b8eb907a5ff511e58
+X-Git-Oldrev: 1ed90a96aa1f11fed19045036b4a10d9a8263a98
+X-Git-Newrev: cec5a941b0867803045450688fbec8992e48d81d
 X-Patchwork-Hint: ignore
-Message-Id: <20221231163500.9DD8086F96@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/imx-mkimage: update codeaurora
- URLs to github
+Message-Id: <20221231163500.CCABD86F96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-kobs: update to
+ NXPmicro github organization
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,82 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=153b91ed13174a9013393a8b8eb907a5ff511e58
+commit: https://git.buildroot.net/buildroot/commit/?id=cec5a941b0867803045450688fbec8992e48d81d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NXP moved all its open source code repositories from Code Aurora Forum
-to github. See for example:
-https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
+imx-kobs was removed from the github codeauroraforum organization.
+It is now redirecting to NXPmicro. This patch updates the link to
+directly point to the correct place.
 
-Software packages are now grouped in several NXP github
-projects/organizations (nxp-imx, nxp-qoriq, ...). See:
-https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
-
-The NXP code published on Code Aurora is still present (at the time of
-this commit) but is no longer receiving updates. It is also expected
-to be shut down on 2023-03-31. The Code Aurora website
-https://source.codeaurora.org/ currently show the following message:
-"""
-Note: Qualcomm Innovation Center Inc. maintained repositories have
-migrated to git.codelinaro.org. QUIC repositories on this site will
-not receive any updates after March 31, 2022, and will be deleted on
-March 31, 2023. If your project depends on these repositories, please
-adjust your tooling configuration to use the new, up-to-date project
-location.
-"""
-
-For this reason, the NXP recipes using codeaurora.org urls need to be
-updated to the correct github.com replacement.
-
-Note: this commit does not change the component version. Only the
-download URL is updated. The archive content is expected to be the
-same.
-
-Note 2: the _SITE_METHOD is also changed from "git" to the default
-"wget", for faster downloads. This is why the package hash has
-changed.
+The commit also replaces the Config.in comment saying the package does
+not have an upstream by the github.com project page.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/imx-mkimage/Config.in.host   | 2 +-
- package/imx-mkimage/imx-mkimage.hash | 2 +-
- package/imx-mkimage/imx-mkimage.mk   | 3 +--
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ package/freescale-imx/imx-kobs/Config.in   | 3 +--
+ package/freescale-imx/imx-kobs/imx-kobs.mk | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/imx-mkimage/Config.in.host b/package/imx-mkimage/Config.in.host
-index 8d273557a1..09df2a3c29 100644
---- a/package/imx-mkimage/Config.in.host
-+++ b/package/imx-mkimage/Config.in.host
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_HOST_IMX_MKIMAGE
- 	  imx-mkimage is used to combine input images and generate
- 	  final boot image with appropriate IVT set.
+diff --git a/package/freescale-imx/imx-kobs/Config.in b/package/freescale-imx/imx-kobs/Config.in
+index 61be9f26d4..a81842b9a5 100644
+--- a/package/freescale-imx/imx-kobs/Config.in
++++ b/package/freescale-imx/imx-kobs/Config.in
+@@ -5,5 +5,4 @@ config BR2_PACKAGE_IMX_KOBS
+ 	  The imx-kobs tool is used for writing images to NAND on i.MX
+ 	  platforms.
  
--	  https://source.codeaurora.org/external/imx/imx-mkimage
-+	  https://github.com/nxp-imx/imx-mkimage
-diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
-index 81d99a5d1c..8346fd64b1 100644
---- a/package/imx-mkimage/imx-mkimage.hash
-+++ b/package/imx-mkimage/imx-mkimage.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  769b3d7376a1f7107ce2958a1babe361bfd29e2cbfbe47eeb2911acc460058e5  imx-mkimage-lf-5.10.72_2.2.0-br1.tar.gz
-+sha256  593bd94aac027844bc58c62aae55557c14e1f8a99e68ba235a46f083759df3d4  imx-mkimage-lf-5.10.72_2.2.0.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index 0bfca72504..54c948e0d3 100644
---- a/package/imx-mkimage/imx-mkimage.mk
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -5,8 +5,7 @@
+-	  This library is provided by Freescale as-is and doesn't have
+-	  an upstream.
++	  https://github.com/NXPmicro/imx-kobs
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
+index d6a250cf72..91b39f6fa4 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.mk
++++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
- IMX_MKIMAGE_VERSION = lf-5.10.72_2.2.0
--IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
--IMX_MKIMAGE_SITE_METHOD = git
-+IMX_MKIMAGE_SITE = $(call github,nxp-imx,imx-mkimage,$(IMX_MKIMAGE_VERSION))
- IMX_MKIMAGE_LICENSE = GPL-2.0+
- IMX_MKIMAGE_LICENSE_FILES = COPYING
- HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
+ IMX_KOBS_VERSION = a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b
+-IMX_KOBS_SITE = $(call github,codeauroraforum,imx-kobs,$(IMX_KOBS_VERSION))
++IMX_KOBS_SITE = $(call github,NXPmicro,imx-kobs,$(IMX_KOBS_VERSION))
+ IMX_KOBS_LICENSE = GPL-2.0+
+ IMX_KOBS_LICENSE_FILES = COPYING
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
