@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAE5CC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 16:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E177AC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 16:21:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BBE6402B1;
-	Sat, 31 Dec 2022 16:20:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BBE6402B1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 823EA403A9;
+	Sat, 31 Dec 2022 16:21:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 823EA403A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x2X0iWXqOH0t; Sat, 31 Dec 2022 16:20:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Dde88NLzjYY0; Sat, 31 Dec 2022 16:21:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1594C40895;
-	Sat, 31 Dec 2022 16:20:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1594C40895
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4DB361BF47D
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:20:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACC5640393;
+	Sat, 31 Dec 2022 16:21:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACC5640393
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 727781BF47D
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 219D281465
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:20:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 219D281465
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAC05607FE
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 16:20:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAC05607FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pX65GBci-NxV for <buildroot@lists.busybox.net>;
- Sat, 31 Dec 2022 16:20:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5BFDF80C29
- for <buildroot@buildroot.org>; Sat, 31 Dec 2022 16:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BFDF80C29
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 473DD86F7D; Sat, 31 Dec 2022 16:20:03 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 17:17:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4e54522caeeaec2e14065752cb3905d292f374e6
-X-Git-Newrev: bfbbfd8fecf8623da4772f97ce208b3e4b69de80
-X-Patchwork-Hint: ignore
-Message-Id: <20221231162003.473DD86F7D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/freescale/imx6sabre/readme.txt:
- update broken urls
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sgf-lh6QMFGN for <buildroot@lists.busybox.net>;
+ Sat, 31 Dec 2022 16:20:49 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B93A560A91
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B93A560A91
+ for <buildroot@buildroot.org>; Sat, 31 Dec 2022 16:20:49 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:37e6:2c2e:a294:8f1b])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id EABE413F86A;
+ Sat, 31 Dec 2022 17:20:43 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 31 Dec 2022 17:20:43 +0100
+Date: Sat, 31 Dec 2022 17:20:43 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20221231162043.GO2498764@scaer>
+References: <20221231135559.34464-1-ju.o@free.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20221231135559.34464-1-ju.o@free.fr>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672503648;
+ bh=YpbnAJxHTSYj3OIyh0r+fDcGvLMPLcGEdtsxy81HbVk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=P4oRMbQrd0aVGjh8UyrUaROI3o7MGxuf9tjN33uvXlrtAGfYWQAJynHv2IxBe+jkn
+ cTYM6m8i1Kk7r73vj8qz43i10BOs7ieme/HMlu2psXFhybr8P6uoSv0WzllbtgmVIf
+ 1JAJB2hBFZBORAdexan/FrnJY2Un0c+dOtaZn7XExu7Xm1h2kzH6sYFOP7nJCuM3H2
+ MehYbB+Z6vT/MRJiVx1pHc/915ESG/FQz3LHP0bFU9y6KL9ODWoDmSNW1mcaDPR2Dg
+ YIOUZv4AEuc0mtVNO50C37VldwfWEatM3DGJ0MeEDEOh4wEDatwUBZfItw9PBw5Qv4
+ jmT/JwsAiMrwg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=P4oRMbQr
+Subject: Re: [Buildroot] [PATCH 1/4] package/freescale-imx: update SITE to
+ directly use https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,66 +77,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Gary Bisson <bisson.gary@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfbbfd8fecf8623da4772f97ce208b3e4b69de80
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Julien, All,
 
-http://freescale.com/ urls are all redirected to the NXP homepage
-https://www.nxp.com/
+On 2022-12-31 14:55 +0100, Julien Olivain spake thusly:
+> http://www.nxp.com/ has a redirect to https://www.nxp.com/ for quite
+> some time now. It is also quite common to directly hit https:// urls
+> now.
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Even if the links are not broken in the sense of a 404 http error, the
-pointed resources are not found.
+Whole series of 4 patches applied to master, thanks.
 
-This commit updates the old freescale links to the correct nxp.com
-locations.
+Regards,
+Yann E. MORIN.
 
-Note: the link to the SABRE for Automotive Infotainment Quick Start
-Guide now requires a free registration to be accessed.
+> ---
+>  package/freescale-imx/freescale-imx.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+> index 5f32a098a2..b119d90ec3 100644
+> --- a/package/freescale-imx/freescale-imx.mk
+> +++ b/package/freescale-imx/freescale-imx.mk
+> @@ -4,6 +4,6 @@
+>  #
+>  ################################################################################
+>  
+> -FREESCALE_IMX_SITE = http://www.nxp.com/lgfiles/NMG/MAD/YOCTO
+> +FREESCALE_IMX_SITE = https://www.nxp.com/lgfiles/NMG/MAD/YOCTO
+>  
+>  include $(sort $(wildcard package/freescale-imx/*/*.mk))
+> -- 
+> 2.39.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- board/freescale/imx6sabre/readme.txt | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/board/freescale/imx6sabre/readme.txt b/board/freescale/imx6sabre/readme.txt
-index 4b8db5233a..320ee463e2 100644
---- a/board/freescale/imx6sabre/readme.txt
-+++ b/board/freescale/imx6sabre/readme.txt
-@@ -8,15 +8,15 @@ as well as the Freescale SABRE Board for Automotive Infotainment.
- 
- Read the i.MX 6 SABRESD Quick Start Guide for an introduction to the
- board:
--http://cache.freescale.com/files/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
-+https://www.nxp.com/files-static/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
- 
- Read the i.MX 6 SoloX SABRESD Quick Start Guide for an introduction to
- the board:
--http://cache.freescale.com/files/32bit/doc/user_guide/IMX6SOLOXQSG.pdf
-+https://www.nxp.com/files-static/32bit/doc/quick_start_guide/IMX6SOLOXQSG.pdf
- 
- Read the SABRE for Automotive Infotainment Quick Start Guide for an
- introduction to the board:
--http://cache.freescale.com/files/32bit/doc/user_guide/IMX6SABREINFOQSG.pdf
-+https://www.nxp.com/webapp/Download?colCode=IMX6SABREINFOQSG
- 
- Building with NXP kernel and NXP U-Boot
- =======================================
-@@ -166,6 +166,6 @@ Enjoy!
- References
- ==========
- 
--https://community.freescale.com/docs/DOC-95015
--https://community.freescale.com/docs/DOC-95017
--https://community.freescale.com/docs/DOC-99218
-+https://community.nxp.com/docs/DOC-95015
-+https://community.nxp.com/docs/DOC-95017
-+https://community.nxp.com/docs/DOC-99218
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
