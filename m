@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D3EC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DC5BC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 323A5843DB;
-	Mon, 20 Feb 2023 23:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 323A5843DB
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC9FC83852;
+	Mon, 20 Feb 2023 23:52:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC9FC83852
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KGfV5WFzQ-4T; Mon, 20 Feb 2023 23:52:45 +0000 (UTC)
+	with ESMTP id Gh9s0s2hhdAA; Mon, 20 Feb 2023 23:52:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49BEE843DA;
-	Mon, 20 Feb 2023 23:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49BEE843DA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1FFD11BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9CB7843E6;
+	Mon, 20 Feb 2023 23:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9CB7843E6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2ED691BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FDAF4178F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FDAF4178F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E12261B22
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E12261B22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OECj6ytGy_Mk for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3HeT4GNJAIPs for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36C8C41784
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36C8C41784
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0FFFE610B0
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FFFE610B0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32F2F86496; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+ id 008D286495; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 30 Jan 2023 08:06:16 +0100
+Date: Sat, 31 Dec 2022 20:24:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 36741b9461a629002296e5debae848fc7f6e152f
-X-Git-Newrev: 33c89f98377cb968b03eb1428af8a74eba9d13ce
+X-Git-Oldrev: 2f54c2a841861ba587c9bbdd66d5164b6774d9e5
+X-Git-Newrev: e75f3962084045cf50f38f0adf8bfaa8da71dfd5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205244.32F2F86496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fxdiv: fix build
- without C++ toolchain
+Message-Id: <20230220205222.008D286495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux: fix builds for kernels
+ < 5.6 and host-gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +63,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33c89f98377cb968b03eb1428af8a74eba9d13ce
+commit: https://git.buildroot.net/buildroot/commit/?id=e75f3962084045cf50f38f0adf8bfaa8da71dfd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The cmake project for fxdiv sets the project language to C and CXX
-even when only C is required.
+During a linux-backports update, it was found that kernel v3.10.108 was
+failing to compile. See:
+https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
 
-Add a patch which disables CXX unless required.
+This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
+"linux: fix build with host-gcc 10+", which removes all declarations of
+"yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
+"%locations" directive is provided in the parser. See:
+https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
+
+Kernel versions < 5.6 did not include this directive, so removing all
+yylloc declararions in the parser also was failing for those version.
+
+In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
+This commit is included in kernel v5.6.
+
+This dtc update include the dtc commit:
+https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
+which adds the '%locations' directive.
+
+This commit fixes the issue by programmatically adding the '%locations'
+Bison directive, if it's not found in the parser file.
 
 Fixes:
- - http://autobuild.buildroot.net/results/b0f/b0f3b6352429a5156a8c3a2b932331753887b65b
- - http://autobuild.buildroot.net/results/52f/52f634c06bdfe983280a2c01bb9fec4b0e1a4b34
- - http://autobuild.buildroot.net/results/181/181b85d9dd505693ed23fab823085b001aa785f4
+- https://bugs.busybox.net/show_bug.cgi?id=14971
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-enable-CXX-unless-building-tests-benchma.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ linux/linux.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
-new file mode 100644
-index 0000000000..0336f5e1cc
---- /dev/null
-+++ b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
-@@ -0,0 +1,49 @@
-+From 8c2d8fc60306a8edd21182a1f5f267a7aca55763 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sun, 29 Jan 2023 21:18:28 -0700
-+Subject: [PATCH] CMake: don't enable CXX unless building tests/benchmarks
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6b547a68ed..7645b5f507 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	WERROR=0 \
++	REGENERATE_PARSERS=1 \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
+ 
+ ifeq ($(BR2_REPRODUCIBLE),y)
+@@ -286,6 +287,19 @@ define LINUX_DROP_YYLLOC
+ endef
+ LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
+ 
++# Kernel version < 5.6 breaks if host-gcc version is >= 10 and
++# 'yylloc' symbol is removed in previous hook, due to missing
++# '%locations' bison directive in dtc-parser.y.  See:
++# https://bugs.busybox.net/show_bug.cgi?id=14971
++define LINUX_ADD_DTC_LOCATIONS
++	$(Q)DTC_PARSER=$(@D)/scripts/dtc/dtc-parser.y; \
++	if test -e "$${DTC_PARSER}" \
++		&& ! grep -Eq '^%locations$$' "$${DTC_PARSER}" ; then \
++		$(SED) '/^%{$$/i %locations' "$${DTC_PARSER}"; \
++	fi
++endef
++LINUX_POST_PATCH_HOOKS += LINUX_ADD_DTC_LOCATIONS
 +
-+We only need CXX support when building tests/benchmarks.
-+
-+Fixes:
-+CMake Error at CMakeLists.txt:4 (PROJECT):
-+  No CMAKE_CXX_COMPILER could be found.
-+
-+  Tell CMake where to find the compiler by setting either the environment
-+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
-+  to the compiler, or to the compiler name if it is in the PATH.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://github.com/Maratyszcza/FXdiv/pull/3]
-+---
-+ CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index bcae6b5..c75f558 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
-+ 
-+ # ---[ Project
-+-PROJECT(FXdiv C CXX)
-++PROJECT(FXdiv C)
-+ 
-+ # ---[ Options.
-+ OPTION(FXDIV_USE_INLINE_ASSEMBLY "Allow use of inline assembly in FXdiv" OFF)
-+@@ -16,6 +16,10 @@ ENDIF()
-+ # ---[ CMake options
-+ INCLUDE(GNUInstallDirs)
-+ 
-++IF(FXDIV_BUILD_TESTS OR FXDIV_BUILD_BENCHMARKS)
-++  ENABLE_LANGUAGE(CXX)
-++ENDIF()
-++
-+ IF(FXDIV_BUILD_TESTS)
-+   ENABLE_TESTING()
-+ ENDIF()
-+-- 
-+2.34.1
-+
+ # Older linux kernels use deprecated perl constructs in timeconst.pl
+ # that were removed for perl 5.22+ so it breaks on newer distributions
+ # Try a dry-run patch to see if this applies, if it does go ahead
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
