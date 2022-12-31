@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B809FC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 19:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26F75C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 19:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED75E40319;
-	Sat, 31 Dec 2022 19:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED75E40319
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD7F680EF1;
+	Sat, 31 Dec 2022 19:34:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD7F680EF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eOTTfnjkHWgs; Sat, 31 Dec 2022 19:32:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id saymUQvGQ8eQ; Sat, 31 Dec 2022 19:34:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2D4340320;
-	Sat, 31 Dec 2022 19:32:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2D4340320
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 212EF1BF3C9
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 19:32:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBAB480C11;
+	Sat, 31 Dec 2022 19:34:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBAB480C11
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AFE31BF3C9
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 19:33:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA68240445
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 19:32:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA68240445
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66CA280C11
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 19:33:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66CA280C11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7u1-IScytujI for <buildroot@lists.busybox.net>;
- Sat, 31 Dec 2022 19:32:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDC7F403FF
- for <buildroot@buildroot.org>; Sat, 31 Dec 2022 19:32:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDC7F403FF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D55FE869E0; Sat, 31 Dec 2022 19:32:20 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 20:24:32 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2f54c2a841861ba587c9bbdd66d5164b6774d9e5
-X-Git-Newrev: e75f3962084045cf50f38f0adf8bfaa8da71dfd5
-X-Patchwork-Hint: ignore
-Message-Id: <20221231193220.D55FE869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] linux: fix builds for kernels < 5.6 and
- host-gcc >= 10
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nUxYtonO0-nE for <buildroot@lists.busybox.net>;
+ Sat, 31 Dec 2022 19:33:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F41A880BFC
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F41A880BFC
+ for <buildroot@buildroot.org>; Sat, 31 Dec 2022 19:33:57 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:37e6:2c2e:a294:8f1b])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 05E6F13F84C;
+ Sat, 31 Dec 2022 20:33:52 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 31 Dec 2022 20:33:45 +0100
+Date: Sat, 31 Dec 2022 20:33:45 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20221231193345.GU2498764@scaer>
+References: <20220822221430.355066-1-ju.o@free.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220822221430.355066-1-ju.o@free.fr>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672515235;
+ bh=TXkWlbdukT/w/5OTQ32fX0y+Vo87+97yZoH/u2CQ6tI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=jEFv6tnDoVCfrKlqOQdX6WAVqARS/FAZtQuwDgswXvWoC3/Yr7aQ4IVoauSQNNMpG
+ 6oRQYtwqHzACcA6WQOnPd+W8Hb505bB5C1Q4WzSKe94O9BdsTQeAYUNLms/Ha99npL
+ +Bm8193zXb2TfQKt7a+z8CHeHlLNWKKjnqsQRM/ln6cZfZz4zEkpXOId3bgFyg3zw6
+ WSkL29ZylYGmOAELraVvDjoMMSbX+wMjuDkAXcB3ITE/37OWF/VUXuoiAAhDWXe5sr
+ iutW3p2hJQ1YQ4jkw3QMzT0yjuMyqfkmMAuthXHv+lja6MM+LCEh4Ga484HMv2meOV
+ bwFmH5nSuhUOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jEFv6tnD
+Subject: Re: [Buildroot] [RFC next 1/2] linux: fix builds for kernels < 5.6
+ and host-gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,80 +77,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e75f3962084045cf50f38f0adf8bfaa8da71dfd5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Julien, All,
 
-During a linux-backports update, it was found that kernel v3.10.108 was
-failing to compile. See:
-https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
+On 2022-08-23 00:14 +0200, Julien Olivain spake thusly:
+> During a linux-backports update, it was found that kernel v3.10.108 was
+> failing to compile. See:
+> https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
+> 
+> This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
+> "linux: fix build with host-gcc 10+", which removes all declarations of
+> "yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
+> "%locations" directive is provided in the parser. See:
+> https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
+> 
+> Kernel versions < 5.6 did not include this directive, so removing all
+> yylloc declararions in the parser also was failing for those version.
+> 
+> In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
+> This commit is included in kernel v5.6.
+> 
+> This dtc update include the dtc commit:
+> https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
+> which adds the '%locations' directive.
+> 
+> This commit fixes the issue by programmatically adding the '%locations'
+> Bison directive, if it's not found in the parser file.
+> 
+> Fixes:
+> - https://bugs.busybox.net/show_bug.cgi?id=14971
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
-"linux: fix build with host-gcc 10+", which removes all declarations of
-"yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
-"%locations" directive is provided in the parser. See:
-https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
+I eventually took some time to look into that issue, and I can't think
+of a better solution than what you proposed.
 
-Kernel versions < 5.6 did not include this directive, so removing all
-yylloc declararions in the parser also was failing for those version.
+Applied to master, thanks.
 
-In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
-This commit is included in kernel v5.6.
+Regards,
+Yann E. MORIN.
 
-This dtc update include the dtc commit:
-https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
-which adds the '%locations' directive.
+> ---
+> Tested by:
+> - Building a recent kernel:
+>   qemu_aarch64_virt_defconfig (Kernel v5.15.18)
+> - Building an old kernel:
+>   qemu_arm_vexpress_defconfig with kernel 3.10.108
+> ---
+>  linux/linux.mk | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 3d9ac37959..f3eb9c32cb 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
+>  	INSTALL_MOD_PATH=$(TARGET_DIR) \
+>  	CROSS_COMPILE="$(TARGET_CROSS)" \
+>  	WERROR=0 \
+> +	REGENERATE_PARSERS=1 \
+>  	DEPMOD=$(HOST_DIR)/sbin/depmod
+>  
+>  ifeq ($(BR2_REPRODUCIBLE),y)
+> @@ -286,6 +287,19 @@ define LINUX_DROP_YYLLOC
+>  endef
+>  LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
+>  
+> +# Kernel version < 5.6 breaks if host-gcc version is >= 10 and
+> +# 'yylloc' symbol is removed in previous hook, due to missing
+> +# '%locations' bison directive in dtc-parser.y.  See:
+> +# https://bugs.busybox.net/show_bug.cgi?id=14971
+> +define LINUX_ADD_DTC_LOCATIONS
+> +	$(Q)DTC_PARSER=$(@D)/scripts/dtc/dtc-parser.y; \
+> +	if test -e "$${DTC_PARSER}" \
+> +		&& ! grep -Eq '^%locations$$' "$${DTC_PARSER}" ; then \
+> +		$(SED) '/^%{$$/i %locations' "$${DTC_PARSER}"; \
+> +	fi
+> +endef
+> +LINUX_POST_PATCH_HOOKS += LINUX_ADD_DTC_LOCATIONS
+> +
+>  # Older linux kernels use deprecated perl constructs in timeconst.pl
+>  # that were removed for perl 5.22+ so it breaks on newer distributions
+>  # Try a dry-run patch to see if this applies, if it does go ahead
+> -- 
+> 2.37.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-This commit fixes the issue by programmatically adding the '%locations'
-Bison directive, if it's not found in the parser file.
-
-Fixes:
-- https://bugs.busybox.net/show_bug.cgi?id=14971
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- linux/linux.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6b547a68ed..7645b5f507 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	WERROR=0 \
-+	REGENERATE_PARSERS=1 \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
- 
- ifeq ($(BR2_REPRODUCIBLE),y)
-@@ -286,6 +287,19 @@ define LINUX_DROP_YYLLOC
- endef
- LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
- 
-+# Kernel version < 5.6 breaks if host-gcc version is >= 10 and
-+# 'yylloc' symbol is removed in previous hook, due to missing
-+# '%locations' bison directive in dtc-parser.y.  See:
-+# https://bugs.busybox.net/show_bug.cgi?id=14971
-+define LINUX_ADD_DTC_LOCATIONS
-+	$(Q)DTC_PARSER=$(@D)/scripts/dtc/dtc-parser.y; \
-+	if test -e "$${DTC_PARSER}" \
-+		&& ! grep -Eq '^%locations$$' "$${DTC_PARSER}" ; then \
-+		$(SED) '/^%{$$/i %locations' "$${DTC_PARSER}"; \
-+	fi
-+endef
-+LINUX_POST_PATCH_HOOKS += LINUX_ADD_DTC_LOCATIONS
-+
- # Older linux kernels use deprecated perl constructs in timeconst.pl
- # that were removed for perl 5.22+ so it breaks on newer distributions
- # Try a dry-run patch to see if this applies, if it does go ahead
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
