@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 032EBC3DA7A
-	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 11:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9466C3DA7D
+	for <buildroot@archiver.kernel.org>; Sat, 31 Dec 2022 11:05:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DF8D8140D;
-	Sat, 31 Dec 2022 11:04:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DF8D8140D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46F5A60743;
+	Sat, 31 Dec 2022 11:05:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46F5A60743
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yuZh4oSkD1TF; Sat, 31 Dec 2022 11:04:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D-DUTFHZ7-Ja; Sat, 31 Dec 2022 11:05:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 815E68143A;
-	Sat, 31 Dec 2022 11:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 815E68143A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FED360746;
+	Sat, 31 Dec 2022 11:05:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FED360746
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 339201BF280
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 11:04:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3E3DA1BF280
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 11:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C4308143A
- for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 11:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C4308143A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26A8E81465
+ for <buildroot@lists.busybox.net>; Sat, 31 Dec 2022 11:05:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26A8E81465
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qu9SuNb1xvux for <buildroot@lists.busybox.net>;
- Sat, 31 Dec 2022 11:04:24 +0000 (UTC)
+ with ESMTP id YqXai3gTbQ-G for <buildroot@lists.busybox.net>;
+ Sat, 31 Dec 2022 11:05:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AB828140D
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com
- [209.85.217.52])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9AB828140D
- for <buildroot@buildroot.org>; Sat, 31 Dec 2022 11:04:24 +0000 (UTC)
-Received: by mail-vs1-f52.google.com with SMTP id i188so23504275vsi.8
- for <buildroot@buildroot.org>; Sat, 31 Dec 2022 03:04:24 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0487A8140D
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com
+ [209.85.217.53])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0487A8140D
+ for <buildroot@buildroot.org>; Sat, 31 Dec 2022 11:04:59 +0000 (UTC)
+Received: by mail-vs1-f53.google.com with SMTP id p30so17892326vsr.1
+ for <buildroot@buildroot.org>; Sat, 31 Dec 2022 03:04:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=jo9J7M4qREZyNhKPopG3KJRM3345QxjgI3KRloLxJeM=;
- b=mR0RlroXxKMVZcLEr6XdupX9Y63pHMdYjDFHENUWl9LHf891uFDC7/4uKe6JsN5s4J
- sz/2PnIneL84QewSNxvogTADz9mCOopcuK8T6kP/oOY//vQXVFqOWBGlPFnHPAXbdxwF
- +O5KMDHVh7QOmTvyB/V09VUZ6lxNLKLFYCX94UYv+5IG21x8WMlUCjMziiDp2E9dUh51
- 3fNp+134O6FUeLUeNtKQGrVJ2yQfNWEU9hkdbXu+yNiBMdtTa8Aj5ySfQJe5ZU5DttHC
- eZvkjAG+LY7ynP01SbV5gDQpn/fp2V2R9uYD6S60ihByyA3uMqXo1FaTbsUa433DuVme
- p1sQ==
-X-Gm-Message-State: AFqh2kpaS/Q6JGlSM0c6NfXcg0fqfJic1MYUzJfQzdfBF/2mEYrWJuMZ
- 8nfnS+5HyPUZ61NRGQzG4LqJja9rRc215cHyiXLnwQ==
-X-Google-Smtp-Source: AMrXdXvVgu7n7cngNoZ7KeILbVhLcyNGXBtA2nGF8tEcrvy++fFKpq0+nzvajgxO2eBmDLNDQLyYLkQRI6WD0c3t9as=
-X-Received: by 2002:a05:6102:a34:b0:3b1:4888:8599 with SMTP id
- 20-20020a0561020a3400b003b148888599mr3620282vsb.42.1672484663174; Sat, 31 Dec
- 2022 03:04:23 -0800 (PST)
+ bh=vuX+CI1Y2z/RVB/AlQJOrH6dIUYuFVmLziRncJHvlH8=;
+ b=eInXFNQXb8XHXj/BR6jH+pNsWj6sjhLQAtekLqwAQH7+Bclu209PahB0oZp9AQXGE0
+ 8rXofYAllFHEkD4twhEUSOTkbjpttYpP0/uGn6jR2+82GWpzCXk8o73orzDwJ/KjVCVR
+ 2YPmwhO9gRK40Bv1ZDd2vbJU5vJLR4NaiAIFL/e/570UAjiOGlY33ko1eVGXE9BqJu2J
+ P3/MCLaz6lv/xSmGc0GB4Lv/GXdZS934jg/bolm5OXBlh4/pkXlngDBKlgRXgXL77C0i
+ OTSJZ1dHHveIVssC7PWyQPbL9iV2mwh3yjZsFCmR4KVq5rF6ALCVfTt9+5sc7ntKHPOU
+ 96Tw==
+X-Gm-Message-State: AFqh2krrLO6Bbu2cw1tf3IRDeRwlCgdkL3Kv4zn5HFhhzIYlSD+0EtVu
+ dOEYDchLR0gC/GSReZngdMX0OoXUPGG2VlwsK611PA==
+X-Google-Smtp-Source: AMrXdXt3jED8aNYPSbRUZlQjtyCDaVmOrHeAqQ4N++L/uhUqPj+oGAYk/dZLd4BPR8CTGG2tUUSrTDDAFQ8mt4Be3mw=
+X-Received: by 2002:a05:6102:c12:b0:3be:c2b1:29ef with SMTP id
+ x18-20020a0561020c1200b003bec2b129efmr5046737vss.15.1672484698463; Sat, 31
+ Dec 2022 03:04:58 -0800 (PST)
 MIME-Version: 1.0
 References: <20221229194729.8085-1-ju.o@free.fr>
- <20221229194729.8085-9-ju.o@free.fr>
-In-Reply-To: <20221229194729.8085-9-ju.o@free.fr>
+ <20221230095728.5941-1-ju.o@free.fr>
+ <20221230095728.5941-6-ju.o@free.fr>
+In-Reply-To: <20221230095728.5941-6-ju.o@free.fr>
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 31 Dec 2022 12:04:11 +0100
-Message-ID: <CAB0FRsudJ2F+rXSk-ROVf0JXT=SGXLG5gvvLAm-muDHy+VBdDw@mail.gmail.com>
+Date: Sat, 31 Dec 2022 12:04:43 +0100
+Message-ID: <CAB0FRssrZm_=0YRzZ_rziC+L-gfdMQK32XG9vZSRcGTyXLu2kw@mail.gmail.com>
 To: Julien Olivain <ju.o@free.fr>
-Subject: Re: [Buildroot] [PATCH 09/27] package/qoriq-rcw: update codeaurora
+Subject: Re: [Buildroot] [PATCH 27/27] configs/ls1028ardb: update codeaurora
  URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -84,18 +85,18 @@ Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Gary Bisson <bisson.gary@gmail.com>,
  Fabrice Goucem <fabrice.goucem@oss.nxp.com>,
  Stephane Viau <stephane.viau@oss.nxp.com>, buildroot@buildroot.org,
  Fabio Estevam <festevam@gmail.com>, Matt Weber <matthew.weber@collins.com>
-Content-Type: multipart/mixed; boundary="===============6975131394682698743=="
+Content-Type: multipart/mixed; boundary="===============3777972265076927399=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6975131394682698743==
-Content-Type: multipart/alternative; boundary="0000000000003dc36205f11dae13"
+--===============3777972265076927399==
+Content-Type: multipart/alternative; boundary="000000000000583c4705f11db0df"
 
---0000000000003dc36205f11dae13
+--000000000000583c4705f11db0df
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Le jeu. 29 d=C3=A9c. 2022 =C3=A0 20:50, Julien Olivain <ju.o@free.fr> a =C3=
+Le ven. 30 d=C3=A9c. 2022 =C3=A0 10:59, Julien Olivain <ju.o@free.fr> a =C3=
 =A9crit :
 
 > NXP moved all its open source code repositories from Code Aurora Forum
@@ -129,9 +130,8 @@ UB
 > download URL is updated. The archive content is expected to be the
 > same.
 >
-> Note 2: the _SITE_METHOD is also changed from "git" to the default
-> "wget", for faster downloads. This is why the package hash has
-> changed.
+> Note 2: this commit updates the Kernel, U-Boot and ATF download urls.
+> The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
 >
 > Signed-off-by: Julien Olivain <ju.o@free.fr>
 >
@@ -141,72 +141,71 @@ Reviewed-by: Francois Perrad <francois.perrad@gadz.org>
 
 
 > ---
->  package/qoriq-rcw/Config.in.host | 2 +-
->  package/qoriq-rcw/qoriq-rcw.hash | 2 +-
->  package/qoriq-rcw/qoriq-rcw.mk   | 3 +--
->  3 files changed, 3 insertions(+), 4 deletions(-)
+>  configs/ls1028ardb_defconfig | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
 >
-> diff --git a/package/qoriq-rcw/Config.in.host
-> b/package/qoriq-rcw/Config.in.host
-> index 08fc83acd0..58c16d495b 100644
-> --- a/package/qoriq-rcw/Config.in.host
-> +++ b/package/qoriq-rcw/Config.in.host
-> @@ -9,7 +9,7 @@ config BR2_PACKAGE_HOST_QORIQ_RCW
->           $(HOST_DIR)/share/rcw. Either a SDK or post scripts can
->           then use this toolset and examples.
+> diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+> index 1bc84f7b80..a46b94511a 100644
+> --- a/configs/ls1028ardb_defconfig
+> +++ b/configs/ls1028ardb_defconfig
+> @@ -17,9 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS=3D"-c
+> board/freescale/ls1028ardb/genimage.cfg"
 >
-> -
-> https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
-> +         https://github.com/nxp-qoriq/rcw
+>  # Kernel
+>  BR2_LINUX_KERNEL=3Dy
+> -BR2_LINUX_KERNEL_CUSTOM_GIT=3Dy
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL=3D"
+> https://source.codeaurora.org/external/qoriq/qoriq-components/linux"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION=3D"LSDK-21.08"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=3Dy
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=3D"$(call
+> github,nxp-qoriq,linux,LSDK-21.08)/linux-LSDK-21.08.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG=3D"imx_v8"
 >
->  if BR2_PACKAGE_HOST_QORIQ_RCW
+>  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES=3D"$(LINUX_DIR)/arch/arm64/config=
+s/lsdk.config"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy
+> @@ -37,9 +36,8 @@ BR2_TARGET_ROOTFS_EXT2_SIZE=3D"120M"
 >
-> diff --git a/package/qoriq-rcw/qoriq-rcw.hash
-> b/package/qoriq-rcw/qoriq-rcw.hash
-> index f34c771d11..2a887d57d4 100644
-> --- a/package/qoriq-rcw/qoriq-rcw.hash
-> +++ b/package/qoriq-rcw/qoriq-rcw.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  caa6802f2ba5ea92fd27e7c977749010a91c9091fcc3fe626f96d9cacfba1f0a
-> qoriq-rcw-LSDK-21.08-br1.tar.gz
-> +sha256  f199c10e50bd18d7bed0d60f5b68194240dea4f1aa164cec98332723727a4796
-> qoriq-rcw-LSDK-21.08.tar.gz
->  sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9
-> LICENSE
-> diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/
-> qoriq-rcw.mk
-> index 0501c36f46..8b1ceacfce 100644
-> --- a/package/qoriq-rcw/qoriq-rcw.mk
-> +++ b/package/qoriq-rcw/qoriq-rcw.mk
-> @@ -5,8 +5,7 @@
->
->  ########################################################################=
-########
->
->  QORIQ_RCW_VERSION =3D LSDK-21.08
-> -QORIQ_RCW_SITE =3D
-> https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
-> -QORIQ_RCW_SITE_METHOD
-> <https://source.codeaurora.org/external/qoriq/qoriq-components/rcw-QORIQ_=
-RCW_SITE_METHOD>
-> =3D git
-> +QORIQ_RCW_SITE =3D $(call github,nxp-qoriq,rcw,$(QORIQ_RCW_VERSION))
->  QORIQ_RCW_LICENSE =3D BSD-3-Clause
->  QORIQ_RCW_LICENSE_FILES =3D LICENSE
+>  # Bootloaders
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=3Dy
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL=3D"
+> https://source.codeaurora.org/external/qoriq/qoriq-components/atf"
+> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION=3D"LSDK-21.08"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=3Dy
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION=3D"$(call
+> github,nxp-qoriq,atf,LSDK-21.08)/atf-LSDK-21.08.tar.gz"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D"ls1028ardb"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=3Dy
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW=3Dy
+> @@ -48,9 +46,8 @@
+> BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES=3D"BOOT_MODE=3Dsd"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=3D"fip.bin bl2_sd.pbl"
+>  BR2_TARGET_UBOOT=3Dy
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy
+> -BR2_TARGET_UBOOT_CUSTOM_GIT=3Dy
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL=3D"
+> https://source.codeaurora.org/external/qoriq/qoriq-components/u-boot"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION=3D"LSDK-21.08"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=3Dy
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION=3D"$(call
+> github,nxp-qoriq,u-boot,LSDK-21.08)/u-boot-LSDK-21.08.tar.gz"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D"ls1028ardb_tfa"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=3Dy
 >
 > --
 > 2.39.0
 >
 >
 
---0000000000003dc36205f11dae13
+--000000000000583c4705f11db0df
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 29 d=C3=A9c. 2022 =C3=A0=
-=C2=A020:50, Julien Olivain &lt;<a href=3D"mailto:ju.o@free.fr">ju.o@free.f=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0ven. 30 d=C3=A9c. 2022 =C3=A0=
+=C2=A010:59, Julien Olivain &lt;<a href=3D"mailto:ju.o@free.fr">ju.o@free.f=
 r</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" st=
 yle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padd=
 ing-left:1ex">NXP moved all its open source code repositories from Code Aur=
@@ -247,11 +246,8 @@ Note: this commit does not change the component version. Only the<br>
 download URL is updated. The archive content is expected to be the<br>
 same.<br>
 <br>
-Note 2: the _SITE_METHOD is also changed from &quot;git&quot; to the defaul=
-t<br>
-&quot;wget&quot;, for faster downloads. This is why the package hash has<br=
->
-changed.<br>
+Note 2: this commit updates the Kernel, U-Boot and ATF download urls.<br>
+The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.<br>
 <br>
 Signed-off-by: Julien Olivain &lt;<a href=3D"mailto:ju.o@free.fr" target=3D=
 "_blank">ju.o@free.fr</a>&gt;<br></blockquote><div><br></div><div><pre clas=
@@ -261,75 +257,75 @@ z.org</a>&gt;</span></pre>=C2=A0</div><blockquote class=3D"gmail_quote" sty=
 le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddi=
 ng-left:1ex">
 ---<br>
-=C2=A0package/qoriq-rcw/Config.in.host | 2 +-<br>
-=C2=A0package/qoriq-rcw/qoriq-rcw.hash | 2 +-<br>
-=C2=A0package/qoriq-rcw/<a href=3D"http://qoriq-rcw.mk" rel=3D"noreferrer" =
-target=3D"_blank">qoriq-rcw.mk</a>=C2=A0 =C2=A0| 3 +--<br>
-=C2=A03 files changed, 3 insertions(+), 4 deletions(-)<br>
+=C2=A0configs/ls1028ardb_defconfig | 15 ++++++---------<br>
+=C2=A01 file changed, 6 insertions(+), 9 deletions(-)<br>
 <br>
-diff --git a/package/qoriq-rcw/Config.in.host b/package/qoriq-rcw/Config.in=
-.host<br>
-index 08fc83acd0..58c16d495b 100644<br>
---- a/package/qoriq-rcw/Config.in.host<br>
-+++ b/package/qoriq-rcw/Config.in.host<br>
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_HOST_QORIQ_RCW<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $(HOST_DIR)/share/rcw. Either a SDK or p=
-ost scripts can<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 then use this toolset and examples.<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://source.codeaurora.org=
-/external/qoriq/qoriq-components/rcw/" rel=3D"noreferrer" target=3D"_blank"=
->https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/</a><br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/nxp-qoriq/=
-rcw" rel=3D"noreferrer" target=3D"_blank">https://github.com/nxp-qoriq/rcw<=
-/a><br>
-<br>
-=C2=A0if BR2_PACKAGE_HOST_QORIQ_RCW<br>
-<br>
-diff --git a/package/qoriq-rcw/qoriq-rcw.hash b/package/qoriq-rcw/qoriq-rcw=
-.hash<br>
-index f34c771d11..2a887d57d4 100644<br>
---- a/package/qoriq-rcw/qoriq-rcw.hash<br>
-+++ b/package/qoriq-rcw/qoriq-rcw.hash<br>
-@@ -1,3 +1,3 @@<br>
-=C2=A0# Locally calculated<br>
--sha256=C2=A0 caa6802f2ba5ea92fd27e7c977749010a91c9091fcc3fe626f96d9cacfba1=
-f0a=C2=A0 qoriq-rcw-LSDK-21.08-br1.tar.gz<br>
-+sha256=C2=A0 f199c10e50bd18d7bed0d60f5b68194240dea4f1aa164cec98332723727a4=
-796=C2=A0 qoriq-rcw-LSDK-21.08.tar.gz<br>
-=C2=A0sha256=C2=A0 68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c=
-943d42e9=C2=A0 LICENSE<br>
-diff --git a/package/qoriq-rcw/<a href=3D"http://qoriq-rcw.mk" rel=3D"noref=
-errer" target=3D"_blank">qoriq-rcw.mk</a> b/package/qoriq-rcw/<a href=3D"ht=
-tp://qoriq-rcw.mk" rel=3D"noreferrer" target=3D"_blank">qoriq-rcw.mk</a><br=
+diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig<br=
 >
-index 0501c36f46..8b1ceacfce 100644<br>
---- a/package/qoriq-rcw/<a href=3D"http://qoriq-rcw.mk" rel=3D"noreferrer" =
-target=3D"_blank">qoriq-rcw.mk</a><br>
-+++ b/package/qoriq-rcw/<a href=3D"http://qoriq-rcw.mk" rel=3D"noreferrer" =
-target=3D"_blank">qoriq-rcw.mk</a><br>
-@@ -5,8 +5,7 @@<br>
-=C2=A0#####################################################################=
-###########<br>
+index 1bc84f7b80..a46b94511a 100644<br>
+--- a/configs/ls1028ardb_defconfig<br>
++++ b/configs/ls1028ardb_defconfig<br>
+@@ -17,9 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS=3D&quot;-c board/freescale/ls=
+1028ardb/genimage.cfg&quot;<br>
 <br>
-=C2=A0QORIQ_RCW_VERSION =3D LSDK-21.08<br>
--QORIQ_RCW_SITE =3D <a href=3D"https://source.codeaurora.org/external/qoriq=
-/qoriq-components/rcw-QORIQ_RCW_SITE_METHOD" rel=3D"noreferrer" target=3D"_=
-blank">https://source.codeaurora.org/external/qoriq/qoriq-components/rcw<br=
->
--QORIQ_RCW_SITE_METHOD</a> =3D git<br>
-+QORIQ_RCW_SITE =3D $(call github,nxp-qoriq,rcw,$(QORIQ_RCW_VERSION))<br>
-=C2=A0QORIQ_RCW_LICENSE =3D BSD-3-Clause<br>
-=C2=A0QORIQ_RCW_LICENSE_FILES =3D LICENSE<br>
+=C2=A0# Kernel<br>
+=C2=A0BR2_LINUX_KERNEL=3Dy<br>
+-BR2_LINUX_KERNEL_CUSTOM_GIT=3Dy<br>
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL=3D&quot;<a href=3D"https://source.codeaur=
+ora.org/external/qoriq/qoriq-components/linux" rel=3D"noreferrer" target=3D=
+"_blank">https://source.codeaurora.org/external/qoriq/qoriq-components/linu=
+x</a>&quot;<br>
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION=3D&quot;LSDK-21.08&quot;<br>
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=3Dy<br>
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=3D&quot;$(call github,nxp-qoriq,l=
+inux,LSDK-21.08)/linux-LSDK-21.08.tar.gz&quot;<br>
+=C2=A0BR2_LINUX_KERNEL_DEFCONFIG=3D&quot;imx_v8&quot;<br>
+=C2=A0BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES=3D&quot;$(LINUX_DIR)/arch/arm6=
+4/configs/lsdk.config&quot;<br>
+=C2=A0BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy<br>
+@@ -37,9 +36,8 @@ BR2_TARGET_ROOTFS_EXT2_SIZE=3D&quot;120M&quot;<br>
+<br>
+=C2=A0# Bootloaders<br>
+=C2=A0BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy<br>
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=3Dy<br>
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL=3D&quot;<a href=3D"https:/=
+/source.codeaurora.org/external/qoriq/qoriq-components/atf" rel=3D"noreferr=
+er" target=3D"_blank">https://source.codeaurora.org/external/qoriq/qoriq-co=
+mponents/atf</a>&quot;<br>
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION=3D&quot;LSDK-21.08&quo=
+t;<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=3Dy<br>
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION=3D&quot;$(call git=
+hub,nxp-qoriq,atf,LSDK-21.08)/atf-LSDK-21.08.tar.gz&quot;<br>
+=C2=A0BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D&quot;ls1028ardb&quot;<br>
+=C2=A0BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=3Dy<br>
+=C2=A0BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW=3Dy<br>
+@@ -48,9 +46,8 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES=3D&q=
+uot;BOOT_MODE=3Dsd&quot;<br>
+=C2=A0BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=3D&quot;fip.bin bl2_sd.pbl&quo=
+t;<br>
+=C2=A0BR2_TARGET_UBOOT=3Dy<br>
+=C2=A0BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy<br>
+-BR2_TARGET_UBOOT_CUSTOM_GIT=3Dy<br>
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL=3D&quot;<a href=3D"https://source.codeaur=
+ora.org/external/qoriq/qoriq-components/u-boot" rel=3D"noreferrer" target=
+=3D"_blank">https://source.codeaurora.org/external/qoriq/qoriq-components/u=
+-boot</a>&quot;<br>
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION=3D&quot;LSDK-21.08&quot;<br>
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=3Dy<br>
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION=3D&quot;$(call github,nxp-qoriq,u=
+-boot,LSDK-21.08)/u-boot-LSDK-21.08.tar.gz&quot;<br>
+=C2=A0BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D&quot;ls1028ardb_tfa&quot;<br>
+=C2=A0BR2_TARGET_UBOOT_NEEDS_DTC=3Dy<br>
 <br>
 -- <br>
 2.39.0<br>
 <br>
 </blockquote></div></div>
 
---0000000000003dc36205f11dae13--
+--000000000000583c4705f11db0df--
 
---===============6975131394682698743==
+--===============3777972265076927399==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -340,4 +336,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6975131394682698743==--
+--===============3777972265076927399==--
