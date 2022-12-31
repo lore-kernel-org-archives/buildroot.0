@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F4C7C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8DCDC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E286B84143;
-	Mon, 20 Feb 2023 23:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E286B84143
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7949684368;
+	Mon, 20 Feb 2023 23:49:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7949684368
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0J86VzZXhd5u; Mon, 20 Feb 2023 23:48:46 +0000 (UTC)
+	with ESMTP id WiCgcj2dZM_E; Mon, 20 Feb 2023 23:48:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDBFD84173;
-	Mon, 20 Feb 2023 23:48:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDBFD84173
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 125F81BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71AC0834F5;
+	Mon, 20 Feb 2023 23:48:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71AC0834F5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DD7D1BF94D
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E5A141785
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E5A141785
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C8A4610AD
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C8A4610AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XVgdadVAQIH7 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CPxyNpauFhUI for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 123C54177B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 123C54177B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4563361040
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4563361040
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E7208648F; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+ id 3D1378648F; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 23:40:47 +0100
+Date: Sat, 31 Dec 2022 17:23:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f46e197374bdac762a628db5ce6977a148d74859
-X-Git-Newrev: a97ab5d2faf4c0498e1c7b4eb68f98fc2eb78060
+X-Git-Oldrev: 492d471968e83126cb0f10518e2deba3ff835b08
+X-Git-Newrev: a01cb853fe978d85037d9a4dd762113c9132dc4c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205243.0E7208648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rng-tools: bump to
- version 6.16
+Message-Id: <20230220205221.3D1378648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/freescale_imx8mqevk:
+ update codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,255 +57,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a97ab5d2faf4c0498e1c7b4eb68f98fc2eb78060
+commit: https://git.buildroot.net/buildroot/commit/?id=a01cb853fe978d85037d9a4dd762113c9132dc4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Drop patches (already in version)
-- libcap is a mandatory dependency since
-  https://github.com/nhorman/rng-tools/commit/50afdce9d3fed6244a0cf772d38f2d8475312bc5
-- Add Qrypt support:
-  https://github.com/nhorman/rng-tools/commit/7ab7f540da567467055f77016590744d828fc9eb
+NXP moved all its open source code repositories from Code Aurora Forum
+to github. See for example:
+https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
 
-https://github.com/nhorman/rng-tools/releases/tag/v6.16
+Software packages are now grouped in several NXP github
+projects/organizations (nxp-imx, nxp-qoriq, ...). See:
+https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The NXP code published on Code Aurora is still present (at the time of
+this commit) but is no longer receiving updates. It is also expected
+to be shut down on 2023-03-31. The Code Aurora website
+https://source.codeaurora.org/ currently show the following message:
+"""
+Note: Qualcomm Innovation Center Inc. maintained repositories have
+migrated to git.codelinaro.org. QUIC repositories on this site will
+not receive any updates after March 31, 2022, and will be deleted on
+March 31, 2023. If your project depends on these repositories, please
+adjust your tooling configuration to use the new, up-to-date project
+location.
+"""
+
+For this reason, the NXP recipes using codeaurora.org urls need to be
+updated to the correct github.com replacement.
+
+Note: this commit does not change the component version. Only the
+download URL is updated. The archive content is expected to be the
+same.
+
+Note 2: this commit updates the Kernel, U-Boot and ATF download urls.
+The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...configure.ac-fix-build-without-sys-auxv.h.patch | 52 ----------------------
- ...erentropy-detection-to-look-for-the-setti.patch | 30 -------------
- ...erentropy-library-to-timeout-fail-on-long.patch | 39 ----------------
- package/rng-tools/Config.in                        | 16 +++++++
- package/rng-tools/rng-tools.hash                   |  2 +-
- package/rng-tools/rng-tools.mk                     | 11 ++++-
- 6 files changed, 26 insertions(+), 124 deletions(-)
+ configs/freescale_imx8mqevk_defconfig | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch b/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch
-deleted file mode 100644
-index 0c15ab6b7d..0000000000
---- a/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 6ea89861c300a732d1bbcffd085d92f5c4c9228e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 15 Aug 2022 11:57:21 +0200
--Subject: [PATCH] configure.ac: fix build without sys/auxv.h
--
--Fix the following build failure on aarch64 without sys/auxv.h (e.g. on
--uclibc) raised since version 6.13 and
--https://github.com/nhorman/rng-tools/commit/9070a04adfcd21ec3839ee8ff190e7130ccd5c9b:
--
--rngd_rndr.c:34:10: fatal error: sys/auxv.h: No such file or directory
--   34 | #include <sys/auxv.h>
--      |          ^~~~~~~~~~~~
--
--The same issue could be raised on powerpc64le since version 6.11 and
--https://github.com/nhorman/rng-tools/commit/ade348cdb90c25b44b203fd4e9c33ec4bccff323
--
--Fixes:
-- - http://autobuild.buildroot.org/results/41d5ab9e67eb0d8af8d789fc94d4366f130a7fb2
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/nhorman/rng-tools/commit/6ea89861c300a732d1bbcffd085d92f5c4c9228e]
-----
-- configure.ac | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 0af64e7..411c7b8 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -76,14 +76,17 @@ AC_PROG_GCC_TRADITIONAL
-- 
-- AX_PTHREAD
-- 
--+dnl Checks for header files.
--+AC_CHECK_HEADERS(sys/auxv.h)
--+
-- AM_CONDITIONAL([RDRAND], [test $host_cpu = x86_64 || test $host_cpu = i686])
-- AS_IF([test $host_cpu = x86_64 || test $host_cpu = i686], [AC_DEFINE([HAVE_RDRAND],1,[Enable RDRAND])],[])
-- 
---AM_CONDITIONAL([DARN], [test $host_cpu = powerpc64le])
---AS_IF([test $host_cpu = powerpc64le], [AC_DEFINE([HAVE_DARN],1,[Enable DARN])],[])
--+AM_CONDITIONAL([DARN], [test $host_cpu = powerpc64le -a "$ac_cv_header_sys_auxv_h" = "yes"])
--+AS_IF([test $host_cpu = powerpc64le -a "$ac_cv_header_sys_auxv_h" = "yes"], [AC_DEFINE([HAVE_DARN],1,[Enable DARN])],[])
-- 
---AM_CONDITIONAL([RNDR], [test $host_cpu = aarch64])
---AS_IF([test $host_cpu = aarch64], [AC_DEFINE([HAVE_RNDR],1,[Enable RNDR])],[])
--+AM_CONDITIONAL([RNDR], [test $host_cpu = aarch64 -a "$ac_cv_header_sys_auxv_h" = "yes"])
--+AS_IF([test $host_cpu = aarch64 -a "$ac_cv_header_sys_auxv_h" = "yes"], [AC_DEFINE([HAVE_RNDR],1,[Enable RNDR])],[])
-- AM_CONDITIONAL([JITTER], [false])
-- 
-- AC_ARG_ENABLE(jitterentropy,
-diff --git a/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch b/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
-deleted file mode 100644
-index 553842640d..0000000000
---- a/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From e2698477e8abf623c18ab28d33cc894ec882a706 Mon Sep 17 00:00:00 2001
--From: Neil Horman <neil.horman@privafy.com>
--Date: Fri, 18 Mar 2022 18:59:52 -0400
--Subject: [PATCH] Adjust jitterentropy detection to look for the settick
-- function
--
--Theres no great way to detect if jitterentropy has the internal timer
--feature enabled so we have to look for a function that is only defined
--when it is enabled
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[downloaded from upstream commit
-- https://github.com/nhorman/rng-tools/commit/e2698477e8abf623c18ab28d33cc894ec882a706]
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index e16e1a0..0f5a38e 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -94,7 +94,7 @@ AS_IF(
-- 		AC_SEARCH_LIBS(jent_version,jitterentropy,
-- 				[AM_CONDITIONAL([JITTER], [true])
-- 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
---				AC_CHECK_LIB(jitterentropy, jent_entropy_switch_notime_impl,
--+				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
-- 				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
-- 				[],-lpthread)],
-- 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
-diff --git a/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch b/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
-deleted file mode 100644
-index 9d8dbe2d0b..0000000000
---- a/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From c29424f10a0dcbd18ac25607fa1c81c18a960e81 Mon Sep 17 00:00:00 2001
--From: Neil Horman <nhorman@tuxdriver.com>
--Date: Mon, 16 May 2022 13:38:54 -0400
--Subject: [PATCH] Adjust jitterentropy library to timeout/fail on long delay
--
--[Bernd: removed description of unrelated part of the patch]
--
--Also while we're at it, I might have a build solution for the presence
--of internal timers.  When jitterentropy is built without internal
--timers, jent_notime_init is defined publically, but when it is built
--with timers, its declared as a static symbol, preenting resolution, so
--we can test to see if the function exists.  If it does we _don't_ have
--notime support. The logic is a bit backwards, but i think it works
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[downloaded configure.ac patch from upstream commit
-- https://github.com/nhorman/rng-tools/commit/57be6d4c90e78ea9ad036a3a6e9b09822ed4d219]
-----
-- configure.ac  |  6 ++---
-- rngd_jitter.c | 62 ++++++++++++++++++++++++++++++++++++++-------------
-- 2 files changed, 49 insertions(+), 19 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 52f2bb5..0af64e7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -101,9 +101,9 @@ AS_IF(
-- 		AC_SEARCH_LIBS(jent_version,jitterentropy,
-- 				[AM_CONDITIONAL([JITTER], [true])
-- 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
---				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
---				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
---				[],-lpthread)],
--+				AC_CHECK_LIB(jitterentropy, jent_notime_init,
--+				[],
--+				[AC_DEFINE([HAVE_JITTER_NOTIME],1, [Enable JITTER_NOTIME])],-lpthread)],
-- 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
-- 	], [AC_MSG_NOTICE([Disabling JITTER entropy source])]
-- )
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index 0dd269c818..be3f078a0b 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -2,7 +2,9 @@ config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
- 	# pthread_setaffinity_np
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_USE_MMU # libcap
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Daemon to use hardware random number generators.
-@@ -35,7 +37,21 @@ config BR2_PACKAGE_RNG_TOOLS_NISTBEACON
- 	  never be used for cryptographic purposes, or any use case in
- 	  which random data should be known only by a single entity.
- 
-+config BR2_PACKAGE_RNG_TOOLS_QRYPT
-+	bool "Qrypt Entropy Beacon support"
-+	select BR2_PACKAGE_JANSSON
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  Enable Qrypt NIST-Beacon like entropy support.
-+
-+	  Entropy gathered from Qrypt server based entropy beacons. Like
-+	  NIST, it should likely not be used directly in cryptographic
-+	  operation, as the entropy may be intercepted over a network,
-+	  but can provide copius amounts of entropy for non-crypto
-+	  purposes.
-+
- endif
- 
- comment "rng-tools needs a toolchain w/ NPTL"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-index be2ee13969..4c86791267 100644
---- a/package/rng-tools/rng-tools.hash
-+++ b/package/rng-tools/rng-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bff0c58dff90ec10bd61f672e48618e045155eabd60b32d63a9c4ffbdad05f3a  rng-tools-6.15.tar.gz
-+sha256  17666c4745fb635d91df293be188daf94b9e465d51d8503c0195fa3beb390894  rng-tools-6.16.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index f736193a23..3e565103e4 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--RNG_TOOLS_VERSION = 6.15
-+RNG_TOOLS_VERSION = 6.16
- RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
- RNG_TOOLS_CPE_ID_VENDOR = rng-tools_project
- RNG_TOOLS_SELINUX_MODULES = rngd
- 
--RNG_TOOLS_DEPENDENCIES = host-pkgconf openssl
-+RNG_TOOLS_DEPENDENCIES = host-pkgconf libcap openssl
- # From git
- RNG_TOOLS_AUTORECONF = YES
- 
-@@ -45,6 +45,13 @@ else
- RNG_TOOLS_CONF_OPTS += --without-nistbeacon
- endif
- 
-+ifeq ($(BR2_PACKAGE_RNG_TOOLS_QRYPT),y)
-+RNG_TOOLS_DEPENDENCIES += jansson libcurl
-+RNG_TOOLS_CONF_OPTS += --with-qrypt
-+else
-+RNG_TOOLS_CONF_OPTS += --without-qrypt
-+endif
-+
- define RNG_TOOLS_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
- 		$(TARGET_DIR)/etc/init.d/S21rngd
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+index 7f5dd87b5f..e3f88dc44c 100644
+--- a/configs/freescale_imx8mqevk_defconfig
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -5,9 +5,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-evk.dtb"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-evk"
+@@ -19,16 +18,14 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
