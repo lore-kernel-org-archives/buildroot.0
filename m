@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D54AC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0A31C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38975823F9;
-	Mon, 20 Feb 2023 23:21:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38975823F9
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6E3F822AE;
+	Mon, 20 Feb 2023 23:21:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6E3F822AE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cawqA00mmqUr; Mon, 20 Feb 2023 23:21:32 +0000 (UTC)
+	with ESMTP id Zx2gvTrVVRBR; Mon, 20 Feb 2023 23:21:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B21D82DD9;
-	Mon, 20 Feb 2023 23:21:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B21D82DD9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2D9D01BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id D226E834F7;
+	Mon, 20 Feb 2023 23:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D226E834F7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C2A6B1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 583E3612B3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 583E3612B3
+ by smtp2.osuosl.org (Postfix) with ESMTP id E08374171D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E08374171D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QUdehD-3B3gQ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kzdO6oXPnovq for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FCB26128D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FCB26128D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13FAE40AA5
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13FAE40AA5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E4AE8648F; Mon, 20 Feb 2023 20:52:10 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 1089B8648F; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 14 Dec 2022 20:02:45 +0100
+Date: Sun, 1 Jan 2023 09:33:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b38286d7e5919693cad2dc5b19024b1c03d29c18
-X-Git-Newrev: 111ab56d840a6c82367b4a3306494faccd7f934b
+X-Git-Oldrev: e75f3962084045cf50f38f0adf8bfaa8da71dfd5
+X-Git-Newrev: acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205210.7E4AE8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cairo: fix
- CVE-2020-35492
+Message-Id: <20230220205222.1089B8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qemu: allow building
+ only the tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,109 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=111ab56d840a6c82367b4a3306494faccd7f934b
+commit: https://git.buildroot.net/buildroot/commit/?id=acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add an upstream patch to fix CVE-2020-35492:
-A flaw was found in cairo's image-compositor.c in all versions prior to
-1.17.4. This flaw allows an attacker who can provide a crafted input
-file to cairo's image-compositor (for example, by convincing a user to
-open a file in an application using cairo, or if an application uses
-cairo on untrusted input) to cause a stack buffer overflow ->
-out-of-bounds WRITE. The highest impact from this vulnerability is to
-confidentiality, integrity, as well as system availability.
+Commit 44be514b21fd (package/qemu: refactor target emulator selection)
+mistakenly forced to always build at least user or system emulation but
+it should be possible to choose only the tools (e.g. for a guest VM
+image).
 
-Important note: this is not the exact upstream patch. Indeed, the
-upstream patch[1] contains a png file which appears as a binary diff
-inside the patch. The `patch` tool which is used by Buildroot to apply
-patches does not handle that kind of diff. Since it is just a test, it
-shouldn't impact the quality of the CVE fix and all changes related to
-the test are removed from the patch.
+Still, we don't want to configure qemu with neither system nor user
+emulation, nor the tools enabled; at least one lust be enabled.
 
-[1] https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+So, change the selection to force the tools to be enabled if neither the
+system nor the user emulations are enabled.
+
+Reinstate the the machine selection guard behind a dependency on whether
+at lesat system or user emulation is enabled.
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+[yann.morin.1998@free.fr:
+  - ensure at least one of system, user, or tools
+  - guard the machine selection
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0004-Fix-mask-usage-in-image-compositor.patch  | 56 ++++++++++++++++++++++
- package/cairo/cairo.mk                             |  2 +
- 2 files changed, 58 insertions(+)
+ package/qemu/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch b/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
-new file mode 100644
-index 0000000000..54a95593c5
---- /dev/null
-+++ b/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
-@@ -0,0 +1,56 @@
-+From 03a820b173ed1fdef6ff14b4468f5dbc02ff59be Mon Sep 17 00:00:00 2001
-+From: Heiko Lewin <heiko.lewin@worldiety.de>
-+Date: Tue, 15 Dec 2020 16:48:19 +0100
-+Subject: [PATCH] Fix mask usage in image-compositor
-+
-+[Retrieved from
-+https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be]
-+[Removed changes in test/ directory to remove binary diff so that the
-+patch can be applied by `patch` tool]
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/cairo-image-compositor.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/cairo-image-compositor.c b/src/cairo-image-compositor.c
-+index bbf4cf228..2352c478e 100644
-+--- a/src/cairo-image-compositor.c
-++++ b/src/cairo-image-compositor.c
-+@@ -2601,14 +2601,14 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-+ 		    unsigned num_spans)
-+ {
-+     cairo_image_span_renderer_t *r = abstract_renderer;
-+-    uint8_t *m;
-++    uint8_t *m, *base = (uint8_t*)pixman_image_get_data(r->mask);
-+     int x0;
-+ 
-+     if (num_spans == 0)
-+ 	return CAIRO_STATUS_SUCCESS;
-+ 
-+     x0 = spans[0].x;
-+-    m = r->_buf;
-++    m = base;
-+     do {
-+ 	int len = spans[1].x - spans[0].x;
-+ 	if (len >= r->u.composite.run_length && spans[0].coverage == 0xff) {
-+@@ -2646,7 +2646,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-+ 				      spans[0].x, y,
-+ 				      spans[1].x - spans[0].x, h);
-+ 
-+-	    m = r->_buf;
-++	    m = base;
-+ 	    x0 = spans[1].x;
-+ 	} else if (spans[0].coverage == 0x0) {
-+ 	    if (spans[0].x != x0) {
-+@@ -2675,7 +2675,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-+ #endif
-+ 	    }
-+ 
-+-	    m = r->_buf;
-++	    m = base;
-+ 	    x0 = spans[1].x;
-+ 	} else {
-+ 	    *m++ = spans[0].coverage;
-+-- 
-+2.38.1
-+
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 8bb7ca121d..e8a704c7da 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -16,6 +16,8 @@ CAIRO_INSTALL_STAGING = YES
- CAIRO_IGNORE_CVES += CVE-2018-19876
- # 0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
- CAIRO_IGNORE_CVES += CVE-2019-6462
-+# 0004-Fix-mask-usage-in-image-compositor.patch
-+CAIRO_IGNORE_CVES += CVE-2020-35492
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 0f9e353510..2bbc6a14c0 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -27,7 +27,7 @@ menuconfig BR2_PACKAGE_QEMU
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PIXMAN
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_QEMU_SYSTEM if !BR2_PACKAGE_QEMU_LINUX_USER
++	select BR2_PACKAGE_QEMU_TOOLS if !BR2_PACKAGE_QEMU_SYSTEM && !BR2_PACKAGE_QEMU_LINUX_USER
+ 	help
+ 	  QEMU is a generic and open source machine emulator and
+ 	  virtualizer.
+@@ -114,6 +114,7 @@ comment "Linux user-land emulation needs a glibc or uClibc toolchain"
  
- CAIRO_CONF_ENV = LIBS="$(CAIRO_LIBS)"
- 
+ config BR2_PACKAGE_QEMU_CHOOSE_TARGETS
+ 	bool "Select individual emulator targets"
++	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER
+ 	help
+ 	  By default, all targets (system and/or user, subject to the
+ 	  corresponding options, above) are built. If you only need a
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
