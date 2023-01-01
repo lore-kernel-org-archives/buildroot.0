@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00FD3C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 18:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE536C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 18:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 868B260AE4;
-	Sun,  1 Jan 2023 18:23:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 868B260AE4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CEF640284;
+	Sun,  1 Jan 2023 18:23:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CEF640284
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9jn1qkCxT5l4; Sun,  1 Jan 2023 18:23:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HINC1gV4ag4U; Sun,  1 Jan 2023 18:23:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D519360ACE;
-	Sun,  1 Jan 2023 18:22:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D519360ACE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1C3CC1BF41A
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:22:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EF3E4007D;
+	Sun,  1 Jan 2023 18:23:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EF3E4007D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 66D071BF41A
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0552E813FE
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:22:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0552E813FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4FF3940194
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:23:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FF3940194
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 82iqyjqldiEb for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 18:22:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C0D481359
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 18:22:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C0D481359
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3306A8705B; Sun,  1 Jan 2023 18:22:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WnZQab_S2HZc for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 18:23:16 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B0EE400D2
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6B0EE400D2
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 18:23:16 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9FB4D60007;
+ Sun,  1 Jan 2023 18:23:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pC2zH-000mEr-I8; Sun, 01 Jan 2023 19:23:11 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 19:22:42 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 72f6b419f088760005d5d23d1b65c6c14bb337eb
-X-Git-Newrev: 332dcce94841c94a977593d6c162fe602598af5f
-X-Patchwork-Hint: ignore
-Message-Id: <20230101182258.3306A8705B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/fmlib: fix build
- for ppc e500mc
+To: Julien Olivain <ju.o@free.fr>
+References: <20221227195339.86514-1-ju.o@free.fr>
+Date: Sun, 01 Jan 2023 19:23:11 +0100
+In-Reply-To: <20221227195339.86514-1-ju.o@free.fr> (Julien Olivain's message
+ of "Tue, 27 Dec 2022 20:53:39 +0100")
+Message-ID: <87sfgucdww.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/fmlib: fix build for ppc e500mc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +63,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=332dcce94841c94a977593d6c162fe602598af5f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-When BR2_powerpc_e500mc=y, fmlib package compilation fails with output:
+ > When BR2_powerpc_e500mc=y, fmlib package compilation fails with output:
+ >     make[2]: *** No rule to make target 'libfm-e500mc.a'.  Stop.
 
-    make[2]: *** No rule to make target 'libfm-e500mc.a'.  Stop.
+ > The fmlib package "make help" command shows:
 
-The fmlib package "make help" command shows:
+ >     The available make libfm-<arch>.a targets are:
+ > 	    libfm-ppce500mc.a		(P2, P3, P4)
+ >     ...
 
-    The available make libfm-<arch>.a targets are:
-	    libfm-ppce500mc.a		(P2, P3, P4)
-    ...
+ > The package Config.in incorrectly sets BR2_PACKAGE_FMLIB_ARCHTYPE
+ > to "e500mc", which is then passed as the package make target.
+ > The correct value should be "ppce500mc".
 
-The package Config.in incorrectly sets BR2_PACKAGE_FMLIB_ARCHTYPE
-to "e500mc", which is then passed as the package make target.
-The correct value should be "ppce500mc".
+ > The commit fixes this build issue.
 
-The commit fixes this build issue.
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1df9d42bdd8cc2e594d6337ee62c3f31499baf80)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fmlib/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to 2022.11.x and 2022.02.x, thanks.
 
-diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
-index df4ae440ea..7bccfd7c83 100644
---- a/package/fmlib/Config.in
-+++ b/package/fmlib/Config.in
-@@ -37,7 +37,7 @@ endchoice
- 
- config BR2_PACKAGE_FMLIB_ARCHTYPE
- 	string
--	default "e500mc" if BR2_powerpc_e500mc
-+	default "ppce500mc" if BR2_powerpc_e500mc
- 	default "ppc64e6500" if BR2_powerpc_e6500 && BR2_powerpc64
- 	default "ppc32e6500" if BR2_powerpc_e6500 && BR2_powerpc
- 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
