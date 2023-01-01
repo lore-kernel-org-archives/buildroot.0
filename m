@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C89DBC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 14:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47EC8C3DA7D
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 14:31:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E14F8142C;
-	Sun,  1 Jan 2023 14:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E14F8142C
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3BF881E1B;
+	Sun,  1 Jan 2023 14:31:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3BF881E1B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PcI6NJmvmaKX; Sun,  1 Jan 2023 14:31:37 +0000 (UTC)
+	with ESMTP id AhwYQ_9uuwfB; Sun,  1 Jan 2023 14:31:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B851B8137A;
-	Sun,  1 Jan 2023 14:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B851B8137A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 57C421BF33C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1376E81DF5;
+	Sun,  1 Jan 2023 14:31:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1376E81DF5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 712C81BF867
  for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 14:31:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4093F8137A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A5CF60BE8
  for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 14:31:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4093F8137A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A5CF60BE8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xFF9f7JDgNvA for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qnhWphfAlqb9 for <buildroot@lists.busybox.net>;
  Sun,  1 Jan 2023 14:31:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 634468135D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CE1860BCC
  for <buildroot@buildroot.org>; Sun,  1 Jan 2023 14:31:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 634468135D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CE1860BCC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A42386B94; Sun,  1 Jan 2023 14:31:34 +0000 (UTC)
+ id 5B89686B8E; Sun,  1 Jan 2023 14:31:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 14:01:25 +0100
+Date: Sun, 1 Jan 2023 15:28:12 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 62fe783ba212595477c8185906ef30567a994e80
-X-Git-Newrev: 8676c2d98210da70b0d547164ccb7507d1b451d0
+X-Git-Oldrev: 8676c2d98210da70b0d547164ccb7507d1b451d0
+X-Git-Newrev: 613b281f4d8a08cc998244ea13d6c9cb14df9910
 X-Patchwork-Hint: ignore
-Message-Id: <20230101143134.4A42386B94@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libcurl: security
- bump version to 7.87.0
+Message-Id: <20230101143134.5B89686B8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] {linux,
+ linux-headers}: 5.{4, 10, 15}.x / 6.{0, 1}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8676c2d98210da70b0d547164ccb7507d1b451d0
+commit: https://git.buildroot.net/buildroot/commit/?id=613b281f4d8a08cc998244ea13d6c9cb14df9910
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-Fixes the following security issues:
-
-- CVE-2022-43551: Another HSTS bypass via IDN
-  https://curl.se/docs/CVE-2022-43551.html
-
-- CVE-2022-43552: HTTP Proxy deny use-after-free
-  https://curl.se/docs/CVE-2022-43552.html
-
-Changelog: https://curl.se/changes.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3b91fd750180dd4689cafc72b28696c239821f9a)
+(cherry picked from commit 0245d30e569cc88875f7ed5b162029064128e89e)
+[Peter: drop 6.0.x / 6.1.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index c0e2378cac..230ec8d704 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-7.84.0.tar.xz.asc
-+# https://curl.se/download/curl-7.87.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  2d61116e5f485581f6d59865377df4463f2e788677ac43222b496d4e49fb627b  curl-7.86.0.tar.xz
-+sha256  ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff  curl-7.87.0.tar.xz
- sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index f2c679f162..64e42d99c6 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 18e7d70fda..5d30271b4b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--LIBCURL_VERSION = 7.86.0
-+LIBCURL_VERSION = 7.87.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.15.83" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.15.85" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.115-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.109-cip5-rt4" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 5222ddeafc..df83f4ee16 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  d8060dc88f862baaae66b42a2dbc12298ed667c698eb5c55617a7786ee47bf25  linux-5.16.20.tar.xz
+-sha256  40590843c04c85789105157f69efbd71a4efe87ae2568e40d1b7258c3f747ff3  linux-5.15.83.tar.xz
+-sha256  1ba9bf57b6bf36d76447d5044b80b746cb5fd61d981c811603dc763b7789cea7  linux-5.10.159.tar.xz
+-sha256  5eefc5037415f31c942d3cfa430b96c2a273246cf7e51db1e51b1d89887f0593  linux-5.4.227.tar.xz
++sha256  2c0bae29fac98e0a9408914a4551b2971365ac0000351cb255d6bd9aa0849808  linux-5.15.85.tar.xz
++sha256  7aaaf6d0bcd8a2cfa14ad75f02ca62bb2de08aad3bee3eff198de49ea5254079  linux-5.10.161.tar.xz
++sha256  80253b2cac54c256dfdfd1061800aef907f88432090f7aef74c0ddf50f6e6524  linux-5.4.228.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  35017bb40b604e0b577fc2b87e727632b46608a2ba3a4f5858b9177f58f376b3  linux-4.4.302.tar.xz
+ sha256  1f6de11306cc9f82fe1d4dd03565cdf43906fa6f77302913d942fd63b77b500c  linux-4.9.336.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3dbb43ef7f..f523cf81e4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -385,9 +385,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.9.336"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.302"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.269"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.227"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.159"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.83"	if BR2_KERNEL_HEADERS_5_15
++	default "5.4.228"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.161"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.85"	if BR2_KERNEL_HEADERS_5_15
+ 	default "5.16.20"	if BR2_KERNEL_HEADERS_5_16
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
