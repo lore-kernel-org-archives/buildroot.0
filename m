@@ -4,48 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47EC8C3DA7D
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 14:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADAC9C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 14:32:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3BF881E1B;
-	Sun,  1 Jan 2023 14:31:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3BF881E1B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55B76813D7;
+	Sun,  1 Jan 2023 14:32:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55B76813D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AhwYQ_9uuwfB; Sun,  1 Jan 2023 14:31:50 +0000 (UTC)
+	with ESMTP id ICzFNeHs8XXv; Sun,  1 Jan 2023 14:32:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1376E81DF5;
-	Sun,  1 Jan 2023 14:31:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1376E81DF5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 712C81BF867
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 14:31:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9ADEA8137A;
+	Sun,  1 Jan 2023 14:32:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ADEA8137A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E0B3A1BF33C
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 14:32:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A5CF60BE8
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 14:31:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A5CF60BE8
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4580410D4
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 14:32:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4580410D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qnhWphfAlqb9 for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 14:31:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CE1860BCC
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 14:31:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CE1860BCC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B89686B8E; Sun,  1 Jan 2023 14:31:34 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QnZNgBOl1F_a for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 14:32:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A95F0410B5
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A95F0410B5
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 14:32:35 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ i17-20020a05600c355100b003d99434b1cfso8457465wmq.1
+ for <buildroot@buildroot.org>; Sun, 01 Jan 2023 06:32:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=kHg4L2vBBxiAuUgVn01w5H5E53av6pT66+evP4K/8Os=;
+ b=JafqOx+7YmA+dMXgNfdgPnwexJ7W0BOyTGDAP4t8ahQ/lIPzcKnVeitYirksEYlft5
+ n3d9xhN64679enVJwA7ozePJOutIZ2OQ8ZhHGB1nz8/KB4Xr33/jzjvW8H0NU06MK/Ht
+ SPGHTTd2F35kMj/zlEbw/FIZZc18giLZhR/A/ocRIVL64/XItFyUFS0/P/TcJTGK1r7t
+ reNvYorudW+6WIEDZGARd/ACRqVLVmJsTsxhxKgKxTF70r7PP0jtvM9gVMj/TUE7CMO4
+ KCaZwX05sbEyJN/N38T0S5WQhm4zeJDH5fwCccehqjaU5Fr5Ry8vYEfF5pbvro4o0MPY
+ zuFA==
+X-Gm-Message-State: AFqh2koZ2ntcw4dzz1Oh9Ac9vQ9wLBIchdCQIfRjHHmkLOSsyLZXwLnk
+ i1yHs1SMwDEh4FggvtB5K3fU0L4ufpc=
+X-Google-Smtp-Source: AMrXdXsajt4avJ2PsAQ1arzyBUp5TMHWCx3UEcPOLbUoeyaXCaREeqn4xnF2qjp0fIs1GN4cx3WISA==
+X-Received: by 2002:a05:600c:1d89:b0:3d3:58cb:f6a6 with SMTP id
+ p9-20020a05600c1d8900b003d358cbf6a6mr26687403wms.41.1672583553746; 
+ Sun, 01 Jan 2023 06:32:33 -0800 (PST)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:80ae:a953:659b:4560])
+ by smtp.gmail.com with ESMTPSA id
+ x7-20020a05600c2d0700b003c6c3fb3cf6sm33841586wmf.18.2023.01.01.06.32.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 01 Jan 2023 06:32:33 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 15:28:12 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 8676c2d98210da70b0d547164ccb7507d1b451d0
-X-Git-Newrev: 613b281f4d8a08cc998244ea13d6c9cb14df9910
-X-Patchwork-Hint: ignore
-Message-Id: <20230101143134.5B89686B8E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] {linux,
- linux-headers}: 5.{4, 10, 15}.x / 6.{0, 1}.x series
+Date: Sun,  1 Jan 2023 15:32:32 +0100
+Message-Id: <20230101143232.187601-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=kHg4L2vBBxiAuUgVn01w5H5E53av6pT66+evP4K/8Os=;
+ b=ow3nJWjbkwXaVNNPNjiUzOjcaTcjW6YINmz8tmCa5U0jEmSTlOJ6SEZxoQbG++b6B4
+ fTth9Geiu5zwz3s9JcbPrO65eMLGAEJZO5v5h4/kMJDem4juRs9HNNfZTO9D+TLWsPbo
+ /ZScGkYA/PvhaQt79QSfdw4t78jSv0eTUveLXhdIWxNiuEmS4/NjvmgmHry54SSYf3Jt
+ 7Jpi4+J9OPFCWd9HssRGSSVAsCLBhy42ifYQxEWPfPk/1pcYXSroPhIAXd6x+Z+aq4z6
+ p/Rr2ogQBteAKGEb6NjVtF7TzbZvh5ClkcXlOhftzNU9u+lJ4Gxzvt7E3d8dvZi5dC/e
+ WwDQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ow3nJWjb
+Subject: [Buildroot] [PATCH] package/qemu: add option to install blobs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,72 +94,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=613b281f4d8a08cc998244ea13d6c9cb14df9910
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+Binary blobs are BIOS of some sorts for the various machines emulated
+by QEMU. There is no option to individually install blobs; it's an
+all-or-nothing option.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0245d30e569cc88875f7ed5b162029064128e89e)
-[Peter: drop 6.0.x / 6.1.x bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/qemu/Config.in | 11 +++++++++++
+ package/qemu/qemu.mk   |  6 ++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 18e7d70fda..5d30271b4b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 2bbc6a14c0..f1631059c7 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -58,6 +58,17 @@ config BR2_PACKAGE_QEMU_SYSTEM
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.15.83" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.15.85" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.115-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.109-cip5-rt4" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 5222ddeafc..df83f4ee16 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  d8060dc88f862baaae66b42a2dbc12298ed667c698eb5c55617a7786ee47bf25  linux-5.16.20.tar.xz
--sha256  40590843c04c85789105157f69efbd71a4efe87ae2568e40d1b7258c3f747ff3  linux-5.15.83.tar.xz
--sha256  1ba9bf57b6bf36d76447d5044b80b746cb5fd61d981c811603dc763b7789cea7  linux-5.10.159.tar.xz
--sha256  5eefc5037415f31c942d3cfa430b96c2a273246cf7e51db1e51b1d89887f0593  linux-5.4.227.tar.xz
-+sha256  2c0bae29fac98e0a9408914a4551b2971365ac0000351cb255d6bd9aa0849808  linux-5.15.85.tar.xz
-+sha256  7aaaf6d0bcd8a2cfa14ad75f02ca62bb2de08aad3bee3eff198de49ea5254079  linux-5.10.161.tar.xz
-+sha256  80253b2cac54c256dfdfd1061800aef907f88432090f7aef74c0ddf50f6e6524  linux-5.4.228.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  35017bb40b604e0b577fc2b87e727632b46608a2ba3a4f5858b9177f58f376b3  linux-4.4.302.tar.xz
- sha256  1f6de11306cc9f82fe1d4dd03565cdf43906fa6f77302913d942fd63b77b500c  linux-4.9.336.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3dbb43ef7f..f523cf81e4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -385,9 +385,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.9.336"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.302"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.269"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.227"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.159"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.83"	if BR2_KERNEL_HEADERS_5_15
-+	default "5.4.228"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.161"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.85"	if BR2_KERNEL_HEADERS_5_15
- 	default "5.16.20"	if BR2_KERNEL_HEADERS_5_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ if BR2_PACKAGE_QEMU_SYSTEM
+ 
++config BR2_PACKAGE_QEMU_BLOBS
++	bool "Install binary blobs"
++	default y
++	help
++	  Say 'y' here (the default) to install binary blobs (such as
++	  BIOS or firmwares for the different machines simulated by
++	  QEMU). Say 'n' to not install those blobs.
++
++	  Note: Some machines may be unbootable without those blobs.
++	  If unsure, say 'y'.
++
+ config BR2_PACKAGE_QEMU_SLIRP
+ 	bool "Enable user mode networking (SLIRP)"
+ 	select BR2_PACKAGE_SLIRP
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 5c7a8d504c..b38dde4308 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -246,6 +246,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ QEMU_OPTS += --static
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QEMU_BLOBS),y)
++QEMU_OPTS += --enable-install-blobs
++else
++QEMU_OPTS += --disable-install-blobs
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define QEMU_CONFIGURE_CMDS
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
