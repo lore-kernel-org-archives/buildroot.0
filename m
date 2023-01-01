@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E704C3DA7D
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F4FC3DA7D
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBC188149A;
-	Sun,  1 Jan 2023 23:43:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBC188149A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F6D480E36;
+	Sun,  1 Jan 2023 23:43:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F6D480E36
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0lwWY3YQp0Sy; Sun,  1 Jan 2023 23:43:21 +0000 (UTC)
+	with ESMTP id t8cTP3fCal7s; Sun,  1 Jan 2023 23:43:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 311208143A;
-	Sun,  1 Jan 2023 23:43:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 311208143A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 68BB91BF38D
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97FFC81BB4;
+	Sun,  1 Jan 2023 23:43:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97FFC81BB4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1286E1BF38D
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51CB460C2C
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51CB460C2C
+ by smtp2.osuosl.org (Postfix) with ESMTP id E00AB4018F
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E00AB4018F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SBRSPJxbeBse for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 23:39:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IhrBFEmWxxUr for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 23:39:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0EBC60BFC
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
- [IPv6:2607:f8b0:4864:20::235])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B0EBC60BFC
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:52 +0000 (UTC)
-Received: by mail-oi1-x235.google.com with SMTP id r130so23852626oih.2
- for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42FF2404C0
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com
+ [IPv6:2607:f8b0:4864:20::234])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 42FF2404C0
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:55 +0000 (UTC)
+Received: by mail-oi1-x234.google.com with SMTP id v70so23832237oie.3
+ for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=aM3LALrpcBI7BpnV57uxmc/YeUHqG7HEEKBGNHRnwNM=;
- b=kCosOCLxgrDjhZE9htBg3/tP/0rHIIpd/m+yPpBIgRwuyekwt3WiTioyheQ5+6jImk
- wMNpkIE145ESzZJ1K3e8bDPeHQyyOWWBKgUlZjvutv1rbR8ShdHGderzlGz6kK0SSyCT
- lJOgv1ZZ8e8GGwLuWYjziU3zIFaWvssLhecctC11t69LW7/eQxXh/KA29jrq9F/88MlK
- O1JGYweMLfF2JIGPcxvdECMLkRB3qwV0HgRGaUgfE96RsRUJGZHy7zAMeOy04fyyjOIa
- fd279SmHWz+RAikQnbaNi1dCABKnvOAgsE1MCFcpJMSFo15Klj7oELx1/O1Ow46evvGV
- rzwA==
-X-Gm-Message-State: AFqh2kqX8zU43xP1e4t2jWoM/2q34C18XaRiBxF26LEqHqO6mrJZWMLx
- G2tRFFE3mNLNTPMzBSgrSz9oL0x8Q7g=
-X-Google-Smtp-Source: AMrXdXvHPVAvVqeMJt35ZrhTrB5m7tUNgiCOGWF0AJhk3yC2VDvmFZJ1ypm7RTt4jt9VKs1dUH4oZw==
-X-Received: by 2002:a05:6808:607:b0:360:e96a:8748 with SMTP id
- y7-20020a056808060700b00360e96a8748mr16029806oih.15.1672616391807; 
- Sun, 01 Jan 2023 15:39:51 -0800 (PST)
+ bh=k50tBaLa2s4eC2Bte1pbpoVsJ6Jak5/vYvQee6oZbhQ=;
+ b=dW1xX42aNj7sfWfNzRkP6C20Hw6mPdlXiJkfXzdI1Xa43CFCxY5gW1sfCaowmoZ0Pd
+ X86ZJbPkJ8+kspoyrZNMNwi0Om5x+hCuNxVDLvUUcJFydyCnTWkC0tgJmLqoZzxXbmWN
+ 7xec7VvXn87nwKGqijVPQ3Y/VPA4DWmBOpS70CbhXBdrU/5dO0n+Lt+ZAcyAFqYdW15e
+ zPQko3QXZPFcF5q5G1/xxU/hW+XbH+Qo02CupVmbj6RKxgnIFdL2fZuw2+bdJD71jCSV
+ 9rgghZBq8HoUEBaraB1sIKMgrx1aRd2WclRZaMz16XEYJj/fZ3EtdSHlJpfqsv0Wz/IQ
+ P/KQ==
+X-Gm-Message-State: AFqh2kq8XXbm5qj0N9nAEOwJ7X8ZXChVYL6L3YsFDNiWlTNANXtbyuw6
+ shIKftvUZlmblF2UAIp2DzeSwgERvqA=
+X-Google-Smtp-Source: AMrXdXvA88IjucrOQFCBQFS8NrDUmzHpSDvPmUiaJZJGeaBkjEGp57pXBEFZr0f+Uk+UIJo3qjd3Pg==
+X-Received: by 2002:a05:6808:1787:b0:35e:b4c3:3708 with SMTP id
+ bg7-20020a056808178700b0035eb4c33708mr23705647oib.5.1672616394949; 
+ Sun, 01 Jan 2023 15:39:54 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:6ae4:c2b1:7ea6:a195])
  by smtp.gmail.com with ESMTPSA id
- o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.49
+ o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jan 2023 15:39:50 -0800 (PST)
+ Sun, 01 Jan 2023 15:39:53 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Jan 2023 20:36:43 -0300
-Message-Id: <20230101233653.487175-20-ricardo.martincoski@gmail.com>
+Date: Sun,  1 Jan 2023 20:36:44 -0300
+Message-Id: <20230101233653.487175-21-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
@@ -74,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=aM3LALrpcBI7BpnV57uxmc/YeUHqG7HEEKBGNHRnwNM=;
- b=ltakjd/6gM8b8R+ZYszsKQflvOEhB3c50R29Y1RqOu+X+QQZB4g2uZBDEeZlsoOfJl
- 2xSPaSyAG6aTMqykUXdqmrVrSMIWqI3h6T6idhGWgvuistrSknP4fWqWsfAKSi0Jadqk
- 6lHJOdrrFtdOv9S7AQTp+e5HPL92Dyipds8z5Y2wXOSKN/Eq+0Xi0SoUOpRLN1ZVT3ai
- ewiPsXK7q8wjrmhbobcM6G31giOZV2HTuciCndIVcrxLnJyUFfrvd3r8TRXu/3qPA7Dw
- hUQadwIHKlLvaISKsRje8eCpYSBsfvIJFxz3H0VZdIbDSazk5iksPeN+cvAhEfbAIZLM
- 8NNA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=k50tBaLa2s4eC2Bte1pbpoVsJ6Jak5/vYvQee6oZbhQ=;
+ b=VXFKmqGX5iJp0rTLdMICipuWyyF88RdloBnTU/bys1hkIqfgRC6xTEpXd+GY4fGG5F
+ lb4nPyynay91lfwx1bJ/3sQYshM2swzTjHcVu/8Aj/0dAwz5MVXktrZG3niv+/8WElgU
+ VbJb1AymowlOPMdUhVtCd3qDwfK0+B06BdHm6wnErqrHhRy5nQQHij9DbJmx6EpON6bp
+ tjSihh/UoD6S5o5m9ANJVCH4I3RLmYGm5pYWSXiFTbTJekrL9AXJ0nSUNLIMtlPHOK03
+ 65/fQCNp0GyD0yxHZ70R8b4L/VItxdROIv9AUhwyED3J6VItNOXm6CLG3dVlc9Ta1ntC
+ RXug==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ltakjd/6
-Subject: [Buildroot] [PATCH 19/29] package/lrzsz: drop bogus
- LRZSZ_BUILD_HOOKS
+ header.a=rsa-sha256 header.s=20210112 header.b=VXFKmqGX
+Subject: [Buildroot] [PATCH 20/29] package/policycoreutils: drop bogus
+ INSTALL_TARGET_LINUX_PAM_CONFS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,38 +97,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit "4f3f291a3b lrzsz: convert to autotools infrastructure" converted
-the package to use autotools infra but added a define that is never
-called.
+Commit "cb328f77f8 policycoreutils: new package" added a define that is
+never called: POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS.
 
-Drop the bogus define.
+The build system from the package already install these files to target.
+So just drop the bogus define.
 
+Cc: Clayton Shotwell <clayton.shotwell@collins.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- package/lrzsz/lrzsz.mk | 4 ----
+Using this defconfig:
+ BR2_x86_i686=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_PACKAGE_LINUX_PAM=y
+ BR2_PACKAGE_POLICYCOREUTILS=y
+and performing a build before and after this patch, the content in
+target/etc/pam.d/ is exactly the same.
+
+$ md5sum output.*/target/etc/pam.d/* |sort
+8448253cd52778260856591208cbf09a  output.after/target/etc/pam.d/run_init
+8448253cd52778260856591208cbf09a  output.before/target/etc/pam.d/run_init
+912cb497b06401def2991346787cfff3  output.after/target/etc/pam.d/other
+912cb497b06401def2991346787cfff3  output.before/target/etc/pam.d/other
+eac337ec241afe0ef2f4e5039be26cea  output.after/target/etc/pam.d/login
+eac337ec241afe0ef2f4e5039be26cea  output.before/target/etc/pam.d/login
+f4a2547443ac34fb30b7d06719328570  output.after/target/etc/pam.d/newrole
+f4a2547443ac34fb30b7d06719328570  output.before/target/etc/pam.d/newrole
+---
+ package/policycoreutils/policycoreutils.mk | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
-index 45c88619e0..3897975d73 100644
---- a/package/lrzsz/lrzsz.mk
-+++ b/package/lrzsz/lrzsz.mk
-@@ -18,10 +18,6 @@ define LRZSZ_POST_CONFIGURE_HOOKS
- 	$(SED) "s~\(#define ENABLE_SYSLOG.*\)~/* \1 */~;" $(@D)/config.h
- endef
- 
--define LRZSZ_BUILD_HOOKS
--	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" prefix="$(TARGET_DIR)" -C $(@D)
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 60575ac644..8505dbca3f 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -16,10 +16,6 @@ POLICYCOREUTILS_MAKE_OPTS = LDLIBS=$(TARGET_NLS_LIBS)
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ POLICYCOREUTILS_DEPENDENCIES += linux-pam
+ POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
+-define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
+-	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
+-	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
 -endef
--
- define LRZSZ_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/src/lrz $(TARGET_DIR)/usr/bin/rz
- 	$(INSTALL) -m 0755 -D $(@D)/src/lsz $(TARGET_DIR)/usr/bin/sz
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
 -- 
 2.34.1
 
