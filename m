@@ -1,50 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A65D2C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 08:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82327C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 11:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BC938142A;
-	Sun,  1 Jan 2023 08:58:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BC938142A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PdIutwYxuC-w; Sun,  1 Jan 2023 08:58:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 770F081426;
-	Sun,  1 Jan 2023 08:58:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 770F081426
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7886B1BF282
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 08:58:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6116E60B26
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 08:58:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6116E60B26
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE53660E39;
+	Sun,  1 Jan 2023 11:25:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE53660E39
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IrfPS7GDa6We for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 08:58:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A27B60BCA
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 08:58:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A27B60BCA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4564486A17; Sun,  1 Jan 2023 08:58:15 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NJmU5u7ilJNo; Sun,  1 Jan 2023 11:25:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C9C160E37;
+	Sun,  1 Jan 2023 11:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C9C160E37
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C97AB1BF392
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 11:25:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E42E40895
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 11:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E42E40895
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XpI8aGRSLs5x for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 11:25:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3400F4087C
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3400F4087C
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 11:25:47 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.166.10.36])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id AC08313F85F;
+ Sun,  1 Jan 2023 12:25:41 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 09:33:22 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e75f3962084045cf50f38f0adf8bfaa8da71dfd5
-X-Git-Newrev: acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
-X-Patchwork-Hint: ignore
-Message-Id: <20230101085815.4564486A17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qemu: allow building only the tools
+Date: Sun,  1 Jan 2023 12:25:27 +0100
+Message-Id: <20230101112528.11170-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1672572344;
+ bh=BsSiiRjP0scTd5ePKECH7JOTrI1LJ/QDH1uIBhAe6bw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=QcVu3SJY6mmV6yMwmduCGcai1VS5fg2x5+04mciYgK4V/9OfMzIOvz6Yg09eCOVEz
+ vsxRcXa8rWQOQfbf5d/Nk9+wZi9/spJDjNY6wGAscXCTQ++hGWUK3BkYOVeFArA2rB
+ 3geCJUfnbo+bgd7TbHby1PO1rXVClYWF9DbTYBq8PO3yrhn4JMAZphap118pXovAVQ
+ 7f9gZjzUXvKNoXJCoPiY5c3HmlxgYAHr/Jy9oEPPkKvQNDkv0Thd2d5D4a9XxF74+h
+ k/XSVC7PjPOBjj3uyZ6s2e8oNfHUsxci5n89cK6ju0dWHozBxHQhgEpMGsRMBnwPMm
+ pJSiyHYfnw2LQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QcVu3SJY
+Subject: [Buildroot] [PATCH 1/2] package/fmlib: bump to version LSDK-21.08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,60 +70,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>, Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+License file was updated in commit:
+https://github.com/nxp-qoriq/fmlib/commit/22126510006f366981c078a340e012a1e0415429
 
-Commit 44be514b21fd (package/qemu: refactor target emulator selection)
-mistakenly forced to always build at least user or system emulation but
-it should be possible to choose only the tools (e.g. for a guest VM
-image).
+Notable changes in the license update are:
+- GPL-2.0+ option was removed,
+- Copyright years updated,
+- NXP was added,
+- License text was reflowed.
 
-Still, we don't want to configure qemu with neither system nor user
-emulation, nor the tools enabled; at least one lust be enabled.
-
-So, change the selection to force the tools to be enabled if neither the
-system nor the user emulations are enabled.
-
-Reinstate the the machine selection guard behind a dependency on whether
-at lesat system or user emulation is enabled.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-[yann.morin.1998@free.fr:
-  - ensure at least one of system, user, or tools
-  - guard the machine selection
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/qemu/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/fmlib/fmlib.hash | 4 ++--
+ package/fmlib/fmlib.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 0f9e353510..2bbc6a14c0 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -27,7 +27,7 @@ menuconfig BR2_PACKAGE_QEMU
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_QEMU_SYSTEM if !BR2_PACKAGE_QEMU_LINUX_USER
-+	select BR2_PACKAGE_QEMU_TOOLS if !BR2_PACKAGE_QEMU_SYSTEM && !BR2_PACKAGE_QEMU_LINUX_USER
- 	help
- 	  QEMU is a generic and open source machine emulator and
- 	  virtualizer.
-@@ -114,6 +114,7 @@ comment "Linux user-land emulation needs a glibc or uClibc toolchain"
+diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
+index d4dcf3be5c..f81b017869 100644
+--- a/package/fmlib/fmlib.hash
++++ b/package/fmlib/fmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6e9e6bdb42dc2a6a76cfd756a2d4cdfcc2be90925c1f439e8a11eafa871896a6  fmlib-43fa98fdbf0c697167e415c3f060896d5b482791.tar.gz
+-sha256  837559e20d83910a005e7883b876cc5c42805fe4abcf7e5c5b3c8d036b7f61c8  COPYING
++sha256  64dc76c0adc3aa58bce6aba470dee7dee001d4964ccb1958e899a59d9917b21d  fmlib-LSDK-21.08.tar.gz
++sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  COPYING
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index 9509f3de56..3d185979d5 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_QEMU_CHOOSE_TARGETS
- 	bool "Select individual emulator targets"
-+	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER
- 	help
- 	  By default, all targets (system and/or user, subject to the
- 	  corresponding options, above) are built. If you only need a
+-FMLIB_VERSION = 43fa98fdbf0c697167e415c3f060896d5b482791
++FMLIB_VERSION = LSDK-21.08
+ FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
+-FMLIB_LICENSE = BSD-3-Clause, GPL-2.0+
++FMLIB_LICENSE = BSD-3-Clause
+ FMLIB_LICENSE_FILES = COPYING
+ FMLIB_DEPENDENCIES = linux
+ FMLIB_INSTALL_STAGING = YES
+-- 
+2.39.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
