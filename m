@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C020C3DA7D
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:39:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE3B9C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:39:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 944DB60C11;
-	Sun,  1 Jan 2023 23:39:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 944DB60C11
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58C0B410D0;
+	Sun,  1 Jan 2023 23:39:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58C0B410D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m6L9kIolGnbU; Sun,  1 Jan 2023 23:39:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J3OMwoIOoMTt; Sun,  1 Jan 2023 23:39:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE4E060E82;
-	Sun,  1 Jan 2023 23:39:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE4E060E82
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 532611BF38D
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48BF6410BE;
+	Sun,  1 Jan 2023 23:39:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48BF6410BE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E8DD11BF38D
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BD5160BFC
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BD5160BFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2264402F5
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2264402F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id og3Zo5Ytvfqw for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 23:39:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0dN2LT5fz19n for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 23:39:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 667F760B2C
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com
- [IPv6:2607:f8b0:4864:20::22a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 667F760B2C
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:07 +0000 (UTC)
-Received: by mail-oi1-x22a.google.com with SMTP id s187so23796798oie.10
- for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:07 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F24824018F
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com
+ [IPv6:2607:f8b0:4864:20::233])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F24824018F
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:09 +0000 (UTC)
+Received: by mail-oi1-x233.google.com with SMTP id i127so23834895oif.8
+ for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ZDJhF+g2N9s4NBRuYNro0l9qItiShDUFaQPS6skD0Lo=;
- b=62EZbob72mUmdzE1Dv6RNVd8fHgi/GI4WGbEmJfxg97bYjvMEFG0TAfaTQ26QYWNq0
- 2UkMbXGAJa0N5xjyoa/AaQSccMLEeYeVLgjOOl3pKc6egVfvC9iVOyE6reO8e2j9BNBM
- 4aVOEwNMTbGhgQbjTgs1rpF5EMrqPYPshk4LNA0DgVamL//P6DhM6fQSHK1COjV8y5FF
- XGCQs26yI8fei7vAiRJH5ko/SEhR8mZmCGjEenskwwyPrMOv+PD+iRDwTuxdd2FX3e0i
- sBOQP4xBN5Aupe/qtP5Pgrei5ET+mw/P7o89iVXWlAlCSGVBLUnAi5yU2jAKtyq4nSvW
- 8Atw==
-X-Gm-Message-State: AFqh2krmXf8FTTVTogcYgFnovqGcBR18KQo/Njuc1oXzbt0sRLjFVsTv
- QF0XyRDy4WKwrjwMKW0GUpXtLKEdl44=
-X-Google-Smtp-Source: AMrXdXugED7WOzK8+WcgPCFh1mDX0S2foR9MZ9LxhfFHqQWNA3I4Hgg4c/THiPvBqaE0PFGNLkIw+A==
-X-Received: by 2002:a05:6808:2982:b0:360:deee:d141 with SMTP id
- ex2-20020a056808298200b00360deeed141mr17043474oib.14.1672616346298; 
- Sun, 01 Jan 2023 15:39:06 -0800 (PST)
+ bh=eYNA2xjXfvDkzPizHpGzKH5l8L/GsRV/sI4cKcOubYk=;
+ b=w4nrhX3767vIjKEBDo+bsqsc0yQaPYAU0Tx/+4m9KpGKssh7PxRYxF1HcJ1DPAJWWo
+ 07rc7GD9PKgo9F1yQXKQ7c9fQLIqbttr436w6U7SST9S8VaiCIy/58XslXL8kLtxP49n
+ r7OZ6oJMia8+vaQT87pennlfnTlGOooVe1N5UwUeB3hKqecY90nN3GmTnPIunnNMzlDY
+ Ea6hbkBKlvSraPA6eZJCFqSBoMb9jTgqmlnGhGzA1BIEl9zYM4s+2pGLTyw9AHJjlD68
+ rWjoVmk/CHfr8c5fDFc9eP32W2oPktB1yg4i0BBEWEZyMY7khNXX2Dd4pjbDntNFfKqq
+ g95g==
+X-Gm-Message-State: AFqh2koNPIy/zX2n/283vNSpnB1Z5TECxDCP+oQ0eu/qAAryTEvacHGY
+ wxBdwVELJRLenrE5EK4Ntd50cidAf9c=
+X-Google-Smtp-Source: AMrXdXtW1jLp0jkbxJuw6bxhXCHdC/8UWM6VtykimFTatf2I5M21OQ3n0F7dsIQMDGwQjCqqA/clFA==
+X-Received: by 2002:a54:4493:0:b0:360:fc47:d7b9 with SMTP id
+ v19-20020a544493000000b00360fc47d7b9mr17473992oiv.37.1672616349028; 
+ Sun, 01 Jan 2023 15:39:09 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:6ae4:c2b1:7ea6:a195])
  by smtp.gmail.com with ESMTPSA id
- o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.04
+ o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jan 2023 15:39:05 -0800 (PST)
+ Sun, 01 Jan 2023 15:39:07 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Jan 2023 20:36:26 -0300
-Message-Id: <20230101233653.487175-3-ricardo.martincoski@gmail.com>
+Date: Sun,  1 Jan 2023 20:36:27 -0300
+Message-Id: <20230101233653.487175-4-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
@@ -74,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ZDJhF+g2N9s4NBRuYNro0l9qItiShDUFaQPS6skD0Lo=;
- b=LAuFg0kGgxKY3YD5qlXucFFDHzLOMTeknF+UoUaiYtuFNO1VJhAPs0vOr0WoTcwFqL
- J6EUpuA1EgnsmhV1N81+5aZG+naR5Y7uFCcDejGVbp5blWJ5gnGqks20X06CARUK1lOt
- 14ywaTF0il6hXyc54tb7+qV9kUa6R/plbfl6ed1GkKi/GeAfjmge8RqFT6g+t1/QdL6V
- PcnoyL4eK/hN0+66BTp+Tejejsb+D1/zhOLyIxw7pxizDtdio/6afRsyzsxglHcyFKWS
- 62fdJf80OFGKqXTpcAxIJC5HKLIekhIv3LNY56kM5SBmvVIK+/29mf9gJRKLVGHywSOx
- r8Pw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=eYNA2xjXfvDkzPizHpGzKH5l8L/GsRV/sI4cKcOubYk=;
+ b=V9Ob23Q+WJlj0iynB50wjjdqsHGF3I/TGSzRSl4FaEexIvF9iI9KfCdb06Jel0T6Ix
+ VlYgHGqW9Y4Wm+te9byUX4Add9+7Bt394c4NUOxlmT/sQyHq13LfxfMxD9xqnT8XFTVi
+ 5+KRwOGpUHO7/4W0F23GsAk3FUzEImdDofI+xC2BZ0YmUKymR5Pbya9pIjnrBNmzxOns
+ z5IYSTXZgYE9MyZ+VWBUf8ELy26cPIFZU4VNGBWLIQRn1OfvJw8yWhuUkCsm6lzXPYjX
+ tpJSkaYzA4n5mPJsSe3rHwDoobKeR7TgsQEn3Dg2FW3Ixq3U0JETstyQvNfJllBvVcHc
+ T2tw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=LAuFg0kG
-Subject: [Buildroot] [PATCH 02/29] package/libmng: fix optional dependency
- to lcms2
+ header.a=rsa-sha256 header.s=20210112 header.b=V9Ob23Q+
+Subject: [Buildroot] [PATCH 03/29] package/qcom-db410c-firmware: fix typo
+ for <pkg>_LICENSE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,57 +97,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Mike Frampton <mikeframpo@gmail.com>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-"0ce9b533e3 libmng: new package" introduced a typo that makes the
-optional dependency to lcms2 ineffective.
-
-Fix the typo LIBMNG_DEPDENDENCIES -> LIBMNG_DEPENDENCIES.
-
+Cc: Mike Frampton <mikeframpo@gmail.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-Tested using this minimal config:
- BR2_x86_i686=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_PACKAGE_LCMS2=y
- BR2_PACKAGE_LIBMNG=y
+$ make defconfig
+$ make qcom-db410c-firmware-legal-info
+$ cat output/legal-info/manifest.csv
 
 before this patch:
-$ make libmng-show-depends
-host-skeleton jpeg skeleton toolchain zlib
+"qcom-db410c-firmware","1034.2.1","unknown","LICENSE",
+"linux-board-support-package-r1034.2.1.zip",
+"https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware","glibc
+[GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)]
+linux-headers [GPL-2.0] skeleton-init-common [unknown]
+skeleton-init-sysv [unknown]"
 
 after this patch:
-$ make libmng-show-depends
-host-skeleton jpeg lcms2 skeleton toolchain zlib
-
-build test:
-44 builds, 0 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/731769914
-
-test-pkg config:
-BR2_PACKAGE_LCMS2=y
-BR2_PACKAGE_LIBMNG=y
+"qcom-db410c-firmware","1034.2.1","Qualcomm firmware license","LICENSE",
+"linux-board-support-package-r1034.2.1.zip",
+"https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware","glibc
+[GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)]
+linux-headers [GPL-2.0] skeleton-init-common [unknown]
+skeleton-init-sysv [unknown]"
 ---
- package/libmng/libmng.mk | 2 +-
+ package/qcom-db410c-firmware/qcom-db410c-firmware.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmng/libmng.mk b/package/libmng/libmng.mk
-index 090fe18380..8ffd74c05b 100644
---- a/package/libmng/libmng.mk
-+++ b/package/libmng/libmng.mk
-@@ -14,7 +14,7 @@ LIBMNG_LICENSE = libmng license
- LIBMNG_LICENSE_FILES = LICENSE
+diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
+index 9ef32cc9d4..cf4b59b72e 100644
+--- a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
++++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
+@@ -8,7 +8,7 @@ QCOM_DB410C_FIRMWARE_VERSION = 1034.2.1
+ QCOM_DB410C_FIRMWARE_BASE = linux-board-support-package-r$(QCOM_DB410C_FIRMWARE_VERSION)
+ QCOM_DB410C_FIRMWARE_SOURCE = $(QCOM_DB410C_FIRMWARE_BASE).zip
+ QCOM_DB410C_FIRMWARE_SITE = https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware
+-QCOM_DB410C_FIRMWARE_LICENCE = Qualcomm firmware license
++QCOM_DB410C_FIRMWARE_LICENSE = Qualcomm firmware license
+ QCOM_DB410C_FIRMWARE_LICENSE_FILES = LICENSE
+ QCOM_DB410C_FIRMWARE_DEPENDENCIES = host-mtools
  
- ifeq ($(BR2_PACKAGE_LCMS2),y)
--LIBMNG_DEPDENDENCIES += lcms2
-+LIBMNG_DEPENDENCIES += lcms2
- else
- LIBMNG_CONF_OPTS += --without-lcms2
- endif
 -- 
 2.34.1
 
