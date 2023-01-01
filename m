@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76E3DC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 18:19:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36917C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 18:20:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D05360AD5;
-	Sun,  1 Jan 2023 18:19:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D05360AD5
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE44860BF2;
+	Sun,  1 Jan 2023 18:20:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE44860BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L2oxaZ0ZYOeG; Sun,  1 Jan 2023 18:19:47 +0000 (UTC)
+	with ESMTP id vHOtX4Oo97kv; Sun,  1 Jan 2023 18:20:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 678706080A;
-	Sun,  1 Jan 2023 18:19:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 678706080A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E3FA1BF867
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E2AD60B06;
+	Sun,  1 Jan 2023 18:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E2AD60B06
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C66F1BF41A
  for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE61E400D2
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE61E400D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77360404AA
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:19:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77360404AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5DM_iOyGLZJd for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3zN5ruqrpCfK for <buildroot@lists.busybox.net>;
  Sun,  1 Jan 2023 18:19:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A4CB400CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D3E240203
  for <buildroot@buildroot.org>; Sun,  1 Jan 2023 18:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A4CB400CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D3E240203
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 014A887012; Sun,  1 Jan 2023 18:19:31 +0000 (UTC)
+ id 397F587012; Sun,  1 Jan 2023 18:19:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 18:55:24 +0100
+Date: Sun, 1 Jan 2023 19:17:58 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 13dd036002bbc4cdbaa86d1b2672333de23a4897
-X-Git-Newrev: ddd47436d6d276d0ae12f1eba363b22124cb4847
+X-Git-Oldrev: e91df35f84a57d76859f0e2579e32bec618a2622
+X-Git-Newrev: 4d41c163d57864e8f86b42a409cfed6354c4275f
 X-Patchwork-Hint: ignore
-Message-Id: <20230101181932.014A887012@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/qemu: fix
- indentation for host-qemu sub-options in menuconfig
+Message-Id: <20230101181932.397F587012@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/libdeflate: fix
+ build with arm soft float
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddd47436d6d276d0ae12f1eba363b22124cb4847
+commit: https://git.buildroot.net/buildroot/commit/?id=4d41c163d57864e8f86b42a409cfed6354c4275f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Commit 255acdc14365 (package/qemu: needs gcc >= 8) added a comment that
-explains that host-qemu would not be available for gcc < 4.8.
+Fix the following build failure with arm soft float raised since bump to
+version 1.15 in commit c31087182fa545784d9a0a01f0b32715d78c3955 and
+https://github.com/ebiggers/libdeflate/commit/84c76f6f2cf5e5ac4deca0b1c25faebb42469f58:
 
-However, it interspersed that comment between the main symbol and the
-conditional block with the sub-options. This breaks the indentation of
-the sub-options in menuconfig, where they appear at the same level as
-the main symbol, rather than indented below it.
+In file included from /home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h:256,
+                 from /home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/crc32.c:227:
+/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/11.3.0/include/arm_neon.h:31:2: error: #error "NEON intrinsics not available with the soft-float ABI.  Please use -mfloat-abi=softfp or -mfloat-abi=hard"
+   31 | #error "NEON intrinsics not available with the soft-float ABI.  Please use -mfloat-abi=softfp or -mfloat-abi=hard"
+      |  ^~~~~
+In file included from /home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/crc32.c:227:
+/home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h: In function 'clmul_u32':
+/home/autobuild/autobuild/instance-3/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h:262:9: error: unknown type name 'uint64x2_t'; did you mean 'uint16x2_t'?
+  262 |         uint64x2_t res = vreinterpretq_u64_p128(
+      |         ^~~~~~~~~~
+      |         uint16x2_t
 
-Fix that by moving the comment before the main symbol.
+Fixes:
+ - http://autobuild.buildroot.org/results/1445dcbf676893133f311a92ac21b29237fb75df
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 037226b33b42fb22234694fe1fcb0b6db624161f)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c181878a84e9531f25d8dd1f5cb10b86f8bf9e51)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ ...d-error-due-to-PMULL-enabled-without-NEON.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index f9cdb9b703..8dd0c7d11b 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -34,6 +34,11 @@ config BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 
-+comment "host-qemu needs a host gcc >= 8"
-+	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || \
-+		BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORT
-+	depends on !BR2_HOST_GCC_AT_LEAST_8
+diff --git a/package/libdeflate/0002-lib-arm-cpu_features-fix-build-error-due-to-PMULL-enabled-without-NEON.patch b/package/libdeflate/0002-lib-arm-cpu_features-fix-build-error-due-to-PMULL-enabled-without-NEON.patch
+new file mode 100644
+index 0000000000..b13cbc48af
+--- /dev/null
++++ b/package/libdeflate/0002-lib-arm-cpu_features-fix-build-error-due-to-PMULL-enabled-without-NEON.patch
+@@ -0,0 +1,35 @@
++From 079a6dd171583c1953017b703ec63c5367a284b4 Mon Sep 17 00:00:00 2001
++From: Eric Biggers <ebiggers3@gmail.com>
++Date: Mon, 26 Dec 2022 11:32:47 -0800
++Subject: [PATCH] lib/arm/cpu_features: fix build error due to PMULL enabled
++ without NEON
 +
- config BR2_PACKAGE_HOST_QEMU
- 	bool "host qemu"
- 	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
-@@ -50,11 +55,6 @@ config BR2_PACKAGE_HOST_QEMU
- 
- 	  http://www.qemu.org
- 
--comment "host-qemu needs a host gcc >= 8"
--	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || \
--		BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORT
--	depends on !BR2_HOST_GCC_AT_LEAST_8
--
- if BR2_PACKAGE_HOST_QEMU
- 
- comment "Emulators selection"
++When building for soft float arm32, HAVE_PMULL_INTRIN is being set when
++it shouldn't be, causing a build error:
++
++    #error "NEON intrinsics not available with the soft-float ABI..."
++
++Fix this by making HAVE_PMULL_INTRIN depend on HAVE_NEON_INTRIN, as used
++to be the case, in order to get the 'defined(__ARM_FP)' dependency,
++
++Fixes https://github.com/ebiggers/libdeflate/issues/282
++Fixes: 84c76f6f2cf5 ("lib/arm: make crc32 code work with MSVC")
++[Retrieved from:
++https://github.com/ebiggers/libdeflate/commit/079a6dd171583c1953017b703ec63c5367a284b4]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/arm/cpu_features.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/arm/cpu_features.h b/lib/arm/cpu_features.h
++index 4092eba8..edcf7359 100644
++--- a/lib/arm/cpu_features.h
+++++ b/lib/arm/cpu_features.h
++@@ -97,6 +97,7 @@ static inline u32 get_arm_cpu_features(void) { return 0; }
++ #endif
++ #if HAVE_PMULL_NATIVE || \
++ 	(HAVE_DYNAMIC_ARM_CPU_FEATURES && \
+++	 HAVE_NEON_INTRIN /* needed to exclude soft float arm32 case */ && \
++ 	 (GCC_PREREQ(6, 1) || __has_builtin(__builtin_neon_vmull_p64) || \
++ 	  defined(_MSC_VER)) && \
++ 	  /*
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
