@@ -1,88 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFB7DC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71471C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:39:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 256924030D;
-	Sun,  1 Jan 2023 23:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 256924030D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E95160C2C;
+	Sun,  1 Jan 2023 23:39:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E95160C2C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IHnFcJfq7gyC; Sun,  1 Jan 2023 23:39:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dZpH9yguQMZS; Sun,  1 Jan 2023 23:39:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE14E405A6;
-	Sun,  1 Jan 2023 23:39:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE14E405A6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 748C41BF38D
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FD7160BFC;
+	Sun,  1 Jan 2023 23:39:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FD7160BFC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E43B11BF38D
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 57C8F405A6
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57C8F405A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id C02E4402F5
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C02E4402F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id airTtd8m_mzP for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 23:39:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zx7EeISP8YSH for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 23:39:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B629A4030D
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
- [IPv6:2607:f8b0:4864:20::235])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B629A4030D
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:02 +0000 (UTC)
-Received: by mail-oi1-x235.google.com with SMTP id v70so23831245oie.3
- for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17E0C4018F
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
+ [IPv6:2607:f8b0:4864:20::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 17E0C4018F
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:05 +0000 (UTC)
+Received: by mail-oi1-x230.google.com with SMTP id e205so23800275oif.11
+ for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=mINdcWTXw6WfTuWMtg2As4IHEC6PpMuTG3xviLoKXd0=;
- b=MxWIddN61mPhsEFyBMY1rT8yI5Mmugvx3SKbwD6i3UmFHT+LQE9ySOCSPlPatL6iRw
- OeI7M9VjLpi4s5FefSlBECOflMZWbpc6ARRXmPeXXqP8YcmLHDrN9RFDmn5QKfIuaJ1h
- ArMmp3Isik89o1Ny+9wTMtyuB3idJSnbT4vDOzGunKdB7UDiRq6JI86mwLXirlfVhCpD
- xB5YOI8fM6o8wQ7Sl5Szvub90kvTRYb3EBnnFEw9XhbihiqnvuVYR7gUdcTrVKTzZOL7
- KZkHkPKUyHcipGfkwjjFPm7Kt9pktPIoLQnXezXfAnFe2Hk2ZER9YLIl1I3V39TNDUsT
- NtaQ==
-X-Gm-Message-State: AFqh2kpraM+lMWbOC5qo3l/nzlXOdRXFMGV5YyEqzjDm/9hoZhevx9o5
- mH0fncN1FsaqPRe0HMCWOXfeNn4OStI=
-X-Google-Smtp-Source: AMrXdXvAeUWJoYZ85yAJ0ox9Nc/k0OOpjK48kqGKa1C6XPsArzHxroHzw9SwkqCzkrrw2pLAiHAjjQ==
-X-Received: by 2002:a05:6808:f12:b0:363:b918:643b with SMTP id
- m18-20020a0568080f1200b00363b918643bmr1886983oiw.31.1672616341221; 
- Sun, 01 Jan 2023 15:39:01 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=GUqBMM67gZEdiYNg2HNKXo9UIJtVm8Krm1R8zkM3qzQ=;
+ b=g2zydqMYe9XYLkUNOXE2C+v6f9lJ8H8fNuyRrAeuWqRc4N1wYsQieBBDlDkMNf1AN4
+ pl9GkcZOdj9ht2TL7lfeJ2cdOLAqAWxbSnVUKnPPF4pXYYl3jQD7owJiDjMvgwSg6fK3
+ H4WQWaRelohYFyTiCppfeugmUlK07+iV3X+07Ix4VYoCrUhF+93Pj14cmAWus8xP+1Vo
+ /Z5CH4BlijpgyootJpM21C7bczFNMk8yMVdyRAhi4FRl5zlrX/vH089R0onvkyt8MY0o
+ ls7MemrgIvAt7qNBWlSp5i80T1CeHjsktIaIuoLB7WvowWkPiammtD3rHN28RBhBClvB
+ KYGA==
+X-Gm-Message-State: AFqh2koZkRW1CdWvtusV+LcTGaMulSadBGUS17Rmb7ue33F2TUBgjwTd
+ AW3/gKUiUaCKCm05rh7nlzpfmmGT0U0=
+X-Google-Smtp-Source: AMrXdXvAO7nuCDEPl/c/UAKGQIqpJVdPLEhAJl/xGHpd++jktx80hOpnBmZCQFFgib/PZ6HqTT0lbQ==
+X-Received: by 2002:a05:6808:238e:b0:35e:aa28:a433 with SMTP id
+ bp14-20020a056808238e00b0035eaa28a433mr23826017oib.25.1672616343953; 
+ Sun, 01 Jan 2023 15:39:03 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:6ae4:c2b1:7ea6:a195])
  by smtp.gmail.com with ESMTPSA id
- o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.38.58
+ o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jan 2023 15:39:00 -0800 (PST)
+ Sun, 01 Jan 2023 15:39:02 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Jan 2023 20:36:24 -0300
-Message-Id: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
+Date: Sun,  1 Jan 2023 20:36:25 -0300
+Message-Id: <20230101233653.487175-2-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
+References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mINdcWTXw6WfTuWMtg2As4IHEC6PpMuTG3xviLoKXd0=;
- b=qqu5ODRbKpdI7W6rTOoo+fGhAROPANUApZgA0UIaLYVuhRj5moY24e96HBt+65QWSH
- ecB0BVgcCcehCVmfCWozV4Ryfs10CI7OMcx65hE8Cj9wdy62KYwcjmj1SmN3+kX8Koyz
- InLplT7qFlkVo3ue7Tyo9rnVbqGKGurLyi4oLETpEBynYQkDdlH/4UGrOH7l7bHAbXz5
- 9RkTtK8SD72KuIs3c7LDN8QahBikPGJ9vNle60Md+cJzyxgoB/yPIJWgpU5hiltDIVPZ
- QPTBK8zec+hL5bZsPoQyWh6Jc/S0iu3zqCnU4kEy5yiYYx+at43Vxz1/YuTo243G1EBU
- F73A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=GUqBMM67gZEdiYNg2HNKXo9UIJtVm8Krm1R8zkM3qzQ=;
+ b=gFpUkKcC75kQZX7GJ2BkZgSxy35m1AUTxek/hbzu7ct8ykFwMogYpLpg6nYejhx0ri
+ sjRbOwsrQcfLaTU+GQRVwPnqbuoL4ogln+eDsKU3u2m8nOn6UWDBQ+Agy3xQ0J8CaOF+
+ O4djcLYIMCKmUs/2wL0fQdVnsNTkJ9jSd4UoEMY1NCdgRDjGTA4W4Z4kOCCDcaDf+zJY
+ PGfCRG3hYSiqFJr6ruoBkWJIlvCPP+ymY0IGUhPzQD8uxGzxqRLzf1/wxaN46+tY+wib
+ p7YCumE/AGfMz/Yr7pCy93vpe3fO6b85HJUiNWBFYQHfGgYtWZ+hciOem9BVJg8VYMIM
+ N0ZQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=qqu5ODRb
-Subject: [Buildroot] [PATCH 00/29] check-package: warn about symbols not
- recognized by a package infra
+ header.a=rsa-sha256 header.s=20210112 header.b=gFpUkKcC
+Subject: [Buildroot] [PATCH 01/29] package/pkg-generic: add check for
+ deprecated _INSTALL_HOST_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,149 +97,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Commit "f6fe8932df pkg-generic: add checks on deprecated variables
+FOO_BAR_OPT" introduced checks for deprecated variables, and warns the
+user to use _INSTALL_HOST_OPTS instead of _INSTALL_HOST_OPT.
 
-Patch 1 contains a fix for deprecated suffix in the package infra.
- 01 package/pkg-generic: add check for deprecated _INSTALL_HOST_OPTS
+Commit "6a25cec33d package/pkg-cmake.mk: rename _INSTALL_HOST_OPTS ->
+_INSTALL_OPTS" removed the usage of _INSTALL_HOST_OPTS but didn't add a
+check for the deprecated variable.
 
-Patches 2 to 9 contain fixes for packages.
- 02 package/libmng: fix optional dependency to lcms2
- 03 package/qcom-db410c-firmware: fix typo for <pkg>_LICENSE
- 04 package/tinyxml: fix typo for TINYXML_CPE_ID_VENDOR
- 05 package/gobject-introspection: really use host python for host va...
- 06 package/i2pd: really install configuration files
- 07 package/ima-evm-utils: really install to staging
- 08 package/qt5/qt5virtualkeyboard: really configure language layouts
- 09 package/tekui: really disable parallel build
+Add a warning to change _INSTALL_HOST_OPTS to _INSTALL_OPTS.
+And change the warning for _INSTALL_HOST_OPT to also suggest
+_INSTALL_OPTS.
 
-Patches 10 and 11 revert bogus commits on packages.
- 10 Revert "pptp-linux: fix build with high BR2_JLEVEL settings"
- 11 Revert "package/zip: install to staging"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+ package/pkg-generic.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Patches 12 to 24 drop bogus or dangling variables on packages.
- 12 boot/ti-k3-r5-loader: drop bogus TI_K3_R5_LOADER_BOARD
- 13 package/checkpolicy: drop bogus CHECKPOLICY_STAGING_CMDS
- 14 package/exfat: drop dangling EXFAT_CFLAGS
- 15 package/falcosecurity-libs: drop bogus FALCOSECURITY_LIBS_SUPPORT...
- 16 package/glib-networking: drop dangling GLIB_NETWORKING_INSTALL_TA...
- 17 package/gobject-introspection: drop bugus GOBJECT_INTROSPECTION_A...
- 18 package/libtalloc: drop bogus LIBTALLOC_{C,LD}FLAGS
- 19 package/lrzsz: drop bogus LRZSZ_BUILD_HOOKS
- 20 package/policycoreutils: drop bogus INSTALL_TARGET_LINUX_PAM_CONFS
- 21 package/qoriq-rcw: drop bogus QORIQ_RCW_FILE_BIN
- 22 package/rhash: drop dangling RHASH_ADDLDFLAGS
- 23 package/swupdate: drop dangling SWUPDATE_BUILD_CONFIG
- 24 package/wpa_supplicant: drop dangling WPA_SUPPLICANT_{LDFLAGS,MAK...
-
-Patches 25 and 26 contain fixes for check-package
- 25 utils/check-package: fix check for <pkg>_REDISTRIBUTE
- 26 utils/check-package: check linux-tools
-
-Patch 27 is the goal of the series, it makes check-package warn about
-symbols used in packages that are not recognized by the package infra(s)
-used by that package.
- 27 utils/check-package: warn about symbols not recognized by a packa...
-
-Patch 28 makes check-package complain for e.g. a package declaring
-_INSTALL_STAGING_CMDS without _INSTALL_STAGING enabled.
- 28 utils/check-package: warn about disabled install
-
-Patch 29 tries to slightly improve correctness for the manual that
-describes how to use the package infras, by partially standardizing the
-entries.
- 29 docs/manual: standardize references to the generic infra
-
-Regards,
-Ricardo
-
-Ricardo Martincoski (29):
-  package/pkg-generic: add check for deprecated _INSTALL_HOST_OPTS
-  package/libmng: fix optional dependency to lcms2
-  package/qcom-db410c-firmware: fix typo for <pkg>_LICENSE
-  package/tinyxml: fix typo for TINYXML_CPE_ID_VENDOR
-  package/gobject-introspection: really use host python for host variant
-  package/i2pd: really install configuration files
-  package/ima-evm-utils: really install to staging
-  package/qt5/qt5virtualkeyboard: really configure language layouts
-  package/tekui: really disable parallel build
-  Revert "pptp-linux: fix build with high BR2_JLEVEL settings"
-  Revert "package/zip: install to staging"
-  boot/ti-k3-r5-loader: drop bogus TI_K3_R5_LOADER_BOARD
-  package/checkpolicy: drop bogus CHECKPOLICY_STAGING_CMDS
-  package/exfat: drop dangling EXFAT_CFLAGS
-  package/falcosecurity-libs: drop bogus
-    FALCOSECURITY_LIBS_SUPPORTS_IN_SOURCE_BUILD
-  package/glib-networking: drop dangling
-    GLIB_NETWORKING_INSTALL_TARGET_OPTS
-  package/gobject-introspection: drop bugus
-    GOBJECT_INTROSPECTION_AUTORECONF
-  package/libtalloc: drop bogus LIBTALLOC_{C,LD}FLAGS
-  package/lrzsz: drop bogus LRZSZ_BUILD_HOOKS
-  package/policycoreutils: drop bogus INSTALL_TARGET_LINUX_PAM_CONFS
-  package/qoriq-rcw: drop bogus QORIQ_RCW_FILE_BIN
-  package/rhash: drop dangling RHASH_ADDLDFLAGS
-  package/swupdate: drop dangling SWUPDATE_BUILD_CONFIG
-  package/wpa_supplicant: drop dangling
-    WPA_SUPPLICANT_{LDFLAGS,MAKE_ENV}
-  utils/check-package: fix check for <pkg>_REDISTRIBUTE
-  utils/check-package: check linux-tools
-  utils/check-package: warn about symbols not recognized by a package
-    infra
-  utils/check-package: warn about disabled install
-  docs/manual: standardize references to the generic infra
-
- boot/ti-k3-r5-loader/ti-k3-r5-loader.mk       |   1 -
- docs/manual/adding-packages-autotools.txt     |  11 +-
- docs/manual/adding-packages-cargo.txt         |   9 +-
- docs/manual/adding-packages-cmake.txt         |  10 +-
- docs/manual/adding-packages-golang.txt        |   9 +-
- docs/manual/adding-packages-kconfig.txt       |  18 +-
- docs/manual/adding-packages-luarocks.txt      |  12 +-
- docs/manual/adding-packages-meson.txt         |   9 +-
- docs/manual/adding-packages-perl.txt          |  12 +-
- docs/manual/adding-packages-python.txt        |   4 +-
- docs/manual/adding-packages-qmake.txt         |  12 +-
- docs/manual/adding-packages-rebar.txt         |  13 +-
- docs/manual/adding-packages-waf.txt           |  12 +-
- fs/initramfs/initramfs.mk                     |   1 +
- linux/linux-ext-xenomai.mk                    |   2 +-
- package/checkpolicy/checkpolicy.mk            |   5 -
- package/exfat/exfat.mk                        |   1 -
- .../falcosecurity-libs/falcosecurity-libs.mk  |   1 -
- package/glib-networking/glib-networking.mk    |   2 -
- .../gobject-introspection.mk                  |   3 +-
- package/i2pd/i2pd.mk                          |   1 +
- package/ima-evm-utils/ima-evm-utils.mk        |   1 +
- package/libmng/libmng.mk                      |   2 +-
- package/libtalloc/libtalloc.mk                |   2 -
- package/lrzsz/lrzsz.mk                        |   4 -
- package/luarocks/luarocks.mk                  |   2 +
- package/pkg-generic.mk                        |   3 +-
- package/policycoreutils/policycoreutils.mk    |   4 -
- package/pptp-linux/pptp-linux.mk              |   1 -
- .../qcom-db410c-firmware.mk                   |   2 +-
- package/qoriq-rcw/qoriq-rcw.mk                |   1 -
- .../qt5virtualkeyboard/qt5virtualkeyboard.mk  |   2 +-
- package/rhash/rhash.mk                        |   1 -
- package/swupdate/swupdate.mk                  |   2 -
- package/tekui/tekui.mk                        |   4 +-
- package/tinyxml/tinyxml.mk                    |   2 +-
- package/wpa_supplicant/wpa_supplicant.mk      |   4 -
- package/zip/zip.mk                            |   6 -
- toolchain/toolchain.mk                        |   2 +
- utils/check-package                           |  20 +-
- utils/checkpackagelib/lib_mk.py               | 228 ++++++-
- utils/checkpackagelib/pkg_infra.py            | 309 +++++++++
- utils/checkpackagelib/test_lib_mk.py          | 603 +++++++++++++++++-
- 43 files changed, 1226 insertions(+), 127 deletions(-)
- create mode 100644 utils/checkpackagelib/pkg_infra.py
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f24e03a325..9db86eccea 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1200,7 +1200,8 @@ $(eval $(call check-deprecated-variable,$(2)_MAKE_OPT,$(2)_MAKE_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_INSTALL_OPT,$(2)_INSTALL_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_INSTALL_TARGET_OPT,$(2)_INSTALL_TARGET_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_INSTALL_STAGING_OPT,$(2)_INSTALL_STAGING_OPTS))
+-$(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_HOST_OPTS))
++$(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_OPTS))
++$(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPTS,$(2)_INSTALL_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_AUTORECONF_OPT,$(2)_AUTORECONF_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_CONF_OPT,$(2)_CONF_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
 -- 
 2.34.1
 
