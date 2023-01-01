@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB570C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 16:50:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F44C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 16:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5393D400CF;
-	Sun,  1 Jan 2023 16:50:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5393D400CF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EB66400D2;
+	Sun,  1 Jan 2023 16:51:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EB66400D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Qs0yTmrgaqH; Sun,  1 Jan 2023 16:50:48 +0000 (UTC)
+	with ESMTP id D1IcAbkrPKM9; Sun,  1 Jan 2023 16:51:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96F62400D2;
-	Sun,  1 Jan 2023 16:50:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96F62400D2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2B7211BF3F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D8184054B;
+	Sun,  1 Jan 2023 16:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D8184054B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F3561BF867
  for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 16:50:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14169400D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 39A7C4054E
  for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 16:50:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14169400D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39A7C4054E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lvI2XeU_fvhc for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0VG7Jt7GTuKU for <buildroot@lists.busybox.net>;
  Sun,  1 Jan 2023 16:50:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44D6E400CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B7F340544
  for <buildroot@buildroot.org>; Sun,  1 Jan 2023 16:50:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44D6E400CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B7F340544
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3487D86E9E; Sun,  1 Jan 2023 16:50:45 +0000 (UTC)
+ id 29E2586E97; Sun,  1 Jan 2023 16:50:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 17:37:15 +0100
+Date: Sun, 1 Jan 2023 16:57:20 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 85a121770b682149ce492f773a159cce312a22ef
-X-Git-Newrev: 45ce6c48ba3f2fd0753a60aec4620a2901555cfd
+X-Git-Oldrev: e40f843b25757b1fb1cd96679fbef54e32a27828
+X-Git-Newrev: 85a121770b682149ce492f773a159cce312a22ef
 X-Patchwork-Hint: ignore
-Message-Id: <20230101165045.3487D86E9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rtl_433: drop
- dynamic library dependency
+Message-Id: <20230101165045.29E2586E97@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/exfat-utils: add
+ CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45ce6c48ba3f2fd0753a60aec4620a2901555cfd
+commit: https://git.buildroot.net/buildroot/commit/?id=85a121770b682149ce492f773a159cce312a22ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-rtl_433 can be built statically since its addition in commit
-4634e84978a3e64e9050021d209a41cd88a1ad16
+cpe:2.3:a:exfat_project:exfat is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aexfat_project%3Aexfat
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7967755fbf25fe4d5860884bedb3e01fcd7e9855)
+(cherry picked from commit 8036b087489c96dfc4a0baf9fbe284a049a58298)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl_433/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/exfat-utils/exfat-utils.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/rtl_433/Config.in b/package/rtl_433/Config.in
-index 5664227c82..a6db00f477 100644
---- a/package/rtl_433/Config.in
-+++ b/package/rtl_433/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_RTL_433
- 	bool "rtl_433"
- 	depends on BR2_USE_MMU # fork()
--	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK if BR2_PACKAGE_LIBOPENSSL
- 	help
-@@ -11,6 +10,6 @@ config BR2_PACKAGE_RTL_433
+diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+index d13ec6bab8..fa471952f2 100644
+--- a/package/exfat-utils/exfat-utils.mk
++++ b/package/exfat-utils/exfat-utils.mk
+@@ -8,6 +8,8 @@ EXFAT_UTILS_VERSION = 1.3.0
+ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTILS_VERSION)
+ EXFAT_UTILS_LICENSE = GPL-2.0+
+ EXFAT_UTILS_LICENSE_FILES = COPYING
++EXFAT_UTILS_CPE_ID_VENDOR = exfat_project
++EXFAT_UTILS_CPE_ID_PRODUCT = exfat
  
- 	  https://github.com/merbanan/rtl_433
+ EXFAT_UTILS_CONF_OPTS += --exec-prefix=/
  
--comment "rtl_433 needs a toolchain w/ dynamic library, threads"
-+comment "rtl_433 needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
