@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE3EC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:44:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E99BDC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:44:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AB9F408F5;
-	Sun,  1 Jan 2023 23:44:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AB9F408F5
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MQuY4w32PUn1; Sun,  1 Jan 2023 23:44:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A64B4091E;
-	Sun,  1 Jan 2023 23:44:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A64B4091E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A81F1BF38D
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:40:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 267AA60BFC
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:40:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 267AA60BFC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CAF260E71;
+	Sun,  1 Jan 2023 23:44:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CAF260E71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RfrdCyPb--SB for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 23:40:09 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OgxJDQfB9SkV; Sun,  1 Jan 2023 23:44:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B10D760C16;
+	Sun,  1 Jan 2023 23:44:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B10D760C16
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DE23E1BF38D
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:40:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6F0981378
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:40:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6F0981378
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OwwoRNX3xI5g for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 23:40:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7268E60B2C
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
- [IPv6:2607:f8b0:4864:20::22e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7268E60B2C
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:40:09 +0000 (UTC)
-Received: by mail-oi1-x22e.google.com with SMTP id e205so23801444oif.11
- for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:40:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9101812CC
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
+ [IPv6:2607:f8b0:4864:20::22c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D9101812CC
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:40:11 +0000 (UTC)
+Received: by mail-oi1-x22c.google.com with SMTP id j130so18188309oif.4
+ for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:40:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=i+oMsZlZbGODRfe1V3OQvLz9E7Cc0/xrfitrtAj1aqc=;
- b=61Y+Mz/5EzAdpO/FLopcR7+tRUpwA5gyX3KgfeNUIgDGYR6Ol99MCcL6Y8Wep5QuzD
- 17zKT0KFiIkKNY3GxuRckJ13hmqRRNwWQFGn4+7G2CRkKu4nsa+wOx167PdkdeHBhomp
- PRWruKBX+bSJdTYZLc8MVBtOM6+TKtwnS3d4odB/4PtUPznO6XWL4Ccsqra4Zmk+T/0x
- Izh6mpiBR+IkndMKFrzyElYR+Rm9J3CJ6vSx5wQCPst4bBuY/ZvVXTkVeeZKgUJl6y+u
- 8KJG4DFOC8mnbsbWnLWlkXuR7uIVzWrhHxdITfemMUB9IT7/Ybg3ARTrFu+4elR5PUK/
- 14uw==
-X-Gm-Message-State: AFqh2kozr42swD8PkXuRhXnJkvRhKimWYNAB2F8MtnBT56jGjjZvkcjM
- 3YymJ9taE7c8//gmwCihOUdA+1VRdqU=
-X-Google-Smtp-Source: AMrXdXskanM/0WkvjVZrY91wbAOmhcP6Ir8vbKQoWlaUagTDcZmfdGn7xLrbjmNmacnJrKO3icNV8g==
-X-Received: by 2002:a05:6808:1826:b0:359:ca54:ecb1 with SMTP id
- bh38-20020a056808182600b00359ca54ecb1mr28727525oib.59.1672616408619; 
- Sun, 01 Jan 2023 15:40:08 -0800 (PST)
+ bh=Gvz8Dp9shjSo61+Fv6KKlzbnsB9izBGoiuj1EFP98sQ=;
+ b=XfKUjU4IsjIKEBKZdHZpK/L0oGdygeuI8s6uZhNvPN44lgLH2B3xMwXsJIPn77y0It
+ 6pn/UXbEyLtwVcq9QYuTe6i2rljqoc8y+uQn+GMlu5nvhvPGiDtda/qI4r0onfr8fvwX
+ c14x1Dwtdw8zdYwDQXY1eEk+oqvwgjddX3+VhnbIQQ2ijthrc8bNCIlUBoTydiCdh3s1
+ UoQRh8KhXMv4URA+yra+wVz0LWF3nKAq2DzXU5pQA38/WOnv8fqWf5Tztk7LP+jz3BNB
+ rEDE7HGRcGevipKTb5mCYi022TMOoWqqg1FtRtuxT2UN9MKuO7rmr+GTqzqB9yCB7zsu
+ wzBg==
+X-Gm-Message-State: AFqh2kqyouoj2R3gMTerFS4v8LmhnDnU8LzGlBgYDnNZGdwtf5jgVwLj
+ BCngFr6lHeaqIHhIcfTcAgDnVY1K04g=
+X-Google-Smtp-Source: AMrXdXvTCHuy/NK8pEjZOb/tew+nxkXkIl/i6rBTWKiGAifdw2GgcTJsKapRvY/QwCqc0bnMf0+h4g==
+X-Received: by 2002:aca:130c:0:b0:363:b6b9:4682 with SMTP id
+ e12-20020aca130c000000b00363b6b94682mr1990451oii.34.1672616410916; 
+ Sun, 01 Jan 2023 15:40:10 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:6ae4:c2b1:7ea6:a195])
  by smtp.gmail.com with ESMTPSA id
- o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.40.06
+ o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.40.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jan 2023 15:40:07 -0800 (PST)
+ Sun, 01 Jan 2023 15:40:09 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Jan 2023 20:36:49 -0300
-Message-Id: <20230101233653.487175-26-ricardo.martincoski@gmail.com>
+Date: Sun,  1 Jan 2023 20:36:50 -0300
+Message-Id: <20230101233653.487175-27-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
@@ -74,18 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=i+oMsZlZbGODRfe1V3OQvLz9E7Cc0/xrfitrtAj1aqc=;
- b=pf/miXoBj9qVRJY0+JziAME7Cb5yMYy0Ps4qp7B3JHVat0U98FtZn1KEpKCRDgzm3y
- wKiP9msbVT7vwvoGQOQZMgYtEQBQFiO7fixzBgRr1fdj91b743vNxaWCDiqZUZ//Swnu
- rVkejjtPCvX7ldkiO+0YGjuHR2tvUPyJCoGstKFPaz/XEicmC05Ocrru44SAQJ+fuz13
- XEZT/DLiIpbRkfSAHUL1Z4ZLRIpShlLjCKmfFWddkEU7PwoxHpCDFul0pHxZpSWbJM20
- aJERy6lENlowz92uMTXusEjy4aNuoEAcUgzOFNYjUjkp/AIwuu7YBXwIOIHaan2cw3bQ
- g4xg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Gvz8Dp9shjSo61+Fv6KKlzbnsB9izBGoiuj1EFP98sQ=;
+ b=JG02+hK591i9cwezqH8zuvlthpGElDGS9eKMIFk+5Wr7WcpJt9c7RYufdlogtXQ41T
+ S5mqlzLMBtYxH2/j0yN8DhGa4L8u/JJDyhWWkqrBsRZW9MQvfyjIsg22ajguXJN8fA46
+ MarBK5wax/BTfqPZh2oZYUJ6GG7XNvz4N4HWmde4d6uBimcG/evyf8OcYaOFXotvrUG3
+ Ybkcqh3qxFBzePrhfMHAHieMnuVhNIpWpgfwqLDHqSJyRdMR1x8WjnY4rWpAD6RdO4yl
+ DQ6j1OWTJbxM8f7544sdyG8/KBufx1fTCU01anwkFSHvy3dZ00xfyGX7etc8NhmoNTU+
+ vaeQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pf/miXoB
-Subject: [Buildroot] [PATCH 25/29] utils/check-package: fix check for
- <pkg>_REDISTRIBUTE
+ header.a=rsa-sha256 header.s=20210112 header.b=JG02+hK5
+Subject: [Buildroot] [PATCH 26/29] utils/check-package: check linux-tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,61 +102,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit "8e87d76c12 check-package: check *.mk files" added a typo that
-prevents check-package from checking <PKG>_REDISTRIBUTE default value.
+Each linux tool uses a fragment of a .mk file, named, for instance:
+package/linux-tools/linux-tool-cpupower.mk.in
+So currently check-package does not check these files.
 
-Fix the typo: _INSTALL_REDISTRIBUTE -> _REDISTRIBUTE
+Add the support in check-package script.
+At the same time, factor out a function to derive package prefix from
+the filename being checked, so the fix (calling os.path.splitext twice)
+can be applied in a single place.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
 Running on current master generates no warnings.
 ---
- utils/checkpackagelib/lib_mk.py      | 2 +-
- utils/checkpackagelib/test_lib_mk.py | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ utils/check-package                  |  3 ++-
+ utils/checkpackagelib/lib_mk.py      | 28 ++++++++++---------
+ utils/checkpackagelib/test_lib_mk.py | 40 ++++++++++++++++++++++++++++
+ 3 files changed, 57 insertions(+), 14 deletions(-)
 
+diff --git a/utils/check-package b/utils/check-package
+index f64daed84c..6bd0c0b31f 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -61,6 +61,7 @@ DO_CHECK_INTREE = re.compile(r"|".join([
+ DO_NOT_CHECK_INTREE = re.compile(r"|".join([
+     r"boot/barebox/barebox\.mk$",
+     r"fs/common\.mk$",
++    r"package/alchemy/atom.mk.in$",
+     r"package/doc-asciidoc\.mk$",
+     r"package/pkg-\S*\.mk$",
+     r"toolchain/helpers\.mk$",
+@@ -84,7 +85,7 @@ def get_lib_from_filename(fname):
+         return checkpackagelib.lib_config
+     if fname.endswith(".hash"):
+         return checkpackagelib.lib_hash
+-    if fname.endswith(".mk"):
++    if fname.endswith(".mk") or fname.endswith(".mk.in"):
+         return checkpackagelib.lib_mk
+     if fname.endswith(".patch"):
+         return checkpackagelib.lib_patch
 diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index b50a19ac62..b0bd52bdf6 100644
+index b0bd52bdf6..931fa39dda 100644
 --- a/utils/checkpackagelib/lib_mk.py
 +++ b/utils/checkpackagelib/lib_mk.py
-@@ -296,7 +296,7 @@ class UselessFlag(_CheckFunction):
-         r"_LIBTOOL_PATCH\s*=\s*YES"])))
-     DEFAULT_GENERIC_FLAG = re.compile(r"^.*{}".format("|".join([
-         r"_INSTALL_IMAGES\s*=\s*NO",
--        r"_INSTALL_REDISTRIBUTE\s*=\s*YES",
-+        r"_REDISTRIBUTE\s*=\s*YES",
-         r"_INSTALL_STAGING\s*=\s*NO",
-         r"_INSTALL_TARGET\s*=\s*YES"])))
-     END_CONDITIONAL = re.compile(r"^\s*({})".format("|".join(end_conditional)))
+@@ -21,6 +21,16 @@ continue_conditional = ["elif", "else"]
+ end_conditional = ["endif"]
+ 
+ 
++def get_package_prefix_from_filename(filename):
++    package = os.path.splitext(os.path.splitext(os.path.basename(filename))[0])[0]
++    # linux tools do not use LINUX_TOOL_ prefix for variables
++    package = package.replace("linux-tool-", "")
++    # linux extensions do not use LINUX_EXT_ prefix for variables
++    package = package.replace("linux-ext-", "")
++    package_upper = package.replace("-", "_").upper()
++    return package, package_upper
++
++
+ class Indent(_CheckFunction):
+     COMMENT = re.compile(r"^\s*#")
+     CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional + continue_conditional)))
+@@ -179,12 +189,10 @@ class RemoveDefaultPackageSourceVariable(_CheckFunction):
+     packages_that_may_contain_default_source = ["binutils", "gcc", "gdb"]
+ 
+     def before(self):
+-        package, _ = os.path.splitext(os.path.basename(self.filename))
+-        package_upper = package.replace("-", "_").upper()
+-        self.package = package
++        self.package, package_upper = get_package_prefix_from_filename(self.filename)
+         self.FIND_SOURCE = re.compile(
+             r"^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
+-            .format(package_upper, package, package_upper))
++            .format(package_upper, self.package, package_upper))
+ 
+     def check_line(self, lineno, text):
+         if self.FIND_SOURCE.search(text):
+@@ -254,16 +262,10 @@ class TypoInPackageVariable(_CheckFunction):
+     VARIABLE = re.compile(r"^(define\s+)?([A-Z0-9_]+_[A-Z0-9_]+)")
+ 
+     def before(self):
+-        package, _ = os.path.splitext(os.path.basename(self.filename))
+-        package = package.replace("-", "_").upper()
+-        # linux tools do not use LINUX_TOOL_ prefix for variables
+-        package = package.replace("LINUX_TOOL_", "")
+-        # linux extensions do not use LINUX_EXT_ prefix for variables
+-        package = package.replace("LINUX_EXT_", "")
+-        self.package = package
+-        self.REGEX = re.compile(r"(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
++        _, self.package = get_package_prefix_from_filename(self.filename)
++        self.REGEX = re.compile(r"(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(self.package))
+         self.FIND_VIRTUAL = re.compile(
+-            r"^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
++            r"^{}_PROVIDES\s*(\+|)=\s*(.*)".format(self.package))
+         self.virtual = []
+ 
+     def check_line(self, lineno, text):
 diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-index 49fa216fcd..5f5663377b 100644
+index 5f5663377b..d817cdece0 100644
 --- a/utils/checkpackagelib/test_lib_mk.py
 +++ b/utils/checkpackagelib/test_lib_mk.py
-@@ -531,13 +531,13 @@ UselessFlag = [
-     ('generic',
-      'any.mk',
-      'ANY_INSTALL_IMAGES = NO\n'
--     'ANY_INSTALL_REDISTRIBUTE = YES\n'
-+     'ANY_REDISTRIBUTE = YES\n'
-      'ANY_INSTALL_STAGING = NO\n'
-      'ANY_INSTALL_TARGET = YES\n',
-      [['any.mk:1: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
-        'ANY_INSTALL_IMAGES = NO\n'],
-       ['any.mk:2: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
--       'ANY_INSTALL_REDISTRIBUTE = YES\n'],
-+       'ANY_REDISTRIBUTE = YES\n'],
-       ['any.mk:3: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
-        'ANY_INSTALL_STAGING = NO\n'],
-       ['any.mk:4: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
-@@ -547,9 +547,9 @@ UselessFlag = [
-      'ifneq (condition)\n'
-      'ANY_INSTALL_IMAGES = NO\n'
-      'endif\n'
--     'ANY_INSTALL_REDISTRIBUTE = YES\n',
-+     'ANY_REDISTRIBUTE = YES\n',
-      [['any.mk:4: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
--       'ANY_INSTALL_REDISTRIBUTE = YES\n']]),
-+       'ANY_REDISTRIBUTE = YES\n']]),
+@@ -3,6 +3,40 @@ import checkpackagelib.test_util as util
+ import checkpackagelib.lib_mk as m
+ 
+ 
++get_package_prefix_from_filename = [
++    ('linux extension',
++     'linux/linux-ext-aufs.mk',
++     ['aufs', 'AUFS']),
++    ('linux tool',
++     'package/linux-tools/linux-tool-gpio.mk.in',
++     ['gpio', 'GPIO']),
++    ('boot',
++     'boot/binaries-marvell/binaries-marvell.mk',
++     ['binaries-marvell', 'BINARIES_MARVELL']),
++    ('toolchain',
++     'toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk',
++     ['toolchain-external-bootlin', 'TOOLCHAIN_EXTERNAL_BOOTLIN']),
++    ('package, underscore, subfolder',
++     'package/x11r7/xapp_bitmap/xapp_bitmap.mk',
++     ['xapp_bitmap', 'XAPP_BITMAP']),
++    ('package, starting with number',
++     'package/4th/4th.mk',
++     ['4th', '4TH']),
++    ('package, long name',
++     'package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk',
++     ['perl-mojolicious-plugin-authentication', 'PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION']),
++    ('package, case sensitive',
++     'package/libeXosip2/libeXosip2.mk',
++     ['libeXosip2', 'LIBEXOSIP2']),
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,expected', get_package_prefix_from_filename)
++def test_get_package_prefix_from_filename(testname, filename, expected):
++    prefix_lower, prefix_upper = m.get_package_prefix_from_filename(filename)
++    assert [prefix_lower, prefix_upper] == expected
++
++
+ Indent = [
+     ('ignore comment at beginning of line',
+      'any',
+@@ -496,6 +530,12 @@ TypoInPackageVariable = [
+      'OTHERS_VAR = \n',
+      [['any.mk:2: possible typo: OTHERS_VAR -> *ANY*',
+        'OTHERS_VAR = \n']]),
++    ('linux tool',
++     'package/linux-tools/linux-tool-cpupower.mk.in',
++     'CPUPOWER_DEPENDENCIES =\n'
++     'POWER_DEPENDENCIES +=\n',
++     [['package/linux-tools/linux-tool-cpupower.mk.in:2: possible typo: POWER_DEPENDENCIES -> *CPUPOWER*',
++       'POWER_DEPENDENCIES +=\n']]),
      ]
  
  
