@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B820CC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 18:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C50C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 18:27:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62DFC40120;
-	Sun,  1 Jan 2023 18:26:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62DFC40120
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36653812C6;
+	Sun,  1 Jan 2023 18:27:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36653812C6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X-WwTEHcGAdr; Sun,  1 Jan 2023 18:27:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7320781066;
+	Sun,  1 Jan 2023 18:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7320781066
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 07BE81BF41A
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:27:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E46E7400CF
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:27:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E46E7400CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J91Myd4LaJ8R; Sun,  1 Jan 2023 18:26:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A01AC400CF;
-	Sun,  1 Jan 2023 18:26:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A01AC400CF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BFDCD1BF41A
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:26:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A474405CE
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:26:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A474405CE
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m2K0PU78tHYP for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 18:26:35 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zot3HxPtj0G3 for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 18:27:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F297404E9
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 18:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F297404E9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40CE540022
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 18:27:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40CE540022
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8AB7387078; Sun,  1 Jan 2023 18:26:35 +0000 (UTC)
+ id 308D587084; Sun,  1 Jan 2023 18:27:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 19:24:22 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 332dcce94841c94a977593d6c162fe602598af5f
-X-Git-Newrev: 4ee9d7f6c413814e01582ef88f6f15490ba59b16
+Date: Sun, 1 Jan 2023 19:24:11 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: e68074e21e4b5e13dd0a4425edfdec72cd0bdbdc
+X-Git-Newrev: 35fa0316c9f1d60c6202c93b6d17ce396474ed68
 X-Patchwork-Hint: ignore
-Message-Id: <20230101182635.8AB7387078@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] DEVELOPERS: add myself to
+Message-Id: <20230101182744.308D587084@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] DEVELOPERS: add myself to
  more packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ee9d7f6c413814e01582ef88f6f15490ba59b16
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=35fa0316c9f1d60c6202c93b6d17ce396474ed68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -75,10 +75,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d35ec2058e..0eb84bb5a0 100644
+index 9adfa2e268..5a27587aac 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2000,12 +2000,16 @@ F:	package/gnuplot/
+@@ -2087,12 +2087,16 @@ F:	package/gnuplot/
  F:	package/sdl2/
  
  N:	Michael Nosthoff <buildroot@heine.tech>
