@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A3E5C3DA7D
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:41:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30ABFC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C974B4030D;
-	Sun,  1 Jan 2023 23:41:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C974B4030D
+	by smtp3.osuosl.org (Postfix) with ESMTP id D42A760C16;
+	Sun,  1 Jan 2023 23:41:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D42A760C16
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q0FhbIsZtdri; Sun,  1 Jan 2023 23:41:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13BE860BFC;
+	Sun,  1 Jan 2023 23:41:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13BE860BFC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B65A31BF38D
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90784410BE
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90784410BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ht40N-mtZTQA; Sun,  1 Jan 2023 23:41:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFB1D410B1;
-	Sun,  1 Jan 2023 23:41:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFB1D410B1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 993391BF38D
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F949402F5
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F949402F5
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k8cE7DGHxE1J for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 23:39:25 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bJogZp-d1Iyt for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 23:39:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E6DF4018F
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8E6DF4018F
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:25 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id e205so23800704oif.11
- for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:25 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D324410AF
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com
+ [IPv6:2001:4860:4864:20::36])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8D324410AF
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:28 +0000 (UTC)
+Received: by mail-oa1-x36.google.com with SMTP id
+ 586e51a60fabf-144bd860fdbso31796157fac.0
+ for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=BjqnLI+ZBjn4auE9kIUfbSAI0EYanysy17DiRhp7Wls=;
- b=udaBRnZevpFhi27bH+EvWCNsGBVyvjPqCCuOWp9H3ujqXGVa3AlW0qJN2clGqW38R7
- a0uJai687YxlMlv4OxoJEB9gxEXf+sZFx/2I/0qtyDi4vWk+Uz0XJR+Wcn8RYWmnqTZ0
- wg3sYGiT5vTAfsUP69hWjLEgvD4L3hqAFWVKO8c5y3WE9d5kWw4XsK18QKyZpi45Q0hN
- VVt7RSMUUe5i9oaghJof3jqDzdduZNoJoHAK7sM2rn2UdDOoWI6yK/Z5Z6bule2EvSgo
- D2w+dQK4EgGcthvISOE1mRJcVj/MNmtkP9sMB7Y01N3dNHsvz+M5gsk7bgsBTJIc1zT/
- M3Yw==
-X-Gm-Message-State: AFqh2kpkGM6ie9/XzLK+Zd8kBzQUPmkD9P6APEOjBqjti7NIEcyMkjnu
- U7dtLqNcTtx4opf5SdO7FeVH71+JT/Q=
-X-Google-Smtp-Source: AMrXdXvJySc69dF4yrySQepAgvWeYNLa3pAWkKTBPCy6sDd/3+2b1MgF4qeS7/LtPmd8+/yWI8UYvQ==
-X-Received: by 2002:a05:6808:1290:b0:355:1df0:9b84 with SMTP id
- a16-20020a056808129000b003551df09b84mr25275635oiw.2.1672616365230; 
- Sun, 01 Jan 2023 15:39:25 -0800 (PST)
+ bh=Tk5MaAbjPkwJnlMojpWHV6kCFXnj7jvvPORxoyutkIU=;
+ b=BZ55u8GZZ4nCP74jcKnEzRWu2zfODFi7vOwQuQmoobZ48kOD5rj/0uqnU6rRtbXPFa
+ pOEmJeK+XOpKTYQ17abWWPfv+R+YqJdahH3hYjH/v2FYRtX3KNDsrHH1MbrqPwbZboER
+ eQZTm453WIdxsgn1mxRn+WsTg8O+uNaw6Pt0d9TFC80j3EtLA1pfw7VAaKMlu7Z4lbo+
+ 1+Xy+BumVhua2xzZMWM8V1FjntpbT/P/SHsgR6it1K1DIHLVyR7AJiZT5HF1Os+euT1H
+ aJ59eQIPvotH5ZtPhOeKrNzLBfUnl4YlVa7OYayW7vAHDkOUXPAfdpl6pwzNlt0L7nhz
+ k0DQ==
+X-Gm-Message-State: AFqh2kqSCCH/AZgNWVs0lYa0uEjQGznO0nlQGhmPUlQ1nWnok7pcMvj4
+ Gp0cPY1C4UGwzI2XY0qP/fg1DfkPOfM=
+X-Google-Smtp-Source: AMrXdXs6wvULHgN0rnMBxVHvHOFONjCl4sUqtRnC/5FC8xgVtw2vv8edWPZo5YBJgE7x2TM9sSQ3og==
+X-Received: by 2002:a05:6870:610f:b0:14f:b4be:2f70 with SMTP id
+ s15-20020a056870610f00b0014fb4be2f70mr19193127oae.9.1672616367606; 
+ Sun, 01 Jan 2023 15:39:27 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:6ae4:c2b1:7ea6:a195])
  by smtp.gmail.com with ESMTPSA id
- o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.22
+ o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jan 2023 15:39:24 -0800 (PST)
+ Sun, 01 Jan 2023 15:39:26 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Jan 2023 20:36:33 -0300
-Message-Id: <20230101233653.487175-10-ricardo.martincoski@gmail.com>
+Date: Sun,  1 Jan 2023 20:36:34 -0300
+Message-Id: <20230101233653.487175-11-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
@@ -74,18 +75,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=BjqnLI+ZBjn4auE9kIUfbSAI0EYanysy17DiRhp7Wls=;
- b=d0pxGpqJbLlIsLmBqvFo5KXv4BsDxP+qzz9yc3qR+lhhzHMLS6LtxZx9cgxx0M6Lvu
- SMuwB2CpI/edlpw/IALej0evERDZIOmInnBJKw5FscnCI+k/xjjzfJ4U8ukNpdQfWm4n
- W90Ubtt6wZvZqTALrI4Cx6Ul78w0KhDtl5dkPuF7avfyMph9jgCKEKUZ2qJ4Ijwhprua
- UXAgUQVy3VmcXg28cTCJPf8npJpBsKjlY6gUvl9v60qXqJm+hw+6EvUpLhnSuUvmoO5Z
- X6pKW3jc2EzKYDgMqLAe0LVtQen32kgD/PfArjz03lRSKGBWBKb+1Lheup14b1WqFVCl
- d51Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Tk5MaAbjPkwJnlMojpWHV6kCFXnj7jvvPORxoyutkIU=;
+ b=G2wDSoBSBZ6mlp6icjXJekydpmXW5Q0FRiorJsWS2OCqwW46hCQ0CnZP33GTWwhg1I
+ bdtW/HgQ8WefQYOtd8zCotSL5koMAvm1XyTWZ8K7VRHJToNQKO639Jh4b66tmS2YpGn1
+ uWu+fbfEUUFjqKjcPR4Zjcoret8b+7x+/53U0K4gBWJTmioGAwcJhsK84tbZSgbeGttb
+ yHO2b3Va1EOUxdcj/6u43mxbqkLR09wSMgBZTpmhGsqo91RS5MgFuRarp7Aktb/97SYb
+ 2zpWZh9LDvrlBfId3R1btyjZFg4OIg8Zic/i43p9P0r4OkY48vNoc59d8v7x5CkuUdwX
+ HVVg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=d0pxGpqJ
-Subject: [Buildroot] [PATCH 09/29] package/tekui: really disable parallel
- build
+ header.a=rsa-sha256 header.s=20210112 header.b=G2wDSoBS
+Subject: [Buildroot] [PATCH 10/29] Revert "pptp-linux: fix build with high
+ BR2_JLEVEL settings"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,66 +104,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit "c80789c917 tekui: disable parallel build" added TEKUI_MAKE but
-that is not a symbol used by the generic package infra.
+This reverts commit ffc4afe084a76e7246bd373c73b706f512a86c2b.
 
-Ensure -j1 is passed to the build and install commands by using
-TEKUI_MAKE explicitly.
+Commit from 2012 "ffc4afe084 pptp-linux: fix build with high BR2_JLEVEL
+settings" added <pkg>_MAKE to a generic package, but the generic infra
+does not take this symbol into account.
 
-Fixes:
-http://autobuild.buildroot.net/results/c6cd0d488581013a8b215b0ee2fd8f549a868d4b
+The build issue was fixed in 2013 with commit "a5b8081b89 pptp-linux:
+fix parallel build" by adding a patch file.
 
-Cc: Francois Perrad <francois.perrad@gadz.org>
+So drop the bogus PPTP_LINUX_MAKE.
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-NOTE: I was unable to reproduce the build issue locally, in current
-master, using a few times:
-$ make BR2_JLEVEL=99 tekui-dirclean tekui
-either at the output of:
-$ br-reproduce-build c6cd0d488581013a8b215b0ee2fd8f549a868d4b
-or with this minimal defconfig:
- BR2_x86_i686=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_JLEVEL=99
- BR2_PACKAGE_TEKUI=y
- BR2_PACKAGE_LUA=y
-
-Testing using this defconfig:
+Using this defconfig:
  BR2_x86_i686=y
  BR2_TOOLCHAIN_EXTERNAL=y
  BR2_JLEVEL=3
- BR2_PACKAGE_TEKUI=y
- BR2_PACKAGE_LUA=y
-and the command:
-$ make V=1 tekui-build
+ BR2_PACKAGE_PPTP_LINUX=y
+one can see at the output of:
+$ make V=1 pptp-linux
 
 Before this patch:
 ... /usr/bin/make -j3 ...
-
 After this patch:
-... /usr/bin/make -j1 ...
+... /usr/bin/make -j3 ...
 ---
- package/tekui/tekui.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pptp-linux/pptp-linux.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/tekui/tekui.mk b/package/tekui/tekui.mk
-index 13000edd3e..3cb7ff51e5 100644
---- a/package/tekui/tekui.mk
-+++ b/package/tekui/tekui.mk
-@@ -59,11 +59,11 @@ endif
- endif
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index 7fd0733977..b6c740e710 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
+@@ -7,7 +7,6 @@
+ PPTP_LINUX_VERSION = 1.10.0
+ PPTP_LINUX_SITE = http://downloads.sourceforge.net/project/pptpclient/pptp/pptp-$(PPTP_LINUX_VERSION)
+ PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
+-PPTP_LINUX_MAKE = $(MAKE1)
+ PPTP_LINUX_LICENSE = GPL-2.0+
+ PPTP_LINUX_LICENSE_FILES = COPYING
  
- define TEKUI_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="/usr" -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(TEKUI_MAKE) $(TEKUI_MAKE_OPTS) PREFIX="/usr" -C $(@D) all
- endef
- 
- define TEKUI_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(TEKUI_MAKE) $(TEKUI_MAKE_OPTS) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
- endef
- 
- $(eval $(generic-package))
 -- 
 2.34.1
 
