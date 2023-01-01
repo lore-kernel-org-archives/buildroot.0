@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED8BDC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B750CC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 23:41:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99B0840600;
-	Sun,  1 Jan 2023 23:40:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99B0840600
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6629940603;
+	Sun,  1 Jan 2023 23:41:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6629940603
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8G7mz6wNgXu6; Sun,  1 Jan 2023 23:40:46 +0000 (UTC)
+	with ESMTP id d_xNLLB6cAL5; Sun,  1 Jan 2023 23:40:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FCE0405EC;
-	Sun,  1 Jan 2023 23:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FCE0405EC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FACD405D8;
+	Sun,  1 Jan 2023 23:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FACD405D8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D08501BF38D
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0884A1BF38D
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACE8760BFC
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACE8760BFC
+ by smtp3.osuosl.org (Postfix) with ESMTP id D85BE60C11
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 23:39:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D85BE60C11
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A8kZRv35No9l for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 23:39:20 +0000 (UTC)
+ with ESMTP id UB7fvZoti1D4 for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 23:39:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B283260C16
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com
- [IPv6:2001:4860:4864:20::2c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B283260C16
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:20 +0000 (UTC)
-Received: by mail-oa1-x2c.google.com with SMTP id
- 586e51a60fabf-14ffd3c5b15so20206941fac.3
- for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:20 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC6EC60BFC
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com
+ [IPv6:2607:f8b0:4864:20::22a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EC6EC60BFC
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 23:39:22 +0000 (UTC)
+Received: by mail-oi1-x22a.google.com with SMTP id s187so23797137oie.10
+ for <buildroot@buildroot.org>; Sun, 01 Jan 2023 15:39:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=CTTYeRYWDPnSQ2VRdLhghfTWLLKNCGSCsTbvSGQGogs=;
- b=E1L9HWXz1LrQI73i1TdNQxIX7rPM7zsEiQ7s6fD2B1/upfemT1MiDZO1fAqfI1CVfP
- 6GeXyuq+YRYFb697Bjx3/Oc4+syemUF4b6f4Qk2vhQcb+nsVjxiPsatd1FkcPmzHLqqG
- G2m0kecRXOwUhGvfsp5gfZtOzfV6S8fePSyaLxAD8kRI15msFd2pRBow2pC6UBNanPuQ
- sK0g3VK3HKk7ebf+gSp3sflFQmLs8W26zLDk7cT17b2Zm8tpEacvcyye3QC9wcMGm/Ou
- Tn8gDWBg7CSEIf3tthLgx9XI8d7Atjvisxq/4o+b1dA1VjNLa6+m6th664fC3E3Z/xYG
- DxSQ==
-X-Gm-Message-State: AFqh2kpgsxYkQJXyfT+i9YHuoTnwuvIN/OftZjlItFfJWWUkEcPbsYRT
- mCUZqdoiwOs4Go0exvXjYIjOWGcGuTw=
-X-Google-Smtp-Source: AMrXdXsdwUSN2vzeAHlL2ZIxxx1DpMJiuFv6B/eACEFyqWNkcst6yeul7RnljWcD7+p+gHetvCm0Sw==
-X-Received: by 2002:a05:6870:678b:b0:145:120:4867 with SMTP id
- gc11-20020a056870678b00b0014501204867mr18707781oab.34.1672616359713; 
- Sun, 01 Jan 2023 15:39:19 -0800 (PST)
+ bh=aMRDLaDkbzahd/uiRVPjuZUsTkJ2JtwhqPMjjH8wbXw=;
+ b=6o6WouE3xP7uBho3voIEKsVqDyLEWuANVSruUupxu4+8Y+P54Jg5f8+guKqYOlk+kg
+ 0eLt9i09fzKZDfgc+Thr85EZPdXAUE12QoZFjuLVy+TXLLoGVaWo1Ds58wWihK0aI/wv
+ Itxf7X4p9h/vFbDzIkmIF9wbOHrURhfpS6h8WK+d3/NG+lGWSC5yIq1QIe2ZF4XJ7ChL
+ ay8AZJko/M0MDm5xQIVo1v4tBlrcMlpPgHW3BDs+oTsP9CFtsJ6eJGs72FeBDm5qNUkh
+ hZOjjNBqwmCBIYrKEN7RuoSJ4RCImcpcKgfSlsBbE/f3HhUd1IbXlGumk6by94BDLMYo
+ mlIQ==
+X-Gm-Message-State: AFqh2kp+ItwPZOT/WFP5KuT5tcdaKDKonH5PRpPC2befHCrUDVHz55o0
+ Zbx/vGUzkotjPNpJqoY71p8ZA53AQDk=
+X-Google-Smtp-Source: AMrXdXvuuxjz2h1BZqgGBoiKAX3BzPgSQ4lcwkPdhkS0JsVqMJq0UpLcy3rRHAKPLJfitPb1EGwW7g==
+X-Received: by 2002:a05:6808:2c9:b0:35e:b231:1a27 with SMTP id
+ a9-20020a05680802c900b0035eb2311a27mr16014160oid.33.1672616362572; 
+ Sun, 01 Jan 2023 15:39:22 -0800 (PST)
 Received: from localhost.localdomain ([2804:14c:7980:988a:6ae4:c2b1:7ea6:a195])
  by smtp.gmail.com with ESMTPSA id
- o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.17
+ o189-20020aca41c6000000b00360e46a1edasm11372611oia.22.2023.01.01.15.39.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jan 2023 15:39:18 -0800 (PST)
+ Sun, 01 Jan 2023 15:39:21 -0800 (PST)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Jan 2023 20:36:31 -0300
-Message-Id: <20230101233653.487175-8-ricardo.martincoski@gmail.com>
+Date: Sun,  1 Jan 2023 20:36:32 -0300
+Message-Id: <20230101233653.487175-9-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
@@ -75,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=CTTYeRYWDPnSQ2VRdLhghfTWLLKNCGSCsTbvSGQGogs=;
- b=UsNcZi81TgxplY+CMTbo8RLBeBDTiQEwMPquAfHlrUQO2Ipuc/SdHOH6DPIzMT4a+P
- CQQUZ0IvDJ5J8AzJeQE0rjzrHok+nateMPtcfLCuHeczhUJAmQuCMc9wE8l6qrWulhhh
- ZRAcG1sTNV8ErSxSZqUH3IqaZDShOy4vlWr1qTIVaF3E11o4c4M+wrB2IoFr/j/34xuL
- m9Bx43m3NbQFl0QD/UeaNCzMIW9QogeyL0+GGVz6/S9TdtX08bSthV9XENLpJ1wrBXbN
- VSRr4nKrU16Uwlz1Lpj12nEJVyHEddGPa1lymuVNMqUPxFTUxibCtzwNcEOai9u+y8op
- nuug==
+ bh=aMRDLaDkbzahd/uiRVPjuZUsTkJ2JtwhqPMjjH8wbXw=;
+ b=FhxipUHoZ3P3CUioOtc845+0DhbYgt9LGX+d23IDSsgl9dRctCaFT1xRKoKln2eNDD
+ nQr/gIqw766JB5Fp27NKaR6q5Hr19h2DPbe9C1M1+vXfG89jRZgOmbZi+P99qyLPzW28
+ Ad8eWZPSejs7sFobRguhqTZas4I5cghTgv6n6NUAsUvV57l/4CmuRjyScNxXr+RrWSmn
+ INVE1jisJ5zSwl5Y8SALwB7XWDsAaxJ76LzR4ZpLEnxWj8DarBJmDxRQms2E9+324F/a
+ pGLRtENroJ9b1U9FK4fHo37zRYuGiAr+l3fS6okAira0hPgWxz/Lh+7A5A2duBbk0gRr
+ VXmw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UsNcZi81
-Subject: [Buildroot] [PATCH 07/29] package/ima-evm-utils: really install to
- staging
+ header.a=rsa-sha256 header.s=20210112 header.b=FhxipUHo
+Subject: [Buildroot] [PATCH 08/29] package/qt5/qt5virtualkeyboard: really
+ configure language layouts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,52 +97,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit "8229196d41 package/ima-evm-utils: new package" added
-IMA_EVM_UTILS_INSTALL_STAGING_CMDS without enabling
-IMA_EVM_UTILS_INSTALL_STAGING, so currently the package is not installed
-to staging.
+Commit "170777f342 package/qt5/qt5virtualkeyboard: convert to qmake
+infrastructure" changed most but not all <pkg>_QMAKEFLAGS to
+<pkg>_CONF_OPTS.
 
-Enable installing to staging.
+As a consequence, BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS is
+ignored and all layouts are compiled in.
+Some layouts have different licenses (e.g. pinying), so the license
+information for a build that is configured to not include such layouts
+is wrong.
 
-Cc: Petr Vorel <petr.vorel@gmail.com>
+Change the remaining _QMAKEFLAGS entry, fixing the config for which
+language layouts are compiled and installed.
+
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
 Tested using this minimal config:
  BR2_x86_i686=y
  BR2_TOOLCHAIN_EXTERNAL=y
- BR2_PACKAGE_IMA_EVM_UTILS=y
+ BR2_PACKAGE_QT5=y
+ BR2_PACKAGE_QT5VIRTUALKEYBOARD=y
+that is expected to compile/install only en_GB layout.
 
-|--- output.before/build/packages-file-list-staging.txt.sorted
-|+++ output.after/build/packages-file-list-staging.txt.sorted
-|@@ -0,0 +1,6 @@
-|+ima-evm-utils,./usr/bin/evmctl
-|+ima-evm-utils,./usr/include/imaevm.h
-|+ima-evm-utils,./usr/lib/libimaevm.la
-|+ima-evm-utils,./usr/lib/libimaevm.so
-|+ima-evm-utils,./usr/lib/libimaevm.so.3
-|+ima-evm-utils,./usr/lib/libimaevm.so.3.0.0
+|--- output.before/build/packages-file-list.txt.sorted
+|+++ output.after/build/packages-file-list.txt.sorted
+|@@ -3647,5 +3646,0 @@
+|-qt5virtualkeyboard,./usr/lib/cmake/Qt5VirtualKeyboard/Qt5VirtualKeyboard_QtVirtualKeyboardHangulPlugin.cmake
+|-qt5virtualkeyboard,./usr/lib/cmake/Qt5VirtualKeyboard/Qt5VirtualKeyboard_QtVirtualKeyboardOpenWnnPlugin.cmake
+|-qt5virtualkeyboard,./usr/lib/cmake/Qt5VirtualKeyboard/Qt5VirtualKeyboard_QtVirtualKeyboardPinyinPlugin.cmake
+|-qt5virtualkeyboard,./usr/lib/cmake/Qt5VirtualKeyboard/Qt5VirtualKeyboard_QtVirtualKeyboardTCImePlugin.cmake
+|-qt5virtualkeyboard,./usr/lib/cmake/Qt5VirtualKeyboard/Qt5VirtualKeyboard_QtVirtualKeyboardThaiPlugin.cmake
+|@@ -3660,5 +3654,0 @@
+|-qt5virtualkeyboard,./usr/lib/qt/plugins/virtualkeyboard/libqtvirtualkeyboard_hangul.so
+|-qt5virtualkeyboard,./usr/lib/qt/plugins/virtualkeyboard/libqtvirtualkeyboard_openwnn.so
+|-qt5virtualkeyboard,./usr/lib/qt/plugins/virtualkeyboard/libqtvirtualkeyboard_pinyin.so
+|-qt5virtualkeyboard,./usr/lib/qt/plugins/virtualkeyboard/libqtvirtualkeyboard_tcime.so
+|-qt5virtualkeyboard,./usr/lib/qt/plugins/virtualkeyboard/libqtvirtualkeyboard_thai.so
+
+build test:
+44 builds, 29 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/731801232
+
+test-pkg config:
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5VIRTUALKEYBOARD=y
 ---
- package/ima-evm-utils/ima-evm-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-index 7ee34d5e1a..01984402ce 100644
---- a/package/ima-evm-utils/ima-evm-utils.mk
-+++ b/package/ima-evm-utils/ima-evm-utils.mk
-@@ -8,6 +8,7 @@ IMA_EVM_UTILS_VERSION = 1.4
- IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
- IMA_EVM_UTILS_LICENSE = GPL-2.0
- IMA_EVM_UTILS_LICENSE_FILES = COPYING
-+IMA_EVM_UTILS_INSTALL_STAGING = YES
- IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl tpm2-tss
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index c31d455c4e..3fefdc874d 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -16,7 +16,7 @@ QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
  
- # Tarball doesn't contain configure
+ QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+ ifneq ($(strip $(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+-QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
++QT5VIRTUALKEYBOARD_CONF_OPTS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
+ 
+ ifneq ($(filter ja_JP all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+ QT5VIRTUALKEYBOARD_LICENSE += , Apache-2.0 (openwnn)
 -- 
 2.34.1
 
