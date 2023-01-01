@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68692C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 08:58:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A65D2C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 08:58:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4453402E0;
-	Sun,  1 Jan 2023 08:58:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4453402E0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BC938142A;
+	Sun,  1 Jan 2023 08:58:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BC938142A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wpnGosESKYbB; Sun,  1 Jan 2023 08:58:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PdIutwYxuC-w; Sun,  1 Jan 2023 08:58:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F4125400E7;
-	Sun,  1 Jan 2023 08:58:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F4125400E7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CDD601BF282
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 08:58:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 770F081426;
+	Sun,  1 Jan 2023 08:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 770F081426
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7886B1BF282
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 08:58:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A449840743
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 08:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A449840743
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6116E60B26
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 08:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6116E60B26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zCf98PDweOmj for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 08:58:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFDD54071B
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DFDD54071B
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 08:58:00 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:80ae:a953:659b:4560])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6A8B8B0055A;
- Sun,  1 Jan 2023 09:57:54 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 01 Jan 2023 09:57:54 +0100
-Date: Sun, 1 Jan 2023 09:57:54 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: unixmania@gmail.com
-Message-ID: <20230101085754.GW2498764@scaer>
-References: <20221231201700.3105911-1-unixmania@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221231201700.3105911-1-unixmania@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672563477;
- bh=6g+AO72Tn/E+WGpJsbCJCysrDPkp5l0c3s9Su8btLQs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CkXRnkthpqMVu86x8Vaub6PiG1ceO/Ju3FI98WzlZLba4RRXCTC46b04oRyEPWulK
- KEi2qyYDLjKpFWJ0HyqzONWTeIukPoKrZ34lq/n6+7I3G4zU0G47bVHZYMsoTr9USZ
- 0n9HLE/KBYqUkG6GCh4Attc9CJuJ/tdPLJpN6uXVDHTndPX0r5+hyxQxVIgx5AAKx0
- uRL8Qy0y/qAe6jUNUUmJwztr8N/Kab3fIPrFHl5nmrinPkT6kDn7frmteJyksvuW4z
- I7Y8NFOwdiac+roSk6wwHC56rdHCpmUY4/j/Wgb6xgegK+Y4Tt/zNMskctxCDFLtCf
- xlMMXgVELPt1Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CkXRnkth
-Subject: Re: [Buildroot] [PATCH] package/qemu: allow building only the tools
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IrfPS7GDa6We for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 08:58:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A27B60BCA
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 08:58:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A27B60BCA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4564486A17; Sun,  1 Jan 2023 08:58:15 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 1 Jan 2023 09:33:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e75f3962084045cf50f38f0adf8bfaa8da71dfd5
+X-Git-Newrev: acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
+X-Patchwork-Hint: ignore
+Message-Id: <20230101085815.4564486A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: allow building only the tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,74 +56,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2022-12-31 17:17 -0300, unixmania@gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Commit 44be514b21fd94096702b80c62d46c31d72f15a5 mistakenly forced to
-> always build at least user or system emulation but it must be possible
-> to choose only the tools (e.g. for a guest VM image).
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  package/qemu/Config.in | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> index 0f9e353510..435e92781c 100644
-> --- a/package/qemu/Config.in
-> +++ b/package/qemu/Config.in
-> @@ -27,7 +27,6 @@ menuconfig BR2_PACKAGE_QEMU
->  	select BR2_PACKAGE_LIBGLIB2
->  	select BR2_PACKAGE_PIXMAN
->  	select BR2_PACKAGE_ZLIB
-> -	select BR2_PACKAGE_QEMU_SYSTEM if !BR2_PACKAGE_QEMU_LINUX_USER
+commit: https://git.buildroot.net/buildroot/commit/?id=acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-But then, we're back to a situation where we can have qemu enabled, but
-we're building neither the the system nor user emulation, nor the tools,
-which does not make sense.
+Commit 44be514b21fd (package/qemu: refactor target emulator selection)
+mistakenly forced to always build at least user or system emulation but
+it should be possible to choose only the tools (e.g. for a guest VM
+image).
 
-So, I've changed that to force the tools if neither system nor user
-emulation is enabled.
+Still, we don't want to configure qemu with neither system nor user
+emulation, nor the tools enabled; at least one lust be enabled.
 
-Applied to master, thanks.
+So, change the selection to force the tools to be enabled if neither the
+system nor the user emulations are enabled.
 
-Note: in fact, even with all disabled, qemu still installs its binary
-blobs, which does not make much sense, so that does not count. Also, I
-was pretty sure we had an option for that, but it turns out that my
-commit [0] did not make it when I initially worked on this, 10 years
-ago [1]... Funny how memory can be flaky. :-) And of course, the option
-has changed since then. Sigh... I guess I'll have to respin this...
+Reinstate the the machine selection guard behind a dependency on whether
+at lesat system or user emulation is enabled.
 
-[0] https://gitlab.com/ymorin/buildroot/-/commit/1b87393f67d7fad5dcd1e2390e4f65cd2d865cab
-[1] https://lore.kernel.org/buildroot/?q=s%3A%22add+option+to+not+install+blobs%22
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+[yann.morin.1998@free.fr:
+  - ensure at least one of system, user, or tools
+  - guard the machine selection
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/qemu/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  QEMU is a generic and open source machine emulator and
->  	  virtualizer.
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 0f9e353510..2bbc6a14c0 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -27,7 +27,7 @@ menuconfig BR2_PACKAGE_QEMU
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PIXMAN
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_QEMU_SYSTEM if !BR2_PACKAGE_QEMU_LINUX_USER
++	select BR2_PACKAGE_QEMU_TOOLS if !BR2_PACKAGE_QEMU_SYSTEM && !BR2_PACKAGE_QEMU_LINUX_USER
+ 	help
+ 	  QEMU is a generic and open source machine emulator and
+ 	  virtualizer.
+@@ -114,6 +114,7 @@ comment "Linux user-land emulation needs a glibc or uClibc toolchain"
+ 
+ config BR2_PACKAGE_QEMU_CHOOSE_TARGETS
+ 	bool "Select individual emulator targets"
++	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER
+ 	help
+ 	  By default, all targets (system and/or user, subject to the
+ 	  corresponding options, above) are built. If you only need a
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
