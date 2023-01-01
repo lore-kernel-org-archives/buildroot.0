@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670F7C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 18:20:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00FD3C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jan 2023 18:23:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16BA381419;
-	Sun,  1 Jan 2023 18:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16BA381419
+	by smtp3.osuosl.org (Postfix) with ESMTP id 868B260AE4;
+	Sun,  1 Jan 2023 18:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 868B260AE4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9jn1qkCxT5l4; Sun,  1 Jan 2023 18:23:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D519360ACE;
+	Sun,  1 Jan 2023 18:22:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D519360ACE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C3CC1BF41A
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:22:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0552E813FE
+ for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:22:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0552E813FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SDNeygX9dr-p; Sun,  1 Jan 2023 18:20:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B0CE8140B;
-	Sun,  1 Jan 2023 18:20:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B0CE8140B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB4311BF41A
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:19:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92F2640203
- for <buildroot@lists.busybox.net>; Sun,  1 Jan 2023 18:19:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92F2640203
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OYF-M-T34yiQ for <buildroot@lists.busybox.net>;
- Sun,  1 Jan 2023 18:19:32 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 82iqyjqldiEb for <buildroot@lists.busybox.net>;
+ Sun,  1 Jan 2023 18:22:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DB5B401FC
- for <buildroot@buildroot.org>; Sun,  1 Jan 2023 18:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DB5B401FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C0D481359
+ for <buildroot@buildroot.org>; Sun,  1 Jan 2023 18:22:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C0D481359
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29FD28705B; Sun,  1 Jan 2023 18:19:32 +0000 (UTC)
+ id 3306A8705B; Sun,  1 Jan 2023 18:22:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jan 2023 19:13:23 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 430e8ff12592bf5d630cd92bfdb4c4850ffa0e34
-X-Git-Newrev: e91df35f84a57d76859f0e2579e32bec618a2622
+Date: Sun, 1 Jan 2023 19:22:42 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 72f6b419f088760005d5d23d1b65c6c14bb337eb
+X-Git-Newrev: 332dcce94841c94a977593d6c162fe602598af5f
 X-Patchwork-Hint: ignore
-Message-Id: <20230101181932.29FD28705B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/libdeflate: fix
- aarch64 build
+Message-Id: <20230101182258.3306A8705B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/fmlib: fix build
+ for ppc e500mc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,150 +58,52 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2855560831711627052=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2855560831711627052==
-Content-Type: text/plain
+commit: https://git.buildroot.net/buildroot/commit/?id=332dcce94841c94a977593d6c162fe602598af5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e91df35f84a57d76859f0e2579e32bec618a2622
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+When BR2_powerpc_e500mc=y, fmlib package compilation fails with output:
 
-Fix the following aarch64 build failure raised since the addition of the
-package in commit 4231e7b10b87de71e33bb9906eede3751bed5dfe:
+    make[2]: *** No rule to make target 'libfm-e500mc.a'.  Stop.
 
-In file included from /home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h:256,
-                 from /home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/crc32.c:227:
-/home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h: In function 'clmul_u32':
-/home/autobuild/autobuild/instance-22/output-1/host/lib/gcc/aarch64-buildroot-linux-gnu/10.4.0/include/arm_neon.h:26723:1: error: inlining failed in call to 'always_inline' 'vmull_p64': target specific option mismatch
-26723 | vmull_p64 (poly64_t __a, poly64_t __b)
-      | ^~~~~~~~~
-In file included from /home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/crc32.c:227:
-/home/autobuild/autobuild/instance-22/output-1/build/libdeflate-1.15/lib/arm/crc32_impl.h:262:19: note: called from here
-  262 |  uint64x2_t res = vreinterpretq_u64_p128(
-      |                   ^~~~~~~~~~~~~~~~~~~~~~~
-  263 |     compat_vmull_p64((poly64_t)a, (poly64_t)b));
-      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The fmlib package "make help" command shows:
 
-Fixes:
- - http://autobuild.buildroot.org/results/9aee8dafea614db77209818b913a571534466506
- - http://autobuild.buildroot.org/results/951d5a1a2959a0cc65ca7e52967ec07bc1cc00f1
+    The available make libfm-<arch>.a targets are:
+	    libfm-ppce500mc.a		(P2, P3, P4)
+    ...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5dc7e1fc363b217683f009f6470519b751675083)
+The package Config.in incorrectly sets BR2_PACKAGE_FMLIB_ARCHTYPE
+to "e500mc", which is then passed as the package make target.
+The correct value should be "ppce500mc".
+
+The commit fixes this build issue.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1df9d42bdd8cc2e594d6337ee62c3f31499baf80)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rypto-target-when-required-due-to-gcc-bug.patch | 90 ++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+ package/fmlib/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libdeflate/0001-lib-arm-crc32-use-crypto-target-when-required-due-to-gcc-bug.patch b/package/libdeflate/0001-lib-arm-crc32-use-crypto-target-when-required-due-to-gcc-bug.patch
-new file mode 100644
-index 0000000000..8823ec4b39
---- /dev/null
-+++ b/package/libdeflate/0001-lib-arm-crc32-use-crypto-target-when-required-due-to-gcc-bug.patch
-@@ -0,0 +1,90 @@
-+From f8f022e5bc574088ae80327ea5f88a8fe09b48c8 Mon Sep 17 00:00:00 2001
-+From: Eric Biggers <ebiggers3@gmail.com>
-+Date: Sun, 25 Dec 2022 15:05:52 -0800
-+Subject: [PATCH] lib/arm/crc32: use crypto target when required due to gcc bug
-+
-+Fixes https://github.com/ebiggers/libdeflate/issues/280
-+Fixes: 6db64ab7afd2 ("lib/crc32: CRC-32 optimizations and other improvements")
-+[Retrieved from:
-+https://github.com/ebiggers/libdeflate/commit/f8f022e5bc574088ae80327ea5f88a8fe09b48c8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/arm/cpu_features.h | 23 +++++++++++++++++++++++
-+ lib/arm/crc32_impl.h   |  9 +++++----
-+ 2 files changed, 28 insertions(+), 4 deletions(-)
-+
-+diff --git a/lib/arm/cpu_features.h b/lib/arm/cpu_features.h
-+index 204c0cd5..4092eba8 100644
-+--- a/lib/arm/cpu_features.h
-++++ b/lib/arm/cpu_features.h
-+@@ -116,6 +116,29 @@ static inline u32 get_arm_cpu_features(void) { return 0; }
-+ #else
-+ #  define HAVE_PMULL_INTRIN	0
-+ #endif
-++/*
-++ * Set USE_PMULL_TARGET_EVEN_IF_NATIVE if a workaround for a gcc bug that was
-++ * fixed by commit 11a113d501ff ("aarch64: Simplify feature definitions") in gcc
-++ * 13 is needed.  A minimal program that fails to build due to this bug when
-++ * compiled with -mcpu=emag, at least with gcc 10 through 12, is:
-++ *
-++ *    static inline __attribute__((always_inline,target("+crypto"))) void f() {}
-++ *    void g() { f(); }
-++ *
-++ * The error is:
-++ *
-++ *    error: inlining failed in call to ‘always_inline’ ‘f’: target specific option mismatch
-++ *
-++ * The workaround is to explicitly add the crypto target to the non-inline
-++ * function g(), even though this should not be required due to -mcpu=emag
-++ * enabling 'crypto' natively and causing __ARM_FEATURE_CRYPTO to be defined.
-++ */
-++#if HAVE_PMULL_NATIVE && defined(ARCH_ARM64) && \
-++		GCC_PREREQ(6, 1) && !GCC_PREREQ(13, 1)
-++#  define USE_PMULL_TARGET_EVEN_IF_NATIVE	1
-++#else
-++#  define USE_PMULL_TARGET_EVEN_IF_NATIVE	0
-++#endif
-+ 
-+ /* CRC32 */
-+ #ifdef __ARM_FEATURE_CRC32
-+diff --git a/lib/arm/crc32_impl.h b/lib/arm/crc32_impl.h
-+index e426a63d..b9300e4b 100644
-+--- a/lib/arm/crc32_impl.h
-++++ b/lib/arm/crc32_impl.h
-+@@ -236,7 +236,7 @@ crc32_arm_crc(u32 crc, const u8 *p, size_t len)
-+  * for implementations that use pmull for folding the data itself.
-+  */
-+ #if HAVE_CRC32_INTRIN && HAVE_PMULL_INTRIN
-+-#  if HAVE_CRC32_NATIVE && HAVE_PMULL_NATIVE
-++#  if HAVE_CRC32_NATIVE && HAVE_PMULL_NATIVE && !USE_PMULL_TARGET_EVEN_IF_NATIVE
-+ #    define ATTRIBUTES
-+ #  else
-+ #    ifdef ARCH_ARM32
-+@@ -438,7 +438,7 @@ crc32_arm_crc_pmullcombine(u32 crc, const u8 *p, size_t len)
-+ #if HAVE_PMULL_INTRIN
-+ #  define crc32_arm_pmullx4	crc32_arm_pmullx4
-+ #  define SUFFIX			 _pmullx4
-+-#  if HAVE_PMULL_NATIVE
-++#  if HAVE_PMULL_NATIVE && !USE_PMULL_TARGET_EVEN_IF_NATIVE
-+ #    define ATTRIBUTES
-+ #  else
-+ #    ifdef ARCH_ARM32
-+@@ -558,7 +558,7 @@ crc32_arm_pmullx4(u32 crc, const u8 *p, size_t len)
-+ #if defined(ARCH_ARM64) && HAVE_PMULL_INTRIN && HAVE_CRC32_INTRIN
-+ #  define crc32_arm_pmullx12_crc	crc32_arm_pmullx12_crc
-+ #  define SUFFIX				 _pmullx12_crc
-+-#  if HAVE_PMULL_NATIVE && HAVE_CRC32_NATIVE
-++#  if HAVE_PMULL_NATIVE && HAVE_CRC32_NATIVE && !USE_PMULL_TARGET_EVEN_IF_NATIVE
-+ #    define ATTRIBUTES
-+ #  else
-+ #    ifdef __clang__
-+@@ -584,7 +584,8 @@ crc32_arm_pmullx4(u32 crc, const u8 *p, size_t len)
-+ 	(HAVE_SHA3_TARGET || HAVE_SHA3_NATIVE)
-+ #  define crc32_arm_pmullx12_crc_eor3	crc32_arm_pmullx12_crc_eor3
-+ #  define SUFFIX				 _pmullx12_crc_eor3
-+-#  if HAVE_PMULL_NATIVE && HAVE_CRC32_NATIVE && HAVE_SHA3_NATIVE
-++#  if HAVE_PMULL_NATIVE && HAVE_CRC32_NATIVE && HAVE_SHA3_NATIVE && \
-++	!USE_PMULL_TARGET_EVEN_IF_NATIVE
-+ #    define ATTRIBUTES
-+ #  else
-+ #    ifdef __clang__
-
---===============2855560831711627052==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
+index df4ae440ea..7bccfd7c83 100644
+--- a/package/fmlib/Config.in
++++ b/package/fmlib/Config.in
+@@ -37,7 +37,7 @@ endchoice
+ 
+ config BR2_PACKAGE_FMLIB_ARCHTYPE
+ 	string
+-	default "e500mc" if BR2_powerpc_e500mc
++	default "ppce500mc" if BR2_powerpc_e500mc
+ 	default "ppc64e6500" if BR2_powerpc_e6500 && BR2_powerpc64
+ 	default "ppc32e6500" if BR2_powerpc_e6500 && BR2_powerpc
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2855560831711627052==--
