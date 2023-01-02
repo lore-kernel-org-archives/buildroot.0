@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 641C9C3DA7A
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 16:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FE24C3DA7A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 16:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BF4081EBC;
-	Mon,  2 Jan 2023 16:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BF4081EBC
+	by smtp4.osuosl.org (Postfix) with ESMTP id D636A400AA;
+	Mon,  2 Jan 2023 16:58:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D636A400AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fhH1O4ZT4PkW; Mon,  2 Jan 2023 16:58:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IIiiDPXYGS41; Mon,  2 Jan 2023 16:58:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F9C281E1E;
-	Mon,  2 Jan 2023 16:58:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F9C281E1E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6BEEA1BF8A8
+	by smtp4.osuosl.org (Postfix) with ESMTP id A85AB40056;
+	Mon,  2 Jan 2023 16:58:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A85AB40056
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DA7A81BF2EC
  for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52E5960F46
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0AD4416B4
  for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:57:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52E5960F46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0AD4416B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ys7Y8M1ADwRK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c_nZkSMDlZ_F for <buildroot@lists.busybox.net>;
  Mon,  2 Jan 2023 16:57:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A60960F3F
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3C42416B9
  for <buildroot@buildroot.org>; Mon,  2 Jan 2023 16:57:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A60960F3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3C42416B9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 506AE87116; Mon,  2 Jan 2023 16:57:52 +0000 (UTC)
+ id 7B8918711C; Mon,  2 Jan 2023 16:57:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 2 Jan 2023 17:49:21 +0100
+Date: Mon, 2 Jan 2023 17:56:05 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 371734c38690e733a94c7db63dda1b45e4399351
-X-Git-Newrev: 7f8341b6c33ca8878158f2e76a1dd61c5fae67a9
+X-Git-Oldrev: 3ce37efe7f8940ecb9410190c70e924e7ade03af
+X-Git-Newrev: 7f1b0cd321a8294754a7193918aef48c27cbe216
 X-Patchwork-Hint: ignore
-Message-Id: <20230102165752.506AE87116@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/mutt: bump to
- version 2.2.9
+Message-Id: <20230102165752.7B8918711C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/xxhash: optimize
+ XXHASH_{TARGETS, INSTALL_TARGETS}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f8341b6c33ca8878158f2e76a1dd61c5fae67a9
+commit: https://git.buildroot.net/buildroot/commit/?id=7f1b0cd321a8294754a7193918aef48c27cbe216
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Mutt 2.2.9 was released on November 12, 2022. This is a bug-fix release,
-fixing a build issue with recent GPGME releases.
-
-Mutt 2.2.8 was released on November 5, 2022. This is a bug-fix release,
-fixing a possible crash when using GPGME to view an application/pgp key
-block. It also makes some changes to resizing and window size logic, and
-enables batch-mode IMAP Fcc'ing.
-
-https://gitlab.com/muttmua/mutt/-/blob/mutt-2-2-9-rel/ChangeLog
+Optimize XXHASH_{TARGETS,INSTALL_TARGETS} as suggested by Thomas
+Petazzoni in
+https://patchwork.ozlabs.org/project/buildroot/patch/20221228221522.280696-1-fontaine.fabrice@gmail.com/
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7a2afdb7b1180bed3b6ad92c22c908805467ead3)
+(cherry picked from commit 3de4ae012141803bdf8abda12e27d10e55f6953f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xxhash/xxhash.mk | 34 +++++++++++++---------------------
+ 1 file changed, 13 insertions(+), 21 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 27e439183a..c475641ab5 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  eb13858f58bb369f477bf652d90e9b6aaddd0d610acbea3455049e5efad36df1  mutt-2.2.7.tar.gz
-+sha256  fa531b231d58fe1f30ceda0ed626683ea9ebdfb76ce47ef8bb27c2f77422cffb  mutt-2.2.9.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 7a4bc1b10c..0a98396d88 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
+index 6932113f14..04bc98690f 100644
+--- a/package/xxhash/xxhash.mk
++++ b/package/xxhash/xxhash.mk
+@@ -10,28 +10,20 @@ XXHASH_LICENSE = BSD-2-Clause (library), GPL-2.0+ (xxhsum)
+ XXHASH_LICENSE_FILES = LICENSE cli/COPYING
+ XXHASH_INSTALL_STAGING = YES
  
--MUTT_VERSION = 2.2.7
-+MUTT_VERSION = 2.2.9
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+-XXHASH_TARGETS = xxhsum
+-XXHASH_INSTALL_TARGETS = install_xxhsum
+-
+-ifeq ($(BR2_STATIC_LIBS),y)
+-XXHASH_TARGETS += libxxhash.a libxxhash.pc
+-XXHASH_INSTALL_TARGETS += \
+-	install_libxxhash.a \
+-	install_libxxhash.includes \
+-	install_libxxhash.pc
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-XXHASH_TARGETS += libxxhash libxxhash.pc
+-XXHASH_INSTALL_TARGETS += \
+-	install_libxxhash \
+-	install_libxxhash.includes \
+-	install_libxxhash.pc
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-XXHASH_TARGETS += libxxhash.a libxxhash libxxhash.pc
+-XXHASH_INSTALL_TARGETS += \
+-	install_libxxhash.a \
+-	install_libxxhash \
++XXHASH_TARGETS = xxhsum libxxhash.pc
++XXHASH_INSTALL_TARGETS = \
+ 	install_libxxhash.includes \
+-	install_libxxhash.pc
++	install_libxxhash.pc \
++	install_xxhsum
++
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++XXHASH_TARGETS += libxxhash.a
++XXHASH_INSTALL_TARGETS += install_libxxhash.a
++endif
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++XXHASH_TARGETS += libxxhash
++XXHASH_INSTALL_TARGETS += install_libxxhash
+ endif
+ 
+ define XXHASH_BUILD_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
