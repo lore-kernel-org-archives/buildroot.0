@@ -1,50 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1989EC3DA7A
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 21:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA019C3DA7A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 21:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A050415F6;
-	Mon,  2 Jan 2023 21:34:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A050415F6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54EB840453;
+	Mon,  2 Jan 2023 21:36:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54EB840453
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tk_GdfuDLsZ1; Mon,  2 Jan 2023 21:34:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AOJe7J2544Lr; Mon,  2 Jan 2023 21:36:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 458B7415E2;
-	Mon,  2 Jan 2023 21:34:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 458B7415E2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8BC381BF2C3
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 21:34:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8353440166;
+	Mon,  2 Jan 2023 21:36:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8353440166
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B05071BF2C3
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 21:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73CAF415E2
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 21:34:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73CAF415E2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BED840166
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 21:36:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BED840166
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aqawpxtSIs2O for <buildroot@lists.busybox.net>;
- Mon,  2 Jan 2023 21:34:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E56B1415E1
- for <buildroot@buildroot.org>; Mon,  2 Jan 2023 21:34:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E56B1415E1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D06AB87153; Mon,  2 Jan 2023 21:34:44 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6vYnhniDLwQu for <buildroot@lists.busybox.net>;
+ Mon,  2 Jan 2023 21:36:09 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75DAB400D3
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 75DAB400D3
+ for <buildroot@buildroot.org>; Mon,  2 Jan 2023 21:36:09 +0000 (UTC)
+Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
+ by mailout02.t-online.de (Postfix) with SMTP id 9BD26236B7
+ for <buildroot@buildroot.org>; Mon,  2 Jan 2023 22:35:40 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd77.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1pCST1-28dLZh0; Mon, 2 Jan 2023 22:35:35 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40792)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pCST1-0002MF-0m
+ for buildroot@buildroot.org; Mon, 02 Jan 2023 22:35:35 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Mon, 2 Jan 2023 22:33:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: acaae6c39bd046a4a2a6250e7c167d77fb24f1f0
-X-Git-Newrev: 82522d25476fee95fe242a38c989280035a460c5
-X-Patchwork-Hint: ignore
-Message-Id: <20230102213444.D06AB87153@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dbus-fast: new package
+Date: Mon,  2 Jan 2023 22:35:35 +0100
+Message-Id: <20230102213535.44208-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1672695335-8A6BF81F-55742F73/0/0 CLEAN NORMAL
+X-TOI-MSGID: ab0ea7ca-9205-4b20-8d35-17c532d9a6f6
+Subject: [Buildroot] [PATCH 1/1] package/libsndfile: bump to version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,210 +65,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82522d25476fee95fe242a38c989280035a460c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+https://github.com/libsndfile/libsndfile/releases/tag/1.2.0
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998@free.fr:
-  - select host-cython in Config.in
-  - introduce obj_path in test sample
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Drop patch (already in version).
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- DEVELOPERS                                         |  2 +
- package/Config.in                                  |  1 +
- package/python-dbus-fast/Config.in                 | 10 +++++
- package/python-dbus-fast/python-dbus-fast.hash     |  5 +++
- package/python-dbus-fast/python-dbus-fast.mk       | 16 ++++++++
- .../tests/package/sample_python_dbus_fast.py       | 45 ++++++++++++++++++++++
- .../testing/tests/package/test_python_dbus_fast.py | 40 +++++++++++++++++++
- 7 files changed, 119 insertions(+)
+ ...ute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch | 24 -------------------
+ package/libsndfile/libsndfile.hash            |  2 +-
+ package/libsndfile/libsndfile.mk              |  4 +---
+ 3 files changed, 2 insertions(+), 28 deletions(-)
+ delete mode 100644 package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3217823b6f..8399dcc7af 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1877,6 +1877,7 @@ F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/python-ansicolors/
- F:	package/python-bleak/
-+F:	package/python-dbus-fast/
- F:	package/python-dbus-next/
- F:	package/python-iniconfig/
- F:	package/python-intelhex/
-@@ -1888,6 +1889,7 @@ F:	package/python-typing-extensions/
- F:	package/python-xmodem/
- F:	package/rs485conf/
- F:	package/turbolua/
-+F:	support/testing/tests/package/sample_python_dbus_fast.py
- F:	support/testing/tests/package/sample_python_dbus_next.py
- F:	support/testing/tests/package/sample_python_pytest.py
- F:	support/testing/tests/package/sample_python_pytest_asyncio.py
-diff --git a/package/Config.in b/package/Config.in
-index 41e15ca77f..995dae2c57 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1022,6 +1022,7 @@ menu "External python modules"
- 	source "package/python-daphne/Config.in"
- 	source "package/python-dataproperty/Config.in"
- 	source "package/python-dateutil/Config.in"
-+	source "package/python-dbus-fast/Config.in"
- 	source "package/python-dbus-next/Config.in"
- 	source "package/python-decorator/Config.in"
- 	source "package/python-defusedxml/Config.in"
-diff --git a/package/python-dbus-fast/Config.in b/package/python-dbus-fast/Config.in
-new file mode 100644
-index 0000000000..c9562fecfa
---- /dev/null
-+++ b/package/python-dbus-fast/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_DBUS_FAST
-+	bool "python-dbus-fast"
-+	select BR2_PACKAGE_HOST_PYTHON_CYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-+	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
-+	help
-+	  A faster version of dbus-next, a DBus library for Python with
-+	  asyncio support.
-+
-+	  https://github.com/bluetooth-devices/dbus-fast
-diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
-new file mode 100644
-index 0000000000..f0dceeb43d
---- /dev/null
-+++ b/package/python-dbus-fast/python-dbus-fast.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/dbus-fast/json
-+md5  eebf2c558dd1af0f8f32b361e91f2fa3  dbus_fast-1.61.1.tar.gz
-+sha256  bda4a7d559047b74f409eda278f68f610a418e86ad3efa0368fa2ed240daa6b6  dbus_fast-1.61.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
-diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
-new file mode 100644
-index 0000000000..de7049ba22
---- /dev/null
-+++ b/package/python-dbus-fast/python-dbus-fast.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-dbus-fast
-+#
-+################################################################################
-+
-+PYTHON_DBUS_FAST_VERSION = 1.61.1
-+PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
-+PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/dd/f4/a280d46b119d59f6a3d84abf474452ae76651558b0963ab8c48ae13b5a44
-+PYTHON_DBUS_FAST_SETUP_TYPE = setuptools
-+PYTHON_DBUS_FAST_LICENSE = MIT
-+PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
-+PYTHON_DBUS_FAST_ENV = REQUIRE_CYTHON=1
-+PYTHON_DBUS_FAST_DEPENDENCIES = host-python-cython
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_dbus_fast.py b/support/testing/tests/package/sample_python_dbus_fast.py
-new file mode 100644
-index 0000000000..4157bccfcf
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_dbus_fast.py
-@@ -0,0 +1,45 @@
-+import asyncio
-+from dbus_fast.aio import MessageBus
-+from dbus_fast.service import ServiceInterface, method
-+import dbus_fast.introspection as intr
-+from dbus_fast import BusType
-+
-+
-+class SampleInterface(ServiceInterface):
-+    def __init__(self):
-+        super().__init__('test.interface')
-+
-+    @method()
-+    def Ping(self):
-+        pass
-+
-+    @method()
-+    def ConcatStrings(self, what1: 's', what2: 's') -> 's':  # noqa: F821
-+        return what1 + what2
-+
-+
-+async def main():
-+    bus_name = 'dbus.fast.sample'
-+    obj_path = '/test/path'
-+
-+    bus = await MessageBus(bus_type=BusType.SYSTEM).connect()
-+    bus2 = await MessageBus(bus_type=BusType.SYSTEM).connect()
-+
-+    await bus.request_name(bus_name)
-+
-+    service_interface = SampleInterface()
-+    bus.export(obj_path, service_interface)
-+
-+    introspection = await bus2.introspect(bus_name, obj_path)
-+    assert type(introspection) is intr.Node
-+    obj = bus2.get_proxy_object(bus_name, obj_path, introspection)
-+    interface = obj.get_interface(service_interface.name)
-+
-+    result = await interface.call_ping()
-+    assert result is None
-+
-+    result = await interface.call_concat_strings('hello ', 'world')
-+    assert result == 'hello world'
-+
-+
-+asyncio.run(main())
-diff --git a/support/testing/tests/package/test_python_dbus_fast.py b/support/testing/tests/package/test_python_dbus_fast.py
-new file mode 100644
-index 0000000000..5f67cfd8cc
---- /dev/null
-+++ b/support/testing/tests/package/test_python_dbus_fast.py
-@@ -0,0 +1,40 @@
-+import textwrap
-+
-+
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3DBusFast(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_DBUS=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DBUS_FAST=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_dbus_fast.py"]
-+
-+    def run_sample_scripts(self):
-+        config = \
-+            """
-+            <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
-+             "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-+            <busconfig>
-+              <policy user="root">
-+                <allow own="dbus.fast.sample"/>
-+                <allow send_destination="dbus.fast.sample"/>
-+              </policy>
-+            </busconfig>
-+            """
-+        config = textwrap.dedent(config)
-+        config_dir = "/etc/dbus-1/system.d"
-+        config_fn = "dbus.fast.sample.conf"
-+
-+        # Setup and reload D-Bus configuration
-+        self.emulator.run("mkdir -p " + config_dir)
-+        self.emulator.run("cat > " + config_dir + "/" + config_fn +
-+                          " <<EOF" + config + "EOF")
-+        self.emulator.run("killall -SIGHUP dbus-daemon")
-+
-+        # Run test scripts
-+        super().run_sample_scripts()
+diff --git a/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch b/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
+deleted file mode 100644
+index 44ed6dc2cb..0000000000
+--- a/package/libsndfile/0001-configure-ac-substitute-EXTERNAL_MPEG_LIBS-in-sndfile-pc.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-From e4fdaeefddd39bae1db27d48ccb7db7733e0c009 Mon Sep 17 00:00:00 2001
+-From: Michael Cho <cho-m@tuta.io>
+-Date: Sun, 17 Apr 2022 21:31:07 -0700
+-Subject: [PATCH] configure.ac: substitute EXTERNAL_MPEG_LIBS in sndfile.pc
+-
+-[Retrieved from:
+-https://github.com/libsndfile/libsndfile/commit/e4fdaeefddd39bae1db27d48ccb7db7733e0c009]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- configure.ac | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 727b67bc0..a4c776d70 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -739,6 +739,7 @@ AC_SUBST(SNDIO_LIBS)
+- AC_SUBST(EXTERNAL_XIPH_CFLAGS)
+- AC_SUBST(EXTERNAL_XIPH_LIBS)
+- AC_SUBST(EXTERNAL_XIPH_REQUIRE)
+-+AC_SUBST(EXTERNAL_MPEG_LIBS)
+- AC_SUBST(EXTERNAL_MPEG_REQUIRE)
+- AC_SUBST(MPG123_CFLAGS)
+- AC_SUBST(MPG123_LIBS)
+diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
+index 67d10d03c4..be3ba41dc6 100644
+--- a/package/libsndfile/libsndfile.hash
++++ b/package/libsndfile/libsndfile.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  0f98e101c0f7c850a71225fb5feaf33b106227b3d331333ddc9bacee190bcf41  libsndfile-1.1.0.tar.xz
++sha256  0e30e7072f83dc84863e2e55f299175c7e04a5902ae79cfb99d4249ee8f6d60a  libsndfile-1.2.0.tar.xz
+ # Locally calculated
+ sha256  ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140  COPYING
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index 0b57a1fdd8..d8d1725444 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBSNDFILE_VERSION = 1.1.0
++LIBSNDFILE_VERSION = 1.2.0
+ LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.xz
+ LIBSNDFILE_SITE = https://github.com/libsndfile/libsndfile/releases/download/$(LIBSNDFILE_VERSION)
+ LIBSNDFILE_INSTALL_STAGING = YES
+ LIBSNDFILE_LICENSE = LGPL-2.1+
+ LIBSNDFILE_LICENSE_FILES = COPYING
+ LIBSNDFILE_CPE_ID_VENDOR = libsndfile_project
+-# We're patching configure.ac
+-LIBSNDFILE_AUTORECONF = YES
+ LIBSNDFILE_DEPENDENCIES = host-pkgconf
+ 
+ LIBSNDFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
