@@ -1,56 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE3BEC5479D
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 11:26:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67746C5479D
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 11:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67F2460BC9;
-	Mon,  2 Jan 2023 11:26:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67F2460BC9
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eyqTs9G6jmcz; Mon,  2 Jan 2023 11:26:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABF6260AD2;
-	Mon,  2 Jan 2023 11:26:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABF6260AD2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 489B11BF39C
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 11:26:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2414E81E50
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 11:26:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2414E81E50
+	by smtp1.osuosl.org (Postfix) with ESMTP id E34D881E5C;
+	Mon,  2 Jan 2023 11:27:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E34D881E5C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7gfMObjZoMNp for <buildroot@lists.busybox.net>;
- Mon,  2 Jan 2023 11:26:24 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA22F81E4F
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EA22F81E4F
- for <buildroot@buildroot.org>; Mon,  2 Jan 2023 11:26:23 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (22)
-Received: from zm (pub-52.182.29.194.multiplay.pl [194.29.182.52])
- by server220076.nazwa.pl (Postfix) with ESMTP id 4C2D81BD890;
- Mon,  2 Jan 2023 12:26:20 +0100 (CET)
-References: <20221103102102.924370-1-m.niestroj@grinn-global.com>
- <20221103102102.924370-2-m.niestroj@grinn-global.com>
- <20221211091013.GN1044805@scaer>
-User-agent: mu4e 1.8.13; emacs 28.2
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Mon, 02 Jan 2023 12:23:05 +0100
-In-reply-to: <20221211091013.GN1044805@scaer>
-Message-ID: <87tu1941pl.fsf@grinn-global.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uM0T_0dSNDgI; Mon,  2 Jan 2023 11:27:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D92681E52;
+	Mon,  2 Jan 2023 11:27:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D92681E52
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B49141BF39C
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 11:27:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8EF69408D0
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 11:27:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EF69408D0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UU189VnsJ8Br for <buildroot@lists.busybox.net>;
+ Mon,  2 Jan 2023 11:27:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5122E408CE
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5122E408CE
+ for <buildroot@buildroot.org>; Mon,  2 Jan 2023 11:27:49 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id B32641814B9; Mon,  2 Jan 2023 12:27:45 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Mon,  2 Jan 2023 12:27:36 +0100
+Message-Id: <20230102112737.113303-1-buildroot@heine.tech>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/python-bleak: bump version
- to 0.19.1
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; 
+ t=1672658867; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=DCbduEBYw7tMaxKmJy9V1VZ8G2sYnP92PUYZ1ptcKhc=;
+ b=IgSwRhTfji7Nki+tRgZR1pII/JgNoMMYCe84E5gQM4VghIxeiOb96d74p7g9zbhkWV/WlN
+ O+pbdrMtqv8fc263QO8B82Jglhf4lR7RfLYlV+SAFXp/eQa/h7tW6z0Z7iL9kRTDoGmLFk
+ R6nxuK3Et1NLJpjt64FbJGtve1Z/kCE=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=IgSwRhTf
+Subject: [Buildroot] [PATCH] package/{python-}protobuf: bump to version 21.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,20 +64,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Matt Weber <matthew.weber@collins.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgWWFubiwKCiJZYW5uIEUuIE1PUklOIiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdyaXRl
-czoKCj4gTWFyY2luLCBBbGwsCj4KPiBPbiAyMDIyLTExLTAzIDExOjIxICswMTAwLCBNYXJjaW4g
-Tmllc3Ryb2ogc3Bha2UgdGh1c2x5Ogo+PiBTaWduZWQtb2ZmLWJ5OiBNYXJjaW4gTmllc3Ryb2og
-PG0ubmllc3Ryb2pAZ3Jpbm4tZ2xvYmFsLmNvbT4KPgo+IEFwcGxpZWQgdG8gbWFzdGVyLCB0aGFu
-a3MuCj4KCkkgaGF2ZSBub3RpY2VkIHRoYXQgdGhpcyBwYXRjaCB3YXMgYXBwbGllZCB0byBtYXN0
-ZXIgd2l0aG91dCBQQVRDSCAxLzIKdGhhdCBhZGRzIHB5dGhvbi1kYnVzLW5leHQgcGFja2FnZSwg
-d2hpY2ggaXMgYSBydW50aW1lIGRlcGVuZGVuY3kuCgotLQpSZWdhcmRzLApNYXJjaW4gTmllc3Ry
-w7NqCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index f1f5fa77cd..b092c9303f 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  96f0ab99b7414e44e7bf9b218bb59510d61549ca68e648f19e3622f9999bec00  protobuf-cpp-3.21.11.tar.gz
++sha256  4eab9b524aa5913c6fffb20b2a8abf5ef7f95a80bc0701f3a6dbb4c607f73460  protobuf-cpp-3.21.12.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 33a7c40f40..8cd4e99e06 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 21.11
++PROTOBUF_VERSION = 21.12
+ PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index c2afc3955a..e7af678b97 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ae4ca6e1da635f31019d8911923163f372d9d333e8857510f513acba33172d0c  protobuf-python-4.21.11.tar.gz
++sha256  e2b976e67d6fcf7078f799143a73f2a4d9cf3126ca68a1a6f1bda30fe5f3585c  protobuf-python-4.21.12.tar.gz
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
