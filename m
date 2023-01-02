@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5AF1C3DA7A
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 16:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10A93C3DA7A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 16:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48A18408BC;
-	Mon,  2 Jan 2023 16:55:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48A18408BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id A135F408D1;
+	Mon,  2 Jan 2023 16:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A135F408D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id reP3DSWKgK5y; Mon,  2 Jan 2023 16:55:57 +0000 (UTC)
+	with ESMTP id 11r34JPGM62P; Mon,  2 Jan 2023 16:56:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CB3840734;
-	Mon,  2 Jan 2023 16:55:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CB3840734
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4DDDC1BF2EC
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:55:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06EA840895;
+	Mon,  2 Jan 2023 16:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06EA840895
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AF1271BF2EC
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:56:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 280BA415F6
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:55:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 280BA415F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8AE8C8176D
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:56:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AE8C8176D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9tCubXhmI6rB for <buildroot@lists.busybox.net>;
- Mon,  2 Jan 2023 16:55:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FzqNHvExzPXa for <buildroot@lists.busybox.net>;
+ Mon,  2 Jan 2023 16:56:29 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D29904024E
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D29904024E
- for <buildroot@buildroot.org>; Mon,  2 Jan 2023 16:55:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79035812C1
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 79035812C1
+ for <buildroot@buildroot.org>; Mon,  2 Jan 2023 16:56:29 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 94D0260008;
- Mon,  2 Jan 2023 16:55:50 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4F2FD40008;
+ Mon,  2 Jan 2023 16:56:26 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pCO6H-003LvY-O2; Mon, 02 Jan 2023 17:55:49 +0100
+ id 1pCO6r-003Lyd-JZ; Mon, 02 Jan 2023 17:56:25 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221229091735.216076-1-fontaine.fabrice@gmail.com>
-Date: Mon, 02 Jan 2023 17:55:49 +0100
-In-Reply-To: <20221229091735.216076-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 29 Dec 2022 10:17:35 +0100")
-Message-ID: <87r0wcanai.fsf@dell.be.48ers.dk>
+References: <20221229092033.218162-1-fontaine.fabrice@gmail.com>
+Date: Mon, 02 Jan 2023 17:56:25 +0100
+In-Reply-To: <20221229092033.218162-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 29 Dec 2022 10:20:33 +0100")
+Message-ID: <87mt70an9i.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
- version 3.4.16
+Subject: Re: [Buildroot] [PATCH 1/1] package/xxhash: optimize
+ XXHASH_{TARGETS, INSTALL_TARGETS}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,11 +72,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix CVE-2022-3190: Infinite loop in the F5 Ethernet Trailer protocol
- > dissector in Wireshark 3.6.0 to 3.6.7 and 3.4.0 to 3.4.15 allows denial
- > of service via packet injection or crafted capture file
-
- > https://www.wireshark.org/security/wnpa-sec-2022-06.html
+ > Optimize XXHASH_{TARGETS,INSTALL_TARGETS} as suggested by Thomas
+ > Petazzoni in
+ > https://patchwork.ozlabs.org/project/buildroot/patch/20221228221522.280696-1-fontaine.fabrice@gmail.com/
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
