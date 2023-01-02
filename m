@@ -1,58 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67746C5479D
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 11:27:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 244EDC3DA7A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 12:06:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E34D881E5C;
-	Mon,  2 Jan 2023 11:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E34D881E5C
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6C1441525;
+	Mon,  2 Jan 2023 12:06:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6C1441525
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uM0T_0dSNDgI; Mon,  2 Jan 2023 11:27:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SFW18HcQyYwO; Mon,  2 Jan 2023 12:06:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D92681E52;
-	Mon,  2 Jan 2023 11:27:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D92681E52
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC415414BF;
+	Mon,  2 Jan 2023 12:06:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC415414BF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B49141BF39C
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 11:27:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AB4EB1BF33E
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 12:06:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8EF69408D0
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 11:27:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EF69408D0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84787414BF
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 12:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84787414BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UU189VnsJ8Br for <buildroot@lists.busybox.net>;
- Mon,  2 Jan 2023 11:27:49 +0000 (UTC)
+ with ESMTP id Oo6dibB-cd1C for <buildroot@lists.busybox.net>;
+ Mon,  2 Jan 2023 12:06:30 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5122E408CE
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5122E408CE
- for <buildroot@buildroot.org>; Mon,  2 Jan 2023 11:27:49 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id B32641814B9; Mon,  2 Jan 2023 12:27:45 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Mon,  2 Jan 2023 12:27:36 +0100
-Message-Id: <20230102112737.113303-1-buildroot@heine.tech>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22C784094E
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 22C784094E
+ for <buildroot@buildroot.org>; Mon,  2 Jan 2023 12:06:29 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4A2E71BF206;
+ Mon,  2 Jan 2023 12:06:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pCJaD-000znO-9M; Mon, 02 Jan 2023 13:06:25 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Gleb Mazovetskiy <glex.spb@gmail.com>
+References: <20221223174922.12131-1-glex.spb@gmail.com>
+Date: Mon, 02 Jan 2023 13:06:25 +0100
+In-Reply-To: <20221223174922.12131-1-glex.spb@gmail.com> (Gleb Mazovetskiy's
+ message of "Fri, 23 Dec 2022 17:49:21 +0000")
+Message-ID: <877cy5cf9a.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1672658867; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=DCbduEBYw7tMaxKmJy9V1VZ8G2sYnP92PUYZ1ptcKhc=;
- b=IgSwRhTfji7Nki+tRgZR1pII/JgNoMMYCe84E5gQM4VghIxeiOb96d74p7g9zbhkWV/WlN
- O+pbdrMtqv8fc263QO8B82Jglhf4lR7RfLYlV+SAFXp/eQa/h7tW6z0Z7iL9kRTDoGmLFk
- R6nxuK3Et1NLJpjt64FbJGtve1Z/kCE=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=IgSwRhTf
-Subject: [Buildroot] [PATCH] package/{python-}protobuf: bump to version 21.12
+Subject: Re: [Buildroot] [PATCH] package/gcc: fix gcc12 with uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,56 +63,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Matt Weber <matthew.weber@collins.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Gleb" == Gleb Mazovetskiy <glex.spb@gmail.com> writes:
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index f1f5fa77cd..b092c9303f 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  96f0ab99b7414e44e7bf9b218bb59510d61549ca68e648f19e3622f9999bec00  protobuf-cpp-3.21.11.tar.gz
-+sha256  4eab9b524aa5913c6fffb20b2a8abf5ef7f95a80bc0701f3a6dbb4c607f73460  protobuf-cpp-3.21.12.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 33a7c40f40..8cd4e99e06 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 21.11
-+PROTOBUF_VERSION = 21.12
- PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index c2afc3955a..e7af678b97 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ae4ca6e1da635f31019d8911923163f372d9d333e8857510f513acba33172d0c  protobuf-python-4.21.11.tar.gz
-+sha256  e2b976e67d6fcf7078f799143a73f2a4d9cf3126ca68a1a6f1bda30fe5f3585c  protobuf-python-4.21.12.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+ > GCC 12 produces broken binaries when used with uClibc.
+ > E.g. `gdb` crashes on startup.
+
+ > GCC HEAD fixes this in:
+ > https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;h=ee4af2ed0b7322884ec4ff537564683c3749b813
+
+ > Adds the commit as patch for GCC 12.
+
+ > Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+
+Committed to 2022.11.x, thanks.
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
