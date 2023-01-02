@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E406DC3DA7A
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 12:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01DE8C46467
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 12:11:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 652E041525;
-	Mon,  2 Jan 2023 12:09:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 652E041525
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84F9C60A47;
+	Mon,  2 Jan 2023 12:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84F9C60A47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9dGcxqRTVywr; Mon,  2 Jan 2023 12:09:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jz6f0el-Cpbv; Mon,  2 Jan 2023 12:11:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 131AA41553;
-	Mon,  2 Jan 2023 12:09:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 131AA41553
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8C60D1BF33E
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 12:09:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEA4F60760;
+	Mon,  2 Jan 2023 12:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEA4F60760
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F4AA1BF33E
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 12:11:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6879F40256
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 12:09:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6879F40256
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8828860760
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 12:11:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8828860760
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bgp0rB-JodPo for <buildroot@lists.busybox.net>;
- Mon,  2 Jan 2023 12:09:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 528B24055D
- for <buildroot@buildroot.org>; Mon,  2 Jan 2023 12:09:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 528B24055D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33729870A7; Mon,  2 Jan 2023 12:09:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KrFnMk0P6rOn for <buildroot@lists.busybox.net>;
+ Mon,  2 Jan 2023 12:11:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C710160750
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C710160750
+ for <buildroot@buildroot.org>; Mon,  2 Jan 2023 12:11:11 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id F051A1814B9; Mon,  2 Jan 2023 13:11:08 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Mon, 2 Jan 2023 13:07:06 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 29aca00e17da210c9d4bdf18098bcdd0ee152e43
-X-Git-Newrev: 222c153869dbddcb7e4e7a47971a642e40a0f61d
-X-Patchwork-Hint: ignore
-Message-Id: <20230102120930.33729870A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/rtl_433: fix
- static openssl build
+Date: Mon,  2 Jan 2023 13:11:02 +0100
+Message-Id: <20230102121103.143967-1-buildroot@heine.tech>
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; 
+ t=1672661469; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=/p2CThGSSwkxXe0U64cGl4yiu8ewdT12OKjBO5N6mQM=;
+ b=ppcTSW6Ie7fLvpySRbhTshigTPv+/YE9sXT9er5dzwMS2+bL+PZzbZanyQigFcUerlqSs6
+ tWQwn0d/JYKqHU24jAQwhvD8CasS8XfcN8i/p93Y5/wjn+B3FDIzwuVuosLRDkpJZ770Sp
+ b7DySOyLEpbGjXBPI8707LgyY1FpkUA=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=ppcTSW6I
+Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.51.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,80 +64,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Robert Rose <robertroyrose@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=222c153869dbddcb7e4e7a47971a642e40a0f61d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
-
-Fix the following static openssl build failure raised since commit
-7967755fbf25fe4d5860884bedb3e01fcd7e9855:
-
-/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-13/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a(ssl_cert.o): in function `ssl_cert_free':
-ssl_cert.c:(.text+0x384): undefined reference to `__atomic_fetch_sub_4'
-
-Fixes:
- - http://autobuild.buildroot.org/results/417c86963ffe038aa052ea3cf19fd52c3e9b7396
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 56763ca01229ead2dba2cfb27025b41c0a5e18ed)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- ...txt-use-pkg-config-to-detect-openssl-when.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl_433/0001-CMakeLists.txt-use-pkg-config-to-detect-openssl-when.patch b/package/rtl_433/0001-CMakeLists.txt-use-pkg-config-to-detect-openssl-when.patch
-new file mode 100644
-index 0000000000..00858c8ff9
---- /dev/null
-+++ b/package/rtl_433/0001-CMakeLists.txt-use-pkg-config-to-detect-openssl-when.patch
-@@ -0,0 +1,42 @@
-+From b860de9e207d8fe2ea37dad28fdd014493d87703 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 27 Dec 2022 16:29:16 +0100
-+Subject: [PATCH] build: Fix CMake to use pkg-config openssl when possible
-+ (#2290)
-+
-+In order to take into account the libraries used by openssl when
-+building statically, using pkg-config is recommended. This patch
-+therefore improves the CMakeLists.txt to use pkg-config to detect
-+openssl when pkg-config is available. This will avoid
-+static build failure when openssl needs to link with -latomic.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/417c86963ffe038aa052ea3cf19fd52c3e9b7396
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/merbanan/rtl_433/commit/b860de9e207d8fe2ea37dad28fdd014493d87703]
-+---
-+ CMakeLists.txt | 9 ++++++++-
-+ 1 file changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d47a3eda2..cf30d8be2 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -175,7 +175,14 @@ set(ENABLE_OPENSSL AUTO CACHE STRING "Enable OpenSSL TLS support")
-+ set_property(CACHE ENABLE_OPENSSL PROPERTY STRINGS AUTO ON OFF)
-+ if(ENABLE_OPENSSL) # AUTO / ON
-+ 
-+-find_package(OpenSSL)
-++find_package(PkgConfig)
-++if(PKG_CONFIG_FOUND)
-++    pkg_check_modules(OPENSSL openssl)
-++    set(OPENSSL_LIBRARIES ${OPENSSL_LINK_LIBRARIES})
-++    set(OPENSSL_INCLUDE_DIR ${OPENSSL_INCLUDE_DIRS})
-++else()
-++    find_package(OpenSSL)
-++endif()
-+ if(OPENSSL_FOUND)
-+     message(STATUS "OpenSSL TLS support will be compiled. Found version ${OPENSSL_VERSION}")
-+     include_directories(${OPENSSL_INCLUDE_DIR})
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 4d838703cc..e6b76dcb5e 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  76900ab068da86378395a8e125b5cc43dfae671e09ff6462ddfef18676e2165a  grpc-1.50.0.tar.gz
++sha256  b55696fb249669744de3e71acc54a9382bea0dce7cd5ba379b356b12b82d4229  grpc-1.51.1.tar.gz
+ sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 9aac241e47..9125b1f9f6 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRPC_VERSION = 1.50.0
++GRPC_VERSION = 1.51.1
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
+ GRPC_LICENSE_FILES = LICENSE
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
