@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CE1DC3DA7A
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 16:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3A8CC3DA7A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jan 2023 16:57:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D739160EDB;
-	Mon,  2 Jan 2023 16:56:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D739160EDB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A3A2408E2;
+	Mon,  2 Jan 2023 16:57:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A3A2408E2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ff3L8EUOBX-D; Mon,  2 Jan 2023 16:56:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T_NBaKUFp8bB; Mon,  2 Jan 2023 16:57:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14B1460EA6;
-	Mon,  2 Jan 2023 16:56:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14B1460EA6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B3C821BF8A8
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:56:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A5A4940983;
+	Mon,  2 Jan 2023 16:57:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5A4940983
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A7171BF2EC
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9023560BC4
- for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:56:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9023560BC4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 413E6408F2
+ for <buildroot@lists.busybox.net>; Mon,  2 Jan 2023 16:57:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 413E6408F2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W9_mblPOdu4F for <buildroot@lists.busybox.net>;
- Mon,  2 Jan 2023 16:56:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XW7Z0JjfO4iC for <buildroot@lists.busybox.net>;
+ Mon,  2 Jan 2023 16:57:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ADB7360BBF
- for <buildroot@buildroot.org>; Mon,  2 Jan 2023 16:56:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADB7360BBF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C3B64090D
+ for <buildroot@buildroot.org>; Mon,  2 Jan 2023 16:57:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C3B64090D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77B9387104; Mon,  2 Jan 2023 16:56:38 +0000 (UTC)
+ id 5BD6287118; Mon,  2 Jan 2023 16:57:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 2 Jan 2023 17:55:28 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: de2662df246c78232adc378ab364513685bb20e1
-X-Git-Newrev: f1e07d7cf3ece3ce4628792880226d1471f13d4f
+Date: Mon, 2 Jan 2023 17:50:12 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 7f8341b6c33ca8878158f2e76a1dd61c5fae67a9
+X-Git-Newrev: 421787e3ad596cb3d18f56e0114cac7ade0800ba
 X-Patchwork-Hint: ignore
-Message-Id: <20230102165638.77B9387104@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/wireshark:
- security bump to version 3.4.16
+Message-Id: <20230102165752.5BD6287118@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/tiff: add
+ libdeflate optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1e07d7cf3ece3ce4628792880226d1471f13d4f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=421787e3ad596cb3d18f56e0114cac7ade0800ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Fix CVE-2022-3190: Infinite loop in the F5 Ethernet Trailer protocol
-dissector in Wireshark 3.6.0 to 3.6.7 and 3.4.0 to 3.4.15 allows denial
-of service via packet injection or crafted capture file
-
-https://www.wireshark.org/security/wnpa-sec-2022-06.html
+libdeflate is an optional dependency which is enabled by default since
+version 4.2.0 and
+https://gitlab.com/libtiff/libtiff/-/commit/3a2de853a932bd0ea79d1677d319841edb736c38
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5b86de52da2141ed289ad2892c34d3110d02f7b5)
+(cherry picked from commit 08ca8ff727c87fce2c6edcb9fc2df0885c22543b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tiff/Config.in | 5 +++++
+ package/tiff/tiff.mk   | 7 +++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index db1f71e9ef..56363e717f 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.12.txt
--sha1  91ca69b0029e58b9c824266237ab392a62f0a248  wireshark-3.4.12.tar.xz
--sha256  881a13303e263b7dc7fe337534c8a541d4914552287879bed30bbe76c5bf68ca  wireshark-3.4.12.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.16.txt
-+sha1  b0e64d5fdd6701106d94bdc8f59dd40a34c7c807  wireshark-3.4.16.tar.xz
-+sha256  6acb3155b89b65bcdbcdac7a9e6a59013a6e21d8ae6a8249a9af4fe9ce3d91ba  wireshark-3.4.16.tar.xz
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index f842c2ead8..cc9aa5cfd0 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -11,6 +11,11 @@ config BR2_PACKAGE_TIFF_CCITT
+ 	bool "CCITT Group 3 & 4 support"
+ 	default y
  
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 1a549f7037..f56843122c 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++config BR2_PACKAGE_TIFF_LIBDEFLATE
++	bool "Libdeflate usage (still requires Zlib)"
++	select BR2_PACKAGE_LIBDEFLATE
++	select BR2_PACKAGE_TIFF_ZLIB
++
+ config BR2_PACKAGE_TIFF_PACKBITS
+ 	bool "Macintosh PackBits algorithm"
+ 	default y
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 7981bdf2c9..a753065fde 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -33,6 +33,13 @@ ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
+ TIFF_CONF_OPTS += --disable-ccitt
+ endif
  
--WIRESHARK_VERSION = 3.4.12
-+WIRESHARK_VERSION = 3.4.16
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
++ifeq ($(BR2_PACKAGE_TIFF_LIBDEFLATE),y)
++TIFF_CONF_OPTS += --enable-libdeflate
++TIFF_DEPENDENCIES += libdeflate
++else
++TIFF_CONF_OPTS += --disable-libdeflate
++endif
++
+ ifneq ($(BR2_PACKAGE_TIFF_PACKBITS),y)
+ TIFF_CONF_OPTS += --disable-packbits
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
