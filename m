@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4F11C3DA7D
-	for <buildroot@archiver.kernel.org>; Tue,  3 Jan 2023 21:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DFFFC3DA7D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Jan 2023 21:25:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F09E60FA0;
-	Tue,  3 Jan 2023 21:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F09E60FA0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 285A74032B;
+	Tue,  3 Jan 2023 21:25:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 285A74032B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mXsZSUOfSkjI; Tue,  3 Jan 2023 21:25:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e3vFXbB31l7I; Tue,  3 Jan 2023 21:25:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C615360F8F;
-	Tue,  3 Jan 2023 21:25:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C615360F8F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 709C140A21;
+	Tue,  3 Jan 2023 21:25:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 709C140A21
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 62F931BF2FC
- for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 21:25:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 476701BF2FC
+ for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 21:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F4A5400BF
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADF4C400BF
  for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 21:25:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F4A5400BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADF4C400BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JCEnN0zIvO4z for <buildroot@lists.busybox.net>;
+ with ESMTP id hAYBOcL0YPQu for <buildroot@lists.busybox.net>;
  Tue,  3 Jan 2023 21:25:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B1DB64032B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98892401F3
  for <buildroot@buildroot.org>; Tue,  3 Jan 2023 21:25:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1DB64032B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98892401F3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B29D87390; Tue,  3 Jan 2023 21:25:20 +0000 (UTC)
+ id 8638B8733A; Tue,  3 Jan 2023 21:25:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Jan 2023 22:23:07 +0100
+Date: Tue, 3 Jan 2023 22:22:51 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: cb266fc67bf5602be21d87832a183596a1956b8b
-X-Git-Newrev: 3ea280b7ed37eb3aa55b2a49e88e2337b7e71643
+X-Git-Oldrev: ce671d1ce74a9ddb606738f5ac1681a793fed0cb
+X-Git-Newrev: f8a0e850e1bc2847479d0d8db4aa1bcb52fa6abd
 X-Patchwork-Hint: ignore
-Message-Id: <20230103212520.9B29D87390@busybox.osuosl.org>
+Message-Id: <20230103212520.8638B8733A@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.02.x]
- board/freescale/imx6ulevk/readme.txt: update broken url
+ board/freescale/imx28evk/readme.txt: update broken url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ea280b7ed37eb3aa55b2a49e88e2337b7e71643
+commit: https://git.buildroot.net/buildroot/commit/?id=f8a0e850e1bc2847479d0d8db4aa1bcb52fa6abd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 http://freescale.com/ urls are all redirected to the NXP homepage
@@ -72,29 +72,27 @@ https://www.nxp.com/
 Even if the link is not broken in the sense of a 404 http error, the
 pointed resource is not found.
 
-This commit updates the old freescale link to the correct nxp.com
+This commit updates the old Freescale link to the correct nxp.com
 location.
-
-Note: the link now requires a free registration to be accessed.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 01a3cb0f6eac48150c4bd246402025c0790e2625)
+(cherry picked from commit 4e54522caeeaec2e14065752cb3905d292f374e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/freescale/imx6ulevk/readme.txt | 2 +-
+ board/freescale/imx28evk/readme.txt | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/freescale/imx6ulevk/readme.txt b/board/freescale/imx6ulevk/readme.txt
-index 5bc03771f2..5a5b4ae5a3 100644
---- a/board/freescale/imx6ulevk/readme.txt
-+++ b/board/freescale/imx6ulevk/readme.txt
-@@ -71,4 +71,4 @@ Enjoy!
+diff --git a/board/freescale/imx28evk/readme.txt b/board/freescale/imx28evk/readme.txt
+index 2920cb04cd..3b77634fe1 100644
+--- a/board/freescale/imx28evk/readme.txt
++++ b/board/freescale/imx28evk/readme.txt
+@@ -54,4 +54,4 @@ Enjoy!
  
  References
  ==========
--[1] http://cache.freescale.com/files/32bit/doc/quick_start_guide/IMX6ULTRALITEQSG.pdf
-+[1] https://www.nxp.com/webapp/Download?colCode=IMX6ULTRALITEQSG
+-[1] http://cache.freescale.com/files/32bit/doc/user_guide/EVK_imx28_QuickStart.pdf
++[1] https://www.nxp.com/docs/en/user-guide/EVK_imx28_QuickStart.pdf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
