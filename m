@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10E3BC3DA7D
-	for <buildroot@archiver.kernel.org>; Tue,  3 Jan 2023 21:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F178C3DA7D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Jan 2023 21:26:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD0E760FB6;
-	Tue,  3 Jan 2023 21:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD0E760FB6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15DF581EE7;
+	Tue,  3 Jan 2023 21:26:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15DF581EE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qIPFHITdgYym; Tue,  3 Jan 2023 21:26:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oZDXeCN_MYYg; Tue,  3 Jan 2023 21:26:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EBE2860FB4;
-	Tue,  3 Jan 2023 21:26:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBE2860FB4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7095081ED8;
+	Tue,  3 Jan 2023 21:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7095081ED8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 468811BF2FC
- for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 21:25:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A4B291BF2FC
+ for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 21:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22F3B4032B
- for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 21:25:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22F3B4032B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DD86401F3
+ for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 21:25:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DD86401F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6QYOJ9Hs9zZ4 for <buildroot@lists.busybox.net>;
- Tue,  3 Jan 2023 21:25:20 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A786A402D7
- for <buildroot@buildroot.org>; Tue,  3 Jan 2023 21:25:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A786A402D7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 908478738F; Tue,  3 Jan 2023 21:25:20 +0000 (UTC)
+ with ESMTP id VWWJPy-mYOV6 for <buildroot@lists.busybox.net>;
+ Tue,  3 Jan 2023 21:25:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FAC8400BF
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6FAC8400BF
+ for <buildroot@buildroot.org>; Tue,  3 Jan 2023 21:25:38 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 57AAA40005;
+ Tue,  3 Jan 2023 21:25:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pComs-004F4H-9v; Tue, 03 Jan 2023 22:25:34 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 3 Jan 2023 22:23:00 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f8a0e850e1bc2847479d0d8db4aa1bcb52fa6abd
-X-Git-Newrev: cb266fc67bf5602be21d87832a183596a1956b8b
-X-Patchwork-Hint: ignore
-Message-Id: <20230103212520.908478738F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- board/freescale/imx6sabre/readme.txt: update broken urls
+To: Julien Olivain <ju.o@free.fr>
+References: <20221230200332.6598-1-ju.o@free.fr>
+Date: Tue, 03 Jan 2023 22:25:34 +0100
+In-Reply-To: <20221230200332.6598-1-ju.o@free.fr> (Julien Olivain's message of
+ "Fri, 30 Dec 2022 21:03:32 +0100")
+Message-ID: <87358r8g4x.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version
+ 2.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,68 +64,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb266fc67bf5602be21d87832a183596a1956b8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-http://freescale.com/ urls are all redirected to the NXP homepage
-https://www.nxp.com/
+ > For change log since v2.3.0, see:
+ > - https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.1
 
-Even if the links are not broken in the sense of a 404 http error, the
-pointed resources are not found.
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-This commit updates the old freescale links to the correct nxp.com
-locations.
+Committed to 2022.11.x, thanks.
 
-Note: the link to the SABRE for Automotive Infotainment Quick Start
-Guide now requires a free registration to be accessed.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bfbbfd8fecf8623da4772f97ce208b3e4b69de80)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/freescale/imx6sabre/readme.txt | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/board/freescale/imx6sabre/readme.txt b/board/freescale/imx6sabre/readme.txt
-index 4b8db5233a..320ee463e2 100644
---- a/board/freescale/imx6sabre/readme.txt
-+++ b/board/freescale/imx6sabre/readme.txt
-@@ -8,15 +8,15 @@ as well as the Freescale SABRE Board for Automotive Infotainment.
- 
- Read the i.MX 6 SABRESD Quick Start Guide for an introduction to the
- board:
--http://cache.freescale.com/files/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
-+https://www.nxp.com/files-static/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
- 
- Read the i.MX 6 SoloX SABRESD Quick Start Guide for an introduction to
- the board:
--http://cache.freescale.com/files/32bit/doc/user_guide/IMX6SOLOXQSG.pdf
-+https://www.nxp.com/files-static/32bit/doc/quick_start_guide/IMX6SOLOXQSG.pdf
- 
- Read the SABRE for Automotive Infotainment Quick Start Guide for an
- introduction to the board:
--http://cache.freescale.com/files/32bit/doc/user_guide/IMX6SABREINFOQSG.pdf
-+https://www.nxp.com/webapp/Download?colCode=IMX6SABREINFOQSG
- 
- Building with NXP kernel and NXP U-Boot
- =======================================
-@@ -166,6 +166,6 @@ Enjoy!
- References
- ==========
- 
--https://community.freescale.com/docs/DOC-95015
--https://community.freescale.com/docs/DOC-95017
--https://community.freescale.com/docs/DOC-99218
-+https://community.nxp.com/docs/DOC-95015
-+https://community.nxp.com/docs/DOC-95017
-+https://community.nxp.com/docs/DOC-99218
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
