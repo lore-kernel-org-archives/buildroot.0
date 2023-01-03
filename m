@@ -1,67 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 500DEC3DA7D
-	for <buildroot@archiver.kernel.org>; Tue,  3 Jan 2023 20:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACC2CC4708E
+	for <buildroot@archiver.kernel.org>; Tue,  3 Jan 2023 20:19:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6D734176D;
-	Tue,  3 Jan 2023 20:01:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6D734176D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4230D80D74;
+	Tue,  3 Jan 2023 20:19:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4230D80D74
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NERLqXDph5Ee; Tue,  3 Jan 2023 20:01:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kr1hpJVeAVA1; Tue,  3 Jan 2023 20:19:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 627004176E;
-	Tue,  3 Jan 2023 20:01:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 627004176E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A75C91BF834
- for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 20:01:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D71980DB3;
+	Tue,  3 Jan 2023 20:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D71980DB3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DD7B21BF574
+ for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 20:19:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F13C4176E
- for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 20:01:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F13C4176E
+ by smtp3.osuosl.org (Postfix) with ESMTP id B947560F93
+ for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 20:19:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B947560F93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gzy1QYLsHzXZ for <buildroot@lists.busybox.net>;
- Tue,  3 Jan 2023 20:01:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 548914176D
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 548914176D
- for <buildroot@buildroot.org>; Tue,  3 Jan 2023 20:01:06 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.171.231.8])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B171913F8AC;
- Tue,  3 Jan 2023 21:00:58 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hYfxO_1E4_ZJ for <buildroot@lists.busybox.net>;
+ Tue,  3 Jan 2023 20:19:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1DA1607BC
+ for <buildroot@buildroot.org>; Tue,  3 Jan 2023 20:19:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1DA1607BC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8FC8487331; Tue,  3 Jan 2023 20:19:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue,  3 Jan 2023 21:00:46 +0100
-Message-Id: <20230103200046.96070-2-ju.o@free.fr>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230103200046.96070-1-ju.o@free.fr>
-References: <20230103200046.96070-1-ju.o@free.fr>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672776064;
- bh=nl+X2WJUqLrXuaVWUdk/rQ7KAGa3JxS0Q3/sTRhAxEc=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=IW5dyE/DyYGia0zeOqYrFesu1uILy0HSmDO270jJIepNSjWgtTIDUnRdkArN5R/yb
- dA/HLPSQ+yhKC4bm9mVZIPgCr77diYkMkTv+hqtokPHDtT/FHyOhxYJy1dNmQn4SL/
- yrFlM4hexNNzBqIXWh/a4FefzV0ZZDyg2LXZdGr87sml/1Sg4uWpQrFWtGuW6bo7Bv
- LpuHkzIncW5xxlJxHp0LHvKn/k+8hT52mu4USIJgJCyhSJUPxlsLG1XfWxmmZyRXMs
- BVRe7Q1EttBqVP+MbQakirCG4WIsu+vxIK4pYg085YH4g9I7DH/7ZuG1wiJhb+yJTc
- AG5049zEkESVg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=IW5dyE/D
-Subject: [Buildroot] [PATCH 2/2]
- support/testing/tests/package/test_fluidsynth.py: new runtime test
+Date: Tue, 3 Jan 2023 21:18:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 791b530368bee8894fb5c48351846609f97ee9e5
+X-Git-Newrev: 8d7c69a0c9e414b7112347c37e1424ec5f2863ed
+X-Patchwork-Hint: ignore
+Message-Id: <20230103201951.8FC8487331@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ncurses: Switch to git repo with
+ snapshots
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,184 +57,204 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=8d7c69a0c9e414b7112347c37e1424ec5f2863ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ncurses does not release dot-versions, but the fixes are released as a
+set of cumulative patches against the latest version.
+
+So far, we carry the list of the patches against 6.3, and this is a
+tedious task to maintain that list (especially as we have a hash for
+each of them).
+
+Thomas E. Dickey (the ncurses maintainer, so we can trust him) hosts the
+ncurses snapshots on Github, with patches already applied.
+
+So, we switch to using that. This avoids needing to list all incremental
+patches, and will make future bumping easier.
+
+Signed-off-by: Dennis Van Hoorick <dennis.vanhoorick@barco.com>
+[yann.morin.1998@free.fr:
+  - don't use 'v' in filename
+  - rework the version string for when there's no snapshot
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Patch tested on branch master at commit e593656 with commands:
+ package/ncurses/ncurses.hash | 65 ++------------------------------------
+ package/ncurses/ncurses.mk   | 75 ++++++--------------------------------------
+ 2 files changed, 11 insertions(+), 129 deletions(-)
 
-    make check-package
-    ...
-    0 warnings generated
-
-    python3 -m flake8 \
-        support/testing/tests/package/test_fluidsynth.py \
-        support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/check_notes.py \
-        support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/gen_midi_file.py
-    [no-output]
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_fluidsynth.TestFluidsynth
-    ...
-    OK
----
- DEVELOPERS                                    |  2 +
- .../testing/tests/package/test_fluidsynth.py  | 61 +++++++++++++++++++
- .../rootfs-overlay/root/check_notes.py        | 24 ++++++++
- .../rootfs-overlay/root/gen_midi_file.py      | 23 +++++++
- 4 files changed, 110 insertions(+)
- create mode 100644 support/testing/tests/package/test_fluidsynth.py
- create mode 100755 support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/check_notes.py
- create mode 100755 support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/gen_midi_file.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index af497114dc..a701485c31 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1698,6 +1698,8 @@ F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
- F:	support/testing/tests/package/sample_python_midiutil.py
- F:	support/testing/tests/package/sample_python_pyalsa.py
-+F:	support/testing/tests/package/test_fluidsynth.py
-+F:	support/testing/tests/package/test_fluidsynth/
- F:	support/testing/tests/package/test_hwloc.py
- F:	support/testing/tests/package/test_ncdu.py
- F:	support/testing/tests/package/test_octave.py
-diff --git a/support/testing/tests/package/test_fluidsynth.py b/support/testing/tests/package/test_fluidsynth.py
-new file mode 100644
-index 0000000000..6b45959179
---- /dev/null
-+++ b/support/testing/tests/package/test_fluidsynth.py
-@@ -0,0 +1,61 @@
-+import os
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index c72a2abf46..c96bf77bce 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
+@@ -1,65 +1,4 @@
+-# Locally calculated after checking pgp signature
+-sha256  97fc51ac2b085d4cde31ef4d2c3122c21abc217e9090a43a30fc5ec21684e059  ncurses-6.3.tar.gz
+-sha256  51bad0e386d06d3a26d7f28087b2072658282452f209e7e5eb7722556b042570  ncurses-6.3-20211026.patch.gz
+-sha256  4e1b0694a2633cc681987c80091175cb2b17a6c882750a7c6afb0560f5447249  ncurses-6.3-20211030.patch.gz
+-sha256  de7e0b2c784342188da48147d3fa661be38d5b5d517bb224423f15893e27334f  ncurses-6.3-20211106.patch.gz
+-sha256  df78f157336fce33d96ae1e3c2f7d7b48e9b728409d9a4ab59e77242255b03ab  ncurses-6.3-20211113.patch.gz
+-sha256  b7bf59d9a8e243263b05b166c6fe321bfca8e67eb32ebc26a1c813df42d64fee  ncurses-6.3-20211115.patch.gz
+-sha256  7cb46c897e2e54d5f085cd9edc8d523c13b8f4a13878dd01ce094ec52bd26aec  ncurses-6.3-20211120.patch.gz
+-sha256  ee8cf6ab6db3a01f2533959d14a5e1cc8e1412fbce4b2ab4668c7d1101f71684  ncurses-6.3-20211127.patch.gz
+-sha256  9d9055badff9e15fc1fbe4f4b2cce7c76384d446ab857573cbb1d645430d8ac7  ncurses-6.3-20211204.patch.gz
+-sha256  6059625cac99819a3580955db377c0820b6be7ae5da4d8a82e9638948a7b0679  ncurses-6.3-20211211.patch.gz
+-sha256  acb77a09fe6ab37b96e9f70d9ebfde0aaf7bdee064761c605b47125bd31be2ae  ncurses-6.3-20211219.patch.gz
+-sha256  f2786f19c85258da9e9255459480e5ac2efb61b6ea5d0866b9b8507fa8f5b036  ncurses-6.3-20211225.patch.gz
+-sha256  ca5736eda90cd7cb597be0fdb0ed10f04deb7304cc7ffb0b166dfa07c39ab1e7  ncurses-6.3-20220101.patch.gz
+-sha256  7e43911e6baa4a7cfeaad1880777bda352eb7b22493db5bc9f72a52aec8d6d78  ncurses-6.3-20220115.patch.gz
+-sha256  ecfdd8bed6ff3b1fae5050da555c77dd41035c35bebed30162862e343324443e  ncurses-6.3-20220122.patch.gz
+-sha256  32ec2da0fe48c353489c4018b38f890a59eafeb37ab24b82e32ba553845438a4  ncurses-6.3-20220129.patch.gz
+-sha256  f74b0d1f7f96bf8609c6a62e268019289e4affec9e02f9182ab14817637180e7  ncurses-6.3-20220205.patch.gz
+-sha256  6506f709e745375f692d05f53c45b50f1e60d13a3e4346db46d14f69e19adbb1  ncurses-6.3-20220212.patch.gz
+-sha256  349433e684e96096cbacaa1014d3ccd285c441d1bd99a721ae0b705b02de4145  ncurses-6.3-20220219.patch.gz
+-sha256  2181cf581fcdabb5b534606ab81c4c625bf819f9d351c670972a7f3a85f36197  ncurses-6.3-20220226.patch.gz
+-sha256  1acd0f2d18ea7c783286658e550c4f61cbe750a907c9be5fc00e67f2ea8f7eb5  ncurses-6.3-20220305.patch.gz
+-sha256  ced13543cc19ee341d82eb7fd501e15a2f3d1bc08fbbeb9de7edbd6422ca4799  ncurses-6.3-20220312.patch.gz
+-sha256  450fce90a10b1ab0b20ba5efc222741fe96f8445d1e4528e2a7b7711c26a5254  ncurses-6.3-20220319.patch.gz
+-sha256  c97213841e41d33b50a8492ba252dc79a24b38721f7ac0966442b3176f5666c7  ncurses-6.3-20220326.patch.gz
+-sha256  4c6253ea2c3cf83fbac2fdb5af56914e6bdc5a7c6e6e7532a4f218b7af6d05eb  ncurses-6.3-20220402.patch.gz
+-sha256  5b46bc2bec8f9192c2ed7d25f2080c57b7d7ecbe294d85ab8d3c7d4eb4a678fa  ncurses-6.3-20220409.patch.gz
+-sha256  fddd3b7dea2db1dc70adfa46ccb52301c820854821ce35366056e8e8daba8360  ncurses-6.3-20220416.patch.gz
+-sha256  1dba62d927affe93face3d55710d8abce7b70a904a0dd0114894efff7ba8ac72  ncurses-6.3-20220423.patch.gz
+-sha256  f6289906a3be560da9240e0d4a7a1bbd213dd9316f0b395e6852524491ff6322  ncurses-6.3-20220430.patch.gz
+-sha256  a6f631b9b934d0012617c429834b370732084d6f3c1784d11d8f18f26ea9e0d4  ncurses-6.3-20220501.patch.gz
+-sha256  79e75286b2a3292058bbe0aa67d8ea49682f7942b108c3ffc725a34765d4fce7  ncurses-6.3-20220507.patch.gz
+-sha256  1dda27245cbd6634f89766624dc72c156312bf00635214ea7ac299c9330b18f2  ncurses-6.3-20220514.patch.gz
+-sha256  0a251674845e0669e92c8bee6b6e5bb317439f8707f3316424eae590322f87c6  ncurses-6.3-20220521.patch.gz
+-sha256  411c4fdfc2ea4f56fdb57ff758a13dffa4b2fff68e71b65cf3248c925f6c30ee  ncurses-6.3-20220529.patch.gz
+-sha256  acc315edb22a04f6476d9cd2a43866d478e0f4b2a555f480c92a18983bec5ee7  ncurses-6.3-20220604.patch.gz
+-sha256  2dae4db33c73766cd63b2b700e09588750bae44622749ce007404e3e30420ada  ncurses-6.3-20220612.patch.gz
+-sha256  1e4b5c3deaab601a9749da591952b66a53d96017967eeec033f3b4d30e12d2de  ncurses-6.3-20220618.patch.gz
+-sha256  65379719532023cd77c80a495cf31ff773345173e919ec8eef8b3f9517969626  ncurses-6.3-20220625.patch.gz
+-sha256  028864b31ada91862f0d8f4aa016b62bc3fe7e3981d62e81110d5143e26d0e0d  ncurses-6.3-20220703.patch.gz
+-sha256  06c2f6d967480d0bcf20f301db26c8e5c90caf6d3adf616bc277e21407e9c955  ncurses-6.3-20220709.patch.gz
+-sha256  66aa8564d09fcc7bbd85bbe79685772330633c14d70af2fef00d10491e6b22fb  ncurses-6.3-20220716.patch.gz
+-sha256  fffcc8ec0eab3dcbb7b8d8a208d880a15fe128f6f2dbc63a87d5640d8ade95cf  ncurses-6.3-20220724.patch.gz
+-sha256  1787619c0b5052121dc5816bdb4cbd9699e1b61ba6c98072a3733b17cc7009f9  ncurses-6.3-20220729.patch.gz
+-sha256  d7fb1f2e2246079527351c8b7c8847c28751c6a5bb46740681d4b6ba790b22cc  ncurses-6.3-20220806.patch.gz
+-sha256  10a04d3189a34187e691e73435c210af3939025f07ff6c34c1bfc48fda6f5a5d  ncurses-6.3-20220813.patch.gz
+-sha256  b9238267413c2fce5bfe4c029f28dbbbef7230cdf47792ecd4070b857fe1a869  ncurses-6.3-20220820.patch.gz
+-sha256  7d30766caaac9136ab0ff7164d33761b186b698ec237560cb8fce0eb937f90b8  ncurses-6.3-20220827.patch.gz
+-sha256  5f04fd2d954b3461671290c766f784a4151091eb4e9197a7745dcdbb9c030483  ncurses-6.3-20220903.patch.gz
+-sha256  b948a0efe45341ccc913cc67231ee1e6bc737f178bcd758ce9f2e856e575071f  ncurses-6.3-20220910.patch.gz
+-sha256  f9ad5781a72d669bdd06fe075136cc79e6a570960f6f641a9c486fc102a45c3b  ncurses-6.3-20220917.patch.gz
+-sha256  bbb9d5afaec836e66b9f919c97c81c0505fd111b479b59ab6e376822ff6df1d3  ncurses-6.3-20220924.patch.gz
+-sha256  7ffeae28a0f8416c6ab088a99807d0d1ee5be821828c288f0a572ea769a8e2e5  ncurses-6.3-20221001.patch.gz
+-sha256  204baff40926d29ec30b1def4d4cc5d7ce074918327d8e271a49c960032b5a49  ncurses-6.3-20221008.patch.gz
+-sha256  f578dbb3beb1976636c74b33ffe5d300fee5a7653bc4f64bb7870d1b9cf85e7b  ncurses-6.3-20221015.patch.gz
+-sha256  b01fc81093a331d5d645dbcbacebf6e5d459430b38cbdae0db053c6e5dff7d7e  ncurses-6.3-20221023.patch.gz
+-sha256  e6e819c78c78c3a0355e7da4360d084f5d69871fa556b51322980f22da4edcea  ncurses-6.3-20221029.patch.gz
+-sha256  4da9b5bf14a1b7d6d8a4181e79a98b9e5782153bc7db93773ac43e0b758c4da2  ncurses-6.3-20221105.patch.gz
+-sha256  b3381da6071bbed04e6ddaabbd5375d280e50af429f94522e32e9d0f22766155  ncurses-6.3-20221112.patch.gz
+-sha256  bf30c435283a4483280e0433f6370d9eea1fb704323bd887e540592eb8203e2f  ncurses-6.3-20221119.patch.gz
+-sha256  32dc21b671ead8b199d66111ebd3404e8cd5f8c4ca5587cfeb5c6a4913b2d103  ncurses-6.3-20221126.patch.gz
+-sha256  8fe3bcacaea784ac7971e102a8eb8ca58c4c2c4c13c1ec33f32334600b9e4f56  ncurses-6.3-20221203.patch.gz
+-
++# Locally calculated
++sha256  4057d800ee96623ae70d06b05b2dadb481a80c030e4968aa5d9bcea4439441da  ncurses-6.3-20221224.tar.gz
+ # Locally computed
+ sha256  63de87399e9fc8860236082b6b0520e068e9eb1fad0ebd30202aa30bb6f690ac  COPYING
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 4d93a992e4..73e3c3feb8 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -4,79 +4,22 @@
+ #
+ ################################################################################
+ 
+-NCURSES_VERSION = 6.3
+-NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
++# When there is no snapshost yet for a new version, set it to the empty string
++NCURSES_VERSION_MAJOR = 6.3
++NCURSES_SNAPSHOT_DATE = 20221224
++NCURSES_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),-$(NCURSES_SNAPSHOT_DATE))
++NCURSES_VERSION_GIT = $(subst .,_,$(subst -,_,$(NCURSES_VERSION)))
++NCURSES_SITE = $(call github,ThomasDickey,ncurses-snapshots,v$(NCURSES_VERSION_GIT))
+ NCURSES_INSTALL_STAGING = YES
+ NCURSES_DEPENDENCIES = host-ncurses
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = COPYING
+ NCURSES_CPE_ID_VENDOR = gnu
++NCURSES_CPE_ID_VERSION = $(NCURSES_VERSION_MAJOR)
+ NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
+-# patch 20220416
 +
-+import infra.basetest
-+
-+
-+class TestFluidsynth(infra.basetest.BRTest):
-+    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it is
-+    # armv5 and based on qemu versatilepb which is limited to 256MB of
-+    # RAM.  The test needs 1GB of RAM (larger initrd and soundfond is
-+    # loaded in memory).
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.86"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_AUBIO=y
-+        BR2_PACKAGE_FLUIDSYNTH=y
-+        BR2_PACKAGE_FLUIDSYNTH_LIBSNDFILE=y
-+        BR2_PACKAGE_FLUID_SOUNDFONT=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_MIDIUTIL=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+           # overlay to add helper test scripts
-+           infra.filepath("tests/package/test_fluidsynth/rootfs-overlay"))
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "1G", "-initrd", img])
-+        self.emulator.login()
-+
-+        # Test the binary executes
-+        self.assertRunOk("fluidsynth --version")
-+
-+        # Create a simple MIDI file programmatically
-+        self.assertRunOk("/root/gen_midi_file.py /tmp/output.mid")
-+
-+        # Convert the MIDI file to a WAV file
-+        cmd = "fluidsynth"
-+        cmd += " -F /tmp/output.wav"
-+        cmd += " /usr/share/soundfonts/FluidR3_GM.sf2"
-+        cmd += " /tmp/output.mid"
-+        self.assertRunOk(cmd)
-+
-+        # Extract notes in the WAV file with Aubio
-+        self.assertRunOk("aubionotes /tmp/output.wav > /tmp/notes.txt")
-+
-+        # Check the extracted notes are the expected ones
-+        self.assertRunOk("/root/check_notes.py < /tmp/notes.txt")
-diff --git a/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/check_notes.py b/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/check_notes.py
-new file mode 100755
-index 0000000000..7301e14a9f
---- /dev/null
-+++ b/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/check_notes.py
-@@ -0,0 +1,24 @@
-+#! /usr/bin/env python3
-+#
-+# This script reads the output of the "aubionotes" command and
-+# validates it contains three expected notes (A2, E3, A3) in the
-+# correct order. Silences or other notes are allowed in between those
-+# notes, to allow some flexibility.
-+
-+import sys
-+
-+found = 0
-+notes = [57, 64, 69]
-+
-+for line in sys.stdin:
-+    fields = line.split()
-+    if len(fields) >= 1:
-+        value = round(float(fields[0]))
-+        if value == notes[found]:
-+            found += 1
-+        if found == len(notes):
-+            print("Found all notes")
-+            sys.exit(0)
-+
-+print("Error: all notes not found")
-+sys.exit(1)
-diff --git a/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/gen_midi_file.py b/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/gen_midi_file.py
-new file mode 100755
-index 0000000000..aa53a25af3
---- /dev/null
-+++ b/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/gen_midi_file.py
-@@ -0,0 +1,23 @@
-+#! /usr/bin/env python3
-+#
-+# This script generates a MIDI file with only 3 notes: A2, E3, A3
-+# usage: gen_midi_file.py [output-filename]
-+
-+import sys
-+
-+from midiutil import MIDIFile
-+
-+output_filename = "output.mid"
-+if len(sys.argv) >= 2:
-+    output_filename = sys.argv[1]
-+
-+notes = [57, 64, 69]  # A2, E3, A3
-+
-+midi = MIDIFile()
-+midi.addTempo(track=0, time=0, tempo=60)
-+
-+for i, p in enumerate(notes):
-+    midi.addNote(track=0, channel=0, pitch=p, time=i, duration=1, volume=100)
-+
-+with open(output_filename, "wb") as output_file:
-+    midi.writeFile(output_file)
--- 
-2.39.0
-
++# Fixed since snapshot 20220416
+ NCURSES_IGNORE_CVES += CVE-2022-29458
+-NCURSES_PATCH = \
+-	$(addprefix https://invisible-mirror.net/archives/ncurses/$(NCURSES_VERSION)/, \
+-		ncurses-6.3-20211026.patch.gz \
+-		ncurses-6.3-20211030.patch.gz \
+-		ncurses-6.3-20211106.patch.gz \
+-		ncurses-6.3-20211113.patch.gz \
+-		ncurses-6.3-20211115.patch.gz \
+-		ncurses-6.3-20211120.patch.gz \
+-		ncurses-6.3-20211127.patch.gz \
+-		ncurses-6.3-20211204.patch.gz \
+-		ncurses-6.3-20211211.patch.gz \
+-		ncurses-6.3-20211219.patch.gz \
+-		ncurses-6.3-20211225.patch.gz \
+-		ncurses-6.3-20220101.patch.gz \
+-		ncurses-6.3-20220115.patch.gz \
+-		ncurses-6.3-20220122.patch.gz \
+-		ncurses-6.3-20220129.patch.gz \
+-		ncurses-6.3-20220205.patch.gz \
+-		ncurses-6.3-20220212.patch.gz \
+-		ncurses-6.3-20220219.patch.gz \
+-		ncurses-6.3-20220226.patch.gz \
+-		ncurses-6.3-20220305.patch.gz \
+-		ncurses-6.3-20220312.patch.gz \
+-		ncurses-6.3-20220319.patch.gz \
+-		ncurses-6.3-20220326.patch.gz \
+-		ncurses-6.3-20220402.patch.gz \
+-		ncurses-6.3-20220409.patch.gz \
+-		ncurses-6.3-20220416.patch.gz \
+-		ncurses-6.3-20220423.patch.gz \
+-		ncurses-6.3-20220430.patch.gz \
+-		ncurses-6.3-20220501.patch.gz \
+-		ncurses-6.3-20220507.patch.gz \
+-		ncurses-6.3-20220514.patch.gz \
+-		ncurses-6.3-20220521.patch.gz \
+-		ncurses-6.3-20220529.patch.gz \
+-		ncurses-6.3-20220604.patch.gz \
+-		ncurses-6.3-20220612.patch.gz \
+-		ncurses-6.3-20220618.patch.gz \
+-		ncurses-6.3-20220625.patch.gz \
+-		ncurses-6.3-20220703.patch.gz \
+-		ncurses-6.3-20220709.patch.gz \
+-		ncurses-6.3-20220716.patch.gz \
+-		ncurses-6.3-20220724.patch.gz \
+-		ncurses-6.3-20220729.patch.gz \
+-		ncurses-6.3-20220806.patch.gz \
+-		ncurses-6.3-20220813.patch.gz \
+-		ncurses-6.3-20220820.patch.gz \
+-		ncurses-6.3-20220827.patch.gz \
+-		ncurses-6.3-20220903.patch.gz \
+-		ncurses-6.3-20220910.patch.gz \
+-		ncurses-6.3-20220917.patch.gz \
+-		ncurses-6.3-20220924.patch.gz \
+-		ncurses-6.3-20221001.patch.gz \
+-		ncurses-6.3-20221008.patch.gz \
+-		ncurses-6.3-20221015.patch.gz \
+-		ncurses-6.3-20221023.patch.gz \
+-		ncurses-6.3-20221029.patch.gz \
+-		ncurses-6.3-20221105.patch.gz \
+-		ncurses-6.3-20221112.patch.gz \
+-		ncurses-6.3-20221119.patch.gz \
+-		ncurses-6.3-20221126.patch.gz \
+-		ncurses-6.3-20221203.patch.gz \
+-	)
+ 
+ NCURSES_CONF_OPTS = \
+ 	--without-cxx \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
