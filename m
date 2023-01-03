@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCCBCC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:53:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B081FC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:53:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C4A04C783;
-	Mon, 20 Feb 2023 23:53:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C4A04C783
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5752E4CB7B;
+	Mon, 20 Feb 2023 23:53:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5752E4CB7B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bsnaZBVhWlUQ; Mon, 20 Feb 2023 23:53:10 +0000 (UTC)
+	with ESMTP id vQygiPMF3B21; Mon, 20 Feb 2023 23:53:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 619244C9E3;
-	Mon, 20 Feb 2023 23:53:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 619244C9E3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 08A561BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EBD04CF79;
+	Mon, 20 Feb 2023 23:53:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EBD04CF79
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 293F81BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6656C41783
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6656C41783
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36E7F610B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E7F610B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0D97ffsG0ppx for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KfVqSkFjBZ-4 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F8F041766
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F8F041766
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61FE361B07
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61FE361B07
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E00D8648F; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+ id 5C26D828C8; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Jan 2023 22:28:05 +0100
+Date: Tue, 3 Jan 2023 13:59:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 319cc24aca38d6cb8898400694135b855731940f
-X-Git-Newrev: fd1d0a9cbf6de2c30fcfcc181b466a5f2b44dc54
+X-Git-Oldrev: a94567b4b5481c14352be3e293672572a326836c
+X-Git-Newrev: e59365629f882eb3e4ea012ab2cd396bc3d8a4fe
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205244.5E00D8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/beaglebone: add
- support for BeagleBone Green Wireless
+Message-Id: <20230220205222.5C26D828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libopenh264: bump
+ version to 2.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,53 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd1d0a9cbf6de2c30fcfcc181b466a5f2b44dc54
+commit: https://git.buildroot.net/buildroot/commit/?id=e59365629f882eb3e4ea012ab2cd396bc3d8a4fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds support for the BeagleBone Green Wireless to the
-existing beaglebone_defconfig, by making sure the relevant Device Tree
-is built and installed.
+Release notes:
+https://github.com/cisco/openh264/releases/tag/v2.3.1
+https://github.com/cisco/openh264/releases/tag/v2.3.0
 
-Signed-off-by: Ramon Crichlow <rcrichlow9000@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/beaglebone/genimage.cfg | 1 +
- configs/beaglebone_defconfig  | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/libopenh264/libopenh264.hash | 2 +-
+ package/libopenh264/libopenh264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
-index 42ca2cf107..987d205075 100644
---- a/board/beaglebone/genimage.cfg
-+++ b/board/beaglebone/genimage.cfg
-@@ -11,6 +11,7 @@ image boot.vfat {
- 			"am335x-boneblack.dtb",
- 			"am335x-bonegreen.dtb",
- 			"am335x-boneblack-wireless.dtb",
-+			"am335x-bonegreen-wireless.dtb",
- 		}
- 	}
+diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
+index 712425a024..eecb0b9625 100644
+--- a/package/libopenh264/libopenh264.hash
++++ b/package/libopenh264/libopenh264.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e4e5c8ba48e64ba6ce61e8b6e2b76b2d870c74c270147649082feabb40f25905  libopenh264-2.2.0.tar.gz
++sha256  453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32  libopenh264-2.3.1.tar.gz
+ sha256  dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index ea41f72661..750ec41e4d 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 06154d98b7..639b491e97 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.30-ti-r3)/linux-5.10.30-ti-r3.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
- # Filesystem
+-LIBOPENH264_VERSION = 2.2.0
++LIBOPENH264_VERSION = 2.3.1
+ LIBOPENH264_SITE = $(call github,cisco,openh264,v$(LIBOPENH264_VERSION))
+ LIBOPENH264_LICENSE = BSD-2-Clause
+ LIBOPENH264_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
