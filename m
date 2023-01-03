@@ -4,63 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B4A4C4708E
-	for <buildroot@archiver.kernel.org>; Tue,  3 Jan 2023 19:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F376C3DA7D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Jan 2023 20:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C21ED40185;
-	Tue,  3 Jan 2023 19:37:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C21ED40185
+	by smtp2.osuosl.org (Postfix) with ESMTP id A75C440A0D;
+	Tue,  3 Jan 2023 20:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A75C440A0D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BkKZB7qbEqO7; Tue,  3 Jan 2023 19:37:58 +0000 (UTC)
+	with ESMTP id 1jlGx0bp-KGz; Tue,  3 Jan 2023 20:01:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E92D4400DD;
-	Tue,  3 Jan 2023 19:37:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E92D4400DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBB67400DD;
+	Tue,  3 Jan 2023 20:01:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBB67400DD
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D1AC41BF834
- for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 19:37:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 59D201BF834
+ for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 20:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA81360784
- for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 19:37:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA81360784
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4316260D68
+ for <buildroot@lists.busybox.net>; Tue,  3 Jan 2023 20:01:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4316260D68
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4RAA9LcCMSm5 for <buildroot@lists.busybox.net>;
- Tue,  3 Jan 2023 19:37:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C40CE605DB
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C40CE605DB
- for <buildroot@buildroot.org>; Tue,  3 Jan 2023 19:37:13 +0000 (UTC)
+ with ESMTP id C7rLyZGvEh3j for <buildroot@lists.busybox.net>;
+ Tue,  3 Jan 2023 20:01:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5111660A8D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5111660A8D
+ for <buildroot@buildroot.org>; Tue,  3 Jan 2023 20:01:01 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.171.231.8])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 19D7D13F8AA;
- Tue,  3 Jan 2023 20:37:09 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A3D6113F8D9;
+ Tue,  3 Jan 2023 21:00:53 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue,  3 Jan 2023 20:36:49 +0100
-Message-Id: <20230103193649.7488-5-ju.o@free.fr>
+Date: Tue,  3 Jan 2023 21:00:45 +0100
+Message-Id: <20230103200046.96070-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230103193649.7488-1-ju.o@free.fr>
-References: <20230103193649.7488-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1672774631;
- bh=YP8Jd47MG4QVJNGIPGgZrUTx38gtu6afNKyHz4xAOJQ=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=pqbJRkJS+xvjQiqWorj+BA+58fp8REjLKlAbX0Ll2gUvxqNweDxLWlz1gN9YeDkGm
- bkdV6HNJOtoiWv8fCoEZdzAjs7rzyJ3j0pRwFop9BhDNlYNSGvKiWseuJQ2qYpI2sp
- 2TI66u1tMhXiQ54koavkTLHtmG3G8GJJTXQNRcA1Kxh9qhal1G+TqYEZocs1lFpXQK
- z2ynCrKjbhZWTgQD1ZOGZ3eVbaskA+OxdXs9NUr8ShWOyuHsNHdPT6giGjsMjVztIL
- fnO+eSGChoOZbgnQr+cSEHCgUHois+f6x2o4Zisvcwv5r4PdEVkth31FzEvJ23wyMQ
- 86BDsYaAti1zw==
+ d=free.fr; s=smtp-20201208; t=1672776058;
+ bh=jnwdOYFt8jJ3JXECt3MSw6ega16tvckHscw2S7dfyNw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=YPrXD1+WIkbRQct8fmAlLGOEW/SJrZBY+emThi5BZaK2IjddZ4n0PMi5O2ZmDqSFn
+ utgWePwpjYcgKqMiS+99S9powDGkWK8qywwsPRSBntRhA+cb9qNGt5uiwJsOr0uJpu
+ B5KCBfQ8FEodEgbRS+7eyYEDYRqwhZosqnaUp/XMqmTnj8LyUbuBJ6lpXonCL5xWa5
+ QABbsR2vjUtLBfqya1msihoYwru2pj1Ibb4i9Mhx9ZSJdyO0bRvkHJTKwvlt6C59ie
+ Ay+wnvPpQHC60a07punFSS+QUwR4PfWFaAVHOhiDkb3/gsoeABW1A6BXdRbHtAYDw6
+ DM5lF7MuZqcSg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pqbJRkJS
-Subject: [Buildroot] [PATCH 5/5] package/gnupg2: bump to version 2.4.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YPrXD1+W
+Subject: [Buildroot] [PATCH 1/2] package/python-midiutil: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,97 +70,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See announce:
-https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000477.html
+A pure python library for creating multi-track MIDI files.
 
-This commit also drop a patch which is now included in the new version.
-See:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=commitdiff;h=7011286ce6e1fb56c2989fdafbd11b931c489faa
+https://github.com/MarkCWirt/MIDIUtil
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gnupg2/0001-ks_ldap_free_state.patch | 21 --------------------
- package/gnupg2/gnupg2.hash                   | 10 +++++-----
- package/gnupg2/gnupg2.mk                     |  8 +++++++-
- 3 files changed, 12 insertions(+), 27 deletions(-)
- delete mode 100644 package/gnupg2/0001-ks_ldap_free_state.patch
+Patch tested on branch master at commit e593656 with commands:
 
-diff --git a/package/gnupg2/0001-ks_ldap_free_state.patch b/package/gnupg2/0001-ks_ldap_free_state.patch
-deleted file mode 100644
-index fa55d27c04..0000000000
---- a/package/gnupg2/0001-ks_ldap_free_state.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--
--Fix undefined reference to `ks_ldap_free_state' if OpenLDAP is not
--installed
--
--Backported from: 7011286ce6e1fb56c2989fdafbd11b931c489faa
--
--Signed-off-by: Michael Fischer <mf@go-sys.de>
--
----- a/dirmngr/server.c
--+++ b/dirmngr/server.c
--@@ -3137,8 +3137,10 @@ start_command_handler (assuan_fd_t fd, unsigned int session_id)
--                ctrl->refcount);
--   else
--     {
--+#if USE_LDAP
--       ks_ldap_free_state (ctrl->ks_get_state);
--       ctrl->ks_get_state = NULL;
--+#endif
--       release_ctrl_ocsp_certs (ctrl);
--       xfree (ctrl->server_local);
--       dirmngr_deinit_default_ctrl (ctrl);
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index f9c071ad45..c642862fe2 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000476.html
--sha1  1f31b7b4c9c9adad97f94ea3acf1aa64c0424bcc  gnupg-2.3.8.tar.bz2
-+# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000477.html
-+sha1  63dde155a8df0d5e1987efa5fc17438beca83ac1  gnupg-2.4.0.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.3.8.tar.bz2.sig
--# using key 6DAA6E64A76D2840571B4902528897B826403ADA and AC8E115BF73E2D8D47FA9908E98E9B2D19C6C8BD
--sha256  540b7a40e57da261fb10ef521a282e0021532a80fd023e75fb71757e8a4969ed  gnupg-2.3.8.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.0.tar.bz2.sig
-+# using key 6DAA6E64A76D2840571B4902528897B826403ADA
-+sha256  1d79158dd01d992431dd2e3facb89fdac97127f89784ea2cb610c600fb0c1483  gnupg-2.4.0.tar.bz2
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 9dc29ca99e..64deab09c1 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+    make check-package
+    ...
+    0 warnings generated
+
+    python3 -m flake8 \
+        support/testing/tests/package/sample_python_midiutil.py \
+        support/testing/tests/package/test_python_midiutil.py
+    [no-output]
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_python_midiutil.TestPythonPy3MidiUtil
+    ...
+    OK
+---
+ DEVELOPERS                                    |  3 +++
+ package/Config.in                             |  1 +
+ package/python-midiutil/Config.in             |  6 +++++
+ package/python-midiutil/python-midiutil.hash  |  5 ++++
+ package/python-midiutil/python-midiutil.mk    | 14 +++++++++++
+ .../tests/package/sample_python_midiutil.py   | 23 +++++++++++++++++++
+ .../tests/package/test_python_midiutil.py     | 11 +++++++++
+ 7 files changed, 63 insertions(+)
+ create mode 100644 package/python-midiutil/Config.in
+ create mode 100644 package/python-midiutil/python-midiutil.hash
+ create mode 100644 package/python-midiutil/python-midiutil.mk
+ create mode 100644 support/testing/tests/package/sample_python_midiutil.py
+ create mode 100644 support/testing/tests/package/test_python_midiutil.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8399dcc7af..af497114dc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1688,6 +1688,7 @@ F:	package/ola/
+ F:	package/ptm2human/
+ F:	package/python-distro/
+ F:	package/python-gnupg/
++F:	package/python-midiutil/
+ F:	package/python-pyalsa/
+ F:	package/riscv-isa-sim/
+ F:	package/tinycompress/
+@@ -1695,6 +1696,7 @@ F:	package/z3/
+ F:	package/zynaddsubfx/
+ F:	support/testing/tests/package/sample_python_distro.py
+ F:	support/testing/tests/package/sample_python_gnupg.py
++F:	support/testing/tests/package/sample_python_midiutil.py
+ F:	support/testing/tests/package/sample_python_pyalsa.py
+ F:	support/testing/tests/package/test_hwloc.py
+ F:	support/testing/tests/package/test_ncdu.py
+@@ -1703,6 +1705,7 @@ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_python_distro.py
+ F:	support/testing/tests/package/test_python_gnupg.py
++F:	support/testing/tests/package/test_python_midiutil.py
+ F:	support/testing/tests/package/test_python_pyalsa.py
+ F:	support/testing/tests/package/test_z3.py
  
--GNUPG2_VERSION = 2.3.8
-+GNUPG2_VERSION = 2.4.0
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
-@@ -15,6 +15,12 @@ GNUPG2_SELINUX_MODULES = gpg
- GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libnpth \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
- 
-+# The configure script fails to find "gpgrt-config" in the prefix
-+# passed to --with-libgpg-error-prefix. This ultimately fail while
-+# detecting libgpg-error, which is mandatory. Adding the staging bin
-+# dir resolve this issue.
-+GNUPG2_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
+diff --git a/package/Config.in b/package/Config.in
+index 995dae2c57..4157fe1214 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1123,6 +1123,7 @@ menu "External python modules"
+ 	source "package/python-matplotlib/Config.in"
+ 	source "package/python-mbstrdecoder/Config.in"
+ 	source "package/python-memory-profiler/Config.in"
++	source "package/python-midiutil/Config.in"
+ 	source "package/python-mimeparse/Config.in"
+ 	source "package/python-minimalmodbus/Config.in"
+ 	source "package/python-mistune/Config.in"
+diff --git a/package/python-midiutil/Config.in b/package/python-midiutil/Config.in
+new file mode 100644
+index 0000000000..c496e60421
+--- /dev/null
++++ b/package/python-midiutil/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_MIDIUTIL
++	bool "python-midiutil"
++	help
++	  A pure python library for creating multi-track MIDI files.
 +
- GNUPG2_CONF_OPTS = \
- 	--disable-rpath \
- 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
++	  https://github.com/MarkCWirt/MIDIUtil
+diff --git a/package/python-midiutil/python-midiutil.hash b/package/python-midiutil/python-midiutil.hash
+new file mode 100644
+index 0000000000..88340a23b8
+--- /dev/null
++++ b/package/python-midiutil/python-midiutil.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/midiutil/json
++md5  948c16c74e7355268158f227b710edce  MIDIUtil-1.2.1.tar.gz
++sha256  79fa983bd1efc60785f68a8fe78fa8f45b8d7ec5898bf7cb7f3f7f3336d6a90a  MIDIUtil-1.2.1.tar.gz
++# Locally computed sha256 checksums
++sha256  8d5bdaebe8445a4c2dc812c205eb5455ba123aa1af8503cc88712115ab7c97ef  License.txt
+diff --git a/package/python-midiutil/python-midiutil.mk b/package/python-midiutil/python-midiutil.mk
+new file mode 100644
+index 0000000000..cb7e8f6ccb
+--- /dev/null
++++ b/package/python-midiutil/python-midiutil.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-midiutil
++#
++################################################################################
++
++PYTHON_MIDIUTIL_VERSION = 1.2.1
++PYTHON_MIDIUTIL_SOURCE = MIDIUtil-$(PYTHON_MIDIUTIL_VERSION).tar.gz
++PYTHON_MIDIUTIL_SITE = https://files.pythonhosted.org/packages/f5/44/fde6772d8bfaea64fcf5eb948124d0a5fdf5f848b14ac22a23ced53e562d
++PYTHON_MIDIUTIL_SETUP_TYPE = setuptools
++PYTHON_MIDIUTIL_LICENSE = MIT
++PYTHON_MIDIUTIL_LICENSE_FILES = License.txt
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_midiutil.py b/support/testing/tests/package/sample_python_midiutil.py
+new file mode 100644
+index 0000000000..58bf1fbccb
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_midiutil.py
+@@ -0,0 +1,23 @@
++#! /usr/bin/env python3
++
++# Taken from:
++# https://github.com/MarkCWirt/MIDIUtil/blob/1.2.1/examples/c-major-scale.py
++
++from midiutil import MIDIFile
++
++degrees = [60, 62, 64, 65, 67, 69, 71, 72]  # MIDI note number
++track = 0
++channel = 0
++time = 0        # In beats
++duration = 1    # In beats
++tempo = 60      # In BPM
++volume = 100    # 0-127, as per the MIDI standard
++
++MyMIDI = MIDIFile(1)  # One track
++MyMIDI.addTempo(track, time, tempo)
++
++for i, pitch in enumerate(degrees):
++    MyMIDI.addNote(track, channel, pitch, time + i, duration, volume)
++
++with open("major-scale.mid", "wb") as output_file:
++    MyMIDI.writeFile(output_file)
+diff --git a/support/testing/tests/package/test_python_midiutil.py b/support/testing/tests/package/test_python_midiutil.py
+new file mode 100644
+index 0000000000..302fbfb1ed
+--- /dev/null
++++ b/support/testing/tests/package/test_python_midiutil.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3MidiUtil(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_MIDIUTIL=y
++        """
++    sample_scripts = ["tests/package/sample_python_midiutil.py"]
 -- 
 2.39.0
 
