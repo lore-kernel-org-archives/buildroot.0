@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48A67C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F0E9C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC74A4EBB9;
-	Mon, 20 Feb 2023 23:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC74A4EBB9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 073C74EBA7;
+	Mon, 20 Feb 2023 23:54:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 073C74EBA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gPxkGUHelu71; Mon, 20 Feb 2023 23:54:34 +0000 (UTC)
+	with ESMTP id iLADFR9DZfa3; Mon, 20 Feb 2023 23:54:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B83D74EBF7;
-	Mon, 20 Feb 2023 23:54:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B83D74EBF7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 914C31BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7215C4EBC9;
+	Mon, 20 Feb 2023 23:54:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7215C4EBC9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 35FD11BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3EF44174E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3EF44174E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 895B061774
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 895B061774
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k1Z41GtoXU4N for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ip9m72R_4J1o for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E41B941780
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E41B941780
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8097A61B25
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8097A61B25
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE76886496; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7C964828C8; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 3 Feb 2023 08:32:00 +0100
+Date: Tue, 3 Jan 2023 21:18:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 02658dcc01f62aef26045affe37d21e6d3250256
-X-Git-Newrev: def789059af78cd65294cafa4288cb41691e86c7
+X-Git-Oldrev: 791b530368bee8894fb5c48351846609f97ee9e5
+X-Git-Newrev: 8d7c69a0c9e414b7112347c37e1424ec5f2863ed
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205244.DE76886496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] {linux,
- linux-headers}: bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.1.x series
+Message-Id: <20230220205222.7C964828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ncurses: Switch to git
+ repo with snapshots
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +63,198 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=def789059af78cd65294cafa4288cb41691e86c7
+commit: https://git.buildroot.net/buildroot/commit/?id=8d7c69a0c9e414b7112347c37e1424ec5f2863ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-4.9.x / 6.0.x is now EOL.
+ncurses does not release dot-versions, but the fixes are released as a
+set of cumulative patches against the latest version.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+So far, we carry the list of the patches against 6.3, and this is a
+tedious task to maintain that list (especially as we have a hash for
+each of them).
+
+Thomas E. Dickey (the ncurses maintainer, so we can trust him) hosts the
+ncurses snapshots on Github, with patches already applied.
+
+So, we switch to using that. This avoids needing to list all incremental
+patches, and will make future bumping easier.
+
+Signed-off-by: Dennis Van Hoorick <dennis.vanhoorick@barco.com>
+[yann.morin.1998@free.fr:
+  - don't use 'v' in filename
+  - rework the version string for when there's no snapshot
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/ncurses/ncurses.hash | 65 ++------------------------------------
+ package/ncurses/ncurses.mk   | 75 ++++++--------------------------------------
+ 2 files changed, 11 insertions(+), 129 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e18b515311..a0e9286bd3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.1.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.1.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 157f267a9d..927172e8fa 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,14 +1,14 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  bc7f6d9a8a8bbe9a723e82346bba94b58d926f78bfba106b21e041e0290076fc  linux-6.1.5.tar.xz
-+sha256  d60cf185693c386e7acd9f3eb3a94ae30ffbfee0a9447a20e83711e0bdf5922b  linux-6.1.9.tar.xz
- sha256  abe37eb0e2e331bdc7c4110115664e180e7d43b7336de6b4cd2bd1b123d30207  linux-6.0.19.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  e7359bd2935b54fe8bb821cf748591c36a95bed019e752d3e4d5803d9da1ccb4  linux-5.15.87.tar.xz
--sha256  2ec400fc50ffdfe4c836a3c02bf6e7aebcd7963dd2ac1425e6d41545c37dd217  linux-5.10.162.tar.xz
--sha256  80253b2cac54c256dfdfd1061800aef907f88432090f7aef74c0ddf50f6e6524  linux-5.4.228.tar.xz
-+sha256  a63c2bb1beb15f1aea9c63cf80559f5b7ab58afd2da2fa5e7670c515ebe1fe80  linux-5.15.91.tar.xz
-+sha256  0051a1780e5bda0efc68dafab7c728b8283d2b028fedb439418f478be7d3e1af  linux-5.10.166.tar.xz
-+sha256  a74fd32ccc1025b72f3ba7183208761f7c6190fb96e8f484f6d543a5a183e62f  linux-5.4.230.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  5385aaec55c766e3f462511453f5c63d7898b2d0e9ea74f22a23ebbedab0b3c6  linux-4.9.337.tar.xz
--sha256  e32a230d71072a4ee50bd4386aa23ca4e617b8ad07b6f9fb223b65bf004c4c80  linux-4.14.302.tar.xz
--sha256  6e0ba5d224ab216b7b938cc9ff2478be7882a884bbdf15374149bade4d58b20a  linux-4.19.269.tar.xz
-+sha256  64cbb234e46c196bc12bde74b233c7d3cb3b68d9c8ed48bf06715bd0f5c549d5  linux-4.14.304.tar.xz
-+sha256  636d3f9cb48eaf06df14e56bd9d57bfc7c1b5952a75b9f841d41a43b75829d1a  linux-4.19.271.tar.xz
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index c72a2abf46..c96bf77bce 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
+@@ -1,65 +1,4 @@
+-# Locally calculated after checking pgp signature
+-sha256  97fc51ac2b085d4cde31ef4d2c3122c21abc217e9090a43a30fc5ec21684e059  ncurses-6.3.tar.gz
+-sha256  51bad0e386d06d3a26d7f28087b2072658282452f209e7e5eb7722556b042570  ncurses-6.3-20211026.patch.gz
+-sha256  4e1b0694a2633cc681987c80091175cb2b17a6c882750a7c6afb0560f5447249  ncurses-6.3-20211030.patch.gz
+-sha256  de7e0b2c784342188da48147d3fa661be38d5b5d517bb224423f15893e27334f  ncurses-6.3-20211106.patch.gz
+-sha256  df78f157336fce33d96ae1e3c2f7d7b48e9b728409d9a4ab59e77242255b03ab  ncurses-6.3-20211113.patch.gz
+-sha256  b7bf59d9a8e243263b05b166c6fe321bfca8e67eb32ebc26a1c813df42d64fee  ncurses-6.3-20211115.patch.gz
+-sha256  7cb46c897e2e54d5f085cd9edc8d523c13b8f4a13878dd01ce094ec52bd26aec  ncurses-6.3-20211120.patch.gz
+-sha256  ee8cf6ab6db3a01f2533959d14a5e1cc8e1412fbce4b2ab4668c7d1101f71684  ncurses-6.3-20211127.patch.gz
+-sha256  9d9055badff9e15fc1fbe4f4b2cce7c76384d446ab857573cbb1d645430d8ac7  ncurses-6.3-20211204.patch.gz
+-sha256  6059625cac99819a3580955db377c0820b6be7ae5da4d8a82e9638948a7b0679  ncurses-6.3-20211211.patch.gz
+-sha256  acb77a09fe6ab37b96e9f70d9ebfde0aaf7bdee064761c605b47125bd31be2ae  ncurses-6.3-20211219.patch.gz
+-sha256  f2786f19c85258da9e9255459480e5ac2efb61b6ea5d0866b9b8507fa8f5b036  ncurses-6.3-20211225.patch.gz
+-sha256  ca5736eda90cd7cb597be0fdb0ed10f04deb7304cc7ffb0b166dfa07c39ab1e7  ncurses-6.3-20220101.patch.gz
+-sha256  7e43911e6baa4a7cfeaad1880777bda352eb7b22493db5bc9f72a52aec8d6d78  ncurses-6.3-20220115.patch.gz
+-sha256  ecfdd8bed6ff3b1fae5050da555c77dd41035c35bebed30162862e343324443e  ncurses-6.3-20220122.patch.gz
+-sha256  32ec2da0fe48c353489c4018b38f890a59eafeb37ab24b82e32ba553845438a4  ncurses-6.3-20220129.patch.gz
+-sha256  f74b0d1f7f96bf8609c6a62e268019289e4affec9e02f9182ab14817637180e7  ncurses-6.3-20220205.patch.gz
+-sha256  6506f709e745375f692d05f53c45b50f1e60d13a3e4346db46d14f69e19adbb1  ncurses-6.3-20220212.patch.gz
+-sha256  349433e684e96096cbacaa1014d3ccd285c441d1bd99a721ae0b705b02de4145  ncurses-6.3-20220219.patch.gz
+-sha256  2181cf581fcdabb5b534606ab81c4c625bf819f9d351c670972a7f3a85f36197  ncurses-6.3-20220226.patch.gz
+-sha256  1acd0f2d18ea7c783286658e550c4f61cbe750a907c9be5fc00e67f2ea8f7eb5  ncurses-6.3-20220305.patch.gz
+-sha256  ced13543cc19ee341d82eb7fd501e15a2f3d1bc08fbbeb9de7edbd6422ca4799  ncurses-6.3-20220312.patch.gz
+-sha256  450fce90a10b1ab0b20ba5efc222741fe96f8445d1e4528e2a7b7711c26a5254  ncurses-6.3-20220319.patch.gz
+-sha256  c97213841e41d33b50a8492ba252dc79a24b38721f7ac0966442b3176f5666c7  ncurses-6.3-20220326.patch.gz
+-sha256  4c6253ea2c3cf83fbac2fdb5af56914e6bdc5a7c6e6e7532a4f218b7af6d05eb  ncurses-6.3-20220402.patch.gz
+-sha256  5b46bc2bec8f9192c2ed7d25f2080c57b7d7ecbe294d85ab8d3c7d4eb4a678fa  ncurses-6.3-20220409.patch.gz
+-sha256  fddd3b7dea2db1dc70adfa46ccb52301c820854821ce35366056e8e8daba8360  ncurses-6.3-20220416.patch.gz
+-sha256  1dba62d927affe93face3d55710d8abce7b70a904a0dd0114894efff7ba8ac72  ncurses-6.3-20220423.patch.gz
+-sha256  f6289906a3be560da9240e0d4a7a1bbd213dd9316f0b395e6852524491ff6322  ncurses-6.3-20220430.patch.gz
+-sha256  a6f631b9b934d0012617c429834b370732084d6f3c1784d11d8f18f26ea9e0d4  ncurses-6.3-20220501.patch.gz
+-sha256  79e75286b2a3292058bbe0aa67d8ea49682f7942b108c3ffc725a34765d4fce7  ncurses-6.3-20220507.patch.gz
+-sha256  1dda27245cbd6634f89766624dc72c156312bf00635214ea7ac299c9330b18f2  ncurses-6.3-20220514.patch.gz
+-sha256  0a251674845e0669e92c8bee6b6e5bb317439f8707f3316424eae590322f87c6  ncurses-6.3-20220521.patch.gz
+-sha256  411c4fdfc2ea4f56fdb57ff758a13dffa4b2fff68e71b65cf3248c925f6c30ee  ncurses-6.3-20220529.patch.gz
+-sha256  acc315edb22a04f6476d9cd2a43866d478e0f4b2a555f480c92a18983bec5ee7  ncurses-6.3-20220604.patch.gz
+-sha256  2dae4db33c73766cd63b2b700e09588750bae44622749ce007404e3e30420ada  ncurses-6.3-20220612.patch.gz
+-sha256  1e4b5c3deaab601a9749da591952b66a53d96017967eeec033f3b4d30e12d2de  ncurses-6.3-20220618.patch.gz
+-sha256  65379719532023cd77c80a495cf31ff773345173e919ec8eef8b3f9517969626  ncurses-6.3-20220625.patch.gz
+-sha256  028864b31ada91862f0d8f4aa016b62bc3fe7e3981d62e81110d5143e26d0e0d  ncurses-6.3-20220703.patch.gz
+-sha256  06c2f6d967480d0bcf20f301db26c8e5c90caf6d3adf616bc277e21407e9c955  ncurses-6.3-20220709.patch.gz
+-sha256  66aa8564d09fcc7bbd85bbe79685772330633c14d70af2fef00d10491e6b22fb  ncurses-6.3-20220716.patch.gz
+-sha256  fffcc8ec0eab3dcbb7b8d8a208d880a15fe128f6f2dbc63a87d5640d8ade95cf  ncurses-6.3-20220724.patch.gz
+-sha256  1787619c0b5052121dc5816bdb4cbd9699e1b61ba6c98072a3733b17cc7009f9  ncurses-6.3-20220729.patch.gz
+-sha256  d7fb1f2e2246079527351c8b7c8847c28751c6a5bb46740681d4b6ba790b22cc  ncurses-6.3-20220806.patch.gz
+-sha256  10a04d3189a34187e691e73435c210af3939025f07ff6c34c1bfc48fda6f5a5d  ncurses-6.3-20220813.patch.gz
+-sha256  b9238267413c2fce5bfe4c029f28dbbbef7230cdf47792ecd4070b857fe1a869  ncurses-6.3-20220820.patch.gz
+-sha256  7d30766caaac9136ab0ff7164d33761b186b698ec237560cb8fce0eb937f90b8  ncurses-6.3-20220827.patch.gz
+-sha256  5f04fd2d954b3461671290c766f784a4151091eb4e9197a7745dcdbb9c030483  ncurses-6.3-20220903.patch.gz
+-sha256  b948a0efe45341ccc913cc67231ee1e6bc737f178bcd758ce9f2e856e575071f  ncurses-6.3-20220910.patch.gz
+-sha256  f9ad5781a72d669bdd06fe075136cc79e6a570960f6f641a9c486fc102a45c3b  ncurses-6.3-20220917.patch.gz
+-sha256  bbb9d5afaec836e66b9f919c97c81c0505fd111b479b59ab6e376822ff6df1d3  ncurses-6.3-20220924.patch.gz
+-sha256  7ffeae28a0f8416c6ab088a99807d0d1ee5be821828c288f0a572ea769a8e2e5  ncurses-6.3-20221001.patch.gz
+-sha256  204baff40926d29ec30b1def4d4cc5d7ce074918327d8e271a49c960032b5a49  ncurses-6.3-20221008.patch.gz
+-sha256  f578dbb3beb1976636c74b33ffe5d300fee5a7653bc4f64bb7870d1b9cf85e7b  ncurses-6.3-20221015.patch.gz
+-sha256  b01fc81093a331d5d645dbcbacebf6e5d459430b38cbdae0db053c6e5dff7d7e  ncurses-6.3-20221023.patch.gz
+-sha256  e6e819c78c78c3a0355e7da4360d084f5d69871fa556b51322980f22da4edcea  ncurses-6.3-20221029.patch.gz
+-sha256  4da9b5bf14a1b7d6d8a4181e79a98b9e5782153bc7db93773ac43e0b758c4da2  ncurses-6.3-20221105.patch.gz
+-sha256  b3381da6071bbed04e6ddaabbd5375d280e50af429f94522e32e9d0f22766155  ncurses-6.3-20221112.patch.gz
+-sha256  bf30c435283a4483280e0433f6370d9eea1fb704323bd887e540592eb8203e2f  ncurses-6.3-20221119.patch.gz
+-sha256  32dc21b671ead8b199d66111ebd3404e8cd5f8c4ca5587cfeb5c6a4913b2d103  ncurses-6.3-20221126.patch.gz
+-sha256  8fe3bcacaea784ac7971e102a8eb8ca58c4c2c4c13c1ec33f32334600b9e4f56  ncurses-6.3-20221203.patch.gz
+-
++# Locally calculated
++sha256  4057d800ee96623ae70d06b05b2dadb481a80c030e4968aa5d9bcea4439441da  ncurses-6.3-20221224.tar.gz
  # Locally computed
- sha256  4594c147bdc493c7c286688542bbe65e550fb7bd58e0649ec587a2fe893ec0ee  linux-cip-5.10.145-cip17.tar.gz
- sha256  a5598f7f673b3ef819d6ed24f08d539eecb6febd11673a1d4752a1c05d4ee289  linux-cip-5.10.145-cip17-rt7.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 1ad9fffcd3..3a5207e0b6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -397,13 +397,13 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.9.337"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.302"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.269"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.228"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.162"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.87"	if BR2_KERNEL_HEADERS_5_15
-+	default "4.14.304"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.271"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.230"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.166"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.91"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.0.19"	if BR2_KERNEL_HEADERS_6_0
--	default "6.1.5"		if BR2_KERNEL_HEADERS_6_1
-+	default "6.1.9"		if BR2_KERNEL_HEADERS_6_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ sha256  63de87399e9fc8860236082b6b0520e068e9eb1fad0ebd30202aa30bb6f690ac  COPYING
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 4d93a992e4..73e3c3feb8 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -4,79 +4,22 @@
+ #
+ ################################################################################
+ 
+-NCURSES_VERSION = 6.3
+-NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
++# When there is no snapshost yet for a new version, set it to the empty string
++NCURSES_VERSION_MAJOR = 6.3
++NCURSES_SNAPSHOT_DATE = 20221224
++NCURSES_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),-$(NCURSES_SNAPSHOT_DATE))
++NCURSES_VERSION_GIT = $(subst .,_,$(subst -,_,$(NCURSES_VERSION)))
++NCURSES_SITE = $(call github,ThomasDickey,ncurses-snapshots,v$(NCURSES_VERSION_GIT))
+ NCURSES_INSTALL_STAGING = YES
+ NCURSES_DEPENDENCIES = host-ncurses
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = COPYING
+ NCURSES_CPE_ID_VENDOR = gnu
++NCURSES_CPE_ID_VERSION = $(NCURSES_VERSION_MAJOR)
+ NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
+-# patch 20220416
++
++# Fixed since snapshot 20220416
+ NCURSES_IGNORE_CVES += CVE-2022-29458
+-NCURSES_PATCH = \
+-	$(addprefix https://invisible-mirror.net/archives/ncurses/$(NCURSES_VERSION)/, \
+-		ncurses-6.3-20211026.patch.gz \
+-		ncurses-6.3-20211030.patch.gz \
+-		ncurses-6.3-20211106.patch.gz \
+-		ncurses-6.3-20211113.patch.gz \
+-		ncurses-6.3-20211115.patch.gz \
+-		ncurses-6.3-20211120.patch.gz \
+-		ncurses-6.3-20211127.patch.gz \
+-		ncurses-6.3-20211204.patch.gz \
+-		ncurses-6.3-20211211.patch.gz \
+-		ncurses-6.3-20211219.patch.gz \
+-		ncurses-6.3-20211225.patch.gz \
+-		ncurses-6.3-20220101.patch.gz \
+-		ncurses-6.3-20220115.patch.gz \
+-		ncurses-6.3-20220122.patch.gz \
+-		ncurses-6.3-20220129.patch.gz \
+-		ncurses-6.3-20220205.patch.gz \
+-		ncurses-6.3-20220212.patch.gz \
+-		ncurses-6.3-20220219.patch.gz \
+-		ncurses-6.3-20220226.patch.gz \
+-		ncurses-6.3-20220305.patch.gz \
+-		ncurses-6.3-20220312.patch.gz \
+-		ncurses-6.3-20220319.patch.gz \
+-		ncurses-6.3-20220326.patch.gz \
+-		ncurses-6.3-20220402.patch.gz \
+-		ncurses-6.3-20220409.patch.gz \
+-		ncurses-6.3-20220416.patch.gz \
+-		ncurses-6.3-20220423.patch.gz \
+-		ncurses-6.3-20220430.patch.gz \
+-		ncurses-6.3-20220501.patch.gz \
+-		ncurses-6.3-20220507.patch.gz \
+-		ncurses-6.3-20220514.patch.gz \
+-		ncurses-6.3-20220521.patch.gz \
+-		ncurses-6.3-20220529.patch.gz \
+-		ncurses-6.3-20220604.patch.gz \
+-		ncurses-6.3-20220612.patch.gz \
+-		ncurses-6.3-20220618.patch.gz \
+-		ncurses-6.3-20220625.patch.gz \
+-		ncurses-6.3-20220703.patch.gz \
+-		ncurses-6.3-20220709.patch.gz \
+-		ncurses-6.3-20220716.patch.gz \
+-		ncurses-6.3-20220724.patch.gz \
+-		ncurses-6.3-20220729.patch.gz \
+-		ncurses-6.3-20220806.patch.gz \
+-		ncurses-6.3-20220813.patch.gz \
+-		ncurses-6.3-20220820.patch.gz \
+-		ncurses-6.3-20220827.patch.gz \
+-		ncurses-6.3-20220903.patch.gz \
+-		ncurses-6.3-20220910.patch.gz \
+-		ncurses-6.3-20220917.patch.gz \
+-		ncurses-6.3-20220924.patch.gz \
+-		ncurses-6.3-20221001.patch.gz \
+-		ncurses-6.3-20221008.patch.gz \
+-		ncurses-6.3-20221015.patch.gz \
+-		ncurses-6.3-20221023.patch.gz \
+-		ncurses-6.3-20221029.patch.gz \
+-		ncurses-6.3-20221105.patch.gz \
+-		ncurses-6.3-20221112.patch.gz \
+-		ncurses-6.3-20221119.patch.gz \
+-		ncurses-6.3-20221126.patch.gz \
+-		ncurses-6.3-20221203.patch.gz \
+-	)
+ 
+ NCURSES_CONF_OPTS = \
+ 	--without-cxx \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
