@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54BCFC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:12:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B40CDC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:12:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 006224F0D3;
-	Tue, 21 Feb 2023 00:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 006224F0D3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6812E4F012;
+	Tue, 21 Feb 2023 00:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6812E4F012
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QHxXV7Sa2p9T; Tue, 21 Feb 2023 00:12:27 +0000 (UTC)
+	with ESMTP id syHl9gawcAv1; Tue, 21 Feb 2023 00:12:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1B2A4F0BD;
-	Tue, 21 Feb 2023 00:12:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1B2A4F0BD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7BB31BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 435054F034;
+	Tue, 21 Feb 2023 00:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 435054F034
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 526DD1BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D62641799
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D62641799
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABCB161B25
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABCB161B25
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dROCMluJFsbo for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vG5CLs5mNHZz for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D9AE417B5
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D9AE417B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3E886F9F4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3E886F9F4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9AD5C8648F; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id E210386495; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 12:00:14 +0100
+Date: Wed, 4 Jan 2023 23:09:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 87af250c0e136bf8751e1fc8a6196f9b25a0b64e
-X-Git-Newrev: c96b2b21f7aedd78094fd009f03d8f82361e5105
+X-Git-Oldrev: ca5cd8d67554c568daee4da1f058bcf3b35b2976
+X-Git-Newrev: 11479db32c5ea6bbdd7ce9b77873561a2ca07cfb
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205248.9AD5C8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/crudini: add
- host-crudini
+Message-Id: <20230220205225.E210386495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wpa_supplicant: drop
+ dangling WPA_SUPPLICANT_{LDFLAGS, MAKE_ENV}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c96b2b21f7aedd78094fd009f03d8f82361e5105
+commit: https://git.buildroot.net/buildroot/commit/?id=11479db32c5ea6bbdd7ce9b77873561a2ca07cfb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Make the host variant of crudini package. This can be useful in
-post-{build,image} scripts.
+Commit "0340b45da0 wpa_supplicant: bump to version 1.0" from 2012
+converted the package to use the generic infra, but added a bogus
+WPA_SUPPLICANT_LDFLAGS end left a dangling WPA_SUPPLICANT_MAKE_ENV.
 
-Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
-Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
-[yann.morin.1998@free.fr: select python3, don't depend on it]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Drop the symbols that are not used since 2012.
+
+Cc: Matt Weber <matthew.weber@collins.com>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in.host         | 1 +
- package/crudini/Config.in.host | 9 +++++++++
- package/crudini/crudini.mk     | 1 +
- 3 files changed, 11 insertions(+)
+ package/wpa_supplicant/wpa_supplicant.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 0f612d7872..8d28f426d1 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -14,6 +14,7 @@ menu "Host utilities"
- 	source "package/checksec/Config.in.host"
- 	source "package/cmake/Config.in.host"
- 	source "package/cramfs/Config.in.host"
-+	source "package/crudini/Config.in.host"
- 	source "package/cryptsetup/Config.in.host"
- 	source "package/dbus-python/Config.in.host"
- 	source "package/delve/Config.in.host"
-diff --git a/package/crudini/Config.in.host b/package/crudini/Config.in.host
-new file mode 100644
-index 0000000000..4e77095627
---- /dev/null
-+++ b/package/crudini/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_CRUDINI
-+	bool "host crudini"
-+	select BR2_PACKAGE_HOST_PYTHON3
-+	select BR2_PACKAGE_HOST_PYTHON_INIPARSE # runtime
-+	help
-+	  A utility for handling ini files from the command line and
-+	  shell scripts
-+
-+	  https://pypi.python.org/pypi/crudini
-diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
-index 7141e2b2a0..c376c5f777 100644
---- a/package/crudini/crudini.mk
-+++ b/package/crudini/crudini.mk
-@@ -11,3 +11,4 @@ CRUDINI_LICENSE = GPL-2.0
- CRUDINI_LICENSE_FILES = COPYING
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index e5e3938be1..42c6f772ac 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -13,7 +13,6 @@ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+ WPA_SUPPLICANT_SUBDIR = wpa_supplicant
+ WPA_SUPPLICANT_DBUS_SERVICE = fi.w1.wpa_supplicant1
+ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+-WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
  
- $(eval $(python-package))
-+$(eval $(host-python-package))
+ # install the wpa_client library
+@@ -157,9 +156,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
+ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf dbus
+-WPA_SUPPLICANT_MAKE_ENV = \
+-	PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+-	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
+ define WPA_SUPPLICANT_INSTALL_DBUS_NEW
+ 	$(INSTALL) -m 0644 -D \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
