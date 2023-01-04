@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69456C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D5CDC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:04:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF2F4826FF;
-	Mon, 20 Feb 2023 23:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF2F4826FF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04E5C826EF;
+	Mon, 20 Feb 2023 23:04:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04E5C826EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m7rP3xmlab2i; Mon, 20 Feb 2023 23:04:26 +0000 (UTC)
+	with ESMTP id VNd6BCWpAa9k; Mon, 20 Feb 2023 23:04:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A07582572;
-	Mon, 20 Feb 2023 23:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A07582572
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B149E1BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 01EC082560;
+	Mon, 20 Feb 2023 23:04:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01EC082560
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BC5E71BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79779612C5
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79779612C5
+ by smtp2.osuosl.org (Postfix) with ESMTP id F26154171C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F26154171C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xtDaCDYE4nsr for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Bo9SavJsrNIa for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A9A97612B9
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9A97612B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2348C411A1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2348C411A1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6C36828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ id 10C5786495; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:44:02 +0100
+Date: Wed, 4 Jan 2023 22:37:45 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: af6f7aa76db5aed1eada0b27bd0375610a2fc728
-X-Git-Newrev: d005917d7256c79b2f50010d48f36846333a457a
+X-Git-Oldrev: 8ebb0f810a21103af0bd6d988a24645503e7d10e
+X-Git-Newrev: 98613ad592828a3626400f52a1504fe5234fc7f1
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.A6C36828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xutil_makedepend: bump version to 1.0.8
+Message-Id: <20230220205225.10C5786495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-mediadriver:
+ bump version to 22.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d005917d7256c79b2f50010d48f36846333a457a
+commit: https://git.buildroot.net/buildroot/commit/?id=98613ad592828a3626400f52a1504fe5234fc7f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-December/003300.html
+Removed patch included in upstream release.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xutil_makedepend/xutil_makedepend.hash | 6 +++---
- package/x11r7/xutil_makedepend/xutil_makedepend.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-dont-include-va-dricommon-h.patch         | 36 ----------------------
+ package/intel-mediadriver/intel-mediadriver.hash   |  2 +-
+ package/intel-mediadriver/intel-mediadriver.mk     |  2 +-
+ 3 files changed, 2 insertions(+), 38 deletions(-)
 
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.hash b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-index 3a7496e1a4..e2fe117f10 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-October/003243.html
--sha256  a729cfd3c0f4e16c0db1da351e7f53335222e058e3434e84f91251fd6d407065  makedepend-1.0.7.tar.xz
--sha512  fd575de737aa56ef8e475d1ddb7b2392e730ee1b23c0b853bbb21975b757c3fc56f94d57ecc5a784dceed2be653feb10909e86fd96fdc074b50fbbd0e27a19db  makedepend-1.0.7.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003300.html
-+sha256  bfb26f8025189b2a01286ce6daacc2af8fe647440b40bb741dd5c397572cba5b  makedepend-1.0.8.tar.xz
-+sha512  6707b1107c07d4ffbcf008181e877d18a0bcc4aea03860ee1158f5630c7fdce4cf9ad7bee3b38ee420c3a44819ed4b56a6f2428a5b695c0dbd17fb3e60825a6d  makedepend-1.0.8.tar.xz
+diff --git a/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch b/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch
+deleted file mode 100644
+index 9d512f9c0b..0000000000
+--- a/package/intel-mediadriver/0001-dont-include-va-dricommon-h.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From e0d2caafcd5e583a01f7792eaec5d1f2d540bdf1 Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Fri, 18 Nov 2022 22:44:52 +1100
+-Subject: [PATCH] [Media Common] [VP] dont include va_dricommon.h
+-
+-<va/va_dricommon.h> is not in non-X11 libva 2.16.0
+-The header "media_libva_putsurface_linux.h" is included
+-
+-Downloaded from upstream commit
+-https://github.com/intel/media-driver/commit/e0d2caafcd5e583a01f7792eaec5d1f2d540bdf1
+-
+-Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp b/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
+-index 8695d6c86..6719c07b3 100644
+---- a/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
+-+++ b/media_softlet/linux/common/vp/ddi/ddi_vp_functions.cpp
+-@@ -23,7 +23,6 @@
+- //! \file     ddi_vp_functions.cpp
+- //! \brief    ddi vp functions implementaion.
+- //!
+--#include <va/va_dricommon.h>
+- #include "ddi_vp_functions.h"
+- #include "media_libva_util_next.h"
+- #include "media_libva_common_next.h"
+-@@ -4700,4 +4699,4 @@ VAStatus DdiVpFunctions::PutSurfaceLinuxHW(
+- 
+-     return VA_STATUS_SUCCESS;
+- }
+--#endif // !defined(ANDROID) && defined(X11_FOUND)
+-\ No newline at end of file
+-+#endif // !defined(ANDROID) && defined(X11_FOUND)
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index a9b7c6407d..b2c45eb025 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  0530078db78c47ae978dc2bd77f4f427e6cd97df868672c95b1ef284113c8cb7  COPYING
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index b16bbe0978..0c4a32c006 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256  0c04b9d74b92de41fd409b62913ce4afd799236c0b6bc1983a496990764e5d90  intel-media-22.6.4.tar.gz
++sha256  cbb6a514564f8c3349b1f78fc0906b636ea2074d7605cb0e820c5b727ce88cdc  intel-media-22.6.5.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index ff97445181..8d3fc09260 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--XUTIL_MAKEDEPEND_VERSION = 1.0.7
-+XUTIL_MAKEDEPEND_VERSION = 1.0.8
- XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.xz
- XUTIL_MAKEDEPEND_SITE = https://xorg.freedesktop.org/archive/individual/util
- XUTIL_MAKEDEPEND_LICENSE = MIT
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 22.6.4
++INTEL_MEDIADRIVER_VERSION = 22.6.5
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
