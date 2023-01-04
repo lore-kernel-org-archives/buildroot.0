@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B1BC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE7E8C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:55:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B31D41891;
-	Wed,  4 Jan 2023 16:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B31D41891
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9553E81FB1;
+	Wed,  4 Jan 2023 16:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9553E81FB1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N7h9marEui64; Wed,  4 Jan 2023 16:54:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q7mVPeFxqHEH; Wed,  4 Jan 2023 16:55:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DF4941893;
-	Wed,  4 Jan 2023 16:54:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DF4941893
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6451D1BF5DF
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA8AA81FAC;
+	Wed,  4 Jan 2023 16:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA8AA81FAC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D5591BF8C7
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FC5A40B81
+ by smtp3.osuosl.org (Postfix) with ESMTP id 497F36107F
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FC5A40B81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 497F36107F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9etpAzyr8xXq for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Uo3eca0GQKuN for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7617D40236
+ by smtp3.osuosl.org (Postfix) with ESMTP id 707376104B
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7617D40236
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 707376104B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63D7087518; Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
+ id 59C8B87567; Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 17:44:44 +0100
+Date: Wed, 4 Jan 2023 17:43:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e7792f539e440d40566bfab3dd86881a8f8edd7a
-X-Git-Newrev: aa35d8d071faf68abc4538be2a3bb636ea6b4a2c
+X-Git-Oldrev: 43c833e6cb44d4ffe59629cd83344caa9f63a0c6
+X-Git-Newrev: e7792f539e440d40566bfab3dd86881a8f8edd7a
 X-Patchwork-Hint: ignore
-Message-Id: <20230104165453.63D7087518@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qcom-db410c-firmware: fix typo for
- <pkg>_LICENSE
+Message-Id: <20230104165453.59C8B87567@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinyxml: fix typo for
+ TINYXML_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa35d8d071faf68abc4538be2a3bb636ea6b4a2c
+commit: https://git.buildroot.net/buildroot/commit/?id=e7792f539e440d40566bfab3dd86881a8f8edd7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Mike Frampton <mikeframpo@gmail.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qcom-db410c-firmware/qcom-db410c-firmware.mk | 2 +-
+ package/tinyxml/tinyxml.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-index 9ef32cc9d4..cf4b59b72e 100644
---- a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-+++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-@@ -8,7 +8,7 @@ QCOM_DB410C_FIRMWARE_VERSION = 1034.2.1
- QCOM_DB410C_FIRMWARE_BASE = linux-board-support-package-r$(QCOM_DB410C_FIRMWARE_VERSION)
- QCOM_DB410C_FIRMWARE_SOURCE = $(QCOM_DB410C_FIRMWARE_BASE).zip
- QCOM_DB410C_FIRMWARE_SITE = https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware
--QCOM_DB410C_FIRMWARE_LICENCE = Qualcomm firmware license
-+QCOM_DB410C_FIRMWARE_LICENSE = Qualcomm firmware license
- QCOM_DB410C_FIRMWARE_LICENSE_FILES = LICENSE
- QCOM_DB410C_FIRMWARE_DEPENDENCIES = host-mtools
+diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
+index d173254e31..8e706f1a1e 100644
+--- a/package/tinyxml/tinyxml.mk
++++ b/package/tinyxml/tinyxml.mk
+@@ -12,7 +12,7 @@ TINYXML_AUTORECONF = YES
+ TINYXML_INSTALL_STAGING = YES
+ TINYXML_LICENSE = Zlib
+ TINYXML_LICENSE_FILES = README
+-TINYXML_CPE_ID_VENDOT = tinyxml_project
++TINYXML_CPE_ID_VENDOR = tinyxml_project
  
+ # 0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
+ TINYXML_IGNORE_CVES += CVE-2021-42260
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
