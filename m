@@ -1,59 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94435C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB546C54EBE
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32A9841882;
-	Wed,  4 Jan 2023 16:25:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32A9841882
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7748C40B7C;
+	Wed,  4 Jan 2023 16:25:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7748C40B7C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D-VsNiSfhd2L; Wed,  4 Jan 2023 16:25:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zfZc6L4BRa6i; Wed,  4 Jan 2023 16:25:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B5CD41880;
-	Wed,  4 Jan 2023 16:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B5CD41880
+	by smtp2.osuosl.org (Postfix) with ESMTP id A47D240B7B;
+	Wed,  4 Jan 2023 16:25:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A47D240B7B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 84C981BF5DF
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:25:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E7531BF5DF
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 612A240B76
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:25:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 612A240B76
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EC1C40B76
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EC1C40B76
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KBiaaCSj6kS0 for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 16:25:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B30940236
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B30940236
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:25:17 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7A63710000B;
- Wed,  4 Jan 2023 16:25:15 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pD6Zl-0052ad-K0; Wed, 04 Jan 2023 17:25:13 +0100
+ with ESMTP id anzzNUavsN4R for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 16:25:50 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A74F40B7C
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:25:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A74F40B7C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 83C6E874F7; Wed,  4 Jan 2023 16:25:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-References: <20221004133057.2003750-1-aperez@igalia.com>
- <20221006095833.1116173-1-aperez@igalia.com>
- <20221006095833.1116173-3-aperez@igalia.com>
- <87bkne1d4q.fsf@dell.be.48ers.dk>
-Date: Wed, 04 Jan 2023 17:25:13 +0100
-In-Reply-To: <87bkne1d4q.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Wed, 04 Jan 2023 17:24:37 +0100")
-Message-ID: <87y1qiz2qe.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 2/5] package/libwpe: bump to version
+To: buildroot@buildroot.org
+Date: Wed, 4 Jan 2023 17:20:36 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9ae7a1a22146e817b8d5cac03d321b5eece65bb4
+X-Git-Newrev: 76dfd8d0278d75dabfe2871cd4e683b7a2790d26
+X-Patchwork-Hint: ignore
+Message-Id: <20230104162550.83C6E874F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpebackend-fdo: bump to version
  1.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,29 +57,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=76dfd8d0278d75dabfe2871cd4e683b7a2790d26
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
- >> This version is the first stable release with support for gamepad
- >> input events and configuring target frame rates. These will be used
- >> by a follow-up update of the wpewebkit package. Release notes:
+This new version contains only small fixes after 1.12.1.
+Release notes:
 
- >> https://wpewebkit.org/release/libwpe-1.14.0.html
+  https://wpewebkit.org/release/wpebackend-fdo-1.14.0.html
 
- >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- > Committed to 2022.11.x and 2022.02.x, thanks.
-
-Ehh, to master naturally.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 49c60fce0f..e2f2c6c89f 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.12.1.tar.xz.sums
+-md5  494f4a5b2bd89dacef37b69534b2e1ce  wpebackend-fdo-1.12.1.tar.xz
+-sha1  72a85e4615e085926f7ad8fc8414f9c6a878ef28  wpebackend-fdo-1.12.1.tar.xz
+-sha256  45aa833c44ec292f31fa943b01b8cc75e54eb623ad7ba6a66fc2f118fe69e629  wpebackend-fdo-1.12.1.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.14.0.tar.xz.sums
++md5  ea62dfa9ecb366598a837d7446ed48ac  wpebackend-fdo-1.14.0.tar.xz
++sha1  1500be9212381a404f4a46b22b90a9880ba11c01  wpebackend-fdo-1.14.0.tar.xz
++sha256  e75b0cb2c7145448416e8696013d8883f675c66c11ed750e06865efec5809155  wpebackend-fdo-1.14.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 2e2bdee94e..afe37b086e 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEBACKEND_FDO_VERSION = 1.12.1
++WPEBACKEND_FDO_VERSION = 1.14.0
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
