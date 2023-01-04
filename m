@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAFB5C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B738C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:44:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BDCF60E39;
-	Wed,  4 Jan 2023 11:44:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BDCF60E39
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32F1C40574;
+	Wed,  4 Jan 2023 11:44:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32F1C40574
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tBZwHrhmrtWP; Wed,  4 Jan 2023 11:44:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rEy31wxBsQkM; Wed,  4 Jan 2023 11:44:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD5156104B;
-	Wed,  4 Jan 2023 11:44:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD5156104B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AD7F1BF2F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 525FF40B03;
+	Wed,  4 Jan 2023 11:44:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 525FF40B03
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FFB51BF2F9
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2B6B581E6C
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B6B581E6C
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1828408F1
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1828408F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id grYkOpTU2cLC for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xh3dfrhTkSF0 for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0ECD7817B3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F03440AFF
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ECD7817B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F03440AFF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF2EF87430; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
+ id 285AF8742E; Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 08:50:24 +0100
+Date: Wed, 4 Jan 2023 08:51:02 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 43a9f2e16abc1e2ff97ffbdf541c8b1e2d894f61
-X-Git-Newrev: 11afe172919371534cfcc1951adbfdb36c778336
+X-Git-Oldrev: 6664b0202f1b67eebfa1132f22297fb4b12e39c8
+X-Git-Newrev: c972856399265a47c31590e2f4f3d3b495773a32
 X-Patchwork-Hint: ignore
-Message-Id: <20230104113933.EF2EF87430@busybox.osuosl.org>
+Message-Id: <20230104113934.285AF8742E@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.11.x]
- configs/freescale_imx7dsabresd: update codeaurora URLs to github
+ configs/freescale_imx8mmevk: update codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11afe172919371534cfcc1951adbfdb36c778336
+commit: https://git.buildroot.net/buildroot/commit/?id=c972856399265a47c31590e2f4f3d3b495773a32
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 NXP moved all its open source code repositories from Code Aurora Forum
@@ -94,45 +94,54 @@ Note: this commit does not change the component version. Only the
 download URL is updated. The archive content is expected to be the
 same.
 
-Note 2: this commit updates the Kernel and U-Boot download urls.
+Note 2: this commit updates the Kernel, U-Boot and ATF download urls.
 The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 492d471968e83126cb0f10518e2deba3ff835b08)
+(cherry picked from commit ca0d4287185c5f7f7c4fea7b405effdc0d19c93c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/freescale_imx7dsabresd_defconfig | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ configs/freescale_imx8mmevk_defconfig | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/configs/freescale_imx7dsabresd_defconfig b/configs/freescale_imx7dsabresd_defconfig
-index 5a9cff488d..d337865831 100644
---- a/configs/freescale_imx7dsabresd_defconfig
-+++ b/configs/freescale_imx7dsabresd_defconfig
-@@ -10,9 +10,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
- # Kernel
+diff --git a/configs/freescale_imx8mmevk_defconfig b/configs/freescale_imx8mmevk_defconfig
+index ae82f29158..dcb4b42540 100644
+--- a/configs/freescale_imx8mmevk_defconfig
++++ b/configs/freescale_imx8mmevk_defconfig
+@@ -5,9 +5,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-evk.dtb"
  BR2_LINUX_KERNEL=y
 -BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
 -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
-@@ -25,9 +24,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # bootloader
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk freescale/imx8mm-evk-revb-qca-wifi"
+@@ -19,16 +18,14 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
 -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
- 
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
