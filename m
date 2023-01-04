@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73FB7C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B88BC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:00:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22A894EDD9;
-	Mon, 20 Feb 2023 23:59:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22A894EDD9
+	by smtp4.osuosl.org (Postfix) with ESMTP id C66D04EE31;
+	Tue, 21 Feb 2023 00:00:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C66D04EE31
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7kto0OP7pCuW; Mon, 20 Feb 2023 23:59:52 +0000 (UTC)
+	with ESMTP id 4RCmLhseZTJh; Tue, 21 Feb 2023 00:00:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0C4B485B0;
-	Mon, 20 Feb 2023 23:59:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0C4B485B0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 853401BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E9EB4EE13;
+	Tue, 21 Feb 2023 00:00:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E9EB4EE13
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D2B51BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6B1941745
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6B1941745
+ by smtp3.osuosl.org (Postfix) with ESMTP id 931EF6F9DC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 931EF6F9DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YQ5POaG8gZt6 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wDGO8avKq6Ki for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C09F441788
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C09F441788
+ by smtp3.osuosl.org (Postfix) with ESMTP id AFC5461B25
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFC5461B25
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA6C48648F; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+ id 9D17F8648F; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Feb 2023 23:51:14 +0100
+Date: Wed, 4 Jan 2023 17:47:55 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 895840edd2784492d9b7066330b43842b703343b
-X-Git-Newrev: 2f1fef1499427d508363c29920468e8f5a495709
+X-Git-Oldrev: ee73336da98a7de04301a90c9b5a881761274a47
+X-Git-Newrev: 92219bdf2ece2a0ddfbc45691879a03acd5c7442
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205245.BA6C48648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gst1-plugins-ugly:
- bump version to 1.22.0
+Message-Id: <20230220205223.9D17F8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/qt5/qt5virtualkeyboard: really configure language layouts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,91 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f1fef1499427d508363c29920468e8f5a495709
+commit: https://git.buildroot.net/buildroot/commit/?id=92219bdf2ece2a0ddfbc45691879a03acd5c7442
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove xingmux config option which has been moved to the
-gst1-plugins-good package.
+Commit "170777f342 package/qt5/qt5virtualkeyboard: convert to qmake
+infrastructure" changed most but not all <pkg>_QMAKEFLAGS to
+<pkg>_CONF_OPTS.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+As a consequence, BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS is
+ignored and all layouts are compiled in.
+Some layouts have different licenses (e.g. pinying), so the license
+information for a build that is configured to not include such layouts
+is wrong.
+
+Change the remaining _QMAKEFLAGS entry, fixing the config for which
+language layouts are compiled and installed.
+
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                            | 7 +++++++
- package/gstreamer1/gst1-plugins-ugly/Config.in              | 5 -----
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 8 +-------
- 4 files changed, 10 insertions(+), 14 deletions(-)
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3fff2b1ddd..1c5af2652a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index c31d455c4e..3fefdc874d 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -16,7 +16,7 @@ QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
  
- comment "Legacy options removed in 2023.02"
+ QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+ ifneq ($(strip $(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+-QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
++QT5VIRTUALKEYBOARD_CONF_OPTS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
  
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
-+	bool "xingmux moved"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_XINGMUX
-+	help
-+	  The xingmux option has been moved to gst1-plugins-good.
-+
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
- 	bool "videoscale removed"
- 	select BR2_LEGACY
-diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
-index ba19989892..54766ffa8c 100644
---- a/package/gstreamer1/gst1-plugins-ugly/Config.in
-+++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
-@@ -26,11 +26,6 @@ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB
- 	help
- 	  DVD subtitle parser and decoder
- 
--config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
--	bool "xingmux"
--	help
--	  Add XING tags to mpeg audio files
--
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA
- 	bool "realmedia"
- 	help
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index 4ec29e6894..21579216df 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.20.4.tar.xz.sha256sum
--sha256  5c9ec6bab96517e438b3f9bae0ceb84d3436f3da9bbe180cf4d28e32a7251b59  gst-plugins-ugly-1.20.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.0.tar.xz.sha256sum
-+sha256  a644dc981afa2d8d3a913f763ab9523c0620ee4e65a7ec73c7721c29da3c5a0c  gst-plugins-ugly-1.22.0.tar.xz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 20382719c3..9f16fa3da8 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_UGLY_VERSION = 1.20.4
-+GST1_PLUGINS_UGLY_VERSION = 1.22.0
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
-@@ -51,12 +51,6 @@ else
- GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdsub=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX),y)
--GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=enabled
--else
--GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA),y)
- GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=enabled
- else
+ ifneq ($(filter ja_JP all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+ QT5VIRTUALKEYBOARD_LICENSE += , Apache-2.0 (openwnn)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
