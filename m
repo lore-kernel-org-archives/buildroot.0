@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB598C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B574C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 816B04C351;
-	Mon, 20 Feb 2023 23:58:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 816B04C351
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FFF14EDB3;
+	Mon, 20 Feb 2023 23:58:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FFF14EDB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EqhH4mxG-j9Y; Mon, 20 Feb 2023 23:58:43 +0000 (UTC)
+	with ESMTP id U5K4sJE1Plnx; Mon, 20 Feb 2023 23:58:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E48284ED8E;
-	Mon, 20 Feb 2023 23:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E48284ED8E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 262584ED65;
+	Mon, 20 Feb 2023 23:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 262584ED65
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6B5691BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6DABF1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 443666F9D0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 595066F9D8
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 443666F9D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 595066F9D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F4OHyEQO7j2q for <buildroot@lists.busybox.net>;
+ with ESMTP id XOMsALRCqL2i for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45F8C61AC8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F4A76F98A
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45F8C61AC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F4A76F98A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41F1F8648F; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+ id 8DA8D828C8; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 17:21:39 +0100
+Date: Wed, 4 Jan 2023 17:46:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 917f05975f9c60eca92988ea9974de55a9e91e44
-X-Git-Newrev: 43c833e6cb44d4ffe59629cd83344caa9f63a0c6
+X-Git-Oldrev: fa581bb3e6b45da2b7a0cfb9e5d6f869a7cd9b05
+X-Git-Newrev: ee73336da98a7de04301a90c9b5a881761274a47
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205223.41F1F8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cog: bump to version
- 0.16.0
+Message-Id: <20230220205223.8DA8D828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ima-evm-utils: really
+ install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,155 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43c833e6cb44d4ffe59629cd83344caa9f63a0c6
+commit: https://git.buildroot.net/buildroot/commit/?id=ee73336da98a7de04301a90c9b5a881761274a47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This new version includes support for setting proxy options and gamepad
-support. Release notes:
+Commit "8229196d41 package/ima-evm-utils: new package" added
+IMA_EVM_UTILS_INSTALL_STAGING_CMDS without enabling
+IMA_EVM_UTILS_INSTALL_STAGING, so currently the package is not installed
+to staging.
 
-  https://wpewebkit.org/release/cog-0.16.0.html
+Enable installing to staging.
 
-This imports a small patch to properly pick libdrm compiler flags,
-fetched from the upstream repository.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Tested-by: James Hilliard <james.hilliard1@gmail.com>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...libdrm-dependency-when-protocols-are-used.patch | 36 +++++++++++++++++++++
- package/cog/cog.hash                               |  8 ++---
- package/cog/cog.mk                                 | 37 ++++++++++++----------
- 3 files changed, 60 insertions(+), 21 deletions(-)
+ package/ima-evm-utils/ima-evm-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch b/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
-new file mode 100644
-index 0000000000..44e555c121
---- /dev/null
-+++ b/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
-@@ -0,0 +1,36 @@
-+From 9a1982c563e218b7695e6a174c8230d3b063eb27 Mon Sep 17 00:00:00 2001
-+From: Gary Bisson <gary.bisson@boundarydevices.com>
-+Date: Thu, 6 Oct 2022 09:04:22 +0200
-+Subject: [PATCH] wl: Fix libdrm dependency when protocols are used
-+
-+As the comment says, cog-platform-wl.c needs drm_fourcc.h to build
-+properly when wayland_weston_direct_display is enabled.
-+
-+However, libdrm.pc doesn't specify "include/libdrm" as part of its
-+includedir but whether in its cflags. So use the compile_args dep
-+instead of includes to fix the build failure.
-+
-+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-+(cherry picked from commit 32c1d9533bcdc22cbc01d02bf2e6ac0d4bda2dc2)
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+[Upstream status: https://github.com/Igalia/cog/pull/501]
-+---
-+ platform/wayland/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/platform/wayland/meson.build b/platform/wayland/meson.build
-+index f1e18ec..31e4460 100644
-+--- a/platform/wayland/meson.build
-++++ b/platform/wayland/meson.build
-+@@ -67,7 +67,7 @@ if wayland_platform_weston_protocols.length() > 0
-+ 
-+     # The code uses definitions from the drm_fourcc.h header, but does not
-+     # need to link the library; libdrm here is only a build-time dependency.
-+-    wayland_platform_dependencies += [dependency('libdrm').partial_dependency(includes: true)]
-++    wayland_platform_dependencies += [dependency('libdrm').partial_dependency(compile_args: true)]
-+ endif
-+ 
-+ 
-+-- 
-+2.38.0
-+
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index aa128d73d8..a2c55c4b94 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.14.1.tar.xz.sums
--md5  69d72ac046a0fc485ea7b61b96e7e7fc  cog-0.14.1.tar.xz
--sha1  6236972b0ae0bce38a0a017610f161b349723862  cog-0.14.1.tar.xz
--sha256  fb91104e25e1dde27189c91c70acc356e387f47acebaa8997e01ce5879c3a600  cog-0.14.1.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.16.0.tar.xz.sums
-+md5  2705472ea4f333290973722c0862b21d  cog-0.16.0.tar.xz
-+sha1  ef16e5e3d91d0da056fe5e4f596c211af7453b4e  cog-0.16.0.tar.xz
-+sha256  2956f719d36c9a6368f63901a0d1ceaf4d27f529f7df441b3748c36d72906fc6  cog-0.16.0.tar.xz
+diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
+index 7ee34d5e1a..01984402ce 100644
+--- a/package/ima-evm-utils/ima-evm-utils.mk
++++ b/package/ima-evm-utils/ima-evm-utils.mk
+@@ -8,6 +8,7 @@ IMA_EVM_UTILS_VERSION = 1.4
+ IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
+ IMA_EVM_UTILS_LICENSE = GPL-2.0
+ IMA_EVM_UTILS_LICENSE_FILES = COPYING
++IMA_EVM_UTILS_INSTALL_STAGING = YES
+ IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl tpm2-tss
  
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 1f24bebee4..241c4e309c 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.14.1
-+COG_VERSION = 0.16.0
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
-@@ -12,37 +12,40 @@ COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland
- COG_LICENSE = MIT
- COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
--	-DCOG_BUILD_PROGRAMS=ON \
--	-DCOG_PLATFORM_HEADLESS=ON \
--	-DINSTALL_MAN_PAGES=OFF \
--	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
--	-DUSE_SOUP2=ON
-+	-Ddocumentation=false \
-+	-Dmanpages=false \
-+	-Dprograms=true \
-+	-Dsoup2=enabled \
-+	-Dcog_home_uri='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
-+	-Dplatforms='$(subst $(space),$(comma),$(strip $(COG_PLATFORMS_LIST)))'
-+
-+COG_PLATFORMS_LIST = headless
- 
- ifeq ($(BR2_PACKAGE_WESTON),y)
--COG_CONF_OPTS += -DCOG_WESTON_DIRECT_DISPLAY=ON
-+COG_CONF_OPTS += -Dwayland_weston_direct_display=true
- COG_DEPENDENCIES += weston
- else
--COG_CONF_OPTS += -DCOG_WESTON_DIRECT_DISPLAY=OFF
-+COG_CONF_OPTS += -Dwayland_weston_direct_display=false
- endif
- 
- ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
--COG_CONF_OPTS += -DCOG_PLATFORM_WL=ON
-+COG_PLATFORMS_LIST += wayland
- COG_DEPENDENCIES += libxkbcommon wayland-protocols
--else
--COG_CONF_OPTS += -DCOG_PLATFORM_WL=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
--COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
-+COG_PLATFORMS_LIST += drm
- COG_DEPENDENCIES += libdrm libinput libgbm libegl udev
--else
--COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_COG_USE_SYSTEM_DBUS),y)
--COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
-+COG_CONF_OPTS += -Dcog_dbus_control=system
- else
--COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
-+COG_CONF_OPTS += -Dcog_dbus_control=user
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
-+COG_DEPENDENCIES += libmanette
- endif
- 
--$(eval $(cmake-package))
-+$(eval $(meson-package))
+ # Tarball doesn't contain configure
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
