@@ -1,59 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3BC3C4708D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:45:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 785D6C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26B974188B;
-	Wed,  4 Jan 2023 16:45:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26B974188B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A8E26108D;
+	Wed,  4 Jan 2023 16:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A8E26108D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nVhzGkkJZurz; Wed,  4 Jan 2023 16:45:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cOycU391eU8z; Wed,  4 Jan 2023 16:45:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BE1E4185B;
-	Wed,  4 Jan 2023 16:44:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BE1E4185B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7965E61087;
+	Wed,  4 Jan 2023 16:45:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7965E61087
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 79F5D1BF5DF
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:44:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 00D7E1BF5DF
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 550D340B7B
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:44:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 550D340B7B
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDEE440B7B
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:45:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDEE440B7B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kbYxFS6Gcu9z for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 16:44:56 +0000 (UTC)
+ with ESMTP id rDcjTcjBQnLR for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 16:45:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C97040236
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9C97040236
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:44:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0355F40236
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0355F40236
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:45:24 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 83B48C0009;
- Wed,  4 Jan 2023 16:44:54 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1C77A240009;
+ Wed,  4 Jan 2023 16:45:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pD6sn-005354-NM; Wed, 04 Jan 2023 17:44:53 +0100
+ id 1pD6tD-00536p-JA; Wed, 04 Jan 2023 17:45:19 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
- <20230101233653.487175-4-ricardo.martincoski@gmail.com>
-Date: Wed, 04 Jan 2023 17:44:53 +0100
-In-Reply-To: <20230101233653.487175-4-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 1 Jan 2023 20:36:27 -0300")
-Message-ID: <87pmbuz1tm.fsf@dell.be.48ers.dk>
+ <20230101233653.487175-3-ricardo.martincoski@gmail.com>
+Date: Wed, 04 Jan 2023 17:45:19 +0100
+In-Reply-To: <20230101233653.487175-3-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sun, 1 Jan 2023 20:36:26 -0300")
+Message-ID: <87lemiz1sw.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 03/29] package/qcom-db410c-firmware: fix
- typo for <pkg>_LICENSE
+Subject: Re: [Buildroot] [PATCH 02/29] package/libmng: fix optional
+ dependency to lcms2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mike Frampton <mikeframpo@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -73,7 +72,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > Cc: Mike Frampton <mikeframpo@gmail.com>
+ > "0ce9b533e3 libmng: new package" introduced a typo that makes the
+ > optional dependency to lcms2 ineffective.
+
+ > Fix the typo LIBMNG_DEPDENDENCIES -> LIBMNG_DEPENDENCIES.
+
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Committed, thanks.
