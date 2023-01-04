@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98C1EC46467
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23C43C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:41:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34A0140574;
-	Wed,  4 Jan 2023 11:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34A0140574
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2A6E8143C;
+	Wed,  4 Jan 2023 11:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2A6E8143C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sCwT2BsC34ks; Wed,  4 Jan 2023 11:40:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yUamjTW-herc; Wed,  4 Jan 2023 11:41:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 404204040D;
-	Wed,  4 Jan 2023 11:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 404204040D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0FEE31BF2F9
+	by smtp1.osuosl.org (Postfix) with ESMTP id EED1B819BE;
+	Wed,  4 Jan 2023 11:41:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EED1B819BE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 171491BF8C7
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F7214088C
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F7214088C
+ by smtp1.osuosl.org (Postfix) with ESMTP id E3D1A8143C
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3D1A8143C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PKztx9c8ipK8 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 85Re0WjaQVL2 for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6FB241706
+ by smtp1.osuosl.org (Postfix) with ESMTP id 004878177C
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6FB241706
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 004878177C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D71F87431; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
+ id E34FF8742D; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 08:47:56 +0100
+Date: Wed, 4 Jan 2023 08:50:16 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 48c070689fdbbdbf6d8dc623534b23163c9cc2c6
-X-Git-Newrev: cb0102fc5e84bcdca2b7e489282128b73620ecbf
+X-Git-Oldrev: 53159737753fbeb921fd22ebf50130a52019756f
+X-Git-Newrev: 43a9f2e16abc1e2ff97ffbdf541c8b1e2d894f61
 X-Patchwork-Hint: ignore
-Message-Id: <20230104113933.9D71F87431@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/qoriq-rcw: update
- codeaurora URLs to github
+Message-Id: <20230104113933.E34FF8742D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x]
+ configs/freescale_imx6ullevk: update codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb0102fc5e84bcdca2b7e489282128b73620ecbf
+commit: https://git.buildroot.net/buildroot/commit/?id=43a9f2e16abc1e2ff97ffbdf541c8b1e2d894f61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 NXP moved all its open source code repositories from Code Aurora Forum
@@ -94,57 +94,45 @@ Note: this commit does not change the component version. Only the
 download URL is updated. The archive content is expected to be the
 same.
 
-Note 2: the _SITE_METHOD is also changed from "git" to the default
-"wget", for faster downloads. This is why the package hash has
-changed.
+Note 2: this commit updates the Kernel and U-Boot download urls.
+The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a019e5e460f0d85b0b44163ba80be7cd6a53738a)
+(cherry picked from commit 897a75a26679fd68276418ff49b79358b7ca2c7a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qoriq-rcw/Config.in.host | 2 +-
- package/qoriq-rcw/qoriq-rcw.hash | 2 +-
- package/qoriq-rcw/qoriq-rcw.mk   | 3 +--
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ configs/freescale_imx6ullevk_defconfig | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/qoriq-rcw/Config.in.host b/package/qoriq-rcw/Config.in.host
-index 08fc83acd0..58c16d495b 100644
---- a/package/qoriq-rcw/Config.in.host
-+++ b/package/qoriq-rcw/Config.in.host
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_HOST_QORIQ_RCW
- 	  $(HOST_DIR)/share/rcw. Either a SDK or post scripts can
- 	  then use this toolset and examples.
- 
--	  https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
-+	  https://github.com/nxp-qoriq/rcw
- 
- if BR2_PACKAGE_HOST_QORIQ_RCW
- 
-diff --git a/package/qoriq-rcw/qoriq-rcw.hash b/package/qoriq-rcw/qoriq-rcw.hash
-index f34c771d11..2a887d57d4 100644
---- a/package/qoriq-rcw/qoriq-rcw.hash
-+++ b/package/qoriq-rcw/qoriq-rcw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  caa6802f2ba5ea92fd27e7c977749010a91c9091fcc3fe626f96d9cacfba1f0a  qoriq-rcw-LSDK-21.08-br1.tar.gz
-+sha256  f199c10e50bd18d7bed0d60f5b68194240dea4f1aa164cec98332723727a4796  qoriq-rcw-LSDK-21.08.tar.gz
- sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
-diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
-index 0501c36f46..8b1ceacfce 100644
---- a/package/qoriq-rcw/qoriq-rcw.mk
-+++ b/package/qoriq-rcw/qoriq-rcw.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- QORIQ_RCW_VERSION = LSDK-21.08
--QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
--QORIQ_RCW_SITE_METHOD = git
-+QORIQ_RCW_SITE = $(call github,nxp-qoriq,rcw,$(QORIQ_RCW_VERSION))
- QORIQ_RCW_LICENSE = BSD-3-Clause
- QORIQ_RCW_LICENSE_FILES = LICENSE
- 
+diff --git a/configs/freescale_imx6ullevk_defconfig b/configs/freescale_imx6ullevk_defconfig
+index 4c5c3b2524..7a8965be18 100644
+--- a/configs/freescale_imx6ullevk_defconfig
++++ b/configs/freescale_imx6ullevk_defconfig
+@@ -4,9 +4,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ull-14x14-evk"
+@@ -15,9 +14,8 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6ull_14x14_evk"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
