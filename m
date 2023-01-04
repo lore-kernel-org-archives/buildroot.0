@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5BB5C53210
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 21:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60612C46467
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 21:38:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FAF9610D5;
-	Wed,  4 Jan 2023 21:38:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FAF9610D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id F069C4049F;
+	Wed,  4 Jan 2023 21:38:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F069C4049F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o1sd6LvLFwJ3; Wed,  4 Jan 2023 21:38:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7QIxqtQRGnaO; Wed,  4 Jan 2023 21:38:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B68CA60DFD;
-	Wed,  4 Jan 2023 21:38:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B68CA60DFD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F4CA40343;
+	Wed,  4 Jan 2023 21:38:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F4CA40343
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 517B31BF279
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:36:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 66F671BF279
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:36:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C9FE60E06
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC652610D5
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:36:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C9FE60E06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC652610D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e68qRGHzcsko for <buildroot@lists.busybox.net>;
+ with ESMTP id SRl9YcKxlPb5 for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 21:36:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 723A1610D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25A0560DFD
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 21:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 723A1610D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25A0560DFD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5FBF58756E; Wed,  4 Jan 2023 21:36:37 +0000 (UTC)
+ id 1404E8756E; Wed,  4 Jan 2023 21:36:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:26:08 +0100
+Date: Wed, 4 Jan 2023 22:23:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f1f5e9f15063443bae1b80af072c7a5b0ab91d24
-X-Git-Newrev: 261b2e25f8fe42395f750d170da313826c5157f6
+X-Git-Oldrev: 6bee8635d90f3f9e3d04e03a9db2f37a387e077c
+X-Git-Newrev: 848450f32bd3b877a7529f72e23c1d967f717552
 X-Patchwork-Hint: ignore
-Message-Id: <20230104213637.5FBF58756E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/strace: bump to version 6.1
+Message-Id: <20230104213637.1404E8756E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lsof: bump to version 4.96.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +62,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=261b2e25f8fe42395f750d170da313826c5157f6
+commit: https://git.buildroot.net/buildroot/commit/?id=848450f32bd3b877a7529f72e23c1d967f717552
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lsof/lsof.hash | 2 +-
+ package/lsof/lsof.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 1743a369b4..9478fbd459 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.0/strace-6.0.tar.xz.asc
--sha256  92d720a666855e9f1c6a11512fd6e99674a82bbfe1442557815f2ce8e1293338  strace-6.0.tar.xz
-+# https://strace.io/files/6.1/strace-6.1.tar.xz.asc
-+sha256  2579e9cec37dbb786f6ea0bebd15f40dd561ef2bde2a2a2ecdce5963b01859fd  strace-6.1.tar.xz
- sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 09e620530e..cbb574559e 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
+index 9649e24f7f..29cf443a24 100644
+--- a/package/lsof/lsof.hash
++++ b/package/lsof/lsof.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2753fc01452a3d2ee665e8365afdac0e9683197f3ec06231aa684a48b286d11c  lsof-4.96.3.tar.gz
++sha256  e9030af1123ff052ab69e12ef55b8a17dc47ac4bccfba85ee1ca1f31acf29607  lsof-4.96.5.tar.gz
+ sha256  32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1  dialects/linux/dproto.h
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 8c8c46c4ed..fd5887141b 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 6.0
-+STRACE_VERSION = 6.1
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-LSOF_VERSION = 4.96.3
++LSOF_VERSION = 4.96.5
+ LSOF_SITE = $(call github,lsof-org,lsof,$(LSOF_VERSION))
+ LSOF_LICENSE = lsof license
+ # License is repeated in each file, this is a relatively small one.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
