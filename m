@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7E11C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:05:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72B51C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:05:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 677D04ED39;
-	Tue, 21 Feb 2023 00:05:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 677D04ED39
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1535E4EE8C;
+	Tue, 21 Feb 2023 00:05:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1535E4EE8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DK9zh11MFZRQ; Tue, 21 Feb 2023 00:05:22 +0000 (UTC)
+	with ESMTP id Oh_-QmxV5TrO; Tue, 21 Feb 2023 00:05:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 679934EE9D;
-	Tue, 21 Feb 2023 00:05:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 679934EE9D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 647FC1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5A0B4EE85;
+	Tue, 21 Feb 2023 00:05:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5A0B4EE85
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 941181BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C1F040C13
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C1F040C13
+ by smtp3.osuosl.org (Postfix) with ESMTP id 747616F98A
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 747616F98A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A9RjxCpbBFFy for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rDspBhommJuv for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A234417A0
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A234417A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4DE361B25
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4DE361B25
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 39C608648F; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id B28168648F; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 15:24:39 +0100
+Date: Wed, 4 Jan 2023 22:31:48 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ae65870e652088dd65ca41d63304893d1d4443a2
-X-Git-Newrev: 42e34cf10f9eb037aa8c48a4fb9e8f521901b983
+X-Git-Oldrev: 34f28a9399477f8fceff54976f838b4d9ff6fb22
+X-Git-Newrev: 99b3ea44295a2ec3aa841f83d81c9231f89cb6e5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205247.39C608648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/modsecurity2: security
- bump to version 2.9.7
+Message-Id: <20230220205224.B28168648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sqlite: security bump
+ to version 3.40.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42e34cf10f9eb037aa8c48a4fb9e8f521901b983
+commit: https://git.buildroot.net/buildroot/commit/?id=99b3ea44295a2ec3aa841f83d81c9231f89cb6e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Fix CVE-2023-24021: Incorrect handling of '\0' bytes in file uploads
-  in ModSecurity before 2.9.7 may allow for Web Application Firewall
-  bypasses and buffer overflows on the Web Application Firewall when
-  executing rules that read the FILES_TMP_CONTENT collection.
-- host-pkgconf is mandatory and used to find libxml2 since
-  https://github.com/SpiderLabs/ModSecurity/commit/baa38ddbaf55a87afecad7a1e1760c69a2689787
-- pcre2 is supported since:
-  https://github.com/SpiderLabs/ModSecurity/commit/8fc0b519b7a6c023259753a21f33bf3649a25b14
+Fixes the following security issues:
 
-https://github.com/SpiderLabs/ModSecurity/blob/v2.9.7/CHANGES
+CVE-2022-46908: SQLite through 3.40.0, when relying on --safe for execution
+of an untrusted CLI script, does not properly implement the
+azProhibitedFunctions protection mechanism, and instead allows UDF functions
+such as WRITEFILE.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Release notes: https://sqlite.org/releaselog/3_40_1.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: mark as security bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/modsecurity2/Config.in         | 2 +-
- package/modsecurity2/modsecurity2.hash | 4 ++--
- package/modsecurity2/modsecurity2.mk   | 7 +++----
- 3 files changed, 6 insertions(+), 7 deletions(-)
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
-index 2870386a99..fb1bfc960e 100644
---- a/package/modsecurity2/Config.in
-+++ b/package/modsecurity2/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_MODSECURITY2
- 	bool "modsecurity2"
- 	depends on BR2_PACKAGE_APACHE
- 	select BR2_PACKAGE_LIBXML2
--	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PCRE2
- 	help
- 	  ModSecurity is an open source, cross-platform web application
- 	  firewall (WAF) module. Known as the "Swiss Army Knife" of
-diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
-index a19f4823a8..2c77ffd830 100644
---- a/package/modsecurity2/modsecurity2.hash
-+++ b/package/modsecurity2/modsecurity2.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.5/modsecurity-2.9.5.tar.gz.sha256
--sha256  e2bfc8cd8b8de1e21f054d310543373ea5d89adbd96784e832be0da3e4dc149e  modsecurity-2.9.5.tar.gz
-+# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
-+sha256  2a28fcfccfef21581486f98d8d5fe0397499749b8380f60ec7bb1c08478e1839  modsecurity-2.9.7.tar.gz
- 
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index ea4e30a463..36f6907fbc 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9  LICENSE
-diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
-index a1ad8fe5bc..c251291e64 100644
---- a/package/modsecurity2/modsecurity2.mk
-+++ b/package/modsecurity2/modsecurity2.mk
-@@ -4,7 +4,7 @@
+-sha256  0333552076d2700c75352256e91c78bf5cd62491589ba0c69aed0a81868980e7  sqlite-autoconf-3400000.tar.gz
++sha256  2c5dea207fa508d765af1ef620b637dcb06572afa6f01f0815bd5bbf864b33d9  sqlite-autoconf-3400100.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 9d0b60ab59..789eddfa0a 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--MODSECURITY2_VERSION = 2.9.5
-+MODSECURITY2_VERSION = 2.9.7
- MODSECURITY2_SOURCE = modsecurity-$(MODSECURITY2_VERSION).tar.gz
- MODSECURITY2_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
- MODSECURITY2_LICENSE = Apache-2.0
-@@ -12,11 +12,10 @@ MODSECURITY2_LICENSE_FILES = LICENSE
- MODSECURITY2_CPE_ID_VENDOR = trustwave
- MODSECURITY2_CPE_ID_PRODUCT = modsecurity
- MODSECURITY2_INSTALL_STAGING = YES
--MODSECURITY2_DEPENDENCIES = apache libxml2 pcre
-+MODSECURITY2_DEPENDENCIES = host-pkgconf apache libxml2 pcre2
- 
- MODSECURITY2_CONF_OPTS = \
--	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
--	--with-libxml=$(STAGING_DIR)/usr \
-+	--with-pcre2=$(STAGING_DIR)/usr/bin/pcre2-config \
- 	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
- 	--with-apu=$(STAGING_DIR)/usr/bin/apu-1-config \
- 	--with-apxs=$(STAGING_DIR)/usr/bin/apxs \
+-SQLITE_VERSION = 3.40.0
+-SQLITE_TAR_VERSION = 3400000
++SQLITE_VERSION = 3.40.1
++SQLITE_TAR_VERSION = 3400100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2022
+ SQLITE_LICENSE = Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
