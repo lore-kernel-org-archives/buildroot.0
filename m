@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0A91C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82D04C46467
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 21:22:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FF5761097;
-	Wed,  4 Jan 2023 16:57:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FF5761097
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0CA3610D2;
+	Wed,  4 Jan 2023 21:22:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0CA3610D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cNLKkuNmJzhq; Wed,  4 Jan 2023 16:56:59 +0000 (UTC)
+	with ESMTP id at5d1KJVlXQv; Wed,  4 Jan 2023 21:22:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92AC06108E;
-	Wed,  4 Jan 2023 16:56:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92AC06108E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7D2491BF5DF
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CC3F60D93;
+	Wed,  4 Jan 2023 21:22:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CC3F60D93
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D4621BF279
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C4264188E
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C4264188E
+ by smtp3.osuosl.org (Postfix) with ESMTP id D8C9C60D93
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:22:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8C9C60D93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7HtriNsF4L0p for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1D7A41893
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1D7A41893
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B267E87567; Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8dGxjfYpxLJm for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 21:22:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85F9760D80
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 85F9760D80
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 21:22:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 17309240002;
+ Wed,  4 Jan 2023 21:22:47 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pDBDj-0058sk-5H; Wed, 04 Jan 2023 22:22:47 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 17:52:59 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4ce9d01c4244252e18302aa97653e573359dba6
-X-Git-Newrev: 11614fdde1611f846b8e5d99f55af7c6c131b817
-X-Patchwork-Hint: ignore
-Message-Id: <20230104165453.B267E87567@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/zip: install to staging"
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+References: <20230102121103.143967-1-buildroot@heine.tech>
+Date: Wed, 04 Jan 2023 22:22:47 +0100
+In-Reply-To: <20230102121103.143967-1-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Mon, 2 Jan 2023 13:11:02 +0100")
+Message-ID: <87mt6yxae0.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/grpc: bump to version 1.51.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,56 +63,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Robert Rose <robertroyrose@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11614fdde1611f846b8e5d99f55af7c6c131b817
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@buildroot.org> writes:
 
-This reverts commit c5b5b5ccabe35e11f0ca8db4361bb3f335fc59fb.
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-Commit "c5b5b5ccab package/zip: install to staging" contains a typo that
-prevents installing to staging.
-ZIP_INSTALLING_STAGING_CMDS -> ZIP_INSTALL_STAGING_CMDS
+Committed, thanks.
 
-But the package does not install headers or libraries, only ELF and
-manual files.
-So instead of fixing the install to staging, revert the bogus commit.
-
-Cc: Jan Pedersen <jp@jp-embedded.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zip/zip.mk | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/package/zip/zip.mk b/package/zip/zip.mk
-index 2d11e1c763..67958a4a66 100644
---- a/package/zip/zip.mk
-+++ b/package/zip/zip.mk
-@@ -11,7 +11,6 @@ ZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
- ZIP_LICENSE = Info-ZIP
- ZIP_LICENSE_FILES = LICENSE
- ZIP_CPE_ID_VENDOR = info-zip_project
--ZIP_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- ZIP_DEPENDENCIES += bzip2
-@@ -41,11 +40,6 @@ define ZIP_INSTALL_TARGET_CMDS
- 		prefix=$(TARGET_DIR)/usr
- endef
- 
--define ZIP_INSTALLING_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install \
--		prefix=$(STAGING_DIR)/usr
--endef
--
- define HOST_ZIP_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
- 		CFLAGS="$(HOST_CFLAGS) $(ZIP_CFLAGS)" \
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
