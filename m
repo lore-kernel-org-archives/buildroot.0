@@ -1,57 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B4C6C46467
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 21:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0C1CC53210
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 21:25:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 195ED41945;
-	Wed,  4 Jan 2023 21:24:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 195ED41945
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D7BC81D0C;
+	Wed,  4 Jan 2023 21:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D7BC81D0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eV2Dp1OJe0qQ; Wed,  4 Jan 2023 21:23:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6CpfT_dWfqiF; Wed,  4 Jan 2023 21:25:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3118841681;
-	Wed,  4 Jan 2023 21:23:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3118841681
+	by smtp1.osuosl.org (Postfix) with ESMTP id D084981CA0;
+	Wed,  4 Jan 2023 21:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D084981CA0
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1EF671BF279
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:23:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 75C2C1BF279
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:25:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EED7C80C68
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:23:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EED7C80C68
+ by smtp1.osuosl.org (Postfix) with ESMTP id 517F881CA0
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:25:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 517F881CA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2FC8D9urUL0w for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 21:23:49 +0000 (UTC)
+ with ESMTP id m299ZUqcr_2l for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 21:25:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1802280BE1
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1802280BE1
- for <buildroot@busybox.net>; Wed,  4 Jan 2023 21:23:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C09181C93
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C09181C93
+ for <buildroot@busybox.net>; Wed,  4 Jan 2023 21:25:20 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A75DD100004;
- Wed,  4 Jan 2023 21:23:45 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7DB9940007;
+ Wed,  4 Jan 2023 21:25:18 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pDBEe-0058xm-Py; Wed, 04 Jan 2023 22:23:44 +0100
+ id 1pDBG9-005918-FA; Wed, 04 Jan 2023 22:25:17 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Francois Perrad <fperrad@gmail.com>
-References: <20230102122144.1912299-1-francois.perrad@gadz.org>
-Date: Wed, 04 Jan 2023 22:23:44 +0100
-In-Reply-To: <20230102122144.1912299-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Mon, 2 Jan 2023 13:21:44 +0100")
-Message-ID: <871qoaxacf.fsf@dell.be.48ers.dk>
+References: <20230102122152.1912325-1-francois.perrad@gadz.org>
+Date: Wed, 04 Jan 2023 22:25:17 +0100
+In-Reply-To: <20230102122152.1912325-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Mon, 2 Jan 2023 13:21:52 +0100")
+Message-ID: <87wn62vvpe.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/nano: bump to version 7.1
+Subject: Re: [Buildroot] [PATCH] package/pcre2: bump to version 10.42
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
