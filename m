@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1CF4C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:11:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9B15C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:11:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77D804F09A;
-	Tue, 21 Feb 2023 00:11:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77D804F09A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B23B4F087;
+	Tue, 21 Feb 2023 00:11:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B23B4F087
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2VfKWfgsacTx; Tue, 21 Feb 2023 00:11:18 +0000 (UTC)
+	with ESMTP id mYeGMDu0XkT3; Tue, 21 Feb 2023 00:11:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CCC04EF93;
-	Tue, 21 Feb 2023 00:11:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CCC04EF93
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 176DB1BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1712B4F094;
+	Tue, 21 Feb 2023 00:11:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1712B4F094
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A60CA1BF27E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B65C417BA
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B65C417BA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C6FC6FA98
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C6FC6FA98
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qRJw7JZVt6XV for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WRo47jGa1dYW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B85C417A0
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B85C417A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id D0CF46FA9C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0CF46FA9C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B91086495; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+ id CF057828C8; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 11:26:41 +0100
+Date: Wed, 4 Jan 2023 23:09:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 316e149611a761db04171ee6141048d9057183c8
-X-Git-Newrev: 4bbda72743d39df29dfc91e0f52be02b2d465f6d
+X-Git-Oldrev: eae97036f34e69e2ca197cd31fd87c673f2ebe37
+X-Git-Newrev: ca5cd8d67554c568daee4da1f058bcf3b35b2976
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205248.4B91086495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/checkpackagelib: warn
- about redefined config
+Message-Id: <20230220205225.CF057828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/swupdate: drop
+ dangling SWUPDATE_BUILD_CONFIG
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,161 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bbda72743d39df29dfc91e0f52be02b2d465f6d
+commit: https://git.buildroot.net/buildroot/commit/?id=ca5cd8d67554c568daee4da1f058bcf3b35b2976
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Warn the developer in the case the same config is declared more than
-once in the same Config.in file.
-But take into account the conditional code that lets the config be
-visible and warn only when it is declared more than once in the same
-conditions.
-For instance, do not warn for:
- if BR2_PACKAGE_BUSYBOX
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
+"6c63e4de4a boot/swupdate: don't specify .config to munge" dropped all
+usages of this define but the define itself was left dangling.
+
+Drop it now.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/checkpackagelib/lib_config.py      | 38 ++++++++++++++++
- utils/checkpackagelib/test_lib_config.py | 78 ++++++++++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
+ package/swupdate/swupdate.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index b05831f2c3..f26ca0d898 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -233,3 +233,41 @@ class Indent(_CheckFunction):
-                 return ["{}:{}: should not be indented"
-                         .format(self.filename, lineno),
-                         text]
-+
-+
-+class RedefinedConfig(_CheckFunction):
-+    CONFIG = re.compile(r"^\s*(menu|)config\s+(BR2_\w+)\b")
-+    IF = re.compile(r"^\s*if\s+([^#]*)\b")
-+    ENDIF = re.compile(r"^\s*endif\b")
-+
-+    def before(self):
-+        self.configs = {}
-+        self.conditional = []
-+
-+    def check_line(self, lineno, text):
-+        if _empty_or_comment(text) or _part_of_help_text(text):
-+            return
-+
-+        m = self.IF.search(text)
-+        if m is not None:
-+            condition = m.group(1)
-+            self.conditional.append(condition)
-+            return
-+
-+        m = self.ENDIF.search(text)
-+        if m is not None:
-+            self.conditional.pop()
-+            return
-+
-+        m = self.CONFIG.search(text)
-+        if m is None:
-+            return
-+        config = m.group(2)
-+
-+        key = (config, ' AND '.join(self.conditional))
-+        if key in self.configs.keys():
-+            previous_line = self.configs[key]
-+            return ["{}:{}: config {} redeclared (previous line: {})"
-+                    .format(self.filename, lineno, config, previous_line),
-+                    text]
-+        self.configs[key] = lineno
-diff --git a/utils/checkpackagelib/test_lib_config.py b/utils/checkpackagelib/test_lib_config.py
-index 91a549adf2..474d17105e 100644
---- a/utils/checkpackagelib/test_lib_config.py
-+++ b/utils/checkpackagelib/test_lib_config.py
-@@ -385,3 +385,81 @@ Indent = [
- def test_Indent(testname, filename, string, expected):
-     warnings = util.check_file(m.Indent, filename, string)
-     assert warnings == expected
-+
-+
-+RedefinedConfig = [
-+    ('no redefinition',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO_BAR\n'
-+     'bool "foo"\n',
-+     []),
-+    ('no conditional',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_BAR\n'
-+     'bool "bar"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n',
-+     [['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('three times',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n',
-+     [['any:3: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n'],
-+      ['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('same conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_BAR\n'
-+     'bool "bar"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     [['any:6: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('equivalent conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     [['any:8: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('not equivalent conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'if !BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     []),
-+    ]
-+
-+
-+@pytest.mark.parametrize('testname,filename,string,expected', RedefinedConfig)
-+def test_RedefinedConfig(testname, filename, string, expected):
-+    warnings = util.check_file(m.RedefinedConfig, filename, string)
-+    assert warnings == expected
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 8f05b83922..11a3946753 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -208,8 +208,6 @@ define SWUPDATE_SET_WEBSERVER
+ endef
+ endif
+ 
+-SWUPDATE_BUILD_CONFIG = $(@D)/.config
+-
+ SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
+ SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
