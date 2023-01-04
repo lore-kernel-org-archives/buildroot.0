@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01818C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60695C46467
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A702E60F3D;
-	Wed,  4 Jan 2023 11:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A702E60F3D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E2626103E;
+	Wed,  4 Jan 2023 11:42:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E2626103E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id avzsTn8LnjCc; Wed,  4 Jan 2023 11:42:36 +0000 (UTC)
+	with ESMTP id 2ZBjH5cZS5xH; Wed,  4 Jan 2023 11:42:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3DA060B04;
-	Wed,  4 Jan 2023 11:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3DA060B04
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 562E91BF95E
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F2046101E;
+	Wed,  4 Jan 2023 11:42:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F2046101E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2448F1BF2F9
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E827681E4C
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E827681E4C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B3244088C
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B3244088C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DifC1nqiKZU6 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MksVPIZPjck1 for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1BAB814B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5EFC940305
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1BAB814B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EFC940305
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFE8087430; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
+ id 4C09A8742D; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 08:49:52 +0100
+Date: Wed, 4 Jan 2023 08:44:10 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: f20548fa82d3dd1e6fc918c147432d2f5abc7583
-X-Git-Newrev: 4844b90dccfe565c24deb8476f3fa2655dbde2da
+X-Git-Oldrev: fcb17f0cb7ecae60b4d4957a8a48f01d0cb9e532
+X-Git-Newrev: be8c4ce25fe797cbbf97ae84cf7cd0794af3743c
 X-Patchwork-Hint: ignore
-Message-Id: <20230104113933.CFE8087430@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- configs/freescale_imx6qsabresd: update codeaurora URLs to github
+Message-Id: <20230104113933.4C09A8742D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/fmc: update
+ codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4844b90dccfe565c24deb8476f3fa2655dbde2da
+commit: https://git.buildroot.net/buildroot/commit/?id=be8c4ce25fe797cbbf97ae84cf7cd0794af3743c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 NXP moved all its open source code repositories from Code Aurora Forum
@@ -90,46 +90,71 @@ location.
 For this reason, the NXP recipes using codeaurora.org urls need to be
 updated to the correct github.com replacement.
 
+This commit also:
+- changes the _SITE_METHOD from "git" to the default "wget",
+- updates an old and broken freescale.com app note link,
+- adds the github project page as project url.
+
 Note: this commit does not change the component version. Only the
 download URL is updated. The archive content is expected to be the
-same.
+same. The version "fsl-sdk-v2.0" is an old tag from 2015. It was not
+migrated to github. This commit use instead the commit id
+corresponding to this tag.
 
-Note 2: this commit updates the Kernel and U-Boot download urls.
-The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
+See:
+https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmc/commit/?h=fsl-sdk-v2.0&id=a079d2c844edd85dff85a317a63198e7988bcd09
+
+The commit id exists on github:
+https://github.com/nxp-qoriq/fmc/commit/a079d2c844edd85dff85a317a63198e7988bcd09
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit dd42b159a5f752921ee602530d289c810ad7ee51)
+(cherry picked from commit 774c39caf093943aa9416c636fe3b2ec31a64e21)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/freescale_imx6qsabresd_defconfig | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/fmc/Config.in | 4 +++-
+ package/fmc/fmc.hash  | 2 +-
+ package/fmc/fmc.mk    | 5 ++---
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index f2ac993da0..86513d8072 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -16,9 +16,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/package/fmc/Config.in b/package/fmc/Config.in
+index 4399aa2cab..c89a87c99e 100644
+--- a/package/fmc/Config.in
++++ b/package/fmc/Config.in
+@@ -21,5 +21,7 @@ config BR2_PACKAGE_FMC
+ 	  packets flow into hardware configuration. The tool provides an
+ 	  abstraction layer between the end customer's vision of the PCD
+ 	  task definition and real hardware implementation.
++	  See application note:
++	  https://www.nxp.com/docs/en/application-note/AN4760.pdf
  
- # kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
-@@ -39,6 +38,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+-	  http://cache.freescale.com/files/32bit/doc/app_note/AN4760.pdf
++	  https://github.com/nxp-qoriq/fmc
+diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
+index fed33091cd..7309562b09 100644
+--- a/package/fmc/fmc.hash
++++ b/package/fmc/fmc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  cb896ec1fac2fe9a3a9bb8be2221b79acf5f9b75841609a681db0d9e7bec02a0  fmc-fsl-sdk-v2.0-br1.tar.gz
++sha256  e8594e37eb81e5b1f492f8494b98086f65180637b1e2e08d8a4475c23653a404  fmc-a079d2c844edd85dff85a317a63198e7988bcd09.tar.gz
+ sha256  f92862ceb95db5492f50a59d7c799c9395b714db88db92d11891dc0233e2ac42  COPYING
+diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
+index b385730138..6ac8c768df 100644
+--- a/package/fmc/fmc.mk
++++ b/package/fmc/fmc.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-FMC_VERSION = fsl-sdk-v2.0
+-FMC_SITE = https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmc
+-FMC_SITE_METHOD = git
++FMC_VERSION = a079d2c844edd85dff85a317a63198e7988bcd09
++FMC_SITE = $(call github,nxp-qoriq,fmc,$(FMC_VERSION))
+ FMC_LICENSE = MIT
+ FMC_LICENSE_FILES = COPYING
+ FMC_DEPENDENCIES = libxml2 tclap fmlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
