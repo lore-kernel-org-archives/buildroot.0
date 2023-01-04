@@ -1,59 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7386C53210
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 019DEC53210
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DCA482015;
-	Wed,  4 Jan 2023 22:12:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DCA482015
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C99B40AA9;
+	Wed,  4 Jan 2023 22:12:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C99B40AA9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QRVRvvj-TlqB; Wed,  4 Jan 2023 22:12:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UjolhdKEZX0j; Wed,  4 Jan 2023 22:12:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C73E681FFA;
-	Wed,  4 Jan 2023 22:12:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C73E681FFA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 977B040577;
+	Wed,  4 Jan 2023 22:12:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 977B040577
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 005E41BF3A3
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:12:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 096C51BF3A3
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D00A840577
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:12:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D00A840577
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5B1940577
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:12:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5B1940577
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DLfh-YG70PnX for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 22:12:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE19B4016C
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DE19B4016C
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 22:12:27 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C021D240002;
- Wed,  4 Jan 2023 22:12:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pDBzk-005BMD-Sh; Wed, 04 Jan 2023 23:12:24 +0100
+ with ESMTP id sVRCObiBBH6i for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 22:12:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CEBA4016C
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 22:12:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CEBA4016C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EAE39875D6; Wed,  4 Jan 2023 22:12:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Martin =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>
-References: <20230103135617.3211318-1-martin@geanix.com>
- <20230103135617.3211318-2-martin@geanix.com>
-Date: Wed, 04 Jan 2023 23:12:24 +0100
-In-Reply-To: <20230103135617.3211318-2-martin@geanix.com> ("Martin
- =?utf-8?Q?Hundeb=C3=B8ll=22's?= message of "Tue, 3 Jan 2023 14:56:17
- +0100")
-Message-ID: <87o7rerltj.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] bash: bump version to 5.2.15
+To: buildroot@buildroot.org
+Date: Wed, 4 Jan 2023 23:11:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 11479db32c5ea6bbdd7ce9b77873561a2ca07cfb
+X-Git-Newrev: f8a2e1dc08a4de2db903a4a5a41c8541e6abfe81
+X-Patchwork-Hint: ignore
+Message-Id: <20230104221251.EAE39875D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] bash: bump version to 5.2.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,15 +56,184 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8682030358450411963=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIk1hcnRpbiIgPT0gTWFydGluIEh1bmRlYsO4bGwgPG1hcnRpbkBnZWFuaXguY29tPiB3
-cml0ZXM6CgogPiBTaWduZWQtb2ZmLWJ5OiBNYXJ0aW4gSHVuZGViw7hsbCA8bWFydGluQGdlYW5p
-eC5jb20+CgpDb21taXR0ZWQsIHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============8682030358450411963==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f8a2e1dc08a4de2db903a4a5a41c8541e6abfe81
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...typo-local_shiftstates-vs.-locale_shiftst.patch | 72 ----------------------
+ ...ix-dequote_pathname-vs.-udequote_pathname.patch | 40 ------------
+ package/bash/bash.hash                             |  4 +-
+ package/bash/bash.mk                               |  2 +-
+ 4 files changed, 3 insertions(+), 115 deletions(-)
+
+diff --git a/package/bash/0002-locale-fix-typo-local_shiftstates-vs.-locale_shiftst.patch b/package/bash/0002-locale-fix-typo-local_shiftstates-vs.-locale_shiftst.patch
+deleted file mode 100644
+index 1636c18036..0000000000
+--- a/package/bash/0002-locale-fix-typo-local_shiftstates-vs.-locale_shiftst.patch
++++ /dev/null
+@@ -1,72 +0,0 @@
+-From 3d6b9e18506ad9daf4ec7b7d406b38d58ec88009 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Thu, 11 Mar 2021 20:48:36 +0100
+-Subject: [PATCH] locale: fix typo local_shiftstates vs. locale_shiftstates
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes:
+-
+-  locale.c:94:3: error: ‘local_shiftstates’ undeclared (first use in this function); did you mean ‘locale_shiftstates’?
+-     94 |   local_shiftstates = 0;
+-        |   ^~~~~~~~~~~~~~~~~
+-        |   locale_shiftstates
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- locale.c | 10 +++++-----
+- 1 file changed, 5 insertions(+), 5 deletions(-)
+-
+-diff --git a/locale.c b/locale.c
+-index 17ccc58..d6dd95a 100644
+---- a/locale.c
+-+++ b/locale.c
+-@@ -91,7 +91,7 @@ set_default_locale ()
+- #if defined (HANDLE_MULTIBYTE)
+-   locale_shiftstates = mblen ((char *)NULL, 0);
+- #else
+--  local_shiftstates = 0;
+-+  locale_shiftstates = 0;
+- #endif
+- }
+- 
+-@@ -117,7 +117,7 @@ set_default_locale_vars ()
+- #    if defined (HANDLE_MULTIBYTE)
+-       locale_shiftstates = mblen ((char *)NULL, 0);
+- #    else
+--      local_shiftstates = 0;
+-+      locale_shiftstates = 0;
+- #    endif
+- 
+-       u32reset ();
+-@@ -226,7 +226,7 @@ set_locale_var (var, value)
+- #  if defined (HANDLE_MULTIBYTE)
+-       locale_shiftstates = mblen ((char *)NULL, 0);
+- #  else
+--      local_shiftstates = 0;
+-+      locale_shiftstates = 0;
+- #  endif
+-       u32reset ();
+-       return r;
+-@@ -250,7 +250,7 @@ set_locale_var (var, value)
+- #if defined (HANDLE_MULTIBYTE)
+- 	  locale_shiftstates = mblen ((char *)NULL, 0);
+- #else
+--	  local_shiftstates = 0;
+-+	  locale_shiftstates = 0;
+- #endif
+- 	  u32reset ();
+- 	}
+-@@ -391,7 +391,7 @@ reset_locale_vars ()
+- #  if defined (HANDLE_MULTIBYTE)
+-   locale_shiftstates = mblen ((char *)NULL, 0);
+- #  else
+--  local_shiftstates = 0;
+-+  locale_shiftstates = 0;
+- #  endif
+-   u32reset ();
+- #endif
+--- 
+-2.30.1
+-
+diff --git a/package/bash/0003-glob-fix-dequote_pathname-vs.-udequote_pathname.patch b/package/bash/0003-glob-fix-dequote_pathname-vs.-udequote_pathname.patch
+deleted file mode 100644
+index a801f68236..0000000000
+--- a/package/bash/0003-glob-fix-dequote_pathname-vs.-udequote_pathname.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From a60ab1e5e88863acf9b0e9bcaa7919bbf093da05 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Thu, 11 Mar 2021 20:55:52 +0100
+-Subject: [PATCH] glob: fix dequote_pathname vs. udequote_pathname
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes:
+-
+-  glob.c:123:28: error: static declaration of ‘udequote_pathname’ follows non-static declaration
+-    123 | #  define dequote_pathname udequote_pathname
+-        |                            ^~~~~~~~~~~~~~~~~
+-  glob.c:125:13: note: in expansion of macro ‘dequote_pathname’
+-    125 | static void dequote_pathname PARAMS((char *));
+-        |             ^~~~~~~~~~~~~~~~
+-  glob.c:118:6: note: previous declaration of ‘udequote_pathname’ was here
+-    118 | void udequote_pathname PARAMS((char *));
+-        |      ^~~~~~~~~~~~~~~~~
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- lib/glob/glob.c | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/lib/glob/glob.c b/lib/glob/glob.c
+-index eb6277f..c903b15 100644
+---- a/lib/glob/glob.c
+-+++ b/lib/glob/glob.c
+-@@ -117,6 +117,5 @@ static int mbskipname PARAMS((char *, char *, int));
+- #else
+- #  define dequote_pathname udequote_pathname
+- #endif
+--static void dequote_pathname PARAMS((char *));
+- static int glob_testdir PARAMS((char *, int));
+- static char **glob_dir_to_array PARAMS((char *, char **, int));
+- 
+--- 
+-2.30.1
+-
+diff --git a/package/bash/bash.hash b/package/bash/bash.hash
+index 4660e9d38a..e0a1ebac91 100644
+--- a/package/bash/bash.hash
++++ b/package/bash/bash.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# https://ftp.gnu.org/gnu/bash/bash-5.1.16.tar.gz.sig
+-sha256  5bac17218d3911834520dad13cd1f85ab944e1c09ae1aba55906be1f8192f558  bash-5.1.16.tar.gz
++# https://ftp.gnu.org/gnu/bash/bash-5.2.15.tar.gz.sig
++sha256  13720965b5f4fc3a0d4b61dd37e7565c741da9a5be24edc2ae00182fc1b3588c  bash-5.2.15.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 3aca22898e..ec5e2d722f 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BASH_VERSION = 5.1.16
++BASH_VERSION = 5.2.15
+ BASH_SITE = $(BR2_GNU_MIRROR)/bash
+ BASH_DEPENDENCIES = ncurses readline host-bison
+ BASH_LICENSE = GPL-3.0+
+
+--===============8682030358450411963==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8682030358450411963==--
