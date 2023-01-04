@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E362CC53210
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 21:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72629C46467
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 21:38:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9069582030;
-	Wed,  4 Jan 2023 21:38:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9069582030
+	by smtp1.osuosl.org (Postfix) with ESMTP id 255D882039;
+	Wed,  4 Jan 2023 21:38:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 255D882039
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KTF03xcWcZ_t; Wed,  4 Jan 2023 21:38:09 +0000 (UTC)
+	with ESMTP id BfV_TCSxYUZG; Wed,  4 Jan 2023 21:38:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3B888202F;
-	Wed,  4 Jan 2023 21:38:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3B888202F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EB7881BF8C7
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:36:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EEF382035;
+	Wed,  4 Jan 2023 21:38:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EEF382035
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 105CF1BF95E
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:36:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF8C4400DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8866481EBD
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 21:36:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF8C4400DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8866481EBD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qgu_WazXz3zV for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ygOO6L77fBzv for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 21:36:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 849AB40467
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50F3E81F1D
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 21:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 849AB40467
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50F3E81F1D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8058A8756F; Wed,  4 Jan 2023 21:36:37 +0000 (UTC)
+ id 4E72E87566; Wed,  4 Jan 2023 21:36:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:27:29 +0100
+Date: Wed, 4 Jan 2023 22:25:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa2b795b2e48663cb2924a35e22fb47071ef9531
-X-Git-Newrev: 3e41117c64cada4a06fcb20fd17517354a42e948
+X-Git-Oldrev: f6e88fff91dd4702c725f47fb4fdd1a00b228f64
+X-Git-Newrev: f1f5e9f15063443bae1b80af072c7a5b0ab91d24
 X-Patchwork-Hint: ignore
-Message-Id: <20230104213637.8058A8756F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/minetest{-game}: bump to version
- 5.6.1
+Message-Id: <20230104213637.4E72E87566@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/readline: bump to version 8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,113 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e41117c64cada4a06fcb20fd17517354a42e948
+commit: https://git.buildroot.net/buildroot/commit/?id=f1f5e9f15063443bae1b80af072c7a5b0ab91d24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release announcement:
-5.6.0: https://forum.minetest.net/viewtopic.php?f=18&t=28511
-5.6.1: https://forum.minetest.net/viewtopic.php?f=18&t=28703
-
-minetest:
-- Update license file hash due to new image file in the project sources.
-- IrrlichtMt 1.9.0mt8 is required to build Minetest >= 5.6.1.
-- Add xlib_libXi dependency for xinput2 support enabled by default for Linux.
-- Remove xlib_libXxf86vm dependency previously used by gamma ramp code [1].
-
-[1] https://github.com/minetest/irrlicht/commit/538c9e5cde425ecee1e802fd53344111683b60be
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minetest-game/minetest-game.hash | 2 +-
- package/minetest-game/minetest-game.mk   | 2 +-
- package/minetest/Config.in               | 2 +-
- package/minetest/minetest.hash           | 6 +++---
- package/minetest/minetest.mk             | 6 +++---
- 5 files changed, 9 insertions(+), 9 deletions(-)
+ package/readline/readline.hash | 4 ++--
+ package/readline/readline.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/minetest-game/minetest-game.hash b/package/minetest-game/minetest-game.hash
-index 2b7eeffd8f..629871edbe 100644
---- a/package/minetest-game/minetest-game.hash
-+++ b/package/minetest-game/minetest-game.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  5a24fec4ed838744906f020096c35616e7ba76eeec2b93b980a40af011107e7c  minetest-game-5.5.1.tar.gz
-+sha256  5dc857003d24bb489f126865fcd6bf0d9c0cb146ca4c1c733570699d15abd0e3  minetest-game-5.6.1.tar.gz
- 
- sha256  f8a254e8d5f6b3ca3873f990986e86c864f943aa5dc9bf56808c5f4bfa509db0  LICENSE.txt
- sha256  ed2afed388c470e08edc1104e4ff6d12b68a32a76b8c52d760a99d4d2d7716f3  mods/beds/license.txt
-diff --git a/package/minetest-game/minetest-game.mk b/package/minetest-game/minetest-game.mk
-index e5ee45b6ab..ec8d5bff26 100644
---- a/package/minetest-game/minetest-game.mk
-+++ b/package/minetest-game/minetest-game.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MINETEST_GAME_VERSION = 5.5.1
-+MINETEST_GAME_VERSION = 5.6.1
- MINETEST_GAME_SITE = $(call github,minetest,minetest_game,$(MINETEST_GAME_VERSION))
- MINETEST_GAME_LICENSE = LGPL-2.1+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, \
- 	CC-BY-SA-4.0, MIT, CC0 1.0, CC-BY-2.0 (mods)
-diff --git a/package/minetest/Config.in b/package/minetest/Config.in
-index 3e331dff7e..4e139ac3e2 100644
---- a/package/minetest/Config.in
-+++ b/package/minetest/Config.in
-@@ -28,7 +28,7 @@ config BR2_PACKAGE_MINETEST_CLIENT
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_JPEG
--	select BR2_PACKAGE_XLIB_LIBXXF86VM
-+	select BR2_PACKAGE_XLIB_LIBXI
- 	help
- 	  Build Minetest client.
- 
-diff --git a/package/minetest/minetest.hash b/package/minetest/minetest.hash
-index e78f865969..ec67d4136d 100644
---- a/package/minetest/minetest.hash
-+++ b/package/minetest/minetest.hash
+diff --git a/package/readline/readline.hash b/package/readline/readline.hash
+index b0530a2d72..627746d821 100644
+--- a/package/readline/readline.hash
++++ b/package/readline/readline.hash
 @@ -1,6 +1,6 @@
- # Locally calculated
--sha256  dc0ae5188ef351db85c38b27f38f8549b133ed82aa46daea6deee148aa3454f4  minetest-5.5.1.tar.gz
--sha256  6d38dd7f3e3c8d768e1f5776b98dd5359b184c2e6740ddf733f4dc8615191bef  irrlicht-1.9.0mt5.tar.gz
-+sha256  1440603e19dca70e2691e86a74c822ee2c4a36fceee32b2d85ae74772149e9a3  minetest-5.6.1.tar.gz
-+sha256  27594242da8c7cc1e5ef45922e1dfdd130c37d77719b5d927359eb47992051e0  irrlicht-1.9.0mt8.tar.gz
+ # Locally calculated after checking pgp signature from
+-# https://ftp.gnu.org/gnu/readline/readline-8.1.2.tar.gz.sig
+-sha256  7589a2381a8419e68654a47623ce7dfcb756815c8fee726b98f90bf668af7bc6  readline-8.1.2.tar.gz
++# https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz.sig
++sha256  3feb7171f16a84ee82ca18a36d7b9be109a52c04f492a053331d7d1095007c35  readline-8.2.tar.gz
  
--sha256  d1d8a63f7f70d89a3a899f3b9fb5ca1ea7dbbd4eb449be2a7b2ff861b1f09192  LICENSE.txt
-+sha256  b38c8d428ceddf8e9b49dca63610c74499d952895d756b7eab5f5d4cef2954f6  LICENSE.txt
- sha256  ca38f1ba4ab901111f6eee50009bd46dbd866e6beb98d592d843f7c162d73409  lib/irrlichtmt/doc/irrlicht-license.txt
-diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
-index 6d56c3222f..3904bd687c 100644
---- a/package/minetest/minetest.mk
-+++ b/package/minetest/minetest.mk
+ # Hash for license file
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index b1fd181b78..66812dee77 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINETEST_VERSION = 5.5.1
-+MINETEST_VERSION = 5.6.1
- MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
- MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds), Zlib (irrlicht)
- MINETEST_LICENSE_FILES = LICENSE.txt lib/irrlichtmt/doc/irrlicht-license.txt
-@@ -12,7 +12,7 @@ MINETEST_CPE_ID_VENDOR = minetest
- 
- MINETEST_DEPENDENCIES = gmp jsoncpp luajit sqlite zlib zstd
- 
--MINETEST_IRRLICHTMT_VERSION = 1.9.0mt5
-+MINETEST_IRRLICHTMT_VERSION = 1.9.0mt8
- MINETEST_EXTRA_DOWNLOADS = $(call github,minetest,irrlicht,$(MINETEST_IRRLICHTMT_VERSION))/irrlicht-$(MINETEST_IRRLICHTMT_VERSION).tar.gz
- 
- define MINETEST_IRRLICHTMT_EXTRACT
-@@ -36,7 +36,7 @@ MINETEST_CONF_OPTS = \
- 	-DBUILD_UNITTESTS=OFF
- 
- ifeq ($(BR2_PACKAGE_MINETEST_CLIENT),y)
--MINETEST_DEPENDENCIES += bzip2 freetype jpeg libgl libpng xlib_libXxf86vm
-+MINETEST_DEPENDENCIES += bzip2 freetype jpeg libgl libpng xlib_libXi
- MINETEST_CONF_OPTS += -DBUILD_CLIENT=ON
- else
- MINETEST_CONF_OPTS += -DBUILD_CLIENT=OFF
+-READLINE_VERSION = 8.1.2
++READLINE_VERSION = 8.2
+ READLINE_SITE = $(BR2_GNU_MIRROR)/readline
+ READLINE_INSTALL_STAGING = YES
+ READLINE_DEPENDENCIES = ncurses host-autoconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
