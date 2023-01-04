@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 165CCC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 13:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BEA5C4708E
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 13:10:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E4F5408CA;
-	Wed,  4 Jan 2023 13:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E4F5408CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0D49416C6;
+	Wed,  4 Jan 2023 13:10:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0D49416C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8fJUh9ngks1J; Wed,  4 Jan 2023 13:04:37 +0000 (UTC)
+	with ESMTP id l9yKDjQGYepQ; Wed,  4 Jan 2023 13:10:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49D6B40591;
-	Wed,  4 Jan 2023 13:04:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49D6B40591
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B77741BF35B
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:04:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CB8940985;
+	Wed,  4 Jan 2023 13:10:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CB8940985
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E7C21BF35B
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:10:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 929E181E47
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:04:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 929E181E47
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AAEF605F6
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:10:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AAEF605F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ptghtDOKsxjp for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 13:04:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0E4881E4A
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F0E4881E4A
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 13:04:31 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 71E75240003;
- Wed,  4 Jan 2023 13:04:28 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pD3RT-004ZmY-KW; Wed, 04 Jan 2023 14:04:27 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NtQe02RwGwfj for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 13:10:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 21F5E60B94
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 13:10:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21F5E60B94
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 11F75874A9; Wed,  4 Jan 2023 13:10:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220822221430.355066-1-ju.o@free.fr>
- <20221231193345.GU2498764@scaer>
-Date: Wed, 04 Jan 2023 14:04:27 +0100
-In-Reply-To: <20221231193345.GU2498764@scaer> (Yann E. MORIN's message of
- "Sat, 31 Dec 2022 20:33:45 +0100")
-Message-ID: <87fscq30ys.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [RFC next 1/2] linux: fix builds for kernels < 5.6
- and host-gcc >= 10
+To: buildroot@buildroot.org
+Date: Wed, 4 Jan 2023 13:47:10 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 0ffa09c66f2590fb98885b3d3041ffd443db68df
+X-Git-Newrev: 5a4ea7079fae490b6eb089f56ab1a8e55a9350d1
+X-Patchwork-Hint: ignore
+Message-Id: <20230104131039.11F75874A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] linux: fix builds for
+ kernels < 5.6 and host-gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,54 +57,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a4ea7079fae490b6eb089f56ab1a8e55a9350d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > Julien, All,
- > On 2022-08-23 00:14 +0200, Julien Olivain spake thusly:
- >> During a linux-backports update, it was found that kernel v3.10.108 was
- >> failing to compile. See:
- >> https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
- >> 
- >> This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
- >> "linux: fix build with host-gcc 10+", which removes all declarations of
- >> "yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
- >> "%locations" directive is provided in the parser. See:
- >> https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
- >> 
- >> Kernel versions < 5.6 did not include this directive, so removing all
- >> yylloc declararions in the parser also was failing for those version.
- >> 
- >> In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
- >> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
- >> This commit is included in kernel v5.6.
- >> 
- >> This dtc update include the dtc commit:
- >> https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
- >> which adds the '%locations' directive.
- >> 
- >> This commit fixes the issue by programmatically adding the '%locations'
- >> Bison directive, if it's not found in the parser file.
- >> 
- >> Fixes:
- >> - https://bugs.busybox.net/show_bug.cgi?id=14971
- >> 
- >> Signed-off-by: Julien Olivain <ju.o@free.fr>
+During a linux-backports update, it was found that kernel v3.10.108 was
+failing to compile. See:
+https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
 
- > I eventually took some time to look into that issue, and I can't think
- > of a better solution than what you proposed.
+This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
+"linux: fix build with host-gcc 10+", which removes all declarations of
+"yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
+"%locations" directive is provided in the parser. See:
+https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
 
- > Applied to master, thanks.
+Kernel versions < 5.6 did not include this directive, so removing all
+yylloc declararions in the parser also was failing for those version.
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
+This commit is included in kernel v5.6.
 
--- 
-Bye, Peter Korsgaard
+This dtc update include the dtc commit:
+https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
+which adds the '%locations' directive.
+
+This commit fixes the issue by programmatically adding the '%locations'
+Bison directive, if it's not found in the parser file.
+
+Fixes:
+- https://bugs.busybox.net/show_bug.cgi?id=14971
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit e75f3962084045cf50f38f0adf8bfaa8da71dfd5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/linux.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6b547a68ed..7645b5f507 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	WERROR=0 \
++	REGENERATE_PARSERS=1 \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
+ 
+ ifeq ($(BR2_REPRODUCIBLE),y)
+@@ -286,6 +287,19 @@ define LINUX_DROP_YYLLOC
+ endef
+ LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
+ 
++# Kernel version < 5.6 breaks if host-gcc version is >= 10 and
++# 'yylloc' symbol is removed in previous hook, due to missing
++# '%locations' bison directive in dtc-parser.y.  See:
++# https://bugs.busybox.net/show_bug.cgi?id=14971
++define LINUX_ADD_DTC_LOCATIONS
++	$(Q)DTC_PARSER=$(@D)/scripts/dtc/dtc-parser.y; \
++	if test -e "$${DTC_PARSER}" \
++		&& ! grep -Eq '^%locations$$' "$${DTC_PARSER}" ; then \
++		$(SED) '/^%{$$/i %locations' "$${DTC_PARSER}"; \
++	fi
++endef
++LINUX_POST_PATCH_HOOKS += LINUX_ADD_DTC_LOCATIONS
++
+ # Older linux kernels use deprecated perl constructs in timeconst.pl
+ # that were removed for perl 5.22+ so it breaks on newer distributions
+ # Try a dry-run patch to see if this applies, if it does go ahead
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
