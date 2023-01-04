@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE964C4708E
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98C1EC46467
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:40:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6537381F80;
-	Wed,  4 Jan 2023 11:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6537381F80
+	by smtp2.osuosl.org (Postfix) with ESMTP id 34A0140574;
+	Wed,  4 Jan 2023 11:40:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34A0140574
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZEHJg_mdA6Xz; Wed,  4 Jan 2023 11:40:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sCwT2BsC34ks; Wed,  4 Jan 2023 11:40:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8116A81F60;
-	Wed,  4 Jan 2023 11:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8116A81F60
+	by smtp2.osuosl.org (Postfix) with ESMTP id 404204040D;
+	Wed,  4 Jan 2023 11:40:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 404204040D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5B1961BF8C7
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FEE31BF2F9
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE53E40891
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE53E40891
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F7214088C
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F7214088C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wiOZcOhrujXE for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
+ with ESMTP id PKztx9c8ipK8 for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 762E14088C
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6FB241706
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 762E14088C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6FB241706
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6294C87430; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
+ id 9D71F87431; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 08:46:29 +0100
+Date: Wed, 4 Jan 2023 08:47:56 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: bb4c7c3faf101162476fba333bbcfd6ac859cdb6
-X-Git-Newrev: cfb0d4d0adcf37826b4826be78361f530d310ef2
+X-Git-Oldrev: 48c070689fdbbdbf6d8dc623534b23163c9cc2c6
+X-Git-Newrev: cb0102fc5e84bcdca2b7e489282128b73620ecbf
 X-Patchwork-Hint: ignore
-Message-Id: <20230104113933.6294C87430@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- package/freescale-imx/imx-alsa-plugins: update codeaurora URLs to github
+Message-Id: <20230104113933.9D71F87431@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/qoriq-rcw: update
+ codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfb0d4d0adcf37826b4826be78361f530d310ef2
+commit: https://git.buildroot.net/buildroot/commit/?id=cb0102fc5e84bcdca2b7e489282128b73620ecbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 NXP moved all its open source code repositories from Code Aurora Forum
@@ -98,55 +98,53 @@ Note 2: the _SITE_METHOD is also changed from "git" to the default
 "wget", for faster downloads. This is why the package hash has
 changed.
 
-Note 3: this commit also adds the github as project homepage in
-Config.in.
-
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1ed90a96aa1f11fed19045036b4a10d9a8263a98)
+(cherry picked from commit a019e5e460f0d85b0b44163ba80be7cd6a53738a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/imx-alsa-plugins/Config.in             | 2 ++
- package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash | 2 +-
- package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk   | 3 +--
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/qoriq-rcw/Config.in.host | 2 +-
+ package/qoriq-rcw/qoriq-rcw.hash | 2 +-
+ package/qoriq-rcw/qoriq-rcw.mk   | 3 +--
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/freescale-imx/imx-alsa-plugins/Config.in b/package/freescale-imx/imx-alsa-plugins/Config.in
-index ec9b5b19cf..df47edd16d 100644
---- a/package/freescale-imx/imx-alsa-plugins/Config.in
-+++ b/package/freescale-imx/imx-alsa-plugins/Config.in
-@@ -13,6 +13,8 @@ config BR2_PACKAGE_IMX_ALSA_PLUGINS
- 	    * Rate Converter Plugin Using Freescale ASRC Hardware
- 	      Resampler (i.MX53 and most i.MX6)
+diff --git a/package/qoriq-rcw/Config.in.host b/package/qoriq-rcw/Config.in.host
+index 08fc83acd0..58c16d495b 100644
+--- a/package/qoriq-rcw/Config.in.host
++++ b/package/qoriq-rcw/Config.in.host
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_HOST_QORIQ_RCW
+ 	  $(HOST_DIR)/share/rcw. Either a SDK or post scripts can
+ 	  then use this toolset and examples.
  
-+	  https://github.com/nxp-imx/imx-alsa-plugins
-+
- comment "imx-alsa-libs needs an imx-specific Linux kernel to be built"
- 	depends on BR2_arm
- 	depends on !BR2_LINUX_KERNEL
-diff --git a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
-index bb7beede9d..1ca7697f03 100644
---- a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
-+++ b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
+-	  https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
++	  https://github.com/nxp-qoriq/rcw
+ 
+ if BR2_PACKAGE_HOST_QORIQ_RCW
+ 
+diff --git a/package/qoriq-rcw/qoriq-rcw.hash b/package/qoriq-rcw/qoriq-rcw.hash
+index f34c771d11..2a887d57d4 100644
+--- a/package/qoriq-rcw/qoriq-rcw.hash
++++ b/package/qoriq-rcw/qoriq-rcw.hash
 @@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  a9a5ef408a7329c2c5fa2a084ae7824afbfbebed68612bd72509488ccb0b94b3  imx-alsa-plugins-rel_imx_4.9.x_1.0.0_ga-br1.tar.gz
-+sha256  089bba009f82bf5e4a1e34b77a7d3badce2948619d92bec7a7ad42e766442d4c  imx-alsa-plugins-rel_imx_4.9.x_1.0.0_ga.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING.GPL
-diff --git a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
-index 9c81ff0df0..912cc7c68b 100644
---- a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
-+++ b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
+ # Locally calculated
+-sha256  caa6802f2ba5ea92fd27e7c977749010a91c9091fcc3fe626f96d9cacfba1f0a  qoriq-rcw-LSDK-21.08-br1.tar.gz
++sha256  f199c10e50bd18d7bed0d60f5b68194240dea4f1aa164cec98332723727a4796  qoriq-rcw-LSDK-21.08.tar.gz
+ sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
+diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
+index 0501c36f46..8b1ceacfce 100644
+--- a/package/qoriq-rcw/qoriq-rcw.mk
++++ b/package/qoriq-rcw/qoriq-rcw.mk
 @@ -5,8 +5,7 @@
  ################################################################################
  
- IMX_ALSA_PLUGINS_VERSION = rel_imx_4.9.x_1.0.0_ga
--IMX_ALSA_PLUGINS_SITE = https://source.codeaurora.org/external/imx/imx-alsa-plugins
--IMX_ALSA_PLUGINS_SITE_METHOD = git
-+IMX_ALSA_PLUGINS_SITE = $(call github,nxp-imx,imx-alsa-plugins,$(IMX_ALSA_PLUGINS_VERSION))
- IMX_ALSA_PLUGINS_LICENSE = GPL-2.0+
- IMX_ALSA_PLUGINS_LICENSE_FILES = COPYING.GPL
- IMX_ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib
+ QORIQ_RCW_VERSION = LSDK-21.08
+-QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
+-QORIQ_RCW_SITE_METHOD = git
++QORIQ_RCW_SITE = $(call github,nxp-qoriq,rcw,$(QORIQ_RCW_VERSION))
+ QORIQ_RCW_LICENSE = BSD-3-Clause
+ QORIQ_RCW_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
