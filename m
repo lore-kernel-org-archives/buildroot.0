@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E18FBC46467
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B9FBC53210
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 823F282052;
-	Wed,  4 Jan 2023 22:05:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 823F282052
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECCFD82054;
+	Wed,  4 Jan 2023 22:06:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECCFD82054
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pH_vLmsEDyfR; Wed,  4 Jan 2023 22:05:55 +0000 (UTC)
+	with ESMTP id h4KlLTqkyPfl; Wed,  4 Jan 2023 22:06:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D14DD8204B;
-	Wed,  4 Jan 2023 22:05:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D14DD8204B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 889ED1BF8C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3451B82052;
+	Wed,  4 Jan 2023 22:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3451B82052
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 940E11BF95E
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6413D82051
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B6A2418EF
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:05:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6413D82051
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B6A2418EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HDXxUacmTZ4I for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cxwcqbp_fMIJ for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 22:05:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D2B78204B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86F83418EC
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 22:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D2B78204B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86F83418EC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8AD51875A9; Wed,  4 Jan 2023 22:05:38 +0000 (UTC)
+ id 6F149875AC; Wed,  4 Jan 2023 22:05:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:56:37 +0100
+Date: Wed, 4 Jan 2023 22:54:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ec6e8c632bf372c1fad7889ca6323166b90e1599
-X-Git-Newrev: 1ad6b4e10e4538532c00f8c04363da64f19c313a
+X-Git-Oldrev: cbb6a55e6e03ea0b4e0a9b744f289e11da963c62
+X-Git-Newrev: c4f2459e8a94c1f30c0fcbeb3cd72b62b5ee3e64
 X-Patchwork-Hint: ignore
-Message-Id: <20230104220538.8AD51875A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtalloc: drop bogus LIBTALLOC_{C,
- LD}FLAGS
+Message-Id: <20230104220538.6F149875AC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glib-networking: drop dangling
+ GLIB_NETWORKING_INSTALL_TARGET_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,36 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ad6b4e10e4538532c00f8c04363da64f19c313a
+commit: https://git.buildroot.net/buildroot/commit/?id=c4f2459e8a94c1f30c0fcbeb3cd72b62b5ee3e64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit "f0d37e275a package/libtalloc: new package" added these symbols
-but they are not used in the package and also not recognized by the waf
-package infra.
+In 2015, commit "3fe434bf35 glib-networking: specify GIO_MODULE_DIR for
+target" correctly used <pkg>_INSTALL_TARGET_OPTS with an autotools
+package.
 
-So drop the ignored symbols.
+But later on, in 2018, commit "928a72c49f package/glib-networking: bump
+version to 2.56.1" changed the package to use the meson infra, that does
+not support <pkg>_INSTALL_TARGET_OPTS.
 
-Cc: David GOUARIN <dgouarin@gmail.com>
-Cc: Matt Weber <matthew.weber@collins.com>
+So this symbol is bogus since 2018. Drop it now.
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtalloc/libtalloc.mk | 2 --
+ package/glib-networking/glib-networking.mk | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
-index 75d3da263b..ca15180d22 100644
---- a/package/libtalloc/libtalloc.mk
-+++ b/package/libtalloc/libtalloc.mk
-@@ -31,8 +31,6 @@ LIBTALLOC_CONF_OPTS += --cross-compile \
- 		--with-libiconv=$(STAGING_DIR)/usr
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index e8905dfff4..4adc13d39f 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -21,8 +21,6 @@ GLIB_NETWORKING_CONF_OPTS = \
+ GLIB_NETWORKING_LICENSE = LGPL-2.0+
+ GLIB_NETWORKING_LICENSE_FILES = COPYING
+ GLIB_NETWORKING_CPE_ID_VENDOR = gnome
+-GLIB_NETWORKING_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) \
+-	GIO_MODULE_DIR=/usr/lib/gio/modules install
  
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
--LIBTALLOC_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
--LIBTALLOC_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
- LIBTALLOC_DEPENDENCIES += libtirpc host-pkgconf
- endif
- 
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ GLIB_NETWORKING_DEPENDENCIES += gnutls
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
