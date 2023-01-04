@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA7CFC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:48:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1C0EC46467
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:48:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BA8440238;
-	Wed,  4 Jan 2023 11:48:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BA8440238
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C3Wbpq_JyXmF; Wed,  4 Jan 2023 11:48:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1587D4023C;
-	Wed,  4 Jan 2023 11:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1587D4023C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A51161BF2F9
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:40:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DF8C81F60
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DF8C81F60
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DCDC80BD2;
+	Wed,  4 Jan 2023 11:48:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DCDC80BD2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7R8EWxwymo9T for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iExxGX4ma3-P; Wed,  4 Jan 2023 11:48:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8907880B79;
+	Wed,  4 Jan 2023 11:48:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8907880B79
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3857F1BF2F9
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:40:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F5AF4182C
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F5AF4182C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5W9hYgWaVN9P for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 11:40:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E620881F8C
+ by smtp4.osuosl.org (Postfix) with ESMTP id E59B24182D
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:40:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E620881F8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E59B24182D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5070874A7; Wed,  4 Jan 2023 11:40:43 +0000 (UTC)
+ id DF1EF874A4; Wed,  4 Jan 2023 11:40:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 12:14:55 +0100
+Date: Wed, 4 Jan 2023 12:15:04 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 84af477f40c1ea61db6f0f73bd29e1599dd4a1ed
-X-Git-Newrev: 0c78fc64016522d01b61108d067effeb886f434d
+X-Git-Oldrev: 0c78fc64016522d01b61108d067effeb886f434d
+X-Git-Newrev: e20be45b15a9c2a53e06d6e2bc4c5050ddf1a03e
 X-Patchwork-Hint: ignore
-Message-Id: <20230104114043.D5070874A7@busybox.osuosl.org>
+Message-Id: <20230104114043.DF1EF874A4@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.02.x]
- configs/freescale_imx8mqevk: update codeaurora URLs to github
+ configs/freescale_imx8mpevk: update codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c78fc64016522d01b61108d067effeb886f434d
+commit: https://git.buildroot.net/buildroot/commit/?id=e20be45b15a9c2a53e06d6e2bc4c5050ddf1a03e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 NXP moved all its open source code repositories from Code Aurora Forum
@@ -99,19 +99,19 @@ The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a01cb853fe978d85037d9a4dd762113c9132dc4c)
+(cherry picked from commit e5f10b73007487d5d19e34914ee0e1c35a127c4c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/freescale_imx8mqevk_defconfig | 15 ++++++---------
+ configs/freescale_imx8mpevk_defconfig | 15 ++++++---------
  1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
-index 7f5dd87b5f..e3f88dc44c 100644
---- a/configs/freescale_imx8mqevk_defconfig
-+++ b/configs/freescale_imx8mqevk_defconfig
-@@ -5,9 +5,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/configs/freescale_imx8mpevk_defconfig b/configs/freescale_imx8mpevk_defconfig
+index 8d0e6e0f3e..5a72406b67 100644
+--- a/configs/freescale_imx8mpevk_defconfig
++++ b/configs/freescale_imx8mpevk_defconfig
+@@ -5,9 +5,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-evk.dtb"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mp-evk.dtb"
  BR2_LINUX_KERNEL=y
 -BR2_LINUX_KERNEL_CUSTOM_GIT=y
 -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
@@ -120,7 +120,7 @@ index 7f5dd87b5f..e3f88dc44c 100644
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
  BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-evk"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mp-evk"
 @@ -19,16 +18,14 @@ BR2_TARGET_ROOTFS_EXT2=y
  BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
@@ -130,7 +130,7 @@ index 7f5dd87b5f..e3f88dc44c 100644
 -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mp"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
@@ -139,7 +139,7 @@ index 7f5dd87b5f..e3f88dc44c 100644
 -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mp_evk"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
  BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 _______________________________________________
