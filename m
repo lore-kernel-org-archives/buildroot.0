@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 703ADC46467
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D7CC53210
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 004CF409FD;
-	Wed,  4 Jan 2023 22:11:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 004CF409FD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87FF4418C7;
+	Wed,  4 Jan 2023 22:12:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87FF4418C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i_B2ic9OLgMm; Wed,  4 Jan 2023 22:11:48 +0000 (UTC)
+	with ESMTP id cdZ1ydGU8VCP; Wed,  4 Jan 2023 22:12:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEE23409EB;
-	Wed,  4 Jan 2023 22:11:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEE23409EB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 401441BF964
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:11:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 855D7409A9;
+	Wed,  4 Jan 2023 22:12:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 855D7409A9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BEBD1BF3A3
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1767081C04
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23233409A9
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1767081C04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23233409A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oMYsBMOkxk-1 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JQacZ197icyx for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 454D081A12
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29DB7409EB
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 454D081A12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29DB7409EB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3562A875CC; Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
+ id 163DD875CF; Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 23:09:24 +0100
+Date: Wed, 4 Jan 2023 23:08:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eae97036f34e69e2ca197cd31fd87c673f2ebe37
-X-Git-Newrev: ca5cd8d67554c568daee4da1f058bcf3b35b2976
+X-Git-Oldrev: 9a4e154c9c583e74846f7ec80ad01d78811722b0
+X-Git-Newrev: 41aa369d01a4dd6646390066f44135d99f926fe4
 X-Patchwork-Hint: ignore
-Message-Id: <20230104221108.3562A875CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/swupdate: drop dangling
- SWUPDATE_BUILD_CONFIG
+Message-Id: <20230104221108.163DD875CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qoriq-rcw: drop bogus
+ QORIQ_RCW_FILE_BIN
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca5cd8d67554c568daee4da1f058bcf3b35b2976
+commit: https://git.buildroot.net/buildroot/commit/?id=41aa369d01a4dd6646390066f44135d99f926fe4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-"6c63e4de4a boot/swupdate: don't specify .config to munge" dropped all
-usages of this define but the define itself was left dangling.
+While applying [1] and cleaning up, the commit "d167f7006e
+package/qoriq-rcw: add in-tree rcw source support" ended up keeping an
+unused define.
 
 Drop it now.
 
+[1] http://patchwork.ozlabs.org/project/buildroot/patch/20200207083857.28058-4-jerry.huang@nxp.com/
+
+Cc: Matt Weber <matthew.weber@collins.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/qoriq-rcw/qoriq-rcw.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 8f05b83922..11a3946753 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -208,8 +208,6 @@ define SWUPDATE_SET_WEBSERVER
- endef
- endif
+diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
+index 8b1ceacfce..b9c9e99222 100644
+--- a/package/qoriq-rcw/qoriq-rcw.mk
++++ b/package/qoriq-rcw/qoriq-rcw.mk
+@@ -59,7 +59,6 @@ endef
+ else ifneq ($(QORIQ_RCW_INTREE),)
  
--SWUPDATE_BUILD_CONFIG = $(@D)/.config
--
- SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
- SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ QORIQ_RCW_PLATFORM = $(firstword $(subst /, ,$(QORIQ_RCW_INTREE)))
+-QORIQ_RCW_FILE_BIN = $(lastword $(subst /, ,$(QORIQ_RCW_INTREE)))
  
+ define HOST_QORIQ_RCW_BUILD_CMDS
+ 	$(MAKE) -C $(@D)/$(QORIQ_RCW_PLATFORM)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
