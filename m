@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D800CC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:56:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50DC7C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78FEC4EC2A;
-	Mon, 20 Feb 2023 23:56:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78FEC4EC2A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0561B4ECEB;
+	Mon, 20 Feb 2023 23:57:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0561B4ECEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fupaovr0SCUC; Mon, 20 Feb 2023 23:56:53 +0000 (UTC)
+	with ESMTP id 8bwsIH9JFm7R; Mon, 20 Feb 2023 23:57:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3710B4ECB8;
-	Mon, 20 Feb 2023 23:56:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3710B4ECB8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C6AE1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4E8D4ECBB;
+	Mon, 20 Feb 2023 23:57:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4E8D4ECBB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CDCB1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10C0141787
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10C0141787
+ by smtp3.osuosl.org (Postfix) with ESMTP id 111326F9CC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 111326F9CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XFsK4R71qPX0 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VLlsNqK-LXE6 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F91741782
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F91741782
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8294617B1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8294617B1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B22286495; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+ id E5DEB8648F; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Feb 2023 15:00:06 +0100
+Date: Wed, 4 Jan 2023 15:30:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 02ace135ee0d31d30021cd000d0594bb6360ca94
-X-Git-Newrev: 607eafa2cd0656929db4bc8a743b28b0c48df8e5
+X-Git-Oldrev: 456f18409861a0bee1d553d530cef8bf3482ee7a
+X-Git-Newrev: b5bdcb4cc562942cac592519c710bc67d1decf8e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205245.1B22286495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ell: bump to version
- 0.56
+Message-Id: <20230220205222.E5DEB8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libgpg-error: bump to
+ version 1.46
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=607eafa2cd0656929db4bc8a743b28b0c48df8e5
+commit: https://git.buildroot.net/buildroot/commit/?id=b5bdcb4cc562942cac592519c710bc67d1decf8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+For the changelog, see:
+https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=log;h=libgpg-error-1.46
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgpg-error/libgpg-error.hash | 6 +++---
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index 68832c3201..c0f1731676 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
--sha256  a7d0df846af839bbea1b80f292166371070328854b3fa785b5c607fe600552ad  ell-0.53.tar.xz
-+sha256  58eb8b2b64087f7479d5db6a830a0656c536d93e5f11d4c9a4443ce8760a1b63  ell-0.56.tar.xz
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index b29ec37598..ffe27e9d99 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,10 +1,10 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  fe724ed37b4935964059a47b7c64d5f8246659d8  libgpg-error-1.45.tar.bz2
++sha1  a6e5efdd72e848aab4064e5ef4c6835ba344bcf1  libgpg-error-1.46.tar.bz2
  
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index b27d6feb65..994b0e19f0 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
+ # Locally calculated after checking pgp signature
+-# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.45.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.46.tar.bz2.sig
+ # using key 6DAA6E64A76D2840571B4902528897B826403ADA
+-sha256  570f8ee4fb4bff7b7495cff920c275002aea2147e9a1d220c068213267f80a26  libgpg-error-1.45.tar.bz2
++sha256  b7e11a64246bbe5ef37748de43b245abd72cfcd53c9ae5e7fc5ca59f1c81268d  libgpg-error-1.46.tar.bz2
+ # Locally calculated
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 252d95ac7f..ab3c7c3bf2 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELL_VERSION = 0.53
-+ELL_VERSION = 0.56
- ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
- ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
- ELL_LICENSE = LGPL-2.1+
+-LIBGPG_ERROR_VERSION = 1.45
++LIBGPG_ERROR_VERSION = 1.46
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
