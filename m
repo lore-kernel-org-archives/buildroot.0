@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C62EC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC6AC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C60BA408CA;
-	Wed,  4 Jan 2023 11:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C60BA408CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB54A40866;
+	Wed,  4 Jan 2023 11:43:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB54A40866
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SmZpnopSvztZ; Wed,  4 Jan 2023 11:43:40 +0000 (UTC)
+	with ESMTP id ggPfg0IM7aLa; Wed,  4 Jan 2023 11:43:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 688DA408C7;
-	Wed,  4 Jan 2023 11:43:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 688DA408C7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0BFE31BF2F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65EC041753;
+	Wed,  4 Jan 2023 11:43:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65EC041753
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 445FD1BF2F9
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B732E40B13
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B732E40B13
+ by smtp4.osuosl.org (Postfix) with ESMTP id E069740305
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:39:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E069740305
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DDKKGGF52SlY for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nV9pm9rBGw7q for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 42FD440B03
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42FD440B03
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B06B4035B
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B06B4035B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F68B8742D; Wed,  4 Jan 2023 11:39:34 +0000 (UTC)
+ id 5792F8742E; Wed,  4 Jan 2023 11:39:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 08:51:24 +0100
+Date: Wed, 4 Jan 2023 08:46:06 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: fcd6a3851c8a1d0810e19e62441db2361e8185b7
-X-Git-Newrev: 5530f837f599e83abca8769074577880d49b5791
+X-Git-Oldrev: be8c4ce25fe797cbbf97ae84cf7cd0794af3743c
+X-Git-Newrev: bb4c7c3faf101162476fba333bbcfd6ac859cdb6
 X-Patchwork-Hint: ignore
-Message-Id: <20230104113934.3F68B8742D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- configs/freescale_imx8qxpmek: update codeaurora URLs to github
+Message-Id: <20230104113933.5792F8742E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/fmlib: update
+ codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5530f837f599e83abca8769074577880d49b5791
+commit: https://git.buildroot.net/buildroot/commit/?id=bb4c7c3faf101162476fba333bbcfd6ac859cdb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 NXP moved all its open source code repositories from Code Aurora Forum
@@ -92,56 +92,68 @@ updated to the correct github.com replacement.
 
 Note: this commit does not change the component version. Only the
 download URL is updated. The archive content is expected to be the
-same.
+same. The version fsl-sdk-v2.0 is an old tag from 2016. It was not
+migrated to github. This commit use instead the commit id
+corresponding to this tag.
 
-Note 2: this commit updates the Kernel, U-Boot and ATF download urls.
-The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
+See:
+https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmlib/commit/?h=fsl-sdk-v2.0&id=43fa98fdbf0c697167e415c3f060896d5b482791
+
+The commit id exists on github:
+https://github.com/nxp-qoriq/fmlib/commit/43fa98fdbf0c697167e415c3f060896d5b482791
+
+Note 2: the _SITE_METHOD is also changed from "git" to the default
+"wget", for faster downloads. This is why the package hash has
+changed.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9bcc1c0ef7cfc5263925448c2b3c502318b37691)
+(cherry picked from commit a94678cfd965ed11a4e2d18d840c03a41c148d6b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/freescale_imx8qxpmek_defconfig | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ package/fmlib/Config.in  | 2 +-
+ package/fmlib/fmlib.hash | 2 +-
+ package/fmlib/fmlib.mk   | 5 ++---
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
-index 1ffbd123e0..ce8f6b7c84 100644
---- a/configs/freescale_imx8qxpmek_defconfig
-+++ b/configs/freescale_imx8qxpmek_defconfig
-@@ -6,9 +6,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qxp-mek.dtb"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qxp-mek"
-@@ -22,16 +21,14 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qx"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qxp_mek"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
+index 7bccfd7c83..97d55d1250 100644
+--- a/package/fmlib/Config.in
++++ b/package/fmlib/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_FMLIB
+ 	  configure driver parameters and PCD (parse - classify -
+ 	  distribute) rules.
+ 
+-	  http://git.freescale.com/git/cgit.cgi/ppc/sdk/fmlib.git/tree/README
++	  https://github.com/nxp-qoriq/fmlib
+ 
+ if BR2_PACKAGE_FMLIB
+ choice
+diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
+index 47460d091c..d4dcf3be5c 100644
+--- a/package/fmlib/fmlib.hash
++++ b/package/fmlib/fmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  59415d346af1d22f510f2785be4c7e3606dc3181476a666e832270550f7d44a6  fmlib-fsl-sdk-v2.0-br1.tar.gz
++sha256  6e9e6bdb42dc2a6a76cfd756a2d4cdfcc2be90925c1f439e8a11eafa871896a6  fmlib-43fa98fdbf0c697167e415c3f060896d5b482791.tar.gz
+ sha256  837559e20d83910a005e7883b876cc5c42805fe4abcf7e5c5b3c8d036b7f61c8  COPYING
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index 8cb779201d..9509f3de56 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-FMLIB_VERSION = fsl-sdk-v2.0
+-FMLIB_SITE = https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmlib
+-FMLIB_SITE_METHOD = git
++FMLIB_VERSION = 43fa98fdbf0c697167e415c3f060896d5b482791
++FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
+ FMLIB_LICENSE = BSD-3-Clause, GPL-2.0+
+ FMLIB_LICENSE_FILES = COPYING
+ FMLIB_DEPENDENCIES = linux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
