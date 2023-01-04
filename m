@@ -4,66 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7548DC4708E
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 00:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F837C4708E
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 00:21:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D536981F05;
-	Wed,  4 Jan 2023 00:21:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D536981F05
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BC9781F0E;
+	Wed,  4 Jan 2023 00:21:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BC9781F0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4IYbsBEEhPOu; Wed,  4 Jan 2023 00:21:24 +0000 (UTC)
+	with ESMTP id t5gUOLdVlxTH; Wed,  4 Jan 2023 00:21:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2189181F00;
-	Wed,  4 Jan 2023 00:21:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2189181F00
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F328C1BF95E
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 00:21:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8225581F10;
+	Wed,  4 Jan 2023 00:21:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8225581F10
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BAF21BF962
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 00:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE3A060B5E
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAC6A417C7
  for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 00:21:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE3A060B5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAC6A417C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e25Zow9u4cPd for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 00:21:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tast0szL2dMP for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 00:21:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 250BF607E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A0E4417C3
 Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 250BF607E3
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 00:21:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7A0E4417C3
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 00:21:19 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.66.6])
  by Aruba Outgoing Smtp  with ESMTPSA
- id CrWtpAYj2eo8HCrWup7N9I; Wed, 04 Jan 2023 01:21:16 +0100
+ id CrWtpAYj2eo8HCrWup7N9C; Wed, 04 Jan 2023 01:21:16 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed,  4 Jan 2023 01:21:11 +0100
-Message-Id: <20230104002113.1038775-3-giulio.benetti@benettiengineering.com>
+Date: Wed,  4 Jan 2023 01:21:09 +0100
+Message-Id: <20230104002113.1038775-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230104002113.1038775-1-giulio.benetti@benettiengineering.com>
-References: <20230104002113.1038775-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-CMAE-Envelope: MS4xfAatUBph3vkZy8UUv1X1mx1FWTdn1pfYKe39KoN1Mv/62lhUe6guenYbpRDTo/6smltP1FEy4DgUsEwa2gLBWpZsGDRUEmbTQS0szol69J6enJJ3yS5G
  YkKTq3lFUo+DViaLND79G4su99eqlErRzYVz7YoNCnr66MmnvcZ29ecX5G23cxhfwkDSwcmwb3eOQtaDkxRN6rOoNsycA622+QKzYFf6nsHqUdX8+l9rfdEi
  bWmcxs4HUwHrdsgYLqoIr3DIiuZdxhnEnZL3f3fWXUHuPUGbpvttgBSl4GKqL4VEgvHMlbRg90YtRBmL06Vu7A==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1672791676; bh=Z2GiAMY2CiwgUjIPYydA0btXARwUQxkqwLSGhvzMILo=;
+ t=1672791676; bh=1sLZKdYImzcg4thDk33oyVu8fEQ/bHdbZsvdydzv7u4=;
  h=From:To:Subject:Date:MIME-Version;
- b=Ldzzdeu6KAXclYOBSDksaEL9n3gzwvqn69YWTqFPaeqnCL+0UTO9kROzxZ4/Xr83z
- O+u6e7iIEcRVrE6qleO8sXRJd1BneovW+x61UBCPwzVCpKGGJYIWty9oWH0/ROG4ss
- ke/AZhSqfbD2dFBJSPd/f2hqsytVCQ4I4TfyV7quKAaIW6DpMsSsOnSiLbV/Yv3Rxt
- wMGBl1oOukAf3Cse9qZ923xmBYb9QJAFznnvevxrCcL9Chcf4vGWYCVIds3sGaglVd
- Ss7a1PJNnmKc6SL3MqCg4Nq7kZtQpZxBNyUU2wPLACAKnDrh39l0LN+/mmzJyIrXhy
- GMOwPPoTs07BA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=TQ2E3NwnbMO4EDYNC0isquojBFOplJ30svOrp7hR1GNn8lDi4KF5M5X2W/DRIP+s0
+ aE+wuWyJewdxCFeMFz4+fLPXgQvyh4+qymN3d1KRYjXCWqDqsVMPIPEcrDpeBJbnF5
+ vWflfOmvKCsPjJHRRUI9VORBn/y+7VMozOk/FlsqFot6ZY2rIdHgW/TtFStu1giLbF
+ SI93CXGb7FbXfLzeVRY8tqO32aKzso6vreTfSfFNKkbjvVSSLheehQH9RCCJ/UxtKI
+ k/jG3GfY98vimvGCCPWYtTHzlqtoe16Md5wO4HvmXxbVe96ZFTcGdOtwq7/xPM6XGn
+ ta3iZ/KbN3bVQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Ldzzdeu6
-Subject: [Buildroot] [PATCH 2/4] board/asus/tinker: rename label linux-next
- to linux in extlinux.conf
+ header.a=rsa-sha256 header.s=a1 header.b=TQ2E3Nwn
+Subject: [Buildroot] [PATCH 0/4] Tinker board boot fix and Linux/U-Boot
+ update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,23 +80,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We're not using next branch so let's rename label linux-next to linux.
+Hello All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- board/asus/tinker/extlinux.conf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+here is a patchset to fix boot of Tinker board and bump Linux/U-boot
+versions.
+I don't know how it happened to have this board not booting up, probably
+while testing in parallel with vyasa I've skipped the last test before
+sending the previous patch that bumped Linux to 5.15 and U-Boot to
+2022.10. So note that even with Linux 5.15 and U-Boot 2022.10 the board
+doesn't boot up and [Patch 1/3] should be backported.
+Probably [Patch 4/4] should be backported too to avoid spending hours
+on power supply issues. After ~1 year I've totally forgotten that 500mA
+Usb port is not enough to power this board.
 
-diff --git a/board/asus/tinker/extlinux.conf b/board/asus/tinker/extlinux.conf
-index 136af0debd..bb96ddb893 100644
---- a/board/asus/tinker/extlinux.conf
-+++ b/board/asus/tinker/extlinux.conf
-@@ -1,4 +1,4 @@
--label Tinker linux-next
-+label Tinker linux
-   kernel /boot/uImage
-   devicetree /boot/rk3288-tinker.dtb
-   append console=ttyS2,115200n8 root=/dev/mmcblk0p1 rootwait
+Best regards
+Giulio
+
+Giulio Benetti (4):
+  configs/asus_tinker_rk3288_defconfig: fix boot by prepending tpl to
+    spl+u-boot
+  board/asus/tinker: rename label linux-next to linux in extlinux.conf
+  configs/asus_tinker_rk3288_defconfig: bump Linux to 6.1.2 and U-boot
+    to 2022.10
+  board/asus/tinker: add a note to readme.txt for power supply
+
+ board/asus/tinker/extlinux.conf      |  2 +-
+ board/asus/tinker/genimage.cfg       | 11 +++++++++--
+ board/asus/tinker/post-build.sh      |  4 ++--
+ board/asus/tinker/readme.txt         |  5 +++++
+ configs/asus_tinker_rk3288_defconfig | 11 +++++------
+ 5 files changed, 22 insertions(+), 11 deletions(-)
+
 -- 
 2.34.1
 
