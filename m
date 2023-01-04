@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8106AC4708E
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 13:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6445C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 13:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22DD681EDC;
-	Wed,  4 Jan 2023 13:23:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22DD681EDC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id amKlijIAym-t; Wed,  4 Jan 2023 13:23:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 681DE81ECF;
-	Wed,  4 Jan 2023 13:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 681DE81ECF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C76A21BF8C7
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:22:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A3B8260B33
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:22:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3B8260B33
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B4F060B33;
+	Wed,  4 Jan 2023 13:25:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B4F060B33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PqYtmvwtKvOx for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 13:22:45 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id by2B_lRnToKZ; Wed,  4 Jan 2023 13:25:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B528B60A64;
+	Wed,  4 Jan 2023 13:25:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B528B60A64
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C8DC71BF35B
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:25:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A512C4031F
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A512C4031F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DRsT8p2VWeXa for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 13:25:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81FAC60640
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 13:22:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81FAC60640
+ by smtp2.osuosl.org (Postfix) with ESMTP id C61C840144
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 13:25:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C61C840144
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 720A8874D6; Wed,  4 Jan 2023 13:22:45 +0000 (UTC)
+ id B368C874DB; Wed,  4 Jan 2023 13:25:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 14:19:31 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: da09054cb92e773fc7fd08a7894b5b0620a32e96
-X-Git-Newrev: 10b7a47d4ddd7f1561128e6b1b894aa556ea5057
+Date: Wed, 4 Jan 2023 14:21:33 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9db9f9b4dc7d7b728bf2ea9e6456a9fcc6d7098c
+X-Git-Newrev: d64a089a64aff7c8cbf197beea460d644646243d
 X-Patchwork-Hint: ignore
-Message-Id: <20230104132245.720A8874D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/tiff: explicitly
- disable webp
+Message-Id: <20230104132506.B368C874DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
+ version 2.38.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10b7a47d4ddd7f1561128e6b1b894aa556ea5057
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d64a089a64aff7c8cbf197beea460d644646243d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9db9f9b4dc7d7b728bf2ea9e6456a9fcc6d7098c)
+Bugfix release, with a security patch for
+CVE-2022-42799, CVE-2022-42823, CVE-2022-42824, CVE-2022-42852,
+CVE-2022-42856, CVE-2022-42863, CVE-2022-42867, CVE-2022-46691,
+CVE-2022-46692, CVE-2022-46698, CVE-2022-46699 and CVE-2022-46700.
+
+Release notes:
+
+ https://webkitgtk.org/2022/10/20/webkitgtk2.38.1-released.html
+ https://webkitgtk.org/2022/11/04/webkitgtk2.38.2-released.html
+ https://webkitgtk.org/2022/12/22/webkitgtk2.38.3-released.html
+
+Accompanying security advisory:
+
+ https://webkitgtk.org/security/WSA-2022-0010.html
+ https://webkitgtk.org/security/WSA-2022-0011.html
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tiff/tiff.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 1b6bd91220..4d3c90f956 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -12,10 +12,13 @@ TIFF_CPE_ID_VENDOR = libtiff
- TIFF_CPE_ID_PRODUCT = libtiff
- TIFF_INSTALL_STAGING = YES
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index c2512be9c6..eff7f5c18f 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.38.0.tar.xz.sums
+-md5  a69cd8fc05f7299458b4faf1bc99b875  webkitgtk-2.38.0.tar.xz
+-sha1  6dcb65b8dc56c52f086bfeecfca7920e9cc78348  webkitgtk-2.38.0.tar.xz
+-sha256  f9ce6375a3b6e1329b0b609f46921e2627dc7ad6224b37b967ab2ea643bc0fbd  webkitgtk-2.38.0.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.38.3.tar.xz.sums
++md5  1c1cc5eb59273091e228406937b23947  webkitgtk-2.38.3.tar.xz
++sha1  04cb5923d8ac6f435424b74115c3219ec597e9ad  webkitgtk-2.38.3.tar.xz
++sha256  41f001d1ed448c6936b394a9f20e4640eebf83a7f08262df28504f7410604a5a  webkitgtk-2.38.3.tar.xz
  
-+# webp has a (optional) dependency on tiff, so we can't have webp
-+# support in tiff, or that would create a circular dependency.
- TIFF_CONF_OPTS = \
- 	--disable-contrib \
- 	--disable-cxx \
- 	--disable-tests \
-+	--disable-webp \
- 	--without-x
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 336744954e..b1bca7b88a 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- TIFF_DEPENDENCIES = host-pkgconf
+-WEBKITGTK_VERSION = 2.38.0
++WEBKITGTK_VERSION = 2.38.3
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
