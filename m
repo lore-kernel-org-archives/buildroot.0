@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 155A6C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89F29C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC3764ECE4;
-	Tue, 21 Feb 2023 00:00:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC3764ECE4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AFA64ECF8;
+	Tue, 21 Feb 2023 00:00:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AFA64ECF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BodLfkzruBj5; Tue, 21 Feb 2023 00:00:19 +0000 (UTC)
+	with ESMTP id pABsCvEqo2pa; Tue, 21 Feb 2023 00:00:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 746F04EE14;
-	Tue, 21 Feb 2023 00:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 746F04EE14
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 87A821BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3094B4EE44;
+	Tue, 21 Feb 2023 00:00:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3094B4EE44
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C6731BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D922341780
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D922341780
+ by smtp3.osuosl.org (Postfix) with ESMTP id 90752610B0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90752610B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QUJQngpOChsU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ceG2tTWh1Hje for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EEE0641795
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEE0641795
+ by smtp3.osuosl.org (Postfix) with ESMTP id C52E56F95F
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C52E56F95F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD3858648F; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+ id B0D77828C8; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 00:06:00 +0100
+Date: Wed, 4 Jan 2023 17:51:23 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0e8f9b34f336da6c50bb7f854f8b3921b31d3398
-X-Git-Newrev: 33d4c226e582f6c0086431c4d9154e462cb3cf34
+X-Git-Oldrev: 92219bdf2ece2a0ddfbc45691879a03acd5c7442
+X-Git-Newrev: 93036af53fbbd566a800a12fa8979000ea4fa31f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205245.DD3858648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gst1-vaapi: bump
- version to 1.22.0
+Message-Id: <20230220205223.B0D77828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tekui: really disable
+ parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,89 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33d4c226e582f6c0086431c4d9154e462cb3cf34
+commit: https://git.buildroot.net/buildroot/commit/?id=93036af53fbbd566a800a12fa8979000ea4fa31f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update config option names and dependency requirements.
+Commit "c80789c917 tekui: disable parallel build" added TEKUI_MAKE but
+that is not a symbol used by the generic package infra.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Ensure -j1 is passed to the build and install commands by using
+TEKUI_MAKE explicitly.
+
+Fixes:
+http://autobuild.buildroot.net/results/c6cd0d488581013a8b215b0ee2fd8f549a868d4b
+
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash |  4 +--
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 37 +++++++++++++++++++++------
- 2 files changed, 31 insertions(+), 10 deletions(-)
+ package/tekui/tekui.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-index 5baaa4dfb7..6dec625c93 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.20.4.tar.xz.sha256sum
--sha256  ab12596144c05506e9782374c5d2cdfb3069fca89908d6de360d947bb77fd06a  gstreamer-vaapi-1.20.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.22.0.tar.xz.sha256sum
-+sha256  593ccad19f88e5fa29f40f98356c007806bd535828707b1406944d16a90bdff5  gstreamer-vaapi-1.22.0.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index bd6c16be3e..3d9eb91ffb 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_VAAPI_VERSION = 1.20.4
-+GST1_VAAPI_VERSION = 1.22.0
- GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
- GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
- GST1_VAAPI_LICENSE = LGPL-2.1+
-@@ -18,19 +18,40 @@ GST1_VAAPI_DEPENDENCIES += \
- 	libdrm
- 
- GST1_VAAPI_CONF_OPTS += \
--	-Dwith_drm=yes \
--	-Dwith_x11=no \
--	-Dwith_glx=no \
--	-Dwith_wayland=no \
--	-Dwith_egl=no \
-+	-Ddrm=enabled \
-+	-Degl=enabled \
- 	-Dexamples=disabled \
- 	-Dtests=disabled \
- 	-Ddoc=disabled
- 
- ifeq ($(BR2_PACKAGE_GST1_VAAPI_ENCODERS),y)
--GST1_VAAPI_CONF_OPTS += -Dwith_encoders=yes
-+GST1_VAAPI_CONF_OPTS += -Dencoders=enabled
- else
--GST1_VAAPI_CONF_OPTS += -Dwith_encoders=no
-+GST1_VAAPI_CONF_OPTS += -Dencoders=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
-+GST1_VAAPI_CONF_OPTS += -Degl=enabled
-+GST1_VAAPI_DEPENDENCIES += libegl
-+else
-+GST1_VAAPI_CONF_OPTS += -Degl=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+GST1_VAAPI_CONF_OPTS += -Dwayland=enabled
-+else
-+GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+GST1_VAAPI_CONF_OPTS += -Dx11=enabled
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+GST1_VAAPI_CONF_OPTS += -Dglx=enabled
-+else
-+GST1_VAAPI_CONF_OPTS += -Dglx=disabled
-+endif
-+else
-+GST1_VAAPI_CONF_OPTS += -Dx11=disabled -Dglx=disabled
+diff --git a/package/tekui/tekui.mk b/package/tekui/tekui.mk
+index 13000edd3e..3cb7ff51e5 100644
+--- a/package/tekui/tekui.mk
++++ b/package/tekui/tekui.mk
+@@ -59,11 +59,11 @@ endif
  endif
  
- $(eval $(meson-package))
+ define TEKUI_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="/usr" -C $(@D) all
++	$(TARGET_MAKE_ENV) $(TEKUI_MAKE) $(TEKUI_MAKE_OPTS) PREFIX="/usr" -C $(@D) all
+ endef
+ 
+ define TEKUI_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
++	$(TARGET_MAKE_ENV) $(TEKUI_MAKE) $(TEKUI_MAKE_OPTS) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
