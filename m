@@ -1,50 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91465C46467
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 14:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18665C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 356C14059E;
-	Wed,  4 Jan 2023 14:33:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 356C14059E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E0B64148B;
+	Wed,  4 Jan 2023 16:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E0B64148B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zNFKrlLl9HIM; Wed,  4 Jan 2023 14:33:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kBxdG7_rQlAI; Wed,  4 Jan 2023 16:24:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CB9C40B29;
-	Wed,  4 Jan 2023 14:33:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CB9C40B29
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6EEF1BF373
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 14:32:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3596409A4;
+	Wed,  4 Jan 2023 16:24:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3596409A4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CA4BB1BF5DF
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A30FE60AB1
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 14:32:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A30FE60AB1
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4ABC818EC
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:24:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4ABC818EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nqa37chYU9HX for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 14:32:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6A6C60D59
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 14:32:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6A6C60D59
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93EF9874F9; Wed,  4 Jan 2023 14:32:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PD4b930v6GM9 for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 16:24:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5306F818CA
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5306F818CA
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:24:36 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CA17210000F;
+ Wed,  4 Jan 2023 16:24:32 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pD6Z5-0052Z0-QH; Wed, 04 Jan 2023 17:24:31 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 15:30:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 456f18409861a0bee1d553d530cef8bf3482ee7a
-X-Git-Newrev: b5bdcb4cc562942cac592519c710bc67d1decf8e
-X-Patchwork-Hint: ignore
-Message-Id: <20230104143228.93EF9874F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgpg-error: bump to version 1.46
+To: Adrian Perez de Castro <aperez@igalia.com>
+References: <20221004133057.2003750-1-aperez@igalia.com>
+ <20221006095833.1116173-1-aperez@igalia.com>
+ <20221006095833.1116173-4-aperez@igalia.com>
+Date: Wed, 04 Jan 2023 17:24:31 +0100
+In-Reply-To: <20221006095833.1116173-4-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Thu, 6 Oct 2022 12:58:31 +0300")
+Message-ID: <87fscq1d4w.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v3 3/5] package/wpebackend-fdo: bump to
+ version 1.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,56 +65,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5bdcb4cc562942cac592519c710bc67d1decf8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-For the changelog, see:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=log;h=libgpg-error-1.46
+ > This new version contains only small fixes after 1.12.1.
+ > Release notes:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgpg-error/libgpg-error.hash | 6 +++---
- package/libgpg-error/libgpg-error.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ >   https://wpewebkit.org/release/wpebackend-fdo-1.14.0.html
 
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index b29ec37598..ffe27e9d99 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,10 +1,10 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  fe724ed37b4935964059a47b7c64d5f8246659d8  libgpg-error-1.45.tar.bz2
-+sha1  a6e5efdd72e848aab4064e5ef4c6835ba344bcf1  libgpg-error-1.46.tar.bz2
- 
- # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.45.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.46.tar.bz2.sig
- # using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  570f8ee4fb4bff7b7495cff920c275002aea2147e9a1d220c068213267f80a26  libgpg-error-1.45.tar.bz2
-+sha256  b7e11a64246bbe5ef37748de43b245abd72cfcd53c9ae5e7fc5ca59f1c81268d  libgpg-error-1.46.tar.bz2
- # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 252d95ac7f..ab3c7c3bf2 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPG_ERROR_VERSION = 1.45
-+LIBGPG_ERROR_VERSION = 1.46
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
