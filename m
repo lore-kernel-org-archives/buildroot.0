@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06224C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:08:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 782A2C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:08:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F5E14EFCB;
-	Tue, 21 Feb 2023 00:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F5E14EFCB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BCCF4EFAA;
+	Tue, 21 Feb 2023 00:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BCCF4EFAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HK5zX8Bgx226; Tue, 21 Feb 2023 00:08:07 +0000 (UTC)
+	with ESMTP id UEY7j31VPn3W; Tue, 21 Feb 2023 00:08:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 743D54EFAE;
-	Tue, 21 Feb 2023 00:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 743D54EFAE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F6D31BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D27B4EFE5;
+	Tue, 21 Feb 2023 00:08:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D27B4EFE5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 27CA71BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A0AA417B4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A0AA417B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id D8F8761094
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8F8761094
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3XVbomiwYifN for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KcINKQeFcvDH for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFA894179B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFA894179B
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF6E961AD6
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF6E961AD6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C06F786495; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+ id E36EC8648F; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 11:01:01 +0100
+Date: Wed, 4 Jan 2023 22:35:11 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ca97c78ee0e069c70b8fa051012ea02c911dbf2d
-X-Git-Newrev: 6139aeacd847487a296f1c7b8a9d302d678cd8ab
+X-Git-Oldrev: 1757c1fe0556d7339d23c5726fb49cca1c7d7759
+X-Git-Newrev: 935f8774e5b10028c71d85c014380dd67714af5c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205247.C06F786495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mongoose: fix build
- with gcc 4.8
+Message-Id: <20230220205224.E36EC8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-gmmlib: bump
+ version to 22.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6139aeacd847487a296f1c7b8a9d302d678cd8ab
+commit: https://git.buildroot.net/buildroot/commit/?id=935f8774e5b10028c71d85c014380dd67714af5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure with gcc 4.8 raised since bump to
-version 7.8 in commit f9e51e1150f59962577358b3da5c390ca4749291:
-
-/home/buildroot/autobuild/run/instance-2/output-1/build/mongoose-7.8/mongoose.c: In function 'mg_iotest':
-/home/buildroot/autobuild/run/instance-2/output-1/build/mongoose-7.8/mongoose.c:4484:3: error: 'for' loop initial declarations are only allowed in C99 mode
-   for (struct mg_connection *c = mgr->conns; c != NULL; c = c->next) {
-   ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/c538c6d8e87e4e24097c9878ee15083802276505
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongoose/mongoose.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 8d06ed4689..0693f7553a 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -13,7 +13,7 @@ MONGOOSE_INSTALL_STAGING = YES
- # static library
- MONGOOSE_INSTALL_TARGET = NO
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index 9491f23680..d36bd8b9b6 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4adcd33a07617e1c95c4bc6d85bac2e3a881ba19ffcca2857da765248295fd2c  intel-gmmlib-22.3.1.tar.gz
++sha256  f725fbb4291ab67bbc7b31e1a268f523df384667360c931b40144db861be53d7  intel-gmmlib-22.3.2.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 81c455eafd..ffd101808b 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--MONGOOSE_CFLAGS = $(TARGET_CFLAGS)
-+MONGOOSE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MONGOOSE_DEPENDENCIES += openssl
+-INTEL_GMMLIB_VERSION = 22.3.1
++INTEL_GMMLIB_VERSION = 22.3.2
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
