@@ -1,51 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1E70C46467
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7386C53210
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:12:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 624D641794;
-	Wed,  4 Jan 2023 22:12:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 624D641794
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5DCA482015;
+	Wed,  4 Jan 2023 22:12:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DCA482015
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lbtuf4dEcb-S; Wed,  4 Jan 2023 22:12:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QRVRvvj-TlqB; Wed,  4 Jan 2023 22:12:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46FCF418D5;
-	Wed,  4 Jan 2023 22:12:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46FCF418D5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D48FB1BF3A3
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:11:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C73E681FFA;
+	Wed,  4 Jan 2023 22:12:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C73E681FFA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 005E41BF3A3
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB67560AFD
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB67560AFD
+ by smtp2.osuosl.org (Postfix) with ESMTP id D00A840577
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:12:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D00A840577
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oLHHJEjMeZcK for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B7BA60AEF
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B7BA60AEF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 09217875CE; Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DLfh-YG70PnX for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 22:12:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE19B4016C
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DE19B4016C
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 22:12:27 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C021D240002;
+ Wed,  4 Jan 2023 22:12:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pDBzk-005BMD-Sh; Wed, 04 Jan 2023 23:12:24 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 23:07:03 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5fde4abc8d67ac2317b1de7a1b4cde8091f4e3c7
-X-Git-Newrev: 9a4e154c9c583e74846f7ec80ad01d78811722b0
-X-Patchwork-Hint: ignore
-Message-Id: <20230104221108.09217875CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/policycoreutils: drop bogus
- INSTALL_TARGET_LINUX_PAM_CONFS
+To: Martin =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>
+References: <20230103135617.3211318-1-martin@geanix.com>
+ <20230103135617.3211318-2-martin@geanix.com>
+Date: Wed, 04 Jan 2023 23:12:24 +0100
+In-Reply-To: <20230103135617.3211318-2-martin@geanix.com> ("Martin
+ =?utf-8?Q?Hundeb=C3=B8ll=22's?= message of "Tue, 3 Jan 2023 14:56:17
+ +0100")
+Message-ID: <87o7rerltj.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 2/2] bash: bump version to 5.2.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +65,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a4e154c9c583e74846f7ec80ad01d78811722b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit "cb328f77f8 policycoreutils: new package" added a define that is
-never called: POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS.
-
-The build system from the package already install these files to target.
-So just drop the bogus define.
-
-Cc: Clayton Shotwell <clayton.shotwell@collins.com>
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/policycoreutils/policycoreutils.mk | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 60575ac644..8505dbca3f 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -16,10 +16,6 @@ POLICYCOREUTILS_MAKE_OPTS = LDLIBS=$(TARGET_NLS_LIBS)
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- POLICYCOREUTILS_DEPENDENCIES += linux-pam
- POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
--define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
--	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
--	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
--endef
- endif
- 
- ifeq ($(BR2_PACKAGE_AUDIT),y)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIk1hcnRpbiIgPT0gTWFydGluIEh1bmRlYsO4bGwgPG1hcnRpbkBnZWFuaXguY29tPiB3
+cml0ZXM6CgogPiBTaWduZWQtb2ZmLWJ5OiBNYXJ0aW4gSHVuZGViw7hsbCA8bWFydGluQGdlYW5p
+eC5jb20+CgpDb21taXR0ZWQsIHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
