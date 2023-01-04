@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FAA4C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:53:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D8C2C4708D
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:54:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18D656104B;
-	Wed,  4 Jan 2023 16:53:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18D656104B
+	by smtp3.osuosl.org (Postfix) with ESMTP id C866F6108F;
+	Wed,  4 Jan 2023 16:54:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C866F6108F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mSy1XBSVHe6K; Wed,  4 Jan 2023 16:53:36 +0000 (UTC)
+	with ESMTP id uYVEkVHquhX6; Wed,  4 Jan 2023 16:54:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71C3760C0B;
-	Wed,  4 Jan 2023 16:53:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71C3760C0B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4ACE91BF5DF
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:53:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23CAD6107F;
+	Wed,  4 Jan 2023 16:54:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23CAD6107F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4557D1BF5DF
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31B66802CD
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:53:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31B66802CD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2095E41886
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2095E41886
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kab44KoPkiAm for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 16:53:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MTgOZp7oAsvy for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 16:54:03 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3364F81F8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B59841845
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3364F81F8B
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:53:32 +0000 (UTC)
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2B59841845
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:54:02 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9113D1BF204;
- Wed,  4 Jan 2023 16:53:30 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 788901BF207;
+ Wed,  4 Jan 2023 16:54:00 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pD717-0053Qx-Pf; Wed, 04 Jan 2023 17:53:29 +0100
+ id 1pD71b-0053Sa-1E; Wed, 04 Jan 2023 17:53:59 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
- <20230101233653.487175-12-ricardo.martincoski@gmail.com>
-Date: Wed, 04 Jan 2023 17:53:29 +0100
-In-Reply-To: <20230101233653.487175-12-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 1 Jan 2023 20:36:35 -0300")
-Message-ID: <87v8lmxmuu.fsf@dell.be.48ers.dk>
+ <20230101233653.487175-13-ricardo.martincoski@gmail.com>
+Date: Wed, 04 Jan 2023 17:53:59 +0100
+In-Reply-To: <20230101233653.487175-13-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sun, 1 Jan 2023 20:36:36 -0300")
+Message-ID: <87r0waxmu0.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 11/29] Revert "package/zip: install to
- staging"
+Subject: Re: [Buildroot] [PATCH 12/29] boot/ti-k3-r5-loader: drop bogus
+ TI_K3_R5_LOADER_BOARD
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jan Pedersen <jp@jp-embedded.com>, buildroot@buildroot.org
+Cc: Xuanhao Shi <X15000177@gmail.com>, Anand Gadiyar <gadiyar@ti.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -73,16 +74,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > This reverts commit c5b5b5ccabe35e11f0ca8db4361bb3f335fc59fb.
- > Commit "c5b5b5ccab package/zip: install to staging" contains a typo that
- > prevents installing to staging.
- > ZIP_INSTALLING_STAGING_CMDS -> ZIP_INSTALL_STAGING_CMDS
+ > Commit "0189bcb47c boot/ti-k3-r5-loader: new package" added an unused
+ > define.
+ > The define value is calculated from an inexistent option
+ > BR2_TARGET_TI_K3_R5_LOADER_BOARD, so drop the line.
 
- > But the package does not install headers or libraries, only ELF and
- > manual files.
- > So instead of fixing the install to staging, revert the bogus commit.
-
- > Cc: Jan Pedersen <jp@jp-embedded.com>
+ > Cc: Anand Gadiyar <gadiyar@ti.com>
+ > Cc: Xuanhao Shi <X15000177@gmail.com>
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Committed, thanks.
