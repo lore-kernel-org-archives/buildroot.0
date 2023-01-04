@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34D24C46467
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF16C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:30:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D831A6102D;
-	Wed,  4 Jan 2023 11:30:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D831A6102D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AE7761035;
+	Wed,  4 Jan 2023 11:30:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AE7761035
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aSPSuuaCzD1n; Wed,  4 Jan 2023 11:30:37 +0000 (UTC)
+	with ESMTP id fzUxBrYgy8DQ; Wed,  4 Jan 2023 11:30:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1979560F3D;
-	Wed,  4 Jan 2023 11:30:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1979560F3D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E08D01BF2F9
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:29:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9082E61019;
+	Wed,  4 Jan 2023 11:30:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9082E61019
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BFC681BF2F9
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABEF841815
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABEF841815
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B82740AFA
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:29:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B82740AFA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rEDKaHTNTBP2 for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 11:29:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K745lP5EE94V for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 11:29:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 778114182B
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 778114182B
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:29:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82E9D408F1
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 82E9D408F1
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:29:12 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id ED4A640007;
- Wed,  4 Jan 2023 11:29:02 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2B848100002;
+ Wed,  4 Jan 2023 11:29:07 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pD1x8-004XBq-7g; Wed, 04 Jan 2023 12:29:02 +0100
+ id 1pD1xD-004XBx-AT; Wed, 04 Jan 2023 12:29:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Julien Olivain <ju.o@free.fr>
 References: <20221229194729.8085-1-ju.o@free.fr>
  <20221229222533.32242-1-ju.o@free.fr>
- <20221229222533.32242-2-ju.o@free.fr>
-Date: Wed, 04 Jan 2023 12:29:02 +0100
-In-Reply-To: <20221229222533.32242-2-ju.o@free.fr> (Julien Olivain's message
- of "Thu, 29 Dec 2022 23:25:26 +0100")
-Message-ID: <87edsa4jy9.fsf@dell.be.48ers.dk>
+ <20221229222533.32242-3-ju.o@free.fr>
+Date: Wed, 04 Jan 2023 12:29:07 +0100
+In-Reply-To: <20221229222533.32242-3-ju.o@free.fr> (Julien Olivain's message
+ of "Thu, 29 Dec 2022 23:25:27 +0100")
+Message-ID: <87a62y4jy4.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 20/27] configs/freescale_imx8mnevk: update
+Subject: Re: [Buildroot] [PATCH 21/27] configs/freescale_imx8mmevk: update
  codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
