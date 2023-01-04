@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21A15C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C896C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAF5B822EE;
-	Mon, 20 Feb 2023 23:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAF5B822EE
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBCAB826E5;
+	Mon, 20 Feb 2023 23:03:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBCAB826E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bYnVc0JP_LN1; Mon, 20 Feb 2023 23:03:35 +0000 (UTC)
+	with ESMTP id WBLJs2nhRSez; Mon, 20 Feb 2023 23:03:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5E0D8269C;
-	Mon, 20 Feb 2023 23:03:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5E0D8269C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 915881BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FEA2826C1;
+	Mon, 20 Feb 2023 23:03:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FEA2826C1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C7B21BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A2536129F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A2536129F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 29F8041728
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29F8041728
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hiJzF4GRNNvZ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qDX9vd2M11b5 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81461612B7
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81461612B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7997541717
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7997541717
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F937828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ id 6951986495; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:40:12 +0100
+Date: Wed, 4 Jan 2023 22:25:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5ebc1545b2f6f192d5abf2d61d9203c3f2095366
-X-Git-Newrev: 4b869587c6c88a15dc2ecf6c417896de18501a17
+X-Git-Oldrev: f6e88fff91dd4702c725f47fb4fdd1a00b228f64
+X-Git-Newrev: f1f5e9f15063443bae1b80af072c7a5b0ab91d24
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.7F937828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pip: bump to
- version 22.3.1
+Message-Id: <20230220205224.6951986495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/readline: bump to
+ version 8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b869587c6c88a15dc2ecf6c417896de18501a17
+commit: https://git.buildroot.net/buildroot/commit/?id=f1f5e9f15063443bae1b80af072c7a5b0ab91d24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pip/python-pip.hash | 4 ++--
- package/python-pip/python-pip.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/readline/readline.hash | 4 ++--
+ package/readline/readline.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
-index d1442ca39d..b41ce47d4c 100644
---- a/package/python-pip/python-pip.hash
-+++ b/package/python-pip/python-pip.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pip/json
--md5  f0dd02265e7ccd2f8758c840fba64810  pip-22.3.tar.gz
--sha256  8182aec21dad6c0a49a2a3d121a87cd524b950e0b6092b181625f07ebdde7530  pip-22.3.tar.gz
-+md5  996f58a94fe0b8b82b6795c42bd171ba  pip-22.3.1.tar.gz
-+sha256  65fd48317359f3af8e593943e6ae1506b66325085ea64b706a998c6e83eeaf38  pip-22.3.1.tar.gz
- # Locally computed sha256 checksums
- sha256  634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index 0f2c5d8e02..8cf3aaa3ec 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/readline/readline.hash b/package/readline/readline.hash
+index b0530a2d72..627746d821 100644
+--- a/package/readline/readline.hash
++++ b/package/readline/readline.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature from
+-# https://ftp.gnu.org/gnu/readline/readline-8.1.2.tar.gz.sig
+-sha256  7589a2381a8419e68654a47623ce7dfcb756815c8fee726b98f90bf668af7bc6  readline-8.1.2.tar.gz
++# https://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz.sig
++sha256  3feb7171f16a84ee82ca18a36d7b9be109a52c04f492a053331d7d1095007c35  readline-8.2.tar.gz
+ 
+ # Hash for license file
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index b1fd181b78..66812dee77 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PIP_VERSION = 22.3
-+PYTHON_PIP_VERSION = 22.3.1
- PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
--PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/f8/08/7f92782ff571c7c7cb6c5eeb8ebbb1f68cb02bdb24e55c5de4dd9ce98bc3
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/a3/50/c4d2727b99052780aad92c7297465af5fe6eec2dbae490aa9763273ffdc1
- PYTHON_PIP_SETUP_TYPE = setuptools
- PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
+-READLINE_VERSION = 8.1.2
++READLINE_VERSION = 8.2
+ READLINE_SITE = $(BR2_GNU_MIRROR)/readline
+ READLINE_INSTALL_STAGING = YES
+ READLINE_DEPENDENCIES = ncurses host-autoconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
