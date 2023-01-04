@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A4D6C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC785C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 16:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 00C2F6108C;
-	Wed,  4 Jan 2023 16:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00C2F6108C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iwNoV1dSDpC0; Wed,  4 Jan 2023 16:55:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5802161089;
-	Wed,  4 Jan 2023 16:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5802161089
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D4B41BF95E
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5973481FAC
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5973481FAC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A20E81FD5;
+	Wed,  4 Jan 2023 16:55:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A20E81FD5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u6JjBkoekjZq for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gRqxFD-i5-5a; Wed,  4 Jan 2023 16:55:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB47481FB1;
+	Wed,  4 Jan 2023 16:55:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB47481FB1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ABF381BF5DF
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8622941894
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 16:54:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8622941894
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLlBIULfTePN for <buildroot@lists.busybox.net>;
  Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8065E81F99
+ by smtp4.osuosl.org (Postfix) with ESMTP id 992594188E
  for <buildroot@buildroot.org>; Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8065E81F99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 992594188E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6EF6087569; Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
+ id 8631E87567; Wed,  4 Jan 2023 16:54:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 17:45:11 +0100
+Date: Wed, 4 Jan 2023 17:46:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa35d8d071faf68abc4538be2a3bb636ea6b4a2c
-X-Git-Newrev: 7aeeb632d66dd59e0dbcff8ad6fee724c4e829d3
+X-Git-Oldrev: fa581bb3e6b45da2b7a0cfb9e5d6f869a7cd9b05
+X-Git-Newrev: ee73336da98a7de04301a90c9b5a881761274a47
 X-Patchwork-Hint: ignore
-Message-Id: <20230104165453.6EF6087569@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmng: fix optional dependency to
- lcms2
+Message-Id: <20230104165453.8631E87567@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ima-evm-utils: really install to
+ staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aeeb632d66dd59e0dbcff8ad6fee724c4e829d3
+commit: https://git.buildroot.net/buildroot/commit/?id=ee73336da98a7de04301a90c9b5a881761274a47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-"0ce9b533e3 libmng: new package" introduced a typo that makes the
-optional dependency to lcms2 ineffective.
+Commit "8229196d41 package/ima-evm-utils: new package" added
+IMA_EVM_UTILS_INSTALL_STAGING_CMDS without enabling
+IMA_EVM_UTILS_INSTALL_STAGING, so currently the package is not installed
+to staging.
 
-Fix the typo LIBMNG_DEPDENDENCIES -> LIBMNG_DEPENDENCIES.
+Enable installing to staging.
 
+Cc: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmng/libmng.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ima-evm-utils/ima-evm-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libmng/libmng.mk b/package/libmng/libmng.mk
-index 090fe18380..8ffd74c05b 100644
---- a/package/libmng/libmng.mk
-+++ b/package/libmng/libmng.mk
-@@ -14,7 +14,7 @@ LIBMNG_LICENSE = libmng license
- LIBMNG_LICENSE_FILES = LICENSE
+diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
+index 7ee34d5e1a..01984402ce 100644
+--- a/package/ima-evm-utils/ima-evm-utils.mk
++++ b/package/ima-evm-utils/ima-evm-utils.mk
+@@ -8,6 +8,7 @@ IMA_EVM_UTILS_VERSION = 1.4
+ IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
+ IMA_EVM_UTILS_LICENSE = GPL-2.0
+ IMA_EVM_UTILS_LICENSE_FILES = COPYING
++IMA_EVM_UTILS_INSTALL_STAGING = YES
+ IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl tpm2-tss
  
- ifeq ($(BR2_PACKAGE_LCMS2),y)
--LIBMNG_DEPDENDENCIES += lcms2
-+LIBMNG_DEPENDENCIES += lcms2
- else
- LIBMNG_CONF_OPTS += --without-lcms2
- endif
+ # Tarball doesn't contain configure
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
