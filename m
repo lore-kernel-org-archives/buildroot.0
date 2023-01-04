@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BEA5C4708E
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 13:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C1CAC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 13:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0D49416C6;
-	Wed,  4 Jan 2023 13:10:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0D49416C6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D53681BFA;
+	Wed,  4 Jan 2023 13:12:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D53681BFA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l9yKDjQGYepQ; Wed,  4 Jan 2023 13:10:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SAEXOehcTu-P; Wed,  4 Jan 2023 13:12:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CB8940985;
-	Wed,  4 Jan 2023 13:10:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CB8940985
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7E7C21BF35B
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:10:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 288568197D;
+	Wed,  4 Jan 2023 13:12:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 288568197D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FEAA1BF35B
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:12:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5AAEF605F6
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:10:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AAEF605F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 494414012B
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 13:12:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 494414012B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NtQe02RwGwfj for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 13:10:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B0WVqpwyXWui for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 13:12:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21F5E60B94
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 13:10:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21F5E60B94
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BA2A400F1
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 13:12:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BA2A400F1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11F75874A9; Wed,  4 Jan 2023 13:10:39 +0000 (UTC)
+ id 1B676874AD; Wed,  4 Jan 2023 13:12:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 13:47:10 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 0ffa09c66f2590fb98885b3d3041ffd443db68df
-X-Git-Newrev: 5a4ea7079fae490b6eb089f56ab1a8e55a9350d1
+Date: Wed, 4 Jan 2023 13:47:05 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 315d6f3d34c5ab45e82fc6db4eb520ba866d2e87
+X-Git-Newrev: 1bc64cfe4de2ebe81b66252165f2bf5ce4291b8e
 X-Patchwork-Hint: ignore
-Message-Id: <20230104131039.11F75874A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] linux: fix builds for
+Message-Id: <20230104131210.1B676874AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] linux: fix builds for
  kernels < 5.6 and host-gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a4ea7079fae490b6eb089f56ab1a8e55a9350d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1bc64cfe4de2ebe81b66252165f2bf5ce4291b8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 During a linux-backports update, it was found that kernel v3.10.108 was
 failing to compile. See:
@@ -102,7 +102,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 14 insertions(+)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 6b547a68ed..7645b5f507 100644
+index 1b54fb561d..818e6f8b99 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
 @@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
