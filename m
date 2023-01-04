@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A76B9C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:08:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46230C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:08:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47AF9410C6;
-	Tue, 21 Feb 2023 00:08:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47AF9410C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1AC042AAB;
+	Tue, 21 Feb 2023 00:08:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1AC042AAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z6lfSWMvdAwE; Tue, 21 Feb 2023 00:08:35 +0000 (UTC)
+	with ESMTP id lvKK99ZaFn2W; Tue, 21 Feb 2023 00:08:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E60104258E;
-	Tue, 21 Feb 2023 00:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E60104258E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 160EC1BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B135A42D19;
+	Tue, 21 Feb 2023 00:08:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B135A42D19
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2FA081BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6106417B6
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6106417B6
+ by smtp3.osuosl.org (Postfix) with ESMTP id F183D61AD6
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F183D61AD6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Scnifgm66yJo for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PHwEoCvAbSHV for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CDD8841788
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDD8841788
+ by smtp3.osuosl.org (Postfix) with ESMTP id 309D66F9FC
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 309D66F9FC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CBA5C81979; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+ id 1E0FF8648F; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 11:01:01 +0100
+Date: Wed, 4 Jan 2023 22:51:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6139aeacd847487a296f1c7b8a9d302d678cd8ab
-X-Git-Newrev: 3c7fece853f3def9a425eccc384b9dacb1010051
+X-Git-Oldrev: 98613ad592828a3626400f52a1504fe5234fc7f1
+X-Git-Newrev: 5424bd0a827ef2a36707b5c12a11251169622160
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205247.CBA5C81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gpsd: bump to version
- 3.25
+Message-Id: <20230220205225.1E0FF8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/amarula_vyasa_rk3288_defconfig: bump to Linux version 6.1.2 and
+ U-Boot 2022.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,95 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c7fece853f3def9a425eccc384b9dacb1010051
+commit: https://git.buildroot.net/buildroot/commit/?id=5424bd0a827ef2a36707b5c12a11251169622160
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop patch (not needed anymore)
-
-https://gitlab.com/gpsd/gpsd/-/blob/release-3.25/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Yann E. MORIN <yann.morin@orange.com>
-Acked-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gpsd/0001-gpsctl-fix-yodaification.patch | 44 ------------------------
- package/gpsd/gpsd.hash                           |  2 +-
- package/gpsd/gpsd.mk                             |  2 +-
- 3 files changed, 2 insertions(+), 46 deletions(-)
+ configs/amarula_vyasa_rk3288_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gpsd/0001-gpsctl-fix-yodaification.patch b/package/gpsd/0001-gpsctl-fix-yodaification.patch
-deleted file mode 100644
-index 753ff300eb..0000000000
---- a/package/gpsd/0001-gpsctl-fix-yodaification.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 72ae7ce646792b07061cbbb31ed47f55a1d2422c Mon Sep 17 00:00:00 2001
--Message-Id: <72ae7ce646792b07061cbbb31ed47f55a1d2422c.1663075350.git.yann.morin@orange.com>
--From: "Yann E. MORIN" <yann.morin@orange.com>
--Date: Tue, 13 Sep 2022 15:10:48 +0200
--Subject: [PATCH] gpsctl: fix yodaification
--
--Commit d5a672abd98a (gpsctl.c: Style tweaks.  Yoda style, braces, //
--comments.) claimed "No functional changes", but mis-treated a comparison
--when it was converted to yoda-style (simplified diff):
--
--    -    if (write(gpsdata->gps_fd, buf, strlen(buf)) <= 0) {
--    +    if (0 <= write(gpsdata->gps_fd, buf, strlen(buf))) {
--
--As one may notice, the comparison operator was not reversed while the
--operands were.
--
--This got silently fixed in commit 3219ab9f6a89 (gpsctl.c: First cut at
----ship sending commands to running gpsd.) but this is completely
--unrelated.
--
--Fix that comparison.
--
--Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
--Upstream status: not applicable as already fixed.
-----
-- gpsctl.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/gpsctl.c b/gpsctl.c
--index cb342af87..ef59a6622 100644
----- a/gpsctl.c
--+++ b/gpsctl.c
--@@ -96,7 +96,7 @@ static bool gps_query(struct gps_data_t *gpsdata,
--     if ('\n' != buf[strnlen(buf, sizeof(buf) - 1) - 1]) {
--         (void)strlcat(buf, "\n", sizeof(buf));
--     }
---    if (0 <= write(gpsdata->gps_fd, buf, strnlen(buf, sizeof(buf)))) {
--+    if (0 >= write(gpsdata->gps_fd, buf, strnlen(buf, sizeof(buf)))) {
--         GPSD_LOG(LOG_ERROR, &context.errout, "gps_query(), write failed\n");
--         return false;
--     }
---- 
--2.25.1
--
-diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
-index f415c3af0f..15e1181ed9 100644
---- a/package/gpsd/gpsd.hash
-+++ b/package/gpsd/gpsd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  00ee13f615655284874a661be13553abe66128e6deb5cd648af9bc0cb345fe5c  gpsd-3.24.tar.gz
-+sha256  b368b6a305e3f7a6382d23a0cbfc1d78923060b6b7f54cf7987a73c7b4a9afc2  gpsd-3.25.tar.gz
- sha256  fdf339997bbca9eaf507476b82fbcac608fc39a3d89b86b51e16db4c9f933716  COPYING
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 961ebde649..d7425513fd 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
+index ff96019e1e..7976537225 100644
+--- a/configs/amarula_vyasa_rk3288_defconfig
++++ b/configs/amarula_vyasa_rk3288_defconfig
+@@ -3,14 +3,14 @@ BR2_arm=y
+ BR2_cortex_a17=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
--GPSD_VERSION = 3.24
-+GPSD_VERSION = 3.25
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-2-Clause
- GPSD_LICENSE_FILES = COPYING
+-# Linux headers same as kernel, a 5.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # Bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="vyasa-rk3288"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
