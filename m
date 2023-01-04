@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53510C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9787EC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07AA481FBA;
-	Mon, 20 Feb 2023 23:03:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07AA481FBA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33139812D8;
+	Mon, 20 Feb 2023 23:03:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33139812D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yZ774npKKo57; Mon, 20 Feb 2023 23:03:10 +0000 (UTC)
+	with ESMTP id 9u7cN4I6BDAn; Mon, 20 Feb 2023 23:03:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20A2381F31;
-	Mon, 20 Feb 2023 23:03:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20A2381F31
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 818381BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DE3E812F4;
+	Mon, 20 Feb 2023 23:03:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DE3E812F4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 99DCE1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32F80612C4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32F80612C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id D29EB41727
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D29EB41727
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KJK_IQPwKZro for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NmO-B2N1ycUE for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66FDB6129F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66FDB6129F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35F40411A1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35F40411A1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5472B828C8; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ id 30F5D86495; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 11:43:11 +0100
+Date: Wed, 4 Jan 2023 22:23:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7aeb6c654e16863dc9d7f0d5b92414b52669299f
-X-Git-Newrev: 48a3fc3f361f2720007f7fd3851fab0cfa25f092
+X-Git-Oldrev: 6bee8635d90f3f9e3d04e03a9db2f37a387e077c
+X-Git-Newrev: 848450f32bd3b877a7529f72e23c1d967f717552
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.5472B828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
- version to 2.9.0
+Message-Id: <20230220205224.30F5D86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lsof: bump to version
+ 4.96.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48a3fc3f361f2720007f7fd3851fab0cfa25f092
+commit: https://git.buildroot.net/buildroot/commit/?id=848450f32bd3b877a7529f72e23c1d967f717552
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://github.com/timescale/timescaledb/blob/2.9.0/CHANGELOG.md
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
+ package/lsof/lsof.hash | 2 +-
+ package/lsof/lsof.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index f546b17d0a..a970ffa1ad 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
+diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
+index 9649e24f7f..29cf443a24 100644
+--- a/package/lsof/lsof.hash
++++ b/package/lsof/lsof.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  22a057c4472d23bf08778932e391f38f350ef0307cf99fb8e279c8245667d3e9  timescaledb-2.8.1.tar.gz
-+sha256  666f5427cb036500bca731d24d845285299cff82f576ad4474f85da682b2ee78  timescaledb-2.9.0.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 659d07bd0c..7530368498 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
+-sha256  2753fc01452a3d2ee665e8365afdac0e9683197f3ec06231aa684a48b286d11c  lsof-4.96.3.tar.gz
++sha256  e9030af1123ff052ab69e12ef55b8a17dc47ac4bccfba85ee1ca1f31acf29607  lsof-4.96.5.tar.gz
+ sha256  32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1  dialects/linux/dproto.h
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 8c8c46c4ed..fd5887141b 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TIMESCALEDB_VERSION = 2.8.1
-+TIMESCALEDB_VERSION = 2.9.0
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+-LSOF_VERSION = 4.96.3
++LSOF_VERSION = 4.96.5
+ LSOF_SITE = $(call github,lsof-org,lsof,$(LSOF_VERSION))
+ LSOF_LICENSE = lsof license
+ # License is repeated in each file, this is a relatively small one.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
