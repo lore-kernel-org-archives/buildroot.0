@@ -1,59 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 590B9C46467
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:10:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2548C46467
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 22:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 002EF40577;
-	Wed,  4 Jan 2023 22:10:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 002EF40577
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8480681DF1;
+	Wed,  4 Jan 2023 22:11:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8480681DF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uxt0ZaLabUwF; Wed,  4 Jan 2023 22:10:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nBnRS7RyNs-R; Wed,  4 Jan 2023 22:11:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D2C7400D9;
-	Wed,  4 Jan 2023 22:10:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D2C7400D9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1C22E1BF3A3
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:10:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8A2981C04;
+	Wed,  4 Jan 2023 22:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A2981C04
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C52F1BF3A3
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:11:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EB65660D74
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:10:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB65660D74
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07670409FD
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 22:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07670409FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GdzWQboUWAS5 for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 22:10:20 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D46260AB0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D46260AB0
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 22:10:19 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 097FC240005;
- Wed,  4 Jan 2023 22:10:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pDBxh-005BGG-2e; Wed, 04 Jan 2023 23:10:17 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ipfyXxAIllL8 for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13C15409A9
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 22:11:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13C15409A9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F0DE9875CC; Wed,  4 Jan 2023 22:11:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
- <20230101233653.487175-25-ricardo.martincoski@gmail.com>
-Date: Wed, 04 Jan 2023 23:10:17 +0100
-In-Reply-To: <20230101233653.487175-25-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 1 Jan 2023 20:36:48 -0300")
-Message-ID: <87sfgqrlx2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 24/29] package/wpa_supplicant: drop dangling
- WPA_SUPPLICANT_{LDFLAGS, MAKE_ENV}
+To: buildroot@buildroot.org
+Date: Wed, 4 Jan 2023 23:06:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1ad6b4e10e4538532c00f8c04363da64f19c313a
+X-Git-Newrev: 5fde4abc8d67ac2317b1de7a1b4cde8091f4e3c7
+X-Patchwork-Hint: ignore
+Message-Id: <20230104221107.F0DE9875CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lrzsz: drop bogus LRZSZ_BUILD_HOOKS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +56,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5fde4abc8d67ac2317b1de7a1b4cde8091f4e3c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Commit "0340b45da0 wpa_supplicant: bump to version 1.0" from 2012
- > converted the package to use the generic infra, but added a bogus
- > WPA_SUPPLICANT_LDFLAGS end left a dangling WPA_SUPPLICANT_MAKE_ENV.
+Commit "4f3f291a3b lrzsz: convert to autotools infrastructure" converted
+the package to use autotools infra but added a define that is never
+called.
 
- > Drop the symbols that are not used since 2012.
+Drop the bogus define.
 
- > Cc: Matt Weber <matthew.weber@collins.com>
- > Cc: Sergey Matyukevich <geomatsi@gmail.com>
- > Cc: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lrzsz/lrzsz.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
+index 45c88619e0..3897975d73 100644
+--- a/package/lrzsz/lrzsz.mk
++++ b/package/lrzsz/lrzsz.mk
+@@ -18,10 +18,6 @@ define LRZSZ_POST_CONFIGURE_HOOKS
+ 	$(SED) "s~\(#define ENABLE_SYSLOG.*\)~/* \1 */~;" $(@D)/config.h
+ endef
+ 
+-define LRZSZ_BUILD_HOOKS
+-	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" prefix="$(TARGET_DIR)" -C $(@D)
+-endef
+-
+ define LRZSZ_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/src/lrz $(TARGET_DIR)/usr/bin/rz
+ 	$(INSTALL) -m 0755 -D $(@D)/src/lsz $(TARGET_DIR)/usr/bin/sz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
