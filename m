@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1AAEC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8BA2C46467
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jan 2023 11:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BB8581FB2;
-	Wed,  4 Jan 2023 11:49:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BB8581FB2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CF4A40238;
+	Wed,  4 Jan 2023 11:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CF4A40238
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vrDMFhU6IG5T; Wed,  4 Jan 2023 11:49:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A36440361;
+	Wed,  4 Jan 2023 11:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A36440361
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D0781BF8C7
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:40:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFEDA81F8B
+ for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:40:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFEDA81F8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rpnzQMT85pE4; Wed,  4 Jan 2023 11:49:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9068881FAC;
-	Wed,  4 Jan 2023 11:49:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9068881FAC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 557241BF2F9
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:40:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 997CD60A64
- for <buildroot@lists.busybox.net>; Wed,  4 Jan 2023 11:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 997CD60A64
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qkAA8ZFkJB5h for <buildroot@lists.busybox.net>;
- Wed,  4 Jan 2023 11:40:44 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gXthP2Ba0GM3 for <buildroot@lists.busybox.net>;
+ Wed,  4 Jan 2023 11:40:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1EEE560F3D
- for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:40:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EEE560F3D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9401C81F84
+ for <buildroot@buildroot.org>; Wed,  4 Jan 2023 11:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9401C81F84
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D072874A4; Wed,  4 Jan 2023 11:40:44 +0000 (UTC)
+ id 836C0874A7; Wed,  4 Jan 2023 11:40:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 12:19:48 +0100
+Date: Wed, 4 Jan 2023 12:13:37 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ce5c00f318399b8f8a32c537bf3faa75112cd77a
-X-Git-Newrev: 315d6f3d34c5ab45e82fc6db4eb520ba866d2e87
+X-Git-Oldrev: bfea3468d0bba9bc99140d3f36dd1f0f835f28fb
+X-Git-Newrev: c0a42b756c72c420039f8f18db55c01c7b8e574e
 X-Patchwork-Hint: ignore
-Message-Id: <20230104114044.1D072874A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] configs/imx8mqevk: update
- codeaurora URLs to github
+Message-Id: <20230104114043.836C0874A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/x11r7/xdriver_xf86-video-imx-viv: update codeaurora URLs to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=315d6f3d34c5ab45e82fc6db4eb520ba866d2e87
+commit: https://git.buildroot.net/buildroot/commit/?id=c0a42b756c72c420039f8f18db55c01c7b8e574e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 NXP moved all its open source code repositories from Code Aurora Forum
@@ -94,42 +94,42 @@ Note: this commit does not change the component version. Only the
 download URL is updated. The archive content is expected to be the
 same.
 
-Note 2: this commit updates the U-Boot and ATF download urls.
-The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
+Note 2: the _SITE_METHOD is also changed from "git" to the default
+"wget", for faster downloads. This is why the package hash has
+changed.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1e96e3c95452aa69dbaad2597146c6da520299fd)
+(cherry picked from commit a5bdaf71c7c53655b5526f1fb6973c8fe98da8db)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/imx8mqevk_defconfig | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash   | 2 +-
+ package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/configs/imx8mqevk_defconfig b/configs/imx8mqevk_defconfig
-index 73f3f3dcc5..943a479932 100644
---- a/configs/imx8mqevk_defconfig
-+++ b/configs/imx8mqevk_defconfig
-@@ -18,16 +18,14 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,rel_imx_5.4.24_2.1.0)/imx-atf-rel_imx_5.4.24_2.1.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,rel_imx_5.4.24_2.1.0)/uboot-imx-rel_imx_5.4.24_2.1.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+index 5873b4b11c..b79c236478 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  638a8aa8b64f860900d003527529689bc342d18ff5e41a9e1750884544898e67  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga-br1.tar.gz
++sha256  8fe1f57334b22926d4ff3b0b9fdf50af835a99cdfd0ad3ba6a604b226b723e89  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga.tar.gz
+ sha256  9d3e373f0440cc0c58853e963636a7c1ffda9308ec5f30ebe9adfb9c16a8a1e4  COPYING-MIT
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index 0913427542..3b346f323a 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_4.9.x_1.0.0_ga
+-XDRIVER_XF86_VIDEO_IMX_VIV_SITE = https://source.codeaurora.org/external/imx/xf86-video-imx-vivante
+-XDRIVER_XF86_VIDEO_IMX_VIV_SITE_METHOD = git
++XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(call github,nxp-imx,xf86-video-imx-vivante,$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION))
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv imx-gpu-g2d xserver_xorg-server \
+ 	xorgproto libdrm
+ XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
