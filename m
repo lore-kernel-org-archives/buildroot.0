@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF700C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84338C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C2E74EEB7;
-	Tue, 21 Feb 2023 00:15:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C2E74EEB7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 319794F164;
+	Tue, 21 Feb 2023 00:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 319794F164
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oRDXYEM-C8tk; Tue, 21 Feb 2023 00:15:38 +0000 (UTC)
+	with ESMTP id sxOggae5j5AH; Tue, 21 Feb 2023 00:15:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 532244F156;
-	Tue, 21 Feb 2023 00:15:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 532244F156
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 28A3F1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D86DC4F052;
+	Tue, 21 Feb 2023 00:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D86DC4F052
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 156A41BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40DAA417C1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40DAA417C1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 518FA6FADC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 518FA6FADC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S9F7DZVo1LqV for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5d0LffGl2OCR for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 72731417BC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72731417BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D5516FABC
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D5516FABC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6115F86495; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+ id 87F728648F; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 14:22:38 +0100
+Date: Thu, 5 Jan 2023 10:25:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 29c9b4435503d1b3130ce37dcab88c89156b1481
-X-Git-Newrev: abcecd737b198e8a1a48bf4533e5c2b8de8b8cf4
+X-Git-Oldrev: d7d48b9840d242acf1b8bfb141c89904e53301fe
+X-Git-Newrev: 01518e5660366be41e6a8e0a0f2b487d7cdf48a2
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205249.6115F86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] toolchain/toolchain-buildroot:
- add comment about using virtual package infra
+Message-Id: <20230220205226.87F728648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/janus-gateway: bump to
+ version 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abcecd737b198e8a1a48bf4533e5c2b8de8b8cf4
+commit: https://git.buildroot.net/buildroot/commit/?id=01518e5660366be41e6a8e0a0f2b487d7cdf48a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit "9a8ec9195c toolchain/toolchain-buildroot: migrate to virtual
-package infrastructure" made the packages toolchain and
-toolchain-buildroot to use the virtual package infra even they being
-generic packages.
-This works because on package/pkg-virtual.mk when a package do not
-define neither _PROVIDES_ or _HAS_ symbols, only _IS_VIRTUAL is set to
-YES and _VERSION and _SOURCE are set to empty before relaying the call
-to inner-generic-package.
+https://github.com/meetecho/janus-gateway/blob/v1.1.1/CHANGELOG.md
 
-Add a comment explaining why the virtual package infra is used in these
-cases.
-
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-buildroot/toolchain-buildroot.mk | 3 +++
- toolchain/toolchain/toolchain.mk                     | 3 +++
- 2 files changed, 6 insertions(+)
+ package/janus-gateway/janus-gateway.hash | 2 +-
+ package/janus-gateway/janus-gateway.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-index b30cc332d2..6da64b7c77 100644
---- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-@@ -14,4 +14,7 @@ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 5d73ede87f..7a87ae737a 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5b8a7304761783585bfa8db7471bf8c393fa2a0ffc346747afadc0c1a9d213f5  janus-gateway-1.0.3.tar.gz
++sha256  bb83c19d6137e39833e8eb2b1deeecb33b5d19d4f503d51703bdcc478c447940  janus-gateway-1.1.1.tar.gz
+ sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 9a74350b2c..0d906f1b62 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
-+# Not really a virtual package, but we use the virtual package infra here so
-+# both the build log and build directory look nicer (toolchain-buildroot-virtual
-+# instead of toolchain-buildroot-undefined)
- $(eval $(virtual-package))
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 18f1dbea1a..ac60a7b248 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -47,4 +47,7 @@ endef
- TOOLCHAIN_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_GLIBC_COPY_NSSWITCH_FILE
- endif
- 
-+# Not really a virtual package, but we use the virtual package infra here so
-+# both the build log and build directory look nicer (toolchain-virtual instead
-+# of toolchain-undefined)
- $(eval $(virtual-package))
+-JANUS_GATEWAY_VERSION = 1.0.3
++JANUS_GATEWAY_VERSION = 1.1.1
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
