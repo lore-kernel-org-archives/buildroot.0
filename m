@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C59CC3DA7A
-	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 09:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0BDAC3DA7D
+	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 09:27:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 308EA41940;
-	Thu,  5 Jan 2023 09:27:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 308EA41940
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CB7E60AAF;
+	Thu,  5 Jan 2023 09:27:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CB7E60AAF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 27znE85gO1Wd; Thu,  5 Jan 2023 09:27:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HRnjZSXUa1ys; Thu,  5 Jan 2023 09:27:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 200B5418BE;
-	Thu,  5 Jan 2023 09:27:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 200B5418BE
+	by smtp3.osuosl.org (Postfix) with ESMTP id B456660BD1;
+	Thu,  5 Jan 2023 09:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B456660BD1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 75A2B1BF964
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:26:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 853BA1BF3DC
+ for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:26:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3AF874013F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C8E74021C
  for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:26:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AF874013F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C8E74021C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BZW-0xfG-JLe for <buildroot@lists.busybox.net>;
+ with ESMTP id hmJCrT4a8V2l for <buildroot@lists.busybox.net>;
  Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7063E4021C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E9E9401CA
  for <buildroot@buildroot.org>; Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7063E4021C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E9E9401CA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 606D487625; Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
+ id 4C4B087629; Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Jan 2023 10:25:14 +0100
+Date: Thu, 5 Jan 2023 10:21:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d7d48b9840d242acf1b8bfb141c89904e53301fe
-X-Git-Newrev: 01518e5660366be41e6a8e0a0f2b487d7cdf48a2
+X-Git-Oldrev: 2b249eca85819761140f670cc52dcf8fb09ef5b3
+X-Git-Newrev: 60b4b04dc23d32641981df984f383c1bb3078f8c
 X-Patchwork-Hint: ignore
-Message-Id: <20230105092626.606D487625@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janus-gateway: bump to version
- 1.1.1
+Message-Id: <20230105092626.4C4B087629@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
+ version to 21.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,170 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01518e5660366be41e6a8e0a0f2b487d7cdf48a2
+commit: https://git.buildroot.net/buildroot/commit/?id=60b4b04dc23d32641981df984f383c1bb3078f8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/meetecho/janus-gateway/blob/v1.1.1/CHANGELOG.md
+Fixes a regression in XTestSwapFakeInput() introduced in the fix for
+CVE-2022-46340 in 21.1.5.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Removed patches included in upstream release.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: mention regression fix]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/janus-gateway/janus-gateway.hash | 2 +-
- package/janus-gateway/janus-gateway.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...etCountedString-against-request-length-at.patch | 35 -------------
+ ...some-possible-memleaks-in-XkbGetKbdByName.patch | 60 ----------------------
+ .../xserver_xorg-server/xserver_xorg-server.hash   |  6 +--
+ .../xserver_xorg-server/xserver_xorg-server.mk     |  8 +--
+ 4 files changed, 4 insertions(+), 105 deletions(-)
 
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index 5d73ede87f..7a87ae737a 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5b8a7304761783585bfa8db7471bf8c393fa2a0ffc346747afadc0c1a9d213f5  janus-gateway-1.0.3.tar.gz
-+sha256  bb83c19d6137e39833e8eb2b1deeecb33b5d19d4f503d51703bdcc478c447940  janus-gateway-1.1.1.tar.gz
- sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 9a74350b2c..0d906f1b62 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
+diff --git a/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
+deleted file mode 100644
+index 8c1869504c..0000000000
+--- a/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 11beef0b7f1ed290348e45618e5fa0d2bffcb72e Mon Sep 17 00:00:00 2001
+-From: Peter Hutterer <peter.hutterer@who-t.net>
+-Date: Tue, 5 Jul 2022 12:06:20 +1000
+-Subject: [PATCH] xkb: proof GetCountedString against request length attacks
+-
+-GetCountedString did a check for the whole string to be within the
+-request buffer but not for the initial 2 bytes that contain the length
+-field. A swapped client could send a malformed request to trigger a
+-swaps() on those bytes, writing into random memory.
+-
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- xkb/xkb.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/xkb/xkb.c b/xkb/xkb.c
+-index f42f59ef3..1841cff26 100644
+---- a/xkb/xkb.c
+-+++ b/xkb/xkb.c
+-@@ -5137,6 +5137,11 @@ _GetCountedString(char **wire_inout, ClientPtr client, char **str)
+-     CARD16 len;
+- 
+-     wire = *wire_inout;
+-+
+-+    if (client->req_len <
+-+        bytes_to_int32(wire + 2 - (char *) client->requestBuffer))
+-+        return BadValue;
+-+
+-     len = *(CARD16 *) wire;
+-     if (client->swapped) {
+-         swaps(&len);
+--- 
+-2.30.2
+-
+diff --git a/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
+deleted file mode 100644
+index 39afec0988..0000000000
+--- a/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 18f91b950e22c2a342a4fbc55e9ddf7534a707d2 Mon Sep 17 00:00:00 2001
+-From: Peter Hutterer <peter.hutterer@who-t.net>
+-Date: Wed, 13 Jul 2022 11:23:09 +1000
+-Subject: [PATCH] xkb: fix some possible memleaks in XkbGetKbdByName
+-
+-GetComponentByName returns an allocated string, so let's free that if we
+-fail somewhere.
+-
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- xkb/xkb.c | 26 ++++++++++++++++++++------
+- 1 file changed, 20 insertions(+), 6 deletions(-)
+-
+-diff --git a/xkb/xkb.c b/xkb/xkb.c
+-index 4692895db..b79a269e3 100644
+---- a/xkb/xkb.c
+-+++ b/xkb/xkb.c
+-@@ -5935,18 +5935,32 @@ ProcXkbGetKbdByName(ClientPtr client)
+-     xkb = dev->key->xkbInfo->desc;
+-     status = Success;
+-     str = (unsigned char *) &stuff[1];
+--    if (GetComponentSpec(&str, TRUE, &status))  /* keymap, unsupported */
+--        return BadMatch;
+-+    {
+-+        char *keymap = GetComponentSpec(&str, TRUE, &status);  /* keymap, unsupported */
+-+        if (keymap) {
+-+            free(keymap);
+-+            return BadMatch;
+-+        }
+-+    }
+-     names.keycodes = GetComponentSpec(&str, TRUE, &status);
+-     names.types = GetComponentSpec(&str, TRUE, &status);
+-     names.compat = GetComponentSpec(&str, TRUE, &status);
+-     names.symbols = GetComponentSpec(&str, TRUE, &status);
+-     names.geometry = GetComponentSpec(&str, TRUE, &status);
+--    if (status != Success)
+-+    if (status == Success) {
+-+        len = str - ((unsigned char *) stuff);
+-+        if ((XkbPaddedSize(len) / 4) != stuff->length)
+-+            status = BadLength;
+-+    }
+-+
+-+    if (status != Success) {
+-+        free(names.keycodes);
+-+        free(names.types);
+-+        free(names.compat);
+-+        free(names.symbols);
+-+        free(names.geometry);
+-         return status;
+--    len = str - ((unsigned char *) stuff);
+--    if ((XkbPaddedSize(len) / 4) != stuff->length)
+--        return BadLength;
+-+    }
+- 
+-     CHK_MASK_LEGAL(0x01, stuff->want, XkbGBN_AllComponentsMask);
+-     CHK_MASK_LEGAL(0x02, stuff->need, XkbGBN_AllComponentsMask);
+--- 
+-2.30.2
+-
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 654552c8b6..0c3c807ff3 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-December/003303.html
+-sha256  05b0c8301cee7c5a78083df421ba3a071891553541a417b3d85adf5cf20f8720  xorg-server-21.1.5.tar.xz
+-sha512  a39c6ba36f94241d330b679a9a6fe2c5fda73fc3f5a9308a7a9cfd0d58503e407291759c9e553455c07cf5a3862952ae3904334eeca29c97ff5af7cffd2e6953  xorg-server-21.1.5.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2022-December/003310.html
++sha256  1eb86ed674d042b6c8b1f9135e59395cbbca35ed551b122f73a7d8bb3bb22484  xorg-server-21.1.6.tar.xz
++sha512  5e3cf879facf3a04aa64b7f6129226ea68a97109a7daca5146b57b4c707cc76a4fbad1924997dd319efd8c8c20eb5bb59570a719101b76ae07e923b7e9656239  xorg-server-21.1.6.tar.xz
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 16b7438ee6..04eb5e90b7 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JANUS_GATEWAY_VERSION = 1.0.3
-+JANUS_GATEWAY_VERSION = 1.1.1
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
- JANUS_GATEWAY_LICENSE_FILES = COPYING
+-XSERVER_XORG_SERVER_VERSION = 21.1.5
++XSERVER_XORG_SERVER_VERSION = 21.1.6
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
+@@ -12,12 +12,6 @@ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
+ XSERVER_XORG_SERVER_SELINUX_MODULES = xdg xserver
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
+ 
+-# 0002-xkb-proof-GetCountedString-against-request-length-at.patch
+-XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3550
+-
+-# 0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
+-XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3551
+-
+ XSERVER_XORG_SERVER_DEPENDENCIES = \
+ 	xutil_util-macros \
+ 	xlib_libX11 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
