@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC922C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7192C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CAF64F10E;
-	Tue, 21 Feb 2023 00:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CAF64F10E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89FC74EE4F;
+	Tue, 21 Feb 2023 00:13:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89FC74EE4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2B2B-OwMYmnS; Tue, 21 Feb 2023 00:13:07 +0000 (UTC)
+	with ESMTP id AnajT9oleUXy; Tue, 21 Feb 2023 00:13:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76CBF4F100;
-	Tue, 21 Feb 2023 00:13:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76CBF4F100
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 672091BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 334C34EE6E;
+	Tue, 21 Feb 2023 00:13:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 334C34EE6E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A67131BF27E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BABCB417BE
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BABCB417BE
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5A396F9EC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5A396F9EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nlUmAvoTNTuX for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9UKgUUTWxVbu for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F20C64179B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F20C64179B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 125E26FAA8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 125E26FAA8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF25F86495; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 105058648F; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 14:21:42 +0100
+Date: Thu, 5 Jan 2023 08:47:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0b42512f2f6c3957637d698de20c3930dfcd85e3
-X-Git-Newrev: 5bd2cafc326141eede4f917069ed21b6d38f88c2
+X-Git-Oldrev: f8a2e1dc08a4de2db903a4a5a41c8541e6abfe81
+X-Git-Newrev: 14956d8908776e52ea9ace2fbb3f41716ebb4262
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205248.EF25F86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Makefile: fix build when $(O)
- ends in _defconfig
+Message-Id: <20230220205226.105058648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/checkpolicy: drop
+ bogus CHECKPOLICY_STAGING_CMDS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,77 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bd2cafc326141eede4f917069ed21b6d38f88c2
+commit: https://git.buildroot.net/buildroot/commit/?id=14956d8908776e52ea9ace2fbb3f41716ebb4262
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit e6195c53041f (Makefile: fix use of many br2-external trees) fixed
-a slowdown with many br2-external trees. In doing so, it changed the
-type of the %_defconfig rule: the stem is no longer present in the
-prerequisites, so it changes from a pattern rule to an implicit pattern
-rule [0].
+Commit "b06110621d checkpolicy: allow compiling for target" contains a
+typo that prevents installing to staging. It also forgot to enable
+CHECKPOLICY_INSTALL_STAGING.
 
-It is not unusual to name the build directory after the defconfig that
-is being built, so we may end up with a build directory named
-meh_defconfig. Before e6195c53041f, the pattern rule would not match
-[1], but now it does, which causes somewhat-cryptic build failures:
+But the package does not install headers or libraries, only ELF and
+manual files.
+So instead of fixing the install to staging, drop the bogus
+CHECKPOLICY_STAGING_CMDS.
 
-    Makefile:1015: *** "Can't find /some/path/meh_defconfig".  Stop.
-
-The issue is that we have this set of rules and assignments (elided and
-reordered for legibility):
-
-    all: world
-    world: target-post-image
-    target-post-image: staging-finalize
-    staging-finalize: $(STAGING_DIR_SYMLINK)
-    $(STAGING_DIR_SYMLINK): | $(BASE_DIR)
-    BASE_DIR := $(CANONICAL_O)
-    CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
-
-So, there is a rule that (eventually) has a dependency on $(O), but we
-have no rule that provides it explicitly, so the %_defconfig rule kicks
-in, with the stem as "/some/path/meh". When the loop searches all the
-".../configs/" directories for a file named ".../configs/%_defconfig",
-it actually looks for a file named ".../configs//some/path/meh_defconfig"
-and that indeed never matches anything.
-
-The solution is to provide an actual rule for $(BASE_DIR), so that the
-implicit rule does not kick in.
-
-[0] Terminology and behaviour in make is hard, so the terms we used here
-    may be wrong or incorrectly used, and/or the explanations for the
-    behaviour be wrong or incomplete... Still, the reasoning stands, and
-    the root cause is the removal of the stem in the RHS of the rule
-    (adding one back does fix the issue).
-
-[1] not sure how the prerequisite was solved  before e6195c53041f,
-    though...
-
-Fixes: e6195c53041f
-
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Nevo Hed <nhed+buildroot@starry.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Tested-by: Sebastian Weyer <sebastian.weyer@smile.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Clayton Shotwell <clayton.shotwell@collins.com>
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/checkpolicy/checkpolicy.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 8517d563d5..f39af5eae9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1042,7 +1042,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index af9a58cee8..baf16fb802 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
+@@ -20,11 +20,6 @@ define CHECKPOLICY_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
+ endef
  
- # staging and target directories do NOT list these as
- # dependencies anywhere else
--$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):
-+$(BASE_DIR) $(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):
- 	@mkdir -p $@
- 
- # outputmakefile generates a Makefile in the output directory, if using a
+-define CHECKPOLICY_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+-
+-endef
+-
+ define CHECKPOLICY_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
