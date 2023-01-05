@@ -1,51 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91F49C3DA7A
-	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 22:29:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8656EC4708E
+	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 22:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2019C4029F;
-	Thu,  5 Jan 2023 22:29:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2019C4029F
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBF2D60AE8;
+	Thu,  5 Jan 2023 22:54:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBF2D60AE8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oxsDgSDXE8fa; Thu,  5 Jan 2023 22:29:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R5Ivb5FPKhXx; Thu,  5 Jan 2023 22:54:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D09C40443;
-	Thu,  5 Jan 2023 22:29:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D09C40443
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A182D1BF295
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 22:29:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 417B360AD1;
+	Thu,  5 Jan 2023 22:54:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 417B360AD1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C3FB51BF295
+ for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 22:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89E9881992
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 22:29:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89E9881992
+ by smtp4.osuosl.org (Postfix) with ESMTP id AAA72419B6
+ for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 22:54:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAA72419B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zyi9hl6Tv7f3 for <buildroot@lists.busybox.net>;
- Thu,  5 Jan 2023 22:29:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 98FB981970
- for <buildroot@buildroot.org>; Thu,  5 Jan 2023 22:29:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98FB981970
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 83D3F87647; Thu,  5 Jan 2023 22:29:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 5 Jan 2023 23:28:36 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80c5be77ceb021e8319b9269b58d6373d378fac5
-X-Git-Newrev: 16168abd26b06656bcc24c2b511c29a0f047ebf4
-X-Patchwork-Hint: ignore
-Message-Id: <20230105222937.83D3F87647@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: security bump version to
- 8.1.14
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C3dep5_0Jp-r for <buildroot@lists.busybox.net>;
+ Thu,  5 Jan 2023 22:54:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5532C419AE
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com
+ [IPv6:2001:4860:4864:20::2b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5532C419AE
+ for <buildroot@buildroot.org>; Thu,  5 Jan 2023 22:54:34 +0000 (UTC)
+Received: by mail-oa1-x2b.google.com with SMTP id
+ 586e51a60fabf-1442977d77dso44644644fac.6
+ for <buildroot@buildroot.org>; Thu, 05 Jan 2023 14:54:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EQ01kFMnNd4kB0mWZ0ojouII/vWQts72PQRKIYbBQFo=;
+ b=MOIoe10/t99+KZE0q9MdQswPfCDMA32n9fA21M0LwnUrqc5KZJZEFcZ4fu2/ohPKGy
+ C5f9DSBQSC+MW2squKWylPKXTmDyKxCwHEv/lfIOwp8ifYrcAKCgAvV26bizdE7pDbQY
+ 0eQdGV9oyMa7oF49sEQObTbcsAOWq5mLIn2fWc/Yhm1DnJsKptEVg/OJ//RSat9PRCy8
+ vsrb2k00mXQ75AT9+E4iJRt5ycKyudpFdfhoY2M/gJ3t1YkkCggAgUTZlSJ79v3enXKe
+ TF/INdMPlwHxujvex5We3Ord5JnT4GPmaRqTdZnOsOFlz6+4vyM/bcpZXZieyZaykqZX
+ bG9g==
+X-Gm-Message-State: AFqh2krdjxhLn2gqLWVSqeCnGK5+++VA5nEkx6fxHjkarLr5hu05WTTy
+ 5ogy00qlC3LfMkC0aeYyWIVMCZhlQv/vOsEkBWn40SWVFLn1Gg==
+X-Google-Smtp-Source: AMrXdXvzWe3ckV+k3Iogw64gRk67FJxZqKjSrRBIOGjyBPsSZ6WYpr1PnCSzRw8tTAMEtFYQnDjYxOeQpe37fQcdl1E=
+X-Received: by 2002:a05:6870:8304:b0:144:9744:2be3 with SMTP id
+ p4-20020a056870830400b0014497442be3mr2498808oae.93.1672959271745; Thu, 05 Jan
+ 2023 14:54:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20230105185140.622799-1-bernd.kuhls@t-online.de>
+In-Reply-To: <20230105185140.622799-1-bernd.kuhls@t-online.de>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 5 Jan 2023 15:54:20 -0700
+Message-ID: <CADvTj4pxi8ZaaGfUAXiKL_WS4ZsT454Q5mACeg=iTZfw=17b-w@mail.gmail.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=EQ01kFMnNd4kB0mWZ0ojouII/vWQts72PQRKIYbBQFo=;
+ b=ZgwT5PDquyttGQlM8y8ZItAxa5uXXBAbAEntfsnmOfluDOPg9LtRBXklhRTBdhjwej
+ OfhsF6RFJ3bQlSImizEEy4yOOuMKDFJNZjLPF4Tm7LVSsuUrDVH79RDJzhxuNZ/3PB4c
+ tlMZQoO9ANppn9hZ4CwQ3ERl0w3ghzgP3yol3LWZNVN7PgJQvrefNuNGnEaJmWxHDsF8
+ F8LfFLr25nZVmSXNc0vhXx1RWxVetyo+9sVJXHqO1f6G9eVRmizf2yl8hxpv13amMimV
+ vQ/+XLlHHPhMA0fAj/JKH56uCmS+1cIrOKztGtHzdSmuaxMcgsu/hIADp4/OaJyERrHQ
+ LSXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ZgwT5PDq
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgpg-error: add configure
+ option to install gpg-error-config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +91,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16168abd26b06656bcc24c2b511c29a0f047ebf4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Changelog: https://www.php.net/ChangeLog-8.php#8.1.14
-
-Fixes CVE 2022-31631: https://bugs.php.net/bug.php?id=81740
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 461dc36031..23ec84f19f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  b15ef0ccdd6760825604b3c4e3e73558dcf87c75ef1d68ef4289d8fd261ac856  php-8.1.13.tar.xz
-+sha256  e16e47a872d58685913ac848ce92ec49f42c1828110c98c65fb6265a08724a1a  php-8.1.14.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 1fdf5c68a2..23dd4ba96f 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.1.13
-+PHP_VERSION = 8.1.14
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+On Thu, Jan 5, 2023 at 11:52 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>
+> Upstream commit[1]
+>
+> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commitdiff;h=0b47de9c719b0ed0da0791f0525de073737bde5a
+>
+> changed behaviour: "gpg-error-config is now only installed when enabled"
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/bc1/bc1566a0fa42f68f1f15f74a61d4081e269e1689/
+>
+> [1] included in version 1.46, added in buildroot with commit b5bdcb4cc5
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/libgpg-error/libgpg-error.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+> index ab3c7c3bf2..3f4a45a7e4 100644
+> --- a/package/libgpg-error/libgpg-error.mk
+> +++ b/package/libgpg-error/libgpg-error.mk
+> @@ -15,6 +15,7 @@ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+>  LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+>  LIBGPG_ERROR_CONF_OPTS = \
+>         --host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG) \
+> +       --enable-install-gpg-error-config \
+>         --disable-tests \
+>         --disable-languages
+>
+> --
+> 2.34.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
