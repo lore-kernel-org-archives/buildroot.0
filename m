@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3B94C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:16:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 367F1C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 580974F180;
-	Tue, 21 Feb 2023 00:16:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 580974F180
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7BD34F16E;
+	Tue, 21 Feb 2023 00:16:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7BD34F16E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZxTXwvpkQ_Ut; Tue, 21 Feb 2023 00:16:33 +0000 (UTC)
+	with ESMTP id ppy3U85TiBeK; Tue, 21 Feb 2023 00:16:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 057EA4F16E;
-	Tue, 21 Feb 2023 00:16:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 057EA4F16E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8AAD11BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E07B4F1A2;
+	Tue, 21 Feb 2023 00:16:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E07B4F1A2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3592B1BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B914417C4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B914417C4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E1766FAE4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E1766FAE4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gyTpoGxUopVH for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q9pv86sP7q3H for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD71F417BF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD71F417BF
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBD836F9F4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBD836F9F4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB1B28648F; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+ id B9AC6828C8; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 14:28:08 +0100
+Date: Thu, 5 Jan 2023 23:28:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a97a4a74aa993b09b958639e2276e7f5cf7a75d2
-X-Git-Newrev: efc223abd4fe764f8af8238aec67e8cb700db45e
+X-Git-Oldrev: 80c5be77ceb021e8319b9269b58d6373d378fac5
+X-Git-Newrev: 16168abd26b06656bcc24c2b511c29a0f047ebf4
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205249.CB1B28648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sunxi-mali-utgard:
- properly handle legacy for renamed options
+Message-Id: <20230220205226.B9AC6828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php: security bump
+ version to 8.1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efc223abd4fe764f8af8238aec67e8cb700db45e
+commit: https://git.buildroot.net/buildroot/commit/?id=16168abd26b06656bcc24c2b511c29a0f047ebf4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit "6a7a652b14 package/sunxi-mali-utgard: rename from
-sunxi-mali-mainline" tried to add legacy handling but the new symbols
-are part of a choice, and Kconfig does not enforce the select of a
-option from a choice.
+Changelog: https://www.php.net/ChangeLog-8.php#8.1.14
 
-Update the legacy entry for 2022.02, following the example described in
-the beginning of the file.
+Fixes CVE 2022-31631: https://bugs.php.net/bug.php?id=81740
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                    | 6 ++++--
- package/sunxi-mali-utgard/Config.in | 2 ++
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 53fe2f0b97..4bfebe3f89 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -761,20 +761,22 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE
- config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
- 	bool "sunxi-mali-mainline-r6p2 was renamed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
- 	help
- 	  The sunxi-mali-mainline package has been renamed
- 	  sunxi-mali-utgard, the suboptions of this package have also
- 	  been renamed accordingly.
-+# Note: BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 is still referenced from
-+# package/sunxi-mali-utgard/Config.in
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 461dc36031..23ec84f19f 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  b15ef0ccdd6760825604b3c4e3e73558dcf87c75ef1d68ef4289d8fd261ac856  php-8.1.13.tar.xz
++sha256  e16e47a872d58685913ac848ce92ec49f42c1828110c98c65fb6265a08724a1a  php-8.1.14.tar.xz
  
- config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1
- 	bool "sunxi-mali-mainline-r8p1 was renamed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1
- 	help
- 	  The sunxi-mali-mainline package has been renamed
- 	  sunxi-mali-utgard, the suboptions of this package have also
- 	  been renamed accordingly.
-+# Note: BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1 is still referenced from
-+# package/sunxi-mali-utgard/Config.in
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 1fdf5c68a2..23dd4ba96f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
- 	bool "qt5webkit-examples removed"
-diff --git a/package/sunxi-mali-utgard/Config.in b/package/sunxi-mali-utgard/Config.in
-index ff49ea03f1..59ac21f5ab 100644
---- a/package/sunxi-mali-utgard/Config.in
-+++ b/package/sunxi-mali-utgard/Config.in
-@@ -20,6 +20,8 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- 
- choice
- 	prompt "Version"
-+	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 # legacy
-+	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1 # legacy
- 	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
- 	help
- 	  Select the version of the userspace module.
+-PHP_VERSION = 8.1.13
++PHP_VERSION = 8.1.14
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
