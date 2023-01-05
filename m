@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F8AFC3DA7D
-	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 09:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C600DC3DA7A
+	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 09:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDF8B4013F;
-	Thu,  5 Jan 2023 09:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDF8B4013F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6881640BDF;
+	Thu,  5 Jan 2023 09:26:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6881640BDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QFgs24O-pTwH; Thu,  5 Jan 2023 09:26:43 +0000 (UTC)
+	with ESMTP id bjCmUZ5txQQ5; Thu,  5 Jan 2023 09:26:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34F92401CA;
-	Thu,  5 Jan 2023 09:26:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34F92401CA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3F3301BF964
+	by smtp2.osuosl.org (Postfix) with ESMTP id ADD4B401CA;
+	Thu,  5 Jan 2023 09:26:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADD4B401CA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D2C81BF3DC
  for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B0FD40232
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6814A418BE
  for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:26:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B0FD40232
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6814A418BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7zXIZS7Oh3Yv for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1FL1zoFVTMNQ for <buildroot@lists.busybox.net>;
  Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 47E054013F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5304F418BC
  for <buildroot@buildroot.org>; Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47E054013F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5304F418BC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3607187626; Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
+ id 4040987628; Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Jan 2023 10:20:17 +0100
+Date: Thu, 5 Jan 2023 10:20:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 43b13ebbdc89f3d7597f476123bcddb7e0a1655d
-X-Git-Newrev: a70e0bdfdabad5e9d789db181e0f4c37544a426b
+X-Git-Oldrev: a70e0bdfdabad5e9d789db181e0f4c37544a426b
+X-Git-Newrev: 2b249eca85819761140f670cc52dcf8fb09ef5b3
 X-Patchwork-Hint: ignore
-Message-Id: <20230105092626.3607187626@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libSM: bump version to
- 1.2.4
+Message-Id: <20230105092626.4040987628@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xcb-util: bump version to
+ 0.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a70e0bdfdabad5e9d789db181e0f4c37544a426b
+commit: https://git.buildroot.net/buildroot/commit/?id=2b249eca85819761140f670cc52dcf8fb09ef5b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2022-December/003307.html
+https://lists.x.org/archives/xorg-announce/2022-December/003306.html
 
 Switched tarball to xz, updated _SITE.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libSM/xlib_libSM.hash | 8 +++-----
- package/x11r7/xlib_libSM/xlib_libSM.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/x11r7/xcb-util/xcb-util.hash | 4 +++-
+ package/x11r7/xcb-util/xcb-util.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libSM/xlib_libSM.hash b/package/x11r7/xlib_libSM/xlib_libSM.hash
-index 7ac288ba4e..3068c85b93 100644
---- a/package/x11r7/xlib_libSM/xlib_libSM.hash
-+++ b/package/x11r7/xlib_libSM/xlib_libSM.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-October/002922.html
--md5  87c7fad1c1813517979184c8ccd76628  libSM-1.2.3.tar.bz2
--sha1  437d7b13fa2eba325df3a106f177df46ccec6546  libSM-1.2.3.tar.bz2
--sha256  2d264499dcb05f56438dee12a1b4b71d76736ce7ba7aa6efbf15ebb113769cbb  libSM-1.2.3.tar.bz2
--sha512  74c42e27029db78475e62025b4711dbac5e22d2f8e8a24be98a1c31b03c0fc4afe859928f851800ea0b76854f12147900dc4f27bbfd3d8ea45daaaf24b70a903  libSM-1.2.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003307.html
-+sha256  fdcbe51e4d1276b1183da77a8a4e74a137ca203e0bcfb20972dd5f3347e97b84  libSM-1.2.4.tar.xz
-+sha512  7f1d41b7b6c5dd456c49ccad7740c3ba9791a2793fa50fd94814a4164ce2e20c4a0a0ad42a87708e494ed5c23f611be6d3ccd9ef1e9add6d46ac545e2b0f6f86  libSM-1.2.4.tar.xz
- # Locally computed
- sha256  af7926a14d85ad367622688636e8c9c6f7807c8a6867536af1c530b5c262bfba  COPYING
-diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
-index 708224e2d1..8e5c90127a 100644
---- a/package/x11r7/xlib_libSM/xlib_libSM.mk
-+++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
+diff --git a/package/x11r7/xcb-util/xcb-util.hash b/package/x11r7/xcb-util/xcb-util.hash
+index c088a62bab..b9d6687752 100644
+--- a/package/x11r7/xcb-util/xcb-util.hash
++++ b/package/x11r7/xcb-util/xcb-util.hash
+@@ -1,3 +1,5 @@
++# From https://lists.x.org/archives/xorg-announce/2022-December/003306.html
++sha256  5abe3bbbd8e54f0fa3ec945291b7e8fa8cfd3cccc43718f8758430f94126e512  xcb-util-0.4.1.tar.xz
++sha512  da67f2f017d2a1788dcf35f28d6956e171303a622a1dd085cd3d69fdb2ed77965d83c557cc926ebf9b32e905eb2cbb5921987250192d78a2f5edc4d437ed7d2b  xcb-util-0.4.1.tar.xz
+ # locally computed
+-sha256  46e49469cb3b594af1d33176cd7565def2be3fa8be4371d62271fabb5eae50e9  xcb-util-0.4.0.tar.bz2
+ sha256  325b64f0b0284e08bbb7a78ae3e55c1edc2a7cd77f603225ae4b8ffc35423e37  COPYING
+diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
+index bb73530f94..793c3dc7f2 100644
+--- a/package/x11r7/xcb-util/xcb-util.mk
++++ b/package/x11r7/xcb-util/xcb-util.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBSM_VERSION = 1.2.3
--XLIB_LIBSM_SOURCE = libSM-$(XLIB_LIBSM_VERSION).tar.bz2
--XLIB_LIBSM_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBSM_VERSION = 1.2.4
-+XLIB_LIBSM_SOURCE = libSM-$(XLIB_LIBSM_VERSION).tar.xz
-+XLIB_LIBSM_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBSM_LICENSE = MIT
- XLIB_LIBSM_LICENSE_FILES = COPYING
- XLIB_LIBSM_INSTALL_STAGING = YES
+-XCB_UTIL_VERSION = 0.4.0
+-XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.bz2
+-XCB_UTIL_SITE = http://xcb.freedesktop.org/dist
++XCB_UTIL_VERSION = 0.4.1
++XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.xz
++XCB_UTIL_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XCB_UTIL_LICENSE = MIT
+ XCB_UTIL_LICENSE_FILES = COPYING
+ XCB_UTIL_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
