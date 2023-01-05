@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 129D3C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:05:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A65BC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:06:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDD798282C;
-	Mon, 20 Feb 2023 23:05:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDD798282C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F78682358;
+	Mon, 20 Feb 2023 23:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F78682358
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7wZrJLnvAg3e; Mon, 20 Feb 2023 23:05:54 +0000 (UTC)
+	with ESMTP id oPUqDS1eHUex; Mon, 20 Feb 2023 23:06:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05584827FA;
-	Mon, 20 Feb 2023 23:05:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05584827FA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 86D631BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6932A82572;
+	Mon, 20 Feb 2023 23:06:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6932A82572
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EEAD51BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D70DC612BE
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D70DC612BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6C064172C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6C064172C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s8B81pfflOyL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e5oxxeFMR6aT for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D40EA612BD
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D40EA612BD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 244C8411A1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 244C8411A1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D19C08648F; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
+ id 21D1B86495; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 14:48:27 +0100
+Date: Thu, 5 Jan 2023 10:19:54 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 30bc9e5aef772432a9c2753296d89984e0097159
-X-Git-Newrev: b9c948df185f61131133d9d8a8cc39beae0ad299
+X-Git-Oldrev: 14956d8908776e52ea9ace2fbb3f41716ebb4262
+X-Git-Newrev: 1906e1fb7cb4104aa3e326f09926b2b3f5129991
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205211.D19C08648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXft:
- bump version to 2.3.7
+Message-Id: <20230220205226.21D1B86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +62,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9c948df185f61131133d9d8a8cc39beae0ad299
+commit: https://git.buildroot.net/buildroot/commit/?id=1906e1fb7cb4104aa3e326f09926b2b3f5129991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Release notes:
-https://lists.x.org/archives/xorg/2022-November/061175.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXft/xlib_libXft.hash | 6 +++---
- package/x11r7/xlib_libXft/xlib_libXft.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
-index 484764be3d..5074365aed 100644
---- a/package/x11r7/xlib_libXft/xlib_libXft.hash
-+++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-September/003211.html
--sha256  60a6e7319fc938bbb8d098c9bcc86031cc2327b5d086d3335fc5c76323c03022  libXft-2.3.6.tar.xz
--sha512  732f8c635fcac6010012ba8c10c23d2dd6ec79b0f096d6bcc9b7e36d2ca0817387faa7ee5bb6f43cff02adc68e4234c1b8f95021ebc548f61c492e0b76836d90  libXft-2.3.6.tar.xz
-+# From https://lists.x.org/archives/xorg/2022-November/061175.html
-+sha256  79f0b37c45007381c371a790c2754644ad955166dbf2a48e3625032e9bdd4f71  libXft-2.3.7.tar.xz
-+sha512  9df29d3c7b88a21952df1015604511e5d79856d721b2a61eb2c5a062a9abccf16318132432a7c86c0ef816bf174ae86842fa67dabbaa0b163dfa56d99022de19  libXft-2.3.7.tar.xz
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 98499eb955..45c8bd62b0 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
-diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
-index a86501900c..845b612669 100644
---- a/package/x11r7/xlib_libXft/xlib_libXft.mk
-+++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+-sha256  ed32401d1ed85f9e2d28d122a046c3f2c01b6ca5c0da1a7d78fa8f400e858107  tvheadend-fbc94aee8bfdd25baba87ab62a39234da20e8dd2.tar.gz
++sha256  06c6d33a8e9d1d645cea9c63a06f6bddb309e5546177966d7b9285f68313bf5b  tvheadend-c9a156a25a07f1f84c2f48a1b03b481430c8257d.tar.gz
+ sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 8ceb7493c8..0ca8f46dc5 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXFT_VERSION = 2.3.6
-+XLIB_LIBXFT_VERSION = 2.3.7
- XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.xz
- XLIB_LIBXFT_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXFT_LICENSE = MIT
+-TVHEADEND_VERSION = fbc94aee8bfdd25baba87ab62a39234da20e8dd2
++TVHEADEND_VERSION = c9a156a25a07f1f84c2f48a1b03b481430c8257d
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
