@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0BDAC3DA7D
-	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 09:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F211C3DA7D
+	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 09:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CB7E60AAF;
-	Thu,  5 Jan 2023 09:27:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CB7E60AAF
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0E6A820EE;
+	Thu,  5 Jan 2023 09:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0E6A820EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HRnjZSXUa1ys; Thu,  5 Jan 2023 09:27:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VYjalx1q155Q; Thu,  5 Jan 2023 09:51:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B456660BD1;
-	Thu,  5 Jan 2023 09:27:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B456660BD1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 853BA1BF3DC
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:26:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF8A2820CE;
+	Thu,  5 Jan 2023 09:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF8A2820CE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ADFE31BF3DC
+ for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C8E74021C
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:26:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C8E74021C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89084820CE
+ for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89084820CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hmJCrT4a8V2l for <buildroot@lists.busybox.net>;
- Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FAdFAws_ebWu for <buildroot@lists.busybox.net>;
+ Thu,  5 Jan 2023 09:51:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E9E9401CA
- for <buildroot@buildroot.org>; Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E9E9401CA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D623820BB
+ for <buildroot@buildroot.org>; Thu,  5 Jan 2023 09:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D623820BB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4C4B087629; Thu,  5 Jan 2023 09:26:26 +0000 (UTC)
+ id 559808762D; Thu,  5 Jan 2023 09:51:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Jan 2023 10:21:38 +0100
+Date: Thu, 5 Jan 2023 10:51:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2b249eca85819761140f670cc52dcf8fb09ef5b3
-X-Git-Newrev: 60b4b04dc23d32641981df984f383c1bb3078f8c
+X-Git-Oldrev: 01518e5660366be41e6a8e0a0f2b487d7cdf48a2
+X-Git-Newrev: a16221834a0c7a8744f620c2cada751c693279d4
 X-Patchwork-Hint: ignore
-Message-Id: <20230105092626.4C4B087629@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
- version to 21.1.6
+Message-Id: <20230105095132.559808762D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,170 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60b4b04dc23d32641981df984f383c1bb3078f8c
+commit: https://git.buildroot.net/buildroot/commit/?id=a16221834a0c7a8744f620c2cada751c693279d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a regression in XTestSwapFakeInput() introduced in the fix for
-CVE-2022-46340 in 21.1.5.
-
-Removed patches included in upstream release.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-dev/2022-December/225903.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: mention regression fix]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...etCountedString-against-request-length-at.patch | 35 -------------
- ...some-possible-memleaks-in-XkbGetKbdByName.patch | 60 ----------------------
- .../xserver_xorg-server/xserver_xorg-server.hash   |  6 +--
- .../xserver_xorg-server/xserver_xorg-server.mk     |  8 +--
- 4 files changed, 4 insertions(+), 105 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch b/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
-deleted file mode 100644
-index 8c1869504c..0000000000
---- a/package/x11r7/xserver_xorg-server/0002-xkb-proof-GetCountedString-against-request-length-at.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 11beef0b7f1ed290348e45618e5fa0d2bffcb72e Mon Sep 17 00:00:00 2001
--From: Peter Hutterer <peter.hutterer@who-t.net>
--Date: Tue, 5 Jul 2022 12:06:20 +1000
--Subject: [PATCH] xkb: proof GetCountedString against request length attacks
--
--GetCountedString did a check for the whole string to be within the
--request buffer but not for the initial 2 bytes that contain the length
--field. A swapped client could send a malformed request to trigger a
--swaps() on those bytes, writing into random memory.
--
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- xkb/xkb.c | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/xkb/xkb.c b/xkb/xkb.c
--index f42f59ef3..1841cff26 100644
----- a/xkb/xkb.c
--+++ b/xkb/xkb.c
--@@ -5137,6 +5137,11 @@ _GetCountedString(char **wire_inout, ClientPtr client, char **str)
--     CARD16 len;
-- 
--     wire = *wire_inout;
--+
--+    if (client->req_len <
--+        bytes_to_int32(wire + 2 - (char *) client->requestBuffer))
--+        return BadValue;
--+
--     len = *(CARD16 *) wire;
--     if (client->swapped) {
--         swaps(&len);
---- 
--2.30.2
--
-diff --git a/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch b/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
-deleted file mode 100644
-index 39afec0988..0000000000
---- a/package/x11r7/xserver_xorg-server/0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From 18f91b950e22c2a342a4fbc55e9ddf7534a707d2 Mon Sep 17 00:00:00 2001
--From: Peter Hutterer <peter.hutterer@who-t.net>
--Date: Wed, 13 Jul 2022 11:23:09 +1000
--Subject: [PATCH] xkb: fix some possible memleaks in XkbGetKbdByName
--
--GetComponentByName returns an allocated string, so let's free that if we
--fail somewhere.
--
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- xkb/xkb.c | 26 ++++++++++++++++++++------
-- 1 file changed, 20 insertions(+), 6 deletions(-)
--
--diff --git a/xkb/xkb.c b/xkb/xkb.c
--index 4692895db..b79a269e3 100644
----- a/xkb/xkb.c
--+++ b/xkb/xkb.c
--@@ -5935,18 +5935,32 @@ ProcXkbGetKbdByName(ClientPtr client)
--     xkb = dev->key->xkbInfo->desc;
--     status = Success;
--     str = (unsigned char *) &stuff[1];
---    if (GetComponentSpec(&str, TRUE, &status))  /* keymap, unsupported */
---        return BadMatch;
--+    {
--+        char *keymap = GetComponentSpec(&str, TRUE, &status);  /* keymap, unsupported */
--+        if (keymap) {
--+            free(keymap);
--+            return BadMatch;
--+        }
--+    }
--     names.keycodes = GetComponentSpec(&str, TRUE, &status);
--     names.types = GetComponentSpec(&str, TRUE, &status);
--     names.compat = GetComponentSpec(&str, TRUE, &status);
--     names.symbols = GetComponentSpec(&str, TRUE, &status);
--     names.geometry = GetComponentSpec(&str, TRUE, &status);
---    if (status != Success)
--+    if (status == Success) {
--+        len = str - ((unsigned char *) stuff);
--+        if ((XkbPaddedSize(len) / 4) != stuff->length)
--+            status = BadLength;
--+    }
--+
--+    if (status != Success) {
--+        free(names.keycodes);
--+        free(names.types);
--+        free(names.compat);
--+        free(names.symbols);
--+        free(names.geometry);
--         return status;
---    len = str - ((unsigned char *) stuff);
---    if ((XkbPaddedSize(len) / 4) != stuff->length)
---        return BadLength;
--+    }
-- 
--     CHK_MASK_LEGAL(0x01, stuff->want, XkbGBN_AllComponentsMask);
--     CHK_MASK_LEGAL(0x02, stuff->need, XkbGBN_AllComponentsMask);
---- 
--2.30.2
--
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 654552c8b6..0c3c807ff3 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index e5988cad5e..f6b3ade3ea 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.3.1
++MESA3D_HEADERS_VERSION = 22.3.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 613ebce89f..e902e6b828 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-December/003303.html
--sha256  05b0c8301cee7c5a78083df421ba3a071891553541a417b3d85adf5cf20f8720  xorg-server-21.1.5.tar.xz
--sha512  a39c6ba36f94241d330b679a9a6fe2c5fda73fc3f5a9308a7a9cfd0d58503e407291759c9e553455c07cf5a3862952ae3904334eeca29c97ff5af7cffd2e6953  xorg-server-21.1.5.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-December/003310.html
-+sha256  1eb86ed674d042b6c8b1f9135e59395cbbca35ed551b122f73a7d8bb3bb22484  xorg-server-21.1.6.tar.xz
-+sha512  5e3cf879facf3a04aa64b7f6129226ea68a97109a7daca5146b57b4c707cc76a4fbad1924997dd319efd8c8c20eb5bb59570a719101b76ae07e923b7e9656239  xorg-server-21.1.6.tar.xz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 16b7438ee6..04eb5e90b7 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://lists.freedesktop.org/archives/mesa-announce/2022-December/000697.html
+-sha256  3c9cd611c0859d307aba0659833386abdca4c86162d3c275ba5be62d16cf31eb  mesa-22.3.1.tar.xz
+-sha512  8a7aee67f6351de293d23425229eb7c42d6918fe9ffb46c6e5df9609f79633c98ab78e892507fe48055c51fa88bf103d7b7baa58e826b1758f66067048baed5b  mesa-22.3.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-dev/2022-December/225903.html
++sha256  c15df758a8795f53e57f2a228eb4593c22b16dffd9b38f83901f76cd9533140b  mesa-22.3.2.tar.xz
++sha512  32934dd23cfcd6165c365597d9a469da0b806b72ea98a200f499344c3b47815db3bf78875b4ea766d2d28d9c70b50c1615d2d3fcbfd4769447fe0a9d3b32951f  mesa-22.3.2.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b6f1214102..523b642d0c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 21.1.5
-+XSERVER_XORG_SERVER_VERSION = 21.1.6
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
-@@ -12,12 +12,6 @@ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
- XSERVER_XORG_SERVER_SELINUX_MODULES = xdg xserver
- XSERVER_XORG_SERVER_INSTALL_STAGING = YES
- 
--# 0002-xkb-proof-GetCountedString-against-request-length-at.patch
--XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3550
--
--# 0003-xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
--XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2022-3551
--
- XSERVER_XORG_SERVER_DEPENDENCIES = \
- 	xutil_util-macros \
- 	xlib_libX11 \
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.3.1
++MESA3D_VERSION = 22.3.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
