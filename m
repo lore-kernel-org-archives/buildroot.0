@@ -1,57 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5335BC3DA7D
-	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 09:23:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DFCDC3DA7D
+	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 09:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 973BA4021C;
-	Thu,  5 Jan 2023 09:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 973BA4021C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u-7nZjJ634bp; Thu,  5 Jan 2023 09:23:33 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E36C5401B2;
-	Thu,  5 Jan 2023 09:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E36C5401B2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C58A51BF5A1
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:23:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A180F606E7
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:23:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A180F606E7
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF9C2607D0;
+	Thu,  5 Jan 2023 09:23:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF9C2607D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n2BRDjWqaYo6 for <buildroot@lists.busybox.net>;
- Thu,  5 Jan 2023 09:23:29 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u71k40PmRAe3; Thu,  5 Jan 2023 09:23:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 444B8606E7;
+	Thu,  5 Jan 2023 09:23:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 444B8606E7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C54EF1BF5A1
+ for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:23:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A13E880BB4
+ for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 09:23:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A13E880BB4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q58tJS0WX8hZ for <buildroot@lists.busybox.net>;
+ Thu,  5 Jan 2023 09:23:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DA93600B3
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0DA93600B3
- for <buildroot@buildroot.org>; Thu,  5 Jan 2023 09:23:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 790D780002
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 790D780002
+ for <buildroot@buildroot.org>; Thu,  5 Jan 2023 09:23:34 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F403F60009;
- Thu,  5 Jan 2023 09:23:25 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6EB26240011;
+ Thu,  5 Jan 2023 09:23:31 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pDMT7-005VOX-1r; Thu, 05 Jan 2023 10:23:25 +0100
+ id 1pDMTC-005VOf-6h; Thu, 05 Jan 2023 10:23:30 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20221229194505.3315137-1-bernd.kuhls@t-online.de>
-Date: Thu, 05 Jan 2023 10:23:25 +0100
-In-Reply-To: <20221229194505.3315137-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 29 Dec 2022 20:45:05 +0100")
-Message-ID: <87fscps5bm.fsf@dell.be.48ers.dk>
+References: <20221229201846.3498030-1-bernd.kuhls@t-online.de>
+Date: Thu, 05 Jan 2023 10:23:30 +0100
+In-Reply-To: <20221229201846.3498030-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 29 Dec 2022 21:18:43 +0100")
+Message-ID: <87bknds5bh.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+Subject: Re: [Buildroot] [PATCH 1/4] package/x11r7/xapp_xdriinfo: bump
+ version to 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,13 +64,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+
+ > Release notes:
+ > https://lists.x.org/archives/xorg-announce/2022-December/003308.html
+
+ > Switched tarball to xz, updated _SITE.
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
