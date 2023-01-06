@@ -1,85 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4B47C61DB3
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jan 2023 21:08:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D0F9C54EBD
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jan 2023 21:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D1A181380;
-	Fri,  6 Jan 2023 21:08:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D1A181380
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B63341028;
+	Fri,  6 Jan 2023 21:09:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B63341028
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kuQgMNNCgK4s; Fri,  6 Jan 2023 21:08:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GV73wUzaGsph; Fri,  6 Jan 2023 21:09:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7814B8138D;
-	Fri,  6 Jan 2023 21:08:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7814B8138D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1070A1BF5E9
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD8A040399;
+	Fri,  6 Jan 2023 21:08:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD8A040399
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AC211BF973
  for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 21:08:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEA8D403D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA79940022
  for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 21:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEA8D403D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA79940022
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t8dyD4BwYIMz for <buildroot@lists.busybox.net>;
- Fri,  6 Jan 2023 21:08:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cAF3ApCi2SAG for <buildroot@lists.busybox.net>;
+ Fri,  6 Jan 2023 21:08:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39A8E403C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F85F40253
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 39A8E403C5
- for <buildroot@buildroot.org>; Fri,  6 Jan 2023 21:08:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8F85F40253
+ for <buildroot@buildroot.org>; Fri,  6 Jan 2023 21:08:32 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.fritz.box ([62.216.209.160]) by mail.gmx.net
  (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MmlTC-1oXRrm2rvK-00jrSc; Fri, 06 Jan 2023 22:08:28 +0100
+ 1N6sn1-1oinaM0DiZ-018H7z; Fri, 06 Jan 2023 22:08:29 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Fri,  6 Jan 2023 22:08:26 +0100
-Message-Id: <20230106210827.30007-2-ps.report@gmx.net>
+Date: Fri,  6 Jan 2023 22:08:27 +0100
+Message-Id: <20230106210827.30007-3-ps.report@gmx.net>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230106210827.30007-1-ps.report@gmx.net>
 References: <20230106210827.30007-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:lO5V5N4fSgpLke7ILeDLrc3D2DZ45LNbypgBZT1HjYCOTM8/IFX
- b1foQKLl1UZEMGfZC8te/UdLLQwWA6+prQzFI3AAEsc4kl17wqZ0tjBaHjq41oY2x4O2U/r
- MbX8BJ4srnNhJBdVTtF5IujKJjTgMY0RnvH8WmcphLrt9MBor7ngk3BXjEdXiu/pEULdGCg
- +raeUK8aW4xWHzilc4i2A==
-UI-OutboundReport: notjunk:1;M01:P0:DW9TxfmPJ3E=;jtH9XWjc/UUC5Ae5bTCIScBt6E3
- Zq8UF4ngk8uytLeUEy32comeJwNutpznGRIbJ5KZYyEf9z/AgCo3Li9JneqjdFxY0Zbk7CjV3
- suYMypsCp6pYg8VP98GG+3L2HivSxQConnLgw6VhdzioHPd1Ra8kEfa0v/31kAsxKWIzQY1ee
- zq/Z8wLHm+qugcdhj1Aict2uam+SL235IMobNPSl+uGOIJUv3sU/AmZEihz7WCvmS3O3APBkt
- 5huV9czm6Z6pXCtBXQWIxwT3QWn+lImBVsrzb2pHY0r32CUR+dvFWJLDpxaANUFgezbPk9D3Y
- SEBS+oGI7Kue7Q2y0R60bbwfbR3ZEfOQghrpL/cfN4Wr+VenTpNgn5lw7n+j+/raxkJnH76qv
- V3pC5CMV3sQZlhSSzvK7RMmk6xvgaLI3Yn4f7GbikpDbgMCWVltNWO1MAGLu/YOWQ6ThPaWB1
- 7vfkrjIi9e3cI1QrhjtRSrhpOXVPfOA1noJbTpa2URTJI/FavlH9o66JU5tcQfB80pcwJjdKP
- 1cGHM9z5mfXHCHPP9f37MIM48lLVrFksGogHjIu7GUHB1NjDTjJC5648uEQCPQ+GX7Lti5tPj
- kIQT8VfeFZ/KJ9mpZc7OitAgQxRDNY+hcwWAgL406SvS+8zPmOKw/7mVs1Kwvq/+FBCP3rD7i
- OymPW7zo8hNQeLhh6/pjDSsv166AHgBSM77A4KqXKU8cwn5KqmbFZzy0qZ+lSDtWUOr6o2wtJ
- baIEoJQvOo/7eF10nSYDj4ETPfurAC1it5tCrvAdoZVR9XnsKJTOzsWOSKVW3pMs5IwkuZI2j
- IRXaARHujA78YLukSIw4XBYS1J9Rz4OqVwCP2Tyt1YMOPE6ovLym2GIXmaja5YtNFcf3lX8JL
- qGhw3LS1EP5Hwy6WZUfYzP58raQhlJtQJzL1/pQCf5xlN5h1T5s0NNx+8lWyjDkIh7JSTs/2E
- E6FeKSKZINV6cCg1h1QPW//aZE8=
+X-Provags-ID: V03:K1:d9NqU3xhTWtQXsHzWLMqcvD4gObKSPT/76dSX/eGWtowBITdDcg
+ ZnPGZ3ywxT7e8jz7yfuEw1uZCBPH3hpfYbgqaEFKKvdcycV7jGSlGypNDEKn4bYvOG7a95W
+ QohCgWiofdvgMqDUPaVg0TmEaDbJOLqjhzxwaFjojiO97KuSHGXFEJaeNkw71narRc4A1Ws
+ 0T1AxcnqaHIvZD4bDHueg==
+UI-OutboundReport: notjunk:1;M01:P0:IRWeuP63fk0=;MeDycDt0KWDZoz+DaNZrZwiw/xb
+ PpqLOP9Z/LF5vltadArpqN6GtvncODzPgAEjFgawAQQbS3mlipV/oI/iXMiNdFp6BUSX5k9fo
+ 0C1jpQXmNHgPg5IR18xEWe6hZHaU6J8K5dkmE2j1EMG/w7BxhK+VLJl91jk9ohzbtDq97StFl
+ /EBhVgNft8Vw0D+2VcZsX66WSGiSluEmAca3D4V5/E2xcL+gXgzujVGtIp0ky+VqG8tP9iVmC
+ lPdkiW2Z8JswME8IYFXaJikAlI3Wo55QPaNXTwdTHwQsrpLREJB9gKMqrX+/GXygW+xKubmOV
+ 4Kwgeor8ppnex2pwbGyx0PAFmj3uVnFYtJ5le4ggsG0//wqxrPx7Jrp8YzY/rnij4wDfiOf9h
+ 0aHdW+OtSN7CKldDU3m0oWiVTcoLbVTq6hTtRFAVzdEW8lcWMHndSC3fizLxzE3xvk6yfNe80
+ rUGg3sKjhNgo1WnNPclBbdHOb33HfFYzWq2wPlE220pOeIVyuHaZ+cmvKifBuJloySo9GsvgA
+ pAQhEQzFE0CvDifo6SwWFZwhDBM7zby2eKrXWxssMelus1TeoXViDVfKMm9PY6fN6eZNJ6oup
+ 6OyBCOagKNEUfHdVDtwqGPyG8H3qPKMaicxBTCOEsB7FMNRCCB6mMfbnTkyMjD7xnlEhaZRDX
+ Gl53d4MtzrPrgtj7Phjz9lP1oF7kcddvzi+w6t+CfyWY5zwFQpVRCkTnHDcFl3ZItyczuvYYF
+ 6Z7FAd5dKGNlWZEfwMFLrZaDACojR6OCWNCWfRk56NP1y2GwDoSI6GQXFAT7Qa7zbFC+G8MRR
+ k+gHHw8MDNoxirmXXcgT/+EpcpUHLZNfUhjeQoemfZmXXyV+G83cZNo23fIbn2YefpgElK6Cr
+ 3IuuXYu+PWImxIjRQwG5Brrc+dcYSvSof0dV+Jvs6czKE7q1HpGYccPnw4mK2a0NOAqvVELUX
+ v3csGg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.net; s=s31663417; 
- t=1673039308; bh=Z8Xa18R8AQzxsOS6zFl6Pc/0DfNcqzNBDfExXHWh5Yc=;
+ t=1673039309; bh=OkvndaxyFyWly96xHU7agbQVWUXRsHhzx3CakWsyOCU=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=XAXHSAvzYfBof87OdPpe+VXfpeHu+4P1IfJ3eoP8/UHoWyvj4B4clffrOpRQMCFyV
- cw12fSgZtySO9xAgGmISFueBkaAJCf3f5fm0Ga+GO2aoSb7yqvgf+AZOhkhIC8Ngmb
- tu2lKy464tubitip8at8BiLZiVm7aHXVJ1fo/0T2eqvKkakCaIgXT1ok9BgTc2J9SS
- Z5+KcSp1PsUjJZ3NxrFkC0hgBp99o9mrlbgkagbAg2R8Yqm1p9SbWNCx26s4m7jkRw
- SRRlBnKxij2z8GHSGAWwS/wYKyWcW8L/3V2V53YjvVySWoQCRkr0G1yjiF3XElApkO
- 2kOTBON5APmhg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=dCXZX5NcXZy+DbEcjAQ3/qxaRoUIROss+5IeyekYgNIkvAmjjm3Yl5Az58Bv9EIoM
+ WQM/JZAcERe4RWuzVHaWWqvVVaVSSPhHijPokmpK/F/cbc6jnm4Jl/3H1eWFi4mOZf
+ YXasHecEO+gHn3S9ONKWdapjD060k85Zc+UTMX3LyvH0hWkaPFyIDtGD+dJTOS1395
+ +9arZCYZkNFJqjGaksW3XJy3fB8ESHBcmjvaSad4Vx3f7siOkNPNuWtBxktShZiJpG
+ HIDf8G7Wels0O/XbLfvjxDS26U7hbZYwrAZf850KpKusrBKtsBaF8zddvuCChZuaY5
+ Vt7JBAccpwNOQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=XAXHSAvz
-Subject: [Buildroot] [PATCH v1] package/speechd: new package
+ header.a=rsa-sha256 header.s=s31663417 header.b=dCXZX5Nc
+Subject: [Buildroot] [PATCH v1] package/qt5speech: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,109 +102,87 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Notes/Todo:
-  - double check license description against
-    https://github.com/brailcom/speechd#license
-  - maybe add SYSV init script
----
- package/Config.in            |  1 +
- package/speechd/Config.in    | 20 ++++++++++++++++++++
- package/speechd/speechd.hash |  5 +++++
- package/speechd/speechd.mk   | 34 ++++++++++++++++++++++++++++++++++
- 4 files changed, 60 insertions(+)
- create mode 100644 package/speechd/Config.in
- create mode 100644 package/speechd/speechd.hash
- create mode 100644 package/speechd/speechd.mk
+ package/qt5/Config.in                |  1 +
+ package/qt5/qt5speech/Config.in      | 12 ++++++++++++
+ package/qt5/qt5speech/qt5speech.hash |  7 +++++++
+ package/qt5/qt5speech/qt5speech.mk   | 23 +++++++++++++++++++++++
+ 4 files changed, 43 insertions(+)
+ create mode 100644 package/qt5/qt5speech/Config.in
+ create mode 100644 package/qt5/qt5speech/qt5speech.hash
+ create mode 100644 package/qt5/qt5speech/qt5speech.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index b9f04e9fd1..3c49edaefb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -51,6 +51,7 @@ menu "Audio and video applications"
- 	source "package/pipewire-media-session/Config.in"
- 	source "package/pulseaudio/Config.in"
- 	source "package/sox/Config.in"
-+	source "package/speechd/Config.in"
- 	source "package/squeezelite/Config.in"
- 	source "package/tinycompress/Config.in"
- 	source "package/tovid/Config.in"
-diff --git a/package/speechd/Config.in b/package/speechd/Config.in
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 6dc9cfa148..f1b16ff39b 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -59,6 +59,7 @@ source "package/qt5/qt5scxml/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
+ source "package/qt5/qt5serialbus/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
++source "package/qt5/qt5speech/Config.in"
+ source "package/qt5/qt5svg/Config.in"
+ source "package/qt5/qt5tools/Config.in"
+ source "package/qt5/qt5virtualkeyboard/Config.in"
+diff --git a/package/qt5/qt5speech/Config.in b/package/qt5/qt5speech/Config.in
 new file mode 100644
-index 0000000000..8fdc452d19
+index 0000000000..cebd06057e
 --- /dev/null
-+++ b/package/speechd/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_SPEECHD
-+	bool "speechd"
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_DOTCONF
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBSNDFILE
++++ b/package/qt5/qt5speech/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_QT5SPEECH
++	bool "qt5speech"
 +	help
-+	  Speech Dispatcher project provides a high-level device
-+	  independent layer for access to speech synthesis through
-+	  a simple, stable and well documented interface.
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
 +
-+	  https://freebsoft.org/speechd
++	  Qt Speech enables support for accessibility features such as
++	  text-to-speech.
 +
-+comment "speechd needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-diff --git a/package/speechd/speechd.hash b/package/speechd/speechd.hash
++	  For output optional enable flite or speechd.
++
++	  https://doc.qt.io/qt-5/qtspeech-index.html
+diff --git a/package/qt5/qt5speech/qt5speech.hash b/package/qt5/qt5speech/qt5speech.hash
 new file mode 100644
-index 0000000000..4eb4cd09d2
+index 0000000000..595aac9f22
 --- /dev/null
-+++ b/package/speechd/speechd.hash
-@@ -0,0 +1,5 @@
++++ b/package/qt5/qt5speech/qt5speech.hash
+@@ -0,0 +1,7 @@
 +# Locally calculated
-+sha256  628d4446894b47f0df099123924c1070180b5b5b09c5b637ebe80d8578fba92f  speechd-0.11.4.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL-2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPL-3
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
++sha256  6d0794ab9d5286d04fbac2db44c00ed3306e569c876f84cfd91ac0e79c834b1e  qtspeech-d32f4a479d38a11f547598004b975f4356424a16.tar.bz2
++
++# Hashes for license files:
++sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
++sha256  75d800e60c8d58c2e7f0338e8552ea6123a9ce7e5dd8e1cdf2095e013b737488  LICENSE.LGPLv3
++sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+diff --git a/package/qt5/qt5speech/qt5speech.mk b/package/qt5/qt5speech/qt5speech.mk
 new file mode 100644
-index 0000000000..0d43e4b6fb
+index 0000000000..8cf6fe19c1
 --- /dev/null
-+++ b/package/speechd/speechd.mk
-@@ -0,0 +1,34 @@
++++ b/package/qt5/qt5speech/qt5speech.mk
+@@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# speechd
++# qt5speech
 +#
 +################################################################################
 +
-+SPEECHD_VERSION = 0.11.4
-+SPEECHD_SITE = $(call github,brailcom,speechd,$(SPEECHD_VERSION))
-+SPEECHD_LICENSE = GPL-2.0+, GPL-3.0+ (buildsystem), LGPL-2.1+
-+SPEECHD_LICENSE_FILES = COPYING.GPL-2 COPYING.GPL-3 COPYING.LGPL
-+SPEECHD_INSTALL_STAGING = YES
-+# speechd source code is released without configure script
-+SPEECHD_AUTORECONF = YES
-+SPEECHD_DEPENDENCIES = host-pkgconf dotconf libglib2 libsndfile
++QT5SPEECH_VERSION = d32f4a479d38a11f547598004b975f4356424a16
++QT5SPEECH_SITE = $(QT5_SITE)/qtspeech/-/archive/$(QT5SPEECH_VERSION)
++QT5SPEECH_SOURCE = qtspeech-$(QT5SPEECH_VERSION).tar.bz2
++QT5SPEECH_INSTALL_STAGING = YES
++QT5SPEECH_LICENSE = GPL-2.0+ or LGPL-3.0, GFDL-1.3 (docs)
++QT5SPEECH_LICENSE_FILES = LICENSE.GPLv2 LICENSE.LGPLv3 LICENSE.FDL
++QT5SPEECH_SYNC_QT_HEADERS = YES
 +
-+# fix missing config.rpath (needed for autoreconf) in the codebase
-+define SPEECHD_TOUCH_CONFIG_RPATH
-+	touch $(@D)/config.rpath
-+endef
-+SPEECHD_PRE_CONFIGURE_HOOKS += SPEECHD_TOUCH_CONFIG_RPATH
-+
-+ifeq ($(BR2_PACKAGE_LIBTOOL),y)
-+SPEECHD_DEPENDENCIES += libtool
-+SPEECHD_CONF_OPTS += --with-libltdl
-+else
-+SPEECHD_CONF_OPTS += --without-libltdl
++ifeq ($(BR2_PACKAGE_FLITE),y)
++QT5SPEECH_DEPENDENCIES += flite
 +endif
 +
-+define SPEECHD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(@D)/speech-dispatcherd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/speech-dispatcherd.service
-+endef
++ifeq ($(BR2_PACKAGE_SPEECHD),y)
++QT5SPEECH_DEPENDENCIES += speechd
++endif
 +
-+$(eval $(autotools-package))
++$(eval $(qmake-package))
 -- 
 2.39.0
 
