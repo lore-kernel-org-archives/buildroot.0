@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B751C54E76
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jan 2023 07:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF1CFC3DA7A
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jan 2023 07:37:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27BB5404A3;
-	Fri,  6 Jan 2023 07:37:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27BB5404A3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7BD5E405C4;
+	Fri,  6 Jan 2023 07:37:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BD5E405C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oVZG3B4IOfj9; Fri,  6 Jan 2023 07:37:39 +0000 (UTC)
+	with ESMTP id AuLH958VS59i; Fri,  6 Jan 2023 07:37:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 626F0400B9;
-	Fri,  6 Jan 2023 07:37:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 626F0400B9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 798401BF359
- for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 07:37:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D43B04048E;
+	Fri,  6 Jan 2023 07:37:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D43B04048E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BC6511BF973
+ for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 07:37:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 545F04188F
- for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 07:37:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 545F04188F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9813A60F20
+ for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 07:37:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9813A60F20
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P3Ck3cW-CbNf for <buildroot@lists.busybox.net>;
- Fri,  6 Jan 2023 07:37:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLJ9bZgapahs for <buildroot@lists.busybox.net>;
+ Fri,  6 Jan 2023 07:37:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3850A41883
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3850A41883
- for <buildroot@buildroot.org>; Fri,  6 Jan 2023 07:37:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DE1860E58
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6DE1860E58
+ for <buildroot@buildroot.org>; Fri,  6 Jan 2023 07:37:55 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id ACB01FF805;
- Fri,  6 Jan 2023 07:37:33 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 32AF82000F;
+ Fri,  6 Jan 2023 07:37:51 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pDhIC-006Dh8-SG; Fri, 06 Jan 2023 08:37:32 +0100
+ id 1pDhIV-006Dj9-6v; Fri, 06 Jan 2023 08:37:51 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221229103953.115133-1-fontaine.fabrice@gmail.com>
-Date: Fri, 06 Jan 2023 08:37:32 +0100
-In-Reply-To: <20221229103953.115133-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 29 Dec 2022 11:39:53 +0100")
-Message-ID: <87r0w8p0zn.fsf@dell.be.48ers.dk>
+References: <20221229104626.145365-1-fontaine.fabrice@gmail.com>
+Date: Fri, 06 Jan 2023 08:37:51 +0100
+In-Reply-To: <20221229104626.145365-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 29 Dec 2022 11:46:26 +0100")
+Message-ID: <87mt6wp0z4.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireshark: add zlib optional
- dependency
+Subject: Re: [Buildroot] [PATCH 1/1] package/wireshark: add minizip-zlib
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,9 +72,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > zlib is an optional dependency which is enabled by default since at
- > least version 1.8.0 and
- > https://github.com/wireshark/wireshark/commit/7133f6944dc26740f5ebf56c2ca33be86a6e0f09
+ > minizip-zlib is an optional dependency which is enabled by default since
+ > version 3.1.0 and
+ > https://github.com/wireshark/wireshark/commit/390071ed0bc8aaf378c3468989ccde1c93817542
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
