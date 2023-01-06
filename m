@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA0F3C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E31EC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E7214F1A8;
-	Tue, 21 Feb 2023 00:17:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E7214F1A8
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2F724F1BE;
+	Tue, 21 Feb 2023 00:17:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2F724F1BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C-OvGQVZB-C0; Tue, 21 Feb 2023 00:17:00 +0000 (UTC)
+	with ESMTP id OVCxG9d5OLiz; Tue, 21 Feb 2023 00:17:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CD224F1BF;
-	Tue, 21 Feb 2023 00:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CD224F1BF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E2B3C1BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB18C4F07E;
+	Tue, 21 Feb 2023 00:17:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB18C4F07E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 37DBF1BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A76C2417BF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A76C2417BF
+ by smtp3.osuosl.org (Postfix) with ESMTP id B42746FAF4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B42746FAF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nz-I97qMJCpw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SXI2yk1gO5li for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 001CC415A4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 001CC415A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC09A6FAC0
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC09A6FAC0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4B648648F; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+ id C8FDA8648F; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 14:40:32 +0100
+Date: Fri, 6 Jan 2023 08:28:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3727229222f23d151a4991ef3db451df6362ce83
-X-Git-Newrev: 00410ab668833d822f645fffd782ce11253457b1
+X-Git-Oldrev: 16168abd26b06656bcc24c2b511c29a0f047ebf4
+X-Git-Newrev: 7ff5f7ff0a5ffb8de98d132740fe2fbe4fb71b5a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205249.E4B648648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Config.in.legacy: select
- BR2_LEGACY from _XF86_INPUT_KEYBOARD
+Message-Id: <20230220205226.C8FDA8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/hiredis: fix debug
+ install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00410ab668833d822f645fffd782ce11253457b1
+commit: https://git.buildroot.net/buildroot/commit/?id=7ff5f7ff0a5ffb8de98d132740fe2fbe4fb71b5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 1100ead7b318 (package/x11r7/xdriver_xf86-input-keyboard: remove
-package) added a legacy symbol for BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD,
-but forgot to select BR2_LEGACY.  Fix that.
+hiredis suffix its debug libraries with "d" since version 1.1.0 and
+https://github.com/redis/hiredis/commit/dde6916b42a4723b364355eff8fbb477723a789a
+resulting in the following build failure with collectd since commit
+bd7e90779861bb603fc1cca03f6fad4d951f7bd9:
 
+    redis . . . . . . . . no (symbol 'redisCommand' not found) (dependency error)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/394ebf2b6816c69dbdd7901491c0e3fd52befedc
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy | 1 +
- 1 file changed, 1 insertion(+)
+ package/hiredis/hiredis.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4bfebe3f89..191a209eeb 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -210,6 +210,7 @@ config BR2_PACKAGE_QEMU_CUSTOM_TARGETS_WRAP
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index d59933845c..f79b6c757a 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -11,7 +11,9 @@ HIREDIS_LICENSE = BSD-3-Clause
+ HIREDIS_LICENSE_FILES = COPYING
+ HIREDIS_CPE_ID_VENDOR = redislabs
+ HIREDIS_INSTALL_STAGING = YES
+-HIREDIS_CONF_OPTS = -DDISABLE_TESTS=ON
++# Set CMAKE_BUILD_TYPE to Release or the libraries will be suffixed with "d"
++# resulting in a build failure with collectd
++HIREDIS_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release -DDISABLE_TESTS=ON
  
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD
- 	bool "xf86-input-keyboard removed"
-+	select BR2_LEGACY
- 	help
- 	  The X.org keyboard input driver no longer support Linux.
- 
+ ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ HIREDIS_CONF_OPTS += -DENABLE_SSL=ON
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
