@@ -1,58 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38086C54E76
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jan 2023 07:38:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6D22C54E76
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jan 2023 07:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D271860F20;
-	Fri,  6 Jan 2023 07:38:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D271860F20
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BED241626;
+	Fri,  6 Jan 2023 07:39:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BED241626
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hRU13JpDBEtW; Fri,  6 Jan 2023 07:38:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZbREHfeXjstz; Fri,  6 Jan 2023 07:39:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D31160E58;
-	Fri,  6 Jan 2023 07:38:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D31160E58
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80E93409F1;
+	Fri,  6 Jan 2023 07:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80E93409F1
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EA2281BF359
- for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 07:38:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A25F21BF359
+ for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 07:39:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D317682188
- for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 07:38:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D317682188
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E86481455
+ for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 07:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E86481455
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ncAWbkpOHgWz for <buildroot@lists.busybox.net>;
- Fri,  6 Jan 2023 07:38:16 +0000 (UTC)
+ with ESMTP id g1DomzexTqLG for <buildroot@lists.busybox.net>;
+ Fri,  6 Jan 2023 07:39:05 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFA7B820EE
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BFA7B820EE
- for <buildroot@buildroot.org>; Fri,  6 Jan 2023 07:38:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E02081414
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2E02081414
+ for <buildroot@buildroot.org>; Fri,  6 Jan 2023 07:39:04 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A72C91C0008;
- Fri,  6 Jan 2023 07:38:12 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 58B5D240008;
+ Fri,  6 Jan 2023 07:39:01 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pDhIp-006Dkp-Df; Fri, 06 Jan 2023 08:38:11 +0100
+ id 1pDhJc-006Doj-An; Fri, 06 Jan 2023 08:39:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221229105311.170136-1-fontaine.fabrice@gmail.com>
-Date: Fri, 06 Jan 2023 08:38:11 +0100
-In-Reply-To: <20221229105311.170136-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 29 Dec 2022 11:53:11 +0100")
-Message-ID: <87ilhkp0yk.fsf@dell.be.48ers.dk>
+References: <20221229105818.175049-1-fontaine.fabrice@gmail.com>
+Date: Fri, 06 Jan 2023 08:39:00 +0100
+In-Reply-To: <20221229105818.175049-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 29 Dec 2022 11:58:18 +0100")
+Message-ID: <87eds8p0x7.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireshark: add libcap optional
- dependency
+Subject: Re: [Buildroot] [PATCH 1/1] package/wireshark: bump to version 4.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,9 +71,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > libcap is an optional dependency which is enabled by default since at
- > least version 1.8.0 and
- > https://github.com/wireshark/wireshark/commit/9250a69a9976617c735679aa5383e53802e5b43e
+ > - pcre2 is mandatory since version 3.7.0 and
+ >   https://github.com/wireshark/wireshark/commit/b9f2e4b7fa091719b93f6256ac34be8e32bd8e94
+ > - Set HAVE_C99_VSNPRINTF to avoid a build failure due to
+ >   check_c_source_runs
+ > - DISABLE_WERROR was renamed to ENABLE_WERROR
+
+ > 4.x serie is the new stable release
+
+ > https://www.wireshark.org/news/20221207.html
+ > https://www.wireshark.org/docs/relnotes/wireshark-4.0.2.html
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
