@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 470E7C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:17:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD050C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:18:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D71094EE53;
-	Tue, 21 Feb 2023 00:17:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D71094EE53
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FE634F1EB;
+	Tue, 21 Feb 2023 00:18:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FE634F1EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sstv-PJuWztk; Tue, 21 Feb 2023 00:17:54 +0000 (UTC)
+	with ESMTP id xY3uOBUcBTKD; Tue, 21 Feb 2023 00:18:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E05E4F1D2;
-	Tue, 21 Feb 2023 00:17:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E05E4F1D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 300D44F1E8;
+	Tue, 21 Feb 2023 00:18:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 300D44F1E8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 472921BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 566CA1BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3E296FAF0
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBD806FAFC
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3E296FAF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBD806FAFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 406VBgL8cPms for <buildroot@lists.busybox.net>;
+ with ESMTP id uTnD2rA6QT50 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E820E6FAA8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E820E6FAA8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13B6F610B3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13B6F610B3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E6887828C8; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+ id 12312828C8; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Jan 2023 08:37:26 +0100
+Date: Fri, 6 Jan 2023 08:38:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 84e52a60b4044d3c54d6d4be5729a6d30aaf5aee
-X-Git-Newrev: e6365126e731a1d0bf40eea91cb51b98b6918ecf
+X-Git-Oldrev: 8702cecb142e42c6fd522d8256732ec54bab1711
+X-Git-Newrev: f70149c80cda5d2f6bbe2266b247d52818391cda
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205226.E6887828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wireshark: add zlib
+Message-Id: <20230220205227.12312828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wireshark: add libcap
  optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,12 +63,12 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6365126e731a1d0bf40eea91cb51b98b6918ecf
+commit: https://git.buildroot.net/buildroot/commit/?id=f70149c80cda5d2f6bbe2266b247d52818391cda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-zlib is an optional dependency which is enabled by default since at
+libcap is an optional dependency which is enabled by default since at
 least version 1.8.0 and
-https://github.com/wireshark/wireshark/commit/7133f6944dc26740f5ebf56c2ca33be86a6e0f09
+https://github.com/wireshark/wireshark/commit/9250a69a9976617c735679aa5383e53802e5b43e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
@@ -77,23 +77,23 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 5da344fc55..f7fd72558e 100644
+index c1efef2280..d9314fb211 100644
 --- a/package/wireshark/wireshark.mk
 +++ b/package/wireshark/wireshark.mk
-@@ -157,6 +157,13 @@ else
- WIRESHARK_CONF_OPTS += -DBUILD_sdjournal=OFF
+@@ -65,6 +65,13 @@ else
+ WIRESHARK_CONF_OPTS += -DENABLE_GNUTLS=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+WIRESHARK_CONF_OPTS += -DENABLE_ZLIB=ON
-+WIRESHARK_DEPENDENCIES += zlib
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++WIRESHARK_CONF_OPTS += -DENABLE_CAP=ON
++WIRESHARK_DEPENDENCIES += libcap
 +else
-+WIRESHARK_CONF_OPTS += -DENABLE_ZLIB=OFF
++WIRESHARK_CONF_OPTS += -DENABLE_CAP=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_ZSTD),y)
- WIRESHARK_CONF_OPTS += -DENABLE_ZSTD=ON
- WIRESHARK_DEPENDENCIES += zstd
+ ifeq ($(BR2_PACKAGE_LIBKRB5),y)
+ WIRESHARK_CONF_OPTS += -DENABLE_KERBEROS=ON
+ WIRESHARK_DEPENDENCIES += libkrb5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
