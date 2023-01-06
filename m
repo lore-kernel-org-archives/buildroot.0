@@ -4,82 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8656EC4708E
-	for <buildroot@archiver.kernel.org>; Thu,  5 Jan 2023 22:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CADD4C4708E
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jan 2023 01:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBF2D60AE8;
-	Thu,  5 Jan 2023 22:54:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBF2D60AE8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23C1D60AB0;
+	Fri,  6 Jan 2023 01:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23C1D60AB0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R5Ivb5FPKhXx; Thu,  5 Jan 2023 22:54:38 +0000 (UTC)
+	with ESMTP id GVlSBn2ShZGa; Fri,  6 Jan 2023 01:21:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 417B360AD1;
-	Thu,  5 Jan 2023 22:54:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 417B360AD1
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEE0C60ABB;
+	Fri,  6 Jan 2023 01:21:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEE0C60ABB
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C3FB51BF295
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 22:54:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CD80A1BF36E
+ for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 01:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AAA72419B6
- for <buildroot@lists.busybox.net>; Thu,  5 Jan 2023 22:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAA72419B6
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7CE441B49
+ for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 01:21:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7CE441B49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C3dep5_0Jp-r for <buildroot@lists.busybox.net>;
- Thu,  5 Jan 2023 22:54:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5532C419AE
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com
- [IPv6:2001:4860:4864:20::2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5532C419AE
- for <buildroot@buildroot.org>; Thu,  5 Jan 2023 22:54:34 +0000 (UTC)
-Received: by mail-oa1-x2b.google.com with SMTP id
- 586e51a60fabf-1442977d77dso44644644fac.6
- for <buildroot@buildroot.org>; Thu, 05 Jan 2023 14:54:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EQ01kFMnNd4kB0mWZ0ojouII/vWQts72PQRKIYbBQFo=;
- b=MOIoe10/t99+KZE0q9MdQswPfCDMA32n9fA21M0LwnUrqc5KZJZEFcZ4fu2/ohPKGy
- C5f9DSBQSC+MW2squKWylPKXTmDyKxCwHEv/lfIOwp8ifYrcAKCgAvV26bizdE7pDbQY
- 0eQdGV9oyMa7oF49sEQObTbcsAOWq5mLIn2fWc/Yhm1DnJsKptEVg/OJ//RSat9PRCy8
- vsrb2k00mXQ75AT9+E4iJRt5ycKyudpFdfhoY2M/gJ3t1YkkCggAgUTZlSJ79v3enXKe
- TF/INdMPlwHxujvex5We3Ord5JnT4GPmaRqTdZnOsOFlz6+4vyM/bcpZXZieyZaykqZX
- bG9g==
-X-Gm-Message-State: AFqh2krdjxhLn2gqLWVSqeCnGK5+++VA5nEkx6fxHjkarLr5hu05WTTy
- 5ogy00qlC3LfMkC0aeYyWIVMCZhlQv/vOsEkBWn40SWVFLn1Gg==
-X-Google-Smtp-Source: AMrXdXvzWe3ckV+k3Iogw64gRk67FJxZqKjSrRBIOGjyBPsSZ6WYpr1PnCSzRw8tTAMEtFYQnDjYxOeQpe37fQcdl1E=
-X-Received: by 2002:a05:6870:8304:b0:144:9744:2be3 with SMTP id
- p4-20020a056870830400b0014497442be3mr2498808oae.93.1672959271745; Thu, 05 Jan
- 2023 14:54:31 -0800 (PST)
+ with ESMTP id VrWoO4jWhcWR for <buildroot@lists.busybox.net>;
+ Fri,  6 Jan 2023 01:21:37 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57FEA41B46
+Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57FEA41B46
+ for <buildroot@buildroot.org>; Fri,  6 Jan 2023 01:21:36 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.66.6])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id DbQMprw6k6OgZDbQMpis4e; Fri, 06 Jan 2023 02:21:34 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Fri,  6 Jan 2023 02:21:33 +0100
+Message-Id: <20230106012133.2431588-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230105185140.622799-1-bernd.kuhls@t-online.de>
-In-Reply-To: <20230105185140.622799-1-bernd.kuhls@t-online.de>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 5 Jan 2023 15:54:20 -0700
-Message-ID: <CADvTj4pxi8ZaaGfUAXiKL_WS4ZsT454Q5mACeg=iTZfw=17b-w@mail.gmail.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=EQ01kFMnNd4kB0mWZ0ojouII/vWQts72PQRKIYbBQFo=;
- b=ZgwT5PDquyttGQlM8y8ZItAxa5uXXBAbAEntfsnmOfluDOPg9LtRBXklhRTBdhjwej
- OfhsF6RFJ3bQlSImizEEy4yOOuMKDFJNZjLPF4Tm7LVSsuUrDVH79RDJzhxuNZ/3PB4c
- tlMZQoO9ANppn9hZ4CwQ3ERl0w3ghzgP3yol3LWZNVN7PgJQvrefNuNGnEaJmWxHDsF8
- F8LfFLr25nZVmSXNc0vhXx1RWxVetyo+9sVJXHqO1f6G9eVRmizf2yl8hxpv13amMimV
- vQ/+XLlHHPhMA0fAj/JKH56uCmS+1cIrOKztGtHzdSmuaxMcgsu/hIADp4/OaJyERrHQ
- LSXA==
+X-CMAE-Envelope: MS4xfIAh8332cPSJ82NOyprYOsQ2w0LBNKyayEmcZ41VqYkgFmYjMwkzcea8N8RmmIXyGhZx+h4P2JUGom5uTKQiFp/VqyDnPS2UkabZpUF27niyUKNjKN93
+ QWLnqnzhxPgz4l8zPAfU/R2GGQ8/JSNPir+8tvfQh8l1rDlWikVkHJjbEkMErQj74bsG9LoL4krxVLhahPoiOGi8ImTCRin9IiFX5s3b9asKrYzgSuRRZRMc
+ pOSFoS7RXZs4mgAJ5wIS+qpk2VrCLjjS0UMKrzPukhRSYVRz4lpf3TDA3MxS8NSgyHfXNC3xmY+p+yh3u1LKxA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1672968094; bh=zH7Cgneh9B7oQYjZQHRG0Jpy94cxvLOO5tOC+Vv2RXk=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=c6RKUQ1hLGpDB6TrFCO5SO1MwMP8fhJ1Wu8zZyhJNGVlE6xsd+Dqh8gyy4Q05nkEI
+ ijY0jQRKmATH2TFGUWSbcNx9pg/qbFdi3CcnLGEfNkh/Ho5rKc7rkNY04wDrP5jq9M
+ ADF287a8ylbxJsFZMZkiup7eN1WJ5G1YJ2p4IZj0hBizNYmHjpWvTTPXDRSncy6SxB
+ 48KV/CzC7zWXBPkPmcPsTmDhvvMEEN7piuYi3TP9HmiLp8O5eJiZLxgb2kgOs1UlAB
+ WibMBAA2KZeeQJJ26fTPNGvs32gDZpFGHjoJrQYgRoq7iqZNPYMYkaqVmcKooL0QUv
+ SNxDXj9oVuuPg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZgwT5PDq
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgpg-error: add configure
- option to install gpg-error-config
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=c6RKUQ1h
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.87
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,50 +72,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Jan 5, 2023 at 11:52 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->
-> Upstream commit[1]
->
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commitdiff;h=0b47de9c719b0ed0da0791f0525de073737bde5a
->
-> changed behaviour: "gpg-error-config is now only installed when enabled"
->
-> Fixes:
-> http://autobuild.buildroot.net/results/bc1/bc1566a0fa42f68f1f15f74a61d4081e269e1689/
->
-> [1] included in version 1.46, added in buildroot with commit b5bdcb4cc5
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/libgpg-error/libgpg-error.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-> index ab3c7c3bf2..3f4a45a7e4 100644
-> --- a/package/libgpg-error/libgpg-error.mk
-> +++ b/package/libgpg-error/libgpg-error.mk
-> @@ -15,6 +15,7 @@ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
->  LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
->  LIBGPG_ERROR_CONF_OPTS = \
->         --host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG) \
-> +       --enable-install-gpg-error-config \
->         --disable-tests \
->         --disable-languages
->
-> --
-> 2.34.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 50c5e583af..f847ec4f77 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_86_RTM/src/SHA256SUMS
+-sha256  3f385fc686476bbba811035fa6821b542475d55747b18c20c221d4d66573b975  nss-3.86.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_87_RTM/src/SHA256SUMS
++sha256  68a1894496d3d158babc75f8a5dda3f55b7c1560573936e3b101a10fa4ac152d  nss-3.87.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index f8fe076fe9..a60e615f9a 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.86
++LIBNSS_VERSION = 3.87
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
