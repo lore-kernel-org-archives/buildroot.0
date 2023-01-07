@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B81BBC54EBC
-	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 19:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DBAAC46467
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 19:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D89660BED;
-	Sat,  7 Jan 2023 19:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D89660BED
+	by smtp3.osuosl.org (Postfix) with ESMTP id A044060E34;
+	Sat,  7 Jan 2023 19:30:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A044060E34
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a5GaTjaUkWRn; Sat,  7 Jan 2023 19:30:40 +0000 (UTC)
+	with ESMTP id CJcGM-YgdGff; Sat,  7 Jan 2023 19:30:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C22FC60B6A;
-	Sat,  7 Jan 2023 19:30:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C22FC60B6A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F0A7C1BF421
- for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:29:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A63E60ECE;
+	Sat,  7 Jan 2023 19:30:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A63E60ECE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 03AAE1BF844
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:29:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7B6140142
- for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7B6140142
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2495C410B1
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:29:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2495C410B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZBeIBVtm_E4s for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zkuYEUhph2vy for <buildroot@lists.busybox.net>;
  Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 20A2A404BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3DED9410C0
  for <buildroot@buildroot.org>; Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20A2A404BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DED9410C0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0EE0D8762D; Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
+ id 2D7AE87625; Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 7 Jan 2023 20:24:15 +0100
+Date: Sat, 7 Jan 2023 20:24:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c1d22c7331d5888c4d1bac0504e35862d72829fe
-X-Git-Newrev: a564f4da0ffbfd180186a34bdbdccf1cb5f9272f
+X-Git-Oldrev: 5db2e5d45e75b44e7c7c5ad8c61d1be2a2748cbc
+X-Git-Newrev: fad36fa91d9a85ce548ea7f3fd42c1c4b31564ba
 X-Patchwork-Hint: ignore
-Message-Id: <20230107192932.0EE0D8762D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_riscv32_virt_defconfig: use
- OpenSBI 1.2
+Message-Id: <20230107192932.2D7AE87625@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/hifive_unleashed_defconfig:
+ explicitly use OpenSBI 0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a564f4da0ffbfd180186a34bdbdccf1cb5f9272f
+commit: https://git.buildroot.net/buildroot/commit/?id=fad36fa91d9a85ce548ea7f3fd42c1c4b31564ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rather than the default (currently 0.9).
+Rather than relying on what is currently the default.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/qemu_riscv32_virt_defconfig | 2 ++
+ configs/hifive_unleashed_defconfig | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index faf4e1e312..f354e303e5 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -25,6 +25,8 @@ BR2_LINUX_KERNEL_IMAGE=y
+diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
+index 0b87f2588f..2b6ee6c08e 100644
+--- a/configs/hifive_unleashed_defconfig
++++ b/configs/hifive_unleashed_defconfig
+@@ -37,6 +37,8 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
  
  # Bootloader
  BR2_TARGET_OPENSBI=y
 +BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
++BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="0.9"
  BR2_TARGET_OPENSBI_PLAT="generic"
- 
- # host-qemu for gitlab testing
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
