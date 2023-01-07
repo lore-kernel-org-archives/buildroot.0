@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E67EC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:23:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C77BC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:23:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B3784172A;
-	Tue, 21 Feb 2023 00:23:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B3784172A
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6E0942A0F;
+	Tue, 21 Feb 2023 00:23:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6E0942A0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WcpljDIQ_8UC; Tue, 21 Feb 2023 00:23:24 +0000 (UTC)
+	with ESMTP id CSG6jWtiEjIr; Tue, 21 Feb 2023 00:23:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B1414F300;
-	Tue, 21 Feb 2023 00:23:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B1414F300
+	by smtp4.osuosl.org (Postfix) with ESMTP id F06A641773;
+	Tue, 21 Feb 2023 00:23:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F06A641773
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D281B1BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 35DF81BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9545F6FB20
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5AA36FAF8
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9545F6FB20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5AA36FAF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VrDrA1clWNXK for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+ with ESMTP id hBo79FPMRpkt for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC6F16FB00
+ by smtp3.osuosl.org (Postfix) with ESMTP id D0E4E6FAA8
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC6F16FB00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0E4E6FAA8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA9D2828C8; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+ id CF07586495; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 7 Jan 2023 20:24:31 +0100
+Date: Sat, 7 Jan 2023 20:24:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 035cc3caf998a71dea37eefb852d20867fd89b39
-X-Git-Newrev: 5db2e5d45e75b44e7c7c5ad8c61d1be2a2748cbc
+X-Git-Oldrev: a564f4da0ffbfd180186a34bdbdccf1cb5f9272f
+X-Git-Newrev: 035cc3caf998a71dea37eefb852d20867fd89b39
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205227.DA9D2828C8@busybox.osuosl.org>
+Message-Id: <20230220205227.CF07586495@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- configs/spike_riscv64_defconfig: use OpenSBI 1.2
+ configs/qemu_riscv64_virt_defconfig: use OpenSBI 1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +63,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5db2e5d45e75b44e7c7c5ad8c61d1be2a2748cbc
+commit: https://git.buildroot.net/buildroot/commit/?id=035cc3caf998a71dea37eefb852d20867fd89b39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Julien Olivain <ju.o@free.fr>
-Tested-by: Julien Olivain <ju.o@free.fr>
+Rather than the default (currently 0.9).
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/spike_riscv64_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/qemu_riscv64_virt_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/configs/spike_riscv64_defconfig b/configs/spike_riscv64_defconfig
-index 26103682f9..e23f1ce32c 100644
---- a/configs/spike_riscv64_defconfig
-+++ b/configs/spike_riscv64_defconfig
-@@ -9,7 +9,7 @@ BR2_TARGET_ROOTFS_CPIO=y
- # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index c455680ee0..b3174a152c 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -25,6 +25,8 @@ BR2_LINUX_KERNEL_IMAGE=y
+ 
+ # Bootloader
  BR2_TARGET_OPENSBI=y
- BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
--BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.1"
++BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
 +BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
  BR2_TARGET_OPENSBI_PLAT="generic"
- BR2_TARGET_OPENSBI_LINUX_PAYLOAD=y
- BR2_PACKAGE_HOST_RISCV_ISA_SIM=y
+ 
+ # host-qemu for gitlab testing
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
