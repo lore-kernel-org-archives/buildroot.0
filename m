@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3B2AC46467
-	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 19:29:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57DEDC54EBC
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 19:29:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5253A81E5E;
-	Sat,  7 Jan 2023 19:29:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5253A81E5E
+	by smtp4.osuosl.org (Postfix) with ESMTP id E87D8410DE;
+	Sat,  7 Jan 2023 19:29:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E87D8410DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sm-obp7mg-tl; Sat,  7 Jan 2023 19:29:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J_hKzCFlsuyE; Sat,  7 Jan 2023 19:29:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A39AB81DFE;
-	Sat,  7 Jan 2023 19:29:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A39AB81DFE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 982631BF421
- for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:28:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03C25410C9;
+	Sat,  7 Jan 2023 19:29:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03C25410C9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C61C21BF421
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 812E940142
- for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:28:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 812E940142
+ by smtp3.osuosl.org (Postfix) with ESMTP id AED1760BBF
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AED1760BBF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eTPRYgov7SJY for <buildroot@lists.busybox.net>;
- Sat,  7 Jan 2023 19:28:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF9AB4002B
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CF9AB4002B
- for <buildroot@buildroot.org>; Sat,  7 Jan 2023 19:28:57 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CA229FF803;
- Sat,  7 Jan 2023 19:28:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pEEs9-00BBfi-AR; Sat, 07 Jan 2023 20:28:53 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XJpjGFSzSXpL for <buildroot@lists.busybox.net>;
+ Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CC2F60ACE
+ for <buildroot@buildroot.org>; Sat,  7 Jan 2023 19:29:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CC2F60ACE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EED8387625; Sat,  7 Jan 2023 19:29:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20230106211841.4064916-1-james.hilliard1@gmail.com>
-Date: Sat, 07 Jan 2023 20:28:53 +0100
-In-Reply-To: <20230106211841.4064916-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Fri, 6 Jan 2023 14:18:41 -0700")
-Message-ID: <875ydim9e2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/{glibc,
- localedef}: bump to version
- 2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c
+To: buildroot@buildroot.org
+Date: Sat, 7 Jan 2023 20:23:33 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b39bd50e0a4cfb9cd5bba02c6ae913be72f3771a
+X-Git-Newrev: 7f9a31bb8ce5567c8b3a59e50c44302f69788e02
+X-Patchwork-Hint: ignore
+Message-Id: <20230107192931.EED8387625@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/sipeed_lichee_rv_defconfig: use
+ OpenSBI 1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,22 +57,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7f9a31bb8ce5567c8b3a59e50c44302f69788e02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop patches which are now upstream.
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/sipeed_lichee_rv_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/sipeed_lichee_rv_defconfig b/configs/sipeed_lichee_rv_defconfig
+index f03a6b4f69..750d2d6e3b 100644
+--- a/configs/sipeed_lichee_rv_defconfig
++++ b/configs/sipeed_lichee_rv_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
+-BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.1"
++BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
+ BR2_TARGET_OPENSBI_PLAT="generic"
+ # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
+ BR2_TARGET_UBOOT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
