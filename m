@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1595FC54EBD
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jan 2023 21:27:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9BAC5479D
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 01:04:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 819A941C5C;
-	Fri,  6 Jan 2023 21:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 819A941C5C
+	by smtp1.osuosl.org (Postfix) with ESMTP id D924081FEE;
+	Sat,  7 Jan 2023 01:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D924081FEE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4i45w_4fCc78; Fri,  6 Jan 2023 21:27:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t2HBVQftojzb; Sat,  7 Jan 2023 01:04:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 664DF41C5E;
-	Fri,  6 Jan 2023 21:27:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 664DF41C5E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1894481FB2;
+	Sat,  7 Jan 2023 01:04:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1894481FB2
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B40241BF5E9
- for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 21:27:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B02861BF59B
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 01:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F7FC40022
- for <buildroot@lists.busybox.net>; Fri,  6 Jan 2023 21:27:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F7FC40022
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B8654026A
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 01:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B8654026A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VmsNvHa_IsNk for <buildroot@lists.busybox.net>;
- Fri,  6 Jan 2023 21:27:22 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D1F340156
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1D1F340156
- for <buildroot@buildroot.org>; Fri,  6 Jan 2023 21:27:21 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.160]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MCbIn-1p5xsj0mp9-009kcR; Fri, 06
- Jan 2023 22:27:18 +0100
-Date: Fri, 6 Jan 2023 22:27:16 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+ with ESMTP id jJOIUOmi_4Mp for <buildroot@lists.busybox.net>;
+ Sat,  7 Jan 2023 01:04:45 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E14C540022
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E14C540022
+ for <buildroot@buildroot.org>; Sat,  7 Jan 2023 01:04:44 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id p66so1639445iof.1
+ for <buildroot@buildroot.org>; Fri, 06 Jan 2023 17:04:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=eKFV2b0eedpsySzLR2yqZCM2V/FpAQ2RSRycv6APphE=;
+ b=dtLCYPNF20TpVkjX9vBh6kqcETaFjKxeqHMrDIV1ypkNBsm62GdxWr8jq2t0UViASx
+ zgIbTZ/S2PoaBxnSRCDz3YkmNF4grHEkw5C2Yo4qdamWlXpkJtLd3IRCeJvr9TtIXvJx
+ NSV2BhNiDskWlTYfm3MGC+yRiuFI3birci/xHSn5BlPiXCterpFt72jsLzQGEHFoZyBP
+ Y8Sp+wm3cbvPYubEmu3gDD52IcVdsPkd06F0zIlCeKfTm2379MTKCQe334EvuqNihgo9
+ kpj7LIofQbONK+o16g74A0vX1+RGOZiBa5qVJgmlKNL0j2HjdevG62xnC6rLxh1GGcxS
+ LG2A==
+X-Gm-Message-State: AFqh2kr9M1sdJHyb3OptqDk4m6w7DWrIfdrAh6BkhorTgXJuqGFwWmKY
+ LhGhnYGVW7SbLpFniUr9McK9fCPd06PvEw==
+X-Google-Smtp-Source: AMrXdXt+ckZ4OXo18FzphTsfB5Gkl7YwKr891GOqquMulttoBQ5Cz9pRcy86kr0J2sAQ7bVDlc3qvw==
+X-Received: by 2002:a5d:83cf:0:b0:6e4:720a:2391 with SMTP id
+ u15-20020a5d83cf000000b006e4720a2391mr36463826ior.2.1673053483557; 
+ Fri, 06 Jan 2023 17:04:43 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
+ [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
+ e26-20020a0566380cda00b00363c4307bb2sm725938jak.79.2023.01.06.17.04.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 06 Jan 2023 17:04:42 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <20230106222716.7b661245@gmx.net>
-In-Reply-To: <20230106210827.30007-3-ps.report@gmx.net>
-References: <20230106210827.30007-1-ps.report@gmx.net>
- <20230106210827.30007-3-ps.report@gmx.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
+Date: Fri,  6 Jan 2023 18:04:34 -0700
+Message-Id: <20230107010437.2471513-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:OVfrUnjSgv9VivOKzJalU9YaZLNt2f2HlohyXzrCya7UQV9dLiU
- 4mf0p/DnjN04yOjzh/jCwxf7bTdJOjH0du0C/iGWV+S3ksDZkNeAXIaQhPdtEL+CV/y0+v5
- GwxwhshfSMWs59P6g/4XIDfRJmtsaPeVvghKKkuSlQGCbSytuA9pxQr/c4v/gDcfl1DoV2Y
- G4TBptYmZN63Y4cUPQzSA==
-UI-OutboundReport: notjunk:1;M01:P0:WdNrynwpwZ0=;55SYj88RUBE9VHfdjBRz/5lrRjc
- LXkjXoT6Smqif7oaSkeduXrwQd0e1BfyhNNM3Q9NoKftP1t1GmHVuNJJjS06/e4L4regTk8qH
- /3YH7IcGHwQgnkUh0CB3MaG8VOe01Dm3K8zRBGeqxTkKGw/DEQKYC+jW2tLq7DnYN6ZIZ93cM
- 2FCWgsHYu0OetH+KcFLGblxGVWkChxuQ5gHKd8nweEZqy0gF2phl1vE5cuU5I6YvpVBgkstkI
- MonJllNz9t/nrD833SvsUuPr59PzXfukc1vUZErHMDDsmv+S9oS7I/9//eDKIoD7/f/jWt96M
- tJJtA2JT4poWH5fdC4qhOV6QfihFVRS7RmeipFCMiZ2SQbFZpCTDzsA0CmIvT84/sI6pastEH
- 9npHfU8ojLGXehdwxeJhmPqTl3WMv9giY4Z2ni7Lmz9IDBXmiUlKhHwKhkuLk5ntGhV638ajc
- SLl6f0ePd3mRpBzBfjbh1xoxS7K31U0x9ekiq64LnBWPE385Vyv9AvzOVj+mceuccWnw9B9V4
- r8pundpmBCLnDY3kDT7kvf27M0kKdMbNyskPH2nFztKh4TjNFwvQRviTViYswJ2ofaWt9ZriK
- ULVoBrwkSKcfjTZ7PF7oYIFTYVmwr1jZRr5RLoF/krlDO9JO3dhoacT+d3dY5QomggLPZk/sV
- YwzyqpCA9adL71Vp6SxplzeW9E9UQcyuhHqLQo2QSNZAqufcqyAkRn3H7pgROD+UrCxmMEHsB
- g4YnG4x9vRk2ah5EoufNPug+E9cABQ9rNdf0m6T8HGSteodSchnZLKWc1OP4hzZrQd9NmHWnF
- ktNqS8rkflEEdOlCSeWVx7nbdSdsTI9dHScXQLVedPSGYj8N3xHwGLcfJ4YtDBIcO0ipv5223
- 1WwuWAnqBLJYKfCQy3D8TVFJtZcyGsQQksHjnWY0k4dP4BTwFR1uJ42VQ1VAq5Y7uxOGNf0VH
- SOla7Q==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1673040438; bh=Co7Wc8630F/s2XVLp9OwHW8E+esljXLwOHANYR1e/mc=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=Hg3+wM0SjA7yQRs1VlBt9lgzfpdhuKoRsqrLeiNYvtCQHoPtrdMl2pRZUuQNTAYFI
- LNsIVCFHzBtpzkqznY/dSA3pS7VX9wdpq5gTcU0UV9TzkUh1NMR1eIEauZYqMcf5KC
- d+mlySkrrXTzJMD33eB9exu6+fF8uNjKfOG9sEalfk/Y3U2DM4qdjHGX9N7jpSt5qD
- QjPZGJWMQgYfFFg4aAMSQVYibL2AKyqWwUNDdxFahEggUs68OLsiqDkcJWMWZFGEEb
- x2ZkPMJTyQB8OOyZU5bGUOEBFDXemSxMLEXxxFxsF6s5XnZ4dWiyTk+oiS7zXJm0GT
- G4cHUdb44t2Tw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=eKFV2b0eedpsySzLR2yqZCM2V/FpAQ2RSRycv6APphE=;
+ b=kbOxDCnKb/WBPA+MkuLxdtxV7obeHEGmSx2nwVFyFeDwxyuTSRvr9O62Jr6tsUcYx8
+ 9hsxLNxg+y0HgqhqdmU3Tw6Ai3zt3LdRA+Un+QaL+BoDXsy164PqDHTmPi/QCKFQ2MJc
+ 5UQQg8y7NcA5Doa9x/Vf2gZ6aGsE3a4XvphQGXvD/a1hBQGIt81u5z6tolKZT86nXd5a
+ YuzC+Upfa2Kr8qk/8DLlvHxUpSjYRMiVBhK1amTVKXk5cDysmTduMxLX4Ibj/ArIbQna
+ 6cF+Qe6+DIq/+2isXLvDDPxX3nGRVegBRpsC+mAI9LoHAuNZ813x/O+pgzp6sgB2is69
+ 7O2g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=Hg3+wM0S
-Subject: Re: [Buildroot] [PATCH v1] package/qt5speech: new package
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kbOxDCnK
+Subject: [Buildroot] [PATCH 1/4] package/hiredis: enable host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,114 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Corjon <corjon.j@ecagroup.com>,
- Naumann Andreas <ANaumann@ultratronik.de>
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello *,
+The host-hiredis package is needed for the upcoming ccache update.
 
-the patches
+Note that we must disable ccache when building host-hiredis itself
+as host-ccache depends on host-hiredis.
 
-  - [PATCH v1] package/dotconf: new package
-  - [PATCH v1] package/speechd: new package
-  - [PATCH v1] package/qt5speech: new package (this one)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/hiredis/hiredis.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-should have been in one patch series (1/3, 2/3, 3/3)...
-
-Regards,
-Peter
-
-
-On Fri,  6 Jan 2023 22:08:27 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt5/Config.in                |  1 +
->  package/qt5/qt5speech/Config.in      | 12 ++++++++++++
->  package/qt5/qt5speech/qt5speech.hash |  7 +++++++
->  package/qt5/qt5speech/qt5speech.mk   | 23 +++++++++++++++++++++++
->  4 files changed, 43 insertions(+)
->  create mode 100644 package/qt5/qt5speech/Config.in
->  create mode 100644 package/qt5/qt5speech/qt5speech.hash
->  create mode 100644 package/qt5/qt5speech/qt5speech.mk
->
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index 6dc9cfa148..f1b16ff39b 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -59,6 +59,7 @@ source "package/qt5/qt5scxml/Config.in"
->  source "package/qt5/qt5sensors/Config.in"
->  source "package/qt5/qt5serialbus/Config.in"
->  source "package/qt5/qt5serialport/Config.in"
-> +source "package/qt5/qt5speech/Config.in"
->  source "package/qt5/qt5svg/Config.in"
->  source "package/qt5/qt5tools/Config.in"
->  source "package/qt5/qt5virtualkeyboard/Config.in"
-> diff --git a/package/qt5/qt5speech/Config.in b/package/qt5/qt5speech/Config.in
-> new file mode 100644
-> index 0000000000..cebd06057e
-> --- /dev/null
-> +++ b/package/qt5/qt5speech/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_QT5SPEECH
-> +	bool "qt5speech"
-> +	help
-> +	  Qt is a cross-platform application and UI framework for
-> +	  developers using C++.
-> +
-> +	  Qt Speech enables support for accessibility features such as
-> +	  text-to-speech.
-> +
-> +	  For output optional enable flite or speechd.
-> +
-> +	  https://doc.qt.io/qt-5/qtspeech-index.html
-> diff --git a/package/qt5/qt5speech/qt5speech.hash b/package/qt5/qt5speech/qt5speech.hash
-> new file mode 100644
-> index 0000000000..595aac9f22
-> --- /dev/null
-> +++ b/package/qt5/qt5speech/qt5speech.hash
-> @@ -0,0 +1,7 @@
-> +# Locally calculated
-> +sha256  6d0794ab9d5286d04fbac2db44c00ed3306e569c876f84cfd91ac0e79c834b1e  qtspeech-d32f4a479d38a11f547598004b975f4356424a16.tar.bz2
-> +
-> +# Hashes for license files:
-> +sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
-> +sha256  75d800e60c8d58c2e7f0338e8552ea6123a9ce7e5dd8e1cdf2095e013b737488  LICENSE.LGPLv3
-> +sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
-> diff --git a/package/qt5/qt5speech/qt5speech.mk b/package/qt5/qt5speech/qt5speech.mk
-> new file mode 100644
-> index 0000000000..8cf6fe19c1
-> --- /dev/null
-> +++ b/package/qt5/qt5speech/qt5speech.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# qt5speech
-> +#
-> +################################################################################
-> +
-> +QT5SPEECH_VERSION = d32f4a479d38a11f547598004b975f4356424a16
-> +QT5SPEECH_SITE = $(QT5_SITE)/qtspeech/-/archive/$(QT5SPEECH_VERSION)
-> +QT5SPEECH_SOURCE = qtspeech-$(QT5SPEECH_VERSION).tar.bz2
-> +QT5SPEECH_INSTALL_STAGING = YES
-> +QT5SPEECH_LICENSE = GPL-2.0+ or LGPL-3.0, GFDL-1.3 (docs)
-> +QT5SPEECH_LICENSE_FILES = LICENSE.GPLv2 LICENSE.LGPLv3 LICENSE.FDL
-> +QT5SPEECH_SYNC_QT_HEADERS = YES
-> +
-> +ifeq ($(BR2_PACKAGE_FLITE),y)
-> +QT5SPEECH_DEPENDENCIES += flite
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SPEECHD),y)
-> +QT5SPEECH_DEPENDENCIES += speechd
-> +endif
-> +
-> +$(eval $(qmake-package))
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index f79b6c757a..f2a4836310 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -22,4 +22,13 @@ else
+ HIREDIS_CONF_OPTS += -DENABLE_SSL=OFF
+ endif
+ 
++# We are a ccache dependency, so we can't use ccache
++HOST_HIREDIS_CONF_OPTS += \
++	-DCMAKE_C_COMPILER_LAUNCHER="" \
++	-DCMAKE_CXX_COMPILER_LAUNCHER="" \
++	-DCMAKE_BUILD_TYPE=Release \
++	-DDISABLE_TESTS=ON \
++	-DENABLE_SSL=OFF
++
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
