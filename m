@@ -1,72 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D85B0C46467
-	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 20:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0CE8C46467
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 20:18:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 81560404D3;
-	Sat,  7 Jan 2023 20:15:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81560404D3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53B7B60A98;
+	Sat,  7 Jan 2023 20:18:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53B7B60A98
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q54LsEqiANqy; Sat,  7 Jan 2023 20:15:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FMC9DMw4hTbi; Sat,  7 Jan 2023 20:18:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1F4C40142;
-	Sat,  7 Jan 2023 20:15:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1F4C40142
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 46A781BF5AE
- for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 20:15:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A615F6058F;
+	Sat,  7 Jan 2023 20:18:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A615F6058F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A6711BF5AE
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 20:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1EB198201B
- for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 20:15:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EB198201B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81E1E404B9
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 20:18:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81E1E404B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 59D5T_0vVmq1 for <buildroot@lists.busybox.net>;
- Sat,  7 Jan 2023 20:15:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1_ALHQJ1ndJ3 for <buildroot@lists.busybox.net>;
+ Sat,  7 Jan 2023 20:18:19 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B94BE81E8E
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B94BE81E8E
- for <buildroot@buildroot.org>; Sat,  7 Jan 2023 20:15:33 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6635:e839:5c45:c60e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3A0005FF27;
- Sat,  7 Jan 2023 21:15:27 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 07 Jan 2023 21:15:26 +0100
-Date: Sat, 7 Jan 2023 21:15:26 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Nevo Hed <nhed+buildroot@starry.com>
-Message-ID: <20230107201526.GA151997@scaer>
-References: <20230105015759.63582-1-nhed+buildroot@starry.com>
- <20230105015759.63582-2-nhed+buildroot@starry.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5932A40422
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5932A40422
+ for <buildroot@buildroot.org>; Sat,  7 Jan 2023 20:18:19 +0000 (UTC)
+Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
+ by mailout12.t-online.de (Postfix) with SMTP id 812171E2AC
+ for <buildroot@buildroot.org>; Sat,  7 Jan 2023 21:18:16 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd78.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1pEFdk-4bWoYj0; Sat, 7 Jan 2023 21:18:04 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49936)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pEFdk-0003ki-01
+ for buildroot@buildroot.org; Sat, 07 Jan 2023 21:18:04 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sat,  7 Jan 2023 21:18:03 +0100
+Message-Id: <20230107201803.587499-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230105015759.63582-2-nhed+buildroot@starry.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1673122530;
- bh=k5rnqgPjaEz263vDxg4EA3KEodZX1bnAHO45r1Mqzcc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=R+Zj2l4tlyujiULbqLyjTgQP9hA5IW2SSuUOWf0f1d1AZ2ZCnkknpejcWcqgNEo5W
- 5LYFM+qqSoraPI5bgv0gOcKT3LQjzf5hAAoTdR/qFZAUxD1g8lClKD7n1uu+TGy1Rd
- 50NK+Ru4q1SiQ6Qc4TkDiL8Tjzk8YIl6w33CuSdHylQUycTspA4rGfUvGcACKOu7IY
- BaHFSnTY3Kiwv59uSFtLCbt6zqym4UVRIyE1q5nGXAotJCdmpPYfkQcHAjwbtSNRKo
- Bdd3/SISSONkf3KuDV62rKK/8WhFd3c1RduSDfFp1+KZEgV7JaugFWD19zTlkdz8oD
- Lb5INaYjz8tsw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=R+Zj2l4t
-Subject: Re: [Buildroot] [PATCH 1/1] core: Use of percent_defconfig seems to
- impact performance
+X-TOI-EXPURGATEID: 150726::1673122684-793AD9DD-8495751F/0/0 CLEAN NORMAL
+X-TOI-MSGID: e369f02a-93a8-4350-b7ca-3b8e8df4ab87
+Subject: [Buildroot] [PATCH 2022.02.x 1/1] package/php: security bump
+ version to 8.0.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,102 +66,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Nevo, All,
+Release notes: https://www.php.net/releases/8_0_27.php
+Changelog: https://www.php.net/ChangeLog-8.php#8.0.27
 
-On 2023-01-04 20:57 -0500, Nevo Hed via buildroot spake thusly:
-> Noticed a significant slowdown with rise of number of external trees
-> in our env.  This slowdown seemed to be related to invocations if the
-> percent_defconfig function (GNU Make 4.3).
-> 
-> While I have not do a deep dive in analyzing the performance issue, it
-> felt like redefining the %_defconfig rule N times impact performance.
-> 
-> This patch makes %_defconfig a single rule which combines uses the
-> first return of a wildcard expression.
-> 
-> Timing (seconds) of `make pc_x86_64_bios_defconfig` with 1-8 external
-> trees:
-> 
->     #Trees    Before    After
->          1      0.38     0.37
->          2      0.32     0.31
->          3      0.31     0.33
->          4      0.36     0.32
->          5      0.45     0.35
->          6      1.26     0.36
->          7      9.10     0.36
->          8     85.93     0.42
-> 
-> Signed-off-by: Nevo Hed <nhed+buildroot@starry.com>
+Fixes CVE-2022-31631: http://bugs.php.net/81740
 
-Thanks for the respin, I like it better than your first iteration, and
-most importantly, better than my own implementation!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I however used most of my commit log, a=exteneded it even further,
-provided my reproducibility script in the commit log and redid the
-timings up to 1000 trees (heck, it's manageable now, so why not!).
-
-I also slightly reformatted the code, to split the long lines.
-
-Finally, I also added David as the reporter, and that his bug #14996
-is now fixed.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  Makefile | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 88f90cd2fa..ad866f1f24 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1013,13 +1013,14 @@ oldconfig syncconfig olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmake
->  defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
->  
-> -define percent_defconfig
-> -# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
-> -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
-> -	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
-> -		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
-> -endef
-> -$(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
-> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf  outputmakefile
-> +	@defconfig=$(or \
-> +		$(firstword $(foreach d, \
-> +			$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(wildcard $(d)/configs/$@))), \
-> +		$(error "Can't find $@") \
-> +	); \
-> +	$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$${defconfig} \
-> +		$< --defconfig=$${defconfig} $(CONFIG_CONFIG_IN)
->  
->  update-defconfig: savedefconfig
->  
-> -- 
-> 2.38.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 574d5fb7c4..01e9c4fe79 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  a291b71d0498707fc5514eb5b9513e88f0f1d4890bcdefd67282ded8a2bfb941  php-8.0.25.tar.xz
++sha256  f942cbfe2f7bacbb8039fb79bbec41c76ea779ac5c8157f21e1e0c1b28a5fc3a  php-8.0.27.tar.xz
+ 
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 531f88e896..e1b62b02a8 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.0.25
++PHP_VERSION = 8.0.27
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
