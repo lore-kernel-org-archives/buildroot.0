@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF402C46467
-	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 19:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03ABEC46467
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jan 2023 19:25:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4353A81FE9;
-	Sat,  7 Jan 2023 19:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4353A81FE9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9530F81FF1;
+	Sat,  7 Jan 2023 19:25:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9530F81FF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BbClBSgMXFmd; Sat,  7 Jan 2023 19:25:37 +0000 (UTC)
+	with ESMTP id r9LeJx27LUBe; Sat,  7 Jan 2023 19:25:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E82081FF1;
-	Sat,  7 Jan 2023 19:25:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E82081FF1
+	by smtp1.osuosl.org (Postfix) with ESMTP id DDD428208D;
+	Sat,  7 Jan 2023 19:25:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDD428208D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 70D1D1BF284
- for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:25:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C34211BF284
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:25:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BCE640182
- for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BCE640182
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB37940182
+ for <buildroot@lists.busybox.net>; Sat,  7 Jan 2023 19:25:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB37940182
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ggxNnwon0WZp for <buildroot@lists.busybox.net>;
- Sat,  7 Jan 2023 19:25:24 +0000 (UTC)
+ with ESMTP id FCvAXf6-A8VG for <buildroot@lists.busybox.net>;
+ Sat,  7 Jan 2023 19:25:29 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54567400C8
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 54567400C8
- for <buildroot@buildroot.org>; Sat,  7 Jan 2023 19:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD481400C8
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AD481400C8
+ for <buildroot@buildroot.org>; Sat,  7 Jan 2023 19:25:28 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4BAC620004;
- Sat,  7 Jan 2023 19:25:21 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 739FC100006;
+ Sat,  7 Jan 2023 19:25:25 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pEEoi-00BBVI-9m; Sat, 07 Jan 2023 20:25:20 +0100
+ id 1pEEom-00BBVN-Hl; Sat, 07 Jan 2023 20:25:24 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 References: <20230106194722.1793331-1-peter@korsgaard.com>
- <20230106194722.1793331-3-peter@korsgaard.com>
-Date: Sat, 07 Jan 2023 20:25:20 +0100
-In-Reply-To: <20230106194722.1793331-3-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 6 Jan 2023 20:47:21 +0100")
-Message-ID: <875ydino4f.fsf@dell.be.48ers.dk>
+ <20230106194722.1793331-2-peter@korsgaard.com>
+Date: Sat, 07 Jan 2023 20:25:24 +0100
+In-Reply-To: <20230106194722.1793331-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 6 Jan 2023 20:47:20 +0100")
+Message-ID: <871qo6no4b.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/3]
- configs/sipeed_lichee_rv_dock_defconfig: use OpenSBI 1.2
+Subject: Re: [Buildroot] [PATCH 2/3] configs/sipeed_lichee_rv_defconfig: use
+ OpenSBI 1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
