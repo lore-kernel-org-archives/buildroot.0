@@ -1,68 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83E82C54EBD
-	for <buildroot@archiver.kernel.org>; Sun,  8 Jan 2023 16:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 934C3C54EBD
+	for <buildroot@archiver.kernel.org>; Sun,  8 Jan 2023 16:55:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B3CB60A87;
-	Sun,  8 Jan 2023 16:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B3CB60A87
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E69F400D8;
+	Sun,  8 Jan 2023 16:55:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E69F400D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yjc7jZ6kgHBB; Sun,  8 Jan 2023 16:55:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kKGTzyIXLizF; Sun,  8 Jan 2023 16:55:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C316607CE;
-	Sun,  8 Jan 2023 16:55:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C316607CE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B60661BF865
- for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 16:54:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A62BC4052A;
+	Sun,  8 Jan 2023 16:55:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A62BC4052A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C86FA1BF304
+ for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 16:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 91CD08193E
- for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 16:54:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91CD08193E
+ by smtp4.osuosl.org (Postfix) with ESMTP id A318B4109F
+ for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 16:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A318B4109F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d3Gl4SeLVko8 for <buildroot@lists.busybox.net>;
- Sun,  8 Jan 2023 16:54:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RUdXzGDI1plF for <buildroot@lists.busybox.net>;
+ Sun,  8 Jan 2023 16:54:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6838E81934
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6838E81934
- for <buildroot@buildroot.org>; Sun,  8 Jan 2023 16:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 300E54109B
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 300E54109B
+ for <buildroot@buildroot.org>; Sun,  8 Jan 2023 16:54:45 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue010
- [212.227.15.167]) with ESMTPSA (Nemesis) id 1MQ67s-1pRfwQ1M8G-00M72M; Sun, 08
- Jan 2023 17:54:42 +0100
+ [212.227.15.167]) with ESMTPSA (Nemesis) id 1MfpjF-1oYtSq0ejJ-00gFLr; Sun, 08
+ Jan 2023 17:54:41 +0100
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 17:54:37 +0100
-Message-Id: <20230108165438.1250779-3-laurent@vivier.eu>
+Date: Sun,  8 Jan 2023 17:54:36 +0100
+Message-Id: <20230108165438.1250779-2-laurent@vivier.eu>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230108165438.1250779-1-laurent@vivier.eu>
 References: <20230108165438.1250779-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:AuAkE6ClPfZ/JVt/V1T81ansBurde4iJyzKcN9zDgVxkmQzwIeI
- F1dJAcyx//BsQcm1cqNAbCxAZYQ2IPx2pCIBosqykD5YGnq8XBMA27Qt3iwUwLAE/pkngIi
- Zqzspyp3P8vD44JbBSsALYZ1fEhnclczuaePL+fFLi9XNHgo8RLbcbMsnxG4HAGS+3cspVL
- oRvrCffGbUeKzqjVE3qaw==
-UI-OutboundReport: notjunk:1;M01:P0:f222N5GLXF4=;JM8++4gJfD0GtHzvDnVr+cykvkQ
- OLlwirFAtxY/42ZRq1c2dBmZ21GJGTBeFSvy8r+ZVl6iinFsZYMkPvjC/9A6C8K/cGBhf0nEl
- AHkVUWH7vKKiOo5yTVKBx0MapOuLm5L6Vxtn3HOfdQCtu3oGKpX9t4wNUxbvOZgPuqdtFDKs2
- 5Nrjy9Y7FmxwDfGfftEkVVAJGTSGK3UxxeMMn22ibxSzxrRqHvqtjW8vF6j3awUytEBgy3ZkC
- S2oGo/ebBDMeLUMD9dnVX6fgtefT+qtrK5r6kg/qvf84M5RyrmjsaNZrk27CqZtEsDnoj7j2a
- WaEjH1nx3ORzyqDeer1asxaGTMBiJRlx+ZIEexmJ1ODdoZu1sejStN9o43cBQ/+P4IYWGe2Vg
- tutiyqPuR4wLuXVHP8HvvTA5LJOg0/mrc/jsPY3nb2rDnzmQ2GbxkSJdWpHGGs8Cri5v2lLI7
- KnWEyD0//gXmuDJtAIBpT/W+XFQ6xc2FuZ80VSh/z5AVqBoZf/aRKXvABt2rKg9SJvtc3EzUb
- r29fLo1zjL5GJgeqRkCSBDbrl8CkoPQSmTVD8vhC6T8iYpEcvCHDRx9vLSdjxpyzQ6rfhC5FR
- av59tNTCp0YdeZ1DCbNFuvYWQBLOPT4yqHiCuFsCKcjvrTK8nJNDnTzscGKwuWl3DVNvBMDNC
- DN89udNV5R4aBjX2Yp5wIN1e5/oYr6LPO7/tdsuTqw==
-Subject: [Buildroot] [PATCH v8 2/3] board/qemu/m68k-virt: Add virt-m68k
- linux config
+X-Provags-ID: V03:K1:yf6dI/CXi+wIg4C+OIP03NmijIeSHxKZDQxSAAH02ZmUaNsNOgz
+ ZMUd6NrrlWvYp1bfx4qJm+QSTze3P27+TDCqjHf1kJbBr9ztQWbphb9xiMt9km6pdDqetv/
+ xFPzsTToY3RH3FpTFFMQZcbEBW627oAEJYYBBxsfmytRkKMnhc/YSMeVMS5YvdrPFQrzRUh
+ jJHMKAXl4eoCUGiFUqmsA==
+UI-OutboundReport: notjunk:1;M01:P0:iyLIUxDezRI=;ZczEio0/tvoF/AsKw5RcAwqqufv
+ dQdOyMmxXh3hy2LR6AcFWdLLRoAvqowkMTUfFHf7oy8eNBfHzUE4pdV1KKYDL+bjWjkWJdp+o
+ UnZblqPOEwVWDpVkF0iCj2pmaMPE0g0E+lWD8b/yKh2nhrI2nlbOcLJdEuXvOhdWmUu8szjFI
+ o4w3zmtyxbR9kQEXVpUuFo8Esz41JyhL6s1quOo0pLBr1LxK+p5gt8tWJ0IpkCbP/pI2rw8gK
+ 1kFEMLkqeo1EmGRZSaNLNoHJcvScZuK/yI06T4RFf5wKdOIlORPpwhIJIWpK7ou6OcjjhNfdw
+ xED5iqlnTkzrUMAnfzoihq69TC9KOtZej57X11z3QfYuul2UHspnuaSJpbggRnXIx/3KHGJ3l
+ vKpv6letMQiFG0GRjafWUsoIbW0kfq8gV8qi2Tbpn5sEzZ9XysFbmiO0WtWndt2mfSkiRlGJ1
+ 0zM4M1Jl34p22VAGZ3DOg+tNUWJbAbommJ3oSIownpzCIKCTTkEseeCEZ6z8STQqt+IFDBnG0
+ cMjiNuiBibGT6mwQ3O+luBupoa/YLyQ6HNt+hBhZh1oYrF9jnnwvHTuUnPVxoUJMK1CSzQYF/
+ hOMHcH32l5SIR3adziFPd+8CE78TLeYRWnMB6IQsbCy0G+yyiPLRC28nHdZ6iPMTg7F1GsD0+
+ TEU7qk8X8fCczUpawteFzMfr7FhT3uI6curk9K2rQg==
+Subject: [Buildroot] [PATCH v8 1/3] package: add petitboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,103 +82,528 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Build a 5.19 (first version with the m68k virt machine) kernel
-for "qemu-system-m68k -M virt" machine.
+from https://github.com/glevand/petitboot--buildroot
+
+Updated to work with m68k architecture rather than PlayStation3
+(focused on qemu-system-m68k virt machine)
 
 Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 ---
- DEVELOPERS                                 |  2 ++
- board/qemu/m68k-virt/linux.fragment        | 21 +++++++++++++++++
- board/qemu/m68k-virt/readme.txt            |  5 +++++
- configs/qemu_m68k_virt_petitboot_defconfig | 26 ++++++++++++++++++++++
- 4 files changed, 54 insertions(+)
- create mode 100644 board/qemu/m68k-virt/linux.fragment
- create mode 100644 board/qemu/m68k-virt/readme.txt
- create mode 100644 configs/qemu_m68k_virt_petitboot_defconfig
+ DEVELOPERS                                   |  3 +
+ package/Config.in                            |  1 +
+ package/kexec/Config.in                      |  2 +-
+ package/petitboot/63-md-raid-arrays.rules    | 41 +++++++++++
+ package/petitboot/65-md-incremental.rules    | 69 ++++++++++++++++++
+ package/petitboot/66-add-sg-module.rules     |  2 +
+ package/petitboot/Config.in                  | 23 ++++++
+ package/petitboot/S14silence-console         |  9 +++
+ package/petitboot/S15pb-discover             | 38 ++++++++++
+ package/petitboot/fs-overlay/etc/inittab     | 34 +++++++++
+ package/petitboot/fs-overlay/etc/locale      |  1 +
+ package/petitboot/fs-overlay/init            |  8 ++
+ package/petitboot/kexec-restart              |  8 ++
+ package/petitboot/petitboot-console-ui.rules |  6 ++
+ package/petitboot/petitboot.hash             |  2 +
+ package/petitboot/petitboot.mk               | 77 ++++++++++++++++++++
+ package/petitboot/removable-event-poll.rules |  4 +
+ package/petitboot/shell_config               | 19 +++++
+ package/petitboot/shell_profile              |  2 +
+ 19 files changed, 348 insertions(+), 1 deletion(-)
+ create mode 100644 package/petitboot/63-md-raid-arrays.rules
+ create mode 100644 package/petitboot/65-md-incremental.rules
+ create mode 100644 package/petitboot/66-add-sg-module.rules
+ create mode 100644 package/petitboot/Config.in
+ create mode 100755 package/petitboot/S14silence-console
+ create mode 100755 package/petitboot/S15pb-discover
+ create mode 100644 package/petitboot/fs-overlay/etc/inittab
+ create mode 100644 package/petitboot/fs-overlay/etc/locale
+ create mode 100755 package/petitboot/fs-overlay/init
+ create mode 100755 package/petitboot/kexec-restart
+ create mode 100644 package/petitboot/petitboot-console-ui.rules
+ create mode 100644 package/petitboot/petitboot.hash
+ create mode 100644 package/petitboot/petitboot.mk
+ create mode 100644 package/petitboot/removable-event-poll.rules
+ create mode 100644 package/petitboot/shell_config
+ create mode 100755 package/petitboot/shell_profile
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index cab009109f49..faac1bdda561 100644
+index 86e3f0e7b123..cab009109f49 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1762,6 +1762,8 @@ F:	package/open-lldp/
+@@ -1760,6 +1760,9 @@ F:	package/aircrack-ng/
+ N:	Laurent Charpentier <laurent_pubs@yahoo.com>
+ F:	package/open-lldp/
  
- N:	Laurent Vivier <laurent@vivier.eu>
- F:	package/petitboot/
-+F:	board/qemu/m68k-virt/
-+F:	configs/qemu_m68k_virt_petitboot_defconfig
- 
++N:	Laurent Vivier <laurent@vivier.eu>
++F:	package/petitboot/
++
  N:	Lee Jones <lee.jones@linaro.org>
  F:	boot/afboot-stm32/
-diff --git a/board/qemu/m68k-virt/linux.fragment b/board/qemu/m68k-virt/linux.fragment
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 995dae2c5755..6404228c1306 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2642,6 +2642,7 @@ menu "System tools"
+ 	source "package/openrc/Config.in"
+ 	source "package/openvmtools/Config.in"
+ 	source "package/pamtester/Config.in"
++	source "package/petitboot/Config.in"
+ 	source "package/polkit/Config.in"
+ 	source "package/powerpc-utils/Config.in"
+ 	source "package/procps-ng/Config.in"
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index 90a7bc2672bd..092a80b171fc 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_KEXEC
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+ 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
+ 		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+-		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x
++		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k
+ 	help
+ 	  Kexec is a user space utility for loading another kernel
+ 	  and asking the currently running kernel to do something with
+diff --git a/package/petitboot/63-md-raid-arrays.rules b/package/petitboot/63-md-raid-arrays.rules
 new file mode 100644
-index 000000000000..49416982601c
+index 000000000000..92aec36e69d4
 --- /dev/null
-+++ b/board/qemu/m68k-virt/linux.fragment
-@@ -0,0 +1,21 @@
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_KEXEC=y
-+CONFIG_BOOTINFO_PROC=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_MD=y
-+CONFIG_MD_LINEAR=y
-+CONFIG_MD_MULTIPATH=y
-+CONFIG_MD_FAULTY=y
-+CONFIG_BLK_DEV_DM=y
-+CONFIG_DM_UNSTRIPED=y
-+CONFIG_DM_CRYPT=y
-+CONFIG_DM_SNAPSHOT=y
-+CONFIG_DM_THIN_PROVISIONING=y
-+CONFIG_DM_CACHE=y
-+CONFIG_DM_WRITECACHE=y
-+CONFIG_DM_EBS=y
-+CONFIG_DM_ERA=y
-+CONFIG_DM_CLONE=y
-+CONFIG_DM_MIRROR=y
-+CONFIG_DM_RAID=y
-+CONFIG_DM_ZERO=y
-diff --git a/board/qemu/m68k-virt/readme.txt b/board/qemu/m68k-virt/readme.txt
-new file mode 100644
-index 000000000000..714b74c70ea1
---- /dev/null
-+++ b/board/qemu/m68k-virt/readme.txt
-@@ -0,0 +1,5 @@
-+Run the emulation with:
++++ b/package/petitboot/63-md-raid-arrays.rules
+@@ -0,0 +1,41 @@
++# do not edit this file, it will be overwritten on update
 +
-+ qemu-system-m68k -M virt -kernel output/images/vmlinux -initrd output/images/rootfs.cpio.xz -append "console=ttyGF0" --nographic # qemu_m68k_virt_petitboot_defconfig
++SUBSYSTEM!="block", GOTO="md_end"
 +
-+The petiboot menu will appear in the terminal where QEMU has been started.
-diff --git a/configs/qemu_m68k_virt_petitboot_defconfig b/configs/qemu_m68k_virt_petitboot_defconfig
++# handle md arrays
++ACTION!="add|change", GOTO="md_end"
++KERNEL!="md*", GOTO="md_end"
++
++# partitions have no md/{array_state,metadata_version}, but should not
++# for that reason be ignored.
++ENV{DEVTYPE}=="partition", GOTO="md_ignore_state"
++
++# container devices have a metadata version of e.g. 'external:ddf' and
++# never leave state 'inactive'
++ATTR{md/metadata_version}=="external:[A-Za-z]*", ATTR{md/array_state}=="inactive", GOTO="md_ignore_state"
++TEST!="md/array_state", ENV{SYSTEMD_READY}="0", GOTO="md_end"
++ATTR{md/array_state}=="|clear|inactive", ENV{SYSTEMD_READY}="0", GOTO="md_end"
++LABEL="md_ignore_state"
++
++IMPORT{program}="/sbin/mdadm --detail --export $devnode"
++ENV{DEVTYPE}=="disk", ENV{MD_NAME}=="?*", SYMLINK+="disk/by-id/md-name-$env{MD_NAME}", OPTIONS+="string_escape=replace"
++ENV{DEVTYPE}=="disk", ENV{MD_UUID}=="?*", SYMLINK+="disk/by-id/md-uuid-$env{MD_UUID}"
++ENV{DEVTYPE}=="disk", ENV{MD_DEVNAME}=="?*", SYMLINK+="md/$env{MD_DEVNAME}"
++ENV{DEVTYPE}=="partition", ENV{MD_NAME}=="?*", SYMLINK+="disk/by-id/md-name-$env{MD_NAME}-part%n", OPTIONS+="string_escape=replace"
++ENV{DEVTYPE}=="partition", ENV{MD_UUID}=="?*", SYMLINK+="disk/by-id/md-uuid-$env{MD_UUID}-part%n"
++ENV{DEVTYPE}=="partition", ENV{MD_DEVNAME}=="*[^0-9]", SYMLINK+="md/$env{MD_DEVNAME}%n"
++ENV{DEVTYPE}=="partition", ENV{MD_DEVNAME}=="*[0-9]", SYMLINK+="md/$env{MD_DEVNAME}p%n"
++
++IMPORT{builtin}="blkid"
++OPTIONS+="link_priority=100"
++OPTIONS+="watch"
++ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{ID_FS_UUID_ENC}=="?*", SYMLINK+="disk/by-uuid/$env{ID_FS_UUID_ENC}"
++ENV{ID_FS_USAGE}=="filesystem|other", ENV{ID_FS_LABEL_ENC}=="?*", SYMLINK+="disk/by-label/$env{ID_FS_LABEL_ENC}"
++
++ENV{MD_LEVEL}=="raid[1-9]*", ENV{SYSTEMD_WANTS}+="mdmonitor.service"
++
++# Tell systemd to run mdmon for our container, if we need it.
++ENV{MD_LEVEL}=="raid[1-9]*", ENV{MD_CONTAINER}=="?*", PROGRAM="/usr/bin/readlink $env{MD_CONTAINER}", ENV{MD_MON_THIS}="%c"
++ENV{MD_MON_THIS}=="?*", PROGRAM="/usr/bin/basename $env{MD_MON_THIS}", ENV{SYSTEMD_WANTS}+="mdmon@%c.service"
++
++LABEL="md_end"
+diff --git a/package/petitboot/65-md-incremental.rules b/package/petitboot/65-md-incremental.rules
 new file mode 100644
-index 000000000000..b3497c12b46b
+index 000000000000..153d12fe6f7e
 --- /dev/null
-+++ b/configs/qemu_m68k_virt_petitboot_defconfig
-@@ -0,0 +1,26 @@
-+BR2_m68k=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_CCACHE=y
-+BR2_RELRO_NONE=y
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Petitboot"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_MERGED_USR=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyGF0"
-+BR2_ROOTFS_OVERLAY="package/petitboot/fs-overlay"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
-+BR2_LINUX_KERNEL_DEFCONFIG="virt"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/m68k-virt/linux.fragment"
-+BR2_LINUX_KERNEL_XZ=y
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_KEXEC=y
-+BR2_PACKAGE_KEXEC_ZLIB=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_NET_TOOLS=y
-+BR2_PACKAGE_NETCAT=y
-+BR2_PACKAGE_RSYNC=y
-+BR2_PACKAGE_PETITBOOT=y
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_XZ=y
++++ b/package/petitboot/65-md-incremental.rules
+@@ -0,0 +1,69 @@
++# This file causes block devices with Linux RAID (mdadm) signatures to
++# automatically cause mdadm to be run.
++# See udev(8) for syntax
++
++# Don't process any events if anaconda is running as anaconda brings up
++# raid devices manually
++ENV{ANACONDA}=="?*", GOTO="md_end"
++
++# Also don't process disks that are slated to be a multipath device
++ENV{DM_MULTIPATH_DEVICE_PATH}=="?*", GOTO="md_end"
++
++# We process add events on block devices (since they are ready as soon as
++# they are added to the system), but we must process change events as well
++# on any dm devices (like LUKS partitions or LVM logical volumes) and on
++# md devices because both of these first get added, then get brought live
++# and trigger a change event.  The reason we don't process change events
++# on bare hard disks is because if you stop all arrays on a disk, then
++# run fdisk on the disk to change the partitions, when fdisk exits it
++# triggers a change event, and we want to wait until all the fdisks on
++# all member disks are done before we do anything.  Unfortunately, we have
++# no way of knowing that, so we just have to let those arrays be brought
++# up manually after fdisk has been run on all of the disks.
++
++# First, process all add events (md and dm devices will not really do
++# anything here, just regular disks, and this also won't get any imsm
++# array members either)
++SUBSYSTEM=="block", ACTION=="add|change", ENV{ID_FS_TYPE}=="linux_raid_member", \
++	RUN+="/sbin/mdadm -I --export $env{DEVNAME}"
++
++# Next, check to make sure the BIOS raid stuff wasn't turned off via cmdline
++IMPORT{cmdline}="noiswmd"
++IMPORT{cmdline}="nodmraid"
++ENV{noiswmd}=="?*", GOTO="md_imsm_inc_end"
++ENV{nodmraid}=="?*", GOTO="md_imsm_inc_end"
++SUBSYSTEM=="block", ACTION=="add", ENV{ID_FS_TYPE}=="isw_raid_member", \
++	RUN+="/sbin/mdadm -I $env{DEVNAME}"
++LABEL="md_imsm_inc_end"
++
++SUBSYSTEM=="block", ACTION=="remove", ENV{ID_PATH}=="?*", \
++	RUN+="/sbin/mdadm -If $name --path $env{ID_PATH}"
++SUBSYSTEM=="block", ACTION=="remove", ENV{ID_PATH}!="?*", \
++	RUN+="/sbin/mdadm -If $name"
++
++# Next make sure that this isn't a dm device we should skip for some reason
++ENV{DM_UDEV_RULES_VSN}!="?*", GOTO="dm_change_end"
++ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", GOTO="dm_change_end"
++ENV{DM_SUSPENDED}=="1", GOTO="dm_change_end"
++KERNEL=="dm-*", SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="linux_raid_member", \
++	ACTION=="change", RUN+="/sbin/mdadm -I $env{DEVNAME}"
++LABEL="dm_change_end"
++
++# Finally catch any nested md raid arrays.  If we brought up an md raid
++# array that's part of another md raid array, it won't be ready to be used
++# until the change event that occurs when it becomes live
++KERNEL=="md*", SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="linux_raid_member", \
++	ACTION=="change", RUN+="/sbin/mdadm -I $env{DEVNAME}"
++
++# In case the initramfs only started some of the arrays in our container,
++# run incremental assembly on the container itself.  Note: we ran mdadm
++# on the container in 64-md-raid.rules, and that's how the MD_LEVEL
++# environment variable is already set.  If that disappears from the other
++# file, we will need to add this line into the middle of the next rule:
++#	IMPORT{program}="/sbin/mdadm -D --export $tempnode", \
++
++SUBSYSTEM=="block", ACTION=="add|change", KERNEL=="md*", \
++	ENV{MD_LEVEL}=="container", RUN+="/sbin/mdadm -I $env{DEVNAME}"
++
++
++LABEL="md_end"
+diff --git a/package/petitboot/66-add-sg-module.rules b/package/petitboot/66-add-sg-module.rules
+new file mode 100644
+index 000000000000..ae18d28c570e
+--- /dev/null
++++ b/package/petitboot/66-add-sg-module.rules
+@@ -0,0 +1,2 @@
++# load modules to scsi disks, if they aren't in kernel
++SUBSYSTEM=="scsi", ENV{DEVTYPE}=="scsi_device", TEST!="[module/sg]", RUN+="/sbin/modprobe sg"
+diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
+new file mode 100644
+index 000000000000..fdcb26ccc924
+--- /dev/null
++++ b/package/petitboot/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_PETITBOOT
++	bool "petitboot"
++	# petitboot needs udev /dev management
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_LVM2
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_TARGET_PANEL
++	select BR2_PACKAGE_NCURSES_TARGET_FORM
++	select BR2_PACKAGE_NCURSES_TARGET_MENU
++	# run-time dependency only
++	select BR2_PACKAGE_KEXEC_LITE if !BR2_PACKAGE_KEXEC
++	# run-time dependency only
++	select BR2_PACKAGE_POWERPC_UTILS if (( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le ) && ! BR2_PACKAGE_PS3_UTILS )
++	# run-time dependency only
++	select BR2_PACKAGE_NVME if (( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le ) && ! BR2_PACKAGE_PS3_UTILS )
++	help
++	  Petitboot is a small kexec-based bootloader
++
++	  http://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
++
++comment "petitboot requires udev to be enabled"
++	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/petitboot/S14silence-console b/package/petitboot/S14silence-console
+new file mode 100755
+index 000000000000..2ce6b39f427b
+--- /dev/null
++++ b/package/petitboot/S14silence-console
+@@ -0,0 +1,9 @@
++#!/bin/sh
++
++case "$1" in
++    start)
++        echo 1 1 1 1 > /proc/sys/kernel/printk
++        ;;
++esac
++
++exit 0
+diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
+new file mode 100755
+index 000000000000..9d9ec57de3f0
+--- /dev/null
++++ b/package/petitboot/S15pb-discover
+@@ -0,0 +1,38 @@
++#!/bin/sh
++
++LOGFILE=/var/log/petitboot/pb-discover.log
++PIDFILE=/var/run/petitboot.pid
++
++PATH=/usr/bin:/usr/sbin:/bin:/sbin
++export PATH
++
++verbose=
++if pb-config debug | grep -q enabled
++then
++	verbose=-v
++fi
++
++case "$1" in
++    start)
++        ulimit -c unlimited
++        mkdir -p -m 0775 $(dirname $LOGFILE)
++        mkdir -p -m 0775 /var/petitboot
++        # Set permissions for normal users
++        chown -R root:petitgroup $(dirname $LOGFILE)
++        chown -R root:petitgroup /var/petitboot
++
++        export $(cat /etc/locale)
++        pb-discover -l $LOGFILE $verbose &
++        echo $! > $PIDFILE
++        ;;
++    stop)
++        pid=$(cat $PIDFILE)
++        [ -n "$pid" ] && kill -TERM $pid
++        ;;
++    *)
++        echo "Usage: $0 {start|stop}"
++        exit 1
++        ;;
++esac
++
++exit 0
+diff --git a/package/petitboot/fs-overlay/etc/inittab b/package/petitboot/fs-overlay/etc/inittab
+new file mode 100644
+index 000000000000..1f503d5d56f7
+--- /dev/null
++++ b/package/petitboot/fs-overlay/etc/inittab
+@@ -0,0 +1,34 @@
++# /etc/inittab
++#
++# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
++#
++# Note: BusyBox init doesn't support runlevels.  The runlevels field is
++# completely ignored by BusyBox init. If you want runlevels, use
++# sysvinit.
++#
++# Format for each entry: <id>:<runlevels>:<action>:<process>
++#
++# id        == tty to run on, or empty for /dev/console
++# runlevels == ignored
++# action    == one of sysinit, respawn, askfirst, wait, and once
++# process   == program to run
++
++# Startup the system
++::sysinit:/bin/mount -t proc proc /proc
++::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
++::sysinit:/bin/mkdir -p /dev/pts
++::sysinit:/bin/mkdir -p /dev/shm
++::sysinit:/bin/mount -a
++::sysinit:/bin/hostname -F /etc/hostname
++# now run any rc scripts
++::sysinit:/etc/init.d/rcS
++::sysinit:/sbin/petitboot-nc
++# Stuff to do for the 3-finger salute
++::ctrlaltdel:/sbin/reboot
++
++# Stuff to do before rebooting
++::shutdown:/etc/init.d/rcK
++::shutdown:/bin/umount -a -r
++::shutdown:/sbin/swapoff -a
++
++::restart:/usr/sbin/kexec-restart
+diff --git a/package/petitboot/fs-overlay/etc/locale b/package/petitboot/fs-overlay/etc/locale
+new file mode 100644
+index 000000000000..655683630776
+--- /dev/null
++++ b/package/petitboot/fs-overlay/etc/locale
+@@ -0,0 +1 @@
++LANG=en_US.utf-8
+diff --git a/package/petitboot/fs-overlay/init b/package/petitboot/fs-overlay/init
+new file mode 100755
+index 000000000000..1e56178db162
+--- /dev/null
++++ b/package/petitboot/fs-overlay/init
+@@ -0,0 +1,8 @@
++#!/bin/sh
++# devtmpfs does not get automounted for initramfs
++/bin/mount -t devtmpfs devtmpfs /dev
++exec 0</dev/console
++exec 1>/dev/console
++exec 2>/dev/console
++exec /sbin/init "$@"
++
+diff --git a/package/petitboot/kexec-restart b/package/petitboot/kexec-restart
+new file mode 100755
+index 000000000000..0175e76df4cd
+--- /dev/null
++++ b/package/petitboot/kexec-restart
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++/usr/sbin/kexec -f -e
++
++while :
++do
++    sleep 1
++done
+diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
+new file mode 100644
+index 000000000000..cbf1b7e1d765
+--- /dev/null
++++ b/package/petitboot/petitboot-console-ui.rules
+@@ -0,0 +1,6 @@
++
++# spawn a petitboot UI on common user-visible interface devices
++SUBSYSTEM=="tty", KERNEL=="ttyGF*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i $name linux"
++SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i $name linux"
++SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i $name linux"
++SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i $name linux"
+diff --git a/package/petitboot/petitboot.hash b/package/petitboot/petitboot.hash
+new file mode 100644
+index 000000000000..ccb58eed0e34
+--- /dev/null
++++ b/package/petitboot/petitboot.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  b42ae4fb2a81e9cf68f727c3f54c6312788c654bd97628ec9ba61b19a68990e6  petitboot-v1.13.tar.gz
+diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+new file mode 100644
+index 000000000000..b04710a535d3
+--- /dev/null
++++ b/package/petitboot/petitboot.mk
+@@ -0,0 +1,77 @@
++################################################################################
++#
++# petitboot
++#
++################################################################################
++
++PETITBOOT_VERSION = v1.13
++PETITBOOT_SITE ?= https://github.com/open-power/petitboot/releases/download/$(PETITBOOT_VERSION)
++PETITBOOT_DEPENDENCIES = elfutils ncurses udev host-bison host-flex lvm2
++PETITBOOT_LICENSE = GPLv2
++PETITBOOT_LICENSE_FILES = COPYING
++
++PETITBOOT_CONF_OPTS += --with-ncurses --without-twin-x11 --without-twin-fbdev \
++	      --localstatedir=/var \
++	      --enable-crypt \
++	      HOST_PROG_KEXEC=/usr/sbin/kexec \
++	      HOST_PROG_SHUTDOWN=/usr/sbin/kexec-restart \
++	      $(if $(BR2_PACKAGE_BUSYBOX),--with-tftp=busybox --enable-busybox)
++
++ifdef PETITBOOT_DEBUG
++PETITBOOT_CONF_OPTS += --enable-debug
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++PETITBOOT_CONF_OPTS += --with-ncursesw MENU_LIB=-lmenuw FORM_LIB=-lformw
++endif
++
++define PETITBOOT_POST_INSTALL
++	$(INSTALL) -D -m 0755 $(@D)/utils/bb-kexec-reboot \
++		$(TARGET_DIR)/usr/libexec/petitboot
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/petitboot/boot.d
++	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/01-create-default-dtb \
++		$(TARGET_DIR)/etc/petitboot/boot.d/
++	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/90-sort-dtb \
++		$(TARGET_DIR)/etc/petitboot/boot.d/
++
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/S14silence-console \
++		$(TARGET_DIR)/etc/init.d/
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/S15pb-discover \
++		$(TARGET_DIR)/etc/init.d/
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/kexec-restart \
++		$(TARGET_DIR)/usr/sbin/
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/removable-event-poll.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/63-md-raid-arrays.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/65-md-incremental.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/66-add-sg-module.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/
++
++	ln -sf /usr/sbin/pb-udhcpc \
++		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
++
++	mkdir -p $(TARGET_DIR)/home/petituser
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/shell_profile \
++		$(TARGET_DIR)/home/petituser/.profile
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/shell_config \
++		$(TARGET_DIR)/home/petituser/.shrc
++
++	$(MAKE) -C $(@D)/po DESTDIR=$(TARGET_DIR) install
++endef
++
++define PETITBOOT_POST_INSTALL_DTB
++	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/30-dtb-updates \
++		$(TARGET_DIR)/etc/petitboot/boot.d/
++endef
++
++PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL
++
++ifeq ($(BR2_PACKAGE_DTC),y)
++PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL_DTB
++endif
++
++$(eval $(autotools-package))
+diff --git a/package/petitboot/removable-event-poll.rules b/package/petitboot/removable-event-poll.rules
+new file mode 100644
+index 000000000000..b736aef6101f
+--- /dev/null
++++ b/package/petitboot/removable-event-poll.rules
+@@ -0,0 +1,4 @@
++
++# petitboot needs notification for media change events on removable devices,
++# which we only get if we've set the poll_msecs sysfs attribute.
++ACTION!="remove", ATTR{removable}=="1", ATTR{events_poll_msecs}="2000"
+diff --git a/package/petitboot/shell_config b/package/petitboot/shell_config
+new file mode 100644
+index 000000000000..59337ff53039
+--- /dev/null
++++ b/package/petitboot/shell_config
+@@ -0,0 +1,19 @@
++#!bin/sh
++
++reset
++
++echo "Exiting petitboot. Type 'exit' to return."
++echo "You may run 'pb-sos' to gather diagnostic data"
++
++if [[ "$(id -u)" != "0" ]]; then
++	echo "" | sudo -S /bin/true 2&>1 >> /dev/null
++	if [[ $? = 0 ]]; then
++		echo "No password set, running as root. You may set a password in the System Configuration screen."
++		sudo -i
++		sudo -K
++		exit
++	fi
++	export PS1='$ '
++else
++	export PS1='# '
++fi
+diff --git a/package/petitboot/shell_profile b/package/petitboot/shell_profile
+new file mode 100755
+index 000000000000..40062b423b79
+--- /dev/null
++++ b/package/petitboot/shell_profile
+@@ -0,0 +1,2 @@
++export ENV="/home/petituser/.shrc"
++/usr/libexec/petitboot/pb-console
 -- 
 2.38.1
 
