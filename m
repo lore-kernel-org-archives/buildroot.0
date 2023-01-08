@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99ACC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AB95C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:27:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 515244F398;
-	Tue, 21 Feb 2023 00:26:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 515244F398
+	by smtp4.osuosl.org (Postfix) with ESMTP id E32194F3BD;
+	Tue, 21 Feb 2023 00:27:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32194F3BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3WzmhA5KZ7vy; Tue, 21 Feb 2023 00:26:48 +0000 (UTC)
+	with ESMTP id KO2YaSjLbUU9; Tue, 21 Feb 2023 00:27:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2442C4F3A9;
-	Tue, 21 Feb 2023 00:26:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2442C4F3A9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EC4321BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E3394F3BA;
+	Tue, 21 Feb 2023 00:27:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E3394F3BA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EB1691BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CA36417D9
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CA36417D9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 918BA6FABC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 918BA6FABC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ABW4wJy_jBDU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ivi9kENDhe4N for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 122C74159A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 122C74159A
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE3A76FB24
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE3A76FB24
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E9E2828C8; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+ id 9B5C68648F; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 12:32:35 +0100
+Date: Sun, 8 Jan 2023 22:13:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 231d00e63ac08c98d7e823c3bd60a618ff322577
-X-Git-Newrev: 8a9da9a8cad5f77902547fab3b24d04175749a7c
+X-Git-Oldrev: d0ecb9b2803b5b0b293acd7a5a6bba1ed1e3feab
+X-Git-Newrev: 359205b4f5b151a6ddff93cd75fd569a6f5c54b4
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205252.0E9E2828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-idna: set
- _SETUP_TYPE = flit
+Message-Id: <20230220205228.9B5C68648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/hiredis: enable host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,60 +57,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2399009046849475872=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a9da9a8cad5f77902547fab3b24d04175749a7c
+--===============2399009046849475872==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=359205b4f5b151a6ddff93cd75fd569a6f5c54b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Python idna package switched to pyproject.toml in commit:
-https://github.com/kjd/idna/commit/2a00e518efe55d2eeb62cd3f88ace7db41338603
-which is included in idna v3.4.
+The host-hiredis package is needed for the upcoming ccache update.
+So, being a dependency of ccache, we can't use ccache, so we must unset
+the options set by the cmake infra (this will be true only when we
+eventually bump ccache, but hiredis builds very fast even without ccache
+so we don't care about ccache even now).
 
-When using the old setuptools infra, the package is incorrectly
-installed as v0.0, which is then incorrectly detected by other
-packages when using setuptools pkg_resources.
+Reorder CONF_OPTS assignments so that comments apply equally to the host
+and target variants.
 
-The issue can be reproduced with the command:
-
-    python3 <<EOF
-    __requires__ = ["idna >= 2.5"]
-    import pkg_resources
-    EOF
-
-which will fail with output:
-
-    pkg_resources.ContextualVersionConflict: (idna 0.0.0 (/usr/lib/python3.11/site-packages), Requirement.parse('idna>=2.5'), {'hyperlink'})
-    pkg_resources.DistributionNotFound: The 'idna>=2.5' distribution was not found and is required by hyperlink
-
-This commit changes _SETUP_TYPE to "flit" to fix this issue.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Dominik Michael Rauh <dmrauh@posteo.de>
+Cc: Anders F Björklund <anders.f.bjorklund@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998@free.fr:
+  - add Dominik and Anders in Cc to ack they provided inspiration
+  - use -Ufoo instead of -Dfoo=""  (as per Dominik & Anders)
+  - reorder CONF_OPTS assignments
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-idna/python-idna.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/hiredis/hiredis.mk | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index 4d9994a9c7..3976cb1518 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
-@@ -9,7 +9,7 @@ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
- PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/8b/e1/43beb3d38dba6cb420cefa297822eac205a277ab43e5ba5d5c46faf96438
- PYTHON_IDNA_LICENSE = BSD-3-Clause
- PYTHON_IDNA_LICENSE_FILES = LICENSE.md
--PYTHON_IDNA_SETUP_TYPE = setuptools
-+PYTHON_IDNA_SETUP_TYPE = flit
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index f79b6c757a..a2f7627b58 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -11,9 +11,14 @@ HIREDIS_LICENSE = BSD-3-Clause
+ HIREDIS_LICENSE_FILES = COPYING
+ HIREDIS_CPE_ID_VENDOR = redislabs
+ HIREDIS_INSTALL_STAGING = YES
++
++HIREDIS_CONF_OPTS = -DDISABLE_TESTS=ON
++HOST_HIREDIS_CONF_OPTS = -DDISABLE_TESTS=ON -DENABLE_SSL=OFF
++
+ # Set CMAKE_BUILD_TYPE to Release or the libraries will be suffixed with "d"
+-# resulting in a build failure with collectd
+-HIREDIS_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release -DDISABLE_TESTS=ON
++# resulting in build failures when linking.
++HIREDIS_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
++HOST_HIREDIS_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
  
- $(eval $(python-package))
- $(eval $(host-python-package))
+ ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ HIREDIS_CONF_OPTS += -DENABLE_SSL=ON
+@@ -22,4 +27,11 @@ else
+ HIREDIS_CONF_OPTS += -DENABLE_SSL=OFF
+ endif
+ 
++# We may be a ccache dependency, so we can't use ccache; reset the
++# options set by the cmake infra.
++HOST_HIREDIS_CONF_OPTS += \
++	-UCMAKE_C_COMPILER_LAUNCHER \
++	-UCMAKE_CXX_COMPILER_LAUNCHER
++
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
+
+--===============2399009046849475872==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2399009046849475872==--
