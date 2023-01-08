@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E59C54EBD
-	for <buildroot@archiver.kernel.org>; Sun,  8 Jan 2023 21:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5353C54EBD
+	for <buildroot@archiver.kernel.org>; Sun,  8 Jan 2023 21:57:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5F8240120;
-	Sun,  8 Jan 2023 21:45:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5F8240120
+	by smtp2.osuosl.org (Postfix) with ESMTP id 651EF4018E;
+	Sun,  8 Jan 2023 21:57:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 651EF4018E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TW3jxETqKijL; Sun,  8 Jan 2023 21:45:10 +0000 (UTC)
+	with ESMTP id 398TBrtb5eAT; Sun,  8 Jan 2023 21:57:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 40F3E40160;
-	Sun,  8 Jan 2023 21:45:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40F3E40160
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 32E271BF352
- for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 21:45:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B512040159;
+	Sun,  8 Jan 2023 21:57:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B512040159
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DDAB61BF352
+ for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 21:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1989D40908
- for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 21:45:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1989D40908
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB8978186E
+ for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 21:57:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB8978186E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gabjg8VxgLjv for <buildroot@lists.busybox.net>;
- Sun,  8 Jan 2023 21:45:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA6F740903
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DA6F740903
- for <buildroot@buildroot.org>; Sun,  8 Jan 2023 21:45:05 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 9D78E5FF3F;
- Sun,  8 Jan 2023 22:44:54 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 08 Jan 2023 22:44:54 +0100
-Date: Sun, 8 Jan 2023 22:44:54 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230108214454.GH151997@scaer>
-References: <20230107010437.2471513-1-james.hilliard1@gmail.com>
- <20230107010437.2471513-2-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230107010437.2471513-2-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1673214303;
- bh=iA2TPTIAWoLNi9+MxpPRg/05E+xEV7i/1smF4wGP9Uw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gdx3HX8I1Beg3QGY9U+CGlU0ivh74+ZnKnhWnPYekKNGDBYLqTY5Ur8aTWelpdctR
- cey6/PDwSPdd94U391NzuV+jEjauJkrHzARIIiKS84iNNqspux3pxkqwZ/7YBbVBeI
- Q/Crfgn06ldszIQBxogjv/QZonsRCxOCKlu+P6hhYc9OSAxwQw8qzbSBiW+VWFaZ8P
- vq8eV5/ETlIm8b+GWcmg6CGL8JOMLjXvnqh6h5zmFZDQSfg1rjgkroqbbW3tbahJLb
- 2DydRxvgGm7PZHFv+nXoptp/FXo9mlIcy7fdgoeX7mdG9/HhjzoI9VaTPczk1L+A+q
- AUXbMf3+8XjWg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gdx3HX8I
-Subject: Re: [Buildroot] [PATCH 2/4] package/zstd: disable ccache for host
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HUe1zuhTOSqj for <buildroot@lists.busybox.net>;
+ Sun,  8 Jan 2023 21:57:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFC658146F
+ for <buildroot@buildroot.org>; Sun,  8 Jan 2023 21:57:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFC658146F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DC942876E9; Sun,  8 Jan 2023 21:57:16 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 8 Jan 2023 22:53:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9fba87b8d708caa51ac674a56b9f2a50ed5fdc36
+X-Git-Newrev: 006ea057e98afddd7d2b92e118ebefa8bdeb9a6d
+X-Patchwork-Hint: ignore
+Message-Id: <20230108215716.DC942876E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkgconf: disable ccache for host
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,76 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anders F =?utf-8?Q?Bj=C3=B6rklund?= <anders.f.bjorklund@gmail.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>,
- Samuel Martin <s.martin49@gmail.com>, Dominik Michael Rauh <dmrauh@posteo.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=006ea057e98afddd7d2b92e118ebefa8bdeb9a6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Dominik +Anders
+We need to disable ccache when building host-pkgconf as the upcoming
+ccache update depends on host-pkgconf indirectly due to host-cmake
+depending on host-pkgconf which will be required due to host-ccache
+migrating from autotools to cmake package infrastructure.
 
-On 2023-01-06 18:04 -0700, James Hilliard spake thusly:
-> We need to disable ccache when building host-zstd as the upcoming
-> ccache update depends on host-zstd.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/zstd/zstd.mk | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-> index e8f6315222..cb4f4cc611 100644
-> --- a/package/zstd/zstd.mk
-> +++ b/package/zstd/zstd.mk
-> @@ -98,12 +98,16 @@ endef
->  HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
->  
->  define HOST_ZSTD_BUILD_CMDS
-> -	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
-> +	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) \
-> +	CC="$(HOSTCC_NOCCACHE)" CXX="$(HOSTCXX_NOCCACHE)" \
-> +	$(MAKE) $(HOST_ZSTD_OPTS) \
->  		-C $(@D) zstd-release lib-release
->  endef
->  
->  define HOST_ZSTD_INSTALL_CMDS
-> -	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
-> +	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) \
-> +	CC="$(HOSTCC_NOCCACHE)" CXX="$(HOSTCXX_NOCCACHE)" \
-> +	$(MAKE) $(HOST_ZSTD_OPTS) \
+Note: host-pkgconf does not need _AUTORECONF = YES, so it doesnot depend
+on any of host-gettext, host-automake, host-autoconf, or host-libtool.
+If it ever nees to in the future, then those should also be made to
+build without ccache.
 
-Rather than duplicating the environment in both _CMDS, I've introduce
-HOST_ZSTD_ENV.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998@free.fr: add note]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkgconf/pkgconf.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  		-C $(@D) install
->  endef
->  
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index 5d65f69c10..e9587fae6b 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -11,6 +11,11 @@ PKGCONF_LICENSE = pkgconf license
+ PKGCONF_LICENSE_FILES = COPYING
+ PKGCONF_CPE_ID_VENDOR = pkgconf
+ 
++# We are a ccache dependency, so we can't use ccache
++HOST_PKGCONF_CONF_ENV = \
++	CC="$(HOSTCC_NOCCACHE)" \
++	CXX="$(HOSTCXX_NOCCACHE)"
++
+ PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/bin/pkg-config
+ 
+ define PKGCONF_LINK_PKGCONFIG
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
