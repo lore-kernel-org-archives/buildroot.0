@@ -1,88 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68759C54EBD
-	for <buildroot@archiver.kernel.org>; Sun,  8 Jan 2023 20:34:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88EEBC54EBC
+	for <buildroot@archiver.kernel.org>; Sun,  8 Jan 2023 21:15:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0355181307;
-	Sun,  8 Jan 2023 20:34:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0355181307
+	by smtp2.osuosl.org (Postfix) with ESMTP id 011CF40120;
+	Sun,  8 Jan 2023 21:15:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 011CF40120
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QsKEKmABrAbo; Sun,  8 Jan 2023 20:34:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NuoftlA10tbi; Sun,  8 Jan 2023 21:15:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10E718130E;
-	Sun,  8 Jan 2023 20:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10E718130E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D95C51BF4E2
- for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 20:34:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26DD440159;
+	Sun,  8 Jan 2023 21:15:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26DD440159
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D37E1BF352
+ for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 21:15:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9B4540907
- for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 20:34:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9B4540907
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0558460B1E
+ for <buildroot@lists.busybox.net>; Sun,  8 Jan 2023 21:15:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0558460B1E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id msyoSQ2QggEs for <buildroot@lists.busybox.net>;
- Sun,  8 Jan 2023 20:34:09 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D92E340901
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D92E340901
- for <buildroot@buildroot.org>; Sun,  8 Jan 2023 20:34:08 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id t5so1865617wrq.1
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 12:34:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VQBMZ0Q2YpPMTlpJJs7iJG4vg4c7ov+iWZtJyJkJn5k=;
- b=5BcYZz1d21Sh2PjfDRW83kDvcnIKPAfo4rx4sbZYyWWt/CYcERbU72ILbrGeAh+VKZ
- XsiNJhb75vr4rUDnKq5IGwSFNd3Wm3fJnEtTIUx+L1pmogNj+S2moAgO/tSkuPRKucEG
- PSjDBSbKuNIEkfiySf9lqGHrlpEV2iFO1CqYWEKGBrJZ00yc/OpQchGPHU6a80ZtWV1+
- Nextk37CwOxbcu0PF+JsPoP/K6EkqjJrsz8V8V8MvyvOc3zXv0py2f8L/DpDzqtOYXvK
- 6EPoiZIsjIFG03SNzwnoHkjdSB8oI1+bqoOvsRmpKOeTdPZJ10xYhcza6xFjolGfdhhW
- zXhw==
-X-Gm-Message-State: AFqh2krObP7oowJzj5cDhl0g4gsg3iG+kV5plS3pKHqhdNv6x5pOVpi6
- B0lADw9PvFCue9RfD4Dbk4Y2tAQIVOU=
-X-Google-Smtp-Source: AMrXdXtjEX4/2SitVoMJ6GdMOW/Udr0BuP1iPo+2q8Re+w5DM1ra7vd54tJDT5JOpDYpJfmnjB9wvQ==
-X-Received: by 2002:a05:6000:1c10:b0:25d:9954:3310 with SMTP id
- ba16-20020a0560001c1000b0025d99543310mr49389048wrb.4.1673210046802; 
- Sun, 08 Jan 2023 12:34:06 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- e7-20020a056000120700b00241dd5de644sm6844387wrx.97.2023.01.08.12.34.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Jan 2023 12:34:06 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 21:34:03 +0100
-Message-Id: <20230108203403.667276-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U7eGJMl0pGg9 for <buildroot@lists.busybox.net>;
+ Sun,  8 Jan 2023 21:15:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 766EE60888
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 766EE60888
+ for <buildroot@buildroot.org>; Sun,  8 Jan 2023 21:15:25 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 7D1AD5FF9D;
+ Sun,  8 Jan 2023 22:15:13 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 08 Jan 2023 22:15:13 +0100
+Date: Sun, 8 Jan 2023 22:15:13 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230108211513.GG151997@scaer>
+References: <20230107010437.2471513-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VQBMZ0Q2YpPMTlpJJs7iJG4vg4c7ov+iWZtJyJkJn5k=;
- b=nTUnCi+NH5XRwFoiim6mQ3wWyGR1rt19yS3UELNDYplgO/yqEeZHPCDWsVEjSSkNkV
- s+pqj+HjuhJnnpNN/ufQxe06TNueyhQIhKaqI2y4IHLbee35UVK6ePUwJs0fQrbhJJsY
- fyaFHlIKF8Jplvcs/2wT/HgJeRIKeCs5nY2MQlJ2e2Hg/SmNPiNCX8x8Nrob73+PGOlV
- C4amZKArxX+Ex7R+IA/bBiAIftJ+zFReXcENLXH/MJMnTxsNuLeTALU2y9PiNbPUCMP0
- IqV49heLSrhRUn9I9ZE0OXvo6TRPunn79sNdKce2c2+eDaDGGW+0gjfkLWT2jgvYj7tB
- 5Y6w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=nTUnCi+N
-Subject: [Buildroot] [PATCH 1/1] package/libpjsip: security bump to version
- 2.13
+Content-Disposition: inline
+In-Reply-To: <20230107010437.2471513-1-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1673212521;
+ bh=Ay/HqXgiWIbcbO9b8axBfxgOh/ASL62ibCdDHAgvcLA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=n96UTwjgjJ991HG2h2Rq2hWYZeJTTCNvJAFueD2ZpfJdqmZFwq95H/wesZsh+UGak
+ owWI5OBsjrMKtCPBdX83ykIEm91QEG+1UhaOAYJAwgSxExpyahIdOe/bv5TDsGcFca
+ gXtjTv8w0q/+8LwIRsyPRVzNnfgFnGDc21K4wPz++n+lyyaClUHsD+GCJ6qyX3EJB9
+ MyuSu38AcnwlnLnU1/SvCmV1LIR7S2/YT8kWLdexJdYnLNx9cP1xkuWwonO6vC1bj/
+ phXwJ1cbKZnQXBlgP3L8T4e6u763+w/EIAWK7u4h2/BZFvYPiLelQ7wHr0/dZTpRmD
+ tXhXCe0vN1sKQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=n96UTwjg
+Subject: Re: [Buildroot] [PATCH 1/4] package/hiredis: enable host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,180 +75,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+Cc: Anders F =?utf-8?Q?Bj=C3=B6rklund?= <anders.f.bjorklund@gmail.com>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>, Dominik Michael Rauh <dmrauh@posteo.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Fix CVE-2022-39269, CVE-2022-39244 and CVE-2022-31031:
-  https://github.com/pjsip/pjproject/security/advisories/GHSA-wx5m-cj97-4wwg
-  https://github.com/pjsip/pjproject/security/advisories/GHSA-fq45-m3f7-3mhj
-  https://github.com/pjsip/pjproject/security/advisories/GHSA-26j7-ww69-c4qj
-- Drop patch (already in version)
-- libuuid configure option is available since
-  https://github.com/pjsip/pjproject/commit/0b0488f17b41c5323028b522cc7323f2cd9b684c
-- libupnp is an optional dependency since
-  https://github.com/pjsip/pjproject/commit/82247cb8c0441d0eafd18cb69e6c7bf55fc6a088
-- libsrtp is optional since
-  https://github.com/pjsip/pjproject/commit/fe6cbbc39764cae8ff6789a98f8ef8e85c63445c
+James, All,
 
-https://github.com/pjsip/pjproject/releases/tag/2.13
+There's this already pending, old-ish patch from Dominik and
+Anders:
+    https://patchwork.ozlabs.org/project/buildroot/patch/20220807093853.15579-1-dmrauh@posteo.de/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ull-request-from-GHSA-26j7-ww69-c4qj.patch | 44 -------------------
- package/libpjsip/Config.in                    |  1 -
- package/libpjsip/libpjsip.hash                |  2 +-
- package/libpjsip/libpjsip.mk                  | 28 +++++++++---
- 4 files changed, 22 insertions(+), 53 deletions(-)
- delete mode 100644 package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
+that tries to bump ccache.
 
-diff --git a/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch b/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
-deleted file mode 100644
-index 42b842a616..0000000000
---- a/package/libpjsip/0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 450baca94f475345542c6953832650c390889202 Mon Sep 17 00:00:00 2001
--From: sauwming <ming@teluu.com>
--Date: Tue, 7 Jun 2022 12:00:13 +0800
--Subject: [PATCH] Merge pull request from GHSA-26j7-ww69-c4qj
--
--[Retrieved from:
--https://github.com/pjsip/pjproject/commit/450baca94f475345542c6953832650c390889202]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- pjlib-util/src/pjlib-util/stun_simple.c | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/pjlib-util/src/pjlib-util/stun_simple.c b/pjlib-util/src/pjlib-util/stun_simple.c
--index 722519584..d0549176d 100644
----- a/pjlib-util/src/pjlib-util/stun_simple.c
--+++ b/pjlib-util/src/pjlib-util/stun_simple.c
--@@ -54,6 +54,7 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
-- {
--     pj_uint16_t msg_type, msg_len;
--     char *p_attr;
--+    int attr_max_cnt = PJ_ARRAY_SIZE(msg->attr);
-- 
--     PJ_CHECK_STACK();
-- 
--@@ -83,7 +84,7 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
--     msg->attr_count = 0;
--     p_attr = (char*)buf + sizeof(pjstun_msg_hdr);
-- 
---    while (msg_len > 0) {
--+    while (msg_len > 0 && msg->attr_count < attr_max_cnt) {
-- 	pjstun_attr_hdr **attr = &msg->attr[msg->attr_count];
-- 	pj_uint32_t len;
-- 	pj_uint16_t attr_type;
--@@ -111,6 +112,10 @@ PJ_DEF(pj_status_t) pjstun_parse_msg( void *buf, pj_size_t buf_len,
-- 	p_attr += len;
-- 	++msg->attr_count;
--     }
--+    if (msg->attr_count == attr_max_cnt) {
--+	PJ_LOG(4, (THIS_FILE, "Warning: max number attribute %d reached.",
--+		   attr_max_cnt));
--+    }
-- 
--     return PJ_SUCCESS;
-- }
-diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index 727d2ec3d0..980fada3d5 100644
---- a/package/libpjsip/Config.in
-+++ b/package/libpjsip/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_LIBPJSIP
- 	bool "libpjsip"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_LIBSRTP
- 	help
- 	  PJSIP is a free and open source multimedia communication
- 	  library written in C language implementing standard based
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index b1ccdb2f37..9935575567 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d0feef6963b07934e821ba4328aecb4c36358515c1b3e507da5874555d713533  pjproject-2.12.1.tar.gz
-+sha256  4178bb9f586299111463fc16ea04e461adca4a73e646f8ddef61ea53dafa92d9  pjproject-2.13.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 4134d40da8..5cc0423f5d 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--LIBPJSIP_VERSION = 2.12.1
-+LIBPJSIP_VERSION = 2.13
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
- LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
- 
--LIBPJSIP_DEPENDENCIES = libsrtp
- LIBPJSIP_LICENSE = GPL-2.0+
- LIBPJSIP_LICENSE_FILES = COPYING
- LIBPJSIP_CPE_ID_VENDOR = teluu
-@@ -16,9 +15,6 @@ LIBPJSIP_CPE_ID_PRODUCT = pjsip
- LIBPJSIP_INSTALL_STAGING = YES
- LIBPJSIP_MAKE = $(MAKE1)
- 
--# 0001-Merge-pull-request-from-GHSA-26j7-ww69-c4qj.patch
--LIBPJSIP_IGNORE_CVES += CVE-2022-31031
--
- LIBPJSIP_CFLAGS = $(TARGET_CFLAGS) -DPJ_HAS_IPV6=1
- 
- # relocation truncated to fit: R_68K_GOT16O
-@@ -40,8 +36,7 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-l16-codec \
- 	--disable-g722-codec \
- 	--disable-ipp \
--	--disable-silk \
--	--with-external-srtp
-+	--disable-silk
- 
- # Note: aconfigure.ac is broken: --enable-epoll or --disable-epoll will
- # both enable it. But that's OK, epoll is better than the alternative,
-@@ -103,6 +98,22 @@ else
- LIBPJSIP_CONF_OPTS += --disable-libsamplerate
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSRTP),y)
-+LIBPJSIP_DEPENDENCIES += libsrtp
-+LIBPJSIP_CONF_OPTS += \
-+	--enable-libsrtp \
-+	--with-external-srtp
-+else
-+LIBPJSIP_CONF_OPTS += --disable-libsrtp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBUPNP),y)
-+LIBPJSIP_DEPENDENCIES += libupnp
-+LIBPJSIP_CONF_OPTS += --with-upnp=$(STAGING_DIR)/usr
-+else
-+LIBPJSIP_CONF_OPTS += --disable-upnp
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBV4L),y)
- # --enable-v4l2 is broken (check for libv4l2 will be omitted)
- LIBPJSIP_DEPENDENCIES += libv4l
-@@ -161,6 +172,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- LIBPJSIP_DEPENDENCIES += util-linux
-+LIBPJSIP_CONF_OPTS += --enable-libuuid
-+else
-+LIBPJSIP_CONF_OPTS += --disable-libuuid
- endif
- 
- # disable build of test binaries
+I prefer your series, because everything is split as much as possible,
+but I am looking at both patches to see if we can pick the best of the
+two. And indeed, see below...
+
+On 2023-01-06 18:04 -0700, James Hilliard spake thusly:
+> The host-hiredis package is needed for the upcoming ccache update.
+> 
+> Note that we must disable ccache when building host-hiredis itself
+> as host-ccache depends on host-hiredis.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/hiredis/hiredis.mk | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+> index f79b6c757a..f2a4836310 100644
+> --- a/package/hiredis/hiredis.mk
+> +++ b/package/hiredis/hiredis.mk
+> @@ -22,4 +22,13 @@ else
+>  HIREDIS_CONF_OPTS += -DENABLE_SSL=OFF
+>  endif
+>  
+> +# We are a ccache dependency, so we can't use ccache
+> +HOST_HIREDIS_CONF_OPTS += \
+
+This is the first assignment, so no need to use append-assignment, jsut
+use a simple assignemnt.
+
+> +	-DCMAKE_C_COMPILER_LAUNCHER="" \
+> +	-DCMAKE_CXX_COMPILER_LAUNCHER="" \
+
+The patch from Dominik and Anders uses -U to "unset" the variables,
+while you set them to empty. I think unsetting is semantically more
+correct, and I checked: it works.
+
+Also, the following options are not related to being build before
+ccache, but the comment makes it confusing, so I prefer we split the
+assignment when only parts of it is covered by a coment:
+
+    HOST_HIREDIS_CONF_OPTS = \
+        -DDISABLE_TESTS=ON \
+        -DENABLE_SSL=OFF
+
+    # Set CMAKE_BUILD_TYPE to Release or the libraries will be suffixed with "d"
+    HOST_HIREDIS_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
+
+    # We are a ccache dependency, so we can't use ccache; reset the
+    # options set by the cmake infra
+    HOST_HIREDIS_CONF_OPTS += \
+        -UCMAKE_C_COMPILER_LAUNCHER \
+        -UCMAKE_CXX_COMPILER_LAUNCHER
+
+However, I wonder whether the -DCMAKE_BUILD_TYPE=Release makes sense.
+Ideed, we need to set it for the target variant, because we can do a
+debug build or not, and we set CMAKE_BUILD_TYPE in toolchainfile.cmake.
+But for the host variant, we do not use toolchainfile.cmake, and we
+never explicitly pass the build type on the command line either, so we
+especially never set it to "Debug", and so the 'd' suffix should not be
+added.
+
+Ah, but CMAKE_BUILD_TYPE can come from the environment... Damn.
+
+OK, so I did a few changes, and applied to master, thanks:
+
+  - add Dominik and Anders in Cc to ack they provided inspiration
+  - use -Ufoo instead of -Dfoo=""  (as per Dominik & Anders)
+  - reorder CONF_OPTS assignments
+
+Regards,
+Yann E. MORIN.
+
+> +	-DCMAKE_BUILD_TYPE=Release \
+> +	-DDISABLE_TESTS=ON \
+> +	-DENABLE_SSL=OFF
+> +
+>  $(eval $(cmake-package))
+> +$(eval $(host-cmake-package))
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.39.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
