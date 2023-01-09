@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7670C54EBD
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 05:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 498DCC54EBD
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 05:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50FB840983;
-	Mon,  9 Jan 2023 05:41:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FB840983
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC97F60759;
+	Mon,  9 Jan 2023 05:46:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC97F60759
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wmEG6CS6gppB; Mon,  9 Jan 2023 05:40:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id efGy_-beTgHw; Mon,  9 Jan 2023 05:46:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 410574094D;
-	Mon,  9 Jan 2023 05:40:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 410574094D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 08CF81BF3EF
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:40:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3337060B20;
+	Mon,  9 Jan 2023 05:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3337060B20
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 63A2B1BF3EF
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:46:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6FD24094D
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6FD24094D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C5CF4033F
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:46:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C5CF4033F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2stdVMKdHdn8 for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 05:40:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BwEjE868RMTK for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 05:46:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE32F40929
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AE32F40929
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 05:40:55 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id u8so4454969ilg.0
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 21:40:55 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 504DC4032E
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
+ [IPv6:2607:f8b0:4864:20::130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 504DC4032E
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 05:46:31 +0000 (UTC)
+Received: by mail-il1-x130.google.com with SMTP id h26so4418799ila.11
+ for <buildroot@buildroot.org>; Sun, 08 Jan 2023 21:46:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=lL1wfxxxt7vuvZ4mpZJ25Cr4SXMOp32h2xuaozDZY9M=;
- b=xuXo132sNYGBg6VPg1Ev50etbu8CB+gZrj1TKXIdKyxTIYnA2UAfizJX7igGJZewcz
- a8HYjZApAzB7XMamMVovtDhM0o7NHM1nXLUPY4DAhis+YlZ7i5fj6hNjJtzgSY+n4NJD
- TIm1TqXFpFMbeBxGDzMyLVvxDgFyiZQz35zInqQxMTXHgsqyg6YsXy8JrJNhlwFLTrxF
- 9xBBejGrkTW5W/YjyT+9M56ESD2eZt5z88prt+ugcARpR2PahAfI85i7mi3YnxjY3rg8
- 0A/ESRYf0MdMdfFMVELB7lOSB5Fi8lAJh1wYMngGnpmP+BUe5ASw2iF88UUpetjCXkLM
- Sfbg==
-X-Gm-Message-State: AFqh2kooogrz6j8sRaqf5q+PLFaFtQyr1UhgI6H88HwXZUNDICBFAU2c
- xp+eR9Jc4w7f6gopihpWghP4tCGqX3cTzEaD
-X-Google-Smtp-Source: AMrXdXsxCksN6cQaYTJq+s14gf0UZYDV/BxGtlAtSIAY9kuz/rtgs8v8QzXvq6CYDYewiml4BdkPKQ==
-X-Received: by 2002:a92:db47:0:b0:303:30a9:326a with SMTP id
- w7-20020a92db47000000b0030330a9326amr41925072ilq.7.1673242854572; 
- Sun, 08 Jan 2023 21:40:54 -0800 (PST)
+ bh=9L5s58buO1sK6tLf3l/nY9GVvA6rrW1Efj1tXUD8OJo=;
+ b=gp/fbzIeuLHsN0Y/mznlE/lP3I37M1thA2C5eMSEam+bss6Opa/w3RraqYfktDwjrZ
+ fEZWOphCrrMZyZbgocnthoTs17KVX9J6B+HzvFKFivF6PAkXKfZGr1x/f2hEkehTQHcv
+ htpaGMllZadrkg+Pv+fk5tNXIvQ/sNpJK+K5A+PORb1BTehWzlFQ785/Yg9KAjPz0Ae0
+ M2YHx+iHn3mAWalLv5lgy+4WDugXHzHd/cEUem8RLgkZhPY/m+y9GpC2HmTRi8itdKfN
+ AqMOkAIXNhx+ddjokRKTYqI3LNX4BOT7zELRj/ffi3lDL/H1G14uSv3Atrbqpo2CF5OM
+ 5hzg==
+X-Gm-Message-State: AFqh2kpEr8/9yqThj7gDbizbjL8Dt51fXTPeOSmtew2GAOi9RWKm6+D5
+ WmIfLjcB48we83lKuzDY+7YfAV6m7uXDB7wd
+X-Google-Smtp-Source: AMrXdXvVkiopQk7ckZD9WvlNTdPiv3sBWe+FQqmUO8a46p81lbpnyGGNrhcKUo9clZo4ZlYijEOzWQ==
+X-Received: by 2002:a92:bf0c:0:b0:30c:3c0:7a56 with SMTP id
+ z12-20020a92bf0c000000b0030c03c07a56mr30474666ilh.5.1673243190053; 
+ Sun, 08 Jan 2023 21:46:30 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- a12-20020a92d10c000000b002eb3b43cd63sm2470464ilb.18.2023.01.08.21.40.54
+ a17-20020a92d591000000b0030be6c79645sm2435027iln.68.2023.01.08.21.46.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Jan 2023 21:40:54 -0800 (PST)
+ Sun, 08 Jan 2023 21:46:29 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 22:40:53 -0700
-Message-Id: <20230109054053.2704727-1-james.hilliard1@gmail.com>
+Date: Sun,  8 Jan 2023 22:46:28 -0700
+Message-Id: <20230109054628.2728954-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lL1wfxxxt7vuvZ4mpZJ25Cr4SXMOp32h2xuaozDZY9M=;
- b=cz+QpvVqbKWcH5ZIQzBcZD8QN8Y6H+w57qQGNOquhj73Tv3Jm/GZKIdUWiYcixd7BM
- x8GyBKajvy7UqXyyXcs/Tf2rAzZdWKKEuLXEJtF1oIxaKJk+ubCeqbQyhprtRayypGVR
- JP1FmQWHn62/9VllXyK9YftXXEaClq2qqJ7l6U7u/PuF+au3A7lcodoLJcPU72deFfk5
- 3i2jP456YgAxWDVtsjQdn0MtIJBrp9w+aoWTfLaYRLV0Qze4NTd8BQejdwpp39hnX3fU
- BpHx5LyT8PcuXQUUnMFTLdLxaH6xR6/rd64rThZnxu3eZipCxtjNrID1Pm1eNEE6x2dy
- hcHg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=9L5s58buO1sK6tLf3l/nY9GVvA6rrW1Efj1tXUD8OJo=;
+ b=LLMPFSrHnmm0HV2V4Z4bdW5r8Cm+xXJ7eSzk3o2M3cJhOt3AeVLnIY1xSBIdwLrk/g
+ UOTGHz4L58OjPIAIWkIigMyHq/xiwfdFu7eq8y9DPtlODXWZGH0psgmzvRRGF9boYf5b
+ /EIi2QGz6HlJoFvRmAdxZ6ZX5bXhGrry8I7ys3Poynt62vMjE1PI/mWaL8L2zHbi/o7I
+ QNtfr6f3Yi3lkBCF1BQrLSOFohAu6CkOGkO7veKkwGiPnS4PqFjA67sS9dOOLEnWCa3t
+ W5QOijIXgxXT/nILNPZSC0qPRUwv1CRdsNZ0gJM3l+YEafGLT4rOjI3Ma4zqNaTrm7SC
+ b/cg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=cz+QpvVq
-Subject: [Buildroot] [PATCH 1/1] package/python-pytest-asyncio: bump to
- version 0.20.3
+ header.a=rsa-sha256 header.s=20210112 header.b=LLMPFSrH
+Subject: [Buildroot] [PATCH 1/1] package/python-pytz: bump to version 2022.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,38 +101,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
- package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
+ package/python-pytz/python-pytz.hash | 4 ++--
+ package/python-pytz/python-pytz.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
-index b683c60553..051670aa51 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
+index e71e77e5b7..6d6e1b606c 100644
+--- a/package/python-pytz/python-pytz.hash
++++ b/package/python-pytz/python-pytz.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
--md5  894109d45a7b6f46718bbe4611aa7817  pytest-asyncio-0.20.1.tar.gz
--sha256  626699de2a747611f3eeb64168b3575f70439b06c3d0206e6ceaeeb956e65519  pytest-asyncio-0.20.1.tar.gz
-+md5  dce438c7b0081d7f580b5a79d7105570  pytest-asyncio-0.20.3.tar.gz
-+sha256  83cbf01169ce3e8eb71c6c278ccb0574d1a7a3bb8eaaf5e50e0ad342afb33b36  pytest-asyncio-0.20.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pytz/json
+-md5  bf46b54a7e9bcb65ea38f54646181979  pytz-2022.6.tar.gz
+-sha256  e89512406b793ca39f5971bc999cc538ce125c0e51c27941bef4568b460095e2  pytz-2022.6.tar.gz
++md5  3b9356e4dcd441df922cc01e8eb15983  pytz-2022.7.tar.gz
++sha256  7ccfae7b4b2c067464a6733c6261673fdb8fd1be905460396b97a073e9fa683a  pytz-2022.7.tar.gz
  # Locally computed sha256 checksums
- sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
-index b70e0ad0f4..c94c9ea876 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+ sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
+diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
+index 58f06e1993..057a3ef173 100644
+--- a/package/python-pytz/python-pytz.mk
++++ b/package/python-pytz/python-pytz.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTEST_ASYNCIO_VERSION = 0.20.1
-+PYTHON_PYTEST_ASYNCIO_VERSION = 0.20.3
- PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
--PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/9e/8f/5a918ac4e2366b61156e16fa9bfb3be52401d81f5309efb1f4e04d99ac39
-+PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/6e/06/38b0ca5d53582bb49697626975b5540435ea064762d852b5c66646c729e9
- PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
- PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
- PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
+-PYTHON_PYTZ_VERSION = 2022.6
++PYTHON_PYTZ_VERSION = 2022.7
+ PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
+-PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/76/63/1be349ff0a44e4795d9712cc0b2d806f5e063d4d34631b71b832fac715a8
++PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/6d/37/54f2d7c147e42dc85ffbc6910862bb4f141fb3fc14d9a88efaa1a76c7df2
+ PYTHON_PYTZ_SETUP_TYPE = setuptools
+ PYTHON_PYTZ_LICENSE = MIT
+ PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
 -- 
 2.34.1
 
