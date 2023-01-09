@@ -1,86 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71ED6C54EBC
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 00:22:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BACFC54EBD
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 00:48:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 062FE400BF;
-	Mon,  9 Jan 2023 00:22:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 062FE400BF
+	by smtp4.osuosl.org (Postfix) with ESMTP id E965C409A0;
+	Mon,  9 Jan 2023 00:48:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E965C409A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u7f4wPhFDsbk; Mon,  9 Jan 2023 00:22:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id twJ2UwYVG3Ow; Mon,  9 Jan 2023 00:48:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00BCB40167;
-	Mon,  9 Jan 2023 00:22:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00BCB40167
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6322F1BF865
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 00:22:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E991B40940;
+	Mon,  9 Jan 2023 00:48:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E991B40940
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ECCCD1BF865
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 00:48:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3EEB340167
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 00:22:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EEB340167
+ by smtp3.osuosl.org (Postfix) with ESMTP id C806760A66
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 00:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C806760A66
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zqdOAYOn1iJD for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 00:22:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d9Blih1-X9AM for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 00:47:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2D64400BF
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com
- [IPv6:2607:f8b0:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E2D64400BF
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 00:22:47 +0000 (UTC)
-Received: by mail-ot1-x333.google.com with SMTP id
- m7-20020a9d73c7000000b00683e2f36c18so4428261otk.0
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 16:22:47 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA878605A4
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com
+ [IPv6:2607:f8b0:4864:20::236])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BA878605A4
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 00:47:58 +0000 (UTC)
+Received: by mail-oi1-x236.google.com with SMTP id d127so5919847oif.12
+ for <buildroot@buildroot.org>; Sun, 08 Jan 2023 16:47:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=EEydk886693++rpjY3Wy7I8H5YHQTU5+gba1AIg4pjs=;
- b=FxtzBJGzpe0NUNUynk3wdMYs2cwLSZ+gZy796g0zmCW5Ns7A5HzVDzGrIrNNgJunpE
- hfnGyo8ynydK2eMfi4e74Bvex+0NcEorEIFd0WeKl5VoOTy7/k2wHatKiOX/doEEDmu/
- VCtINDiJArmRIpoubtVrjgZvPEUOKuKn/y3GdfALGGOIClLjxjscQduUuZZUAhJFVarZ
- oOU5R9PjGZpKTyLkZBxWrRrhqc/tBdXu4+emq0ImQiUB3mCpGRokUeDNsbafbYLG1cEc
- iosQUveV/ulcb+b9n4hXpCN08RhWy2gLzn4rNi1fLSl8Cp3dNJZY6dxUv2WCpY+aec3x
- fRRA==
-X-Gm-Message-State: AFqh2kp0GQhO1rN7a4t2XGjpTbGnRwZ25lOYTZbck+PVPf+5Jwomfc/y
- GyBgfCScaLmWoNpPAFd/cNhtV7gd+gJHkeUFS++jzrocgTv1MA==
-X-Google-Smtp-Source: AMrXdXvWVQcYI/LADIKce3nCvpxA1KYx+LblK5MeH4yTwOoI86G5WIGNv1LOrZ7eIVL2yR6x1Wp9Us8+gfo4bV+CrSw=
-X-Received: by 2002:a05:6830:1b62:b0:66e:ac28:a4d7 with SMTP id
- d2-20020a0568301b6200b0066eac28a4d7mr4099739ote.54.1673223766847; Sun, 08 Jan
- 2023 16:22:46 -0800 (PST)
+ bh=csQe3FBC/7P80Q4WeLkBUCIKJr5mjstl+GaSejEQK9w=;
+ b=jD/IYVx3cRML+u3Uo2dxzacNyj3VpDihGyojifCuLfVmqkYtq/pO5pL/iZm5xy/4/6
+ 36D1WtqiiqflShZhHIQmyU3umSMOBUA4B4MJEg7WJDJqEnGpIj4kjBGK5x1RWC55+bWk
+ QfAtn4jbJYAlfV9Qe3TtyUaxTkNY3CoMA854j+duCy3/gjscMi4lBP11puDsY5Lr5Pvt
+ VMCqDOAXdHAv4usBHD4yYflxffPG8Zr0UNa+J30gv0jYUypKtpO/hy8J/GidAWq6RjJp
+ OOW878w2lhdKhBHJsk4ZebX73Np5+qhFyWUgTB73KjvTkWnd0T+O0ejj8pQrSxCJStiJ
+ /bQA==
+X-Gm-Message-State: AFqh2kp76pIGlZ+1VoNh79z7E8OFNyD1/215xzN3J1DKAsjEccg8cUhc
+ j464mgqY9qiQG1p2NEW/HZNQ3EcSedI=
+X-Google-Smtp-Source: AMrXdXtQDYu+IZFsPOhlBsGZJpbfaOt5OidyCLFSzQEPNzb6sB7Z/BEUTboQFGr2qbeBsZNOqUTpvw==
+X-Received: by 2002:a05:6808:13d2:b0:35e:ae18:9783 with SMTP id
+ d18-20020a05680813d200b0035eae189783mr39527765oiw.8.1673225277349; 
+ Sun, 08 Jan 2023 16:47:57 -0800 (PST)
+Received: from abyss.attlocal.net
+ (108-193-1-150.lightspeed.sntcca.sbcglobal.net. [108.193.1.150])
+ by smtp.gmail.com with ESMTPSA id
+ bk33-20020a0568081a2100b0035a2f3e423esm3235178oib.32.2023.01.08.16.47.56
+ (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+ Sun, 08 Jan 2023 16:47:56 -0800 (PST)
+From: Charles Hardin <ckhardin@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  8 Jan 2023 16:47:48 -0800
+Message-Id: <20230109004748.1372-1-ckhardin@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-References: <20230107010437.2471513-1-james.hilliard1@gmail.com>
- <20230107010437.2471513-4-james.hilliard1@gmail.com>
- <20230108222926.GJ151997@scaer>
-In-Reply-To: <20230108222926.GJ151997@scaer>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 8 Jan 2023 17:22:35 -0700
-Message-ID: <CADvTj4o1YB7Ztf9y7PC4z83TDYEAXX2eFJBAZ_uBDzu-9a4cXA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=EEydk886693++rpjY3Wy7I8H5YHQTU5+gba1AIg4pjs=;
- b=mnKq/ff2rkhxKnFKw2sOiEd1h7iXWaN+JFzE8vAK8xs9C0rtsJdLWX3RnNE18bOMtj
- x4eLHmYOmClmm85sMZzqUUhYSgFrw6TWu9O+9AA6LZKY7yKqKiZoxzBrGLqXw0Fg1HQ7
- diuJtbTPZfT5PCq30x3XxZCl4WBY7voaBg1CiksffR12JPD0OoEMJlv7Am4jI7LLiSvW
- lYLgy+RLThv0fTiYukGLtDa2GtXwHeHhtEKdkpcPHtN0OEd0YzglhJPWkIxQWM8Gppgf
- O39gu5ouyRzn+kSZag8LaiPqug80Y/TjpSLjV1u/wj/qk7lDCl4cippBq2xBPzA70el5
- OevQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=csQe3FBC/7P80Q4WeLkBUCIKJr5mjstl+GaSejEQK9w=;
+ b=FchcNEOL229ddRikTleUAKj9j+wJferL2mICMIQ2pZysJLKqAEReaL3Xe6DS4nXAoS
+ wdv/eM49NLgWWHoMR0bD4Kp73BXQ/109DiRaWAWGdCWm6b5Zq2QSD7/LytdNyFBHWPIk
+ jltuXAUcY9L0yhj2x+I2LXLpgaR4G5LbKUEo5A7dxuMKYtaHEchcB8Kvpi2WwjbRnzo0
+ 0OfvZtOLsFw05/2w1csj5ARoDv59oLlQLXCjeWTrjk+ePMd1AdYuxqNhZwsMD2flyEXX
+ EnMGR9a4jMMt4RDJSv6i5ViXAiRXv38hgiVPcihANtGBzrpMecTKazmzzZw1DRn8+EkX
+ p+Yw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mnKq/ff2
-Subject: Re: [Buildroot] [PATCH 4/4] package/ccache: bump to version 4.7.4
+ header.a=rsa-sha256 header.s=20210112 header.b=FchcNEOL
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic: additional
+ dependencies for rebuild/reconfigure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,208 +95,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?Anders_F_Bj=C3=B6rklund?= <anders.f.bjorklund@gmail.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>,
- Samuel Martin <s.martin49@gmail.com>, Dominik Michael Rauh <dmrauh@posteo.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Charles Hardin <ckhardin@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Jan 8, 2023 at 3:29 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> +Dominik, +Anders
->
-> On 2023-01-06 18:04 -0700, James Hilliard spake thusly:
-> > Migrate to cmake package infrastructure.
-> >
-> > Add new host-hiredis host-zstd dependencies.
-> >
-> > Add new ccache dependency exclusions to pkg-generic.
-> >
-> > Migrate HOST_CCACHE_PATCH_CONFIGURATION to handle updated
-> > source files/format.
-> >
-> > License hashes changed due to migrating urls to https:
-> > https://github.com/ccache/ccache/commit/a0f32f161f1b8b9c5d287ca8abe88e3fd1e940a2
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/ccache/ccache.hash |  6 +++---
-> >  package/ccache/ccache.mk   | 30 +++++++++++-------------------
->
-> This misses a critical part: what prevents cmake from using ccache to
-> build?
->
-> Dominik and Anders got that correct in their patch:
->
->     +# we are built before ccache
->     +HOST_CMAKE_CONFIGURE_OPTS = \
->     +   $(HOST_CONFIGURE_OPTS) \
->     +   CC="$(HOSTCC_NOCCACHE)" \
->     +   GCC="$(HOSTCC_NOCCACHE)" \
->     +   CXX="$(HOSTCXX_NOCCACHE)"
->     +
->      define HOST_CMAKE_CONFIGURE_CMDS
->         (cd $(@D); \
->     -           $(HOST_CONFIGURE_OPTS) \
->     +           $(HOST_CMAKE_CONFIGURE_OPTS) \
->                 CFLAGS="$(HOST_CMAKE_CFLAGS)" \
+While testing incremental changes for a kernel build using the
+LINUX_OVERRIDE_SRCDIR, the following behavior was observed.
 
-Fixed in v3:
-https://lore.kernel.org/buildroot/20230109001037.641422-1-james.hilliard1@gmail.com/
+- edit a file in the kernel tree and save
+- make linux-rebuild for buildroot to pickup the changes
+- rsync occurrs and then the install target is run (no build)
+- run make linux-rebuild a second time and the build is compiled and run
 
->
-> (Arguably, CFLAGS assignment should have been moved into
-> HOST_CMAKE_CONFIGURE_OPTS as well.)
->
-> [--SNIP--]
-> > diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-> > index 97aa8b1c75..0c208cb9e6 100644
-> > --- a/package/ccache/ccache.mk
-> > +++ b/package/ccache/ccache.mk
-> > @@ -4,27 +4,19 @@
-> >  #
-> >  ################################################################################
-> >
-> > -CCACHE_VERSION = 3.7.12
-> > +CCACHE_VERSION = 4.7.4
-> >  CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
-> >  CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
-> >  CCACHE_LICENSE = GPL-3.0+, others
-> >  CCACHE_LICENSE_FILES = LICENSE.adoc GPL-3.0.txt
-> > -
-> > -# Force ccache to use its internal zlib. The problem is that without
-> > -# this, ccache would link against the zlib of the build system, but we
-> > -# might build and install a different version of zlib in $(O)/host
-> > -# afterwards, which ccache will pick up. This might break if there is
-> > -# a version mismatch. A solution would be to add host-zlib has a
-> > -# dependency of ccache, but it would require tuning the zlib .mk file
-> > -# to use HOSTCC_NOCCACHE as the compiler. Instead, we take the easy
-> > -# path: tell ccache to use its internal copy of zlib, so that ccache
-> > -# has zero dependency besides the C library.
-> > -HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
-> > +HOST_CCACHE_DEPENDENCIES = host-hiredis host-zstd
->
-> Dominik and Anders made hiredis an optional dependency. Given that
-> hiredis builds very, very fast (just about 3s here), I wonder if that
-> really makes sense to make it optional; hiredis has no dependency that
-> are not dependencies of ccache, so there is no hidden overhead.
->
-> If hiredis support is compiled in, does that make it mandatory to use a
-> hiredis server, or does ccache still uses local files by default?
+To get the changes in on the first invocation of the rebuild requires
+a dependency on the build target to re-evaluate the stamp dependencies
+after the remove. This is a function of make dependency order evaluation
+so that the install steps will see the missing the install stamp but
+that evaluation doesn't require the rebuild because of the file being
+removed internally on the evaluation.
 
-Default is to use local files.
+Explicit $(1)-build and $(1)-configure deps are added that will evaluate
+after the cleans remove the stamps and cause them to be re-invoked.
 
->
-> If the latter, then I think a mandatory dependency is OK.
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+---
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yeah, it didn't seem like it made sense to make it optional since hiredis is a
-small library.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f2bea01d7d..da99d9622a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1062,12 +1062,12 @@ $(1)-reinstall:		$(1)-clean-for-reinstall $(1)
+ $(1)-clean-for-rebuild: $(1)-clean-for-reinstall
+ 			rm -f $$($(2)_TARGET_BUILD)
+ 
+-$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
++$(1)-rebuild:		$(1)-clean-for-rebuild $(1)-build $(1)
+ 
+ $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
+ 			rm -f $$($(2)_TARGET_CONFIGURE)
+ 
+-$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
++$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)-configure $(1)-build $(1)
+ 
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
+-- 
+2.24.3 (Apple Git-128)
 
->
-> Dominik, Anders, did you make it a optional because of a previous review
-> by Thomas asking so?
->
-> [--SNIP--]
-> > +HOST_CCACHE_CONF_OPTS += \
-> > +     -DCMAKE_C_COMPILER_LAUNCHER="" \
-> > +     -DCMAKE_CXX_COMPILER_LAUNCHER="" \
->
-> Same as for hiredis: use -U.
-
-Fixed in v3:
-https://lore.kernel.org/buildroot/20230109001037.641422-2-james.hilliard1@gmail.com/
-
->
-> [--SNIP--]
-> > @@ -35,11 +27,11 @@ HOST_CCACHE_CONF_ENV = \
-> >  #    the need to specify BR_CACHE_DIR when invoking ccache directly.
-> >  #    CCache replaces "%s" with the home directory of the current user,
-> >  #    So rewrite BR_CACHE_DIR to take that into consideration for SDK purpose
-> > -HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
-> > +HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,%,$(BR_CACHE_DIR))
->
-> Err, this is probably bad and the comment above no longer matches the
-> code.
->
-> Did you meant using 'home_dir +' to replace '%s' (see Dominik and
-> Anders' patch):
-
-Well matching against the full 'home_dir +' doesn't seem to be needed,
-we can just target the appended strings for replacement which is a bit
-cleaner:
-https://lore.kernel.org/buildroot/20230109001037.641422-2-james.hilliard1@gmail.com/
-
->
->     HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst \"$(HOME)/%,home_dir + \"/%,\"$(BR_CACHE_DIR)\")
->
-> >  define HOST_CCACHE_PATCH_CONFIGURATION
-> > -     sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/src/ccache.c
-> > -     sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/conf.c
-> > +     sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/src/Config.cpp
-> > +     sed -i 's,".ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/Config.cpp
->
-> This needs a bit of consolidation and further explanations, becasue
-> ccache now has more locations where it looks for, and we do not want it
-> to default to those:
-
-I have them all being overridden now in my v3:
-https://lore.kernel.org/buildroot/20230109001037.641422-2-james.hilliard1@gmail.com/
-
->
->     home_dir + "/.ccache"           -> the legacy location
->     home_dir + "/.cache/ccache"     -> new, XDG-based
->     home_dir + "/.config/ccache"    -> new, XDG-based
->
-> Also, it seems that we need a patch to use BR_CACHE_DIR from the
-> environment...
-
-I cleaned this up a bit in my v3 to handle the cases from Dominik and
-Anders' patch:
-https://lore.kernel.org/buildroot/20230109001037.641422-2-james.hilliard1@gmail.com/
-
->
-> [--SNIP--]
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index f24e03a325..0863444221 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -792,7 +792,7 @@ $(2)_EXTRACT_DEPENDENCIES += \
-> >  endif
-> >
-> >  ifeq ($$(BR2_CCACHE),y)
-> > -ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
-> > +ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache host-cmake host-hiredis host-pkgconf host-zstd,$(1)),)
->
-> I've applied that part with just host-hiredis, host-pkgconf, and host-zstd,
-> and left host-cmake out for now.
->
-> Regards,
-> Yann E. MORIN.
->
-> >  $(2)_DEPENDENCIES += host-ccache
-> >  endif
-> >  endif
-> > --
-> > 2.34.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
