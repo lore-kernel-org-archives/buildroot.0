@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CD96C54EBD
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 05:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16F59C54EBD
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 05:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C27D160B0C;
-	Mon,  9 Jan 2023 05:05:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C27D160B0C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9619281767;
+	Mon,  9 Jan 2023 05:07:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9619281767
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wFaPp6714RoM; Mon,  9 Jan 2023 05:07:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7EFF8146C;
+	Mon,  9 Jan 2023 05:07:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7EFF8146C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A5461BF3EF
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:07:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 760EC60AF4
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:07:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 760EC60AF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yXF6Lky2T6sY; Mon,  9 Jan 2023 05:05:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2003260A9D;
-	Mon,  9 Jan 2023 05:04:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2003260A9D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 978671BF3EF
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:04:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7118940919
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:04:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7118940919
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZEc6REy3eC8r for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 05:04:56 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 79E9Jsok0OVA for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 05:07:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A29540917
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A29540917
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 05:04:56 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id u8so4431912ilg.0
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 21:04:56 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8164C606ED
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8164C606ED
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 05:07:49 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id i83so4022205ioa.11
+ for <buildroot@buildroot.org>; Sun, 08 Jan 2023 21:07:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=2O5Ufg+tfBqvc114i3RYXx/9GTA/3GZfoZkmLNJj6l0=;
- b=LLLq67lxBumpltcflKHldgnn8h6RqhxrELpBz7MRF8fuMgUsJX10m4zXdfH/25PU0v
- 62H3yMc53L4R3EpxjJbOsqssOSQytf9fVycolFWRIE4yRY3J+HJow4YSz0Q03jfFjSTh
- Bjr9rksn92QBQ+CWRDjVd4OVO7B8QzAe0DQ7WaN08IDxqlJg2kIoO0l5ygLQGTxndQOt
- wqWi7EmY7GGVjnNW7hb3eqi6Ir9S8479sIbrN2Ria0IGugzF0WVRrsRb0sMFVuIxi9U8
- vDCAe4iMymHJyaTRxewbacHDBKDoWKwhTbt3hZpEdb9Kx69qdmRGKH2kyEAnjgtXqw27
- 76vg==
-X-Gm-Message-State: AFqh2kqxUThrCXPoyqZbeMzke/eDMoJ9ySSwL55FU7cclivI1rMI8uPX
- BH7qmW/6mmVXqE4WHERVDxxRzqa2LEaw3iBn
-X-Google-Smtp-Source: AMrXdXuddtSvdw0yDBem+ZElrKnmxesBepzsdo7zkFa6lKXG+KBaaxZvmaezZP15L8xHRlYkaERH4A==
-X-Received: by 2002:a92:ca8f:0:b0:30c:d46:de86 with SMTP id
- t15-20020a92ca8f000000b0030c0d46de86mr29549606ilo.26.1673240695268; 
- Sun, 08 Jan 2023 21:04:55 -0800 (PST)
+ bh=5aj5BF1pcK3X6NrzQ9SsoSuwzDGcRu8bQBxWSUv3xhA=;
+ b=SIIjEcX2O5CKb0Dr7oJ6RhZ+EQgKMsiHyWdCHjjd7InHwrXpXINfL7blXTdtMsXEMA
+ eOU92GypGYGhXO8mXJ9sX8uQXSoslVN8dV1V0d//ADkVufnGD76vgorprw1fkpmw6/2F
+ 7+5zD1cGEYRswNxLGVQCj7LGNioaMi9SN3SQB3lf/bMq4l0kf0ou7Qv1Gdn54XwWS0MM
+ /Xk4E1ZR5qSVZZoDDQCghF8pW/g/fdeOh9tHYgk+Zer3cy3qvEWokvfwaxvnOm65d5Vn
+ haaDYJywnsezOlRChrZfuTqrAz9d5VRkOgwYuz8SM1ZUzLtOUyDIjTyxIns8v4oegPfc
+ 5kIQ==
+X-Gm-Message-State: AFqh2krPjtTgNB6iGcBDlGsP3aZk66Kslp+YOSTV7hNiOWDU8Ne39SHO
+ 1qaDDAQrzkvCtArO1gS+0mVLjIEFYiIJm+Y/
+X-Google-Smtp-Source: AMrXdXuXl9gAPoWSRSzeGzomigrocw4JkjRkM38+vC0D1h1c1yt9lDGJkquv+sC5RqJTUdcZYXYLuQ==
+X-Received: by 2002:a5e:a707:0:b0:6e0:7dd:5976 with SMTP id
+ b7-20020a5ea707000000b006e007dd5976mr55435695iod.12.1673240868473; 
+ Sun, 08 Jan 2023 21:07:48 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- a14-20020a02734e000000b0039e90ba37e3sm16437jae.43.2023.01.08.21.04.54
+ w7-20020a0566022c0700b006a49722dc6dsm2880986iov.11.2023.01.08.21.07.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Jan 2023 21:04:54 -0800 (PST)
+ Sun, 08 Jan 2023 21:07:48 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 22:04:53 -0700
-Message-Id: <20230109050453.2526286-1-james.hilliard1@gmail.com>
+Date: Sun,  8 Jan 2023 22:07:46 -0700
+Message-Id: <20230109050746.2539771-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2O5Ufg+tfBqvc114i3RYXx/9GTA/3GZfoZkmLNJj6l0=;
- b=Ic/+acGpyRkKxfwYfOe2U/s+fGQr37egAsRUiBWxAyx/wTd07HltLgS4KFbtcZSUXQ
- mAuc/sGZKC2bNL2KzaNDksCNIbni2/Mk2ISAZ5a5Mi6+miPLVdOY7lrpppYxEx77q+Rs
- VhGUlY70imM+L6ZxeSSXAXg6RSnX5/2tUc5p1mEh94XGeEwgXxlV0e/ATHxfvBQe+3AP
- +UarfuaEWtJsTBxHHghk++XryiOi10prlR7RxRIWQSKjcDfWIeynzE+B8Q6IVa2z1t+j
- XFGqEzbj3dOPbKvM/KF9tpEaaGvWUxjQVCaFQdxV/tT1HC3boaNdMc8FVPareYAyuUa5
- 5ZtQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=5aj5BF1pcK3X6NrzQ9SsoSuwzDGcRu8bQBxWSUv3xhA=;
+ b=XTat1OdcdoRR+rGdGtTSKY2kgywirHnieee9MiW/sH6PtD68XYAzs9Wbg1SMd2cqQE
+ efkSf208Kx2cGM2sfwvivby4dq2yMcN56T6S2qmXBPWDpEgp7tuaMZ6xfYBh+typEpp/
+ 5oBklX3wh8If2d6B8849lhjYifcIp/lcTBaZQaelKq2f8EuXo+5w44CMOPvXyXoQHbtV
+ s+jIx1NmScc3QJCcW8zcs8qHg402R49WDbnmKk2Gao11DSIXdVhdsGayjSPARf4V182n
+ QXyovUYE9ploCxXjxrXIeOqTwWrE9HLn1ahe644wYHcOiAHsvZscvtDMfim+itRLC8vs
+ zRYg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Ic/+acGp
-Subject: [Buildroot] [PATCH 1/1] package/python-pydantic: bump to version
- 1.10.4
+ header.a=rsa-sha256 header.s=20210112 header.b=XTat1Odc
+Subject: [Buildroot] [PATCH 1/1] package/python-pygments: bump to version
+ 2.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,7 +94,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Mauro Condarelli <mc5686@mclink.it>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,38 +103,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pydantic/python-pydantic.hash | 4 ++--
- package/python-pydantic/python-pydantic.mk   | 4 ++--
+ package/python-pygments/python-pygments.hash | 4 ++--
+ package/python-pygments/python-pygments.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
-index a5eb025fcb..e73a3099a8 100644
---- a/package/python-pydantic/python-pydantic.hash
-+++ b/package/python-pydantic/python-pydantic.hash
+diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
+index 610acb96d7..f7396cb3d6 100644
+--- a/package/python-pygments/python-pygments.hash
++++ b/package/python-pygments/python-pygments.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydantic/json
--md5  9691f29e97c1280ab56b7d0a2dade9c1  pydantic-1.10.2.tar.gz
--sha256  91b8e218852ef6007c2b98cd861601c6a09f1aa32bbbb74fab5b1c33d4a1e410  pydantic-1.10.2.tar.gz
-+md5  2e036b5f993b93dd83f6a7009252ae78  pydantic-1.10.4.tar.gz
-+sha256  b9a3859f24eb4e097502a3be1fb4b2abb79b6103dd9e2e0edb70613a4459a648  pydantic-1.10.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pygments/json
+-md5  6ccae578d28d18968b30a4711652fd9a  Pygments-2.13.0.tar.gz
+-sha256  56a8508ae95f98e2b9bdf93a6be5ae3f7d8af858b43e02c5a2ff083726be40c1  Pygments-2.13.0.tar.gz
++md5  447be4afb076c8325a7dc659aff5b931  Pygments-2.14.0.tar.gz
++sha256  b3ed06a9e8ac9a9aae5a6f5dbe78a8a58655d17b43b93c078f094ddc476ae297  Pygments-2.14.0.tar.gz
  # Locally computed sha256 checksums
- sha256  9e3946690ac88b6b73e8f001a0586af13568be8852fd514e4393f39761764387  LICENSE
-diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-index 04014214e1..a1a4dc9b16 100644
---- a/package/python-pydantic/python-pydantic.mk
-+++ b/package/python-pydantic/python-pydantic.mk
+ sha256  a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17  LICENSE
+diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
+index c09350c42b..9c4f0be6c8 100644
+--- a/package/python-pygments/python-pygments.mk
++++ b/package/python-pygments/python-pygments.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_VERSION = 1.10.2
-+PYTHON_PYDANTIC_VERSION = 1.10.4
- PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
--PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/7d/7d/58dd62f792b002fa28cce4e83cb90f4359809e6d12db86eedf26a752895c
-+PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/53/17/34e54e352f6a3d304044e52d5ddd5cd621a62ec8fb7af08cc73af65dd3e1
- PYTHON_PYDANTIC_SETUP_TYPE = setuptools
- PYTHON_PYDANTIC_LICENSE = MIT
- PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
+-PYTHON_PYGMENTS_VERSION = 2.13.0
++PYTHON_PYGMENTS_VERSION = 2.14.0
+ PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
+-PYTHON_PYGMENTS_SITE = https://files.pythonhosted.org/packages/e0/ef/5905cd3642f2337d44143529c941cc3a02e5af16f0f65f81cbef7af452bb
++PYTHON_PYGMENTS_SITE = https://files.pythonhosted.org/packages/da/6a/c427c06913204e24de28de5300d3f0e809933f376e0b7df95194b2bb3f71
+ PYTHON_PYGMENTS_LICENSE = BSD-2-Clause
+ PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
+ PYTHON_PYGMENTS_CPE_ID_VENDOR = pygments
 -- 
 2.34.1
 
