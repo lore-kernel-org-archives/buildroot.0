@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 489A5C5479D
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 05:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7670C54EBD
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 05:41:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC3EE817A3;
-	Mon,  9 Jan 2023 05:38:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC3EE817A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50FB840983;
+	Mon,  9 Jan 2023 05:41:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FB840983
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sXN9BR5F4hSn; Mon,  9 Jan 2023 05:38:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wmEG6CS6gppB; Mon,  9 Jan 2023 05:40:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D9A881775;
-	Mon,  9 Jan 2023 05:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D9A881775
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 401FE1BF3EF
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:37:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 410574094D;
+	Mon,  9 Jan 2023 05:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 410574094D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 08CF81BF3EF
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1809660B20
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:37:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1809660B20
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6FD24094D
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 05:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6FD24094D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0WjScd3pAlox for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 05:37:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2stdVMKdHdn8 for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 05:40:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 323B460AED
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 323B460AED
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 05:37:58 +0000 (UTC)
-Received: by mail-il1-x132.google.com with SMTP id d10so4414019ilc.12
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 21:37:58 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE32F40929
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
+ [IPv6:2607:f8b0:4864:20::12f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE32F40929
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 05:40:55 +0000 (UTC)
+Received: by mail-il1-x12f.google.com with SMTP id u8so4454969ilg.0
+ for <buildroot@buildroot.org>; Sun, 08 Jan 2023 21:40:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=GTPNQNQNo6hB9YGqzA6/afFkIQhTE1vPZcVID+rC7Ks=;
- b=wO80CNpY6GSuX++KVn7yYX4wLvZnT1l5myVVv0XoLRDsyuENsydF8Xsukff7HKqi6g
- rE4QJOccoIRrJBMI2UWzFgIEtXdlW1NChaBNlFf2XBUSw40TO/Ou4VaYUA+ILrm/h1f+
- ZkA23tU20pPK33k9TOMhXZpxQ6JA0NFCCzwCEWt1oyyGuJv2pvjOuNNQ/bAk1n2orjhn
- IqeaJcolBmf9qZ42q7I9+SzdH0KoUPDRrIf9ZOy0Fy2Ueep/0t361cmYlR0LNMnIcuwg
- MtpkDIexDT7mtE6+NWERe3Ia70JOlDDcbuv4odxoGgib0ioIXLPoC3ki96m2QRnIyDlk
- jTzQ==
-X-Gm-Message-State: AFqh2krqqxvx0DqLaqzC1mP1+vS4pUiXgtRHA6fbqU5GLmcTWrJ4PRsd
- JWD2QgUZj7j8AnTWHkVqeOWaRzepY4AS7KBd
-X-Google-Smtp-Source: AMrXdXsoJuhhBPI7oYl4yrn+l8QIh5F3Sor00+MlhHRig7RsbXhGNYZhsX1Xg8kgXrTG/H9n2qA0rA==
-X-Received: by 2002:a05:6e02:103:b0:30b:e570:57d8 with SMTP id
- t3-20020a056e02010300b0030be57057d8mr51948873ilm.8.1673242677126; 
- Sun, 08 Jan 2023 21:37:57 -0800 (PST)
+ bh=lL1wfxxxt7vuvZ4mpZJ25Cr4SXMOp32h2xuaozDZY9M=;
+ b=xuXo132sNYGBg6VPg1Ev50etbu8CB+gZrj1TKXIdKyxTIYnA2UAfizJX7igGJZewcz
+ a8HYjZApAzB7XMamMVovtDhM0o7NHM1nXLUPY4DAhis+YlZ7i5fj6hNjJtzgSY+n4NJD
+ TIm1TqXFpFMbeBxGDzMyLVvxDgFyiZQz35zInqQxMTXHgsqyg6YsXy8JrJNhlwFLTrxF
+ 9xBBejGrkTW5W/YjyT+9M56ESD2eZt5z88prt+ugcARpR2PahAfI85i7mi3YnxjY3rg8
+ 0A/ESRYf0MdMdfFMVELB7lOSB5Fi8lAJh1wYMngGnpmP+BUe5ASw2iF88UUpetjCXkLM
+ Sfbg==
+X-Gm-Message-State: AFqh2kooogrz6j8sRaqf5q+PLFaFtQyr1UhgI6H88HwXZUNDICBFAU2c
+ xp+eR9Jc4w7f6gopihpWghP4tCGqX3cTzEaD
+X-Google-Smtp-Source: AMrXdXsxCksN6cQaYTJq+s14gf0UZYDV/BxGtlAtSIAY9kuz/rtgs8v8QzXvq6CYDYewiml4BdkPKQ==
+X-Received: by 2002:a92:db47:0:b0:303:30a9:326a with SMTP id
+ w7-20020a92db47000000b0030330a9326amr41925072ilq.7.1673242854572; 
+ Sun, 08 Jan 2023 21:40:54 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- y6-20020a92d0c6000000b0030014a5556bsm2469878ila.69.2023.01.08.21.37.56
+ a12-20020a92d10c000000b002eb3b43cd63sm2470464ilb.18.2023.01.08.21.40.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Jan 2023 21:37:56 -0800 (PST)
+ Sun, 08 Jan 2023 21:40:54 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 22:37:55 -0700
-Message-Id: <20230109053755.2692156-1-james.hilliard1@gmail.com>
+Date: Sun,  8 Jan 2023 22:40:53 -0700
+Message-Id: <20230109054053.2704727-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GTPNQNQNo6hB9YGqzA6/afFkIQhTE1vPZcVID+rC7Ks=;
- b=ijbYnYvlJiVZGAgcacDzoszaL9lqx8GVX0fbbXLZR/58vy7zBMkP6EeJelP4rcIBuU
- OicgsRmumnGLMXx7n0bcsd8kGfyKN3wTztOJ04MuwrHv9PORXATTDJr1jmdzebjam2bY
- Kq7lJoto4QGNYJ89aWkZR9YiVmcU1eBDdfrMlPRNv1c/HxDehMXe257NWoJOEVia+m0K
- 0b7PjcmcSDJbQMsKR+9GEH+mVQjUj1PMmT0mGjPkbfXvQ3PNt1VfUxveDFVfDXc8XZjZ
- Qzp5aC3RxQ49M5K5heVM5s8G9WpGvihTgT4YWcDx/njbNHuW/UMUonykyqUpgC65TJq8
- kt+g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=lL1wfxxxt7vuvZ4mpZJ25Cr4SXMOp32h2xuaozDZY9M=;
+ b=cz+QpvVqbKWcH5ZIQzBcZD8QN8Y6H+w57qQGNOquhj73Tv3Jm/GZKIdUWiYcixd7BM
+ x8GyBKajvy7UqXyyXcs/Tf2rAzZdWKKEuLXEJtF1oIxaKJk+ubCeqbQyhprtRayypGVR
+ JP1FmQWHn62/9VllXyK9YftXXEaClq2qqJ7l6U7u/PuF+au3A7lcodoLJcPU72deFfk5
+ 3i2jP456YgAxWDVtsjQdn0MtIJBrp9w+aoWTfLaYRLV0Qze4NTd8BQejdwpp39hnX3fU
+ BpHx5LyT8PcuXQUUnMFTLdLxaH6xR6/rd64rThZnxu3eZipCxtjNrID1Pm1eNEE6x2dy
+ hcHg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ijbYnYvl
-Subject: [Buildroot] [PATCH 1/1] package/python-pyspnego: bump to version
- 0.7.0
+ header.a=rsa-sha256 header.s=20210112 header.b=cz+QpvVq
+Subject: [Buildroot] [PATCH 1/1] package/python-pytest-asyncio: bump to
+ version 0.20.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,7 +94,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,39 +103,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyspnego/python-pyspnego.hash | 4 ++--
- package/python-pyspnego/python-pyspnego.mk   | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyspnego/python-pyspnego.hash b/package/python-pyspnego/python-pyspnego.hash
-index 400e380b5d..0ae6cf1d4e 100644
---- a/package/python-pyspnego/python-pyspnego.hash
-+++ b/package/python-pyspnego/python-pyspnego.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyspnego/json
--md5  67114f5e59c6d5b45fe2b38c128c2140  pyspnego-0.6.3.tar.gz
--sha256  6060a0e683171090adcf92c9d319ddd334f15117fa199a703d8c9bd094d9f6c0  pyspnego-0.6.3.tar.gz
-+md5  93ab1a088d65e6a7c97efdb567ba37b0  pyspnego-0.7.0.tar.gz
-+sha256  da78096fd7c9f40e716f6fbe3e30d913103d75fd676f839f98fc3a6fee92fbe3  pyspnego-0.7.0.tar.gz
- 
- # Locally computed
- sha256  286517c93031c343f809f64b38563a783614b762e1367242af6cdd4107335471  LICENSE
-diff --git a/package/python-pyspnego/python-pyspnego.mk b/package/python-pyspnego/python-pyspnego.mk
-index 0910c57b7d..2fbb779d98 100644
---- a/package/python-pyspnego/python-pyspnego.mk
-+++ b/package/python-pyspnego/python-pyspnego.mk
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+index b683c60553..051670aa51 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+-md5  894109d45a7b6f46718bbe4611aa7817  pytest-asyncio-0.20.1.tar.gz
+-sha256  626699de2a747611f3eeb64168b3575f70439b06c3d0206e6ceaeeb956e65519  pytest-asyncio-0.20.1.tar.gz
++md5  dce438c7b0081d7f580b5a79d7105570  pytest-asyncio-0.20.3.tar.gz
++sha256  83cbf01169ce3e8eb71c6c278ccb0574d1a7a3bb8eaaf5e50e0ad342afb33b36  pytest-asyncio-0.20.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+index b70e0ad0f4..c94c9ea876 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSPNEGO_VERSION = 0.6.3
-+PYTHON_PYSPNEGO_VERSION = 0.7.0
- PYTHON_PYSPNEGO_SOURCE = pyspnego-$(PYTHON_PYSPNEGO_VERSION).tar.gz
--PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/ba/13/7b4e7dcff1eb24a13e0a631a4b49eab361678e4490d691c03253ae736da4
-+PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/97/f3/bdf3cd5f4c5a1bf9e1d4bb771c133850ee08241c18cafd90a6d872937a9f
- PYTHON_PYSPNEGO_SETUP_TYPE = setuptools
- PYTHON_PYSPNEGO_LICENSE = MIT
- PYTHON_PYSPNEGO_LICENSE_FILES = LICENSE
+-PYTHON_PYTEST_ASYNCIO_VERSION = 0.20.1
++PYTHON_PYTEST_ASYNCIO_VERSION = 0.20.3
+ PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+-PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/9e/8f/5a918ac4e2366b61156e16fa9bfb3be52401d81f5309efb1f4e04d99ac39
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/6e/06/38b0ca5d53582bb49697626975b5540435ea064762d852b5c66646c729e9
+ PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+ PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
