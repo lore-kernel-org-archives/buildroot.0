@@ -1,87 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F473C5479D
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 22:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8818C54EBD
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 22:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB61880CB8;
-	Mon,  9 Jan 2023 22:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB61880CB8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 601FF40903;
+	Mon,  9 Jan 2023 22:07:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 601FF40903
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4QxVmkPK9Wkr; Mon,  9 Jan 2023 22:03:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mimIW_r81v8J; Mon,  9 Jan 2023 22:07:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 232BB80C6A;
-	Mon,  9 Jan 2023 22:03:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 232BB80C6A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 246F540915;
+	Mon,  9 Jan 2023 22:07:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 246F540915
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6AD8C1BF3FF
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 22:03:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B67B41BF3F7
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 22:07:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 457F240204
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 22:03:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 457F240204
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CC7140915
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 22:07:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CC7140915
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id azi-FJHn2bf7 for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 22:03:33 +0000 (UTC)
+ with ESMTP id CxK9ALQvzFSM for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 22:07:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D795540203
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
- [IPv6:2607:f8b0:4864:20::d2a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D795540203
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 22:03:32 +0000 (UTC)
-Received: by mail-io1-xd2a.google.com with SMTP id q190so5236149iod.10
- for <buildroot@buildroot.org>; Mon, 09 Jan 2023 14:03:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 320B340903
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 320B340903
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 22:07:50 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id fc4so23756732ejc.12
+ for <buildroot@buildroot.org>; Mon, 09 Jan 2023 14:07:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=3uJUTJapQGqFYEXS47LGnXaxRrLah3UY7kyftJYg5Uw=;
- b=lLRvNE65RR8HQSMihRp3dZWu1QbBJZxx+vex/fpP7IhCCh6M3SzdKPJts3HtvfgXhk
- pl3PcJfPSIEJevDCmzI+mqc7tEeMUARNxXXZgy83BdNCL7fZw7s1RQ0tUaE8sYL5o2vM
- Vc/NFQxiFRv9WzuHuHKC+9HE6o5xAeam7P8NBSj1zDHdpSWXzbt1kNAAw+lZw7UNpczQ
- lmM6DDOnYQMcpO1wwK6TpSNoddeG6FJVTyK1gGSrv27P1FdxdV80Ib2x9epS0czNtQsZ
- feNaWKjD3UoS8tXszKCr0slaWoKnGchx0x2ylXDnv85Yxtjlapy9CR5pRoxjU4vcqHjO
- 3FXQ==
-X-Gm-Message-State: AFqh2kqf+yorzrzj5IbRwNrqKolzxYNKLAX1W79+Njr/LlQdcA/wZhZj
- WhFbOWrwr70D2Seap/DUpF0JxsU77TNWJZ6Z
-X-Google-Smtp-Source: AMrXdXt7ZKA07jp1mvIr2/IH0fZLAnH2WaqXAFFA9veQ+kWPCqaHKLT1hlBI7N/5Wb2vfjL3AGlWKw==
-X-Received: by 2002:a5e:9515:0:b0:6ec:dcd8:ac4e with SMTP id
- r21-20020a5e9515000000b006ecdcd8ac4emr44637978ioj.3.1673301811761; 
- Mon, 09 Jan 2023 14:03:31 -0800 (PST)
-Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
- [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- a6-20020a029406000000b0039e8bbca56fsm1017476jai.24.2023.01.09.14.03.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 09 Jan 2023 14:03:31 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  9 Jan 2023 15:03:29 -0700
-Message-Id: <20230109220329.2122632-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=HM4+aC1W7lIbmIxYxJCcKcCzQLzPBF5BQiZtyEeuYTk=;
+ b=RCvtpv1RN7qWKNPnW9vY+NrhZtW7gE3mn+UBpPte065ygHAXBYmxODxhLPAeCisBRK
+ PmG2EWeWY7RklDV9sfrQhxElie9c6U/xY6iFHHh660XXis+prdiwsPL5w+ckEEb63cjG
+ MVQ0GOgKtnKS2UI7NTx90lXoLfTRWY6fzr7phaD+uCAPriiObm02ngW1vH8IbbXNqeJ6
+ Egz66/XmOa7KFu1gK/dbjd+NnAK/Hj4ByJOPaP0RtFrnd35KmCOHmVBq2Umt90VxNeHT
+ AjFYOQlzOfJi0idxgUpozxK0d7W8zDokf8ev3cKybuW1GDEJyxUcvd1YJdy2c7a7gh8K
+ flqA==
+X-Gm-Message-State: AFqh2kry9+q8pHdHxWgIu/+icuU/9CRjnqPGhtANkTe5FK9JoKYfMRss
+ 216wUdIhNLtIL9eK0wbdGVsX5qncJX92Tlnc9mJFefP/
+X-Google-Smtp-Source: AMrXdXufJTxpXmI8h72EWDhv+2CYOin02OBthYhXeMec8u7DwoCO+XDguAO/rdySMUesZV+o2VuTjXvmmez4+q8tTdw=
+X-Received: by 2002:a17:907:34d6:b0:84d:41dd:ff43 with SMTP id
+ zy22-20020a17090734d600b0084d41ddff43mr407202ejb.239.1673302068131; Mon, 09
+ Jan 2023 14:07:48 -0800 (PST)
 MIME-Version: 1.0
+References: <20221018034605.800593-1-james.hilliard1@gmail.com>
+In-Reply-To: <20221018034605.800593-1-james.hilliard1@gmail.com>
+From: Charles Hardin <ckhardin@gmail.com>
+Date: Mon, 9 Jan 2023 14:07:36 -0800
+Message-ID: <CAN=fXj0BgK2ygmW4iUs9XuaxNZ+McUB+Z6Mu=rJ+dHRu_aFbcw@mail.gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3uJUTJapQGqFYEXS47LGnXaxRrLah3UY7kyftJYg5Uw=;
- b=EWXtj08MSIIe7uw6YodCRQZwcu1XkiUyeNXaAyBfAbj6T0nSYSOkekhT9DPq0t5aU3
- 6YwA//7RSsSC5eqGrLGa2VN2UbuEKxx2GftgVN1rzlXR/xt5mpelf+WmKeXVx5+uzzd5
- 5lbAktsIab+4w05iWKIxiGRFu/CKJbOZ38k66gBCTsWx2gkO2bpZPQwbQC+zrqlR1KYp
- QVICYvWzid26Y3SaaQKd6eGuuDCEteK6gkrw2s96XtlmsQjfMOeZuqtMXfu8cQOASUyk
- Lml0sgpMYAw15Rqwh7Bd5SJBg0DZE/Cddxk0ww78MeINmLva9oBoNV63gM3BIL21aGtm
- TCOg==
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=HM4+aC1W7lIbmIxYxJCcKcCzQLzPBF5BQiZtyEeuYTk=;
+ b=EG2pEPIVqoPsXgAlgsXCzzSU8ImhoB6K9q+HV/uWNozFDDlkIWNkbWIHUjtzhimQd0
+ /pD1kooKhr6x9c+/R0mMDNBDWyygSB/6osC/qndOjKGL5/gPc3v4U0vgT4j3ST0S0axQ
+ YUK79a/HGHOikcezval5NyYIc6zvA5rjPpPISJZREK/KdlfTj6EvCqLG+PmFjl0wZemB
+ vxpeBUO3pYn8tsKtRANDfzC8RfC/Q2S8y140ya3DUBT+SkgIZdLQ6fW7E076j7NyH78m
+ luCntE0ljFhrSxtWCu41pB2KbSpkq8HpxGOaxyZOEZeejdr0dQR0MFocWPK0O/6JzKEb
+ xkhA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EWXtj08M
-Subject: [Buildroot] [PATCH 1/1] package/libbpf: bump to version 1.1.0
+ header.a=rsa-sha256 header.s=20210112 header.b=EG2pEPIV
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix rule order
+ for re{install, build, configure}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,95 +90,183 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============3020683132155632211=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch which is now upstream.
+--===============3020683132155632211==
+Content-Type: multipart/alternative; boundary="0000000000005f7c6705f1dbffdc"
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...cross-compilation-for-32-bit-targets.patch | 38 -------------------
- package/libbpf/libbpf.hash                    |  2 +-
- package/libbpf/libbpf.mk                      |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
- delete mode 100644 package/libbpf/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch
+--0000000000005f7c6705f1dbffdc
+Content-Type: text/plain; charset="UTF-8"
 
-diff --git a/package/libbpf/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch b/package/libbpf/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch
-deleted file mode 100644
-index 12c22f3147..0000000000
---- a/package/libbpf/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 68e6f83f223ebf3fbf0d94c0f4592e5e6773f0c1 Mon Sep 17 00:00:00 2001
--From: Tobias Waldekranz <tobias@waldekranz.com>
--Date: Fri, 14 Oct 2022 21:14:14 +0200
--Subject: [PATCH] Makefile: Fix cross-compilation for 32-bit targets
--
--Determining the correct library installation path (lib vs. lib64)
--using uname(1) breaks in cross compilation scenarios where word widths
--differ between the host and target system.
--
--Instead, source the information from the compilers '-dumpmachine'
--option (supported by both GCC and Clang).
--
--We call this the "host" architecture, using the same nomenclature as
--Autotools (--host configure option).
--
--Upstream: https://github.com/libbpf/libbpf/commit/68e6f83f223ebf3fbf0d94c0f4592e5e6773f0c1
--Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-----
-- src/Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index 3cd0854..d535f81 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -77,7 +77,8 @@ INSTALL = install
-- 
-- DESTDIR ?=
-- 
---ifeq ($(filter-out %64 %64be %64eb %64le %64el s390x, $(shell uname -m)),)
--+HOSTARCH = $(firstword $(subst -, ,$(shell $(CC) -dumpmachine)))
--+ifeq ($(filter-out %64 %64be %64eb %64le %64el s390x, $(HOSTARCH)),)
-- 	LIBSUBDIR := lib64
-- else
-- 	LIBSUBDIR := lib
---- 
--2.34.1
--
-diff --git a/package/libbpf/libbpf.hash b/package/libbpf/libbpf.hash
-index 4305872d9f..75f2b1695c 100644
---- a/package/libbpf/libbpf.hash
-+++ b/package/libbpf/libbpf.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  3d6afde67682c909e341bf194678a8969f17628705af25f900d5f68bd299cb03  libbpf-1.0.1.tar.gz
-+sha256  5da826c968fdb8a2f714701cfef7a4b7078be030cf58b56143b245816301cbb8  libbpf-1.1.0.tar.gz
- sha256  847f4addbd56e2d5be20c4ea0845e972672fc07b755fadaae5f7abd35d71e349  LICENSE
- sha256  e1638b9a0c68ca90fad3df1d6b4e430804d2fbdc15e58d02cffddfae38953bbf  LICENSE.BSD-2-Clause
- sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSE.LGPL-2.1
-diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
-index 820f1dc4bf..b498136ace 100644
---- a/package/libbpf/libbpf.mk
-+++ b/package/libbpf/libbpf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBPF_VERSION = 1.0.1
-+LIBBPF_VERSION = 1.1.0
- LIBBPF_SITE = $(call github,libbpf,libbpf,v$(LIBBPF_VERSION))
- LIBBPF_LICENSE = GPL-2.0, LGPL-2.1, BSD-2-Clause
- LIBBPF_LICENSE_FILES = LICENSE LICENSE.BSD-2-Clause LICENSE.LGPL-2.1
--- 
-2.34.1
+On Mon, Oct 17, 2022 at 8:46 PM James Hilliard <james.hilliard1@gmail.com>
+wrote:
+
+> These command rely on the clean operations being first so that the
+> stamp files being deleted will rebuild the targets.
+>
+> The execution ordering of the clean and rebuild operations may
+> change, for example if --shuffle=reversed is set.
+>
+> To ensure the evaluation order is always correct use double colon
+> rules to make the evaluation order explicit as per make docs:
+>
+> The double-colon rules for a target are executed in the order they
+> appear in the makefile.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>
+
+Tested-by: Charles Hardin <ckhardin@gmail.com>
+
+Set LINUX_OVERRIDE_SRCDIR in local.mk
+touch arm64/kernel/setup.c
+make linux-rebuild
+See Building steps with CC on the changed file setup.c
+
+
+> ---
+>  package/pkg-generic.mk | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index f24e03a325..6cb461af90 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -1057,17 +1057,20 @@ endif
+>                         rm -f $$($(2)_TARGET_INSTALL_IMAGES)
+>                         rm -f $$($(2)_TARGET_INSTALL_HOST)
+>
+> -$(1)-reinstall:                $(1)-clean-for-reinstall $(1)
+> +$(1)-reinstall::               $(1)-clean-for-reinstall
+> +$(1)-reinstall::               $(1)
+>
+>  $(1)-clean-for-rebuild: $(1)-clean-for-reinstall
+>                         rm -f $$($(2)_TARGET_BUILD)
+>
+> -$(1)-rebuild:          $(1)-clean-for-rebuild $(1)
+> +$(1)-rebuild::         $(1)-clean-for-rebuild
+> +$(1)-rebuild::         $(1)
+>
+>  $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
+>                         rm -f $$($(2)_TARGET_CONFIGURE)
+>
+> -$(1)-reconfigure:      $(1)-clean-for-reconfigure $(1)
+> +$(1)-reconfigure::     $(1)-clean-for-reconfigure
+> +$(1)-reconfigure::     $(1)
+>
+>  # define the PKG variable for all targets, containing the
+>  # uppercase package variable prefix
+> --
+> 2.34.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+--0000000000005f7c6705f1dbffdc
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Mon, Oct 17, 2022 at 8:46 PM James=
+ Hilliard &lt;<a href=3D"mailto:james.hilliard1@gmail.com">james.hilliard1@=
+gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">These command rely on the clean operations being first so that t=
+he<br>
+stamp files being deleted will rebuild the targets.<br>
+<br>
+The execution ordering of the clean and rebuild operations may<br>
+change, for example if --shuffle=3Dreversed is set.<br>
+<br>
+To ensure the evaluation order is always correct use double colon<br>
+rules to make the evaluation order explicit as per make docs:<br>
+<br>
+The double-colon rules for a target are executed in the order they<br>
+appear in the makefile.<br>
+<br>
+Signed-off-by: James Hilliard &lt;<a href=3D"mailto:james.hilliard1@gmail.c=
+om" target=3D"_blank">james.hilliard1@gmail.com</a>&gt;<br></blockquote><di=
+v><br></div><div>Tested-by: Charles Hardin &lt;<a href=3D"mailto:ckhardin@g=
+mail.com">ckhardin@gmail.com</a>&gt;</div><div><br></div><div>Set LINUX_OVE=
+RRIDE_SRCDIR in <a href=3D"http://local.mk">local.mk</a></div><div>touch ar=
+m64/kernel/setup.c</div><div>make linux-rebuild</div><div>See Building step=
+s with CC on the changed file setup.c</div><div>=C2=A0</div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
+rgb(204,204,204);padding-left:1ex">
+---<br>
+=C2=A0package/<a href=3D"http://pkg-generic.mk" rel=3D"noreferrer" target=
+=3D"_blank">pkg-generic.mk</a> | 9 ++++++---<br>
+=C2=A01 file changed, 6 insertions(+), 3 deletions(-)<br>
+<br>
+diff --git a/package/<a href=3D"http://pkg-generic.mk" rel=3D"noreferrer" t=
+arget=3D"_blank">pkg-generic.mk</a> b/package/<a href=3D"http://pkg-generic=
+.mk" rel=3D"noreferrer" target=3D"_blank">pkg-generic.mk</a><br>
+index f24e03a325..6cb461af90 100644<br>
+--- a/package/<a href=3D"http://pkg-generic.mk" rel=3D"noreferrer" target=
+=3D"_blank">pkg-generic.mk</a><br>
++++ b/package/<a href=3D"http://pkg-generic.mk" rel=3D"noreferrer" target=
+=3D"_blank">pkg-generic.mk</a><br>
+@@ -1057,17 +1057,20 @@ endif<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 rm -f $$($(2)_TARGET_INSTALL_IMAGES)<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 rm -f $$($(2)_TARGET_INSTALL_HOST)<br>
+<br>
+-$(1)-reinstall:=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $(1=
+)-clean-for-reinstall $(1)<br>
++$(1)-reinstall::=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(1=
+)-clean-for-reinstall<br>
++$(1)-reinstall::=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(1=
+)<br>
+<br>
+=C2=A0$(1)-clean-for-rebuild: $(1)-clean-for-reinstall<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 rm -f $$($(2)_TARGET_BUILD)<br>
+<br>
+-$(1)-rebuild:=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $(1)-clean-for-rebuild $(1=
+)<br>
++$(1)-rebuild::=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(1)-clean-for-rebuild<br>
++$(1)-rebuild::=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(1)<br>
+<br>
+=C2=A0$(1)-clean-for-reconfigure: $(1)-clean-for-rebuild<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 rm -f $$($(2)_TARGET_CONFIGURE)<br>
+<br>
+-$(1)-reconfigure:=C2=A0 =C2=A0 =C2=A0 $(1)-clean-for-reconfigure $(1)<br>
++$(1)-reconfigure::=C2=A0 =C2=A0 =C2=A0$(1)-clean-for-reconfigure<br>
++$(1)-reconfigure::=C2=A0 =C2=A0 =C2=A0$(1)<br>
+<br>
+=C2=A0# define the PKG variable for all targets, containing the<br>
+=C2=A0# uppercase package variable prefix<br>
+-- <br>
+2.34.1<br>
+<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div></div>
+
+--0000000000005f7c6705f1dbffdc--
+
+--===============3020683132155632211==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3020683132155632211==--
