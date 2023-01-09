@@ -1,133 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66472C5479D
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 12:59:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBB3DC54EBD
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 15:23:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AE4C81375;
-	Mon,  9 Jan 2023 12:59:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AE4C81375
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4BDC74014D;
+	Mon,  9 Jan 2023 15:23:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BDC74014D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jeH3dv7gHRn2; Mon,  9 Jan 2023 15:23:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64F59402E7;
+	Mon,  9 Jan 2023 15:23:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64F59402E7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB05D1BF34C
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 15:23:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95D68819D1
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 15:23:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95D68819D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zfi4Us8Bty0V; Mon,  9 Jan 2023 12:59:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE19181390;
-	Mon,  9 Jan 2023 12:59:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE19181390
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F4C81BF21A
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 12:59:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A50660F1C
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 12:59:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A50660F1C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uBvpfqPFCkQU for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 12:59:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD34160BE9
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com
- (mail-db5eur01on2084.outbound.protection.outlook.com [40.107.15.84])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CD34160BE9
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 12:59:36 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YM7GvVrvTAG2T/VivyIfhRLtOIpNdBn+16nJCFdLfbJDdSwUjtN7W64sL4d+zNiEIa4QV1uzfN0b9V+vaR17hWvhTlx9dnkeIuDaUSu/nzAhEIFpxBZiqf1X+uCtb5cR3+Rl7ReiFhTG6ayd8Hcg++ACG51MGq4dVblRwxJh6AggAJqzFwjUaaMwDo8uVaUsmg5mJlGh6oX6OJ7Qp2b80w7mc0cyPakf8eImOZ4wykJ3hW1p30eveJvA4OESpyuRWulZdMmAuiwWUjgQUBcBuJA4AvmrGsert5Urme2jjh0VqMROoctww4+ph0nl5tvldwmhYzoErwPNiO1qE2+oTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0Cv3CrVYip+hvlZ3VeQ/gsJntTt83n86/73rvoeVjmk=;
- b=Aw5tkox4eclupTNLhQt5PtRFRKQl6UtDHukJaLZu+2AfltA81zeiBv7QNSJR7y+oZXqo1qqQkBqzNogazvjMnrOHASh7YNJUR5JS0tYQUv6gnGzHxvjCHGB9xhCjab3ICy9FFG9G/71XwMHuOBuVdy6kGgm4IGfjpHcBk4XEuPGzOIEekqAleyEeErDWPzGZ0YL7YQ6+cIKFcKKy1Fw1O7omNjOK/JEr23abR55OFHCHlpn2lQFty15hRBD4yWAzaXTRzcl37fCjnT6d3+h/bszmX2avUZa9QpPkz43GcbuG1l+ZSbH0EACNVBd6/B2uQLtgvnyWXi1ebXqMyejWIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
- dkim=pass header.d=abatec.at; arc=none
-Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
- by DB9P190MB1795.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:33b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
- 2023 12:59:33 +0000
-Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
- ([fe80::a6aa:bd17:e838:b0b0]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
- ([fe80::a6aa:bd17:e838:b0b0%4]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
- 12:59:33 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 4/4] package/atk: remove package
-Thread-Index: AQHZJCna76x930sTekq7e1U9I+ZGsg==
-Date: Mon, 9 Jan 2023 12:59:33 +0000
-Message-ID: <VI1P190MB049320A6AD3502E69083DB819FFE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1P190MB0493:EE_|DB9P190MB1795:EE_
-x-ms-office365-filtering-correlation-id: e89fd99e-3eb2-450c-1477-08daf2415ad9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NcIE7jMmCKo0AOo/Tg8K6k0oYZoqeSUME2+AHbu2aeOptIV/bCp5wWfCHuUW3HpzMa/5IAHP23uMDa4DmZpSmqXfz7qVwosiAwM7+A1ozTRwC+8g98fQ8ihK4FDzFiz9tHJ2JBXzrMdsXKldN/W8cxaACje9yInJfKjZffxbfOVyeIcSe5S7yaJZx3wT1ooee2d/AlMfzKQcZMGXe7ginrL1Ql/ER7NoR5Ac99qnc1lJhKy9LhvU9gIcxJPiU29qVfwFV3ame04/cm2ZyAa93FFrKcHGy97N6iYiIjXKcd15D5A6/icpjpyMGea4U10NPTtQ/3UyRCDlpRZg5phE92yGlqQf578LtF5fRsoZq7DKhS2akUWWR6kBl4kjrzq+h3ieX2ZtqYPRKVyRprZO641h6KzzxiELKXIxWpu1CibzhkTVYud9fg2ZszhhDOrjQy8ps0Cw45FO4QOmQ1r5JP3anfslYfm/82xOnBdcFUhweqJmBgEEpLbPjs+aqE4Po4pWKSY/UiRxRtO+RmNaczMvPWq2z2BP1NJHmbR5l/Jidg70FFdQBJkjS1qd6JPcJWx3FRA2gEeoRZw2V3kvXjAcHJExBWliSFTRLNrNlNqXk84MirsZI5Wd2eT9zMRMyELJR23yZBIGulkipGP/4gKcA8AMBrxpl/LqtYmQf5ZQHmLQtJ/JnUOaMudbwpfD/0w4sL4E7t8bigXn4Tr6amcsxxZ1Ebu0bbWmXR/5+UA=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(136003)(346002)(396003)(366004)(376002)(39840400004)(451199015)(5660300002)(8936002)(52536014)(41300700001)(6916009)(2906002)(83380400001)(38070700005)(66556008)(66476007)(76116006)(66946007)(8676002)(54906003)(66446008)(64756008)(4326008)(316002)(33656002)(71200400001)(7696005)(26005)(9686003)(186003)(478600001)(966005)(6506007)(86362001)(55016003)(122000001)(38100700002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?v+4aoyf9qsi9yqSjK6eXUDEj4DTDKUvg85nWWgTrFFWfr9bpaq+uhjXwyk?=
- =?iso-8859-1?Q?//sPzT5ofraQJaCZSDz2sGJgopMhuS622Iu5pUEKSbYafgbXWs7876gTQC?=
- =?iso-8859-1?Q?0XG8UNMZaE3/txRvsh9OAmz964v+N7V7/g5sZlS7DOcOo+HTwy5vKkDfpW?=
- =?iso-8859-1?Q?CDh5OPNNXi273DzyOUjUZRYfkgx9qXiOJhuYogPY4ZyOSkUUBxHiw0FO+c?=
- =?iso-8859-1?Q?ZNumqa1NRc05huuAw9+lAOnH1aMS700IM7yeW8Ag04EkVP/kentBcEcr01?=
- =?iso-8859-1?Q?eThWvlxj1KjEqdkmgoyXGI+KLSM06WJCwmjttGN6cuwK1eM3pwKg7LWV6R?=
- =?iso-8859-1?Q?97xISrSi+Xd/QoONw+Tqnmz6YyxW7p7vSsFnNhEERNrDjLOTXLHfceh+LY?=
- =?iso-8859-1?Q?B0djuQ35T4L2u7AeATFgMB4Q9IHcL6yorNlMM5ncSgSXlQVqyOF9+Bp/up?=
- =?iso-8859-1?Q?KIXuUn3Qn19sWpY03w3ELDAboFhPBKfXysisYnAz8RTJqgt1Qhl6ekJmWE?=
- =?iso-8859-1?Q?u+yW+Zja8s2D6Zfjmr1w6ic2jPyiMdUl6A0YUdAJkHn2LA6xM8oiLwxBFt?=
- =?iso-8859-1?Q?4E6hlPQJNT5Iqy+o3W2sbtLHTHyRM+vbiV/CKdcHinYVISkN9R/fj4d7vx?=
- =?iso-8859-1?Q?VlLcxx7PhRAjCp08xDlaCpzTLNuOKAPY4ilVs9jLGyrcPC5lBQ3Q0HPNzB?=
- =?iso-8859-1?Q?EdxnZ+KD62HX7IkI+0i5jTvrKGp7vJQ2KM6mjkhthhR5Lqcp8kjJWWxNgo?=
- =?iso-8859-1?Q?wDhDz87jqWWknLhI/O0Wvo0HdUBuYZwwPFSpY04D72kGhhZLrium9s73rz?=
- =?iso-8859-1?Q?9TNbMGZpL3IAHPWAf1ub6zGSxxSzmhxexbEz/zMVrsCXUOhZ0Y19b/KgAr?=
- =?iso-8859-1?Q?0aE6xR9xRNYTt8RdxglUqDL6DH/u3g2+X9OIQ/XJQO9WZrLBLXQqLYmtda?=
- =?iso-8859-1?Q?vLJYa9lhN/fLGftM9Dm63RBqoYunWg1qeAdjRmOXCmUsgmYo05zhk/2SYZ?=
- =?iso-8859-1?Q?Vtop4K0ziSn3x4GYmeBNBuHixys64iF41OsXzAk2ioWqmnKjQgfxwafhna?=
- =?iso-8859-1?Q?5hntCpsu77/tngiPqvBrhOmZOPI/OfkFNYd5/T4UReuY0hgrVHP1qufCMW?=
- =?iso-8859-1?Q?OS/PWGy4L22AR9vjcgiEsoIX/EFrA1XsXOtM0olECf60oFovY+5XjIrlcz?=
- =?iso-8859-1?Q?rdG5ahkmdccmswKZ7cqvVQHBTWTWQPy9jHnbVdkKGIJdC60AH/T6yCkjzY?=
- =?iso-8859-1?Q?p9rl93z6818XFZbZ56sbpI6TCtVeZUrpcOcTfoSgI1zHcj9I1m331jI0/G?=
- =?iso-8859-1?Q?QLfyNiVrhAZws2k0WJVgtT5Bv3+IkVdcnSN/Y8Nhmd88NaE9w8VQ3sHgaG?=
- =?iso-8859-1?Q?9tcAg1Lncwau5E3uw0h2xHh0JsSRGeNWYeIhmmTqVFLzIa6eJ9iZc7TiWB?=
- =?iso-8859-1?Q?Ol9AJt8c/djoQjr5bRLKPpVLkccZ9S0q4i+PGL2a9I7YwAA6JzPWB9bB2I?=
- =?iso-8859-1?Q?rwO4vVs4akKXRVAXFT9Fr5Mj8WUQWI7KSiEx5AYZkEaoUHuPd+aeL/o0px?=
- =?iso-8859-1?Q?4mYxXgFKQSbHgxst3MWoW/9RQGk7StjqHqqnVOdHpShoe54WpfRGyhcBRb?=
- =?iso-8859-1?Q?2GmEUDw/vRBNk=3D?=
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k6-PbTRZCwbg for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 15:23:06 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F95081919
+Received: from wilbur.contactoffice.com (wilbur.contactoffice.com
+ [212.3.242.68])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5F95081919
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 15:23:06 +0000 (UTC)
+Received: from fidget.co-bxl (fidget.co-bxl [10.2.0.33])
+ by wilbur.contactoffice.com (Postfix) with ESMTP id D41A2A35
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 16:23:04 +0100 (CET)
+Date: Mon, 9 Jan 2023 16:22:59 +0100 (CET)
+Message-ID: <1166577682.270413.1673277779708@fidget.co-bxl>
 MIME-Version: 1.0
-X-OriginatorOrg: abatec.at
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e89fd99e-3eb2-450c-1477-08daf2415ad9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 12:59:33.7006 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: st/0zE4oHVHhEpsEATlBD29duTy+iYZnM5gNrVWPJZ9Seg4WhckOhEgV0F2JfYCc+FgbI6fiCrUBJcLqjxQkng==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P190MB1795
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=abatec.at; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0Cv3CrVYip+hvlZ3VeQ/gsJntTt83n86/73rvoeVjmk=;
- b=zcgJ4b7U7Kb5ieinVYCRQZhz55rJgGO3z2IBckKFNXNB5h8aBI2Y+X9TyHkZ6uxedNvmUl8KAkVvOSOmGsCSkCAEx5+CYZ7EGF1fHGzswWxCTpmmiHOD6EBN5NtLDek1VREkviCc7Cj7GViSJAQThSIZS0gJfMVxWMsanQWx3Tg=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=zcgJ4b7U
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH 4/4] package/atk: remove package
+X-ContactOffice-Account: com:360785386
+To: buildroot@buildroot.org
+X-Mailer: ContactOffice Mail
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; t=1673277784; 
+ s=20210208-e7xh; d=mailfence.com;
+ i=raphael.slagmolen@mailfence.com;
+ h=Date:From:Message-ID:Subject:MIME-Version:Content-Type:To;
+ l=29412; bh=eKwvTkksTNxfh8fMzmVa8fLNS4siKhBLDsgvnI/zF3Q=;
+ b=OG1kjD9M5Sbq4hhpbCscHs7D1Gitju4XMsaUf4KpMwfu8lndyec7PuILq2N0ttUQ
+ aYroXSa07rTFC4zK+1BICCtWfQSeMsJTwsziC+nq7W9x9DbrtjjZoPOHfJf/Tz4lDtc
+ Oibbrh0Q/oiQF4e7G6XEtoeRl2eNLL720qB+JvrOtxqrhX2VTFd6i2RNEQnRRKeqAsB
+ PpzsS5ayFW6GCPYNITnng3uyieVvdY3MgpuYVzixisQcl1rBVckkTX3JnU5d9NMg3nB
+ tuAKOTlgVLlfvlnptBQ+k1kpA74pQ/MUTuTCl1Wolt1abAMB2dtEj8bzQ0Z2sJ0/grR
+ SNTtXNXCmw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mailfence.com
+ header.i=raphael.slagmolen@mailfence.com header.a=rsa-sha256
+ header.s=20210208-e7xh header.b=OG1kjD9M
+Subject: [Buildroot] [PATCH 1/1] utils/make_rich_wrapper.py: add new python
+ script to wrap the build process into a colored TUI with progress tracking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -139,244 +74,948 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Lang Daniel via buildroot <buildroot@buildroot.org>
-Reply-To: Lang Daniel <d.lang@abatec.at>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- "james.knight@collins.com" <james.knight@collins.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Rapha=C3=ABl_Slagmolen_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?utf-8?Q?Rapha=C3=ABl_Slagmolen?= <raphael.slagmolen@mailfence.com>
+Content-Type: multipart/mixed; boundary="===============8186663050281503317=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-atk has been merged into at-spi2-core with version 2.45.1.
+--===============8186663050281503317==
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; 
+	boundary="----=_Part_270410_71280179.1673277779706"
 
-https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_45_1/NEWS
-https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/78
+------=_Part_270410_71280179.1673277779706
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
+As the build process can be long and hard to track, I wrote a little Python
+script that try to make it easier for users
+to see where in the process they are, what is going on, log filtering and
+more.
+
+The script is completly autonomous and doesn't impose anything on the curre=
+nt
+build process so it should work without
+tampering the maintenability of the project's Makefile.
+
+The script has only two dependencies :
+=C2=A0=C2=A0 =C2=A0- packaging (for version parsing while checking Buildroo=
+t's dependencies)
+=C2=A0=C2=A0 =C2=A0- rich (for the colored output and layout)
+
+Features:
+=C2=A0=C2=A0 =C2=A0- test the presence of Buildroot's dependencies, with ve=
+rsion control and
+path validation (for `file`)
+=C2=A0=C2=A0 =C2=A0- (optional) test the presence of Buildroot's optional d=
+ependencies but
+without blocking the process
+=C2=A0=C2=A0 =C2=A0- can only do the checking or skip it entirely using com=
+mand line option
+=C2=A0=C2=A0 =C2=A0- filter the output of the build process while trying to=
+ detect
+fatal/error/warning/debug loglevel (may have some false positive)
+=C2=A0=C2=A0 =C2=A0- can change the filtering level using a command line op=
+tion (default on
+ERROR)
+=C2=A0=C2=A0 =C2=A0- keep track of the amount of work to do using `make ext=
+ernal-deps` and
+display the overall progress
+=C2=A0=C2=A0 =C2=A0- in case the amount of work isn't correctly detected (I=
+ try to account for
+some specials steps), the progress is fixed at the end with a message
+=C2=A0=C2=A0 =C2=A0- keep track of all the task already done and the one cu=
+rrently working
+=C2=A0=C2=A0 =C2=A0- display the current task's step message (extracted fro=
+m `>>> %s` output)
+=C2=A0=C2=A0 =C2=A0- keep track of the current task progress based on the a=
+mount of steps
+done
+=C2=A0=C2=A0 =C2=A0- display a progress in case of `wget` with extraction o=
+f filename, size,
+and downloaded from the output
+
+The script is launching `make` by itself but the user is supposed to have
+already done the configuration needed!
+
+May be added later:
+=C2=A0=C2=A0 =C2=A0- export raw output from `make` into a log file in /tmp =
+or elsewhere
+(command line option?)
+=C2=A0=C2=A0 =C2=A0- add other trackable step like `wget`?
+=C2=A0=C2=A0 =C2=A0- improve loglevel detection
+=C2=A0=C2=A0 =C2=A0- any request from the team?!
+
+Some images can be seen on my personal server:
+=C2=A0=C2=A0 =C2=A0- the `--help` menu: https://naheulcraft.be/nextcloud/s/=
+aX8fW5mK8dbXwqT
+=C2=A0=C2=A0 =C2=A0- the progress tracking:
+https://naheulcraft.be/nextcloud/s/87GK7yXQzZHydcj
+=C2=A0=C2=A0 =C2=A0- the finished process: https://naheulcraft.be/nextcloud=
+/s/ZPMt46WP5jib7mk
+
+Signed-off-by: Rapha=C3=ABl Slagmolen (Tutul) <raphael.slagmolen@mailfence.=
+com>
 ---
- Config.in.legacy             |  7 +++++++
- package/Config.in            |  1 -
- package/atk/Config.in        | 14 --------------
- package/atk/atk.hash         |  5 -----
- package/atk/atk.mk           | 25 -------------------------
- package/atkmm/Config.in      |  8 ++++----
- package/atkmm/atkmm.mk       |  2 +-
- package/libglade/Config.in   |  2 +-
- package/libglade/libglade.mk |  2 +-
- package/libgtk2/Config.in    |  2 +-
- package/libgtk2/libgtk2.mk   |  2 +-
- package/libgtk3/Config.in    |  2 +-
- package/libgtk3/libgtk3.mk   |  2 +-
- 13 files changed, 18 insertions(+), 56 deletions(-)
- delete mode 100644 package/atk/Config.in
- delete mode 100644 package/atk/atk.hash
- delete mode 100644 package/atk/atk.mk
+ DEVELOPERS                 |   3 +
+ utils/make_rich_wrapper.py | 660 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 663 insertions(+)
+ create mode 100755 utils/make_rich_wrapper.py
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 184bab6097..ac5943519e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_ATK
-+	bool "atk removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_AT_SPI2_CORE
-+	help
-+	  atk is now part of at-spi2-core.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 86e3f0e7b1..0c78d2f3a1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3159,3 +3159,6 @@ F:=09package/quazip/
+ F:=09package/shapelib/
+ F:=09package/simple-mail/
+ F:=09package/tinc/
 +
- config BR2_PACKAGE_AT_SPI2_ATK
- 	bool "at-spi2-atk removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 5c8dcd849f..95db7c627b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1531,7 +1531,6 @@ endmenu
- menu "Graphics"
- 	source "package/assimp/Config.in"
- 	source "package/at-spi2-core/Config.in"
--	source "package/atk/Config.in"
- 	source "package/atkmm/Config.in"
- 	source "package/bayer2rgb-neon/Config.in"
- 	source "package/bullet/Config.in"
-diff --git a/package/atk/Config.in b/package/atk/Config.in
-deleted file mode 100644
-index d9371b879b..0000000000
---- a/package/atk/Config.in
-+++ /dev/null
-@@ -1,14 +0,0 @@
--config BR2_PACKAGE_ATK
--	bool "atk"
--	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
--	depends on BR2_USE_MMU # glib2
--	select BR2_PACKAGE_LIBGLIB2
--	help
--	  The ATK accessibility toolkit, needed to build GTK+-2.x.
--
--	  https://gitlab.gnome.org/GNOME/atk
--
--comment "atk needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/atk/atk.hash b/package/atk/atk.hash
-deleted file mode 100644
-index d8cd69ff1f..0000000000
---- a/package/atk/atk.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# From http://ftp.gnome.org/pub/gnome/sources/atk/2.38/atk-2.38.0.sha256sum
--sha256  ac4de2a4ef4bd5665052952fe169657e65e895c5057dffb3c2a810f6191a0c36  atk-2.38.0.tar.xz
--
--# Hash for license file
--sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-deleted file mode 100644
-index 2820fb486d..0000000000
---- a/package/atk/atk.mk
-+++ /dev/null
-@@ -1,25 +0,0 @@
--################################################################################
--#
--# atk
--#
--################################################################################
--
--ATK_VERSION_MAJOR = 2.38
--ATK_VERSION = $(ATK_VERSION_MAJOR).0
--ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
--ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
--ATK_LICENSE = LGPL-2.0+
--ATK_LICENSE_FILES = COPYING
--ATK_INSTALL_STAGING = YES
--ATK_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
--
--ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--ATK_CONF_OPTS += -Dintrospection=true
--ATK_DEPENDENCIES += gobject-introspection
--else
--ATK_CONF_OPTS += -Dintrospection=false
--endif
--
--ATK_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
--
--$(eval $(meson-package))
-diff --git a/package/atkmm/Config.in b/package/atkmm/Config.in
-index aa58f8d593..f6f2ca8fc2 100644
---- a/package/atkmm/Config.in
-+++ b/package/atkmm/Config.in
-@@ -2,10 +2,10 @@ config BR2_PACKAGE_ATKMM
- 	bool "atkmm"
- 	depends on BR2_INSTALL_LIBSTDCPP # glibmm
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libsigc
--	depends on BR2_TOOLCHAIN_HAS_THREADS # atk/glibmm -> libglib2
--	depends on BR2_USE_MMU # atk/glibmm -> libglib2
--	depends on BR2_USE_WCHAR # atk/glibmm -> libglib2
--	select BR2_PACKAGE_ATK
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
-+	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
-+	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_GLIBMM
- 	select BR2_PACKAGE_LIBSIGC
- 
-diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
-index 3bcb941c9f..76371aadbc 100644
---- a/package/atkmm/atkmm.mk
-+++ b/package/atkmm/atkmm.mk
-@@ -11,6 +11,6 @@ ATKMM_SITE = http://ftp.gnome.org/pub/gnome/sources/atkmm/$(ATKMM_VERSION_MAJOR)
- ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- ATKMM_LICENSE_FILES = COPYING COPYING.tools
- ATKMM_INSTALL_STAGING = YES
--ATKMM_DEPENDENCIES = atk glibmm libsigc host-pkgconf
-+ATKMM_DEPENDENCIES = at-spi2-core glibmm libsigc host-pkgconf
- 
- $(eval $(meson-package))
-diff --git a/package/libglade/Config.in b/package/libglade/Config.in
-index e269a07548..4cf2ae4086 100644
---- a/package/libglade/Config.in
-+++ b/package/libglade/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBGLADE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_LIBXML2
- 	help
- 	  Libglade allows you to load glade interface files in a program
-diff --git a/package/libglade/libglade.mk b/package/libglade/libglade.mk
-index 32fa595f5a..24865fb8ff 100644
---- a/package/libglade/libglade.mk
-+++ b/package/libglade/libglade.mk
-@@ -9,7 +9,7 @@ LIBGLADE_VERSION = $(LIBGLADE_VERSION_MAJOR).4
- LIBGLADE_SOURCE = libglade-$(LIBGLADE_VERSION).tar.bz2
- LIBGLADE_SITE = http://ftp.gnome.org/pub/GNOME/sources/libglade/$(LIBGLADE_VERSION_MAJOR)
- LIBGLADE_INSTALL_STAGING = YES
--LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 atk libxml2
-+LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 at-spi2-core libxml2
- LIBGLADE_LICENSE = LGPL-2.0+
- LIBGLADE_LICENSE_FILES = COPYING
- 
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index c75c37fb63..f2888b2f51 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBGTK2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
- 	select BR2_PACKAGE_CAIRO_PDF
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index d30e1d9d43..ad4dd74e4d 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -23,7 +23,7 @@ LIBGTK2_CONF_ENV = \
- 
- LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
- 
--LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango atk \
-+LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango at-spi2-core \
- 	gdk-pixbuf $(TARGET_NLS_DEPENDENCIES)
- 
- LIBGTK2_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index bc8cacd9f5..cb44607b7c 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_LIBGTK3
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		BR2_PACKAGE_HAS_LIBGL
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
- 	select BR2_PACKAGE_CAIRO_PDF
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index f277fce2ed..15190efd96 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -30,7 +30,7 @@ LIBGTK3_MAKE_OPTS = \
- 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols \
- 	LIBS=$(TARGET_NLS_LIBS)
- 
--LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango \
-+LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 at-spi2-core libglib2 cairo pango \
- 	gdk-pixbuf libepoxy $(TARGET_NLS_DEPENDENCIES)
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
--- 
-2.25.1
++N:=09Rapha=C3=ABl Slagmolen (Tutul) <raphael.slagmolen@mailfence.com>
++F:=09utils/make_rich_wrapper.py
+diff --git a/utils/make_rich_wrapper.py b/utils/make_rich_wrapper.py
+new file mode 100755
+index 0000000000..152b50be65
+--- /dev/null
++++ b/utils/make_rich_wrapper.py
+@@ -0,0 +1,660 @@
++#!/usr/bin/env python
++# -*- coding: utf-8 -*-
++
++'''
++    Date created: 2023/01/07
++    Date last modified: 2023/01/09
++    Python Version: 3.10+
++    Requirement:
++        packaging=3D=3D21+
++        rich=3D=3D13+
++'''
++
++__author__ =3D 'Tutul (https://gitlab.com/Tutul)'
++__copyright__ =3D 'Copyright 2023, make_rich_wrapper.py for Buildroot'
++__license__ =3D 'MIT'
++__credits__ =3D ['Tutul']
++__version__ =3D '1.0.0'
++__status__ =3D 'release'  # release > test > dev
++__maintainer__ =3D 'Tutul'
++__description__ =3D 'simple python script that act as a wrapper around `ma=
+ke`
+for Buildroot using the Rich module'
++
++import argparse
++import enum
++import logging
++import os
++import re
++import select
++import shutil
++import signal
++import subprocess
++from packaging import version
++from rich import box
++from rich.console import Console, Group
++from rich.live import Live
++from rich.logging import RichHandler
++from rich.panel import Panel
++from rich.prompt import Confirm
++from rich.progress import (
++    BarColumn,
++    DownloadColumn,
++    MofNCompleteColumn,
++    Progress, SpinnerColumn,
++    Task,
++    TaskProgressColumn,
++    TextColumn,
++    TimeElapsedColumn,
++    TimeRemainingColumn,
++    TransferSpeedColumn
++)
++from rich.table import Table
++
++##########################################################################=
+##################
++
++
++class DownloadStep(enum.Enum):
++    """
++    Help to know wich downloading information is present
++    """
++    LENGTH =3D 0
++    OUTPUT =3D 1
++    PROGRESS =3D 2
++    DONE =3D 3
++
++##########################################################################=
+##################
++
++
++class State(enum.Enum):
++    """
++    Buildroot Makefile's steps
++    """
++    READY =3D 0
++    DOWNLOADING =3D 1
++    EXTRACTING =3D 2
++    PATCHING =3D 3
++    CONFIGURING =3D 4
++    BUILDING =3D 5
++    INSTALLING =3D 6
++    DONE =3D 7
++
++    @staticmethod
++    def get_from_message(message) -> str:
++        if message.__contains__("Downloading"):
++            return State.DOWNLOADING
++        elif message.__contains__("Extracting"):
++            return State.EXTRACTING
++        elif message.__contains__("Patching"):
++            return State.PATCHING
++        elif message.__contains__("Configuring"):
++            return State.CONFIGURING
++        elif message.__contains__("Building"):
++            return State.BUILDING
++        elif message.__contains__("Installing"):
++            return State.INSTALLING
++        else:
++            return None
++
++##########################################################################=
+##################
++
++
++class Task():
++    """
++    Keep track of the current step
++    """
++
++    def __init__(self, current_pkg_progress, step_progress,
+pkg_steps_progress, downloader):
++        self.current_pkg_progress =3D current_pkg_progress
++        self.step_progress =3D step_progress
++        self.pkg_steps_progress =3D pkg_steps_progress
++        self.downloader =3D downloader
++
++        self.pkg_task_id =3D None
++        self.step_task_id =3D None
++        self.pkg_step_task_id =3D None
++        self.downloading_task_id =3D None
++        self.state =3D None
++        self.name =3D None
++
++    def __del__(self):
++        if self.pkg_task_id is not None:
++            self.current_pkg_progress.stop_task(self.pkg_task_id)
++            self.pkg_task_id =3D None
++        if self.step_task_id is not None:
++            self.step_progress.stop_task(self.step_task_id)
++            self.step_progress.update(self.step_task_id, visible=3DFalse)
++            self.step_task_id =3D None
++        if self.pkg_step_task_id is not None:
++            self.pkg_steps_progress.stop_task(self.pkg_step_task_id)
++            self.pkg_steps_progress.update(self.pkg_step_task_id,
+visible=3DFalse)
++            self.pkg_step_task_id =3D None
++        if self.downloading_task_id is not None:
++            self.downloader.stop_task(self.downloading_task_id)
++            self.downloader.update(self.downloading_task_id, visible=3DFal=
+se)
++            self.downloading_task_id =3D None
++        self.name =3D None
++        self.sate =3D State.DONE
++
++    def update(self, new_state, new_step=3DNone) -> None:
++        self.state =3D new_state
++
++        if self.downloading_task_id is not None and State.DOWNLOADING !=3D
+self.state:
++            self.downloader.stop_task(self.downloading_task_id)
++            self.downloader.update(self.downloading_task_id, visible=3DFal=
+se)
++            self.downloading_task_id =3D None
++
++        if self.step_task_id is not None:
++            self.step_progress.stop_task(self.step_task_id)
++            self.step_progress.update(self.step_task_id, visible=3DFalse)
++        if new_step is not None:
++            self.step_task_id =3D self.step_progress.add_task("", step=3Dn=
+ew_step,
+name=3Dself.name)
++        else:
++            self.step_task_id =3D None
++        if self.pkg_step_task_id is not None:
++            self.pkg_steps_progress.update(self.pkg_step_task_id,
+completed=3Dself.state.value)
++
++    def next(self, new_name, new_state, new_step=3DNone) -> None:
++        if self.pkg_task_id is not None:
++            self.current_pkg_progress.stop_task(self.pkg_task_id)
++            self.current_pkg_progress.update(self.pkg_task_id,
+description=3D"[bold green]%s done!" % self.name)
++
++        if self.step_task_id is not None:
++            self.step_progress.stop_task(self.step_task_id)
++            self.step_progress.update(self.step_task_id, visible=3DFalse)
++
++        if self.pkg_step_task_id is not None:
++            self.pkg_steps_progress.stop_task(self.pkg_step_task_id)
++            self.pkg_steps_progress.update(self.pkg_step_task_id,
+visible=3DFalse)
++            self.pkg_step_task_id =3D None
++
++        if self.downloading_task_id is not None:
++            self.downloader.stop_task(self.downloading_task_id)
++            self.downloader.update(self.downloading_task_id, visible=3DFal=
+se)
++            self.downloading_task_id =3D None
++
++        self.name =3D new_name
++        self.state =3D new_state
++
++        if self.state is not None:
++            self.step_task_id =3D self.step_progress.add_task("", step=3Dn=
+ew_step,
+name=3Dself.name)
++        if "Finishing" =3D=3D self.name:
++            self.pkg_task_id =3D self.current_pkg_progress.add_task("%s" %
+self.name)
++        else:
++            self.pkg_step_task_id =3D self.pkg_steps_progress.add_task("",
+total=3DState.DONE.value, name=3Dself.name)
++            self.pkg_task_id =3D self.current_pkg_progress.add_task("Worki=
+ng on
+%s" % self.name)
++
++##########################################################################=
+##################
++
++
++def handle_task_update(current, message) -> bool:
++    """
++    Handle step update and detect task switching
++    """
++    finished =3D False
++    message_array =3D message.split(">>> ")[1].split(" ")
++
++    name =3D "[b]" + message_array[0] + "[/b]"
++    if len(message_array) >=3D 3:
++        name =3D name + " " + message_array[1]
++        step =3D message_array[2:]
++    else:
++        step =3D message_array[1:]
++    if message.__contains__(">>>   "):
++        name =3D "Finishing"  # Reset for the last few tasks
++
++    step =3D ' '.join(str(x) for x in step)
++    state =3D State.get_from_message(step)
++
++    if current.name is None:
++        current.next(name, state, step)
++    elif name !=3D current.name:
++        finished =3D True
++        current.update(State.DONE)
++        if state is None:
++            state =3D State.READY
++        current.next(name, state, step)
++    elif state is None:
++        state =3D current.state
++
++    current.update(state, step)
++    return finished
++
++##########################################################################=
+##################
++
++
++def handle_downloading(current, message, step) -> None:
++    """
++    Handle all that is about downloading (wget only for now)
++    """
++
++    log.debug(message)
++
++    if current.downloading_task_id is None:
++        current.downloading_task_id =3D current.downloader.add_task("",
+total=3DNone, filename=3D"?")
++
++    if DownloadStep.LENGTH =3D=3D step:
++        current.downloader.update(current.downloading_task_id,
+total=3Dint(message.split("Length: ")[1].split(" (")[0]))
++    elif DownloadStep.OUTPUT =3D=3D step:
++        current.downloader.update(current.downloading_task_id,
+filename=3Dmessage.split("output' '")[1])
++    elif DownloadStep.PROGRESS =3D=3D step:
++        if message.__contains__(" ."):
++            downloaded_size =3D message.split(" .")[0]
++        else:
++            downloaded_size =3D message.split("                           =
+     =20
+                     ")[0]
++        downloaded_size.strip().upper().replace("O", "").replace("B",
+"").replace("I", "")
++        if downloaded_size.__contains__("K"):
++            downloaded_size =3D int(downloaded_size.replace("K", "")) * 10=
+00
++        elif downloaded_size.__contains__("M"):
++            downloaded_size =3D int(downloaded_size.replace("M", "")) * 10=
+00000
++        elif downloaded_size.__contains__("G"):
++            downloaded_size =3D int(downloaded_size.replace("G", "")) *
+1000000000
++        elif downloaded_size.__contains__("T"):
++            downloaded_size =3D int(downloaded_size.replace("T", "")) *
+1000000000000
++        current.downloader.update(current.downloading_task_id,
+completed=3Dint(downloaded_size))
++    elif DownloadStep.DONE =3D=3D step:
++        current.downloader.stop_task(current.downloading_task_id)
++        current.downloader.update(current.downloading_task_id, visible=3DF=
+alse)
++        current.downloading_task_id =3D None
++
++##########################################################################=
+##################
++
++
++def which(exec_name, package=3DNone, desired_version=3DNone,
+version_tuple_catcher=3DNone, path=3DNone) -> bool:
++    """
++    Used to find if a binary is present (and usable) on the system
++    Can also check for minimal version (as long as the binary use --versio=
+n)
++    And may also check if the path is the required one
++    """
++    global console
++    if package is None:
++        package =3D exec_name
++
++    p =3D shutil.which(exec_name)
++    if p is None:
++        console.print(f"    [red1]:cross_mark: [b]{package}[/b] is require=
+d
+but cannot find it in the PATH")
++        return False
++    elif path is not None and path !=3D p:
++        console.print(
++            f"    [orange_red1]:no_entry: [b]{package}[/b] is found but we
+need it to be in a specific location: {p} --> {path}")
++        return False
++    elif desired_version is not None:
++        if version_tuple_catcher is not None:
++            local_version =3D subprocess.run([p, "--version"],
+stdout=3Dsubprocess.PIPE, check=3DTrue,
++                                         =20
+text=3DTrue).stdout.split(version_tuple_catcher[0])[1].split(version_tuple_=
+catcher[1])[0]
++            if version.parse(local_version) < version.parse(desired_versio=
+n):
++                console.print(
++                    f"    [orange1]:exclamation_mark: [b]{package}[/b] is
+found but we require at least the version {desired_version} and you have th=
+e
+version {local_version}")
++                return False
++        else:
++            console.print(
++                f"    [orange1]:exclamation_mark: [b]{package}[/b] is foun=
+d
+but we require at least the version {desired_version}")
++            return False
++    console.print(f"    [green4]:heavy_check_mark:  [b]{package}[/b] is fo=
+und
+and usable")
++    return True
++
++##########################################################################=
+##################
++
++
++def test_depencencies(tools_list) -> bool:
++    """
++    Simply handle calling which() from a list of tools
++    """
++    is_all_ok =3D True
++    for tool in tools_list:
++        if not which(tool[0], tool[1], tool[2], tool[3], tool[4]):
++            is_all_ok =3D False
++    return is_all_ok
++
++##########################################################################=
+##################
++
++
++# which(binary), package[binary], minimal version, version_tuple_catcher,
+required path
++build_tools_list =3D [
++    ("which", None, None, None, None),
++    ("sed", None, None, None, None),
++    ("make", None, "3.81", ("GNU Make ", "\n"), None),
++    ("ld", "binutils", None, None, None),
++    ("diff", "diffutils", None, None, None),
++    ("gcc", None, "4.8", ("gcc (GCC) ", "\n"), None),
++    ("g++", None, "4.8", ("g++ (GCC) ", "\n"), None),
++    ("bash", None, None, None, None),
++    ("patch", None, None, None, None),
++    ("gzip", None, None, None, None),
++    ("bzip2", None, None, None, None),
++    ("perl", None, "5.8.7", (" (v", ") built for"), None),
++    ("tar", None, None, None, None),
++    ("cpio", None, None, None, None),
++    ("unzip", None, None, None, None),
++    ("rsync", None, None, None, None),
++    ("file", None, None, None, "/usr/bin/file"),
++    ("bc", None, None, None, None),
++    ("find", "findutils", None, None, None)
++]
++source_fetching_tools_list =3D [
++    ("wget", None, None, None, None)
++]
++
++
++def check_requirements() -> bool:
++    """
++    Manage the display and checking for the required tools, stop if any is
+missing
++    """
++    global console
++    requirements_ok =3D True
++    console.print("Mandatory packages:")
++    with console.status("[blue]Looking for mandatory packages...") as stat=
+us:
++        console.print("  [i]Build tools:")
++        requirements_ok =3D test_depencencies(build_tools_list) and
+requirements_ok
++        console.print("  [i]Source fetching tools:")
++        requirements_ok =3D test_depencencies(source_fetching_tools_list) =
+and
+requirements_ok
++    if not requirements_ok:
++        console.print("\nMandatory program are [u]missing[/u]")
++        console.print("you must install them before retrying!")
++    return requirements_ok
++
++##########################################################################=
+##################
++
++
++recommanded_dependencies_list =3D [
++    ("python", None, "2.7", ("Python ", "\n"), None)
++]
++configuration_interface_dependencies_list =3D [
++    ("ncursesw5-config", "ncurses5", None, None, None),  # menuconfig
++    ("qtdiag-qt5", "qt5", None, None, None),  # xconfig
++    ("glib-compile-schemas", "glib2", None, None, None),  # gconfig
++    ("gtk-launch", "gtk2", None, None, None),  # gconfig
++    ("glade", "glade2", None, None, None)  # gconfig
++]
++opt_source_fetching_tools_list =3D [
++    ("bzr", "bazaar", None, None, None),
++    ("cvs", None, None, None, None),
++    ("git", None, None, None, None),
++    ("hg", "mercurial", None, None, None),
++    ("scp", None, None, None, None),
++    ("sftp", None, None, None, None),
++    ("svn", "subversion", None, None, None)
++]
++java_related_packages_list =3D [
++    ("javac", None, None, None, None),
++    ("jar", None, None, None, None)
++]
++documentation_generation_tools_list =3D [
++    ("asciidoc", None, "8.6.3", ("asciidoc ", "\n"), None),
++    ("w3m", None, None, None, None),
++    ("dblatex", None, None, None, None)  # Only for PDF manual
++]
++graph_generation_tools_list =3D [
++    ("gvgen", "graphviz", None, None, None)
++]
++
++
++def check_optional_packages() -> bool:
++    """
++    Manage the display and checking for the optional tools, continue with =
+a
+warning if any is missing
++    """
++    global console
++    opt_ok =3D True
++    console.print("Optional packages:")
++    with console.status("[blue]Looking for optional packages...") as statu=
+s:
++        console.print("  [i]Recommended dependencies:")
++        opt_ok =3D test_depencencies(recommanded_dependencies_list) and op=
+t_ok
++        console.print("  [i]Configuration interface dependencies:")
++        opt_ok =3D test_depencencies(configuration_interface_dependencies_=
+list)
+and opt_ok
++        console.print("  [i]Source fetching tools:")
++        opt_ok =3D test_depencencies(opt_source_fetching_tools_list) and o=
+pt_ok
++        console.print("  [i]Java-related packages, if the Java Classpath n=
+eeds
+to be built for the target system:")
++        opt_ok =3D test_depencencies(java_related_packages_list) and opt_o=
+k
++        console.print("  [i]Documentation generation tools:")
++        opt_ok =3D test_depencencies(documentation_generation_tools_list) =
+and
+opt_ok
++        console.print("  [i]Graph generation tools:")
++        opt_ok =3D test_depencencies(graph_generation_tools_list) and opt_=
+ok
++        console.print(
++            "    [gray39]:interrobang:  [b]python-matplotlib[/b] cannot be
+detected automaticly. Check your distribution's repositories or [i]pip[/i]"=
+)
++    if not opt_ok:
++        console.print("\n>>> Some optional program are [u]missing[/u], som=
+e
+functionalities may not compile or be incomplete")
++    return opt_ok
++
++##########################################################################=
+##################
++
++
++# skeleton (4): host-skeleton && skeleton-init-common &&
+skeleton-init-(sysv|systemd|openrc|none) && skeleton
++# toolcahin (2): toolchain && toolchain-buildroot
++# gcc(+1): gcc become host-gcc-initial and host-gcc-final
++# various (~4): host-makedevs && ifupdown-scripts && initscripts &&
+urandom-scripts
++# +1 for the last task (finalizing host/target directory, sanitizing RPATH=
+,
+generating root filesystems and image rootfs)
++# BUT.... in some case this number isn't quit exact (especially the 'vario=
+us'
+section)
++extra_packages_to_count =3D 12
++
++
++def load_all_tasks() -> None:
++    """
++    Load the external deps on witch we need to work for this run
++    if an error occure, it's probably because the user didn't do any `make
+menuconfig`
++    """
++    global total_pkgs
++    global console
++    with console.status("[bold]Loading config, requested packages and
+dependencies[/bold] (did you run `[blue]make menuconfig[/blue]`?)",
+spinner=3D"aesthetic") as status:
++        external_deps =3D subprocess.run(["make", "external-deps"],
+stdout=3Dsubprocess.PIPE, check=3DTrue, text=3DTrue)
++    raw_pkgs_list =3D external_deps.stdout.splitlines()
++
++    # Do some cleaning because all the patches files aren't packages
++    regex =3D re.compile(r'^.*\.patch.*$')
++    total_pkgs =3D [p for p in raw_pkgs_list if not regex.match(p)]
++
++    console.print("In total", (len(total_pkgs) + extra_packages_to_count),
+"packages will be processed for this buildroot")
++
++##########################################################################=
+##################
++
++
++def main() -> None:
++    # Track the averall progress
++    pkgs_progress =3D Progress(
++        TimeElapsedColumn(),
++        TextColumn("[blue]{task.description}"),
++        BarColumn(complete_style=3D'slate_blue1'),
++        MofNCompleteColumn(),
++        TaskProgressColumn()
++    )
++    # Track the current progress and stay after completion
++    current_pkg_progress =3D Progress(
++        TimeElapsedColumn(),
++        TextColumn("{task.description}")
++    )
++    # Progress bars for single pkg steps (will be hidden when step is done=
+)
++    step_progress =3D Progress(
++        TextColumn("     "),
++        SpinnerColumn(),
++        TextColumn("[bold purple]{task.fields[step]}")
++    )
++    # Progress bar for current pkg (progress in steps)
++    pkg_steps_progress =3D Progress(
++        TextColumn("[bold cyan]Progress for pkg {task.fields[name]}"),
++        SpinnerColumn("simpleDotsScrolling"),
++        TextColumn("({task.completed} of {task.total} steps done)"),
++    )
++    # Track any downloading
++    downloader_progress =3D Progress(
++        TextColumn("[bold]{task.fields[filename]}", justify=3D"right"),
++        BarColumn(bar_width=3DNone, complete_style=3D"dark_magenta",
+pulse_style=3D"medium_purple"),
++        "[progress.percentage]{task.percentage:>3.1f}%",
++        "=E2=80=A2",
++        DownloadColumn(),
++        "=E2=80=A2",
++        TransferSpeedColumn(),
++        "=E2=80=A2",
++        TimeRemainingColumn()
++    )
++
++    # group of progress bars;
++    # some are always visible, others will disappear when progress is
+complete
++    working_panel =3D Panel(Group(current_pkg_progress, step_progress,
+pkg_steps_progress, downloader_progress), box=3Dbox.SIMPLE_HEAD)
++    progress_group =3D Group(
++        working_panel,
++        pkgs_progress
++    )
++
++    pkgs_task_id =3D pkgs_progress.add_task("Packages", total=3D(len(total=
+_pkgs) +
+extra_packages_to_count))
++    cached =3D None
++    overflow =3D None
++
++    # use own live instance as context manager with group of progress bars=
+,
++    # which allows for running multiple different progress bars in paralle=
+l,
++    # and dynamically showing/hiding them
++    with Live(progress_group):
++        # Current task
++        pkg =3D Task(current_pkg_progress=3Dcurrent_pkg_progress,
+step_progress=3Dstep_progress,
++                   pkg_steps_progress=3Dpkg_steps_progress,
+downloader=3Ddownloader_progress)
++
++        # Prepare the call to `make`
++        modified_env =3D os.environ.copy()
++        modified_env["LANG"] =3D "C"
++        log.debug(f"Using modified encironment: {modified_env}")
++        process =3D subprocess.Popen(
++            'make',
++            env=3Dmodified_env,
++            stdout=3Dsubprocess.PIPE,
++            stderr=3Dsubprocess.STDOUT,
++            text=3DTrue,
++            close_fds=3DTrue)
++
++        # Loop as long as the process is running
++        while process.poll() is None:
++            # Wait for something to read from stdout or stderr
++            _, _, _ =3D select.select([process.stdout.fileno()], [], [])
++            read =3D process.stdout.readline()
++
++            # Detect each step
++            if read.__contains__("[7m>>>"):
++                if handle_task_update(pkg, read):
++                    pkgs_progress.advance(pkgs_task_id, advance=3D1)
++            # Handles all WGET downloading steps
++            elif re.search("Length: [0-9]+ \([0-9ioObBkKmMgGtT.,]+\)", rea=
+d):
++                handle_downloading(pkg, read, DownloadStep.LENGTH)
++            elif re.search("wget -.*output' '.*'", read):
++                handle_downloading(pkg, read, DownloadStep.OUTPUT)
++            elif re.search("[0-9kKmMgGtTioObB.,]+ [. ]+ [0-9]+%", read):
++                handle_downloading(pkg, read, DownloadStep.PROGRESS)
++            elif re.search("[0-9-/pPaAmM ]+ \([0-9., kKmMgGtTbBoOiI\/]+s\)=
+ -
+.* saved", read):
++                handle_downloading(pkg, read, DownloadStep.DONE)
++            # Handles auto-detect for logging level
++            elif re.search("[\] ]{1}(EXCEPTION|EMERGENCY|EMERG)[\]: ]{1}",
+read.upper()):
++                log.exception(read)
++            elif re.search("[\] ]{1}(CRITICAL|CRIT|FATAL|ALERT)[\]: ]{1}",
+read.upper()):
++                log.critical(read)
++            elif re.search("[\] ]{1}(ERROR|ERR)[\]: ]{1}", read.upper()):
++                log.error(read)
++            elif re.search("[\] ]{1}(WARNING|WARN)[\]: ]{1}", read.upper()=
+):
++                log.warning(read)
++            elif re.search("[\] ]{1}(DEBUG|TRACE)[\]: ]{1}", read.upper())=
+:
++                log.debug(read)
++            elif read:
++                log.info(read)
++
++        # Clean the "current" progress bar
++        del pkg
++
++        # We may need to fix this progress depending of the untrackable ta=
+sks
+that may be badly accounted for earlier
++        pkgs_task =3D [t for t in pkgs_progress.tasks if t.id =3D=3D
+pkgs_task_id][0]
++        if pkgs_task.completed < pkgs_task.total:
++            cached =3D pkgs_task.total - pkgs_task.completed
++            pkgs_progress.update(pkgs_task_id, completed=3D(pkgs_task.tota=
+l),
+advance=3D1)
++        elif pkgs_task.completed > pkgs_task.total:
++            overflow =3D pkgs_task.completed - pkgs_task.total
++            pkgs_progress.update(pkgs_task_id, total=3Dpkgs_task.completed=
+,
+completed=3D(pkgs_task.completed), advance=3D1)
++        pkgs_progress.refresh()
++    if cached is not None:
++        console.print(f"[spring_green3][b]{cached}[/b] pkg(s) loaded from
+[i]cache")
++    if overflow is not None:
++        console.print(f"[deep_pink2 b]{overflow} unacounted pkg(s) added t=
+o
+our workload")
++    console.print("Work is done :relieved_face:")
++
++##########################################################################=
+##################
++
++
++def handle_sigint(signum, frame) -> None:
++    console.print("Interrupted by the user")
++    quit()
++
++
++signal.signal(signal.SIGINT, handle_sigint)
++
++##########################################################################=
+##################
++
++if __name__ =3D=3D '__main__':
++    parser =3D argparse.ArgumentParser(
++        prog=3D"make_rich_wrapper.py",
++        description=3Df"{__description__}",
++        epilog=3Df"{__copyright__}, {__author__}, license: {__license__}"
++    )
++    parser.add_argument('-l', '--loglevel',
++                        help=3D'set the verbosity level for the logs print=
+ed on
+the screen',
++                        type=3Dstr,
++                        choices=3D["all", "debug", "info", "warn", "error"=
+,
+"critical"],
++                        default=3D"error")
++    group =3D parser.add_mutually_exclusive_group()
++    group.add_argument('-f', '--fast',
++                       help=3D'disable the requirements and optionnal chec=
+k
+before running',
++                       action=3D'store_true')
++    group.add_argument('--only-check',
++                       help=3D'only do the requirements and optionnal chec=
+k and
+exit',
++                       action=3D'store_true')
++    parser.add_argument('--check-optional',
++                        help=3D'enable checking for optional ressources an=
+d
+exit',
++                        action=3D'store_true')
++    parser.add_argument('--version',
++                        help=3D'output version information and exit',
++                        action=3D'version',
++                        version=3Df'%(prog)s {__version__} - {__status__}'=
+)
++    parser.add_argument('--about',
++                        help=3D'output about information and exit',
++                        action=3D'store_true')
++
++    arguments =3D parser.parse_args()
++
++    if arguments.about:
++        console =3D Console(highlight=3DFalse)
++        console.print(f"{__copyright__}\nCreated by {__author__}, license:
+{__license__}\n\n{__description__}\n")
++        if "release" =3D=3D __status__:
++            console.print(f"[green b]{__status__}")
++        elif "test" =3D=3D __status__:
++            console.print(f"[cyan]{__status__}")
++        elif "dev" =3D=3D __status__:
++            console.print(f"[purple i]{__status__}")
++        else:
++            console.print(f"[red u]{__status__}")
++        console.print(f"Version: {__version__}\nMaintainer:
+{__maintainer__}\n\nCredits: {__credits__}")
++        quit()
++
++    # Initialise the rich console for printing
++    console =3D Console()
++
++    # Initialing the rich log handler
++    logging.basicConfig(
++        level=3Darguments.loglevel.upper().replace("ALL",
+"NOTSET").replace("WARN", "WARNING"),
++        format=3D"%(message)s",
++        datefmt=3D"[%X]",
++        handlers=3D[RichHandler(rich_tracebacks=3DTrue, show_path=3DFalse)=
+]
++    )
++    log =3D logging.getLogger("rich")
++
++    if not arguments.fast:
++        ok =3D check_requirements()
++        if not arguments.only_check:
++            if ok:
++                console.rule(style=3D"green")
++            else:
++                quit()
++
++    if not arguments.fast and arguments.check_optional:
++        ok =3D check_optional_packages()
++        if not arguments.only_check:
++            if ok:
++                console.rule(style=3D"blue")
++            else:
++                console.rule(style=3D"magenta")
++
++    if not arguments.only_check:
++        load_all_tasks()
++        if not arguments.fast and not Confirm.ask("Proceed? (it may take s=
+ome
+times)", console=3Dconsole, default=3D"y"):
++            quit()
++        console.print("\n\n")
++        main()
+--=20
+2.39.0
+
+----
+De: raphael.slagmolen@mailfence.com
+=C3=80: buildroot@buildroot.org, raphael.slagmolen@mailfence.com
+9 janv. 2023 15:57:48
+
+----
+De: raphael.slagmolen@mailfence.com
+=C3=80: buildroot@buildroot.org
+9 janv. 2023 16:22:52
+------=_Part_270410_71280179.1673277779706
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment
+
+-----BEGIN PGP SIGNATURE-----
+Version: CO
+Comment: CO
+
+wnUEARYKAAYFAmO8MVMAIQkQrN+Jdt0fs44WIQRE1d/Juv0brx2kJnas34l2
+3R+zjpMtAP9wPmEf2bMVMDbU250YAJLorlI7aZ8LEpxifzD3REw+MAD/Zpso
+6ZXSFAWbauXi/LnBCHWEQ+cCa4jlRX/C8O/9MQ4=
+=9Rr2
+-----END PGP SIGNATURE-----
+
+------=_Part_270410_71280179.1673277779706--
+
+--===============8186663050281503317==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8186663050281503317==--
