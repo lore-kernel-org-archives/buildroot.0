@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5843EC5479D
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 03:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3F08C5479D
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 03:32:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D318A607BC;
-	Mon,  9 Jan 2023 03:26:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D318A607BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E294402E4;
+	Mon,  9 Jan 2023 03:32:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E294402E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GAu7q9RgS1WD; Mon,  9 Jan 2023 03:26:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IKBVAAHdanWm; Mon,  9 Jan 2023 03:32:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B0F760A70;
-	Mon,  9 Jan 2023 03:26:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B0F760A70
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D602F1BF86B
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 03:26:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF0B340140;
+	Mon,  9 Jan 2023 03:32:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF0B340140
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C34591BF86B
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 03:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BEF25815CD
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 03:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEF25815CD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9BD6640140
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 03:32:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BD6640140
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iP6gIOax2a6i for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 03:26:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ci8G1eeADKUU for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 03:32:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F50081585
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6F50081585
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 03:26:34 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id i83so3957399ioa.11
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 19:26:34 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B002740127
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B002740127
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 03:32:34 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id n63so3988611iod.7
+ for <buildroot@buildroot.org>; Sun, 08 Jan 2023 19:32:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7yGykQiPF5MsVW+zdfJMuFhZ/fB6PfaN3HyskGp631Y=;
- b=2E5lusPGE6MCkeNippLpwC+xQ6gQ6NMom+SO+1Y4YWTKDRE1b/sgWjZ/CnxhI80tQ0
- wnGrKokPTy0djxsQCSA+tROy2bGtliYY237T1BMZwmis2ktLG7JKH6Tix4G3C0tk51Pc
- hrp0vUgJ5aheEZ8/0lDFnoQ/gSk+0fTbbT3rE2XzWd23oxZcemVxpaf1dz1T8VPKh+WI
- f2lITCJGWlVxROHTP77lEukQFOfcUsnS7ZGrWVA6omGG4jBffbelZG1zBqGOaB+j28D/
- LV7kNnYQ5J20WxltAUCbHnj6YQsEDvPYhDNufOeQl71I435u9/0otnue1u9i6MvUx1/W
- LocQ==
-X-Gm-Message-State: AFqh2kqrMoa3e1dGpKBnU8mNlYc82veOdYvZ5bbJtmafE2hyeUhTezTb
- 09LwjPxRhpf2ROYHeP99O9UEsG+yK6IqEg==
-X-Google-Smtp-Source: AMrXdXsUPzUrT++L9PGJs3gOL8phnC6i3IxAlm1L70VAyIoGvESPSTUmBLxMuwVhdpRDrQJO1pF/xg==
-X-Received: by 2002:a6b:ce15:0:b0:6e3:db2:6a7b with SMTP id
- p21-20020a6bce15000000b006e30db26a7bmr36353097iob.6.1673234793285; 
- Sun, 08 Jan 2023 19:26:33 -0800 (PST)
+ bh=8a1T21m7MsG3ZmnEIOrwOwJ61sTePCiPD2A6yCyph1A=;
+ b=JSj0YLd2QbuPBg+PqaXxo7IbUrEhc1zPWmdoD4fikBOQk5CQqur/0uOlpvCUo9UafT
+ m31b2g0LMhOF/DZc++yEMI5/hsRp871q4xTt6FU5cuf0QqUZ+sqxFRXg8Z4gkfy/z/Og
+ Dbaer1L/HrHbtFU4zcuckB2joplni5Yym6SRvBiEoqwyo9pgM/TFrFfmInf5n+H5Som0
+ Ry2csQzzSKN42MruY7QyZk/1PdbJobyTKDJ/Y3grgG4CJp//tJK6JC2r22UUIAsFPljh
+ N+LrTtpdkHbi6stgFHYbZ2rmuSpR+A2zVbfEJZDCAEmnfJha/cJF/3heeHk3rbvITFwt
+ 8BUg==
+X-Gm-Message-State: AFqh2kqHgIRgGJkzGCGdmzPVcmup+G1WAlikGubuvNxrg6XIFksnR0Wb
+ ZbF2SRMBm5qk+yzHwGx8ossxGWYnar1yeA==
+X-Google-Smtp-Source: AMrXdXsYgw2vvrFSuVYOgcamhsRU3qQCxcNAQ2b3XZwrvzPk5ux/W3HBW2Awvcsx5Pb58LKo3JCOfg==
+X-Received: by 2002:a05:6602:298a:b0:6e2:f989:5a8a with SMTP id
+ o10-20020a056602298a00b006e2f9895a8amr38831624ior.11.1673235153565; 
+ Sun, 08 Jan 2023 19:32:33 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- f16-20020a05660215d000b006dfbd35e995sm2794054iow.21.2023.01.08.19.26.32
+ n2-20020a6bf602000000b006e02c489089sm2807942ioh.32.2023.01.08.19.32.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Jan 2023 19:26:32 -0800 (PST)
+ Sun, 08 Jan 2023 19:32:31 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 20:26:31 -0700
-Message-Id: <20230109032631.2086263-1-james.hilliard1@gmail.com>
+Date: Sun,  8 Jan 2023 20:32:29 -0700
+Message-Id: <20230109033229.2111340-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7yGykQiPF5MsVW+zdfJMuFhZ/fB6PfaN3HyskGp631Y=;
- b=aNLvU3hfx76BU6w04TvFcrcBMVtqtSqH7zIhuGVPWL6Tafe8csgzMIdGwWNZwsak9+
- dsteCjNfV31XDXpta9MXWM0ieVkHGPsbidw5ObZHL4vMe9/fQhyVpqpWWYpUExdTDhV1
- FPl2Rk/JM+AvbjhegDE13GFsMUB8viTC3pREa6ADQ+ce8IPz5wYdslbnRGt5Hpq7bR26
- Go94iAkPJo3SBCeN/Zx1KFEvmO0csVEGtsXsS8nFXmTkvlGYt7nFDHiYsS3sguUL0prs
- H2S8U6w7vJdPbjOanUrF/1Y+8tUKy79l38lrKUffCACcJA8qh5B8LTz6sg71jSpK4Zoo
- UcUA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=8a1T21m7MsG3ZmnEIOrwOwJ61sTePCiPD2A6yCyph1A=;
+ b=qOUAh8gUudYK4sznfz5/sFr4/U1/bYlWqN7KX6dy93rOKejAUxfm6ZDhIFqmxun+vk
+ h1ezdKYWxZ0PkOQ96ePkePjASC5lvqeOzS5oPqfPbC5G2ltMgDDeKaiJ7D/LxdwK4dRq
+ 7NUpFB1ueB1jvN5MjdbSHMy5B10BEXdtCP+XMjpgc4q1I6ergjJ3fm/WWJ1lbTT6BeUn
+ eefA7CYwBlYBGiAoXNblZ+a9fqyAOd+urXh7T56DD9N0ctIFaiJTVoPLMJ4/rcRvzWII
+ jzEjtGuS4rc+xutAEmXrmYZwwRmjrFJlVUFVaxA/Y8cIk6Xnwgpm1JrJg3o9EIn61MbQ
+ YcmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=aNLvU3hf
-Subject: [Buildroot] [PATCH 1/1] package/python-crontab: bump to version
- 2.7.1
+ header.a=rsa-sha256 header.s=20210112 header.b=qOUAh8gU
+Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
+ version 39.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,37 +102,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-crontab/python-crontab.hash | 4 ++--
- package/python-crontab/python-crontab.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-crontab/python-crontab.hash b/package/python-crontab/python-crontab.hash
-index b3aa96fc1b..d9519096df 100644
---- a/package/python-crontab/python-crontab.hash
-+++ b/package/python-crontab/python-crontab.hash
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index a01c8810e3..da3ef0ad98 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-crontab/json
--md5  2982bdce2d9b7789f32da649a9507c4b  python-crontab-2.6.0.tar.gz
--sha256  1e35ed7a3cdc3100545b43e196d34754e6551e7f95e4caebbe0e1c0ca41c2f1b  python-crontab-2.6.0.tar.gz
-+md5  0a71aa83eed18752c2850632d84cfd89  python-crontab-2.7.1.tar.gz
-+sha256  b21af4647c7bbb848fef2f020616c6b0289dcb9f94b4f991a55310ff9bec5749  python-crontab-2.7.1.tar.gz
+ # Locally calculated after vendoring
+-sha256  2abbeb6d42e8844de036bf2e0d78a42feeee1d57ebf29a07684490f98bdcab37  cryptography-38.0.4.tar.gz
++sha256  f5bd4646a673bfba2a837e18e55890b754dd5e1efeb494e31d2c4c116ac1496b  cryptography-39.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/python-crontab/python-crontab.mk b/package/python-crontab/python-crontab.mk
-index 9b29e11ccd..1c2802ef61 100644
---- a/package/python-crontab/python-crontab.mk
-+++ b/package/python-crontab/python-crontab.mk
-@@ -4,8 +4,8 @@
+ sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 4254fa3557..6868ff4633 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CRONTAB_VERSION = 2.6.0
--PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/06/b0/c270a1b5c83d9e0f83ab654d3153c39d80f61ba49fefde50fd23ab351381
-+PYTHON_CRONTAB_VERSION = 2.7.1
-+PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/6a/b6/94d861e868698b8e3f288f7e4684e30535b0d9a6b38316ee0a3d4d31e6ae
- PYTHON_CRONTAB_SETUP_TYPE = setuptools
- PYTHON_CRONTAB_LICENSE = LGPL-3.0+
- PYTHON_CRONTAB_LICENSE_FILES = COPYING
+-PYTHON_CRYPTOGRAPHY_VERSION = 38.0.4
++PYTHON_CRYPTOGRAPHY_VERSION = 39.0.0
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/e3/3f/41186b1f2fd86a542d399175f6b8e43f82cd4dfa51235a0b030a042b811a
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/12/e3/c46c274cf466b24e5d44df5d5cd31a31ff23e57f074a2bb30931a8c9b01a
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 -- 
 2.34.1
 
