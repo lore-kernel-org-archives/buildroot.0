@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33862C54EBD
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 03:42:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DBFAC5479D
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 03:47:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9849D409EA;
-	Mon,  9 Jan 2023 03:42:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9849D409EA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FCAA819C8;
+	Mon,  9 Jan 2023 03:47:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FCAA819C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xpAFzL-crMq3; Mon,  9 Jan 2023 03:42:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 17YkK_JmVXhN; Mon,  9 Jan 2023 03:47:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 820D4409AF;
-	Mon,  9 Jan 2023 03:42:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 820D4409AF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 97FB01BF86B
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 03:42:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6E2D817E4;
+	Mon,  9 Jan 2023 03:47:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6E2D817E4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D90561BF86B
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 03:47:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 804E640127
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 03:42:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 804E640127
+ by smtp1.osuosl.org (Postfix) with ESMTP id B41ED817E4
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 03:47:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B41ED817E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KU9P15yacuWj for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 03:42:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id REaJM8trCBKf for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 03:47:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29F1340116
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 29F1340116
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 03:42:21 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id o8so4361447ilo.1
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 19:42:21 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7EA6817AD
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C7EA6817AD
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 03:47:11 +0000 (UTC)
+Received: by mail-il1-x12a.google.com with SMTP id o8so4364424ilo.1
+ for <buildroot@buildroot.org>; Sun, 08 Jan 2023 19:47:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Tlwuq96MadW7bZgigLAKGawRy/fDGZxtG5lVA/FHySU=;
- b=2yayJ2b/FOCPfLByWUVap8CmhwUZl1nLKj7O6qztGR6H6rtiLZtiY22ZE6JTq7Z7S9
- qKh3FRUwZvixksYkEn4fiTRyi65BC1UFmBW0BKYzgJPu60kXUJr5N9TXrVC8anc8R+sk
- hci/j5r3xqHEFJhz9ZVdYPG5a2+3havXpNkTYvXvNdQJ20T25GFkHDZQ/PGKtrdMJ96g
- bnjmTJvCicsiawJDjqekrvo0Bo8VMLlEXvs5GZerGgYXLXitaCGAGzouRQI8Ne+sHrVv
- /szaPvP4+NhmCr2gwac5CK5WOU2zGNPCveF0AK8G2wW0bsAv3aTtAU4Sf7VvN2CiAqOL
- 3auA==
-X-Gm-Message-State: AFqh2kpax4e6VYShMYbzSLMl5Tnk39O4skf37ZnnliGarF53N5wJMhtj
- /DVN/EGl+GScRSfDG8e9mZH4rVUBm1AoYQ==
-X-Google-Smtp-Source: AMrXdXvapJjeLTjSUp2nLUrMMMHnUUdRF5Ob5/hjmMb+XCWdU9+VKB7+ktr1dXQTrxsIYB+9xAg+BA==
-X-Received: by 2002:a92:364f:0:b0:30d:6ea8:4f27 with SMTP id
- d15-20020a92364f000000b0030d6ea84f27mr12435030ilf.15.1673235739969; 
- Sun, 08 Jan 2023 19:42:19 -0800 (PST)
+ bh=bdsmOFUJ5OVgiBpr2c9IPi7yvrxSYMk6W1RCTg17Too=;
+ b=dBPAigai05xkgg3kRyViHmo8St3pnxczC7iBqb2cQwctH610TRH2KpZuIX4xJIB4FI
+ JnelFDfo9Kmlg29VNXT0QaKtXAxOyYCIk11sg3zgn3/76AOs9N9Ch/1nvK3Yen3hwaZY
+ g9ohCqq7eSKkz3qLZhWfMXJ6U5yq4bCsUtIRteoG2uG57DmSuL50+1eVcZciLr4o4lnr
+ 6imKuv6JVPe/T70gZdYPoak0+Dzrw7ccBdq5FpATX0jJB6eUrtWHe54zus3t09J22QOX
+ c2OIoqPW42uuLmEMXJlegNTfS/Yh9lNTXFWpuqCwxBey3P0+A7i/wNlc1iHcXOa6KRKB
+ SKpw==
+X-Gm-Message-State: AFqh2koI8IaPuMvCW2PJ5BoQztpo6Kzv+63fUYc+oxTof4BKH5h4qBdc
+ J4fS5xwBtd/S2KeVk/5uMJtd+4MTqLRPIA==
+X-Google-Smtp-Source: AMrXdXuTAci8NrBpKl4Z5Nrm2KLOFoRqlgHcW7RmNfdFklRdD7becoEwkhXohP1CxShnBIcqIXMenw==
+X-Received: by 2002:a92:da4a:0:b0:30d:acd9:f56d with SMTP id
+ p10-20020a92da4a000000b0030dacd9f56dmr19895ilq.19.1673236030700; 
+ Sun, 08 Jan 2023 19:47:10 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- f14-20020a056638112e00b0038a346207cdsm2454036jar.84.2023.01.08.19.42.19
+ r8-20020a92ac08000000b0030c68d38255sm2332013ilh.38.2023.01.08.19.47.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Jan 2023 19:42:19 -0800 (PST)
+ Sun, 08 Jan 2023 19:47:10 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 20:42:18 -0700
-Message-Id: <20230109034218.2150414-1-james.hilliard1@gmail.com>
+Date: Sun,  8 Jan 2023 20:47:08 -0700
+Message-Id: <20230109034708.2168856-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Tlwuq96MadW7bZgigLAKGawRy/fDGZxtG5lVA/FHySU=;
- b=Tr84EnqGG1QqAVUY/I8RAPK3BWXLasGyLJhT2jtBcswoHtVYUGiBFSiUCBf948L/yq
- VbaafUDxSNe7jojEw26KwS8R8okChqhuy8EuUmY6Rr+yJoqU6cfD7jpIGl1ia3PWjgHY
- s260GNBMEpAkI+f+YNLzwrM1FVH54LL2GzmRM1c1lRkrepHW2Q6usXcFijHxYRXHbJBy
- Haho35UEIAOxUDBR91pyJKCRnHetxUO/Er4FbNxGXqmxJ5XodaHU91giGJhz6J5BauMv
- TClfZkLb4ty6onReryk2iUS7PYHiSON3n7cE6xdRNx9RMl6eKRW5knQjB69eAedr/lCs
- YDiw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=bdsmOFUJ5OVgiBpr2c9IPi7yvrxSYMk6W1RCTg17Too=;
+ b=Ch14s6oj6y5ZGBfqs/StBlJ8l+FvGMEWjUnHxwk9z76TBW2HrieE6jNnzp60Q6f3iF
+ imIrVS4iCFRmHByG2aDPdQP4CAKBVkjQgcvoFI5X4UtqCbKA9ZnIbmIrSR4vHO/FQMYR
+ l2iBVnBccq04HtpPDNessK1fUMtiMqMfaKM0tktqtYheP5FKpqbqA44htiu4/kN9YbiS
+ J3Mp4xk5tS2+lj3MTSr7vYIVJ9EV1LWYrX8OWAcIUGjFsvIS0ax80AXQOJOHGXNkZ7ry
+ +2YAZTDkbIom2bQvkPsirRs+k0xtqmcJ7KDfXryXsjTTE52sH+EPlUMSHWCBO8sbYYq9
+ fEeA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Tr84EnqG
-Subject: [Buildroot] [PATCH 1/1] package/python-dbus-fast: bump to version
- 1.84.0
+ header.a=rsa-sha256 header.s=20210112 header.b=Ch14s6oj
+Subject: [Buildroot] [PATCH 1/1] package/python-dicttoxml: bump to version
+ 1.7.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-dbus-fast/python-dbus-fast.hash | 4 ++--
- package/python-dbus-fast/python-dbus-fast.mk   | 4 ++--
+ package/python-dicttoxml/python-dicttoxml.hash | 4 ++--
+ package/python-dicttoxml/python-dicttoxml.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
-index f0dceeb43d..e9a3992f8e 100644
---- a/package/python-dbus-fast/python-dbus-fast.hash
-+++ b/package/python-dbus-fast/python-dbus-fast.hash
+diff --git a/package/python-dicttoxml/python-dicttoxml.hash b/package/python-dicttoxml/python-dicttoxml.hash
+index dcde7cf1b6..1c94d3446a 100644
+--- a/package/python-dicttoxml/python-dicttoxml.hash
++++ b/package/python-dicttoxml/python-dicttoxml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dbus-fast/json
--md5  eebf2c558dd1af0f8f32b361e91f2fa3  dbus_fast-1.61.1.tar.gz
--sha256  bda4a7d559047b74f409eda278f68f610a418e86ad3efa0368fa2ed240daa6b6  dbus_fast-1.61.1.tar.gz
-+md5  21e3675168e3dbe807c6c8a29267241f  dbus_fast-1.84.0.tar.gz
-+sha256  d64f1b68c1c81268e846471caeb9264a9306a6c6ad356c30d5cdf7d1ecc251a1  dbus_fast-1.84.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dicttoxml/json
+-md5  234550e3aa875c6f3520aa9a2dff1ef1  dicttoxml-1.7.15.tar.gz
+-sha256  5540fe7dfde2d2ed9467e67fcc981cbd2e164dc3120c862bdb7333202ac48838  dicttoxml-1.7.15.tar.gz
++md5  f4853a05c41f9056172447d4e59517b9  dicttoxml-1.7.16.tar.gz
++sha256  6f36ce644881db5cd8940bee9b7cb3f3f6b7b327ba8a67d83d3e2caa0538bf9d  dicttoxml-1.7.16.tar.gz
  # Locally computed sha256 checksums
- sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
-diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
-index de7049ba22..9dd88f613f 100644
---- a/package/python-dbus-fast/python-dbus-fast.mk
-+++ b/package/python-dbus-fast/python-dbus-fast.mk
+ sha256  4514114bd9da0b2fbf8c4fa264c0e6cc80fd41e6ac7f09d7a39a215662951c7c  LICENCE.txt
+diff --git a/package/python-dicttoxml/python-dicttoxml.mk b/package/python-dicttoxml/python-dicttoxml.mk
+index 3e5f90e9de..c26c16b72a 100644
+--- a/package/python-dicttoxml/python-dicttoxml.mk
++++ b/package/python-dicttoxml/python-dicttoxml.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DBUS_FAST_VERSION = 1.61.1
-+PYTHON_DBUS_FAST_VERSION = 1.84.0
- PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
--PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/dd/f4/a280d46b119d59f6a3d84abf474452ae76651558b0963ab8c48ae13b5a44
-+PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/81/67/a83522d6692a72911c3586e2fcd2363ce22d1522a7e17e1012f255a6083b
- PYTHON_DBUS_FAST_SETUP_TYPE = setuptools
- PYTHON_DBUS_FAST_LICENSE = MIT
- PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
+-PYTHON_DICTTOXML_VERSION = 1.7.15
++PYTHON_DICTTOXML_VERSION = 1.7.16
+ PYTHON_DICTTOXML_SOURCE = dicttoxml-$(PYTHON_DICTTOXML_VERSION).tar.gz
+-PYTHON_DICTTOXML_SITE = https://files.pythonhosted.org/packages/45/b5/efa170fd88e8b8bc025c59592eade0fb7de6ae02ed3dd63957956adc1396
++PYTHON_DICTTOXML_SITE = https://files.pythonhosted.org/packages/ee/c9/3132427f9e64d572688e6a1cbe3d542d1a03f676b81fb600f3d1fd7d2ec5
+ PYTHON_DICTTOXML_SETUP_TYPE = distutils
+ PYTHON_DICTTOXML_LICENSE = GPL-2.0
+ PYTHON_DICTTOXML_LICENSE_FILES = LICENCE.txt
 -- 
 2.34.1
 
