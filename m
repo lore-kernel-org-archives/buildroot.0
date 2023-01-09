@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A25EC54EBD
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 02:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B13C0C54EBC
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 02:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A0B960A8C;
-	Mon,  9 Jan 2023 02:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A0B960A8C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DF5E402D7;
+	Mon,  9 Jan 2023 02:55:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DF5E402D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wV4w5FZ-ZsWY; Mon,  9 Jan 2023 02:52:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DaSLkzy4xIs6; Mon,  9 Jan 2023 02:55:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 940B260A7A;
-	Mon,  9 Jan 2023 02:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 940B260A7A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7901240127;
+	Mon,  9 Jan 2023 02:55:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7901240127
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3A59B1BF3B0
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 02:52:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D5C0B1BF3B0
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 02:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0EC0981763
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 02:52:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EC0981763
+ by smtp1.osuosl.org (Postfix) with ESMTP id B12A9817AD
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 02:55:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B12A9817AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9x2R5CW1bu9L for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 02:52:05 +0000 (UTC)
+ with ESMTP id MXgFFXFxKSt7 for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 02:55:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B0E581760
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
- [IPv6:2607:f8b0:4864:20::12d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2B0E581760
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 02:52:05 +0000 (UTC)
-Received: by mail-il1-x12d.google.com with SMTP id m15so4327038ilq.2
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 18:52:05 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8F69817A6
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B8F69817A6
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 02:55:31 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id h26so4302844ila.11
+ for <buildroot@buildroot.org>; Sun, 08 Jan 2023 18:55:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qXhbo1tzQEhzt5VRbJ3qU4xEjAnUQh82uDEQbC9lgy4=;
- b=FNYngI8dNFR93mwlMXLlTtZxMoKpbHAn3Vgrjdx2WjR3I+UxFiij2aDI2erKiKaP8j
- ZwVZv3m83DTOp5y66iY1w0NyQFvC8HbJs5744mZPfb+cmVz5dAq7IH/vU7QgJl1/DBCK
- KJHEBYCQc8AGAe63LPg820qygOvrLUkYnRK2i9NMVgOYT4/JWPA938hJkluyEnbchUnh
- zYCxyY0xmRzrZrgCS8tz+UpA6CMxCd+zA4Oa2S/8/ymGCWw359W1J2BHtkvjH4peWAfa
- hDrU02CMAG3dI/NOfsRpG1CZzlhHS0hbCGDvOpOfV8tEeXHjz0lasIOCQRFgOFztuCpq
- mvig==
-X-Gm-Message-State: AFqh2krTC5fZmxQVtODWI/NAkkJgffQlCMG3rZM/7YvYPp7jEeHvm5CI
- 3J5Pvcn8rHxJ1TaKT43FdoZkMzd80vj/gg==
-X-Google-Smtp-Source: AMrXdXs4F5xGGDdKNk3zv082AvedwjuWGMb6maTlEo/Pf0B/Qp73NlI9ntSOxhYCBXQsmtXUl3GCkg==
-X-Received: by 2002:a92:ce06:0:b0:30c:3500:20cf with SMTP id
- b6-20020a92ce06000000b0030c350020cfmr27495568ilo.1.1673232724053; 
- Sun, 08 Jan 2023 18:52:04 -0800 (PST)
+ bh=D1olJxZZEd+DjOLVFUEBEQmp6dFEkIEX84lDq4PXtxM=;
+ b=aelKnuKQCHy9VqIuLwoELeDtHqqYXA6yozfpoFaUlz2N4SuMlLgGEo6hciT5giMqmK
+ mckPi6D8vewFHo+Ex2JKShAZRi8alZ9m0Dt6pZ6hMOBTUaIUBauSKZFvgXSNVRt0YTEm
+ wmz4lKAQlIotsMWchaEQzkVTwMK+cxPM+C3kkxiKB5j6aC16vZtBbkSH8TaDTpcu/Yr1
+ xvFwyMfadu/v74Nw6/rDpQkwX7WMRcyG244VahahuLIbvOvYPayMvGqfj7jNTP9g35nm
+ YmqWrAa8skf5mh5oyVuZHDThU0EuVWYvDq7f0AARbmvRxeVUUqY0gVmq4af04euwO4Xk
+ /axQ==
+X-Gm-Message-State: AFqh2krNYI0m4kRs8yTg4rRtdOpF81orj2aQ5ZRZuhIUbvagIh6qVnl5
+ NPZRTy/CIJgCfmNO8Ev0lIgvoNaK9LlZug==
+X-Google-Smtp-Source: AMrXdXuFIBbJB/nkFPZB4t06LRCq4E4raoq1RVgN5MilT3wgVfhccYoMOlCWO/QdjLv5bP/1E5Twvg==
+X-Received: by 2002:a92:6f06:0:b0:304:cf5a:16d4 with SMTP id
+ k6-20020a926f06000000b00304cf5a16d4mr36284238ilc.20.1673232930651; 
+ Sun, 08 Jan 2023 18:55:30 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- r6-20020a924406000000b0030d86710f31sm2380734ila.1.2023.01.08.18.52.02
+ g11-20020a05663810eb00b0037477c3d04asm2377714jae.130.2023.01.08.18.55.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Jan 2023 18:52:03 -0800 (PST)
+ Sun, 08 Jan 2023 18:55:29 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 19:52:01 -0700
-Message-Id: <20230109025201.1939360-1-james.hilliard1@gmail.com>
+Date: Sun,  8 Jan 2023 19:55:28 -0700
+Message-Id: <20230109025528.1954397-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qXhbo1tzQEhzt5VRbJ3qU4xEjAnUQh82uDEQbC9lgy4=;
- b=VQOAz72GuapFn7yQwFjxNU784Yrw6Us9Io2+aNTOgFsf8SrHb9NpIhSLlxfM3ZrmlB
- My0S9BXrlu4ohAcQPzIKC7xvrpUkjpQ71DdM9mbfqYmIMZnvL4pSGFc0rfGbU29FrQyj
- DmXL2xNZJxI+LhItFsYZ7EpN965oINk7rvIDWeLy8dozDPYw1Sb0nNIPInkqsD4NghnZ
- escJpHJrDPCtCctRDKFf0UjBqPC21CYsEx1pV9yFxvpEfzOJhlwSQovAFifwzGzvn/Gw
- 8LdnCxIONEHjFpBVl65TyfctAhknAijLaN1WzhebTuFUjh8zjtfzJp+tT4CUGNH8mRpi
- pOKA==
+ bh=D1olJxZZEd+DjOLVFUEBEQmp6dFEkIEX84lDq4PXtxM=;
+ b=n9hSIcHdykjbxWvkPfeenFUGa+QH1OvHT5fr8TsbzbBTVkstJSPYQFmXYG6vyZSIBd
+ S3Y6YASa0tG5dLVU9VxrD1OGsB/PyrAyNBV0RGj8g2nQEWPfiv/b316TtJtDHaCeS+rx
+ /i4eVCkc8dXSco5NIEPjzGOUJ8toVHDf3S8nxltmMguMEIXm8JMwPHK3zrvSrJo53mo/
+ pp+0le3gp50hARPL42CNio/ABLOnssYySSTl/XxR4SeO8fF79+zfS7DcheTE+0DDmQ8Q
+ 3nsjO06GY/sCw+caFSTHD2TCumKV7v/Vm72YQBXTkKl1CioblqNM8kvXlSaUsAgiD4r4
+ z2UQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=VQOAz72G
-Subject: [Buildroot] [PATCH 1/1] package/python-aioblescan: bump to version
- 0.2.14
+ header.a=rsa-sha256 header.s=20210112 header.b=n9hSIcHd
+Subject: [Buildroot] [PATCH 1/1] package/python-alembic: bump to version
+ 1.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +95,8 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
+ =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,38 +104,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aioblescan/python-aioblescan.hash | 4 ++--
- package/python-aioblescan/python-aioblescan.mk   | 4 ++--
+ package/python-alembic/python-alembic.hash | 4 ++--
+ package/python-alembic/python-alembic.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
-index 9a40ca4560..c754325fb1 100644
---- a/package/python-aioblescan/python-aioblescan.hash
-+++ b/package/python-aioblescan/python-aioblescan.hash
+diff --git a/package/python-alembic/python-alembic.hash b/package/python-alembic/python-alembic.hash
+index e256e9dc08..f94f5ab10a 100644
+--- a/package/python-alembic/python-alembic.hash
++++ b/package/python-alembic/python-alembic.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioblescan/json
--md5  0601cf9335e5d89166a88f53597c79bf  aioblescan-0.2.13.tar.gz
--sha256  28632e32c8180ea4b792f4cf9b88968dd100f4d3cee0cf16d27c193cf954422a  aioblescan-0.2.13.tar.gz
-+md5  10014cfd24b8f9f54099bbf7e2ea528a  aioblescan-0.2.14.tar.gz
-+sha256  3a47c5292186ee87fc49cb076a5271c766510f44749b93ac4a32bbb4cb5258a0  aioblescan-0.2.14.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/alembic/json
+-md5  667a722df7dbef926a4ce760b9917622  alembic-1.8.1.tar.gz
+-sha256  cd0b5e45b14b706426b833f06369b9a6d5ee03f826ec3238723ce8caaf6e5ffa  alembic-1.8.1.tar.gz
++md5  999392ffc900da18afbf10d2ac31bdc6  alembic-1.9.1.tar.gz
++sha256  f9f76e41061f5ebe27d4fe92600df9dd612521a7683f904dab328ba02cffa5a2  alembic-1.9.1.tar.gz
  # Locally computed sha256 checksums
- sha256  c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
-diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
-index f0e277d528..7e0cde6c85 100644
---- a/package/python-aioblescan/python-aioblescan.mk
-+++ b/package/python-aioblescan/python-aioblescan.mk
+ sha256  f0e3f7a5080879ccae798882d9bee3d48fe335d0bad84ca8eec86fa594375ea0  LICENSE
+diff --git a/package/python-alembic/python-alembic.mk b/package/python-alembic/python-alembic.mk
+index 735678b384..64ce85bead 100644
+--- a/package/python-alembic/python-alembic.mk
++++ b/package/python-alembic/python-alembic.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOBLESCAN_VERSION = 0.2.13
-+PYTHON_AIOBLESCAN_VERSION = 0.2.14
- PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
--PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/bd/04/c6798c76704d57da22f19c2e47485821d4b23144ef75f9c0e18dbfe47565
-+PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/45/15/faf503083bc5a2d81f1b17fbbe30d15f35217b6c5e944c771c8760354d59
- PYTHON_AIOBLESCAN_SETUP_TYPE = setuptools
- PYTHON_AIOBLESCAN_LICENSE = MIT
- PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
+-PYTHON_ALEMBIC_VERSION = 1.8.1
++PYTHON_ALEMBIC_VERSION = 1.9.1
+ PYTHON_ALEMBIC_SOURCE = alembic-$(PYTHON_ALEMBIC_VERSION).tar.gz
+-PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/37/ab/80e6d86ca81235ea1a7104089dddf74de4b45f8af0a05d4b265be44d6ff9
++PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/81/87/5c531d2923c61e7ae68b23c8660df289ae4241a0d38f3fbcbd8dba64ca6b
+ PYTHON_ALEMBIC_SETUP_TYPE = setuptools
+ PYTHON_ALEMBIC_LICENSE = MIT
+ PYTHON_ALEMBIC_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
