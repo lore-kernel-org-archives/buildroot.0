@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B13C0C54EBC
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 02:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4D07C54EBD
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 02:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DF5E402D7;
-	Mon,  9 Jan 2023 02:55:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DF5E402D7
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DaSLkzy4xIs6; Mon,  9 Jan 2023 02:55:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7901240127;
-	Mon,  9 Jan 2023 02:55:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7901240127
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D5C0B1BF3B0
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 02:55:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B12A9817AD
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 02:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B12A9817AD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 647BF8176F;
+	Mon,  9 Jan 2023 02:59:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 647BF8176F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MXgFFXFxKSt7 for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 02:55:31 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YKzt-bJXvjXe; Mon,  9 Jan 2023 02:59:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD86A81771;
+	Mon,  9 Jan 2023 02:59:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD86A81771
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E4A11BF21A
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 02:59:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09A5060A7E
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 02:59:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09A5060A7E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MJ6xHi0pyZIo for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 02:59:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8F69817A6
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B8F69817A6
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 02:55:31 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id h26so4302844ila.11
- for <buildroot@buildroot.org>; Sun, 08 Jan 2023 18:55:31 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17C5460A70
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 17C5460A70
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 02:59:27 +0000 (UTC)
+Received: by mail-il1-x12b.google.com with SMTP id c20so4309618ilj.10
+ for <buildroot@buildroot.org>; Sun, 08 Jan 2023 18:59:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=D1olJxZZEd+DjOLVFUEBEQmp6dFEkIEX84lDq4PXtxM=;
- b=aelKnuKQCHy9VqIuLwoELeDtHqqYXA6yozfpoFaUlz2N4SuMlLgGEo6hciT5giMqmK
- mckPi6D8vewFHo+Ex2JKShAZRi8alZ9m0Dt6pZ6hMOBTUaIUBauSKZFvgXSNVRt0YTEm
- wmz4lKAQlIotsMWchaEQzkVTwMK+cxPM+C3kkxiKB5j6aC16vZtBbkSH8TaDTpcu/Yr1
- xvFwyMfadu/v74Nw6/rDpQkwX7WMRcyG244VahahuLIbvOvYPayMvGqfj7jNTP9g35nm
- YmqWrAa8skf5mh5oyVuZHDThU0EuVWYvDq7f0AARbmvRxeVUUqY0gVmq4af04euwO4Xk
- /axQ==
-X-Gm-Message-State: AFqh2krNYI0m4kRs8yTg4rRtdOpF81orj2aQ5ZRZuhIUbvagIh6qVnl5
- NPZRTy/CIJgCfmNO8Ev0lIgvoNaK9LlZug==
-X-Google-Smtp-Source: AMrXdXuFIBbJB/nkFPZB4t06LRCq4E4raoq1RVgN5MilT3wgVfhccYoMOlCWO/QdjLv5bP/1E5Twvg==
-X-Received: by 2002:a92:6f06:0:b0:304:cf5a:16d4 with SMTP id
- k6-20020a926f06000000b00304cf5a16d4mr36284238ilc.20.1673232930651; 
- Sun, 08 Jan 2023 18:55:30 -0800 (PST)
+ bh=+Db53FasKRB9Mya78jyxkRJQnX4UTtq4oZglApmC26M=;
+ b=h69VDhlzSRl6laeI7feea0Vo59IifWYTLeup5Zq8KEWCWgNvoxuVqfGsNXLGRvCWER
+ rylHcE7BorU0IXYlYAncmg4XlCdNpmkp0n+P8hbVN4AjHiTmmV/dtRvkprdadTJKX2pZ
+ YtdAD/7fMgsOv8oAcLCc02OxPG+nT6RTwMvYYvUbzqAZ9PqK+BYDuljOoSf12Df8+HwI
+ fQW24vcdePsTO4qb55AYvYJl5CpEM+Gz89DQEferiw3eT93A8EVkVJsbZ35/0X8uOutv
+ sa65l36TzC5n6s3TUEezzKCTHVwGqueKXcfrq5FDER0u+WS4JY85x0hDV4RC2hnDwbQ2
+ F7fQ==
+X-Gm-Message-State: AFqh2kpPwr9WvkpPJgZ+7f7qBz6Yp27anORJfPvOqBcIy4u8dTF6rRoo
+ zkGsLhtmROM6TqC8y9YOGYnhGd9iJyylUA==
+X-Google-Smtp-Source: AMrXdXt1KcCml8X6KUaINRhGHu8Qp1qUR7bwmSzpVh5HgkINscWjJ6Qum5k1+Oujotkuz3m6brN+GA==
+X-Received: by 2002:a92:4a07:0:b0:303:7b0e:fdb7 with SMTP id
+ m7-20020a924a07000000b003037b0efdb7mr42595991ilf.0.1673233165857; 
+ Sun, 08 Jan 2023 18:59:25 -0800 (PST)
 Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net.
  [71.33.132.231]) by smtp.gmail.com with ESMTPSA id
- g11-20020a05663810eb00b0037477c3d04asm2377714jae.130.2023.01.08.18.55.29
+ f14-20020a056638112e00b0038a346207cdsm2431161jar.84.2023.01.08.18.59.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Jan 2023 18:55:29 -0800 (PST)
+ Sun, 08 Jan 2023 18:59:25 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Jan 2023 19:55:28 -0700
-Message-Id: <20230109025528.1954397-1-james.hilliard1@gmail.com>
+Date: Sun,  8 Jan 2023 19:59:23 -0700
+Message-Id: <20230109025923.1971154-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=D1olJxZZEd+DjOLVFUEBEQmp6dFEkIEX84lDq4PXtxM=;
- b=n9hSIcHdykjbxWvkPfeenFUGa+QH1OvHT5fr8TsbzbBTVkstJSPYQFmXYG6vyZSIBd
- S3Y6YASa0tG5dLVU9VxrD1OGsB/PyrAyNBV0RGj8g2nQEWPfiv/b316TtJtDHaCeS+rx
- /i4eVCkc8dXSco5NIEPjzGOUJ8toVHDf3S8nxltmMguMEIXm8JMwPHK3zrvSrJo53mo/
- pp+0le3gp50hARPL42CNio/ABLOnssYySSTl/XxR4SeO8fF79+zfS7DcheTE+0DDmQ8Q
- 3nsjO06GY/sCw+caFSTHD2TCumKV7v/Vm72YQBXTkKl1CioblqNM8kvXlSaUsAgiD4r4
- z2UQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=+Db53FasKRB9Mya78jyxkRJQnX4UTtq4oZglApmC26M=;
+ b=orwCZTP5UrYL+TYOXvY0JExDh0c0ld/VIB1lCkO/nHKwXV+maydji49lvJeWho2HIy
+ lKnHPaAVFDLkLOTJkOlmonEB+Uj2Fb8TRciezTIti0fFwOd7YdWPzwf0kETR9VTZI655
+ TpE065PlN84pGHeZ2R9Mh4nbBbrF77sA9bDM/gp5eY1IAJqdv9d65eUs9PfQLSvsF7SI
+ Rf4e5FFgDKDkZTpEzRy+79vTSF8eN3vPfXw83WayjXBv/bUdvEXwOgNlAGHW/ubYhEc3
+ 9KoudE+CwkSQ4ZuEaftChIHE7Oodj5rNKTnCG6dQ1nUDab6RjsvcrnXbLYrMyZZshn18
+ LAsA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=n9hSIcHd
-Subject: [Buildroot] [PATCH 1/1] package/python-alembic: bump to version
- 1.9.1
+ header.a=rsa-sha256 header.s=20210112 header.b=orwCZTP5
+Subject: [Buildroot] [PATCH 1/1] package/python-asgiref: bump to version
+ 3.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,9 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-alembic/python-alembic.hash | 4 ++--
- package/python-alembic/python-alembic.mk   | 4 ++--
+ package/python-asgiref/python-asgiref.hash | 4 ++--
+ package/python-asgiref/python-asgiref.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-alembic/python-alembic.hash b/package/python-alembic/python-alembic.hash
-index e256e9dc08..f94f5ab10a 100644
---- a/package/python-alembic/python-alembic.hash
-+++ b/package/python-alembic/python-alembic.hash
+diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
+index fec707ce02..26d8e78e47 100644
+--- a/package/python-asgiref/python-asgiref.hash
++++ b/package/python-asgiref/python-asgiref.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/alembic/json
--md5  667a722df7dbef926a4ce760b9917622  alembic-1.8.1.tar.gz
--sha256  cd0b5e45b14b706426b833f06369b9a6d5ee03f826ec3238723ce8caaf6e5ffa  alembic-1.8.1.tar.gz
-+md5  999392ffc900da18afbf10d2ac31bdc6  alembic-1.9.1.tar.gz
-+sha256  f9f76e41061f5ebe27d4fe92600df9dd612521a7683f904dab328ba02cffa5a2  alembic-1.9.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/asgiref/json
+-md5  b3cf42bb1f9191196f9ed1678f9dc106  asgiref-3.5.2.tar.gz
+-sha256  4a29362a6acebe09bf1d6640db38c1dc3d9217c68e6f9f6204d72667fc19a424  asgiref-3.5.2.tar.gz
++md5  562ecd896dcbf5576db8c29cb1881ca4  asgiref-3.6.0.tar.gz
++sha256  9567dfe7bd8d3c8c892227827c41cce860b368104c3431da67a0c5a65a949506  asgiref-3.6.0.tar.gz
  # Locally computed sha256 checksums
- sha256  f0e3f7a5080879ccae798882d9bee3d48fe335d0bad84ca8eec86fa594375ea0  LICENSE
-diff --git a/package/python-alembic/python-alembic.mk b/package/python-alembic/python-alembic.mk
-index 735678b384..64ce85bead 100644
---- a/package/python-alembic/python-alembic.mk
-+++ b/package/python-alembic/python-alembic.mk
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
+index afc083fb1f..bfd90f10e8 100644
+--- a/package/python-asgiref/python-asgiref.mk
++++ b/package/python-asgiref/python-asgiref.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ALEMBIC_VERSION = 1.8.1
-+PYTHON_ALEMBIC_VERSION = 1.9.1
- PYTHON_ALEMBIC_SOURCE = alembic-$(PYTHON_ALEMBIC_VERSION).tar.gz
--PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/37/ab/80e6d86ca81235ea1a7104089dddf74de4b45f8af0a05d4b265be44d6ff9
-+PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/81/87/5c531d2923c61e7ae68b23c8660df289ae4241a0d38f3fbcbd8dba64ca6b
- PYTHON_ALEMBIC_SETUP_TYPE = setuptools
- PYTHON_ALEMBIC_LICENSE = MIT
- PYTHON_ALEMBIC_LICENSE_FILES = LICENSE
+-PYTHON_ASGIREF_VERSION = 3.5.2
++PYTHON_ASGIREF_VERSION = 3.6.0
+ PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
+-PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/1f/35/e7d59b92ceffb1dc62c65156278de378670b46ab2364a3ea7216fe194ba3
++PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/78/2d/797c0537426266d6c9377a2ed6a4ac61e50c2d5b1ab4da101a4b9bfe26e2
+ PYTHON_ASGIREF_SETUP_TYPE = setuptools
+ PYTHON_ASGIREF_LICENSE = BSD-3-Clause
+ PYTHON_ASGIREF_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
