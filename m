@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ED7BC5479D
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 12:59:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66472C5479D
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 12:59:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A238140866;
-	Mon,  9 Jan 2023 12:59:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A238140866
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AE4C81375;
+	Mon,  9 Jan 2023 12:59:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AE4C81375
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dAok98VGmfAo; Mon,  9 Jan 2023 12:59:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zfi4Us8Bty0V; Mon,  9 Jan 2023 12:59:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 402DF4150E;
-	Mon,  9 Jan 2023 12:59:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 402DF4150E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8448E1BF21A
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 12:59:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE19181390;
+	Mon,  9 Jan 2023 12:59:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE19181390
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F4C81BF21A
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 12:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D36F410E3
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 12:59:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D36F410E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A50660F1C
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 12:59:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A50660F1C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2iay4sLTZxVq for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 12:59:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uBvpfqPFCkQU for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 12:59:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7181A4150E
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
- (mail-he1eur04on2078.outbound.protection.outlook.com [40.107.7.78])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7181A4150E
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 12:59:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD34160BE9
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com
+ (mail-db5eur01on2084.outbound.protection.outlook.com [40.107.15.84])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CD34160BE9
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 12:59:36 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OJH7nKcixMfwIB5SCWBtDm86WpLGvqo7hjdse4STH6Krey7JFzQrWib55HM3PFtD983uoOkBkOTalobzVhDhCvWneapV4ETajiqWt+SPW3xQtlcPVgKwEhjcRCRLExbGMPHwhiPhPOk+03m/XyG/V72OXcs2Tgj4AxmsOtgxDbFLUqhID0WPBgRCLJqMsKtYrWiMz/m9sxuFRSD2zxaF6IhOIXg46SzohaybcluBPQfeARscNmkmUUShVL/rduJFnLCaJZLIdKVHnNTbT3xRYOnJVsHRu7ZP2TOHQhPLd34cw3q7dCm45uMaU9YYjhrCnpAr2lrLWS9FitngptBHeA==
+ b=YM7GvVrvTAG2T/VivyIfhRLtOIpNdBn+16nJCFdLfbJDdSwUjtN7W64sL4d+zNiEIa4QV1uzfN0b9V+vaR17hWvhTlx9dnkeIuDaUSu/nzAhEIFpxBZiqf1X+uCtb5cR3+Rl7ReiFhTG6ayd8Hcg++ACG51MGq4dVblRwxJh6AggAJqzFwjUaaMwDo8uVaUsmg5mJlGh6oX6OJ7Qp2b80w7mc0cyPakf8eImOZ4wykJ3hW1p30eveJvA4OESpyuRWulZdMmAuiwWUjgQUBcBuJA4AvmrGsert5Urme2jjh0VqMROoctww4+ph0nl5tvldwmhYzoErwPNiO1qE2+oTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wa3i9F/oD2kRJmp+SXnrJ2yR6xVyKJ8/8FBlkXJp+S8=;
- b=nFJ8VlEVJo2QJ0f9YGZIhPsvgWZhPnd7YaeqjA7SGTkcGfOODW4K+x706VjwQ7W8HgJgPE+Su4aF6n/JNbqNuO8Zqbo7PihFfF2Bwq0Ac1POMc5IztQaryrQM+FGuVFh6+OQUCL92WXr+uGkqtachZmqC8Ulvi7Id502YcprM8ysyf7OFUZbjdz7OYnIGFDZhOZRKBWPChK8x+tx8d8WSkpxisz8IbKkMhoy5Uh7sgRDNNdu4ADlRwzgK2Zwzsl/6QZWfqn3h8rcWyY1EXgLiCZE9ydo6FVc1Y3U7Ai+GFCBjiMCnvbWiANIYWsD9FUSaZIhFBJTcDuXcnIVTl8Y7g==
+ bh=0Cv3CrVYip+hvlZ3VeQ/gsJntTt83n86/73rvoeVjmk=;
+ b=Aw5tkox4eclupTNLhQt5PtRFRKQl6UtDHukJaLZu+2AfltA81zeiBv7QNSJR7y+oZXqo1qqQkBqzNogazvjMnrOHASh7YNJUR5JS0tYQUv6gnGzHxvjCHGB9xhCjab3ICy9FFG9G/71XwMHuOBuVdy6kGgm4IGfjpHcBk4XEuPGzOIEekqAleyEeErDWPzGZ0YL7YQ6+cIKFcKKy1Fw1O7omNjOK/JEr23abR55OFHCHlpn2lQFty15hRBD4yWAzaXTRzcl37fCjnT6d3+h/bszmX2avUZa9QpPkz43GcbuG1l+ZSbH0EACNVBd6/B2uQLtgvnyWXi1ebXqMyejWIA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
  dkim=pass header.d=abatec.at; arc=none
@@ -50,16 +50,16 @@ Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
  by DB9P190MB1795.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:33b::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
- 2023 12:59:14 +0000
+ 2023 12:59:33 +0000
 Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::a6aa:bd17:e838:b0b0]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::a6aa:bd17:e838:b0b0%4]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
- 12:59:14 +0000
+ 12:59:33 +0000
 To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 3/4] package/at-spi2-atk: remove package
-Thread-Index: AQHZJCmr1O8YgSYn1Eu1pQtaSS/q4Q==
-Date: Mon, 9 Jan 2023 12:59:14 +0000
-Message-ID: <VI1P190MB0493C32FC5DA7515166664C69FFE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Thread-Topic: [PATCH 4/4] package/atk: remove package
+Thread-Index: AQHZJCna76x930sTekq7e1U9I+ZGsg==
+Date: Mon, 9 Jan 2023 12:59:33 +0000
+Message-ID: <VI1P190MB049320A6AD3502E69083DB819FFE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 Accept-Language: en-GB, en-US
 Content-Language: en-GB
 X-MS-Has-Attach: 
@@ -67,67 +67,67 @@ X-MS-TNEF-Correlator:
 msip_labels: 
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: VI1P190MB0493:EE_|DB9P190MB1795:EE_
-x-ms-office365-filtering-correlation-id: f3e33875-3c45-4b91-9a87-08daf2414f3e
+x-ms-office365-filtering-correlation-id: e89fd99e-3eb2-450c-1477-08daf2415ad9
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1FuOUqyYa+EdZP2GMHpLAJumuUjL/EpWZbarjq2G7tWJ7epKszcmtjMHDuf60yj6luhN7+uKe9Db2qh02JO9YLnTfgJabg4xElwOnTl8UhtXRQh/6+nOfOV+eDFl3j9J6HrAtZCLiPJSXPMuKuFM+bSOpbagPkwR2HBSToa4acBHdbi4VNvFJJGF8aIVbP4InphtQNQS4ecOhkn2m2oEOC3kBq5MyHswtEPDgg+hDhTX7/RiV/NS+mvxbtFMUpxxal76fAlev0aYMbIzAntYw2Zn0wNZY1GZioePY0fhs2nnTSdTwBdsaQkn+zMN3BklV0L63ivyjDnCevIlARt3HGq+bqoaVgdH7CD1QKs5oYMjnnFdG+uZW8tNvC9gwFhr/adhOGp57N0lS/pea9fuc7cWnAZB7eEXz57aXAy3+7lX031q+zU7Fytynkv+QZxwoBjDkkUhAUOL6xadAJ8BKfr1CbFj95pAvhSYtjYP9rgCF978eSeLVMJ/85LHhyVDcAW2IrEJ5Fd51vpzsokTptfadEgVKyz0y4Pd6UobRUjklpYAsxcq3J54z/dxN7RhjE2GlskERi/dJFCs5tR9Y1KHHmMqgL0sflIgg/Bo98nxCmAbsAHfdtARW0qyV+dqf8Ug9mLSaK3bhQCqbks9UodCLAzkekgGldYLprsuSJ3jS+8Vmqs20iSadV5TGm8GLvmQfNc9gRKe0MbhRSnzI6SUWfHXsA85qP1EducliEY=
+x-microsoft-antispam-message-info: NcIE7jMmCKo0AOo/Tg8K6k0oYZoqeSUME2+AHbu2aeOptIV/bCp5wWfCHuUW3HpzMa/5IAHP23uMDa4DmZpSmqXfz7qVwosiAwM7+A1ozTRwC+8g98fQ8ihK4FDzFiz9tHJ2JBXzrMdsXKldN/W8cxaACje9yInJfKjZffxbfOVyeIcSe5S7yaJZx3wT1ooee2d/AlMfzKQcZMGXe7ginrL1Ql/ER7NoR5Ac99qnc1lJhKy9LhvU9gIcxJPiU29qVfwFV3ame04/cm2ZyAa93FFrKcHGy97N6iYiIjXKcd15D5A6/icpjpyMGea4U10NPTtQ/3UyRCDlpRZg5phE92yGlqQf578LtF5fRsoZq7DKhS2akUWWR6kBl4kjrzq+h3ieX2ZtqYPRKVyRprZO641h6KzzxiELKXIxWpu1CibzhkTVYud9fg2ZszhhDOrjQy8ps0Cw45FO4QOmQ1r5JP3anfslYfm/82xOnBdcFUhweqJmBgEEpLbPjs+aqE4Po4pWKSY/UiRxRtO+RmNaczMvPWq2z2BP1NJHmbR5l/Jidg70FFdQBJkjS1qd6JPcJWx3FRA2gEeoRZw2V3kvXjAcHJExBWliSFTRLNrNlNqXk84MirsZI5Wd2eT9zMRMyELJR23yZBIGulkipGP/4gKcA8AMBrxpl/LqtYmQf5ZQHmLQtJ/JnUOaMudbwpfD/0w4sL4E7t8bigXn4Tr6amcsxxZ1Ebu0bbWmXR/5+UA=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(136003)(346002)(396003)(366004)(376002)(39840400004)(451199015)(5660300002)(8936002)(52536014)(41300700001)(6916009)(2906002)(83380400001)(38070700005)(66556008)(66476007)(76116006)(66946007)(8676002)(66446008)(64756008)(4326008)(316002)(33656002)(71200400001)(7696005)(26005)(9686003)(186003)(478600001)(966005)(6506007)(86362001)(55016003)(122000001)(38100700002);
+ SFS:(13230022)(4636009)(136003)(346002)(396003)(366004)(376002)(39840400004)(451199015)(5660300002)(8936002)(52536014)(41300700001)(6916009)(2906002)(83380400001)(38070700005)(66556008)(66476007)(76116006)(66946007)(8676002)(54906003)(66446008)(64756008)(4326008)(316002)(33656002)(71200400001)(7696005)(26005)(9686003)(186003)(478600001)(966005)(6506007)(86362001)(55016003)(122000001)(38100700002);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?+1vulClAY3x2iFfVvKkBrjLJbnsPAKcGnstnshtRHJ1QtZGt+3K+DFTIdm?=
- =?iso-8859-1?Q?AoVNxpC5bSI+v/iuEBNgj1g77caSnAZRO1a5JnnGTXzujxMeyV0IpzstpS?=
- =?iso-8859-1?Q?CnFPUKt0opjRQE+oTSQsgABBLKdA2zi45ebtVi3UGUtHlJoaQJNCWv3//3?=
- =?iso-8859-1?Q?0XmZqacd1aWnJDNYQ+xRHne/dbdYMRCC8+/+i4L6CDE1tUfzTXTWKCJiZi?=
- =?iso-8859-1?Q?UIJTD3euZMVsbfclz7sijU0Hr8X+rco7RR2XSVVRMGVG6cW+bn6j7vr8HX?=
- =?iso-8859-1?Q?sJTaXRhCkgrgQ5r2mvA09LqhkE29ZRFUfXmW4H2Pgkwm0g6Z7O67XJyRCP?=
- =?iso-8859-1?Q?pz5scexvoQylQCIheW+d4SYu2etI3pmtQSKLIfopSZIJuNRXyIRcWg550Y?=
- =?iso-8859-1?Q?uxRYo1NFhgALNxn8DcuPr5+iafq0Ub/uiSbZumzK8zF2Uj5GBIYENDyvte?=
- =?iso-8859-1?Q?ms0rpZVv1BSCkNE/xZHDhzcSA6VkVAzlowi7C18Pnq8otsvw3K2IPAG73S?=
- =?iso-8859-1?Q?orSYlJCr0D/GyYTaxVY0oDEa/YoyClUMjnJZ3XiDOqpXK/iaU1XLG18+4p?=
- =?iso-8859-1?Q?Zl0yrJcjmZJXzCn2ih9L7FBZahPwBmNiYBz07LjLiuQdVmGOHRrhOjY1Ap?=
- =?iso-8859-1?Q?eHlf4aGo8bnkXFN/V0Fnj3julEfOGbRubRQ4sZoxt2jGP2UVwyO6AJkU1Z?=
- =?iso-8859-1?Q?v8SMqtLGUfVNljKz2fRAo240OgpaJTX3Pv9mIihaFEjCJ+Jo/GD848HJ88?=
- =?iso-8859-1?Q?Wn/CcPP3yRNgWhhEhz6S40T0anrrkJ2wKpyIGnjMPS4pipqhSlADV2YZFL?=
- =?iso-8859-1?Q?nnHDsud9+RRceeTV3YF2TXiHu8rtpO0+K1EC1tjAyPc/aoSIKVFIMJsjMX?=
- =?iso-8859-1?Q?To+r31RGQ+ajS/N13Sm/bNz5PqNf8zM2+yHVTfM/Klghz6QPZiWp87tvno?=
- =?iso-8859-1?Q?kYADgCz+//HHC02uCubjqAECGg5qpabT6BfquP5Rcpz5wKs88sl4+1URjF?=
- =?iso-8859-1?Q?OW0XTJkloA4dNcSFCDyp4ICG66RP46iysB7mhG3CpUdFr0/GBa26dLWLEA?=
- =?iso-8859-1?Q?TuH0tBuFvZ5By1ITfUBGTUehbKMqqDLbU9Qguh33+rMtwoYR1W+V29xPHz?=
- =?iso-8859-1?Q?OpLQbLRO3bvlkAPnHzcUS0H/psHDPvFY2j2FZxpuhRSIoWgZufC9kuGr1Z?=
- =?iso-8859-1?Q?GrU5aM8X2/5ufh4Xy1PtsR1ae2VCPwSieWalmlV8DJJhSUr5nfEIMxmLYi?=
- =?iso-8859-1?Q?Q67VWQU5sJwFOWxvNJO1ASsgolbU+OtMDLWQvH8yqQ07N7t3w2xgsdQ17a?=
- =?iso-8859-1?Q?Hzg5RQ19uCkFHMEO36CY3HAS1NeK7QN9MrJzdYOkciheCc4Dlv7B7mMOJz?=
- =?iso-8859-1?Q?GGDM9avxK6JXge/yyltj4PHgjD7nvUwDncCrL2GyWT+bK56e6Q6ODtGiIZ?=
- =?iso-8859-1?Q?UzViGuW3zJ1ljpFLtFbSKDMHxxHnlj73+ETKA6mg9OHULfVfKgSJPm9Qdu?=
- =?iso-8859-1?Q?d5n9VoIVrcWjcSgd2AghZkJtVHPIz5TrNLSGQUl3lSmYHElvA34qnlrW3C?=
- =?iso-8859-1?Q?2r4eErBcW35IxUhm4N482DifvO0InMx0EXBAOtCul76D75Tb0UC2gnVqND?=
- =?iso-8859-1?Q?7kEcrCj4Ip4pY=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?v+4aoyf9qsi9yqSjK6eXUDEj4DTDKUvg85nWWgTrFFWfr9bpaq+uhjXwyk?=
+ =?iso-8859-1?Q?//sPzT5ofraQJaCZSDz2sGJgopMhuS622Iu5pUEKSbYafgbXWs7876gTQC?=
+ =?iso-8859-1?Q?0XG8UNMZaE3/txRvsh9OAmz964v+N7V7/g5sZlS7DOcOo+HTwy5vKkDfpW?=
+ =?iso-8859-1?Q?CDh5OPNNXi273DzyOUjUZRYfkgx9qXiOJhuYogPY4ZyOSkUUBxHiw0FO+c?=
+ =?iso-8859-1?Q?ZNumqa1NRc05huuAw9+lAOnH1aMS700IM7yeW8Ag04EkVP/kentBcEcr01?=
+ =?iso-8859-1?Q?eThWvlxj1KjEqdkmgoyXGI+KLSM06WJCwmjttGN6cuwK1eM3pwKg7LWV6R?=
+ =?iso-8859-1?Q?97xISrSi+Xd/QoONw+Tqnmz6YyxW7p7vSsFnNhEERNrDjLOTXLHfceh+LY?=
+ =?iso-8859-1?Q?B0djuQ35T4L2u7AeATFgMB4Q9IHcL6yorNlMM5ncSgSXlQVqyOF9+Bp/up?=
+ =?iso-8859-1?Q?KIXuUn3Qn19sWpY03w3ELDAboFhPBKfXysisYnAz8RTJqgt1Qhl6ekJmWE?=
+ =?iso-8859-1?Q?u+yW+Zja8s2D6Zfjmr1w6ic2jPyiMdUl6A0YUdAJkHn2LA6xM8oiLwxBFt?=
+ =?iso-8859-1?Q?4E6hlPQJNT5Iqy+o3W2sbtLHTHyRM+vbiV/CKdcHinYVISkN9R/fj4d7vx?=
+ =?iso-8859-1?Q?VlLcxx7PhRAjCp08xDlaCpzTLNuOKAPY4ilVs9jLGyrcPC5lBQ3Q0HPNzB?=
+ =?iso-8859-1?Q?EdxnZ+KD62HX7IkI+0i5jTvrKGp7vJQ2KM6mjkhthhR5Lqcp8kjJWWxNgo?=
+ =?iso-8859-1?Q?wDhDz87jqWWknLhI/O0Wvo0HdUBuYZwwPFSpY04D72kGhhZLrium9s73rz?=
+ =?iso-8859-1?Q?9TNbMGZpL3IAHPWAf1ub6zGSxxSzmhxexbEz/zMVrsCXUOhZ0Y19b/KgAr?=
+ =?iso-8859-1?Q?0aE6xR9xRNYTt8RdxglUqDL6DH/u3g2+X9OIQ/XJQO9WZrLBLXQqLYmtda?=
+ =?iso-8859-1?Q?vLJYa9lhN/fLGftM9Dm63RBqoYunWg1qeAdjRmOXCmUsgmYo05zhk/2SYZ?=
+ =?iso-8859-1?Q?Vtop4K0ziSn3x4GYmeBNBuHixys64iF41OsXzAk2ioWqmnKjQgfxwafhna?=
+ =?iso-8859-1?Q?5hntCpsu77/tngiPqvBrhOmZOPI/OfkFNYd5/T4UReuY0hgrVHP1qufCMW?=
+ =?iso-8859-1?Q?OS/PWGy4L22AR9vjcgiEsoIX/EFrA1XsXOtM0olECf60oFovY+5XjIrlcz?=
+ =?iso-8859-1?Q?rdG5ahkmdccmswKZ7cqvVQHBTWTWQPy9jHnbVdkKGIJdC60AH/T6yCkjzY?=
+ =?iso-8859-1?Q?p9rl93z6818XFZbZ56sbpI6TCtVeZUrpcOcTfoSgI1zHcj9I1m331jI0/G?=
+ =?iso-8859-1?Q?QLfyNiVrhAZws2k0WJVgtT5Bv3+IkVdcnSN/Y8Nhmd88NaE9w8VQ3sHgaG?=
+ =?iso-8859-1?Q?9tcAg1Lncwau5E3uw0h2xHh0JsSRGeNWYeIhmmTqVFLzIa6eJ9iZc7TiWB?=
+ =?iso-8859-1?Q?Ol9AJt8c/djoQjr5bRLKPpVLkccZ9S0q4i+PGL2a9I7YwAA6JzPWB9bB2I?=
+ =?iso-8859-1?Q?rwO4vVs4akKXRVAXFT9Fr5Mj8WUQWI7KSiEx5AYZkEaoUHuPd+aeL/o0px?=
+ =?iso-8859-1?Q?4mYxXgFKQSbHgxst3MWoW/9RQGk7StjqHqqnVOdHpShoe54WpfRGyhcBRb?=
+ =?iso-8859-1?Q?2GmEUDw/vRBNk=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: abatec.at
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3e33875-3c45-4b91-9a87-08daf2414f3e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 12:59:14.2332 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e89fd99e-3eb2-450c-1477-08daf2415ad9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 12:59:33.7006 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gYUktpLdhMxJn/8wYZnhuOACUdpjHngs2se7k6QX5jwqXTSwyhPdjNBHcwiPMRNuNvPRNJHO0mwA+R3e1//itA==
+X-MS-Exchange-CrossTenant-userprincipalname: st/0zE4oHVHhEpsEATlBD29duTy+iYZnM5gNrVWPJZ9Seg4WhckOhEgV0F2JfYCc+FgbI6fiCrUBJcLqjxQkng==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P190MB1795
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=abatec.at; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wa3i9F/oD2kRJmp+SXnrJ2yR6xVyKJ8/8FBlkXJp+S8=;
- b=HqVrN2RohOYFrlITIxQjUcVZR5bKC4bRoMSwmFoChbyAfGHHT6hMx3HFEwDCXLjViIAyRxhRx7zeapnNSDsB+fyESbD/fSIFqaF/1FlHedU8QZfwYNqj/vmFj0N5spY5OxONxuM35tZD31PjJKYGBA579lKHTYbgmTo/5CbLbis=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=0Cv3CrVYip+hvlZ3VeQ/gsJntTt83n86/73rvoeVjmk=;
+ b=zcgJ4b7U7Kb5ieinVYCRQZhz55rJgGO3z2IBckKFNXNB5h8aBI2Y+X9TyHkZ6uxedNvmUl8KAkVvOSOmGsCSkCAEx5+CYZ7EGF1fHGzswWxCTpmmiHOD6EBN5NtLDek1VREkviCc7Cj7GViSJAQThSIZS0gJfMVxWMsanQWx3Tg=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=HqVrN2Ro
+ header.s=selector1 header.b=zcgJ4b7U
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH 3/4] package/at-spi2-atk: remove package
+Subject: [Buildroot] [PATCH 4/4] package/atk: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -141,187 +141,239 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Lang Daniel via buildroot <buildroot@buildroot.org>
 Reply-To: Lang Daniel <d.lang@abatec.at>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ "james.knight@collins.com" <james.knight@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-at-spi2-atk has been merged into at-spi2-core with version 2.45.1.
+atk has been merged into at-spi2-core with version 2.45.1.
 
 https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_45_1/NEWS
 https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/78
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 ---
- Config.in.legacy                              |  7 +++
- DEVELOPERS                                    |  1 -
- package/Config.in                             |  1 -
- .../0001-meson-add-tests-option.patch         | 43 -------------------
- package/at-spi2-atk/Config.in                 | 22 ----------
- package/at-spi2-atk/at-spi2-atk.hash          |  5 ---
- package/at-spi2-atk/at-spi2-atk.mk            | 19 --------
- 7 files changed, 7 insertions(+), 91 deletions(-)
- delete mode 100644 package/at-spi2-atk/0001-meson-add-tests-option.patch
- delete mode 100644 package/at-spi2-atk/Config.in
- delete mode 100644 package/at-spi2-atk/at-spi2-atk.hash
- delete mode 100644 package/at-spi2-atk/at-spi2-atk.mk
+ Config.in.legacy             |  7 +++++++
+ package/Config.in            |  1 -
+ package/atk/Config.in        | 14 --------------
+ package/atk/atk.hash         |  5 -----
+ package/atk/atk.mk           | 25 -------------------------
+ package/atkmm/Config.in      |  8 ++++----
+ package/atkmm/atkmm.mk       |  2 +-
+ package/libglade/Config.in   |  2 +-
+ package/libglade/libglade.mk |  2 +-
+ package/libgtk2/Config.in    |  2 +-
+ package/libgtk2/libgtk2.mk   |  2 +-
+ package/libgtk3/Config.in    |  2 +-
+ package/libgtk3/libgtk3.mk   |  2 +-
+ 13 files changed, 18 insertions(+), 56 deletions(-)
+ delete mode 100644 package/atk/Config.in
+ delete mode 100644 package/atk/atk.hash
+ delete mode 100644 package/atk/atk.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 6d66f1b958..184bab6097 100644
+index 184bab6097..ac5943519e 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2023.02"
  
-+config BR2_PACKAGE_AT_SPI2_ATK
-+	bool "at-spi2-atk removed"
++config BR2_PACKAGE_ATK
++	bool "atk removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_AT_SPI2_CORE
 +	help
-+	  at-spi2-atk is now part of at-spi2-core.
++	  atk is now part of at-spi2-core.
 +
- config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
- 	string "the QEMU specific targets option has been removed"
- 	help
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 86e3f0e7b1..b3e02154aa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1609,7 +1609,6 @@ F:	support/testing/tests/package/test_avocado.py
- F:	support/testing/tests/package/test_python_aexpect.py
- 
- N:	Joseph Kogut <joseph.kogut@gmail.com>
--F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
- F:	package/clang/
- F:	package/earlyoom/
+ config BR2_PACKAGE_AT_SPI2_ATK
+ 	bool "at-spi2-atk removed"
+ 	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 995dae2c57..5c8dcd849f 100644
+index 5c8dcd849f..95db7c627b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1530,7 +1530,6 @@ endmenu
- 
+@@ -1531,7 +1531,6 @@ endmenu
  menu "Graphics"
  	source "package/assimp/Config.in"
--	source "package/at-spi2-atk/Config.in"
  	source "package/at-spi2-core/Config.in"
- 	source "package/atk/Config.in"
+-	source "package/atk/Config.in"
  	source "package/atkmm/Config.in"
-diff --git a/package/at-spi2-atk/0001-meson-add-tests-option.patch b/package/at-spi2-atk/0001-meson-add-tests-option.patch
+ 	source "package/bayer2rgb-neon/Config.in"
+ 	source "package/bullet/Config.in"
+diff --git a/package/atk/Config.in b/package/atk/Config.in
 deleted file mode 100644
-index 3a2aefa090..0000000000
---- a/package/at-spi2-atk/0001-meson-add-tests-option.patch
+index d9371b879b..0000000000
+--- a/package/atk/Config.in
 +++ /dev/null
-@@ -1,43 +0,0 @@
--From 466d04a57b32417dbf2d5e818af1b7593af5f802 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 3 May 2020 10:29:36 +0200
--Subject: [PATCH] meson: add tests option
--
--Add tests option to allow the user to build at-spi2-atk without tests,
--it is especially useful as one of the test requires libxml-2.0
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.gnome.org/GNOME/at-spi2-atk/-/merge_requests/22]
-----
-- meson.build       | 4 +++-
-- meson_options.txt | 4 ++++
-- 2 files changed, 7 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 9fce5d6..61bc93d 100644
----- a/meson.build
--+++ b/meson.build
--@@ -61,4 +61,6 @@ install_data('at-spi2-atk.desktop',
-- 
-- subdir('droute')
-- subdir('atk-adaptor')
---subdir('tests')
--+if get_option('tests')
--+  subdir('tests')
--+endif
--diff --git a/meson_options.txt b/meson_options.txt
--index 24c9228..a4abdc2 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -2,3 +2,7 @@ option('disable_p2p',
--        description: 'Disable peer-to-peer DBus connections',
--        type: 'boolean',
--        value: false)
--+option('tests',
--+       description: 'Whether to build tests',
--+       type: 'boolean',
--+       value: true)
---- 
--2.26.2
--
-diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
-deleted file mode 100644
-index 9a7cfde0af..0000000000
---- a/package/at-spi2-atk/Config.in
-+++ /dev/null
-@@ -1,22 +0,0 @@
--config BR2_PACKAGE_AT_SPI2_ATK
--	bool "at-spi2-atk"
--	depends on BR2_PACKAGE_XORG7 # at-spi2-core
+@@ -1,14 +0,0 @@
+-config BR2_PACKAGE_ATK
+-	bool "atk"
+-	depends on BR2_USE_WCHAR # glib2
 -	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
 -	depends on BR2_USE_MMU # glib2
--	depends on BR2_USE_WCHAR # glib2
--	select BR2_PACKAGE_ATK
--	select BR2_PACKAGE_AT_SPI2_CORE
 -	select BR2_PACKAGE_LIBGLIB2
 -	help
--	  The At-Spi2 Atk package contains a library that bridges
--	  ATK to At-Spi2 D-Bus service.
+-	  The ATK accessibility toolkit, needed to build GTK+-2.x.
 -
--	  https://www.freedesktop.org/wiki/Accessibility/AT-SPI2/
+-	  https://gitlab.gnome.org/GNOME/atk
 -
--comment "at-spi2-atk needs a toolchain w/ wchar, threads"
+-comment "atk needs a toolchain w/ wchar, threads"
 -	depends on BR2_USE_MMU
 -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
--
--comment "at-spi2-atk depends on X.org"
--	depends on BR2_USE_MMU
--	depends on !BR2_PACKAGE_XORG7
-diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
+diff --git a/package/atk/atk.hash b/package/atk/atk.hash
 deleted file mode 100644
-index 9c564c32af..0000000000
---- a/package/at-spi2-atk/at-spi2-atk.hash
+index d8cd69ff1f..0000000000
+--- a/package/atk/atk.hash
 +++ /dev/null
 @@ -1,5 +0,0 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/at-spi2-atk/2.34/at-spi2-atk-2.34.2.sha256sum
--sha256  901323cee0eef05c01ec4dee06c701aeeca81a314a7d60216fa363005e27f4f0  at-spi2-atk-2.34.2.tar.xz
+-# From http://ftp.gnome.org/pub/gnome/sources/atk/2.38/atk-2.38.0.sha256sum
+-sha256  ac4de2a4ef4bd5665052952fe169657e65e895c5057dffb3c2a810f6191a0c36  atk-2.38.0.tar.xz
 -
--# locally calculated
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
+-# Hash for license file
+-sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
 deleted file mode 100644
-index 232b577230..0000000000
---- a/package/at-spi2-atk/at-spi2-atk.mk
+index 2820fb486d..0000000000
+--- a/package/atk/atk.mk
 +++ /dev/null
-@@ -1,19 +0,0 @@
+@@ -1,25 +0,0 @@
 -################################################################################
 -#
--# at-spi2-atk
+-# atk
 -#
 -################################################################################
 -
--AT_SPI2_ATK_VERSION_MAJOR = 2.34
--AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
--AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
--AT_SPI2_ATK_SITE = \
--	http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
--AT_SPI2_ATK_LICENSE = LGPL-2.1+
--AT_SPI2_ATK_LICENSE_FILES = COPYING
--AT_SPI2_ATK_CPE_ID_VENDOR = gnome
--AT_SPI2_ATK_INSTALL_STAGING = YES
--AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
--AT_SPI2_ATK_CONF_OPTS = -Dtests=false
+-ATK_VERSION_MAJOR = 2.38
+-ATK_VERSION = $(ATK_VERSION_MAJOR).0
+-ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+-ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
+-ATK_LICENSE = LGPL-2.0+
+-ATK_LICENSE_FILES = COPYING
+-ATK_INSTALL_STAGING = YES
+-ATK_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
+-
+-ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-ATK_CONF_OPTS += -Dintrospection=true
+-ATK_DEPENDENCIES += gobject-introspection
+-else
+-ATK_CONF_OPTS += -Dintrospection=false
+-endif
+-
+-ATK_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
 -
 -$(eval $(meson-package))
+diff --git a/package/atkmm/Config.in b/package/atkmm/Config.in
+index aa58f8d593..f6f2ca8fc2 100644
+--- a/package/atkmm/Config.in
++++ b/package/atkmm/Config.in
+@@ -2,10 +2,10 @@ config BR2_PACKAGE_ATKMM
+ 	bool "atkmm"
+ 	depends on BR2_INSTALL_LIBSTDCPP # glibmm
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libsigc
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # atk/glibmm -> libglib2
+-	depends on BR2_USE_MMU # atk/glibmm -> libglib2
+-	depends on BR2_USE_WCHAR # atk/glibmm -> libglib2
+-	select BR2_PACKAGE_ATK
++	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
++	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
++	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
++	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_GLIBMM
+ 	select BR2_PACKAGE_LIBSIGC
+ 
+diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
+index 3bcb941c9f..76371aadbc 100644
+--- a/package/atkmm/atkmm.mk
++++ b/package/atkmm/atkmm.mk
+@@ -11,6 +11,6 @@ ATKMM_SITE = http://ftp.gnome.org/pub/gnome/sources/atkmm/$(ATKMM_VERSION_MAJOR)
+ ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ ATKMM_LICENSE_FILES = COPYING COPYING.tools
+ ATKMM_INSTALL_STAGING = YES
+-ATKMM_DEPENDENCIES = atk glibmm libsigc host-pkgconf
++ATKMM_DEPENDENCIES = at-spi2-core glibmm libsigc host-pkgconf
+ 
+ $(eval $(meson-package))
+diff --git a/package/libglade/Config.in b/package/libglade/Config.in
+index e269a07548..4cf2ae4086 100644
+--- a/package/libglade/Config.in
++++ b/package/libglade/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBGLADE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_ATK
++	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  Libglade allows you to load glade interface files in a program
+diff --git a/package/libglade/libglade.mk b/package/libglade/libglade.mk
+index 32fa595f5a..24865fb8ff 100644
+--- a/package/libglade/libglade.mk
++++ b/package/libglade/libglade.mk
+@@ -9,7 +9,7 @@ LIBGLADE_VERSION = $(LIBGLADE_VERSION_MAJOR).4
+ LIBGLADE_SOURCE = libglade-$(LIBGLADE_VERSION).tar.bz2
+ LIBGLADE_SITE = http://ftp.gnome.org/pub/GNOME/sources/libglade/$(LIBGLADE_VERSION_MAJOR)
+ LIBGLADE_INSTALL_STAGING = YES
+-LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 atk libxml2
++LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 at-spi2-core libxml2
+ LIBGLADE_LICENSE = LGPL-2.0+
+ LIBGLADE_LICENSE_FILES = COPYING
+ 
+diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+index c75c37fb63..f2888b2f51 100644
+--- a/package/libgtk2/Config.in
++++ b/package/libgtk2/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+-	select BR2_PACKAGE_ATK
++	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PS
+ 	select BR2_PACKAGE_CAIRO_PDF
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index d30e1d9d43..ad4dd74e4d 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -23,7 +23,7 @@ LIBGTK2_CONF_ENV = \
+ 
+ LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
+ 
+-LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango atk \
++LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango at-spi2-core \
+ 	gdk-pixbuf $(TARGET_NLS_DEPENDENCIES)
+ 
+ LIBGTK2_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index bc8cacd9f5..cb44607b7c 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -23,7 +23,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		BR2_PACKAGE_HAS_LIBGL
+-	select BR2_PACKAGE_ATK
++	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PS
+ 	select BR2_PACKAGE_CAIRO_PDF
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index f277fce2ed..15190efd96 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -30,7 +30,7 @@ LIBGTK3_MAKE_OPTS = \
+ 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols \
+ 	LIBS=$(TARGET_NLS_LIBS)
+ 
+-LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango \
++LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 at-spi2-core libglib2 cairo pango \
+ 	gdk-pixbuf libepoxy $(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
 -- 
 2.25.1
 _______________________________________________
