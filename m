@@ -1,88 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BAE6C67871
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 20:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22D80C54EBD
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jan 2023 21:29:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DC6A4023B;
-	Mon,  9 Jan 2023 20:18:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DC6A4023B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5EE94400E2;
+	Mon,  9 Jan 2023 21:29:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EE94400E2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g9F0MFUXEJHy; Mon,  9 Jan 2023 20:18:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hza3cdtiunFq; Mon,  9 Jan 2023 21:29:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D0C840245;
-	Mon,  9 Jan 2023 20:18:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D0C840245
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 22B721BF239
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 20:18:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7009940108;
+	Mon,  9 Jan 2023 21:29:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7009940108
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D31CF1BF3FF
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 21:29:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0AD9F80C4D
- for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 20:18:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AD9F80C4D
+ by smtp3.osuosl.org (Postfix) with ESMTP id ADDE560A9F
+ for <buildroot@lists.busybox.net>; Mon,  9 Jan 2023 21:29:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADDE560A9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gG1_cv8P3FBC for <buildroot@lists.busybox.net>;
- Mon,  9 Jan 2023 20:18:32 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A796880C03
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com
- [IPv6:2607:f8b0:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A796880C03
- for <buildroot@buildroot.org>; Mon,  9 Jan 2023 20:18:32 +0000 (UTC)
-Received: by mail-ot1-x32e.google.com with SMTP id
- x25-20020a056830115900b00670932eff32so5812063otq.3
- for <buildroot@buildroot.org>; Mon, 09 Jan 2023 12:18:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=jJxH5rHaS4X613KaKX7Sa0uR5zJkGQHt6g63TL7XmGA=;
- b=YRqmLVk2/a7vWzxHZL/vuRWiZLPEsCCvc/5dGcN/gO2NNtixSBCv2WwLV8kDKf8TRk
- HGcJgpZtMT63GEfBHcjL4Gr9as/dKVrsOOx4jZXjTlULcTI/AiiDrBKC9mhU6puFq4L6
- d5wyyGbnHBp/w4SaGcrYVxnrO/9v3xGGCCo6tqpHVS/UsKlT/hpCxWVNYz70Acqr4B5B
- hV+jfwgdZeQu2vdcgaUeHWgDEzRjXU///MuaZy0kLtoBgATThBWMPVk1MG1U18wUdAna
- gungmhNb5CKzBoJdOBfgH07pDr3prXYubl8s4IpaIen71UL2xfsHIXqejTYTSXgD+gd+
- 9z6A==
-X-Gm-Message-State: AFqh2krQxm5DbplrOPe8nPyobmfVIRuSW6rMonc3r0EGMjLZbh3gabOl
- 97mtB9xpyjq+cNG34nu9C3wDT6zbYJWMerUQ6rM=
-X-Google-Smtp-Source: AMrXdXs8ljQXroBuv2LbLTJ80mgnS3XtxBKk8VF8WRFJfwTP5HieV2kVZGzpnvskWd4yrGrLl/vRUlvmDUFWj7UeqyI=
-X-Received: by 2002:a05:6830:1052:b0:676:c98a:e8cf with SMTP id
- b18-20020a056830105200b00676c98ae8cfmr3567290otp.376.1673295511613; Mon, 09
- Jan 2023 12:18:31 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RVXfS_M_xgtO for <buildroot@lists.busybox.net>;
+ Mon,  9 Jan 2023 21:29:04 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BD0C60640
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2BD0C60640
+ for <buildroot@buildroot.org>; Mon,  9 Jan 2023 21:29:04 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 59A7F5FF9E;
+ Mon,  9 Jan 2023 22:28:56 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 09 Jan 2023 22:28:55 +0100
+Date: Mon, 9 Jan 2023 22:28:55 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Message-ID: <20230109212855.GM151997@scaer>
+References: <20230109163017.1260911-1-yann.morin.1998@free.fr>
 MIME-Version: 1.0
-References: <20230109004748.1372-1-ckhardin@gmail.com>
- <CADvTj4rTjzyLAYRe0dO+=9=ZmX1odPjDFjs6mN_fwd62Z8ac8w@mail.gmail.com>
- <CAN=fXj0kB6ys61DqspLtG6_ipD-CVYigxDwaseofsvOUwWZTrA@mail.gmail.com>
- <CAN=fXj140d4Rdh2ybw=wP-evB34PTTqz6qNpue=4JPrahu8dOQ@mail.gmail.com>
-In-Reply-To: <CAN=fXj140d4Rdh2ybw=wP-evB34PTTqz6qNpue=4JPrahu8dOQ@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 9 Jan 2023 13:18:20 -0700
-Message-ID: <CADvTj4pvwru8zPxDqAsxkEgvjnQ=pJEY4t_cuk=b-MBdEFrKow@mail.gmail.com>
-To: Charles Hardin <ckhardin@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=jJxH5rHaS4X613KaKX7Sa0uR5zJkGQHt6g63TL7XmGA=;
- b=RdI/2JnwGYn1s5Fx/rmIhq3gpirsqC1Ta86bKsG0Mgt8f27bc9xBr6Y6znu4nLzlVw
- kFlYFWHCdrk0hGraA92DuAQr1NF9qLV55GUrl5e0Hl6DE6Zj262LpC4OktK67VdISTjU
- uxJptCCNddimHwc5c4aA16Pf9p+G8QxqxgXw44ouacwZdeZDoAfleyMijuyY6ayxuvZR
- kvTBt7o3rI9n/kE9IwasvryJjcCeIGef3xGp0ra3faGmQDVKX7+oV1JzKwDCKnX6WpnA
- 77c5DQzN6l+HHBVk24esjREFD6OJyjNXgLYRJHi0ofU4neikajU6eAZEUm9JNiK4F42n
- FdCg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=RdI/2Jnw
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic: additional
- dependencies for rebuild/reconfigure
+Content-Disposition: inline
+In-Reply-To: <20230109163017.1260911-1-yann.morin.1998@free.fr>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1673299740;
+ bh=tjSvx5bqT8uQ1ILsmK1pryK1dxamwPMaZ1+NyUU6qfc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=GYxnLPgv9JItmZpYb0+CC65/AYGGorLJG5ZFBs18u/LzZrc9gaNqOARUEnWR2UsUf
+ O6yHDOLru/M0FVXxMa0Vpgmf4W9ymFVLtuydKP/B+q3paMiQAb/mapo+0UbxQe1iDr
+ h4PfWoi4gH4igFlFF6Hl0H7WOjzh/AV7MSECjHvN8UMEcM/vJiItAPWlR48QCxlW4q
+ bmtUZmG06jDdy806Zyx3m3B4KyLMAYr5l7RhixAY6/cylDViN3y0M464gX8VbJdMTl
+ fhI9cQbh+DOW/GtnpS9P7p4lA9iFSy9Q8wClsr44IN9N/HmoGp7kgqunFxpYQ8/NHN
+ HV35oql6nwG0w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GYxnLPgv
+Subject: Re: [Buildroot] [PATCH] support/download: fix cargo vendoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,116 +75,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Simon Richter <simon.richter@ptwdosimetry.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Jan 9, 2023 at 10:42 AM Charles Hardin <ckhardin@gmail.com> wrote:
->
->
->
-> On Sun, Jan 8, 2023 at 6:21 PM Charles Hardin <ckhardin@gmail.com> wrote:
->>
->> inline
->>
->> On Sun, Jan 8, 2023 at 5:58 PM James Hilliard <james.hilliard1@gmail.com> wrote:
->>>
->>> On Sun, Jan 8, 2023 at 5:48 PM Charles Hardin <ckhardin@gmail.com> wrote:
->>> >
->>> > While testing incremental changes for a kernel build using the
->>> > LINUX_OVERRIDE_SRCDIR, the following behavior was observed.
->>> >
->>> > - edit a file in the kernel tree and save
->>> > - make linux-rebuild for buildroot to pickup the changes
->>> > - rsync occurrs and then the install target is run (no build)
->>> > - run make linux-rebuild a second time and the build is compiled and run
->>> >
->>> > To get the changes in on the first invocation of the rebuild requires
->>> > a dependency on the build target to re-evaluate the stamp dependencies
->>> > after the remove. This is a function of make dependency order evaluation
->>> > so that the install steps will see the missing the install stamp but
->>> > that evaluation doesn't require the rebuild because of the file being
->>> > removed internally on the evaluation.
->>> >
->>> > Explicit $(1)-build and $(1)-configure deps are added that will evaluate
->>> > after the cleans remove the stamps and cause them to be re-invoked.
->>>
->>> This isn't correct from my understanding as you aren't actually specifying
->>> the above described execution order.
->>>
->>> I think this should more correctly fix the issue:
->>> https://patchwork.ozlabs.org/project/buildroot/patch/20221018034605.800593-1-james.hilliard1@gmail.com/
->>>
->>
->> Yup, the evaluation is dependent on the make behavior in the parallel prereq - tried the double colon rules and those work as expected - the rebuild will trigger the build and install and the reconfigure will do the configure, build, install steps.
->>
->
->
-> Oh - I thought that double colon patch was already merged into mainline. It is pretty useful to be able to use rebuild and reconfigure on systems for a bit quicker turnaround.
+All,
 
-Not yet.
+On 2023-01-09 17:30 +0100, Yann E. MORIN spake thusly:
+> Commit de4cf253752d (package/{rust, rust-bin}: bump to version 1.66.0)
+> forgot, despite the big comment above the version strings, to confirm
+> that the vendoring was still working.
+> 
+> Previously, we were adding the vendoring equivalence manually, but in
+> commit 04154a651729 (support/download/cargo-post-process: cargo output
+> for vendor config), we switched to using the output of "vargo vendor"
+> (on stdout) to support caxses were the vendoring equivalence would be
+> more complex (e.g. when using crates not hosted on crates.io).
+> 
+> With rust until and including 1.65.0, "cargo vendor" would output (for
+> crates.io crates) the same output as our manual fixups, except it was
+> preceded by an empty line. So, to avoid recompting all our hashes, we
+> added a tweak to strip away the leading empty line in 04154a651729.
+> 
+> But rust 1.66.0 includes [0] which changes the output (on stdout) of
+> "cargo vendor", where the first empty line is no longer emitted.
+> 
+> This means that our tweak for rust 1.65.0 now strips out an important
+> part of the cargo vendor output, which renders the archives invalid, and
+> thus generates different archives, which fail to validate against our
+> hashes.
+> 
+> Fix this by doing what the comment in the post-process helper states,
+> and just keep the whole output of "cargo vendor", byt just removing the
+> "tail --lines=+2". Since that comment is no longer meaningful, we drop
+> it too.
+> 
+> Now, all our 6 cargo-based packages can be vendored again, without
+> changing our hashes, but most importantly, with valid archives.
 
-I had discovered the issue when testing with make 4.4's shuffle mode which
-is designed to make dependency ordering issues like this much more obvious.
+Of course, I forgot to account for the 5 python packages that have rust
+code; they too are fixed with this change.
 
->
-> The testing we use is pretty simple.
->
-> touch arm64/kernel/setup.c in the local linux directory
-> make linux-rebuild
->
-> Will see the "Building" notification with that patch - without it will just rsync and then "Installing"
-> Watch the CC arm64/kernel/setup in the build
->
-> The rest proceeds as expected with Installing - etc.
+Regards,
+Yann E. MORIN.
 
-If my patch does indeed fully fix the issue can you reply to it with a
-tested-by?
+> Still, we keep the comment above the versions strings, in the hope that
+> a future bumper will notice and be more careful at validating the
+> vendoring.
+> 
+> [0] https://github.com/rust-lang/cargo/pull/11273
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/bea/beac7674bbc9fd2f8777b5861f65afee9c485753/  (bat)
+>     http://autobuild.buildroot.org/results/d1e/d1ec1ebbde115628a4b8b9099544347242a97c1c/  (dust)
+>     http://autobuild.buildroot.org/results/f96/f968be895be9ca98b314fdd688ef8d3bdf4e5dfb/  (hyerfine)
+>     http://autobuild.buildroot.org/results/a0c/a0cdb6cc9493f5248d98f98b13da854e12adc2be/  (ripgrep)
+>     ... and so many others...
+> 
+> Reported-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: James Hilliard <james.hilliard1@gmail.com>
+> Cc: Simon Richter <simon.richter@ptwdosimetry.com>
+> ---
+>  support/download/cargo-post-process | 16 +---------------
+>  1 file changed, 1 insertion(+), 15 deletions(-)
+> 
+> diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
+> index 186e9eb69b..21a6be8dbe 100755
+> --- a/support/download/cargo-post-process
+> +++ b/support/download/cargo-post-process
+> @@ -25,25 +25,11 @@ post_process_unpack "${base_name}" "${output}"
+>  pushd "${base_name}" > /dev/null
+>  
+>  # Create the local .cargo/config with vendor info
+> -#
+> -# The first line of the output to stdout is empty.
+> -# So skip it to have the file start with the vendoring
+> -# configuration (`tail --lines=+2`).
+> -#
+> -# NOTE:
+> -#   There is  a patch for cargo to remove the first empty line:
+> -#   See: https://github.com/rust-lang/cargo/pull/11273
+> -#
+> -#   The patch already landed in +nightly and will end up
+> -#   in +stable soon.
+> -#
+> -# ->  When updating rust/cargo, the call to `tail` must be removed.
+> -#
+>  mkdir -p .cargo/
+>  cargo vendor \
+>      --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} \
+>      --locked VENDOR \
+> -    | tail --lines=+2 | tee .cargo/config
+> +    | tee .cargo/config
+>  
+>  popd > /dev/null
+>  
+> -- 
+> 2.25.1
+> 
 
->
->>>
->>> >
->>> > Signed-off-by: Charles Hardin <ckhardin@gmail.com>
->>> > ---
->>> >  package/pkg-generic.mk | 4 ++--
->>> >  1 file changed, 2 insertions(+), 2 deletions(-)
->>> >
->>> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->>> > index f2bea01d7d..da99d9622a 100644
->>> > --- a/package/pkg-generic.mk
->>> > +++ b/package/pkg-generic.mk
->>> > @@ -1062,12 +1062,12 @@ $(1)-reinstall:         $(1)-clean-for-reinstall $(1)
->>> >  $(1)-clean-for-rebuild: $(1)-clean-for-reinstall
->>> >                         rm -f $$($(2)_TARGET_BUILD)
->>> >
->>> > -$(1)-rebuild:          $(1)-clean-for-rebuild $(1)
->>> > +$(1)-rebuild:          $(1)-clean-for-rebuild $(1)-build $(1)
->>>
->>> You aren't actually specifying that $(1)-clean-for-rebuild runs before
->>> $(1)-build but rather are specifying that the $(1)-build target can be
->>> executed in parallel to the $(1)-clean-for-rebuild and $(1) targets.
->>>
->>> Parallel targets can effectively be executed in any arbitrary order and/or
->>> at the same time.
->>>
->>> >
->>> >  $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
->>> >                         rm -f $$($(2)_TARGET_CONFIGURE)
->>> >
->>> > -$(1)-reconfigure:      $(1)-clean-for-reconfigure $(1)
->>> > +$(1)-reconfigure:      $(1)-clean-for-reconfigure $(1)-configure $(1)-build $(1)
->>> >
->>> >  # define the PKG variable for all targets, containing the
->>> >  # uppercase package variable prefix
->>> > --
->>> > 2.24.3 (Apple Git-128)
->>> >
->>> > _______________________________________________
->>> > buildroot mailing list
->>> > buildroot@buildroot.org
->>> > https://lists.buildroot.org/mailman/listinfo/buildroot
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
