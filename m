@@ -4,50 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A290FC54EBC
-	for <buildroot@archiver.kernel.org>; Tue, 10 Jan 2023 20:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E2E6C54EBC
+	for <buildroot@archiver.kernel.org>; Tue, 10 Jan 2023 20:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F238A60B3D;
-	Tue, 10 Jan 2023 20:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F238A60B3D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7683E606EB;
+	Tue, 10 Jan 2023 20:43:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7683E606EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5z_u2n7tsyQu; Tue, 10 Jan 2023 20:43:40 +0000 (UTC)
+	with ESMTP id 9scTbrX9KDUJ; Tue, 10 Jan 2023 20:43:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D5E2606EB;
-	Tue, 10 Jan 2023 20:43:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D5E2606EB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C9EF61038;
+	Tue, 10 Jan 2023 20:43:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C9EF61038
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BEF291BF37F
- for <buildroot@lists.busybox.net>; Tue, 10 Jan 2023 20:43:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E32A51BF37F
+ for <buildroot@lists.busybox.net>; Tue, 10 Jan 2023 20:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6BCF40277
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7A39400AF
  for <buildroot@lists.busybox.net>; Tue, 10 Jan 2023 20:43:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6BCF40277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7A39400AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ddzG2qZGexPm for <buildroot@lists.busybox.net>;
+ with ESMTP id FmrhIXwYIjBr for <buildroot@lists.busybox.net>;
  Tue, 10 Jan 2023 20:43:36 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99245400AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B02A6400E0
 Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 99245400AF
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B02A6400E0
  for <buildroot@buildroot.org>; Tue, 10 Jan 2023 20:43:36 +0000 (UTC)
 X-Virus-Scanned: by amavisd-new using ClamAV (25)
 Received: from zm.lan (pub-52.182.29.194.multiplay.pl [194.29.182.52])
- by server220076.nazwa.pl (Postfix) with ESMTP id 9B5691BCE98;
+ by server220076.nazwa.pl (Postfix) with ESMTP id 4585E1BCCAA;
  Tue, 10 Jan 2023 21:43:33 +0100 (CET)
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Jan 2023 21:43:20 +0100
-Message-Id: <20230110204320.2911196-2-m.niestroj@grinn-global.com>
+Date: Tue, 10 Jan 2023 21:43:19 +0100
+Message-Id: <20230110204320.2911196-1-m.niestroj@grinn-global.com>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230110204320.2911196-1-m.niestroj@grinn-global.com>
-References: <20230110204320.2911196-1-m.niestroj@grinn-global.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] configs/chiliboard: bump u-boot to 2023.01
+Subject: [Buildroot] [PATCH 1/2] configs/chiliboard: bump linux to 6.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,30 +57,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
+Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Marcin Niestroj <m.niestroj@emb.dev>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+From: Marcin Niestroj <m.niestroj@emb.dev>
+
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- configs/grinn_chiliboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/grinn_chiliboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/configs/grinn_chiliboard_defconfig b/configs/grinn_chiliboard_defconfig
-index df483d991a..e7862d1738 100644
+index 80f3077b76..df483d991a 100644
 --- a/configs/grinn_chiliboard_defconfig
 +++ b/configs/grinn_chiliboard_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="chiliboard"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+@@ -1,12 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/grinn/chiliboard/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-chiliboard"
 -- 
 2.39.0
 
