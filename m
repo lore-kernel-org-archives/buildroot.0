@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2CF7C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 269D3C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:10:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F96D82C75;
-	Mon, 20 Feb 2023 23:10:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F96D82C75
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCD4082CAC;
+	Mon, 20 Feb 2023 23:10:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCD4082CAC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MHO_LhHUE3py; Mon, 20 Feb 2023 23:10:28 +0000 (UTC)
+	with ESMTP id WVTkbsneaQHC; Mon, 20 Feb 2023 23:10:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D05582CAC;
-	Mon, 20 Feb 2023 23:10:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D05582CAC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A92351BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0C6082C8E;
+	Mon, 20 Feb 2023 23:10:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0C6082C8E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E8D51BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:56:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C424D612B7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C424D612B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE54B4172F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE54B4172F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d9QF_8Isazfg for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MnY2JSL0ZrBp for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BBC69612B9
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBC69612B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE5F441730
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE5F441730
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA2938648F; Mon, 20 Feb 2023 20:52:12 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id DC01686495; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 Dec 2022 15:34:45 +0100
+Date: Tue, 10 Jan 2023 17:58:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8ef654997caba04dffecdc4105b214abf7d02ae5
-X-Git-Newrev: 5aceee9b1dc2c1c3e7f22ff2892aa580378d741b
+X-Git-Oldrev: 75519b19c8d0763fc02647c6df55c67fbe3ac89e
+X-Git-Newrev: ac2b26fba2ad06fadf14244505319dc5c272906c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205212.BA2938648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8189fs: bump to
- 2022-10-30 version to fix build failure with Linux up to 6.1
+Message-Id: <20230220205228.DC01686495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/download: fix cargo
+ vendoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,105 +63,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5aceee9b1dc2c1c3e7f22ff2892aa580378d741b
+commit: https://git.buildroot.net/buildroot/commit/?id=ac2b26fba2ad06fadf14244505319dc5c272906c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop local patch that has been upstreamed[0] and drop the endianness
-handling too since from this commit[1] on it's handled by using Linux
-macro __LITTLE_ENDIAN.
+Commit de4cf253752d (package/{rust, rust-bin}: bump to version 1.66.0)
+forgot, despite the big comment above the version strings, to confirm
+that the vendoring was still working.
 
-[0]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/4a555ffb77a5947814b6c7f330968318e265c496
-[1]: https://github.com/jwrdegoede/rtl8189ES_linux/commit/b3da33576da5359d85c7cfe82716c9a08a592aff
+Previously, we were adding the vendoring equivalence manually, but in
+commit 04154a651729 (support/download/cargo-post-process: cargo output
+for vendor config), we switched to using the output of "cargo vendor"
+(on stdout) to support cases were the vendoring equivalence would be
+more complex (e.g. when using crates not hosted on crates.io).
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+With rust until and including 1.65.0, "cargo vendor" would output (for
+crates.io crates) the same output as our manual fixups, except it was
+preceded by an empty line. So, to avoid recompting all our hashes, we
+added a tweak to strip away the leading empty line in 04154a651729.
+
+But rust 1.66.0 includes [0] which changes the output (on stdout) of
+"cargo vendor", where the first empty line is no longer emitted.
+
+This means that our tweak for rust 1.65.0 now strips out an important
+part of the cargo vendor output, which renders the archives invalid, and
+thus generates different archives, which fail to validate against our
+hashes.
+
+Fix this by doing what the comment in the post-process helper states,
+and just keep the whole output of "cargo vendor", by just removing the
+"tail --lines=+2". Since that comment is no longer meaningful, we drop
+it too.
+
+Now, all our 6 cargo-based packages, as well as our 5 python packages
+that have rust code, can be vendored again, without changing our hashes,
+but most importantly, with valid archives.
+
+Still, we keep the comment above the versions strings, in the hope that
+a future bumper will notice and be more careful at validating the
+vendoring.
+
+[0] https://github.com/rust-lang/cargo/pull/11273
+
+Fixes:
+    http://autobuild.buildroot.org/results/bea/beac7674bbc9fd2f8777b5861f65afee9c485753/  (bat)
+    http://autobuild.buildroot.org/results/d1e/d1ec1ebbde115628a4b8b9099544347242a97c1c/  (dust)
+    http://autobuild.buildroot.org/results/f96/f968be895be9ca98b314fdd688ef8d3bdf4e5dfb/  (hyerfine)
+    http://autobuild.buildroot.org/results/a0c/a0cdb6cc9493f5248d98f98b13da854e12adc2be/  (ripgrep)
+    ... and so many others...
+
+Reported-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Simon Richter <simon.richter@ptwdosimetry.com>
+Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Tested-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ve-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 40 ----------------------
- package/rtl8189fs/rtl8189fs.hash                   |  2 +-
- package/rtl8189fs/rtl8189fs.mk                     | 10 ++----
- 3 files changed, 3 insertions(+), 49 deletions(-)
+ support/download/cargo-post-process | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-deleted file mode 100644
-index dc4deff9f1..0000000000
---- a/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 4a555ffb77a5947814b6c7f330968318e265c496 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 28 Sep 2022 21:17:17 +0200
--Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-- end of EXTRA_FLAGS assignment
--
--At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
--since it's assigned at the beginning of the Makefile. For example it's not
--possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
--allow to build these modules for big endian architectures. So let's move
--the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
--EXTRA_CFLAGS assignment.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--[Upstream status: https://github.com/jwrdegoede/rtl8189ES_linux/pull/83]
-----
-- Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 8fcb7bd..e4664e9 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,4 +1,3 @@
---EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-- EXTRA_CFLAGS += -O1
-- #EXTRA_CFLAGS += -O3
-- #EXTRA_CFLAGS += -Wall
--@@ -2239,6 +2238,8 @@ ifneq ($(USER_MODULE_NAME),)
-- MODULE_NAME := $(USER_MODULE_NAME)
-- endif
-- 
--+EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
--+
-- ifneq ($(KERNELRELEASE),)
-- 
-- ########### this part for *.mk ############################
---- 
--2.34.1
--
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index 1ab41db553..4f117cfd14 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  7cc80cb85ed6e7f7d5480e6094c377d3dbcd18a57b58cfba43a7e42ea59fc8d3  rtl8189fs-c93cfd712a3acd2ecdeda19a66d269c20f8803f1.tar.gz
-+sha256  96347dbfedd95a217fb89b7b295fe417b711dbad3db896ef0c2fa733c6d150fd  rtl8189fs-e58bd86c9d9408c648b1246a0dd76b16856ec172.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index 8b7618fcc8..15a5329a45 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -4,20 +4,14 @@
- #
- ################################################################################
+diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
+index 186e9eb69b..21a6be8dbe 100755
+--- a/support/download/cargo-post-process
++++ b/support/download/cargo-post-process
+@@ -25,25 +25,11 @@ post_process_unpack "${base_name}" "${output}"
+ pushd "${base_name}" > /dev/null
  
--RTL8189FS_VERSION = c93cfd712a3acd2ecdeda19a66d269c20f8803f1
-+RTL8189FS_VERSION = e58bd86c9d9408c648b1246a0dd76b16856ec172
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
+ # Create the local .cargo/config with vendor info
+-#
+-# The first line of the output to stdout is empty.
+-# So skip it to have the file start with the vendoring
+-# configuration (`tail --lines=+2`).
+-#
+-# NOTE:
+-#   There is  a patch for cargo to remove the first empty line:
+-#   See: https://github.com/rust-lang/cargo/pull/11273
+-#
+-#   The patch already landed in +nightly and will end up
+-#   in +stable soon.
+-#
+-# ->  When updating rust/cargo, the call to `tail` must be removed.
+-#
+ mkdir -p .cargo/
+ cargo vendor \
+     --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} \
+     --locked VENDOR \
+-    | tail --lines=+2 | tee .cargo/config
++    | tee .cargo/config
  
--# Undefine the hardcoded CONFIG_LITTLE_ENDIAN
--RTL8189FS_USER_EXTRA_CLAGS = -UCONFIG_LITTLE_ENDIAN
--# Set endianness
--RTL8189FS_USER_EXTRA_CLAGS += -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
--
- RTL8189FS_MODULE_MAKE_OPTS = \
- 	CONFIG_RTL8189FS=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
--	KSRC=$(LINUX_DIR) \
--	USER_EXTRA_CFLAGS="$(RTL8189FS_USER_EXTRA_CLAGS)"
-+	KSRC=$(LINUX_DIR)
+ popd > /dev/null
  
- define RTL8189FS_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
