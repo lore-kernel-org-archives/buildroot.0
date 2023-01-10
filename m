@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3769DC5479D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:34:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC439C46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:35:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3720820A3;
-	Wed, 11 Jan 2023 09:34:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3720820A3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5AE4E40526;
+	Wed, 11 Jan 2023 09:35:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AE4E40526
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bxmCK8mubWAI; Wed, 11 Jan 2023 09:34:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MEqthkbKOnm1; Wed, 11 Jan 2023 09:35:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EEC8C82093;
-	Wed, 11 Jan 2023 09:34:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEC8C82093
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 61A801BF95E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 66CFC40134;
+	Wed, 11 Jan 2023 09:35:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66CFC40134
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E21561BF2B3
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 47ACD60B30
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47ACD60B30
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24A4240135
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24A4240135
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KocmUnR4E6iz for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fKwLHkBJXt4y for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1E9F60B25
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52FB340B9E
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1E9F60B25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52FB340B9E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0315878E3; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+ id 42ECC878DE; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 10:22:21 +0100
+Date: Tue, 10 Jan 2023 22:48:48 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e5f0b65f1f5cdd060c9eee1ffcd3840586899730
-X-Git-Newrev: b6e119bb55303f132acdd5c524dc6f135a7a1099
+X-Git-Oldrev: 8334e39079c8c1beeb00e8e400c4ebe29b226420
+X-Git-Newrev: 60d393d8617d8249703dde1eb32f10402a083f34
 X-Patchwork-Hint: ignore
-Message-Id: <20230111093332.C0315878E3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/policycoreutils:
- drop bogus INSTALL_TARGET_LINUX_PAM_CONFS
+Message-Id: <20230111093332.42ECC878DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/qt5/qt5virtualkeyboard: really configure language layouts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6e119bb55303f132acdd5c524dc6f135a7a1099
+commit: https://git.buildroot.net/buildroot/commit/?id=60d393d8617d8249703dde1eb32f10402a083f34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit "cb328f77f8 policycoreutils: new package" added a define that is
-never called: POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS.
+Commit "170777f342 package/qt5/qt5virtualkeyboard: convert to qmake
+infrastructure" changed most but not all <pkg>_QMAKEFLAGS to
+<pkg>_CONF_OPTS.
 
-The build system from the package already install these files to target.
-So just drop the bogus define.
+As a consequence, BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS is
+ignored and all layouts are compiled in.
+Some layouts have different licenses (e.g. pinying), so the license
+information for a build that is configured to not include such layouts
+is wrong.
 
-Cc: Clayton Shotwell <clayton.shotwell@collins.com>
-Cc: Matt Weber <matthew.weber@collins.com>
+Change the remaining _QMAKEFLAGS entry, fixing the config for which
+language layouts are compiled and installed.
+
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9a4e154c9c583e74846f7ec80ad01d78811722b0)
+(cherry picked from commit 92219bdf2ece2a0ddfbc45691879a03acd5c7442)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/policycoreutils/policycoreutils.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 60575ac644..8505dbca3f 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -16,10 +16,6 @@ POLICYCOREUTILS_MAKE_OPTS = LDLIBS=$(TARGET_NLS_LIBS)
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- POLICYCOREUTILS_DEPENDENCIES += linux-pam
- POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
--define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
--	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
--	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
--endef
- endif
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index 8e997a2426..1e76332f75 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -16,7 +16,7 @@ QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
  
- ifeq ($(BR2_PACKAGE_AUDIT),y)
+ QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+ ifneq ($(strip $(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+-QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
++QT5VIRTUALKEYBOARD_CONF_OPTS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
+ 
+ ifneq ($(filter ja_JP all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+ QT5VIRTUALKEYBOARD_LICENSE += , Apache-2.0 (openwnn)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
