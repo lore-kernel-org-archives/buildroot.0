@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72C12C5479D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8FE2C46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:26:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E3C940C80;
-	Wed, 11 Jan 2023 09:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E3C940C80
+	by smtp2.osuosl.org (Postfix) with ESMTP id 94E6A40CA0;
+	Wed, 11 Jan 2023 09:26:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94E6A40CA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e6zCJ2liGnUX; Wed, 11 Jan 2023 09:26:16 +0000 (UTC)
+	with ESMTP id LmbBCazFmomk; Wed, 11 Jan 2023 09:26:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD0D140C9B;
-	Wed, 11 Jan 2023 09:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD0D140C9B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1BC531BF2B3
+	by smtp2.osuosl.org (Postfix) with ESMTP id D436440CAD;
+	Wed, 11 Jan 2023 09:26:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D436440CAD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 235381BF95E
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F10F40C89
+ by smtp3.osuosl.org (Postfix) with ESMTP id 522F061070
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F10F40C89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 522F061070
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LsnJ1cOEcruD for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U0zouvWTNwOp for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CD2840AAD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7236C60B30
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CD2840AAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7236C60B30
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3BA9287818; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+ id 6D4EA87815; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Jan 2023 22:40:19 +0100
+Date: Tue, 10 Jan 2023 22:49:00 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: bafb32a406e9335d33ac9048e4111e92ec7dc891
-X-Git-Newrev: c694e0787b49f040843b4388c7513c93094be20b
+X-Git-Oldrev: 1d043ccba9a09fbebc9d288f970368242a8fa7c4
+X-Git-Newrev: 4dcbf5732fa0759c2b87f9dfbf13b73b8372e74f
 X-Patchwork-Hint: ignore
-Message-Id: <20230111092533.3BA9287818@busybox.osuosl.org>
+Message-Id: <20230111092533.6D4EA87815@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.11.x]
- package/qcom-db410c-firmware: fix typo for <pkg>_LICENSE
+ package/qt5/qt5virtualkeyboard: really configure language layouts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c694e0787b49f040843b4388c7513c93094be20b
+commit: https://git.buildroot.net/buildroot/commit/?id=4dcbf5732fa0759c2b87f9dfbf13b73b8372e74f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Cc: Mike Frampton <mikeframpo@gmail.com>
+Commit "170777f342 package/qt5/qt5virtualkeyboard: convert to qmake
+infrastructure" changed most but not all <pkg>_QMAKEFLAGS to
+<pkg>_CONF_OPTS.
+
+As a consequence, BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS is
+ignored and all layouts are compiled in.
+Some layouts have different licenses (e.g. pinying), so the license
+information for a build that is configured to not include such layouts
+is wrong.
+
+Change the remaining _QMAKEFLAGS entry, fixing the config for which
+language layouts are compiled and installed.
+
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit aa35d8d071faf68abc4538be2a3bb636ea6b4a2c)
+(cherry picked from commit 92219bdf2ece2a0ddfbc45691879a03acd5c7442)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qcom-db410c-firmware/qcom-db410c-firmware.mk | 2 +-
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-index 9ef32cc9d4..cf4b59b72e 100644
---- a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-+++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-@@ -8,7 +8,7 @@ QCOM_DB410C_FIRMWARE_VERSION = 1034.2.1
- QCOM_DB410C_FIRMWARE_BASE = linux-board-support-package-r$(QCOM_DB410C_FIRMWARE_VERSION)
- QCOM_DB410C_FIRMWARE_SOURCE = $(QCOM_DB410C_FIRMWARE_BASE).zip
- QCOM_DB410C_FIRMWARE_SITE = https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware
--QCOM_DB410C_FIRMWARE_LICENCE = Qualcomm firmware license
-+QCOM_DB410C_FIRMWARE_LICENSE = Qualcomm firmware license
- QCOM_DB410C_FIRMWARE_LICENSE_FILES = LICENSE
- QCOM_DB410C_FIRMWARE_DEPENDENCIES = host-mtools
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index c31d455c4e..3fefdc874d 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -16,7 +16,7 @@ QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
  
+ QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+ ifneq ($(strip $(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+-QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
++QT5VIRTUALKEYBOARD_CONF_OPTS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
+ 
+ ifneq ($(filter ja_JP all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+ QT5VIRTUALKEYBOARD_LICENSE += , Apache-2.0 (openwnn)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
