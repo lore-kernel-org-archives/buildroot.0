@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8692C46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6B7EC5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:34:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4331261083;
-	Wed, 11 Jan 2023 09:33:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4331261083
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3998C40868;
+	Wed, 11 Jan 2023 09:34:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3998C40868
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rfXnIH6MJC5x; Wed, 11 Jan 2023 09:33:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jtjFUhKYMTA6; Wed, 11 Jan 2023 09:34:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9723C60B2A;
-	Wed, 11 Jan 2023 09:33:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9723C60B2A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0CD811BF95E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 358B9407D7;
+	Wed, 11 Jan 2023 09:33:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 358B9407D7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 226951BF2B3
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD62D60B2A
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1DF840135
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD62D60B2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1DF840135
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BiZFMxFUOtTK for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ifaJWfzaANNM for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 24667607B5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2FE1140494
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24667607B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FE1140494
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11446878DE; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+ id 1E7AC878DF; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Jan 2023 22:40:09 +0100
+Date: Tue, 10 Jan 2023 22:48:25 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 63106ccf658fd4f9c2150d7c60f8cc2a43745f09
-X-Git-Newrev: 572bd5b703c19de9ab99b2ec4b5d64c750018ad1
+X-Git-Oldrev: 572bd5b703c19de9ab99b2ec4b5d64c750018ad1
+X-Git-Newrev: 3eb29003b94d0146a3a66d83d964402f7fdadede
 X-Patchwork-Hint: ignore
-Message-Id: <20230111093332.11446878DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/qcom-db410c-firmware: fix typo for <pkg>_LICENSE
+Message-Id: <20230111093332.1E7AC878DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libmng: fix
+ optional dependency to lcms2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=572bd5b703c19de9ab99b2ec4b5d64c750018ad1
+commit: https://git.buildroot.net/buildroot/commit/?id=3eb29003b94d0146a3a66d83d964402f7fdadede
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Cc: Mike Frampton <mikeframpo@gmail.com>
+"0ce9b533e3 libmng: new package" introduced a typo that makes the
+optional dependency to lcms2 ineffective.
+
+Fix the typo LIBMNG_DEPDENDENCIES -> LIBMNG_DEPENDENCIES.
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit aa35d8d071faf68abc4538be2a3bb636ea6b4a2c)
+(cherry picked from commit 7aeeb632d66dd59e0dbcff8ad6fee724c4e829d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qcom-db410c-firmware/qcom-db410c-firmware.mk | 2 +-
+ package/libmng/libmng.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-index 9ef32cc9d4..cf4b59b72e 100644
---- a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-+++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-@@ -8,7 +8,7 @@ QCOM_DB410C_FIRMWARE_VERSION = 1034.2.1
- QCOM_DB410C_FIRMWARE_BASE = linux-board-support-package-r$(QCOM_DB410C_FIRMWARE_VERSION)
- QCOM_DB410C_FIRMWARE_SOURCE = $(QCOM_DB410C_FIRMWARE_BASE).zip
- QCOM_DB410C_FIRMWARE_SITE = https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware
--QCOM_DB410C_FIRMWARE_LICENCE = Qualcomm firmware license
-+QCOM_DB410C_FIRMWARE_LICENSE = Qualcomm firmware license
- QCOM_DB410C_FIRMWARE_LICENSE_FILES = LICENSE
- QCOM_DB410C_FIRMWARE_DEPENDENCIES = host-mtools
+diff --git a/package/libmng/libmng.mk b/package/libmng/libmng.mk
+index 090fe18380..8ffd74c05b 100644
+--- a/package/libmng/libmng.mk
++++ b/package/libmng/libmng.mk
+@@ -14,7 +14,7 @@ LIBMNG_LICENSE = libmng license
+ LIBMNG_LICENSE_FILES = LICENSE
  
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+-LIBMNG_DEPDENDENCIES += lcms2
++LIBMNG_DEPENDENCIES += lcms2
+ else
+ LIBMNG_CONF_OPTS += --without-lcms2
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
