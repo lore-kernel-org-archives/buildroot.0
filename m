@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F93EC46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:25:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B82CC46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE12240494;
-	Wed, 11 Jan 2023 09:25:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE12240494
+	by smtp4.osuosl.org (Postfix) with ESMTP id B616041975;
+	Wed, 11 Jan 2023 09:25:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B616041975
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eV2YtZZDVR94; Wed, 11 Jan 2023 09:25:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C316F41972;
+	Wed, 11 Jan 2023 09:25:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C316F41972
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A9551BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DFC340C88
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DFC340C88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kjF0lVZDtxqv; Wed, 11 Jan 2023 09:25:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E98040134;
-	Wed, 11 Jan 2023 09:25:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E98040134
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0B8811BF2B3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DBCD160AD6
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBCD160AD6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nRX7Gf-rylLf for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:25:20 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FFE560A91
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0FFE560A91
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:19 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C88C1C0006;
- Wed, 11 Jan 2023 09:25:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pFXMD-001VOO-05; Wed, 11 Jan 2023 10:25:17 +0100
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q1yVzrYxNQq1 for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EF65408EA
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EF65408EA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2EFC987817; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
- <20230101233653.487175-25-ricardo.martincoski@gmail.com>
-Date: Wed, 11 Jan 2023 10:25:16 +0100
-In-Reply-To: <20230101233653.487175-25-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 1 Jan 2023 20:36:48 -0300")
-Message-ID: <87v8ldh18j.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 24/29] package/wpa_supplicant: drop dangling
- WPA_SUPPLICANT_{LDFLAGS, MAKE_ENV}
+To: buildroot@buildroot.org
+Date: Tue, 10 Jan 2023 22:40:16 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: a87db5682c1814b39dbf32c76f0ea840724007ed
+X-Git-Newrev: bafb32a406e9335d33ac9048e4111e92ec7dc891
+X-Patchwork-Hint: ignore
+Message-Id: <20230111092533.2EFC987817@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/tinyxml: fix typo
+ for TINYXML_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +57,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bafb32a406e9335d33ac9048e4111e92ec7dc891
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > Commit "0340b45da0 wpa_supplicant: bump to version 1.0" from 2012
- > converted the package to use the generic infra, but added a bogus
- > WPA_SUPPLICANT_LDFLAGS end left a dangling WPA_SUPPLICANT_MAKE_ENV.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e7792f539e440d40566bfab3dd86881a8f8edd7a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tinyxml/tinyxml.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Drop the symbols that are not used since 2012.
-
- > Cc: Matt Weber <matthew.weber@collins.com>
- > Cc: Sergey Matyukevich <geomatsi@gmail.com>
- > Cc: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
-Committed to 2022.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
+index d173254e31..8e706f1a1e 100644
+--- a/package/tinyxml/tinyxml.mk
++++ b/package/tinyxml/tinyxml.mk
+@@ -12,7 +12,7 @@ TINYXML_AUTORECONF = YES
+ TINYXML_INSTALL_STAGING = YES
+ TINYXML_LICENSE = Zlib
+ TINYXML_LICENSE_FILES = README
+-TINYXML_CPE_ID_VENDOT = tinyxml_project
++TINYXML_CPE_ID_VENDOR = tinyxml_project
+ 
+ # 0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
+ TINYXML_IGNORE_CVES += CVE-2021-42260
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
