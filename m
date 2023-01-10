@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F0A4C46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43B00C46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4D6D404F7;
-	Wed, 11 Jan 2023 09:31:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4D6D404F7
+	by smtp3.osuosl.org (Postfix) with ESMTP id E23E960B30;
+	Wed, 11 Jan 2023 09:33:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E23E960B30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z5N4M3TaF9T8; Wed, 11 Jan 2023 09:31:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O8KBkcjJlFUO; Wed, 11 Jan 2023 09:33:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A313141758;
-	Wed, 11 Jan 2023 09:31:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A313141758
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 123291BF2B3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:31:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3031760B2A;
+	Wed, 11 Jan 2023 09:33:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3031760B2A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D38511BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED5DB404F7
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:31:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED5DB404F7
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB71940A4B
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB71940A4B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VOmCkdlGgKC2 for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:31:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AD164021D
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0AD164021D
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:31:15 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 092FA1BF20E;
- Wed, 11 Jan 2023 09:31:13 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pFXRx-001Vjp-5Y; Wed, 11 Jan 2023 10:31:13 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Pv48YpM0tfhH for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BF9040135
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BF9040135
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 04138878DD; Wed, 11 Jan 2023 09:33:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
- <20230101233653.487175-14-ricardo.martincoski@gmail.com>
-Date: Wed, 11 Jan 2023 10:31:13 +0100
-In-Reply-To: <20230101233653.487175-14-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 1 Jan 2023 20:36:37 -0300")
-Message-ID: <87r0w1h0ym.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 13/29] package/checkpolicy: drop bogus
- CHECKPOLICY_STAGING_CMDS
+To: buildroot@buildroot.org
+Date: Tue, 10 Jan 2023 22:40:01 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: de76cad31780d839d7b8bc3d542417efaa2a61f8
+X-Git-Newrev: 63106ccf658fd4f9c2150d7c60f8cc2a43745f09
+X-Patchwork-Hint: ignore
+Message-Id: <20230111093332.04138878DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/tinyxml: fix typo
+ for TINYXML_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,31 +57,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=63106ccf658fd4f9c2150d7c60f8cc2a43745f09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Commit "b06110621d checkpolicy: allow compiling for target" contains a
- > typo that prevents installing to staging. It also forgot to enable
- > CHECKPOLICY_INSTALL_STAGING.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e7792f539e440d40566bfab3dd86881a8f8edd7a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tinyxml/tinyxml.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > But the package does not install headers or libraries, only ELF and
- > manual files.
- > So instead of fixing the install to staging, drop the bogus
- > CHECKPOLICY_STAGING_CMDS.
-
- > Cc: Clayton Shotwell <clayton.shotwell@collins.com>
- > Cc: Matt Weber <matthew.weber@collins.com>
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
-Committed to 2022.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
+index d173254e31..8e706f1a1e 100644
+--- a/package/tinyxml/tinyxml.mk
++++ b/package/tinyxml/tinyxml.mk
+@@ -12,7 +12,7 @@ TINYXML_AUTORECONF = YES
+ TINYXML_INSTALL_STAGING = YES
+ TINYXML_LICENSE = Zlib
+ TINYXML_LICENSE_FILES = README
+-TINYXML_CPE_ID_VENDOT = tinyxml_project
++TINYXML_CPE_ID_VENDOR = tinyxml_project
+ 
+ # 0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
+ TINYXML_IGNORE_CVES += CVE-2021-42260
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
