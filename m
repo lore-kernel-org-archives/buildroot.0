@@ -1,51 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A3FC46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:40:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B1BBC5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 919BB82065;
-	Wed, 11 Jan 2023 09:40:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 919BB82065
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD8AE408A0;
+	Wed, 11 Jan 2023 09:40:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD8AE408A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iY3kG4TyR2G4; Wed, 11 Jan 2023 09:40:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wdM0Wddmcc3z; Wed, 11 Jan 2023 09:40:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2124820C6;
-	Wed, 11 Jan 2023 09:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2124820C6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A2CDC1BF2B3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:40:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA49140884;
+	Wed, 11 Jan 2023 09:40:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA49140884
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3593B1BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E65981FA8
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:40:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E65981FA8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 103D440878
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:40:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 103D440878
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sMhVkWLpvPqR for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:40:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A105A82096
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:40:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A105A82096
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DEDD83D5C; Wed, 11 Jan 2023 09:40:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N45xmibQkkWq for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:40:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 052FA40884
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 052FA40884
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:40:39 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D91A61C0007;
+ Wed, 11 Jan 2023 09:40:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pFXb1-001W8m-VU; Wed, 11 Jan 2023 10:40:35 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 10:30:53 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 1e7bac765390fb6e59bfed0ccee5b3612e2a9119
-X-Git-Newrev: 03378a0a987df36152d2d5b5aedf82becec1592f
-X-Patchwork-Hint: ignore
-Message-Id: <20230111094011.8DEDD83D5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/checkpolicy: drop
- bogus CHECKPOLICY_STAGING_CMDS
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20221229201846.3498030-1-bernd.kuhls@t-online.de>
+ <20221229201846.3498030-4-bernd.kuhls@t-online.de>
+Date: Wed, 11 Jan 2023 10:40:35 +0100
+In-Reply-To: <20221229201846.3498030-4-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 29 Dec 2022 21:18:46 +0100")
+Message-ID: <87mt6ph0j0.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 4/4] package/x11r7/xserver_xorg-server: bump
+ version to 21.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +65,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03378a0a987df36152d2d5b5aedf82becec1592f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Commit "b06110621d checkpolicy: allow compiling for target" contains a
-typo that prevents installing to staging. It also forgot to enable
-CHECKPOLICY_INSTALL_STAGING.
+ > Removed patches included in upstream release.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-But the package does not install headers or libraries, only ELF and
-manual files.
-So instead of fixing the install to staging, drop the bogus
-CHECKPOLICY_STAGING_CMDS.
+Committed to 2022.11.x and 2022.02.x, thanks.
 
-Cc: Clayton Shotwell <clayton.shotwell@collins.com>
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 14956d8908776e52ea9ace2fbb3f41716ebb4262)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/checkpolicy/checkpolicy.mk | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index af9a58cee8..baf16fb802 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -20,11 +20,6 @@ define CHECKPOLICY_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
- endef
- 
--define CHECKPOLICY_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
--
--endef
--
- define CHECKPOLICY_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- endef
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
