@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1E3EC5479D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86B0FC54EBE
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 522E441975;
-	Wed, 11 Jan 2023 09:28:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 522E441975
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0375B4002A;
+	Wed, 11 Jan 2023 09:28:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0375B4002A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IST4y7OxcHp6; Wed, 11 Jan 2023 09:28:10 +0000 (UTC)
+	with ESMTP id a31wG1Y3HF6C; Wed, 11 Jan 2023 09:28:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BEB34197C;
-	Wed, 11 Jan 2023 09:28:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BEB34197C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 019EF1BF964
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECC304032D;
+	Wed, 11 Jan 2023 09:28:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECC304032D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C2421BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7335740C88
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7335740C88
+ by smtp3.osuosl.org (Postfix) with ESMTP id 211AE60B45
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 211AE60B45
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tJ-dTXbPNTrl for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 22oXKbA0nQ-3 for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BB2340C7A
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BB2340C7A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E22C60DB2
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E22C60DB2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79A2187817; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+ id 2B42E87815; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 08:09:29 +0100
+Date: Wed, 11 Jan 2023 10:22:27 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 4dcbf5732fa0759c2b87f9dfbf13b73b8372e74f
-X-Git-Newrev: 52cce71027b61e048dc336d5bb212a85998f4c1b
+X-Git-Oldrev: 90f6ef6741b5f217e199bc04377c8d2d424a27a7
+X-Git-Newrev: aae31cf4f5a821b6f4f3b6803a136a073169ca65
 X-Patchwork-Hint: ignore
-Message-Id: <20230111092533.79A2187817@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/tekui: really
- disable parallel build
+Message-Id: <20230111092534.2B42E87815@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/lrzsz: drop bogus
+ LRZSZ_BUILD_HOOKS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52cce71027b61e048dc336d5bb212a85998f4c1b
+commit: https://git.buildroot.net/buildroot/commit/?id=aae31cf4f5a821b6f4f3b6803a136a073169ca65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Commit "c80789c917 tekui: disable parallel build" added TEKUI_MAKE but
-that is not a symbol used by the generic package infra.
+Commit "4f3f291a3b lrzsz: convert to autotools infrastructure" converted
+the package to use autotools infra but added a define that is never
+called.
 
-Ensure -j1 is passed to the build and install commands by using
-TEKUI_MAKE explicitly.
+Drop the bogus define.
 
-Fixes:
-http://autobuild.buildroot.net/results/c6cd0d488581013a8b215b0ee2fd8f549a868d4b
-
-Cc: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 93036af53fbbd566a800a12fa8979000ea4fa31f)
+(cherry picked from commit 5fde4abc8d67ac2317b1de7a1b4cde8091f4e3c7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tekui/tekui.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lrzsz/lrzsz.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/tekui/tekui.mk b/package/tekui/tekui.mk
-index 13000edd3e..3cb7ff51e5 100644
---- a/package/tekui/tekui.mk
-+++ b/package/tekui/tekui.mk
-@@ -59,11 +59,11 @@ endif
- endif
- 
- define TEKUI_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="/usr" -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(TEKUI_MAKE) $(TEKUI_MAKE_OPTS) PREFIX="/usr" -C $(@D) all
+diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
+index 45c88619e0..3897975d73 100644
+--- a/package/lrzsz/lrzsz.mk
++++ b/package/lrzsz/lrzsz.mk
+@@ -18,10 +18,6 @@ define LRZSZ_POST_CONFIGURE_HOOKS
+ 	$(SED) "s~\(#define ENABLE_SYSLOG.*\)~/* \1 */~;" $(@D)/config.h
  endef
  
- define TEKUI_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(TEKUI_MAKE) $(TEKUI_MAKE_OPTS) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+-define LRZSZ_BUILD_HOOKS
+-	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" prefix="$(TARGET_DIR)" -C $(@D)
+-endef
+-
+ define LRZSZ_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/src/lrz $(TARGET_DIR)/usr/bin/rz
+ 	$(INSTALL) -m 0755 -D $(@D)/src/lsz $(TARGET_DIR)/usr/bin/sz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
