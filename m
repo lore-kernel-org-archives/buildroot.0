@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0D10C5479D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DBC1C5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:30:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95066404F7;
-	Wed, 11 Jan 2023 09:30:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95066404F7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2992B419A7;
+	Wed, 11 Jan 2023 09:30:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2992B419A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yLUEVrLHBGCp; Wed, 11 Jan 2023 09:30:44 +0000 (UTC)
+	with ESMTP id 0bC1atHFWVLP; Wed, 11 Jan 2023 09:30:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91FE14028F;
-	Wed, 11 Jan 2023 09:30:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91FE14028F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 221401BF2B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 029E84021D;
+	Wed, 11 Jan 2023 09:30:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 029E84021D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4226A1BF95E
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9BE760B05
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9BE760B05
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C7F340134
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C7F340134
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IX3-p3SXR6Tf for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VrnX6yyQMgnS for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E5EA60B93
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E78240C8C
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E5EA60B93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E78240C8C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F088F87815; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+ id 3A71B87817; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 10:18:08 +0100
+Date: Wed, 11 Jan 2023 10:22:28 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 63758bfed67325590c6c5a58e2f36748eacb83c1
-X-Git-Newrev: 8ec1504f59847d66c0db6b574c8a63ab69cba933
+X-Git-Oldrev: aae31cf4f5a821b6f4f3b6803a136a073169ca65
+X-Git-Newrev: a2322a1fef8ccc94bdbd37d4831c7d53821013bc
 X-Patchwork-Hint: ignore
-Message-Id: <20230111092533.F088F87815@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/glib-networking:
- drop dangling GLIB_NETWORKING_INSTALL_TARGET_OPTS
+Message-Id: <20230111092534.3A71B87817@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/policycoreutils:
+ drop bogus INSTALL_TARGET_LINUX_PAM_CONFS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ec1504f59847d66c0db6b574c8a63ab69cba933
+commit: https://git.buildroot.net/buildroot/commit/?id=a2322a1fef8ccc94bdbd37d4831c7d53821013bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-In 2015, commit "3fe434bf35 glib-networking: specify GIO_MODULE_DIR for
-target" correctly used <pkg>_INSTALL_TARGET_OPTS with an autotools
-package.
+Commit "cb328f77f8 policycoreutils: new package" added a define that is
+never called: POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS.
 
-But later on, in 2018, commit "928a72c49f package/glib-networking: bump
-version to 2.56.1" changed the package to use the meson infra, that does
-not support <pkg>_INSTALL_TARGET_OPTS.
+The build system from the package already install these files to target.
+So just drop the bogus define.
 
-So this symbol is bogus since 2018. Drop it now.
-
+Cc: Clayton Shotwell <clayton.shotwell@collins.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c4f2459e8a94c1f30c0fcbeb3cd72b62b5ee3e64)
+(cherry picked from commit 9a4e154c9c583e74846f7ec80ad01d78811722b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glib-networking/glib-networking.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/policycoreutils/policycoreutils.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index e8905dfff4..4adc13d39f 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -21,8 +21,6 @@ GLIB_NETWORKING_CONF_OPTS = \
- GLIB_NETWORKING_LICENSE = LGPL-2.0+
- GLIB_NETWORKING_LICENSE_FILES = COPYING
- GLIB_NETWORKING_CPE_ID_VENDOR = gnome
--GLIB_NETWORKING_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) \
--	GIO_MODULE_DIR=/usr/lib/gio/modules install
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 60575ac644..8505dbca3f 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -16,10 +16,6 @@ POLICYCOREUTILS_MAKE_OPTS = LDLIBS=$(TARGET_NLS_LIBS)
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ POLICYCOREUTILS_DEPENDENCIES += linux-pam
+ POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
+-define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
+-	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
+-	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
+-endef
+ endif
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- GLIB_NETWORKING_DEPENDENCIES += gnutls
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
