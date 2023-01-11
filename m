@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF7C4C46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:51:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC39C46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:52:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5661941951;
-	Wed, 11 Jan 2023 09:51:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5661941951
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92F59419BF;
+	Wed, 11 Jan 2023 09:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92F59419BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NkHjqjWE069X; Wed, 11 Jan 2023 09:51:57 +0000 (UTC)
+	with ESMTP id S2vwq4PKmxne; Wed, 11 Jan 2023 09:52:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 140E54194F;
-	Wed, 11 Jan 2023 09:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 140E54194F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C682B1BF2B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84F7841948;
+	Wed, 11 Jan 2023 09:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84F7841948
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E56B71BF95E
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:51:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFCB560B45
+ by smtp2.osuosl.org (Postfix) with ESMTP id C110740135
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:51:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFCB560B45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C110740135
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xl_0OdDS5GBp for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 249KsvbculBk for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 09:51:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EB1E060B30
+ by smtp2.osuosl.org (Postfix) with ESMTP id E69AF405C4
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB1E060B30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E69AF405C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA1B4878F6; Wed, 11 Jan 2023 09:51:43 +0000 (UTC)
+ id D08C387914; Wed, 11 Jan 2023 09:51:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 10:49:47 +0100
+Date: Wed, 11 Jan 2023 10:48:31 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 05900e5b6ea9a679a6296a91d34d5b799b22a01d
-X-Git-Newrev: b9026d539e0f7e928c2b382ee49220e5ef353eed
+X-Git-Oldrev: b96bf0a106e4c344dfb8fff4d8e6785e19d17d15
+X-Git-Newrev: 05900e5b6ea9a679a6296a91d34d5b799b22a01d
 X-Patchwork-Hint: ignore
-Message-Id: <20230111095143.DA1B4878F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/php: security
- bump version to 8.0.27
+Message-Id: <20230111095143.D08C387914@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/gobject-introspection: really use host python for host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9026d539e0f7e928c2b382ee49220e5ef353eed
+commit: https://git.buildroot.net/buildroot/commit/?id=05900e5b6ea9a679a6296a91d34d5b799b22a01d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Release notes: https://www.php.net/releases/8_0_27.php
-Changelog: https://www.php.net/ChangeLog-8.php#8.0.27
+Commit "abc110e362 package/gobject-introspection: bump to version
+1.68.0" renamed the define that makes sure g-ir-tool-template uses the
+host python, but forgot to update its call on pre-configure hooks.
 
-Fixes CVE-2022-31631: http://bugs.php.net/81740
+Update it now.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 80c5be77ceb021e8319b9269b58d6373d378fac5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gobject-introspection/gobject-introspection.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 574d5fb7c4..01e9c4fe79 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  a291b71d0498707fc5514eb5b9513e88f0f1d4890bcdefd67282ded8a2bfb941  php-8.0.25.tar.xz
-+sha256  f942cbfe2f7bacbb8039fb79bbec41c76ea779ac5c8157f21e1e0c1b28a5fc3a  php-8.0.27.tar.xz
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index 99f4a7e2fe..ec236c621d 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -66,7 +66,7 @@ HOST_GOBJECT_INTROSPECTION_CONF_ENV = \
+ define GOBJECT_INTROSPECTION_FIX_TOOLS_PYTHON_PATH
+ 	$(SED) '1s%#!.*%#!$(HOST_DIR)/bin/python3%' $(@D)/tools/g-ir-tool-template.in
+ endef
+-HOST_GOBJECT_INTROSPECTION_PRE_CONFIGURE_HOOKS += GOBJECT_INTROSPECTION_FIX_TOOLTEMPLATE_PYTHON_PATH
++HOST_GOBJECT_INTROSPECTION_PRE_CONFIGURE_HOOKS += GOBJECT_INTROSPECTION_FIX_TOOLS_PYTHON_PATH
  
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 531f88e896..e1b62b02a8 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.0.25
-+PHP_VERSION = 8.0.27
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ # Perform the following:
+ # - Just as above, Ensure that g-ir-tool-template.in uses the host python.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
