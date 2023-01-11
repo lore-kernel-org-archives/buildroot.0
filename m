@@ -1,49 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7364C46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 21:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8425C5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 21:36:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0469D4189C;
-	Wed, 11 Jan 2023 21:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0469D4189C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C17B404C8;
+	Wed, 11 Jan 2023 21:36:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C17B404C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nEs7I2YYensU; Wed, 11 Jan 2023 21:22:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LiF9jFzZATCI; Wed, 11 Jan 2023 21:36:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3301418A0;
-	Wed, 11 Jan 2023 21:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3301418A0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E4E9A1BF2A3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 21:22:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5DEDF402F2;
+	Wed, 11 Jan 2023 21:36:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DEDF402F2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F60D1BF2A3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 21:36:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF66A418A0
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 21:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF66A418A0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 87C7282065
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 21:36:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87C7282065
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uk_PNEvVR34t for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 21:22:35 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E5964189C
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 21:22:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E5964189C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2932687957; Wed, 11 Jan 2023 21:22:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 22:21:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ac2b26fba2ad06fadf14244505319dc5c272906c
-X-Git-Newrev: fce9f0eea00ed9aaeca12c1529ea380617baa477
-X-Patchwork-Hint: ignore
-Message-Id: <20230111212235.2932687957@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: update sponsors.html page
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bqH35m1qHPJj for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 21:36:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D34538205D
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com
+ [IPv6:2607:f8b0:4864:20::72d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D34538205D
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 21:36:39 +0000 (UTC)
+Received: by mail-qk1-x72d.google.com with SMTP id pj1so8354097qkn.3
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 13:36:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=I5+ZApbwrIYta8GOIgUi+uyKIm/wHhJ3RoLx8Vf9BXA=;
+ b=PXvKFK19W2WQ+bzjv1RF0vfGvuxqKIvWoE16Y09MC4CEeD01fER9ZV0BszSLVff9tH
+ 2lFpHIOwpLzJbQOpjdB6zYaV3lKe2VTpKrL/pcS8xEdsLVb/C0wdxHtaxqcdwqXikfWL
+ s2LcbJ1FHhmQSlKy4i8ZfA9xAUF3F+tWUrGFsodrnYnMuC9oHIDU1uXLEWuIHfESGRVF
+ DRzcFji3sFtERTfD9yioYGOXnNFS1+amaiwWqeIpIloNfi74NUblIab2j3J78oOz7X71
+ FfD4ThYLGL8vZbUwDhwoeh/UBZ/oca1QDnVCW+otyxmm8LflIwU31wLJ7xGSS7aKKmJ5
+ 59QQ==
+X-Gm-Message-State: AFqh2krWUBZFJSUzwqYrpMynnxGQyeUTk9iKFJ45BqIgjcGVGWvE8zVe
+ NIzl8uF3f7lI5ZvOLz3RHnRNChTUeHvSfTxfP9t85cbp
+X-Google-Smtp-Source: AMrXdXsoDGL1lYQPZ+gcD09oQ0xyXGep8Hq5X3JQU6Qrmb/6O4XaZZQv5vSxEuCh5s9le6fplxjk70cwmT2ZZG+7X3w=
+X-Received: by 2002:a05:620a:f93:b0:705:ef9d:cc16 with SMTP id
+ b19-20020a05620a0f9300b00705ef9dcc16mr103281qkn.439.1673472998616; Wed, 11
+ Jan 2023 13:36:38 -0800 (PST)
+MIME-Version: 1.0
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed, 11 Jan 2023 22:36:26 +0100
+Message-ID: <CADYdroM5e4W64FXRMK9QUGXrcBOLBRUiyursiPW7mjP6bs9KdQ@mail.gmail.com>
+To: buildroot <buildroot@buildroot.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=I5+ZApbwrIYta8GOIgUi+uyKIm/wHhJ3RoLx8Vf9BXA=;
+ b=mlx4HNa1Uck1Q2z6q/Cg20C+9rv9umdoPnnf3ySJELXK30iZnsVWqt8tuGkDCy1Yuo
+ 4JAnZhA9yS+d3O5kPu8jvHC9Jd2utMH+xVQzzEwiZlbQLNIwGQnx9vn//EJTTMDVmyiS
+ mzp/JAd4X6n6USg5oOhWvQMpNpx9kBMnQvte1adya1GeQnJ3aIwGpqPOx1d+8+krQQge
+ tuWCREbht/ODu7487vC2O/qAcOxA7ZQQblvj2pKo4tAsflmaP3jFLESJPWVxL+frhhb4
+ gn/dGcLj6l4Hyjbbl+JXtLFGmdkYgqw4zQOQUsjijwEerXOv0oVJaI0EvNvZymavcSwM
+ TZDw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=mlx4HNa1
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/cmake: disable ccache for
+ host-cmake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,146 +87,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0428074282408426793=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fce9f0eea00ed9aaeca12c1529ea380617baa477
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============0428074282408426793==
+Content-Type: multipart/alternative; boundary="0000000000009fb38705f203cbf0"
 
-- Thank Smile for sponsoring the Buildroot Developers Meeting of
-  February 2023 by providing the meeting room
+--0000000000009fb38705f203cbf0
+Content-Type: text/plain; charset="UTF-8"
 
-- Thank Armadeus and Logilin for their financial sponsoring in 2022
+Hi,
 
-- Move older sponsors to the "Past sponsors" section
+Wouldnt a way simpler method be to just prepare a wrapper in
+$(HOST_DIR)/bin/ccache ?
 
-- Remove section about the Buildroot.org domain sponsor, as that
-  sponsoring ended in 2019.
+#!/bin/sh
+exec "$@"
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/website/images/armadeus-systems-logo.png | Bin 0 -> 43363 bytes
- docs/website/sponsors.html                    |  69 +++++++++++++++++---------
- 2 files changed, 46 insertions(+), 23 deletions(-)
+(Or a bit more sophisticated: try finding and using a system installed
+ccache first)
 
-diff --git a/docs/website/images/armadeus-systems-logo.png b/docs/website/images/armadeus-systems-logo.png
-new file mode 100644
-index 0000000000..9b6080fb13
-Binary files /dev/null and b/docs/website/images/armadeus-systems-logo.png differ
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index 2f3f6309ae..9c17bed0c7 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -9,18 +9,40 @@
-     <div class="panel-body">
- 
-       <div class="row">
-+
- 	<div class="col-sm-4">
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
- 	      <div class="col-sm-12" style="height: 150px;">
--		<a href="https://www.tap2open.com">
--		  <img class="img-responsive center-block" src="images/tap2open-logo.png"/>
-+		<a href="https://www.smile.eu">
-+		  <img class="img-responsive center-block" src="images/smile-logo.png"/>
- 		</a>
- 	      </div>
- 	      <div class="col-sm-12" style="height: 150px;">
--	        <a href="https://www.tap2open.com">Tap2Open</a>
--	        financially sponsored the <a href="/association.html">Buildroot Association</a>
--	        in 2020.</div>
-+		<a href="http://www.smile.eu">Smile</a> sponsored the
-+		Buildroot project by hosting
-+		the <a href="https://elinux.org/Buildroot:DeveloperDaysFOSDEM2023">Buildroot
-+		Developers Meeting of February 2023</a> in Brussels,
-+		after the FOSDEM
-+		<a href="https://www.fosdem.org">conference</a>.
-+	      </div>
-+	    </div>
-+	  </div>
-+	</div>
-+
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 180px;">
-+		<a href="http://www.opossom.com/english/index.html">
-+		  <img class="img-responsive center-block" src="images/armadeus-systems-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="http://www.opossom.com/english/index.html">Armadeus
-+		Systems</a> financially sponsored
-+		the <a href="/association.html">Buildroot
-+		Association</a> in 2022.</div>
- 	    </div>
- 	  </div>
- 	</div>
-@@ -36,7 +58,7 @@
- 	      <div class="col-sm-12" style="height: 150px;">
- 		<a href="http://www.logilin.fr">Logilin</a>
- 		financially sponsored the <a href="/association.html">Buildroot Association</a>
--		in 2020.</div>
-+		in 2022.</div>
- 	    </div>
- 	  </div>
- 	</div>
-@@ -44,23 +66,6 @@
-     </div>
-     </div>
- 
--  <div class="panel panel-primary">
--    <div class="panel-heading">Sponsor of the Buildroot.org domain</div>
--    <div class="panel-body">
--      <div class="col-sm-6">
--	<p>The Buildroot community would like to thank
--          <a href="http://www.zillabit.com/">Zillabit</a> for
--	  donating the <b>buildroot.org</b> domain name and sponsoring
--	  the registration fees 2009 - 2019.</p>
--       </div>
--      <div class="col-sm-6">
--	<a href="http://www.zillabit.com">
--	  <img class="img-responsive center-block" src="images/zillabit-logo.png"/>
--	</a>
--      </div>
--    </div>
--  </div>
--
-   <div class="panel panel-primary">
-     <div class="panel-heading">Past sponsors</div>
-     <div class="panel-body">
-@@ -343,6 +348,24 @@
- 	</div>
-       </div>
- 
-+      <div class="row">
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="https://www.tap2open.com">
-+		  <img class="img-responsive center-block" src="images/tap2open-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12" style="height: 150px;">
-+	        <a href="https://www.tap2open.com">Tap2Open</a>
-+	        financially sponsored the <a href="/association.html">Buildroot Association</a>
-+	        in 2020.</div>
-+	    </div>
-+	  </div>
-+	</div>
-+      </div>
-+
-     </div>
-   </div>
- </div>
+When host-ccache is installed, the wrapper will be replaced.
+
+Regards, Norbert
+
+--0000000000009fb38705f203cbf0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Hi,<div dir=3D"auto"><br></div><div dir=3D"auto">Wouldnt =
+a way simpler method be to just prepare a wrapper in $(HOST_DIR)/bin/ccache=
+ ?</div><div dir=3D"auto"><br></div><div dir=3D"auto">#!/bin/sh</div><div d=
+ir=3D"auto">exec &quot;$@&quot;</div><div dir=3D"auto"><br></div><div dir=
+=3D"auto">(Or a bit more sophisticated: try finding and using a system inst=
+alled ccache first)</div><div dir=3D"auto"><br></div><div dir=3D"auto">When=
+ host-ccache is installed, the wrapper will be replaced.</div><div dir=3D"a=
+uto"><br></div><div dir=3D"auto">Regards, Norbert</div></div>
+
+--0000000000009fb38705f203cbf0--
+
+--===============0428074282408426793==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0428074282408426793==--
