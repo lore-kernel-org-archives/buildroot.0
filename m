@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 047AEC46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31A03C5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C5E3419C1;
-	Wed, 11 Jan 2023 09:35:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C5E3419C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE24941044;
+	Wed, 11 Jan 2023 09:35:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE24941044
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gRRcIIkluWia; Wed, 11 Jan 2023 09:35:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yCgtIjscXxpP; Wed, 11 Jan 2023 09:35:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EE9541A15;
-	Wed, 11 Jan 2023 09:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EE9541A15
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 638AF1BF2B3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A1BF41066;
+	Wed, 11 Jan 2023 09:35:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1BF41066
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04F871BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29B7740320
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29B7740320
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F0B040526
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F0B040526
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XR67-kpwZZt0 for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:33:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kD4bQJanSEBV for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB0E440341
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADBDF4056F
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB0E440341
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADBDF4056F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2D81878DD; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+ id ABE3F878E0; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 10:18:36 +0100
+Date: Wed, 11 Jan 2023 10:19:03 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7463502768b1b0ac265c61b11002020c8391fc89
-X-Git-Newrev: 8a2e60a43d9473f00ed5cf9b2c768d7447fa908b
+X-Git-Oldrev: 8a2e60a43d9473f00ed5cf9b2c768d7447fa908b
+X-Git-Newrev: 5e84cc96b255fa7a7190d29b2bff7cca0f775cbd
 X-Patchwork-Hint: ignore
-Message-Id: <20230111093332.A2D81878DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/gobject-introspection: drop bogus GOBJECT_INTROSPECTION_AUTORECONF
+Message-Id: <20230111093332.ABE3F878E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libtalloc: drop
+ bogus LIBTALLOC_{C, LD}FLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a2e60a43d9473f00ed5cf9b2c768d7447fa908b
+commit: https://git.buildroot.net/buildroot/commit/?id=5e84cc96b255fa7a7190d29b2bff7cca0f775cbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit "7687a396e8 package/gobject-introspection: new package" added the
-package using the meson infra for both target and host variants.
+Commit "f0d37e275a package/libtalloc: new package" added these symbols
+but they are not used in the package and also not recognized by the waf
+package infra.
 
-Meson infra does not support <pkg>_AUTORECONF.
+So drop the ignored symbols.
 
-So drop the bogus symbol.
-
+Cc: David GOUARIN <dgouarin@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ec6e8c632bf372c1fad7889ca6323166b90e1599)
+(cherry picked from commit 1ad6b4e10e4538532c00f8c04363da64f19c313a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gobject-introspection/gobject-introspection.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/libtalloc/libtalloc.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-index 41d64171a7..99f4a7e2fe 100644
---- a/package/gobject-introspection/gobject-introspection.mk
-+++ b/package/gobject-introspection/gobject-introspection.mk
-@@ -9,7 +9,6 @@ GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
- GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
- GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
- GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
--GOBJECT_INTROSPECTION_AUTORECONF = YES
- GOBJECT_INTROSPECTION_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-2-Clause
- GOBJECT_INTROSPECTION_LICENSE_FILES = COPYING.LGPL COPYING.GPL giscanner/scannerlexer.l
+diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
+index 8cba699ea1..c6d69a616c 100644
+--- a/package/libtalloc/libtalloc.mk
++++ b/package/libtalloc/libtalloc.mk
+@@ -25,8 +25,6 @@ LIBTALLOC_CONF_OPTS += --cross-compile \
+ 		--with-libiconv=$(STAGING_DIR)/usr
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+-LIBTALLOC_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+-LIBTALLOC_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
+ LIBTALLOC_DEPENDENCIES += libtirpc host-pkgconf
+ endif
  
 _______________________________________________
 buildroot mailing list
