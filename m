@@ -1,54 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71ABBC46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 07:31:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9322EC6379F
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 07:55:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D43F84191C;
-	Wed, 11 Jan 2023 07:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D43F84191C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A48182014;
+	Wed, 11 Jan 2023 07:55:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A48182014
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h7bJ1vm_5tWz; Wed, 11 Jan 2023 07:31:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UEN5o3g4cZpF; Wed, 11 Jan 2023 07:55:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B445E418FD;
-	Wed, 11 Jan 2023 07:31:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B445E418FD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86C4282012;
+	Wed, 11 Jan 2023 07:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86C4282012
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 009A41BF2C4
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 07:31:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 43FFA1BF2C4
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 07:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D083981F15
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 07:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D083981F15
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F65B82012
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 07:55:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F65B82012
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k50-Q8-8WJJX for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 07:31:39 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB0CC81F02
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB0CC81F02
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 07:31:38 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (15)
-Received: from zm (pub-52.182.29.194.multiplay.pl [194.29.182.52])
- by server220076.nazwa.pl (Postfix) with ESMTP id 080A81BC1BE;
- Wed, 11 Jan 2023 08:31:36 +0100 (CET)
-References: <20230109034218.2150414-1-james.hilliard1@gmail.com>
-User-agent: mu4e 1.8.13; emacs 28.2
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 11 Jan 2023 08:31:26 +0100
-In-reply-to: <20230109034218.2150414-1-james.hilliard1@gmail.com>
-Message-ID: <87o7r5msrs.fsf@grinn-global.com>
+ with ESMTP id 9owxUIySa8Cb for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 07:55:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F60682000
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1F60682000
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 07:55:19 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id d17so14184797wrs.2
+ for <buildroot@buildroot.org>; Tue, 10 Jan 2023 23:55:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=3Fs041vAktMGjBzWbogjQUVhKxGHq5pcaZTAGcXYl5Y=;
+ b=CvAfAvjTO5MGGC1iacWS4PA1JtIusHs+IdBgvViUPY/W1ysKFO45IFIou+9TfxDObZ
+ 9CTc44hrL+r0IWhL4YzS1CqhKVXZDZqKr4gR4eiQ3D+N4C8j1+i0uYaU01n17vuU1L7H
+ edCZyHnT1S1M6lc7Oqek+IWuZlT7Xz9K2eiEn9M43bW2EmlYrSQ5Jpuyv0BAljVTX3yH
+ A3YlBXXd0Mn3kZ1ExHuHa5GWu3VKCjUYbulQ7vvC8oPKDNPvdYznqmddK2fcqdIKrEgT
+ WleG/D+MVvbWqdojwktUTp2g5npd28rzNy2bQ33dhbri1Zm9vdTt7kUtm5zFb673ANGH
+ 3eWA==
+X-Gm-Message-State: AFqh2komO9Zj4927V3koXL5VBr72kIhEqYq4zx29nA5BzBnJQbO6lqN7
+ hKP/2xWvoHJZwoAHbDusB4vPFXpaOGvdOXtu
+X-Google-Smtp-Source: AMrXdXse802TOvFbZBU5O5E43orIOTrX4BdSWsLzxWXq1QDzRQHOx64hlxNbgSaBnyPk5utXq1MkGg==
+X-Received: by 2002:a5d:5085:0:b0:2bb:de29:5c16 with SMTP id
+ a5-20020a5d5085000000b002bbde295c16mr7622734wrt.71.1673423717096; 
+ Tue, 10 Jan 2023 23:55:17 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:c9ae:a8ee:206a:9211])
+ by smtp.gmail.com with ESMTPSA id
+ bu3-20020a056000078300b002bbe7efd88csm8583684wrb.41.2023.01.10.23.55.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 10 Jan 2023 23:55:16 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Jan 2023 08:55:14 +0100
+Message-Id: <20230111075514.8131-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-dbus-fast: bump to
- version 1.84.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=3Fs041vAktMGjBzWbogjQUVhKxGHq5pcaZTAGcXYl5Y=;
+ b=kXdTXBNi+HEXQgH0CMxiD/Cg1s961Me8r46TWVh3vn7KH6PQ9ZZPMtoQEgUUqwDxbw
+ WUbQnkO+Kx6LL+UbeTYylgJIw1XfQ0aiKD/qcFsGyd2PIK/4Ss1uAbLCeRSk1lY2k/2b
+ cBi6xm9fPMaYMaB32qlw5BgpXqEnIE91YofH8zq90w1boofE9EAyU5snadeiuHwaj+dK
+ 3E+RkHTHTsJ9PN5722RMBnSYjPVIW2oR3Veil32xqJgBsje/a0zKy5NYRBXOZu+kn8j4
+ NIzQ599HPAC5DNQBOSpUU20L/01XJ/wOiBqkxY5kddNrjlaDgHDkxa5Tzrf5GXHZTZg2
+ W4Iw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bgdev-pl.20210112.gappssmtp.com
+ header.i=@bgdev-pl.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=kXdTXBNi
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove my entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,48 +95,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CkphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPiB3cml0ZXM6Cgo+IFNp
-Z25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgo+
-IC0tLQo+ICBwYWNrYWdlL3B5dGhvbi1kYnVzLWZhc3QvcHl0aG9uLWRidXMtZmFzdC5oYXNoIHwg
-NCArKy0tCj4gIHBhY2thZ2UvcHl0aG9uLWRidXMtZmFzdC9weXRob24tZGJ1cy1mYXN0Lm1rICAg
-fCA0ICsrLS0KPiAgMiBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25z
-KC0pCj4KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tZGJ1cy1mYXN0L3B5dGhvbi1kYnVz
-LWZhc3QuaGFzaCBiL3BhY2thZ2UvcHl0aG9uLWRidXMtZmFzdC9weXRob24tZGJ1cy1mYXN0Lmhh
-c2gKPiBpbmRleCBmMGRjZWViNDNkLi5lOWEzOTkyZjhlIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
-cHl0aG9uLWRidXMtZmFzdC9weXRob24tZGJ1cy1mYXN0Lmhhc2gKPiArKysgYi9wYWNrYWdlL3B5
-dGhvbi1kYnVzLWZhc3QvcHl0aG9uLWRidXMtZmFzdC5oYXNoCj4gQEAgLTEsNSArMSw1IEBACj4g
-ICMgbWQ1LCBzaGEyNTYgZnJvbSBodHRwczovL3B5cGkub3JnL3B5cGkvZGJ1cy1mYXN0L2pzb24K
-PiAtbWQ1ICBlZWJmMmM1NThkZDFhZjBmOGYzMmIzNjFlOTFmMmZhMyAgZGJ1c19mYXN0LTEuNjEu
-MS50YXIuZ3oKPiAtc2hhMjU2ICBiZGE0YTdkNTU5MDQ3Yjc0ZjQwOWVkYTI3OGY2OGY2MTBhNDE4
-ZTg2YWQzZWZhMDM2OGZhMmVkMjQwZGFhNmI2ICBkYnVzX2Zhc3QtMS42MS4xLnRhci5nego+ICtt
-ZDUgIDIxZTM2NzUxNjhlM2RiZTgwN2M2YzhhMjkyNjcyNDFmICBkYnVzX2Zhc3QtMS44NC4wLnRh
-ci5nego+ICtzaGEyNTYgIGQ2NGYxYjY4YzFjODEyNjhlODQ2NDcxY2FlYjkyNjRhOTMwNmE2YzZh
-ZDM1NmMzMGQ1Y2RmN2QxZWNjMjUxYTEgIGRidXNfZmFzdC0xLjg0LjAudGFyLmd6Cj4gICMgTG9j
-YWxseSBjb21wdXRlZCBzaGEyNTYgY2hlY2tzdW1zCj4gIHNoYTI1NiAgYzM3ZTljNzUxMTBlMDFk
-MWYwYzUzNjBkYzdkNzc3NmEzMGFjNWY3MGQyNDQwZGIyMTQ0MjNlNGI3YTc3YTZhZiAgTElDRU5T
-RQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1kYnVzLWZhc3QvcHl0aG9uLWRidXMtZmFz
-dC5tayBiL3BhY2thZ2UvcHl0aG9uLWRidXMtZmFzdC9weXRob24tZGJ1cy1mYXN0Lm1rCj4gaW5k
-ZXggZGU3MDQ5YmEyMi4uOWRkODhmNjEzZiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3B5dGhvbi1k
-YnVzLWZhc3QvcHl0aG9uLWRidXMtZmFzdC5tawo+ICsrKyBiL3BhY2thZ2UvcHl0aG9uLWRidXMt
-ZmFzdC9weXRob24tZGJ1cy1mYXN0Lm1rCj4gQEAgLTQsOSArNCw5IEBACj4gICMKPiAgIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMKPgo+IC1QWVRIT05fREJVU19GQVNUX1ZFUlNJT04gPSAxLjYxLjEK
-PiArUFlUSE9OX0RCVVNfRkFTVF9WRVJTSU9OID0gMS44NC4wCj4gIFBZVEhPTl9EQlVTX0ZBU1Rf
-U09VUkNFID0gZGJ1c19mYXN0LSQoUFlUSE9OX0RCVVNfRkFTVF9WRVJTSU9OKS50YXIuZ3oKPiAt
-UFlUSE9OX0RCVVNfRkFTVF9TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3Bh
-Y2thZ2VzL2RkL2Y0L2EyODBkNDZiMTE5ZDU5ZjZhM2Q4NGFiZjQ3NDQ1MmFlNzY2NTE1NThiMDk2
-M2FiOGM0OGFlMTNiNWE0NAo+ICtQWVRIT05fREJVU19GQVNUX1NJVEUgPSBodHRwczovL2ZpbGVz
-LnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvODEvNjcvYTgzNTIyZDY2OTJhNzI5MTFjMzU4NmUy
-ZmNkMjM2M2NlMjJkMTUyMmE3ZTE3ZTEwMTJmMjU1YTYwODNiCj4gIFBZVEhPTl9EQlVTX0ZBU1Rf
-U0VUVVBfVFlQRSA9IHNldHVwdG9vbHMKPiAgUFlUSE9OX0RCVVNfRkFTVF9MSUNFTlNFID0gTUlU
-Cj4gIFBZVEhPTl9EQlVTX0ZBU1RfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKClJldmlld2VkLWJ5
-OiBNYXJjaW4gTmllc3Ryb2ogPG0ubmllc3Ryb2pAZ3Jpbm4tZ2xvYmFsLmNvbT4KCi0tCk1hcmNp
-biBOaWVzdHLDs2oKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+It's been a while since I've even used buildroot at all and I don't
+really have any spare cycles to spend on maintaining its packages.
+Let's face reality and drop me from the DEVELOPERS file.
+
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ DEVELOPERS | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 86e3f0e7b1..8e1d68c026 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -283,17 +283,6 @@ F:	package/ttyd/
+ F:	package/qt5/qt5scxml/
+ F:	package/qt5/qt5webview/
+ 
+-N:	Bartosz Golaszewski <brgl@bgdev.pl>
+-F:	package/autoconf-archive/
+-F:	package/doxygen/
+-F:	package/libgpiod/
+-F:	package/libserialport/
+-F:	package/libsigrok/
+-F:	package/libsigrokdecode/
+-F:	package/libzip/
+-F:	package/pulseview/
+-F:	package/sigrok-cli/
+-
+ N:	Baruch Siach <baruch@tkos.co.il>
+ F:	board/solidrun/clearfog_gt_8k/
+ F:	configs/solidrun_clearfog_gt_8k_defconfig
+-- 
+2.37.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
