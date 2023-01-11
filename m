@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4534DC46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E986FC5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:24:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF9A240AAD;
-	Wed, 11 Jan 2023 09:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF9A240AAD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aTE1vpeirxh2; Wed, 11 Jan 2023 09:24:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3831740C81;
-	Wed, 11 Jan 2023 09:24:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3831740C81
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 65A401BF2B3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:24:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BE6441992
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:24:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BE6441992
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B99E41901;
+	Wed, 11 Jan 2023 09:24:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B99E41901
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bFZACTe547hf for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:24:06 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m7iH1BQfx-kT; Wed, 11 Jan 2023 09:24:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD8A741896;
+	Wed, 11 Jan 2023 09:24:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD8A741896
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A9BD1BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:24:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06F8860AD6
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:24:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06F8860AD6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kpoz_I7pJJ2i for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:24:52 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3650641901
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3650641901
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:24:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AAAD60A91
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3AAAD60A91
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:24:52 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5B79DE0007;
- Wed, 11 Jan 2023 09:24:04 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6F60324000A;
+ Wed, 11 Jan 2023 09:24:49 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pFXL1-001VEw-GM; Wed, 11 Jan 2023 10:24:03 +0100
+ id 1pFXLl-001VKf-EG; Wed, 11 Jan 2023 10:24:49 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
- <20230101233653.487175-23-ricardo.martincoski@gmail.com>
-Date: Wed, 11 Jan 2023 10:24:03 +0100
-In-Reply-To: <20230101233653.487175-23-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 1 Jan 2023 20:36:46 -0300")
-Message-ID: <874jsxifv0.fsf@dell.be.48ers.dk>
+ <20230101233653.487175-24-ricardo.martincoski@gmail.com>
+Date: Wed, 11 Jan 2023 10:24:49 +0100
+In-Reply-To: <20230101233653.487175-24-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sun, 1 Jan 2023 20:36:47 -0300")
+Message-ID: <87zgaph19a.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 22/29] package/rhash: drop dangling
- RHASH_ADDLDFLAGS
+Subject: Re: [Buildroot] [PATCH 23/29] package/swupdate: drop dangling
+ SWUPDATE_BUILD_CONFIG
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,8 +73,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > Commit "ead2afda13 package/rhash: bump version to 1.4.0" dropped the
- > only usage of this define but the define itself was left dangling.
+ > "6c63e4de4a boot/swupdate: don't specify .config to munge" dropped all
+ > usages of this define but the define itself was left dangling.
 
  > Drop it now.
 
