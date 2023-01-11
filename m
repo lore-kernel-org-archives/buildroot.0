@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 831CAC46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:34:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3769DC5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3659682093;
-	Wed, 11 Jan 2023 09:34:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3659682093
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3720820A3;
+	Wed, 11 Jan 2023 09:34:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3720820A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eAVq9e08rI3y; Wed, 11 Jan 2023 09:34:38 +0000 (UTC)
+	with ESMTP id bxmCK8mubWAI; Wed, 11 Jan 2023 09:34:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68C09813F9;
-	Wed, 11 Jan 2023 09:34:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68C09813F9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4FD941BF2B3
+	by smtp1.osuosl.org (Postfix) with ESMTP id EEC8C82093;
+	Wed, 11 Jan 2023 09:34:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEC8C82093
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 61A801BF95E
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72749402B8
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72749402B8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47ACD60B30
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47ACD60B30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pxju15XhgH6Q for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KocmUnR4E6iz for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67B14402ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id D1E9F60B25
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67B14402ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1E9F60B25
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65C50878DD; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+ id C0315878E3; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 08:11:33 +0100
+Date: Wed, 11 Jan 2023 10:22:21 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 15de6b689bb48a827f6f43d008223517f03da8b6
-X-Git-Newrev: 6fe6d31b0a07ee2e8d37f624d75c1166b9c08394
+X-Git-Oldrev: e5f0b65f1f5cdd060c9eee1ffcd3840586899730
+X-Git-Newrev: b6e119bb55303f132acdd5c524dc6f135a7a1099
 X-Patchwork-Hint: ignore
-Message-Id: <20230111093332.65C50878DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Revert "package/zip:
- install to staging"
+Message-Id: <20230111093332.C0315878E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/policycoreutils:
+ drop bogus INSTALL_TARGET_LINUX_PAM_CONFS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fe6d31b0a07ee2e8d37f624d75c1166b9c08394
+commit: https://git.buildroot.net/buildroot/commit/?id=b6e119bb55303f132acdd5c524dc6f135a7a1099
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This reverts commit c5b5b5ccabe35e11f0ca8db4361bb3f335fc59fb.
+Commit "cb328f77f8 policycoreutils: new package" added a define that is
+never called: POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS.
 
-Commit "c5b5b5ccab package/zip: install to staging" contains a typo that
-prevents installing to staging.
-ZIP_INSTALLING_STAGING_CMDS -> ZIP_INSTALL_STAGING_CMDS
+The build system from the package already install these files to target.
+So just drop the bogus define.
 
-But the package does not install headers or libraries, only ELF and
-manual files.
-So instead of fixing the install to staging, revert the bogus commit.
-
-Cc: Jan Pedersen <jp@jp-embedded.com>
+Cc: Clayton Shotwell <clayton.shotwell@collins.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 11614fdde1611f846b8e5d99f55af7c6c131b817)
+(cherry picked from commit 9a4e154c9c583e74846f7ec80ad01d78811722b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zip/zip.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/policycoreutils/policycoreutils.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/zip/zip.mk b/package/zip/zip.mk
-index 2d11e1c763..67958a4a66 100644
---- a/package/zip/zip.mk
-+++ b/package/zip/zip.mk
-@@ -11,7 +11,6 @@ ZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
- ZIP_LICENSE = Info-ZIP
- ZIP_LICENSE_FILES = LICENSE
- ZIP_CPE_ID_VENDOR = info-zip_project
--ZIP_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- ZIP_DEPENDENCIES += bzip2
-@@ -41,11 +40,6 @@ define ZIP_INSTALL_TARGET_CMDS
- 		prefix=$(TARGET_DIR)/usr
- endef
- 
--define ZIP_INSTALLING_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install \
--		prefix=$(STAGING_DIR)/usr
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 60575ac644..8505dbca3f 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -16,10 +16,6 @@ POLICYCOREUTILS_MAKE_OPTS = LDLIBS=$(TARGET_NLS_LIBS)
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ POLICYCOREUTILS_DEPENDENCIES += linux-pam
+ POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
+-define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
+-	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
+-	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
 -endef
--
- define HOST_ZIP_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
- 		CFLAGS="$(HOST_CFLAGS) $(ZIP_CFLAGS)" \
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
