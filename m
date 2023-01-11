@@ -4,48 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32291C46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 19:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7364C46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 21:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4C0841822;
-	Wed, 11 Jan 2023 19:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4C0841822
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0469D4189C;
+	Wed, 11 Jan 2023 21:22:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0469D4189C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rUNoAAgIXYvC; Wed, 11 Jan 2023 19:47:26 +0000 (UTC)
+	with ESMTP id nEs7I2YYensU; Wed, 11 Jan 2023 21:22:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE51E4189F;
-	Wed, 11 Jan 2023 19:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE51E4189F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7FB171BF3ED
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 19:47:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3301418A0;
+	Wed, 11 Jan 2023 21:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3301418A0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E4E9A1BF2A3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 21:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66CC940C39
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 19:46:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66CC940C39
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF66A418A0
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 21:22:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF66A418A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZiICe05nFWyG for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 19:46:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uk_PNEvVR34t for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 21:22:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83B73402BC
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 19:46:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83B73402BC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E5964189C
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 21:22:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E5964189C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72AEC8794B; Wed, 11 Jan 2023 19:46:58 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2932687957; Wed, 11 Jan 2023 21:22:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 20:40:00 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b9026d539e0f7e928c2b382ee49220e5ef353eed
-X-Git-Newrev: 847c45a8d3c7d181e95abf44cb9dc440c8642f79
+Date: Wed, 11 Jan 2023 22:21:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ac2b26fba2ad06fadf14244505319dc5c272906c
+X-Git-Newrev: fce9f0eea00ed9aaeca12c1529ea380617baa477
 X-Patchwork-Hint: ignore
-Message-Id: <20230111194658.72AEC8794B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/tiff: fix host
- package
+Message-Id: <20230111212235.2932687957@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website: update sponsors.html page
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,70 +55,145 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=847c45a8d3c7d181e95abf44cb9dc440c8642f79
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fce9f0eea00ed9aaeca12c1529ea380617baa477
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable webp and zstd on host package to avoid the following build
-failure with host-gdk-pixbuf raised since bump to version 4.5.0 in
-commit 5b62ea01369b11f5a4320bb2c909168b21c2642c:
+- Thank Smile for sponsoring the Buildroot Developers Meeting of
+  February 2023 by providing the meeting room
 
-Run-time dependency libtiff-4 found: NO (tried cmake)
+- Thank Armadeus and Logilin for their financial sponsoring in 2022
 
-../output-1/build/host-gdk-pixbuf-2.42.10/meson.build:330:2: ERROR: Dependency lookup for libtiff-4 with method 'pkgconfig' failed: Could not generate cargs for libtiff-4:
-Package libwebp was not found in the pkg-config search path.
-Perhaps you should add the directory containing `libwebp.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'libwebp', required by 'libtiff-4', not found
+- Move older sponsors to the "Past sponsors" section
 
-[...]
+- Remove section about the Buildroot.org domain sponsor, as that
+  sponsoring ended in 2019.
 
-Run-time dependency libtiff-4 found: NO (tried cmake)
-
-../output-1/build/host-gdk-pixbuf-2.42.10/meson.build:330:2: ERROR: Dependency lookup for libtiff-4 with method 'pkgconfig' failed: Could not generate cargs for libtiff-4:
-Package libzstd was not found in the pkg-config search path.
-Perhaps you should add the directory containing `libzstd.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'libzstd', required by 'libtiff-4', not found
-
-While at it, also disable libdeflate even if no build failures are
-raised by autobuilders
-
-Fixes:
- - http://autobuild.buildroot.org/results/320083dfec4d126043b036cbaec7c7b85069a50a
- - http://autobuild.buildroot.org/results/8ff1cfa254920749a43e235c4084b8524d0edf6f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 84e52a60b4044d3c54d6d4be5729a6d30aaf5aee)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tiff/tiff.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ docs/website/images/armadeus-systems-logo.png | Bin 0 -> 43363 bytes
+ docs/website/sponsors.html                    |  69 +++++++++++++++++---------
+ 2 files changed, 46 insertions(+), 23 deletions(-)
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 4d3c90f956..ac34e300a9 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -27,9 +27,12 @@ HOST_TIFF_CONF_OPTS = \
- 	--disable-cxx \
- 	--without-x \
- 	--disable-zlib \
-+	--disable-libdeflate \
- 	--disable-lzma \
- 	--disable-jpeg \
--	--disable-tests
-+	--disable-tests \
-+	--disable-webp \
-+	--disable-zstd
- HOST_TIFF_DEPENDENCIES = host-pkgconf
+diff --git a/docs/website/images/armadeus-systems-logo.png b/docs/website/images/armadeus-systems-logo.png
+new file mode 100644
+index 0000000000..9b6080fb13
+Binary files /dev/null and b/docs/website/images/armadeus-systems-logo.png differ
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index 2f3f6309ae..9c17bed0c7 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -9,18 +9,40 @@
+     <div class="panel-body">
  
- ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
+       <div class="row">
++
+ 	<div class="col-sm-4">
+ 	  <div class="panel panel-default panel-sponsor">
+ 	    <div class="panel-body">
+ 	      <div class="col-sm-12" style="height: 150px;">
+-		<a href="https://www.tap2open.com">
+-		  <img class="img-responsive center-block" src="images/tap2open-logo.png"/>
++		<a href="https://www.smile.eu">
++		  <img class="img-responsive center-block" src="images/smile-logo.png"/>
+ 		</a>
+ 	      </div>
+ 	      <div class="col-sm-12" style="height: 150px;">
+-	        <a href="https://www.tap2open.com">Tap2Open</a>
+-	        financially sponsored the <a href="/association.html">Buildroot Association</a>
+-	        in 2020.</div>
++		<a href="http://www.smile.eu">Smile</a> sponsored the
++		Buildroot project by hosting
++		the <a href="https://elinux.org/Buildroot:DeveloperDaysFOSDEM2023">Buildroot
++		Developers Meeting of February 2023</a> in Brussels,
++		after the FOSDEM
++		<a href="https://www.fosdem.org">conference</a>.
++	      </div>
++	    </div>
++	  </div>
++	</div>
++
++	<div class="col-sm-4">
++	  <div class="panel panel-default panel-sponsor">
++	    <div class="panel-body">
++	      <div class="col-sm-12" style="height: 180px;">
++		<a href="http://www.opossom.com/english/index.html">
++		  <img class="img-responsive center-block" src="images/armadeus-systems-logo.png"/>
++		</a>
++	      </div>
++	      <div class="col-sm-12" style="height: 150px;">
++		<a href="http://www.opossom.com/english/index.html">Armadeus
++		Systems</a> financially sponsored
++		the <a href="/association.html">Buildroot
++		Association</a> in 2022.</div>
+ 	    </div>
+ 	  </div>
+ 	</div>
+@@ -36,7 +58,7 @@
+ 	      <div class="col-sm-12" style="height: 150px;">
+ 		<a href="http://www.logilin.fr">Logilin</a>
+ 		financially sponsored the <a href="/association.html">Buildroot Association</a>
+-		in 2020.</div>
++		in 2022.</div>
+ 	    </div>
+ 	  </div>
+ 	</div>
+@@ -44,23 +66,6 @@
+     </div>
+     </div>
+ 
+-  <div class="panel panel-primary">
+-    <div class="panel-heading">Sponsor of the Buildroot.org domain</div>
+-    <div class="panel-body">
+-      <div class="col-sm-6">
+-	<p>The Buildroot community would like to thank
+-          <a href="http://www.zillabit.com/">Zillabit</a> for
+-	  donating the <b>buildroot.org</b> domain name and sponsoring
+-	  the registration fees 2009 - 2019.</p>
+-       </div>
+-      <div class="col-sm-6">
+-	<a href="http://www.zillabit.com">
+-	  <img class="img-responsive center-block" src="images/zillabit-logo.png"/>
+-	</a>
+-      </div>
+-    </div>
+-  </div>
+-
+   <div class="panel panel-primary">
+     <div class="panel-heading">Past sponsors</div>
+     <div class="panel-body">
+@@ -343,6 +348,24 @@
+ 	</div>
+       </div>
+ 
++      <div class="row">
++	<div class="col-sm-4">
++	  <div class="panel panel-default panel-sponsor">
++	    <div class="panel-body">
++	      <div class="col-sm-12" style="height: 150px;">
++		<a href="https://www.tap2open.com">
++		  <img class="img-responsive center-block" src="images/tap2open-logo.png"/>
++		</a>
++	      </div>
++	      <div class="col-sm-12" style="height: 150px;">
++	        <a href="https://www.tap2open.com">Tap2Open</a>
++	        financially sponsored the <a href="/association.html">Buildroot Association</a>
++	        in 2020.</div>
++	    </div>
++	  </div>
++	</div>
++      </div>
++
+     </div>
+   </div>
+ </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
