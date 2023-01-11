@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 955A9C46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3AF3C5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CAE882034;
-	Wed, 11 Jan 2023 09:27:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CAE882034
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9758060B3D;
+	Wed, 11 Jan 2023 09:27:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9758060B3D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LFsqr_ZL43UR; Wed, 11 Jan 2023 09:27:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J6aCOWyDd9aG; Wed, 11 Jan 2023 09:27:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9813581EAA;
-	Wed, 11 Jan 2023 09:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9813581EAA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0EAC11BF95E
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9E4660B43;
+	Wed, 11 Jan 2023 09:27:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9E4660B43
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 439B31BF95E
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6414C408EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3A8660B3D
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6414C408EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3A8660B3D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wY7t_FD9Vr7e for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rwf8qPH9LLxO for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 722CB40C61
+ by smtp3.osuosl.org (Postfix) with ESMTP id D475860B45
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 722CB40C61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D475860B45
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 615698781C; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+ id D164E87815; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Jan 2023 22:48:58 +0100
+Date: Wed, 11 Jan 2023 10:17:20 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 536d5c7792dd2881f6f08f0894dafabb8e6bf78c
-X-Git-Newrev: 1d043ccba9a09fbebc9d288f970368242a8fa7c4
+X-Git-Oldrev: aee0b26141f748609ccd140c7ffc23782b27ce1d
+X-Git-Newrev: 5113d1890e4cf12e095aa3ff87f8a3b181bdce61
 X-Patchwork-Hint: ignore
-Message-Id: <20230111092533.615698781C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/ima-evm-utils:
- really install to staging
+Message-Id: <20230111092533.D164E87815@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/exfat: drop
+ dangling EXFAT_CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d043ccba9a09fbebc9d288f970368242a8fa7c4
+commit: https://git.buildroot.net/buildroot/commit/?id=5113d1890e4cf12e095aa3ff87f8a3b181bdce61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Commit "8229196d41 package/ima-evm-utils: new package" added
-IMA_EVM_UTILS_INSTALL_STAGING_CMDS without enabling
-IMA_EVM_UTILS_INSTALL_STAGING, so currently the package is not installed
-to staging.
+Commit "98538bb0a2 exfat: bump to version 1.2.1" changed the package
+infra from generic to autotools, but dropped all usages of EXFAT_CFLAGS.
+This config is ignored by autotools package infra.
 
-Enable installing to staging.
+So drop the dangling symbol.
 
-Cc: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ee73336da98a7de04301a90c9b5a881761274a47)
+(cherry picked from commit fbbbe50173ed4b3ef3323cc7df6c90e0d63678d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ima-evm-utils/ima-evm-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/exfat/exfat.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-index 7ee34d5e1a..01984402ce 100644
---- a/package/ima-evm-utils/ima-evm-utils.mk
-+++ b/package/ima-evm-utils/ima-evm-utils.mk
-@@ -8,6 +8,7 @@ IMA_EVM_UTILS_VERSION = 1.4
- IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
- IMA_EVM_UTILS_LICENSE = GPL-2.0
- IMA_EVM_UTILS_LICENSE_FILES = COPYING
-+IMA_EVM_UTILS_INSTALL_STAGING = YES
- IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl tpm2-tss
+diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
+index 282a30aa5e..c0ef77a113 100644
+--- a/package/exfat/exfat.mk
++++ b/package/exfat/exfat.mk
+@@ -11,7 +11,6 @@ EXFAT_DEPENDENCIES = libfuse host-pkgconf
+ EXFAT_LICENSE = GPL-2.0+
+ EXFAT_LICENSE_FILES = COPYING
+ EXFAT_CPE_ID_VENDOR = exfat_project
+-EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
  
- # Tarball doesn't contain configure
+ EXFAT_CONF_OPTS += --exec-prefix=/
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
