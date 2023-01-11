@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E986FC5479D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F93EC46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B99E41901;
-	Wed, 11 Jan 2023 09:24:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B99E41901
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE12240494;
+	Wed, 11 Jan 2023 09:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE12240494
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m7iH1BQfx-kT; Wed, 11 Jan 2023 09:24:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kjF0lVZDtxqv; Wed, 11 Jan 2023 09:25:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD8A741896;
-	Wed, 11 Jan 2023 09:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD8A741896
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E98040134;
+	Wed, 11 Jan 2023 09:25:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E98040134
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2A9BD1BF2B3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:24:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0B8811BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06F8860AD6
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:24:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06F8860AD6
+ by smtp3.osuosl.org (Postfix) with ESMTP id DBCD160AD6
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBCD160AD6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kpoz_I7pJJ2i for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:24:52 +0000 (UTC)
+ with ESMTP id nRX7Gf-rylLf for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:25:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AAAD60A91
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3AAAD60A91
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FFE560A91
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0FFE560A91
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:19 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6F60324000A;
- Wed, 11 Jan 2023 09:24:49 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id C88C1C0006;
+ Wed, 11 Jan 2023 09:25:17 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pFXLl-001VKf-EG; Wed, 11 Jan 2023 10:24:49 +0100
+ id 1pFXMD-001VOO-05; Wed, 11 Jan 2023 10:25:17 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
- <20230101233653.487175-24-ricardo.martincoski@gmail.com>
-Date: Wed, 11 Jan 2023 10:24:49 +0100
-In-Reply-To: <20230101233653.487175-24-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 1 Jan 2023 20:36:47 -0300")
-Message-ID: <87zgaph19a.fsf@dell.be.48ers.dk>
+ <20230101233653.487175-25-ricardo.martincoski@gmail.com>
+Date: Wed, 11 Jan 2023 10:25:16 +0100
+In-Reply-To: <20230101233653.487175-25-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sun, 1 Jan 2023 20:36:48 -0300")
+Message-ID: <87v8ldh18j.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 23/29] package/swupdate: drop dangling
- SWUPDATE_BUILD_CONFIG
+Subject: Re: [Buildroot] [PATCH 24/29] package/wpa_supplicant: drop dangling
+ WPA_SUPPLICANT_{LDFLAGS, MAKE_ENV}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -73,11 +74,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > "6c63e4de4a boot/swupdate: don't specify .config to munge" dropped all
- > usages of this define but the define itself was left dangling.
+ > Commit "0340b45da0 wpa_supplicant: bump to version 1.0" from 2012
+ > converted the package to use the generic infra, but added a bogus
+ > WPA_SUPPLICANT_LDFLAGS end left a dangling WPA_SUPPLICANT_MAKE_ENV.
 
- > Drop it now.
+ > Drop the symbols that are not used since 2012.
 
+ > Cc: Matt Weber <matthew.weber@collins.com>
+ > Cc: Sergey Matyukevich <geomatsi@gmail.com>
+ > Cc: Yegor Yefremov <yegorslists@googlemail.com>
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Committed to 2022.11.x and 2022.02.x, thanks.
