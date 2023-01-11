@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0F4EC5479D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 19:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C516C54EBC
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 19:45:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 619D581F50;
-	Wed, 11 Jan 2023 19:45:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 619D581F50
+	by smtp2.osuosl.org (Postfix) with ESMTP id B020D40FF8;
+	Wed, 11 Jan 2023 19:45:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B020D40FF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b0JVG038CD2J; Wed, 11 Jan 2023 19:45:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LMGFiCxFylCU; Wed, 11 Jan 2023 19:45:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B858D81F7D;
-	Wed, 11 Jan 2023 19:45:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B858D81F7D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 90D9A1BF3ED
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BA27405A7;
+	Wed, 11 Jan 2023 19:45:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BA27405A7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B9E581BF95F
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 19:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6CBEE81F71
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93A624189F
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 19:45:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CBEE81F71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93A624189F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TML-2J5DhO0h for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YVKzpLZGzfBn for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 19:45:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 99FE581F50
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92F3041822
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 19:45:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99FE581F50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92F3041822
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 887C08793B; Wed, 11 Jan 2023 19:45:38 +0000 (UTC)
+ id 7E8848793A; Wed, 11 Jan 2023 19:45:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 20:41:39 +0100
+Date: Wed, 11 Jan 2023 20:41:31 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: c8a13976a964414eaa3307220a1e2a58a40d4277
-X-Git-Newrev: 4b0c6e11cf60dc5159058488a0f3471b36ad25cc
+X-Git-Oldrev: 06a7edb417dfcba5059223c404a9e056a53fb3d2
+X-Git-Newrev: c8a13976a964414eaa3307220a1e2a58a40d4277
 X-Patchwork-Hint: ignore
-Message-Id: <20230111194538.887C08793B@busybox.osuosl.org>
+Message-Id: <20230111194538.7E8848793A@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.11.x] package/wireshark: add
- minizip-zlib optional dependency
+ zlib optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b0c6e11cf60dc5159058488a0f3471b36ad25cc
+commit: https://git.buildroot.net/buildroot/commit/?id=c8a13976a964414eaa3307220a1e2a58a40d4277
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-minizip-zlib is an optional dependency which is enabled by default since
-version 3.1.0 and
-https://github.com/wireshark/wireshark/commit/390071ed0bc8aaf378c3468989ccde1c93817542
+zlib is an optional dependency which is enabled by default since at
+least version 1.8.0 and
+https://github.com/wireshark/wireshark/commit/7133f6944dc26740f5ebf56c2ca33be86a6e0f09
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8702cecb142e42c6fd522d8256732ec54bab1711)
+(cherry picked from commit e6365126e731a1d0bf40eea91cb51b98b6918ecf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/wireshark/wireshark.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
 diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index f7fd72558e..c1efef2280 100644
+index 5da344fc55..f7fd72558e 100644
 --- a/package/wireshark/wireshark.mk
 +++ b/package/wireshark/wireshark.mk
-@@ -115,6 +115,13 @@ else
- WIRESHARK_CONF_OPTS += -DENABLE_LZ4=OFF
+@@ -157,6 +157,13 @@ else
+ WIRESHARK_CONF_OPTS += -DBUILD_sdjournal=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_MINIZIP_ZLIB),y)
-+WIRESHARK_CONF_OPTS += -DENABLE_MINIZIP=ON
-+WIRESHARK_DEPENDENCIES += minizip-zlib
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++WIRESHARK_CONF_OPTS += -DENABLE_ZLIB=ON
++WIRESHARK_DEPENDENCIES += zlib
 +else
-+WIRESHARK_CONF_OPTS += -DENABLE_MINIZIP=OFF
++WIRESHARK_CONF_OPTS += -DENABLE_ZLIB=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_NGHTTP2),y)
- WIRESHARK_CONF_OPTS += -DENABLE_NGHTTP2=ON
- WIRESHARK_DEPENDENCIES += nghttp2
+ ifeq ($(BR2_PACKAGE_ZSTD),y)
+ WIRESHARK_CONF_OPTS += -DENABLE_ZSTD=ON
+ WIRESHARK_DEPENDENCIES += zstd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
