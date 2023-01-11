@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D501C5479D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:35:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E47CCC46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A700440C81;
-	Wed, 11 Jan 2023 09:35:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A700440C81
+	by smtp1.osuosl.org (Postfix) with ESMTP id 995DD820B5;
+	Wed, 11 Jan 2023 09:35:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 995DD820B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RtBx17I4TZpP; Wed, 11 Jan 2023 09:35:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6YlWPUpYUYMz; Wed, 11 Jan 2023 09:35:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E443940C61;
-	Wed, 11 Jan 2023 09:35:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E443940C61
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0D5F91BF95E
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC739813CA;
+	Wed, 11 Jan 2023 09:35:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC739813CA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F24FD1BF2B3
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A922D402ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E9AB40494
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A922D402ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E9AB40494
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9VyJmR2Y_mfJ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q3zPIlBAMMhp for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FC3A40320
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73A2D40526
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FC3A40320
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73A2D40526
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DD7F878DD; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+ id 71F07878DE; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 10:16:12 +0100
+Date: Wed, 11 Jan 2023 10:16:09 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 1db2b582c380a09c526bfcd51794352af3b191cf
-X-Git-Newrev: 5c880044aeb5af01fe7b7554da2c0f3584c535fd
+X-Git-Oldrev: 6fe6d31b0a07ee2e8d37f624d75c1166b9c08394
+X-Git-Newrev: 1db2b582c380a09c526bfcd51794352af3b191cf
 X-Patchwork-Hint: ignore
-Message-Id: <20230111093332.7DD7F878DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/sqlite: security
- bump to version 3.40.1
+Message-Id: <20230111093332.71F07878DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/sqlite: bump
+ version to 3.40.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,22 +63,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c880044aeb5af01fe7b7554da2c0f3584c535fd
+commit: https://git.buildroot.net/buildroot/commit/?id=1db2b582c380a09c526bfcd51794352af3b191cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes the following security issues:
-
-CVE-2022-46908: SQLite through 3.40.0, when relying on --safe for execution
-of an untrusted CLI script, does not properly implement the
-azProhibitedFunctions protection mechanism, and instead allows UDF functions
-such as WRITEFILE.
-
-Release notes: https://sqlite.org/releaselog/3_40_1.html
+Release notes: https://sqlite.org/releaselog/3_40_0.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: mark as security bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 99b3ea44295a2ec3aa841f83d81c9231f89cb6e5)
+(cherry picked from commit a182f3a7edcaf771d350604abc132e157b47f7ee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/sqlite/sqlite.hash | 2 +-
@@ -86,26 +78,26 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index ea4e30a463..36f6907fbc 100644
+index 936f42e8e9..ea4e30a463 100644
 --- a/package/sqlite/sqlite.hash
 +++ b/package/sqlite/sqlite.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  0333552076d2700c75352256e91c78bf5cd62491589ba0c69aed0a81868980e7  sqlite-autoconf-3400000.tar.gz
-+sha256  2c5dea207fa508d765af1ef620b637dcb06572afa6f01f0815bd5bbf864b33d9  sqlite-autoconf-3400100.tar.gz
+-sha256  f31d445b48e67e284cf206717cc170ab63cbe4fd7f79a82793b772285e78fdbb  sqlite-autoconf-3390400.tar.gz
++sha256  0333552076d2700c75352256e91c78bf5cd62491589ba0c69aed0a81868980e7  sqlite-autoconf-3400000.tar.gz
  sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
 diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 9d0b60ab59..789eddfa0a 100644
+index 4f4164c374..9d0b60ab59 100644
 --- a/package/sqlite/sqlite.mk
 +++ b/package/sqlite/sqlite.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3.40.0
--SQLITE_TAR_VERSION = 3400000
-+SQLITE_VERSION = 3.40.1
-+SQLITE_TAR_VERSION = 3400100
+-SQLITE_VERSION = 3.39.4
+-SQLITE_TAR_VERSION = 3390400
++SQLITE_VERSION = 3.40.0
++SQLITE_TAR_VERSION = 3400000
  SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
  SQLITE_SITE = https://www.sqlite.org/2022
  SQLITE_LICENSE = Public domain
