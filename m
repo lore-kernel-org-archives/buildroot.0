@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C7F2C46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E57DC46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:37:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA19F60DB2;
-	Wed, 11 Jan 2023 09:37:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA19F60DB2
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7A2A8206B;
+	Wed, 11 Jan 2023 09:37:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7A2A8206B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AOWTCCpAxwha; Wed, 11 Jan 2023 09:37:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f69n4JlgO4IM; Wed, 11 Jan 2023 09:37:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E91036107F;
-	Wed, 11 Jan 2023 09:37:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E91036107F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 407E88208D;
+	Wed, 11 Jan 2023 09:37:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 407E88208D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5F0DD1BF2B3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6FE771BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77C8A402E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2F4140306
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:33:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77C8A402E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2F4140306
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FOiroWiVkN5A for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+ with ESMTP id zS4t4oMLuKLH for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:33:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B9CC40306
+ by smtp4.osuosl.org (Postfix) with ESMTP id E40D5403A8
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B9CC40306
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E40D5403A8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 595C3878E0; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
+ id D414E878DE; Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 08:09:51 +0100
+Date: Wed, 11 Jan 2023 10:23:54 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: acbedb79c779ff85b0c12d278ef6d820483445fa
-X-Git-Newrev: 15de6b689bb48a827f6f43d008223517f03da8b6
+X-Git-Oldrev: 12681ecacf5945d61e6b685417e682ddf856e960
+X-Git-Newrev: 1eef77e582490e164db75ac007fb32bfa2fc0e0a
 X-Patchwork-Hint: ignore
-Message-Id: <20230111093332.595C3878E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Revert "pptp-linux: fix
- build with high BR2_JLEVEL settings"
+Message-Id: <20230111093332.D414E878DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rhash: drop
+ dangling RHASH_ADDLDFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15de6b689bb48a827f6f43d008223517f03da8b6
+commit: https://git.buildroot.net/buildroot/commit/?id=1eef77e582490e164db75ac007fb32bfa2fc0e0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This reverts commit ffc4afe084a76e7246bd373c73b706f512a86c2b.
+Commit "ead2afda13 package/rhash: bump version to 1.4.0" dropped the
+only usage of this define but the define itself was left dangling.
 
-Commit from 2012 "ffc4afe084 pptp-linux: fix build with high BR2_JLEVEL
-settings" added <pkg>_MAKE to a generic package, but the generic infra
-does not take this symbol into account.
-
-The build issue was fixed in 2013 with commit "a5b8081b89 pptp-linux:
-fix parallel build" by adding a patch file.
-
-So drop the bogus PPTP_LINUX_MAKE.
+Drop it now.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c4ce9d01c4244252e18302aa97653e573359dba6)
+(cherry picked from commit eae97036f34e69e2ca197cd31fd87c673f2ebe37)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pptp-linux/pptp-linux.mk | 1 -
+ package/rhash/rhash.mk | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
-index 7fd0733977..b6c740e710 100644
---- a/package/pptp-linux/pptp-linux.mk
-+++ b/package/pptp-linux/pptp-linux.mk
-@@ -7,7 +7,6 @@
- PPTP_LINUX_VERSION = 1.10.0
- PPTP_LINUX_SITE = http://downloads.sourceforge.net/project/pptpclient/pptp/pptp-$(PPTP_LINUX_VERSION)
- PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
--PPTP_LINUX_MAKE = $(MAKE1)
- PPTP_LINUX_LICENSE = GPL-2.0+
- PPTP_LINUX_LICENSE_FILES = COPYING
+diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
+index 02af0aa57b..77011f3833 100644
+--- a/package/rhash/rhash.mk
++++ b/package/rhash/rhash.mk
+@@ -12,7 +12,6 @@ RHASH_LICENSE_FILES = COPYING
+ RHASH_CPE_ID_VENDOR = rhash_project
+ RHASH_INSTALL_STAGING = YES
+ RHASH_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+-RHASH_ADDLDFLAGS = $(TARGET_NLS_LIBS)
  
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ RHASH_CONF_OPTS += --enable-gettext
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
