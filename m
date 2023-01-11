@@ -4,49 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EEB9C46467
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F0A4C46467
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:31:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 413DD417D4;
-	Wed, 11 Jan 2023 09:31:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 413DD417D4
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4D6D404F7;
+	Wed, 11 Jan 2023 09:31:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4D6D404F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l95jFqsKp0ba; Wed, 11 Jan 2023 09:31:12 +0000 (UTC)
+	with ESMTP id z5N4M3TaF9T8; Wed, 11 Jan 2023 09:31:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0379341758;
-	Wed, 11 Jan 2023 09:31:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0379341758
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 145C41BF2B3
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A313141758;
+	Wed, 11 Jan 2023 09:31:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A313141758
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 123291BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:31:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E06F740494
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E06F740494
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED5DB404F7
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:31:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED5DB404F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JSa3Y4MJ6SmB for <buildroot@lists.busybox.net>;
- Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E671140C83
- for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E671140C83
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DFEAE87818; Wed, 11 Jan 2023 09:25:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VOmCkdlGgKC2 for <buildroot@lists.busybox.net>;
+ Wed, 11 Jan 2023 09:31:16 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AD164021D
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0AD164021D
+ for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:31:15 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 092FA1BF20E;
+ Wed, 11 Jan 2023 09:31:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pFXRx-001Vjp-5Y; Wed, 11 Jan 2023 10:31:13 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 10:17:28 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 5113d1890e4cf12e095aa3ff87f8a3b181bdce61
-X-Git-Newrev: 63758bfed67325590c6c5a58e2f36748eacb83c1
-X-Patchwork-Hint: ignore
-Message-Id: <20230111092533.DFEAE87818@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- package/falcosecurity-libs: drop bogus
- FALCOSECURITY_LIBS_SUPPORTS_IN_SOURCE_BUILD
+To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
+ <20230101233653.487175-14-ricardo.martincoski@gmail.com>
+Date: Wed, 11 Jan 2023 10:31:13 +0100
+In-Reply-To: <20230101233653.487175-14-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sun, 1 Jan 2023 20:36:37 -0300")
+Message-ID: <87r0w1h0ym.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 13/29] package/checkpolicy: drop bogus
+ CHECKPOLICY_STAGING_CMDS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +65,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63758bfed67325590c6c5a58e2f36748eacb83c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
-Commit "a15e35c4eb falcosecurity-libs: add new package" uses the infras
-kernel-module and generic-package. Neither of them support
-<pkg>_SUPPORTS_IN_SOURCE_BUILD, only the CMake infra does.
+ > Commit "b06110621d checkpolicy: allow compiling for target" contains a
+ > typo that prevents installing to staging. It also forgot to enable
+ > CHECKPOLICY_INSTALL_STAGING.
 
-So drop the bogus symbol.
+ > But the package does not install headers or libraries, only ELF and
+ > manual files.
+ > So instead of fixing the install to staging, drop the bogus
+ > CHECKPOLICY_STAGING_CMDS.
 
-Cc: Francis Laniel <flaniel@linux.microsoft.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cbb6a55e6e03ea0b4e0a9b744f289e11da963c62)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/falcosecurity-libs/falcosecurity-libs.mk | 1 -
- 1 file changed, 1 deletion(-)
+ > Cc: Clayton Shotwell <clayton.shotwell@collins.com>
+ > Cc: Matt Weber <matthew.weber@collins.com>
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk b/package/falcosecurity-libs/falcosecurity-libs.mk
-index f2c389948f..92d5c61832 100644
---- a/package/falcosecurity-libs/falcosecurity-libs.mk
-+++ b/package/falcosecurity-libs/falcosecurity-libs.mk
-@@ -9,7 +9,6 @@ FALCOSECURITY_LIBS_SITE = $(call github,falcosecurity,libs,$(FALCOSECURITY_LIBS_
- FALCOSECURITY_LIBS_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
- FALCOSECURITY_LIBS_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
- FALCOSECURITY_LIBS_CPE_ID_VENDOR = falco
--FALCOSECURITY_LIBS_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- FALCOSECURITY_LIBS_DEPENDENCIES = \
- 	c-ares \
+Committed to 2022.11.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
