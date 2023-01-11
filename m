@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 188F4C5479D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:30:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE8CC5479D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Jan 2023 09:30:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBCAD40350;
-	Wed, 11 Jan 2023 09:30:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBCAD40350
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB29C40526;
+	Wed, 11 Jan 2023 09:30:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB29C40526
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 63981v0eAcFj; Wed, 11 Jan 2023 09:30:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id krNM80UuqKJY; Wed, 11 Jan 2023 09:30:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4A6C4021D;
-	Wed, 11 Jan 2023 09:30:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4A6C4021D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FB661BF2B3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 20A9740494;
+	Wed, 11 Jan 2023 09:30:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20A9740494
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F77F1BF95E
  for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A75660B2A
- for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A75660B2A
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6377408C9
+ for <buildroot@lists.busybox.net>; Wed, 11 Jan 2023 09:25:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6377408C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WwCt6umkWp1C for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iNesNUK-huW3 for <buildroot@lists.busybox.net>;
  Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F71760B30
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D49340C87
  for <buildroot@buildroot.org>; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F71760B30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D49340C87
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B82587815; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
+ id 0A60887817; Wed, 11 Jan 2023 09:25:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 10:24:40 +0100
+Date: Wed, 11 Jan 2023 10:18:41 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 435e194e35633dcc8fb31d89edadfb9a59e4b550
-X-Git-Newrev: 939422679a58e3814941c88a245aeda8c99a38c9
+X-Git-Oldrev: 8ec1504f59847d66c0db6b574c8a63ab69cba933
+X-Git-Newrev: a20aac2777cf68831655f1c31de511372d25d8df
 X-Patchwork-Hint: ignore
-Message-Id: <20230111092534.6B82587815@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/swupdate: drop
- dangling SWUPDATE_BUILD_CONFIG
+Message-Id: <20230111092534.0A60887817@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x]
+ package/gobject-introspection: drop bogus GOBJECT_INTROSPECTION_AUTORECONF
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=939422679a58e3814941c88a245aeda8c99a38c9
+commit: https://git.buildroot.net/buildroot/commit/?id=a20aac2777cf68831655f1c31de511372d25d8df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-"6c63e4de4a boot/swupdate: don't specify .config to munge" dropped all
-usages of this define but the define itself was left dangling.
+Commit "7687a396e8 package/gobject-introspection: new package" added the
+package using the meson infra for both target and host variants.
 
-Drop it now.
+Meson infra does not support <pkg>_AUTORECONF.
+
+So drop the bogus symbol.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ca5cd8d67554c568daee4da1f058bcf3b35b2976)
+(cherry picked from commit ec6e8c632bf372c1fad7889ca6323166b90e1599)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/gobject-introspection/gobject-introspection.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index ed0c1e56a8..af5db290b8 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -207,8 +207,6 @@ define SWUPDATE_SET_WEBSERVER
- endef
- endif
- 
--SWUPDATE_BUILD_CONFIG = $(@D)/.config
--
- SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
- SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index c8ad9b3c72..0d8c666ba1 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -9,7 +9,6 @@ GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
+ GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
+ GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
+ GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
+-GOBJECT_INTROSPECTION_AUTORECONF = YES
+ GOBJECT_INTROSPECTION_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-2-Clause
+ GOBJECT_INTROSPECTION_LICENSE_FILES = COPYING.LGPL COPYING.GPL giscanner/scannerlexer.l
  
 _______________________________________________
 buildroot mailing list
