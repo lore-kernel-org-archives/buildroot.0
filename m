@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E99E4C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA703C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 957CB4F466;
-	Tue, 21 Feb 2023 00:34:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 957CB4F466
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A4D14F47A;
+	Tue, 21 Feb 2023 00:34:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A4D14F47A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zbr6Dujhnf_T; Tue, 21 Feb 2023 00:34:34 +0000 (UTC)
+	with ESMTP id 5Z5s0qrIZDV7; Tue, 21 Feb 2023 00:34:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EA204F463;
-	Tue, 21 Feb 2023 00:34:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EA204F463
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E059B1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DE644F45D;
+	Tue, 21 Feb 2023 00:34:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DE644F45D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BB5141BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C105417EE
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C105417EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5A926FB62
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5A926FB62
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jQp03ujLVAcT for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wKGbM-U5tXmn for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 327AB4159A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 327AB4159A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 319A76FB58
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 319A76FB58
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2CE348648F; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+ id 2167886495; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 22:57:06 +0100
+Date: Thu, 12 Jan 2023 20:17:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a016b693f7830f3c8ae815851d3204b8b6e99821
-X-Git-Newrev: bed21bb9b462bece7cd1b9741643aa553ced4d35
+X-Git-Oldrev: 3c21710040224448d71d4417e166cdd2c7f6a06b
+X-Git-Newrev: e3842ca3c66c6368fd13a7329a518c4d02b1beb6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205254.2CE348648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/xz: fix microblaze
- compiles
+Message-Id: <20230220205230.2167886495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/chiliboard: bump linux
+ to 6.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,96 +57,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bed21bb9b462bece7cd1b9741643aa553ced4d35
+commit: https://git.buildroot.net/buildroot/commit/?id=e3842ca3c66c6368fd13a7329a518c4d02b1beb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Patch xz to check if __attribute__((symver ..)) is supported via a
-compile check during configure.
-
-Fixes:
-  http://autobuild.buildroot.org/results/c0d/c0de72e5a34b379e0c516ad08984bb2c4b0abb5c//
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xz/0001-Detect-symver-attribute-support.patch  | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ configs/grinn_chiliboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xz/0001-Detect-symver-attribute-support.patch b/package/xz/0001-Detect-symver-attribute-support.patch
-new file mode 100644
-index 0000000000..9ec43ea7a0
---- /dev/null
-+++ b/package/xz/0001-Detect-symver-attribute-support.patch
-@@ -0,0 +1,61 @@
-+From 231add523328ad9e021d8f2b02697b6a11719430 Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <vfazio@gmail.com>
-+Date: Tue, 7 Feb 2023 08:51:24 -0600
-+Subject: [PATCH] Detect symver attribute support
-+
-+On non-ELF platforms, such as microblaze, builds will fail when trying
-+to add symver information because  __attribute__((symver ..)) is not
-+supported even though __has_attribute(__symver__) returns true.
-+
-+Support for symver needs to be detected via a compile test since
-+__has_attribute can report false positives [0].
-+
-+Add a configure compile check for __attribute__((symver ..)) to ensure
-+it is supported and define a variable to advertise support.
-+
-+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c1
-+
-+Upstream: https://github.com/tukaani-project/xz/pull/32
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+---
-+ configure.ac                | 9 +++++++++
-+ src/liblzma/common/common.h | 2 +-
-+ 2 files changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5ad5589..08c623a 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -791,6 +791,15 @@ else
-+ 				time with Libtool if neither --with-pic nor
-+ 				--without-pic is used). This define must be
-+ 				used together with liblzma_linux.map.])
-++			OLD_CFLAGS="$CFLAGS"
-++			CFLAGS="$CFLAGS -Werror"  # we need -Werror to make sure the attribute is not ignored
-++			AC_COMPILE_IFELSE([AC_LANG_SOURCE(
-++				[__attribute__ ((symver ("test@TEST"))) void foo(void) { }
-++				])],
-++				[AC_DEFINE([HAVE_SYMVER_ATTRIBUTE], [1],
-++					[Define to 1 if GCC supports the symver attribute])],
-++				[])
-++			CFLAGS="$OLD_CFLAGS"
-+ 			;;
-+ 		*)
-+ 			enable_symbol_versions=generic
-+diff --git a/src/liblzma/common/common.h b/src/liblzma/common/common.h
-+index 11fec52..1d2ef9c 100644
-+--- a/src/liblzma/common/common.h
-++++ b/src/liblzma/common/common.h
-+@@ -76,7 +76,7 @@
-+ // too (which doesn't support __symver__) so use it to detect if __symver__
-+ // is available. This should be far more reliable than looking at compiler
-+ // version macros as nowadays especially __GNUC__ is defined by many compilers.
-+-#	if lzma_has_attribute(__symver__)
-++#	if defined(HAVE_SYMVER_ATTRIBUTE) 
-+ #		define LZMA_SYMVER_API(extnamever, type, intname) \
-+ 			extern __attribute__((__symver__(extnamever))) \
-+ 					LZMA_API(type) intname
-+-- 
-+2.25.1
-+
+diff --git a/configs/grinn_chiliboard_defconfig b/configs/grinn_chiliboard_defconfig
+index 80f3077b76..df483d991a 100644
+--- a/configs/grinn_chiliboard_defconfig
++++ b/configs/grinn_chiliboard_defconfig
+@@ -1,12 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/grinn/chiliboard/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-chiliboard"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
