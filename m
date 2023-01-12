@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAFBEC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:28:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58913C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87EED44F3E;
-	Tue, 21 Feb 2023 00:28:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87EED44F3E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0466645FD7;
+	Tue, 21 Feb 2023 00:29:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0466645FD7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gjo5mdZmPPl3; Tue, 21 Feb 2023 00:28:52 +0000 (UTC)
+	with ESMTP id nQwtauEus-xM; Tue, 21 Feb 2023 00:29:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 418E644AFC;
-	Tue, 21 Feb 2023 00:28:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 418E644AFC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2D7B01BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id C40C446DAA;
+	Tue, 21 Feb 2023 00:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C40C446DAA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E77391BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89B04417DF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89B04417DF
+ by smtp3.osuosl.org (Postfix) with ESMTP id F05C26FB57
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F05C26FB57
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TVAhUmKrNN2w for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mPcYTgvAjmWu for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 961C0417DA
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 961C0417DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B40F6FB30
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B40F6FB30
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 926AB86495; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+ id 282D48648F; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 14:44:02 +0100
+Date: Thu, 12 Jan 2023 11:44:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d68b617993bd2f5c82a4936ed1e24e4fec6b94a2
-X-Git-Newrev: 33bdf7bb037c05863aa69bbe219e1cb78d596a3a
+X-Git-Oldrev: 693c88d9d276c16e7a3aad333cb20e56cfffbf20
+X-Git-Newrev: ab8a8066f5cf397d98c76a06757a9523d25d6500
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205252.926AB86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dahdi-linux: fix build
- with kernel >= 6.1
+Message-Id: <20230220205229.282D48648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/go: bump version to
+ 1.19.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,99 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4455169565279214912=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4455169565279214912==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=33bdf7bb037c05863aa69bbe219e1cb78d596a3a
+commit: https://git.buildroot.net/buildroot/commit/?id=ab8a8066f5cf397d98c76a06757a9523d25d6500
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure with kernel >= 6.1
+go1.19.5 (released 2023-01-10) includes fixes to the compiler, the linker, and
+the crypto/x509, net/http, sync/atomic, and syscall packages.
 
-In file included from ./include/linux/string.h:20,
-                 from ./include/linux/bitmap.h:11,
-                 from ./include/linux/cpumask.h:12,
-                 from ./include/linux/mm_types_task.h:14,
-                 from ./include/linux/mm_types.h:5,
-                 from ./include/linux/buildid.h:5,
-                 from ./include/linux/module.h:14,
-                 from /home/autobuild/autobuild/instance-11/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wctc4xxp/base.c:24:
-./arch/powerpc/include/asm/string.h:27:22: note: expected ‘void *’ but argument is of type ‘const unsigned char *’
-   27 | extern void * memcpy(void *,const void *,__kernel_size_t);
-      |                      ^~~~~~
-/home/autobuild/autobuild/instance-11/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wctc4xxp/base.c:661:9: error: too many arguments to function ‘netif_napi_add’
-  661 |         netif_napi_add(netdev, &wc->napi, &wctc4xxp_poll, 64);
-      |         ^~~~~~~~~~~~~~
-In file included from ./include/net/inet_sock.h:19,
-                 from ./include/linux/udp.h:16,
-                 from /home/autobuild/autobuild/instance-11/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wctc4xxp/base.c:38:
-./include/linux/netdevice.h:2562:1: note: declared here
- 2562 | netif_napi_add(struct net_device *dev, struct napi_struct *napi,
-      | ^~~~~~~~~~~~~~
+https://github.com/golang/go/issues?q=milestone%3AGo1.19.5+label%3ACherryPickApproved
 
-Fixes:
- - http://autobuild.buildroot.org/results/d7ce103a886329c68c04ebe05571be8f95a873ce
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-next-fix-kernel-6-1-build.patch           | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch b/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch
-new file mode 100644
-index 0000000000..b910c4b775
---- /dev/null
-+++ b/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch
-@@ -0,0 +1,32 @@
-+From a759a578277bde98eba7ef4bf86bdf819a900de9 Mon Sep 17 00:00:00 2001
-+From: John Thomson <git@johnthomson.fastmail.com.au>
-+Date: Sun, 23 Oct 2022 13:42:52 +1000
-+Subject: [PATCH] fix kernel 6.1 build
-+
-+kernel 6.1 includes b48b89f9c189 ("net: drop the weight argument from netif_napi_add") [0]
-+
-+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b48b89f9c189d24eb5e2b4a0ac067da5a24ee86d
-+
-+Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
-+[Retrieved from:
-+https://github.com/asterisk/dahdi-linux/pull/14/commits/a759a578277bde98eba7ef4bf86bdf819a900de9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/dahdi/kernel.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/include/dahdi/kernel.h b/include/dahdi/kernel.h
-+index 35e93bc4..fd64a15e 100644
-+--- a/include/dahdi/kernel.h
-++++ b/include/dahdi/kernel.h
-+@@ -58,6 +58,10 @@
-+ 
-+ #include <linux/poll.h>
-+ 
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
-++#define netif_napi_add netif_napi_add_weight
-++#endif
-++
-+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
-+ #include <linux/pci.h>
-+ #include <linux/dma-mapping.h>
-
---===============4455169565279214912==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/go/go.hash b/package/go/go.hash
+index d35db10213..4c22f0f274 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  eda74db4ac494800a3e66ee784e495bfbb9b8e535df924a8b01b1a8028b7f368  go1.19.4.src.tar.gz
++sha256  8e486e8e85a281fc5ce3f0bedc5b9d2dbf6276d7db0b25d3ec034f313da0375f  go1.19.5.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 44e0c622c9..d3ed07f03b 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.19.4
++GO_VERSION = 1.19.5
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4455169565279214912==--
