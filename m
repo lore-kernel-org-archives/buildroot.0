@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0EF5C54EBC
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88A09C54EBC
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:25:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4ACF740235;
-	Thu, 12 Jan 2023 10:24:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ACF740235
+	by smtp2.osuosl.org (Postfix) with ESMTP id 10D3A40235;
+	Thu, 12 Jan 2023 10:25:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10D3A40235
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3h1VoBr4mZFG; Thu, 12 Jan 2023 10:24:42 +0000 (UTC)
+	with ESMTP id whfS0OuKmuhp; Thu, 12 Jan 2023 10:25:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63CFC400D6;
-	Thu, 12 Jan 2023 10:24:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63CFC400D6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED29E1BF96B
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:24:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E74F400D6;
+	Thu, 12 Jan 2023 10:25:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E74F400D6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ED3ED1BF476
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C94204010E
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:24:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C94204010E
+ by smtp3.osuosl.org (Postfix) with ESMTP id C91A260B24
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:25:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C91A260B24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AFF3jpaT9Q5s for <buildroot@lists.busybox.net>;
- Thu, 12 Jan 2023 10:24:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Soy2rl-88X-I for <buildroot@lists.busybox.net>;
+ Thu, 12 Jan 2023 10:25:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D51F7400D6
- for <buildroot@buildroot.org>; Thu, 12 Jan 2023 10:24:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D51F7400D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7986606E7
+ for <buildroot@buildroot.org>; Thu, 12 Jan 2023 10:25:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7986606E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C120987964; Thu, 12 Jan 2023 10:24:26 +0000 (UTC)
+ id B6BF587973; Thu, 12 Jan 2023 10:25:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 11:18:45 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 35c47ed4d94c9cdb79c7dc8856808fd460b13945
-X-Git-Newrev: e7dee76f9b9ce5d8bbffe50005d9e12c4e7b7e59
+Date: Thu, 12 Jan 2023 11:20:09 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 4418e34d72d09d16ad2076f723ac83694263ebe0
+X-Git-Newrev: ba59c92c9dfc18b6c2b36761ce5925d0ff329db9
 X-Patchwork-Hint: ignore
-Message-Id: <20230112102426.C120987964@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] Makefile: fix use of many
+Message-Id: <20230112102537.B6BF587973@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] Makefile: fix use of many
  br2-external trees
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7dee76f9b9ce5d8bbffe50005d9e12c4e7b7e59
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ba59c92c9dfc18b6c2b36761ce5925d0ff329db9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 The top level Makefile in buildroot has a recursive rule which causes
 the appearance of a hang as the number of directories in BR2_EXTERNAL
@@ -167,10 +167,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 12 insertions(+), 7 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 89f3648bb7..66fe04962d 100644
+index 06020ca18a..404dcaa270 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1010,13 +1010,18 @@ oldconfig syncconfig olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmake
+@@ -1013,13 +1013,18 @@ oldconfig syncconfig olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmake
  defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
  
