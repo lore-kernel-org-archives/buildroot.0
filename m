@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F5D5C54EBC
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 11:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99146C54EBD
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 11:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A087E81A15;
-	Thu, 12 Jan 2023 11:43:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A087E81A15
+	by smtp1.osuosl.org (Postfix) with ESMTP id 262F781BC2;
+	Thu, 12 Jan 2023 11:43:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 262F781BC2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3bbNYjvP7dqg; Thu, 12 Jan 2023 11:43:10 +0000 (UTC)
+	with ESMTP id 2FcmkYcGNgsG; Thu, 12 Jan 2023 11:43:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE7D5819BC;
-	Thu, 12 Jan 2023 11:43:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE7D5819BC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 61D691BF35F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DB9181B01;
+	Thu, 12 Jan 2023 11:43:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DB9181B01
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A4EF1BF96B
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CCC460BFB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C98C415E1
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:43:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CCC460BFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C98C415E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2WkBcGZHhOoN for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 57R6_rtRSi25 for <buildroot@lists.busybox.net>;
  Thu, 12 Jan 2023 11:43:07 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3436760BDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 334F041522
 Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3436760BDC
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 334F041522
  for <buildroot@buildroot.org>; Thu, 12 Jan 2023 11:43:07 +0000 (UTC)
 Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
- by mailout04.t-online.de (Postfix) with SMTP id AE1A91A6CA;
+ by mailout04.t-online.de (Postfix) with SMTP id D18271A6CB;
  Thu, 12 Jan 2023 12:43:04 +0100 (CET)
 Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd71.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1pFvz6-0EUdpR0; Thu, 12 Jan 2023 12:43:04 +0100
+ esmtp id 1pFvz6-0EUdpS0; Thu, 12 Jan 2023 12:43:04 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55010)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pFvz6-0005Yw-0d;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pFvz6-0005Yw-1j;
  Thu, 12 Jan 2023 12:43:04 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 12:42:59 +0100
-Message-Id: <20230112114304.3007221-2-bernd.kuhls@t-online.de>
+Date: Thu, 12 Jan 2023 12:43:04 +0100
+Message-Id: <20230112114304.3007221-7-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230112114304.3007221-1-bernd.kuhls@t-online.de>
 References: <20230112114304.3007221-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1673523784-F27F4ECF-6EFA96C0/0/0 CLEAN NORMAL
-X-TOI-MSGID: cf4d494b-f1ec-4631-9998-42bd142e79f2
-Subject: [Buildroot] [PATCH 2/7] package/perl-html-parser: bump version to
- 3.80
+X-TOI-EXPURGATEID: 150726::1673523784-F27F4ECF-B98BD612/0/0 CLEAN NORMAL
+X-TOI-MSGID: f473e207-e898-44dd-ae62-20937d1786b7
+Subject: [Buildroot] [PATCH 7/7] package/perl-uri: bump version to 5.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,42 +72,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updated license hash due to typo/whitespace-only fixes in license file:
-https://github.com/libwww-perl/HTML-Parser/commit/96192e7cb1f31559e8ad834fd5d7642d04e35f65#diff-c693279643b8cd5d248172d9c22cb7cf4ed163a3c98c8a3f69c2717edd3eacb7
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/perl-html-parser/perl-html-parser.hash | 6 +++---
- package/perl-html-parser/perl-html-parser.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-uri/perl-uri.hash | 4 ++--
+ package/perl-uri/perl-uri.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
-index 36b094a7cb..ccd115d6c9 100644
---- a/package/perl-html-parser/perl-html-parser.hash
-+++ b/package/perl-html-parser/perl-html-parser.hash
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index a169fc067d..daf043347f 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  60e266d5a07fbea671a0383dd8af7b6c  HTML-Parser-3.76.tar.gz
--sha256  64d9e2eb2b420f1492da01ec0e6976363245b4be9290f03f10b7d2cb63fa2f61  HTML-Parser-3.76.tar.gz
-+md5  8e7151d08f30457a2ba80020b936285f  HTML-Parser-3.80.tar.gz
-+sha256  63411db03016747e37c2636db11b05f8cc71608ef5bff36d04ddb0dc92f7835b  HTML-Parser-3.80.tar.gz
+-md5  d7fc1b1c88d03357aed2f03b455a223e  URI-5.12.tar.gz
+-sha256  66abe0eaddd76b74801ecd28ec1411605887550fc0a45ef6aa744fdad768d9b3  URI-5.12.tar.gz
++md5  63675c429cfb1df73d7d21a9302e1000  URI-5.17.tar.gz
++sha256  5f7e42b769cb27499113cfae4b786c37d49e7c7d32dbb469602cd808308568f8  URI-5.17.tar.gz
  
  # computed by scancpan
--sha256  0e57338bc10d5fb8891012ebee65a7b504b247f5bb485e121b8b48d7a118a60b  LICENSE
-+sha256  9081922eb873ec1809c20672a7385a65f3c6b1163166bf69b2bbe986fb5b0159  LICENSE
-diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
-index 097564dbcb..1e1f8e6050 100644
---- a/package/perl-html-parser/perl-html-parser.mk
-+++ b/package/perl-html-parser/perl-html-parser.mk
+ sha256  d4f0b7a8771dcb1eee79a38c2e466eb997e23565a6687dd1900a2027eabe12a0  LICENSE
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index b0ac885c10..d4bfcb44ef 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTML_PARSER_VERSION = 3.76
-+PERL_HTML_PARSER_VERSION = 3.80
- PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
- PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
+-PERL_URI_VERSION = 5.12
++PERL_URI_VERSION = 5.17
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+ PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_URI_LICENSE = Artistic or GPL-1.0+
 -- 
 2.34.1
 
