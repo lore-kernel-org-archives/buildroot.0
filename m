@@ -1,61 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 993A5C54EBC
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 11:44:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 785A7C54EBD
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 11:47:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45DDE81440;
-	Thu, 12 Jan 2023 11:44:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45DDE81440
+	by smtp3.osuosl.org (Postfix) with ESMTP id 227F260BD3;
+	Thu, 12 Jan 2023 11:47:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 227F260BD3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XvuahmcDW56X; Thu, 12 Jan 2023 11:44:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SujomeDsTN7D; Thu, 12 Jan 2023 11:47:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 949998141E;
-	Thu, 12 Jan 2023 11:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 949998141E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 683CC60B77;
+	Thu, 12 Jan 2023 11:47:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 683CC60B77
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 283BE1BF96B
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:43:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BC5261BF35F
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:47:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BABAC408B1
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BABAC408B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97985405AE
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:47:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97985405AE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WpItnqt5ISFI for <buildroot@lists.busybox.net>;
- Thu, 12 Jan 2023 11:43:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97403408A8
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 97403408A8
- for <buildroot@buildroot.org>; Thu, 12 Jan 2023 11:43:07 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout12.t-online.de (Postfix) with SMTP id E179D18AEE;
- Thu, 12 Jan 2023 12:43:04 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd85.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1pFvz6-36fmdO0; Thu, 12 Jan 2023 12:43:04 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55010)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pFvz6-0005Yw-1Y;
- Thu, 12 Jan 2023 12:43:04 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id xBAGzHHtpmwN for <buildroot@lists.busybox.net>;
+ Thu, 12 Jan 2023 11:47:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2388440522
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2388440522
+ for <buildroot@buildroot.org>; Thu, 12 Jan 2023 11:47:01 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id d30so23133414lfv.8
+ for <buildroot@buildroot.org>; Thu, 12 Jan 2023 03:47:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wx/6oWjEZlZ4SgLT+AQbEtia2t3lOPcBKDtfWeUtTP0=;
+ b=0boOpmiiJHAbmD76e7c3rltuR2leqSgiek+PFrDwP2cX/3n+v/O8NlkJ0P+JQfJ8cp
+ 8j+KZRGDYfos+dyT8Rk0lMss89yK6pa9uHdA6SvXIdt7oBYS0kZxUpZGBqwNACClMVaf
+ 3kqG0r0RY08zrDkkiNfDS4FWB2gmcHtx1dDS4H98Yp3bUHQsaIlfCxRbI1Sr9Lxwgnxl
+ cEmUKl8E8BPaU9TWTW4DRKkLk2YW/f4o8ex0EOCuLEJQezoW1Ztodv/FHwVEXn/TYsiY
+ GFhd4jKBEofjbWpzVKWZ6JtNZqKeOaZGuObszZRjHik9hsme5emOj6cXGBcFpLNZoUCC
+ lYUA==
+X-Gm-Message-State: AFqh2kpzgdZGUyBMA7tFYM5jXQzoq2BQf0NmDT9mLH/Civ4+naNXYknW
+ SNNYh3+AcgognUxn1KofsWSdXKuFZAM=
+X-Google-Smtp-Source: AMrXdXs0HtH6Z5ZijWHp88I74HzAKfJJ3cveuN+KbmgHZBDdJO50EXIaNWTLCZi9oABwR+9H/UPYdw==
+X-Received: by 2002:a05:6512:10c3:b0:4b6:e64c:aec6 with SMTP id
+ k3-20020a05651210c300b004b6e64caec6mr25939210lfg.63.1673524018640; 
+ Thu, 12 Jan 2023 03:46:58 -0800 (PST)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com.
+ [82.209.154.112]) by smtp.gmail.com with ESMTPSA id
+ f19-20020ac25333000000b004cb2e3089a7sm3220844lfh.38.2023.01.12.03.46.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 12 Jan 2023 03:46:58 -0800 (PST)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 12:43:03 +0100
-Message-Id: <20230112114304.3007221-6-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230112114304.3007221-1-bernd.kuhls@t-online.de>
-References: <20230112114304.3007221-1-bernd.kuhls@t-online.de>
+Date: Thu, 12 Jan 2023 12:47:54 +0100
+Message-Id: <20230112114754.82405-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1673523784-2E0B6EA1-B70EA74A/0/0 CLEAN NORMAL
-X-TOI-MSGID: e46a97f0-3b3a-4f10-b368-152cff8f432f
-Subject: [Buildroot] [PATCH 6/7] package/perl-net-dns: bump version to 1.36
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wx/6oWjEZlZ4SgLT+AQbEtia2t3lOPcBKDtfWeUtTP0=;
+ b=O07GzM9IybWHghuv4sVUEe5DM+eVq/HdX1HGHG4sl3MJDvNfzpZNKxliicrfz9dmMP
+ VIbNbB1D3Puata8Tn5R+m+iIKrLac3Fd40ZP1RRsBRfRtB7u3G10ld5b7Jcik3Itfd8W
+ zxcBmAdJGW5gr8Wbrua2tM3QL9qHILGLapa540IzQldpumR8ORxZDiWIC7VkOG/UwkSG
+ stwAiYLhSKdJ+gCSw/NURw0sdAuYv/Ut8vofHAUsZw57CVjm0CUFf0k6xiSRZk82dbmb
+ 7bkTjv5w5UDCQwXKr75WGKYzBNxBkRopjz+Mj8JJsXOClQw5mepo740Pq9ob+FCV3Y/5
+ ycIA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=O07GzM9I
+Subject: [Buildroot] [PATCH] package/pkg-kconfig.mk new <pkg>-show-fragment
+ target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,45 +94,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/perl-net-dns/perl-net-dns.hash | 4 ++--
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This patch introduce the new target to simplify the generation of
+configuration fragments as the output could be directly copied into a
+fragment file as-is.
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index 52f2f2bff2..a98ac3525d 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  f10276a44ce157cd5f709be4c70c34a8  Net-DNS-1.34.tar.gz
--sha256  de756e3fb6addbd32beafc869c4dd1c6a0b3783c5ef56dbefc6809443a4b1d15  Net-DNS-1.34.tar.gz
-+md5  b70b74481908d995f57569ab7cfe6432  Net-DNS-1.36.tar.gz
-+sha256  143ba0e530f8b727be61ec052974cbf52df5b0afc0582d75b04809e0b2a95ebe  Net-DNS-1.36.tar.gz
+It is *heavily* based on the <pkg>-diff-config target, but serves a
+different purpose.
+
+Output from linux-diff-config:
+-CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK y
+-CONFIG_GCC_PLUGIN_CYC_COMPLEXITY n
+-CONFIG_GCC_PLUGIN_LATENT_ENTROPY n
+-CONFIG_GCC_PLUGIN_RANDSTRUCT n
+-CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF n
+-CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL n
+-CONFIG_GCC_PLUGIN_STRUCTLEAK_USER n
+-CONFIG_STACKPROTECTOR_PER_TASK y
+CONFIG_CRYPTO_DH n -> y
+CONFIG_CRYPTO_KPP m -> y
+CONFIG_GCC_PLUGINS y -> n
+CONFIG_KEY_DH_OPERATIONS n -> y
+CONFIG_PKCS8_PRIVATE_KEY_PARSER n -> y
+CONFIG_VIDEO_IMX274 n -> m
+
+Output from linux-show-fragment:
+CONFIG_CRYPTO_DH=y
+CONFIG_CRYPTO_KPP=y
+CONFIG_KEY_DH_OPERATIONS=y
+CONFIG_PKCS8_PRIVATE_KEY_PARSER=y
+CONFIG_VIDEO_IMX274=m
+
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/pkg-kconfig.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index f4f35bf96a..ee96525c47 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -309,12 +309,26 @@ $(1)-diff-config: $(1)-check-configuration-done
+ 	$$(Q)cp -a $$($(2)_DIR)/.config.dc.bak $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
+ 	$$(Q)rm -f $$($(2)_DIR)/.config.dc.bak
  
- # computed by scancpan
- sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index cfb16d8ded..f4c20c07ad 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++# Target to output differences between the configuration obtained via the
++# defconfig + fragments (if any) and the current configuration.
++# Output format is suitable to be used as-is in fragment files.
++# Note: it preserves the timestamp of the current configuration when moving it
++# around.
++$(1)-show-fragment: $(1)-check-configuration-done
++	$$(Q)cp -a $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_DIR)/.config.dc.bak
++	$$(call kconfig-package-merge-config,$(2),$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG),\
++		$$($(2)_KCONFIG_FRAGMENT_FILES))
++	$$(Q)utils/diffconfig -m $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) \
++		 $$($(2)_DIR)/.config.dc.bak
++	$$(Q)cp -a $$($(2)_DIR)/.config.dc.bak $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
++	$$(Q)rm -f $$($(2)_DIR)/.config.dc.bak
  
--PERL_NET_DNS_VERSION = 1.34
-+PERL_NET_DNS_VERSION = 1.36
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
+ endif # package enabled
+ 
+ .PHONY: \
+ 	$(1)-diff-config \
+ 	$(1)-check-configuration-done \
++	$(1)-show-fragment \
+ 	$$($(2)_DIR)/.kconfig_editor_% \
+ 	$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS))
+ 
 -- 
-2.34.1
+2.38.1
 
 _______________________________________________
 buildroot mailing list
