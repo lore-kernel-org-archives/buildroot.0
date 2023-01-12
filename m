@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EEF2C54EBD
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 11:44:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C414C54EBD
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 11:44:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3350060BE9;
-	Thu, 12 Jan 2023 11:44:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3350060BE9
+	by smtp3.osuosl.org (Postfix) with ESMTP id E224560BFB;
+	Thu, 12 Jan 2023 11:44:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E224560BFB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zNt-hzy8NMLE; Thu, 12 Jan 2023 11:44:00 +0000 (UTC)
+	with ESMTP id rz97fXYezfLm; Thu, 12 Jan 2023 11:44:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F91A60BD3;
-	Thu, 12 Jan 2023 11:43:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F91A60BD3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 737241BF35F
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:43:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A95660C09;
+	Thu, 12 Jan 2023 11:44:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A95660C09
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 109711BF35F
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B6A0408B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FA1641571
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 11:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B6A0408B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FA1641571
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7gywHBaBwSUi for <buildroot@lists.busybox.net>;
- Thu, 12 Jan 2023 11:43:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zr8I0qwC5hqL for <buildroot@lists.busybox.net>;
+ Thu, 12 Jan 2023 11:43:07 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 703EE40522
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 703EE40522
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62D53415C0
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62D53415C0
  for <buildroot@buildroot.org>; Thu, 12 Jan 2023 11:43:07 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout12.t-online.de (Postfix) with SMTP id E137C18AED;
- Thu, 12 Jan 2023 12:43:04 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd85.t-online.de
+Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
+ by mailout04.t-online.de (Postfix) with SMTP id 022481A6CF;
+ Thu, 12 Jan 2023 12:43:05 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.73]) by fwd71.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1pFvz6-36fmdN0; Thu, 12 Jan 2023 12:43:04 +0100
+ esmtp id 1pFvz6-0EUdpT0; Thu, 12 Jan 2023 12:43:04 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55010)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pFvz6-0005Yw-0p;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pFvz6-0005Yw-1O;
  Thu, 12 Jan 2023 12:43:04 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 12:43:00 +0100
-Message-Id: <20230112114304.3007221-3-bernd.kuhls@t-online.de>
+Date: Thu, 12 Jan 2023 12:43:02 +0100
+Message-Id: <20230112114304.3007221-5-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230112114304.3007221-1-bernd.kuhls@t-online.de>
 References: <20230112114304.3007221-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1673523784-2D0B8EA1-FECACB92/0/0 CLEAN NORMAL
-X-TOI-MSGID: c6c721ed-445c-4ece-b058-287c00bb6fcd
-Subject: [Buildroot] [PATCH 3/7] package/perl-http-daemon: bump version to
- 6.14
+X-TOI-EXPURGATEID: 150726::1673523784-F27F4ECF-42BFBE17/0/0 CLEAN NORMAL
+X-TOI-MSGID: d8e4e2a5-6522-4278-8315-5a88171cb0bb
+Subject: [Buildroot] [PATCH 5/7] package/perl-mail-dkim: bump version to
+ 1.20220520
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,42 +73,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updated license hash due to typo/whitespace-only fixes in license file:
-https://github.com/libwww-perl/HTTP-Daemon/commit/605bc6efdabf39d2c9f9c7f613bf88d497454e5a#diff-b4668a52683f65fbc0528f6590ba160c9c64c88c302b6262c506266eb1d35180
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/perl-http-daemon/perl-http-daemon.hash | 6 +++---
- package/perl-http-daemon/perl-http-daemon.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
+ package/perl-mail-dkim/perl-mail-dkim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
-index f8272a4fce..c19b3b9558 100644
---- a/package/perl-http-daemon/perl-http-daemon.hash
-+++ b/package/perl-http-daemon/perl-http-daemon.hash
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
+index e94adfc6ed..c44e4ab161 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.hash
++++ b/package/perl-mail-dkim/perl-mail-dkim.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  63674e3f81760a29075853413eb157d8  HTTP-Daemon-6.12.tar.gz
--sha256  df47bed10c38670c780fd0116867d5fd4693604acde31ba63380dce04c4e1fa6  HTTP-Daemon-6.12.tar.gz
-+md5  3111b0081d08d8b225f52884033de349  HTTP-Daemon-6.14.tar.gz
-+sha256  f0767e7f3cbb80b21313c761f07ad8ed253bce9fa2d0ba806b3fb72d309b2e1d  HTTP-Daemon-6.14.tar.gz
+-md5  9de35f8aa77a85dc17423cbcce2bf46d  Mail-DKIM-1.20200824.tar.gz
+-sha256  871d329830acb4840423aa59036622fb2ee394efc1d09316dcc32ae94454e916  Mail-DKIM-1.20200824.tar.gz
++md5  5a0dec58f0c2526521b2952a3c126906  Mail-DKIM-1.20220520.tar.gz
++9de35f8aa77a85dc17423cbcce2bf46d  Mail-DKIM-1.20200824.tar.gz
  
  # computed by scancpan
--sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENCE
-+sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENCE
-diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
-index e475072628..fe50c768bf 100644
---- a/package/perl-http-daemon/perl-http-daemon.mk
-+++ b/package/perl-http-daemon/perl-http-daemon.mk
+ sha256  ffaa40feb768566e52d93879fedd2c5483828b6de483874f30a0a4425351555f  LICENSE
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
+index e67bf5ee18..f3383a02bf 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.mk
++++ b/package/perl-mail-dkim/perl-mail-dkim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_DAEMON_VERSION = 6.12
-+PERL_HTTP_DAEMON_VERSION = 6.14
- PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
- PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
+-PERL_MAIL_DKIM_VERSION = 1.20200824
++PERL_MAIL_DKIM_VERSION = 1.20220520
+ PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
+ PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
+ PERL_MAIL_DKIM_LICENSE = Artistic or GPL-1.0+
 -- 
 2.34.1
 
