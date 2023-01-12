@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA7F5C677F1
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6263FC61DB3
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:26:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65DE081F32;
-	Thu, 12 Jan 2023 19:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65DE081F32
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0646441746;
+	Thu, 12 Jan 2023 19:26:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0646441746
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id huXYIvNJE_sx; Thu, 12 Jan 2023 19:26:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Cxy-yJc5OB3B; Thu, 12 Jan 2023 19:26:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B7ED81F1C;
-	Thu, 12 Jan 2023 19:26:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B7ED81F1C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 02D4A1BF973
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12AEE416E5;
+	Thu, 12 Jan 2023 19:26:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12AEE416E5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 044CF1BF976
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:26:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D2E0581F27
+ by smtp3.osuosl.org (Postfix) with ESMTP id E090660E7D
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2E0581F27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E090660E7D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ERHzlRTDXceb for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bm-Y2r40h_Fg for <buildroot@lists.busybox.net>;
  Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 18F0F81F1C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2399C60E33
  for <buildroot@buildroot.org>; Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18F0F81F1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2399C60E33
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 070ED87A3C; Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
+ id 118DB87A3D; Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:19:18 +0100
+Date: Thu, 12 Jan 2023 20:19:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e3842ca3c66c6368fd13a7329a518c4d02b1beb6
-X-Git-Newrev: 93d0979fbf063a8b65fd9d4c58891b21805804c6
+X-Git-Oldrev: 93d0979fbf063a8b65fd9d4c58891b21805804c6
+X-Git-Newrev: d5c509bcc0e28a71d58248158e904315486624bd
 X-Patchwork-Hint: ignore
-Message-Id: <20230112192614.070ED87A3C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/chiliboard: bump u-boot to 2023.01
+Message-Id: <20230112192614.118DB87A3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/liteboard: bump linux to 6.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,28 +62,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93d0979fbf063a8b65fd9d4c58891b21805804c6
+commit: https://git.buildroot.net/buildroot/commit/?id=d5c509bcc0e28a71d58248158e904315486624bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/grinn_chiliboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/grinn_liteboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/grinn_chiliboard_defconfig b/configs/grinn_chiliboard_defconfig
-index df483d991a..e7862d1738 100644
---- a/configs/grinn_chiliboard_defconfig
-+++ b/configs/grinn_chiliboard_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="chiliboard"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
+index 9cad66e15a..ab22911d66 100644
+--- a/configs/grinn_liteboard_defconfig
++++ b/configs/grinn_liteboard_defconfig
+@@ -1,12 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/grinn/liteboard/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-liteboard"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
