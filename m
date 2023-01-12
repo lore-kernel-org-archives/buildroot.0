@@ -1,57 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91636C61DB3
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:31:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE611C54EBE
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FC9660E56;
-	Thu, 12 Jan 2023 19:31:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FC9660E56
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8030E81F7E;
+	Thu, 12 Jan 2023 19:32:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8030E81F7E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y067liOX1umY; Thu, 12 Jan 2023 19:31:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nTrzbHNjTR2U; Thu, 12 Jan 2023 19:32:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74A2F60E48;
-	Thu, 12 Jan 2023 19:31:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74A2F60E48
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 910001BF281
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:31:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D145381F69;
+	Thu, 12 Jan 2023 19:32:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D145381F69
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D901C1BF281
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7727F41148
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:31:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7727F41148
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3B314177C
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:32:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3B314177C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZooO7M_17lJN for <buildroot@lists.busybox.net>;
- Thu, 12 Jan 2023 19:31:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m3463AlzmhTZ for <buildroot@lists.busybox.net>;
+ Thu, 12 Jan 2023 19:32:16 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CF1541139
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7CF1541139
- for <buildroot@buildroot.org>; Thu, 12 Jan 2023 19:31:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6065740919
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6065740919
+ for <buildroot@buildroot.org>; Thu, 12 Jan 2023 19:32:16 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B3CFD2000A;
- Thu, 12 Jan 2023 19:31:09 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 37C7BFF804;
+ Thu, 12 Jan 2023 19:32:12 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pG3I1-0037L8-1l; Thu, 12 Jan 2023 20:31:05 +0100
+ id 1pG3J1-0037Pa-9H; Thu, 12 Jan 2023 20:32:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230108191405.9608-1-fontaine.fabrice@gmail.com>
-Date: Thu, 12 Jan 2023 20:31:05 +0100
-In-Reply-To: <20230108191405.9608-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 8 Jan 2023 20:14:05 +0100")
-Message-ID: <877cxra6ti.fsf@dell.be.48ers.dk>
+References: <20230108195626.328941-1-fontaine.fabrice@gmail.com>
+Date: Thu, 12 Jan 2023 20:32:07 +0100
+In-Reply-To: <20230108195626.328941-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 8 Jan 2023 20:56:26 +0100")
+Message-ID: <87358fa6rs.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireshark: fix legal info
+Subject: Re: [Buildroot] [PATCH 1/1] package/trinity: fix build with kernel
+ >= 6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,14 +72,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Commit 4aca99f51cc97cfc3bcd3affa65f4694004dd444 forgot to update hash of
- > COPYING file and add hash of README.md due to the following commit which
- > moved the introductory note about the GPL from the COPYING license text
- > file to the README:
- > https://github.com/wireshark/wireshark/commit/d2b6b89b94bd3e18520c472affae9cd4a03283e2
+ > Fix the following build failure with kernel >= 6.1:
+ > net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
+ >     5 | #include <linux/dn.h>
+ >       |          ^~~~~~~~~~~~
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/aaed32b55cc56beb32152ed61ac9b7f69d3ebef5
+ >  - http://autobuild.buildroot.org/results/47e0a5e0b6fcf33ab4f9848d5d8c2be9e5283950
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
