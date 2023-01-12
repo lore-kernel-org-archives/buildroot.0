@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36740C54EBD
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 16:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C7C1C54EBE
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 23:23:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC1EE60BFF;
-	Thu, 12 Jan 2023 16:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC1EE60BFF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B73860EC4;
+	Thu, 12 Jan 2023 23:23:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B73860EC4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g_b12OSB-GLw; Thu, 12 Jan 2023 16:09:28 +0000 (UTC)
+	with ESMTP id SiHyGNz2CObZ; Thu, 12 Jan 2023 23:23:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D71360B5A;
-	Thu, 12 Jan 2023 16:09:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D71360B5A
+	by smtp3.osuosl.org (Postfix) with ESMTP id B187560B60;
+	Thu, 12 Jan 2023 23:23:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B187560B60
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39CC51BF3CE
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 16:09:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 185A81BF31A
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 23:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22A9140004
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 16:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22A9140004
+ by smtp2.osuosl.org (Postfix) with ESMTP id 002054118E
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 23:23:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 002054118E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id haT3LPAV6bfb for <buildroot@lists.busybox.net>;
- Thu, 12 Jan 2023 16:09:24 +0000 (UTC)
+ with ESMTP id UQWAYpBpaEYn for <buildroot@lists.busybox.net>;
+ Thu, 12 Jan 2023 23:23:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A6EB400F6
- for <buildroot@uclibc.org>; Thu, 12 Jan 2023 16:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A6EB400F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EDE44118A
+ for <buildroot@uclibc.org>; Thu, 12 Jan 2023 23:23:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EDE44118A
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 493B587991; Thu, 12 Jan 2023 16:09:24 +0000 (UTC)
+ id 2649D84155; Thu, 12 Jan 2023 23:23:45 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 12 Jan 2023 16:09:24 +0000
+Date: Thu, 12 Jan 2023 23:23:45 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
+X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.11
+X-Bugzilla-Version: 2022.02.8
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: arnout@mind.be
+X-Bugzilla-Who: YitzchokRosenfeld@outlook.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15246-163-8OGSfc5Ftk@https.bugs.busybox.net/>
-In-Reply-To: <bug-15246-163@https.bugs.busybox.net/>
-References: <bug-15246-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-15251-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15246] buildroot ignore my config
+Subject: [Buildroot] [Bug 15251] New: imx-alsa-plugins
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,25 +78,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15246
+https://bugs.busybox.net/show_bug.cgi?id=15251
 
---- Comment #2 from Arnout Vandecappelle <arnout@mind.be> ---
-There are several places where it could have gone wrong.
+            Bug ID: 15251
+           Summary: imx-alsa-plugins
+           Product: buildroot
+           Version: 2022.02.8
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: YitzchokRosenfeld@outlook.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-* When you make changes to pc_x86_bios_defconfig this won't be taken into
-account at all unless you run `make pc_x86_bios_defconfig` again.
-
-* When you make changes manually in pc_x86_bios_defconfig, it's possible you
-made a mistake (e.g. missed a dependency). As a result, your changes may have
-been removed from the full .config. Check in the .config if those symbols are
-there. In general, it's best to run `make menuconfig; make savedefconfig` and
-review the changes, rather than editing the defconfig manually.
-
-* After you make changes to the configuration, the next build will not take
-into account changes, it will only build any *new* packages you added. In this
-case, since you changed the linux configuration, you can run `make
-linux-reconfigure` to refresh the configuration. In general you may need to do
-a clean build (`make clean; make`).
+if you try compiling with the imx alsa plugins target package you get the
+following error:
+asrc_pair.h:28:10: fatal error: linux/mxc_asrc.h: No such file or directory
 
 -- 
 You are receiving this mail because:
