@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A766C54EBC
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A903C54EBD
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9DAA640235;
-	Thu, 12 Jan 2023 10:47:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DAA640235
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NZjCBv2tlExK; Thu, 12 Jan 2023 10:47:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E68B8405B8;
-	Thu, 12 Jan 2023 10:47:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E68B8405B8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EF3161BF476
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7C7381777
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7C7381777
+	by smtp1.osuosl.org (Postfix) with ESMTP id E57B5818BE;
+	Thu, 12 Jan 2023 10:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E57B5818BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g1TjJjwnn8S6 for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P43AVP39em4h; Thu, 12 Jan 2023 10:47:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3286281886;
+	Thu, 12 Jan 2023 10:47:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3286281886
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D5D11BF96B
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:47:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA9EE404D8
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9EE404D8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TgWVdncE1JdG for <buildroot@lists.busybox.net>;
  Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 148148177C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3310440235
  for <buildroot@buildroot.org>; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 148148177C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3310440235
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 005328798E; Thu, 12 Jan 2023 10:47:24 +0000 (UTC)
+ id 212B887991; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 11:44:01 +0100
+Date: Thu, 12 Jan 2023 11:45:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fce9f0eea00ed9aaeca12c1529ea380617baa477
-X-Git-Newrev: 24c532c9f6885174ddf1a9621cc1d55412139676
+X-Git-Oldrev: ab8a8066f5cf397d98c76a06757a9523d25d6500
+X-Git-Newrev: 57817fe05a4250a260a08201812c6652b306a0e5
 X-Patchwork-Hint: ignore
-Message-Id: <20230112104725.005328798E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Bartosz Golaszewski
+Message-Id: <20230112104725.212B887991@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/parted: bump to version 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24c532c9f6885174ddf1a9621cc1d55412139676
+commit: https://git.buildroot.net/buildroot/commit/?id=57817fe05a4250a260a08201812c6652b306a0e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's been a while since I've even used buildroot at all and I don't
-really have any spare cycles to spend on maintaining its packages.
-Let's face reality and drop me from the DEVELOPERS file.
-
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 11 -----------
- 1 file changed, 11 deletions(-)
+ package/parted/parted.hash | 2 +-
+ package/parted/parted.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 86e3f0e7b1..8e1d68c026 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -283,17 +283,6 @@ F:	package/ttyd/
- F:	package/qt5/qt5scxml/
- F:	package/qt5/qt5webview/
+diff --git a/package/parted/parted.hash b/package/parted/parted.hash
+index 392436ec4b..8a167d9bb8 100644
+--- a/package/parted/parted.hash
++++ b/package/parted/parted.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  e1298022472da5589b7f2be1d5ee3c1b66ec3d96dfbad03dc642afd009da5342  parted-3.4.tar.xz
++sha256  4938dd5c1c125f6c78b1f4b3e297526f18ee74aa43d45c248578b1d2470c05a2  parted-3.5.tar.xz
  
--N:	Bartosz Golaszewski <brgl@bgdev.pl>
--F:	package/autoconf-archive/
--F:	package/doxygen/
--F:	package/libgpiod/
--F:	package/libserialport/
--F:	package/libsigrok/
--F:	package/libsigrokdecode/
--F:	package/libzip/
--F:	package/pulseview/
--F:	package/sigrok-cli/
--
- N:	Baruch Siach <baruch@tkos.co.il>
- F:	board/solidrun/clearfog_gt_8k/
- F:	configs/solidrun_clearfog_gt_8k_defconfig
+ # Locally calculated
+ sha256  0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf  COPYING
+diff --git a/package/parted/parted.mk b/package/parted/parted.mk
+index 23158179e4..6d4626e2e6 100644
+--- a/package/parted/parted.mk
++++ b/package/parted/parted.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PARTED_VERSION = 3.4
++PARTED_VERSION = 3.5
+ PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
+ PARTED_SITE = $(BR2_GNU_MIRROR)/parted
+ PARTED_DEPENDENCIES = host-pkgconf util-linux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
