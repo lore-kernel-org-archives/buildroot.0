@@ -1,85 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B628C54EBD
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 09:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92FC6C54EBD
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31FB74032B;
-	Thu, 12 Jan 2023 09:47:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31FB74032B
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0BCD60B48;
+	Thu, 12 Jan 2023 10:20:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0BCD60B48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A9nLPYsJKaIc; Thu, 12 Jan 2023 09:47:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qA2FAhiY4Ndg; Thu, 12 Jan 2023 10:20:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F6E340323;
-	Thu, 12 Jan 2023 09:47:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F6E340323
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 797F51BF3DB
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 09:47:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3487360B24;
+	Thu, 12 Jan 2023 10:20:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3487360B24
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 42FD91BF476
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 61F5E40184
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 09:47:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61F5E40184
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1DF618143A
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:20:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DF618143A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 39y5GP-4NbKE for <buildroot@lists.busybox.net>;
- Thu, 12 Jan 2023 09:47:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89E8A400D6
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com
- [IPv6:2607:f8b0:4864:20::732])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 89E8A400D6
- for <buildroot@buildroot.org>; Thu, 12 Jan 2023 09:47:41 +0000 (UTC)
-Received: by mail-qk1-x732.google.com with SMTP id pa22so9002766qkn.9
- for <buildroot@buildroot.org>; Thu, 12 Jan 2023 01:47:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=sTISwTVq8FN88+sb04EVMvjM9+//Ys3svvjIA/qieGE=;
- b=TRDpOAK3M+agokvEovmrZIXgYv5bJHw9k1aQX8rrb6I7rJV5XK99USIpqBH2uM+GnX
- Ck3bi4NFixaKfsA67tPNjv+lD8polwtY48huAtjUpniDp/4cwOddBqEq4UPQv+ervMF+
- XmFbGCjb75TbxAYoyLPcIlebmeGLYjQQ8irI6goD2AeFtvyyLzzttU+dgZataGC+DhvX
- KBJJFczr7qLxm1lxpqIrkITIxaaE5YpUVfg0/HWGSc7Sdfu/QsQeOlgxDnZ4paqg8yRx
- eC21q3wQLzpUGXg9E/f57W4Bqsqls4MOpYJUpRGFEPJT15A7/KUXZbOMLWqyl6dPvNAX
- VkRQ==
-X-Gm-Message-State: AFqh2koKpaZCtoewD8PIyOzc41ehzygCz4vM8e/YS1WXMdBrBfO4o09c
- /dFZeFfGpdvirK6ToRESEXZOJ2+/D9oPYRJ0TOPj3HQGbSY=
-X-Google-Smtp-Source: AMrXdXs5R+bAoK7VLbLV+5TRKNdxuuVYueYw8NtC8sMvcIlvCkSSf8ntE3XVWtAuMw1hTW/NyScLOkm3sCV8ZL3/nWw=
-X-Received: by 2002:a05:620a:81b:b0:705:ab02:d960 with SMTP id
- s27-20020a05620a081b00b00705ab02d960mr746361qks.539.1673516860166; Thu, 12
- Jan 2023 01:47:40 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ifZruoXCey-j for <buildroot@lists.busybox.net>;
+ Thu, 12 Jan 2023 10:20:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA12C81434
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CA12C81434
+ for <buildroot@buildroot.org>; Thu, 12 Jan 2023 10:20:47 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E39761BF20D;
+ Thu, 12 Jan 2023 10:20:43 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pFuhO-002dvh-Og; Thu, 12 Jan 2023 11:20:42 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230105015759.63582-1-nhed+buildroot@starry.com>
+ <20230105015759.63582-2-nhed+buildroot@starry.com>
+ <20230107201526.GA151997@scaer>
+Date: Thu, 12 Jan 2023 11:20:42 +0100
+In-Reply-To: <20230107201526.GA151997@scaer> (Yann E. MORIN's message of "Sat, 
+ 7 Jan 2023 21:15:26 +0100")
+Message-ID: <87k01sf405.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <CADYdroM5e4W64FXRMK9QUGXrcBOLBRUiyursiPW7mjP6bs9KdQ@mail.gmail.com>
- <CADvTj4qpHEZ+2Wmr+3e85x0YMeMfN3FPjhZ9BSqYHs3K9rYk6Q@mail.gmail.com>
-In-Reply-To: <CADvTj4qpHEZ+2Wmr+3e85x0YMeMfN3FPjhZ9BSqYHs3K9rYk6Q@mail.gmail.com>
-From: Norbert Lange <nolange79@gmail.com>
-Date: Thu, 12 Jan 2023 10:47:29 +0100
-Message-ID: <CADYdroM_3pdsFH5w7cAhdGVD2jOt-Y5QOtkyASJuG-f4YiYqGg@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=sTISwTVq8FN88+sb04EVMvjM9+//Ys3svvjIA/qieGE=;
- b=qxqMat4JtxTcE+jdhIe1VSrdjyi8pPizMF/wZakY7rHYgcEHXp98w4vz0JGyB48KQw
- lxUlrDeWmeZrcGW63QlB7vw1iwVnaI8b8VgNZP+W24YBqVMw6a1c27z1qZuP3ckV1wNG
- yVMTe/xo2bLb/Fwro2kFIeXzsyLB5LJugM3Mp3s/RFwcG0jzPdUdLs7jKX4jm1pavDxU
- n6fTrzbQeKN6e1Rwv3KoHlLv2/71hhfiv2L1CTPTP2uSmAE7MhwogNyGCyoNbGjiq5Uc
- LIlzvYI7J0NNQGEYTo+7Y0X2TCbcucRF1nAFumlBxG0o990RGM+FltMJ+3jVvI6KTxMg
- gQHQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=qxqMat4J
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/cmake: disable ccache for
- host-cmake
+Subject: Re: [Buildroot] [PATCH 1/1] core: Use of percent_defconfig seems to
+ impact performance
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,43 +66,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Nevo Hed <nhed+buildroot@starry.com>, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Do., 12. Jan. 2023 um 01:30 Uhr schrieb James Hilliard
-<james.hilliard1@gmail.com>:
->
-> On Wed, Jan 11, 2023 at 2:36 PM Norbert Lange <nolange79@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > Wouldnt a way simpler method be to just prepare a wrapper in $(HOST_DIR)/bin/ccache ?
->
-> Seems more complex to me than just forcing noccache in the opts.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Its simpler because it wont affect multiple packages now or whenever
-ccache's dependencies change.
+ > Nevo, All,
+ > On 2023-01-04 20:57 -0500, Nevo Hed via buildroot spake thusly:
+ >> Noticed a significant slowdown with rise of number of external trees
+ >> in our env.  This slowdown seemed to be related to invocations if the
+ >> percent_defconfig function (GNU Make 4.3).
+ >> 
+ >> While I have not do a deep dive in analyzing the performance issue, it
+ >> felt like redefining the %_defconfig rule N times impact performance.
+ >> 
+ >> This patch makes %_defconfig a single rule which combines uses the
+ >> first return of a wildcard expression.
+ >> 
+ >> Timing (seconds) of `make pc_x86_64_bios_defconfig` with 1-8 external
+ >> trees:
+ >> 
+ >> #Trees    Before    After
+ >> 1      0.38     0.37
+ >> 2      0.32     0.31
+ >> 3      0.31     0.33
+ >> 4      0.36     0.32
+ >> 5      0.45     0.35
+ >> 6      1.26     0.36
+ >> 7      9.10     0.36
+ >> 8     85.93     0.42
+ >> 
+ >> Signed-off-by: Nevo Hed <nhed+buildroot@starry.com>
 
->
-> >
-> > #!/bin/sh
-> > exec "$@"
-> >
-> > (Or a bit more sophisticated: try finding and using a system installed ccache first)
-> >
-> > When host-ccache is installed, the wrapper will be replaced.
->
-> There may be compatibility issues between buildroot's ccache and a host
-> ccache so I don't think we want to use a system ccache normally.
+ > Thanks for the respin, I like it better than your first iteration, and
+ > most importantly, better than my own implementation!
 
-There schouldn't be, at most you will not find hits between them [1].
+ > I however used most of my commit log, a=exteneded it even further,
+ > provided my reproducibility script in the commit log and redid the
+ > timings up to 1000 trees (heck, it's manageable now, so why not!).
 
-Regards, Norbert
+ > I also slightly reformatted the code, to split the long lines.
 
-[1] - https://github.com/ccache/ccache/discussions/923
+ > Finally, I also added David as the reporter, and that his bug #14996
+ > is now fixed.
+
+ > Applied to master, thanks.
+
+Committed to 2022.11.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
