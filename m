@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E456C61DB3
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:16:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D475C61DB3
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:17:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05D3E60E56;
-	Thu, 12 Jan 2023 19:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05D3E60E56
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZIrLp9FO6C1h; Thu, 12 Jan 2023 19:16:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3088F60B58;
-	Thu, 12 Jan 2023 19:16:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3088F60B58
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DD77F1BF3EC
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:15:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A810A41080
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:15:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A810A41080
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5CFD41095;
+	Thu, 12 Jan 2023 19:17:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5CFD41095
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HcYhTMt8avRV for <buildroot@lists.busybox.net>;
- Thu, 12 Jan 2023 19:15:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BB6541028
- for <buildroot@buildroot.org>; Thu, 12 Jan 2023 19:15:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BB6541028
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69FDA879F7; Thu, 12 Jan 2023 19:15:51 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZpMF-6P1YwVp; Thu, 12 Jan 2023 19:17:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8EA641028;
+	Thu, 12 Jan 2023 19:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8EA641028
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1414E1BF46D
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:17:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1EBB4175D
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1EBB4175D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H-2KN1RPzRZp for <buildroot@lists.busybox.net>;
+ Thu, 12 Jan 2023 19:17:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC9EB40869
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AC9EB40869
+ for <buildroot@buildroot.org>; Thu, 12 Jan 2023 19:17:43 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 60F07100003;
+ Thu, 12 Jan 2023 19:17:40 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pG351-00365z-Cq; Thu, 12 Jan 2023 20:17:39 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:10:38 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e35750b5246e1cd7bce0c53b6e32cca592c4f3ca
-X-Git-Newrev: 6e69d76aae479ab2d5f15baa79f25fd480e12eab
-X-Patchwork-Hint: ignore
-Message-Id: <20230112191551.69FDA879F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-http-daemon: bump version to
- 6.14
+To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+References: <20230110093537.16767-1-nicolas.cavallari@green-communications.fr>
+Date: Thu, 12 Jan 2023 20:17:39 +0100
+In-Reply-To: <20230110093537.16767-1-nicolas.cavallari@green-communications.fr>
+ (Nicolas Cavallari's message of "Tue, 10 Jan 2023 10:35:37 +0100")
+Message-ID: <878ri7d0ks.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/iw: bump version to 5.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +63,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e69d76aae479ab2d5f15baa79f25fd480e12eab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
 
-Updated license hash due to typo/whitespace-only fixes in license file:
-https://github.com/libwww-perl/HTTP-Daemon/commit/605bc6efdabf39d2c9f9c7f613bf88d497454e5a#diff-b4668a52683f65fbc0528f6590ba160c9c64c88c302b6262c506266eb1d35180
+ > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+ > ---
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/perl-http-daemon/perl-http-daemon.hash | 6 +++---
- package/perl-http-daemon/perl-http-daemon.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > on top of 3a22b009992883ad57553ffb3f194303f90ad1a4:
+ >                              arm-aarch64 [ 1/44]: OK
+ >                    bootlin-aarch64-glibc [ 2/44]: OK
+ >                bootlin-arcle-hs38-uclibc [ 3/44]: OK
+ >                     bootlin-armv5-uclibc [ 4/44]: OK
+ >                      bootlin-armv7-glibc [ 5/44]: OK
+ >                    bootlin-armv7m-uclibc [ 6/44]: OK
+ >                       bootlin-armv7-musl [ 7/44]: OK
+ >                 bootlin-m68k-5208-uclibc [ 8/44]: OK
+ >                bootlin-m68k-68040-uclibc [ 9/44]: OK
+ >              bootlin-microblazeel-uclibc [10/44]: OK
+ >                 bootlin-mipsel32r6-glibc [11/44]: OK
+ >                    bootlin-mipsel-uclibc [12/44]: OK
+ >                      bootlin-nios2-glibc [13/44]: OK
+ >                  bootlin-openrisc-uclibc [14/44]: OK
+ >         bootlin-powerpc64le-power8-glibc [15/44]: OK
+ >            bootlin-powerpc-e500mc-uclibc [16/44]: OK
+ >                    bootlin-riscv32-glibc [17/44]: OK
+ >                    bootlin-riscv64-glibc [18/44]: OK
+ >                     bootlin-riscv64-musl [19/44]: OK
+ >                       bootlin-sh4-uclibc [20/44]: OK
+ >                    bootlin-sparc64-glibc [21/44]: OK
+ >                     bootlin-sparc-uclibc [22/44]: OK
+ >                     bootlin-x86-64-glibc [23/44]: OK
+ >                      bootlin-x86-64-musl [24/44]: OK
+ >                    bootlin-x86-64-uclibc [25/44]: OK
+ >                    bootlin-xtensa-uclibc [26/44]: OK
+ >                             br-arm-basic [27/44]: OK
+ >                     br-arm-full-nothread [28/44]: SKIPPED
+ >                       br-arm-full-static [29/44]: OK
+ >                    br-i386-pentium4-full [30/44]: OK
+ >                 br-i386-pentium-mmx-musl [31/44]: OK
+ >                       br-mips64-n64-full [32/44]: OK
+ >                  br-mips64r6-el-hf-glibc [33/44]: OK
+ >                br-powerpc-603e-basic-cpp [34/44]: OK
+ >                br-powerpc64-power7-glibc [35/44]: OK
+ >                        linaro-aarch64-be [36/44]: OK
+ >                           linaro-aarch64 [37/44]: OK
+ >                               linaro-arm [38/44]: OK
+ >                      sourcery-arm-armv4t [39/44]: OK
+ >                             sourcery-arm [40/44]: OK
+ >                      sourcery-arm-thumb2 [41/44]: OK
+ >                          sourcery-mips64 [42/44]: OK
+ >                            sourcery-mips [43/44]: OK
+ >                           sourcery-nios2 [44/44]: OK
+ > 44 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
 
-diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
-index f8272a4fce..c19b3b9558 100644
---- a/package/perl-http-daemon/perl-http-daemon.hash
-+++ b/package/perl-http-daemon/perl-http-daemon.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  63674e3f81760a29075853413eb157d8  HTTP-Daemon-6.12.tar.gz
--sha256  df47bed10c38670c780fd0116867d5fd4693604acde31ba63380dce04c4e1fa6  HTTP-Daemon-6.12.tar.gz
-+md5  3111b0081d08d8b225f52884033de349  HTTP-Daemon-6.14.tar.gz
-+sha256  f0767e7f3cbb80b21313c761f07ad8ed253bce9fa2d0ba806b3fb72d309b2e1d  HTTP-Daemon-6.14.tar.gz
- 
- # computed by scancpan
--sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENCE
-+sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENCE
-diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
-index e475072628..fe50c768bf 100644
---- a/package/perl-http-daemon/perl-http-daemon.mk
-+++ b/package/perl-http-daemon/perl-http-daemon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_HTTP_DAEMON_VERSION = 6.12
-+PERL_HTTP_DAEMON_VERSION = 6.14
- PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
- PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
