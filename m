@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58AA3C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2189C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:12:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 048BD82EBA;
-	Mon, 20 Feb 2023 23:11:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 048BD82EBA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96ACE82EAD;
+	Mon, 20 Feb 2023 23:12:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96ACE82EAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jAYM2gVDcq4z; Mon, 20 Feb 2023 23:11:56 +0000 (UTC)
+	with ESMTP id capOx9Oy1Yu9; Mon, 20 Feb 2023 23:12:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F4DC82EDB;
-	Mon, 20 Feb 2023 23:11:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F4DC82EDB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8965C1BF8C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB54282EDB;
+	Mon, 20 Feb 2023 23:12:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB54282EDB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 835DC1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36EA5612CF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36EA5612CF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92D5541734
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92D5541734
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AKZiqR1_BrjV for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s3_wS-nxesFG for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4611B612AC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4611B612AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id D886A41730
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D886A41730
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EA8D828C8; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+ id C5EA286495; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 Dec 2022 10:00:57 +0100
+Date: Thu, 12 Jan 2023 20:10:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d4386b912db9f9f9a3cf5cbc9165e1609a55309f
-X-Git-Newrev: 58bb71089e52323aea8696a5de2d7687422bde74
+X-Git-Oldrev: e35750b5246e1cd7bce0c53b6e32cca592c4f3ca
+X-Git-Newrev: 6e69d76aae479ab2d5f15baa79f25fd480e12eab
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205213.3EA8D828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gtest: bump to version
- 1.12.1
+Message-Id: <20230220205229.C5EA286495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl-http-daemon: bump
+ version to 6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58bb71089e52323aea8696a5de2d7687422bde74
+commit: https://git.buildroot.net/buildroot/commit/?id=6e69d76aae479ab2d5f15baa79f25fd480e12eab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/google/googletest/releases/tag/release-1.12.1
+Updated license hash due to typo/whitespace-only fixes in license file:
+https://github.com/libwww-perl/HTTP-Daemon/commit/605bc6efdabf39d2c9f9c7f613bf88d497454e5a#diff-b4668a52683f65fbc0528f6590ba160c9c64c88c302b6262c506266eb1d35180
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gtest/gtest.hash | 2 +-
- package/gtest/gtest.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-http-daemon/perl-http-daemon.hash | 6 +++---
+ package/perl-http-daemon/perl-http-daemon.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
-index 1a93684aeb..a6dd15a8d2 100644
---- a/package/gtest/gtest.hash
-+++ b/package/gtest/gtest.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  2a4f11dce6188b256f3650061525d0fe352069e5c162452818efbbf8d0b5fe1c  gtest-1.12.0.tar.gz
-+sha256  81964fe578e9bd7c94dfdb09c8e4d6e6759e19967e397dbea48d1c10e45d0df2  gtest-1.12.1.tar.gz
- sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  LICENSE
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 236c8f3730..a53253228e 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
+diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
+index f8272a4fce..c19b3b9558 100644
+--- a/package/perl-http-daemon/perl-http-daemon.hash
++++ b/package/perl-http-daemon/perl-http-daemon.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  63674e3f81760a29075853413eb157d8  HTTP-Daemon-6.12.tar.gz
+-sha256  df47bed10c38670c780fd0116867d5fd4693604acde31ba63380dce04c4e1fa6  HTTP-Daemon-6.12.tar.gz
++md5  3111b0081d08d8b225f52884033de349  HTTP-Daemon-6.14.tar.gz
++sha256  f0767e7f3cbb80b21313c761f07ad8ed253bce9fa2d0ba806b3fb72d309b2e1d  HTTP-Daemon-6.14.tar.gz
+ 
+ # computed by scancpan
+-sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENCE
++sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENCE
+diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
+index e475072628..fe50c768bf 100644
+--- a/package/perl-http-daemon/perl-http-daemon.mk
++++ b/package/perl-http-daemon/perl-http-daemon.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GTEST_VERSION = 1.12.0
-+GTEST_VERSION = 1.12.1
- GTEST_SITE = $(call github,google,googletest,release-$(GTEST_VERSION))
- GTEST_INSTALL_STAGING = YES
- GTEST_INSTALL_TARGET = NO
+-PERL_HTTP_DAEMON_VERSION = 6.12
++PERL_HTTP_DAEMON_VERSION = 6.14
+ PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
+ PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
