@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD2E4C54EBE
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A62C54EBE
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 881F2813D5;
-	Thu, 12 Jan 2023 19:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 881F2813D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68DC341746;
+	Thu, 12 Jan 2023 19:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68DC341746
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zX2heppEnk_7; Thu, 12 Jan 2023 19:33:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VfmBJekUKiHr; Thu, 12 Jan 2023 19:34:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2EF3813D9;
-	Thu, 12 Jan 2023 19:33:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2EF3813D9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DDFA41BF281
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:32:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FA3C4157D;
+	Thu, 12 Jan 2023 19:34:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FA3C4157D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 629441BF281
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:32:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C464B41139
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:32:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C464B41139
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46F8941793
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:32:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46F8941793
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jVzJxi9uS6_j for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1qymqZmcSoCV for <buildroot@lists.busybox.net>;
  Thu, 12 Jan 2023 19:32:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3CD641148
- for <buildroot@buildroot.org>; Thu, 12 Jan 2023 19:32:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3CD641148
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16F4341796
+ for <buildroot@buildroot.org>; Thu, 12 Jan 2023 19:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16F4341796
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E306987AA1; Thu, 12 Jan 2023 19:32:29 +0000 (UTC)
+ id 145A987A9F; Thu, 12 Jan 2023 19:32:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:28:24 +0100
+Date: Thu, 12 Jan 2023 20:32:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f675fd79d57fc6c8fe0b15fe1c3e3d5aabcd8bd2
-X-Git-Newrev: 431683def0785583705fb32dc1a54f82da65e423
+X-Git-Oldrev: bb79d78554632e96df52f41333aa62f928b6817f
+X-Git-Newrev: 49ca11e339c41ea2dd0484556b7b5beacff9fee9
 X-Patchwork-Hint: ignore
-Message-Id: <20230112193229.E306987AA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-xlsxwriter: bump to version
- 3.0.6
+Message-Id: <20230112193230.145A987A9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/trinity: fix build with kernel >=
+ 6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,160 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=431683def0785583705fb32dc1a54f82da65e423
+commit: https://git.buildroot.net/buildroot/commit/?id=49ca11e339c41ea2dd0484556b7b5beacff9fee9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to date update:
-https://github.com/jmcnamara/XlsxWriter/commit/ba92afc31a232322597709bf7ad4a3b14ca7b293
+Fix the following build failure with kernel >= 6.1:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
+    5 | #include <linux/dn.h>
+      |          ^~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/47e0a5e0b6fcf33ab4f9848d5d8c2be9e5283950
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-xlsxwriter/python-xlsxwriter.hash | 6 +++---
- package/python-xlsxwriter/python-xlsxwriter.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/trinity/0004-drop-decnet.patch | 130 +++++++++++++++++++++++++++++++++
+ 1 file changed, 130 insertions(+)
 
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
-index 4363799079..4a4b946fcb 100644
---- a/package/python-xlsxwriter/python-xlsxwriter.hash
-+++ b/package/python-xlsxwriter/python-xlsxwriter.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/xlsxwriter/json
--md5  b08fcc4753c14aa64b9d99219475d91e  XlsxWriter-3.0.3.tar.gz
--sha256  e89f4a1d2fa2c9ea15cde77de95cd3fd8b0345d0efb3964623f395c8c4988b7f  XlsxWriter-3.0.3.tar.gz
-+md5  3df433a1b6427d40af6e7cac36f0b5c4  XlsxWriter-3.0.6.tar.gz
-+sha256  2f9e5ea13343fe85486e349d4e5fdf746bb69dc7bc1dedfa9b5fae2bb48c0795  XlsxWriter-3.0.6.tar.gz
- # Locally computed sha256 checksums
--sha256  6287be39bd007c8729f5c3cf8dfda9b462af725c1d06e3bf0e17b1532196a08f  LICENSE.txt
-+sha256  b3b494c7e7456dad12ac1b3e61c60e850d60d3ce865fa056c4ce0ae680c03677  LICENSE.txt
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
-index 4055e52622..f05b10670c 100644
---- a/package/python-xlsxwriter/python-xlsxwriter.mk
-+++ b/package/python-xlsxwriter/python-xlsxwriter.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_XLSXWRITER_VERSION = 3.0.3
-+PYTHON_XLSXWRITER_VERSION = 3.0.6
- PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
--PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/53/04/91ff43803c3e88c32aa272fdbda5859fc3c3b50b0de3a1e439cc57455330
-+PYTHON_XLSXWRITER_SITE = https://files.pythonhosted.org/packages/d4/b5/cef6fadeaf316a3bbe82a506252081f2e6533cdf4b69ed64f8831ac01fb0
- PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
- PYTHON_XLSXWRITER_LICENSE = BSD-2-Clause
- PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
+diff --git a/package/trinity/0004-drop-decnet.patch b/package/trinity/0004-drop-decnet.patch
+new file mode 100644
+index 0000000000..15ba7f8e82
+--- /dev/null
++++ b/package/trinity/0004-drop-decnet.patch
+@@ -0,0 +1,130 @@
++From ec8dcc7faf13c57f5f6d785e4429818f1239a058 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 8 Jan 2023 20:50:18 +0100
++Subject: [PATCH] drop decnet
++
++Drop decnet as it has been removed since kernel 6.1 and
++https://github.com/torvalds/linux/commit/1202cdd665315c525b5237e96e0bedc76d7e754f
++resulting in the following build failure:
++
++net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
++    5 | #include <linux/dn.h>
++      |          ^~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/47e0a5e0b6fcf33ab4f9848d5d8c2be9e5283950
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/kernelslacker/trinity/pull/41]
++---
++ include/net.h      |  1 -
++ net/proto-decnet.c | 59 ----------------------------------------------
++ net/proto-unix.c   |  1 -
++ net/protocols.c    |  1 -
++ 4 files changed, 62 deletions(-)
++ delete mode 100644 net/proto-decnet.c
++
++diff --git a/include/net.h b/include/net.h
++index 99d55363..791e8090 100644
++--- a/include/net.h
+++++ b/include/net.h
++@@ -80,7 +80,6 @@ extern const struct netproto proto_atmpvc;
++ extern const struct netproto proto_atmsvc;
++ extern const struct netproto proto_x25;
++ extern const struct netproto proto_rose;
++-extern const struct netproto proto_decnet;
++ extern const struct netproto proto_llc;
++ extern const struct netproto proto_netlink;
++ extern const struct netproto proto_packet;
++diff --git a/net/proto-decnet.c b/net/proto-decnet.c
++deleted file mode 100644
++index 7711cf00..00000000
++--- a/net/proto-decnet.c
+++++ /dev/null
++@@ -1,59 +0,0 @@
++-#include <sys/types.h>
++-#include <sys/socket.h>
++-#include <sys/un.h>
++-#include <netinet/in.h>
++-#include <linux/dn.h>
++-#include <stdlib.h>
++-#include "net.h"
++-#include "random.h"
++-#include "utils.h"	// RAND_ARRAY
++-#include "compat.h"
++-
++-static void decnet_gen_sockaddr(struct sockaddr **addr, socklen_t *addrlen)
++-{
++-	struct sockaddr_dn *dn;
++-	unsigned int i;
++-
++-	dn = zmalloc(sizeof(struct sockaddr_dn));
++-
++-	dn->sdn_family = PF_DECnet;
++-	dn->sdn_flags = rnd();
++-	dn->sdn_objnum = rnd();
++-	dn->sdn_objnamel = rnd() % 16;
++-	for (i = 0; i < dn->sdn_objnamel; i++)
++-		dn->sdn_objname[i] = rnd();
++-	dn->sdn_add.a_len = RAND_BOOL();
++-	dn->sdn_add.a_addr[0] = rnd();
++-	dn->sdn_add.a_addr[1] = rnd();
++-	*addr = (struct sockaddr *) dn;
++-	*addrlen = sizeof(struct sockaddr_dn);
++-}
++-
++-static const unsigned int decnet_opts[] = {
++-	SO_CONDATA, SO_CONACCESS, SO_PROXYUSR, SO_LINKINFO,
++-	DSO_CONDATA, DSO_DISDATA, DSO_CONACCESS, DSO_ACCEPTMODE,
++-	DSO_CONACCEPT, DSO_CONREJECT, DSO_LINKINFO, DSO_STREAM,
++-	DSO_SEQPACKET, DSO_MAXWINDOW, DSO_NODELAY, DSO_CORK,
++-	DSO_SERVICES, DSO_INFO
++-};
++-
++-static void decnet_setsockopt(struct sockopt *so, __unused__ struct socket_triplet *triplet)
++-{
++-	so->level = SOL_DECNET;
++-	so->optname = RAND_ARRAY(decnet_opts);
++-
++-	// TODO: set optlen correctly
++-}
++-
++-static struct socket_triplet decnet_triplets[] = {
++-	{ .family = PF_DECnet, .protocol = DNPROTO_NSP, .type = SOCK_SEQPACKET },
++-	{ .family = PF_DECnet, .protocol = DNPROTO_NSP, .type = SOCK_STREAM },
++-};
++-
++-const struct netproto proto_decnet = {
++-	.name = "decnet",
++-	.setsockopt = decnet_setsockopt,
++-	.gen_sockaddr = decnet_gen_sockaddr,
++-	.valid_triplets = decnet_triplets,
++-	.nr_triplets = ARRAY_SIZE(decnet_triplets),
++-};
++diff --git a/net/proto-unix.c b/net/proto-unix.c
++index f7427a22..119c1429 100644
++--- a/net/proto-unix.c
+++++ b/net/proto-unix.c
++@@ -2,7 +2,6 @@
++ #include <sys/socket.h>
++ #include <sys/un.h>
++ #include <netinet/in.h>
++-#include <linux/dn.h>
++ #include <stdlib.h>
++ #include "net.h"
++ #include "random.h"
++diff --git a/net/protocols.c b/net/protocols.c
++index ea64d5f5..278f08b5 100644
++--- a/net/protocols.c
+++++ b/net/protocols.c
++@@ -18,7 +18,6 @@ const struct protoptr net_protocols[TRINITY_PF_MAX] = {
++ #ifdef USE_IPV6
++ 	[PF_INET6] = { .proto = &proto_inet6 },
++ #endif
++-	[PF_DECnet] = { .proto = &proto_decnet },
++ 	[PF_PACKET] = { .proto = &proto_packet },
++ #ifdef USE_NETECONET
++ 	[PF_ECONET] = { .proto = &proto_econet },
++-- 
++2.39.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
