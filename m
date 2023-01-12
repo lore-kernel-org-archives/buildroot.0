@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B9DFC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:32:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A22FAC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:32:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AB834F11C;
-	Tue, 21 Feb 2023 00:32:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AB834F11C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 448044F429;
+	Tue, 21 Feb 2023 00:32:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 448044F429
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gg8VLXa9F_-A; Tue, 21 Feb 2023 00:32:29 +0000 (UTC)
+	with ESMTP id 1RNgrP4wDpCM; Tue, 21 Feb 2023 00:32:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9861A4F42D;
-	Tue, 21 Feb 2023 00:32:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9861A4F42D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 56A8D1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F57F4F1DD;
+	Tue, 21 Feb 2023 00:32:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F57F4F1DD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 76BA41BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D5F334179B
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5F334179B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 953426FB5C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 953426FB5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fz7WEJnoZkPv for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nwmny1oi_RJt for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B7E240C1A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B7E240C1A
+ by smtp3.osuosl.org (Postfix) with ESMTP id C620A6FAE8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C620A6FAE8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 095CC86495; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-From: Arnout Vandecappelle <arnout@mind.be>
+ id B403B8648F; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 22:51:26 +0100
+Date: Thu, 12 Jan 2023 20:10:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b16ae93c85355aad3440737bc4ef7c3ec2d534f3
-X-Git-Newrev: 9a095643b4dd34eb7acb69662aa64fa945f4b542
+X-Git-Oldrev: 57a907fb3b1c303c2402268450616a13f8571a5d
+X-Git-Newrev: e35750b5246e1cd7bce0c53b6e32cca592c4f3ca
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205254.095CC86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] system: Warn if systemd is
- used with kernel < 4.15
+Message-Id: <20230220205229.B403B8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl-html-parser: bump
+ version to 3.80
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a095643b4dd34eb7acb69662aa64fa945f4b542
+commit: https://git.buildroot.net/buildroot/commit/?id=e35750b5246e1cd7bce0c53b6e32cca592c4f3ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-To quote the README:
+Updated license hash due to typo/whitespace-only fixes in license file:
+https://github.com/libwww-perl/HTML-Parser/commit/96192e7cb1f31559e8ad834fd5d7642d04e35f65#diff-c693279643b8cd5d248172d9c22cb7cf4ed163a3c98c8a3f69c2717edd3eacb7
 
-> Kernel versions below 4.15 have significant gaps in functionality and
-> are not recommended for use with this version of systemd. Taint flag
-> 'old-kernel' will be set. Systemd will most likely still function, but
-> upstream support and testing are limited.
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- system/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/perl-html-parser/perl-html-parser.hash | 6 +++---
+ package/perl-html-parser/perl-html-parser.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 6100d965e7..1ca7690ea3 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -140,6 +140,10 @@ comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.15, host and targe
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
- 		!BR2_HOST_GCC_AT_LEAST_5
+diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
+index 36b094a7cb..ccd115d6c9 100644
+--- a/package/perl-html-parser/perl-html-parser.hash
++++ b/package/perl-html-parser/perl-html-parser.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  60e266d5a07fbea671a0383dd8af7b6c  HTML-Parser-3.76.tar.gz
+-sha256  64d9e2eb2b420f1492da01ec0e6976363245b4be9290f03f10b7d2cb63fa2f61  HTML-Parser-3.76.tar.gz
++md5  8e7151d08f30457a2ba80020b936285f  HTML-Parser-3.80.tar.gz
++sha256  63411db03016747e37c2636db11b05f8cc71608ef5bff36d04ddb0dc92f7835b  HTML-Parser-3.80.tar.gz
  
-+comment "systemd highly recommends Linux >= 4.15"
-+	depends on BR2_INIT_SYSTEMD
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-+
- config BR2_INIT_NONE
- 	bool "None"
- 	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_ROOTFS_SKELETON_DEFAULT
+ # computed by scancpan
+-sha256  0e57338bc10d5fb8891012ebee65a7b504b247f5bb485e121b8b48d7a118a60b  LICENSE
++sha256  9081922eb873ec1809c20672a7385a65f3c6b1163166bf69b2bbe986fb5b0159  LICENSE
+diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
+index 097564dbcb..1e1f8e6050 100644
+--- a/package/perl-html-parser/perl-html-parser.mk
++++ b/package/perl-html-parser/perl-html-parser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_HTML_PARSER_VERSION = 3.76
++PERL_HTML_PARSER_VERSION = 3.80
+ PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
+ PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
