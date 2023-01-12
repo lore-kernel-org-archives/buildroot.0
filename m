@@ -4,46 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C342C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC3DAC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:30:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F197A4F3D2;
-	Tue, 21 Feb 2023 00:30:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F197A4F3D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B8F44F3F7;
+	Tue, 21 Feb 2023 00:30:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B8F44F3F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EgXUns4WLCtf; Tue, 21 Feb 2023 00:30:00 +0000 (UTC)
+	with ESMTP id kO8301D8E8qk; Tue, 21 Feb 2023 00:30:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A24A24F3F3;
-	Tue, 21 Feb 2023 00:29:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A24A24F3F3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 564931BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69A7B4F3DB;
+	Tue, 21 Feb 2023 00:30:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69A7B4F3DB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F11E31BF27E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DF78417D0
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DF78417D0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A05361075
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A05361075
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vqfts9Z6g2LF for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mn1douJsz77X for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 349D14159A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 349D14159A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B5C361099
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B5C361099
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 238B88648F; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+ id 374E6828C8; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 16:18:37 +0100
+Date: Thu, 12 Jan 2023 11:45:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 93ce3c1be0753189d6af3ee9968b935037519c25
-X-Git-Newrev: 26dd70e954a7c9142b078837ab1bbfad54d0e5cb
+X-Git-Oldrev: ab8a8066f5cf397d98c76a06757a9523d25d6500
+X-Git-Newrev: 57817fe05a4250a260a08201812c6652b306a0e5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205253.238B88648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/reproc: new package
+Message-Id: <20230220205229.374E6828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/parted: bump to
+ version 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,105 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26dd70e954a7c9142b078837ab1bbfad54d0e5cb
+commit: https://git.buildroot.net/buildroot/commit/?id=57817fe05a4250a260a08201812c6652b306a0e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Required by micromamba.
-
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/reproc/Config.in   | 14 ++++++++++++++
- package/reproc/reproc.hash |  3 +++
- package/reproc/reproc.mk   | 17 +++++++++++++++++
- 5 files changed, 36 insertions(+)
+ package/parted/parted.hash | 2 +-
+ package/parted/parted.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e8ddad71cd..d7c4d03c4c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2790,6 +2790,7 @@ N:	TIAN Yuanhao <tianyuanhao3@163.com>
- F:	package/cli11/
- F:	package/libsolv/
- F:	package/open-isns/
-+F:	package/reproc/
- F:	package/termcolor/
- F:	package/tl-expected/
+diff --git a/package/parted/parted.hash b/package/parted/parted.hash
+index 392436ec4b..8a167d9bb8 100644
+--- a/package/parted/parted.hash
++++ b/package/parted/parted.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  e1298022472da5589b7f2be1d5ee3c1b66ec3d96dfbad03dc642afd009da5342  parted-3.4.tar.xz
++sha256  4938dd5c1c125f6c78b1f4b3e297526f18ee74aa43d45c248578b1d2470c05a2  parted-3.5.tar.xz
  
-diff --git a/package/Config.in b/package/Config.in
-index 6ca4c61959..06d0a05854 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2126,6 +2126,7 @@ endif
- 	source "package/protozero/Config.in"
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
-+	source "package/reproc/Config.in"
- 	source "package/riemann-c-client/Config.in"
- 	source "package/shapelib/Config.in"
- 	source "package/skalibs/Config.in"
-diff --git a/package/reproc/Config.in b/package/reproc/Config.in
-new file mode 100644
-index 0000000000..a4e9c893b1
---- /dev/null
-+++ b/package/reproc/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_REPROC
-+	bool "reproc"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # uses wchar_t
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
-+	help
-+	  reproc is a cross-platform C/C++ library that simplifies
-+	  starting, stopping and communicating with external programs.
-+
-+	  https://github.com/DaanDeMeyer/reproc
-+
-+comment "reproc needs a toolchain w/ threads, wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/reproc/reproc.hash b/package/reproc/reproc.hash
-new file mode 100644
-index 0000000000..6da6d0a0bb
---- /dev/null
-+++ b/package/reproc/reproc.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  55c780f7faa5c8cabd83ebbb84b68e5e0e09732de70a129f6b3c801e905415dd  reproc-14.2.4.tar.gz
-+sha256  8f91afbe266bebac2cf1b220e0e67ace4cb9a97d2b21940abef20eb6691cfa91  LICENSE
-diff --git a/package/reproc/reproc.mk b/package/reproc/reproc.mk
-new file mode 100644
-index 0000000000..3167911c4d
---- /dev/null
-+++ b/package/reproc/reproc.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# reproc
-+#
-+################################################################################
-+
-+REPROC_VERSION = 14.2.4
-+REPROC_SITE = $(call github,DaanDeMeyer,reproc,v$(REPROC_VERSION))
-+REPROC_LICENSE = MIT
-+REPROC_LICENSE_FILES = LICENSE
-+REPROC_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),yy) # C++11
-+REPROC_CONF_OPTS += -DREPROC++=ON
-+endif
-+
-+$(eval $(cmake-package))
+ # Locally calculated
+ sha256  0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf  COPYING
+diff --git a/package/parted/parted.mk b/package/parted/parted.mk
+index 23158179e4..6d4626e2e6 100644
+--- a/package/parted/parted.mk
++++ b/package/parted/parted.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PARTED_VERSION = 3.4
++PARTED_VERSION = 3.5
+ PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
+ PARTED_SITE = $(BR2_GNU_MIRROR)/parted
+ PARTED_DEPENDENCIES = host-pkgconf util-linux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
