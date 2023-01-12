@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A903C54EBD
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D18FC54EBD
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:47:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E57B5818BE;
-	Thu, 12 Jan 2023 10:47:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E57B5818BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2075410A1;
+	Thu, 12 Jan 2023 10:47:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2075410A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P43AVP39em4h; Thu, 12 Jan 2023 10:47:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gLLTPlDJ4YNv; Thu, 12 Jan 2023 10:47:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3286281886;
-	Thu, 12 Jan 2023 10:47:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3286281886
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0D5D11BF96B
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFD7D410BA;
+	Thu, 12 Jan 2023 10:47:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFD7D410BA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F0DB1BF973
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:47:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA9EE404D8
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFBB38177C
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9EE404D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFBB38177C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TgWVdncE1JdG for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZdNcSs__7SLp for <buildroot@lists.busybox.net>;
  Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3310440235
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2946A817FD
  for <buildroot@buildroot.org>; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3310440235
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2946A817FD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 212B887991; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
+ id 175E387990; Thu, 12 Jan 2023 10:47:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 11:45:43 +0100
+Date: Thu, 12 Jan 2023 11:44:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab8a8066f5cf397d98c76a06757a9523d25d6500
-X-Git-Newrev: 57817fe05a4250a260a08201812c6652b306a0e5
+X-Git-Oldrev: 693c88d9d276c16e7a3aad333cb20e56cfffbf20
+X-Git-Newrev: ab8a8066f5cf397d98c76a06757a9523d25d6500
 X-Patchwork-Hint: ignore
-Message-Id: <20230112104725.212B887991@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/parted: bump to version 3.5
+Message-Id: <20230112104725.175E387990@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: bump version to 1.19.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57817fe05a4250a260a08201812c6652b306a0e5
+commit: https://git.buildroot.net/buildroot/commit/?id=ab8a8066f5cf397d98c76a06757a9523d25d6500
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+go1.19.5 (released 2023-01-10) includes fixes to the compiler, the linker, and
+the crypto/x509, net/http, sync/atomic, and syscall packages.
+
+https://github.com/golang/go/issues?q=milestone%3AGo1.19.5+label%3ACherryPickApproved
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/parted/parted.hash | 2 +-
- package/parted/parted.mk   | 2 +-
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/parted/parted.hash b/package/parted/parted.hash
-index 392436ec4b..8a167d9bb8 100644
---- a/package/parted/parted.hash
-+++ b/package/parted/parted.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  e1298022472da5589b7f2be1d5ee3c1b66ec3d96dfbad03dc642afd009da5342  parted-3.4.tar.xz
-+sha256  4938dd5c1c125f6c78b1f4b3e297526f18ee74aa43d45c248578b1d2470c05a2  parted-3.5.tar.xz
- 
- # Locally calculated
- sha256  0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf  COPYING
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index 23158179e4..6d4626e2e6 100644
---- a/package/parted/parted.mk
-+++ b/package/parted/parted.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index d35db10213..4c22f0f274 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  eda74db4ac494800a3e66ee784e495bfbb9b8e535df924a8b01b1a8028b7f368  go1.19.4.src.tar.gz
++sha256  8e486e8e85a281fc5ce3f0bedc5b9d2dbf6276d7db0b25d3ec034f313da0375f  go1.19.5.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 44e0c622c9..d3ed07f03b 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PARTED_VERSION = 3.4
-+PARTED_VERSION = 3.5
- PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
- PARTED_SITE = $(BR2_GNU_MIRROR)/parted
- PARTED_DEPENDENCIES = host-pkgconf util-linux
+-GO_VERSION = 1.19.4
++GO_VERSION = 1.19.5
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
