@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A98AC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:16:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09097C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:16:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23FDF701EA;
-	Tue, 21 Feb 2023 02:16:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23FDF701EA
+	by smtp3.osuosl.org (Postfix) with ESMTP id B30E87018F;
+	Tue, 21 Feb 2023 02:16:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B30E87018F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KGdNmGeWsdLV; Tue, 21 Feb 2023 02:16:44 +0000 (UTC)
+	with ESMTP id pwH5Hv8NkTgl; Tue, 21 Feb 2023 02:16:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14E18702D9;
-	Tue, 21 Feb 2023 02:16:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E18702D9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 68EA01BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3E86701C6;
+	Tue, 21 Feb 2023 02:16:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3E86701C6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 961121BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A617417EC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A617417EC
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE0F46FB5E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE0F46FB5E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T5BSers5HqDa for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NXvW0-laVeBy for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0559417DA
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0559417DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id D78B56FB24
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D78B56FB24
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD9DF86496; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+ id D5FF1828C8; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 22:37:15 +0100
+Date: Thu, 12 Jan 2023 20:10:45 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f79a9c775ff0a59027f274a237d98b5f8d31c022
-X-Git-Newrev: d8dc5315eb712eca0a5cbf793a6714a47ab6e57e
+X-Git-Oldrev: 6e69d76aae479ab2d5f15baa79f25fd480e12eab
+X-Git-Newrev: 79e8aad721099eb05e60b449432136691275022f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205253.CD9DF86496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wolfssl: disable
- assembly when not supported
+Message-Id: <20230220205229.D5FF1828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl-http-message:
+ bump version to 6.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,90 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8dc5315eb712eca0a5cbf793a6714a47ab6e57e
+commit: https://git.buildroot.net/buildroot/commit/?id=79e8aad721099eb05e60b449432136691275022f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-wolfssl contains some assembly code and its configure.ac script
-enables the assembly code depending on the CPU architecture. However,
-the detection logic is not sufficient and leads to using the assembly
-code in situation where it should not.
-
-Here are two examples:
-
- - As soon as the architecture is mips64/mips64el, it uses assembly
-   code, but that assembly code is not mips64r6 compatible.
-
- - As soon as the architecture is RISC-V, it uses assembly code, but
-   that assembly code uses multiplication instructions, without paying
-   attention that the "M" extension may not be available in the RISC-V
-   CPU instruction set.
-
-In order to avoid this, we introduce a
-BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS hidden boolean to decide when to
-enable/disable assembly code. We set an initial value with the
-supported CPU architectures, with the exclusion of the problematic
-cases described above.
-
-It is pretty likely that this variable will need tuning progressively,
-as it is difficult to determine which CPU variants exactly are
-supported by the assembly code in wolfssl.
-
-Fixes:
-
- - MIPS64 case: http://autobuild.buildroot.net/results/43e/43ee1a457cbeb986d958c9a70cac0676377661c0/
- - RISC-V case: http://autobuild.buildroot.net/results/f05/f056ebe7749a69994afba39a9d4967e2774c45ea/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/Config.in  | 12 ++++++++++++
- package/wolfssl/wolfssl.mk |  6 ++++++
- 2 files changed, 18 insertions(+)
+ package/perl-http-message/perl-http-message.hash | 4 ++--
+ package/perl-http-message/perl-http-message.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
-index 3a97125e8d..c41bdb6888 100644
---- a/package/wolfssl/Config.in
-+++ b/package/wolfssl/Config.in
-@@ -1,3 +1,15 @@
-+config BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	default y if BR2_arm || BR2_armeb
-+	default y if BR2_powerpc
-+	default y if BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_mips64 && !BR2_MIPS_CPU_MIPS32R6
-+	default y if BR2_mips64el && !BR2_MIPS_CPU_MIPS32R6
-+	default y if BR2_mips || BR2_mipsel
-+	default y if BR2_riscv && BR2_RISCV_ISA_RVM
-+	default y if BR2_s390x
-+
- config BR2_PACKAGE_WOLFSSL
- 	bool "wolfssl"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 8f6cba56ec..9f06bb1b4b 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -32,6 +32,12 @@ else
- WOLFSSL_CONF_OPTS += --disable-sslv3
- endif
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index 0e05da644e..94b5c06a4f 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  17ca8ec3be118d50c5299b232f3109d7  HTTP-Message-6.37.tar.gz
+-sha256  0e59da0a85e248831327ebfba66796314cb69f1bfeeff7a9da44ad766d07d802  HTTP-Message-6.37.tar.gz
++md5  926a077669a7828c5ca39b5cf7735625  HTTP-Message-6.44.tar.gz
++sha256  398b647bf45aa972f432ec0111f6617742ba32fc773c6612d21f64ab4eacbca1  HTTP-Message-6.44.tar.gz
  
-+ifeq ($(BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS),y)
-+WOLFSSL_CONF_OPTS += --enable-asm
-+else
-+WOLFSSL_CONF_OPTS += --disable-asm
-+endif
-+
- # enable ARMv8 hardware acceleration
- ifeq ($(BR2_aarch64),y)
- WOLFSSL_CONF_OPTS += --enable-armasm
+ # computed by scancpan
+ sha256  f2f428b5f8a3bf4e6a71cd5ea92558a3d123d3d7c5075d34923e71e46dea94df  LICENSE
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index 79402c3298..67b68b0de2 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_HTTP_MESSAGE_VERSION = 6.37
++PERL_HTTP_MESSAGE_VERSION = 6.44
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+ PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
