@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 275C9C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D004FC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D567382F99;
-	Mon, 20 Feb 2023 23:12:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D567382F99
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57F9B82FD5;
+	Mon, 20 Feb 2023 23:12:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57F9B82FD5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3uJj_YqQIngB; Mon, 20 Feb 2023 23:12:46 +0000 (UTC)
+	with ESMTP id wTySsIFQPAds; Mon, 20 Feb 2023 23:12:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E652382F76;
-	Mon, 20 Feb 2023 23:12:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E652382F76
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9B63D1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7043382FBE;
+	Mon, 20 Feb 2023 23:12:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7043382FBE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D164E1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 857D5612AC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 857D5612AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 854054173A
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 854054173A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IFxLHG7-ZU4s for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F_53HdGzSLm7 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BF51612C3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BF51612C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id C481D41730
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C481D41730
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A7478648F; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
+ id C209B86495; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 Dec 2022 10:05:23 +0100
+Date: Thu, 12 Jan 2023 20:27:06 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 58bb71089e52323aea8696a5de2d7687422bde74
-X-Git-Newrev: 704c62bbc5d30df80002fdd1f6a63bebc0e1842d
+X-Git-Oldrev: 0a598dedd8090d3c7ba4ea8c323a702289586647
+X-Git-Newrev: 6abb8721dbf0987ec43f248c84ce4f0f4d11b697
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205213.4A7478648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/visionfive2_defconfig:
- new defconfig
+Message-Id: <20230220205230.C209B86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-weasyprint:
+ bump to version 57.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,141 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=704c62bbc5d30df80002fdd1f6a63bebc0e1842d
+commit: https://git.buildroot.net/buildroot/commit/?id=6abb8721dbf0987ec43f248c84ce4f0f4d11b697
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a defconfig for the Starfive VisionFive2 board, a board built around the
-Starfive JH7110 RISC-V 64bit SoC.
-
-This board comes with functional lowlevel and U-Boot bootloaders in SPI
-flash. The defconfig reuses these and only builds a (5.15 based) kernel and
-rootfs.
-
-The factory shipped U-Boot is hard coded to look at MMC partition 3.
-
-Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
-[Peter: add to DEVELOPERS]
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  4 +++
- board/visionfive2/genimage.cfg                     | 21 +++++++++++++++
- .../overlay/boot/extlinux/extlinux.conf            |  4 +++
- board/visionfive2/readme.txt                       | 30 ++++++++++++++++++++++
- configs/visionfive2_defconfig                      | 18 +++++++++++++
- 5 files changed, 77 insertions(+)
+ package/python-weasyprint/python-weasyprint.hash | 4 ++--
+ package/python-weasyprint/python-weasyprint.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b0f10148b5..a200edb7f5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1029,6 +1029,10 @@ F:	package/tbb/
- N:	Francisco Gonzalez <gzmorell@gmail.com>
- F:	package/ser2net/
+diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
+index 4da8ea479a..d6026cf034 100644
+--- a/package/python-weasyprint/python-weasyprint.hash
++++ b/package/python-weasyprint/python-weasyprint.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/weasyprint/json
+-md5  bab389bdfb25e03d64591c56367fb344  weasyprint-57.1.tar.gz
+-sha256  397a9d11298f94485ec3b7b68aeef1c6106fb638350126d9d4a64109b73508a0  weasyprint-57.1.tar.gz
++md5  497030cecafffca06bae2b161846b461  weasyprint-57.2.tar.gz
++sha256  b8e9ef2dcbcfbc82e99215acfd68f947b2b5f1999b5b156db75fabe380ba7e9a  weasyprint-57.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
+diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
+index d1e5e7983d..27b07226d9 100644
+--- a/package/python-weasyprint/python-weasyprint.mk
++++ b/package/python-weasyprint/python-weasyprint.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+N:	Francois Dugast <francois.dugast.foss@gmail.com>
-+F:	board/visionfive2/
-+F:	configs/visionfive2_defconfig
-+
- N:	Francois Perrad <francois.perrad@gadz.org>
- F:	board/freescale/ls1028ardb/
- F:	board/olimex/a20_olinuxino
-diff --git a/board/visionfive2/genimage.cfg b/board/visionfive2/genimage.cfg
-new file mode 100644
-index 0000000000..c221b49c7b
---- /dev/null
-+++ b/board/visionfive2/genimage.cfg
-@@ -0,0 +1,21 @@
-+# Minimal SD card image for the Starfive VisionFive2 board
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	# u-boot is hard coded to look at 3rd partition
-+	partition dummy1 {
-+		size = 512
-+	}
-+
-+	partition dummy2 {
-+		size = 512
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		bootable = "true"
-+	}
-+}
-diff --git a/board/visionfive2/overlay/boot/extlinux/extlinux.conf b/board/visionfive2/overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..6e2c5660d6
---- /dev/null
-+++ b/board/visionfive2/overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label linux
-+  kernel /boot/Image
-+  devicetree /boot/jh7110-visionfive-v2.dtb
-+  append console=ttyS0,115200 root=/dev/mmcblk1p3
-diff --git a/board/visionfive2/readme.txt b/board/visionfive2/readme.txt
-new file mode 100644
-index 0000000000..2da98f3847
---- /dev/null
-+++ b/board/visionfive2/readme.txt
-@@ -0,0 +1,30 @@
-+Starfive VisionFive2
-+====================
-+
-+The VisionFive2 is a low-cost RISC-V 64-bit based platform, powered by a
-+Starfive JH7110 processor.
-+
-+How to build
-+============
-+
-+$ make visionfive2_defconfig
-+$ make
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Preparing the board
-+===================
-+
-+Connect a TTL UART cable to pin 6 (GND), 8 (TX) and 10 (RX).
-+
-+Insert your SD card.
-+
-+Power-up the board using an USB-C cable.
-diff --git a/configs/visionfive2_defconfig b/configs/visionfive2_defconfig
-new file mode 100644
-index 0000000000..5b07a8efbc
---- /dev/null
-+++ b/configs/visionfive2_defconfig
-@@ -0,0 +1,18 @@
-+BR2_riscv=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_OVERLAY="board/visionfive2/overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/visionfive/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,linux,7b7b4eddd8d5ae55f6e0ee09b93e16e23ab4f97b)/linux-7b7b4eddd8d5ae55f6e0ee09b93e16e23ab4f97b.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="starfive_visionfive2"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="starfive/jh7110-visionfive-v2"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_PACKAGE_HOST_GENIMAGE=y
+-PYTHON_WEASYPRINT_VERSION = 57.1
++PYTHON_WEASYPRINT_VERSION = 57.2
+ PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
+-PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/32/3f/d305dc714c119e5b11c0ea1ecff9741407b6da90d6b684859d3b3e586692
++PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/b1/88/335dd6cb71a9d58584c975bf1db0ab9a3a9f15f9bffef1cbfac0fb1ee72e
+ PYTHON_WEASYPRINT_SETUP_TYPE = flit
+ PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
+ PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
