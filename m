@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 229D2C63797
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB477C61DB3
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 19:28:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6B0B81F32;
-	Thu, 12 Jan 2023 19:28:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6B0B81F32
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DC4D402E5;
+	Thu, 12 Jan 2023 19:28:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DC4D402E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Enpyrmw0u424; Thu, 12 Jan 2023 19:28:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8KnLxfvfLauo; Thu, 12 Jan 2023 19:28:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1601C81F2D;
-	Thu, 12 Jan 2023 19:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1601C81F2D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67EFA41778;
+	Thu, 12 Jan 2023 19:28:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67EFA41778
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 707821BF281
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:26:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6FC231BF281
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:26:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5A2E60E48
- for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5A2E60E48
+ by smtp3.osuosl.org (Postfix) with ESMTP id 31BA560E41
+ for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 19:26:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31BA560E41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gwm5ERgS8hpd for <buildroot@lists.busybox.net>;
+ with ESMTP id UwbSFCCFFJbW for <buildroot@lists.busybox.net>;
  Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D30360E41
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AA1660E6D
  for <buildroot@buildroot.org>; Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D30360E41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AA1660E6D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BFE387A3F; Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
+ id 471AE87A3D; Thu, 12 Jan 2023 19:26:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:19:42 +0100
+Date: Thu, 12 Jan 2023 20:24:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5c509bcc0e28a71d58248158e904315486624bd
-X-Git-Newrev: 895a5562c02b7f1ac762f17dcd08ee8b2a39e4f1
+X-Git-Oldrev: bb066af7f9d84abf890c5692879477aaca36bff8
+X-Git-Newrev: 21175102a0cd544a789c3cedead7d5141191275c
 X-Patchwork-Hint: ignore
-Message-Id: <20230112192614.1BFE387A3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/liteboard: bump u-boot to 2023.01
+Message-Id: <20230112192614.471AE87A3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsigc: switch to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,28 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=895a5562c02b7f1ac762f17dcd08ee8b2a39e4f1
+commit: https://git.buildroot.net/buildroot/commit/?id=21175102a0cd544a789c3cedead7d5141191275c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/grinn_liteboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libsigc/libsigc.hash | 2 +-
+ package/libsigc/libsigc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
-index ab22911d66..3ae4a2a0b5 100644
---- a/configs/grinn_liteboard_defconfig
-+++ b/configs/grinn_liteboard_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="liteboard"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
+diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
+index a358732faa..6becfb19ce 100644
+--- a/package/libsigc/libsigc.hash
++++ b/package/libsigc/libsigc.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/3.4/libsigc++-3.4.0.sha256sum
++# From https://download.gnome.org/sources/libsigc++/3.4/libsigc++-3.4.0.sha256sum
+ sha256  02e2630ffb5ce93cd52c38423521dfe7063328863a6e96d41d765a6116b8707e  libsigc++-3.4.0.tar.xz
+ 
+ # Locally calculated
+diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
+index 2de49a0c1c..c054575ea6 100644
+--- a/package/libsigc/libsigc.mk
++++ b/package/libsigc/libsigc.mk
+@@ -7,7 +7,7 @@
+ LIBSIGC_VERSION_MAJOR = 3.4
+ LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).0
+ LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
+-LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/$(LIBSIGC_VERSION_MAJOR)
++LIBSIGC_SITE = https://download.gnome.org/sources/libsigc++/$(LIBSIGC_VERSION_MAJOR)
+ LIBSIGC_INSTALL_STAGING = YES
+ LIBSIGC_LICENSE = LGPL-3.0+
+ LIBSIGC_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
