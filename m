@@ -4,46 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 597E2C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:35:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D825C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 070354F457;
-	Tue, 21 Feb 2023 00:35:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 070354F457
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5271C4F27A;
+	Tue, 21 Feb 2023 00:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5271C4F27A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OIL_xRLLYV0g; Tue, 21 Feb 2023 00:35:15 +0000 (UTC)
+	with ESMTP id QQj5oWXRDphr; Tue, 21 Feb 2023 00:35:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8C834F446;
-	Tue, 21 Feb 2023 00:35:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8C834F446
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 97BF81BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59EC94F47B;
+	Tue, 21 Feb 2023 00:35:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59EC94F47B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BE0741BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7862B417CB
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7862B417CB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 03B486FB00
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03B486FB00
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dlX1hsBVahba for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tRfyR7dzrRsA for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 937BD417C3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 937BD417C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E4A56FB5A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E4A56FB5A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C23A86495; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+ id 390EF81979; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 09:54:14 +0100
+Date: Thu, 12 Jan 2023 20:19:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f9a92ea1cb1dd2aa9b3f9c83c04d7d01c1f6e148
-X-Git-Newrev: 17be7d028c193dc1160a4cb9313efe37326e7aa9
+X-Git-Oldrev: 93d0979fbf063a8b65fd9d4c58891b21805804c6
+X-Git-Newrev: d5c509bcc0e28a71d58248158e904315486624bd
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205254.8C23A86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libva: switch to meson
+Message-Id: <20230220205230.390EF81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/liteboard: bump linux
+ to 6.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,88 +57,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17be7d028c193dc1160a4cb9313efe37326e7aa9
+commit: https://git.buildroot.net/buildroot/commit/?id=d5c509bcc0e28a71d58248158e904315486624bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The time between version 2.17.0 being tagged and the release of its
-tarball version containing autoconf scripts was three weeks now.
-With the switch to meson we can directly use the github-generated
-tarball while not needing to run autoreconf.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libva/libva.hash |  4 +---
- package/libva/libva.mk   | 19 +++++++++----------
- 2 files changed, 10 insertions(+), 13 deletions(-)
+ configs/grinn_liteboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 700ace0378..780c186069 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,3 @@
--# From https://github.com/intel/libva/releases/download/2.17.0/libva-2.17.0.tar.bz2.sha1sum
--sha1  997f7b3111bc5a4d32ec72e9d7f9fcfca41e4923  libva-2.17.0.tar.bz2
- # Locally computed
--sha256  f3e5eb27c305e05a9bb62703d1915a127301cc0c4f9f209025767432230c4eac  libva-2.17.0.tar.bz2
-+sha256  8940541980ef998a36cd8f6ad905e81838ea4ddf56dc479ed2bebd12711e6001  libva-2.17.0.tar.gz
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index c6b9f63b10..f50010d9fc 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- LIBVA_VERSION = 2.17.0
--LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
--LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
-+LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
- LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
- LIBVA_INSTALL_STAGING = YES
-@@ -14,25 +13,25 @@ LIBVA_DEPENDENCIES = host-pkgconf libdrm
- 
- # libdrm is a hard-dependency
- LIBVA_CONF_OPTS = \
--	--enable-drm \
--	--with-drivers-path="/usr/lib/va"
-+	-Ddisable_drm=false \
-+	-Ddriverdir="/usr/lib/va"
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
--LIBVA_CONF_OPTS += --enable-x11
-+LIBVA_CONF_OPTS += -Dwith_x11=yes
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
- LIBVA_DEPENDENCIES += libgl
--LIBVA_CONF_OPTS += --enable-glx
-+LIBVA_CONF_OPTS += -Dwith_glx=yes
- endif
- else
--LIBVA_CONF_OPTS += --disable-glx --disable-x11
-+LIBVA_CONF_OPTS += -Dwith_glx=no -Dwith_x11=no
- endif
- 
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- LIBVA_DEPENDENCIES += wayland
--LIBVA_CONF_OPTS += --enable-wayland
-+LIBVA_CONF_OPTS += -Dwith_wayland=yes
- else
--LIBVA_CONF_OPTS += --disable-wayland
-+LIBVA_CONF_OPTS += -Dwith_wayland=no
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
+index 9cad66e15a..ab22911d66 100644
+--- a/configs/grinn_liteboard_defconfig
++++ b/configs/grinn_liteboard_defconfig
+@@ -1,12 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/grinn/liteboard/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-liteboard"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
