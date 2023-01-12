@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AEE0C54EBD
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:24:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0EF5C54EBC
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jan 2023 10:24:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEE8360B24;
-	Thu, 12 Jan 2023 10:24:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEE8360B24
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4ACF740235;
+	Thu, 12 Jan 2023 10:24:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ACF740235
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ll6_dDxpotHa; Thu, 12 Jan 2023 10:24:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3h1VoBr4mZFG; Thu, 12 Jan 2023 10:24:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0718E60758;
-	Thu, 12 Jan 2023 10:24:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0718E60758
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C69B11BF476
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63CFC400D6;
+	Thu, 12 Jan 2023 10:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63CFC400D6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ED29E1BF96B
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEA738145F
+ by smtp2.osuosl.org (Postfix) with ESMTP id C94204010E
  for <buildroot@lists.busybox.net>; Thu, 12 Jan 2023 10:24:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEA738145F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C94204010E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f1GhQlycklBw for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AFF3jpaT9Q5s for <buildroot@lists.busybox.net>;
  Thu, 12 Jan 2023 10:24:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCBC0813A2
+ by smtp2.osuosl.org (Postfix) with ESMTP id D51F7400D6
  for <buildroot@buildroot.org>; Thu, 12 Jan 2023 10:24:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCBC0813A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D51F7400D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB24A87966; Thu, 12 Jan 2023 10:24:26 +0000 (UTC)
+ id C120987964; Thu, 12 Jan 2023 10:24:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 11:22:43 +0100
+Date: Thu, 12 Jan 2023 11:18:45 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: e7dee76f9b9ce5d8bbffe50005d9e12c4e7b7e59
-X-Git-Newrev: 260a94a43426544166fad33a30d83b9d06849542
+X-Git-Oldrev: 35c47ed4d94c9cdb79c7dc8856808fd460b13945
+X-Git-Newrev: e7dee76f9b9ce5d8bbffe50005d9e12c4e7b7e59
 X-Patchwork-Hint: ignore
-Message-Id: <20230112102426.CB24A87966@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/crun: needs
- fexecve
+Message-Id: <20230112102426.C120987964@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] Makefile: fix use of many
+ br2-external trees
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,139 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=260a94a43426544166fad33a30d83b9d06849542
+commit: https://git.buildroot.net/buildroot/commit/?id=e7dee76f9b9ce5d8bbffe50005d9e12c4e7b7e59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-crun unconditionally uses fexecve since its addition in commit
-530d6f661e506a4774b7236cb93d65f669adbc92 and
-https://github.com/containers/crun/commit/ce4dfbb97a8a05bef125030eaa6c46c07a5f9344:
-resulting in the following uclibc build failure:
+The top level Makefile in buildroot has a recursive rule which causes
+the appearance of a hang as the number of directories in BR2_EXTERNAL
+increases. When the number of directories in BR2_EXTERNAL is small, the
+recursion occurs, but make detects the recursion and determines the
+target does not have to be remade. This allows make to progress.
 
-/tmp/instance-11/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arceb-snps-linux-uclibc/9.2.1/../../../../arceb-snps-linux-uclibc/bin/ld: src/libcrun/crun-cloned_binary.o: in function `ensure_cloned_binary':
-cloned_binary.c:(.text+0x1006): undefined reference to `fexecve'
+This is the failing rule:
 
-In 6e3f7fbc072c (package/runc: add upstream security fix for
-CVE-2019-5736), we made runc unavailable for uclibc toolchains, and crun
-uses fexecve for that same reason, to fix CVE-2019-5736.
+    define percent_defconfig
+    # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+    %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
+        @$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
+                $$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
+    endef
+    $(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
 
-So, also make crun unavailable for uclibc toolchains.
+The rule for %defconfig is created for each directory in BR2_EXTERNAL.
+When the rule is matched, the stem is 'defconfig_name'. The second
+prerequisite is expanded to $(1)/configs/defconfig_name_defconfig. The
+rule, and all of the other rules defined by this macro, are invoked
+again, but the stem is now $(1)/configs/defconfig_name_defconfig. The
+second prerequisite is now expanded to
+$(1)/configs/($1)/configs/defconfig_name_defconfig. This expansion
+continues until make detects the infinite recursion.
 
-Fixes:
- - http://autobuild.buildroot.org/results/e1f4ef2b392c0e7161390ba0f97d6eef3bd12e9c
+With up to 5 br2-external trees, the time is very small, so that it is
+not noticeable. But starting with 6 br2-external trees, the time is
+insanely big (so much so that we did not even let it finish after it ran
+for hours); see timings toward the end of the commit log.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+We fix that by adding a single %_defconfig rule, which is now rsponsible
+to find the actual defconfig file that triggered the rule, by iterating
+on the reverse list of br2-external trees and then in main tree.
+
+Of course, now, there is no way for make to warn that there is no such
+defconfig, as it is no longer part of the prerequisites of the rule. So,
+we delegate to the recipe the responsibility to check for that.
+
+Timing (seconds) of `make pc_x86_64_bios_defconfig` with 1..1000
+external trees, with make 4.2.1 (* with make 4.3), on a Core i7-7700HQ:
+
+    #trees    Before    After
+         1     0.312    0.319
+         2     0.319    0.323
+         3     0.325    0.327
+         4     0.353    0.339
+         5     0.993    0.349
+         6     1.26*    0.347
+         7     9.10*    0.362
+         8    85.93*    0.360
+         9     n/a      0.373
+        10     n/a      0.374
+        50     n/a      0.738
+       100     n/a      1.228
+       500     n/a      7.483
+      1000     n/a     16.076
+
+How to reproduce:
+
+    #!/usr/bin/env bash
+
+    N="${1:-1000}"
+
+    for i in $(seq 1 1000); do
+        [ -d "br2-external/${i}/configs" ] && break
+        mkdir -p br2-external/${i}/configs
+        touch br2-external/${i}/{Config.in,external.mk}
+        echo "name: BR_TEST_${i}" >br2-external/${i}/external.desc
+        touch br2-external/${i}/configs/foo{,_${i}}_defconfig
+    done
+
+    time make \
+        BR2_EXTERNAL="$(
+            for i in $(seq 1 ${N}); do
+                printf '%s\n' "$(pwd)/br2-external/${i}"
+            done
+        )" \
+        foo_1_defconfig
+
+Notes: the timings are very dependent on how much the CPU is otherwise
+loaded, but having a multi-core CPU slightly loaded helps maintain a
+high frequency on the siblings, and that can reduce the above timings
+in half! Best to try on an otherwise-idle system.
+
+Fixes: #14996
+
+Reported-by: David Lawson <david.lawson1@tx.rr.com>
+Signed-off-by: Nevo Hed <nhed+buildroot@starry.com>
+[yann.morin.1998@free.fr:
+  - split long foreach
+  - drastically extend the commit log
+  - provide reproducer script and redo timings
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a0e134a05342507bd9ac47da03abca4c9c113a64)
+(cherry picked from commit e6195c53041f5a8aa375b9715f90beb5188d33e5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/crun/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ Makefile | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/crun/Config.in b/package/crun/Config.in
-index 5def7001c1..fa0894e126 100644
---- a/package/crun/Config.in
-+++ b/package/crun/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_CRUN
- 	bool "crun"
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_YAJL # libocispec
- 	help
- 	  crun is a fast and low-memory OCI Container Runtime in C.
+diff --git a/Makefile b/Makefile
+index 89f3648bb7..66fe04962d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1010,13 +1010,18 @@ oldconfig syncconfig olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmake
+ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
  
- 	  https://github.com/containers/crun
-+
-+comment "crun needs a glibc or musl toolchain"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC
+-define percent_defconfig
+-# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+-%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
+-	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
+-		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
+-endef
+-$(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf  outputmakefile
++	@defconfig=$(or \
++		$(firstword \
++			$(foreach d, \
++				$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)), \
++				$(wildcard $(d)/configs/$@) \
++			) \
++		), \
++		$(error "Can't find $@") \
++	); \
++	$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$${defconfig} \
++		$< --defconfig=$${defconfig} $(CONFIG_CONFIG_IN)
+ 
+ update-defconfig: savedefconfig
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
