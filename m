@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB12AC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1B61C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7689041D7C;
-	Tue, 21 Feb 2023 00:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7689041D7C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5331A4F4FF;
+	Tue, 21 Feb 2023 00:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5331A4F4FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u6s4sacvcqTT; Tue, 21 Feb 2023 00:40:44 +0000 (UTC)
+	with ESMTP id JhBVGVSglLuy; Tue, 21 Feb 2023 00:40:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A1B04F4FB;
-	Tue, 21 Feb 2023 00:40:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A1B04F4FB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 692261BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04E754F503;
+	Tue, 21 Feb 2023 00:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E754F503
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F04B1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83C85417FB
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83C85417FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58C896FB6C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58C896FB6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WTVAy1Hqvnf5 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mmkxSnW74I7k for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C82F2417F4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C82F2417F4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E5796FAD4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E5796FAD4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C588F86495; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-From: Arnout Vandecappelle <arnout@mind.be>
+ id 6DBE7828C8; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 13:31:04 +0100
+Date: Fri, 13 Jan 2023 11:21:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 11b2ab5ee261e8af1065f15e2e69290e15e9e4ea
-X-Git-Newrev: 30624cf777b84ead9c788cee911fb1c387d358fd
+X-Git-Oldrev: 479b042433447214cf318964cc7557b6b5f5d05f
+X-Git-Newrev: d6469c513d5ee9b46c1a7484b93f1c50162aa359
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205255.C588F86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] .checkpackageignore: remove
- package/urandom-scripts/S20urandom
+Message-Id: <20230220205231.6DBE7828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30624cf777b84ead9c788cee911fb1c387d358fd
+commit: https://git.buildroot.net/buildroot/commit/?id=d6469c513d5ee9b46c1a7484b93f1c50162aa359
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 4a6f9d2516820c296a8af788b259ca96926cd60d removed
-package/urandom-scripts/S20urandom but didn't remove it from
-.checkpackageignore. Do so now.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-January/000699.html
 
-The commit actually renamed it to S20seedrng, but it also fixed the
-Variables errors so it no longer needs to be ignored.
-
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore | 1 -
- 1 file changed, 1 deletion(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b1f2d99b99..c4d07c1d7d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -169,7 +169,6 @@ package/tvheadend/S99tvheadend Indent Shellcheck Variables
- package/unbound/S70unbound Shellcheck
- package/unscd/S46unscd Indent Shellcheck Variables
- package/upmpdcli/S99upmpdcli Indent Shellcheck Variables
--package/urandom-scripts/S20urandom Variables
- package/usbguard/S20usbguard Indent Shellcheck Variables
- package/vsftpd/S70vsftpd Indent Shellcheck Variables
- package/watchdogd/S01watchdogd Indent NotExecutable
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index f6b3ade3ea..c1765c3eaa 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.3.2
++MESA3D_HEADERS_VERSION = 22.3.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index e902e6b828..c2ceaa6ead 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-dev/2022-December/225903.html
+-sha256  c15df758a8795f53e57f2a228eb4593c22b16dffd9b38f83901f76cd9533140b  mesa-22.3.2.tar.xz
+-sha512  32934dd23cfcd6165c365597d9a469da0b806b72ea98a200f499344c3b47815db3bf78875b4ea766d2d28d9c70b50c1615d2d3fcbfd4769447fe0a9d3b32951f  mesa-22.3.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-January/000699.html
++sha256  bed799788bf2bd9ef079d97cd8e09348bf53cb086818578e40773b2b17812922  mesa-22.3.3.tar.xz
++sha512  dcf166bc7c80e6ad09337e0188219e5ea4bdc558bc4b4ca35ce30d5421568f6b5328e5508b3175a2696521214e466354d8652ade22468ce448d9f61d5709c8a1  mesa-22.3.3.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 523b642d0c..9fa2c05230 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.3.2
++MESA3D_VERSION = 22.3.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
