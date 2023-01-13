@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C4B9C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F2D6C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:14:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C07E3813DF;
-	Mon, 20 Feb 2023 23:14:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C07E3813DF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0784A82AF5;
+	Mon, 20 Feb 2023 23:14:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0784A82AF5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6WjAKy6Q1II6; Mon, 20 Feb 2023 23:14:13 +0000 (UTC)
+	with ESMTP id O6bUvPlQ6ydP; Mon, 20 Feb 2023 23:14:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A706B83054;
-	Mon, 20 Feb 2023 23:14:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A706B83054
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D099C1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E7D982A6C;
+	Mon, 20 Feb 2023 23:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E7D982A6C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 940481BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E88B361377
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E88B361377
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B42241737
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B42241737
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fIpXRroyrJZw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yjtVYstq_rwU for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F01EB612B9
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F01EB612B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EA6F41739
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EA6F41739
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EADB781979; Mon, 20 Feb 2023 20:52:13 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 5EB3786496; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Dec 2022 22:10:01 +0100
+Date: Fri, 13 Jan 2023 11:21:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: add21fd600b2db4dbb930e2e62b9fbb1b72cceb9
-X-Git-Newrev: ff0fd90c3e42dd00283a4eb192ce832f7c03ac30
+X-Git-Oldrev: 035f18db042d218777394b868beadc575976a5ac
+X-Git-Newrev: 479b042433447214cf318964cc7557b6b5f5d05f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205213.EADB781979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/skeleton-systemd: move
- /var factory tmpfiles out of /etc
+Message-Id: <20230220205231.5EB3786496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] {linux,
+ linux-headers}: bump 4.9.x / 5.{10, 15}.x / 6.{0, 1}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,94 +58,81 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3950422273906196686=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3950422273906196686==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ff0fd90c3e42dd00283a4eb192ce832f7c03ac30
+commit: https://git.buildroot.net/buildroot/commit/?id=479b042433447214cf318964cc7557b6b5f5d05f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When the rootfs is not remounted read-write (thus assuming a read-only
-rootfs like squashfs), we create a tmpfiles.d factory for /var.
-
-However, we register those in /etc/tmpfiles.d/, but /etc could also be
-a tmpfs (for full state-less systems, or easy factory-reset, see [0]).
-
-So, we move our var factory to /usr/lib/tmpfiles.d/, which is also the
-location where systemd itself places its own tmpfiles, and where we
-already put all our other tmpfiles (see audit, avahi, cryptsetup, dhcp,
-lighttpd, nfs-utils, quagga, samba4, swupdate) and our handling of
-systemd's catalog files too. We also rename the file to a better name,
-so that it is obvious it is generated by us (systemd already installs a
-var.conf of its own, so we want to avoid name clashing).
-
-Last little detail: there is no need or reason to create .../tmpfiles.d/
-at install time; it is only needed in the rootfs-pre-cmd hook, so we
-only create it just before we need it.
-
-[0] http://0pointer.de/blog/projects/stateless.html
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Norbert Lange <nolange79@gmail.com>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: Jérémy Rosen <jeremy.rosen@smile.fr>
-[yann.morin.1998@free.fr:
-  - split original patch in two
-  - this one only moves out of /etc and into /usr/lib
-  - adapt commit log accordingly
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Acked-by: Norbert Lange <nolange79@gmail.com>
-[yann.morin.1998@free.fr:
-  - rename to 00-buildroot-var.conf as suggested by Norbert
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/skeleton-init-systemd/skeleton-init-systemd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index 795a171809..ec908b4fac 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -29,7 +29,6 @@ else
- # a real (but empty) directory, and the "factory files" will be copied
- # back there by the tmpfiles.d mechanism.
- define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
--	mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
- 	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
- 	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
- endef
-@@ -38,6 +37,7 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 	rm -rf $(TARGET_DIR)/usr/share/factory/var
- 	mv $(TARGET_DIR)/var $(TARGET_DIR)/usr/share/factory/var
- 	mkdir -p $(TARGET_DIR)/var
-+	mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
- 	for i in $(TARGET_DIR)/usr/share/factory/var/* \
- 		 $(TARGET_DIR)/usr/share/factory/var/lib/* \
- 		 $(TARGET_DIR)/usr/share/factory/var/lib/systemd/*; do \
-@@ -51,7 +51,7 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 			printf "C! %s - - - -\n" "$${j}" \
- 			|| exit 1; \
- 		fi; \
--	done >$(TARGET_DIR)/etc/tmpfiles.d/var-factory.conf
-+	done >$(TARGET_DIR)/usr/lib/tmpfiles.d/00-buildroot-var.conf
- endef
- SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+diff --git a/linux/Config.in b/linux/Config.in
+index bca1b3fc8b..e18b515311 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
-
---===============3950422273906196686==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.1.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.1.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 8ac04b60f9..157f267a9d 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  ee41f3c4f599b2f46f08aae428c9243db403e7292eb2c9f04ee34909b038d1ae  linux-6.1.2.tar.xz
+-sha256  842071bca611c1f080cbc39c7ab3a6b58d7951f4f41e553b3db4fbe3e0705ce4  linux-6.0.16.tar.xz
++sha256  bc7f6d9a8a8bbe9a723e82346bba94b58d926f78bfba106b21e041e0290076fc  linux-6.1.5.tar.xz
++sha256  abe37eb0e2e331bdc7c4110115664e180e7d43b7336de6b4cd2bd1b123d30207  linux-6.0.19.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  80fcd9efa443502de9e2750f6dfb59e8de43a5d87a6d2be09dca748d79b5f2ee  linux-5.15.86.tar.xz
+-sha256  7aaaf6d0bcd8a2cfa14ad75f02ca62bb2de08aad3bee3eff198de49ea5254079  linux-5.10.161.tar.xz
++sha256  e7359bd2935b54fe8bb821cf748591c36a95bed019e752d3e4d5803d9da1ccb4  linux-5.15.87.tar.xz
++sha256  2ec400fc50ffdfe4c836a3c02bf6e7aebcd7963dd2ac1425e6d41545c37dd217  linux-5.10.162.tar.xz
+ sha256  80253b2cac54c256dfdfd1061800aef907f88432090f7aef74c0ddf50f6e6524  linux-5.4.228.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  1f6de11306cc9f82fe1d4dd03565cdf43906fa6f77302913d942fd63b77b500c  linux-4.9.336.tar.xz
++sha256  5385aaec55c766e3f462511453f5c63d7898b2d0e9ea74f22a23ebbedab0b3c6  linux-4.9.337.tar.xz
+ sha256  e32a230d71072a4ee50bd4386aa23ca4e617b8ad07b6f9fb223b65bf004c4c80  linux-4.14.302.tar.xz
+ sha256  6e0ba5d224ab216b7b938cc9ff2478be7882a884bbdf15374149bade4d58b20a  linux-4.19.269.tar.xz
+ # Locally computed
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 216b496fe4..1ad9fffcd3 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -396,14 +396,14 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.9.336"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.337"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.302"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.269"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.228"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.161"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.86"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.0.16"	if BR2_KERNEL_HEADERS_6_0
+-	default "6.1.2"		if BR2_KERNEL_HEADERS_6_1
++	default "5.10.162"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.87"	if BR2_KERNEL_HEADERS_5_15
++	default "6.0.19"	if BR2_KERNEL_HEADERS_6_0
++	default "6.1.5"		if BR2_KERNEL_HEADERS_6_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3950422273906196686==--
