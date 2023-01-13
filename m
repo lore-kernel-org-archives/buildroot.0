@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87EC5C54EBD
-	for <buildroot@archiver.kernel.org>; Fri, 13 Jan 2023 10:06:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2598C54EBE
+	for <buildroot@archiver.kernel.org>; Fri, 13 Jan 2023 10:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D25EB4189F;
-	Fri, 13 Jan 2023 10:06:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D25EB4189F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5915D418D6;
+	Fri, 13 Jan 2023 10:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5915D418D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2XF-McHitml1; Fri, 13 Jan 2023 10:06:02 +0000 (UTC)
+	with ESMTP id ceeqfItWT2tf; Fri, 13 Jan 2023 10:06:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B634B41893;
-	Fri, 13 Jan 2023 10:06:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B634B41893
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6825D1BF32C
- for <buildroot@lists.busybox.net>; Fri, 13 Jan 2023 10:06:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C87E418C7;
+	Fri, 13 Jan 2023 10:06:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C87E418C7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 74D291BF32C
+ for <buildroot@lists.busybox.net>; Fri, 13 Jan 2023 10:06:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4134960C19
- for <buildroot@lists.busybox.net>; Fri, 13 Jan 2023 10:06:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4134960C19
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F1A14189B
+ for <buildroot@lists.busybox.net>; Fri, 13 Jan 2023 10:06:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F1A14189B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tJ-oAx_CsqQI for <buildroot@lists.busybox.net>;
- Fri, 13 Jan 2023 10:05:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TnXWTzqUO9XJ for <buildroot@lists.busybox.net>;
+ Fri, 13 Jan 2023 10:06:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6170E60B8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DECA4174F
 Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com
  [209.85.216.49])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6170E60B8C
- for <buildroot@buildroot.org>; Fri, 13 Jan 2023 10:05:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5DECA4174F
+ for <buildroot@buildroot.org>; Fri, 13 Jan 2023 10:06:01 +0000 (UTC)
 Received: by mail-pj1-f49.google.com with SMTP id
- cx21-20020a17090afd9500b00228f2ecc6dbso1237074pjb.0
- for <buildroot@buildroot.org>; Fri, 13 Jan 2023 02:05:59 -0800 (PST)
+ z9-20020a17090a468900b00226b6e7aeeaso23922282pjf.1
+ for <buildroot@buildroot.org>; Fri, 13 Jan 2023 02:06:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=8U8yB4UuLyd9PeNt8fEGjYe9V5Ibsbya/uFUZKtTI8Y=;
- b=lf5rzliErhHUbeiFMSYSManHaDJZAOiUnoROXrC+6m3Q2Kg7OyjipF4i1E7HBQM3sU
- NRTs3a+KUmOsIj8BArdl6jXJ7aQKOo1e6Wh4USE/oPaIUM2FIb1WwXwF3H3GE8PkG+wp
- 9MsadJF2nhXUN5yaUljMZbEpJ9xlYHZOqsnmuYVlV7fE2YGRTT6zLCg156rcPs86FnW1
- Dx3y6BMLaRFbzo8ZSpHouHnrYGIwFs/5KMP0YSfIA7qTEsK+2nIXFALxSZzRrLqoohY9
- SGPamCIFUdZT99rD7OOzyx0gM8/7I7I8ybrX3hcSEVq0G8TcfQeS1QysgQWFBGWHFPzC
- 1TZw==
-X-Gm-Message-State: AFqh2kqTWN2jdR4GW4QCD9V/WpQi9ssoJuKXkx47gXI1xhYaRj6Er6aY
- Emgj4Ez7cZhex0eqIbyJ3BgrTWvOITMaKA==
-X-Google-Smtp-Source: AMrXdXuXVgfoWxklaSJwssEd7iYHwkvRhChOy03wlROU9rwq8FGd0oCx8OOEVH+W+an9Sjgoq0mM3w==
-X-Received: by 2002:a17:90a:bd81:b0:219:14af:3538 with SMTP id
- z1-20020a17090abd8100b0021914af3538mr10447648pjr.40.1673604358283; 
- Fri, 13 Jan 2023 02:05:58 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=j5+/9bGu3pZUVvBitbhmzc0a6t9f9ct4lDxeej1OQoY=;
+ b=boqB5kncExE1xsI7DuQwT6W7XgeQ3mZpMrE+oWmplHdWjcb7c5lpC8eEE5isFUcokS
+ grBnUaAKSthbzmwvbnrySnv7bGBrJAL60gHpFIY5R6VzcSFygi3YHqTbnVmnCCAVSWeV
+ djFZfHZiOEBUH1dQMiq6rpSDR45ZXHCQh89KGC7XFo5J/h4PzyIby7rZ8VOx3/+BC5Zj
+ PMi3CyZP7gpfZ5Tfj/+E4ApEPN01AmiTVw4paCt+3saRfoRqmHdL+0C5397QsY81sbxg
+ UQCM0cQCOIRk8vs8UUBacIv6fYCHDdbXGcNh5C6C1SxHrNxHQSTRwDhnP68ChCiv1mry
+ CXZA==
+X-Gm-Message-State: AFqh2kp12vb4DpB8WQbiMabgx6EgtzMYEdZ7vKilGsUJbzklabjrFVdR
+ iMT1/Slp6lho/s1gVajpgXB6AH1VEF65Pw==
+X-Google-Smtp-Source: AMrXdXvMntv58BRsM2DHhjvHFPR1cCzbUcWXIEKp820dq4ioVMb4qhwoHPqt5h41jr8vhgKT/2QeHw==
+X-Received: by 2002:a17:90a:558c:b0:226:1189:ad3e with SMTP id
+ c12-20020a17090a558c00b002261189ad3emr58121316pji.27.1673604360492; 
+ Fri, 13 Jan 2023 02:06:00 -0800 (PST)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- o33-20020a17090a0a2400b00226463cd239sm13894262pjo.15.2023.01.13.02.05.56
+ o33-20020a17090a0a2400b00226463cd239sm13894262pjo.15.2023.01.13.02.05.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Jan 2023 02:05:57 -0800 (PST)
+ Fri, 13 Jan 2023 02:06:00 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Fri, 13 Jan 2023 02:05:52 -0800
-Message-Id: <20230113100553.2836256-1-christian@paral.in>
+Date: Fri, 13 Jan 2023 02:05:53 -0800
+Message-Id: <20230113100553.2836256-2-christian@paral.in>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230113100553.2836256-1-christian@paral.in>
+References: <20230113100553.2836256-1-christian@paral.in>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/docker-engine: bump version to
- 20.10.22
+Subject: [Buildroot] [PATCH 2/2] package/docker-cli: bump version to 20.10.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,43 +91,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bug fixes and enhancements
-
- - Improve error message when attempting to pull an unsupported image format or OCI artifact (moby/moby#44413, moby/moby#44569)
- - Fix an issue where the host's ephemeral port-range was ignored when selecting random ports for containers (moby/moby#44476).
- - Fix ssh: parse error in message type 27 errors during docker build on hosts using OpenSSH 8.9 or above (moby/moby#3862).
- - seccomp: block socket calls to AF_VSOCK in default profile (moby/moby#44564).
-
 https://github.com/moby/moby/releases/tag/v20.10.22
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 10e9727a08..d15b1359cb 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index d9477cf3af..c6db95f9b3 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  61f4c3a2d0426e1bbbda1b0e5dd33ec203776f7d99d1a61522c77c04c4ed09fe  docker-engine-20.10.21.tar.gz
-+sha256  ee0e2168e27ec87f1b0650e86af5d3e167a07fd2ff8c1ce3bb588f0b4f9a4658  docker-engine-20.10.22.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 36c66485ba..2a9b72ca78 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+-sha256  f0f62ca1c80e8fd5b9e140ca64ef3e75dc7cf7a28040b3d10b260307128946e8  docker-cli-20.10.21.tar.gz
++sha256  84d71ac2b508b54e8df9f3ea425aa33e254fd3645fe9bad5619b98eaffb33408  docker-cli-20.10.22.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index a14edb2c31..cb44c68c1b 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 20.10.21
-+DOCKER_ENGINE_VERSION = 20.10.22
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+-DOCKER_CLI_VERSION = 20.10.21
++DOCKER_CLI_VERSION = 20.10.22
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_CLI_LICENSE = Apache-2.0
 -- 
 2.39.0
 
