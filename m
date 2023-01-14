@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A8A8C46467
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 14:17:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96DF4C46467
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 14:19:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6A3F821A9;
-	Sat, 14 Jan 2023 14:17:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6A3F821A9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24A13819F6;
+	Sat, 14 Jan 2023 14:19:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24A13819F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u1cluocXnzp2; Sat, 14 Jan 2023 14:17:38 +0000 (UTC)
+	with ESMTP id mxts-I5XNuDS; Sat, 14 Jan 2023 14:19:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2D1D821AF;
-	Sat, 14 Jan 2023 14:17:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2D1D821AF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1B0AE1BF316
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 14:17:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A4468198D;
+	Sat, 14 Jan 2023 14:19:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A4468198D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 559AE1BF316
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 14:19:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED9CE60B5D
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 14:17:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED9CE60B5D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30DDC8198D
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 14:19:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30DDC8198D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T9dw3ZO1GVAR for <buildroot@lists.busybox.net>;
- Sat, 14 Jan 2023 14:17:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3D586076C
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B3D586076C
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 14:17:34 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 652F51C0003;
- Sat, 14 Jan 2023 14:17:31 +0000 (UTC)
-Date: Sat, 14 Jan 2023 15:17:29 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20230114151729.57f75a70@windsurf>
-In-Reply-To: <20230114135817.GA2692@scaer>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLbEfiihmckQ for <buildroot@lists.busybox.net>;
+ Sat, 14 Jan 2023 14:19:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F8D68195C
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2F8D68195C
+ for <buildroot@buildroot.org>; Sat, 14 Jan 2023 14:19:19 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 640355FF33;
+ Sat, 14 Jan 2023 15:19:12 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 14 Jan 2023 15:19:12 +0100
+Date: Sat, 14 Jan 2023 15:19:12 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20230114141912.GB2692@scaer>
 References: <20221103224539.692322-1-thomas.petazzoni@bootlin.com>
  <20221103224539.692322-2-thomas.petazzoni@bootlin.com>
  <20230114135817.GA2692@scaer>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1673705852;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7d0N2JMAeYZbrP63mOafsnifxgndxt4EAyvVI9j2/8E=;
- b=Vg6VvujrRGZ5lL0lm/E7bccmK5PDxsrzUIZ/gaGPbs9j371lZHFsRc8pRXifgf7B/IGj4k
- BiYgZNNJqKSeX3A6qqndyxz/5uiV5O3LzQmNwmcxxKZL8SXMmiS4B5mU3CTdqB+Ndl6uLT
- gCOgCRUAXiFYRExvfKgf4TjWMaSUqxoYBbXa8fsOxRw3TRjt1IA7kQbhfbQoJtHC/dLGJs
- J6PAo49XkZqrekyynTeHdY308EpBR+flwgOxrFsZLRgmmQSZ065Gl+WYo+joNEDYQXOlPH
- 4n65eZdEQTIka//l0mvwmpbbkfymJ7luQ/mIhelKykY5x7EqVUTHTQ5BjPAyVA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Vg6Vvujr
+Content-Disposition: inline
+In-Reply-To: <20230114135817.GA2692@scaer>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1673705956;
+ bh=pvZY11W2mrXbx08KObBvPFicHDIXkQZjtWvNdpA9JlA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=TOXw8fDpvMa1p2YJ5ZbmmDtdAY10PEswOyBwWLPahYVJ/Hgt4QcN99vHnqvX04uiF
+ iQL2cQ3nHaXRdwvkhqhdFRkED3dc3Bpho0dP6RNuFahh7r1BcheyF3jhN+/1Qm+jNC
+ giDUQWWElIh01zDOFer/6xV2cW4bEbmBZl8AiqJqpBgVQHV9tZpEXNuKP6PLZVtmhy
+ HhJ9eD1YB/ixJtlnN44bmSLK7RP96f3KTwJptVmvOCzYO2k8sHxsT94P26e5wDohay
+ VcstoE4nYTjJ0rCE6xzcKJCn03U21jIGjVfANzxmc6c9ny/FEqAafjUly2duC7+tiB
+ ctTRsH8rBpZNw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=TOXw8fDp
 Subject: Re: [Buildroot] [PATCH next 2/2] package/pkg-cargo: move CARGO_HOME
  into DL_DIR
 X-BeenThere: buildroot@buildroot.org
@@ -78,38 +78,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Moritz Bitsch <moritz@h6t.eu>, James Hilliard <james.hilliard1@gmail.com>,
  Buildroot List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCAxNCBKYW4gMjAyMyAxNDo1ODoxNyArMDEwMAoiWWFubiBFLiBNT1JJTiIgPHlhbm4u
-bW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKCj4gVW5mb3J0dW5hdGVseSwgdGhpcyBjYXVzZXMg
-YnJlYWthZ2Ugd2hlbiB0aGVyZSBhcmUgcGFyYWxsZWwgZG93bmxvYWRzCj4gKHNlZSBiZWxvdyBm
-b3IgZXhjZXB0OyBmdWxsIGxvZyBhcyBhdHRhY2htZW50KS4KClRoYW5rcyBmb3IgdGhlIHJlcG9y
-dC4KCj4gCj4gU28sIHRoZXJlIGFyZSB0d28gc29sdXRpb25zOgo+IAo+ICAxLiByZXZlcnQgdG8g
-YSBwZXItcGFja2FnZSBjYXJnbyBob21lLCBsb3NpbmcgdGhlIGJlbmVmaXQgb2YgYSBzaGFyZWQK
-PiAgICAgY2FjaGUsIGJ1dCB0cml2aWFsIHRvIGltcGxlbWVudAo+IAo+ICAyLiBhZGQgbG9ja2lu
-ZyBvdXJzZWx2ZXMgaW4gdGhlIHBvc3QtcHJvY2VzcyBzY3JpcHRzLCBzbyB0aGF0IHRoZXJlIGFy
-ZQo+ICAgICBuZXZlciB0d28gImNhcmdvIHZlbmRvciIgcnVubmluZyBpbiBwYXJhbGxlbCwgd2hp
-Y2ggaXMgc2xpZ2h0bHkgbW9yZQo+ICAgICBpbnZvbHZlZC4KCklzIHRoYXQgcmVhbGx5IHRoYXQg
-aW52b2x2ZWQ/Cgo+ICAzLiB0ZWxsIHVwc3RyZWFtIHRoYXQgdGhleSBib3JrZWQgdGhlaXIgbG9j
-a2luZz8KCldlIHNob3VsZCBvYnZpb3VzbHkgdGVsbCB0aGVtLgoKPiA+Pj4gZHVzdCAwLjguMSBE
-b3dubG9hZGluZyAgCj4gd2dldCAtLXBhc3NpdmUtZnRwIC1uZCAtdCAzIC1PICcvaG9tZS95bW9y
-aW4vZGV2L2J1aWxkcm9vdC9PL21hc3Rlci9idWlsZC8uZHVzdC0wLjguMS50YXIuZ3oueWJEZXZa
-L291dHB1dCcgJ2h0dHBzOi8vZ2l0aHViLmNvbS9ib290YW5keS9kdXN0L2FyY2hpdmUvdjAuOC4x
-L2R1c3QtMC44LjEudGFyLmd6Jwo+IFstLVNOSVAtLV0KPiAyMDIzLTAxLTE0IDE0OjMwOjE1ICgx
-LjQyIE1CL3MpIC0g4oCYL2hvbWUveW1vcmluL2Rldi9idWlsZHJvb3QvTy9tYXN0ZXIvYnVpbGQv
-LmR1c3QtMC44LjEudGFyLmd6LnliRGV2Wi9vdXRwdXTigJkgc2F2ZWQgWzg5MDIzLzg5MDIzXQo+
-IAo+ICAgICBCbG9ja2luZyB3YWl0aW5nIGZvciBmaWxlIGxvY2sgb24gcGFja2FnZSBjYWNoZQo+
-ICAgICBCbG9ja2luZyB3YWl0aW5nIGZvciBmaWxlIGxvY2sgb24gcGFja2FnZSBjYWNoZQoKU28g
-dGhleSBkbyBoYXZlIGxvY2tpbmcgYnV0IGl0IGRvZXNuJ3Qgd29yaz8KClRob21hcwotLSAKVGhv
-bWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBh
-bmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Thomas, All,
+
+On 2023-01-14 14:58 +0100, Yann E. MORIN spake thusly:
+> On 2022-11-03 23:45 +0100, Thomas Petazzoni via buildroot spake thusly:
+> > CARGO_HOME is where Cargo stores its downloaded artefacts. See
+> > https://doc.rust-lang.org/cargo/reference/environment-variables.html:
+[--SNIP--]
+> > To solve this, this commit moves CARGO_HOME into $(DL_DIR), so that it
+> > is shared between builds and packages.
+> Unfortunately, this causes breakage when there are parallel downloads
+> (see below for except; full log as attachment).
+> So, there are two solutions:
+>  1. revert to a per-package cargo home, losing the benefit of a shared
+>     cache, but trivial to implement
+>  2. add locking ourselves in the post-process scripts, so that there are
+>     never two "cargo vendor" running in parallel, which is slightly more
+>     involved.
+
+In fact, it turns out that doing the lock ourselves is relatively
+trivial, so I'll do a few more tests and send a patch...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
