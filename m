@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6287DC46467
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 21:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD1F8C46467
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 21:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E731F819D1;
-	Sat, 14 Jan 2023 21:54:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E731F819D1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tZOdxhicq2-i; Sat, 14 Jan 2023 21:54:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 140CF81970;
-	Sat, 14 Jan 2023 21:54:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 140CF81970
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3D7581BF3C2
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 21:54:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 115594098F
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 21:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 115594098F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50887409EA;
+	Sat, 14 Jan 2023 21:56:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50887409EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qmfjPpvIiX6Z for <buildroot@lists.busybox.net>;
- Sat, 14 Jan 2023 21:54:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA9F2408F7
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 21:54:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA9F2408F7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C620B87B77; Sat, 14 Jan 2023 21:54:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 22:54:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4db36b268d8978b65bb5ed46e8f7e57412f3097f
-X-Git-Newrev: 424f53ac0730ea8e8aac4f3341f25a9829582cbb
-X-Patchwork-Hint: ignore
-Message-Id: <20230114215440.C620B87B77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: drop
- X11 output
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zfaU76dAuQtZ; Sat, 14 Jan 2023 21:56:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15CDA415C9;
+	Sat, 14 Jan 2023 21:56:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15CDA415C9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EF8E1BF3C2
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 21:56:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE47B81E75
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 21:56:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE47B81E75
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vuA88Df9DPv2 for <buildroot@lists.busybox.net>;
+ Sat, 14 Jan 2023 21:56:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC1F781E68
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AC1F781E68
+ for <buildroot@busybox.net>; Sat, 14 Jan 2023 21:56:42 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 78B6A5FF67;
+ Sat, 14 Jan 2023 22:56:37 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 14 Jan 2023 22:56:37 +0100
+Date: Sat, 14 Jan 2023 22:56:37 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230114215637.GF199036@scaer>
+References: <20230114194657.2192-1-francois.perrad@gadz.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230114194657.2192-1-francois.perrad@gadz.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1673733399;
+ bh=GRpIc4Kg/SPsIOLBx1/OIOOi/ZoK0aIthh7oKDEtQnU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=W2Qcuwswign0umGMe0KIWMm7kCWc1kRtDi2ja7XKoF91DSXFSKIqZA+PEIXhlpOuT
+ R8hYXnIPGDcovHwxBsPMss/vFWGmFDQWf1FlruMC0/J4Sr/mUVcqoeBK7v0w0zZQnZ
+ EnMO/5CQXUBLIKgE5HlEyeAlZxzj88m9rTpbUH6GpLhtv0qhCZa7T0oTyeHQ0SEwxL
+ YjUE5sW3D0gUQTQ6aBlaz+hf60p4ydb9v/8jDJVEXn32vCqBqikL5ZsOwOl/EEjxKn
+ I0FVMSfZZdKwl0bKcJsouaS6lvcketSRTqkU42KZR09A6+/81+Sl7TtmwIqtYBa41A
+ umn/mslfR8D5g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=W2Qcuwsw
+Subject: Re: [Buildroot] [PATCH] package/lua: add options for coercion
+ between number and string
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,136 +76,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=424f53ac0730ea8e8aac4f3341f25a9829582cbb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since e8df0f7 (package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p4.4)
-the X11 folder is no longer included in the archive.
-
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in.legacy                                 |  6 ++++++
- package/freescale-imx/imx-gpu-viv/Config.in      | 22 ++++------------------
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 16 +---------------
- 3 files changed, 11 insertions(+), 33 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6d66f1b958..41c5fdefb3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
-+	bool "imx-gpu-viv X11 output has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The X11 output was dropped by NXP.
-+
- config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
- 	string "the QEMU specific targets option has been removed"
- 	help
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index 9ba3d0428e..9372b6313f 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -27,9 +27,9 @@ config BR2_PACKAGE_IMX_GPU_VIV
- 	  Userspace libraries for Vivante GPU on i.MX platforms
- 
- 	  It contains libraries and headers for GLES, OpenCL, and
--	  OpenVG. It also contains a DRI plugin for X11. It also
--	  contains a plugin for DirectFB-1.4.0, but that doesn't work
--	  together with buildroot's DirectFB version.
-+	  OpenVG. It also contains a plugin for DirectFB-1.4.0, but
-+	  that doesn't work together with buildroot's DirectFB
-+	  version.
- 
- 	  This library is provided by Freescale as-is and doesn't have
- 	  an upstream.
-@@ -40,22 +40,9 @@ choice
- 	prompt "Output option"
- 	help
- 	  There are two versions of this library: one for
--	  direct framebuffer access, one for X11 rendering.
-+	  direct framebuffer access, one for wayland rendering.
- 	  Choose here which version to install.
- 
--config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
--	bool "X11"
--	depends on BR2_PACKAGE_XORG7
--	# The i.MX8 blob doesn't support X11 output
--	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXFIXES
--
--comment "X11 backend needs Xorg package"
--	depends on !BR2_PACKAGE_XORG7
--	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
--
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
- 	bool "Framebuffer"
- 	# The i.MX8 blob doesn't support FB output
-@@ -70,7 +57,6 @@ endchoice
- 
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT
- 	string
--	default "x11" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
- 	default "fb" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
- 	default "wayland" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
- 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 06fbbc7343..e0e8a31533 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -26,14 +26,6 @@ endif
- 
- IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
- 
--ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
--# The libGAL.so library provided by imx-gpu-viv uses X functions. Packages
--# may want to link against libGAL.so (QT5 Base with OpenGL and X support
--# does so). For this to work we need build dependencies to libXdamage,
--# libXext and libXfixes so that X functions used in libGAL.so are referenced.
--IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
--endif
--
- # Libraries are linked against libdrm, except framebuffer output on ARM
- ifneq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
- IMX_GPU_VIV_DEPENDENCIES += libdrm
-@@ -55,12 +47,6 @@ else ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
- define IMX_GPU_VIV_FIXUP_PKGCONFIG
- 	ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
- endef
--else ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
--define IMX_GPU_VIV_FIXUP_PKGCONFIG
--	$(foreach lib,egl glesv1_cm glesv2 vg, \
--		ln -sf $(lib)_x11.pc $(@D)/gpu-core/usr/lib/pkgconfig/$(lib).pc
--	)
--endef
- endif
- 
- # Instead of building, we fix up the inconsistencies that exist
-@@ -68,7 +54,7 @@ endif
- # Make sure these commands are idempotent.
- define IMX_GPU_VIV_BUILD_CMDS
- 	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
--	$(foreach backend,fb x11 wayland, \
-+	$(foreach backend,fb wayland, \
- 		$(RM) -r $(@D)/gpu-core/usr/lib/$(backend)
- 	)
- 	$(IMX_GPU_VIV_FIXUP_PKGCONFIG)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJhbsOnb2lzLCBBbGwsCgpPbiAyMDIzLTAxLTE0IDIwOjQ2ICswMTAwLCBGcmFuY29pcyBQZXJy
+YWQgc3Bha2UgdGh1c2x5Ogo+IG5vdGU6IG5vdCBhdmFpbGFibGUgd2l0aCBMdWEgNS4xCgpPSywg
+c28gSSB0aGluayB0aGlzIG1lYW5zIGEgYml0IG1vcmUgZXhwbGFuYXRpb25zLgoKRmlyc3QsIGl0
+IHNob3VsZCBiZSBtZW50aW9uZWQgdGhhdCBjb2VyY2lvbiBkZWZhdWx0cyB0byAneScgZm9yIGVs
+Z2FjeQpyZWFzb246IHVubGVzcyB0b2xkIG5vdCB0bywgdGhlIGJ1aWxkc3lzdGVtIGZvciBsdWEg
+ZW5hYmxlcyBjb2VyY2lvbi4KClRoZW4sIGl0IHdvdWxkIGJlIG5pY2UgdG8gZXhwbGFpbiB3aHkg
+b25lIG1pZ2h0IHdhbnQvbmVlZCB0byBkaXNhYmxlCmNvZXJjaW9uLgoKRmluYWxseSwgSSdkIGxp
+a2UgdG8gcmVhZCBob3cgcGFja2FnZXMgbWF5IGJlIGltcGFjdGVkIGJ5IHN1Y2ggb3B0aW9ucy4K
+Rm9yIGV4YW1wbGUsIGNvdWxkIHRoZXJlIGJlIHBhY2thZ2VzIHRoYXQgZXhwbGljaXRseSBleHBl
+Y3QgY29lcmNpb24/CkhvdyB3b3VsZCB0aGV5IGJlaGF2ZSB3aXRob3V0IGNvZXJjaW9uPyBDb252
+ZXJzZWx5LCBhcmUgdGhlcmUgcGFja2FnZXMKdGhhdCBleHBsaWNpdGx5IHdhbnQgbm8gY29lcmNp
+b24/CgpJJ3ZlIHJlYWQgYSBiaXQgYWJvdXQgaXQgaW4gdGhlIG1hbnVhbCBbMF0sIGFuZCB0aGUg
+b25seSBuaXQgdGhhdCBzZWVtcwpyZWxldmFudCB3YXMgIlRoZXNlIGNvZXJjaW9ucyBleGlzdCBt
+YWlubHkgZm9yIGNvbXBhdGliaWxpdHkgYW5kIG1heSBiZQpyZW1vdmVkIGluIGZ1dHVyZSB2ZXJz
+aW9ucyBvZiB0aGUgbGFuZ3VhZ2UiLiBTdGlsbCwgdGhpcyBkb2VzIG5vdApleHBsYWluIHdoeSB3
+ZSBuZWVkIHRoYXQgaSBCdWlsZHJvb3QuCgpDb3VsZCB5b3UgcmVzcGluIHdpdGggYSBiZXR0ZXIg
+Y29tbWl0IGxvZywgcGxlYXNlPwoKWzBdIGh0dHBzOi8vd3d3Lmx1YS5vcmcvbWFudWFsLzUuNC9t
+YW51YWwuaHRtbCMzLjQuMwoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gU2lnbmVkLW9mZi1i
+eTogRnJhbmNvaXMgUGVycmFkIDxmcmFuY29pcy5wZXJyYWRAZ2Fkei5vcmc+Cj4gLS0tCj4gIHBh
+Y2thZ2UvbHVhL0NvbmZpZy5pbiB8IDEyICsrKysrKysrKysrKwo+ICBwYWNrYWdlL2x1YS9sdWEu
+bWsgICAgfCAgOCArKysrKysrKwo+ICAyIGZpbGVzIGNoYW5nZWQsIDIwIGluc2VydGlvbnMoKykK
+PiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9sdWEvQ29uZmlnLmluIGIvcGFja2FnZS9sdWEvQ29u
+ZmlnLmluCj4gaW5kZXggMzA5ZGQ2ZWVjLi45MDMwMzFlNTAgMTAwNjQ0Cj4gLS0tIGEvcGFja2Fn
+ZS9sdWEvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9sdWEvQ29uZmlnLmluCj4gQEAgLTQxLDYg
+KzQxLDE4IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9MVUFfMzJCSVRTCj4gIAkgIGRlZmF1bHQgNjQg
+Yml0IHR5cGUuIFRoaXMgb3B0aW9uIGlzIHBhcnRpY3VsYXJseSBhdHRyYWN0aXZlCj4gIAkgIGZv
+ciBzbWFsbCBtYWNoaW5lcyBhbmQgZW1iZWRkZWQgc3lzdGVtcy4KPiAgCj4gK2NvbmZpZyBCUjJf
+UEFDS0FHRV9MVUFfQ1ZUX04yUwo+ICsJYm9vbCAiYXV0b21hdGljIGNvZXJjaW9uIGZyb20gbnVt
+YmVyIHRvIHN0cmluZyIKPiArCWRlZmF1bHQgeQo+ICsJaGVscAo+ICsJICBTZWUgTFVBX05PQ1ZU
+TjJTIGluIGx1YWNvbmYuaAo+ICsKPiArY29uZmlnIEJSMl9QQUNLQUdFX0xVQV9DVlRfUzJOCj4g
+Kwlib29sICJhdXRvbWF0aWMgY29lcmNpb24gZnJvbSBzdHJpbmcgdG8gbnVtYmVyIgo+ICsJZGVm
+YXVsdCB5Cj4gKwloZWxwCj4gKwkgIFNlZSBMVUFfTk9DVlRTMk4gaW4gbHVhY29uZi5oCj4gKwo+
+ICBlbmRpZgo+ICAKPiAgY2hvaWNlCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbHVhL2x1YS5tayBi
+L3BhY2thZ2UvbHVhL2x1YS5tawo+IGluZGV4IDAxYjU1NGViNi4uMTYwODZlN2JmIDEwMDY0NAo+
+IC0tLSBhL3BhY2thZ2UvbHVhL2x1YS5tawo+ICsrKyBiL3BhY2thZ2UvbHVhL2x1YS5tawo+IEBA
+IC0zMSw2ICszMSwxNCBAQCBlbHNlIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTFVBXzVfMykseSkKPiAg
+TFVBX0NGTEFHUyArPSAtRExVQV9DT01QQVRfNV8yCj4gIGVuZGlmCj4gIAo+ICtpZmVxICgkKEJS
+Ml9QQUNLQUdFX0xVQV9DVlRfTjJTKSwpCj4gK0xVQV9DRkxBR1MgKz0gLURMVUFfTk9DVlROMlMK
+PiArZW5kaWYKPiArCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTFVBX0NWVF9TMk4pLCkKPiArTFVB
+X0NGTEFHUyArPSAtRExVQV9OT0NWVFMyTgo+ICtlbmRpZgo+ICsKPiAgaWZlcSAoJChCUjJfU1RB
+VElDX0xJQlMpLHkpCj4gIExVQV9CVUlMRE1PREUgPSBzdGF0aWMKPiAgZWxzZQo+IC0tIAo+IDIu
+MzcuMgo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAK
+Li0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
+LS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1i
+ZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYy
+IDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAg
+ICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAg
+WCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlz
+LWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFj
+eS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0t
+LS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
