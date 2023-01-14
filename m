@@ -1,72 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71F9CC3DA78
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 21:58:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFB93C3DA78
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 22:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4F6540342;
-	Sat, 14 Jan 2023 21:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4F6540342
+	by smtp2.osuosl.org (Postfix) with ESMTP id 597A3408B0;
+	Sat, 14 Jan 2023 22:00:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 597A3408B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J-v-X5I2UpI3; Sat, 14 Jan 2023 21:58:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ezmo-wHVRC9l; Sat, 14 Jan 2023 22:00:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF93240300;
-	Sat, 14 Jan 2023 21:58:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF93240300
+	by smtp2.osuosl.org (Postfix) with ESMTP id 696BD4063C;
+	Sat, 14 Jan 2023 22:00:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 696BD4063C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 76E5A1BF3C2
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 21:58:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D8D71BF3C2
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 22:00:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CD694063C
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 21:58:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CD694063C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78C744063C
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 22:00:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78C744063C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dp6QjjvWVsg0 for <buildroot@lists.busybox.net>;
- Sat, 14 Jan 2023 21:58:27 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0953640734
+ with ESMTP id 9nKIx5Hs9QeK for <buildroot@lists.busybox.net>;
+ Sat, 14 Jan 2023 22:00:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7421D4048A
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0953640734
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 21:58:26 +0000 (UTC)
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7421D4048A
+ for <buildroot@buildroot.org>; Sat, 14 Jan 2023 22:00:31 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D623BFF804;
- Sat, 14 Jan 2023 21:58:22 +0000 (UTC)
-Date: Sat, 14 Jan 2023 22:58:21 +0100
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20230114225821.4edc5530@windsurf>
-In-Reply-To: <CAOrEah5_BQzsLnHYkMGvpSR=MxeqTeDkmbKNAQOOJ6eRXreg-g@mail.gmail.com>
-References: <20230113225425.3301420-1-vfazio@xes-inc.com>
- <20230114221718.01e97481@windsurf>
- <CAOrEah5_BQzsLnHYkMGvpSR=MxeqTeDkmbKNAQOOJ6eRXreg-g@mail.gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 89621FF806;
+ Sat, 14 Jan 2023 22:00:29 +0000 (UTC)
+Date: Sat, 14 Jan 2023 23:00:28 +0100
+To: Lang Daniel via buildroot <buildroot@buildroot.org>
+Message-ID: <20230114230028.46833cae@windsurf>
+In-Reply-To: <VI1P190MB0493F15E5CA3D6BC8CCD52029FFF9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+References: <VI1P190MB0493F15E5CA3D6BC8CCD52029FFF9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1673733504;
+ d=bootlin.com; s=gm1; t=1673733629;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=sOR7RhK5VE7rwAxLWi6eEelThQFzxOnITTWNlGU+EW8=;
- b=pW2Zs9JSD/KGoPhQAeDcrn1hjjC7E2gW4JScNDfKV089DKHQjbQE8fo3R2LBXPsb9Ci4uc
- XquOnQWIk3QbV4tkxNW95BhtqAGBdbKVhR0sioOjRpwhtYJs08nsNhClaKKi5aup+UTT0O
- P1RGfYTKrEAqmCrUpRjPsZsj/MD8uddoqMKJf+61yvSQPVG8UI5oOjCDuWq+MYolNJIWHH
- 55PrAOymHj+oD/I596p2cTYHy7fjKQy6bU1yMODVAh2LVdNCGz/EfdPPP88PfETAmTSKui
- egRuxA0HHbzUvuNQeOzlNqmWLyMqiA1XwFbFuJl6g8Aj6NzTKWrONQTcpBnIYA==
+ bh=tfOcKm/iLZMKZe1+pYlSblsaPnylV5yaxaLAZuEH59c=;
+ b=Rx3A7iLGzVWn81nDk0ts9E1UV1Im7cNibqLcUBPy0rCHsemJxwVOYcBGgjS4d8D87/KXxz
+ Ca4Q1m6tSczl4si2nhqCegCsQUcMtjP+Y4kpfaOWs8LYusV4cibEIin7i8pl3uRrNBVC1n
+ xzj9G2ef7zUBSAvyeT0R6onM8IjPBwg75tqJR8LW0SGixc3a1uhu2Tg8ATW6/21lsh/LnN
+ isp3xfgJ146ZklFeVTKAkXeo20OZYxLINNxZFFNMDtQdai7j/9g4OiOWUXS6bWuvVvLaCQ
+ Hrw8RMH/yIVc+Uz1KiN1wrUBNlwZ34bSYHGzH5YRpxA+dEP9vsrjLQS6qQf24Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=pW2Zs9JS
-Subject: Re: [Buildroot] [PATCH 1/2] package/ipmitool: backport fixes for
- registry issues
+ header.s=gm1 header.b=Rx3A7iLG
+Subject: Re: [Buildroot] [PATCH 1/3] package/freescale-imx/imx-gpu-viv: drop
+ X11 output
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,44 +78,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Floris Bos <bos@je-eigen-domein.nl>, Heiko Thiery <heiko.thiery@gmail.com>,
- Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
+Cc: Lang Daniel <d.lang@abatec.at>,
+ "tuzakli.refik@gmail.com" <tuzakli.refik@gmail.com>,
+ Gary Bisson <bisson.gary@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 14 Jan 2023 15:33:06 -0600
-Vincent Fazio <vfazio@gmail.com> wrote:
+On Tue, 10 Jan 2023 09:32:43 +0000
+Lang Daniel via buildroot <buildroot@buildroot.org> wrote:
 
-> replies below (i hope, i haven't tried responding to ML emails in gmail)
+> Since e8df0f7 (package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p4.4)
+> the X11 folder is no longer included in the archive.
+> 
+> Signed-off-by: Daniel Lang <d.lang@abatec.at>
 
-It's almost good, except that gmail adds one extra > on the first line
-of each paragraph of your replies.
+I've applied with minor tweaks. See below.
 
-> > So in the current Buildroot situation (before this patch), the registry
-> > is always installed, correct?
-> >
-> > Correct, but with a caveat... as of the version bump to 1.8.19, the file  
-> being installed is broken and the tool actually won't work.
+> +config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+> +	bool "imx-gpu-viv X11 output has been removed"
 
-So the current ipmitool in Buildroot is broken. Could perhaps separate
-a "fix" that could be backported from a large improvement that allows
-to not used the registry?
+	select BR2_LEGACY
 
-> All upstream patches have been accepted into mainline. The commit hashes  
-> in the patches are the mainline commits
+was missing here to make sure the build doesn't start if this option is
+enabled.
 
-Thing is we don't which are "upstream patches". If the patches are
-upstream, you can do:
+> +	help
+> +	  The X11 output was dropped by NXP.
+> +
+>  config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
+>  	string "the QEMU specific targets option has been removed"
+>  	help
+> diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+> index 9ba3d0428e..bc30798ca5 100644
+> --- a/package/freescale-imx/imx-gpu-viv/Config.in
+> +++ b/package/freescale-imx/imx-gpu-viv/Config.in
+> @@ -27,8 +27,8 @@ config BR2_PACKAGE_IMX_GPU_VIV
+>  	  Userspace libraries for Vivante GPU on i.MX platforms
+>  
+>  	  It contains libraries and headers for GLES, OpenCL, and
+> -	  OpenVG. It also contains a DRI plugin for X11. It also
+> -	  contains a plugin for DirectFB-1.4.0, but that doesn't work
+> +	  OpenVG. It also contains a plugin for DirectFB-1.4.0,
+> +	  but that doesn't work
+>  	  together with buildroot's DirectFB version.
 
-Signed-off-by: John Doe <john.doe@foobar.com>
-Upstream: https://github.com/some/where/commit/12456abc
+This paragraph should have been rewrapped after your change.
 
-This makes it very clear that it has been accepted upstream, and will
-help someone who will do the next ipmitool version bump.
+Other than that, looks good so I've applied. Of course, it might be
+surprising for people who might be using X11 with OpenGL support on
+i.MX platforms... but we're simply following the choice made by
+upstream.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
