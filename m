@@ -4,63 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF224C54EBE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 00:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF6F6C46467
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 06:31:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 312DC821DC;
-	Sat, 14 Jan 2023 00:36:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 312DC821DC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E92982237;
+	Sat, 14 Jan 2023 06:31:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E92982237
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x49YHmiuJuNg; Sat, 14 Jan 2023 00:36:54 +0000 (UTC)
+	with ESMTP id jWpMZt36yb5s; Sat, 14 Jan 2023 06:31:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67C09821D7;
-	Sat, 14 Jan 2023 00:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67C09821D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 92D7D1BF3C3
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 00:36:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F04B821AB;
+	Sat, 14 Jan 2023 06:31:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F04B821AB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 62E5D1BF4E6
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 06:31:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D30D41B56
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 00:36:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D30D41B56
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36D0F416FD
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 06:31:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36D0F416FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZZnf_8FtGPAm for <buildroot@lists.busybox.net>;
- Sat, 14 Jan 2023 00:36:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 574CB41A58
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp4.osuosl.org (Postfix) with ESMTP id 574CB41A58
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 00:36:49 +0000 (UTC)
-Received: from localhost.localdomain ([88.149.186.89])
- by Aruba Outgoing Smtp  with ESMTPSA
- id GUXPpp1J5BXcMGUXPpPeTV; Sat, 14 Jan 2023 01:36:47 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 01:36:46 +0100
-Message-Id: <20230114003646.1540536-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CK832Q9isqtB for <buildroot@lists.busybox.net>;
+ Sat, 14 Jan 2023 06:31:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19AE9416FC
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com
+ [IPv6:2607:f8b0:4864:20::112e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 19AE9416FC
+ for <buildroot@buildroot.org>; Sat, 14 Jan 2023 06:31:49 +0000 (UTC)
+Received: by mail-yw1-x112e.google.com with SMTP id
+ 00721157ae682-4d59d518505so144317907b3.1
+ for <buildroot@buildroot.org>; Fri, 13 Jan 2023 22:31:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=D7zIReTMLajFoQWiFrE35BdVNZza0N6yi/szabK4puw=;
+ b=M55awah+aQZ+QSH4AvRdMTs6F5NR5VvTuB86/xUmxXEFwMQyluWOrIFevj2dvlCCtV
+ Hw/n2LMMTOmXVeyIINBhpSBsFNupJbZI0E7AcFNHo1MH4ba4tqCBE4Q2PVFaNjHbOMLX
+ Pes0+j5g8GiTL/jljt1wH9ChcxAdusP5pvwqZ1ckbd0bgoBFTCuD7Sn52ZsGeva1h8p0
+ fo/j6BhveqMUuM8LVMHlS6KTL2PfDmmqs1qPUGfP0ZQIHbAdo6Uwr5sCWsU1ZZqk+jNR
+ /1Jc9Cl2w+E7hCXYikaqtZll9UPUR4ZbFa8kIS0/P0DyFfbdCrSuOqWi5kXjIYJRx6wW
+ 1BOQ==
+X-Gm-Message-State: AFqh2koDKFEJXqV844/uJIweZyyZEUu10weyPUw0pgm/4QCZI0o1BTKu
+ uT8xNxCrP9jYahEesxJGRG3hFKfHnA1REVc2TRFx4hfig90=
+X-Google-Smtp-Source: AMrXdXuuThY5esEKiHGKI6UjZm7ZLRK2dMj5N5pNPFbuLfyRk8YO3faM7XQ1EirVyro7MIRYUCjLDXFqOq0AKGNeUIo=
+X-Received: by 2002:a05:690c:b05:b0:467:2f6:4de5 with SMTP id
+ cj5-20020a05690c0b0500b0046702f64de5mr4222557ywb.278.1673677908454; Fri, 13
+ Jan 2023 22:31:48 -0800 (PST)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfHfLoJr/eNcvv2iRxkiuy1MQCLlbeXIGxcE7I8S+GN03ilNulL2iw9EQRUqxx3fU0X1DghkprmuBf303ofb2Q0kHeXwGpRaMlinspXHMF8/xUfpHQtQD
- OEIkz1hS7tOPnn23AZxYsKzgY9j4omb69l2Sv3Z05JrGd8ilCCGPBOfXCwMqCrOp15ZY7dMXZZAs1HU4tR80vQsoOLVKGpvVPRmIWmtZYRJlMRKt7eI7ku1f
- 2bSjPM4RgXrNln7vyAulNzzWriMIHmE79fWOdQ4tlezvKg1DU3AV+dDA9Ely6z2kWb0DsKxX9458b41FI8H+ww==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1673656607; bh=zUEJyXmohgQQex2vXGuw8nRx/22MUxT2hpapyrg/ecM=;
- h=From:To:Subject:Date:MIME-Version;
- b=IDoSINwOyvF7xXtQ47PKViImkx13jQxyXvupjD/3GtBL4ovXq/Tm7rj+YMEYdrbvV
- XorfSsseB6zKNMMx9LIu7j0Mal2WQrEzD2fMKXykpuSlVsBBOHeXDRfvqbIIGEcIvQ
- WZom8SDxW32Lc/7XmOufC7PRRAOh/MnQPEM/rDQMKqFj5bipEnKJMxNUt0FrXFjdcD
- pmEu52TADSUEealRS1g1Fm/1HQAKRRSyAZVuBQxiD50tfGKiXrPkA+RJjXGraaymPz
- 4NYcg7Ti2OBZXc90BuIoUGY4G4fnLaRJIK89/oWRsNl6egmIB0wKSAIu7Om9R7s8nG
- JYdQcUTr+ao0Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=IDoSINwO
-Subject: [Buildroot] [PATCH] package/libfuse3: bump version to 3.13.0
+From: Ernie Carp <erniecarp2018@gmail.com>
+Date: Fri, 13 Jan 2023 22:31:37 -0800
+Message-ID: <CAHdaamN7mawJYf6LAVJXTtptm08u79TucxEbbSoMYHduhUdL3A@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=D7zIReTMLajFoQWiFrE35BdVNZza0N6yi/szabK4puw=;
+ b=iNyeAW8DD6Rx1vQYh8v93f/EpVtMsFZqcFJWez4891M3n3kwFlE0qqYtLJeMlNPiRK
+ TliWoJL9g+VgQ5YXGwIFLT0Qq4C92FsHhnYVbfM+GV7GhdmygTDP3SM69qZhNevgQk8p
+ o13H8OodmC4P6PThceTu0xa9DergHz7Ffp3+gkls+LKXPLYROwBDRiL++R8N1aA+9x0l
+ ebqo1wfjZ9gh/eoPQ9CQtSyjvX7ZrSxs3Uq12POev2iu/+Z0Qyt1Q7ox3rbuQBincwLS
+ 3GTvHdrGYMtu18vzV/rpb5ksUlmvqITAyZiU6iBBK5UWmRgY3DRUC9Sx0Q7O0PVkl41B
+ eE+w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=iNyeAW8D
+Subject: [Buildroot] Python 3 bcrypt error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,45 +87,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5105089486093210348=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libfuse3/libfuse3.hash | 2 +-
- package/libfuse3/libfuse3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--===============5105089486093210348==
+Content-Type: multipart/alternative; boundary="00000000000033b1d805f2338190"
 
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index 2fb5f329e3..691bfbc9d6 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  25a00226d2d449c15b2f08467d6d5ebbb2a428260c4ab773721c32adbc6da072  libfuse3-3.11.0.tar.gz
-+sha256  224544214204eb348b548d6faa7a9bc91b053aacfc92e8b5da3f478c76ae4a03  libfuse3-3.13.0.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index b3e3176708..d94f7d3d3a 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFUSE3_VERSION = 3.11.0
-+LIBFUSE3_VERSION = 3.13.0
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
--- 
-2.34.1
+--00000000000033b1d805f2338190
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+When compiling python3 on buildroot version 2022-11 I get an error message
+about bcrypt.
+The PyPi.org lists the sha256 hash as
+27d375903ac8261cfe4047f6709d16f7d18d39b1ec92aaf72af989552a650ebd
+
+Need a little help to fix it.
+
+[source.vendored-sources]
+directory = "VENDOR"
+ERROR: bcrypt-4.0.1.tar.gz has wrong sha256 hash:
+ERROR: expected:
+d64daee0af1afe137718674e67a49b8bb791842aab265b588a6d68d44a449c70
+ERROR: got     :
+108aaa38326360d716f4a6e2e98bfe84969542e559bd8bfe3b09ccc93e6c2944
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+wget --passive-ftp -nd -t 3 -O
+'/home/ethertek/rms200v2/buildroot/output/build/.bcrypt-4.0.1.tar.gz.CquFUP/output'
+'http://sources.buildroot.net/bcrypt-4.0.1.tar.gz'
+--2023-01-14 06:19:19--  http://sources.buildroot.net/bcrypt-4.0.1.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.26.0.37,
+172.67.72.56, 104.26.1.37, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.0.37|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+2023-01-14 06:19:19 ERROR 404: Not Found.
+
+make[1]: *** [package/pkg-generic.mk:189:
+/home/ethertek/rms200v2/buildroot/output/build/python-bcrypt-4.0.1/.stamp_downloaded]
+Error 1
+make: *** [Makefile:84: _all] Error 2
+
+Thank you,
+Ernie.
+
+--00000000000033b1d805f2338190
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr">Hello,<div><br></div><di=
+v>When compiling python3 on buildroot version 2022-11 I get an error messag=
+e about bcrypt.</div><div>The PyPi.org lists the sha256 hash as 27d375903ac=
+8261cfe4047f6709d16f7d18d39b1ec92aaf72af989552a650ebd</div><div><br></div><=
+div>Need a little help to fix it.</div><div><br></div><div><div>[source.ven=
+dored-sources]</div><div>directory =3D &quot;VENDOR&quot;</div><div>ERROR: =
+bcrypt-4.0.1.tar.gz has wrong sha256 hash:</div><div>ERROR: expected: d64da=
+ee0af1afe137718674e67a49b8bb791842aab265b588a6d68d44a449c70</div><div>ERROR=
+: got=C2=A0 =C2=A0 =C2=A0: 108aaa38326360d716f4a6e2e98bfe84969542e559bd8bfe=
+3b09ccc93e6c2944</div><div>ERROR: Incomplete download, or man-in-the-middle=
+ (MITM) attack</div><div>wget --passive-ftp -nd -t 3 -O &#39;/home/ethertek=
+/rms200v2/buildroot/output/build/.bcrypt-4.0.1.tar.gz.CquFUP/output&#39; &#=
+39;<a href=3D"http://sources.buildroot.net/bcrypt-4.0.1.tar.gz">http://sour=
+ces.buildroot.net/bcrypt-4.0.1.tar.gz</a>&#39;=C2=A0</div><div>--2023-01-14=
+ 06:19:19--=C2=A0 <a href=3D"http://sources.buildroot.net/bcrypt-4.0.1.tar.=
+gz">http://sources.buildroot.net/bcrypt-4.0.1.tar.gz</a></div><div>Resolvin=
+g <a href=3D"http://sources.buildroot.net">sources.buildroot.net</a> (<a hr=
+ef=3D"http://sources.buildroot.net">sources.buildroot.net</a>)... 104.26.0.=
+37, 172.67.72.56, 104.26.1.37, ...</div><div>Connecting to <a href=3D"http:=
+//sources.buildroot.net">sources.buildroot.net</a> (<a href=3D"http://sourc=
+es.buildroot.net">sources.buildroot.net</a>)|104.26.0.37|:80... connected.<=
+/div><div>HTTP request sent, awaiting response... 404 Not Found</div><div>2=
+023-01-14 06:19:19 ERROR 404: Not Found.</div><div><br></div><div>make[1]: =
+*** [package/<a href=3D"http://pkg-generic.mk:189">pkg-generic.mk:189</a>: =
+/home/ethertek/rms200v2/buildroot/output/build/python-bcrypt-4.0.1/.stamp_d=
+ownloaded] Error 1</div><div>make: *** [Makefile:84: _all] Error 2</div></d=
+iv><div><br></div><div>Thank you,</div><div>Ernie.</div></div></div></div>
+
+--00000000000033b1d805f2338190--
+
+--===============5105089486093210348==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5105089486093210348==--
