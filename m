@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8635C3DA78
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 20:03:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98B2DC46467
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 20:03:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D3A881E66;
-	Sat, 14 Jan 2023 20:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D3A881E66
+	by smtp1.osuosl.org (Postfix) with ESMTP id 430C381E66;
+	Sat, 14 Jan 2023 20:03:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 430C381E66
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YftD8varFdpe; Sat, 14 Jan 2023 20:03:11 +0000 (UTC)
+	with ESMTP id 04d9Dcjze6r6; Sat, 14 Jan 2023 20:03:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8988881DE2;
-	Sat, 14 Jan 2023 20:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8988881DE2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1DA4F1BF3D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71BDD81E3C;
+	Sat, 14 Jan 2023 20:03:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71BDD81E3C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 575F51BF3D8
  for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 20:03:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC66981E3C
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 20:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC66981E3C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FFF44048A
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 20:03:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FFF44048A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hJBuIATWaD51 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GPrOzQ3V8WMl for <buildroot@lists.busybox.net>;
  Sat, 14 Jan 2023 20:03:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2045981DE2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E88940004
  for <buildroot@buildroot.org>; Sat, 14 Jan 2023 20:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2045981DE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E88940004
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0EB1D87B20; Sat, 14 Jan 2023 20:03:08 +0000 (UTC)
+ id EFACD87B1C; Sat, 14 Jan 2023 20:03:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 21:02:13 +0100
+Date: Sat, 14 Jan 2023 21:02:10 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9259635564f799ff4b0e63b1baff62505571938
-X-Git-Newrev: 113e3a8fed6c89e947bea2f44672c47338d08c96
+X-Git-Oldrev: fbddd126011611e97cc920e40cd58784e29f242d
+X-Git-Newrev: 3cd1090d9a7fd15eddf4dc843800256d846a9955
 X-Patchwork-Hint: ignore
-Message-Id: <20230114200308.0EB1D87B20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnetconf2: bump version 2.2.12
+Message-Id: <20230114200307.EFACD87B1C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libyang: bump version to 2.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=113e3a8fed6c89e947bea2f44672c47338d08c96
+commit: https://git.buildroot.net/buildroot/commit/?id=3cd1090d9a7fd15eddf4dc843800256d846a9955
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sysrepo/sysrepo.hash | 2 +-
- package/sysrepo/sysrepo.mk   | 2 +-
+ package/libyang/libyang.hash | 2 +-
+ package/libyang/libyang.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
-index 1db33df626..a90d8259bf 100644
---- a/package/sysrepo/sysrepo.hash
-+++ b/package/sysrepo/sysrepo.hash
+diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
+index c064c2e69c..da8600351b 100644
+--- a/package/libyang/libyang.hash
++++ b/package/libyang/libyang.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  357a50851e4cc052b484b924ed0a5808c29159a7c9d48d9b1b8c42784c4b6917  sysrepo-2.1.64.tar.gz
-+sha256  1bc866f13e41ba5e7e4acd52b5c3d42b1a2a1e032775e0a9b094f3265844cd25  sysrepo-2.2.12.tar.gz
- sha256  88f1b7e5c64d2c113e07105aa9c0fb80639b40287565be1c2afd0949df83d826  LICENSE
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 0ed27e3cfb..9da8c22ca2 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
+-sha256  94898ee391c238dcd29ff21092e5dcab4e17b9623e88862a55b72fc6168846f8  libyang-2.0.194.tar.gz
++sha256  f30ee1c3e13f0c5d25c4d2fb628e4b262b483d0a500464a7c12008ccc393a69e  libyang-2.1.4.tar.gz
+ sha256  0b7ec43747d211a1e49c53588b0822062947bab6bdcc95238578beab34cba5bb  LICENSE
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index 36f452ca07..6c57a2dd42 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSREPO_VERSION = 2.1.64
-+SYSREPO_VERSION = 2.2.12
- SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
- SYSREPO_INSTALL_STAGING = YES
- SYSREPO_LICENSE = BSD-3-Clause
+-LIBYANG_VERSION = 2.0.194
++LIBYANG_VERSION = 2.1.4
+ LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
+ LIBYANG_LICENSE = BSD-3-Clause
+ LIBYANG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
