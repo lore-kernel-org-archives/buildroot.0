@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D1ABC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26933C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2367A42AEA;
-	Mon, 20 Feb 2023 21:16:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2367A42AEA
+	by smtp4.osuosl.org (Postfix) with ESMTP id C311C41D3B;
+	Mon, 20 Feb 2023 21:16:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C311C41D3B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OuDNjCYbhlce; Mon, 20 Feb 2023 21:16:38 +0000 (UTC)
+	with ESMTP id ETZ_PBN3fTQT; Mon, 20 Feb 2023 21:16:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0BAD42CB6;
-	Mon, 20 Feb 2023 21:16:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0BAD42CB6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4E79F1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 671C042CBA;
+	Mon, 20 Feb 2023 21:16:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 671C042CBA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A42A1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90C5A41591
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90C5A41591
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8046822F4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8046822F4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pUkMj-Ro6MVZ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 724OMp81agYq for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B445C40C29
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B445C40C29
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D10B822E0
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D10B822E0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B1F8F86495; Mon, 20 Feb 2023 20:51:51 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id F1954828C8; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Nov 2022 10:14:41 +0100
+Date: Sat, 14 Jan 2023 22:54:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0cc7c63f91ffadb0835bb57cdb7bfffdf7803add
-X-Git-Newrev: 8f706ebb2cf325565f12b532c84a9d5ebe14d0d2
+X-Git-Oldrev: 4db36b268d8978b65bb5ed46e8f7e57412f3097f
+X-Git-Newrev: 424f53ac0730ea8e8aac4f3341f25a9829582cbb
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205151.B1F8F86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/openpgm: fix build for
- non-x86 targets
+Message-Id: <20230220205232.F1954828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/freescale-imx/imx-gpu-viv: drop X11 output
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,70 +56,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f706ebb2cf325565f12b532c84a9d5ebe14d0d2
+commit: https://git.buildroot.net/buildroot/commit/?id=424f53ac0730ea8e8aac4f3341f25a9829582cbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-openpgm-5-3-128 has assembly code for x86 that is not guarded by
-architecture defines. A patch to fix that has been merged upstream
-some time ago, and the next release will have it. This includes
-that patch for the time being.
+Since e8df0f7 (package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p4.4)
+the X11 folder is no longer included in the archive.
 
-Fixes: http://autobuild.buildroot.net/results/338291e5bf0671cb7ed7a32cc10e546c7a521acc
-Fixes: http://autobuild.buildroot.net/results/3ab6d7f9ee841fa18c1c220d722b1c06ca1fff30
-Fixes: http://autobuild.buildroot.net/results/68e840b1fec8f14775cef0b6a14d9b847337324b
-
-Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openpgm/0003-fix-build-on-macOS-ARM.patch | 34 +++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ Config.in.legacy                                 |  6 ++++++
+ package/freescale-imx/imx-gpu-viv/Config.in      | 22 ++++------------------
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 16 +---------------
+ 3 files changed, 11 insertions(+), 33 deletions(-)
 
-diff --git a/package/openpgm/0003-fix-build-on-macOS-ARM.patch b/package/openpgm/0003-fix-build-on-macOS-ARM.patch
-new file mode 100644
-index 0000000000..5769c5d7f1
---- /dev/null
-+++ b/package/openpgm/0003-fix-build-on-macOS-ARM.patch
-@@ -0,0 +1,34 @@
-+From 43dfc3e3a66b8e4584eb46219b129197a2428181 Mon Sep 17 00:00:00 2001
-+From: Michael Cho <cho-m@tuta.io>
-+Date: Thu, 10 Mar 2022 22:46:29 -0800
-+Subject: [PATCH] fix build on macOS ARM
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 6d66f1b958..41c5fdefb3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
++	bool "imx-gpu-viv X11 output has been removed"
++	select BR2_LEGACY
++	help
++	  The X11 output was dropped by NXP.
 +
-+[alexander.lukichev@gmail.com: backport from upstream]
-+Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-+---
-+ openpgm/pgm/cpu.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/openpgm/pgm/cpu.c b/openpgm/pgm/cpu.c
-+index cbcc988..f5da471 100644
-+--- a/openpgm/pgm/cpu.c
-++++ b/openpgm/pgm/cpu.c
-+@@ -33,6 +33,7 @@
-+ //#define CPU_DEBUG
-+ 
-+ 
-++#if defined(__i386__) || defined(__x86_64__)
-+ #ifndef _MSC_VER
-+ static
-+ void
-+@@ -59,7 +60,6 @@ _xgetbv(uint32_t xcr) {
-+ #endif
-+ 
-+ 
-+-#if defined(__i386__) || defined(__x86_64__)
-+ PGM_GNUC_INTERNAL
-+ void
-+ pgm_cpuid (pgm_cpu_t* cpu)
-+-- 
-+2.37.2
-+
+ config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
+ 	string "the QEMU specific targets option has been removed"
+ 	help
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 9ba3d0428e..9372b6313f 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -27,9 +27,9 @@ config BR2_PACKAGE_IMX_GPU_VIV
+ 	  Userspace libraries for Vivante GPU on i.MX platforms
+ 
+ 	  It contains libraries and headers for GLES, OpenCL, and
+-	  OpenVG. It also contains a DRI plugin for X11. It also
+-	  contains a plugin for DirectFB-1.4.0, but that doesn't work
+-	  together with buildroot's DirectFB version.
++	  OpenVG. It also contains a plugin for DirectFB-1.4.0, but
++	  that doesn't work together with buildroot's DirectFB
++	  version.
+ 
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
+@@ -40,22 +40,9 @@ choice
+ 	prompt "Output option"
+ 	help
+ 	  There are two versions of this library: one for
+-	  direct framebuffer access, one for X11 rendering.
++	  direct framebuffer access, one for wayland rendering.
+ 	  Choose here which version to install.
+ 
+-config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+-	bool "X11"
+-	depends on BR2_PACKAGE_XORG7
+-	# The i.MX8 blob doesn't support X11 output
+-	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XLIB_LIBXFIXES
+-
+-comment "X11 backend needs Xorg package"
+-	depends on !BR2_PACKAGE_XORG7
+-	depends on !BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+-
+ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
+ 	bool "Framebuffer"
+ 	# The i.MX8 blob doesn't support FB output
+@@ -70,7 +57,6 @@ endchoice
+ 
+ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT
+ 	string
+-	default "x11" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+ 	default "fb" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
+ 	default "wayland" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 06fbbc7343..e0e8a31533 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -26,14 +26,6 @@ endif
+ 
+ IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
+ 
+-ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+-# The libGAL.so library provided by imx-gpu-viv uses X functions. Packages
+-# may want to link against libGAL.so (QT5 Base with OpenGL and X support
+-# does so). For this to work we need build dependencies to libXdamage,
+-# libXext and libXfixes so that X functions used in libGAL.so are referenced.
+-IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
+-endif
+-
+ # Libraries are linked against libdrm, except framebuffer output on ARM
+ ifneq ($(IMX_GPU_VIV_LIB_TARGET)$(BR2_arm),fby)
+ IMX_GPU_VIV_DEPENDENCIES += libdrm
+@@ -55,12 +47,6 @@ else ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ 	ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
+ endef
+-else ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+-define IMX_GPU_VIV_FIXUP_PKGCONFIG
+-	$(foreach lib,egl glesv1_cm glesv2 vg, \
+-		ln -sf $(lib)_x11.pc $(@D)/gpu-core/usr/lib/pkgconfig/$(lib).pc
+-	)
+-endef
+ endif
+ 
+ # Instead of building, we fix up the inconsistencies that exist
+@@ -68,7 +54,7 @@ endif
+ # Make sure these commands are idempotent.
+ define IMX_GPU_VIV_BUILD_CMDS
+ 	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
+-	$(foreach backend,fb x11 wayland, \
++	$(foreach backend,fb wayland, \
+ 		$(RM) -r $(@D)/gpu-core/usr/lib/$(backend)
+ 	)
+ 	$(IMX_GPU_VIV_FIXUP_PKGCONFIG)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
