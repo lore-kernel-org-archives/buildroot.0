@@ -1,81 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF6F6C46467
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 06:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ABF7C46467
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 08:03:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E92982237;
-	Sat, 14 Jan 2023 06:31:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E92982237
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA06260806;
+	Sat, 14 Jan 2023 08:03:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA06260806
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jWpMZt36yb5s; Sat, 14 Jan 2023 06:31:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J_y9hP58HJmR; Sat, 14 Jan 2023 08:03:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F04B821AB;
-	Sat, 14 Jan 2023 06:31:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F04B821AB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 62E5D1BF4E6
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 06:31:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E577161171;
+	Sat, 14 Jan 2023 08:03:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E577161171
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D9C621BF3DF
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 08:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36D0F416FD
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 06:31:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36D0F416FD
+ by smtp3.osuosl.org (Postfix) with ESMTP id B52D261171
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 08:03:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B52D261171
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CK832Q9isqtB for <buildroot@lists.busybox.net>;
- Sat, 14 Jan 2023 06:31:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jd18WOR7I6Xq for <buildroot@lists.busybox.net>;
+ Sat, 14 Jan 2023 08:03:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19AE9416FC
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com
- [IPv6:2607:f8b0:4864:20::112e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19AE9416FC
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 06:31:49 +0000 (UTC)
-Received: by mail-yw1-x112e.google.com with SMTP id
- 00721157ae682-4d59d518505so144317907b3.1
- for <buildroot@buildroot.org>; Fri, 13 Jan 2023 22:31:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=D7zIReTMLajFoQWiFrE35BdVNZza0N6yi/szabK4puw=;
- b=M55awah+aQZ+QSH4AvRdMTs6F5NR5VvTuB86/xUmxXEFwMQyluWOrIFevj2dvlCCtV
- Hw/n2LMMTOmXVeyIINBhpSBsFNupJbZI0E7AcFNHo1MH4ba4tqCBE4Q2PVFaNjHbOMLX
- Pes0+j5g8GiTL/jljt1wH9ChcxAdusP5pvwqZ1ckbd0bgoBFTCuD7Sn52ZsGeva1h8p0
- fo/j6BhveqMUuM8LVMHlS6KTL2PfDmmqs1qPUGfP0ZQIHbAdo6Uwr5sCWsU1ZZqk+jNR
- /1Jc9Cl2w+E7hCXYikaqtZll9UPUR4ZbFa8kIS0/P0DyFfbdCrSuOqWi5kXjIYJRx6wW
- 1BOQ==
-X-Gm-Message-State: AFqh2koDKFEJXqV844/uJIweZyyZEUu10weyPUw0pgm/4QCZI0o1BTKu
- uT8xNxCrP9jYahEesxJGRG3hFKfHnA1REVc2TRFx4hfig90=
-X-Google-Smtp-Source: AMrXdXuuThY5esEKiHGKI6UjZm7ZLRK2dMj5N5pNPFbuLfyRk8YO3faM7XQ1EirVyro7MIRYUCjLDXFqOq0AKGNeUIo=
-X-Received: by 2002:a05:690c:b05:b0:467:2f6:4de5 with SMTP id
- cj5-20020a05690c0b0500b0046702f64de5mr4222557ywb.278.1673677908454; Fri, 13
- Jan 2023 22:31:48 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3804B60BFE
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3804B60BFE
+ for <buildroot@buildroot.org>; Sat, 14 Jan 2023 08:03:23 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id E52CB5FF96;
+ Sat, 14 Jan 2023 09:03:17 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 14 Jan 2023 09:03:17 +0100
+Date: Sat, 14 Jan 2023 09:03:17 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Ernie Carp <erniecarp2018@gmail.com>
+Message-ID: <20230114080317.GW151997@scaer>
+References: <CAHdaamN7mawJYf6LAVJXTtptm08u79TucxEbbSoMYHduhUdL3A@mail.gmail.com>
 MIME-Version: 1.0
-From: Ernie Carp <erniecarp2018@gmail.com>
-Date: Fri, 13 Jan 2023 22:31:37 -0800
-Message-ID: <CAHdaamN7mawJYf6LAVJXTtptm08u79TucxEbbSoMYHduhUdL3A@mail.gmail.com>
-To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=D7zIReTMLajFoQWiFrE35BdVNZza0N6yi/szabK4puw=;
- b=iNyeAW8DD6Rx1vQYh8v93f/EpVtMsFZqcFJWez4891M3n3kwFlE0qqYtLJeMlNPiRK
- TliWoJL9g+VgQ5YXGwIFLT0Qq4C92FsHhnYVbfM+GV7GhdmygTDP3SM69qZhNevgQk8p
- o13H8OodmC4P6PThceTu0xa9DergHz7Ffp3+gkls+LKXPLYROwBDRiL++R8N1aA+9x0l
- ebqo1wfjZ9gh/eoPQ9CQtSyjvX7ZrSxs3Uq12POev2iu/+Z0Qyt1Q7ox3rbuQBincwLS
- 3GTvHdrGYMtu18vzV/rpb5ksUlmvqITAyZiU6iBBK5UWmRgY3DRUC9Sx0Q7O0PVkl41B
- eE+w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=iNyeAW8D
-Subject: [Buildroot] Python 3 bcrypt error
+Content-Disposition: inline
+In-Reply-To: <CAHdaamN7mawJYf6LAVJXTtptm08u79TucxEbbSoMYHduhUdL3A@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1673683400;
+ bh=w9ecsLOT5bJW1fmZiCbegQJ97LskDz+TTBpNt3zJ46I=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=mhLH83uB2wMzmbhHvo8vHgiP28tGiWX6RnqjYqTLuMZVGOhpKduk31OhrvhUH7hpz
+ rNi6r7xQTaDoawS+S5zHhRrlXjSZHILUNfUzpwYKZcH3q+VandyUwo0VLdt9ay5euv
+ uimW7FHhCmLAtwlZT6U9Y441NrXOdWdA8wlCpEeBWbKM1LiUvbe7TWfo9x0mpL1M/W
+ 6owIUAHxwKj1/yDhUnFs0rOZ7Am1PhcQuzOPyfM489cQImyFr02eVVKsTjobKyRO19
+ ANBBPawcYFxwa9V16J2X2Sh4dq/AnIMmqZF0O+xBmYCz+Ea8ficJGvNKevgBmiyAy4
+ +ovxoYkVhtr5A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mhLH83uB
+Subject: Re: [Buildroot] Python 3 bcrypt error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,95 +75,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5105089486093210348=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5105089486093210348==
-Content-Type: multipart/alternative; boundary="00000000000033b1d805f2338190"
-
---00000000000033b1d805f2338190
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-When compiling python3 on buildroot version 2022-11 I get an error message
-about bcrypt.
-The PyPi.org lists the sha256 hash as
-27d375903ac8261cfe4047f6709d16f7d18d39b1ec92aaf72af989552a650ebd
-
-Need a little help to fix it.
-
-[source.vendored-sources]
-directory = "VENDOR"
-ERROR: bcrypt-4.0.1.tar.gz has wrong sha256 hash:
-ERROR: expected:
-d64daee0af1afe137718674e67a49b8bb791842aab265b588a6d68d44a449c70
-ERROR: got     :
-108aaa38326360d716f4a6e2e98bfe84969542e559bd8bfe3b09ccc93e6c2944
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-wget --passive-ftp -nd -t 3 -O
-'/home/ethertek/rms200v2/buildroot/output/build/.bcrypt-4.0.1.tar.gz.CquFUP/output'
-'http://sources.buildroot.net/bcrypt-4.0.1.tar.gz'
---2023-01-14 06:19:19--  http://sources.buildroot.net/bcrypt-4.0.1.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.26.0.37,
-172.67.72.56, 104.26.1.37, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.0.37|:80...
-connected.
-HTTP request sent, awaiting response... 404 Not Found
-2023-01-14 06:19:19 ERROR 404: Not Found.
-
-make[1]: *** [package/pkg-generic.mk:189:
-/home/ethertek/rms200v2/buildroot/output/build/python-bcrypt-4.0.1/.stamp_downloaded]
-Error 1
-make: *** [Makefile:84: _all] Error 2
-
-Thank you,
-Ernie.
-
---00000000000033b1d805f2338190
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr">Hello,<div><br></div><di=
-v>When compiling python3 on buildroot version 2022-11 I get an error messag=
-e about bcrypt.</div><div>The PyPi.org lists the sha256 hash as 27d375903ac=
-8261cfe4047f6709d16f7d18d39b1ec92aaf72af989552a650ebd</div><div><br></div><=
-div>Need a little help to fix it.</div><div><br></div><div><div>[source.ven=
-dored-sources]</div><div>directory =3D &quot;VENDOR&quot;</div><div>ERROR: =
-bcrypt-4.0.1.tar.gz has wrong sha256 hash:</div><div>ERROR: expected: d64da=
-ee0af1afe137718674e67a49b8bb791842aab265b588a6d68d44a449c70</div><div>ERROR=
-: got=C2=A0 =C2=A0 =C2=A0: 108aaa38326360d716f4a6e2e98bfe84969542e559bd8bfe=
-3b09ccc93e6c2944</div><div>ERROR: Incomplete download, or man-in-the-middle=
- (MITM) attack</div><div>wget --passive-ftp -nd -t 3 -O &#39;/home/ethertek=
-/rms200v2/buildroot/output/build/.bcrypt-4.0.1.tar.gz.CquFUP/output&#39; &#=
-39;<a href=3D"http://sources.buildroot.net/bcrypt-4.0.1.tar.gz">http://sour=
-ces.buildroot.net/bcrypt-4.0.1.tar.gz</a>&#39;=C2=A0</div><div>--2023-01-14=
- 06:19:19--=C2=A0 <a href=3D"http://sources.buildroot.net/bcrypt-4.0.1.tar.=
-gz">http://sources.buildroot.net/bcrypt-4.0.1.tar.gz</a></div><div>Resolvin=
-g <a href=3D"http://sources.buildroot.net">sources.buildroot.net</a> (<a hr=
-ef=3D"http://sources.buildroot.net">sources.buildroot.net</a>)... 104.26.0.=
-37, 172.67.72.56, 104.26.1.37, ...</div><div>Connecting to <a href=3D"http:=
-//sources.buildroot.net">sources.buildroot.net</a> (<a href=3D"http://sourc=
-es.buildroot.net">sources.buildroot.net</a>)|104.26.0.37|:80... connected.<=
-/div><div>HTTP request sent, awaiting response... 404 Not Found</div><div>2=
-023-01-14 06:19:19 ERROR 404: Not Found.</div><div><br></div><div>make[1]: =
-*** [package/<a href=3D"http://pkg-generic.mk:189">pkg-generic.mk:189</a>: =
-/home/ethertek/rms200v2/buildroot/output/build/python-bcrypt-4.0.1/.stamp_d=
-ownloaded] Error 1</div><div>make: *** [Makefile:84: _all] Error 2</div></d=
-iv><div><br></div><div>Thank you,</div><div>Ernie.</div></div></div></div>
-
---00000000000033b1d805f2338190--
-
---===============5105089486093210348==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5105089486093210348==--
+RXJuaWUsIEFsbCwKCk9uIDIwMjMtMDEtMTMgMjI6MzEgLTA4MDAsIEVybmllIENhcnAgc3Bha2Ug
+dGh1c2x5Ogo+IEhlbGxvLAo+IFdoZW4gY29tcGlsaW5nIHB5dGhvbjMgb24gYnVpbGRyb290IHZl
+cnNpb24gMjAyMi0xMSBJIGdldCBhbiBlcnJvciBtZXNzYWdlIGFib3V0IGJjcnlwdC4KCkluIEJ1
+aWxkcm9vdCAyMDIyLjExLCBhcyB3ZWxsIGFzIGluIHRoZSAyMDIyLjExLnggbWFpbnRlbmFuY2Ug
+YnJhbmNoLAp3ZSBvbmx5IGhhdmUgcHl0aG9uYmNyeXB0IDMuMi4wLCBidXQgdGhlIHRyYWNlcyBi
+ZWxvdyByZWZlciB0byA0LjAuMSwKd2hpY2ggaXMgb25seSBpbiBtYXN0ZXIuCgpTbywgYXJlIHlv
+dSBzdXJlIHlvdSBhcmUgdXNpbmcgYnVpbGRyb290IDIwMjIuMTE/IElmIHNvLCBob3cgY2FuIHlv
+dSBiZQp1c2luZyBweXRob24tYmNyeXB0IDQuMC4xPwoKPiBUaGUgUHlQaS5vcmcgbGlzdHMgdGhl
+IHNoYTI1NiBoYXNoIGFzIDI3ZDM3NTkwM2FjODI2MWNmZTQwNDdmNjcwOWQxNmY3ZDE4ZDM5YjFl
+YzkyYWFmNzJhZjk4OTU1MmE2NTBlYmQKPiBOZWVkIGEgbGl0dGxlIGhlbHAgdG8gZml4IGl0Lgo+
+IFtzb3VyY2UudmVuZG9yZWQtc291cmNlc10KPiBkaXJlY3RvcnkgPSAiVkVORE9SIgo+IEVSUk9S
+OiBiY3J5cHQtNC4wLjEudGFyLmd6IGhhcyB3cm9uZyBzaGEyNTYgaGFzaDoKPiBFUlJPUjogZXhw
+ZWN0ZWQ6IGQ2NGRhZWUwYWYxYWZlMTM3NzE4Njc0ZTY3YTQ5YjhiYjc5MTg0MmFhYjI2NWI1ODhh
+NmQ2OGQ0NGE0NDljNzAKPiBFUlJPUjogZ290wqAgwqAgwqA6IDEwOGFhYTM4MzI2MzYwZDcxNmY0
+YTZlMmU5OGJmZTg0OTY5NTQyZTU1OWJkOGJmZTNiMDljY2M5M2U2YzI5NDQKPiBFUlJPUjogSW5j
+b21wbGV0ZSBkb3dubG9hZCwgb3IgbWFuLWluLXRoZS1taWRkbGUgKE1JVE0pIGF0dGFjawoKVGhp
+cyBoYXMgbm93IHN1cHBvc2VkbHkgYmVlbiBmaXhlZCBpbiBtYXN0ZXIgd2l0aCBjb21taXQgYWMy
+YjI2ZmJhMmFkCihzdXBwb3J0L2Rvd25sb2FkOiBmaXggY2FyZ28gdmVuZG9yaW5nKS4KClJlZ2Fy
+ZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
+LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBF
+LiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3Mn
+IGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBc
+IC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0Mjcg
+YC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMg
+bm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBN
+QUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
