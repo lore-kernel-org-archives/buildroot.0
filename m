@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49E89C3DA78
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 20:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8472CC46467
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 20:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBC494059C;
-	Sat, 14 Jan 2023 20:07:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBC494059C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22322414E0;
+	Sat, 14 Jan 2023 20:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22322414E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dIcpAXwu7OIp; Sat, 14 Jan 2023 20:07:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XvSVy6eJLDm9; Sat, 14 Jan 2023 20:08:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 111FE4048A;
-	Sat, 14 Jan 2023 20:07:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 111FE4048A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5077D1BF863
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 20:07:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 097E9410E7;
+	Sat, 14 Jan 2023 20:08:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 097E9410E7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 212891BF2A5
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 20:08:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2BFFE80C60
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 20:07:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BFFE80C60
+ by smtp3.osuosl.org (Postfix) with ESMTP id F0F4B60759
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 20:08:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0F4B60759
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LKasx_U944Dn for <buildroot@lists.busybox.net>;
- Sat, 14 Jan 2023 20:07:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A03880A8D
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 20:07:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A03880A8D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2764F87B1B; Sat, 14 Jan 2023 20:07:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 21:07:03 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60cf07079b78d4c4bb495fd18cb2a145a4cb3635
-X-Git-Newrev: 664897295a3667db2ff95c5c1b458b16c1192a47
-X-Patchwork-Hint: ignore
-Message-Id: <20230114200728.2764F87B1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janus-gateway: fix libcurl build
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8PnCfKWuL9IC for <buildroot@lists.busybox.net>;
+ Sat, 14 Jan 2023 20:08:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC4CD605D6
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CC4CD605D6
+ for <buildroot@buildroot.org>; Sat, 14 Jan 2023 20:08:46 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C5637100003;
+ Sat, 14 Jan 2023 20:08:43 +0000 (UTC)
+Date: Sat, 14 Jan 2023 21:08:42 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230114210842.1cf70a03@windsurf>
+In-Reply-To: <20230114170126.1085188-1-fontaine.fabrice@gmail.com>
+References: <20230114170126.1085188-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1673726924;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=jXFywsAIJkNkmkbp4YzK7SLzQgN29ajWYP6WfQw1CxQ=;
+ b=O6wbIrCyi73kCqW9qu9hgXoPAnf+B+fPr3D2ukYrcmerX9WP5EBMdLK000k9NsfrjHPNE9
+ n8Z9XJRvDZmKXya09rvPSae9L5d5mV01Mth9Ozt4byh/aSX86G25U2AIbrs1okqMdvrsbf
+ m64E99TaHXtdnyoAkQ2IamFXJUXQaemq252G25UuFH/tiF3FtM/lBpoVCJL+/DjBnX/5kP
+ 3LUbHbrkJSGjrXObI0wZTTc9Kh1C8LuDAJPDeppb/1oh6oQbZ/1/BQGwLeSUir+Vq2RQ84
+ LCWGwDK/0JopTBnHOjWDij6Yw1nvJaXuCENs5OKKOnr+OMjqK09mT/SmatyGGA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=O6wbIrCy
+Subject: Re: [Buildroot] [PATCH 1/2] package/janus-gateway: add libcurl
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,67 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Gregory Dymarek <gregd72002@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=664897295a3667db2ff95c5c1b458b16c1192a47
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 14 Jan 2023 18:01:25 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fix the following libcurl build failure raised since bump to version
-1.1.1 in commit 01518e5660366be41e6a8e0a0f2b487d7cdf48a2:
+> libcurl is an optional dependency which is enabled by default since at
+> least version 0.0.9 and
+> https://github.com/meetecho/janus-gateway/commit/ca9c0a86f975f88fbdd791af3cb4f8986883c1c2
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/janus-gateway/janus-gateway.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-In file included from /home/autobuild/autobuild/instance-11/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/curl/curl.h:3195,
-                 from turnrest.c:21:
-turnrest.c: In function 'janus_turnrest_request':
-turnrest.c:168:2: error: void value not ignored as it ought to be
-  168 |  curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
-      |  ^
+Both applied, thanks!
 
-Fixes:
- - http://autobuild.buildroot.org/results/11bb0079f5a7d06d3494a61b411f0af2e8c4d342
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...003-Use-parentheses-to-ensure-compilation.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
-new file mode 100644
-index 0000000000..f91c13d1f6
---- /dev/null
-+++ b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
-@@ -0,0 +1,27 @@
-+From 51431c36cd5f2997c0f7723909195b9883ae0486 Mon Sep 17 00:00:00 2001
-+From: Benson Muite <bkmgit@users.noreply.github.com>
-+Date: Wed, 4 Jan 2023 13:33:36 +0300
-+Subject: [PATCH] Use parentheses to ensure compilation (#3138)
-+
-+Compiler fails with latest Curl release. Use parenthesis to ensure compiler evaluates expression correctly.
-+
-+[Retrieved from:
-+https://github.com/meetecho/janus-gateway/commit/51431c36cd5f2997c0f7723909195b9883ae0486]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/turnrest.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/turnrest.c b/src/turnrest.c
-+index b8560d22f2..42e6114de8 100644
-+--- a/src/turnrest.c
-++++ b/src/turnrest.c
-+@@ -165,7 +165,7 @@ janus_turnrest_response *janus_turnrest_request(const char *user) {
-+ 	JANUS_LOG(LOG_VERB, "Sending request: %s\n", request_uri);
-+ 	janus_mutex_unlock(&api_mutex);
-+ 	curl_easy_setopt(curl, CURLOPT_URL, request_uri);
-+-	curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
-++	curl_easy_setopt(curl, (api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST), 1);
-+ 	if(!api_http_get) {
-+ 		/* FIXME Some servers don't like a POST with no data */
-+ 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query_string);
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
