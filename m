@@ -4,66 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00252C54EBE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 00:29:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A23A6C3DA78
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 00:31:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9294F417B0;
-	Sat, 14 Jan 2023 00:29:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9294F417B0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F45441B50;
+	Sat, 14 Jan 2023 00:31:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F45441B50
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tiaIOObwHzX0; Sat, 14 Jan 2023 00:29:51 +0000 (UTC)
+	with ESMTP id I9kfE0W_aVQF; Sat, 14 Jan 2023 00:31:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73580418C7;
-	Sat, 14 Jan 2023 00:29:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73580418C7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E59E61BF3C3
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 00:29:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 247CA41A58;
+	Sat, 14 Jan 2023 00:31:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 247CA41A58
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 91D911BF3C3
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 00:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD1E060AAC
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 00:29:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD1E060AAC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C951821C9
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 00:31:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C951821C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g5K73JdpwgmR for <buildroot@lists.busybox.net>;
- Sat, 14 Jan 2023 00:29:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ychhiKC2CWqN for <buildroot@lists.busybox.net>;
+ Sat, 14 Jan 2023 00:31:36 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF58860776
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF58860776
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 00:29:47 +0000 (UTC)
-Received: from [10.0.2.86] ([88.149.186.89])
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BB74821C7
+Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BB74821C7
+ for <buildroot@buildroot.org>; Sat, 14 Jan 2023 00:31:35 +0000 (UTC)
+Received: from localhost.localdomain ([88.149.186.89])
  by Aruba Outgoing Smtp  with ESMTPSA
- id GUQcpK4xBvRk8GUQcpQi3M; Sat, 14 Jan 2023 01:29:46 +0100
-Message-ID: <5a5b75bd-2a39-a142-b079-b3f885dca87b@benettiengineering.com>
-Date: Sat, 14 Jan 2023 01:29:46 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-To: buildroot@buildroot.org
-References: <20230114002433.1388538-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-US
+ id GUSBpoy9lBXcMGUSBpPdAv; Sat, 14 Jan 2023 01:31:34 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230114002433.1388538-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfG66O8XMGqKrhGQRPcS3qn3OfYDElTrBGVKvF+4QwzDxDBqJ2/bQgq43toXZvjpe8lVT5ttkbBiXETOSibkTa3XsPqR/XI7+uvT1f54CqmX7XiWx4JJQ
- VbTaQpx42uqRiH45cdZckymFdvB5alBLmreyA7VFsdxVKHFtaqXPefrRuzJTEZHruqzjwIB77mI088F0hxM1uVIGAUOk4bejECs=
+To: buildroot@buildroot.org
+Date: Sat, 14 Jan 2023 01:31:22 +0100
+Message-Id: <20230114003122.1475047-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfKRc2vC3rLhCaIlmRXUwskD/Ae5o9pD4kxlDYLvVOjXKluac4Eem9pGhNtn6PVcaYnLIBOmYfBpPJ+PTB7I9foTaZgEEUbqYRN554PtkqX8Q7A/U6AoH
+ 3D/ZA+w0+Ftt1OHdH0onFdGAmUnvsvbEksGaac3ZonGR0os13kOBJsUwv0F5N6d9Ur3nYZj/Zl8FgKkGgNk4MISfXXxyjjl3/lnNM1jAF9qU8uzPoQiW8dhx
+ vRXePIRygzrSV5s17f0yB3jc0fn1eH4TZtxOHm4pjQoonH90bkEyXjMLK/IGMQuQL883l3X3R7gyP7Sp25V3eQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1673656186; bh=rO0QlUnWJOovah4Ml1UHWjOsE52XgAgmUjYEkYyjvLE=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=hjJMeD/w99p36f+njLOFnOrNSBSjo0DALXdIJzor/CVR6A4BRVI/h90yykR01Beln
- UlkWJWY8YywQplYFGCMooy9NujY9OkORBbZ2QHhWXH0JQSBr5CnRL9AbWPNKYhH3tb
- ZcjTOC5AsTbpQ7YzEVmFzgd7Ci88JW0wUjG0cS98VwYqhZpfKxFfQPOkZqSQKZB7cQ
- A7gaD81j+Vo3qbNKD60a/VuugdyvwNXgsaTHn8Vmw6+tfqKF1ssxnU7e8xeRZ7+PeH
- 2sVUkcJQj8AvN1SQ0nQNdZCYc0UZhJk6ZVKsISiapCXPwgIX3AMY8vlCz0Mr/yo0af
- IHAL31SZDP2Qg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ t=1673656294; bh=395MUJwW6WB8K5y3l4GVwcyjB4zY7m1QDni1ER6ZevU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=YXIhw+jvrg9FvV2ceTUVaiTlrvstTnzI6+MwQsPSWrKEpqleB+erVjB0euCEucMv/
+ YNdtHcW3daYtbs8XgCXFWUrqi39gnOjyACWEI+VS7s75XkRR4TxxWH0UO1QOSAD/LS
+ bgT0fW6I/tfOS1O74CVfRRtWhtTsstmXU4ZRByNEXGzw3a2RegV9042xJAY/YK3lRV
+ 2+sj9cv3Zk0evxCezumh5ZGhCZUiWQNfrov5cum6tDxHu/8Mqoa0BKbMZntXDKf8dz
+ CrGDxwgH6/ynBBoB4edre04ESmSrVGoLnJaTv38x5LwLQwmbmesbOXiB6pfvfR8zMS
+ pWB/aVEGMzcFQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=hjJMeD/w
-Subject: Re: [Buildroot] [PATCH] package/rtl8821cu: fix build failure due to
+ header.a=rsa-sha256 header.s=a1 header.b=YXIhw+jv
+Subject: [Buildroot] [PATCH v2] package/rtl8821cu: fix build failure due to
  missing Linux options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -76,63 +73,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/01/23 01:24, Giulio Benetti wrote:
-> After fixing build failure due to missing Linux CONFIG_CFG80211 an error
-> of conflicting Big and Little endianness came out. So let's fix it by
-> disabling the default CONFIG_PLATFORM that is not CONFIG_PLATFORM_GENERIC
-> but CONFIG_PLATFORM_AUTODETECT.
+Fixes:
+http://autobuild.buildroot.net/results/aea/aea6bc1e4f89bd1010dfdc9caa54c37edb567d5f/
 
-Here I'm wrong. CONFIG_PLATFORM_GENERIC is still generic with this git 
-SHA1. So I'm going to send V2.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+V1->V2:
+* drop CONFIG_PLATFORM_ change
+---
+ package/rtl8821cu/rtl8821cu.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Please drop this
-Sorry for the noise
-Best regards
+diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
+index 18222e0014..97f50d9633 100644
+--- a/package/rtl8821cu/rtl8821cu.mk
++++ b/package/rtl8821cu/rtl8821cu.mk
+@@ -9,6 +9,14 @@ RTL8821CU_SITE = $(call github,morrownr,8821cu-20210118,$(RTL8821CU_VERSION))
+ RTL8821CU_LICENSE = GPL-2.0
+ RTL8821CU_LICENSE_FILES = LICENSE
+ 
++define RTL8821CU_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
++endef
++
+ RTL8821CU_USER_EXTRA_CFLAGS = \
+ 	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
+ 	-DCONFIG_IOCTL_CFG80211 \
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Fixes:
-> http://autobuild.buildroot.net/results/aea/aea6bc1e4f89bd1010dfdc9caa54c37edb567d5f/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/rtl8821cu/rtl8821cu.mk | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-> index 18222e0014..501d849aca 100644
-> --- a/package/rtl8821cu/rtl8821cu.mk
-> +++ b/package/rtl8821cu/rtl8821cu.mk
-> @@ -9,6 +9,14 @@ RTL8821CU_SITE = $(call github,morrownr,8821cu-20210118,$(RTL8821CU_VERSION))
->   RTL8821CU_LICENSE = GPL-2.0
->   RTL8821CU_LICENSE_FILES = LICENSE
->   
-> +define RTL8821CU_LINUX_CONFIG_FIXUPS
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
-> +endef
-> +
->   RTL8821CU_USER_EXTRA_CFLAGS = \
->   	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
->   	-DCONFIG_IOCTL_CFG80211 \
-> @@ -16,7 +24,7 @@ RTL8821CU_USER_EXTRA_CFLAGS = \
->   	-Wno-error
->   
->   RTL8821CU_MODULE_MAKE_OPTS = \
-> -	CONFIG_PLATFORM_GENERIC=n \
-> +	CONFIG_PLATFORM_AUTODETECT=n \
->   	CONFIG_RTL8821CU=m \
->   	KVER=$(LINUX_VERSION_PROBED) \
->   	USER_EXTRA_CFLAGS="$(RTL8821CU_USER_EXTRA_CFLAGS)"
+2.34.1
 
 _______________________________________________
 buildroot mailing list
