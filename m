@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7984DC6379F
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:45:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4C56C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:45:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 258044F58A;
-	Tue, 21 Feb 2023 00:45:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 258044F58A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50AA54F590;
+	Tue, 21 Feb 2023 00:45:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50AA54F590
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ONBXB4_RM_nK; Tue, 21 Feb 2023 00:45:16 +0000 (UTC)
+	with ESMTP id XQCYhP1Hs1GA; Tue, 21 Feb 2023 00:45:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E598A4F5B7;
-	Tue, 21 Feb 2023 00:45:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E598A4F5B7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E7BC01BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 281D44F5A8;
+	Tue, 21 Feb 2023 00:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 281D44F5A8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 317FC1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5629441808
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5629441808
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2996D6FB7A
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2996D6FB7A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tW7phwrA9Mhk for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C2kpKh5V21qr for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 755A7417E3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 755A7417E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38763610A0
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38763610A0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65A9486495; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 3463A828C8; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 16:26:48 +0100
+Date: Sat, 14 Jan 2023 23:10:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 57e297a215193c92f6a178139db53616f2ee23b5
-X-Git-Newrev: 16e5c92ff5fd2b44a1126bd7d7538c68ce838213
+X-Git-Oldrev: 838c9a33be603e59ff7f65041bbcc138e573d13f
+X-Git-Newrev: dde078790a965dfd469ec6ed745e4f7b5edc60ba
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205257.65A9486495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/webkitgtk: Build with
- ninja
+Message-Id: <20230220205233.3463A828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/at-spi2-core: switch
+ to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,57 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16e5c92ff5fd2b44a1126bd7d7538c68ce838213
+commit: https://git.buildroot.net/buildroot/commit/?id=dde078790a965dfd469ec6ed745e4f7b5edc60ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Webkitgtk needs cmake >= 3.20 when building with the make backend since
-webkitgtk 3.8.0.
-
-Cmake 3.20 is above our minimal version in
-support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
-with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
-
-https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/webkitgtk/webkitgtk.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/at-spi2-core/at-spi2-core.hash | 2 +-
+ package/at-spi2-core/at-spi2-core.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index b42ac3b644..a6974db926 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -139,4 +139,23 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+index e2cc403e71..764e4c3661 100644
+--- a/package/at-spi2-core/at-spi2-core.hash
++++ b/package/at-spi2-core/at-spi2-core.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/at-spi2-core/2.36/at-spi2-core-2.36.0.sha256sum
++# From https://download.gnome.org/sources/at-spi2-core/2.36/at-spi2-core-2.36.0.sha256sum
+ sha256  88da57de0a7e3c60bc341a974a80fdba091612db3547c410d6deab039ca5c05a  at-spi2-core-2.36.0.tar.xz
  
-+# webkitgtk needs cmake >= 3.20 when not building with ninja, which is
-+# above our minimal version in
-+# support/dependencies/check-host-cmake.mk, so use the ninja backend:
-+# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-+WEBKITGTK_CONF_OPTS += -GNinja
-+WEBKITGTK_DEPENDENCIES += host-ninja
-+
-+define WEBKITGTK_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WEBKITGTK_BUILDDIR)
-+endef
-+
-+define WEBKITGTK_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
-+endef
-+
-+define WEBKITGTK_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
-+endef
-+
- $(eval $(cmake-package))
+ # locally calculated
+diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+index cf7fdd297c..f0b019c0ed 100644
+--- a/package/at-spi2-core/at-spi2-core.mk
++++ b/package/at-spi2-core/at-spi2-core.mk
+@@ -7,7 +7,7 @@
+ AT_SPI2_CORE_VERSION_MAJOR = 2.36
+ AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
+ AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+-AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
++AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+ AT_SPI2_CORE_LICENSE = LGPL-2.1+
+ AT_SPI2_CORE_LICENSE_FILES = COPYING
+ AT_SPI2_CORE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
