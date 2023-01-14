@@ -4,85 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61303C3DA78
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 17:01:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA52CC46467
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jan 2023 17:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8D93405A2;
-	Sat, 14 Jan 2023 17:01:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8D93405A2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56FD6405B5;
+	Sat, 14 Jan 2023 17:01:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56FD6405B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8lm6oblL4aJ5; Sat, 14 Jan 2023 17:01:40 +0000 (UTC)
+	with ESMTP id v_N3c5Keh8mB; Sat, 14 Jan 2023 17:01:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F9AA4015A;
-	Sat, 14 Jan 2023 17:01:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F9AA4015A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A1BE40643;
+	Sat, 14 Jan 2023 17:01:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A1BE40643
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2C4F71BF380
- for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 17:01:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E89BA1BF380
+ for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 17:01:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06BD1415EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFF72415DF
  for <buildroot@lists.busybox.net>; Sat, 14 Jan 2023 17:01:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06BD1415EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFF72415DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PCTSZ_0mPY9X for <buildroot@lists.busybox.net>;
- Sat, 14 Jan 2023 17:01:34 +0000 (UTC)
+ with ESMTP id OkA7yge3wTB0 for <buildroot@lists.busybox.net>;
+ Sat, 14 Jan 2023 17:01:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 502F5415DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73835415E3
 Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
  [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 502F5415DF
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 17:01:34 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id r2so23724019wrv.7
- for <buildroot@buildroot.org>; Sat, 14 Jan 2023 09:01:34 -0800 (PST)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 73835415E3
+ for <buildroot@buildroot.org>; Sat, 14 Jan 2023 17:01:36 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id b5so2559595wrn.0
+ for <buildroot@buildroot.org>; Sat, 14 Jan 2023 09:01:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EjV9J7tepFXugB3xPt1oo7JvSjIIRg8XxiyonArRRBo=;
- b=dyEQE2CV+oKLDo8cf8SHR4uC4eZerYINbBa4kmuzm43v6ip3yhxV/OSG6D+Ph3N8q4
- cxxusW0Bc3XIYBWAyfAEapoKfrQ9+A1EiiIEog+neK9gQLqmafIM3Q8az4XbeWqYGGeH
- 9XLSI28lEMpL2njoVMm63hP/UfxkhAb+izhKHifaEA3utbr68zD7GIS9SkvgVr0RVk+i
- jBauOMnT5fXXd1cO5A9s1X6F2JGJYGCNbklYLDDlV3lO6fx6cBOX6EDmu5Y+hcSBDUyj
- vxEaAnN+PDy1yKVf1f+so6+6rEbRlPIZxU14LXKWeYJbQN0br3pA7qa2tQ4VdufgiIX5
- QHwQ==
-X-Gm-Message-State: AFqh2kr47SboMA56+zVsuK+Of0Txs6g+C3vYTaLrWLvcLvbRLG2YqrQH
- w9FwuIFiwnYP2hvUrcpwEaP1BmNp/Ww=
-X-Google-Smtp-Source: AMrXdXuyXKYxx7WKc/3Eq8tBujcEC6ZtH1OIA3cwlZHSRmPcE39F3sxTBaNVtgdONi+QIx4bx3b6rQ==
-X-Received: by 2002:a5d:5226:0:b0:2bd:e873:e20c with SMTP id
- i6-20020a5d5226000000b002bde873e20cmr3109135wra.70.1673715691749; 
- Sat, 14 Jan 2023 09:01:31 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Ylpvv1W5FU5RG7u9wrR1simpV6/sLKqnL/O54yb8cmk=;
+ b=k1v4fyWlcuBVHgIn6fSiW/qEYGRMa8gfXShKvoktdoew6TDHwYCKtTw9X80kN/C/mv
+ E5eTKvoMdA54DCvQJrWjRh7uV2lk/fTfO8u9j/GbYdPeb1mChJp4jT9Dqk9ZyfjjipGP
+ SzmrIUkVb3PyNxB3aQHrn6zcgxJiygoQjzyV6d44HLi7qekGOn+j8UnbocnEVNeJGCdc
+ HukuH6uiDCaf90C6i7QHkgXS7tpbtwCKgbLgLHwCSsot/v77AAcTr63ePZHZNDtEUyIz
+ afyDfdyORM0zOizCW1q1CbHnRCLVUybZCQ5OR7fi31qcNMcPtd9q0FRVZJLJPBzqG1+L
+ QwIQ==
+X-Gm-Message-State: AFqh2kobM++GcSUQ8hCQeQ/OMjWrm9wDMlFeDiad16Bn/xjnuStMfgZr
+ kldTMypJGD4Bz+aqXPRYQN9rF02KK9U=
+X-Google-Smtp-Source: AMrXdXsgnpi97RSUj2xrvOnxHt/HGB0LE3PlQf96W20LM3wBYjU7EpGj1XvoRGbaZd4yYWyI2RHYaw==
+X-Received: by 2002:adf:f4c1:0:b0:27e:7f5:6634 with SMTP id
+ h1-20020adff4c1000000b0027e07f56634mr44342254wrp.60.1673715694384; 
+ Sat, 14 Jan 2023 09:01:34 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- bq14-20020a5d5a0e000000b002bdf2739cabsm1725691wrb.1.2023.01.14.09.01.30
+ bq14-20020a5d5a0e000000b002bdf2739cabsm1725691wrb.1.2023.01.14.09.01.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Jan 2023 09:01:31 -0800 (PST)
+ Sat, 14 Jan 2023 09:01:33 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 18:01:25 +0100
-Message-Id: <20230114170126.1085188-1-fontaine.fabrice@gmail.com>
+Date: Sat, 14 Jan 2023 18:01:26 +0100
+Message-Id: <20230114170126.1085188-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230114170126.1085188-1-fontaine.fabrice@gmail.com>
+References: <20230114170126.1085188-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=EjV9J7tepFXugB3xPt1oo7JvSjIIRg8XxiyonArRRBo=;
- b=inqlK2EVTsrNEuyFrAxdlfeMzr04W/6Ly+do9vDMgbcevBmdbUykOgiJbbridIaHwR
- 9Kx4WvQ/6FZj6jTxvYR0/qgVPERnwyb8pTTBVClFc409fDznbd/jJra8rZYH7BNmIoVf
- wq0PQzK98fyeC6p8sLFXm+v5eJEIATtztWEjWNnITefjhIvEIjVx/H7eG0/nLImPAHXb
- JQxR4dYjdAynnf5IXEFOQ7Efgk6bCsXy8INpmsiRtOtnCvD/OkN7GGebAFMluA1d8p7n
- RBLabBvGMBUZb6g53Hic3y/4frtDWuaVw8lVUSfjFCXDb8aMPRO0NL+2nMdO2FvqvPIK
- FW6g==
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Ylpvv1W5FU5RG7u9wrR1simpV6/sLKqnL/O54yb8cmk=;
+ b=h3Z5QDfLQgGqwF9zS3YGi5Ba28CyF9gu0PFjcamVRkZlrymogZXXtwJDsavaJlX/wr
+ LwwMwXLhQJbWIcVqXlBUrEwRnSUFtgDriCPPCp7du0Tim1kfVki98M8S8+uHmoLxUEr/
+ V+jBTPRcbX1Y/v1MYAr+SXQjYcZeLWsla8LMFihkL/iaMXRvu0z9YiXuuUmUCZD7/1+h
+ cXE7UVAHwFFyd94+JMmyZRhXqr0ndPmUB9BdRr+gAiItf/3DF9dsNR8p1NxiIRI7KqVu
+ qgjq8fz1iHu3QbDtRIWYcRs42Gx4MnrfbUJs5QXnGc7VuIB+qxh3x+xRrcwppDnLAsma
+ mWBg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=inqlK2EV
-Subject: [Buildroot] [PATCH 1/2] package/janus-gateway: add libcurl optional
- dependency
+ header.a=rsa-sha256 header.s=20210112 header.b=h3Z5QDfL
+Subject: [Buildroot] [PATCH 2/2] package/janus-gateway: fix libcurl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,33 +103,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libcurl is an optional dependency which is enabled by default since at
-least version 0.0.9 and
-https://github.com/meetecho/janus-gateway/commit/ca9c0a86f975f88fbdd791af3cb4f8986883c1c2
+Fix the following libcurl build failure raised since bump to version
+1.1.1 in commit 01518e5660366be41e6a8e0a0f2b487d7cdf48a2:
+
+In file included from /home/autobuild/autobuild/instance-11/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/curl/curl.h:3195,
+                 from turnrest.c:21:
+turnrest.c: In function 'janus_turnrest_request':
+turnrest.c:168:2: error: void value not ignored as it ought to be
+  168 |  curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
+      |  ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/11bb0079f5a7d06d3494a61b411f0af2e8c4d342
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/janus-gateway/janus-gateway.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ...se-parentheses-to-ensure-compilation.patch | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
 
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 0d906f1b62..dd898563e5 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -128,6 +128,13 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-websockets
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+JANUS_GATEWAY_DEPENDENCIES += libcurl
-+JANUS_GATEWAY_CONF_OPTS += --enable-turn-rest-api
-+else
-+JANUS_GATEWAY_CONF_OPTS += --disable-turn-rest-api
-+endif
+diff --git a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
+new file mode 100644
+index 0000000000..f91c13d1f6
+--- /dev/null
++++ b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
+@@ -0,0 +1,27 @@
++From 51431c36cd5f2997c0f7723909195b9883ae0486 Mon Sep 17 00:00:00 2001
++From: Benson Muite <bkmgit@users.noreply.github.com>
++Date: Wed, 4 Jan 2023 13:33:36 +0300
++Subject: [PATCH] Use parentheses to ensure compilation (#3138)
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- JANUS_GATEWAY_DEPENDENCIES += systemd
- JANUS_GATEWAY_CONF_OPTS += --enable-systemd-sockets
++Compiler fails with latest Curl release. Use parenthesis to ensure compiler evaluates expression correctly.
++
++[Retrieved from:
++https://github.com/meetecho/janus-gateway/commit/51431c36cd5f2997c0f7723909195b9883ae0486]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/turnrest.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/turnrest.c b/src/turnrest.c
++index b8560d22f2..42e6114de8 100644
++--- a/src/turnrest.c
+++++ b/src/turnrest.c
++@@ -165,7 +165,7 @@ janus_turnrest_response *janus_turnrest_request(const char *user) {
++ 	JANUS_LOG(LOG_VERB, "Sending request: %s\n", request_uri);
++ 	janus_mutex_unlock(&api_mutex);
++ 	curl_easy_setopt(curl, CURLOPT_URL, request_uri);
++-	curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
+++	curl_easy_setopt(curl, (api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST), 1);
++ 	if(!api_http_get) {
++ 		/* FIXME Some servers don't like a POST with no data */
++ 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query_string);
 -- 
 2.39.0
 
