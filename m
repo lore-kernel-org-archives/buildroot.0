@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DECBC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B575CC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:18:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9C61702E0;
-	Tue, 21 Feb 2023 02:17:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9C61702E0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6021960A7D;
+	Tue, 21 Feb 2023 02:18:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6021960A7D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OzbZj2XR90rV; Tue, 21 Feb 2023 02:17:59 +0000 (UTC)
+	with ESMTP id OTSvUOvlwHiU; Tue, 21 Feb 2023 02:18:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1ADB2702C3;
-	Tue, 21 Feb 2023 02:17:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ADB2702C3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 336AA1BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 809DA70346;
+	Tue, 21 Feb 2023 02:18:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 809DA70346
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C43051BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FA5141806
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FA5141806
+ by smtp3.osuosl.org (Postfix) with ESMTP id 435D5610A3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 435D5610A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0w1h6eOqVVws for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id knBP27axxxp7 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 81E3E417F8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81E3E417F8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E57E6FB5A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E57E6FB5A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CFCA86496; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+ id 6C2258648F; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 16:54:35 +0100
+Date: Sat, 14 Jan 2023 21:07:03 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2a571acddd0badaf9636649d98fd095757878348
-X-Git-Newrev: c33a133704166d602090b0b0d394aa9428e6acd4
+X-Git-Oldrev: 60cf07079b78d4c4bb495fd18cb2a145a4cb3635
+X-Git-Newrev: 664897295a3667db2ff95c5c1b458b16c1192a47
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205256.7CFCA86496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/afboot-stm32: disable
- stack-protector
+Message-Id: <20230220205232.6C2258648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/janus-gateway: fix
+ libcurl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,68 +64,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c33a133704166d602090b0b0d394aa9428e6acd4
+commit: https://git.buildroot.net/buildroot/commit/?id=664897295a3667db2ff95c5c1b458b16c1192a47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Disable stack-protector to avoid the following build failure:
+Fix the following libcurl build failure raised since bump to version
+1.1.1 in commit 01518e5660366be41e6a8e0a0f2b487d7cdf48a2:
 
-/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld -T stm32f429.lds --gc-sections -o stm32f469i-disco.elf stm32f469i-disco.o gpio.o mpu.o qspi.o start_kernel.o usart-f4.o
-/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.o: in function `main':
-stm32f469i-disco.c:(.text.startup.main+0x3b0): undefined reference to `__stack_chk_guard'
-/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.c:(.text.startup.main+0x4c0): undefined reference to `__stack_chk_fail'
-/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.c:(.text.startup.main+0x4ec): undefined reference to `__stack_chk_guard'
+In file included from /home/autobuild/autobuild/instance-11/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/curl/curl.h:3195,
+                 from turnrest.c:21:
+turnrest.c: In function 'janus_turnrest_request':
+turnrest.c:168:2: error: void value not ignored as it ought to be
+  168 |  curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
+      |  ^
 
 Fixes:
- - http://autobuild.buildroot.org/results/fa6ffab24c3998f21034ab24e8d2852cacde08c1
+ - http://autobuild.buildroot.org/results/11bb0079f5a7d06d3494a61b411f0af2e8c4d342
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0003-Makefile-disable-stack-protector.patch    | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ ...003-Use-parentheses-to-ensure-compilation.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch b/boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch
+diff --git a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
 new file mode 100644
-index 0000000000..27a81b45d5
+index 0000000000..f91c13d1f6
 --- /dev/null
-+++ b/boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch
-@@ -0,0 +1,36 @@
-+From d65b07d6fe438e760fdbc33a8e42650a27d5b417 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 31 Dec 2022 11:09:38 +0100
-+Subject: [PATCH] Makefile: disable stack-protector
++++ b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
+@@ -0,0 +1,27 @@
++From 51431c36cd5f2997c0f7723909195b9883ae0486 Mon Sep 17 00:00:00 2001
++From: Benson Muite <bkmgit@users.noreply.github.com>
++Date: Wed, 4 Jan 2023 13:33:36 +0300
++Subject: [PATCH] Use parentheses to ensure compilation (#3138)
 +
-+Disable stack-protector to avoid the following build failure:
++Compiler fails with latest Curl release. Use parenthesis to ensure compiler evaluates expression correctly.
 +
-+/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld -T stm32f429.lds --gc-sections -o stm32f469i-disco.elf stm32f469i-disco.o gpio.o mpu.o qspi.o start_kernel.o usart-f4.o
-+/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.o: in function `main':
-+stm32f469i-disco.c:(.text.startup.main+0x3b0): undefined reference to `__stack_chk_guard'
-+/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.c:(.text.startup.main+0x4c0): undefined reference to `__stack_chk_fail'
-+/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.c:(.text.startup.main+0x4ec): undefined reference to `__stack_chk_guard'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fa6ffab24c3998f21034ab24e8d2852cacde08c1
-+
++[Retrieved from:
++https://github.com/meetecho/janus-gateway/commit/51431c36cd5f2997c0f7723909195b9883ae0486]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/turnrest.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Makefile b/Makefile
-+index 8f42be1..8da7a25 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -14,6 +14,7 @@ CFLAGS := -mthumb -mcpu=cortex-m4
-+ CFLAGS += -ffunction-sections -fdata-sections
-+ CFLAGS += -Os -std=gnu99 -Wall
-+ CFLAGS += -fno-builtin
-++CFLAGS += -fno-stack-protector
-+ LINKERFLAGS := --gc-sections
-+ 
-+ obj-y += gpio.o mpu.o qspi.o start_kernel.o
-+-- 
-+2.35.1
-+
++diff --git a/src/turnrest.c b/src/turnrest.c
++index b8560d22f2..42e6114de8 100644
++--- a/src/turnrest.c
+++++ b/src/turnrest.c
++@@ -165,7 +165,7 @@ janus_turnrest_response *janus_turnrest_request(const char *user) {
++ 	JANUS_LOG(LOG_VERB, "Sending request: %s\n", request_uri);
++ 	janus_mutex_unlock(&api_mutex);
++ 	curl_easy_setopt(curl, CURLOPT_URL, request_uri);
++-	curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
+++	curl_easy_setopt(curl, (api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST), 1);
++ 	if(!api_http_get) {
++ 		/* FIXME Some servers don't like a POST with no data */
++ 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query_string);
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
