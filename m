@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74A09C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:41:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 038FFC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17D294F4FD;
-	Tue, 21 Feb 2023 00:41:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17D294F4FD
+	by smtp4.osuosl.org (Postfix) with ESMTP id A171D4F1D5;
+	Tue, 21 Feb 2023 00:41:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A171D4F1D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NqHWWg8m1GtZ; Tue, 21 Feb 2023 00:41:12 +0000 (UTC)
+	with ESMTP id 7rCl-T0Q1p4g; Tue, 21 Feb 2023 00:41:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4EC64F50F;
-	Tue, 21 Feb 2023 00:41:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4EC64F50F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6ABA61BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 724274F512;
+	Tue, 21 Feb 2023 00:41:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 724274F512
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F3431BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1915417C3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1915417C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7AF7A6FB6D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AF7A6FB6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qZIA4UQyQ_te for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3MSKb1VMEvCL for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBAEA417DD
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBAEA417DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 949EA6FB48
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 949EA6FB48
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBDCD8648F; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
+ id 921D486495; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 13:24:16 +0100
+Date: Sat, 14 Jan 2023 11:47:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 456a7398316655ad0b669635f580e4887c24a700
-X-Git-Newrev: 11b2ab5ee261e8af1065f15e2e69290e15e9e4ea
+X-Git-Oldrev: 0da2742abbe2123d8bafe30e307b94c2b72f94cd
+X-Git-Newrev: de51efc543775cf32456c1090d1b396d0b67f9bc
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205255.BBDCD8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/gstreamer1/gst1-plugins-bad: add zxing plugin support
+Message-Id: <20230220205231.921D486495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-engine: bump
+ version to 20.10.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,70 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11b2ab5ee261e8af1065f15e2e69290e15e9e4ea
+commit: https://git.buildroot.net/buildroot/commit/?id=de51efc543775cf32456c1090d1b396d0b67f9bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in           | 9 +++++++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+Bug fixes and enhancements
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 1e89cd124f..d477924eec 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -738,6 +738,15 @@ comment "zbar plugin needs a toolchain w/ threads, C++ and headers >= 3.0"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ - Improve error message when attempting to pull an unsupported image format or OCI artifact (moby/moby#44413, moby/moby#44569)
+ - Fix an issue where the host's ephemeral port-range was ignored when selecting random ports for containers (moby/moby#44476).
+ - Fix ssh: parse error in message type 27 errors during docker build on hosts using OpenSSH 8.9 or above (moby/moby#3862).
+ - seccomp: block socket calls to AF_VSOCK in default profile (moby/moby#44564).
+
+https://github.com/moby/moby/releases/tag/v20.10.22
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 10e9727a08..d15b1359cb 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  61f4c3a2d0426e1bbbda1b0e5dd33ec203776f7d99d1a61522c77c04c4ed09fe  docker-engine-20.10.21.tar.gz
++sha256  ee0e2168e27ec87f1b0650e86af5d3e167a07fd2ff8c1ce3bb588f0b4f9a4658  docker-engine-20.10.22.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 36c66485ba..2a9b72ca78 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_ZXING
-+	bool "zxing"
-+	depends on !BR2_STATIC_LIBS # zxing-cpp
-+	depends on BR2_INSTALL_LIBSTDCPP # zxing-cpp
-+	select BR2_PACKAGE_ZXING_CPP
-+
-+comment "zxing plugin needs a toolchain w/ C++, dynamic library"
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
-+
- endif
+-DOCKER_ENGINE_VERSION = 20.10.21
++DOCKER_ENGINE_VERSION = 20.10.22
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
- comment "gst1-plugins-bad needs a toolchain w/ C++"
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index dfe1f1c9eb..edac818985 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -70,7 +70,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	-Dsvthevcenc=disabled \
- 	-Dtranscode=disabled \
- 	-Dwasapi2=disabled \
--	-Dzxing=disabled \
- 	-Dmagicleap=disabled \
- 	-Disac=disabled \
- 	-Diqa=disabled \
-@@ -812,6 +811,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += -Dzbar=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_ZXING),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dzxing=enabled
-+GST1_PLUGINS_BAD_DEPENDENCIES += zxing-cpp
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dzxing=disabled
-+endif
-+
- # Add GPL license if GPL licensed plugins enabled.
- ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
- GST1_PLUGINS_BAD_CONF_OPTS += -Dgpl=enabled
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
