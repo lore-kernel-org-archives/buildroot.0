@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE8BCC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFEC1C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:52:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4E8A4F445;
-	Tue, 21 Feb 2023 00:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4E8A4F445
+	by smtp4.osuosl.org (Postfix) with ESMTP id 579E54ECA7;
+	Tue, 21 Feb 2023 00:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 579E54ECA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JDAKw0Wn3wDy; Tue, 21 Feb 2023 00:52:12 +0000 (UTC)
+	with ESMTP id WXQkttoCS3go; Tue, 21 Feb 2023 00:52:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C30D4F61E;
-	Tue, 21 Feb 2023 00:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C30D4F61E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CDF2A1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEA734F45D;
+	Tue, 21 Feb 2023 00:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEA734F45D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 190AE1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6390E41816
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6390E41816
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA93D6FB8E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA93D6FB8E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UQ4XUmi3RQJR for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fhUgVzCyrinS for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90C0041814
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90C0041814
+ by smtp3.osuosl.org (Postfix) with ESMTP id E870F6FB83
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E870F6FB83
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DD8A8648F; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id E6E76828C8; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:11:29 +0100
+Date: Sun, 15 Jan 2023 12:01:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e648d399d8bd609697e78f13f7fa76be06d91a57
-X-Git-Newrev: 86a3bd33c2d52b2d3e014913857abaa7f24f428c
+X-Git-Oldrev: 64848d5dcddad89dd0b151282d3b5060d96dffaf
+X-Git-Newrev: 46d6bd7820622c67ed11ca09a1161a574f6af9e3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.8DD8A8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mpd: update to version
- 0.23.12
+Message-Id: <20230220205234.E6E76828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-posix-ipc: bump
+ to version 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86a3bd33c2d52b2d3e014913857abaa7f24f428c
+commit: https://git.buildroot.net/buildroot/commit/?id=46d6bd7820622c67ed11ca09a1161a574f6af9e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-List of changes:
-	decoder::mad: fix integer underflow with very small files
-	input::curl: require CURL 7.55.0 or later
-	output::pipewire: adjust to PipeWire 0.3.64 API change
-	tags:: fix crash bug due to race condition
-	fix build failures with GCC 13
-
-Change log:
-	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.12/NEWS
-
-Commit:
-	https://github.com/MusicPlayerDaemon/MPD/commit/b1422fb
-
-Tested on:
-	i386 (build)
-	x86_64 (build, run)
-	Aarch64 (build)
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-posix-ipc/python-posix-ipc.hash | 4 ++--
+ package/python-posix-ipc/python-posix-ipc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 8c488d0357..2521238f64 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  edb4e7a8f9dff238b5610f9e2461940ea98c727a5462fafb1cdf836304dfdca9  mpd-0.23.11.tar.xz
-+sha256  b7fca62284ecc25a681ea6a07abc49200af5353be42cb5a31e3173be9d8702e7  mpd-0.23.12.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 449600eda2..6c25c9b46f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
+index 74d2db0f5e..427e4c7b55 100644
+--- a/package/python-posix-ipc/python-posix-ipc.hash
++++ b/package/python-posix-ipc/python-posix-ipc.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/posix-ipc/json
+-md5  81baeabebd3e4064972ec62fd9eace0b  posix_ipc-1.1.0.tar.gz
+-sha256  f86a15b32b38573c78e305ebd9100d8198a3d9facc03ffafe39edc35833738e3  posix_ipc-1.1.0.tar.gz
++md5  523a31c4dbd56e0d4fd677f33e126e5d  posix_ipc-1.1.1.tar.gz
++sha256  e2456ba0cfb2ee5ba14121450e8d825b3c4a1461fca0761220aab66d4111cbb7  posix_ipc-1.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2b58f0bf31a8cbd7e56bfef030e9f7f02758ce8a810d073ccf41753bdc2a0747  LICENSE
+diff --git a/package/python-posix-ipc/python-posix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
+index c25af9ecbd..bdd2f1d4af 100644
+--- a/package/python-posix-ipc/python-posix-ipc.mk
++++ b/package/python-posix-ipc/python-posix-ipc.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).11
-+MPD_VERSION = $(MPD_VERSION_MAJOR).12
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
+-PYTHON_POSIX_IPC_VERSION = 1.1.0
++PYTHON_POSIX_IPC_VERSION = 1.1.1
+ PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
+-PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/41/72/90b6702782921c0e3e0b10a66f2a47d8cfaf9c2255d763ab45cc8cea25eb
++PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/07/7f/b954f224a226960a4aa98b6c5fa3d4f3fafb20bb8461446e41b563aee863
+ PYTHON_POSIX_IPC_LICENSE = BSD-3-Clause
+ PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
+ PYTHON_POSIX_IPC_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
