@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BB68C46467
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDA66C3DA78
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:09:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DA188408EC;
-	Sun, 15 Jan 2023 11:09:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA188408EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54BD760A9F;
+	Sun, 15 Jan 2023 11:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54BD760A9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t3VwrekbzSXC; Sun, 15 Jan 2023 11:09:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SvLJExhjfpkU; Sun, 15 Jan 2023 11:09:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DB7A4062A;
-	Sun, 15 Jan 2023 11:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB7A4062A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 839BE60DB7;
+	Sun, 15 Jan 2023 11:09:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 839BE60DB7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 072B31BF86C
- for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 097C31BF29F
+ for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9EF1382003
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3F9B81EEF
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EF1382003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3F9B81EEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UFwQRdgFTjJ0 for <buildroot@lists.busybox.net>;
- Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
+ with ESMTP id vGUTqNSQbppE for <buildroot@lists.busybox.net>;
+ Sun, 15 Jan 2023 11:06:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C137481EEF
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA49181F0B
  for <buildroot@buildroot.org>; Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C137481EEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA49181F0B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ADA0E870DC; Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
+ id D40B7870D1; Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 12:00:30 +0100
+Date: Sun, 15 Jan 2023 12:00:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0cd7fadb263decfa5b4566f6ad71c02914726146
-X-Git-Newrev: 1db8f1edf859a501fb8444e90a2af7916f48de42
+X-Git-Oldrev: 2abc0d6a3809eaa9c71043368b3915572f5d0735
+X-Git-Newrev: 7be2ff33abdd049dc3670c5a6e2e385c1fba6f41
 X-Patchwork-Hint: ignore
-Message-Id: <20230115110627.ADA0E870DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-bidict: bump to version
- 0.22.1
+Message-Id: <20230115110627.D40B7870D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-canopen: bump to version
+ 2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1db8f1edf859a501fb8444e90a2af7916f48de42
+commit: https://git.buildroot.net/buildroot/commit/?id=7be2ff33abdd049dc3670c5a6e2e385c1fba6f41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Verified license remains MIT after hash changed.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-bidict/python-bidict.hash | 4 ++--
- package/python-bidict/python-bidict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-canopen/python-canopen.hash | 6 +++---
+ package/python-canopen/python-canopen.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-bidict/python-bidict.hash b/package/python-bidict/python-bidict.hash
-index fe9a94af53..bcb9ea3f34 100644
---- a/package/python-bidict/python-bidict.hash
-+++ b/package/python-bidict/python-bidict.hash
+diff --git a/package/python-canopen/python-canopen.hash b/package/python-canopen/python-canopen.hash
+index 610dca3f34..e6485e72f0 100644
+--- a/package/python-canopen/python-canopen.hash
++++ b/package/python-canopen/python-canopen.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bidict/json
--md5  da3d37ae93c740c191b5666918c3164f  bidict-0.22.0.tar.gz
--sha256  5c826b3e15e97cc6e615de295756847c282a79b79c5430d3bfc909b1ac9f5bd8  bidict-0.22.0.tar.gz
-+md5  67dd74f41341e7ff437d69e00a6fd514  bidict-0.22.1.tar.gz
-+sha256  1e0f7f74e4860e6d0943a05d4134c63a2fad86f3d4732fb265bd79e4e856d81d  bidict-0.22.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/canopen/json
+-md5  0719b73bd8ccaeaa9fb758c5338fd030  canopen-2.0.0.tar.gz
+-sha256  bcc8aa9ea83f7ada5da0dade81038977be52a93802c2657649729eb1f82065d9  canopen-2.0.0.tar.gz
++md5  d51443bdc8a55faea63c9da82196dd47  canopen-2.1.0.tar.gz
++sha256  bc126bb1dcb62e3b34d8a12e38a07b5aa8319c17457c9bfe208f0bbbda90ff61  canopen-2.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  be0487398bba08e7772b4077b637787b94973b53c44b3cbdd6c7dab10ed15035  LICENSE
-diff --git a/package/python-bidict/python-bidict.mk b/package/python-bidict/python-bidict.mk
-index 7ba15db605..ae3a1ee024 100644
---- a/package/python-bidict/python-bidict.mk
-+++ b/package/python-bidict/python-bidict.mk
+-sha256  0740d30978affcd91c0fc817b7cf942a332381bf0380fe17e60c6a0b377c6e0d  LICENSE.txt
++sha256  d9035caf7b8b135899da92a2730e2ac2e9f5ae3220dc98bd661be18045fcf689  LICENSE.txt
+diff --git a/package/python-canopen/python-canopen.mk b/package/python-canopen/python-canopen.mk
+index bd0a3bfba7..a0f5220ded 100644
+--- a/package/python-canopen/python-canopen.mk
++++ b/package/python-canopen/python-canopen.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BIDICT_VERSION = 0.22.0
-+PYTHON_BIDICT_VERSION = 0.22.1
- PYTHON_BIDICT_SOURCE = bidict-$(PYTHON_BIDICT_VERSION).tar.gz
--PYTHON_BIDICT_SITE = https://files.pythonhosted.org/packages/2b/84/159749556b9c49ea4489dadeb94d44f05d6033d1db3af4c83120ecac5b15
-+PYTHON_BIDICT_SITE = https://files.pythonhosted.org/packages/f2/be/b31e6ea9c94096a323e7a0e2c61480db01f07610bb7e7ea72a06fd1a23a8
- PYTHON_BIDICT_SETUP_TYPE = setuptools
- PYTHON_BIDICT_LICENSE = MPL-2.0
- PYTHON_BIDICT_LICENSE_FILES = LICENSE
+-PYTHON_CANOPEN_VERSION = 2.0.0
++PYTHON_CANOPEN_VERSION = 2.1.0
+ PYTHON_CANOPEN_SOURCE = canopen-$(PYTHON_CANOPEN_VERSION).tar.gz
+-PYTHON_CANOPEN_SITE = https://files.pythonhosted.org/packages/9e/d6/6ced4b410b904aeee5f7d0227187eae95a5ad769f01014a74fc0e016845e
++PYTHON_CANOPEN_SITE = https://files.pythonhosted.org/packages/29/d1/54462c949c384b1a9a2bd260143a8ec6f4259a18d119bd122e8f8a791b50
+ PYTHON_CANOPEN_SETUP_TYPE = setuptools
+ PYTHON_CANOPEN_LICENSE = MIT
+ PYTHON_CANOPEN_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
