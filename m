@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9530C63797
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 557CFC3DA78
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:21:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E2674168D;
-	Sun, 15 Jan 2023 11:20:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E2674168D
+	by smtp4.osuosl.org (Postfix) with ESMTP id EFA8A415E3;
+	Sun, 15 Jan 2023 11:21:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFA8A415E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wfPHpeSPH-4O; Sun, 15 Jan 2023 11:20:51 +0000 (UTC)
+	with ESMTP id q7B6kP0PeixG; Sun, 15 Jan 2023 11:21:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CD41415A9;
-	Sun, 15 Jan 2023 11:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CD41415A9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4A7461BF29F
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4633414A1;
+	Sun, 15 Jan 2023 11:21:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4633414A1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 84E381BF29F
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:19:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0EEF681F3D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 570724136C
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:19:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EEF681F3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 570724136C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jihFnCzQ9E5K for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GbfDb5WLto8K for <buildroot@lists.busybox.net>;
  Sun, 15 Jan 2023 11:19:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3ABED81F68
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50E45414A1
  for <buildroot@buildroot.org>; Sun, 15 Jan 2023 11:19:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ABED81F68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50E45414A1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2ABEC870EF; Sun, 15 Jan 2023 11:19:43 +0000 (UTC)
+ id 4E58F870E7; Sun, 15 Jan 2023 11:19:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 12:15:57 +0100
+Date: Sun, 15 Jan 2023 12:16:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1ffc7b4bb1241eb64272aa78448aac35d67ff4ba
-X-Git-Newrev: cc64eb6d1238515b4c53b2b34d89fc3bd09fb59b
+X-Git-Oldrev: 8c2d7e401296e4b17ba9c6d521eca62eaff15159
+X-Git-Newrev: b341e0cc646665ccda1c6997fb845503c12a0d06
 X-Patchwork-Hint: ignore
-Message-Id: <20230115111943.2ABEC870EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyspnego: bump to version
- 0.7.0
+Message-Id: <20230115111943.4E58F870E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
+ 1.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc64eb6d1238515b4c53b2b34d89fc3bd09fb59b
+commit: https://git.buildroot.net/buildroot/commit/?id=b341e0cc646665ccda1c6997fb845503c12a0d06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pyspnego/python-pyspnego.hash | 4 ++--
- package/python-pyspnego/python-pyspnego.mk   | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyspnego/python-pyspnego.hash b/package/python-pyspnego/python-pyspnego.hash
-index 400e380b5d..0ae6cf1d4e 100644
---- a/package/python-pyspnego/python-pyspnego.hash
-+++ b/package/python-pyspnego/python-pyspnego.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyspnego/json
--md5  67114f5e59c6d5b45fe2b38c128c2140  pyspnego-0.6.3.tar.gz
--sha256  6060a0e683171090adcf92c9d319ddd334f15117fa199a703d8c9bd094d9f6c0  pyspnego-0.6.3.tar.gz
-+md5  93ab1a088d65e6a7c97efdb567ba37b0  pyspnego-0.7.0.tar.gz
-+sha256  da78096fd7c9f40e716f6fbe3e30d913103d75fd676f839f98fc3a6fee92fbe3  pyspnego-0.7.0.tar.gz
- 
- # Locally computed
- sha256  286517c93031c343f809f64b38563a783614b762e1367242af6cdd4107335471  LICENSE
-diff --git a/package/python-pyspnego/python-pyspnego.mk b/package/python-pyspnego/python-pyspnego.mk
-index 0910c57b7d..2fbb779d98 100644
---- a/package/python-pyspnego/python-pyspnego.mk
-+++ b/package/python-pyspnego/python-pyspnego.mk
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 2aa739f398..38ae3380a8 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  4980e01dc73c6bcf794b0b7d3f3e08d7  sentry-sdk-1.11.1.tar.gz
+-sha256  675f6279b6bb1fea09fd61751061f9a90dca3b5929ef631dd50dc8b3aeb245e9  sentry-sdk-1.11.1.tar.gz
++md5  ea2d728c847879f66c3d24cfbade2026  sentry-sdk-1.12.1.tar.gz
++sha256  5bbe4b72de22f9ac1e67f2a4e6efe8fbd595bb59b7b223443f50fe5802a5551c  sentry-sdk-1.12.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index 056a015952..c3092a5184 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSPNEGO_VERSION = 0.6.3
-+PYTHON_PYSPNEGO_VERSION = 0.7.0
- PYTHON_PYSPNEGO_SOURCE = pyspnego-$(PYTHON_PYSPNEGO_VERSION).tar.gz
--PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/ba/13/7b4e7dcff1eb24a13e0a631a4b49eab361678e4490d691c03253ae736da4
-+PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/97/f3/bdf3cd5f4c5a1bf9e1d4bb771c133850ee08241c18cafd90a6d872937a9f
- PYTHON_PYSPNEGO_SETUP_TYPE = setuptools
- PYTHON_PYSPNEGO_LICENSE = MIT
- PYTHON_PYSPNEGO_LICENSE_FILES = LICENSE
+-PYTHON_SENTRY_SDK_VERSION = 1.11.1
++PYTHON_SENTRY_SDK_VERSION = 1.12.1
+ PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/a3/d5/db26377e9817407ae8d7b65e15b3c3b8d817c301633be15bd2aef61f38a3
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/32/03/496a7c8313658dec419303e8add969f314b7538c29f4ec5ebe6d86fb8ce2
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
