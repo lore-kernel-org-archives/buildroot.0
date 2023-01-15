@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA06C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:55:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD2AEC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC054610C9;
-	Tue, 21 Feb 2023 00:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC054610C9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D408610B0;
+	Tue, 21 Feb 2023 00:55:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D408610B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9lF1I8ulEo6n; Tue, 21 Feb 2023 00:55:26 +0000 (UTC)
+	with ESMTP id EYMsaG64QB-V; Tue, 21 Feb 2023 00:55:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3213161089;
-	Tue, 21 Feb 2023 00:55:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3213161089
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 415761BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 995FE610A5;
+	Tue, 21 Feb 2023 00:55:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 995FE610A5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B7B2F1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E64041820
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E64041820
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A7BE6FB7F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A7BE6FB7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XnN0FD2B9jUm for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VW5rwblWDgez for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56E1541810
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56E1541810
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1AAA6FB80
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1AAA6FB80
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 52C3B7FF06; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id A018386496; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 10:23:35 +0100
+Date: Sun, 15 Jan 2023 12:16:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5cbb458bd44778376ccdd5ffccc3e5fc5492766a
-X-Git-Newrev: 740d923423f18d94d62e60d0efe8200c7bd889d6
+X-Git-Oldrev: 8c2d7e401296e4b17ba9c6d521eca62eaff15159
+X-Git-Newrev: b341e0cc646665ccda1c6997fb845503c12a0d06
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205300.52C3B7FF06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/config-fragments: add
- a bootlin s390x toolchain
+Message-Id: <20230220205235.A018386496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-sentry-sdk:
+ bump to version 1.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=740d923423f18d94d62e60d0efe8200c7bd889d6
+commit: https://git.buildroot.net/buildroot/commit/?id=b341e0cc646665ccda1c6997fb845503c12a0d06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-I do constantly get mails that fluent-bit fails to build for s390x.
-So added this to ensure that the s390x architecture is checked as well
-if I manually do:
-
-$ ./utils/test-pkg -p fluent-bit -a
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/config-fragments/autobuild/bootlin-s390x-z13-glibc.config | 5 +++++
- support/config-fragments/autobuild/toolchain-configs.csv          | 1 +
- 2 files changed, 6 insertions(+)
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/bootlin-s390x-z13-glibc.config b/support/config-fragments/autobuild/bootlin-s390x-z13-glibc.config
-new file mode 100644
-index 0000000000..fe3f0380c9
---- /dev/null
-+++ b/support/config-fragments/autobuild/bootlin-s390x-z13-glibc.config
-@@ -0,0 +1,5 @@
-+BR2_s390x=y
-+BR2_s390x_z13=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_S390X_Z13_GLIBC_BLEEDING_EDGE=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 0b19051543..a65e9bacc3 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -38,6 +38,7 @@ support/config-fragments/autobuild/bootlin-powerpc-e500mc-uclibc.config,x86_64
- support/config-fragments/autobuild/bootlin-riscv32-glibc.config,x86_64
- support/config-fragments/autobuild/bootlin-riscv64-glibc.config,x86_64
- support/config-fragments/autobuild/bootlin-riscv64-musl.config,x86_64
-+support/config-fragments/autobuild/bootlin-s390x-z13-glibc.config,x86_64
- support/config-fragments/autobuild/bootlin-sh4-uclibc.config,x86_64
- support/config-fragments/autobuild/bootlin-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/bootlin-sparc64-glibc.config,x86_64
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 2aa739f398..38ae3380a8 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  4980e01dc73c6bcf794b0b7d3f3e08d7  sentry-sdk-1.11.1.tar.gz
+-sha256  675f6279b6bb1fea09fd61751061f9a90dca3b5929ef631dd50dc8b3aeb245e9  sentry-sdk-1.11.1.tar.gz
++md5  ea2d728c847879f66c3d24cfbade2026  sentry-sdk-1.12.1.tar.gz
++sha256  5bbe4b72de22f9ac1e67f2a4e6efe8fbd595bb59b7b223443f50fe5802a5551c  sentry-sdk-1.12.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index 056a015952..c3092a5184 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SENTRY_SDK_VERSION = 1.11.1
++PYTHON_SENTRY_SDK_VERSION = 1.12.1
+ PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/a3/d5/db26377e9817407ae8d7b65e15b3c3b8d817c301633be15bd2aef61f38a3
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/32/03/496a7c8313658dec419303e8add969f314b7538c29f4ec5ebe6d86fb8ce2
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
