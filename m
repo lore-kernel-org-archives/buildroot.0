@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA419C46467
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F4C1C3DA78
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:08:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 994894062A;
-	Sun, 15 Jan 2023 11:08:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 994894062A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56F4F408F1;
+	Sun, 15 Jan 2023 11:08:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56F4F408F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jrPZ3j2pBc28; Sun, 15 Jan 2023 11:08:12 +0000 (UTC)
+	with ESMTP id CdeAcGB7ORaO; Sun, 15 Jan 2023 11:08:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C7728405C0;
-	Sun, 15 Jan 2023 11:08:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7728405C0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A45B91BF29F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 79DE7408F8;
+	Sun, 15 Jan 2023 11:08:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79DE7408F8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF4111BF86C
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0864400F1
- for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0864400F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 771C641477
+ for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 771C641477
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id th07V_7eMtZI for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GxiEVccVZYxL for <buildroot@lists.busybox.net>;
  Sun, 15 Jan 2023 11:06:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0AC294013F
- for <buildroot@buildroot.org>; Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AC294013F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5623341296
+ for <buildroot@buildroot.org>; Sun, 15 Jan 2023 11:06:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5623341296
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF071870E7; Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
+ id 4458F870BF; Sun, 15 Jan 2023 11:06:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 12:00:43 +0100
+Date: Sun, 15 Jan 2023 12:00:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3030baaa67dcafcc9f2c0802278c51f2ea016936
-X-Git-Newrev: d31937ab88097a9ed3a34bf05fa07278abed77ae
+X-Git-Oldrev: 203cf2d8b7e9668ba51dc8a72636896e656e7e1b
+X-Git-Newrev: 9b88d0f7b9775db73da55504f3968bc0ff25687a
 X-Patchwork-Hint: ignore
-Message-Id: <20230115110627.EF071870E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cython: bump to version
- 0.29.33
+Message-Id: <20230115110628.4458F870BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-filelock: bump to version
+ 3.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d31937ab88097a9ed3a34bf05fa07278abed77ae
+commit: https://git.buildroot.net/buildroot/commit/?id=9b88d0f7b9775db73da55504f3968bc0ff25687a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Migrate from setuptools to hatchling pep517 build backend.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-filelock/python-filelock.hash | 4 ++--
+ package/python-filelock/python-filelock.mk   | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 3ed9fb56a1..e7e86264d2 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5  91c36ea86c00adcc5c1c11cf48b733c0  Cython-0.29.32.tar.gz
--sha256  8733cf4758b79304f2a4e39ebfac5e92341bce47bcceb26c1254398b2f8c1af7  Cython-0.29.32.tar.gz
-+md5  bd42c555cb2298b8a94fa8de7ee679ba  Cython-0.29.33.tar.gz
-+sha256  5040764c4a4d2ce964a395da24f0d1ae58144995dab92c6b96f44c3f4d72286a  Cython-0.29.33.tar.gz
+diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
+index f9e6bc03e8..4ef7afed00 100644
+--- a/package/python-filelock/python-filelock.hash
++++ b/package/python-filelock/python-filelock.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/filelock/json
+-md5  d66099b8823ebbdd980cde0dae8f7341  filelock-3.8.2.tar.gz
+-sha256  7565f628ea56bfcd8e54e42bdc55da899c85c1abfe1b5bcfd147e9188cebb3b2  filelock-3.8.2.tar.gz
++md5  40eeb4a2963e1b07b8eab12b5db08418  filelock-3.9.0.tar.gz
++sha256  7b319f24340b51f55a2bf7a12ac0755a9b03e718311dac567a0f4f7fabd2f5de  filelock-3.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 9a90f6198e..b11d75b33d 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
+ sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
+diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
+index 86f1220b54..02759935ad 100644
+--- a/package/python-filelock/python-filelock.mk
++++ b/package/python-filelock/python-filelock.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.29.32
-+PYTHON_CYTHON_VERSION = 0.29.33
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/4c/76/1e41fbb365ad20b6efab2e61b0f4751518444c953b390f9b2d36cf97eea0
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/dc/f6/e8e302f9942cbebede88b1a0c33d0be3a738c3ac37abae87254d58ffc51c
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-PYTHON_FILELOCK_VERSION = 3.8.2
++PYTHON_FILELOCK_VERSION = 3.9.0
+ PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
+-PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/d8/73/292d9ea2370840a163e6dd2d2816a571244e9335e2f6ad957bf0527c492f
+-PYTHON_FILELOCK_SETUP_TYPE = setuptools
++PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/0b/dc/eac02350f06c6ed78a655ceb04047df01b02c6b7ea3fc02d4df24ca87d24
++PYTHON_FILELOCK_SETUP_TYPE = pep517
+ PYTHON_FILELOCK_LICENSE = Public Domain
+ PYTHON_FILELOCK_LICENSE_FILES = LICENSE
++PYTHON_FILELOCK_DEPENDENCIES = host-python-hatchling host-python-hatch-vcs
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
