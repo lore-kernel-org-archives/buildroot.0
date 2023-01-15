@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57F66C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34568C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 093484F176;
-	Tue, 21 Feb 2023 00:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 093484F176
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEBCD4F472;
+	Tue, 21 Feb 2023 00:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEBCD4F472
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i8rAmIfdrO7z; Tue, 21 Feb 2023 00:51:17 +0000 (UTC)
+	with ESMTP id morU42eRFfWz; Tue, 21 Feb 2023 00:51:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B34664F639;
-	Tue, 21 Feb 2023 00:51:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B34664F639
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AE9A21BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 973D64F4B9;
+	Tue, 21 Feb 2023 00:51:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 973D64F4B9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 079B71BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C90341815
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C90341815
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC35F6FB8B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC35F6FB8B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LYzyFr2Y-lH4 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pB0_1g2AeSTw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F5CD41809
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F5CD41809
+ by smtp3.osuosl.org (Postfix) with ESMTP id E45296FB10
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E45296FB10
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4CE897FF06; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+ id D9B728648F; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Feb 2023 21:53:55 +0100
+Date: Sun, 15 Jan 2023 12:01:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8f48b3983cdb32dfcd59e7e549c8eaa1503fe342
-X-Git-Newrev: aa93d0cdd7adf1051cdb1643e978c81ae183327c
+X-Git-Oldrev: d5a1a38c8975153838f4e3f43ea03820613e4882
+X-Git-Newrev: 64848d5dcddad89dd0b151282d3b5060d96dffaf
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.4CE897FF06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xapp_beforelight: bump version to 1.0.6
+Message-Id: <20230220205234.D9B728648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pillow: bump to
+ version 9.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa93d0cdd7adf1051cdb1643e978c81ae183327c
+commit: https://git.buildroot.net/buildroot/commit/?id=64848d5dcddad89dd0b151282d3b5060d96dffaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-January/003317.html
+License hash changed due to year update:
+https://github.com/python-pillow/Pillow/commit/13306974e749871822dac413be66e699a0f4645e
 
-The license file was previously a stub, but it now contains the proper
-license text since upstream commit:
-https://gitlab.freedesktop.org/xorg/app/beforelight/-/commit/fa1e473dd64673a36a73a01a84a8db61eaa425dc
-
-Switched tarball to xz, updated _SITE.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[yann.morin.1998@free.fr: properly explain the license hash change]
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_beforelight/xapp_beforelight.hash | 7 ++++---
- package/x11r7/xapp_beforelight/xapp_beforelight.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-pillow/python-pillow.hash | 6 +++---
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_beforelight/xapp_beforelight.hash b/package/x11r7/xapp_beforelight/xapp_beforelight.hash
-index 00aff75779..f5b0cb21a4 100644
---- a/package/x11r7/xapp_beforelight/xapp_beforelight.hash
-+++ b/package/x11r7/xapp_beforelight/xapp_beforelight.hash
-@@ -1,4 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2013-January/002131.html
--sha256  8fcab6f15148ca680c0d3da8de7dcb41f8e6a076f442cf8bdcf272be9e348166  beforelight-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-January/003317.html
-+sha256  53f0bf085b7272ebbf626d1b9b0ad320d1a07bc1fe7f3ae260c86a71a857ad28  beforelight-1.0.6.tar.xz
-+sha512  48a165d151676f6d213883bee98b34007403a77e025253c8649f9a0f5ea258b09381ab523a5e906030ac9fc8245fce2c6beaf9ad0f81116e302d51ad4a0fad5a  beforelight-1.0.6.tar.xz
- # Locally computed
--sha256  27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
-+sha256  3909739fae1ee37c3c7167a91f53d29317965aaf932813e16ef733f033619a7b  COPYING
-diff --git a/package/x11r7/xapp_beforelight/xapp_beforelight.mk b/package/x11r7/xapp_beforelight/xapp_beforelight.mk
-index 7dcb715ef3..6b753833f7 100644
---- a/package/x11r7/xapp_beforelight/xapp_beforelight.mk
-+++ b/package/x11r7/xapp_beforelight/xapp_beforelight.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 46da25dddc..d514bdfe56 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pillow/json
+-md5  a6507c1e811a51071d2d6de83070e703  Pillow-9.3.0.tar.gz
+-sha256  c935a22a557a560108d780f9a0fc426dd7459940dc54faa49d83249c8d3e760f  Pillow-9.3.0.tar.gz
++md5  ee6e9a6c729ed9e9a78ccd3f6e9d7143  Pillow-9.4.0.tar.gz
++sha256  a1c2d7780448eb93fbcc3789bf3916aa5720d942e37945f4056680317f1cd23e  Pillow-9.4.0.tar.gz
+ 
+ # Locally computed sha256 checksums
+-sha256  a6554cb737ba6c9b47d3301f78de03b4ed0d3f08d6cf9400714f3d4c894f6943  LICENSE
++sha256  4e1755595052d843e2f350c930759f945ecf707bf812883948d181016b12dd0f  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 5ea9fcf264..c02968610f 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XAPP_BEFORELIGHT_VERSION = 1.0.5
--XAPP_BEFORELIGHT_SOURCE = beforelight-$(XAPP_BEFORELIGHT_VERSION).tar.bz2
--XAPP_BEFORELIGHT_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_BEFORELIGHT_VERSION = 1.0.6
-+XAPP_BEFORELIGHT_SOURCE = beforelight-$(XAPP_BEFORELIGHT_VERSION).tar.xz
-+XAPP_BEFORELIGHT_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_BEFORELIGHT_LICENSE = MIT
- XAPP_BEFORELIGHT_LICENSE_FILES = COPYING
- XAPP_BEFORELIGHT_DEPENDENCIES = xlib_libX11 xlib_libXScrnSaver xlib_libXaw xlib_libXt
+-PYTHON_PILLOW_VERSION = 9.3.0
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/16/11/da8d395299ca166aa56d9436e26fe8440e5443471de16ccd9a1d06f5993a
++PYTHON_PILLOW_VERSION = 9.4.0
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/bc/07/830784e061fb94d67649f3e438ff63cfb902dec6d48ac75aeaaac7c7c30e
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
