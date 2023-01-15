@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83E32C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:46:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A0ACC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 216354F560;
-	Tue, 21 Feb 2023 00:46:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 216354F560
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B3314F562;
+	Tue, 21 Feb 2023 00:46:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B3314F562
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MpolN4xPJ73M; Tue, 21 Feb 2023 00:46:38 +0000 (UTC)
+	with ESMTP id YjR89KpVl1zM; Tue, 21 Feb 2023 00:46:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4A874F57E;
-	Tue, 21 Feb 2023 00:46:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4A874F57E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 096931BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7A414F578;
+	Tue, 21 Feb 2023 00:46:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7A414F578
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 614FB1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B7BC4180C
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B7BC4180C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E5E96FB7D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E5E96FB7D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fwbDQtSz6VEB for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JqKjN0RdqG35 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF55F417C2
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF55F417C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id B17FC6FB75
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B17FC6FB75
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A99AA81979; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+ id A0C53828C8; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:26:56 +0100
+Date: Sun, 15 Jan 2023 12:00:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0f868e97f6b42ccaa0844880775f86002656227d
-X-Git-Newrev: f661c00342befb21c0032e593c758dfb2d336007
+X-Git-Oldrev: 823e3e98671bf70135d526298346a8c72beacd8a
+X-Git-Newrev: 3f8d6264d79f6645ce4f2bbf0b76a919db29fcb5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205257.A99AA81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gtest: drop patch
- adding debug 'd' to library names in pkg-config files
+Message-Id: <20230220205233.A0C53828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-attrs: bump to
+ version 22.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,104 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f661c00342befb21c0032e593c758dfb2d336007
+commit: https://git.buildroot.net/buildroot/commit/?id=3f8d6264d79f6645ce4f2bbf0b76a919db29fcb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- drop patch adding debug 'd' to gmock/gtest library names in pkg-config files
-  (not longer needed since gtest version bump to 1.22 ([1]) and upstream
-  commit 'FIX #2174 -- remove `DEBUG_POSTFIX`' ([2]).
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/5ea8f180e4909f8157565238b25f567fcf1f3beb
-
-  .../host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/7.3.1/../../../../aarch64-linux-gnu/bin/ld: cannot find -lgtestd
-
-[1] https://git.buildroot.net/buildroot/commit/?id=a336b731af5979a25213b33c5840de6d1ed88bdc
-[2] https://github.com/google/googletest/commit/ca3ffd90f2726f6c0c6e790f05c7c88491a16466
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...fix-gtest.pc-gmock.pc-library-names-for-t.patch | 62 ----------------------
- 1 file changed, 62 deletions(-)
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gtest/0001-pkg-config-fix-gtest.pc-gmock.pc-library-names-for-t.patch b/package/gtest/0001-pkg-config-fix-gtest.pc-gmock.pc-library-names-for-t.patch
-deleted file mode 100644
-index c47e8fc8f8..0000000000
---- a/package/gtest/0001-pkg-config-fix-gtest.pc-gmock.pc-library-names-for-t.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From cf5a3177159ca832470e7f876cab0a1923fa666f Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Fri, 22 Oct 2021 20:17:36 +0200
--Subject: [PATCH] pkg-config: fix gtest.pc/gmock.pc library names for the debug
-- build
--
--In case CMAKE_BUILD_TYPE is set to Debug the gtest library is
--name libgtestd.a but the link command returned from gtest.pc is
--'-lgtest' (without the debug d) and so the linking of dependent
--packages fails (see [1] for a buildroot failure example).
--
--Enhance the gtest.pc ang gmock.pc generation to honour the debug 'd'.
--
--[1] http://lists.busybox.net/pipermail/buildroot/2021-October/626382.html
--
--[Upstream: https://github.com/google/googletest/pull/3625]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- googlemock/cmake/gmock.pc.in          | 2 +-
-- googletest/cmake/gtest.pc.in          | 2 +-
-- googletest/cmake/internal_utils.cmake | 3 +++
-- 3 files changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/googlemock/cmake/gmock.pc.in b/googlemock/cmake/gmock.pc.in
--index 23c67b5c..0f469857 100644
----- a/googlemock/cmake/gmock.pc.in
--+++ b/googlemock/cmake/gmock.pc.in
--@@ -6,5 +6,5 @@ Description: GoogleMock (without main() function)
-- Version: @PROJECT_VERSION@
-- URL: https://github.com/google/googletest
-- Requires: gtest = @PROJECT_VERSION@
---Libs: -L${libdir} -lgmock @CMAKE_THREAD_LIBS_INIT@
--+Libs: -L${libdir} -lgmock@DEBUG_POSTFIX@ @CMAKE_THREAD_LIBS_INIT@
-- Cflags: -I${includedir} @GTEST_HAS_PTHREAD_MACRO@
--diff --git a/googletest/cmake/gtest.pc.in b/googletest/cmake/gtest.pc.in
--index b4148fae..225bba81 100644
----- a/googletest/cmake/gtest.pc.in
--+++ b/googletest/cmake/gtest.pc.in
--@@ -5,5 +5,5 @@ Name: gtest
-- Description: GoogleTest (without main() function)
-- Version: @PROJECT_VERSION@
-- URL: https://github.com/google/googletest
---Libs: -L${libdir} -lgtest @CMAKE_THREAD_LIBS_INIT@
--+Libs: -L${libdir} -lgtest@DEBUG_POSTFIX@ @CMAKE_THREAD_LIBS_INIT@
-- Cflags: -I${includedir} @GTEST_HAS_PTHREAD_MACRO@
--diff --git a/googletest/cmake/internal_utils.cmake b/googletest/cmake/internal_utils.cmake
--index 58fc9bfb..fd81b825 100644
----- a/googletest/cmake/internal_utils.cmake
--+++ b/googletest/cmake/internal_utils.cmake
--@@ -335,6 +335,9 @@ function(install_project)
--     # Configure and install pkgconfig files.
--     foreach(t ${ARGN})
--       set(configured_pc "${generated_dir}/${t}.pc")
--+      if(CMAKE_BUILD_TYPE MATCHES Debug)
--+        set(DEBUG_POSTFIX "d")
--+      endif()
--       configure_file("${PROJECT_SOURCE_DIR}/cmake/${t}.pc.in"
--         "${configured_pc}" @ONLY)
--       install(FILES "${configured_pc}"
---- 
--2.33.1
--
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index d5548c0ed3..66b2082cff 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5  0487081b7ead8753fc46cf7c6d1e28e3  attrs-22.1.0.tar.gz
+-sha256  29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6  attrs-22.1.0.tar.gz
++md5  eff16b3bbd0d9b72e118cca83a19d380  attrs-22.2.0.tar.gz
++sha256  c9227bfc2f01993c03f68db37d1d15c9690188323c067c641f1a35ca58185f99  attrs-22.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 33651ee80a..0462f7cb0b 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ATTRS_VERSION = 22.1.0
++PYTHON_ATTRS_VERSION = 22.2.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/1a/cb/c4ffeb41e7137b23755a45e1bfec9cbb76ecf51874c6f1d113984ecaa32c
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/21/31/3f468da74c7de4fcf9b25591e682856389b3400b4b62f201e65f15ea3e07
+ PYTHON_ATTRS_SETUP_TYPE = setuptools
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
