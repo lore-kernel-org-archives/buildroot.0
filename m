@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB6CDC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDE00C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6605D4F652;
-	Tue, 21 Feb 2023 00:53:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6605D4F652
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8052560F92;
+	Tue, 21 Feb 2023 00:53:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8052560F92
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hqPPNj0YQInS; Tue, 21 Feb 2023 00:53:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JRt0DbweMrqq; Tue, 21 Feb 2023 00:53:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 171844F655;
-	Tue, 21 Feb 2023 00:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 171844F655
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED7231BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEC8060B78;
+	Tue, 21 Feb 2023 00:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEC8060B78
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EF6E71BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2C7B4181B
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2C7B4181B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 309756FB7B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 309756FB7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YQ4Gy1oThkpw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vsDy4LP-Q6tc for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD41E4180E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD41E4180E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C0FB6FB86
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C0FB6FB86
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA5E5828C8; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 5F6B5828C8; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:12:48 +0100
+Date: Sun, 15 Jan 2023 12:15:54 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4231054b05436978795267330202f72be0d3a4d4
-X-Git-Newrev: 89fa774a191d41ed5d125d87d812ff3478902251
+X-Git-Oldrev: 1b6a466ea306d0e760b35fe84330d7f57a3a624b
+X-Git-Newrev: 1ffc7b4bb1241eb64272aa78448aac35d67ff4ba
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.CA5E5828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/zabbix: bump to
- version 6.2.7
+Message-Id: <20230220205235.5F6B5828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pysmb: bump to
+ version 1.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,76 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89fa774a191d41ed5d125d87d812ff3478902251
+commit: https://git.buildroot.net/buildroot/commit/?id=1ffc7b4bb1241eb64272aa78448aac35d67ff4ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- host-pkgconf is now mandatory
-- switch to pcre2 which is supported since version 6.0.0 and
-  https://github.com/zabbix/zabbix/commit/18917f919a68abc863a5c79ba88c0cb156255fdc
-- Update hash of README (links updated with
-  https://github.com/zabbix/zabbix/commit/067f5f873fb18ae7b22c5eaef40f0898b98edeb5
-  https://github.com/zabbix/zabbix/commit/499dbc81b987513233d579610335b8938f1ae91d)
-
-https://github.com/zabbix/zabbix/blob/6.2.7/ChangeLog
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/zabbix/Config.in   | 2 +-
- package/zabbix/zabbix.hash | 4 ++--
- package/zabbix/zabbix.mk   | 7 +++----
- 3 files changed, 6 insertions(+), 7 deletions(-)
+ package/python-pysmb/python-pysmb.hash | 2 +-
+ package/python-pysmb/python-pysmb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
-index 0f7a0b0003..377c0ff692 100644
---- a/package/zabbix/Config.in
-+++ b/package/zabbix/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_ZABBIX
- 	bool "zabbix"
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
--	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PCRE2
- 	help
- 	  Zabbix is an enterprise-class open source distributed
- 	  monitoring solution. Zabbix is free of cost. Zabbix is
-diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
-index 42cc0bda57..bb6127e5ec 100644
---- a/package/zabbix/zabbix.hash
-+++ b/package/zabbix/zabbix.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/python-pysmb/python-pysmb.hash b/package/python-pysmb/python-pysmb.hash
+index 025e47d030..87b1edf595 100644
+--- a/package/python-pysmb/python-pysmb.hash
++++ b/package/python-pysmb/python-pysmb.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  19686628df76e8d5ef7c2ed2975b258c7ca3ec7d151b1bb59d7e132f9fc7c941  zabbix-5.4.9.tar.gz
--sha256  10d68ec3abacc29222c07748fc5e5cb9474fd7cd9ccdde1b92ff941ded946b78  README
-+sha256  6d423810667b948ed22052d9aa84a035e2d4b92cbe8efdb669cac529806b722d  zabbix-6.2.7.tar.gz
-+sha256  f8fc3fd12521b60d53d8c5d48a883eb3c9c5ddec9de986a273e1b77f69d811db  README
- sha256  444fe54aecc95ac0f3314289c300afc73b3946a4dc9fbd7e022709b3e0924dd0  COPYING
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-index e00d693ba5..db9efed78b 100644
---- a/package/zabbix/zabbix.mk
-+++ b/package/zabbix/zabbix.mk
-@@ -4,8 +4,8 @@
+-sha256  9215356c446e4c6b335b4a481f52d746ff60926badfecbc33524b94908fdc0e1  pysmb-1.2.8.tar.gz
++sha256  30558c11ba141e9ad26e5edb1b85b94813a335ed5c0fe11df8046942b0c7e813  pysmb-1.2.9.tar.gz
+ sha256  8c487d5c10f024e44a9cf1df21d1fd28a80bd2dfddd9f1dcd109a47d721f497f  LICENSE
+diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
+index 36993ce42c..394a9d806c 100644
+--- a/package/python-pysmb/python-pysmb.mk
++++ b/package/python-pysmb/python-pysmb.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZABBIX_VERSION_MAJOR = 5.4
--ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).9
-+ZABBIX_VERSION_MAJOR = 6.2
-+ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).7
- ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
- ZABBIX_LICENSE = GPL-2.0+
- ZABBIX_LICENSE_FILES = README COPYING
-@@ -13,9 +13,8 @@ ZABBIX_CPE_ID_VENDOR = zabbix
- # We're patching m4/netsnmp.m4
- ZABBIX_AUTORECONF = YES
- 
--ZABBIX_DEPENDENCIES = pcre
-+ZABBIX_DEPENDENCIES = host-pkgconf pcre2
- ZABBIX_CONF_OPTS = \
--	--with-libpcre=$(STAGING_DIR)/usr/bin/ \
- 	--without-sqlite3 \
- 	--enable-agent \
- 	--disable-agent2 \
+-PYTHON_PYSMB_VERSION = 1.2.8
++PYTHON_PYSMB_VERSION = 1.2.9
+ PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
+ PYTHON_PYSMB_SITE = https://miketeo.net/files/Projects/pysmb
+ PYTHON_PYSMB_LICENSE = Libpng
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
