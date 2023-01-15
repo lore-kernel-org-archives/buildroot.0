@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C54C46467
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194DAC3DA78
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:22:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C043E82012;
-	Sun, 15 Jan 2023 11:22:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C043E82012
+	by smtp4.osuosl.org (Postfix) with ESMTP id A21FC415E3;
+	Sun, 15 Jan 2023 11:22:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A21FC415E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jW-XXXug1QHS; Sun, 15 Jan 2023 11:22:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yAe29d_TC-JR; Sun, 15 Jan 2023 11:22:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F17CA81FE1;
-	Sun, 15 Jan 2023 11:22:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F17CA81FE1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 06B2D1BF86C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A086415D5;
+	Sun, 15 Jan 2023 11:22:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A086415D5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CC2FF1BF29F
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85A7A81F1A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FCA760F97
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:19:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85A7A81F1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FCA760F97
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XU9epVvQnnXS for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id do0n-WfiWiHQ for <buildroot@lists.busybox.net>;
  Sun, 15 Jan 2023 11:19:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C16381FB7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78EBF60F99
  for <buildroot@buildroot.org>; Sun, 15 Jan 2023 11:19:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C16381FB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78EBF60F99
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57399870EF; Sun, 15 Jan 2023 11:19:43 +0000 (UTC)
+ id 68F43870E7; Sun, 15 Jan 2023 11:19:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 12:16:10 +0100
+Date: Sun, 15 Jan 2023 12:16:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b341e0cc646665ccda1c6997fb845503c12a0d06
-X-Git-Newrev: 3dfa2421e1840758f9ec5292da85a9c884567318
+X-Git-Oldrev: 9779ba9cc603df2b75156fcc8979175d8b2ff665
+X-Git-Newrev: c60f09bf11cd465caa51c7f099508c44d6359a01
 X-Patchwork-Hint: ignore
-Message-Id: <20230115111943.57399870EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools-scm: bump to
- version 7.1.0
+Message-Id: <20230115111943.68F43870E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tempora: bump to version
+ 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dfa2421e1840758f9ec5292da85a9c884567318
+commit: https://git.buildroot.net/buildroot/commit/?id=c60f09bf11cd465caa51c7f099508c44d6359a01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop no longer required host-python-tomli dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
- package/python-setuptools-scm/python-setuptools-scm.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-tempora/python-tempora.hash | 4 ++--
+ package/python-tempora/python-tempora.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
-index 8ef125840a..8cfe07d1d9 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.hash
-+++ b/package/python-setuptools-scm/python-setuptools-scm.hash
+diff --git a/package/python-tempora/python-tempora.hash b/package/python-tempora/python-tempora.hash
+index 39249eb4fa..ac6483b77f 100644
+--- a/package/python-tempora/python-tempora.hash
++++ b/package/python-tempora/python-tempora.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
--md5  0df4e7fd923e4983cd65786efaa0e0d0  setuptools_scm-7.0.5.tar.gz
--sha256  031e13af771d6f892b941adb6ea04545bbf91ebc5ce68c78aaf3fff6e1fb4844  setuptools_scm-7.0.5.tar.gz
-+md5  158dc741637fb4fa4b955c62bd2c08be  setuptools_scm-7.1.0.tar.gz
-+sha256  6c508345a771aad7d56ebff0e70628bf2b0ec7573762be9960214730de278f27  setuptools_scm-7.1.0.tar.gz
- # sha256 locally computed
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
-index 87d5dd290d..5a35c35a1f 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.mk
-+++ b/package/python-setuptools-scm/python-setuptools-scm.mk
-@@ -4,16 +4,15 @@
+ # md5, sha256 from https://pypi.org/pypi/tempora/json
+-md5  f9954a8c3b091f9769eb7bbe0faddccf  tempora-5.1.0.tar.gz
+-sha256  3e7c4a5369a1788c88a99b6be3a4c74c0c7728d3b62fd768a7e81bd0be0e88df  tempora-5.1.0.tar.gz
++md5  87fc0d99edd557323e61a16017707a8b  tempora-5.2.0.tar.gz
++sha256  af82eb016decda8daf566d1e4836f94f7f8ba8c7153637460156e081aadc64df  tempora-5.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
+diff --git a/package/python-tempora/python-tempora.mk b/package/python-tempora/python-tempora.mk
+index 68516a8388..3074ad0de2 100644
+--- a/package/python-tempora/python-tempora.mk
++++ b/package/python-tempora/python-tempora.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_SCM_VERSION = 7.0.5
-+PYTHON_SETUPTOOLS_SCM_VERSION = 7.1.0
- PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/d0/43/f038b5009f93bcd77b1b8da9e6d424b739ab17aec9726f3a99eba23d53ca
-+PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/98/12/2c1e579bb968759fc512391473340d0661b1a8c96a59fb7c65b02eec1321
- PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
- PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
- 
- HOST_PYTHON_SETUPTOOLS_SCM_DEPENDENCIES = \
- 	host-python-packaging \
--	host-python-tomli \
- 	host-python-typing-extensions
- 
- $(eval $(host-python-package))
+-PYTHON_TEMPORA_VERSION = 5.1.0
++PYTHON_TEMPORA_VERSION = 5.2.0
+ PYTHON_TEMPORA_SOURCE = tempora-$(PYTHON_TEMPORA_VERSION).tar.gz
+-PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/a9/4e/41863232e77742b3a5b30a81e1398abd102aa0a67657bc86a53800966b8e
++PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/97/70/5cf5031a83ca6d0431a53459b2a98aa387ba23d06710a5e48d681ff3956f
+ PYTHON_TEMPORA_LICENSE = MIT
+ PYTHON_TEMPORA_LICENSE_FILES = LICENSE
+ PYTHON_TEMPORA_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
