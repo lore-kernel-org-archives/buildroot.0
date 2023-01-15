@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BAFAC63797
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 20:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 028DEC3DA78
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 20:29:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6B5C40436;
-	Sun, 15 Jan 2023 20:29:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6B5C40436
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98D2341721;
+	Sun, 15 Jan 2023 20:29:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98D2341721
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5swJJRqm8UUc; Sun, 15 Jan 2023 20:29:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id btxQvNXfw_8t; Sun, 15 Jan 2023 20:29:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7FC340320;
-	Sun, 15 Jan 2023 20:29:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7FC340320
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 828371BF86C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 822044067F;
+	Sun, 15 Jan 2023 20:29:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 822044067F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F20031BF25F
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 20:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CAB0D81A50
+ by smtp3.osuosl.org (Postfix) with ESMTP id C47AA60FC7
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 20:28:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAB0D81A50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C47AA60FC7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZSAoVgenxswh for <buildroot@lists.busybox.net>;
- Sun, 15 Jan 2023 20:28:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yrBTDQV2eozq for <buildroot@lists.busybox.net>;
+ Sun, 15 Jan 2023 20:28:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D804D81EA8
+ by smtp3.osuosl.org (Postfix) with ESMTP id E26E160F9B
  for <buildroot@buildroot.org>; Sun, 15 Jan 2023 20:28:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D804D81EA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E26E160F9B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6E3D87B2C; Sun, 15 Jan 2023 20:28:05 +0000 (UTC)
+ id D0DF987B32; Sun, 15 Jan 2023 20:28:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 21:08:07 +0100
+Date: Sun, 15 Jan 2023 21:10:50 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: fca96f697525765b86a4b2ae44057f7e8cf86baf
-X-Git-Newrev: e806e443f90c2c5778f6c3acd73b2e3fae190aef
+X-Git-Oldrev: e806e443f90c2c5778f6c3acd73b2e3fae190aef
+X-Git-Newrev: b84aa71ee13347ea4163079e5649c0d7c819ccb2
 X-Patchwork-Hint: ignore
-Message-Id: <20230115202805.C6E3D87B2C@busybox.osuosl.org>
+Message-Id: <20230115202805.D0DF987B32@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.11.x]
- configs/zynqmp_kria_kv260_defconfig: use CONFIG_MULTI_DTB_FIT
+ configs/zynqmp_kria_kv260_defconfig: fix linux dts name
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,102 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e806e443f90c2c5778f6c3acd73b2e3fae190aef
+commit: https://git.buildroot.net/buildroot/commit/?id=b84aa71ee13347ea4163079e5649c0d7c819ccb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-When using the buildroot compiler, it builds the u-boot.itb immediately
-after building the fit-dtb.blob.  This causes a build failure when using
-the CONFIG_MULTI_DTB_FIT build configuration.  This patch adds the necessary
-dependency to guarantee that the fit-dtb.blob has finished building before
-trying to build the u-boot.itb.
+The Linux DTS name has changed for the zynqmp_kria_kv260 with Xilinx 2022.2.
+smk-k26-revA-sck-kv-g-revB has become zynqmp-smk-k26-revA-sck-kv-g-revB.
+
+This DTS corresponds to generating the zynqmp-smk-k26-revA.dtb for the k26 som
+and applying the zynqmp-sck-kv-g-revB.dtbo for the kv260 carrier board.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/3310463281
+https://gitlab.com/buildroot.org/buildroot/-/jobs/3477506541
 
-This patch has been submitted to u-boot mainline:
-https://lore.kernel.org/all/20221221075446.47141-1-neal.frager@amd.com/
-
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 250d7df53acdccdb3c65c941ad426f6cc0502996)
+(cherry picked from commit b3f5c5cb87b2f5d0e24b291697d959b8773e8b86)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/zynqmp/kria/kv260/kv260.sh                   |  2 +-
- board/zynqmp/kria/kv260/uboot.fragment             |  1 +
- .../v1-0001-makefile-add-multi_dtb_fit-dep.patch   | 32 ++++++++++++++++++++++
- configs/zynqmp_kria_kv260_defconfig                |  1 +
- 4 files changed, 35 insertions(+), 1 deletion(-)
+ configs/zynqmp_kria_kv260_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
-index e891852009..e3467f3068 100755
---- a/board/zynqmp/kria/kv260/kv260.sh
-+++ b/board/zynqmp/kria/kv260/kv260.sh
-@@ -8,5 +8,5 @@
- 
- UBOOT_DIR=$4
- 
--fdtoverlay -o ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
-+fdtoverlay -o ${UBOOT_DIR}/fit-dtb.blob -i ${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb ${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo
- ${UBOOT_DIR}/tools/mkimage -E -f ${UBOOT_DIR}/u-boot.its -B 0x8 ${BINARIES_DIR}/u-boot.itb
-diff --git a/board/zynqmp/kria/kv260/uboot.fragment b/board/zynqmp/kria/kv260/uboot.fragment
-index 0ed560c411..e9da24ef9a 100644
---- a/board/zynqmp/kria/kv260/uboot.fragment
-+++ b/board/zynqmp/kria/kv260/uboot.fragment
-@@ -1,5 +1,6 @@
- CONFIG_DEFAULT_DEVICE_TREE="zynqmp-smk-k26-revA"
- CONFIG_SYS_SPI_U_BOOT_OFFS=0xF80000
-+CONFIG_MULTI_DTB_FIT=y
- CONFIG_DTB_RESELECT=y
- CONFIG_DMA=y
- CONFIG_XILINX_DPDMA=y
-diff --git a/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch b/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch
-new file mode 100644
-index 0000000000..ddc04cacac
---- /dev/null
-+++ b/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch
-@@ -0,0 +1,32 @@
-+From 8b181bf582c17cf709a62cf499f9709c94f49d33 Mon Sep 17 00:00:00 2001
-+From: Neal Frager <neal.frager@amd.com>
-+Date: Wed, 21 Dec 2022 07:51:42 +0000
-+Subject: [PATCH v1 1/1] makefile: add multi_dtb_fit dep
-+
-+With certain gcc compilers, the u-boot.itb is built immediately after dtb
-+generation.  If CONFIG_MULTI_DTB_FIT is used, it is possible that the
-+fit-dtb.blob is not finished in time.
-+
-+This patch adds a necessary dependency to guarantee that the fit-dtb.blob
-+is built before attempting to build the u-boot.itb.
-+
-+Signed-off-by: Neal Frager <neal.frager@amd.com>
-+---
-+ Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile b/Makefile
-+index b96e2ffa15..682a5d94fd 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1425,6 +1425,7 @@ MKIMAGEFLAGS_u-boot.itb += -B 0x8
-+ ifdef U_BOOT_ITS
-+ u-boot.itb: u-boot-nodtb.bin \
-+ 		$(if $(CONFIG_OF_SEPARATE)$(CONFIG_OF_EMBED)$(CONFIG_SANDBOX),dts/dt.dtb) \
-++		$(if $(CONFIG_MULTI_DTB_FIT),$(FINAL_DTB_CONTAINER)) \
-+ 		$(U_BOOT_ITS) FORCE
-+ 	$(call if_changed,mkfitimage)
-+ 	$(BOARD_SIZE_CHECK)
-+-- 
-+2.17.1
-+
 diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index e5b92fa031..7afc7748b0 100644
+index 7afc7748b0..0fcfce7c7d 100644
 --- a/configs/zynqmp_kria_kv260_defconfig
 +++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -37,3 +37,4 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches"
+@@ -8,7 +8,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/smk-k26-revA-sck-kv-g-revB"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
