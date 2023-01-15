@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50241C63797
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 20:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 996F2C63797
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 20:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC23240917;
-	Sun, 15 Jan 2023 20:29:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC23240917
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E58860AE6;
+	Sun, 15 Jan 2023 20:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E58860AE6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id duO2EA9rK_xQ; Sun, 15 Jan 2023 20:29:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b4j__eLqAjHe; Sun, 15 Jan 2023 20:29:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EEBE040436;
-	Sun, 15 Jan 2023 20:29:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEBE040436
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A90C61012;
+	Sun, 15 Jan 2023 20:29:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A90C61012
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3C54C1BF25F
- for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 20:28:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 70BE41BF25F
+ for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 20:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D931861007
- for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 20:28:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D931861007
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B6AC60AE6
+ for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 20:28:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B6AC60AE6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mGMaidCZn5MM for <buildroot@lists.busybox.net>;
+ with ESMTP id PzoxviOa_YTD for <buildroot@lists.busybox.net>;
  Sun, 15 Jan 2023 20:28:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 151DA60AE6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0385560FFC
  for <buildroot@buildroot.org>; Sun, 15 Jan 2023 20:28:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 151DA60AE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0385560FFC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 054EB87B2C; Sun, 15 Jan 2023 20:28:06 +0000 (UTC)
+ id E55B487B1F; Sun, 15 Jan 2023 20:28:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 21:20:41 +0100
+Date: Sun, 15 Jan 2023 21:14:16 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: d57989ccc26b9de4f7c9f0bc37763e3cc1ce600a
-X-Git-Newrev: f2b283ccaf49a35f6504796ea81c1a918aeadba4
+X-Git-Oldrev: bf16efb29f6c67b387afd9473397232027c16fa1
+X-Git-Newrev: d89d991e74de1b39057e0e49c53fb9771d97c412
 X-Patchwork-Hint: ignore
-Message-Id: <20230115202806.054EB87B2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] {linux,
- linux-headers}: bump 4.9.x / 5.{10, 15}.x / 6.{0, 1}.x series
+Message-Id: <20230115202805.E55B487B1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/redis: bump to
+ v7.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,76 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2b283ccaf49a35f6504796ea81c1a918aeadba4
+commit: https://git.buildroot.net/buildroot/commit/?id=d89d991e74de1b39057e0e49c53fb9771d97c412
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
+From the release notes
+(https://github.com/redis/redis/blob/7.0.7/00-RELEASENOTES)
+
+================================================================================
+Redis 7.0.7 Released Fri Dec 16 12:00:00 IST 2022
+================================================================================
+
+Upgrade urgency: MODERATE, Contains fix for a regression in Geo commands.
+
+================================================================================
+Redis 7.0.6 Released Mon Dec 12 12:00:00 IST 2022
+================================================================================
+
+Upgrade urgency: MODERATE, Contains fixes for a few non-critical or unlikely bugs,
+and some dramatic optimizations to Geo, EVAL, and Sorted sets commands.
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 479b042433447214cf318964cc7557b6b5f5d05f)
-[Peter: drop 6.1.x bump]
+(cherry picked from commit fbdc0f8ef8bdbe919925e281b2d5ce1583fd1aab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index cce67eeee6..c93a1fbe5f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index a10df46031..eb8c21be98 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  67054cc37b58c125df93bd78000261ec0ef4436a26b40f38262c780e56315cc3  redis-7.0.5.tar.gz
++sha256  8d327d7e887d1bb308fc37aaf717a0bf79f58129e3739069aaeeae88955ac586  redis-7.0.7.tar.gz
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.0.16" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.0.19" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index b7869d06e9..ab996a4d81 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  842071bca611c1f080cbc39c7ab3a6b58d7951f4f41e553b3db4fbe3e0705ce4  linux-6.0.16.tar.xz
-+sha256  abe37eb0e2e331bdc7c4110115664e180e7d43b7336de6b4cd2bd1b123d30207  linux-6.0.19.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  c93bb384a97ad1f0a4f18e442ce0291242722f78023eca658b22344541f09489  linux-5.19.17.tar.xz
--sha256  80fcd9efa443502de9e2750f6dfb59e8de43a5d87a6d2be09dca748d79b5f2ee  linux-5.15.86.tar.xz
--sha256  7aaaf6d0bcd8a2cfa14ad75f02ca62bb2de08aad3bee3eff198de49ea5254079  linux-5.10.161.tar.xz
-+sha256  e7359bd2935b54fe8bb821cf748591c36a95bed019e752d3e4d5803d9da1ccb4  linux-5.15.87.tar.xz
-+sha256  2ec400fc50ffdfe4c836a3c02bf6e7aebcd7963dd2ac1425e6d41545c37dd217  linux-5.10.162.tar.xz
- sha256  80253b2cac54c256dfdfd1061800aef907f88432090f7aef74c0ddf50f6e6524  linux-5.4.228.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  1f6de11306cc9f82fe1d4dd03565cdf43906fa6f77302913d942fd63b77b500c  linux-4.9.336.tar.xz
-+sha256  5385aaec55c766e3f462511453f5c63d7898b2d0e9ea74f22a23ebbedab0b3c6  linux-4.9.337.tar.xz
- sha256  e32a230d71072a4ee50bd4386aa23ca4e617b8ad07b6f9fb223b65bf004c4c80  linux-4.14.302.tar.xz
- sha256  6e0ba5d224ab216b7b938cc9ff2478be7882a884bbdf15374149bade4d58b20a  linux-4.19.269.tar.xz
- # Locally computed
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e57a6d74dd..742d13546a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -392,14 +392,14 @@ endchoice
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 7a637c106c..b08be11538 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.9.336"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.337"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.302"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.269"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.228"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.161"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.86"	if BR2_KERNEL_HEADERS_5_15
-+	default "5.10.162"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.87"	if BR2_KERNEL_HEADERS_5_15
- 	default "5.19.17"	if BR2_KERNEL_HEADERS_5_19
--	default "6.0.16"	if BR2_KERNEL_HEADERS_6_0
-+	default "6.0.19"	if BR2_KERNEL_HEADERS_6_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-REDIS_VERSION = 7.0.5
++REDIS_VERSION = 7.0.7
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
