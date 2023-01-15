@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41242C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:19:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C34C8C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:19:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E17C3833CD;
-	Mon, 20 Feb 2023 23:19:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E17C3833CD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 717168343E;
+	Mon, 20 Feb 2023 23:19:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 717168343E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C9S10ciRsWsB; Mon, 20 Feb 2023 23:19:39 +0000 (UTC)
+	with ESMTP id caz0mZaDAw5V; Mon, 20 Feb 2023 23:19:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A0AC833C6;
-	Mon, 20 Feb 2023 23:19:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A0AC833C6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 58BAC1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EAE88341E;
+	Mon, 20 Feb 2023 23:19:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EAE88341E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 298001BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6401A61399
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6401A61399
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39CF441592
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39CF441592
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GyH-sR6cgVs4 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0Lfg81Yxv28H for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3A9F6128E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3A9F6128E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CC9541593
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CC9541593
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFBC38648F; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 4D23A86496; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 10:34:46 +0100
+Date: Sun, 15 Jan 2023 12:15:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bd7e90779861bb603fc1cca03f6fad4d951f7bd9
-X-Git-Newrev: 53f2999edfa5e67923d4d8a102c15fa3200e089c
+X-Git-Oldrev: 208bf69626d25761f6e502b967b6d8ecf7d5df00
+X-Git-Newrev: 1b6a466ea306d0e760b35fe84330d7f57a3a624b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205214.CFBC38648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/xtables-addons: bump
- to version 3.22
+Message-Id: <20230220205235.4D23A86496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pyrsistent:
+ bump to version 0.19.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,68 +58,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5477997359332449599=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5477997359332449599==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=53f2999edfa5e67923d4d8a102c15fa3200e089c
+commit: https://git.buildroot.net/buildroot/commit/?id=1b6a466ea306d0e760b35fe84330d7f57a3a624b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for up to Linux 6.1 by fixing the following build failure:
-
-/tmp/instance-5/output-1/build/xtables-addons-3.21/extensions/xt_CHAOS.c: In function ‘xt_chaos_total’:
-/tmp/instance-5/output-1/build/xtables-addons-3.21/extensions/xt_CHAOS.c:70:46: error: implicit declaration of function ‘prandom_u32’; did you mean ‘prandom_u32_max’? [-Werror=implicit-function-declaration]
-   70 |         if (!ret || hotdrop || (unsigned int)prandom_u32() > delude_percentage)
-      |                                              ^~~~~~~~~~~
-      |                                              prandom_u32_max
-
-https://fossies.org/linux/privat/xtables-addons-3.22.tar.xz/xtables-addons-3.22/doc/changelog.rst
-
-Fixes:
- - http://autobuild.buildroot.org/results/4564ba888156710819f6bd86117e0c0bdd513dba
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xtables-addons/xtables-addons.hash | 2 +-
- package/xtables-addons/xtables-addons.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pyrsistent/python-pyrsistent.hash | 4 ++--
+ package/python-pyrsistent/python-pyrsistent.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 0d2434eeb1..840a31f947 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2e09ac129a14f5e9c23b115ebcdfff4aa84e2aeba1268dbdf39b2d752bd71e19  xtables-addons-3.21.tar.xz
-+sha256  faa16a27166275afbfe8df605f55c3a81ac693bf19da674d45ceded4137ae217  xtables-addons-3.22.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index 83cc3266c4..77dcfd741c 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pyrsistent/python-pyrsistent.hash b/package/python-pyrsistent/python-pyrsistent.hash
+index bb55c7135d..d5c9a22656 100644
+--- a/package/python-pyrsistent/python-pyrsistent.hash
++++ b/package/python-pyrsistent/python-pyrsistent.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyrsistent/json
+-md5  23da81256b8817e123568a858bf78997  pyrsistent-0.19.2.tar.gz
+-sha256  bfa0351be89c9fcbcb8c9879b826f4353be10f58f8a677efab0c017bf7137ec2  pyrsistent-0.19.2.tar.gz
++md5  761266eab1f9dc9280cdb0a6d2dedb08  pyrsistent-0.19.3.tar.gz
++sha256  1a2994773706bbb4995c31a97bc94f1418314923bd1048c6d964837040376440  pyrsistent-0.19.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3ea56753cbd0cc897d3f4414a902f5694991db7c1b3abb8230216381185f9112  LICENSE.mit
+diff --git a/package/python-pyrsistent/python-pyrsistent.mk b/package/python-pyrsistent/python-pyrsistent.mk
+index 6a5ac30a15..f3457feebe 100644
+--- a/package/python-pyrsistent/python-pyrsistent.mk
++++ b/package/python-pyrsistent/python-pyrsistent.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XTABLES_ADDONS_VERSION = 3.21
-+XTABLES_ADDONS_VERSION = 3.22
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
- XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
-
---===============5477997359332449599==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_PYRSISTENT_VERSION = 0.19.2
++PYTHON_PYRSISTENT_VERSION = 0.19.3
+ PYTHON_PYRSISTENT_SOURCE = pyrsistent-$(PYTHON_PYRSISTENT_VERSION).tar.gz
+-PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/b8/ef/325da441a385a8a931b3eeb70db23cb52da42799691988d8d943c5237f10
++PYTHON_PYRSISTENT_SITE = https://files.pythonhosted.org/packages/bf/90/445a7dbd275c654c268f47fa9452152709134f61f09605cf776407055a89
+ PYTHON_PYRSISTENT_SETUP_TYPE = setuptools
+ PYTHON_PYRSISTENT_LICENSE = MIT
+ PYTHON_PYRSISTENT_LICENSE_FILES = LICENSE.mit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5477997359332449599==--
