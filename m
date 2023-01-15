@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52F73C63797
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:07:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A4FFC46467
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9442D41477;
-	Sun, 15 Jan 2023 11:07:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9442D41477
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3887405C8;
+	Sun, 15 Jan 2023 11:07:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3887405C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1T1yS9uhAgJE; Sun, 15 Jan 2023 11:07:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EdG1ZamyYA0i; Sun, 15 Jan 2023 11:07:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7904941296;
-	Sun, 15 Jan 2023 11:07:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7904941296
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A7E451BF8C7
- for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0FB154062A;
+	Sun, 15 Jan 2023 11:07:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FB154062A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 229471BF29F
+ for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B0B841591
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D2B181FE1
  for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:06:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B0B841591
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D2B181FE1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ANTTaIKW5Vne for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l3swpQPmMd7I for <buildroot@lists.busybox.net>;
  Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8807641295
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF3B281ED0
  for <buildroot@buildroot.org>; Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8807641295
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF3B281ED0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 75268870D1; Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
+ id 97CF6870CF; Sun, 15 Jan 2023 11:06:27 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 12:00:16 +0100
+Date: Sun, 15 Jan 2023 12:00:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 59461ec52ef6d70d08d0e68cd24a6a3db2dbb7fc
-X-Git-Newrev: c35f2393327abab5d21a9155d468067482af383b
+X-Git-Oldrev: 823e3e98671bf70135d526298346a8c72beacd8a
+X-Git-Newrev: 3f8d6264d79f6645ce4f2bbf0b76a919db29fcb5
 X-Patchwork-Hint: ignore
-Message-Id: <20230115110627.75268870D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aioblescan: bump to version
- 0.2.14
+Message-Id: <20230115110627.97CF6870CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-attrs: bump to version
+ 22.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c35f2393327abab5d21a9155d468067482af383b
+commit: https://git.buildroot.net/buildroot/commit/?id=3f8d6264d79f6645ce4f2bbf0b76a919db29fcb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-aioblescan/python-aioblescan.hash | 4 ++--
- package/python-aioblescan/python-aioblescan.mk   | 4 ++--
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
-index 9a40ca4560..c754325fb1 100644
---- a/package/python-aioblescan/python-aioblescan.hash
-+++ b/package/python-aioblescan/python-aioblescan.hash
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index d5548c0ed3..66b2082cff 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioblescan/json
--md5  0601cf9335e5d89166a88f53597c79bf  aioblescan-0.2.13.tar.gz
--sha256  28632e32c8180ea4b792f4cf9b88968dd100f4d3cee0cf16d27c193cf954422a  aioblescan-0.2.13.tar.gz
-+md5  10014cfd24b8f9f54099bbf7e2ea528a  aioblescan-0.2.14.tar.gz
-+sha256  3a47c5292186ee87fc49cb076a5271c766510f44749b93ac4a32bbb4cb5258a0  aioblescan-0.2.14.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5  0487081b7ead8753fc46cf7c6d1e28e3  attrs-22.1.0.tar.gz
+-sha256  29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6  attrs-22.1.0.tar.gz
++md5  eff16b3bbd0d9b72e118cca83a19d380  attrs-22.2.0.tar.gz
++sha256  c9227bfc2f01993c03f68db37d1d15c9690188323c067c641f1a35ca58185f99  attrs-22.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
-diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
-index f0e277d528..7e0cde6c85 100644
---- a/package/python-aioblescan/python-aioblescan.mk
-+++ b/package/python-aioblescan/python-aioblescan.mk
+ sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 33651ee80a..0462f7cb0b 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOBLESCAN_VERSION = 0.2.13
-+PYTHON_AIOBLESCAN_VERSION = 0.2.14
- PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
--PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/bd/04/c6798c76704d57da22f19c2e47485821d4b23144ef75f9c0e18dbfe47565
-+PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/45/15/faf503083bc5a2d81f1b17fbbe30d15f35217b6c5e944c771c8760354d59
- PYTHON_AIOBLESCAN_SETUP_TYPE = setuptools
- PYTHON_AIOBLESCAN_LICENSE = MIT
- PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
+-PYTHON_ATTRS_VERSION = 22.1.0
++PYTHON_ATTRS_VERSION = 22.2.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/1a/cb/c4ffeb41e7137b23755a45e1bfec9cbb76ecf51874c6f1d113984ecaa32c
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/21/31/3f468da74c7de4fcf9b25591e682856389b3400b4b62f201e65f15ea3e07
+ PYTHON_ATTRS_SETUP_TYPE = setuptools
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
