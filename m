@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BB75C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01148C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:53:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F41661086;
-	Tue, 21 Feb 2023 00:53:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F41661086
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5EA86107E;
+	Tue, 21 Feb 2023 00:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5EA86107E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xIkz8h8vkrEN; Tue, 21 Feb 2023 00:53:33 +0000 (UTC)
+	with ESMTP id lbJSnRe78Vif; Tue, 21 Feb 2023 00:53:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60B736107C;
-	Tue, 21 Feb 2023 00:53:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60B736107C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0A2431BF8C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id C99016106F;
+	Tue, 21 Feb 2023 00:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C99016106F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F26881BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C62414181D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C62414181D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29B73610BC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29B73610BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 08CKoNLweiuG for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id seRrueAmqrkt for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A0CB41802
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A0CB41802
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42CA8610A0
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42CA8610A0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06E8481979; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 3174C828C8; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:14:57 +0100
+Date: Sun, 15 Jan 2023 12:15:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 67eb00b807ddd168a9765e953405d03e18599fb5
-X-Git-Newrev: 910aae1e23806fff74b16088c8975827e6664c2e
+X-Git-Oldrev: e1f426de2e67018d8b57c03457dbf1d719ac3b19
+X-Git-Newrev: e52a5966ec9be07d846ca3a0264cbd892d256b53
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205300.06E8481979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sdl2: bump version to
- 2.26.3
+Message-Id: <20230220205235.3174C828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{,
+ python-py}mupdf: bump to version 1.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=910aae1e23806fff74b16088c8975827e6664c2e
+commit: https://git.buildroot.net/buildroot/commit/?id=e52a5966ec9be07d846ca3a0264cbd892d256b53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update the license hash because of a change in copyright year:
-- Copyright (C) 1997-2022 Sam Lantinga <slouken@libsdl.org>
-+ Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
-
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sdl2/sdl2.hash | 6 +++---
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mupdf/mupdf.hash                   | 4 ++--
+ package/mupdf/mupdf.mk                     | 2 +-
+ package/python-pymupdf/python-pymupdf.hash | 4 ++--
+ package/python-pymupdf/python-pymupdf.mk   | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 86e0d86e7c..e26dcee301 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.2.tar.gz.sig
--sha256  95d39bc3de037fbdfa722623737340648de4f180a601b0afad27645d150b99e0  SDL2-2.26.2.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.3.tar.gz.sig
-+sha256  c661205a553b7d252425f4b751ff13209e5e020b876bbfa1598494af61790057  SDL2-2.26.3.tar.gz
- # Locally calculated
--sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
-+sha256  9928507f684c1965d07f2b6ef4b4723d5efc2f6b4ab731f743a413c51c319927  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 8995178e71..c01f12d12c 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mupdf/mupdf.hash b/package/mupdf/mupdf.hash
+index 6785aa163a..ef91abee18 100644
+--- a/package/mupdf/mupdf.hash
++++ b/package/mupdf/mupdf.hash
+@@ -1,8 +1,8 @@
+ # From https://mupdf.com/downloads/index.html:
+-sha1  27d75cae256450abb9f50cd00b3e5a895fc684cf  mupdf-1.21.0-source.tar.lz
++sha1  f759d914ec6ad6a3b96f994630ff70b75823831b  mupdf-1.21.1-source.tar.lz
+ 
+ # Locally computed:
+-sha256  f23fc1ad9081375d9c5f2318d6e6e5c5be490ecb70b10ed7167932afbe1ccfb5  mupdf-1.21.0-source.tar.lz
++sha256  66a43490676c7f7c2ff74067328ef13285506fcc758d365ae27ea3668bd5e620  mupdf-1.21.1-source.tar.lz
+ 
+ # Hash for license files:
+ sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index e93a41bd00..d6cc407c49 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SDL2_VERSION = 2.26.2
-+SDL2_VERSION = 2.26.3
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+ # python-pymupdf's version must match mupdf's version
+-MUPDF_VERSION = 1.21.0
++MUPDF_VERSION = 1.21.1
+ MUPDF_SOURCE = mupdf-$(MUPDF_VERSION)-source.tar.lz
+ MUPDF_SITE = https://mupdf.com/downloads/archive
+ MUPDF_LICENSE = AGPL-3.0+
+diff --git a/package/python-pymupdf/python-pymupdf.hash b/package/python-pymupdf/python-pymupdf.hash
+index d930d04335..bda356d905 100644
+--- a/package/python-pymupdf/python-pymupdf.hash
++++ b/package/python-pymupdf/python-pymupdf.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pymupdf/json
+-md5  ae24d77d44369e46bbcd5457fe97d776  PyMuPDF-1.21.0.tar.gz
+-sha256  a63dfc289e127a16ab60310ee6005fe83121c7a97f7c120db688f9281c9e5d0f  PyMuPDF-1.21.0.tar.gz
++md5  be10963679ac6d52b7aed2311ca7e3c5  PyMuPDF-1.21.1.tar.gz
++sha256  f815741a435c62a0036bbcbf5fa6c533567bd69c5338d413714fc57b22db93e0  PyMuPDF-1.21.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  COPYING
+diff --git a/package/python-pymupdf/python-pymupdf.mk b/package/python-pymupdf/python-pymupdf.mk
+index 38212dc44b..70448e8d90 100644
+--- a/package/python-pymupdf/python-pymupdf.mk
++++ b/package/python-pymupdf/python-pymupdf.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # python-pymupdf's version must match mupdf's version
+-PYTHON_PYMUPDF_VERSION = 1.21.0
++PYTHON_PYMUPDF_VERSION = 1.21.1
+ PYTHON_PYMUPDF_SOURCE = PyMuPDF-$(PYTHON_PYMUPDF_VERSION).tar.gz
+-PYTHON_PYMUPDF_SITE = https://files.pythonhosted.org/packages/61/14/632eefe5568ee7a4ec95aa7fc9c63996ff6a6d2464d4e3a9dc35da11a409
++PYTHON_PYMUPDF_SITE = https://files.pythonhosted.org/packages/30/44/9fce79689e5df7deebe2d17cb2b9b2a6b888439c241e71296e732aefa649
+ PYTHON_PYMUPDF_SETUP_TYPE = setuptools
+ PYTHON_PYMUPDF_LICENSE = AGPL-3.0+
+ PYTHON_PYMUPDF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
