@@ -4,46 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C620C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:55:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABDFBC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:56:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF523610DC;
-	Tue, 21 Feb 2023 00:55:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF523610DC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 631EE610D2;
+	Tue, 21 Feb 2023 00:56:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 631EE610D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VxpV3QirHvr8; Tue, 21 Feb 2023 00:55:51 +0000 (UTC)
+	with ESMTP id pZOOIB3cZltY; Tue, 21 Feb 2023 00:56:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28074610DB;
-	Tue, 21 Feb 2023 00:55:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28074610DB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 442CA1BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86BF8610E3;
+	Tue, 21 Feb 2023 00:56:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86BF8610E3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C6DE51BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C27F41810
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C27F41810
+ by smtp3.osuosl.org (Postfix) with ESMTP id A014D6FB88
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A014D6FB88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WNOHMfj7VM0O for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A9fV2XTUDHB5 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 927E34181A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 927E34181A
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0C0D6FB81
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0C0D6FB81
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8FD0B8648F; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+ id AC7AA828C8; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 21:56:13 +0100
+Date: Sun, 15 Jan 2023 12:16:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4cc59b5cb397ee79d1a8152540eec512354b1825
-X-Git-Newrev: 0b5b92019ba30aecdaa7ba34c255d15e0c0489e8
+X-Git-Oldrev: b341e0cc646665ccda1c6997fb845503c12a0d06
+X-Git-Newrev: 3dfa2421e1840758f9ec5292da85a9c884567318
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205300.8FD0B8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: drop Matt Weber
+Message-Id: <20230220205235.AC7AA828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-setuptools-scm:
+ bump to version 7.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,141 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b5b92019ba30aecdaa7ba34c255d15e0c0489e8
+commit: https://git.buildroot.net/buildroot/commit/?id=3dfa2421e1840758f9ec5292da85a9c884567318
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-I regret that my work situation doesn't sustain me contributing.
+Drop no longer required host-python-tomli dependency.
 
-Signed-off-by: Matthew Weber <matthew.weber@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS | 105 -------------------------------------------------------------
- 1 file changed, 105 deletions(-)
+ package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
+ package/python-setuptools-scm/python-setuptools-scm.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index df2b98ad53..72a56deb4c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1984,111 +1984,6 @@ F:	board/technologic/ts4900/
- F:	configs/ts4900_defconfig
- F:	package/ts4900-fpga/
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+index 8ef125840a..8cfe07d1d9 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-setuptools-scm/python-setuptools-scm.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
+-md5  0df4e7fd923e4983cd65786efaa0e0d0  setuptools_scm-7.0.5.tar.gz
+-sha256  031e13af771d6f892b941adb6ea04545bbf91ebc5ce68c78aaf3fff6e1fb4844  setuptools_scm-7.0.5.tar.gz
++md5  158dc741637fb4fa4b955c62bd2c08be  setuptools_scm-7.1.0.tar.gz
++sha256  6c508345a771aad7d56ebff0e70628bf2b0ec7573762be9960214730de278f27  setuptools_scm-7.1.0.tar.gz
+ # sha256 locally computed
+ sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index 87d5dd290d..5a35c35a1f 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
+@@ -4,16 +4,15 @@
+ #
+ ################################################################################
  
--N:	Matt Weber <matthew.weber@collins.com>
--F:	board/freescale/p*
--F:	board/freescale/t*
--F:	board/qemu/ppc64-e5500/
--F:	configs/freescale_p*
--F:	configs/freescale_t*
--F:	configs/qemu_ppc64_e5500_defconfig
--F:	package/ace/
--F:	package/argp-standalone/
--F:	package/aufs/
--F:	package/aufs-util/
--F:	package/bc/
--F:	package/bridge-utils/
--F:	package/checkpolicy/
--F:	package/checksec/
--F:	package/cgroupfs-mount/
--F:	package/compiler-rt/
--F:	package/crda/
--F:	package/cunit/
--F:	package/dacapo/
--F:	package/davici/
--F:	package/dnsmasq/
--F:	package/dosfstools/
--F:	package/eigen/
--F:	package/ethtool/
--F:	package/flashbench/
--F:	package/fmc/
--F:	package/fmlib/
--F:	package/freeradius-server/
--F:	package/git/
--F:	package/gnutls/
--F:	package/hostapd/
--F:	package/i2c-tools/
--F:	package/ifplugd/
--F:	package/igmpproxy/
--F:	package/iperf/
--F:	package/iperf3/
--F:	package/iputils/
--F:	package/iw/
--F:	package/jitterentropy-library/
--F:	package/kvm-unit-tests/
--F:	package/kvmtool/
--F:	package/libcsv/
--F:	package/libcurl/
--F:	package/libeastl/
--F:	package/libfcgi/
--F:	package/libopenssl/
--F:	package/libselinux/
--F:	package/libsemanage/
--F:	package/libsepol/
--F:	package/libssh2/
--F:	package/libtalloc/
--F:	package/libqmi/
--F:	package/lighttpd/
--F:	package/logrotate/
--F:	package/makedevs/
--F:	package/memtester/
--F:	package/mii-diag/
--F:	package/mrouted/
--F:	package/mtd/
--F:	package/mtools/
--F:	package/nginx-upload/
--F:	package/omniorb/
--F:	package/openresolv/
--F:	package/paxtest/
--F:	package/picocom/
--F:	package/policycoreutils/
--F:	package/proftpd/
--F:	package/protobuf-c/
--F:	package/protobuf/
--F:	package/python-colorama/
--F:	package/python-filelock/
--F:	package/python-flask-cors/
--F:	package/python-iptables/
--F:	package/python-ipy/
--F:	package/python-iwlib/
--F:	package/python-posix-ipc/
--F:	package/python-pycairo/
--F:	package/python-pysftp/
--F:	package/python-tinyrpc/
--F:	package/python-txdbus/
--F:	package/qoriq-rcw/
--F:	package/raptor/
--F:	package/rng-tools/
--F:	package/rsyslog/
--F:	package/setools/
--F:	package/sloci-image/
--F:	package/smcroute/
--F:	package/tclap/
--F:	package/tini/
--F:	package/uboot-tools/
--F:	package/unionfs/
--F:	package/valijson/
--F:	package/wpa_supplicant/
--F:	package/wireless_tools/
--F:	package/xen/
--F:	package/xml-security-c/
--F:	support/testing/tests/fs/test_oci.py
--F:	support/testing/tests/package/br2-external/clang-compiler-rt/
--F:	support/testing/tests/package/br2-external/openjdk/
--F:	support/testing/tests/package/test_clang.py
--F:	support/testing/tests/package/test_openjdk.py
--F:	support/testing/tests/package/test_opkg/
--F:	support/testing/tests/package/test_opkg.py
--
- N:	Mauro Condarelli <mc5686@mclink.it>
- F:	package/mc/
- F:	package/python-autobahn/
+-PYTHON_SETUPTOOLS_SCM_VERSION = 7.0.5
++PYTHON_SETUPTOOLS_SCM_VERSION = 7.1.0
+ PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/d0/43/f038b5009f93bcd77b1b8da9e6d424b739ab17aec9726f3a99eba23d53ca
++PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/98/12/2c1e579bb968759fc512391473340d0661b1a8c96a59fb7c65b02eec1321
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
+ 
+ HOST_PYTHON_SETUPTOOLS_SCM_DEPENDENCIES = \
+ 	host-python-packaging \
+-	host-python-tomli \
+ 	host-python-typing-extensions
+ 
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
