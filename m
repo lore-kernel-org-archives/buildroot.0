@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B816EC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B9C2C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:56:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7189D610D3;
-	Tue, 21 Feb 2023 00:56:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7189D610D3
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7A0A60A9C;
+	Tue, 21 Feb 2023 00:56:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7A0A60A9C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D_SXMnoRKVQG; Tue, 21 Feb 2023 00:56:17 +0000 (UTC)
+	with ESMTP id Pw4f9yykwy7T; Tue, 21 Feb 2023 00:56:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D3C3610B2;
-	Tue, 21 Feb 2023 00:56:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D3C3610B2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5393E1BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1462660A8A;
+	Tue, 21 Feb 2023 00:56:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1462660A8A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C92FF1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85A6541819
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85A6541819
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC4386FB95
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC4386FB95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LliPs15LV6qJ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OxDoVfQqN1Ni for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C44C64181C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C44C64181C
+ by smtp3.osuosl.org (Postfix) with ESMTP id D27F56FB8C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D27F56FB8C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C045C8648F; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-From: Arnout Vandecappelle <arnout@mind.be>
+ id D0F458648F; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 22:23:17 +0100
+Date: Sun, 15 Jan 2023 12:16:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c3a1f0fe1b912727bb7b5baebe938f75036e566b
-X-Git-Newrev: 854314d15361dc3b69b97ee29d483ee920b9098f
+X-Git-Oldrev: c60f09bf11cd465caa51c7f099508c44d6359a01
+X-Git-Newrev: 1e85e54729ece9fd7285c2e4d3f7ea537aabe0a3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205300.C045C8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pipewire:
- compress-offload needs kernel >= 5.7
+Message-Id: <20230220205235.D0F458648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-termcolor: bump
+ to version 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=854314d15361dc3b69b97ee29d483ee920b9098f
+commit: https://git.buildroot.net/buildroot/commit/?id=1e85e54729ece9fd7285c2e4d3f7ea537aabe0a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-SND_AUDIOCODEC_A{LAC,PE} are only available since kernel 5.7 and
-https://github.com/torvalds/linux/commit/0f546d6f0292fb624b4cf0cc70096ddb9ea070e6
-resulting in the following build failure since bump to version 0.3.65
-in commit 247e2d0eb1e60f483044d58bed58c5ed321528f7 and
-https://git.buildroot.net/buildroot/commit/?id=247e2d0eb1e60f483044d58bed58c5ed321528f7:
-
-../spa/plugins/alsa/alsa-compress-offload-sink.c:183:11: error: 'SND_AUDIOCODEC_ALAC' undeclared here (not in a function); did you mean 'SND_AUDIOCODEC_AAC'?
-  183 |         { SND_AUDIOCODEC_ALAC, },
-      |           ^~~~~~~~~~~~~~~~~~~
-      |           SND_AUDIOCODEC_AAC
-
-Moreover, flac_d is also only available since kernel 5.5 and
-https://github.com/torvalds/linux/commit/d2522335c92c090bf58531a2b696d7fe80ab2a7a
-
-Take this opportunity to make compress offload an explicit option rather
-than automatic based on the availability of tinycompress. The
-relationship between them is not obvious.
-
-Fixes:
- - http://autobuild.buildroot.org/results/9ecd9aca5edc3756154da59573157954f06e6537
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pipewire/Config.in   | 12 ++++++++++++
- package/pipewire/pipewire.mk |  2 +-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ package/python-termcolor/python-termcolor.hash | 4 ++--
+ package/python-termcolor/python-termcolor.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-index f038291e87..4929e5d3d1 100644
---- a/package/pipewire/Config.in
-+++ b/package/pipewire/Config.in
-@@ -15,6 +15,18 @@ config BR2_PACKAGE_PIPEWIRE
+diff --git a/package/python-termcolor/python-termcolor.hash b/package/python-termcolor/python-termcolor.hash
+index 73fb9129ed..9be0ad00c8 100644
+--- a/package/python-termcolor/python-termcolor.hash
++++ b/package/python-termcolor/python-termcolor.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/termcolor/json
+-md5  f7f59efd147dd1ec2a25e667616e8a52  termcolor-2.1.1.tar.gz
+-sha256  67cee2009adc6449c650f6bcf3bdeed00c8ba53a8cda5362733c53e0a39fb70b  termcolor-2.1.1.tar.gz
++md5  ba0af4ee713cd0030c2d436091af4241  termcolor-2.2.0.tar.gz
++sha256  dfc8ac3f350788f23b2947b3e6cfa5a53b630b612e6cd8965a015a776020b99a  termcolor-2.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  e79b6bd82962c1330caaa7c42278567b08667777673f8e2371a624d5715d4c0e  COPYING.txt
+diff --git a/package/python-termcolor/python-termcolor.mk b/package/python-termcolor/python-termcolor.mk
+index d7511d692f..5cbedfb396 100644
+--- a/package/python-termcolor/python-termcolor.mk
++++ b/package/python-termcolor/python-termcolor.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_PIPEWIRE
- 
-+config BR2_PACKAGE_PIPEWIRE_COMPRESS_OFFLOAD
-+	bool "pipewire Compress-Offload"
-+	depends on !BR2_STATIC_LIBS # tinycompress
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
-+	select BR2_PACKAGE_TINYCOMPRESS
-+	help
-+	  Enable ALSA Compress-Offload support
-+
-+comment "pipewire Compress-Offload needs a toolchain w/ dynamic library, headers >= 5.7"
-+	depends on BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
-+
- config BR2_PACKAGE_PIPEWIRE_EXAMPLES
- 	bool "pipewire examples"
- 	help
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 976d7783b9..ecf4a035ec 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -215,7 +215,7 @@ else
- PIPEWIRE_CONF_OPTS += -Dsdl2=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_TINYCOMPRESS),y)
-+ifeq ($(BR2_PACKAGE_PIPEWIRE_COMPRESS_OFFLOAD),y)
- PIPEWIRE_CONF_OPTS += -Dcompress-offload=enabled
- PIPEWIRE_DEPENDENCIES += tinycompress
- else
+-PYTHON_TERMCOLOR_VERSION = 2.1.1
++PYTHON_TERMCOLOR_VERSION = 2.2.0
+ PYTHON_TERMCOLOR_SOURCE = termcolor-$(PYTHON_TERMCOLOR_VERSION).tar.gz
+-PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/19/da/ff1f0906818a5bd2e69e773d88801ca3c9e92d0d7caa99db1665658819ea
++PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/e5/4e/b2a54a21092ad2d5d70b0140e4080811bee06a39cc8481651579fe865c89
+ PYTHON_TERMCOLOR_SETUP_TYPE = pep517
+ PYTHON_TERMCOLOR_LICENSE = MIT
+ PYTHON_TERMCOLOR_LICENSE_FILES = COPYING.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
