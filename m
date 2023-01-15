@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63438C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE46BC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:46:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D8224F53B;
-	Tue, 21 Feb 2023 00:46:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D8224F53B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83F804F2AA;
+	Tue, 21 Feb 2023 00:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83F804F2AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5On8aEan4wgW; Tue, 21 Feb 2023 00:46:11 +0000 (UTC)
+	with ESMTP id jPnpeVSZz01q; Tue, 21 Feb 2023 00:46:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E20434F59A;
-	Tue, 21 Feb 2023 00:46:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E20434F59A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED6C21BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 563904F571;
+	Tue, 21 Feb 2023 00:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 563904F571
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 50E781BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D2BA4180A
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D2BA4180A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5EB646FB7C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EB646FB7C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fOs5S5yjNjz8 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EbblVpL38TZK for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2EA2417DA
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2EA2417DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A5B56FB48
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A5B56FB48
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D00CA81979; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+ id 8AF4686495; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:30:30 +0100
+Date: Sun, 15 Jan 2023 12:00:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d4b46bc3c6997e32050b332d7578f0cb289b57be
-X-Git-Newrev: 0fdf20249574b64285979f109bef74eb9cdbf0db
+X-Git-Oldrev: cde8b664b5fef509df74582097b925b899191543
+X-Git-Newrev: 823e3e98671bf70135d526298346a8c72beacd8a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205257.D00CA81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/asus_tinker_rk3288:
- bump Linux to 6.1.2 and U-boot to 2022.10
+Message-Id: <20230220205233.8AF4686495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-asgiref: bump
+ to version 3.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,54 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fdf20249574b64285979f109bef74eb9cdbf0db
+commit: https://git.buildroot.net/buildroot/commit/?id=823e3e98671bf70135d526298346a8c72beacd8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/asus_tinker_rk3288_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/python-asgiref/python-asgiref.hash | 4 ++--
+ package/python-asgiref/python-asgiref.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
-index 02b340a7f1..40f4125880 100644
---- a/configs/asus_tinker_rk3288_defconfig
-+++ b/configs/asus_tinker_rk3288_defconfig
-@@ -3,14 +3,14 @@ BR2_arm=y
- BR2_cortex_a17=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
+index fec707ce02..26d8e78e47 100644
+--- a/package/python-asgiref/python-asgiref.hash
++++ b/package/python-asgiref/python-asgiref.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asgiref/json
+-md5  b3cf42bb1f9191196f9ed1678f9dc106  asgiref-3.5.2.tar.gz
+-sha256  4a29362a6acebe09bf1d6640db38c1dc3d9217c68e6f9f6204d72667fc19a424  asgiref-3.5.2.tar.gz
++md5  562ecd896dcbf5576db8c29cb1881ca4  asgiref-3.6.0.tar.gz
++sha256  9567dfe7bd8d3c8c892227827c41cce860b368104c3431da67a0c5a65a949506  asgiref-3.6.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
+index afc083fb1f..bfd90f10e8 100644
+--- a/package/python-asgiref/python-asgiref.mk
++++ b/package/python-asgiref/python-asgiref.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
-+# Linux headers same as kernel, a 6.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- 
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.2"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+-PYTHON_ASGIREF_VERSION = 3.5.2
++PYTHON_ASGIREF_VERSION = 3.6.0
+ PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
+-PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/1f/35/e7d59b92ceffb1dc62c65156278de378670b46ab2364a3ea7216fe194ba3
++PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/78/2d/797c0537426266d6c9377a2ed6a4ac61e50c2d5b1ab4da101a4b9bfe26e2
+ PYTHON_ASGIREF_SETUP_TYPE = setuptools
+ PYTHON_ASGIREF_LICENSE = BSD-3-Clause
+ PYTHON_ASGIREF_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
