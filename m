@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DC29C46467
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C4A5C46467
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jan 2023 11:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEBC260F98;
-	Sun, 15 Jan 2023 11:23:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEBC260F98
+	by smtp3.osuosl.org (Postfix) with ESMTP id 997D260FA3;
+	Sun, 15 Jan 2023 11:36:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 997D260FA3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cHQJDZk6b3Ym; Sun, 15 Jan 2023 11:23:25 +0000 (UTC)
+	with ESMTP id I4ZzI7uFFlme; Sun, 15 Jan 2023 11:36:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E828160D91;
-	Sun, 15 Jan 2023 11:23:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E828160D91
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E10731BF29F
- for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:21:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE7A260F78;
+	Sun, 15 Jan 2023 11:36:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE7A260F78
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CA3D1BF29F
+ for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:36:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC84C60D91
- for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:21:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC84C60D91
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15613404C9
+ for <buildroot@lists.busybox.net>; Sun, 15 Jan 2023 11:36:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15613404C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DzXKztPQwYmE for <buildroot@lists.busybox.net>;
- Sun, 15 Jan 2023 11:21:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9WMS2sN-yf8Z for <buildroot@lists.busybox.net>;
+ Sun, 15 Jan 2023 11:36:43 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3C7760A9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17218400A4
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B3C7760A9F
- for <buildroot@buildroot.org>; Sun, 15 Jan 2023 11:21:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 17218400A4
+ for <buildroot@buildroot.org>; Sun, 15 Jan 2023 11:36:43 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8AC6B5FFA8;
- Sun, 15 Jan 2023 12:21:10 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id E358D5FF27;
+ Sun, 15 Jan 2023 12:36:36 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 15 Jan 2023 12:21:10 +0100
-Date: Sun, 15 Jan 2023 12:21:10 +0100
+ Sun, 15 Jan 2023 12:36:36 +0100
+Date: Sun, 15 Jan 2023 12:36:36 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230115112110.GK199036@scaer>
-References: <20230109062656.2966277-1-james.hilliard1@gmail.com>
+Message-ID: <20230115113636.GL199036@scaer>
+References: <20230111012105.4075174-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230109062656.2966277-1-james.hilliard1@gmail.com>
+In-Reply-To: <20230111012105.4075174-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1673781674;
- bh=Im7WWAzUowXpiTJCZxZ64KKK2GyV81WytvWXCN9mT/s=;
+ d=free.fr; s=smtp-20201208; t=1673782600;
+ bh=VKzyQKXVkP4rJaCCaUS0qjjENgchvjmGG1RN/3ituX0=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=IDaCq4ejJ88wEN56ksZ7kS44m7QhT6SGIEuqlC0c/hU3aUeY16r83J0rv0dfWyTHJ
- l1e2K0smvd5C8k8pccGuZPaYN4Yv2Gf9xj2LZ0az3oFpSyK27NHg+pErm4fQAADOsi
- +cwP3kPlKvw8uekPNE9jVWMYLU4V5tELq0LvUhN7nT3hDCm75xdyijxi6l/egx7fyF
- TotEzoPpSS6bPaWy8nUKZxc3vn9YsR35RnnG2gC7G1VU3DxvYnDijdvtQTEWtQwRCR
- XzL6AYFFHmyeaQkkXLLMa9C4ppLOd2hA9ZMZNeoYg8Fh+oRgTs9VQMm8PMJh73oLv9
- rqnQ0p6UX3JNA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=aZsNxLQdmR/i+we0hlUyRLKqL/j/CgNjK/5ECY+f43gG80Z/ynglKpTyR8FP+x936
+ 45LiB0wuYQ/00lF0FVNFEVaAFeUT6iHMIm3XEuoZq+V41DzHHwNrMLKRe8bxJbb4Jz
+ fAFzTjCsJAa9LqhPWY4b4bUMgvJzS+X7WbyithK+orGveAMVwQho1R18u8dkuGtJMP
+ DTcqG6fLSKHo56LXwCSQEAgz1FIMJkcf+72jWXPSP9D6Rz8QckfSwYyQ2kinhLx8od
+ jAXPTTPcohU8OJ32jsnwC6+2sWaD3/ENSrztA1m+63c06C4jP/z4k0jMKDSVMJYRfq
+ 0EhBoFaG5+EJg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=IDaCq4ej
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-traitlets: bump to
- version 5.8.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=aZsNxLQd
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/python-cryptography: bump to
+ version 39.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,8 +76,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -85,50 +84,49 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 James, All,
 
-On 2023-01-08 23:26 -0700, James Hilliard spake thusly:
+On 2023-01-10 18:21 -0700, James Hilliard spake thusly:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Applied to master, thanks.
-
-This is the last I applied from your patch-spree. I'll revert to
-replying to individual other patches, now. Thanks!
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-traitlets/python-traitlets.hash | 4 ++--
->  package/python-traitlets/python-traitlets.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> Changes v1 -> v2:
+>   - fix vendored archive hash
+> ---
+>  package/python-cryptography/python-cryptography.hash | 2 +-
+>  package/python-cryptography/python-cryptography.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
-> index 0c68e04518..80fa8d4d44 100644
-> --- a/package/python-traitlets/python-traitlets.hash
-> +++ b/package/python-traitlets/python-traitlets.hash
+> diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+> index a01c8810e3..3f2204eeb1 100644
+> --- a/package/python-cryptography/python-cryptography.hash
+> +++ b/package/python-cryptography/python-cryptography.hash
 > @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/traitlets/json
-> -md5  74ad03a0c8dd45d5621b12e0be0ab38f  traitlets-5.7.1.tar.gz
-> -sha256  fde8f62c05204ead43c2c1b9389cfc85befa7f54acb5da28529d671175bb4108  traitlets-5.7.1.tar.gz
-> +md5  95b21c721316bbc06922df9d97af5158  traitlets-5.8.0.tar.gz
-> +sha256  6cc57d6dc28c85d5365961726ffd19b538739347749e13ebe34e03323a0e8f84  traitlets-5.8.0.tar.gz
+>  # Locally calculated after vendoring
+> -sha256  2abbeb6d42e8844de036bf2e0d78a42feeee1d57ebf29a07684490f98bdcab37  cryptography-38.0.4.tar.gz
+> +sha256  2d00e023261719f85caf360ee061d37ee27654a0344d1376441c8a29ea3bac86  cryptography-39.0.0.tar.gz
 >  # Locally computed sha256 checksums
->  sha256  3dcd47086529bf178cf7d10f35a8c188a1e9710391acecceef700898a4cf099b  COPYING.md
-> diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-> index 8cda56817f..7054557a48 100644
-> --- a/package/python-traitlets/python-traitlets.mk
-> +++ b/package/python-traitlets/python-traitlets.mk
+>  sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+>  sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+> diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+> index 4254fa3557..6868ff4633 100644
+> --- a/package/python-cryptography/python-cryptography.mk
+> +++ b/package/python-cryptography/python-cryptography.mk
 > @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_TRAITLETS_VERSION = 5.7.1
-> +PYTHON_TRAITLETS_VERSION = 5.8.0
->  PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
-> -PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/0b/db/9adbbb2bef9a43ecfa4f1cbcec1d662adade10262328a4b7ef65effc6341
-> +PYTHON_TRAITLETS_SITE = https://files.pythonhosted.org/packages/56/48/0eb99357330a02974d537be8e4096bc58cfac1089e3153570119ccea7a40
->  PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
->  PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
->  PYTHON_TRAITLETS_SETUP_TYPE = pep517
+> -PYTHON_CRYPTOGRAPHY_VERSION = 38.0.4
+> +PYTHON_CRYPTOGRAPHY_VERSION = 39.0.0
+>  PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+> -PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/e3/3f/41186b1f2fd86a542d399175f6b8e43f82cd4dfa51235a0b030a042b811a
+> +PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/12/e3/c46c274cf466b24e5d44df5d5cd31a31ff23e57f074a2bb30931a8c9b01a
+>  PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+>  PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+>  PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 > -- 
 > 2.34.1
 > 
