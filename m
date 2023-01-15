@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0697C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E0FCC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:20:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5ECA8610D9;
-	Tue, 21 Feb 2023 02:19:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ECA8610D9
+	by smtp3.osuosl.org (Postfix) with ESMTP id E22F37011F;
+	Tue, 21 Feb 2023 02:20:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E22F37011F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Grbh1Ij5D1DY; Tue, 21 Feb 2023 02:19:51 +0000 (UTC)
+	with ESMTP id IoGqAtmz4wDI; Tue, 21 Feb 2023 02:20:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E15D70266;
-	Tue, 21 Feb 2023 02:19:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E15D70266
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5A2B51BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11A697035F;
+	Tue, 21 Feb 2023 02:20:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11A697035F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 63DC91BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E89A417FF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E89A417FF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 810E86FB7E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 810E86FB7E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id afbBIIDG2hUz for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pblq4h-8MD41 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC110417F4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC110417F4
+ by smtp3.osuosl.org (Postfix) with ESMTP id B536B6FB76
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B536B6FB76
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC16581979; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
-From: Arnout Vandecappelle <arnout@mind.be>
+ id B29278648F; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 9 Feb 2023 21:32:43 +0100
+Date: Sun, 15 Jan 2023 12:00:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 554d79f5cc01c20d886cbe9c676195159947f066
-X-Git-Newrev: b1bceb4b51581e0c7b3953181ee3a2c31f0094f6
+X-Git-Oldrev: 3f8d6264d79f6645ce4f2bbf0b76a919db29fcb5
+X-Git-Newrev: 0cd7fadb263decfa5b4566f6ad71c02914726146
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205256.DC16581979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/pipewire-media-session: bump to version 0.4.2
+Message-Id: <20230220205233.B29278648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-autobahn: bump
+ to version 22.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,98 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1bceb4b51581e0c7b3953181ee3a2c31f0094f6
+commit: https://git.buildroot.net/buildroot/commit/?id=0cd7fadb263decfa5b4566f6ad71c02914726146
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Explicitly set installed_tests to disabled.
-
-Drop patch which is now upstream.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...eson-remove-session-managers-option-check.patch | 36 ----------------------
- .../pipewire-media-session.hash                    |  2 +-
- .../pipewire-media-session.mk                      |  7 +++--
- 3 files changed, 6 insertions(+), 39 deletions(-)
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pipewire-media-session/0001-meson-remove-session-managers-option-check.patch b/package/pipewire-media-session/0001-meson-remove-session-managers-option-check.patch
-deleted file mode 100644
-index fc1d25edb3..0000000000
---- a/package/pipewire-media-session/0001-meson-remove-session-managers-option-check.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 1923c97fbd0b3d8cacdb72386886f860c818bccf Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Wed, 10 Nov 2021 08:54:06 -0700
--Subject: [PATCH] meson: remove session-managers option check.
--
--This option no longer exists and causes a build failure if building
--with the systemd system service enabled.
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/pipewire/media-session/-/merge_requests/24]
-----
-- systemd/system/meson.build | 10 ++++------
-- 1 file changed, 4 insertions(+), 6 deletions(-)
--
--diff --git a/systemd/system/meson.build b/systemd/system/meson.build
--index ab0d49064..0e9885b0f 100644
----- a/systemd/system/meson.build
--+++ b/systemd/system/meson.build
--@@ -4,9 +4,7 @@ systemd_system_services_dir = systemd.get_variable(pkgconfig: 'systemdsystemunit
-- systemd_config = configuration_data()
-- systemd_config.set('PW_MEDIA_SESSION_BINARY', media_session_bindir / 'pipewire-media-session')
-- 
---if get_option('session-managers').contains('media-session')
---  configure_file(input : 'pipewire-media-session.service.in',
---               output : 'pipewire-media-session.service',
---               configuration : systemd_config,
---               install_dir : systemd_system_services_dir)
---endif
--+configure_file(input : 'pipewire-media-session.service.in',
--+             output : 'pipewire-media-session.service',
--+             configuration : systemd_config,
--+             install_dir : systemd_system_services_dir)
---- 
--2.25.1
--
-diff --git a/package/pipewire-media-session/pipewire-media-session.hash b/package/pipewire-media-session/pipewire-media-session.hash
-index e335fd8913..e6b176eea2 100644
---- a/package/pipewire-media-session/pipewire-media-session.hash
-+++ b/package/pipewire-media-session/pipewire-media-session.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  ebdf9f8e389896fdc4b58da5f909afce18441b4b53d5b4f2104dd53586ea8681  media-session-0.4.1.tar.bz2
-+sha256  26e21852e0834a4418b40eae342ac5178dfe40342b9c5afe204d43ef8aafa14e  media-session-0.4.2.tar.bz2
- sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
- sha256  77b9c867237ef919e33c0fdbcf22ab84b1cf24a63f9431ec68759026b658c994  LICENSE
-diff --git a/package/pipewire-media-session/pipewire-media-session.mk b/package/pipewire-media-session/pipewire-media-session.mk
-index d349fd7454..cc7317f925 100644
---- a/package/pipewire-media-session/pipewire-media-session.mk
-+++ b/package/pipewire-media-session/pipewire-media-session.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 4ae158be03..f9b68dcb22 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  2921fb2bdea60b4cb36ccec367625995  autobahn-22.7.1.tar.gz
+-sha256  8b462ea2e6aad6b4dc0ed45fb800b6cbfeb0325e7fe6983907f122f2be4a1fe9  autobahn-22.7.1.tar.gz
++md5  98d8451385ccd8ece2d2fac023c61a19  autobahn-22.12.1.tar.gz
++sha256  43b4e8b1aeaeb20a0cc0a81572e613dc958057c0ab248a7d6b41b2763270f925  autobahn-22.12.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index fb3a7b84de..4c14151960 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PIPEWIRE_MEDIA_SESSION_VERSION = 0.4.1
-+PIPEWIRE_MEDIA_SESSION_VERSION = 0.4.2
- PIPEWIRE_MEDIA_SESSION_SOURCE = media-session-$(PIPEWIRE_MEDIA_SESSION_VERSION).tar.bz2
- PIPEWIRE_MEDIA_SESSION_SITE = https://gitlab.freedesktop.org/pipewire/media-session/-/archive/$(PIPEWIRE_MEDIA_SESSION_VERSION)
- PIPEWIRE_MEDIA_SESSION_LICENSE = MIT
-@@ -17,7 +17,10 @@ PIPEWIRE_MEDIA_SESSION_DEPENDENCIES = \
- 	pipewire \
- 	$(TARGET_NLS_DEPENDENCIES)
- 
--PIPEWIRE_MEDIA_SESSION_CONF_OPTS = -Ddocs=disabled -Dtests=disabled
-+PIPEWIRE_MEDIA_SESSION_CONF_OPTS = \
-+	-Ddocs=disabled \
-+	-Dtests=disabled \
-+	-Dinstalled_tests=disabled
- 
- PIPEWIRE_MEDIA_SESSION_MODULE_SETS_LIST = alsa
- 
+-PYTHON_AUTOBAHN_VERSION = 22.7.1
++PYTHON_AUTOBAHN_VERSION = 22.12.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/c5/b5/c92d6640fd55cbbdd97c05800ab534d84197f7b485d89a9df981ab67cce3
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/a8/6f/78b90951f263232e468439627f31a2c0846e36043c95af96dc527a4aeee6
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
