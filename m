@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEFDAC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BEDAC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7406983294;
-	Mon, 20 Feb 2023 23:17:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7406983294
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB14983300;
+	Mon, 20 Feb 2023 23:17:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB14983300
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7KnJE8C3-qR5; Mon, 20 Feb 2023 23:17:08 +0000 (UTC)
+	with ESMTP id Me9tgA8pR6AP; Mon, 20 Feb 2023 23:17:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84204832E7;
-	Mon, 20 Feb 2023 23:17:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84204832E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D78683323;
+	Mon, 20 Feb 2023 23:17:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D78683323
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E856D1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DE8051BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5CD1441591
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CD1441591
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0401B41742
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0401B41742
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UFbqxO-CYUQn for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+ with ESMTP id w3Oryc669ICj for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABD9F41742
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABD9F41742
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42A8141740
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42A8141740
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A954986495; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+ id 312EA8648F; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 22:17:27 +0100
+Date: Sun, 15 Jan 2023 12:00:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 52afc0b3b504c9616b3875dcdf67ab7be41455f5
-X-Git-Newrev: dce238f045f25d75b31681ea56ea5b9c668912dd
+X-Git-Oldrev: 3030baaa67dcafcc9f2c0802278c51f2ea016936
+X-Git-Newrev: d31937ab88097a9ed3a34bf05fa07278abed77ae
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205232.A954986495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ipmitool: use the
- standard github helper
+Message-Id: <20230220205234.312EA8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-cython: bump to
+ version 0.29.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dce238f045f25d75b31681ea56ea5b9c668912dd
+commit: https://git.buildroot.net/buildroot/commit/?id=d31937ab88097a9ed3a34bf05fa07278abed77ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ipmitool/ipmitool.hash | 2 +-
- package/ipmitool/ipmitool.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ipmitool/ipmitool.hash b/package/ipmitool/ipmitool.hash
-index bb0b0d80b0..c3b298e3ba 100644
---- a/package/ipmitool/ipmitool.hash
-+++ b/package/ipmitool/ipmitool.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c  IPMITOOL_1_8_19.tar.gz
-+sha256  48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c  ipmitool-1_8_19.tar.gz
- sha256  b7e2382a8be43b5f6cb092f2d2bda163bf1a1938be9300f821a845cbcd535f56  COPYING
-diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
-index b9f60d8151..5e34434a03 100644
---- a/package/ipmitool/ipmitool.mk
-+++ b/package/ipmitool/ipmitool.mk
-@@ -5,8 +5,7 @@
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 3ed9fb56a1..e7e86264d2 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5  91c36ea86c00adcc5c1c11cf48b733c0  Cython-0.29.32.tar.gz
+-sha256  8733cf4758b79304f2a4e39ebfac5e92341bce47bcceb26c1254398b2f8c1af7  Cython-0.29.32.tar.gz
++md5  bd42c555cb2298b8a94fa8de7ee679ba  Cython-0.29.33.tar.gz
++sha256  5040764c4a4d2ce964a395da24f0d1ae58144995dab92c6b96f44c3f4d72286a  Cython-0.29.33.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 9a90f6198e..b11d75b33d 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- IPMITOOL_VERSION = 1_8_19
--IPMITOOL_SOURCE = IPMITOOL_$(IPMITOOL_VERSION).tar.gz
--IPMITOOL_SITE = https://github.com/ipmitool/ipmitool/archive/refs/tags
-+IPMITOOL_SITE = $(call github,ipmitool,ipmitool,IPMITOOL_$(IPMITOOL_VERSION))
- IPMITOOL_LICENSE = BSD-3-Clause
- IPMITOOL_LICENSE_FILES = COPYING
- IPMITOOL_CPE_ID_VENDOR = ipmitool_project
+-PYTHON_CYTHON_VERSION = 0.29.32
++PYTHON_CYTHON_VERSION = 0.29.33
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/4c/76/1e41fbb365ad20b6efab2e61b0f4751518444c953b390f9b2d36cf97eea0
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/dc/f6/e8e302f9942cbebede88b1a0c33d0be3a738c3ac37abae87254d58ffc51c
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
