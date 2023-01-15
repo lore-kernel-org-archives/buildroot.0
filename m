@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353B9C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56DFBC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D63704F5EB;
-	Tue, 21 Feb 2023 00:49:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D63704F5EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id D810F4F611;
+	Tue, 21 Feb 2023 00:49:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D810F4F611
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R41ffzc3hiNJ; Tue, 21 Feb 2023 00:49:35 +0000 (UTC)
+	with ESMTP id FEWTf1AkDCaQ; Tue, 21 Feb 2023 00:49:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4CDE4F5F2;
-	Tue, 21 Feb 2023 00:49:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4CDE4F5F2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 55BED1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97B784F603;
+	Tue, 21 Feb 2023 00:49:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97B784F603
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D67571BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6004417C2
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6004417C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 539766FB58
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 539766FB58
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hZT_w6Olvady for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pihRCaWBGr8x for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03E9641802
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03E9641802
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84F736FB7F
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84F736FB7F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 003C28648F; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+ id 7EE7F8648F; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Feb 2023 21:30:05 +0100
+Date: Sun, 15 Jan 2023 12:00:57 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 631d0289fe880952d9bedf37cc10b043c70c1482
-X-Git-Newrev: d40cab45e21cd1c66bfffa911b1310e29c321486
+X-Git-Oldrev: 9b88d0f7b9775db73da55504f3968bc0ff25687a
+X-Git-Newrev: 194c0247e796e9d1b3c6682b3cf37395d05f95d9
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.003C28648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/opencv3: bump to
- version 3.4.19
+Message-Id: <20230220205234.7EE7F8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-hatchling: bump
+ to version 1.12.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d40cab45e21cd1c66bfffa911b1310e29c321486
+commit: https://git.buildroot.net/buildroot/commit/?id=194c0247e796e9d1b3c6682b3cf37395d05f95d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This bump will fix the following build failure with gcc >= 12:
-
-/home/thomas/autobuild/instance-1/output-1/build/opencv3-3.4.17/modules/core/src/persistence_base64.cpp: In function 'bool base64::base64_valid(const uint8_t*, size_t, size_t)':
-/home/thomas/autobuild/instance-1/output-1/build/opencv3-3.4.17/modules/core/src/persistence_base64.cpp:167:31: error: comparing the result of pointer addition '(src + ((sizetype)off))' and NULL [-Werror=address]
-  167 |     if (src == 0 || src + off == 0)
-      |                     ~~~~~~~~~~^~~~
-cc1plus: some warnings being treated as errors
-
-Update hash of LICENSE file (update in year:
-https://github.com/opencv/opencv/commit/f6fe5c07f61eb0bc934672200b2bfd453f2fc41d)
-
-https://github.com/opencv/opencv/wiki/ChangeLog#version3419
-
-Fixes:
- - http://autobuild.buildroot.org/results/cb9c120c15c8042e6919858d6885c1cc4d996c0c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/opencv3/opencv3.hash | 4 ++--
- package/opencv3/opencv3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-hatchling/python-hatchling.hash | 4 ++--
+ package/python-hatchling/python-hatchling.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
-index 30308188aa..3d6fd2ed8a 100644
---- a/package/opencv3/opencv3.hash
-+++ b/package/opencv3/opencv3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1353eec67849aadb20df71d8bae18b83708e18fc5da080fe5efeabb1e99b2ee8  opencv3-3.4.17.tar.gz
--sha256  9076d3d934839a2f8e7bfe549abda6faea4751f1edd6e9460ff703559890ad5f  LICENSE
-+sha256  9b913e74299ce4416a5c94000da577c592bf670fd53bad16220eb115a0821529  opencv3-3.4.19.tar.gz
-+sha256  c1fed9cd2f557ba23a1b37a21e2c90629d1a60bdb61e92d0e79369bb6fca3390  LICENSE
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 8e4c90786e..29fb246e65 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-hatchling/python-hatchling.hash b/package/python-hatchling/python-hatchling.hash
+index 41d7be977e..154c1fdcac 100644
+--- a/package/python-hatchling/python-hatchling.hash
++++ b/package/python-hatchling/python-hatchling.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/hatchling/json
+-md5  e06cc65ac646f9b01df5406aa1f97022  hatchling-1.11.1.tar.gz
+-sha256  9f84361f70cf3a7ab9543b0c3ecc64211ed2ba8a606a71eb6a473c1c9b08e1d0  hatchling-1.11.1.tar.gz
++md5  5a6e2fd0c877feea7e71b9d72bbdbed9  hatchling-1.12.2.tar.gz
++sha256  8a6d719d96653a0f3901072b12710c9c3cc934f9061b443775c6789b45333495  hatchling-1.12.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7f143a8127ad4873862d70854b5bd2abd0085aa73e64fd2b08704a3b9f5c07fc  LICENSE.txt
+diff --git a/package/python-hatchling/python-hatchling.mk b/package/python-hatchling/python-hatchling.mk
+index 13155a20a4..61aa1a6c23 100644
+--- a/package/python-hatchling/python-hatchling.mk
++++ b/package/python-hatchling/python-hatchling.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--OPENCV3_VERSION = 3.4.17
-+OPENCV3_VERSION = 3.4.19
- OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
- OPENCV3_INSTALL_STAGING = YES
- OPENCV3_LICENSE = BSD-3-Clause
+-PYTHON_HATCHLING_VERSION = 1.11.1
++PYTHON_HATCHLING_VERSION = 1.12.2
+ PYTHON_HATCHLING_SOURCE = hatchling-$(PYTHON_HATCHLING_VERSION).tar.gz
+-PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/24/20/3e21d2bc57229822ac9fb9b314d7892c16f829f34a0eb247c55fc11e09a8
++PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/f5/ea/3ed5a7ecdd8a8f7e84cffd3b5ec24279a09ce2694c218ff922c35c6f1a77
+ PYTHON_HATCHLING_LICENSE = MIT
+ PYTHON_HATCHLING_LICENSE_FILES = LICENSE.txt
+ PYTHON_HATCHLING_SETUP_TYPE = pep517
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
