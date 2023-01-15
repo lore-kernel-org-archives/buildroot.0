@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C8A6C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:54:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86783C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF6ED60B0E;
-	Tue, 21 Feb 2023 00:54:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF6ED60B0E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40E8E61084;
+	Tue, 21 Feb 2023 00:54:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40E8E61084
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5Qxsg7hy24h4; Tue, 21 Feb 2023 00:54:10 +0000 (UTC)
+	with ESMTP id GG32lRmE08Sd; Tue, 21 Feb 2023 00:54:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2F1760B78;
-	Tue, 21 Feb 2023 00:54:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2F1760B78
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1206F1BF8C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 664CD61073;
+	Tue, 21 Feb 2023 00:54:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 664CD61073
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EFBD1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 093B341802
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 093B341802
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58CE96FB91
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58CE96FB91
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZzuXblEtUesS for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9URSNxv4Ftfh for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C77241818
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C77241818
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9556F6FB88
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9556F6FB88
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C75286496; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 93DCD8648F; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:15:39 +0100
+Date: Sun, 15 Jan 2023 12:16:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: df50979e7bf0ff7f0b8a2461ed7ae9dbd103d836
-X-Git-Newrev: efdcc850be902de2596412dbf0f142c3f679ce35
+X-Git-Oldrev: 9af376f6da76c7c8b38e01d9d3cae04948d5f758
+X-Git-Newrev: 8c2d7e401296e4b17ba9c6d521eca62eaff15159
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205300.1C75286496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libmdbx: bump version
- to 0.11.14 "Sergey Kapitsa"
+Message-Id: <20230220205235.93DCD8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-scapy: bump to
+ version 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,99 +58,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6469684843435793531=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6469684843435793531==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=efdcc850be902de2596412dbf0f142c3f679ce35
+commit: https://git.buildroot.net/buildroot/commit/?id=8c2d7e401296e4b17ba9c6d521eca62eaff15159
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is stable bugfix release of libmdbx,
-in memory of Sergey Kapitsa (Russian physicist and demographer) on his 95th birthday.
-
-It is reasonable to backport this patch to all applicable releases/branches of Buildroot,
-at least this release fixes build for sh4 arch.
-
-Release notes for v0.11.14
---------------------------
-
-Fixes:
-
- - backport: Refined the `__cold`/`__hot` macros to avoid the
-   `error: inlining failed in call to ‘always_inline FOO(...)’: target specific option mismatch`
-   issue during build using GCC >10.x for SH4 arch.
-   Actually this is GCC' SH4-backend bug which triggered by the `__attribute__((__optimize__("Os")))`
-   used in conjunction with the `__attribute__((__cold__))`.
-
- - backport: Fixed `SIGSEGV` or an erroneous call to `free()` in case where
-   errors occur when reopening by `mdbx_env_open()` of a previously used
-   environment.
-
- - backport: Fixed `cursor_put_nochecklen()` internals for case when dupsort'ed named subDb
-   contains a single key with multiple values (aka duplicates), which are replaced
-   with a single value by put-operation with the `MDBX_UPSERT+MDBX_ALLDUPS` flags.
-   In this case, the database becomes completely empty, without any pages.
-   However exactly this condition was not considered and thus wasn't handled correctly.
-   See [issue#8](https://gitflic.ru/project/erthink/libmdbx/issue/8) for more information.
-
- - backport: Fixed extra assertion inside `override_meta()`, which could
-   lead to false-positive failing of the assertion in a debug builds during
-   DB recovery and/or auto-rollback.
-
-Minors:
-
- - backport: Fixed typos.
- - backport: Refined `const` and `noexcept` for few C++ API methods.
- - backport: Resolve false-posirive `used uninitialized` warning from GCC >10.x
-   while build for SH4 arch.
- - backport: Fixed insignificant typo of `||` inside `#if` byte-order condition.
-
-The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libmdbx/libmdbx.hash | 2 +-
- package/libmdbx/libmdbx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-scapy/python-scapy.hash | 4 ++--
+ package/python-scapy/python-scapy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index e3fb309461..b1a2891b91 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
+diff --git a/package/python-scapy/python-scapy.hash b/package/python-scapy/python-scapy.hash
+index 4dccffd39a..7b21e6cb30 100644
+--- a/package/python-scapy/python-scapy.hash
++++ b/package/python-scapy/python-scapy.hash
 @@ -1,5 +1,5 @@
- # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
--sha256  9449fd357119e19902363ab90134d82c9a713b706394c2a1389b5bb4787b5164  libmdbx-amalgamated-0.11.13.tar.xz
-+sha256  97b03965b5b61727dc4232c50ccb174c632470a3d24438b3c52315bef6fb4033  libmdbx-amalgamated-0.11.14.tar.xz
- 
- # Locally calculated
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index a139e062f6..5e7995f8c8 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/scapy/json
+-md5  54072af118e9291b6c7898b4ea87cdaf  scapy-2.4.5.tar.gz
+-sha256  bc707e3604784496b6665a9e5b2a69c36cc9fb032af4864b29051531b24c8593  scapy-2.4.5.tar.gz
++md5  f546b1c82c2c98e0dae1a436219dd042  scapy-2.5.0.tar.gz
++sha256  5b260c2b754fd8d409ba83ee7aee294ecdbb2c235f9f78fe90bc11cb6e5debc2  scapy-2.5.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/python-scapy/python-scapy.mk b/package/python-scapy/python-scapy.mk
+index 9cf17db671..a2c6cc6872 100644
+--- a/package/python-scapy/python-scapy.mk
++++ b/package/python-scapy/python-scapy.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBMDBX_VERSION = 0.11.13
-+LIBMDBX_VERSION = 0.11.14
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
- LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-
---===============6469684843435793531==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_SCAPY_VERSION = 2.4.5
++PYTHON_SCAPY_VERSION = 2.5.0
+ PYTHON_SCAPY_SOURCE = scapy-$(PYTHON_SCAPY_VERSION).tar.gz
+-PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/85/47/c919432ca258f354bb2c1e645623f891603f185bfc7563d4a21f6432e7ed
++PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/67/a1/2a60d5b6f0fed297dd0c0311c887d5e8a30ba1250506585b897e5a662f4c
+ PYTHON_SCAPY_SETUP_TYPE = setuptools
+ PYTHON_SCAPY_LICENSE = GPL-2.0
+ PYTHON_SCAPY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6469684843435793531==--
