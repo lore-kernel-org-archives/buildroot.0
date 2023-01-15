@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29827C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE0EC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:17:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C71D482D14;
-	Mon, 20 Feb 2023 23:17:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C71D482D14
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BC2882521;
+	Mon, 20 Feb 2023 23:17:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BC2882521
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id avItUH_rk6Ir; Mon, 20 Feb 2023 23:17:46 +0000 (UTC)
+	with ESMTP id DJ2Yn768H2-x; Mon, 20 Feb 2023 23:17:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 076B083386;
-	Mon, 20 Feb 2023 23:17:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 076B083386
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 15AC01BF94D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6493383336;
+	Mon, 20 Feb 2023 23:17:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6493383336
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E182E1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A23A761383
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A23A761383
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1EE7241740
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EE7241740
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DraGVeZUJFGU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OdS2GtrW5Pdb for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABD9D612B4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABD9D612B4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65B2D41592
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65B2D41592
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9DB48648F; Mon, 20 Feb 2023 20:52:14 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 613E28648F; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 23 Dec 2022 10:29:07 +0100
+Date: Sun, 15 Jan 2023 12:00:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 183de9155b138497783717383418544da00e0da7
-X-Git-Newrev: de584a78a37b99b99a4011020a17b3ae99f002c7
+X-Git-Oldrev: fc457e3d320bea68eac1bab8bd759c1ba0f7b40b
+X-Git-Newrev: 203cf2d8b7e9668ba51dc8a72636896e656e7e1b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205214.A9DB48648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dovecot: bump version
- to 2.3.20
+Message-Id: <20230220205234.613E28648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-django: bump to
+ version 4.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de584a78a37b99b99a4011020a17b3ae99f002c7
+commit: https://git.buildroot.net/buildroot/commit/?id=203cf2d8b7e9668ba51dc8a72636896e656e7e1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2022-December/000479.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 124f834dca..7036df57a8 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 40526bc0ff..1d3035bb98 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
 @@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  db5abcd87d7309659ea6b45b2cb6ee9c5f97486b2b719a5dd05a759e1f6a5c51  dovecot-2.3.19.1.tar.gz
-+sha256  caa832eb968148abdf35ee9d0f534b779fa732c0ce4a913d9ab8c3469b218552  dovecot-2.3.20.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index e28f500b7b..4b17784f93 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  02e2222d064d800f37c6a0ba78ce87f3  Django-4.1.4.tar.gz
+-sha256  d38a4e108d2386cb9637da66a82dc8d0733caede4c83c4afdbda78af4214211b  Django-4.1.4.tar.gz
++md5  6b6a47d7478ead15b0a0835841c433dc  Django-4.1.5.tar.gz
++sha256  ff56ebd7ead0fd5dbe06fe157b0024a7aaea2e0593bb3785fb594cf94dad58ef  Django-4.1.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 96ec53f82c..e08de68954 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19.1
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).20
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-PYTHON_DJANGO_VERSION = 4.1.4
++PYTHON_DJANGO_VERSION = 4.1.5
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/de/7d/ca5d224f7d345b0defd0a57c6deb0c6115fbe5304e4d9571f728b617f1a3
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/41/c8/b3c469353f9d1b7f0e99b45520582b891da02cd87408bc867affa6e039a3
+ 
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
