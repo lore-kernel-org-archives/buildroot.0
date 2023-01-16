@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39D8EC46467
-	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 21:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A73CC46467
+	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 21:25:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF10F60E72;
-	Mon, 16 Jan 2023 21:24:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF10F60E72
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA2B760E4D;
+	Mon, 16 Jan 2023 21:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA2B760E4D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5J33ZnJvDMrZ; Mon, 16 Jan 2023 21:24:56 +0000 (UTC)
+	with ESMTP id hqOUkfikP36k; Mon, 16 Jan 2023 21:25:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D310960E64;
-	Mon, 16 Jan 2023 21:24:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D310960E64
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B71D11BF20D
- for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 21:24:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A57460E64;
+	Mon, 16 Jan 2023 21:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A57460E64
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 68B9B1BF20D
+ for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 21:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EA8A410AF
- for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 21:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EA8A410AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51C06404F6
+ for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 21:25:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51C06404F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7KG79QHCF2PA for <buildroot@lists.busybox.net>;
- Mon, 16 Jan 2023 21:24:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C16D9409E3
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C16D9409E3
- for <buildroot@buildroot.org>; Mon, 16 Jan 2023 21:24:50 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 4BF735FFAB;
- Mon, 16 Jan 2023 22:24:44 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 16 Jan 2023 22:24:44 +0100
-Date: Mon, 16 Jan 2023 22:24:44 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: yegorslists@googlemail.com
-Message-ID: <20230116212444.GH2770@scaer>
-References: <20230116080513.21407-1-yegorslists@googlemail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230116080513.21407-1-yegorslists@googlemail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1673904288;
- bh=VW67qqOYd2HTJUF1Ic54wKYS4jmGu/bI+jZ12Sk8p2k=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cHUPZTSENY7LHbVkBr9AaqyIuYAfPpAV9oEFDTB17Fdj2++3LMjpfdABj/mUwtxj3
- ClzE35UA7szbDNb6HTKK18HWJEJPjE5kCalM8NfF4IJD5bQlPdMFNcoPqIOK2+k+Ne
- EfhZMWKCXLpYApLPKWFwNUPI32R8UfeRzSp/w2dH0TFkoAH4kOlj0S0B8esiKQC6tT
- qeLL81DNDjLJ+IFF/at3WnheDxI6a6nAnO8441qV1WlQospMNENgdjPukKa5Z4Hmt2
- Mk6456aH/t1JuikzViMd2In0IvxNvnstrxoJjiyKGrhAf3XpGNN3ss/QmjYog2+58M
- eSc5INoq8aCYQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=cHUPZTSE
-Subject: Re: [Buildroot] [PATCH] package/util-linux: add an option to enable
- irqtop
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pgfiTmerUxu1 for <buildroot@lists.busybox.net>;
+ Mon, 16 Jan 2023 21:25:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 91D77402FE
+ for <buildroot@buildroot.org>; Mon, 16 Jan 2023 21:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91D77402FE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 778ED87BE1; Mon, 16 Jan 2023 21:25:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 16 Jan 2023 22:25:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ac5ecaf86809a999d68d851c2200705a8f10a7b0
+X-Git-Newrev: ccaf9f316544f0c8c3546b70568ed48c265e801b
+X-Patchwork-Hint: ignore
+Message-Id: <20230116212551.778ED87BE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/frr: bump to version 8.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,91 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yegor, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ccaf9f316544f0c8c3546b70568ed48c265e801b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-01-16 09:05 +0100, yegorslists--- via buildroot spake thusly:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> irqtop is an IRQ monitoring tool.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/util-linux/Config.in     | 7 +++++++
->  package/util-linux/util-linux.mk | 1 +
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index 917f1bc2b4..c7e4d2d8bc 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -161,6 +161,13 @@ config BR2_PACKAGE_UTIL_LINUX_IPCS
->  	help
->  	  Show information on IPC facilities
->  
-> +config BR2_PACKAGE_UTIL_LINUX_IRQTOP
-> +	bool "irqtop"
-> +	depends on BR2_USE_MMU # libsmartcols
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+Changes since 8.3.1:
 
-I was about to apply this, but I am a bit conflicted... Building irqtop
-defaults to 'yes' for linux systems, when --disable-irqtop is not
-specified (unless I misread util-linux' configure.ac).
+ - https://frrouting.org/release/8.4
+ - https://frrouting.org/release/8.4.1
 
-So, today we are providing neither --enable-irqtop nor --disable-irqtop,
-which means that it is in practice always built.
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/frr/frr.hash | 2 +-
+ package/frr/frr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-But with your change, it means that now it is by default disabled.
-
-So I wanted to add 'default y' for legacy reasons, but we have no other
-option in util-linux that defaults to 'y', so it would have been a bit
-odd to do so...
-
-Or maybe I am just too tired to think straight...
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
-> +	help
-> +	  Show information on IRQs
-> +
->  config BR2_PACKAGE_UTIL_LINUX_KILL
->  	bool "kill"
->  	help
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index b53b94ec31..87ec3c19d7 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -136,6 +136,7 @@ UTIL_LINUX_CONF_OPTS += \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCMK),--enable-ipcmk,--disable-ipcmk) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
-> +	$(if $(BR2_PACKAGE_UTIL_LINUX_IRQTOP),--enable-irqtop,--disable-irqtop) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
-> -- 
-> 2.17.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/frr/frr.hash b/package/frr/frr.hash
+index 87ade19c16..836f130b93 100644
+--- a/package/frr/frr.hash
++++ b/package/frr/frr.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9b0430d01f8da2d780ac5e41de2cf4e53abff0ed06a0cc75d745f4b1f29e5b9e  frr-8.3.1.tar.gz
++sha256  8a6b0e0fa1e89493ba84cf176674e55c7a814821fd02a7188095b76c37c3935f  frr-8.4.2.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index 72c46ba4aa..abae784c40 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FRR_VERSION = 8.3.1
++FRR_VERSION = 8.4.2
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0
+ FRR_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
