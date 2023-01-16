@@ -4,46 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41F6EC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:58:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FB5DC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3E7C61129;
-	Tue, 21 Feb 2023 00:58:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3E7C61129
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5409B61110;
+	Tue, 21 Feb 2023 00:58:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5409B61110
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u6__ruwP75RC; Tue, 21 Feb 2023 00:58:23 +0000 (UTC)
+	with ESMTP id gPXUDbXeOTH7; Tue, 21 Feb 2023 00:58:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFCFB60A47;
-	Tue, 21 Feb 2023 00:58:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFCFB60A47
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 94E371BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D0BF61143;
+	Tue, 21 Feb 2023 00:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D0BF61143
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1662D1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22FCE41826
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22FCE41826
+ by smtp3.osuosl.org (Postfix) with ESMTP id F00CE6FAEC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F00CE6FAEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u98Lev0PR-GW for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4vB0zm7hrLjc for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4513B41809
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4513B41809
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B5546FB90
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B5546FB90
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35B1E86495; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+ id 2BDE3828C8; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 22:46:35 +0100
+Date: Mon, 16 Jan 2023 21:16:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b259dac22a4179494e9947c485b6b171d8fef52e
-X-Git-Newrev: 3481674ee36fe9fa695e2e6c255bf02b5ab380b0
+X-Git-Oldrev: 8eef1e1488bce0732dbce137baa4f506a29dd13f
+X-Git-Newrev: af8200a4c3543403ca653f4064f6649a052440e1
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205301.35B1E86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dmalloc: don't use SSP
+Message-Id: <20230220205236.2BDE3828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sscep: requires des
+ support in openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,103 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3481674ee36fe9fa695e2e6c255bf02b5ab380b0
+commit: https://git.buildroot.net/buildroot/commit/?id=af8200a4c3543403ca653f4064f6649a052440e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-dmalloc directly calls into $(LD) to generate a shared library our of
-the static one.
+Enable des in openssl to fix the following build failure raised
+since the addition of the package in commit
+72fa60dc102679f51b228336ec38f5af78ff7646:
 
-To detect what command it should run, ./configure tries various
-incantations of ld with various command line options until one does not
-fail. One of those is (basically):
-    $(LD) --whole-archive -o contest.o.t contest.a
+src/sscep.c: In function 'get_cipher_alg':
+src/sscep.c:119:32: warning: implicit declaration of function 'EVP_des_ede3_cbc'; did you mean 'NID_des_ede3_cbc'? [-Wimplicit-function-declaration]
+  119 |                         return EVP_des_ede3_cbc();
+      |                                ^~~~~~~~~~~~~~~~
+      |                                NID_des_ede3_cbc
 
-This makes ./configure conclude what the command to link a shared
-library in the Makefile should be, and thus stores that in a variable:
-    shlinkargs='$(LD) --whole-archive -o $@'
+Fixes:
+ - http://autobuild.buildroot.net/results/34bd76e8e5e7df0db31918d610a0dadf531f369d
 
-... which is then AC_SUBST()ed into Makefile.in with a rule like:
-
-    $(SHLIB): $(LIBRARY)
-        @shlinkargs@ $(LIRARY)
-
-which once substiuted, gives:
-
-    $(SHLIB): $(LIBRARY)
-        $(LD) --whole-archive -o $@ $(LIRARY)
-
-However, when SSP is enabled, the __stack_chk_fail_local and co symbols
-are provided by additional libraries or object files, and that is the
-responsibility of gcc to pass those when linking. But as dmalloc
-directly calls ld, it misses those.
-
-Changing dmalloc to use $(CC) is not trivial, however.
-
-First, we can't pass LD=$(TARGET_CC), otherwise the whole package
-explodes [0]: indeed --whole-archive is unknown to gcc, so it must be
-passed as -Wl,--whole archive instead. So we'd need to add a new test
-that uses $(CC), like so:
-    $(CC) -Wl,--whole-archive -o contest.o.t contest.a
-
-However, in that case, gcc does pass additional libs/objs (like, for
-eample, the SSP ones) to the linker. But then those are also included
-in the whole-archive section. This causes the linker to add all the
-symbols form those libs/objs, even those not needed for SSP; on some
-archs, like PPC, that may require floating point symbols (__muldiv3 et
-al.) which are in another library, and thus the linker can't find them.
-
-The proper solution wouild be to add -Wl,--no-whole-archive, but that
-would have to be added _after_ the library we want to link, i.e.e we
-should be able to evntually run:
-
-    $(CC) -Wl,--whole-archive -o $@ $(LIRARY) -Wl,--no-whole-archive
-
-That would require that we introduce a new variable that is added
-_after_ the $(LIBRARY), e.g. @shlinkargs_post@ or so...
-
-This is a bigger endeavour than we want to pursue...
-
-Since dmalloc is a debugging utility, it is not supposed to go into
-production builds, and during debugging, it would not be surprising that
-it needs to poke around arrays to debug them.
-
-So, we go the easier route: disable SSP altogether.
-
-[0] with lots of nice colors, but that's not the point, is it?
-
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dmalloc/dmalloc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/sscep/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index 6b90f810b2..5bd6691725 100644
---- a/package/dmalloc/dmalloc.mk
-+++ b/package/dmalloc/dmalloc.mk
-@@ -14,6 +14,13 @@ DMALLOC_LICENSE_FILES = LICENSE.txt
- DMALLOC_INSTALL_STAGING = YES
- DMALLOC_CFLAGS = $(TARGET_CFLAGS)
- 
-+# dmalloc uses $(LD) to link, and thus misses the object files or libs that
-+# are needed to provide the __stack_chk_fail_local and co. symbols. Changing
-+# to use $(CC) is really more complex that we'd like. Since dmalloc is
-+# involved in debugging memory allocation, it is not expected to be a
-+# production library, so we do not care that much that it has SSP.
-+DMALLOC_CFLAGS += -fno-stack-protector
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- DMALLOC_CONF_OPTS += --disable-shlib
- else
+diff --git a/package/sscep/Config.in b/package/sscep/Config.in
+index 2e5e29f7c8..549c65274b 100644
+--- a/package/sscep/Config.in
++++ b/package/sscep/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SSCEP
+ 	bool "sscep"
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  SSCEP is a client-only implementation of the SCEP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
