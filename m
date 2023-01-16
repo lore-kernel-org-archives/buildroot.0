@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36946C63797
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 09:40:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EC12C63797
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 09:41:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5337607F4;
-	Tue, 17 Jan 2023 09:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5337607F4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3531E81424;
+	Tue, 17 Jan 2023 09:41:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3531E81424
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UkDjoHZ993JV; Tue, 17 Jan 2023 09:40:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DO5v1d5Ge3H7; Tue, 17 Jan 2023 09:41:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 226FF606F5;
-	Tue, 17 Jan 2023 09:40:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 226FF606F5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D655E1BF2B1
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FDC58138F;
+	Tue, 17 Jan 2023 09:41:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FDC58138F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D92E1BF95F
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B23BF40414
+ by smtp1.osuosl.org (Postfix) with ESMTP id EDA6D813BE
  for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B23BF40414
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDA6D813BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NjubOcmiyWCp for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hpC_46z0EpYM for <buildroot@lists.busybox.net>;
  Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F18D340153
- for <buildroot@buildroot.org>; Tue, 17 Jan 2023 09:40:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F18D340153
+ by smtp1.osuosl.org (Postfix) with ESMTP id 152778138B
+ for <buildroot@buildroot.org>; Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 152778138B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD6F287C39; Tue, 17 Jan 2023 09:40:49 +0000 (UTC)
+ id 03E8087C3D; Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Jan 2023 15:40:10 +0100
+Date: Mon, 16 Jan 2023 15:44:32 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: aab29257d470ace3b223c8bb3978c5683c4d1a3e
-X-Git-Newrev: 352f5bd46c46f0e9146a93f2221d05b2d28ba6e2
+X-Git-Oldrev: 8fb5d033329f51e8a07ff252a25daa7239d80c6a
+X-Git-Newrev: b1eb1e7d92b57637df04e5ecc233175abd40d17e
 X-Patchwork-Hint: ignore
-Message-Id: <20230117094049.DD6F287C39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/janus-gateway:
- add libcurl optional dependency
+Message-Id: <20230117094050.03E8087C3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/lpeg: add missing
+ LPEG_LICENSE_FILES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=352f5bd46c46f0e9146a93f2221d05b2d28ba6e2
+commit: https://git.buildroot.net/buildroot/commit/?id=b1eb1e7d92b57637df04e5ecc233175abd40d17e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-libcurl is an optional dependency which is enabled by default since at
-least version 0.0.9 and
-https://github.com/meetecho/janus-gateway/commit/ca9c0a86f975f88fbdd791af3cb4f8986883c1c2
+The lpeg.html file declares the licensing terms at its bottom, so it
+should work as a license file.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 60cf07079b78d4c4bb495fd18cb2a145a4cb3635)
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+[yann.morin.1998@free.fr: use LPEG_SUBDIR]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 52afc0b3b504c9616b3875dcdf67ab7be41455f5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/janus-gateway/janus-gateway.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/lpeg/lpeg.hash | 2 ++
+ package/lpeg/lpeg.mk   | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 9a74350b2c..149b2e86c4 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -128,6 +128,13 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-websockets
- endif
+diff --git a/package/lpeg/lpeg.hash b/package/lpeg/lpeg.hash
+index 1ccaf242c4..cb995bde2c 100644
+--- a/package/lpeg/lpeg.hash
++++ b/package/lpeg/lpeg.hash
+@@ -1,2 +1,4 @@
+ # computed by luarocks/buildroot
+ sha256  e0d0d687897f06588558168eeb1902ac41a11edd1b58f1aa61b99d0ea0abbfbc  lpeg-1.0.2-1.src.rock
++# computed locally
++sha256  2b80a8cce793e008ba433e5e0184f20aca4a67ec741439fafd86a874a6a91c49  lpeg-1.0.2/lpeg.html
+diff --git a/package/lpeg/lpeg.mk b/package/lpeg/lpeg.mk
+index cdb2e81a5f..7326e59e01 100644
+--- a/package/lpeg/lpeg.mk
++++ b/package/lpeg/lpeg.mk
+@@ -6,5 +6,6 @@
  
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+JANUS_GATEWAY_DEPENDENCIES += libcurl
-+JANUS_GATEWAY_CONF_OPTS += --enable-turn-rest-api
-+else
-+JANUS_GATEWAY_CONF_OPTS += --disable-turn-rest-api
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- JANUS_GATEWAY_DEPENDENCIES += systemd
- JANUS_GATEWAY_CONF_OPTS += --enable-systemd-sockets
+ LPEG_VERSION = 1.0.2-1
+ LPEG_LICENSE = MIT
++LPEG_LICENSE_FILES = $(LPEG_SUBDIR)/lpeg.html
+ 
+ $(eval $(luarocks-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
