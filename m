@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2764BC54EBE
-	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 20:19:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F4B0C46467
+	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 20:19:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0F4860E30;
-	Mon, 16 Jan 2023 20:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0F4860E30
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1937260FC8;
+	Mon, 16 Jan 2023 20:19:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1937260FC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Iua-1xI704w2; Mon, 16 Jan 2023 20:19:31 +0000 (UTC)
+	with ESMTP id 6f7C3us1Q0sN; Mon, 16 Jan 2023 20:19:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7BD760E87;
-	Mon, 16 Jan 2023 20:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7BD760E87
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E15D61BF3C6
- for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 20:19:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C6BC60E87;
+	Mon, 16 Jan 2023 20:19:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C6BC60E87
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A3C0E1BF3C6
+ for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 20:19:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE078405AC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BA9A60E3F
  for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 20:19:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE078405AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BA9A60E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BlWuEhsAAxwu for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f2JywyMdOA-U for <buildroot@lists.busybox.net>;
  Mon, 16 Jan 2023 20:19:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DCDC0403BE
+ by smtp3.osuosl.org (Postfix) with ESMTP id C46ED60E22
  for <buildroot@buildroot.org>; Mon, 16 Jan 2023 20:19:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCDC0403BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C46ED60E22
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC82D87BC2; Mon, 16 Jan 2023 20:19:15 +0000 (UTC)
+ id B45FD87BC0; Mon, 16 Jan 2023 20:19:15 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 16 Jan 2023 21:18:31 +0100
+Date: Mon, 16 Jan 2023 21:12:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af8200a4c3543403ca653f4064f6649a052440e1
-X-Git-Newrev: 04fc02a8b7a70bc0afe17fe0625cfd2b4c55b776
+X-Git-Oldrev: 627c38caf07de44e26b187e40f0cfed9e2e6591a
+X-Git-Newrev: 8eef1e1488bce0732dbce137baa4f506a29dd13f
 X-Patchwork-Hint: ignore
-Message-Id: <20230116201915.CC82D87BC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sscep: fix linking error
+Message-Id: <20230116201915.B45FD87BC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/z3: bump to version 4.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,91 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04fc02a8b7a70bc0afe17fe0625cfd2b4c55b776
+commit: https://git.buildroot.net/buildroot/commit/?id=8eef1e1488bce0732dbce137baa4f506a29dd13f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Apply the patch to fix the following build failure raised since the
-addition of the package in commit
-72fa60dc102679f51b228336ec38f5af78ff7646:
+For change log since v4.11.2, see:
+- https://github.com/Z3Prover/z3/releases/tag/z3-4.12.0
 
-uclibc/sysroot/usr/lib/libc.a(getopt.os): in function `__GI_getopt':
-getopt.c:(.text+0x598): multiple definition of `getopt'; src/getopt.o:getopt.c:(.text+0x0): first defined here
-
-The patch has been submitted and accepted upstream to address this issue.
-
-Fixes:
- - http://autobuild.buildroot.net/results/844c7dd79f69ef2ea8f293bb73a2d4b7533aa97c
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[yann.morin.1998@free.fr: do an actual bacport]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sscep/0001-Fix-getopt-linking-error.patch | 57 +++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ package/z3/z3.hash | 2 +-
+ package/z3/z3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sscep/0001-Fix-getopt-linking-error.patch b/package/sscep/0001-Fix-getopt-linking-error.patch
-new file mode 100644
-index 0000000000..9427593cc3
---- /dev/null
-+++ b/package/sscep/0001-Fix-getopt-linking-error.patch
-@@ -0,0 +1,57 @@
-+From 65561b53344b834877e6b63320066a1e26038a3c Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Fri, 9 Dec 2022 18:18:27 +0100
-+Subject: [PATCH] Fix getopt linking error
-+
-+The buildroot project, to which the sscep application was added, has
-+configurations that raise the following linking error:
-+buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld: buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os):(.data+0x8): multiple definition of `optind'; src/getopt.o:(.data+0x0): first defined here
-+buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld: buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os): in function `__GI_getopt':
-+getopt.c:(.text+0x5a4): multiple definition of `getopt'; src/getopt.o:getopt.c:(.text+0x0): first defined here
-+buildroot/output/host/lib/gcc/arc-buildroot-linux-uclibc/11.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld: buildroot/output/host/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getopt.os): in function `getopt_long':
-+getopt.c:(.text+0x5b0): multiple definition of `getopt_long'; src/getopt.o:getopt.c:(.text+0x128): first defined here
-+collect2: error: ld returned 1 exit status
-+make[2]: *** [Makefile:507: sscep] Error 1
-+make[1]: *** [package/pkg-generic.mk:293: buildroot/output/build/sscep-0.10.0/.stamp_built] Error 2
-+
-+The patch re-added a check that commit
-+81f56f635259b9 ("Replaced GNU getopt by a BSD licensed alternative")
-+removed.
-+
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+[yann.morin.1998@free.fr: make that an actual backport]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ src/getopt.c | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+
-+diff --git a/src/getopt.c b/src/getopt.c
-+index eae36a6..0109406 100644
-+--- a/src/getopt.c
-++++ b/src/getopt.c
-+@@ -31,6 +31,16 @@
-+ #include <stddef.h>
-+ #include <string.h>
-+ 
-++#define GETOPT_INTERFACE_VERSION 2
-++#if !defined _LIBC && defined __GLIBC__ && __GLIBC__ >= 2
-++# include <gnu-versions.h>
-++# if _GNU_GETOPT_INTERFACE_VERSION == GETOPT_INTERFACE_VERSION
-++#  define ELIDE_CODE
-++# endif
-++#endif
-++
-++#ifndef ELIDE_CODE
-++
-+ char* optarg;
-+ int optopt;
-+ /* The variable optind [...] shall be initialized to 1 by the system. */
-+@@ -226,3 +236,5 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
-+   ++optind;
-+   return retval;
-+ }
-++
-++#endif	/* Not ELIDE_CODE.  */
-+-- 
-+2.25.1
-+
+diff --git a/package/z3/z3.hash b/package/z3/z3.hash
+index d38c5f1971..517e2f4923 100644
+--- a/package/z3/z3.hash
++++ b/package/z3/z3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e3a82431b95412408a9c994466fad7252135c8ed3f719c986cd75c8c5f234c7e  z3-4.11.2.tar.gz
++sha256  5f575f0a3950760436217da1cc1a714569b6d4f664a75bb6775876328cf0a580  z3-4.12.0.tar.gz
+ sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
+diff --git a/package/z3/z3.mk b/package/z3/z3.mk
+index 2252e05395..ecd79325dc 100644
+--- a/package/z3/z3.mk
++++ b/package/z3/z3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-Z3_VERSION = 4.11.2
++Z3_VERSION = 4.12.0
+ Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
+ Z3_LICENSE = MIT
+ Z3_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
