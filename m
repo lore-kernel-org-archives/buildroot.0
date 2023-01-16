@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72410C61DB3
-	for <buildroot@archiver.kernel.org>; Fri, 13 Jan 2023 06:26:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE334C63797
+	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 00:54:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA47941827;
-	Fri, 13 Jan 2023 06:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA47941827
+	by smtp4.osuosl.org (Postfix) with ESMTP id EECEC408EE;
+	Mon, 16 Jan 2023 00:54:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EECEC408EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AHaNJGh0KJ7H; Fri, 13 Jan 2023 06:26:54 +0000 (UTC)
+	with ESMTP id OlxISHEHBzDd; Mon, 16 Jan 2023 00:54:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB3DB417B9;
-	Fri, 13 Jan 2023 06:26:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB3DB417B9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4D2D51BF83B
- for <buildroot@lists.busybox.net>; Fri, 13 Jan 2023 06:26:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BF3F408EC;
+	Mon, 16 Jan 2023 00:54:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BF3F408EC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 835031BF870
+ for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 00:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26C5C417B9
- for <buildroot@lists.busybox.net>; Fri, 13 Jan 2023 06:26:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26C5C417B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5EFFB4014E
+ for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 00:54:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EFFB4014E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id awsbW0X66lfU for <buildroot@lists.busybox.net>;
- Fri, 13 Jan 2023 06:26:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pcJXI1gUeX87 for <buildroot@lists.busybox.net>;
+ Mon, 16 Jan 2023 00:54:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F1334172A
- for <buildroot@uclibc.org>; Fri, 13 Jan 2023 06:26:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F1334172A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CA8F40002
+ for <buildroot@uclibc.org>; Mon, 16 Jan 2023 00:54:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CA8F40002
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 1717E86F99; Fri, 13 Jan 2023 06:26:50 +0000 (UTC)
+ id 36DEB870BF; Mon, 16 Jan 2023 00:54:26 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 13 Jan 2023 06:26:49 +0000
+Date: Mon, 16 Jan 2023 00:54:25 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2022.11
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: br015@umbiko.net
+X-Bugzilla-Who: glscene2010@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15246-163-HF3K8wRLfn@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-15246-163-mVIOmtEZMu@https.bugs.busybox.net/>
 In-Reply-To: <bug-15246-163@https.bugs.busybox.net/>
 References: <bug-15246-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -80,18 +80,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15246
 
---- Comment #4 from Andreas Ziegler <br015@umbiko.net> ---
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL)/board/my_company/my_board/pc_x86_bios_kernel4.19.269_defconfig"
-                   This is not correct ^^^
+--- Comment #5 from Andrei Cherniaev <glscene2010@gmail.com> ---
+Created attachment 9461
+  --> https://bugs.busybox.net/attachment.cgi?id=9461&action=edit
+good buildroot and kernel configs for x86
 
-The external tree is referenced by $(BR2_EXTERNAL_XYZZY_PATH), where XYZZY is
-the name you specified in external.desc. You need to edit this file before
-setting up your project with 
-
-  $ make BR2_EXTERNAL= ... pc_x86_bios_defconfig,
-
-because this variable is transferred to your .config; check the first section
-of the file.
+This is working config with kernel 4.19.269 (based on pc_x86_64_bios_defconfig)
 
 -- 
 You are receiving this mail because:
