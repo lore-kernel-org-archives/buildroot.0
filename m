@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEC77C54EBE
-	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 21:26:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C0EBC54EBE
+	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 21:26:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6226240B9D;
-	Mon, 16 Jan 2023 21:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6226240B9D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2237F40BA4;
+	Mon, 16 Jan 2023 21:26:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2237F40BA4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4V4xgqbf0Hto; Mon, 16 Jan 2023 21:26:11 +0000 (UTC)
+	with ESMTP id dfasuaMUdEjY; Mon, 16 Jan 2023 21:26:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CAEC404F6;
-	Mon, 16 Jan 2023 21:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CAEC404F6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4986A1BF956
- for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 21:26:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50EC8404F6;
+	Mon, 16 Jan 2023 21:26:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50EC8404F6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 16FC41BF20D
+ for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 21:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25C6060E64
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5201410AF
  for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 21:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25C6060E64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5201410AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5yXaH25yAjZP for <buildroot@lists.busybox.net>;
- Mon, 16 Jan 2023 21:26:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JxFQ9asCINMo for <buildroot@lists.busybox.net>;
+ Mon, 16 Jan 2023 21:26:04 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B86760E79
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B86760E79
- for <buildroot@buildroot.org>; Mon, 16 Jan 2023 21:26:08 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id B4F6F5FF67;
- Mon, 16 Jan 2023 22:26:01 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 16 Jan 2023 22:26:01 +0100
-Date: Mon, 16 Jan 2023 22:26:01 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20230116212601.GI2770@scaer>
-References: <20230116070838.4011964-1-troglobit@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF09410A1
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2AF09410A1
+ for <buildroot@buildroot.org>; Mon, 16 Jan 2023 21:26:03 +0000 (UTC)
+Received: from 91-153-34-153.elisa-laajakaista.fi ([91.153.34.153] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1pHWzP-00A8th-RE; Mon, 16 Jan 2023 22:25:59 +0100
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 37155160;
+ Mon, 16 Jan 2023 21:25:58 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Mon, 16 Jan 2023 23:25:58 +0200
+Message-Id: <20230116212558.2182684-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230116070838.4011964-1-troglobit@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1673904366;
- bh=ix0G+O07jZ5pVRxXoHE2jVTCQcITdIv8mukaUXJ8I24=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=BL5Xeu8PGfVnaSTR9J+FeTU+SO59WN/TcTcrg8KCe1mScLbvnm//4nu+NiW05KO+b
- aRlElwzTv245fglsCGBItsLmk0L26wSIp0JEiKrMLpmjcfCJCPFZBQm51HpoEe/c+4
- uE64T9iL8jKknw+3e9dEMO7FqvzgrHhtiVW9VBogRbFVeh/pUbfe1wSH0zo4rYci9n
- RUzydU7ijRNNgGWXpSBRrr3Yyug3BbRFuo5ZH4v61UklyWkMo4iu6ipImQMQ0YyOC4
- 0sND3CzwguGnk79BS+3W38CtumUqXR9kc0Y5LLVvkFtn3lkToBq4eRUg+vR+rgeT7y
- L9kELR825ksWQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BL5Xeu8P
-Subject: Re: [Buildroot] [PATCH 1/1] package/frr: bump to version 8.4.2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=66WcYKd2/9H28n7UEJiO5YmCR/9FcX8PXEJoW+Z0h18=; b=f2CI87sdkMb3TAMrlmrg5KZw7p
+ gsLE9BPTbpXvtBJLZUwQrkjMpPEzdgnGnGx21bXtf+pNIMrFJGatsj1D8WwJELAPGTHWqzRS/l13t
+ 35Lop2FAAbv9vpuEgOc2UnJBAcW0Hvo4r5OCAPh6bKRX7N9wnAbvV2xzSRwJngiUURmmCN3s3EooI
+ wqMP+5LVsPCYMmn4DVzqgUXdvwS88SrG1aOdZyi/7oGyiPKsZerib6bnHImNKSgGCY5NGp4pQtOY/
+ 01QrCdH5xGq5uuhbya/uli6zZ2xa89zvZKxXcpUvoOXUzrER72vTIjSI+Ne8B/JikqIm9PllRtqc1
+ 03LQIWow==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=f2CI87sd
+Subject: [Buildroot] [PATCH 1/1] package/bubblewrap: bump to version 0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,69 +76,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>, buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Joachim, All,
+This version contains a few minor fixes, provides better error messages,
+and includes a new option to set the size of created tmpfs volumes.
+Release notes:
 
-On 2023-01-16 08:08 +0100, Joachim Wiberg spake thusly:
-> Changes since 8.3.1:
-> 
->  - https://frrouting.org/release/8.4
->  - https://frrouting.org/release/8.4.1
-> 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+  https://github.com/containers/bubblewrap/releases/tag/v0.7.0
 
-Applied to master, thanks.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/bubblewrap/bubblewrap.hash | 4 ++--
+ package/bubblewrap/bubblewrap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/frr/frr.hash | 2 +-
->  package/frr/frr.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/frr/frr.hash b/package/frr/frr.hash
-> index 87ade19c16..836f130b93 100644
-> --- a/package/frr/frr.hash
-> +++ b/package/frr/frr.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  9b0430d01f8da2d780ac5e41de2cf4e53abff0ed06a0cc75d745f4b1f29e5b9e  frr-8.3.1.tar.gz
-> +sha256  8a6b0e0fa1e89493ba84cf176674e55c7a814821fd02a7188095b76c37c3935f  frr-8.4.2.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-> index 72c46ba4aa..abae784c40 100644
-> --- a/package/frr/frr.mk
-> +++ b/package/frr/frr.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -FRR_VERSION = 8.3.1
-> +FRR_VERSION = 8.4.2
->  FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
->  FRR_LICENSE = GPL-2.0
->  FRR_LICENSE_FILES = COPYING
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
+index 98fafc3679..0475f8882a 100644
+--- a/package/bubblewrap/bubblewrap.hash
++++ b/package/bubblewrap/bubblewrap.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/containers/bubblewrap/releases/tag/v0.6.2
+-sha256  8a0ec802d1b3e956c5bb0a40a81c9ce0b055a31bf30a8efa547433603b8af20b  bubblewrap-0.6.2.tar.xz
++# From https://github.com/containers/bubblewrap/releases/tag/v0.7.0
++sha256  764ab7100bd037ea53d440d362e099d7a425966bc62d1f00ab26b8fbb882a9dc  bubblewrap-0.7.0.tar.xz
+ 
+ # Hash for license files:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
+index 91864d2b76..658e6e113c 100644
+--- a/package/bubblewrap/bubblewrap.mk
++++ b/package/bubblewrap/bubblewrap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUBBLEWRAP_VERSION = 0.6.2
++BUBBLEWRAP_VERSION = 0.7.0
+ BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
+ BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
+ BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
