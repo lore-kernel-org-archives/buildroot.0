@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E748C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97784C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:58:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5D3061106;
-	Tue, 21 Feb 2023 00:57:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5D3061106
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46B6061099;
+	Tue, 21 Feb 2023 00:58:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46B6061099
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uvHYXNzIzZMI; Tue, 21 Feb 2023 00:57:57 +0000 (UTC)
+	with ESMTP id 0_W_wLluJTVN; Tue, 21 Feb 2023 00:58:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9ADB61135;
-	Tue, 21 Feb 2023 00:57:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9ADB61135
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 851E61BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69C05610ED;
+	Tue, 21 Feb 2023 00:58:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69C05610ED
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 06D471BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 239E241828
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 239E241828
+ by smtp3.osuosl.org (Postfix) with ESMTP id E81BA6FB9A
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E81BA6FB9A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HwPPBtdlL3BJ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GtbHIFhqMxnj for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B395414E7
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B395414E7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30A9C6FB83
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30A9C6FB83
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BB188648F; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+ id 1D7398648F; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 22:45:26 +0100
+Date: Mon, 16 Jan 2023 21:12:17 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f16b97eab1859395ddd74f557d33ef8a1f2447d6
-X-Git-Newrev: a7bd0fdb88a15b15d4b41bdc82a37cf35ab2b268
+X-Git-Oldrev: 627c38caf07de44e26b187e40f0cfed9e2e6591a
+X-Git-Newrev: 8eef1e1488bce0732dbce137baa4f506a29dd13f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205301.1BB188648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dmalloc: convert
- existing patch to git format
+Message-Id: <20230220205236.1D7398648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/z3: bump to version
+ 4.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,175 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7bd0fdb88a15b15d4b41bdc82a37cf35ab2b268
+commit: https://git.buildroot.net/buildroot/commit/?id=8eef1e1488bce0732dbce137baa4f506a29dd13f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We're going to add more patches, so let's cleanup our historical
-baggage...
+For change log since v4.11.2, see:
+- https://github.com/Z3Prover/z3/releases/tag/z3-4.12.0
 
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../dmalloc/0001-configure-fix-build-on-mips.patch | 90 ++++++++++++++++++++++
- package/dmalloc/0001-mips.patch                    | 45 -----------
- 2 files changed, 90 insertions(+), 45 deletions(-)
+ package/z3/z3.hash | 2 +-
+ package/z3/z3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dmalloc/0001-configure-fix-build-on-mips.patch b/package/dmalloc/0001-configure-fix-build-on-mips.patch
-new file mode 100644
-index 0000000000..9b1525d0d1
---- /dev/null
-+++ b/package/dmalloc/0001-configure-fix-build-on-mips.patch
-@@ -0,0 +1,90 @@
-+From af6adb3f5f05be4faa88a5aa83296c388c8085e7 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 12:30:10 +0100
-+Subject: [PATCH] configure: fix build on mips
-+
-+This patch is a historical baggage that Buildroot has carried for ages
-+(since 2006), and the reason for it are notentirely clear.
-+
-+Since dmalloc is pretty tricky, and as this patch has not been
-+identified as causing issues, we keep it; we just add the configure.ac
-+patchlet to match the one in configure.
-+
-+As for the title, the original patch was named dmalloc-mips.patch, so
-+presumably it fixes some mips issue; let's title the commit that way.
-+
-+[Fabrice: Updated for 5.6.5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[yann.morin.1998@free.fr: make it a git-formatted patch]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ configure    |  4 ++--
-+ configure.ac |  2 +-
-+ return.h     | 16 +++-------------
-+ 3 files changed, 6 insertions(+), 16 deletions(-)
-+
-+diff --git a/configure b/configure
-+index d52a1e8..c18dfb2 100755
-+--- a/configure
-++++ b/configure
-+@@ -5413,8 +5413,8 @@ fi
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking return.h macros work" >&5
-+ $as_echo_n "checking return.h macros work... " >&6; }
-+ if test "$cross_compiling" = yes; then :
-+-   $as_echo "#define RETURN_MACROS_WORK 0" >>confdefs.h
-+- { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-++   $as_echo "#define RETURN_MACROS_WORK 1" >>confdefs.h
-++ { $as_echo "$as_me:${as_lineno-$LINENO}: result: assume yes (cross-compiling)" >&5
-+ $as_echo "no" >&6; }
-+ 
-+ else
-+diff --git a/configure.ac b/configure.ac
-+index a5295f1..9740fdc 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -705,7 +705,7 @@ int main()
-+ ])],
-+ [ AC_DEFINE(RETURN_MACROS_WORK, 1) AC_MSG_RESULT([yes]) ],
-+ [ AC_DEFINE(RETURN_MACROS_WORK, 0) AC_MSG_RESULT([no]) ],
-+-[ AC_DEFINE(RETURN_MACROS_WORK, 0) AC_MSG_RESULT([no]) ]
-++[ AC_DEFINE(RETURN_MACROS_WORK, 1) AC_MSG_RESULT([assume yes (cross-compiling)]) ]
-+ )
-+ 
-+ ##############################################################################
-+diff --git a/return.h b/return.h
-+index 9d3f5f1..d916c7a 100644
-+--- a/return.h
-++++ b/return.h
-+@@ -117,26 +117,16 @@
-+ /*************************************/
-+ 
-+ /*
-+- * For DEC Mips machines running Ultrix
-++ * For Mips machines running Linux
-+  */
-+ #if __mips
-+ 
-+-/*
-+- * I have no idea how to get inline assembly with the default cc.
-+- * Anyone know how?
-+- */
-+-
-+-#if 0
-+-
-+ /*
-+  * NOTE: we assume here that file is global.
-+  *
-+- * $31 is the frame pointer.  $2 looks to be the return address but maybe
-+- * not consistently.
-++ * $31 is the return address.
-+  */
-+-#define GET_RET_ADDR(file)	asm("sw $2, file")
-+-
-+-#endif
-++#define GET_RET_ADDR(file)	asm("sw $31, %0" : "=m" (file))
-+ 
-+ #endif /* __mips */
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/0001-mips.patch b/package/dmalloc/0001-mips.patch
-deleted file mode 100644
-index 3150d030ec..0000000000
---- a/package/dmalloc/0001-mips.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--[Fabrice: Updated for 5.6.5]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----- a/configure
--+++ b/configure
--@@ -7107,7 +7107,7 @@
-- { $as_echo "$as_me:${as_lineno-$LINENO}: checking return.h macros work" >&5
-- $as_echo_n "checking return.h macros work... " >&6; }
-- if test "$cross_compiling" = yes; then :
---   $as_echo "#define RETURN_MACROS_WORK 0" >>confdefs.h
--+   $as_echo "#define RETURN_MACROS_WORK 1" >>confdefs.h
--  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-- $as_echo "no" >&6; }
-- 
----- a/return.h
--+++ b/return.h
--@@ -106,26 +106,16 @@
-- /*************************************/
-- 
-- /*
--- * For DEC Mips machines running Ultrix
--+ * For Mips machines running Linux
--  */
-- #if __mips
-- 
-- /*
--- * I have no idea how to get inline assembly with the default cc.
--- * Anyone know how?
--- */
---
---#if 0
---
---/*
--  * NOTE: we assume here that file is global.
--  *
--- * $31 is the frame pointer.  $2 looks to be the return address but maybe
--- * not consistently.
--+ * $31 is the return address.
--  */
---#define GET_RET_ADDR(file)	asm("sw $2, file")
---
---#endif
--+#define GET_RET_ADDR(file)	asm("sw $31, %0" : "=m" (file))
-- 
-- #endif /* __mips */
-- 
+diff --git a/package/z3/z3.hash b/package/z3/z3.hash
+index d38c5f1971..517e2f4923 100644
+--- a/package/z3/z3.hash
++++ b/package/z3/z3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e3a82431b95412408a9c994466fad7252135c8ed3f719c986cd75c8c5f234c7e  z3-4.11.2.tar.gz
++sha256  5f575f0a3950760436217da1cc1a714569b6d4f664a75bb6775876328cf0a580  z3-4.12.0.tar.gz
+ sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
+diff --git a/package/z3/z3.mk b/package/z3/z3.mk
+index 2252e05395..ecd79325dc 100644
+--- a/package/z3/z3.mk
++++ b/package/z3/z3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-Z3_VERSION = 4.11.2
++Z3_VERSION = 4.12.0
+ Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
+ Z3_LICENSE = MIT
+ Z3_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
