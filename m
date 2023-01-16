@@ -1,89 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16071C46467
-	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 11:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B9BC54EBE
+	for <buildroot@archiver.kernel.org>; Mon, 16 Jan 2023 12:52:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 729D7404AE;
-	Mon, 16 Jan 2023 11:29:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 729D7404AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89BE060BA2;
+	Mon, 16 Jan 2023 12:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89BE060BA2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PQkfYZWI1d0m; Mon, 16 Jan 2023 11:29:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gnQ-AGVTwMyM; Mon, 16 Jan 2023 12:52:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C4D32403A5;
-	Mon, 16 Jan 2023 11:29:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4D32403A5
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC7C560AD1;
+	Mon, 16 Jan 2023 12:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC7C560AD1
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D44161BF2FB
- for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 11:29:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A015A1BF2F6
+ for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 12:52:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEF638148A
- for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 11:29:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEF638148A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 885AE81465
+ for <buildroot@lists.busybox.net>; Mon, 16 Jan 2023 12:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 885AE81465
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8pVeVPEcp35v for <buildroot@lists.busybox.net>;
- Mon, 16 Jan 2023 11:29:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 798758146F
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 798758146F
- for <buildroot@busybox.net>; Mon, 16 Jan 2023 11:29:52 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- j16-20020a05600c1c1000b003d9ef8c274bso17555261wms.0
- for <buildroot@busybox.net>; Mon, 16 Jan 2023 03:29:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Uwlq+wBShQYtzh9p1567j/S5831yiv4mrtoocfpoW+I=;
- b=JdfbO5Wak0kuF84eGmyvjqBtRHaYBV36WdAsX3E+DmZ8VGrwaF4aJrGFVdhdEBUJVp
- KoTafKjzMLBZxewhiD3cdWcMYo/WsxA4qcGn+zGDouNqJ/gIAQo1R+tryTxlfgnvqN+l
- 6VHtS3NfG2GdPh5mBvAC0PktgggYtEZIeAVgMglWVhF+hHRnsDiMz5yI8jxh4MipPvnn
- swWbPTmo5FOSOHHr8VANKmd1XGT1FIlIsAdA9hslhBpt25QG/W6XEmqp/WCtKVwd6wSY
- oNSLDZ+B8gaoy71OFJgPUTjGAU2LajD8UH5oOh/4OQbQaRrC93oTQRqoNqaa1BE5cORc
- klFQ==
-X-Gm-Message-State: AFqh2koRMgCX4XuJoe+Hn3UPA3zHNcVnKzJcojcGG/khbKdjFYiihtex
- lkN2p+1IWOZvHvM0ks1zMawE1M1/RR4=
-X-Google-Smtp-Source: AMrXdXslLr7Ssr6yquFJdtaXBNYXBcLMdv/dLMS8KrUSTi9YbGMt0yhGFCHUWs5neUmUBdqPc9xkoA==
-X-Received: by 2002:a05:600c:348b:b0:3d1:fcb4:4074 with SMTP id
- a11-20020a05600c348b00b003d1fcb44074mr78232139wmq.22.1673868590671; 
- Mon, 16 Jan 2023 03:29:50 -0800 (PST)
-Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- s7-20020a1cf207000000b003d98438a43asm31853159wmc.34.2023.01.16.03.29.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Jan 2023 03:29:50 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Mon, 16 Jan 2023 12:29:44 +0100
-Message-Id: <20230116112944.5440-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.37.2
+ with ESMTP id y2YRH7bWWtd0 for <buildroot@lists.busybox.net>;
+ Mon, 16 Jan 2023 12:52:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D8C681464
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7D8C681464
+ for <buildroot@buildroot.org>; Mon, 16 Jan 2023 12:52:07 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9551B1BF208;
+ Mon, 16 Jan 2023 12:52:03 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pHOy2-0082Ol-Bd; Mon, 16 Jan 2023 13:52:02 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Heiko Thiery <heiko.thiery@gmail.com>
+References: <20230114104832.12702-1-heiko.thiery@gmail.com>
+ <20230114104832.12702-3-heiko.thiery@gmail.com>
+Date: Mon, 16 Jan 2023 13:52:02 +0100
+In-Reply-To: <20230114104832.12702-3-heiko.thiery@gmail.com> (Heiko Thiery's
+ message of "Sat, 14 Jan 2023 11:48:34 +0100")
+Message-ID: <87sfga4p71.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Uwlq+wBShQYtzh9p1567j/S5831yiv4mrtoocfpoW+I=;
- b=Sw5h2lvdxPzWS+DMLF/WzPMU058JS6L/10zy1faYQUboxIfEpcGWjzEYaKrnPD3qFJ
- 3imEJARkott1Rm0G8C5UZegeaDGgKO6gmRHr9DYuFVY6j9iVx2Bqwd0WvHfW0A9Ib0jT
- 8/bejeCZv0f+uJJmQzIIM6EYAZ0A6VLITLlXSsRtxjxzZgRt3xdu7vRHC7mMGlFPg07C
- HjBc5Ap5+4D+/Gisd7VaAHj5rueg4ZJADu4Ejw/vozk0iGQC6xABkMjtqFQfrzJtnsRI
- DIAlIZx8Hsp3CEQKJlbPyMJVOEp17tFpOHHBlNQXbKOxE9LHBToqkztcfncPVTOdE338
- Esmg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Sw5h2lvd
-Subject: [Buildroot] [PATCH] package/lua-cffi: bump to version 0.2.3
+Subject: Re: [Buildroot] [PATCH 3/4] package/libnetconf2: bump version 2.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,42 +64,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Jan =?utf-8?Q?Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua-cffi/lua-cffi.hash | 2 +-
- package/lua-cffi/lua-cffi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 
-diff --git a/package/lua-cffi/lua-cffi.hash b/package/lua-cffi/lua-cffi.hash
-index e71019993..318f60fef 100644
---- a/package/lua-cffi/lua-cffi.hash
-+++ b/package/lua-cffi/lua-cffi.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  34fb4eea7a0abec2095f08596f604ac01c81b979bead7d2f5cb084b3e2b46cbc  lua-cffi-0.2.2.tar.gz
-+sha256  1d2577a62a843e5e6db35af1b58300d279b4df58eccef5e823441501f960d388  lua-cffi-0.2.3.tar.gz
- sha256  f5653a4d5864a3920ea1e07dacfd646067314be647598f0acaaf685beaa2e396  COPYING.md
-diff --git a/package/lua-cffi/lua-cffi.mk b/package/lua-cffi/lua-cffi.mk
-index ac351f7f9..30427ac34 100644
---- a/package/lua-cffi/lua-cffi.mk
-+++ b/package/lua-cffi/lua-cffi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > ---
+ >  package/sysrepo/sysrepo.hash | 2 +-
+ >  package/sysrepo/sysrepo.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
+ > index 1db33df626..a90d8259bf 100644
+ > --- a/package/sysrepo/sysrepo.hash
+ > +++ b/package/sysrepo/sysrepo.hash
+ > @@ -1,3 +1,3 @@
+ >  # Locally calculated
+ > -sha256  357a50851e4cc052b484b924ed0a5808c29159a7c9d48d9b1b8c42784c4b6917  sysrepo-2.1.64.tar.gz
+ > +sha256  1bc866f13e41ba5e7e4acd52b5c3d42b1a2a1e032775e0a9b094f3265844cd25  sysrepo-2.2.12.tar.gz
+ >  sha256  88f1b7e5c64d2c113e07105aa9c0fb80639b40287565be1c2afd0949df83d826  LICENSE
+ > diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+ > index 0ed27e3cfb..9da8c22ca2 100644
+ > --- a/package/sysrepo/sysrepo.mk
+ > +++ b/package/sysrepo/sysrepo.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
--LUA_CFFI_VERSION = 0.2.2
-+LUA_CFFI_VERSION = 0.2.3
- LUA_CFFI_SITE = $(call github,q66,cffi-lua,v$(LUA_CFFI_VERSION))
- LUA_CFFI_LICENSE = MIT
- LUA_CFFI_LICENSE_FILES = COPYING.md
--- 
-2.37.2
+ > -SYSREPO_VERSION = 2.1.64
+ > +SYSREPO_VERSION = 2.2.12
 
+NIT: This is sysrepo, not libnetconf2.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
