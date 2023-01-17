@@ -1,84 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DEC7C63797
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 07:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B355C3DA78
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 07:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5C8D60AC4;
-	Tue, 17 Jan 2023 07:47:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5C8D60AC4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 01A8381951;
+	Tue, 17 Jan 2023 07:57:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01A8381951
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7YIIhR7v09pM; Tue, 17 Jan 2023 07:47:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 05Nv5ab6GzXx; Tue, 17 Jan 2023 07:57:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C06F60AC0;
-	Tue, 17 Jan 2023 07:47:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C06F60AC0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B8C681E43;
+	Tue, 17 Jan 2023 07:57:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B8C681E43
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 163391BF321
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 07:47:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 60A531BF321
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 07:57:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E42A2417AB
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 07:47:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E42A2417AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3AAE5417AB
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 07:57:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AAE5417AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q6AM4NKAdgNj for <buildroot@lists.busybox.net>;
- Tue, 17 Jan 2023 07:47:51 +0000 (UTC)
+ with ESMTP id rrjtBNerccqP for <buildroot@lists.busybox.net>;
+ Tue, 17 Jan 2023 07:57:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64ABF417A5
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 64ABF417A5
- for <buildroot@buildroot.org>; Tue, 17 Jan 2023 07:47:51 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id b4so24325547edf.0
- for <buildroot@buildroot.org>; Mon, 16 Jan 2023 23:47:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC01C417A5
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com
+ [IPv6:2607:f8b0:4864:20::b35])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CC01C417A5
+ for <buildroot@buildroot.org>; Tue, 17 Jan 2023 07:57:28 +0000 (UTC)
+Received: by mail-yb1-xb35.google.com with SMTP id p188so33026902yba.5
+ for <buildroot@buildroot.org>; Mon, 16 Jan 2023 23:57:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=iDtBXNZK2PNVsRwewsKmXgIjuj8BTwMhcCyPTlNH4Zo=;
- b=4j+94XbMZTT63wJZG2eeq5kmqNPQw9mbmKtXbLEJ5sCEkeMfl4d/n3P5pvaRfBvHVh
- D+ZOR05pvz2ktXJZgmg++Gn+JRJOnCG+Y+Goqtwq6XiZuCu3tnre3QUIQAsCW+IbqYdh
- FtA7Zx5oAlmB0S3GFvIBNNgPnEqR7HuESkoV1YdGoXZ35NXEjPLk/KO8y2Taoo0cFT1r
- v6aGKhSj2twDdsYKybOTqMxTGHPknGe5ihvmollW1DclfVR4jcoJaUxlUu70ej9zVRVR
- ZpJ4bEzVMkTFBxFIXbzZsBdQd/xMr+a1AStqJPsiUMQsawEDGJrXHJoTq29K1BS+Xv/Y
- YJXg==
-X-Gm-Message-State: AFqh2krJAWf8cWUyE2PWnfqdxw9PggYxWlGXaHdHvopzlx7ORyZPbRzu
- PQ+M83Y3xBrCppI+sIH60y12cONKLkk=
-X-Google-Smtp-Source: AMrXdXuTIMw3EBQny/j9SyVb7k80J9WAR7YBHTsIk20sn3lByT4beArIKZ7157oqq8EBprm32Lx/OA==
-X-Received: by 2002:aa7:c30b:0:b0:47c:4479:d60d with SMTP id
- l11-20020aa7c30b000000b0047c4479d60dmr2034864edq.20.1673941668997; 
- Mon, 16 Jan 2023 23:47:48 -0800 (PST)
-Received: from development1.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- e1-20020aa7d7c1000000b0049e388684a9sm216255eds.52.2023.01.16.23.47.48
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Mon, 16 Jan 2023 23:47:48 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Tue, 17 Jan 2023 08:47:42 +0100
-Message-Id: <20230117074742.5295-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.17.0
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=DnkyNZbhJmnOa1CSU1w7m1Mprt+ppXwb9tRD7L1keu8=;
+ b=u/LNmfzDttV4aMhKCsjdkpzh3lfOWGU6CHbFuUo70d3eStLeM1yZBmQ7yhwL73bS6C
+ Y7f2mqVb09sS4ystglxQrRAq0TfYGRP6U5ytbM88NjiOmMYP+ByW+2r/kp1q1C7ZXs3a
+ CK4QQOdLzk71EhuPWnEOLRE84Mp1LpZnaGNJZk56LDkEA2+XtCVXGdk0TjuUr4+oJs0U
+ lGfPW2L3BTXWOZskGXhWW3KCOi02kceCrXvIUA1+ATHYaUd551nXnWDHg3FWcf8yx8uB
+ VNnxAGvwLBYqK7pZBH4nSSQOjbsd/DKIyu5MtmDELofeu7ELzdFTFIBOQFSqCl45VcfQ
+ dCPg==
+X-Gm-Message-State: AFqh2ko34XSYDYvv7IUIiZr/WJUCjnHVogz5zF+HcIsbWHaqcvZH/REQ
+ KPNXHaOWIlfUuEyW9/Z94s4AMKi+arLxlu2LS/3YBXyQpK0=
+X-Google-Smtp-Source: AMrXdXvUyU2O9Lzq8EdHnYZ9Zk18nhOnBuhif0yUAu9ymQOj+GLgNKfm4Zih3RDkfKLfM3hGCCGww6yo+ou5hO54Pew=
+X-Received: by 2002:a25:8287:0:b0:707:103:a56 with SMTP id
+ r7-20020a258287000000b0070701030a56mr261421ybk.466.1673942247543; 
+ Mon, 16 Jan 2023 23:57:27 -0800 (PST)
+MIME-Version: 1.0
+References: <20230116080513.21407-1-yegorslists@googlemail.com>
+ <20230116212444.GH2770@scaer>
+In-Reply-To: <20230116212444.GH2770@scaer>
+Date: Tue, 17 Jan 2023 08:57:16 +0100
+Message-ID: <CAGm1_kuifU41S1+Yr4eEX90AwA7CXnFtDVr+GES2SewO1PmagA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=googlemail.com; s=20210112;
- h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=iDtBXNZK2PNVsRwewsKmXgIjuj8BTwMhcCyPTlNH4Zo=;
- b=IlqOFSE9WBKGhfJXBSNWiJtRYwefMFVx5Jkf7sws/e4uSR2bR8lBPMYDbqEScrPdC8
- dBAmJT1SgyDOdPXj8fgB2AlFt/T4OXH32JMQDTYMo4jw32veYOxDpv2VOAUcwrxzpkTY
- 15njliAY06YiP+aPhU2fuZs83B8V7tKMB6XX5jy9ZsUSZUrqNBSGn9P8iBzFIxRQTzb3
- djs2fg7bt6a4882OrU7/ymFWn8vTkd5k4NXhNKCatKr9JsH/96oTN0eqKBTHFQQDKc+8
- fRK95YvD89umgHiJJGwVl7Z04UQnOYwTFQpzllHcz9bymV4lVCRHUt6vbm3bKOXPe1mS
- urSQ==
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=DnkyNZbhJmnOa1CSU1w7m1Mprt+ppXwb9tRD7L1keu8=;
+ b=jTkcsqakm+hsHnMuXAHifCu8etcNgzZ/454S+NsS7Foi7zgBizo2292JuuQu1Mcu38
+ aj/4ICtp2TDKxXeU50ccaeZuKhN1KQjFAqAksE5rrb3GxvVXW/xWX7zJgMUZq9w/1rWI
+ zcEWM1h/upxebjSQNa6pOyYG/X7YnIlzezMWgZAQHq4OaiWn2mbg3QJtTmXO5Q5Mygc0
+ lz/HAHULOyXINzeJ3GIq8ZrkMJA4lQndWEFw+Gu1TABqY3/dooc3XuJX73FNWmqTePXs
+ H8oFBYf65jumXfQSt9sLEu5/1c6TpYfvkcz1+mLb/38t37vSRSjN2A+ppRSmppi3JRam
+ eUXg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=IlqOFSE9
-Subject: [Buildroot] [PATCH v2] package/util-linux: add an option to enable
+ header.a=rsa-sha256 header.s=20210112 header.b=jTkcsqak
+Subject: Re: [Buildroot] [PATCH] package/util-linux: add an option to enable
  irqtop
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -91,61 +90,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-MIME-Version: 1.0
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Yann, All,
 
-irqtop is an IRQ monitoring tool.
+On Mon, Jan 16, 2023 at 10:24 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Yegor, All,
+>
+> On 2023-01-16 09:05 +0100, yegorslists--- via buildroot spake thusly:
+> > From: Yegor Yefremov <yegorslists@googlemail.com>
+> >
+> > irqtop is an IRQ monitoring tool.
+> >
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> >  package/util-linux/Config.in     | 7 +++++++
+> >  package/util-linux/util-linux.mk | 1 +
+> >  2 files changed, 8 insertions(+)
+> >
+> > diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+> > index 917f1bc2b4..c7e4d2d8bc 100644
+> > --- a/package/util-linux/Config.in
+> > +++ b/package/util-linux/Config.in
+> > @@ -161,6 +161,13 @@ config BR2_PACKAGE_UTIL_LINUX_IPCS
+> >       help
+> >         Show information on IPC facilities
+> >
+> > +config BR2_PACKAGE_UTIL_LINUX_IRQTOP
+> > +     bool "irqtop"
+> > +     depends on BR2_USE_MMU # libsmartcols
+> > +     select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+>
+> I was about to apply this, but I am a bit conflicted... Building irqtop
+> defaults to 'yes' for linux systems, when --disable-irqtop is not
+> specified (unless I misread util-linux' configure.ac).
+>
+> So, today we are providing neither --enable-irqtop nor --disable-irqtop,
+> which means that it is in practice always built.
+>
+> But with your change, it means that now it is by default disabled.
+>
+> So I wanted to add 'default y' for legacy reasons, but we have no other
+> option in util-linux that defaults to 'y', so it would have been a bit
+> odd to do so...
+>
+> Or maybe I am just too tired to think straight...
+>
+> Thoughts?
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes v1 -> v2:
-	- add the missing NCURSES dependency
+irqtop is a rather new tool and it is not listed in the
+BR2_PACKAGE_UTIL_LINUX_BINARIES help text. Perhaps, it is not that
+problematic that it is not enabled by default.
 
- package/util-linux/Config.in     | 8 ++++++++
- package/util-linux/util-linux.mk | 1 +
- 2 files changed, 9 insertions(+)
+I've sent v2 with the added ncurses dependency.
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 917f1bc2b4..b5d8cad15b 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -161,6 +161,14 @@ config BR2_PACKAGE_UTIL_LINUX_IPCS
- 	help
- 	  Show information on IPC facilities
- 
-+config BR2_PACKAGE_UTIL_LINUX_IRQTOP
-+	bool "irqtop"
-+	depends on BR2_USE_MMU # libsmartcols
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	help
-+	  Show information on IRQs
-+
- config BR2_PACKAGE_UTIL_LINUX_KILL
- 	bool "kill"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index b53b94ec31..87ec3c19d7 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -136,6 +136,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCMK),--enable-ipcmk,--disable-ipcmk) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_IRQTOP),--enable-irqtop,--disable-irqtop) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
--- 
-2.17.0
+Regards,
+Yegor
 
+> Regards,
+> Yann E. MORIN.
+>
+> > +     help
+> > +       Show information on IRQs
+> > +
+> >  config BR2_PACKAGE_UTIL_LINUX_KILL
+> >       bool "kill"
+> >       help
+> > diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> > index b53b94ec31..87ec3c19d7 100644
+> > --- a/package/util-linux/util-linux.mk
+> > +++ b/package/util-linux/util-linux.mk
+> > @@ -136,6 +136,7 @@ UTIL_LINUX_CONF_OPTS += \
+> >       $(if $(BR2_PACKAGE_UTIL_LINUX_IPCMK),--enable-ipcmk,--disable-ipcmk) \
+> >       $(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
+> >       $(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
+> > +     $(if $(BR2_PACKAGE_UTIL_LINUX_IRQTOP),--enable-irqtop,--disable-irqtop) \
+> >       $(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
+> >       $(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
+> >       $(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
+> > --
+> > 2.17.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
