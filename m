@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FA14C63797
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 09:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BC93C63797
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 09:35:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0E0A81E91;
-	Tue, 17 Jan 2023 09:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0E0A81E91
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28F9A40198;
+	Tue, 17 Jan 2023 09:35:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28F9A40198
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tpWqR8--7gkr; Tue, 17 Jan 2023 09:35:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rGz7fQ6Eg3rK; Tue, 17 Jan 2023 09:35:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0D0D81A30;
-	Tue, 17 Jan 2023 09:35:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0D0D81A30
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E8AC31BF95E
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:34:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6325940364;
+	Tue, 17 Jan 2023 09:35:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6325940364
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D20301BF2B1
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:34:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFE3D812F5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4713D400BF
  for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:34:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFE3D812F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4713D400BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1elpkajxibCt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m4JuaznKdhmp for <buildroot@lists.busybox.net>;
  Tue, 17 Jan 2023 09:34:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4483881301
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65DA440A6E
  for <buildroot@buildroot.org>; Tue, 17 Jan 2023 09:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4483881301
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65DA440A6E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32FC987C1A; Tue, 17 Jan 2023 09:34:19 +0000 (UTC)
+ id 55ECA87C18; Tue, 17 Jan 2023 09:34:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Jan 2023 15:42:11 +0100
+Date: Tue, 17 Jan 2023 10:24:36 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 71bb1b27ea3bc53138a5fcf1ae08409759f1790f
-X-Git-Newrev: 87d8b2e07bd9d675c22bac0e73fd1b97f1e757d7
+X-Git-Oldrev: b007397e809ee9742196e2caf6c8c32ccb403dbc
+X-Git-Newrev: a6a0b2c08fc08b634509c44f131807c4e675d21a
 X-Patchwork-Hint: ignore
-Message-Id: <20230117093419.32FC987C1A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/lpeg: add missing
- LPEG_LICENSE_FILES
+Message-Id: <20230117093419.55ECA87C18@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/go: explicitly
+ set GOMODCACHE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87d8b2e07bd9d675c22bac0e73fd1b97f1e757d7
+commit: https://git.buildroot.net/buildroot/commit/?id=a6a0b2c08fc08b634509c44f131807c4e675d21a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The lpeg.html file declares the licensing terms at its bottom, so it
-should work as a license file.
+go mod vendor caches downloaded modules to the Go module cache, which
+defaults to $GOPATH/pkg/mod - But can be overridden with the GOMODCACHE
+environment variable:
 
-Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-[yann.morin.1998@free.fr: use LPEG_SUBDIR]
+https://go.dev/ref/mod#module-cache
+
+So explicitly set GOMODCACHE= for reproducibility.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 52afc0b3b504c9616b3875dcdf67ab7be41455f5)
+(cherry picked from commit 162f656884185662d85e5366871284adca87a465)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lpeg/lpeg.hash | 2 ++
- package/lpeg/lpeg.mk   | 1 +
- 2 files changed, 3 insertions(+)
+ package/go/go.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lpeg/lpeg.hash b/package/lpeg/lpeg.hash
-index 1ccaf242c4..cb995bde2c 100644
---- a/package/lpeg/lpeg.hash
-+++ b/package/lpeg/lpeg.hash
-@@ -1,2 +1,4 @@
- # computed by luarocks/buildroot
- sha256  e0d0d687897f06588558168eeb1902ac41a11edd1b58f1aa61b99d0ea0abbfbc  lpeg-1.0.2-1.src.rock
-+# computed locally
-+sha256  2b80a8cce793e008ba433e5e0184f20aca4a67ec741439fafd86a874a6a91c49  lpeg-1.0.2/lpeg.html
-diff --git a/package/lpeg/lpeg.mk b/package/lpeg/lpeg.mk
-index cdb2e81a5f..7326e59e01 100644
---- a/package/lpeg/lpeg.mk
-+++ b/package/lpeg/lpeg.mk
-@@ -6,5 +6,6 @@
- 
- LPEG_VERSION = 1.0.2-1
- LPEG_LICENSE = MIT
-+LPEG_LICENSE_FILES = $(LPEG_SUBDIR)/lpeg.html
- 
- $(eval $(luarocks-package))
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 5de043100d..84c6582afd 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -26,6 +26,7 @@ HOST_GO_COMMON_ENV = \
+ 	GOROOT="$(HOST_GO_ROOT)" \
+ 	GOPATH="$(HOST_GO_GOPATH)" \
+ 	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
++	GOMODCACHE="$(HOST_GO_GOPATH)/pkg/mod" \
+ 	GOPROXY=off \
+ 	PATH=$(BR_PATH) \
+ 	GOBIN= \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
