@@ -1,64 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 911AEC3DA78
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 10:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FAABC63797
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 11:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDEEE606A9;
-	Tue, 17 Jan 2023 10:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDEEE606A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 935B8405AE;
+	Tue, 17 Jan 2023 11:05:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 935B8405AE
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3gmQqPnSq1ao; Tue, 17 Jan 2023 11:05:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 870D4406E0;
+	Tue, 17 Jan 2023 11:05:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 870D4406E0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C33071BF375
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 11:05:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E4246068F
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 11:05:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E4246068F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bmXdzwWBQLNk; Tue, 17 Jan 2023 10:59:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FA9960655;
-	Tue, 17 Jan 2023 10:59:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FA9960655
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89A181BF20D
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 10:59:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 720E18174F
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 10:59:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 720E18174F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3qeslaMdOC58 for <buildroot@lists.busybox.net>;
- Tue, 17 Jan 2023 10:59:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66C6F8149D
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 66C6F8149D
- for <buildroot@busybox.net>; Tue, 17 Jan 2023 10:59:52 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.3])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 086C04402B5;
- Tue, 17 Jan 2023 12:56:07 +0200 (IST)
-To: buildroot@busybox.net
-Date: Tue, 17 Jan 2023 12:59:45 +0200
-Message-Id: <5ad733d655927dd855102810e494becce05f53a4.1673953185.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.39.0
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LZHglzvcnDwP for <buildroot@lists.busybox.net>;
+ Tue, 17 Jan 2023 11:05:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F52D605EA
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9F52D605EA
+ for <buildroot@buildroot.org>; Tue, 17 Jan 2023 11:05:09 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id r9so7385076wrw.4
+ for <buildroot@buildroot.org>; Tue, 17 Jan 2023 03:05:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PMDV0ETqPAM71wvhvmydCd5XSUjiZQMmffjg4f4/HKw=;
+ b=rIdneg9mobNVf5xi+7M8pzb/txDmXWqjPMzTDHrBlQ/ACPKD3LImcWcZhDu4NKWei9
+ gmZ/XJ2KCb8L4P0TUiFRy1Z1k2C6WmgteBqGXGenuvE//Zv74kpEdaVRzDpRuBYgdJOW
+ zwyTlY1uDHPdisXlbOeF4b3+KjWM6I+x+JDhiTuVGBLij7q9EwJfchBy/RAzBcKTZ4Ys
+ a0VnW7Bzw+ErCePC8pu11RVq81JPBui9KQjS/A3rnGJDwecVnBf8A8qKDlfvUTONtxjj
+ eUxFTslbatxZEdvQ06wOu46AOfuZMcu3bpPiBCJkwA6+6CJNjDBLGiGy6t7OYzh7tEcM
+ oKoQ==
+X-Gm-Message-State: AFqh2kpK9iARHzVFrlgMAja47HJq6nv/9iQCX1RtW6Kmfsw6CHSwwKjA
+ pvdFXxfZ2hopUftQw3YhJ+Ir7k5N9Oc=
+X-Google-Smtp-Source: AMrXdXvr13i9Jx4m19vY+zy+SF8HT71DDtqr8bbR8AbOja0YDIFxbmPifPCopLPFoT6iSIaCwumdCQ==
+X-Received: by 2002:adf:e109:0:b0:2bd:e547:943a with SMTP id
+ t9-20020adfe109000000b002bde547943amr2493545wrz.14.1673953507433; 
+ Tue, 17 Jan 2023 03:05:07 -0800 (PST)
+Received: from ncarrier.spectracom.local
+ (2a02-8428-7321-aa01-1304-3364-4203-42ea.rev.sfr.net.
+ [2a02:8428:7321:aa01:1304:3364:4203:42ea])
+ by smtp.gmail.com with ESMTPSA id
+ k18-20020adfb352000000b00241fab5a296sm29200257wrd.40.2023.01.17.03.05.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 17 Jan 2023 03:05:06 -0800 (PST)
+From: carrier.nicolas0@gmail.com
+To: buildroot@buildroot.org
+Date: Tue, 17 Jan 2023 12:04:40 +0100
+Message-Id: <20230117110440.3405234-1-carrier.nicolas0@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1673952967;
- bh=7wd4C31sLqE73wfFLev9Fadu01S9LZgfAA0pP8V6rnI=;
- h=From:To:Cc:Subject:Date:From;
- b=aSyGfjXFWwpiiHdbZm8S+ecjZui6RLjJkcpoVGAp1HEWZ24qNi2IQRPMOVV/Y7q7Q
- O+ii6gHGVRWrpnJhwcWXup/NmD9VfjuxIew32ChM+kn74ye24YDvt8QIV3ZagmWncw
- BBj9DR+i04sUPUREU//y7nIIRpJ2Cx2xrN/if0GQazrWTsJQDoburBaiy9iWqpmqZ1
- X4XWscX4E79p67sbaY1hBMDNbYMYk7/tSlyE/4HPPflJmxvlDcWvhV9yw8SbrWbUWV
- pB2lqQQRF/68O8o1Z4qKhQid5StnphYWYxir3I3pr3S1t6SBFuUJnmGO0pP38B1Jn0
- It+iB9HE/pMXQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=aSyGfjXF
-Subject: [Buildroot] [PATCH] package/sexpect: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PMDV0ETqPAM71wvhvmydCd5XSUjiZQMmffjg4f4/HKw=;
+ b=F82a/RomaPMZoHcCWgaXU200zh7TSRiX9n+trJatOQ9upf2zGHDHeVaPvQZwlGbqhJ
+ G74MA3CmIru2NJtTFXinDn3Mlg4idzhXmvfsmSd8x72jpuUfbORZdaKfOv0qybrl5IBI
+ I0MrxuZQ06rg7ngImEFsFAZ3Y01PZ9lg1crkycCHYSoaszwiMiO8fI6ntTbNfTvHoMR1
+ xgRNZVkPMf+12eh407PlgjaBKW3MGaKV8D3S9seVRxhTD8crZz0/+jgXs4GV5OVhP0Fj
+ TLcB22DNiaDoSdjp5DbrM53Te3vbjwZ1jsfYuykblpTEFK7PADfpWJ6zCR+3s7KijOzg
+ 9l8A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=F82a/Rom
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: local and override
+ support in legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,94 +96,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Nicolas Carrier <carrier.nicolas0@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-sexpect is useful for shell controlled testing.
+From: Nicolas Carrier <carrier.nicolas0@gmail.com>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Sources of packages which are using the 'local' _METHOD_SITE or
+which declare an _OVERRIDE_SRC_DIR are not archived when generating
+the legal-info target.
+This is problematic since those packages are the most likely to
+require being published, because it's highly probable that their
+sources have been modified.
+
+This patch generates a tar.gz archive on the fly, containing the
+result of the rsync of the package's source directory, using the
+same arguments as during the preparation of a build.
+Note that is not possible to archive the builddir, since it may
+contain artifacts of previous compilations.
+
+It is not possible to consider rsync as a "normal" download method
+either (which would have solved the initial problem), because if we
+do that:
+ * the DL dir's content would be altered improperly
+ * the rsync + tar gz overhead would be paid on compilation and is
+   significant, for example, for a linux kernel
+ * a hash file would be necessary, which would be a burden to
+   maintain, for sources frequently modified
+
+Signed-off-by: Nicolas Carrier <carrier.nicolas0@gmail.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/sexpect/Config.in    |  7 +++++++
- package/sexpect/sexpect.hash |  3 +++
- package/sexpect/sexpect.mk   | 13 +++++++++++++
- 5 files changed, 25 insertions(+)
- create mode 100644 package/sexpect/Config.in
- create mode 100644 package/sexpect/sexpect.hash
- create mode 100644 package/sexpect/sexpect.mk
+ package/pkg-generic.mk | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e8e0dffcd392..f2fc4acece43 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -294,6 +294,7 @@ F:	package/ebtables/
- F:	package/i2c-tools/
- F:	package/libcurl/
- F:	package/libpcap/
-+F:	package/sexpect/
- F:	package/socat/
- F:	package/strace/
- F:	package/tcpdump/
-diff --git a/package/Config.in b/package/Config.in
-index 995dae2c5755..da47cbd4ed06 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2568,6 +2568,7 @@ comment "Utilities"
- 	source "package/rtty/Config.in"
- 	source "package/screen/Config.in"
- 	source "package/screenfetch/Config.in"
-+	source "package/sexpect/Config.in"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-diff --git a/package/sexpect/Config.in b/package/sexpect/Config.in
-new file mode 100644
-index 000000000000..7fbdf9b99eb1
---- /dev/null
-+++ b/package/sexpect/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SEXPECT
-+	bool "sexpect"
-+	help
-+	  sexpect is another implementation of Expect which is specifically
-+	  designed for Shell scripts (sh, bash, ksh, zsh, ...)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 2f8ba39edf..a8760f40d4 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -660,6 +660,12 @@ $$(error $(1) has local site method, but `$(2)_SITE` is not defined)
+ endif
+ endif
+ 
++# for legal-info sources archival
++ifneq ($$($(2)_OVERRIDE_SRCDIR),)
++$(2)_OVERRIDE_RSYNC_DIR = $$($(2)_BUILDDIR)/$$($(2)_BASENAME_RAW)
++$(2)_OVERRIDE_RSYNC_ARCHIVE = $$($(2)_OVERRIDE_RSYNC_DIR).tar.gz
++endif
 +
-+	  https://github.com/clarkwang/sexpect
-diff --git a/package/sexpect/sexpect.hash b/package/sexpect/sexpect.hash
-new file mode 100644
-index 000000000000..d5121176269e
---- /dev/null
-+++ b/package/sexpect/sexpect.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  f6801c8b979d56eec54aedd7ede06e2342f382cee291beea88b52869186c557c  sexpect-2.3.14.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/sexpect/sexpect.mk b/package/sexpect/sexpect.mk
-new file mode 100644
-index 000000000000..7b878600e41f
---- /dev/null
-+++ b/package/sexpect/sexpect.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# sexpect
-+#
-+################################################################################
-+
-+SEXPECT_VERSION = 2.3.14
-+SEXPECT_SITE = $(call github,clarkwang,sexpect,v$(SEXPECT_VERSION))
-+SEXPECT_LICENSE = GPL-3.0
-+SEXPECT_LICENSE_FILES = LICENSE
-+SEXPECT_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+$(eval $(cmake-package))
+ ifndef $(2)_LICENSE
+  ifdef $(3)_LICENSE
+   $(2)_LICENSE = $$($(3)_LICENSE)
+@@ -1146,13 +1152,16 @@ else
+ endif # license files
+ 
+ ifeq ($$($(2)_REDISTRIBUTE),YES)
+-ifeq ($$($(2)_SITE_METHOD),local)
+-# Packages without a tarball: don't save and warn
+-	@$$(call legal-warning-nosource,$$($(2)_RAWNAME),local)
+-
+-else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+-	@$$(call legal-warning-nosource,$$($(2)_RAWNAME),override)
+-
++ifneq ($$($(2)_OVERRIDE_SRCDIR),)
++# Packages without a tarball: create one on the fly
++	@echo "Package is of type local or override, archive sources"
++	$$(Q)rm -rf $$($(2)_OVERRIDE_RSYNC_DIR) $$($(2)_OVERRIDE_RSYNC_ARCHIVE)
++	$$(Q)rsync -au --chmod=u=rwX,go=rX $$(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$$($(2)_OVERRIDE_SRCDIR))/ $$($(2)_OVERRIDE_RSYNC_DIR)/
++	$$(Q)tar -zcf $$($(2)_OVERRIDE_RSYNC_ARCHIVE) -C $$($(2)_OVERRIDE_RSYNC_DIR) $$$$(ls -A $$($(2)_OVERRIDE_RSYNC_DIR)/)
++	$$(Q)rm -rf $$($(2)_OVERRIDE_RSYNC_DIR)
++	$$(Q)support/scripts/hardlink-or-copy \
++			$$($(2)_OVERRIDE_RSYNC_ARCHIVE) \
++			$$($(2)_REDIST_SOURCES_DIR)$$(sep)
+ else
+ # Other packages
+ 
 -- 
-2.39.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
