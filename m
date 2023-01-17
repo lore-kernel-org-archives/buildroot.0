@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E032C3DA78
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 21:31:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F305C677F1
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 21:42:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3319A60B46;
-	Tue, 17 Jan 2023 21:31:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3319A60B46
+	by smtp3.osuosl.org (Postfix) with ESMTP id AADAE60BFD;
+	Tue, 17 Jan 2023 21:42:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AADAE60BFD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7laTNdmDUtBN; Tue, 17 Jan 2023 21:31:15 +0000 (UTC)
+	with ESMTP id inI33Wy3JBEI; Tue, 17 Jan 2023 21:42:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79DF960AD4;
-	Tue, 17 Jan 2023 21:31:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79DF960AD4
+	by smtp3.osuosl.org (Postfix) with ESMTP id D98C260BC7;
+	Tue, 17 Jan 2023 21:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D98C260BC7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 318E81BF5DB
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 21:30:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 74E831BF5DB
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 21:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1AA54819FC
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 21:30:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AA54819FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A5CF81C0A
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 21:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A5CF81C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g8nzjNIJ_PJe for <buildroot@lists.busybox.net>;
- Tue, 17 Jan 2023 21:30:32 +0000 (UTC)
+ with ESMTP id 7__bxz7oFINP for <buildroot@lists.busybox.net>;
+ Tue, 17 Jan 2023 21:42:28 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F4FA81959
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6503B81BF4
 Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6F4FA81959
- for <buildroot@buildroot.org>; Tue, 17 Jan 2023 21:30:32 +0000 (UTC)
-Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
- by mailout09.t-online.de (Postfix) with SMTP id 2AA1DA8D8
- for <buildroot@buildroot.org>; Tue, 17 Jan 2023 22:30:25 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.183.179]) by fwd71.t-online.de
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6503B81BF4
+ for <buildroot@buildroot.org>; Tue, 17 Jan 2023 21:42:28 +0000 (UTC)
+Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
+ by mailout09.t-online.de (Postfix) with SMTP id 640AEA94D
+ for <buildroot@buildroot.org>; Tue, 17 Jan 2023 22:42:25 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.183.179]) by fwd73.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pHtXB-4Msp4E0; Tue, 17 Jan 2023 22:30:21 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51842)
+ esmtp id 1pHtio-2dL3A10; Tue, 17 Jan 2023 22:42:22 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47480)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pHsFp-0000Im-1u
- for buildroot@buildroot.org; Tue, 17 Jan 2023 21:08:21 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pHtin-0000LA-2h
+ for buildroot@buildroot.org; Tue, 17 Jan 2023 22:42:21 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Tue, 17 Jan 2023 21:08:21 +0100
-Message-Id: <20230117200821.2882597-3-bernd.kuhls@t-online.de>
+Date: Tue, 17 Jan 2023 22:42:21 +0100
+Message-Id: <20230117214221.3098939-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230117200821.2882597-1-bernd.kuhls@t-online.de>
-References: <20230117200821.2882597-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1673991021-417E8C4D-542E69AA/0/0 CLEAN NORMAL
-X-TOI-MSGID: a2949f49-b05f-4a7d-a735-c7dcfe281f6c
-Subject: [Buildroot] [PATCH 3/3] package/kodi: fix riscv build
+X-TOI-EXPURGATEID: 150726::1673991742-B639BDF7-4CD55A64/0/0 CLEAN NORMAL
+X-TOI-MSGID: 5a16841f-182a-40f8-83a9-78b2e66b41d0
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version to
+ 2.4.55
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,44 +71,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes build error not yet found by autobuilders
+Release notes:
+https://lists.apache.org/thread/xlp3od60fjl8nl44z4f56y0lhs7pglos
 
--- System type: Linux
-CMake Error at cmake/scripts/linux/ArchSetup.cmake:42 (message):
-  Unknown CPU: riscv32
-
-using this defconfig:
-
-BR2_riscv=y
-BR2_RISCV_32=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON3_PY_ONLY=y
+Fixes CVE-2006-20001, CVE-2022-36760, CVE-2022-37436:
+https://httpd.apache.org/security/vulnerabilities_24.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/kodi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index aaa165871c..093b3aa9ae 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -136,7 +136,7 @@ else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
- KODI_CONF_OPTS += \
- 	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
- 	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
--else ifeq ($(BR2_or1k)$(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
-+else ifeq ($(BR2_or1k)$(BR2_powerpc64)$(BR2_riscv)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
- KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
- else
- # Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 2c21a5bab8..a1185c5618 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+ # From https://downloads.apache.org/httpd/httpd-2.4.54.tar.bz2.{sha256,sha512}
+-sha256  eb397feeefccaf254f8d45de3768d9d68e8e73851c49afd5b7176d1ecf80c340  httpd-2.4.54.tar.bz2
+-sha512  228493b2ff32c4142c6e484d304f2ea12e467498605fe12adce2b61388d8efe7b2e96ae2fd0abd1dc88a5f12d625e007d8da0ae5628cff2a5272806754f41e18  httpd-2.4.54.tar.bz2
++sha256  11d6ba19e36c0b93ca62e47e6ffc2d2f2884942694bce0f23f39c71bdc5f69ac  httpd-2.4.55.tar.bz2
++sha512  94982f7a1fedac8961fc17b5a22cf763ac28cb27ee6facab2e6a15b249b927773667493fd3f7354fb13fcb34a6f1afc1bdd5cf4b7be030cba1dfb523e40d43fb  httpd-2.4.55.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 315282baac..13018a9b1f 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.54
++APACHE_VERSION = 2.4.55
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = https://downloads.apache.org/httpd
+ APACHE_LICENSE = Apache-2.0
 -- 
 2.34.1
 
