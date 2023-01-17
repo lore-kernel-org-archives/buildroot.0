@@ -1,84 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B355C3DA78
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 07:57:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 829C8C3DA78
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 09:07:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01A8381951;
-	Tue, 17 Jan 2023 07:57:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01A8381951
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12294400BF;
+	Tue, 17 Jan 2023 09:07:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12294400BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 05Nv5ab6GzXx; Tue, 17 Jan 2023 07:57:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HxK1bNucDFqQ; Tue, 17 Jan 2023 09:07:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B8C681E43;
-	Tue, 17 Jan 2023 07:57:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B8C681E43
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 60A531BF321
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 07:57:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4049F4021C;
+	Tue, 17 Jan 2023 09:07:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4049F4021C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AC0F51BF2B1
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3AAE5417AB
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 07:57:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AAE5417AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94B4C60736
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:07:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94B4C60736
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rrjtBNerccqP for <buildroot@lists.busybox.net>;
- Tue, 17 Jan 2023 07:57:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC01C417A5
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com
- [IPv6:2607:f8b0:4864:20::b35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CC01C417A5
- for <buildroot@buildroot.org>; Tue, 17 Jan 2023 07:57:28 +0000 (UTC)
-Received: by mail-yb1-xb35.google.com with SMTP id p188so33026902yba.5
- for <buildroot@buildroot.org>; Mon, 16 Jan 2023 23:57:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=DnkyNZbhJmnOa1CSU1w7m1Mprt+ppXwb9tRD7L1keu8=;
- b=u/LNmfzDttV4aMhKCsjdkpzh3lfOWGU6CHbFuUo70d3eStLeM1yZBmQ7yhwL73bS6C
- Y7f2mqVb09sS4ystglxQrRAq0TfYGRP6U5ytbM88NjiOmMYP+ByW+2r/kp1q1C7ZXs3a
- CK4QQOdLzk71EhuPWnEOLRE84Mp1LpZnaGNJZk56LDkEA2+XtCVXGdk0TjuUr4+oJs0U
- lGfPW2L3BTXWOZskGXhWW3KCOi02kceCrXvIUA1+ATHYaUd551nXnWDHg3FWcf8yx8uB
- VNnxAGvwLBYqK7pZBH4nSSQOjbsd/DKIyu5MtmDELofeu7ELzdFTFIBOQFSqCl45VcfQ
- dCPg==
-X-Gm-Message-State: AFqh2ko34XSYDYvv7IUIiZr/WJUCjnHVogz5zF+HcIsbWHaqcvZH/REQ
- KPNXHaOWIlfUuEyW9/Z94s4AMKi+arLxlu2LS/3YBXyQpK0=
-X-Google-Smtp-Source: AMrXdXvUyU2O9Lzq8EdHnYZ9Zk18nhOnBuhif0yUAu9ymQOj+GLgNKfm4Zih3RDkfKLfM3hGCCGww6yo+ou5hO54Pew=
-X-Received: by 2002:a25:8287:0:b0:707:103:a56 with SMTP id
- r7-20020a258287000000b0070701030a56mr261421ybk.466.1673942247543; 
- Mon, 16 Jan 2023 23:57:27 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uoS9YcBn6gSu for <buildroot@lists.busybox.net>;
+ Tue, 17 Jan 2023 09:07:28 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1967460701
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1967460701
+ for <buildroot@buildroot.org>; Tue, 17 Jan 2023 09:07:27 +0000 (UTC)
+Received: from 91-153-34-153.elisa-laajakaista.fi ([91.153.34.153] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1pHhw7-00AW4F-4s; Tue, 17 Jan 2023 10:07:19 +0100
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id afd8cab2;
+ Tue, 17 Jan 2023 09:07:18 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Tue, 17 Jan 2023 11:07:17 +0200
+Message-Id: <20230117090717.2657216-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230116080513.21407-1-yegorslists@googlemail.com>
- <20230116212444.GH2770@scaer>
-In-Reply-To: <20230116212444.GH2770@scaer>
-Date: Tue, 17 Jan 2023 08:57:16 +0100
-Message-ID: <CAGm1_kuifU41S1+Yr4eEX90AwA7CXnFtDVr+GES2SewO1PmagA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=DnkyNZbhJmnOa1CSU1w7m1Mprt+ppXwb9tRD7L1keu8=;
- b=jTkcsqakm+hsHnMuXAHifCu8etcNgzZ/454S+NsS7Foi7zgBizo2292JuuQu1Mcu38
- aj/4ICtp2TDKxXeU50ccaeZuKhN1KQjFAqAksE5rrb3GxvVXW/xWX7zJgMUZq9w/1rWI
- zcEWM1h/upxebjSQNa6pOyYG/X7YnIlzezMWgZAQHq4OaiWn2mbg3QJtTmXO5Q5Mygc0
- lz/HAHULOyXINzeJ3GIq8ZrkMJA4lQndWEFw+Gu1TABqY3/dooc3XuJX73FNWmqTePXs
- H8oFBYf65jumXfQSt9sLEu5/1c6TpYfvkcz1+mLb/38t37vSRSjN2A+ppRSmppi3JRam
- eUXg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=jTkcsqak
-Subject: Re: [Buildroot] [PATCH] package/util-linux: add an option to enable
- irqtop
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=G20NfA8FBWOJoEcJlHmy41Z0h72LCiBJIhtlGNDIR+A=; b=Pqafp48HqjJk+v+WRYWMJEISCw
+ 1ev5oZM5Fa7zE7EkGkkDBZgovGK7ExL72zLPlV78XNljgwb2xjn4arIk0fik8UKkvff5nehu4xvob
+ Qk//21st63LDHvswyukekn5fH7Hz/tYDV3wVxvCerkuehvO6hPeHXvZ6XcG+o7pemwGEuM5JIUWvK
+ /3ql9pqWkUyqKWQGWzWLpkuIL9hiCoJf4TxQzx/DzEFfmflBsoz5qCL+sKjd0ucZq4cEeplYUu3t7
+ vj/y+CY7bWbLqJpTUfl8TZ5Lq1KIwYSu+ySL3mU6ExyxMSn0jYxMWU9ImsJefSWvoqoUYe+cLIjmJ
+ 79dTNCfg==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=Pqafp48H
+Subject: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,106 +76,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann, All,
+This is a small bugfix release which solves build issues. The patch
+to fix the libdrm dependency is included in this release and can be
+removed. Release notes:
 
-On Mon, Jan 16, 2023 at 10:24 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Yegor, All,
->
-> On 2023-01-16 09:05 +0100, yegorslists--- via buildroot spake thusly:
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> >
-> > irqtop is an IRQ monitoring tool.
-> >
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > ---
-> >  package/util-linux/Config.in     | 7 +++++++
-> >  package/util-linux/util-linux.mk | 1 +
-> >  2 files changed, 8 insertions(+)
-> >
-> > diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> > index 917f1bc2b4..c7e4d2d8bc 100644
-> > --- a/package/util-linux/Config.in
-> > +++ b/package/util-linux/Config.in
-> > @@ -161,6 +161,13 @@ config BR2_PACKAGE_UTIL_LINUX_IPCS
-> >       help
-> >         Show information on IPC facilities
-> >
-> > +config BR2_PACKAGE_UTIL_LINUX_IRQTOP
-> > +     bool "irqtop"
-> > +     depends on BR2_USE_MMU # libsmartcols
-> > +     select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
->
-> I was about to apply this, but I am a bit conflicted... Building irqtop
-> defaults to 'yes' for linux systems, when --disable-irqtop is not
-> specified (unless I misread util-linux' configure.ac).
->
-> So, today we are providing neither --enable-irqtop nor --disable-irqtop,
-> which means that it is in practice always built.
->
-> But with your change, it means that now it is by default disabled.
->
-> So I wanted to add 'default y' for legacy reasons, but we have no other
-> option in util-linux that defaults to 'y', so it would have been a bit
-> odd to do so...
->
-> Or maybe I am just too tired to think straight...
->
-> Thoughts?
+  https://wpewebkit.org/release/cog-0.16.1.html
 
-irqtop is a rather new tool and it is not listed in the
-BR2_PACKAGE_UTIL_LINUX_BINARIES help text. Perhaps, it is not that
-problematic that it is not enabled by default.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...m-dependency-when-protocols-are-used.patch | 36 -------------------
+ package/cog/cog.hash                          |  8 ++---
+ package/cog/cog.mk                            |  2 +-
+ 3 files changed, 5 insertions(+), 41 deletions(-)
+ delete mode 100644 package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
 
-I've sent v2 with the added ncurses dependency.
+diff --git a/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch b/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
+deleted file mode 100644
+index 44e555c121..0000000000
+--- a/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 9a1982c563e218b7695e6a174c8230d3b063eb27 Mon Sep 17 00:00:00 2001
+-From: Gary Bisson <gary.bisson@boundarydevices.com>
+-Date: Thu, 6 Oct 2022 09:04:22 +0200
+-Subject: [PATCH] wl: Fix libdrm dependency when protocols are used
+-
+-As the comment says, cog-platform-wl.c needs drm_fourcc.h to build
+-properly when wayland_weston_direct_display is enabled.
+-
+-However, libdrm.pc doesn't specify "include/libdrm" as part of its
+-includedir but whether in its cflags. So use the compile_args dep
+-instead of includes to fix the build failure.
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+-(cherry picked from commit 32c1d9533bcdc22cbc01d02bf2e6ac0d4bda2dc2)
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[Upstream status: https://github.com/Igalia/cog/pull/501]
+----
+- platform/wayland/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/platform/wayland/meson.build b/platform/wayland/meson.build
+-index f1e18ec..31e4460 100644
+---- a/platform/wayland/meson.build
+-+++ b/platform/wayland/meson.build
+-@@ -67,7 +67,7 @@ if wayland_platform_weston_protocols.length() > 0
+- 
+-     # The code uses definitions from the drm_fourcc.h header, but does not
+-     # need to link the library; libdrm here is only a build-time dependency.
+--    wayland_platform_dependencies += [dependency('libdrm').partial_dependency(includes: true)]
+-+    wayland_platform_dependencies += [dependency('libdrm').partial_dependency(compile_args: true)]
+- endif
+- 
+- 
+--- 
+-2.38.0
+-
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index a2c55c4b94..2ea3ddee08 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/cog-0.16.0.tar.xz.sums
+-md5  2705472ea4f333290973722c0862b21d  cog-0.16.0.tar.xz
+-sha1  ef16e5e3d91d0da056fe5e4f596c211af7453b4e  cog-0.16.0.tar.xz
+-sha256  2956f719d36c9a6368f63901a0d1ceaf4d27f529f7df441b3748c36d72906fc6  cog-0.16.0.tar.xz
++# From https://wpewebkit.org/releases/cog-0.16.1.tar.xz.sums
++md5  1489740db6b4ea568578035c30b8b2f4  cog-0.16.1.tar.xz
++sha1  1235203085e7ccd8fc76eab6bdfcdb2e3ae38ea9  cog-0.16.1.tar.xz
++sha256  37c5f14123b8dcf077839f6c60f0d721d2a91bb37829e796f420126e6b0d38b5  cog-0.16.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 241c4e309c..da4bfc7ac6 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COG_VERSION = 0.16.0
++COG_VERSION = 0.16.1
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
+-- 
+2.39.0
 
-Regards,
-Yegor
-
-> Regards,
-> Yann E. MORIN.
->
-> > +     help
-> > +       Show information on IRQs
-> > +
-> >  config BR2_PACKAGE_UTIL_LINUX_KILL
-> >       bool "kill"
-> >       help
-> > diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> > index b53b94ec31..87ec3c19d7 100644
-> > --- a/package/util-linux/util-linux.mk
-> > +++ b/package/util-linux/util-linux.mk
-> > @@ -136,6 +136,7 @@ UTIL_LINUX_CONF_OPTS += \
-> >       $(if $(BR2_PACKAGE_UTIL_LINUX_IPCMK),--enable-ipcmk,--disable-ipcmk) \
-> >       $(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
-> >       $(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
-> > +     $(if $(BR2_PACKAGE_UTIL_LINUX_IRQTOP),--enable-irqtop,--disable-irqtop) \
-> >       $(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
-> >       $(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
-> >       $(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
-> > --
-> > 2.17.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
