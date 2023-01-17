@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4357C3DA78
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 09:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B694C3DA78
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jan 2023 09:41:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7088781F00;
-	Tue, 17 Jan 2023 09:41:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7088781F00
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC8C8404AA;
+	Tue, 17 Jan 2023 09:41:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC8C8404AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OgS7G--WJzwO; Tue, 17 Jan 2023 09:41:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a3QWx3YnBZdY; Tue, 17 Jan 2023 09:41:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B482581424;
-	Tue, 17 Jan 2023 09:41:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B482581424
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 761FD1BF2B1
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:40:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 152FE402A7;
+	Tue, 17 Jan 2023 09:41:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 152FE402A7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E1E31BF2B1
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50BCA417D1
- for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:40:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50BCA417D1
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7D3C40414
+ for <buildroot@lists.busybox.net>; Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7D3C40414
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CzJg7TWXc1-d for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Bqimy-4TKE0W for <buildroot@lists.busybox.net>;
  Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25EAD41769
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33F20403F9
  for <buildroot@buildroot.org>; Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25EAD41769
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33F20403F9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 12B2F87C39; Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
+ id 20E8087C3E; Tue, 17 Jan 2023 09:40:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Jan 2023 15:52:10 +0100
+Date: Tue, 17 Jan 2023 10:24:15 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: b1eb1e7d92b57637df04e5ecc233175abd40d17e
-X-Git-Newrev: e227c45200d9ecd996754b7bc4508cc2c4921068
+X-Git-Oldrev: e227c45200d9ecd996754b7bc4508cc2c4921068
+X-Git-Newrev: 5b151fae52ee33e43e2415f1b66c05015e2d1d9e
 X-Patchwork-Hint: ignore
-Message-Id: <20230117094050.12B2F87C39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/at-spi2-core:
- switch to https download
+Message-Id: <20230117094050.20E8087C3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/go: set GOCACHE
+ for download post-process
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e227c45200d9ecd996754b7bc4508cc2c4921068
+commit: https://git.buildroot.net/buildroot/commit/?id=5b151fae52ee33e43e2415f1b66c05015e2d1d9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dde078790a965dfd469ec6ed745e4f7b5edc60ba)
+The go mod vendor call in support/download/go-post-process accesses the go
+cache, so pass GOCACHE= in the environment to ensure our cache directory is
+used.
+
+The go cache defaults to ~/.cache/go-build if not set, so this fixes builds
+where that location (or GOCACHE if set in the environment) is not writable:
+
+rm -rf ~/.cache/go-build
+chmod -w ~/.cache
+make docker-compose-source
+..
+failed to initialize build cache at /home/peko/.cache/go-build: mkdir /home/peko/.cache/go-build: permission denied
+make[1]: *** [package/pkg-generic.mk:189: /home/peko/source/buildroot/output/build/docker-compose-2.14.0/.stamp_downloaded] Error 1
+
+We use two different cache directories for target and host builds, but the
+download/vendoring should be independent of the architecture, so use the
+target variant even for host-only packages for simplicity.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 07a745e55d76616802a20dcbfd72dfe6fe8e3b05)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/at-spi2-core/at-spi2-core.hash | 2 +-
- package/at-spi2-core/at-spi2-core.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/go/go.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
-index e2cc403e71..764e4c3661 100644
---- a/package/at-spi2-core/at-spi2-core.hash
-+++ b/package/at-spi2-core/at-spi2-core.hash
-@@ -1,4 +1,4 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/at-spi2-core/2.36/at-spi2-core-2.36.0.sha256sum
-+# From https://download.gnome.org/sources/at-spi2-core/2.36/at-spi2-core-2.36.0.sha256sum
- sha256  88da57de0a7e3c60bc341a974a80fdba091612db3547c410d6deab039ca5c05a  at-spi2-core-2.36.0.tar.xz
- 
- # locally calculated
-diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
-index cf7fdd297c..f0b019c0ed 100644
---- a/package/at-spi2-core/at-spi2-core.mk
-+++ b/package/at-spi2-core/at-spi2-core.mk
-@@ -7,7 +7,7 @@
- AT_SPI2_CORE_VERSION_MAJOR = 2.36
- AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
- AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
--AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
-+AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
- AT_SPI2_CORE_LICENSE = LGPL-2.1+
- AT_SPI2_CORE_LICENSE_FILES = COPYING
- AT_SPI2_CORE_INSTALL_STAGING = YES
+diff --git a/package/go/go.mk b/package/go/go.mk
+index d3ed07f03b..c4f72d403c 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -25,6 +25,7 @@ HOST_GO_COMMON_ENV = \
+ 	GOFLAGS=-mod=vendor \
+ 	GOROOT="$(HOST_GO_ROOT)" \
+ 	GOPATH="$(HOST_GO_GOPATH)" \
++	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
+ 	GOPROXY=off \
+ 	PATH=$(BR_PATH) \
+ 	GOBIN= \
+@@ -75,7 +76,6 @@ HOST_GO_TARGET_ENV = \
+ 	$(HOST_GO_COMMON_ENV) \
+ 	GOOS="linux" \
+ 	GOARCH=$(GO_GOARCH) \
+-	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
+ 	CC="$(TARGET_CC)" \
+ 	CXX="$(TARGET_CXX)" \
+ 	CGO_CFLAGS="$(TARGET_CFLAGS)" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
