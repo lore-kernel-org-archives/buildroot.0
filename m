@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA29BC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EA6AC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98EC46112F;
-	Tue, 21 Feb 2023 01:00:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98EC46112F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E1FD610B3;
+	Tue, 21 Feb 2023 01:01:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E1FD610B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jEiRfrXNUa6h; Tue, 21 Feb 2023 01:00:52 +0000 (UTC)
+	with ESMTP id j7N3_fXG0Qee; Tue, 21 Feb 2023 01:01:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFB3C610B7;
-	Tue, 21 Feb 2023 01:00:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFB3C610B7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BED0C1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 422BB61160;
+	Tue, 21 Feb 2023 01:01:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 422BB61160
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 475DE1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06DAB41830
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06DAB41830
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5A0B6FB9F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5A0B6FB9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h2er7CvjWjEw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id krc2bu_Xgdv2 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21F8441825
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21F8441825
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF5336FB8C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF5336FB8C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E3E186496; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id DDF958648F; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 17:52:32 +0100
+Date: Wed, 18 Jan 2023 21:42:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: be235c048f004617851d7ef752ee5f4dc2373e28
-X-Git-Newrev: 66b1926764582a628b0b6b68a3aebe4b9790ab12
+X-Git-Oldrev: a8447f17b8a589af5a88fc1ffdacde3b130c539d
+X-Git-Newrev: 94b66fb49cd57d0863245fbe0a3dc0833e76aad0
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205302.1E3E186496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/php: security bump
- version to 8.2.3
+Message-Id: <20230220205236.DDF958648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xxhash: set
+ XXH_NO_INLINE_HINTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66b1926764582a628b0b6b68a3aebe4b9790ab12
+commit: https://git.buildroot.net/buildroot/commit/?id=94b66fb49cd57d0863245fbe0a3dc0833e76aad0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.2.3
+Set XXH_NO_INLINE_HINTS to marks all internal functions as static,
+giving the compiler full control on whether to inline or not. This will
+fix the following build failure raised since bump to version 0.8.1 in
+commit 5dbdb2535c649ee617595b8c4ae3cbba0ee37b97:
 
-Fixes CVE-2023-0567, CVE-2023-0568 & CVE-2023-0662.
+In file included from xxhash.c:43:
+In function 'XXH3_accumulate',
+    inlined from 'XXH3_hashLong_internal_loop' at xxhash.h:4390:9,
+    inlined from 'XXH3_hashLong_64b_internal' at xxhash.h:4453:5,
+    inlined from 'XXH3_hashLong_64b_withSecret' at xxhash.h:4473:12,
+    inlined from 'XXH3_64bits_internal' at xxhash.h:4554:12,
+    inlined from 'XXH3_64bits_withSecret' at xxhash.h:4570:12:
+xxhash.h:4196:1: error: inlining failed in call to 'always_inline' 'XXH3_accumulate_512_scalar': function not considered for inlining
+ 4196 | XXH3_accumulate_512_scalar(void* XXH_RESTRICT acc,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/f2c52238df97cc4c13117d8dc1423235231a094c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xxhash/xxhash.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 869cb9b94f..41aa326156 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  bdc4aa38e652bac86039601840bae01c0c3653972eaa6f9f93d5f71953a7ee33  php-8.2.2.tar.xz
-+sha256  b9b566686e351125d67568a33291650eb8dfa26614d205d70d82e6e92613d457  php-8.2.3.tar.xz
+diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
+index 04bc98690f..40e3c2696c 100644
+--- a/package/xxhash/xxhash.mk
++++ b/package/xxhash/xxhash.mk
+@@ -28,6 +28,7 @@ endif
  
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 9ce153f4fa..bd7d5a8c3c 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ define XXHASH_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		CFLAGS="$(TARGET_CFLAGS) -DXXH_NO_INLINE_HINTS" \
+ 		$(XXHASH_TARGETS)
+ endef
  
--PHP_VERSION = 8.2.2
-+PHP_VERSION = 8.2.3
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
