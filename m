@@ -1,76 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7EF2C004D4
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 07:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60991C32793
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 08:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80E7960BBF;
-	Wed, 18 Jan 2023 07:14:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80E7960BBF
+	by smtp1.osuosl.org (Postfix) with ESMTP id E089F81E91;
+	Wed, 18 Jan 2023 08:05:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E089F81E91
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jJuq7uMBjFsR; Wed, 18 Jan 2023 08:05:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09EBA81E33;
+	Wed, 18 Jan 2023 08:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09EBA81E33
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 647AB1BF425
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 08:05:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 37FBE60E85
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 08:05:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37FBE60E85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qsAFg_j-SYjm; Wed, 18 Jan 2023 07:14:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F33E60AAD;
-	Wed, 18 Jan 2023 07:14:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F33E60AAD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 406391BF3D2
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 07:14:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 28ECC40377
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 07:14:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28ECC40377
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gFrImsDXKTHG for <buildroot@lists.busybox.net>;
- Wed, 18 Jan 2023 07:14:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC0BF40253
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BC0BF40253
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 07:14:22 +0000 (UTC)
-Received: from opfednr06.francetelecom.fr (unknown [xx.xx.xx.70])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfednr25.francetelecom.fr (ESMTP service) with ESMTPS id 4NxcSr1TDZzCr83
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 08:14:20 +0100 (CET)
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Wed, 18 Jan 2023 08:14:13 +0100
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Wed, 18 Jan 2023 08:14:11 +0100
-Message-ID: <5608_1674026060_63C79C4C_5608_450_1_3268e156530869e8fea307493cc0ee3d8d8df679.1674025553.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <e5a79e14d6b9a1d81047cdd6605184ecae6803f8.1674025553.git.yann.morin@orange.com>
-References: <e5a79e14d6b9a1d81047cdd6605184ecae6803f8.1674025553.git.yann.morin@orange.com>
-MIME-Version: 1.0
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX102.corporate.adroot.infra.ftgroup (10.115.26.3)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1674026060;
- bh=uFjVsG1OVv9amXHAmAcxKsAeAo3ZCOv9G6FIZ7lp4vw=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:
- Content-Transfer-Encoding:Content-Type;
- b=azPK7Mo/oEbUHNRfPC60jQGXR+8TaDpj7PzeqfXPdhyuP/OnEZymNYWjlTpY9oSys
- 4aC2e1xvY/Bd7HBnUzj+rPMd4K8eLxFf49CxAlDtRnvmnAI9U1Bk9nb1fICsZYtx/R
- eCVSXgsVbVa7Un4muQzPTE4gMBMKLHRsmuOA0yReWX0bvq/H42G1Tn8S6H7OFIeCe2
- Ftbg5Xe3Udwiva9Qu63EClUgFWMLtYwz6srhyBk7vCmErKyeaEFMdruwLJsc8dTnT6
- 0LgLTl7x7XmyrPl9x48yQh0b9JPyMT58tZ/CQdrb5tE34/M/RvEvU7m5ocdERYPTA0
- Zs332R6p4RBIQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=azPK7Mo/
-Subject: [Buildroot] [PATCH 2/2] package/doc-ssciidoc: allow docs to request
- a specific TOC depth
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iKyYSQv8RDIo for <buildroot@lists.busybox.net>;
+ Wed, 18 Jan 2023 08:05:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 23677606F9
+ for <buildroot@buildroot.org>; Wed, 18 Jan 2023 08:05:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23677606F9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0E38787C52; Wed, 18 Jan 2023 08:05:18 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 18 Jan 2023 09:04:16 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: bcb39cdd583096d5f9ec576c1ec8a9930dacb85c
+X-Git-Newrev: d48a8beb39275a479185ab9b3232cd15dcfb87ab
+X-Patchwork-Hint: ignore
+Message-Id: <20230118080518.0E38787C52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] Update for 2022.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,140 +56,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin@orange.com
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For some documents, we may want a terse or deeper TOC depth. For
-example, short documents may want just the level-0 in the TOC, while
-longer documents may want depth 1 or 2, or even deeper; also, some
-documents may not use the document-title levels [0], only section
-levels [1], and so may want to increase the TOC depth.
+commit: https://git.buildroot.net/buildroot/commit/?id=d48a8beb39275a479185ab9b3232cd15dcfb87ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Additioanlly, allow per-format depth. For example, split-html has a
-single page dedicated to the TOC, so there we may want a deeper TOC,
-while on the html output, where the TOC is on the same page as the
-whole document, a shorter TOC is preferred.
-
-[0] https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/#document-header
-[1] https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/#section-titles
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-asciidoc.txt | 54 ++++++++++++++----------
- package/doc-asciidoc.mk                  |  3 +-
- 2 files changed, 34 insertions(+), 23 deletions(-)
+ CHANGES                  | 50 ++++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 53 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
-index 0bfe99d22e..d68978b1cb 100644
---- a/docs/manual/adding-packages-asciidoc.txt
-+++ b/docs/manual/adding-packages-asciidoc.txt
-@@ -66,6 +66,12 @@ information is (assuming the document name is +foo+) :
- * +FOO_DEPENDENCIES+, optional, the list of packages (most probably,
-   host-packages) that must be built before building this document.
- 
-+* +FOO_TOC_DEPTH+, +FOO_TOC_DEPTH_<FMT>+, optionals, the depth of the
-+  table of content for this document, which can be overridden for the
-+  specified format +<FMT>+  (see the list of rendered formats, above,
-+  but in uppercase, and with dash replaced by underscore; see example,
-+  below). By default: +1+.
+diff --git a/CHANGES b/CHANGES
+index f71e53fe4b..e501fcb4c6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,53 @@
++2022.11.1, released January 18th, 2023
 +
- There are also additional hooks (see xref:hooks[] for general information
- on hooks), that a document may set to define extra actions to be done at
- various steps:
-@@ -108,26 +114,30 @@ Here is a complete example that uses all variables and all hooks:
- 07: FOO_SOURCES = $(sort $(wildcard $(FOO_DOCDIR)/*))
- 08: FOO_RESOURCES = $(sort $(wildcard $(FOO_DOCDIR)/ressources))
- 09:
--10: define FOO_GEN_EXTRA_DOC
--11:     /path/to/generate-script --outdir=$(@D)
--12: endef
--13: FOO_POST_RSYNC_HOOKS += FOO_GEN_EXTRA_DOC
--14:
--15: define FOO_CHECK_MY_PROG
--16:     if ! which my-prog >/dev/null 2>&1; then \
--17:         echo "You need my-prog to generate the foo document"; \
--18:         exit 1; \
--19:     fi
--20: endef
--21: FOO_CHECK_DEPENDENCIES_HOOKS += FOO_CHECK_MY_PROG
--22:
--23: define FOO_CHECK_MY_OTHER_PROG
--24:     if ! which my-other-prog >/dev/null 2>&1; then \
--25:         echo "You need my-other-prog to generate the foo document as PDF"; \
--26:         exit 1; \
--27:     fi
--28: endef
--29: FOO_CHECK_DEPENDENCIES_PDF_HOOKS += FOO_CHECK_MY_OTHER_PROG
--30:
--31: $(eval $(call asciidoc-document))
-+10: FOO_TOC_DEPTH = 2
-+11: FOO_TOC_DEPTH_HTML = 1
-+12: FOO_TOC_DEPTH_SPLIT_HTML = 3
-+13:
-+14: define FOO_GEN_EXTRA_DOC
-+15:     /path/to/generate-script --outdir=$(@D)
-+16: endef
-+17: FOO_POST_RSYNC_HOOKS += FOO_GEN_EXTRA_DOC
-+18:
-+19: define FOO_CHECK_MY_PROG
-+20:     if ! which my-prog >/dev/null 2>&1; then \
-+21:         echo "You need my-prog to generate the foo document"; \
-+22:         exit 1; \
-+23:     fi
-+24: endef
-+25: FOO_CHECK_DEPENDENCIES_HOOKS += FOO_CHECK_MY_PROG
-+26:
-+27: define FOO_CHECK_MY_OTHER_PROG
-+28:     if ! which my-other-prog >/dev/null 2>&1; then \
-+29:         echo "You need my-other-prog to generate the foo document as PDF"; \
-+30:         exit 1; \
-+31:     fi
-+32: endef
-+33: FOO_CHECK_DEPENDENCIES_PDF_HOOKS += FOO_CHECK_MY_OTHER_PROG
-+34:
-+35: $(eval $(call asciidoc-document))
- ----
-diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-index 931c5136d4..6b8eaa81b3 100644
---- a/package/doc-asciidoc.mk
-+++ b/package/doc-asciidoc.mk
-@@ -87,7 +87,7 @@ $(2)_$(3)_ASCIIDOC_OPTS += -f $$($(2)_$(3)_ASCIIDOC_CONF)
- endif
++	Important / security related fixes.
++
++	Br2-external: Fix make performance issue when many (> 6)
++	external trees are used together.
++
++	Erofs: Use fixed timestamp and UUID when BR2_REPRODUCIBLE is
++	used.
++
++	Go: Ensure our go build and module cache is used, even for the
++	download step.
++
++	Legal-info: Stop warning about not saving sources for local /
++	override packages if <PKG>_REDISTRIBUTE is set to NO.
++
++	Linux: Fix build of < 5.6 kernels with host-gcc >= 10.
++
++	A large number of NXP related packages and defconfigs have
++	been updated as upstream moved the git repositories to Github.
++
++	Defconfigs: zcu106, kria kv260: Fix U-Boot build
++
++	Updated/fixed packages: asterisk, bearssl, botan, cairo,
++	capnproto, check, checkpolicy, connman, containerd, crun,
++	dbus-cxx, docker-cli, docker-engine, exempi, exfat,
++	exfat-utils, falcosecurity-libs, fluidsynth, fmc, fmlib,
++	freeradius-server, gcc, glib-networking, go,
++	gobject-introspection, gperf, i2pd, ima-evm-utils,
++	imx-alsa-plugins, imx-kobs, imx-lib, imx-m4fwloader,
++	imx-mkimage, intel-microcode, janus-gateway, libcurl,
++	libdeflate, libftdi1, libkcapi, libksba, libmbim, libmng,
++	libpjsip, libtalloc, libuwsc, libxkbcommon, lpeg, lrzsz,
++	lttng-tools, lua-cqueues, mali-driver, mbedtls, mfgtools,
++	moby-buildkit, mutt, opensc, php, policycoreutils, polkit,
++	postgresql, pptp-linux, qcom-db410c-firmware, qemu, qoriq-rcw,
++	qt5virtualkeyboard, redis, rhash, rtl8189es, rtl8192eu,
++	rtl_433, ruby, sqlite, swupdate, tealdeer, tekui, tiff,
++	tinyxml, tor, webkitgtk, wireshark, wpasupplicant, wpewebkit,
++	xr819-xradio, xdriver_xf86-video-imx-viv, xserver_xorg-server,
++	xxhash, zip
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#14971: Kernel 3.10.108 fail to build in Buildroot 2022.08-rc1
++	#14996: Too many directories in BR2_EXTERNAL causes hang during make
++	#15161: kernel can't support SUBDIR
++	#15196: Setting BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE does not work
++	#15226: lsblk: not found
++
+ 2022.11, released December 5th, 2022
  
- $(2)_$(3)_A2X_OPTS = \
--	--xsltproc-opts "--stringparam toc.section.depth 1"
-+	--xsltproc-opts "--stringparam toc.section.depth $$(or $$($(2)_TOC_DEPTH_$$(call UPPERCASE,$(4))),$$($(2)_TOC_DEPTH))"
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 66fe04962d..ab5f97aeff 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- # Handle a2x warning about --destination-dir option only applicable to HTML
- # based outputs. So:
-@@ -161,6 +161,7 @@ $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced:
- .PHONY: $(1)-prepare-sources
- $(1)-prepare-sources: $$(BUILD_DIR)/docs/$(1)/.stamp_doc_rsynced
+ # Set and export the version string
+-export BR2_VERSION := 2022.11
++export BR2_VERSION := 2022.11.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1669308000
++BR2_VERSION_EPOCH = 1674028000
  
-+$(2)_TOC_DEPTH ?= 1
- $(2)_ASCIIDOC_CONF = $$($(2)_DOCDIR)/asciidoc.conf
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 02fe6bca67..9eee9955ec 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- $(call ASCIIDOC_INNER,$(1),$(2),xhtml,html,html,HTML)
--- 
-2.25.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
+ # Buildroot version to use
+-RELEASE='2022.11'
++RELEASE='2022.11.1'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
