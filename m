@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E89EC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 470B2C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2266561183;
-	Tue, 21 Feb 2023 01:01:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2266561183
+	by smtp3.osuosl.org (Postfix) with ESMTP id F403561144;
+	Tue, 21 Feb 2023 01:01:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F403561144
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k4kiiKE1bgSJ; Tue, 21 Feb 2023 01:01:43 +0000 (UTC)
+	with ESMTP id rJ4Nha66Mawi; Tue, 21 Feb 2023 01:01:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 295AA6117F;
-	Tue, 21 Feb 2023 01:01:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 295AA6117F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DEFB91BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBB6B61186;
+	Tue, 21 Feb 2023 01:01:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBB6B61186
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5967B1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2D0941833
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2D0941833
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0C996FBA0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0C996FBA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hCugFgwVR9Ar for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IcY3-dnTCJJw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B62B841821
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B62B841821
+ by smtp3.osuosl.org (Postfix) with ESMTP id D59016FB98
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D59016FB98
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2CDF8648F; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+ id D1F5F81979; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 21:53:36 +0100
+Date: Wed, 18 Jan 2023 17:57:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5085b61121a55c830b4d1576ab52441dc1491e35
-X-Git-Newrev: 273bec97fc34068281d44e57bc60fbcfed5c8342
+X-Git-Oldrev: 7b56604060a9bb6d06e790934421909dc1b763d8
+X-Git-Newrev: a8447f17b8a589af5a88fc1ffdacde3b130c539d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205302.A2CDF8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libfuse3: bump to
- version 3.14.0
+Message-Id: <20230220205236.D1F5F81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/website: update for
+ 2022.02.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +57,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=273bec97fc34068281d44e57bc60fbcfed5c8342
+commit: https://git.buildroot.net/buildroot/commit/?id=a8447f17b8a589af5a88fc1ffdacde3b130c539d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfuse3/libfuse3.hash | 2 +-
- package/libfuse3/libfuse3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index f697f4ad3f..2d78153c81 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  96399b09b91bc717a9e96ffea660d611e6a342547c1abd4d0e858b3dca9d5a13  libfuse3-3.13.1.tar.gz
-+sha256  b14f7d97abc11a5a70a37955021a7a1d8eb1d3dd5b6abec66af093eae3168c62  libfuse3-3.14.0.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index a2e9775868..8c306ba187 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 0b62522043..a7efef1ef3 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
--LIBFUSE3_VERSION = 3.13.1
-+LIBFUSE3_VERSION = 3.14.0
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
+-      <h3 style="text-align: center;">Latest long term support release: <b>2022.02.8</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2022.02.9</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2022.02.8.tar.gz">buildroot-2022.02.8.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.02.8.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.02.9.tar.gz">buildroot-2022.02.9.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.02.9.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.02.8.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.02.9.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.02.8.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.02.9.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2022.02.8.tar.xz">buildroot-2022.02.8.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.02.8.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.02.9.tar.xz">buildroot-2022.02.9.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.02.9.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index e8d87a5c26..687efeb377 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2022.02.9 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>18 January 2023</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2022.02.9 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2022.02.8 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.02.9">CHANGES</a>
++	  file for more details, read the
++	  <a href="https://lore.kernel.org/buildroot/87edrrer54.fsf@dell.be.48ers.dk/T/#u">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2022.02.9.tar.xz">2022.02.9 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
