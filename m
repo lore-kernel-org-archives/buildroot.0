@@ -1,51 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 733BBC32793
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 21:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6944FC32793
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 21:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1073C82190;
-	Wed, 18 Jan 2023 21:24:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1073C82190
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UTP2mCOO1ZfE; Wed, 18 Jan 2023 21:24:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C638813C0;
-	Wed, 18 Jan 2023 21:24:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C638813C0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 927D91BF308
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 21:24:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6EC1240AE7
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 21:24:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EC1240AE7
+	by smtp2.osuosl.org (Postfix) with ESMTP id E809740B9A;
+	Wed, 18 Jan 2023 21:35:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E809740B9A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 00rAoHM5zm7x for <buildroot@lists.busybox.net>;
- Wed, 18 Jan 2023 21:24:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A885C400D2
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 21:24:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A885C400D2
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 949EC87D02; Wed, 18 Jan 2023 21:24:39 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aqIe2LI_L66H; Wed, 18 Jan 2023 21:35:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C81D40B64;
+	Wed, 18 Jan 2023 21:35:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C81D40B64
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FF721BF308
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 21:35:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B46C60FF3
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 21:35:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B46C60FF3
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9V4dOv7v3mZa for <buildroot@lists.busybox.net>;
+ Wed, 18 Jan 2023 21:35:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E89760AC3
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3E89760AC3
+ for <buildroot@buildroot.org>; Wed, 18 Jan 2023 21:35:23 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([62.216.209.20]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRCKC-1p66U60JKm-00NDsg; Wed, 18
+ Jan 2023 22:35:18 +0100
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Wed, 18 Jan 2023 22:18:16 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e7797603d260b498c864d089b107d01679edf0a6
-X-Git-Newrev: c77c66b7df478f508b8f2affa7a64795504db699
-X-Patchwork-Hint: ignore
-Message-Id: <20230118212439.949EC87D02@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua: add options for coercion
- between number and string
+Date: Wed, 18 Jan 2023 22:35:17 +0100
+Message-Id: <20230118213517.5946-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:ZabZuAeSgOoXUABnWBitVaiaNl9LbEwtiYucY3vUS0+Ux2a+cnC
+ /8ATfBQmMKCnYrBBj4N58wlitR8nrfFFNwcAN6EmACclYlLHUUxpLKdsSvcXaZa3INMnbjQ
+ l7YDGF0jM6YmC5IYSOYAwfwRSbEUUCTu4gXh+abJXN1GHqXP/OaIIfywptAEai2Qm5r6ZuI
+ sgzhKZnOjEWtF/MmQUixQ==
+UI-OutboundReport: notjunk:1;M01:P0:6rgeHWqY+Zg=;ptq3NrIC0CxfIlf3g6WET1fR+ha
+ FCg2Pn1SR2/aOe02/vXMC+oW62LB/kYzNzPhYKuecy2BNrxbUyYlHOK7NXqgTVoYyOb1R8/4g
+ 9BQbUJdRXX6qPxL78MIMcteoBv1jX9XvrBYbKyDxYxA+hfyLNvXlvfyR0pWNrPlElARGyeBc/
+ rxPjxhynmp6Ct7ufuGN00NXHoV2vU1+MVFpqWBJELb9dFBh60m6oUugy1WKrDzixPLTcjtzZR
+ knrck34B8hrMwB1tlSeqiLBHuil4teKfz0WnBCeFKGGUoqqsiZxzfv+ZwhazvvVHppkn4i0uP
+ +UxVly9RHkSQVRGV92pp/gq4UgMWa4+scHWweNx9QkNNz7pfCLsq+NgXzgQiG1MOCkg7L8vSr
+ b0J6r0XPfeSJkgaETFJ6TBr3bOTP7AkwAcTzscnfbJ9JTGq4K8aHu1hs7Bpzgp4mbY5KDrOx9
+ xFp117EkdSKTBoSACJWCjfWDz5ZOCAFBhxojhbkT82mryGKUYnSqZi5BcjI2w/ID1knUu8CJk
+ 1ntuoQvDec2N/F7JF4+RhjqNSxz9yLqoWEUTbtQXBidGTdplupN88n7fHEu324A/KBR+P1bS2
+ 7jBxlBenrk0myQs22pEsNuqcJaeY4/bO4fHS6C8y8mGKM25POE9RF1QogAE/1P+7dfipUvFvB
+ i0uUFg57GH54rv8UP7uwK3l9OrERKcfnDNzQSZmaWCwGDCszc3WNhOrctrFJnkP1LEFt13Kzg
+ UVcAG3hTFHxEE54Pax0ziaRiu5Nq4C8lvTilcijMoc50wLhJxm87QqylSqIGFOZXUN5RMtb5B
+ 442s4lkI8ka4SaiSHvIiLvsWcIkICynpRyTww9QdZKOk8mQdGL2tQsdWnzdnd1qj0ROtDAl8m
+ 9gnOv3gCD/wKdv1XUDPhxkb32+9+OlnQ5zuRbrPffX6ZrbgNGbGmFpLWYWgLxjAHoJC53+1WI
+ a3PpC7aApT7Z/txnI5uEHmiwQ7M=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; s=s31663417; 
+ t=1674077718; bh=T1Bo/ONTAlwDkFbbYv5DFuAtN0DPlevAp6eXMcvUz/w=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=SHN81BXtIlgHLUmYCIg8Qb/yiBfcgk5Ua9EyPqb+01lsESzeYqTVwSkXb5btixXaR
+ COgffoQkesjRw4BVyFptJ2alGb6ojAOtIcJqdvvMIEL6ZYFwTw1tLWOsqchL0mB3bO
+ EooWgtzj0/WuOg5tt79BwU7g5DOg8woK2tvNPPEEhem2BaEpIg21rLjWqMZkVSn9D2
+ jnYjYPUeg/Y9bYk+z9+PrzO7C6eyQ1ublhRGo2ycFkEq/AlRD0lAfQ9Bc3Lhhtsdsg
+ qRqvhES3NL0NKxohaFByhp3SVoT2wb5tuL3BXWeYxY089JdTSlHaEfephy06b+ZBZP
+ YWnZTW8rCVzbg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=SHN81BXt
+Subject: [Buildroot] [PATCH v1] package/git: bump version to 2.39.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,95 +89,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c77c66b7df478f508b8f2affa7a64795504db699
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- fixes CVE-2022-41903 and CVE-2022-23521
 
-The default behavior of Lua 5.3/5.4 interperter (and the only way with
-Lua 5.1) is the automatic coercion. This default behavior could change
-in future version (ie. Lua 5.5).
+For details see [1].
 
-Disabling automatic coercion increases the performance of the interpreter.
+[1] https://lore.kernel.org/git/xmqq7cxl9h0i.fsf@gitster.g/
 
-Currently, using automatic coercion is not a good/recommended practice,
-but there are no way (expect testing) to say if a Lua module relies on it.
-
-We add two options to drive coercion in either way, and we make those
-options default to y, as this was the de-facto situation until now; lua
-5.1 forces those options: this will help when/if we have packages that
-actually requires them, but has otherwise no requirement on the lua
-version.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[yann.morin.1998@free.fr:
-  - don't limit options to lua 5.3||5.4
-  - force those options for lua 5.1
-  - extend commit log accordingly
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/lua/Config.in | 16 ++++++++++++++++
- package/lua/lua.mk    |  8 ++++++++
- 2 files changed, 24 insertions(+)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 309dd6eec2..456f3b8c12 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -21,6 +21,8 @@ choice
- config BR2_PACKAGE_LUA_5_1
- 	bool "Lua 5.1.x"
- 	select BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-+	select BR2_PACKAGE_LUA_CVT_N2S
-+	select BR2_PACKAGE_LUA_CVT_S2N
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 57a77b2810..75398896e5 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  ba199b13fb5a99ca3dec917b0bd736bc0eb5a9df87737d435eddfdf10d69265b  git-2.39.0.tar.xz
++sha256  40a38a0847b30c371b35873b3afcf123885dd41ea3ecbbf510efa97f3ce5c161  git-2.39.1.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 9918d4c1ef..1d728e1964 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LUA_5_3
- 	bool "Lua 5.3.x"
-@@ -43,6 +45,20 @@ config BR2_PACKAGE_LUA_32BITS
- 
- endif
- 
-+config BR2_PACKAGE_LUA_CVT_N2S
-+	bool "automatic coercion from number to string"
-+	default y  # legacy
-+	help
-+	  If unsure, say y, this is the default behavior of the Lua
-+	  interpreter. See LUA_NOCVTN2S in luaconf.h
-+
-+config BR2_PACKAGE_LUA_CVT_S2N
-+	bool "automatic coercion from string to number"
-+	default y  # legacy
-+	help
-+	  If unsure, say y, this is the default behavior of the Lua
-+	  interpreter. See LUA_NOCVTN2S in luaconf.h
-+
- choice
- 	prompt "Lua command-line editing"
- 	default BR2_PACKAGE_LUA_EDITING_NONE
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 01b554eb6b..16086e7bf4 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -31,6 +31,14 @@ else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_CFLAGS += -DLUA_COMPAT_5_2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LUA_CVT_N2S),)
-+LUA_CFLAGS += -DLUA_NOCVTN2S
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LUA_CVT_S2N),)
-+LUA_CFLAGS += -DLUA_NOCVTS2N
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- LUA_BUILDMODE = static
- else
+-GIT_VERSION = 2.39.0
++GIT_VERSION = 2.39.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-- 
+2.39.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
