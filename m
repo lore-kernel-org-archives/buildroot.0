@@ -4,84 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BDE1C32793
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 18:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74F00C32793
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 19:50:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C21C61017;
-	Wed, 18 Jan 2023 18:47:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C21C61017
+	by smtp3.osuosl.org (Postfix) with ESMTP id B96F06107F;
+	Wed, 18 Jan 2023 19:50:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B96F06107F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jfrw78BQE80j; Wed, 18 Jan 2023 18:47:49 +0000 (UTC)
+	with ESMTP id ZxETLil6jq9j; Wed, 18 Jan 2023 19:50:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB1CE60FEA;
-	Wed, 18 Jan 2023 18:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB1CE60FEA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0246661064;
+	Wed, 18 Jan 2023 19:50:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0246661064
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 602B81BF29C
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 18:47:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 435D01BF429
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 19:50:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 483B341831
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 18:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 483B341831
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A9694185B
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 19:50:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A9694185B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kbFS8Q0Tph61 for <buildroot@lists.busybox.net>;
- Wed, 18 Jan 2023 18:47:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F412F41828
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F412F41828
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 18:47:43 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id ss4so78189687ejb.11
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 10:47:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=9v+nEDKEF+WBXW9Ieh5DqlXllcS1vP6GbqEzuiCEjvA=;
- b=NWMFvYbKskH7j/Y7yNdp2j0nwwsu9qIBZVymX5IfghDyvo4Y2fWBZ9R4+8pObowLr5
- ue7D3Fl2BxTzw0hr6XXDigpM67OQ8e7h1RzDaOd8vAi39b/XsLka3jPa4ehuIXZy3Dl4
- 38dbdipRsiL9AbwyH95kVNA6BTN4WRs3UOilzocS9gNKgPgRDlZ/p+8D0JHHHFtrqokJ
- 7aABu3cNFvMcLDRon/lZ1rRwwKONg52P66PRtzAWpPvj+RkpBjrBcU13LdbIpliyjtIW
- tRtOSl4YMAF8VhYXIxs9y4pc/2SIm9V9LX0mSMPED3V+HQ20JGql/p/zwAxgeBH5xUtS
- GSQQ==
-X-Gm-Message-State: AFqh2kqcxDGR4mQPRz8QzHe37d399vR9LxkiuASk24xGqqpQg5nc5ko7
- MgkkCmbMxOJt6nL4CslcrF/mgcZgmYI=
-X-Google-Smtp-Source: AMrXdXsPoIwSt6QK7gtz5hhs7SuKSJ/fJErVgrCYrN/hwWSsrP9TN9G4iWpWJ+E6yTDIpWCLK2pFNQ==
-X-Received: by 2002:a05:600c:214f:b0:3da:68e1:5d45 with SMTP id
- v15-20020a05600c214f00b003da68e15d45mr7652608wml.23.1674066217938; 
- Wed, 18 Jan 2023 10:23:37 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- j30-20020a05600c1c1e00b003daf89e01d3sm3186552wms.11.2023.01.18.10.23.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Jan 2023 10:23:37 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 92yRMRH7px0b for <buildroot@lists.busybox.net>;
+ Wed, 18 Jan 2023 19:50:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6478A4187D
+Received: from mail.xogium.me (mail.xogium.me [107.167.81.91])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6478A4187D
+ for <buildroot@buildroot.org>; Wed, 18 Jan 2023 19:50:10 +0000 (UTC)
+Received: from ganimede.. (2a02-8428-324d-2201-5ccf-c338-3098-6959.rev.sfr.net
+ [IPv6:2a02:8428:324d:2201:5ccf:c338:3098:6959])
+ by mail.xogium.me (Postfix) with ESMTPSA id CBB4FF40214;
+ Wed, 18 Jan 2023 14:50:07 -0500 (EST)
+From: Casey Reeves <casey@xogium.me>
 To: buildroot@buildroot.org
-Date: Wed, 18 Jan 2023 19:23:33 +0100
-Message-Id: <20230118182333.503773-1-fontaine.fabrice@gmail.com>
+Date: Wed, 18 Jan 2023 20:49:25 +0100
+Message-Id: <20230118194925.254654-1-casey@xogium.me>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230117205630.221898-1-casey@xogium.me>
+References: <20230117205630.221898-1-casey@xogium.me>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9v+nEDKEF+WBXW9Ieh5DqlXllcS1vP6GbqEzuiCEjvA=;
- b=IWGRgQvh/8iOL4yhptkRz39IF4vpL0dMgDmP0DfPLpRuSozznUQFRyH4rEMDDKb8Fw
- FDuIRERIrZjksK+YZXjZU1oCccD39TjhnKifhOmtuS3ty9D2MllO6Z2ELe7tdu4XBiND
- MCXJPRn+VpR6A3m1IYELsyOZl3WQQprEVCgkmzPKzHXI8ukJ5Z/AQXnsWchR7EPVmD42
- I6hURUk3+rpnx1tN1xzrKvRU+WQ1pqklkIhMQw4yIlr6JixoDhcRzXPVdANPhG+l6Nsq
- nscWxCKmjptylgUbDdMWWxQ5Xhw7gnv3/U97VxzRr2BuoBOkm61voijtnxRImiKIKmvB
- 5lxQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=xogium.me; s=xogium-mail; t=1674071408;
+ bh=VtMzuhNWt/YyEB07I/RlFoW/qH7kEPqw0tvrU/CiEzg=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=QhIOgq3J6IIs+FBpIRDrYtxvUOnYNyv4xXJA0/81B5l3q9+18HHc4gOM8oOqsZ05X
+ TuYwokmNcPUw4L6OXcCYa0t1qEKwHMeBBqiHirIKTQvhsUoend0239EmamaaWp4+m/
+ CqGzS7csIrEYozTesRiVLapixjXlTt69Fa9QAxseotQFdJsy59lzDde802arHUxDpJ
+ vwxGGCz7WYEc02hbDeVGee64jxKkvE+aLRSvEs0+S+25en35AiJm3uZjcEBrnSrw0B
+ V5Klnmu6CnCJ8vjKzjoWnEOjVUPeef5bpzDcV4WtaYPl7/euSLs9n2ubAgFxCQq1N6
+ +ZAdEu32zgvsQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=IWGRgQvh
-Subject: [Buildroot] [PATCH 1/1] package/xxhash: set XXH_NO_INLINE_HINTS
+ dkim=pass (2048-bit key) header.d=xogium.me header.i=@xogium.me
+ header.a=rsa-sha256 header.s=xogium-mail header.b=QhIOgq3J
+Subject: [Buildroot] [PATCH v2] package/systemd: reenable utmp support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,48 +72,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Norbert Lange <nolange79@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@phobosdpl.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set XXH_NO_INLINE_HINTS to marks all internal functions as static,
-giving the compiler full control on whether to inline or not. This will
-fix the following build failure raised since bump to version 0.8.1 in
-commit 5dbdb2535c649ee617595b8c4ae3cbba0ee37b97:
+This patch provides a way to enable utmp support when using systemd,
+with it disabled by default, as some security concerns may apply. Still,
+there are cases where having utmp is desirable, even though it is rare,
+so let's make this configurable.
 
-In file included from xxhash.c:43:
-In function 'XXH3_accumulate',
-    inlined from 'XXH3_hashLong_internal_loop' at xxhash.h:4390:9,
-    inlined from 'XXH3_hashLong_64b_internal' at xxhash.h:4453:5,
-    inlined from 'XXH3_hashLong_64b_withSecret' at xxhash.h:4473:12,
-    inlined from 'XXH3_64bits_internal' at xxhash.h:4554:12,
-    inlined from 'XXH3_64bits_withSecret' at xxhash.h:4570:12:
-xxhash.h:4196:1: error: inlining failed in call to 'always_inline' 'XXH3_accumulate_512_scalar': function not considered for inlining
- 4196 | XXH3_accumulate_512_scalar(void* XXH_RESTRICT acc,
-      | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+See commit 32f53bdfb482d0d78308e548c654898089b5c183.
 
-Fixes:
- - http://autobuild.buildroot.org/results/f2c52238df97cc4c13117d8dc1423235231a094c
+Signed-off-by: Casey Reeves <casey@xogium.me>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/xxhash/xxhash.mk | 1 +
- 1 file changed, 1 insertion(+)
+Changes v1 -> v2:
+- Make this a configurable option rather than hardcode it to forcefully
+disabled or enabled
+---
+ package/systemd/Config.in  | 16 ++++++++++++++++
+ package/systemd/systemd.mk |  9 +++++++--
+ 2 files changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
-index 04bc98690f..40e3c2696c 100644
---- a/package/xxhash/xxhash.mk
-+++ b/package/xxhash/xxhash.mk
-@@ -28,6 +28,7 @@ endif
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 45a9e2d644..daa72b65b1 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -518,6 +518,22 @@ config BR2_PACKAGE_SYSTEMD_USERDB
  
- define XXHASH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		CFLAGS="$(TARGET_CFLAGS) -DXXH_NO_INLINE_HINTS" \
- 		$(XXHASH_TARGETS)
- endef
+ 	  https://www.freedesktop.org/software/systemd/man/systemd-userdbd.service.html
  
++config BR2_PACKAGE_SYSTEMD_UTMP
++	bool "enable utmp support"
++	help
++	  When this feature is selected, systemd will manage the
++	  support of utmp.
++
++	  Utmp keeps track of what users do on the system (where they
++	  logged from, on which terminal, ...) along with a general
++	  status of the system (list of reboots, current uptime, current
++	  number of users logged in).
++
++	  You should only enable this if your system requires actual
++	  users to log in.
++
++	  https://man7.org/linux/man-pages/man5/utmp.5.html
++
+ config BR2_PACKAGE_SYSTEMD_VCONSOLE
+ 	bool "enable vconsole tool"
+ 	default y
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index b96873b73f..f191542866 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -87,8 +87,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dtelinit-path= \
+ 	-Dtests=false \
+ 	-Dtmpfiles=true \
+-	-Dumount-path=/usr/bin/umount \
+-	-Dutmp=false
++	-Dumount-path=/usr/bin/umount
+ 
+ SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_OPTIMIZE_FAST),y)
+@@ -331,6 +330,12 @@ else
+ SYSTEMD_CONF_OPTS += -Dbinfmt=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_UTMP),y)
++SYSTEMD_CONF_OPTS += -Dutmp=true
++else
++SYSTEMD_CONF_OPTS += -Dutmp=false
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_VCONSOLE),y)
+ SYSTEMD_CONF_OPTS += -Dvconsole=true
+ else
 -- 
 2.39.0
 
