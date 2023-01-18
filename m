@@ -4,51 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE7DDC38147
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 16:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FAA9C32793
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 16:57:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3441260FEA;
-	Wed, 18 Jan 2023 16:36:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3441260FEA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64B2560FE9;
+	Wed, 18 Jan 2023 16:57:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64B2560FE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u4SEY8DdL_RH; Wed, 18 Jan 2023 16:36:48 +0000 (UTC)
+	with ESMTP id mroEVpVWkLw1; Wed, 18 Jan 2023 16:57:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7806560FDF;
-	Wed, 18 Jan 2023 16:36:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7806560FDF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 827341BF578
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:36:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D4AB60FCD;
+	Wed, 18 Jan 2023 16:57:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D4AB60FCD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 389971BF578
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5EAD040B2E
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:36:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EAD040B2E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D75081E7C
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:57:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D75081E7C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kTr_hspObh9C for <buildroot@lists.busybox.net>;
- Wed, 18 Jan 2023 16:36:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E954A40B05
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E954A40B05
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 16:36:43 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E8E9940004
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 16:36:40 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1pIBQV-009KJL-Um
- for buildroot@buildroot.org; Wed, 18 Jan 2023 17:36:39 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3NWnMckm0MQ7 for <buildroot@lists.busybox.net>;
+ Wed, 18 Jan 2023 16:57:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18C0E81E2D
+ for <buildroot@buildroot.org>; Wed, 18 Jan 2023 16:57:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18C0E81E2D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 06EEF87CE7; Wed, 18 Jan 2023 16:57:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Jan 2023 17:36:39 +0100
-Message-ID: <87edrrer54.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: [Buildroot] Buildroot 2022.02.9 released
+Date: Wed, 18 Jan 2023 17:53:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a796cfb2e0343730a1232d0f5aff405a9788a15d
+X-Git-Newrev: 281e51f00b838dc26be5babf4acf9730f8ad87be
+X-Patchwork-Hint: ignore
+Message-Id: <20230118165751.06EEF87CE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website: update for 2022.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,99 +56,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=281e51f00b838dc26be5babf4acf9730f8ad87be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-Buildroot 2022.02.9 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2022.02.9.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2022.02.9.tar.xz
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2022.02.9 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2022.02.8 release.
-
-- Br2-external: Fix make performance issue when many (> 6) external
-  trees are used together.
-
-- Erofs: Use fixed timestamp and UUID when BR2_REPRODUCIBLE is used.
-
-- Go: Ensure our go build and module cache is used, even for the
-  download step.
-
-- Legal-info: Stop warning about not saving sources for local / override
-  packages if <PKG>_REDISTRIBUTE is set to NO.
-
-- Linux: Fix build of < 5.6 kernels with host-gcc >= 10.
-
-- A large number of NXP related packages and defconfigs have been
-  updated as upstream moved the git repositories to Github.
-
-- Defconfigs: zcu106, kria kv260: Fix U-Boot build
-
-- Security fixes for asterisk, botan, cairo, capnproto, connman,
-  containerd, docker-cli, docker-engine, go, intel-microcode, libcurl,
-  libksba, libpjsip, mbedtls, php, ruby, sqlite, tiff,
-  tor, wayland, wireshark, xserver_xorg-server
-
-- Fixes for download/compilation/runtime/license issues in bearssl,
-  check, checkpolicy, exempi, exfat, exfat-utils, fmc, fmlib,
-  glib-networking, gobject-introspection, gperf, i2pd, ima-evm-utils,
-  imx-alsa-plugins, imx-kobs, imx-lib, imx-m4fwloader, imx-mkimage,
-  janus-gateway, libftdi1, libmbim, libmng, libtalloc, libuwsc,
-  libxkbcommon, linux, lpeg, lrzsz, lttng-tools, lua-cqueues, mfgtools,
-  mutt, policycoreutils, polkit, postgresql, pptp-linux,
-  qcom-db410c-firmware, qoriq-rcw, qt5virtualkeyboard, rhash, rtl_433,
-  swupdate, tekui, tinyxml, wpa_supplicant, xdriver_xf86-video-imx-viv,
-  xr819-xradio, xxhash, zip
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2022.11.1
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2022.02.8..
-
-    32  Julien Olivain
-    28  Fabrice Fontaine
-    21  Ricardo Martincoski
-    15  Bernd Kuhls
-     8  Peter Korsgaard
-     5  Christian Stewart
-     4  Quentin Schulz
-     3  Yann E. MORIN
-     2  Francois Perrad
-     2  Lang Daniel
-     2  Nicolas Carrier
-     2  Peter Seiderer
-     1  Bartosz Golaszewski
-     1  Casey Reeves
-     1  James Hilliard
-     1  Maxim Kochetkov
-     1  Michael Nosthoff
-     1  Nevo Hed
-     1  Norbert Lange
-     1  Thomas Claveirole
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 7fc5d1169b..0b62522043 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2022.11</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2022.11.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2022.11.tar.gz">buildroot-2022.11.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.11.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.11.1.tar.gz">buildroot-2022.11.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.11.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.11.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2022.11.tar.xz">buildroot-2022.11.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.11.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.11.1.tar.xz">buildroot-2022.11.1.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.11.1.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 75f1cb785d..e8d87a5c26 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2022.11.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>18 January 2023</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2022.11.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2022.11 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.11.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="https://lore.kernel.org/buildroot/87ilh4dvax.fsf@dell.be.48ers.dk/T/#u">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2022.11.1.tar.xz">2022.11.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
