@@ -1,50 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp1.osuosl.org (unknown [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37CADC32793
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 16:58:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AD0FC32793
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 17:36:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F52080316;
-	Wed, 18 Jan 2023 16:58:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F52080316
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD9DB820C9;
+	Wed, 18 Jan 2023 17:36:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD9DB820C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eboYdk1JfnnD; Wed, 18 Jan 2023 16:58:33 +0000 (UTC)
+	with ESMTP id zk_g2TzYx5Sm; Wed, 18 Jan 2023 17:36:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E0C481FF4;
-	Wed, 18 Jan 2023 16:58:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E0C481FF4
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4324820C2;
+	Wed, 18 Jan 2023 17:36:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4324820C2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 836201BF578
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:57:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0BC441BF2B5
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 17:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F1D341862
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:57:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F1D341862
+ by smtp4.osuosl.org (Postfix) with ESMTP id E32EE4188F
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 17:36:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32EE4188F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MfPa3z44V-P6 for <buildroot@lists.busybox.net>;
- Wed, 18 Jan 2023 16:57:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FE324185F
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 16:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FE324185F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED94287CE6; Wed, 18 Jan 2023 16:57:50 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id M4ivHQBZqVBQ for <buildroot@lists.busybox.net>;
+ Wed, 18 Jan 2023 17:36:05 +0000 (UTC)
+X-Greylist: delayed 00:15:11 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6DED4188B
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com
+ [136.143.188.14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A6DED4188B
+ for <buildroot@buildroot.org>; Wed, 18 Jan 2023 17:36:05 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1674062446; cv=none; 
+ d=zohomail.com; s=zohoarc; 
+ b=mmK66/+XLZ3Bqi5vaKej1RhvBMmDxeVACEhkgy7XqDZ0Uj05AvSaMbcaNEDdd7nIBK2qZacIAjQCmXMkJPDky9KSKVusludRQXAKSDrgIJ9Ik8Iizy0RA5COBDUQ8RkAPqEcOeFsucjvCamYePu6uzES240DUKBsl1lwGxB4d+c=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
+ s=zohoarc; t=1674062446;
+ h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To;
+ bh=+L0ZRB/mwqTH9QridhDrJobWNfkqTnLLN6p8RynSlPA=; 
+ b=MUcHPjeKroPoW9lBdDG8k0StaeSiOQRDgdAohg9Fml2LIVMX9ckIt+RkB1U9CIzfsOoFYEKgQ3TXRC8GzMbzo6Jxii+X5do4Oib//fmjfBnbAeSYn3+eGGXHOaFaqbe+lhShXb4T8U4+wXU5I7F3T+apcxhgCcWUPqpyPQk/18I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+ dkim=pass  header.i=arinc9.com;
+ spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+ dmarc=pass header.from=<arinc.unal@arinc9.com>
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by
+ mx.zohomail.com with SMTPS id 1674062444024300.12376436861257;
+ Wed, 18 Jan 2023 09:20:44 -0800 (PST)
+Message-ID: <454a1894-af38-7818-7880-8e6a29466f63@arinc9.com>
+Date: Wed, 18 Jan 2023 20:20:41 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
 To: buildroot@buildroot.org
-Date: Wed, 18 Jan 2023 17:50:12 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b6ccffcfb84938d2f0813d7c98907d75b49b842
-X-Git-Newrev: a796cfb2e0343730a1232d0f5aff405a9788a15d
-X-Patchwork-Hint: ignore
-Message-Id: <20230118165750.ED94287CE6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2022.11.1
+From: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+X-ZohoMailClient: External
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; t=1674062446; 
+ s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+ h=Message-ID:Date:Date:MIME-Version:To:To:Cc:Cc:From:From:Subject:Subject:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+ bh=+L0ZRB/mwqTH9QridhDrJobWNfkqTnLLN6p8RynSlPA=;
+ b=Pi9MrotckqBKGYdCK6Fzc3rOw2maKXVrIzCsEiSlxhGhXZzVZ/8xKlDw6bEHrtpE
+ q+YGUPAOb772ljMVaabpKqFqolepbbLkpZ73KkYMoW1VwXyMNSSbgMhZ7jalWTCACgX
+ CXX/OxE3GHXtzFRq16GzkxbWtAb1/v5B/6siZE7o=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=arinc9.com header.i=arinc.unal@arinc9.com
+ header.a=rsa-sha256 header.s=zmail header.b=Pi9Mrotc
+Subject: [Buildroot] ifupdown bridging interfaces support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,96 +83,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: erkin.bozoglu@xeront.com, Frank Wunderlich <frank-w@public-files.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a796cfb2e0343730a1232d0f5aff405a9788a15d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d48a8beb39275a479185ab9b3232cd15dcfb87ab)
-[Peter: drop Makefile change]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 50 ++++++++++++++++++++++++++++++++++++++++++++++++
- support/misc/Vagrantfile |  2 +-
- 2 files changed, 51 insertions(+), 1 deletion(-)
-
-diff --git a/CHANGES b/CHANGES
-index 6de79c7d35..e23cd4eaf8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,53 @@
-+2022.11.1, released January 18th, 2023
-+
-+	Important / security related fixes.
-+
-+	Br2-external: Fix make performance issue when many (> 6)
-+	external trees are used together.
-+
-+	Erofs: Use fixed timestamp and UUID when BR2_REPRODUCIBLE is
-+	used.
-+
-+	Go: Ensure our go build and module cache is used, even for the
-+	download step.
-+
-+	Legal-info: Stop warning about not saving sources for local /
-+	override packages if <PKG>_REDISTRIBUTE is set to NO.
-+
-+	Linux: Fix build of < 5.6 kernels with host-gcc >= 10.
-+
-+	A large number of NXP related packages and defconfigs have
-+	been updated as upstream moved the git repositories to Github.
-+
-+	Defconfigs: zcu106, kria kv260: Fix U-Boot build
-+
-+	Updated/fixed packages: asterisk, bearssl, botan, cairo,
-+	capnproto, check, checkpolicy, connman, containerd, crun,
-+	dbus-cxx, docker-cli, docker-engine, exempi, exfat,
-+	exfat-utils, falcosecurity-libs, fluidsynth, fmc, fmlib,
-+	freeradius-server, gcc, glib-networking, go,
-+	gobject-introspection, gperf, i2pd, ima-evm-utils,
-+	imx-alsa-plugins, imx-kobs, imx-lib, imx-m4fwloader,
-+	imx-mkimage, intel-microcode, janus-gateway, libcurl,
-+	libdeflate, libftdi1, libkcapi, libksba, libmbim, libmng,
-+	libpjsip, libtalloc, libuwsc, libxkbcommon, lpeg, lrzsz,
-+	lttng-tools, lua-cqueues, mali-driver, mbedtls, mfgtools,
-+	moby-buildkit, mutt, opensc, php, policycoreutils, polkit,
-+	postgresql, pptp-linux, qcom-db410c-firmware, qemu, qoriq-rcw,
-+	qt5virtualkeyboard, redis, rhash, rtl8189es, rtl8192eu,
-+	rtl_433, ruby, sqlite, swupdate, tealdeer, tekui, tiff,
-+	tinyxml, tor, webkitgtk, wireshark, wpasupplicant, wpewebkit,
-+	xr819-xradio, xdriver_xf86-video-imx-viv, xserver_xorg-server,
-+	xxhash, zip
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#14971: Kernel 3.10.108 fail to build in Buildroot 2022.08-rc1
-+	#14996: Too many directories in BR2_EXTERNAL causes hang during make
-+	#15161: kernel can't support SUBDIR
-+	#15196: Setting BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE does not work
-+	#15226: lsblk: not found
-+
- 2022.11, released December 5th, 2022
- 
- 	Fixes all over the tree.
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 02fe6bca67..9eee9955ec 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2022.11'
-+RELEASE='2022.11.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gZm9sa3MsCgpJIHdhbnQgdG8gdXNlIEJ1aWxkcm9vdCBhcyB0aGUgZmlsZXN5c3RlbSBv
+biBzb21lIGVtYmVkZGVkIGRldmljZXMgSSd2ZSAKZ290LiBJIHdhbnQgdG8gcHV0IHRoZSBpbnRl
+cmZhY2VzIGluIGEgYnJpZGdlLgoKSSBzZWUgYnVpbGRyb290IHVzZXMgaWZ1cGRvd24gYnkgZGVm
+YXVsdCB0byBtYW5hZ2UgaW50ZXJmYWNlcy4gSG93ZXZlciwgCnRoZXJlIGlzIG5vIHN1cHBvcnQg
+Zm9yIGJyaWRnaW5nIGludGVyZmFjZXMuIFRoZSBicmlkZ2UtdXRpbHMgcGFja2FnZSBvbiAKRGVi
+aWFuIGNvbnRhaW5zIGEgc2NyaXB0IGZvciBpZnVwZG93biBbMV0gd2hpY2ggZG9lcyB0aGlzLiBI
+b3dldmVyIHRoZSAKc2FtZSBwYWNrYWdlIG9uIEJ1aWxkcm9vdCBoYXNuJ3QgZ290IGl0LgoKSSBh
+bHJlYWR5IGNoYW5nZWQgdGhlIHNjcmlwdCBhIGxpdHRsZSBhbmQgcHV0IGl0IG9uIG15IHJvb3Rm
+cyBvdmVybGF5IAp3aGljaCB3b3JrcyBmaW5lLCBidXQgSSdkIGxpa2UgdG8gaW5jbHVkZSB0aGlz
+IGluIGEgYnVpbGRyb290IHBhY2thZ2Ugc28gCml0IGhlbHBzIGV2ZXJ5b25lLgoKSSBzZWUgdGhl
+IHBhY2thZ2UgaXMgZGVwcmVjYXRlZCBzbyBpdCBtYWtlcyBzZW5zZSBub3QgdG8gdG91Y2ggaXQg
+YXQgCmFsbC4gTXkgcGxhbiBpcyB0byBhZGQgYSBzY3JpcHQgb24gdGhlIGlmdXBkb3duLXNjcmlw
+dHMgcGFja2FnZSB0byAKc2ltcGx5IHN1cHBvcnQgdGhlIGJyaWRnZV9wb3J0cyBvcHRpb24uIEdl
+dCB0aGUgRGViaWFuIHRhcmJhbGwgWzJdLCAKZXh0cmFjdCB0aGUgc2NyaXB0LCBhbmQgcGF0Y2gg
+aXQgdG8ganVzdCBzdXBwb3J0IHRoZSBicmlkZ2VfcG9ydHMgb3B0aW9uIAp3aXRob3V0IG5lZWRp
+bmcgaXByb3V0ZTIgb3IgYnJjdGwuCgpJIGNhbiBhbHNvIGp1c3QgaW5jbHVkZSB0aGUgbW9kaWZp
+ZWQgc2NyaXB0IG9uIHRoZSBwYWNrYWdlIHdpdGhvdXQgCnJldHJpZXZpbmcgYW5kIHBhdGNoaW5n
+IGJ1dCBJIGRvbid0IHRoaW5rIHRoYXQgd291bGQgYmUgZmluZSB3aXRoIGxpY2Vuc2luZy4KCkkg
+d29uZGVyIGlmIHRoaXMgd2FzIGRpc2N1c3NlZCBiZWZvcmUsIHRoZSBvbmx5IGNvbnZlcnNhdGlv
+biB0aGF0IGNhbWUgCnVwIG9uIG15IHNlYXJjaCB3YXMgRnJhbmsncyBidWcgcmVwb3J0IFszXS4K
+CkknZCBhcHByZWNpYXRlIHlvdXIgdGhvdWdodHMsIGhvdyBJIHNob3VsZCBwcm9jZWVkIHRvIHN1
+cHBvcnQgaXQgb24gCkJ1aWxkcm9vdC4gQWxzbywgaWYgdGhlcmUncyBhbnkgb3RoZXIgbmV0d29y
+ayBjb25maWd1cmF0aW9uIHRvb2wgb24gCkJ1aWxkcm9vdCB3aGljaCBzdXBwb3J0cyBicmlkZ2lu
+ZyBpbnRlcmZhY2VzLCBwbGVhc2UgbGV0IG1lIGtub3cuCgpbMV0gaHR0cHM6Ly9zb3VyY2VzLmRl
+Ymlhbi5vcmcvc3JjL2JyaWRnZS11dGlscy8xLjctMS9kZWJpYW4vcnVsZXMvI0w1OQpbMl0gCmh0
+dHA6Ly9kZWIuZGViaWFuLm9yZy9kZWJpYW4vcG9vbC9tYWluL2IvYnJpZGdlLXV0aWxzL2JyaWRn
+ZS11dGlsc18xLjctMS5kZWJpYW4udGFyLnh6ClszXSBodHRwczovL2J1Z3MuYnVzeWJveC5uZXQv
+c2hvd19idWcuY2dpP2lkPTEzNDY2CgpDaGVlcnMuCkFyxLFuw6cKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
