@@ -4,50 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71358C004D4
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 09:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 476A6C32793
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 10:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED0BA416AD;
-	Wed, 18 Jan 2023 09:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED0BA416AD
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCDC3416FF;
+	Wed, 18 Jan 2023 10:44:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCDC3416FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SBLkXlRQyrot; Wed, 18 Jan 2023 09:52:14 +0000 (UTC)
+	with ESMTP id 2VMb7f95d9IU; Wed, 18 Jan 2023 10:44:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8BB24180F;
-	Wed, 18 Jan 2023 09:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8BB24180F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 576FB1BF3F4
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 09:52:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A856A415E5;
+	Wed, 18 Jan 2023 10:44:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A856A415E5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AA821BF589
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 10:44:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F98681E7A
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 09:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F98681E7A
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA42B415E5
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 10:44:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA42B415E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 28hzSsG89989 for <buildroot@lists.busybox.net>;
- Wed, 18 Jan 2023 09:52:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 899CA81E6C
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 899CA81E6C
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 09:52:10 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A6C09240009
- for <buildroot@buildroot.org>; Wed, 18 Jan 2023 09:52:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1pI570-009Cfe-Jv
- for buildroot@buildroot.org; Wed, 18 Jan 2023 10:52:06 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id leTjailW1hrU for <buildroot@lists.busybox.net>;
+ Wed, 18 Jan 2023 10:44:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC0D9411C6
+ for <buildroot@buildroot.org>; Wed, 18 Jan 2023 10:44:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC0D9411C6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B649A87C8A; Wed, 18 Jan 2023 10:44:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Jan 2023 10:52:06 +0100
-Message-ID: <87ilh4dvax.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: [Buildroot] Buildroot 2022.11.1 released
+Date: Wed, 18 Jan 2023 11:44:24 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: e18846284cafd8827872f02e9699102740988132
+X-Git-Newrev: ae835e094f607d69f1c2581593a4c55723486c39
+X-Patchwork-Hint: ignore
+Message-Id: <20230118104448.B649A87C8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] Update for 2022.02.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,108 +56,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae835e094f607d69f1c2581593a4c55723486c39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                  | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 47 insertions(+), 3 deletions(-)
 
-Buildroot 2022.11.1 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2022.11.1.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2022.11.1.tar.xz
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2022.11.1 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2022.11 release.
-
-- Br2-external: Fix make performance issue when many (> 6) external
-  trees are used together.
-
-- Erofs: Use fixed timestamp and UUID when BR2_REPRODUCIBLE is used.
-
-- Go: Ensure our go build and module cache is used, even for the
-  download step.
-
-- Legal-info: Stop warning about not saving sources for local / override
-  packages if <PKG>_REDISTRIBUTE is set to NO.
-
-- Linux: Fix build of < 5.6 kernels with host-gcc >= 10.
-
-- A large number of NXP related packages and defconfigs have been
-  updated as upstream moved the git repositories to Github.
-
-- Defconfigs: zcu106, kria kv260: Fix U-Boot build
-
-- Security fixes for asterisk, botan, cairo, capnproto, connman,
-  containerd, docker-cli, docker-engine, go, intel-microcode, libcurl,
-  libksba, libpjsip, mbedtls, moby-buildkit, php, ruby, sqlite, tiff,
-  tor, webkitgtk, wireshark, wpewebkit, xserver_xorg-server
-
-- Fixes for download/compilation/runtime/license issues in bearssl,
-  dbus-cxx, check, checkpolicy, crun, exempi, exfat, exfat-utils,
-  falcosecurity-libs, fluidsynth, fmc, fmlib, freeradius-server, gcc,
-  glib-networking, gobject-introspection, gperf, i2pd, ima-evm-utils,
-  imx-alsa-plugins, imx-kobs, imx-lib, imx-m4fwloader, imx-mkimage,
-  janus-gateway, libdeflate, libftdi1, libkcapi, libmbim, libmng,
-  libtalloc, libuwsc, libxkbcommon, linux, lpeg, lrzsz, lttng-tools,
-  lua-cqueues, mali-driver, mfgtools, mutt, opensc, policycoreutils,
-  polkit, postgresql, pptp-linux, qcom-db410c-firmware, qoriq-rcw,
-  qt5virtualkeyboard, redis, rhash, rtl8189es, rtl8192eu, rtl_433,
-  swupdate, tealdeer, tekui, tinyxml, wpa_supplicant,
-  xdriver_xf86-video-imx-viv, xr819-xradio, xxhash, zip
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2022.11.1
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2022.11..
-
-    38  Julien Olivain
-    32  Fabrice Fontaine
-    22  Ricardo Martincoski
-    16  Bernd Kuhls
-     9  Christian Stewart
-     6  Peter Korsgaard
-     5  Giulio Benetti
-     5  Yann E. MORIN
-     4  Neal Frager
-     3  Lang Daniel
-     3  Quentin Schulz
-     2  Francois Perrad
-     2  Nicolas Carrier
-     2  Peter Seiderer
-     1  Adrian Perez de Castro
-     1  Bartosz Golaszewski
-     1  Casey Reeves
-     1  Danilo Bargen
-     1  Gleb Mazovetskiy
-     1  James Hilliard
-     1  Maxim Kochetkov
-     1  Michael Nosthoff
-     1  Nevo Hed
-     1  Norbert Lange
-     1  Tan En De
-     1  Thomas Claveirole
-     1  Thomas Devoogdt
-     1  Titouan Christophe
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index 3af8c5dcdf..8af15d3b1e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,47 @@
++2022.02.9, released January 18th, 2023
++
++	Important / security related fixes.
++
++	Br2-external: Fix make performance issue when many (> 6)
++	external trees are used together.
++
++	Erofs: Use fixed timestamp and UUID when BR2_REPRODUCIBLE is
++	used.
++
++	Go: Ensure our go build and module cache is used, even for the
++	download step.
++
++	Legal-info: Stop warning about not saving sources for local /
++	override packages if <PKG>_REDISTRIBUTE is set to NO.
++
++	Linux: Fix build of < 5.6 kernels with host-gcc >= 10.
++
++	A large number of NXP related packages and defconfigs have
++	been updated as upstream moved the git repositories to Github.
++
++	Updated/fixed packages: asterisk, bearssl, botan, cairo,
++	capnproto, check, checkpolicy, connman, containerd,
++	docker-cli, docker-engine, exempi, exfat, exfat-utils, fmc,
++	fmlib, glib-networking, go, gobject-introspection, gperf,
++	i2pd, ima-evm-utils, imx-alsa-plugins, imx-kobs, imx-lib,
++	imx-m4fwloader, imx-mkimage, intel-microcode, janus-gateway,
++	libcurl, libftdi1, libksba, libmbim, libmng, libpjsip,
++	libtalloc, libuwsc, libxkbcommon, linux, lpeg, lrzsz,
++	lttng-tools, lua-cqueues, mbedtls, mfgtools, mutt, php,
++	policycoreutils, polkit, postgresql, pptp-linux,
++	qcom-db410c-firmware, qemu, qoriq-rcw, qt5virtualkeyboard,
++	rhash, rtl_433, ruby, sqlite, swupdate, tekui, tiff, tinyxml,
++	tor, wayland, wireshark, wpa_supplicant,
++	xdriver_xf86-video-imx-viv, xserver_xorg-server, xxhash, zip
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#14971: Kernel 3.10.108 fail to build in Buildroot 2022.08-rc1
++	#14996: Too many directories in BR2_EXTERNAL causes hang during make
++	#15161: kernel can't support SUBDIR
++	#15196: Setting BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE does not work
++	#15226: lsblk: not found
++
+ 2022.02.8, released December 10th, 2022
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 404dcaa270..3bdc2f08c9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2022.02.8
++export BR2_VERSION := 2022.02.9
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1670685000
++BR2_VERSION_EPOCH = 1674038000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index b35ccac727..a96b91ea40 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2022.02.8'
++RELEASE='2022.02.9'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
