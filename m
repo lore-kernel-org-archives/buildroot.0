@@ -1,90 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C25A3C38147
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 15:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE7DDC38147
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 16:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1EA8A40ACD;
-	Wed, 18 Jan 2023 15:47:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EA8A40ACD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3441260FEA;
+	Wed, 18 Jan 2023 16:36:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3441260FEA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u4SEY8DdL_RH; Wed, 18 Jan 2023 16:36:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7806560FDF;
+	Wed, 18 Jan 2023 16:36:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7806560FDF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 827341BF578
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:36:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5EAD040B2E
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:36:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EAD040B2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6rsgOYDioVO7; Wed, 18 Jan 2023 15:47:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6497B4038E;
-	Wed, 18 Jan 2023 15:47:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6497B4038E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00B321BF312
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 15:46:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D049A82036
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 15:46:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D049A82036
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wsA9nVZzXsOL for <buildroot@lists.busybox.net>;
- Wed, 18 Jan 2023 15:46:58 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4A748201F
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E4A748201F
- for <buildroot@busybox.net>; Wed, 18 Jan 2023 15:46:57 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- o17-20020a05600c511100b003db021ef437so1832998wms.4
- for <buildroot@busybox.net>; Wed, 18 Jan 2023 07:46:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=zyI0j7q1WZAGC7KerakJiV7hO4EDh4uzC28H++B2rlg=;
- b=PMUR9dOMXGPk3zylJLb3ZMLDZ+7lKJ7oKM0NeF5gbO9UoZ5RNBH8Iv8rbaCcKYCh7D
- wtXuoIX+m+vHPSktMobVjcx4IsJA0i6jXv3nujayCgszOaiW45GjqO+ej+oeekz6cfUp
- 9TV4Gq/Me2ZRvY6OazkYQfdfleSI5AbQghtljq2dHcm1KNBUa5kMTiZ5hb3WtpnviCmg
- Bw+OuAtSh7kx6hSXEGO/URkaQDmM54U/6YRXlJZKw0EXHOXcW4FQbfwjPrdUWYQWgha2
- qYxzI0b8Pzq5/8ipbmMUxEZUqgqjBGPPBfutdgJCfjy7WgiUY8EXwSX8y12lqpa/ByDj
- cBCQ==
-X-Gm-Message-State: AFqh2kr/5rYd0n+jAPP6b2qBaOjE4+YgTq+jygJKaxghIqmTCEft5A9G
- zYbFCQ9My1w+F8gbmOJmQB07SyoRlpY=
-X-Google-Smtp-Source: AMrXdXsbyzmCvCuWIpQowRTS/YQwOmLMyipiTnVq3WuX5gGm7ehVvG7OXyqGxQsYASI0aifr+3QJrA==
-X-Received: by 2002:a05:600c:1c01:b0:3da:fc07:5e80 with SMTP id
- j1-20020a05600c1c0100b003dafc075e80mr10536878wms.12.1674056815881; 
- Wed, 18 Jan 2023 07:46:55 -0800 (PST)
-Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- p10-20020a1c544a000000b003db16770bc5sm1630160wmi.6.2023.01.18.07.46.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Jan 2023 07:46:55 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Wed, 18 Jan 2023 16:46:14 +0100
-Message-Id: <20230118154614.2103-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.37.2
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kTr_hspObh9C for <buildroot@lists.busybox.net>;
+ Wed, 18 Jan 2023 16:36:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E954A40B05
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E954A40B05
+ for <buildroot@buildroot.org>; Wed, 18 Jan 2023 16:36:43 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E8E9940004
+ for <buildroot@buildroot.org>; Wed, 18 Jan 2023 16:36:40 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1pIBQV-009KJL-Um
+ for buildroot@buildroot.org; Wed, 18 Jan 2023 17:36:39 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 18 Jan 2023 17:36:39 +0100
+Message-ID: <87edrrer54.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zyI0j7q1WZAGC7KerakJiV7hO4EDh4uzC28H++B2rlg=;
- b=pREP4/7kWPGKtQPsE/hWbjT8QHBGaN05sTiixxWmEQ4K/+4oWASwr0c5uKS3cXLT7q
- b61pErDMUhU2QakCVlpHAq/aBLCIlTxZCKxFTCre4HCD5REOgWme7zXFL7qSo88kJqCp
- gzESiMvLo9OVgMP2omRpNN/k49wU+v/vjrXY04knBIGJv0TCcdjCsnA8aXy3+HG8YBjP
- GLUjIg8sbzwqB6Uu4tXxJnd5WxP/WCOwyljD5Gm78/BTCj+kMQABVIaYZB/qdhOgk1/V
- o31XiZe9T+hK/1Mvo6dC07rso1hzezNdOH+FjAD2siJbLDf0n+2rzj2sFeMCGUSdMozj
- nh6A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pREP4/7k
-Subject: [Buildroot] [PATCH v2] package/lua: add options for coercion
- between number and string
+Subject: [Buildroot] Buildroot 2022.02.9 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,69 +65,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-the default behavior of Lua 5.3/5.4 interperter
-(and the only way with Lua 5.1) is the automatic coercion.
+Hi,
 
-this default behavior could change in future version (ie. Lua 5.5).
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-disabling automatic coercion increases the performance of the interpreter.
+Buildroot 2022.02.9 is released - Go download it at:
 
-currently, using automatic coercion is not a good/recommended practice,
-but there are no way (expect testing) to say if a Lua module relies on it.
+http://buildroot.org/downloads/buildroot-2022.02.9.tar.gz
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/Config.in | 14 ++++++++++++++
- package/lua/lua.mk    |  8 ++++++++
- 2 files changed, 22 insertions(+)
+or
 
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 309dd6eec..ac30cfdde 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -41,6 +41,20 @@ config BR2_PACKAGE_LUA_32BITS
- 	  default 64 bit type. This option is particularly attractive
- 	  for small machines and embedded systems.
- 
-+config BR2_PACKAGE_LUA_CVT_N2S
-+	bool "automatic coercion from number to string"
-+	default y
-+	help
-+	  If unsure, say y, this is the default behavior of the Lua
-+	  interpreter. See LUA_NOCVTN2S in luaconf.h
-+
-+config BR2_PACKAGE_LUA_CVT_S2N
-+	bool "automatic coercion from string to number"
-+	default y
-+	help
-+	  If unsure, say y, this is the default behavior of the Lua
-+	  interpreter. See LUA_NOCVTN2S in luaconf.h
-+
- endif
- 
- choice
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 01b554eb6..16086e7bf 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -31,6 +31,14 @@ else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_CFLAGS += -DLUA_COMPAT_5_2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LUA_CVT_N2S),)
-+LUA_CFLAGS += -DLUA_NOCVTN2S
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LUA_CVT_S2N),)
-+LUA_CFLAGS += -DLUA_NOCVTS2N
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- LUA_BUILDMODE = static
- else
+http://buildroot.org/downloads/buildroot-2022.02.9.tar.xz
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2022.02.9 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2022.02.8 release.
+
+- Br2-external: Fix make performance issue when many (> 6) external
+  trees are used together.
+
+- Erofs: Use fixed timestamp and UUID when BR2_REPRODUCIBLE is used.
+
+- Go: Ensure our go build and module cache is used, even for the
+  download step.
+
+- Legal-info: Stop warning about not saving sources for local / override
+  packages if <PKG>_REDISTRIBUTE is set to NO.
+
+- Linux: Fix build of < 5.6 kernels with host-gcc >= 10.
+
+- A large number of NXP related packages and defconfigs have been
+  updated as upstream moved the git repositories to Github.
+
+- Defconfigs: zcu106, kria kv260: Fix U-Boot build
+
+- Security fixes for asterisk, botan, cairo, capnproto, connman,
+  containerd, docker-cli, docker-engine, go, intel-microcode, libcurl,
+  libksba, libpjsip, mbedtls, php, ruby, sqlite, tiff,
+  tor, wayland, wireshark, xserver_xorg-server
+
+- Fixes for download/compilation/runtime/license issues in bearssl,
+  check, checkpolicy, exempi, exfat, exfat-utils, fmc, fmlib,
+  glib-networking, gobject-introspection, gperf, i2pd, ima-evm-utils,
+  imx-alsa-plugins, imx-kobs, imx-lib, imx-m4fwloader, imx-mkimage,
+  janus-gateway, libftdi1, libmbim, libmng, libtalloc, libuwsc,
+  libxkbcommon, linux, lpeg, lrzsz, lttng-tools, lua-cqueues, mfgtools,
+  mutt, policycoreutils, polkit, postgresql, pptp-linux,
+  qcom-db410c-firmware, qoriq-rcw, qt5virtualkeyboard, rhash, rtl_433,
+  swupdate, tekui, tinyxml, wpa_supplicant, xdriver_xf86-video-imx-viv,
+  xr819-xradio, xxhash, zip
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2022.11.1
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2022.02.8..
+
+    32  Julien Olivain
+    28  Fabrice Fontaine
+    21  Ricardo Martincoski
+    15  Bernd Kuhls
+     8  Peter Korsgaard
+     5  Christian Stewart
+     4  Quentin Schulz
+     3  Yann E. MORIN
+     2  Francois Perrad
+     2  Lang Daniel
+     2  Nicolas Carrier
+     2  Peter Seiderer
+     1  Bartosz Golaszewski
+     1  Casey Reeves
+     1  James Hilliard
+     1  Maxim Kochetkov
+     1  Michael Nosthoff
+     1  Nevo Hed
+     1  Norbert Lange
+     1  Thomas Claveirole
+
 -- 
-2.37.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
