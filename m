@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3781C38159
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 16:58:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37CADC32793
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jan 2023 16:58:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 65E1540B1D;
-	Wed, 18 Jan 2023 16:58:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65E1540B1D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F52080316;
+	Wed, 18 Jan 2023 16:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F52080316
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zXf_1WH5MuGC; Wed, 18 Jan 2023 16:58:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eboYdk1JfnnD; Wed, 18 Jan 2023 16:58:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EF3540B05;
-	Wed, 18 Jan 2023 16:58:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EF3540B05
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E0C481FF4;
+	Wed, 18 Jan 2023 16:58:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E0C481FF4
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 72CF81BF578
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:57:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 836201BF578
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 775D841861
- for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:57:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 775D841861
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F1D341862
+ for <buildroot@lists.busybox.net>; Wed, 18 Jan 2023 16:57:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F1D341862
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LNNZIQq9li2p for <buildroot@lists.busybox.net>;
+ with ESMTP id MfPa3z44V-P6 for <buildroot@lists.busybox.net>;
  Wed, 18 Jan 2023 16:57:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3AABA41863
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FE324185F
  for <buildroot@buildroot.org>; Wed, 18 Jan 2023 16:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AABA41863
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FE324185F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2730287CE6; Wed, 18 Jan 2023 16:57:51 +0000 (UTC)
+ id ED94287CE6; Wed, 18 Jan 2023 16:57:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Jan 2023 17:57:30 +0100
+Date: Wed, 18 Jan 2023 17:50:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7b56604060a9bb6d06e790934421909dc1b763d8
-X-Git-Newrev: a8447f17b8a589af5a88fc1ffdacde3b130c539d
+X-Git-Oldrev: 4b6ccffcfb84938d2f0813d7c98907d75b49b842
+X-Git-Newrev: a796cfb2e0343730a1232d0f5aff405a9788a15d
 X-Patchwork-Hint: ignore
-Message-Id: <20230118165751.2730287CE6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: update for 2022.02.9
+Message-Id: <20230118165750.ED94287CE6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2022.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,96 +62,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8447f17b8a589af5a88fc1ffdacde3b130c539d
+commit: https://git.buildroot.net/buildroot/commit/?id=a796cfb2e0343730a1232d0f5aff405a9788a15d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d48a8beb39275a479185ab9b3232cd15dcfb87ab)
+[Peter: drop Makefile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES                  | 50 ++++++++++++++++++++++++++++++++++++++++++++++++
+ support/misc/Vagrantfile |  2 +-
+ 2 files changed, 51 insertions(+), 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 0b62522043..a7efef1ef3 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2022.02.8</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2022.02.9</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2022.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2022.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2022.02.8.tar.gz">buildroot-2022.02.8.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2022.02.8.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.02.9.tar.gz">buildroot-2022.02.9.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.02.9.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2022.02.8.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.02.9.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2022.02.8.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2022.02.9.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2022.02.8.tar.xz">buildroot-2022.02.8.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2022.02.8.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2022.02.9.tar.xz">buildroot-2022.02.9.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2022.02.9.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index e8d87a5c26..687efeb377 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2022.02.9 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>18 January 2023</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2022.02.9 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2022.02.8 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.02.9">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87edrrer54.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2022.02.9.tar.xz">2022.02.9 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/CHANGES b/CHANGES
+index 6de79c7d35..e23cd4eaf8 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,53 @@
++2022.11.1, released January 18th, 2023
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Br2-external: Fix make performance issue when many (> 6)
++	external trees are used together.
++
++	Erofs: Use fixed timestamp and UUID when BR2_REPRODUCIBLE is
++	used.
++
++	Go: Ensure our go build and module cache is used, even for the
++	download step.
++
++	Legal-info: Stop warning about not saving sources for local /
++	override packages if <PKG>_REDISTRIBUTE is set to NO.
++
++	Linux: Fix build of < 5.6 kernels with host-gcc >= 10.
++
++	A large number of NXP related packages and defconfigs have
++	been updated as upstream moved the git repositories to Github.
++
++	Defconfigs: zcu106, kria kv260: Fix U-Boot build
++
++	Updated/fixed packages: asterisk, bearssl, botan, cairo,
++	capnproto, check, checkpolicy, connman, containerd, crun,
++	dbus-cxx, docker-cli, docker-engine, exempi, exfat,
++	exfat-utils, falcosecurity-libs, fluidsynth, fmc, fmlib,
++	freeradius-server, gcc, glib-networking, go,
++	gobject-introspection, gperf, i2pd, ima-evm-utils,
++	imx-alsa-plugins, imx-kobs, imx-lib, imx-m4fwloader,
++	imx-mkimage, intel-microcode, janus-gateway, libcurl,
++	libdeflate, libftdi1, libkcapi, libksba, libmbim, libmng,
++	libpjsip, libtalloc, libuwsc, libxkbcommon, lpeg, lrzsz,
++	lttng-tools, lua-cqueues, mali-driver, mbedtls, mfgtools,
++	moby-buildkit, mutt, opensc, php, policycoreutils, polkit,
++	postgresql, pptp-linux, qcom-db410c-firmware, qemu, qoriq-rcw,
++	qt5virtualkeyboard, redis, rhash, rtl8189es, rtl8192eu,
++	rtl_433, ruby, sqlite, swupdate, tealdeer, tekui, tiff,
++	tinyxml, tor, webkitgtk, wireshark, wpasupplicant, wpewebkit,
++	xr819-xradio, xdriver_xf86-video-imx-viv, xserver_xorg-server,
++	xxhash, zip
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#14971: Kernel 3.10.108 fail to build in Buildroot 2022.08-rc1
++	#14996: Too many directories in BR2_EXTERNAL causes hang during make
++	#15161: kernel can't support SUBDIR
++	#15196: Setting BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE does not work
++	#15226: lsblk: not found
++
+ 2022.11, released December 5th, 2022
+ 
+ 	Fixes all over the tree.
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 02fe6bca67..9eee9955ec 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2022.11'
++RELEASE='2022.11.1'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
