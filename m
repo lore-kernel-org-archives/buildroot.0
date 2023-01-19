@@ -1,88 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61672C6379F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 18:49:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D5CBC004D4
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 18:51:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03B926119E;
-	Thu, 19 Jan 2023 18:49:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03B926119E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C84C41D17;
+	Thu, 19 Jan 2023 18:51:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C84C41D17
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Axuj5aBF2dgW; Thu, 19 Jan 2023 18:49:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pig12SAlSVhO; Thu, 19 Jan 2023 18:51:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41B6460FE5;
-	Thu, 19 Jan 2023 18:49:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41B6460FE5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 057D11BF33E
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:48:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0193241D11;
+	Thu, 19 Jan 2023 18:51:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0193241D11
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 968441BF33E
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5ABF60B5D
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:48:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5ABF60B5D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EF5C41D11
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EF5C41D11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 76YuM_MbkWcm for <buildroot@lists.busybox.net>;
- Thu, 19 Jan 2023 18:48:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3BDB60B36
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E3BDB60B36
- for <buildroot@buildroot.org>; Thu, 19 Jan 2023 18:48:51 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- f19-20020a1c6a13000000b003db0ef4dedcso4207930wmc.4
- for <buildroot@buildroot.org>; Thu, 19 Jan 2023 10:48:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Mwe+mEo3TfGct8RYnmv0fLXIaf98iArOm2HHj0gzLGI=;
- b=42WU1Lx4ZHZbH1UdOwUcMwws2drYwJBXsxI+dWLQFPGSNpnKKPztm4LtQbkGwcxIvu
- WLJ/Kla9YTWXMWN8GGX4zOZFS2nZSCc9HMz9cS7hpZLU90eV1wm1rl8PwrSzdZcgWYXd
- 18i7JzYf1WZTZODL7s/N4SkTwqfvnb8VQNd8p/y6zhNC0jQoQ61DcaX2WhLA3MioFACs
- 5KHccanuQkhtFn0c1jKSKXxMsAPvL6R7f7mBMx3/y1ycdmWojPzuG/leSOUC09lsy+BM
- XJwMorFci+fYr63lAikwJCvzHPvMaj1BmYZSaAAV21TgScFOWuG3gkPzkBuxWX3XEsXZ
- TlXA==
-X-Gm-Message-State: AFqh2koUuUf38C3Ov/FbSrBmQaljP9kA/jZvGPH2p6gXBptbKUalsWHH
- E9sJNm6pTDueJuMAmn1uVrJq1m6wch0=
-X-Google-Smtp-Source: AMrXdXu0scWJoMC8z0O9VAiBjG6c72klWXen1UI2NPQs7P0e5uz+qs/qoucBOaZCnGaZZdrDELeSrQ==
-X-Received: by 2002:a05:600c:5118:b0:3db:1e4f:7cdc with SMTP id
- o24-20020a05600c511800b003db1e4f7cdcmr3469352wms.15.1674154129874; 
- Thu, 19 Jan 2023 10:48:49 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- m10-20020a05600c4f4a00b003d96efd09b7sm5965251wmq.19.2023.01.19.10.48.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Jan 2023 10:48:49 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tM86O6qTn4eG for <buildroot@lists.busybox.net>;
+ Thu, 19 Jan 2023 18:50:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B1DD4089B
+Received: from mail.xogium.me (mail.xogium.me [107.167.81.91])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B1DD4089B
+ for <buildroot@buildroot.org>; Thu, 19 Jan 2023 18:50:59 +0000 (UTC)
+Received: from ganimede.. (2a02-8428-324d-2201-5ccf-c338-3098-6959.rev.sfr.net
+ [IPv6:2a02:8428:324d:2201:5ccf:c338:3098:6959])
+ by mail.xogium.me (Postfix) with ESMTPSA id 22AAEF40214;
+ Thu, 19 Jan 2023 13:50:57 -0500 (EST)
+From: Casey Reeves <casey@xogium.me>
 To: buildroot@buildroot.org
-Date: Thu, 19 Jan 2023 19:48:46 +0100
-Message-Id: <20230119184846.3693-1-fontaine.fabrice@gmail.com>
+Date: Thu, 19 Jan 2023 19:50:40 +0100
+Message-Id: <20230119185041.3430421-1-casey@xogium.me>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230119183026.3428277-1-casey@xogium.me>
+References: <20230119183026.3428277-1-casey@xogium.me>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Mwe+mEo3TfGct8RYnmv0fLXIaf98iArOm2HHj0gzLGI=;
- b=COFqANtAfvR0FI6dZuDAfl6sv1bVjRKkdsw1KFgEIBjsHLMSnFgcdrp8r7NCzSYkNi
- syKU93v2JphM19VQcxVoIO3Lg3L3sVE7oxVYnFXwEhOe5xduqP6hPJ5JJNnXV+XAy9Em
- uVBYah/Fxy9d/+fbQ/k/t086gdiKkm/ZDVU2/0LTLK/CWC0Gnjw8MtgC0pa+Y6XosSDg
- vhZoBxytCPsKEXBZbZKqAN0KnqrGtJc/78WweZs2Uivb32czlmb2KrnTiTubBU5mNomr
- DnfxNfcQ3h6SfLuDVz4LCFFZd7kPhTDQCi8Xtbsjh/RhorFYqfh9wNZh+e3ACKzBOzIu
- f8nw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=COFqANtA
-Subject: [Buildroot] [PATCH 1/1] package/xxhash: set MOREFLAGS
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=xogium.me; s=xogium-mail; t=1674154259;
+ bh=SDxW3iGp0w0Ey692VhU6w4q/hgBStKO7HEy0a2D/u24=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=cfDgaHgogmTHhsW3BZSP7WkhNGqA/4BtNH1aUNh1swoGrL/Zcbi63HSsDil4bApmf
+ 1+oxubBzyhGtjk6a0nBMXakV33kGgrwQHkPPtqONPaiVn3eLjFOVqiZYwzIVE6AyYO
+ pTNTsgJmLPjqHXbp3JmIDRVYYSFbiOYegSvkzRek3V7YD27KurXh2m96l/vcVb+DwA
+ JklGGeqZb3t6nd6MqKsCvEUUnCANjW4Bop6Ax6xwULrZwy8lToVnD4Dx2avegOuOaq
+ b2TpDGgNFMhPZYeuvNOEQzS4+tTfI/HZK3FT/TRN6dhXgynRl5jYCiSVzhGvODiqq2
+ lYviUYL54T4sQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=xogium.me header.i=@xogium.me
+ header.a=rsa-sha256 header.s=xogium-mail header.b=cfDgaHgo
+Subject: [Buildroot] [PATCH v2] boot/arm-trusted-firmware: Barebox available
+ as BL33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,39 +73,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set MOREFLAGS instead of overriding CFLAGS to avoid the following build
-failure raised since commit 94b66fb49cd57d0863245fbe0a3dc0833e76aad0:
+Since version 2022.04.0, Barebox now support a generic image built for
+platforms, to be used as BL33 to generate FIP images. This patch makes
+it available as choice of BL33 to be used with ATF and is based on the
+similar work put into U-Boot as BL33.
 
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/x86_64-buildroot-linux-uclibc/11.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /tmp/ccabb8cF.o: relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
+Signed-off-by: Casey Reeves <casey@xogium.me>
 
-Fixes:
- - http://autobuild.buildroot.org/results/953133575d8c13266f1450fa545e70e4a518508d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/xxhash/xxhash.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Changes v1 -> v2:
+- fixed quoting issue in the default image name
+---
+ boot/arm-trusted-firmware/Config.in           | 21 +++++++++++++++++++
+ .../arm-trusted-firmware.mk                   |  6 ++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
-index 40e3c2696c..75d375a2fa 100644
---- a/package/xxhash/xxhash.mk
-+++ b/package/xxhash/xxhash.mk
-@@ -28,8 +28,7 @@ endif
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index a9b9bbcc5a..cb54c6c9d8 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -129,6 +129,27 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
  
- define XXHASH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		CFLAGS="$(TARGET_CFLAGS) -DXXH_NO_INLINE_HINTS" \
--		$(XXHASH_TARGETS)
-+		MOREFLAGS=-DXXH_NO_INLINE_HINTS $(XXHASH_TARGETS)
- endef
+ endchoice
  
- define XXHASH_INSTALL_STAGING_CMDS
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
++	bool "Use Barebox as BL33"
++	depends on BR2_TARGET_BAREBOX
++	help
++	  This option allows to embed the Barebox generic BL33 image in
++	  the ARM Trusted Firmware. It ensures that the Barebox package
++	  gets built before ATF, and that the appropriate BL33
++	  variable pointing to the generic bl33 image is passed
++	  when building ATF.
++
++if BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
++
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE
++	string "Barebox BL33 image name"
++	default "*-generic-bl33.img"
++	help
++	  Name of the Barebox BL33 image to include in ATF, it must
++	  have been installed to BINARIES_DIR by the Barebox package.
++
++endif
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+ 	bool "Use U-Boot as BL33"
+ 	depends on BR2_TARGET_UBOOT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 1164c81410..648f62ed85 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -105,6 +105,12 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
+ endif
+ endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+ 
++ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33),y)
++ARM_TRUSTED_FIRMWARE_BAREBOX_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE))
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_BAREBOX_BIN)
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += barebox
++endif
++
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33),y)
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += edk2
+ # Since the flash device name vary between platforms, we use the variable
 -- 
 2.39.0
 
