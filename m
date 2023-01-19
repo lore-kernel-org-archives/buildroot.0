@@ -1,67 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D5CBC004D4
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 18:51:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E91C004D4
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 20:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C84C41D17;
-	Thu, 19 Jan 2023 18:51:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C84C41D17
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4BD840598;
+	Thu, 19 Jan 2023 20:35:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4BD840598
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pig12SAlSVhO; Thu, 19 Jan 2023 18:51:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Skv5o4VuGEba; Thu, 19 Jan 2023 20:35:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0193241D11;
-	Thu, 19 Jan 2023 18:51:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0193241D11
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A07B405A0;
+	Thu, 19 Jan 2023 20:35:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A07B405A0
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 968441BF33E
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:51:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 769ED1BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 20:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7EF5C41D11
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:51:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EF5C41D11
+ by smtp4.osuosl.org (Postfix) with ESMTP id 510D841B4F
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 20:35:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 510D841B4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tM86O6qTn4eG for <buildroot@lists.busybox.net>;
- Thu, 19 Jan 2023 18:50:59 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B1DD4089B
-Received: from mail.xogium.me (mail.xogium.me [107.167.81.91])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B1DD4089B
- for <buildroot@buildroot.org>; Thu, 19 Jan 2023 18:50:59 +0000 (UTC)
-Received: from ganimede.. (2a02-8428-324d-2201-5ccf-c338-3098-6959.rev.sfr.net
- [IPv6:2a02:8428:324d:2201:5ccf:c338:3098:6959])
- by mail.xogium.me (Postfix) with ESMTPSA id 22AAEF40214;
- Thu, 19 Jan 2023 13:50:57 -0500 (EST)
-From: Casey Reeves <casey@xogium.me>
-To: buildroot@buildroot.org
-Date: Thu, 19 Jan 2023 19:50:40 +0100
-Message-Id: <20230119185041.3430421-1-casey@xogium.me>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230119183026.3428277-1-casey@xogium.me>
-References: <20230119183026.3428277-1-casey@xogium.me>
+ with ESMTP id z7isejn8-mX5 for <buildroot@lists.busybox.net>;
+ Thu, 19 Jan 2023 20:35:50 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C794F41B4D
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C794F41B4D
+ for <buildroot@buildroot.org>; Thu, 19 Jan 2023 20:35:49 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([62.216.209.145]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MmlT2-1otgx01Okg-00jqzY; Thu, 19
+ Jan 2023 21:35:40 +0100
+Date: Thu, 19 Jan 2023 21:35:38 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20230119213538.093a1fa4@gmx.net>
+In-Reply-To: <87cz7aden6.fsf@dell.be.48ers.dk>
+References: <20230119095842.445227-1-bagasdotme@gmail.com>
+ <87cz7aden6.fsf@dell.be.48ers.dk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=xogium.me; s=xogium-mail; t=1674154259;
- bh=SDxW3iGp0w0Ey692VhU6w4q/hgBStKO7HEy0a2D/u24=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=cfDgaHgogmTHhsW3BZSP7WkhNGqA/4BtNH1aUNh1swoGrL/Zcbi63HSsDil4bApmf
- 1+oxubBzyhGtjk6a0nBMXakV33kGgrwQHkPPtqONPaiVn3eLjFOVqiZYwzIVE6AyYO
- pTNTsgJmLPjqHXbp3JmIDRVYYSFbiOYegSvkzRek3V7YD27KurXh2m96l/vcVb+DwA
- JklGGeqZb3t6nd6MqKsCvEUUnCANjW4Bop6Ax6xwULrZwy8lToVnD4Dx2avegOuOaq
- b2TpDGgNFMhPZYeuvNOEQzS4+tTfI/HZK3FT/TRN6dhXgynRl5jYCiSVzhGvODiqq2
- lYviUYL54T4sQ==
+X-Provags-ID: V03:K1:sN9c2nhc0VJGzige+aGfI7mEzMXt9G22gvInGjhj4uMhvKtSeOu
+ YQwcyJAcyfeRdkVrMgdWcWcPjR6IHfkwX4u5A7bxQO1EYJjAm9JZjuSJ7OBP8gFE9xZgnLd
+ DdCVq5Y0kPpgUYeoIdwHPjM98VEOqg8sC41CLIhM0+OlxgtKVnlxpXI3WilMSc5zoYvOUA/
+ sWjayjZT3rQKR6j+FsZHA==
+UI-OutboundReport: notjunk:1;M01:P0:gszsDwxUtI0=;4rHw8OsMdOWQswETemEgNb4QEUo
+ 6t53eyFg6449y8LZ6xVn3abAnGgEPhCSCyNfyYH+o+b1hd7JrXp4EKvNvnfuw6gCrtx3TAd3G
+ LGt4itmOuWAzxPMuYvJUmfUjZXcgL2yt9f2j1SkE/8qCFM5ZlDRHd0Me2f4+/1ab+/lMuI42r
+ bAloh+5z2YDfXknQ93TxFJDHy2538Ktdkft0IImJawJKGGvYtHTffHrZ3oZ2W+0jV4iJhkaA7
+ FIhoZdUIzrEhiBvYAFWY/0MFGTwDx5M5zksV/wtH47kHHkdShkOQPMTxhYgA5/4fjOhYh9wBu
+ 3Ok67P6p8Mk4q54GIw1HxZROD4+2y6he+AgIvd/XZdpD+BPkmYbrunFJO1nW8P6cN+YLloyto
+ Fl3cAIl05NmuFfpczxxVsU0GmC3yUz6kD5L/DLRh/+0orXuoh7clivwzMukijSyYmnivAnihU
+ eAl/A/H3nBEzTSlWTJesdTpK1qoZiVeGmkgT1/DqJqhdj79pY1tfP/oewf52vJ83wPt1USn3E
+ TXoRBN8KrnWRJJrffx+D+WhX57TSkSDXsqIKTSoCi5nrhJEB3OkAxEeer9H8Talfo/N+vw0ZE
+ ti3JQHzppjuc7WvNG1LwfrH7AgIwAQYpL3ahcj1PnLR6l7oyN607twxNNE9uYHCe9BRZc9csr
+ v3SoU7paOTUHYMXb3Bu5pcXLc/GUjd8jVdT3DSHHkQZlxduBccxp9wKStwwJDseq/HIsBUtVq
+ ONpYSsfFjKI7uFWKid6gN6r1z3zdx8zQqDtXU3/qMkcI6kRwhTHi7D+1qKmHebr5vFK27zFRf
+ 29Jj9omp19kX8KwAcq4+5LZFApDlSxjkbIj+8wfsDd3VnguLZw7dAjbfX1u1gruKxxJykAzlC
+ oSRmyzoqTBw+DlhiQILgLGF36GaXgeHtdtK/3avfMo4LnqYN8lyXc13dkDWiFjzx27sDE+FA9
+ MScuKg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; s=s31663417; 
+ t=1674160540; bh=BtWlEDZ45ObSW7f8VwocPQZEac3LME+Caec7Bz/iEJY=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=oOcf/yvhWfyAlJHE+rE4L0Hf0iourzgQ/1/5aScLDkcX4IgjGNNJDSB+Y2tq8vu7G
+ VQVfFAb5WX0gDb+ZdGzNAxZ/xtoPFNolg8XuwMms51AArh6MCezvRakz98bz890w9a
+ GaZkvEeXZ7LNgiF6P1KgOGSHjoJbzBLORNH4zrhwx27VwfSoQzAtJKMzInNyRt8baM
+ RPXKvHgm00aNbUgJ0iWtsVO1Cn6/iVkzgYaQ9BfhGV6aSKp+4vaA714C0Gt5evcrM1
+ 0+GV9KMs8DCKXKnRWPHFJBZBC6c04YFk+TmRouAgrwTioxyK2NjPJYz3EMaeB/Rcax
+ EKtHg3QpuYSqQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=xogium.me header.i=@xogium.me
- header.a=rsa-sha256 header.s=xogium-mail header.b=cfDgaHgo
-Subject: [Buildroot] [PATCH v2] boot/arm-trusted-firmware: Barebox available
- as BL33
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=oOcf/yvh
+Subject: Re: [Buildroot] [PATCH] package/git: prefer OpenSSL SHA-1 and
+ SHA-256 implementation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,79 +93,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
+Cc: "Yann
+ E . MORIN" <yann.morin.1998@free.fr>, Buildroot <buildroot@buildroot.org>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>, Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since version 2022.04.0, Barebox now support a generic image built for
-platforms, to be used as BL33 to generate FIP images. This patch makes
-it available as choice of BL33 to be used with ATF and is based on the
-similar work put into U-Boot as BL33.
+Hello *,
 
-Signed-off-by: Casey Reeves <casey@xogium.me>
+On Thu, 19 Jan 2023 11:04:13 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
 
----
-Changes v1 -> v2:
-- fixed quoting issue in the default image name
----
- boot/arm-trusted-firmware/Config.in           | 21 +++++++++++++++++++
- .../arm-trusted-firmware.mk                   |  6 ++++++
- 2 files changed, 27 insertions(+)
+> >>>>> "Bagas" == Bagas Sanjaya <bagasdotme@gmail.com> writes:
+>
+>  > Git is shipped with its own implementation of SHA-1 and SHA-256.
+>  > However, when OpenSSL is available (BR2_PACKAGE_OPENSSL=y), it is
+>  > preferable to leverage the OpenSSL version of these hash algorithm
+>  > instead. --with-openssl configure flag doesn't enable that, though.
+>
+>  > Set OPENSSL_{SHA1,SHA256} make variable when OpenSSL package is
+>  > selected.
+>
+>  > Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>
+> What is the added value of doing this? Size? Speed? Why is it not the
+> upstream default?
+>
+> A quick search for git + OPENSSL_SHA1 lead me to:
+>
+> https://www.spinics.net/lists/git/msg125401.html
+>
+> Which is old, but argued for not using the openssl implementation
+> because of performance concerns.
+>
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index a9b9bbcc5a..cb54c6c9d8 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -129,6 +129,27 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
- 
- endchoice
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
-+	bool "Use Barebox as BL33"
-+	depends on BR2_TARGET_BAREBOX
-+	help
-+	  This option allows to embed the Barebox generic BL33 image in
-+	  the ARM Trusted Firmware. It ensures that the Barebox package
-+	  gets built before ATF, and that the appropriate BL33
-+	  variable pointing to the generic bl33 image is passed
-+	  when building ATF.
-+
-+if BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
-+
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE
-+	string "Barebox BL33 image name"
-+	default "*-generic-bl33.img"
-+	help
-+	  Name of the Barebox BL33 image to include in ATF, it must
-+	  have been installed to BINARIES_DIR by the Barebox package.
-+
-+endif
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 	bool "Use U-Boot as BL33"
- 	depends on BR2_TARGET_UBOOT
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 1164c81410..648f62ed85 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -105,6 +105,12 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
- endif
- endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
- 
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33),y)
-+ARM_TRUSTED_FIRMWARE_BAREBOX_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE))
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_BAREBOX_BIN)
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += barebox
-+endif
-+
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33),y)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += edk2
- # Since the flash device name vary between platforms, we use the variable
--- 
-2.39.0
+Or 'Makefile: make DC_SHA1 the default' ([1]):
 
+	Makefile: make DC_SHA1 the default
+
+	We used to use the SHA1 implementation from the OpenSSL library by
+	default.  As we are trying to be careful against collision attacks
+	after the recent "shattered" announcement, switch the default to
+	encourage people to use DC_SHA1 implementation instead.  Those who
+	want to use the implementation from OpenSSL can explicitly ask for
+	it by OPENSSL_SHA1=YesPlease when running "make".
+
+And 'INSTALL: remove discussion of SHA-1 backends' ([2]):
+
+	INSTALL: remove discussion of SHA-1 backends
+
+	The claim that OpenSSL is the default SHA-1 backend hasn't been true
+	since e6b07da (Makefile: make DC_SHA1 the default, 2017-03-17),
+	but more importantly tweaking the SHA-1 backend isn't something that's
+	common enough to warrant discussing in the INSTALL document, so let's
+	remove this paragraph.
+
+	This discussion was originally added in c538d2d (Add some
+	installation notes in INSTALL, 2005-06-17) when tweaking the default
+	backend was more common. The current wording was added in
+	5beb577 (INSTALL: Describe dependency knobs from Makefile,
+	2009-09-10).
+
+Regards,
+Peter
+
+
+[1] https://github.com/git/git/commit/e6b07da2780f349c29809bd75d3eca6ad3c35d19
+[2] https://github.com/git/git/commit/0ced11d32fea5caec3f014b4e60dd197b9c8aa0f
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
