@@ -1,79 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34085C46467
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 18:42:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FED0C46467
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 18:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76A8E82393;
-	Thu, 19 Jan 2023 18:42:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76A8E82393
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD4E5400CC;
+	Thu, 19 Jan 2023 18:48:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD4E5400CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tyovl1y8DBLC; Thu, 19 Jan 2023 18:42:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HeE05tDUqV6q; Thu, 19 Jan 2023 18:48:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A99EC8238D;
-	Thu, 19 Jan 2023 18:42:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A99EC8238D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6EBA51BF33E
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:42:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E67BD40481;
+	Thu, 19 Jan 2023 18:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E67BD40481
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 354061BF33E
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:48:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A6F58238B
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:42:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A6F58238B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 106A841D09
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 106A841D09
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YbZKMYb2QXx9 for <buildroot@lists.busybox.net>;
- Thu, 19 Jan 2023 18:42:01 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4848A82389
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com
- [136.143.188.14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4848A82389
- for <buildroot@buildroot.org>; Thu, 19 Jan 2023 18:42:01 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; t=1674153708; cv=none; 
- d=zohomail.com; s=zohoarc; 
- b=T3NMT8p/+VLXd5xxI+vYUhfkTrhkZEnEEZob3WdCVVxght4CvHZsaXcTFrjNNb4NlgfGu1yUvAS0mJLEQzKwNDLFlO/zddNOWEK+TfgTe83onF+cNBCfDUguvCQjYVdVDVeP8KYYkUmzWXEqG+SSrLXo4fJXBbxOooahremqx5E=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
- s=zohoarc; t=1674153708;
- h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To;
- bh=VWB4JtvRyId5TJFu+ityFG0nnuKxodgwmB3GvEA0Xpo=; 
- b=m1NkC7MTSGtQiD05TaWeK/n0JUjMtbmvsMkSNlF41KoT513PNnYG75jX/Ig8qb4fT73lbGUWvnBZHxQ98QapJEo9uiDrgW0Azy3pteQO3tCDo0fLMKobmvl5fXEKq950Zv1Jk5bGamQTgOuFCNVoVBofHzjPPYHCOP9L3Wu4tqY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
- dkim=pass  header.i=arinc9.com;
- spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
- dmarc=pass header.from=<arinc.unal@arinc9.com>
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by
- mx.zohomail.com with SMTPS id 1674153704547674.3297220531965;
- Thu, 19 Jan 2023 10:41:44 -0800 (PST)
-Message-ID: <cedbf0b8-878c-1833-4325-772ce522d16d@arinc9.com>
-Date: Thu, 19 Jan 2023 21:41:37 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bjBxBGx_IIQd for <buildroot@lists.busybox.net>;
+ Thu, 19 Jan 2023 18:47:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3065E41D08
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3065E41D08
+ for <buildroot@buildroot.org>; Thu, 19 Jan 2023 18:47:57 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id k16so2283009wms.2
+ for <buildroot@buildroot.org>; Thu, 19 Jan 2023 10:47:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=IYmnl5yF3O7OGK6UPzwXdNUXyuIyFWwfKTtHy998DK4=;
+ b=ps4F1n7ZW4u6wrtXUboS4daBfqbXdntPQKYpVKqmXUy27jjB8GeQi0ThmaXhArY3U1
+ sD0YjXALEtxNc3kYkyVUvQAHUAhCKv7pew5u5XRpxI1ZzujPMfIK0TDkD/wBoQcHpmGT
+ eLNT3/4/0JymBs4Gi/a+E8BFbHKytPeRxa0tHd5uUG6lcotgyn01Enp7rpnVN4EXIKsE
+ YxV7A4nN9It8U8Wx2z1CN22ajt6ElB/J/Uf2FBCI1QOQXWn81nSIcjtPibbWYmgy81Kh
+ qi357Wq+OOnbXnfgrKgQtg1sZ3xYWIr3sdFnLADKTyqPcLiaiY8Dc3M9eI7zq0Iylyub
+ yrsQ==
+X-Gm-Message-State: AFqh2kpRf3pS/trTPijtwwEDW60cIdoyjRWaGgRC6bRnKj4tVK/xin6i
+ sK6QHyRp/nmK+0gf1dPw8VG0YJMQlNo=
+X-Google-Smtp-Source: AMrXdXs63GbZFBpyJVE+1VhAur2mDBwZLw1vnsBjB3c1s0pmvyn+e0nxyHMFtGGzYbOJOYW7AccuNA==
+X-Received: by 2002:a05:600c:4687:b0:3db:2e06:4091 with SMTP id
+ p7-20020a05600c468700b003db2e064091mr495176wmo.37.1674154075787; 
+ Thu, 19 Jan 2023 10:47:55 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ bg14-20020a05600c3c8e00b003dab40f9eafsm7310506wmb.35.2023.01.19.10.47.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 19 Jan 2023 10:47:55 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-References: <454a1894-af38-7818-7880-8e6a29466f63@arinc9.com>
-Content-Language: en-US
-In-Reply-To: <454a1894-af38-7818-7880-8e6a29466f63@arinc9.com>
-X-ZohoMailClient: External
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; t=1674153708; 
- s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
- h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
- bh=VWB4JtvRyId5TJFu+ityFG0nnuKxodgwmB3GvEA0Xpo=;
- b=QUTEBOlyF5MIJEUnBhNXXAv0wktoYtNfR/PbXY/4uei37jhBRzFJikuviNic863O
- CG4Vu01sS+weeVZM2nzteGkRpaURuMrLKimx/Mf+WWRKznV8e3ciJMMB/z5qLmduuuY
- MjK+9xKIpVWlz6mTyDXWTumWRQz88Wp3irRx/fDw=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=arinc9.com header.i=arinc.unal@arinc9.com
- header.a=rsa-sha256 header.s=zmail header.b=QUTEBOly
-Subject: Re: [Buildroot] ifupdown bridging interfaces support
+Date: Thu, 19 Jan 2023 19:47:52 +0100
+Message-Id: <20230119184752.3067-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=IYmnl5yF3O7OGK6UPzwXdNUXyuIyFWwfKTtHy998DK4=;
+ b=JJFeJhnwTrs6pzlP/Weth1MMe2WLG/y15HBbVo2dqnukRmNB9/TahlPwuYYy/EyXxI
+ HPWa5KebKzaWxVWGjAp8a60OU/5AcWauCGJRgx08/oKr0laQRKMBsdlEW3Y/QnV0GB9r
+ DdIKy4S1FjBfWTN06ZBYCBx8LhvD3o4R1AFRoM8vRxAEvBZufX3C04/2rSmX006gbvs6
+ J3NbAchGTOR2h0HLtX0+lXfxIRpwkMH+GpnJZ2qSko9HhV+LIhDNNvGUCuUU6Pzu0jaE
+ DNAWWKZfRNpbUbk8+T3kmW2YRlcWQxfHVwHrz6KBCb4uf1/7yV3mqKASQBu46tL8D7g0
+ ATAA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=JJFeJhnw
+Subject: [Buildroot] [PATCH 1/1] package/flashrom: bump to version 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,54 +93,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Carlos Santos <unixmania@gmail.com>, erkin.bozoglu@xeront.com,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Frank Wunderlich <frank-w@public-files.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SSBkaWQgdGhpcyBbMF0gZm9yIHRoZSB0aW1lIGJlaW5nLiBXZSBjYW4gc3RpbGwgc3VwcG9ydCBh
-bGwgb2YgdGhlIApvcHRpb25zIHdoaWNoIHJlcXVpcmUgaXByb3V0ZTIgYW5kIGJyY3RsLgoKNCBz
-Y3JpcHRzIGluIHRvdGFsOgotIEJhc2UKLSBCYXNlICsgaXByb3V0ZTIKLSBCYXNlICsgYnJjdGwK
-LSBCYXNlICsgYnJjdGwgKyBpcHJvdXRlMgoKSW50cm9kdWNlIDMga2NvbmZpZyBzdWJvcHRpb25z
-IGZvciB0aGUgaWZ1cGRvd24tc2NyaXB0cyBwYWNrYWdlLgotIEJhc2UgKyBpcHJvdXRlMiB0byBz
-ZWxlY3QgaXByb3V0ZTIuCi0gQmFzZSArIGJyY3RsIHRvIHNlbGVjdCBicmlkZ2UtdXRpbHMgKGJy
-Y3RsKS4KLSBCYXNlICsgYnJjdGwgKyBpcHJvdXRlMiB0byBzZWxlY3QgYnJpZGdlLXV0aWxzIChi
-cmN0bCkgYW5kIGlwcm91dGUyLgoKWzBdIApodHRwczovL2dpdGh1Yi5jb20vYXJpbmM5L2J1aWxk
-cm9vdC9jb21taXQvYTRkNGQwOGExZTg5MGU5Njk0NzBhOGUzMTY1MzRjYWE0YTA3Y2VlMwoKTG9v
-a2luZyBmb3J3YXJkIHRvIHlvdXIgdGhvdWdodHMuCgpBcsSxbsOnCgpPbiAxOC4wMS4yMDIzIDIw
-OjIwLCBBcsSxbsOnIMOcTkFMIHdyb3RlOgo+IEhlbGxvIGZvbGtzLAo+IAo+IEkgd2FudCB0byB1
-c2UgQnVpbGRyb290IGFzIHRoZSBmaWxlc3lzdGVtIG9uIHNvbWUgZW1iZWRkZWQgZGV2aWNlcyBJ
-J3ZlIAo+IGdvdC4gSSB3YW50IHRvIHB1dCB0aGUgaW50ZXJmYWNlcyBpbiBhIGJyaWRnZS4KPiAK
-PiBJIHNlZSBidWlsZHJvb3QgdXNlcyBpZnVwZG93biBieSBkZWZhdWx0IHRvIG1hbmFnZSBpbnRl
-cmZhY2VzLiBIb3dldmVyLCAKPiB0aGVyZSBpcyBubyBzdXBwb3J0IGZvciBicmlkZ2luZyBpbnRl
-cmZhY2VzLiBUaGUgYnJpZGdlLXV0aWxzIHBhY2thZ2Ugb24gCj4gRGViaWFuIGNvbnRhaW5zIGEg
-c2NyaXB0IGZvciBpZnVwZG93biBbMV0gd2hpY2ggZG9lcyB0aGlzLiBIb3dldmVyIHRoZSAKPiBz
-YW1lIHBhY2thZ2Ugb24gQnVpbGRyb290IGhhc24ndCBnb3QgaXQuCj4gCj4gSSBhbHJlYWR5IGNo
-YW5nZWQgdGhlIHNjcmlwdCBhIGxpdHRsZSBhbmQgcHV0IGl0IG9uIG15IHJvb3RmcyBvdmVybGF5
-IAo+IHdoaWNoIHdvcmtzIGZpbmUsIGJ1dCBJJ2QgbGlrZSB0byBpbmNsdWRlIHRoaXMgaW4gYSBi
-dWlsZHJvb3QgcGFja2FnZSBzbyAKPiBpdCBoZWxwcyBldmVyeW9uZS4KPiAKPiBJIHNlZSB0aGUg
-cGFja2FnZSBpcyBkZXByZWNhdGVkIHNvIGl0IG1ha2VzIHNlbnNlIG5vdCB0byB0b3VjaCBpdCBh
-dCAKPiBhbGwuIE15IHBsYW4gaXMgdG8gYWRkIGEgc2NyaXB0IG9uIHRoZSBpZnVwZG93bi1zY3Jp
-cHRzIHBhY2thZ2UgdG8gCj4gc2ltcGx5IHN1cHBvcnQgdGhlIGJyaWRnZV9wb3J0cyBvcHRpb24u
-IEdldCB0aGUgRGViaWFuIHRhcmJhbGwgWzJdLCAKPiBleHRyYWN0IHRoZSBzY3JpcHQsIGFuZCBw
-YXRjaCBpdCB0byBqdXN0IHN1cHBvcnQgdGhlIGJyaWRnZV9wb3J0cyBvcHRpb24gCj4gd2l0aG91
-dCBuZWVkaW5nIGlwcm91dGUyIG9yIGJyY3RsLgo+IAo+IEkgY2FuIGFsc28ganVzdCBpbmNsdWRl
-IHRoZSBtb2RpZmllZCBzY3JpcHQgb24gdGhlIHBhY2thZ2Ugd2l0aG91dCAKPiByZXRyaWV2aW5n
-IGFuZCBwYXRjaGluZyBidXQgSSBkb24ndCB0aGluayB0aGF0IHdvdWxkIGJlIGZpbmUgd2l0aCAK
-PiBsaWNlbnNpbmcuCj4gCj4gSSB3b25kZXIgaWYgdGhpcyB3YXMgZGlzY3Vzc2VkIGJlZm9yZSwg
-dGhlIG9ubHkgY29udmVyc2F0aW9uIHRoYXQgY2FtZSAKPiB1cCBvbiBteSBzZWFyY2ggd2FzIEZy
-YW5rJ3MgYnVnIHJlcG9ydCBbM10uCj4gCj4gSSdkIGFwcHJlY2lhdGUgeW91ciB0aG91Z2h0cywg
-aG93IEkgc2hvdWxkIHByb2NlZWQgdG8gc3VwcG9ydCBpdCBvbiAKPiBCdWlsZHJvb3QuIEFsc28s
-IGlmIHRoZXJlJ3MgYW55IG90aGVyIG5ldHdvcmsgY29uZmlndXJhdGlvbiB0b29sIG9uIAo+IEJ1
-aWxkcm9vdCB3aGljaCBzdXBwb3J0cyBicmlkZ2luZyBpbnRlcmZhY2VzLCBwbGVhc2UgbGV0IG1l
-IGtub3cuCj4gCj4gWzFdIGh0dHBzOi8vc291cmNlcy5kZWJpYW4ub3JnL3NyYy9icmlkZ2UtdXRp
-bHMvMS43LTEvZGViaWFuL3J1bGVzLyNMNTkKPiBbMl0gCj4gaHR0cDovL2RlYi5kZWJpYW4ub3Jn
-L2RlYmlhbi9wb29sL21haW4vYi9icmlkZ2UtdXRpbHMvYnJpZGdlLXV0aWxzXzEuNy0xLmRlYmlh
-bi50YXIueHoKPiBbM10gaHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0x
-MzQ2Ngo+IAo+IENoZWVycy4KPiBBcsSxbsOnCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+Drop patch (already in version)
+
+https://github.com/flashrom/flashrom/compare/v1.2...v1.2.1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...kefile-Fix-building-on-AArch64-NixOS.patch | 95 -------------------
+ package/flashrom/flashrom.hash                |  4 +-
+ package/flashrom/flashrom.mk                  |  2 +-
+ 3 files changed, 3 insertions(+), 98 deletions(-)
+ delete mode 100644 package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
+
+diff --git a/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch b/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
+deleted file mode 100644
+index f835172e61..0000000000
+--- a/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
++++ /dev/null
+@@ -1,95 +0,0 @@
+-From da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d Mon Sep 17 00:00:00 2001
+-From: Pyry Kontio <pyry.kontio@drasa.eu>
+-Date: Mon, 6 Jul 2020 12:57:35 +0900
+-Subject: [PATCH] Makefile: Fix building on AArch64 NixOS
+-
+-The parsing of the output of archtest.c produced an unexpected
+-value on AArch64 NixOS. For example, the make variable ARCH was set to:
+-
+-```
+-bit outside of fd_set selected
+-arm
+-```
+-
+-This made the arch and OS checks fail.
+-
+-This commit simplifies the parsing, making it more robust.
+-
+-The C files archtest.c, endiantest.c and os.h used to set the
+-TARGET_OS, ARCH and ENDIAN variables, respectively, output
+-the result of the test as the final line, so just extracting
+-the final line and removing double quoting is enough.
+-
+-This commit also fixes a bug with debug_shell lacking escaping
+-single quotes, which prevented using the single quote in the
+-debug_shell calls. It used to work by accident before this fix;
+-the line in the call happened to contain a balanced pair of double
+-quotes and lacked other characters that needed escaping, which
+-didn't break the debug_shell, but this was accidental and very
+-brittle.
+-
+-Signed-off-by: Pyry Kontio <pyry.kontio@drasa.eu>
+-Change-Id: Iaa4477a71e758cf9ecad2c22f3b77bc6508a3510
+-Reviewed-on: https://review.coreboot.org/c/flashrom/+/43140
+-Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
+-Reviewed-by: Angel Pons <th3fanbus@gmail.com>
+-
+-[Retrieved from:
+-https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile | 16 ++++++++++------
+- 1 file changed, 10 insertions(+), 6 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index f3f7717e2..e475cbdbd 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -83,7 +83,8 @@ dummy_for_make_3_80:=$(shell printf "Build started on %s\n\n" "$$(date)" >$(BUIL
+- 
+- # Provide an easy way to execute a command, print its output to stdout and capture any error message on stderr
+- # in the build details file together with the original stdout output.
+--debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(1) ; }' >&2;  { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
+-+debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(subst ','\'',$(1)) ; }' >&2; \
+-+    { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
+- 
+- ###############################################################################
+- # General OS-specific settings.
+-@@ -106,7 +107,8 @@ endif
+- # IMPORTANT: The following line must be placed before TARGET_OS is ever used
+- # (of course), but should come after any lines setting CC because the line
+- # below uses CC itself.
+--override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
+-+override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null \
+-+    | tail -1 | cut -f 2 -d'"'))
+- 
+- ifeq ($(TARGET_OS), Darwin)
+- override CPPFLAGS += -I/opt/local/include -I/usr/local/include
+-@@ -490,8 +492,10 @@ endif
+- # IMPORTANT: The following line must be placed before ARCH is ever used
+- # (of course), but should come after any lines setting CC because the line
+- # below uses CC itself.
+--override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
+--override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null | grep -v '^\#'))
+-+override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null \
+-+    | tail -1 | cut -f 2 -d'"'))
+-+override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null \
+-+    | tail -1))
+- 
+- # Disable the internal programmer on unsupported architectures (everything but x86 and mipsel)
+- ifneq ($(ARCH)-little, $(filter $(ARCH),x86 mips)-$(ENDIAN))
+-@@ -1299,12 +1303,12 @@ compiler: featuresavailable
+- 	@printf "Target arch is "
+- 	@# FreeBSD wc will output extraneous whitespace.
+- 	@echo $(ARCH)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
+--		( echo "unknown. Aborting."; exit 1)
+-+		( echo "unknown (\"$(ARCH)\"). Aborting."; exit 1)
+- 	@printf "%s\n" '$(ARCH)'
+- 	@printf "Target OS is "
+- 	@# FreeBSD wc will output extraneous whitespace.
+- 	@echo $(TARGET_OS)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
+--		( echo "unknown. Aborting."; exit 1)
+-+		( echo "unknown (\"$(TARGET_OS)\"). Aborting."; exit 1)
+- 	@printf "%s\n" '$(TARGET_OS)'
+- ifeq ($(TARGET_OS), libpayload)
+- 	@$(CC) --version 2>&1 | grep -q coreboot || \
+diff --git a/package/flashrom/flashrom.hash b/package/flashrom/flashrom.hash
+index 97df4fe9a4..2ab463d93a 100644
+--- a/package/flashrom/flashrom.hash
++++ b/package/flashrom/flashrom.hash
+@@ -1,4 +1,4 @@
+ # Locally computed after checking pgp signature
+-# https://download.flashrom.org/releases/flashrom-v1.2.tar.bz2.asc
+-sha256  e1f8d95881f5a4365dfe58776ce821dfcee0f138f75d0f44f8a3cd032d9ea42b  flashrom-v1.2.tar.bz2
++# https://download.flashrom.org/releases/flashrom-v1.2.1.tar.bz2.asc
++sha256  89a7ff5beb08c89b8795bbd253a51b9453547a864c31793302296b56bbc56d65  flashrom-v1.2.1.tar.bz2
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 5554082bca..dd505987ed 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLASHROM_VERSION = 1.2
++FLASHROM_VERSION = 1.2.1
+ FLASHROM_SOURCE = flashrom-v$(FLASHROM_VERSION).tar.bz2
+ FLASHROM_SITE = https://download.flashrom.org/releases
+ FLASHROM_LICENSE = GPL-2.0+
+-- 
+2.39.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
