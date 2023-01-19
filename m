@@ -1,61 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3B6C46467
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 18:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34085C46467
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 18:42:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0029D60FE5;
-	Thu, 19 Jan 2023 18:40:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0029D60FE5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76A8E82393;
+	Thu, 19 Jan 2023 18:42:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76A8E82393
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H5arHGmZDsFo; Thu, 19 Jan 2023 18:40:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Tyovl1y8DBLC; Thu, 19 Jan 2023 18:42:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED57A61109;
-	Thu, 19 Jan 2023 18:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED57A61109
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E24B11BF33E
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:39:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A99EC8238D;
+	Thu, 19 Jan 2023 18:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A99EC8238D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6EBA51BF33E
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:42:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE20261109
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:39:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE20261109
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A6F58238B
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 18:42:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A6F58238B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id boKBYh5PwAf5 for <buildroot@lists.busybox.net>;
- Thu, 19 Jan 2023 18:39:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YbZKMYb2QXx9 for <buildroot@lists.busybox.net>;
+ Thu, 19 Jan 2023 18:42:01 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3838360FE5
-Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3838360FE5
- for <buildroot@buildroot.org>; Thu, 19 Jan 2023 18:39:56 +0000 (UTC)
-Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
- by mail.xes-mad.com (Postfix) with ESMTP id BE43A20352;
- Thu, 19 Jan 2023 12:39:55 -0600 (CST)
-From: Vincent Fazio <vfazio@xes-inc.com>
-To: buildroot@buildroot.org
-Date: Thu, 19 Jan 2023 12:39:53 -0600
-Message-Id: <20230119183953.1609871-1-vfazio@xes-inc.com>
-X-Mailer: git-send-email 2.25.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4848A82389
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com
+ [136.143.188.14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4848A82389
+ for <buildroot@buildroot.org>; Thu, 19 Jan 2023 18:42:01 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1674153708; cv=none; 
+ d=zohomail.com; s=zohoarc; 
+ b=T3NMT8p/+VLXd5xxI+vYUhfkTrhkZEnEEZob3WdCVVxght4CvHZsaXcTFrjNNb4NlgfGu1yUvAS0mJLEQzKwNDLFlO/zddNOWEK+TfgTe83onF+cNBCfDUguvCQjYVdVDVeP8KYYkUmzWXEqG+SSrLXo4fJXBbxOooahremqx5E=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
+ s=zohoarc; t=1674153708;
+ h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To;
+ bh=VWB4JtvRyId5TJFu+ityFG0nnuKxodgwmB3GvEA0Xpo=; 
+ b=m1NkC7MTSGtQiD05TaWeK/n0JUjMtbmvsMkSNlF41KoT513PNnYG75jX/Ig8qb4fT73lbGUWvnBZHxQ98QapJEo9uiDrgW0Azy3pteQO3tCDo0fLMKobmvl5fXEKq950Zv1Jk5bGamQTgOuFCNVoVBofHzjPPYHCOP9L3Wu4tqY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+ dkim=pass  header.i=arinc9.com;
+ spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+ dmarc=pass header.from=<arinc.unal@arinc9.com>
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by
+ mx.zohomail.com with SMTPS id 1674153704547674.3297220531965;
+ Thu, 19 Jan 2023 10:41:44 -0800 (PST)
+Message-ID: <cedbf0b8-878c-1833-4325-772ce522d16d@arinc9.com>
+Date: Thu, 19 Jan 2023 21:41:37 +0300
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=xes-inc.com; s=mail; 
- t=1674153595; bh=h3Va6q/t8K4PjDRRhCFZ4yfAl1vHzZI+c8XyVFK4KyU=;
- h=From:To:Cc:Subject:Date:From;
- b=GvQjM5hNTBlRIua/Tx2Uwk+/EFedZbC6JntLf7wyKVtGPTo2LMRGpbByEpw2ii9Tn
- x8bFjVLSZMMrtkta5LQafGZfyLKC9AzkKoPc8YlUzVh1cjLWvwo1oNDiz1I0x/Sv48
- BHU+DA2DDCCnnmsVuh7D28haoJjMROBr5ZwEUBVc=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
- header.a=rsa-sha256 header.s=mail header.b=GvQjM5hN
-Subject: [Buildroot] [PATCH 1/1] package/ipmitool: allow configuring PEN
- registry source
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+To: buildroot@buildroot.org
+References: <454a1894-af38-7818-7880-8e6a29466f63@arinc9.com>
+Content-Language: en-US
+In-Reply-To: <454a1894-af38-7818-7880-8e6a29466f63@arinc9.com>
+X-ZohoMailClient: External
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; t=1674153708; 
+ s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+ h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+ bh=VWB4JtvRyId5TJFu+ityFG0nnuKxodgwmB3GvEA0Xpo=;
+ b=QUTEBOlyF5MIJEUnBhNXXAv0wktoYtNfR/PbXY/4uei37jhBRzFJikuviNic863O
+ CG4Vu01sS+weeVZM2nzteGkRpaURuMrLKimx/Mf+WWRKznV8e3ciJMMB/z5qLmduuuY
+ MjK+9xKIpVWlz6mTyDXWTumWRQz88Wp3irRx/fDw=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=arinc9.com header.i=arinc.unal@arinc9.com
+ header.a=rsa-sha256 header.s=zmail header.b=QUTEBOly
+Subject: Re: [Buildroot] ifupdown bridging interfaces support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,306 +85,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Floris Bos <bos@je-eigen-domein.nl>, Heiko Thiery <heiko.thiery@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Vincent Fazio <vfazio@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Carlos Santos <unixmania@gmail.com>, erkin.bozoglu@xeront.com,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Frank Wunderlich <frank-w@public-files.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Vincent Fazio <vfazio@gmail.com>
-
-The default, the IANA PEN registry used by ipmitool is large (4 MiB+)
-and changes at the whim of IANA, meaning reproducible builds may not be
-possible by using the default package.
-
-Add a configuration option to specify the source of the registry file.
-
-Remote and local files are supported. If no source is specified, no
-registry file will be installed to the target.
-
-Backport upstream patches to allow this to add requisite support:
-  Make a missing registry file non-fatal
-  Make downloading/installing the registry optional
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...t-require-the-IANA-PEN-registry-file.patch | 115 ++++++++++++++++++
- ...c-allow-disabling-registry-downloads.patch |  75 ++++++++++++
- package/ipmitool/Config.in                    |  12 ++
- package/ipmitool/ipmitool.mk                  |  20 +++
- 4 files changed, 222 insertions(+)
- create mode 100644 package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch
- create mode 100644 package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch
-
-diff --git a/package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch b/package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch
-new file mode 100644
-index 0000000000..3f35a78af2
---- /dev/null
-+++ b/package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch
-@@ -0,0 +1,115 @@
-+From 26b088193a55624df4cbe2a0d33c7bba5bca108d Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <vfazio@gmail.com>
-+Date: Sat, 7 Jan 2023 21:02:48 -0600
-+Subject: [PATCH] Do not require the IANA PEN registry file
-+
-+Previously, ipmitool would fail to run if the local copy of the IANA PEN
-+registry could not be parsed.
-+
-+When the registry is not available the manufacturer will be "Unknown" but
-+ipmitool will otherwise function so should not be considered fatal.
-+
-+Also, fix an issue with improperly handling the `oem_info_list_load`
-+return value. Previously, in `ipmi_oem_info_init`, if `oem_info_list_load`
-+returned a negative value due to the registry file not existing, an
-+improper count would cause `oem_info_init_from_list` to aallocate a list
-+that didn't encompass the full header/tail list.
-+
-+  IANA PEN registry open failed: No such file or directory
-+    Allocating      3 entries
-+    [     1] 16777214 | A Debug Assisting Company, Ltd.
-+    [     0]  1048575 | Unspecified
-+
-+Now, use a signed int and ensure a valid count of loaded OEMs is used.
-+
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+
-+[vfazio: backport from upstream 26b088193a55624df4cbe2a0d33c7bba5bca108d]
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+---
-+ include/ipmitool/ipmi_strings.h |  2 +-
-+ lib/ipmi_main.c                 |  5 +----
-+ lib/ipmi_strings.c              | 19 +++++--------------
-+ 3 files changed, 7 insertions(+), 19 deletions(-)
-+
-+diff --git a/include/ipmitool/ipmi_strings.h b/include/ipmitool/ipmi_strings.h
-+index 17c37c6..d60179c 100644
-+--- a/include/ipmitool/ipmi_strings.h
-++++ b/include/ipmitool/ipmi_strings.h
-+@@ -55,7 +55,7 @@ extern const struct valstr ipmi_integrity_algorithms[];
-+ extern const struct valstr ipmi_encryption_algorithms[];
-+ extern const struct valstr ipmi_user_enable_status_vals[];
-+ extern const struct valstr *ipmi_oem_info;
-+-int ipmi_oem_info_init();
-++void ipmi_oem_info_init();
-+ void ipmi_oem_info_free();
-+ 
-+ extern const struct valstr picmg_frucontrol_vals[];
-+diff --git a/lib/ipmi_main.c b/lib/ipmi_main.c
-+index a673a30..510bc2d 100644
-+--- a/lib/ipmi_main.c
-++++ b/lib/ipmi_main.c
-+@@ -853,10 +853,7 @@ ipmi_main(int argc, char ** argv,
-+ 	}
-+ 
-+ 	/* load the IANA PEN registry */
-+-	if (ipmi_oem_info_init()) {
-+-		lprintf(LOG_ERR, "Failed to initialize the OEM info dictionary");
-+-		goto out_free;
-+-	}
-++	ipmi_oem_info_init();
-+ 
-+ 	/* run OEM setup if found */
-+ 	if (oemtype &&
-+diff --git a/lib/ipmi_strings.c b/lib/ipmi_strings.c
-+index 26b359f..c8fc2d0 100644
-+--- a/lib/ipmi_strings.c
-++++ b/lib/ipmi_strings.c
-+@@ -1719,39 +1719,30 @@ out:
-+ 	return rc;
-+ }
-+ 
-+-int ipmi_oem_info_init()
-++void ipmi_oem_info_init()
-+ {
-+ 	oem_valstr_list_t terminator = { { -1, NULL}, NULL }; /* Terminator */
-+ 	oem_valstr_list_t *oemlist = &terminator;
-+ 	bool free_strings = true;
-+-	size_t count;
-+-	int rc = -4;
-++	int count;
-+ 
-+ 	lprintf(LOG_INFO, "Loading IANA PEN Registry...");
-+ 
-+ 	if (ipmi_oem_info) {
-+ 		lprintf(LOG_INFO, "IANA PEN Registry is already loaded");
-+-		rc = 0;
-+ 		goto out;
-+ 	}
-+ 
-+-	if (!(count = oem_info_list_load(&oemlist))) {
-+-		/*
-+-		 * We can't identify OEMs without a loaded registry.
-+-		 * Set the pointer to dummy and return.
-+-		 */
-+-		ipmi_oem_info = ipmi_oem_info_dummy;
-+-		goto out;
-++	if ((count = oem_info_list_load(&oemlist)) < 1) {
-++		lprintf(LOG_WARN, "Failed to load entries from IANA PEN Registry");
-++		count = 0;
-+ 	}
-+ 
-+ 	/* In the array was allocated, don't free the strings at cleanup */
-+ 	free_strings = !oem_info_init_from_list(oemlist, count);
-+ 
-+-	rc = IPMI_CC_OK;
-+-
-+ out:
-+ 	oem_info_list_free(&oemlist, free_strings);
-+-	return rc;
-+ }
-+ 
-+ void ipmi_oem_info_free()
-+-- 
-+2.25.1
-+
-diff --git a/package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch b/package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch
-new file mode 100644
-index 0000000000..9a995b9a14
---- /dev/null
-+++ b/package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch
-@@ -0,0 +1,75 @@
-+From be11d948f89b10be094e28d8a0a5e8fb532c7b60 Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <vfazio@gmail.com>
-+Date: Wed, 11 Jan 2023 22:55:51 -0600
-+Subject: [PATCH] configure.ac: allow disabling registry downloads
-+
-+Some environments require reproducible builds. Since the IANA PEN
-+registry is constantly updating and there is no snapshot available,
-+installing ipmitool via `make install` is not reproducible.
-+
-+Provide a configure mechanism to disable the registry download/install..
-+
-+[vfazio: backport from upstream be11d948f89b10be094e28d8a0a5e8fb532c7b60]
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+---
-+ configure.ac | 30 ++++++++++++++++++++----------
-+ 1 file changed, 20 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4ee1be8..1dd2742 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -18,8 +18,6 @@ AC_PROG_LN_S
-+ AC_PROG_MAKE_SET
-+ AC_CHECK_PROG([RPMBUILD], [rpmbuild], [rpmbuild], [rpm])
-+ AC_CHECK_PROG([SED], [sed], [sed])
-+-AC_CHECK_PROG([WGET], [wget], [wget])
-+-AC_CHECK_PROG([CURL], [curl], [curl])
-+ 
-+ AC_HEADER_STDC
-+ AC_CHECK_HEADERS([stdlib.h string.h sys/ioctl.h sys/stat.h unistd.h paths.h])
-+@@ -56,21 +54,33 @@ if test "x$exec_prefix" = "xNONE"; then
-+ 	exec_prefix="$prefix"
-+ fi
-+ 
-+-if test "x$WGET" = "x"; then
-+-	if test "x$CURL" = "x"; then
-++dnl allow enabling/disabling the fetching of the IANA PEN registry
-++AC_ARG_ENABLE([registry-download],
-++	[AC_HELP_STRING([--enable-registry-download],
-++			[download/install the IANA PEN registry [default=yes]])],
-++	[xenable_registry_download=$enableval],
-++	[xenable_registry_download=yes])
-++
-++AM_CONDITIONAL([DOWNLOAD], [false])
-++
-++if test "x$xenable_registry_download" = "xyes"; then
-++	AC_CHECK_PROG([WGET], [wget], [wget])
-++	AC_CHECK_PROG([CURL], [curl], [curl])
-++
-++	if test "x$WGET" = "x" && test "x$CURL" = "x"; then
-+ 		AC_MSG_WARN([** Neither wget nor curl could be found.])
-+ 		AC_MSG_WARN([** IANA PEN database will not be installed by `make install` !])
-+ 	else
-+-		DOWNLOAD="$CURL --location --progress-bar"
-+ 		AM_CONDITIONAL([DOWNLOAD], [true])
-++		if test "x$WGET" != "x"; then
-++			DOWNLOAD="$WGET -c -nd -O -"
-++		else
-++			DOWNLOAD="$CURL --location --progress-bar"
-++		fi
-+ 	fi
-+-else
-+-	DOWNLOAD="$WGET -c -nd -O -"
-+-	AM_CONDITIONAL([DOWNLOAD], [true])
-+ fi
-+ 
-+-AC_MSG_WARN([** Download is:])
-+-AC_MSG_WARN($DOWNLOAD)
-++AC_MSG_WARN([** Download is: $DOWNLOAD])
-+ AC_SUBST(DOWNLOAD, $DOWNLOAD)
-+ 
-+ dnl
-+-- 
-+2.25.1
-+
-diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
-index dbd6483110..8e217ecc45 100644
---- a/package/ipmitool/Config.in
-+++ b/package/ipmitool/Config.in
-@@ -9,6 +9,18 @@ config BR2_PACKAGE_IPMITOOL
- 
- if BR2_PACKAGE_IPMITOOL
- 
-+config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
-+	string "IANA PEN registry URL or path"
-+	default "http://www.iana.org/assignments/enterprise-numbers.txt"
-+	help
-+	  Enter an URL or a file path to the PEN registry to use.
-+
-+	  Note that the official registry is 4MiB+ and may change any
-+	  time and is thus not guaranteed to be reproducible.
-+
-+	  Leave empty to not use a registry; vendor IDs will be
-+	  displayed instead of the corresponding names.
-+
- config BR2_PACKAGE_IPMITOOL_LANPLUS
- 	bool "enable lanplus interface"
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
-index 5e34434a03..6fc4283e47 100644
---- a/package/ipmitool/ipmitool.mk
-+++ b/package/ipmitool/ipmitool.mk
-@@ -13,6 +13,8 @@ IPMITOOL_CPE_ID_VENDOR = ipmitool_project
- IPMITOOL_AUTORECONF = YES
- IPMITOOL_DEPENDENCIES = host-pkgconf
- 
-+IPMITOOL_CONF_OPTS += --disable-registry-download
-+
- ifeq ($(BR2_PACKAGE_FREEIPMI),y)
- IPMITOOL_DEPENDENCIES += freeipmi
- IPMITOOL_CONF_OPTS += --enable-intf-free
-@@ -47,4 +49,22 @@ endef
- IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
- endif
- 
-+IPMITOOL_PEN_REG_URI = $(call qstrip,$(BR2_PACKAGE_IPMITOOL_PEN_REG_URI))
-+
-+ifneq ($(IPMITOOL_PEN_REG_URI),)
-+ifneq ($(findstring ://,$(IPMITOOL_PEN_REG_URI)),)
-+IPMITOOL_EXTRA_DOWNLOADS += $(IPMITOOL_PEN_REG_URI)
-+BR_NO_CHECK_HASH_FOR += $(notdir $(IPMITOOL_PEN_REG_URI))
-+IPMITOOL_PEN_REG = $(IPMITOOL_DL_DIR)/$(notdir $(IPMITOOL_PEN_REG_URI))
-+else
-+IPMITOOL_PEN_REG = $(IPMITOOL_PEN_REG_URI)
-+endif #findstring
-+
-+define IPMITOOL_INSTALL_PEN_REG
-+	$(INSTALL) -D -m 0644 $(IPMITOOL_PEN_REG) \
-+		$(TARGET_DIR)/usr/share/misc/enterprise-numbers
-+endef
-+IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_INSTALL_PEN_REG
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SSBkaWQgdGhpcyBbMF0gZm9yIHRoZSB0aW1lIGJlaW5nLiBXZSBjYW4gc3RpbGwgc3VwcG9ydCBh
+bGwgb2YgdGhlIApvcHRpb25zIHdoaWNoIHJlcXVpcmUgaXByb3V0ZTIgYW5kIGJyY3RsLgoKNCBz
+Y3JpcHRzIGluIHRvdGFsOgotIEJhc2UKLSBCYXNlICsgaXByb3V0ZTIKLSBCYXNlICsgYnJjdGwK
+LSBCYXNlICsgYnJjdGwgKyBpcHJvdXRlMgoKSW50cm9kdWNlIDMga2NvbmZpZyBzdWJvcHRpb25z
+IGZvciB0aGUgaWZ1cGRvd24tc2NyaXB0cyBwYWNrYWdlLgotIEJhc2UgKyBpcHJvdXRlMiB0byBz
+ZWxlY3QgaXByb3V0ZTIuCi0gQmFzZSArIGJyY3RsIHRvIHNlbGVjdCBicmlkZ2UtdXRpbHMgKGJy
+Y3RsKS4KLSBCYXNlICsgYnJjdGwgKyBpcHJvdXRlMiB0byBzZWxlY3QgYnJpZGdlLXV0aWxzIChi
+cmN0bCkgYW5kIGlwcm91dGUyLgoKWzBdIApodHRwczovL2dpdGh1Yi5jb20vYXJpbmM5L2J1aWxk
+cm9vdC9jb21taXQvYTRkNGQwOGExZTg5MGU5Njk0NzBhOGUzMTY1MzRjYWE0YTA3Y2VlMwoKTG9v
+a2luZyBmb3J3YXJkIHRvIHlvdXIgdGhvdWdodHMuCgpBcsSxbsOnCgpPbiAxOC4wMS4yMDIzIDIw
+OjIwLCBBcsSxbsOnIMOcTkFMIHdyb3RlOgo+IEhlbGxvIGZvbGtzLAo+IAo+IEkgd2FudCB0byB1
+c2UgQnVpbGRyb290IGFzIHRoZSBmaWxlc3lzdGVtIG9uIHNvbWUgZW1iZWRkZWQgZGV2aWNlcyBJ
+J3ZlIAo+IGdvdC4gSSB3YW50IHRvIHB1dCB0aGUgaW50ZXJmYWNlcyBpbiBhIGJyaWRnZS4KPiAK
+PiBJIHNlZSBidWlsZHJvb3QgdXNlcyBpZnVwZG93biBieSBkZWZhdWx0IHRvIG1hbmFnZSBpbnRl
+cmZhY2VzLiBIb3dldmVyLCAKPiB0aGVyZSBpcyBubyBzdXBwb3J0IGZvciBicmlkZ2luZyBpbnRl
+cmZhY2VzLiBUaGUgYnJpZGdlLXV0aWxzIHBhY2thZ2Ugb24gCj4gRGViaWFuIGNvbnRhaW5zIGEg
+c2NyaXB0IGZvciBpZnVwZG93biBbMV0gd2hpY2ggZG9lcyB0aGlzLiBIb3dldmVyIHRoZSAKPiBz
+YW1lIHBhY2thZ2Ugb24gQnVpbGRyb290IGhhc24ndCBnb3QgaXQuCj4gCj4gSSBhbHJlYWR5IGNo
+YW5nZWQgdGhlIHNjcmlwdCBhIGxpdHRsZSBhbmQgcHV0IGl0IG9uIG15IHJvb3RmcyBvdmVybGF5
+IAo+IHdoaWNoIHdvcmtzIGZpbmUsIGJ1dCBJJ2QgbGlrZSB0byBpbmNsdWRlIHRoaXMgaW4gYSBi
+dWlsZHJvb3QgcGFja2FnZSBzbyAKPiBpdCBoZWxwcyBldmVyeW9uZS4KPiAKPiBJIHNlZSB0aGUg
+cGFja2FnZSBpcyBkZXByZWNhdGVkIHNvIGl0IG1ha2VzIHNlbnNlIG5vdCB0byB0b3VjaCBpdCBh
+dCAKPiBhbGwuIE15IHBsYW4gaXMgdG8gYWRkIGEgc2NyaXB0IG9uIHRoZSBpZnVwZG93bi1zY3Jp
+cHRzIHBhY2thZ2UgdG8gCj4gc2ltcGx5IHN1cHBvcnQgdGhlIGJyaWRnZV9wb3J0cyBvcHRpb24u
+IEdldCB0aGUgRGViaWFuIHRhcmJhbGwgWzJdLCAKPiBleHRyYWN0IHRoZSBzY3JpcHQsIGFuZCBw
+YXRjaCBpdCB0byBqdXN0IHN1cHBvcnQgdGhlIGJyaWRnZV9wb3J0cyBvcHRpb24gCj4gd2l0aG91
+dCBuZWVkaW5nIGlwcm91dGUyIG9yIGJyY3RsLgo+IAo+IEkgY2FuIGFsc28ganVzdCBpbmNsdWRl
+IHRoZSBtb2RpZmllZCBzY3JpcHQgb24gdGhlIHBhY2thZ2Ugd2l0aG91dCAKPiByZXRyaWV2aW5n
+IGFuZCBwYXRjaGluZyBidXQgSSBkb24ndCB0aGluayB0aGF0IHdvdWxkIGJlIGZpbmUgd2l0aCAK
+PiBsaWNlbnNpbmcuCj4gCj4gSSB3b25kZXIgaWYgdGhpcyB3YXMgZGlzY3Vzc2VkIGJlZm9yZSwg
+dGhlIG9ubHkgY29udmVyc2F0aW9uIHRoYXQgY2FtZSAKPiB1cCBvbiBteSBzZWFyY2ggd2FzIEZy
+YW5rJ3MgYnVnIHJlcG9ydCBbM10uCj4gCj4gSSdkIGFwcHJlY2lhdGUgeW91ciB0aG91Z2h0cywg
+aG93IEkgc2hvdWxkIHByb2NlZWQgdG8gc3VwcG9ydCBpdCBvbiAKPiBCdWlsZHJvb3QuIEFsc28s
+IGlmIHRoZXJlJ3MgYW55IG90aGVyIG5ldHdvcmsgY29uZmlndXJhdGlvbiB0b29sIG9uIAo+IEJ1
+aWxkcm9vdCB3aGljaCBzdXBwb3J0cyBicmlkZ2luZyBpbnRlcmZhY2VzLCBwbGVhc2UgbGV0IG1l
+IGtub3cuCj4gCj4gWzFdIGh0dHBzOi8vc291cmNlcy5kZWJpYW4ub3JnL3NyYy9icmlkZ2UtdXRp
+bHMvMS43LTEvZGViaWFuL3J1bGVzLyNMNTkKPiBbMl0gCj4gaHR0cDovL2RlYi5kZWJpYW4ub3Jn
+L2RlYmlhbi9wb29sL21haW4vYi9icmlkZ2UtdXRpbHMvYnJpZGdlLXV0aWxzXzEuNy0xLmRlYmlh
+bi50YXIueHoKPiBbM10gaHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0x
+MzQ2Ngo+IAo+IENoZWVycy4KPiBBcsSxbsOnCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
