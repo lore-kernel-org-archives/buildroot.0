@@ -1,90 +1,135 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6ECAC38142
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 08:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0548C00A5A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jan 2023 09:49:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 224C241910;
-	Thu, 19 Jan 2023 08:10:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 224C241910
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sfaZaqtL_lzP; Thu, 19 Jan 2023 08:10:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A61C541936;
-	Thu, 19 Jan 2023 08:10:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A61C541936
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F98C1BF329
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 08:10:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 483BB8216D
- for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 08:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 483BB8216D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87ADC81452;
+	Thu, 19 Jan 2023 09:49:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87ADC81452
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kDts-dO7md_W for <buildroot@lists.busybox.net>;
- Thu, 19 Jan 2023 08:10:11 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ilztGAIpffbV; Thu, 19 Jan 2023 09:49:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B97ED8140E;
+	Thu, 19 Jan 2023 09:49:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B97ED8140E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 85CCD1BF95F
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 09:49:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32D9E60A7A
+ for <buildroot@lists.busybox.net>; Thu, 19 Jan 2023 09:49:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32D9E60A7A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qapAADkKb6uo for <buildroot@lists.busybox.net>;
+ Thu, 19 Jan 2023 09:48:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 503EA8214B
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 503EA8214B
- for <buildroot@buildroot.org>; Thu, 19 Jan 2023 08:10:11 +0000 (UTC)
-Received: by mail-pl1-x632.google.com with SMTP id p24so1590549plw.11
- for <buildroot@buildroot.org>; Thu, 19 Jan 2023 00:10:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=aeiit7b+X4xZlPXS7N7oJAHaEeZOJbuDourYoXf85Cw=;
- b=MTXDB3ThNaXfkZ7s/dapOBFcvHH1zIVAEa7/hD3WGMcsp4MdpmgF+bMBMArOvDh9gX
- CKy4MnyoVllBLbPA8MOFtX00/yCR2sdUeOR9IOEUVMn3DIR4EuF6rKVPOChEQhth4gFA
- GspuwJmL3cvRsklx59vEJHbUeEMxtTgcFDqKemQTAitcaSmLE197Urk4b262am7dYvnM
- 00i9wi6hweJr1RZ27T5rM/TjHkeQewKO9q9KBttOM4c7kLRGrzovOOEtmaMmVG+sclVG
- G2upbT+oRV1K1ec6tNpiWn4IseILeuu055ODSRVqCpOoe8Lp+8gHCVBs4c/OG3mUc5te
- ZygQ==
-X-Gm-Message-State: AFqh2kqAzndL6e64TJukScgnQaYPZSVn+LeS7ZPn8WDBvgnRyBVkBlC7
- bBDWvMDcLBUPKNMgXwXt/o3QvRGkVt+RDg==
-X-Google-Smtp-Source: AMrXdXvMNPHrlb+cLppxWc+wLcp5ZEwP6Cl2Lmw8xqq5IfX8UuV4UOx+Wk2CBlJbqFmu3V5+3uINjw==
-X-Received: by 2002:a17:903:1209:b0:189:6f76:9b61 with SMTP id
- l9-20020a170903120900b001896f769b61mr14350130plh.39.1674115810518; 
- Thu, 19 Jan 2023 00:10:10 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-2.three.co.id. [180.214.232.2])
- by smtp.gmail.com with ESMTPSA id
- c11-20020a170903234b00b00188f6cbd950sm3466522plh.226.2023.01.19.00.10.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Jan 2023 00:10:09 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
- id 070E6104FA9; Thu, 19 Jan 2023 15:10:04 +0700 (WIB)
-Date: Thu, 19 Jan 2023 15:10:04 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
-Message-ID: <Y8j63Dj9XcD56e5n@debian.me>
-References: <20230118213517.5946-1-ps.report@gmx.net>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86B2260A68
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com
+ (mail-db5eur02on2058.outbound.protection.outlook.com [40.107.249.58])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 86B2260A68
+ for <buildroot@buildroot.org>; Thu, 19 Jan 2023 09:48:58 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KMfshovVvsLLgK7XO4vM6Ae/fmPFuIKK9LbLhm40OXe9FZxO8xXNh1WYYAdpt74VisO2cCzpxTUMxdxuNORle0hOo9uU/fraqPvfs+A+FLtqegdwen3+5GahJX+T50XN+cOYAZJ7wwxRzEl3ra9NTkiG1H0IElupp3wtbF/iEOFCcF1Y+GpKHU/yLk9VH8fDPlVE/bXEgpLYN8fna7f4f8Odp/O5dWNmtDS3M0QTfeR7oc2EEiEL4U7xtcSeNrF3oEtXOBcjhGsrafpogWKBdo20jXUcivHMMoIhxrz+LlpFH2TFamqVEIIP7MqqGfFP5zNfGlkXZusG+gj5xJFdug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fvDljtzWkN1f25wz2kueRz27AV/021vBeSAgwjxHGYQ=;
+ b=luKH4W3w8LToV6Ao0RAMbWizstXg+Hd3s7Fgrc90OjB8t6ygaMGmVF5f/AB21VIeHG7hFpVdVtacmJkmADqKI1qBwBu3zx5KNqxEVLCsIeA1ScYtZRxQDnmqchPrnW4WizS9rZFCZoPvisByp0XL/3D4zv9JKpHmxPdDwXwDtCQbwv7gLTz3+NZcqTYFWaBPm2LFnVVs4lr1a56VBlhHK5MLJoMgI+YlufFF3VyJhqak96Oj6MN0ORDJOLBRwXqD9Vj0DFu5Uj6knigWWQ3ak0qBYMr7a1voM+JgjPrtpe0LyGoqg/TvXBikg2XlSwh9oqvH20cnShINQNP4p0Qluw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
+ dkim=pass header.d=abatec.at; arc=none
+Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
+ by VE1P190MB0861.EURP190.PROD.OUTLOOK.COM (2603:10a6:800:1ad::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
+ 2023 09:48:54 +0000
+Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+ ([fe80::a6aa:bd17:e838:b0b0]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+ ([fe80::a6aa:bd17:e838:b0b0%3]) with mapi id 15.20.5986.023; Thu, 19 Jan 2023
+ 09:48:54 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH 01/45] package/adwaita-icon-theme: switch to https
+ download
+Thread-Index: AQHZK+oHpsm6BF0in0i5Lq8oYfs6JQ==
+Date: Thu, 19 Jan 2023 09:48:54 +0000
+Message-ID: <VI1P190MB049394F865BD2222D7D40CAB9FC49@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1P190MB0493:EE_|VE1P190MB0861:EE_
+x-ms-office365-filtering-correlation-id: db6b64f0-9718-4c74-3f74-08dafa026084
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KNVxVu6g3g3MZE6EENrc6NbUYP52xHpXAVCDmr0byGagWk8q+WyYsnLVt2nDxtOjr85XFVoL5UT3RPWjjuEx/R0m6hPWamLLr3jBVWu+NJ9fVZFOzfU9TUPL7YZgW2dCyjxn8twX9TRYmMNfMS8FPbW6FRWQ/dwFP8Jh2VszqYVblEXNwl/ABQ0fZxAiGxWYu3zlvNPU0GjgPRtHkctHDzlbfEYjo3p8XFXL9t/SFeWVR143l4PeKe7S/RJvC+PI2QcpsUi4fa/ZH8V9+b6U/3/1R1w0i5952Zs9C8t7qoW1WKrrfdzg8UDbKBVg913M64nC5OqzYyRf8qecQVjU9EUUpc3NGnEJ27xXuzNDulZXJQ5eKU3/W3Kgn75kPOInUPzYna4/3CgMkEt0GhMJpAlddtJEIj0ZeHzB5osfiC/2f6lJK/p4QrZe4azGmYBW5Y0IXBOVKetnbgQhHdiB/HEqyRkZNfQa8ZH5NHUYBpRMNnPVzIfXL79pKYU9vOwaesOXyhfbxgV40j1CnjaBzWVaWrPVWcmOtf4oY95mPmHreY8bdTdiitCuThDLwxlM2bmqYNqznMMGEx6XkxjMWR30iterscIQaPKdTO3TEVLB2r4//+f/mSlPJv2J/iOyZSGxZlfGOrNkCAuL8zJMSqgUivv9anSWw5XkN01Zh04EU0XzyYpaZKU+JHXdLYu1+XVyQ5QHJ98Mv86kds1GBUQLJbjcgj/8FfsVDtGBHWkQGGdk1FXBMhmdUXorkgb8
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230022)(4636009)(366004)(396003)(39840400004)(346002)(376002)(136003)(451199015)(316002)(122000001)(6506007)(38100700002)(33656002)(2906002)(55016003)(64756008)(66446008)(66556008)(66476007)(38070700005)(66946007)(76116006)(26005)(4326008)(9686003)(52536014)(478600001)(6916009)(8676002)(8936002)(966005)(71200400001)(186003)(7696005)(5660300002)(83380400001)(41300700001)(86362001)(41080700001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?debzxBjjiwsx2K+oBzxzqXfISETOJKF6NnJ5fwBuiU4SR/3ENoybJbRXpP?=
+ =?iso-8859-1?Q?u6iT5b9EyJVWmP7udvEmXkmsHNabj5pHLCNwN8aZiX4EN9Hn0Ck18SJUjG?=
+ =?iso-8859-1?Q?xBqR+ZBA1THvfiQexAq1Qf16bgpyCvQNldiifr6Q9LxQF2fyOhI0/RyP5r?=
+ =?iso-8859-1?Q?Y23wsbLpLg9ig13EWxI7NBb5BuaXUcbRZqBKrVkqPD5bp7aQtwpL30exe9?=
+ =?iso-8859-1?Q?LaKxQFwidx+/yGb6KEkdOMYL183DrdbGvPcRLXtR4yj6zXKsbeJiF/HjRL?=
+ =?iso-8859-1?Q?VMFFgki08BNY7+pB6ic2vWDoL9JE9EMpFfrcGqPuP11BZIXTVv21Hd7t0F?=
+ =?iso-8859-1?Q?xRe52yDrRdHJEQB6El9Iom8F7w4ysTGiNK6hRSZhaR48Bd1+VHS9BDM8b1?=
+ =?iso-8859-1?Q?QcHRH2K1r5E7N/PomdGxcqwWe+3ie8zEwnTgz5LnJmhz2ZNurjf3Udga8t?=
+ =?iso-8859-1?Q?5buuWLg2RfHSJ1N4z2s9UsXGI5xMtqP9xQ50mIEahFl8miAMqPWIfMWL5a?=
+ =?iso-8859-1?Q?EiYStH3FT9Ab53ob+C+R+xHw9rJRWF5g+b34z8xcclFFkiwQdjgAg6e6cf?=
+ =?iso-8859-1?Q?rgwnlOBmj/rxSiBL1e6vbKyS4BbaRmdhmcMMqg3g+tvkGis6wa0cjPmZOX?=
+ =?iso-8859-1?Q?F2BnzWGkP0zbbzk8beTh5ykPTz/1RtR4Zi2gx4iDwd6V02a+Vb5gUEMXJ/?=
+ =?iso-8859-1?Q?iqTbRFfMlJrrY3TyMtit8CR5/pMlhYPdr5oX5gxt1AYvv8UybrgiTiXbeS?=
+ =?iso-8859-1?Q?lIMrhp5FJkJvQ8fWwNgTZBIGVWJDwWP/fqvBpDS0UXQAJb88laWjqz8Qx9?=
+ =?iso-8859-1?Q?ksBA8HOY+/po4fSzmYNzHUfMkNG8iysKum5AvsHHGjHu4kGyaVY3qEdVPq?=
+ =?iso-8859-1?Q?7Ux8vW24mWUhPCp0HTsjNaMqI15kAQ4ywdOlDkceBVQ4flvifYij4d8nkN?=
+ =?iso-8859-1?Q?SnCFkrE1YJf2mzrGwm8eKYaUm3KY6rXguQ1Ev/Z7aa5uGcXTDGp1FUlRJi?=
+ =?iso-8859-1?Q?9E6lxOZn8FRCy5B/chl6ezl0zdrgyVa5cIYEgAOZWV/kKO798NosFr/t6M?=
+ =?iso-8859-1?Q?4IQLyag9Lvm55+HgYJC8/CKi9Ud0fdB/QR/OAkzb3N+EH4En91OGumyl1x?=
+ =?iso-8859-1?Q?xzjS1XZ7pAQ/rOMR+eOtG8goULcThJO8iJCl3jg0FuUs1hdI3nmzW7p+c8?=
+ =?iso-8859-1?Q?TVTYmNhDHWG46nE+Rn1CPqoKXxzrrmDWVs3vMhHj1mS4UHsjkQ7O7Gm6t6?=
+ =?iso-8859-1?Q?aQ/F0oVNdP7kghqRjhmXZhUQUndl9E2Hvqp+SgaY+QXLnsA6IFL9hD3ONM?=
+ =?iso-8859-1?Q?eNeFkXMN5tHvvCK2KEsErSkv8ePFqqRPXOVLmDqmXcjMGpXbUPHZrq27Eq?=
+ =?iso-8859-1?Q?hx3iU4M00mCd/xu5rY9NPZAoZAuszIaDNUZAAlwVQ5I7kpZL6q6JACnXUk?=
+ =?iso-8859-1?Q?lYDkJiio6MKKHNPcuDSSbYTgaKUYpxoORxMUXpRf6np26CEKvdhE8nSaW/?=
+ =?iso-8859-1?Q?gvoJB9l48gDo9FW0iVFcXEtdOogtiuAhM3kEHG/ShECMJd5GSTribq8v8+?=
+ =?iso-8859-1?Q?2RhazmBvJ5hkCwFmfcPRKJmJ41R7Yp0YdkpUGwchrAMBzWm1P6UpR6b42X?=
+ =?iso-8859-1?Q?0i+eW2SljsqzU=3D?=
 MIME-Version: 1.0
-In-Reply-To: <20230118213517.5946-1-ps.report@gmx.net>
+X-OriginatorOrg: abatec.at
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: db6b64f0-9718-4c74-3f74-08dafa026084
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 09:48:54.1879 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KqK/OqjDhCS6Apx79lyTsrpsqemCCxdqdImy2sOjOsishXJ6oTxR7paYoEhWKdB15JJx+AGA7gUL7z1B2L9TWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1P190MB0861
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=aeiit7b+X4xZlPXS7N7oJAHaEeZOJbuDourYoXf85Cw=;
- b=Heanq2Zn32TdqU+Os9xQ8F67tknFNjDp6fwk8nZDBuI7yuJjJWr9/UjSjvpiym3K9m
- GxOtIS9S/6Zc9yE9oFahd1cJVia6QNT4wyQ7FmwSrU/FQ0kZUL2JWnndNTBnYeHV7x32
- bdElTbTcNBzNKVAKjppNRznX3mZPh0STTJqsj0/+RVMFdetBVGcE/4/dMwIgo4wlqo9U
- wBi0igtyr+J0jwRubemjPL2+O0HLwsqAYn8o5Xk8a1tVfXNPIHQ/zMp7oCP4Y2kaJ5Wl
- u8ylIAQNOhNz4q6OAEbfiTG8swM0mDq8Bwph8DKSdRijcVIjnVTWbO9XOiqV78bKor56
- 8bfg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Heanq2Zn
-Subject: Re: [Buildroot] [PATCH v1] package/git: bump version to 2.39.1
+ d=abatec.at; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fvDljtzWkN1f25wz2kueRz27AV/021vBeSAgwjxHGYQ=;
+ b=W42zwHiZeq4i+Ug4cgwTY/S5lONQkKDzqQ5fcFuZ9Rc1B31LMOY/xu6mJ3FFaHmzA7VDzUxGoXc5teG0SV8fZQqGsnhu/a69u/fP4Rw2LPbgKbwrIgRFplSw4q3s1UnF07D3ywvgijL5LlTV20lnLK0HMI6VSSQWncZgjqi/ooE=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
+ header.s=selector1 header.b=W42zwHiZ
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=abatec.at;
+Subject: [Buildroot] [PATCH 01/45] package/adwaita-icon-theme: switch to
+ https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,191 +141,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>
-Content-Type: multipart/mixed; boundary="===============2491225921642352142=="
+From: Lang Daniel via buildroot <buildroot@buildroot.org>
+Reply-To: Lang Daniel <d.lang@abatec.at>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+---
+ package/adwaita-icon-theme/adwaita-icon-theme.hash | 2 +-
+ package/adwaita-icon-theme/adwaita-icon-theme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---===============2491225921642352142==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="etYPdnMzLJeHwR1j"
-Content-Disposition: inline
-
-
---etYPdnMzLJeHwR1j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jan 18, 2023 at 10:35:17PM +0100, Peter Seiderer wrote:
-> - fixes CVE-2022-41903 and CVE-2022-23521
->=20
-> For details see [1].
->=20
-> [1] https://lore.kernel.org/git/xmqq7cxl9h0i.fsf@gitster.g/
->=20
-
-Ah! I'm about to submit the same bump. My bump builds fine, so I think
-it is also applicable to yours.
-
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/git/git.hash | 2 +-
->  package/git/git.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/package/git/git.hash b/package/git/git.hash
-> index 57a77b2810..75398896e5 100644
-> --- a/package/git/git.hash
-> +++ b/package/git/git.hash
-> @@ -1,5 +1,5 @@
->  # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
-> -sha256  ba199b13fb5a99ca3dec917b0bd736bc0eb5a9df87737d435eddfdf10d69265b=
-  git-2.39.0.tar.xz
-> +sha256  40a38a0847b30c371b35873b3afcf123885dd41ea3ecbbf510efa97f3ce5c161=
-  git-2.39.1.tar.xz
->  # Locally calculated
->  sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e=
-  COPYING
->  sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a=
-  LGPL-2.1
-> diff --git a/package/git/git.mk b/package/git/git.mk
-> index 9918d4c1ef..1d728e1964 100644
-> --- a/package/git/git.mk
-> +++ b/package/git/git.mk
-> @@ -4,7 +4,7 @@
->  #
->  ########################################################################=
-########
-> =20
-> -GIT_VERSION =3D 2.39.0
-> +GIT_VERSION =3D 2.39.1
->  GIT_SOURCE =3D git-$(GIT_VERSION).tar.xz
->  GIT_SITE =3D $(BR2_KERNEL_MIRROR)/software/scm/git
->  GIT_LICENSE =3D GPL-2.0, LGPL-2.1+
-
-The package patches apply here (with fuzz), so you need to refresh these
-against v2.39.1:
-
----- >8 ----
-diff --git a/package/git/0001-git-compat-util-avoid-redefining-system-funct=
-ion-nam.patch b/package/git/0001-git-compat-util-avoid-redefining-system-fu=
-nction-nam.patch
-index dbde87940a..cb6c3a6dbb 100644
---- a/package/git/0001-git-compat-util-avoid-redefining-system-function-nam=
-=2Epatch
-+++ b/package/git/0001-git-compat-util-avoid-redefining-system-function-nam=
-=2Epatch
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.hash b/package/adwaita-icon-theme/adwaita-icon-theme.hash
+index ce6acb8d9a..ae28a7a152 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.hash
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.hash
 @@ -1,4 +1,4 @@
--From 385f67eb2254edb1fb4cf523e5e3d5a8f123d72c Mon Sep 17 00:00:00 2001
-+From a70fa5257ee347fa3a21734b7066803064657445 Mon Sep 17 00:00:00 2001
- From: Jeff King <peff@peff.net>
- Date: Wed, 30 Nov 2022 16:15:14 -0500
- Subject: [PATCH] git-compat-util: avoid redefining system function names
-@@ -57,14 +57,14 @@ but without redeclaring the system function names.
-=20
- Signed-off-by: Jeff King <peff@peff.net>
- Signed-off-by: Junio C Hamano <gitster@pobox.com>
--[Bagas: cherry-picked from e0c08a4f738b3dea7a4e8fe3511c323cf1f41942 on nex=
-t branch]
-+[Bagas: refresh against v2.39.1]
- Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
- ---
-  git-compat-util.h | 13 ++++++++-----
-  1 file changed, 8 insertions(+), 5 deletions(-)
-=20
- diff --git a/git-compat-util.h b/git-compat-util.h
--index a76d0526f7..e3456bdd0d 100644
-+index af05077560..f6882b9b50 100644
- --- a/git-compat-util.h
- +++ b/git-compat-util.h
- @@ -341,11 +341,12 @@ struct itimerval {
-@@ -83,7 +83,7 @@ index a76d0526f7..e3456bdd0d 100644
-  #endif
- =20
-  #ifndef NO_LIBGEN_H
--@@ -1471,14 +1472,16 @@ int open_nofollow(const char *path, int flags);
-+@@ -1479,14 +1480,16 @@ int open_nofollow(const char *path, int flags);
-  #endif
- =20
-  #ifndef _POSIX_THREAD_SAFE_FUNCTIONS
-diff --git a/package/git/0002-git-compat-util-undefine-system-names-before-=
-redecla.patch b/package/git/0002-git-compat-util-undefine-system-names-befo=
-re-redecla.patch
-index 9e3c9b662c..9a9d2362b0 100644
---- a/package/git/0002-git-compat-util-undefine-system-names-before-redecla=
-=2Epatch
-+++ b/package/git/0002-git-compat-util-undefine-system-names-before-redecla=
-=2Epatch
-@@ -1,4 +1,4 @@
--From 6d406390b870fdb2cd9d18b12ebfabc12f5096df Mon Sep 17 00:00:00 2001
-+From 1528273a611e331bfce4da1d4fb0f76d9463ab02 Mon Sep 17 00:00:00 2001
- From: Jeff King <peff@peff.net>
- Date: Fri, 2 Dec 2022 06:05:38 -0500
- Subject: [PATCH] git-compat-util: undefine system names before redeclaring
-@@ -22,14 +22,14 @@ defensive about the other macro wrappers added in the p=
-revious patch.
-=20
- Signed-off-by: Jeff King <peff@peff.net>
- Signed-off-by: Junio C Hamano <gitster@pobox.com>
--[Bagas: cherry-picked from e1a95b78d8a26762ea04332de8b7c3878da51522 on nex=
-t branch]
-+[Bagas: refresh against v2.39.1]
- Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
- ---
-  git-compat-util.h | 4 ++++
-  1 file changed, 4 insertions(+)
-=20
- diff --git a/git-compat-util.h b/git-compat-util.h
--index e3456bdd0d..211861da0f 100644
-+index f6882b9b50..dadb9e55cb 100644
- --- a/git-compat-util.h
- +++ b/git-compat-util.h
- @@ -346,6 +346,7 @@ static inline int git_setitimer(int which,
-@@ -40,7 +40,7 @@ index e3456bdd0d..211861da0f 100644
-  #define setitimer(which,value,ovalue) git_setitimer(which,value,ovalue)
-  #endif
- =20
--@@ -1480,6 +1481,9 @@ static inline void git_funlockfile(FILE *fh)
-+@@ -1488,6 +1489,9 @@ static inline void git_funlockfile(FILE *fh)
-  {
-  	; /* nothing */
-  }
-
-When the refresh is applied, don't forget to add:
-
-Co-developed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---etYPdnMzLJeHwR1j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARMIAB0WIQQJRmM4Nl+8BKPNGvtCNk3+7YYOdAUCY8j61AAKCRBCNk3+7YYO
-dOmRAP4oHBOsaK/Mk0E1iwToyTxvbu9ndLWxlwNTS9HMEecU1gEAoE9BliT6ywIX
-liMQMawSKcTo8ZiWOMNPtOtJC5ZwHFs=
-=QCzR
------END PGP SIGNATURE-----
-
---etYPdnMzLJeHwR1j--
-
---===============2491225921642352142==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-# From http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.22/adwaita-icon-theme-3.22.0.sha256sum
++# From https://download.gnome.org/sources/adwaita-icon-theme/3.27/adwaita-icon-theme-3.27.2.sha256sum
+ sha256  a594e7440971f860cc61b1b8291be15ffc1b8dd06a9f11485a5a7faf189bcf6b  adwaita-icon-theme-3.37.2.tar.xz
+ # locally computed
+ sha256  51f83b2b4e9ed2beebc9b8eed2ecad29314a58ed8c5184b22ad8f9df703d3ce5  COPYING
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+index 3950cfa636..6b71c41d52 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+@@ -6,7 +6,7 @@
+ 
+ ADWAITA_ICON_THEME_VERSION_MAJOR = 3.37
+ ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).2
+-ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
++ADWAITA_ICON_THEME_SITE = https://download.gnome.org/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
+ ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
+ ADWAITA_ICON_THEME_INSTALL_STAGING = YES
+ ADWAITA_ICON_THEME_LICENSE = LGPL-3.0 or CC-BY-SA-3.0
+-- 
+2.25.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2491225921642352142==--
