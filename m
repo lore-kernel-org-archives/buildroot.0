@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73097C25B4E
-	for <buildroot@archiver.kernel.org>; Fri, 20 Jan 2023 07:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44491C25B4E
+	for <buildroot@archiver.kernel.org>; Fri, 20 Jan 2023 07:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E58B41C98;
-	Fri, 20 Jan 2023 07:45:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E58B41C98
+	by smtp4.osuosl.org (Postfix) with ESMTP id D079641C97;
+	Fri, 20 Jan 2023 07:45:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D079641C97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jIlSKlYNtllh; Fri, 20 Jan 2023 07:45:10 +0000 (UTC)
+	with ESMTP id yViIIyqzZv7T; Fri, 20 Jan 2023 07:45:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECFF541C96;
-	Fri, 20 Jan 2023 07:45:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECFF541C96
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CD1221BF2A7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 893C741C9A;
+	Fri, 20 Jan 2023 07:45:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 893C741C9A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E2EC61BF973
  for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:45:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B61F241165
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB62441C96
  for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:45:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B61F241165
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB62441C96
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v-9rtqyKCm79 for <buildroot@lists.busybox.net>;
- Fri, 20 Jan 2023 07:45:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rMd1VuJvFOkF for <buildroot@lists.busybox.net>;
+ Fri, 20 Jan 2023 07:45:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E96414011D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88DC741C93
  for <buildroot@buildroot.org>; Fri, 20 Jan 2023 07:45:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E96414011D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88DC741C93
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CDD087D5D; Fri, 20 Jan 2023 07:45:06 +0000 (UTC)
+ id 71AF687D5C; Fri, 20 Jan 2023 07:45:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Jan 2023 08:17:59 +0100
+Date: Fri, 20 Jan 2023 08:17:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ed9b0d395435683f2d70175f1354de723e7ad4e4
-X-Git-Newrev: 60d8585570c8caf3267c702b902bbe847d713342
+X-Git-Oldrev: c77c66b7df478f508b8f2affa7a64795504db699
+X-Git-Newrev: ed9b0d395435683f2d70175f1354de723e7ad4e4
 X-Patchwork-Hint: ignore
-Message-Id: <20230120074506.7CDD087D5D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apache: security bump version to
- 2.4.55
+Message-Id: <20230120074506.71AF687D5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cog: bump to version 0.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +62,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60d8585570c8caf3267c702b902bbe847d713342
+commit: https://git.buildroot.net/buildroot/commit/?id=ed9b0d395435683f2d70175f1354de723e7ad4e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.apache.org/thread/xlp3od60fjl8nl44z4f56y0lhs7pglos
+This is a small bugfix release which solves build issues. The patch
+to fix the libdrm dependency is included in this release and can be
+removed. Release notes:
 
-Fixes CVE-2006-20001, CVE-2022-36760, CVE-2022-37436:
-https://httpd.apache.org/security/vulnerabilities_24.html
+  https://wpewebkit.org/release/cog-0.16.1.html
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...libdrm-dependency-when-protocols-are-used.patch | 36 ----------------------
+ package/cog/cog.hash                               |  8 ++---
+ package/cog/cog.mk                                 |  2 +-
+ 3 files changed, 5 insertions(+), 41 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 2c21a5bab8..a1185c5618 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,5 +1,5 @@
- # From https://downloads.apache.org/httpd/httpd-2.4.54.tar.bz2.{sha256,sha512}
--sha256  eb397feeefccaf254f8d45de3768d9d68e8e73851c49afd5b7176d1ecf80c340  httpd-2.4.54.tar.bz2
--sha512  228493b2ff32c4142c6e484d304f2ea12e467498605fe12adce2b61388d8efe7b2e96ae2fd0abd1dc88a5f12d625e007d8da0ae5628cff2a5272806754f41e18  httpd-2.4.54.tar.bz2
-+sha256  11d6ba19e36c0b93ca62e47e6ffc2d2f2884942694bce0f23f39c71bdc5f69ac  httpd-2.4.55.tar.bz2
-+sha512  94982f7a1fedac8961fc17b5a22cf763ac28cb27ee6facab2e6a15b249b927773667493fd3f7354fb13fcb34a6f1afc1bdd5cf4b7be030cba1dfb523e40d43fb  httpd-2.4.55.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 315282baac..13018a9b1f 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+diff --git a/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch b/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
+deleted file mode 100644
+index 44e555c121..0000000000
+--- a/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 9a1982c563e218b7695e6a174c8230d3b063eb27 Mon Sep 17 00:00:00 2001
+-From: Gary Bisson <gary.bisson@boundarydevices.com>
+-Date: Thu, 6 Oct 2022 09:04:22 +0200
+-Subject: [PATCH] wl: Fix libdrm dependency when protocols are used
+-
+-As the comment says, cog-platform-wl.c needs drm_fourcc.h to build
+-properly when wayland_weston_direct_display is enabled.
+-
+-However, libdrm.pc doesn't specify "include/libdrm" as part of its
+-includedir but whether in its cflags. So use the compile_args dep
+-instead of includes to fix the build failure.
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+-(cherry picked from commit 32c1d9533bcdc22cbc01d02bf2e6ac0d4bda2dc2)
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[Upstream status: https://github.com/Igalia/cog/pull/501]
+----
+- platform/wayland/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/platform/wayland/meson.build b/platform/wayland/meson.build
+-index f1e18ec..31e4460 100644
+---- a/platform/wayland/meson.build
+-+++ b/platform/wayland/meson.build
+-@@ -67,7 +67,7 @@ if wayland_platform_weston_protocols.length() > 0
+- 
+-     # The code uses definitions from the drm_fourcc.h header, but does not
+-     # need to link the library; libdrm here is only a build-time dependency.
+--    wayland_platform_dependencies += [dependency('libdrm').partial_dependency(includes: true)]
+-+    wayland_platform_dependencies += [dependency('libdrm').partial_dependency(compile_args: true)]
+- endif
+- 
+- 
+--- 
+-2.38.0
+-
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index a2c55c4b94..2ea3ddee08 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/cog-0.16.0.tar.xz.sums
+-md5  2705472ea4f333290973722c0862b21d  cog-0.16.0.tar.xz
+-sha1  ef16e5e3d91d0da056fe5e4f596c211af7453b4e  cog-0.16.0.tar.xz
+-sha256  2956f719d36c9a6368f63901a0d1ceaf4d27f529f7df441b3748c36d72906fc6  cog-0.16.0.tar.xz
++# From https://wpewebkit.org/releases/cog-0.16.1.tar.xz.sums
++md5  1489740db6b4ea568578035c30b8b2f4  cog-0.16.1.tar.xz
++sha1  1235203085e7ccd8fc76eab6bdfcdb2e3ae38ea9  cog-0.16.1.tar.xz
++sha256  37c5f14123b8dcf077839f6c60f0d721d2a91bb37829e796f420126e6b0d38b5  cog-0.16.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 241c4e309c..da4bfc7ac6 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.54
-+APACHE_VERSION = 2.4.55
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = https://downloads.apache.org/httpd
- APACHE_LICENSE = Apache-2.0
+-COG_VERSION = 0.16.0
++COG_VERSION = 0.16.1
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
