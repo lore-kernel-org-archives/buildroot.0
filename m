@@ -4,54 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D9A6C25B50
-	for <buildroot@archiver.kernel.org>; Fri, 20 Jan 2023 07:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D2CCC25B4E
+	for <buildroot@archiver.kernel.org>; Fri, 20 Jan 2023 07:57:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD59B41179;
-	Fri, 20 Jan 2023 07:53:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD59B41179
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E72241186;
+	Fri, 20 Jan 2023 07:57:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E72241186
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rf62ICTfGkJQ; Fri, 20 Jan 2023 07:53:34 +0000 (UTC)
+	with ESMTP id M-PUP5vh6QCl; Fri, 20 Jan 2023 07:57:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24113408D3;
-	Fri, 20 Jan 2023 07:53:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24113408D3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 00ACA1BF2A7
- for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:53:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FBD9408D3;
+	Fri, 20 Jan 2023 07:57:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FBD9408D3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 961731BF2A7
+ for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:57:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFE9D60F54
- for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:53:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFE9D60F54
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E9908237A
+ for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:57:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E9908237A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2qXhEO-4rexb for <buildroot@lists.busybox.net>;
- Fri, 20 Jan 2023 07:53:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B998F60BFE
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B998F60BFE
- for <buildroot@buildroot.org>; Fri, 20 Jan 2023 07:53:30 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1A59A60005;
- Fri, 20 Jan 2023 07:53:26 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pImDF-00ALRu-Vi; Fri, 20 Jan 2023 08:53:26 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KTy2V5_5izlH for <buildroot@lists.busybox.net>;
+ Fri, 20 Jan 2023 07:57:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 59A988232A
+ for <buildroot@buildroot.org>; Fri, 20 Jan 2023 07:57:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59A988232A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4684487D6F; Fri, 20 Jan 2023 07:57:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230119184752.3067-1-fontaine.fabrice@gmail.com>
-Date: Fri, 20 Jan 2023 08:53:25 +0100
-In-Reply-To: <20230119184752.3067-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 19 Jan 2023 19:47:52 +0100")
-Message-ID: <87r0vpabgq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/flashrom: bump to version 1.2.1
+To: buildroot@buildroot.org
+Date: Fri, 20 Jan 2023 08:52:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9d18ef6a0cbe81c01118f12c72eb99c09fce0994
+X-Git-Newrev: a49f00010da29e904c07debea9fd1ab54f2f6c50
+X-Patchwork-Hint: ignore
+Message-Id: <20230120075739.4684487D6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flashrom: bump to version 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,23 +56,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a49f00010da29e904c07debea9fd1ab54f2f6c50
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop patch (already in version)
- > https://github.com/flashrom/flashrom/compare/v1.2...v1.2.1
+Drop patch (already in version)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://github.com/flashrom/flashrom/compare/v1.2...v1.2.1
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...01-Makefile-Fix-building-on-AArch64-NixOS.patch | 95 ----------------------
+ package/flashrom/flashrom.hash                     |  4 +-
+ package/flashrom/flashrom.mk                       |  2 +-
+ 3 files changed, 3 insertions(+), 98 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch b/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
+deleted file mode 100644
+index f835172e61..0000000000
+--- a/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
++++ /dev/null
+@@ -1,95 +0,0 @@
+-From da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d Mon Sep 17 00:00:00 2001
+-From: Pyry Kontio <pyry.kontio@drasa.eu>
+-Date: Mon, 6 Jul 2020 12:57:35 +0900
+-Subject: [PATCH] Makefile: Fix building on AArch64 NixOS
+-
+-The parsing of the output of archtest.c produced an unexpected
+-value on AArch64 NixOS. For example, the make variable ARCH was set to:
+-
+-```
+-bit outside of fd_set selected
+-arm
+-```
+-
+-This made the arch and OS checks fail.
+-
+-This commit simplifies the parsing, making it more robust.
+-
+-The C files archtest.c, endiantest.c and os.h used to set the
+-TARGET_OS, ARCH and ENDIAN variables, respectively, output
+-the result of the test as the final line, so just extracting
+-the final line and removing double quoting is enough.
+-
+-This commit also fixes a bug with debug_shell lacking escaping
+-single quotes, which prevented using the single quote in the
+-debug_shell calls. It used to work by accident before this fix;
+-the line in the call happened to contain a balanced pair of double
+-quotes and lacked other characters that needed escaping, which
+-didn't break the debug_shell, but this was accidental and very
+-brittle.
+-
+-Signed-off-by: Pyry Kontio <pyry.kontio@drasa.eu>
+-Change-Id: Iaa4477a71e758cf9ecad2c22f3b77bc6508a3510
+-Reviewed-on: https://review.coreboot.org/c/flashrom/+/43140
+-Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
+-Reviewed-by: Angel Pons <th3fanbus@gmail.com>
+-
+-[Retrieved from:
+-https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile | 16 ++++++++++------
+- 1 file changed, 10 insertions(+), 6 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index f3f7717e2..e475cbdbd 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -83,7 +83,8 @@ dummy_for_make_3_80:=$(shell printf "Build started on %s\n\n" "$$(date)" >$(BUIL
+- 
+- # Provide an easy way to execute a command, print its output to stdout and capture any error message on stderr
+- # in the build details file together with the original stdout output.
+--debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(1) ; }' >&2;  { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
+-+debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(subst ','\'',$(1)) ; }' >&2; \
+-+    { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
+- 
+- ###############################################################################
+- # General OS-specific settings.
+-@@ -106,7 +107,8 @@ endif
+- # IMPORTANT: The following line must be placed before TARGET_OS is ever used
+- # (of course), but should come after any lines setting CC because the line
+- # below uses CC itself.
+--override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
+-+override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null \
+-+    | tail -1 | cut -f 2 -d'"'))
+- 
+- ifeq ($(TARGET_OS), Darwin)
+- override CPPFLAGS += -I/opt/local/include -I/usr/local/include
+-@@ -490,8 +492,10 @@ endif
+- # IMPORTANT: The following line must be placed before ARCH is ever used
+- # (of course), but should come after any lines setting CC because the line
+- # below uses CC itself.
+--override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
+--override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null | grep -v '^\#'))
+-+override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null \
+-+    | tail -1 | cut -f 2 -d'"'))
+-+override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null \
+-+    | tail -1))
+- 
+- # Disable the internal programmer on unsupported architectures (everything but x86 and mipsel)
+- ifneq ($(ARCH)-little, $(filter $(ARCH),x86 mips)-$(ENDIAN))
+-@@ -1299,12 +1303,12 @@ compiler: featuresavailable
+- 	@printf "Target arch is "
+- 	@# FreeBSD wc will output extraneous whitespace.
+- 	@echo $(ARCH)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
+--		( echo "unknown. Aborting."; exit 1)
+-+		( echo "unknown (\"$(ARCH)\"). Aborting."; exit 1)
+- 	@printf "%s\n" '$(ARCH)'
+- 	@printf "Target OS is "
+- 	@# FreeBSD wc will output extraneous whitespace.
+- 	@echo $(TARGET_OS)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
+--		( echo "unknown. Aborting."; exit 1)
+-+		( echo "unknown (\"$(TARGET_OS)\"). Aborting."; exit 1)
+- 	@printf "%s\n" '$(TARGET_OS)'
+- ifeq ($(TARGET_OS), libpayload)
+- 	@$(CC) --version 2>&1 | grep -q coreboot || \
+diff --git a/package/flashrom/flashrom.hash b/package/flashrom/flashrom.hash
+index 97df4fe9a4..2ab463d93a 100644
+--- a/package/flashrom/flashrom.hash
++++ b/package/flashrom/flashrom.hash
+@@ -1,4 +1,4 @@
+ # Locally computed after checking pgp signature
+-# https://download.flashrom.org/releases/flashrom-v1.2.tar.bz2.asc
+-sha256  e1f8d95881f5a4365dfe58776ce821dfcee0f138f75d0f44f8a3cd032d9ea42b  flashrom-v1.2.tar.bz2
++# https://download.flashrom.org/releases/flashrom-v1.2.1.tar.bz2.asc
++sha256  89a7ff5beb08c89b8795bbd253a51b9453547a864c31793302296b56bbc56d65  flashrom-v1.2.1.tar.bz2
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 5554082bca..dd505987ed 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLASHROM_VERSION = 1.2
++FLASHROM_VERSION = 1.2.1
+ FLASHROM_SOURCE = flashrom-v$(FLASHROM_VERSION).tar.bz2
+ FLASHROM_SITE = https://download.flashrom.org/releases
+ FLASHROM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
