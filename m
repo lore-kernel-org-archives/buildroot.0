@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA1CEC05027
-	for <buildroot@archiver.kernel.org>; Fri, 20 Jan 2023 07:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5720BC05027
+	for <buildroot@archiver.kernel.org>; Fri, 20 Jan 2023 07:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4ACDC60F9A;
-	Fri, 20 Jan 2023 07:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ACDC60F9A
+	by smtp2.osuosl.org (Postfix) with ESMTP id DAF1C41165;
+	Fri, 20 Jan 2023 07:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAF1C41165
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 54esBVSZuoAf; Fri, 20 Jan 2023 07:51:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KHn_lzHdNLNS; Fri, 20 Jan 2023 07:51:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 200C860F79;
-	Fri, 20 Jan 2023 07:51:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 200C860F79
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0CE1C405AB;
+	Fri, 20 Jan 2023 07:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CE1C405AB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0F8CC1BF2A7
- for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:51:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9554B1BF2A7
+ for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECBAD60F79
- for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECBAD60F79
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E5B06120A
+ for <buildroot@lists.busybox.net>; Fri, 20 Jan 2023 07:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E5B06120A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bCGN2itwXTzF for <buildroot@lists.busybox.net>;
- Fri, 20 Jan 2023 07:51:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6DBD60F72
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E6DBD60F72
- for <buildroot@buildroot.org>; Fri, 20 Jan 2023 07:51:34 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 965C41BF207;
- Fri, 20 Jan 2023 07:51:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pImBO-00ALJz-Jz; Fri, 20 Jan 2023 08:51:30 +0100
+ with ESMTP id FGJnLPoeFiN1 for <buildroot@lists.busybox.net>;
+ Fri, 20 Jan 2023 07:51:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9DC776118B
+ for <buildroot@buildroot.org>; Fri, 20 Jan 2023 07:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DC776118B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 883DB87D65; Fri, 20 Jan 2023 07:51:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20230118213517.5946-1-ps.report@gmx.net>
-Date: Fri, 20 Jan 2023 08:51:30 +0100
-In-Reply-To: <20230118213517.5946-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Wed, 18 Jan 2023 22:35:17 +0100")
-Message-ID: <87v8l1abjx.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/git: bump version to 2.39.1
+To: buildroot@buildroot.org
+Date: Fri, 20 Jan 2023 08:50:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a0dfd717f3ff888b4ab6d8c40bb6a01a939370cb
+X-Git-Newrev: 9d18ef6a0cbe81c01118f12c72eb99c09fce0994
+X-Patchwork-Hint: ignore
+Message-Id: <20230120075151.883DB87D65@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/git: security bump to version
+ 2.39.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,26 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9d18ef6a0cbe81c01118f12c72eb99c09fce0994
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - fixes CVE-2022-41903 and CVE-2022-23521
- > For details see [1].
+- fixes CVE-2022-41903 and CVE-2022-23521
 
- > [1] https://lore.kernel.org/git/xmqq7cxl9h0i.fsf@gitster.g/
+For details see [1].
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[1] https://lore.kernel.org/git/xmqq7cxl9h0i.fsf@gitster.g/
 
-Committed after adjusting the summary to make it clear that this is a
-security bump, thanks.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+[Peter: Mark as security bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 57a77b2810..75398896e5 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  ba199b13fb5a99ca3dec917b0bd736bc0eb5a9df87737d435eddfdf10d69265b  git-2.39.0.tar.xz
++sha256  40a38a0847b30c371b35873b3afcf123885dd41ea3ecbbf510efa97f3ce5c161  git-2.39.1.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 9918d4c1ef..1d728e1964 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.39.0
++GIT_VERSION = 2.39.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
