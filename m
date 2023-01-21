@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F5C9C27C76
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E07C004D4
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:22:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5F5561184;
-	Sat, 21 Jan 2023 13:22:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5F5561184
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K87-UmFf_f9Y; Sat, 21 Jan 2023 13:22:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BB546118B;
-	Sat, 21 Jan 2023 13:22:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BB546118B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2C2421BF40B
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F48982C84
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F48982C84
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72F7D82C84;
+	Sat, 21 Jan 2023 13:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72F7D82C84
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 29Tim5BzFqP3 for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k1EyhI-EivZT; Sat, 21 Jan 2023 13:22:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B591382BA7;
+	Sat, 21 Jan 2023 13:22:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B591382BA7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FD191BF40B
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FACC40549
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FACC40549
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p4ZZDveI1RMk for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9255082CA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F3A44070F
  for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9255082CA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F3A44070F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C9E98694D; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
+ id 584458694B; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:59:23 +0100
+Date: Sat, 21 Jan 2023 13:58:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bf3242b8ffcff49d9a0d75091ef9a81304f1dab5
-X-Git-Newrev: 4426874cd337e59db0fed846e625ba45a4fd43fe
+X-Git-Oldrev: 4b1114e5799cbb10396962c0f447ba076562359a
+X-Git-Newrev: 824c40d39d16191681baa3869e1f6c5588a31d76
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131610.8C9E98694D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxml2: switch to https download
+Message-Id: <20230121131610.584458694B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgudev: switch to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,39 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4426874cd337e59db0fed846e625ba45a4fd43fe
+commit: https://git.buildroot.net/buildroot/commit/?id=824c40d39d16191681baa3869e1f6c5588a31d76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libxml2/libxml2.hash | 2 +-
- package/libxml2/libxml2.mk   | 2 +-
+ package/libgudev/libgudev.hash | 2 +-
+ package/libgudev/libgudev.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 00daa21a83..6957e2ed87 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
+diff --git a/package/libgudev/libgudev.hash b/package/libgudev/libgudev.hash
+index 3933e55de4..90f27a02fc 100644
+--- a/package/libgudev/libgudev.hash
++++ b/package/libgudev/libgudev.hash
 @@ -1,4 +1,4 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.10/libxml2-2.10.3.sha256sum
-+# From https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.3.sha256sum
- sha256  5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c  libxml2-2.10.3.tar.xz
- # License files, locally calculated
- sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 321e8b756b..7a01dc4259 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -8,7 +8,7 @@ LIBXML2_VERSION_MAJOR = 2.10
- LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).3
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
--	http://ftp.gnome.org/pub/gnome/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
-+	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
- LIBXML2_LICENSE_FILES = Copyright
+-# From http://ftp.gnome.org/pub/GNOME/sources/libgudev/237/libgudev-237.sha256sum
++# From https://download.gnome.org/sources/libgudev/237/libgudev-237.sha256sum
+ sha256  0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa  libgudev-237.tar.xz
+ 
+ # Hash for license file:
+diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
+index 27244c3072..ef0bd997fa 100644
+--- a/package/libgudev/libgudev.mk
++++ b/package/libgudev/libgudev.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBGUDEV_VERSION = 237
+ LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
+-LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
++LIBGUDEV_SITE = https://download.gnome.org/sources/libgudev/$(LIBGUDEV_VERSION)
+ LIBGUDEV_INSTALL_STAGING = YES
+ LIBGUDEV_DEPENDENCIES = host-pkgconf udev libglib2
+ LIBGUDEV_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
