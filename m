@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC3E9C27C76
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A94FC004D4
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:21:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C83441C9D;
-	Sat, 21 Jan 2023 13:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C83441C9D
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF4A8404DF;
+	Sat, 21 Jan 2023 13:21:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF4A8404DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v-A3uVb0r4Cd; Sat, 21 Jan 2023 13:21:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4W5AALDvrefn; Sat, 21 Jan 2023 13:21:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E7D641CA1;
-	Sat, 21 Jan 2023 13:21:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E7D641CA1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1CBDC1BF40B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 38BC64048A;
+	Sat, 21 Jan 2023 13:21:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38BC64048A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 360F81BF847
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2BB9682BA7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 853B041CE6
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BB9682BA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 853B041CE6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U1aQ-hSUyIET for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 40SJhbnaxax3 for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 62CDE82C84
- for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62CDE82C84
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF14441CA8
+ for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF14441CA8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60FD18694D; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
+ id D6D5786964; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:58:33 +0100
+Date: Sat, 21 Jan 2023 13:55:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 824c40d39d16191681baa3869e1f6c5588a31d76
-X-Git-Newrev: 7a511e286d68e7abb9058421dda4c05e288f6cf4
+X-Git-Oldrev: b443913bcc4809c3fd29d8fa12e940e51225913a
+X-Git-Newrev: 01b5b18cbc0a86faff68ec4f67b707965ed332cf
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131610.60FD18694D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmediaart: switch to https
+Message-Id: <20230121131609.D6D5786964@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gupnp-tools: switch to https
  download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,39 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a511e286d68e7abb9058421dda4c05e288f6cf4
+commit: https://git.buildroot.net/buildroot/commit/?id=01b5b18cbc0a86faff68ec4f67b707965ed332cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libmediaart/libmediaart.hash | 2 +-
- package/libmediaart/libmediaart.mk   | 2 +-
+ package/gupnp-tools/gupnp-tools.hash | 2 +-
+ package/gupnp-tools/gupnp-tools.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
-index ebc914526b..34094744a9 100644
---- a/package/libmediaart/libmediaart.hash
-+++ b/package/libmediaart/libmediaart.hash
+diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
+index 37983b0c92..c3808de6e2 100644
+--- a/package/gupnp-tools/gupnp-tools.hash
++++ b/package/gupnp-tools/gupnp-tools.hash
 @@ -1,4 +1,4 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.6.sha256sum:
-+# Hash from: https://download.gnome.org/sources/libmediaart/1.9/libmediaart-1.9.6.sha256sum:
- sha256  c3bc5025d7db380587f9c8eb800c611f6b5a16d6b4b78fcff93f62876a677f17  libmediaart-1.9.6.tar.xz
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.10/gupnp-tools-0.10.3.sha256sum:
++# Hash from: https://download.gnome.org/sources/gupnp-tools/0.10/gupnp-tools-0.10.3.sha256sum:
+ sha256  457f4d923935b078415cd2ba88d78db60079b725926b7ee106e4565efe3204de  gupnp-tools-0.10.3.tar.xz
  
  # Locally computed:
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 429e0c20de..d4480dbe5d 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -8,7 +8,7 @@ LIBMEDIAART_VERSION_MAJOR = 1.9
- LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).6
- LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
- LIBMEDIAART_SITE = \
--	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
-+	https://download.gnome.org/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
- LIBMEDIAART_LICENSE = LGPL-2.1+
- LIBMEDIAART_LICENSE_FILES = COPYING.LESSER
- LIBMEDIAART_INSTALL_STAGING = YES
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+index 96bcbffa49..f87e98ef03 100644
+--- a/package/gupnp-tools/gupnp-tools.mk
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -8,7 +8,7 @@ GUPNP_TOOLS_VERSION_MAJOR = 0.10
+ GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).3
+ GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
+ GUPNP_TOOLS_SITE = \
+-	http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
++	https://download.gnome.org/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
+ GUPNP_TOOLS_LICENSE = GPL-2.0+
+ GUPNP_TOOLS_LICENSE_FILES = COPYING
+ GUPNP_TOOLS_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
