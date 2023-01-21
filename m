@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82E5BC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A205C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:04:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CBF161287;
-	Tue, 21 Feb 2023 01:04:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CBF161287
+	by smtp3.osuosl.org (Postfix) with ESMTP id E62216119D;
+	Tue, 21 Feb 2023 01:04:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E62216119D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6qvl36M80hPn; Tue, 21 Feb 2023 01:04:17 +0000 (UTC)
+	with ESMTP id mwXxCOCSm6fH; Tue, 21 Feb 2023 01:04:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B29A611C2;
-	Tue, 21 Feb 2023 01:04:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B29A611C2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3F5AD1BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DC386115D;
+	Tue, 21 Feb 2023 01:04:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DC386115D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FE051BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58D314181E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58D314181E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F4006FB93
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F4006FB93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bX3Jbnw-cRX7 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OWuXIp9x_yPE for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52C5F41832
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52C5F41832
+ by smtp3.osuosl.org (Postfix) with ESMTP id 925DC6FB9D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 925DC6FB9D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4218081979; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 90BD381979; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:10:37 +0100
+Date: Sat, 21 Jan 2023 13:51:55 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d37b3916a1ce75085da8232db95cfd354137e540
-X-Git-Newrev: a85ed5d21c14cbe3ec2864206fe792152598e4db
+X-Git-Oldrev: 7d3690e8628c29d96993e981a9cc8ef05f22a3cc
+X-Git-Newrev: 0e483a7340a4aeecf1d362328e06c2fcdec1dcae
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205303.4218081979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-django:
- security bump to version 4.1.7
+Message-Id: <20230220205237.90BD381979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/cantarell: switch to
+ https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a85ed5d21c14cbe3ec2864206fe792152598e4db
+commit: https://git.buildroot.net/buildroot/commit/?id=0e483a7340a4aeecf1d362328e06c2fcdec1dcae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix CVE-2023-23969 and CVE-2023-24580
-
-https://docs.djangoproject.com/en/dev/releases/4.1.6
-https://docs.djangoproject.com/en/dev/releases/4.1.7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/cantarell/cantarell.hash | 2 +-
+ package/cantarell/cantarell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 1d3035bb98..cb03b33bfe 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  6b6a47d7478ead15b0a0835841c433dc  Django-4.1.5.tar.gz
--sha256  ff56ebd7ead0fd5dbe06fe157b0024a7aaea2e0593bb3785fb594cf94dad58ef  Django-4.1.5.tar.gz
-+md5  626f96c63ddfab24bab90d80c87a7aad  Django-4.1.7.tar.gz
-+sha256  44f714b81c5f190d9d2ddad01a532fe502fa01c4cb8faf1d081f4264ed15dcd8  Django-4.1.7.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index e08de68954..e8c91cf51f 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
+index 49b4634063..18e0fc2cfa 100644
+--- a/package/cantarell/cantarell.hash
++++ b/package/cantarell/cantarell.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.25.sha256sum
++# From https://download.gnome.org/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.25.sha256sum
+ sha256  14a228aa0b516dfc367b434a850f955a00c57fc549cbb05348e2b150196a737f  cantarell-fonts-0.0.25.tar.xz
+ # locally computed
+ sha256  79a9d6198c0d9192c1b0bf55bcbc404a39390bd0d8c650cf20d652c2eaa284d8  COPYING
+diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
+index 2769b35c1f..59e65b25c1 100644
+--- a/package/cantarell/cantarell.mk
++++ b/package/cantarell/cantarell.mk
+@@ -6,7 +6,7 @@
  
--PYTHON_DJANGO_VERSION = 4.1.5
-+PYTHON_DJANGO_VERSION = 4.1.7
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/41/c8/b3c469353f9d1b7f0e99b45520582b891da02cd87408bc867affa6e039a3
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/9f/a7/07939866241b7e8f8d3bf164b7d6ad428163723e29dd472700f8ab0e5fd5
- 
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ CANTARELL_VERSION_MAJOR = 0.0
+ CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).25
+-CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
++CANTARELL_SITE = https://download.gnome.org/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
+ CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
+ CANTARELL_DEPENDENCIES = host-pkgconf
+ CANTARELL_LICENSE = OFL-1.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
