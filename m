@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48DFBC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:08:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1870C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3C3B610A5;
-	Tue, 21 Feb 2023 01:08:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3C3B610A5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F35A610C8;
+	Tue, 21 Feb 2023 01:08:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F35A610C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P97Sc_WlGIR9; Tue, 21 Feb 2023 01:08:27 +0000 (UTC)
+	with ESMTP id psXOua2GtPFL; Tue, 21 Feb 2023 01:08:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23394612AB;
-	Tue, 21 Feb 2023 01:08:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23394612AB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F81D61382;
+	Tue, 21 Feb 2023 01:08:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F81D61382
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 141C51BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 240761BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B1706FBA7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 662A76FB9B
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B1706FBA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 662A76FB9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tPXSe8ZGyuAq for <buildroot@lists.busybox.net>;
+ with ESMTP id 05_MN_CBoYZL for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FB8B6FB9B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98F486FBA9
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FB8B6FB9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98F486FBA9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E30381979; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+ id 8A62E81979; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:58:06 +0100
+Date: Sat, 21 Jan 2023 13:58:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 65c47725b02d00b6ffa5acf88176b6b1365c3f7a
-X-Git-Newrev: ce15c411a2a7e83ff5a5838450913082aa80a031
+X-Git-Oldrev: 16acbf9ce30985f29afdf4d0d1aca4fd9df21292
+X-Git-Newrev: 39c25a288e0dd64157485dfebd83ef8ce8c1f2b0
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205238.6E30381979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/json-glib: switch to
+Message-Id: <20230220205238.8A62E81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libepoxy: switch to
  https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,39 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce15c411a2a7e83ff5a5838450913082aa80a031
+commit: https://git.buildroot.net/buildroot/commit/?id=39c25a288e0dd64157485dfebd83ef8ce8c1f2b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/json-glib/json-glib.hash | 2 +-
- package/json-glib/json-glib.mk   | 2 +-
+ package/libepoxy/libepoxy.hash | 2 +-
+ package/libepoxy/libepoxy.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
-index 680d404a4b..0c3cf7f7f7 100644
---- a/package/json-glib/json-glib.hash
-+++ b/package/json-glib/json-glib.hash
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index bf6c52f99e..27adb70f40 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
 @@ -1,4 +1,4 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.6/json-glib-1.6.6.sha256sum
-+# From https://download.gnome.org/sources/json-glib/1.6/json-glib-1.6.6.sha256sum
- sha256  96ec98be7a91f6dde33636720e3da2ff6ecbb90e76ccaa49497f31a6855a490e  json-glib-1.6.6.tar.xz
+-# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.10.sha256sum
++# From https://download.gnome.org/sources/libepoxy/1.5/libepoxy-1.5.10.sha256sum
+ sha256  072cda4b59dd098bba8c2363a6247299db1fa89411dc221c8b81b8ee8192e623  libepoxy-1.5.10.tar.xz
  
- # Hash for license file:
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index 52ca47e906..b7ff0bfd57 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
+ # Hashes for license files:
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index 2af2e2f6e8..1630428844 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
 @@ -6,7 +6,7 @@
  
- JSON_GLIB_VERSION_MAJOR = 1.6
- JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
--JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
-+JSON_GLIB_SITE = https://download.gnome.org/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
- JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
- JSON_GLIB_LICENSE = LGPL-2.1+
- JSON_GLIB_LICENSE_FILES = COPYING
+ LIBEPOXY_VERSION_MAJOR = 1.5
+ LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).10
+-LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
++LIBEPOXY_SITE = https://download.gnome.org/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
+ LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
