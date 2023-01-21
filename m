@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 832D1C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6ED4C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31582612D9;
-	Tue, 21 Feb 2023 01:07:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31582612D9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C6FF612DC;
+	Tue, 21 Feb 2023 01:07:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C6FF612DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iXkhgmUlPcQq; Tue, 21 Feb 2023 01:07:37 +0000 (UTC)
+	with ESMTP id LmndVfKUMhhp; Tue, 21 Feb 2023 01:07:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 789746128B;
-	Tue, 21 Feb 2023 01:07:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 789746128B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A6DD81BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id CECC961123;
+	Tue, 21 Feb 2023 01:07:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CECC961123
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F34521BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 53D0A414E7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53D0A414E7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 021B16FB83
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 021B16FB83
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bPBFD6GzeUdL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kemzTjHqoG-Q for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B1BE14182B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1BE14182B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36B3D6FBA4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36B3D6FBA4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ADFCA86495; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+ id 30B2F81979; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 21:54:39 +0100
+Date: Sat, 21 Jan 2023 13:55:25 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 273bec97fc34068281d44e57bc60fbcfed5c8342
-X-Git-Newrev: 8797f3fb272e9c1a5fe6a1953cacf6e5065a133a
+X-Git-Oldrev: cfdd3fcd158031dfa2157454b9f5071e801171b5
+X-Git-Newrev: b443913bcc4809c3fd29d8fa12e940e51225913a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205302.ADFCA86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/speechd: disable kali
- support
+Message-Id: <20230220205238.30B2F81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gupnp-dlna: switch to
+ https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,45 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8797f3fb272e9c1a5fe6a1953cacf6e5065a133a
+commit: https://git.buildroot.net/buildroot/commit/?id=b443913bcc4809c3fd29d8fa12e940e51225913a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Disable kali support as it is not needed and raises the following build
-failure without C++ since the addition of the package in commit
-9f4f8c5f8993c6d7c2ef730ac211ef84ac9ae26d:
-
-  CXX      sd_kali-kali.o
-/bin/sh: line 1: no: command not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/2f6c8b3674753d6a9f165117c70e7dad88505505
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/speechd/speechd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gupnp-dlna/gupnp-dlna.hash | 2 +-
+ package/gupnp-dlna/gupnp-dlna.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
-index 0d43e4b6fb..46c0672f59 100644
---- a/package/speechd/speechd.mk
-+++ b/package/speechd/speechd.mk
-@@ -12,6 +12,7 @@ SPEECHD_INSTALL_STAGING = YES
- # speechd source code is released without configure script
- SPEECHD_AUTORECONF = YES
- SPEECHD_DEPENDENCIES = host-pkgconf dotconf libglib2 libsndfile
-+SPEECHD_CONF_OPTS = --without-kali
+diff --git a/package/gupnp-dlna/gupnp-dlna.hash b/package/gupnp-dlna/gupnp-dlna.hash
+index dd9f2e4e4f..c7cab2601c 100644
+--- a/package/gupnp-dlna/gupnp-dlna.hash
++++ b/package/gupnp-dlna/gupnp-dlna.hash
+@@ -1,4 +1,4 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/0.12/gupnp-dlna-0.12.0.sha256sum:
++# Hash from: https://download.gnome.org/sources/gupnp-dlna/0.12/gupnp-dlna-0.12.0.sha256sum:
+ sha256  3d53b96f85bc5628d33e367ec9bf2adb38ef2b34d7ad0434a6ba0cf4ad9048e6  gupnp-dlna-0.12.0.tar.xz
  
- # fix missing config.rpath (needed for autoreconf) in the codebase
- define SPEECHD_TOUCH_CONFIG_RPATH
+ # Locally computed:
+diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
+index 64146f894b..0064700fd2 100644
+--- a/package/gupnp-dlna/gupnp-dlna.mk
++++ b/package/gupnp-dlna/gupnp-dlna.mk
+@@ -8,7 +8,7 @@ GUPNP_DLNA_VERSION_MAJOR = 0.12
+ GUPNP_DLNA_VERSION = $(GUPNP_DLNA_VERSION_MAJOR).0
+ GUPNP_DLNA_SOURCE = gupnp-dlna-$(GUPNP_DLNA_VERSION).tar.xz
+ GUPNP_DLNA_SITE = \
+-	http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/$(GUPNP_DLNA_VERSION_MAJOR)
++	https://download.gnome.org/sources/gupnp-dlna/$(GUPNP_DLNA_VERSION_MAJOR)
+ # COPYING contains LGPL-2.1 but all source files contain LPGL-2.0+
+ GUPNP_DLNA_LICENSE = LGPL-2.0+
+ GUPNP_DLNA_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
