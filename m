@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6348C004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74742C27C76
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:20:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 712D6829DB;
-	Sat, 21 Jan 2023 13:20:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 712D6829DB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20DFD819BC;
+	Sat, 21 Jan 2023 13:20:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20DFD819BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UXwiyUvwQbmN; Sat, 21 Jan 2023 13:20:41 +0000 (UTC)
+	with ESMTP id aBCL0Lf-9JCW; Sat, 21 Jan 2023 13:20:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C320D81E28;
-	Sat, 21 Jan 2023 13:20:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C320D81E28
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A90A1BF40B
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28ADE82BE7;
+	Sat, 21 Jan 2023 13:20:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28ADE82BE7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C4D31BF40B
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 23DA340607
+ by smtp1.osuosl.org (Postfix) with ESMTP id 115B582C3E
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23DA340607
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 115B582C3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xSBrce2120ih for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 79q4cuzI3F4s for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E260D40549
- for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E260D40549
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48E8982BA7
+ for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48E8982BA7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF85A86946; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
+ id 46C3B8694D; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:57:58 +0100
+Date: Sat, 21 Jan 2023 13:58:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 01b5b18cbc0a86faff68ec4f67b707965ed332cf
-X-Git-Newrev: be4b3300085d1c2266a18e6615d9288759438d9c
+X-Git-Oldrev: 9d4d3a930e14b2b81524711288e7092a562f5ed1
+X-Git-Newrev: 1d7e304648ffa8f4d88bfd540176e492fcafb015
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131609.DF85A86946@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gupnp: switch to https download
+Message-Id: <20230121131610.46C3B8694D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgtk2: switch to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,39 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be4b3300085d1c2266a18e6615d9288759438d9c
+commit: https://git.buildroot.net/buildroot/commit/?id=1d7e304648ffa8f4d88bfd540176e492fcafb015
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gupnp/gupnp.hash | 2 +-
- package/gupnp/gupnp.mk   | 2 +-
+ package/libgtk2/libgtk2.hash | 2 +-
+ package/libgtk2/libgtk2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index cc5e2b5775..823dbd7927 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
+diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
+index 9b10a1f0ce..7b9a46b697 100644
+--- a/package/libgtk2/libgtk2.hash
++++ b/package/libgtk2/libgtk2.hash
 @@ -1,4 +1,4 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.4/gupnp-1.4.3.sha256sum:
-+# Hash from: https://download.gnome.org/sources/gupnp/1.4/gupnp-1.4.3.sha256sum:
- sha256  14eda777934da2df743d072489933bd9811332b7b5bf41626b8032efb28b33ba  gupnp-1.4.3.tar.xz
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.33.sha256sum
++# From https://download.gnome.org/sources/gtk+/2.24/gtk+-2.24.33.sha256sum
+ sha256  ac2ac757f5942d318a311a54b0c80b5ef295f299c2a73c632f6bfb1ff49cc6da  gtk+-2.24.33.tar.xz
  
  # Hash for license file:
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index dca747f064..f41f26d2dd 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index d30e1d9d43..859925e8d3 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
 @@ -7,7 +7,7 @@
- GUPNP_VERSION_MAJOR = 1.4
- GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
--GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
-+GUPNP_SITE = https://download.gnome.org/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPL-2.1+
- GUPNP_LICENSE_FILES = COPYING
- GUPNP_CPE_ID_VENDOR = gnome
+ LIBGTK2_VERSION_MAJOR = 2.24
+ LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).33
+ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
+-LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
++LIBGTK2_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
+ LIBGTK2_INSTALL_STAGING = YES
+ LIBGTK2_LICENSE = LGPL-2.0+
+ LIBGTK2_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
