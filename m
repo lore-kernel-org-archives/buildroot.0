@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0BB5C004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8224C27C76
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8183E40549;
-	Sat, 21 Jan 2023 13:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8183E40549
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5468D60D95;
+	Sat, 21 Jan 2023 13:24:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5468D60D95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FEDMDa4xPXsi; Sat, 21 Jan 2023 13:24:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RpTcz3Cko13b; Sat, 21 Jan 2023 13:24:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C89514048A;
-	Sat, 21 Jan 2023 13:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C89514048A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4EF361BF40B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A76161052;
+	Sat, 21 Jan 2023 13:24:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A76161052
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BF8651BF40B
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A098C82CD4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86E054061C
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A098C82CD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86E054061C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CI7DsEyrwhGK for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J6_-XpQCa85C for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB69E82C35
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D2614011C
  for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB69E82C35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D2614011C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6F6B8694D; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
+ id 6A76986948; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:59:37 +0100
+Date: Sat, 21 Jan 2023 13:58:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97ceb937a1f3c359b14b524f636f5fddfa09d48d
-X-Git-Newrev: 6893eabaa05e2ad4c3fe375196e1b84e3cee3326
+X-Git-Oldrev: 7a511e286d68e7abb9058421dda4c05e288f6cf4
+X-Git-Newrev: abe3c7f81bba9fea46cc9ea379c6dbab624e447e
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131610.B6F6B8694D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pango: switch to https download
+Message-Id: <20230121131610.6A76986948@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpeas: switch to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,39 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6893eabaa05e2ad4c3fe375196e1b84e3cee3326
+commit: https://git.buildroot.net/buildroot/commit/?id=abe3c7f81bba9fea46cc9ea379c6dbab624e447e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pango/pango.hash | 2 +-
- package/pango/pango.mk   | 2 +-
+ package/libpeas/libpeas.hash | 2 +-
+ package/libpeas/libpeas.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 60a6809ab5..1dbc5c9197 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
+diff --git a/package/libpeas/libpeas.hash b/package/libpeas/libpeas.hash
+index c503558f85..f69fd2945f 100644
+--- a/package/libpeas/libpeas.hash
++++ b/package/libpeas/libpeas.hash
 @@ -1,4 +1,4 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.12.sha256sum
-+# From https://download.gnome.org/sources/pango/1.50/pango-1.50.12.sha256sum
- sha256  caef96d27bbe792a6be92727c73468d832b13da57c8071ef79b9df69ee058fe3  pango-1.50.12.tar.xz
- 
- # Locally computed
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 698894d0c8..f19faf0502 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
+-# From https://ftp.gnome.org/pub/GNOME/sources/libpeas/1.32/libpeas-1.32.0.sha256sum
++# From https://download.gnome.org/sources/libpeas/1.32/libpeas-1.32.0.sha256sum
+ sha256  d625520fa02e8977029b246ae439bc218968965f1e82d612208b713f1dcc3d0e  libpeas-1.32.0.tar.xz
+ # Locally calculated
+ sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
+diff --git a/package/libpeas/libpeas.mk b/package/libpeas/libpeas.mk
+index 5550162e04..3d2e79452c 100644
+--- a/package/libpeas/libpeas.mk
++++ b/package/libpeas/libpeas.mk
 @@ -7,7 +7,7 @@
- PANGO_VERSION_MAJOR = 1.50
- PANGO_VERSION = $(PANGO_VERSION_MAJOR).12
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
--PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
-+PANGO_SITE = https://download.gnome.org/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
- PANGO_LICENSE = LGPL-2.0+
- PANGO_LICENSE_FILES = COPYING
+ LIBPEAS_VERSION_MAJOR = 1.32
+ LIBPEAS_VERSION = $(LIBPEAS_VERSION_MAJOR).0
+ LIBPEAS_SOURCE = libpeas-$(LIBPEAS_VERSION).tar.xz
+-LIBPEAS_SITE = http://ftp.gnome.org/pub/gnome/sources/libpeas/$(LIBPEAS_VERSION_MAJOR)
++LIBPEAS_SITE = https://download.gnome.org/sources/libpeas/$(LIBPEAS_VERSION_MAJOR)
+ LIBPEAS_LICENSE = LGPL-2.1+
+ LIBPEAS_LICENSE_FILES = COPYING
+ LIBPEAS_CPE_ID_VENDOR = gnome
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
