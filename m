@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BBB5C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97191C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:11:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFCDC61B22;
-	Tue, 21 Feb 2023 01:11:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFCDC61B22
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48DAF612DF;
+	Tue, 21 Feb 2023 01:11:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48DAF612DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 75xMNleA5mvJ; Tue, 21 Feb 2023 01:11:34 +0000 (UTC)
+	with ESMTP id Ptv8DuNZFqV2; Tue, 21 Feb 2023 01:11:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED73461B19;
-	Tue, 21 Feb 2023 01:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED73461B19
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FA4B61B25;
+	Tue, 21 Feb 2023 01:11:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FA4B61B25
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EF5E71BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F27E01BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C6756FBBE
+ by smtp3.osuosl.org (Postfix) with ESMTP id A20FC6FBBF
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C6756FBBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A20FC6FBBF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xSB6cM9kUnrR for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+ with ESMTP id mAJG5JDlWnP9 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3EEF6FBA1
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4ABB6FB8C
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3EEF6FBA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4ABB6FB8C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDFF586496; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id A9F24828C8; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 26 Jan 2023 14:25:50 +0100
+Date: Sat, 21 Jan 2023 19:05:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f5d73033b8683df83d0ca9eb172b885d33a5ea64
-X-Git-Newrev: 3621312a840306e38573c667459b5dee4db19531
+X-Git-Oldrev: f0901160666852eaea15eeac4a1905cfff94bab1
+X-Git-Newrev: e6789e8b8b5f39e0efb9f4a9af492de416c121c8
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205239.DDFF586496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libosmium: bump
- version to 2.19.0
+Message-Id: <20230220205239.A9F24828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/systemd: reenable utmp
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3621312a840306e38573c667459b5dee4db19531
+commit: https://git.buildroot.net/buildroot/commit/?id=e6789e8b8b5f39e0efb9f4a9af492de416c121c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release-notes: https://github.com/osmcode/libosmium/releases/tag/v2.19.0
+This patch provides a way to enable utmp support when using systemd,
+with it disabled by default, as some security concerns may apply. Still,
+there are cases where having utmp is desirable, even though it is rare,
+so let's make this configurable.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+See commit 32f53bdfb482d0d78308e548c654898089b5c183.
+
+Signed-off-by: Casey Reeves <casey@xogium.me>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libosmium/libosmium.hash | 2 +-
- package/libosmium/libosmium.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/Config.in  | 20 ++++++++++++++++++++
+ package/systemd/systemd.mk |  9 +++++++--
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/package/libosmium/libosmium.hash b/package/libosmium/libosmium.hash
-index cb53a91c67..b055aa21ea 100644
---- a/package/libosmium/libosmium.hash
-+++ b/package/libosmium/libosmium.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c05a3e95c9c811521ebad8637e90f43ab8fb053b310875acce741cc4c17d6f59  libosmium-2.18.0.tar.gz
-+sha256  6911a8ca8e81d49205357177982df908af11376919f93b814cccf02f1d4d63e3  libosmium-2.19.0.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
-diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
-index f7ced04de3..2725130e72 100644
---- a/package/libosmium/libosmium.mk
-+++ b/package/libosmium/libosmium.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 45a9e2d644..33ac03e584 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -518,6 +518,26 @@ config BR2_PACKAGE_SYSTEMD_USERDB
  
--LIBOSMIUM_VERSION = 2.18.0
-+LIBOSMIUM_VERSION = 2.19.0
- LIBOSMIUM_SITE = $(call github,osmcode,libosmium,v$(LIBOSMIUM_VERSION))
- LIBOSMIUM_LICENSE = BSL-1.0
- LIBOSMIUM_LICENSE_FILES = LICENSE
+ 	  https://www.freedesktop.org/software/systemd/man/systemd-userdbd.service.html
+ 
++config BR2_PACKAGE_SYSTEMD_UTMP
++	bool "enable utmp support"
++	help
++	  systemd-update-utmp-runlevel.service is a service that writes
++	  SysV runlevel changes to utmp and wtmp, as well as the audit
++	  logs, as they occur.  systemd-update-utmp.service does the
++	  same for system reboots and shutdown requests.
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-update-utmp.service.html
++
++	  Utmp keeps track of what users do on the system (where they
++	  logged from, on which terminal, ...) along with a general
++	  status of the system (list of reboots, current uptime, current
++	  number of users logged in).
++
++	  You should only enable this if your system will have actual
++	  users who log in.
++
++	  https://man7.org/linux/man-pages/man5/utmp.5.html
++
+ config BR2_PACKAGE_SYSTEMD_VCONSOLE
+ 	bool "enable vconsole tool"
+ 	default y
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index b96873b73f..f191542866 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -87,8 +87,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dtelinit-path= \
+ 	-Dtests=false \
+ 	-Dtmpfiles=true \
+-	-Dumount-path=/usr/bin/umount \
+-	-Dutmp=false
++	-Dumount-path=/usr/bin/umount
+ 
+ SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_OPTIMIZE_FAST),y)
+@@ -331,6 +330,12 @@ else
+ SYSTEMD_CONF_OPTS += -Dbinfmt=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_UTMP),y)
++SYSTEMD_CONF_OPTS += -Dutmp=true
++else
++SYSTEMD_CONF_OPTS += -Dutmp=false
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_VCONSOLE),y)
+ SYSTEMD_CONF_OPTS += -Dvconsole=true
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
