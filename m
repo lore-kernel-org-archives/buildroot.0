@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2624C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:09:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ECBCC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:09:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D83A613BA;
-	Tue, 21 Feb 2023 01:09:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D83A613BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF91561168;
+	Tue, 21 Feb 2023 01:09:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF91561168
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id volMbkbUDZtD; Tue, 21 Feb 2023 01:09:29 +0000 (UTC)
+	with ESMTP id WqURtYF9a4hm; Tue, 21 Feb 2023 01:09:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 839A461386;
-	Tue, 21 Feb 2023 01:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 839A461386
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA0B0612DB;
+	Tue, 21 Feb 2023 01:09:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA0B0612DB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5671B1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 665B51BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9FF966FBB5
+ by smtp3.osuosl.org (Postfix) with ESMTP id B546C6FBB7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FF966FBB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B546C6FBB7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VtX2ZQt5wb0Z for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+ with ESMTP id 0VRcs37okuhC for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A9CE16FBAA
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9CE16FBAA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09B526FBA1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09B526FBA1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A50328648F; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+ id 031F78648F; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:58:18 +0100
+Date: Sat, 21 Jan 2023 13:58:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 500f40bbc7a7657393dd308490afec3effee6dea
-X-Git-Newrev: 03255ca62792681c03620df0008a496273fe8801
+X-Git-Oldrev: abe3c7f81bba9fea46cc9ea379c6dbab624e447e
+X-Git-Newrev: 9da85317b3d9549c24e8941d069958ed2d71a120
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205238.A50328648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libglade: switch to
+Message-Id: <20230220205239.031F78648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/librsvg: switch to
  https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,53 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03255ca62792681c03620df0008a496273fe8801
+commit: https://git.buildroot.net/buildroot/commit/?id=9da85317b3d9549c24e8941d069958ed2d71a120
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libglade/Config.in     | 2 +-
- package/libglade/libglade.hash | 2 +-
- package/libglade/libglade.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/librsvg/librsvg.hash | 2 +-
+ package/librsvg/librsvg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglade/Config.in b/package/libglade/Config.in
-index e269a07548..c97c9becd2 100644
---- a/package/libglade/Config.in
-+++ b/package/libglade/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBGLADE
- 	  at runtime. It doesn't require GLADE to be used, but GLADE is
- 	  by far the easiest way to create the interface files.
- 
--	  http://ftp.gnome.org/pub/GNOME/sources/libglade/
-+	  https://download.gnome.org/sources/libglade/
- 
- comment "libglade needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
-diff --git a/package/libglade/libglade.hash b/package/libglade/libglade.hash
-index d01c83be25..b04087e286 100644
---- a/package/libglade/libglade.hash
-+++ b/package/libglade/libglade.hash
+diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
+index 8b32c6581e..c8da3354f5 100644
+--- a/package/librsvg/librsvg.hash
++++ b/package/librsvg/librsvg.hash
 @@ -1,4 +1,4 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/libglade-2.6.4.sha256sum
-+# From https://download.gnome.org/sources/libglade/2.6/libglade-2.6.4.sha256sum
- sha256  64361e7647839d36ed8336d992fd210d3e8139882269bed47dc4674980165dec  libglade-2.6.4.tar.bz2
+-# From https://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.7.sha256sum
++# From https://download.gnome.org/sources/librsvg/2.50/librsvg-2.50.7.sha256sum
+ sha256  fffb61b08cd5282aaae147a02b305166a7426fad22a8b9427708f0f2fc426ebc  librsvg-2.50.7.tar.xz
  
- # Hash for license file:
-diff --git a/package/libglade/libglade.mk b/package/libglade/libglade.mk
-index 32fa595f5a..21aed60605 100644
---- a/package/libglade/libglade.mk
-+++ b/package/libglade/libglade.mk
-@@ -7,7 +7,7 @@
- LIBGLADE_VERSION_MAJOR = 2.6
- LIBGLADE_VERSION = $(LIBGLADE_VERSION_MAJOR).4
- LIBGLADE_SOURCE = libglade-$(LIBGLADE_VERSION).tar.bz2
--LIBGLADE_SITE = http://ftp.gnome.org/pub/GNOME/sources/libglade/$(LIBGLADE_VERSION_MAJOR)
-+LIBGLADE_SITE = https://download.gnome.org/sources/libglade/$(LIBGLADE_VERSION_MAJOR)
- LIBGLADE_INSTALL_STAGING = YES
- LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 atk libxml2
- LIBGLADE_LICENSE = LGPL-2.0+
+ # Locally computed
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 07a14b4366..df6559a858 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBRSVG_VERSION_MAJOR = 2.50
+ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).7
+-LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
++LIBRSVG_SITE = https://download.gnome.org/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
