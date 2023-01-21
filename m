@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A50A2C004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8C26C004D4
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:17:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35D3960FCC;
-	Sat, 21 Jan 2023 13:17:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35D3960FCC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 852AA60FE6;
+	Sat, 21 Jan 2023 13:17:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 852AA60FE6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Untlrr06rUoF; Sat, 21 Jan 2023 13:17:31 +0000 (UTC)
+	with ESMTP id qBoGobwxLmzw; Sat, 21 Jan 2023 13:17:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B65960FE6;
-	Sat, 21 Jan 2023 13:17:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B65960FE6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3042A1BF859
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6F6161289;
+	Sat, 21 Jan 2023 13:17:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6F6161289
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 13D451BF40B
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5AB9641CD9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71D894048A
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AB9641CD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71D894048A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pSJ6q8ptJUEU for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FhxZjBlQG9_2 for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66C1E41C9C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C5A6404C3
  for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66C1E41C9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C5A6404C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FD6D8693A; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
+ id 993D98694D; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:51:49 +0100
+Date: Sat, 21 Jan 2023 13:55:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d74dc17559ba88854e175ca2cc11c91dabc1694e
-X-Git-Newrev: 11bb66247bc364ab46b9bf10d769cecdb7b6fdc0
+X-Git-Oldrev: 01e4f72b6bc8120437dd462673fdfccb4ef7df20
+X-Git-Newrev: 2d7de5b2befe5a1703fbd583514aa46b457246d4
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131609.3FD6D8693A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/atkmm: switch to https download
+Message-Id: <20230121131609.993D98694D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gsettings-desktop-schemas: switch
+ to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,39 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11bb66247bc364ab46b9bf10d769cecdb7b6fdc0
+commit: https://git.buildroot.net/buildroot/commit/?id=2d7de5b2befe5a1703fbd583514aa46b457246d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/atkmm/atkmm.hash | 2 +-
- package/atkmm/atkmm.mk   | 2 +-
+ package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash | 2 +-
+ package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/atkmm/atkmm.hash b/package/atkmm/atkmm.hash
-index f965ad29cb..9e2bb2830c 100644
---- a/package/atkmm/atkmm.hash
-+++ b/package/atkmm/atkmm.hash
+diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
+index d530517cd1..bad8eab91d 100644
+--- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
++++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
 @@ -1,4 +1,4 @@
--# From http://ftp.gnome.org/pub/gnome/sources/atkmm/2.36/atkmm-2.36.1.sha256sum
-+# From https://download.gnome.org/sources/atkmm/2.36/atkmm-2.36.1.sha256sum
- sha256  e11324bfed1b6e330a02db25cecc145dca03fb0dff47f0710c85e317687da458  atkmm-2.36.1.tar.xz
- # locally computed
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
-index 3bcb941c9f..7ceb87b047 100644
---- a/package/atkmm/atkmm.mk
-+++ b/package/atkmm/atkmm.mk
+-# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.36/gsettings-desktop-schemas-3.36.1.sha256sum
++# From https://download.gnome.org/sources/gsettings-desktop-schemas/3.36/gsettings-desktop-schemas-3.36.1.sha256sum
+ sha256  004bdbe43cf8290f2de7d8537e14d8957610ca479a4fa368e34dbd03f03ec9d9  gsettings-desktop-schemas-3.36.1.tar.xz
+ 
+ # Hash for license file
+diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
+index 8573c75fde..b77397d565 100644
+--- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
++++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
 @@ -7,7 +7,7 @@
- ATKMM_VERSION_MAJOR = 2.36
- ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).1
- ATKMM_SOURCE = atkmm-$(ATKMM_VERSION).tar.xz
--ATKMM_SITE = http://ftp.gnome.org/pub/gnome/sources/atkmm/$(ATKMM_VERSION_MAJOR)
-+ATKMM_SITE = https://download.gnome.org/sources/atkmm/$(ATKMM_VERSION_MAJOR)
- ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- ATKMM_LICENSE_FILES = COPYING COPYING.tools
- ATKMM_INSTALL_STAGING = YES
+ GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.36
+ GSETTINGS_DESKTOP_SCHEMAS_VERSION = $(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR).1
+ GSETTINGS_DESKTOP_SCHEMAS_SOURCE = gsettings-desktop-schemas-$(GSETTINGS_DESKTOP_SCHEMAS_VERSION).tar.xz
+-GSETTINGS_DESKTOP_SCHEMAS_SITE = http://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/$(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR)
++GSETTINGS_DESKTOP_SCHEMAS_SITE = https://download.gnome.org/sources/gsettings-desktop-schemas/$(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR)
+ GSETTINGS_DESKTOP_SCHEMAS_INSTALL_STAGING = YES
+ GSETTINGS_DESKTOP_SCHEMAS_DEPENDENCIES = host-pkgconf libglib2
+ GSETTINGS_DESKTOP_SCHEMAS_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
