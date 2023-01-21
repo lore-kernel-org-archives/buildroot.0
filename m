@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E27C004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C5BBC27C76
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06453822FB;
-	Sat, 21 Jan 2023 13:24:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06453822FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19292408C4;
+	Sat, 21 Jan 2023 13:25:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19292408C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RTZb5VssrNVf; Sat, 21 Jan 2023 13:24:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AlUkIKiBoL7b; Sat, 21 Jan 2023 13:25:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C046822F9;
-	Sat, 21 Jan 2023 13:24:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C046822F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15FBD417B6;
+	Sat, 21 Jan 2023 13:25:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15FBD417B6
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C26F21BF40B
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D1D461BF40B
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 911C84070F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92730409E0
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 911C84070F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92730409E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bquzOsHsE0W5 for <buildroot@lists.busybox.net>;
+ with ESMTP id 40nRDqMyPl7F for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B8794059C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7660F408CD
  for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B8794059C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7660F408CD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 18BD086948; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
+ id 72B5886962; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:58:12 +0100
+Date: Sat, 21 Jan 2023 13:58:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 16acbf9ce30985f29afdf4d0d1aca4fd9df21292
-X-Git-Newrev: 39c25a288e0dd64157485dfebd83ef8ce8c1f2b0
+X-Git-Oldrev: abe3c7f81bba9fea46cc9ea379c6dbab624e447e
+X-Git-Newrev: 9da85317b3d9549c24e8941d069958ed2d71a120
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131610.18BD086948@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libepoxy: switch to https download
+Message-Id: <20230121131610.72B5886962@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/librsvg: switch to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,39 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39c25a288e0dd64157485dfebd83ef8ce8c1f2b0
+commit: https://git.buildroot.net/buildroot/commit/?id=9da85317b3d9549c24e8941d069958ed2d71a120
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libepoxy/libepoxy.hash | 2 +-
- package/libepoxy/libepoxy.mk   | 2 +-
+ package/librsvg/librsvg.hash | 2 +-
+ package/librsvg/librsvg.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
-index bf6c52f99e..27adb70f40 100644
---- a/package/libepoxy/libepoxy.hash
-+++ b/package/libepoxy/libepoxy.hash
+diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
+index 8b32c6581e..c8da3354f5 100644
+--- a/package/librsvg/librsvg.hash
++++ b/package/librsvg/librsvg.hash
 @@ -1,4 +1,4 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.10.sha256sum
-+# From https://download.gnome.org/sources/libepoxy/1.5/libepoxy-1.5.10.sha256sum
- sha256  072cda4b59dd098bba8c2363a6247299db1fa89411dc221c8b81b8ee8192e623  libepoxy-1.5.10.tar.xz
+-# From https://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.7.sha256sum
++# From https://download.gnome.org/sources/librsvg/2.50/librsvg-2.50.7.sha256sum
+ sha256  fffb61b08cd5282aaae147a02b305166a7426fad22a8b9427708f0f2fc426ebc  librsvg-2.50.7.tar.xz
  
- # Hashes for license files:
-diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
-index 2af2e2f6e8..1630428844 100644
---- a/package/libepoxy/libepoxy.mk
-+++ b/package/libepoxy/libepoxy.mk
+ # Locally computed
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 07a14b4366..df6559a858 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
 @@ -6,7 +6,7 @@
  
- LIBEPOXY_VERSION_MAJOR = 1.5
- LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).10
--LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
-+LIBEPOXY_SITE = https://download.gnome.org/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
- LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
- LIBEPOXY_INSTALL_STAGING = YES
- LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
+ LIBRSVG_VERSION_MAJOR = 2.50
+ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).7
+-LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
++LIBRSVG_SITE = https://download.gnome.org/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
