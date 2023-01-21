@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52272C004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F5C9C27C76
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:22:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A09360B57;
-	Sat, 21 Jan 2023 13:22:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A09360B57
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5F5561184;
+	Sat, 21 Jan 2023 13:22:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5F5561184
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VvN74bC3TovW; Sat, 21 Jan 2023 13:22:00 +0000 (UTC)
+	with ESMTP id K87-UmFf_f9Y; Sat, 21 Jan 2023 13:22:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE93760D95;
-	Sat, 21 Jan 2023 13:21:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE93760D95
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8042B1BF40B
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BB546118B;
+	Sat, 21 Jan 2023 13:22:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BB546118B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C2421BF40B
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37FAC409D7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F48982C84
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37FAC409D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F48982C84
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yzTLx99mUaFp for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 29Tim5BzFqP3 for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EACC340573
- for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EACC340573
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9255082CA5
+ for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9255082CA5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E7F9A86948; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
+ id 8C9E98694D; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:58:00 +0100
+Date: Sat, 21 Jan 2023 13:59:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: be4b3300085d1c2266a18e6615d9288759438d9c
-X-Git-Newrev: dc967784ccb3aa378d597098750c9a643e9d2850
+X-Git-Oldrev: bf3242b8ffcff49d9a0d75091ef9a81304f1dab5
+X-Git-Newrev: 4426874cd337e59db0fed846e625ba45a4fd43fe
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131609.E7F9A86948@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcr: switch to https download
+Message-Id: <20230121131610.8C9E98694D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxml2: switch to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc967784ccb3aa378d597098750c9a643e9d2850
+commit: https://git.buildroot.net/buildroot/commit/?id=4426874cd337e59db0fed846e625ba45a4fd43fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gcr/gcr.hash | 2 +-
- package/gcr/gcr.mk   | 2 +-
+ package/libxml2/libxml2.hash | 2 +-
+ package/libxml2/libxml2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
-index e6074a9991..f6cc44e97d 100644
---- a/package/gcr/gcr.hash
-+++ b/package/gcr/gcr.hash
-@@ -1,3 +1,3 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.40/gcr-3.40.0.sha256sum
-+# From https://download.gnome.org/sources/gcr/3.40/gcr-3.40.0.sha256sum
- sha256  b9d3645a5fd953a54285cc64d4fc046736463dbd4dcc25caf5c7b59bed3027f5  gcr-3.40.0.tar.xz
- sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING
-diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
-index d479de82d3..3a8c01729f 100644
---- a/package/gcr/gcr.mk
-+++ b/package/gcr/gcr.mk
-@@ -6,7 +6,7 @@
- 
- GCR_VERSION_MAJOR = 3.40
- GCR_VERSION = $(GCR_VERSION_MAJOR).0
--GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
-+GCR_SITE = https://download.gnome.org/sources/gcr/$(GCR_VERSION_MAJOR)
- GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
- GCR_DEPENDENCIES = \
- 	host-pkgconf \
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 00daa21a83..6957e2ed87 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.10/libxml2-2.10.3.sha256sum
++# From https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.3.sha256sum
+ sha256  5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c  libxml2-2.10.3.tar.xz
+ # License files, locally calculated
+ sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 321e8b756b..7a01dc4259 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -8,7 +8,7 @@ LIBXML2_VERSION_MAJOR = 2.10
+ LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).3
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+-	http://ftp.gnome.org/pub/gnome/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
++	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
+ LIBXML2_LICENSE_FILES = Copyright
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
