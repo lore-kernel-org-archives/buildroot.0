@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06466C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54775C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A890281F37;
-	Mon, 20 Feb 2023 23:37:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A890281F37
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03E7E83F36;
+	Mon, 20 Feb 2023 23:37:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03E7E83F36
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xwncaTGB6ilQ; Mon, 20 Feb 2023 23:37:14 +0000 (UTC)
+	with ESMTP id cXOkIF7sHqJk; Mon, 20 Feb 2023 23:37:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B98EA8385D;
-	Mon, 20 Feb 2023 23:37:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B98EA8385D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 342031BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 235CC83F31;
+	Mon, 20 Feb 2023 23:37:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 235CC83F31
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 927A31BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5B9161AD3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5B9161AD3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5511E4175F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5511E4175F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MbJpgFrNAs0V for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SSETT5NPwUgJ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E95161774
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E95161774
+ by smtp2.osuosl.org (Postfix) with ESMTP id A076941741
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A076941741
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6BBB681979; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
+ id 8CDF48648F; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 10:30:46 +0100
+Date: Sat, 21 Jan 2023 13:59:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7e4b0d8be54ce6dd9c54f1c04eeb752db2f0dcf3
-X-Git-Newrev: 65d14c82db6e6c4555cc83b65ff22578e4525601
+X-Git-Oldrev: ca2be02a6a53213be06dcd11b11ae0b2b2702679
+X-Git-Newrev: a4befb442e2fe1e5438fa5cee8c8a79ded69c832
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205218.6BBB681979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-aiohttp-remotes: bump to version 1.2.0
+Message-Id: <20230220205239.8CDF48648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vte: switch to https
+ download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,98 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65d14c82db6e6c4555cc83b65ff22578e4525601
+commit: https://git.buildroot.net/buildroot/commit/?id=a4befb442e2fe1e5438fa5cee8c8a79ded69c832
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Migrate from distutils to flit package infrastructure.
-
-Add a patch fixing incorrect flit requires/build-backend in
-pyproject.toml.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...0001-Fix-flit_core-build-requires-backend.patch | 32 ++++++++++++++++++++++
- .../python-aiohttp-remotes.hash                    |  4 +--
- .../python-aiohttp-remotes.mk                      |  6 ++--
- 3 files changed, 37 insertions(+), 5 deletions(-)
+ package/vte/vte.hash | 2 +-
+ package/vte/vte.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch b/package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch
-new file mode 100644
-index 0000000000..cf940eaf87
---- /dev/null
-+++ b/package/python-aiohttp-remotes/0001-Fix-flit_core-build-requires-backend.patch
-@@ -0,0 +1,32 @@
-+From 3d39ee9a03a1c96b8e798dc6acf98165da31da1f Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Fri, 11 Mar 2022 12:59:53 -0700
-+Subject: [PATCH] Fix flit_core build requires/backend.
-+
-+Only flit_core should be required by pyproject.toml, the regular flit
-+package is the pep517 frontend which is not what should be set for the
-+build system.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://github.com/aio-libs/aiohttp-remotes/pull/355]
-+---
-+ pyproject.toml     | 4 ++--
-+ 1 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/pyproject.toml b/pyproject.toml
-+index 214d64d..8c6b882 100644
-+--- a/pyproject.toml
-++++ b/pyproject.toml
-+@@ -1,6 +1,6 @@
-+ [build-system]
-+-requires=["flit"]
-+-build-backend="flit.buildapi"
-++requires=["flit_core"]
-++build-backend="flit_core.buildapi"
-+ 
-+ [tool.flit.metadata]
-+ module="aiohttp_remotes"
-+-- 
-+2.38.1
-+
-diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
-index 595340d5d8..51c5cf08b4 100644
---- a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
-+++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-remotes/json
--md5  da13880f25ec3b9cf98c7baff92835a2  aiohttp_remotes-1.1.0.tar.gz
--sha256  e44f2c5fd5fc3305477c89bb25f14570589100cc58c48b36745d4239839d3174  aiohttp_remotes-1.1.0.tar.gz
-+md5  c46a71df656e7f1e111684ced68a85d0  aiohttp_remotes-1.2.0.tar.gz
-+sha256  f95c3a6be5e2de746a85ce9af49ec548da6db8378d7e81bb171ec77b13562a6c  aiohttp_remotes-1.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256  4e7d0edf250abe2a28027788b8c55a53d1b5c9ff961b8a00643c76aed637ba13  LICENSE
-diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
-index e2bc3e1c18..e0ec789f41 100644
---- a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
-+++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/vte/vte.hash b/package/vte/vte.hash
+index 90818d31f3..8c84dfce1a 100644
+--- a/package/vte/vte.hash
++++ b/package/vte/vte.hash
+@@ -1,4 +1,4 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/vte/0.66/vte-0.66.2.sha256sum
++# Hash from: https://download.gnome.org/sources/vte/0.66/vte-0.66.2.sha256sum
+ sha256  e89974673a72a0a06edac6d17830b82bb124decf0cb3b52cebc92ec3ff04d976  vte-0.66.2.tar.xz
  
--PYTHON_AIOHTTP_REMOTES_VERSION = 1.1.0
-+PYTHON_AIOHTTP_REMOTES_VERSION = 1.2.0
- PYTHON_AIOHTTP_REMOTES_SOURCE = aiohttp_remotes-$(PYTHON_AIOHTTP_REMOTES_VERSION).tar.gz
--PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/e3/fc/5523010172e2d8685a8934fbb49d564118c9ebc1e4233a62b77310f979db
--PYTHON_AIOHTTP_REMOTES_SETUP_TYPE = distutils
-+PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/54/05/7c4be6171cc78a13171a4f89e5d308c4a636bdd8ee36101367e99e410ed8
-+PYTHON_AIOHTTP_REMOTES_SETUP_TYPE = flit
- PYTHON_AIOHTTP_REMOTES_LICENSE = MIT
- PYTHON_AIOHTTP_REMOTES_LICENSE_FILES = LICENSE
- 
+ # Hash for license file:
+diff --git a/package/vte/vte.mk b/package/vte/vte.mk
+index ceb2f09d67..a68d96aa12 100644
+--- a/package/vte/vte.mk
++++ b/package/vte/vte.mk
+@@ -7,7 +7,7 @@
+ VTE_VERSION_MAJOR = 0.66
+ VTE_VERSION = $(VTE_VERSION_MAJOR).2
+ VTE_SOURCE = vte-$(VTE_VERSION).tar.xz
+-VTE_SITE = http://ftp.gnome.org/pub/gnome/sources/vte/$(VTE_VERSION_MAJOR)
++VTE_SITE = https://download.gnome.org/sources/vte/$(VTE_VERSION_MAJOR)
+ VTE_DEPENDENCIES = host-pkgconf libgtk3 pcre2 $(TARGET_NLS_DEPENDENCIES)
+ VTE_LICENSE = LGPL-3.0+
+ VTE_LICENSE_FILES = COPYING.LGPL3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
