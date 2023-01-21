@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C9FBC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 372F7C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57CE76115C;
-	Tue, 21 Feb 2023 01:04:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57CE76115C
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7FEB61121;
+	Tue, 21 Feb 2023 01:04:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7FEB61121
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qD6kG4Y3-T_A; Tue, 21 Feb 2023 01:04:42 +0000 (UTC)
+	with ESMTP id yo2hTkiI0Qwy; Tue, 21 Feb 2023 01:04:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 881C5611CA;
-	Tue, 21 Feb 2023 01:04:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 881C5611CA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4FA0F1BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E8F661143;
+	Tue, 21 Feb 2023 01:04:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E8F661143
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9244E1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6868A415A8
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6868A415A8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62C796FBA6
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62C796FBA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cS3u55wythcs for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AX9S2enoieMh for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7757B41836
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7757B41836
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81C406FB94
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81C406FB94
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72E9F81979; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7954B828C8; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:17:14 +0100
+Date: Sat, 21 Jan 2023 13:51:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5f1858e859833da272fce70bf445ca1b53ebffe1
-X-Git-Newrev: b21cd8be3f9469d6bdbbaed951ae7c59efb46a24
+X-Git-Oldrev: d74dc17559ba88854e175ca2cc11c91dabc1694e
+X-Git-Newrev: 11bb66247bc364ab46b9bf10d769cecdb7b6fdc0
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205303.72E9F81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Revert "xorg-server: not
- available with musl on ARM"
+Message-Id: <20230220205237.7954B828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/atkmm: switch to https
+ download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,36 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b21cd8be3f9469d6bdbbaed951ae7c59efb46a24
+commit: https://git.buildroot.net/buildroot/commit/?id=11bb66247bc364ab46b9bf10d769cecdb7b6fdc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This reverts commit 9daafbcb75a7ab593ce8a1f21c6149c8437bc0bc.
-
-Fixed since https://gitlab.freedesktop.org/xorg/xserver/-/issues/840
-(xserver 1.20.6).
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xserver_xorg-server/Config.in | 5 -----
- 1 file changed, 5 deletions(-)
+ package/atkmm/atkmm.hash | 2 +-
+ package/atkmm/atkmm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 865917c4ec..b933bd0285 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -1,11 +1,6 @@
--comment "xorg-server needs a glibc or uClibc toolchain"
--	depends on BR2_arm && BR2_TOOLCHAIN_USES_MUSL
--
- config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	bool "xorg-server"
- 	depends on BR2_USE_MMU # fork()
--	# xserver uses inb/outb on arm, which aren't available with musl
--	depends on !(BR2_arm && BR2_TOOLCHAIN_USES_MUSL)
- 	# We need a SHA1 implementation. If either openssl or
- 	# libgcrypt are already part of the build, we'll use one of
- 	# them, otherwise, use the small libsha1 library.
+diff --git a/package/atkmm/atkmm.hash b/package/atkmm/atkmm.hash
+index f965ad29cb..9e2bb2830c 100644
+--- a/package/atkmm/atkmm.hash
++++ b/package/atkmm/atkmm.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/atkmm/2.36/atkmm-2.36.1.sha256sum
++# From https://download.gnome.org/sources/atkmm/2.36/atkmm-2.36.1.sha256sum
+ sha256  e11324bfed1b6e330a02db25cecc145dca03fb0dff47f0710c85e317687da458  atkmm-2.36.1.tar.xz
+ # locally computed
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
+index 3bcb941c9f..7ceb87b047 100644
+--- a/package/atkmm/atkmm.mk
++++ b/package/atkmm/atkmm.mk
+@@ -7,7 +7,7 @@
+ ATKMM_VERSION_MAJOR = 2.36
+ ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).1
+ ATKMM_SOURCE = atkmm-$(ATKMM_VERSION).tar.xz
+-ATKMM_SITE = http://ftp.gnome.org/pub/gnome/sources/atkmm/$(ATKMM_VERSION_MAJOR)
++ATKMM_SITE = https://download.gnome.org/sources/atkmm/$(ATKMM_VERSION_MAJOR)
+ ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ ATKMM_LICENSE_FILES = COPYING COPYING.tools
+ ATKMM_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
