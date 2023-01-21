@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BC05C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2F8DC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4524761227;
-	Tue, 21 Feb 2023 01:06:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4524761227
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3D3261102;
+	Tue, 21 Feb 2023 01:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3D3261102
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NrQw4uEYlw51; Tue, 21 Feb 2023 01:06:47 +0000 (UTC)
+	with ESMTP id twcv_e1Oh961; Tue, 21 Feb 2023 01:06:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74E2161288;
-	Tue, 21 Feb 2023 01:06:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74E2161288
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 854331BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id C97CA6118A;
+	Tue, 21 Feb 2023 01:06:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C97CA6118A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D40381BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7FC624010E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FC624010E
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7FD46FBAB
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7FD46FBAB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id secytvoPCk7S for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xhW29yWk4byU for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7CFB6414E7
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CFB6414E7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 146316FB83
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 146316FB83
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6693C86496; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 1093E81979; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:13:07 +0100
+Date: Sat, 21 Jan 2023 13:55:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ee13e3fb41dc7c0c001127733b5a599c1e509747
-X-Git-Newrev: 5f1858e859833da272fce70bf445ca1b53ebffe1
+X-Git-Oldrev: cb96dcaff49c259ad02fad428ab3ae3d210416e4
+X-Git-Newrev: 30b916546b7c5000130db461880e7d21b5741952
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205303.6693C86496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rockchip-mali: needs
- C++
+Message-Id: <20230220205238.1093E81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gtkmm3: switch to
+ https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f1858e859833da272fce70bf445ca1b53ebffe1
+commit: https://git.buildroot.net/buildroot/commit/?id=30b916546b7c5000130db461880e7d21b5741952
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-rockchip-mali pre-built libraries needs C++ since the addition of the
-package in commit 97c74a73e5dee17530647f89b2c7d8692781eb14:
-
-readelf -a output/build/rockchip-mali-721653b5b3b525a4f80d15aa7e2f9df7b7e60427/lib/aarch64-linux-gnu/libmali-bifrost-g31-rxp0-gbm.so|grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdrm.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
- 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
- 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
-
-While at it, add a comment when dependencies are not met
-
-Fixes:
- - No autobuilder failures (yet), found when debugging an issue with
-   rockchip-mali and glslsandbox-player
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rockchip-mali/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/gtkmm3/gtkmm3.hash | 2 +-
+ package/gtkmm3/gtkmm3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rockchip-mali/Config.in b/package/rockchip-mali/Config.in
-index d616284911..5a23954af3 100644
---- a/package/rockchip-mali/Config.in
-+++ b/package/rockchip-mali/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ROCKCHIP_MALI
- 	bool "rockchip-mali"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_ARM_EABIHF || BR2_aarch64
- 	# lidbrm. This would normally need a Config.in comment, but
-@@ -30,3 +31,8 @@ config BR2_PACKAGE_PROVIDES_LIBGBM
- 	default "rockchip-mali"
- 
- endif
-+
-+comment "rockchip-mali needs a glibc toolchain w/ C++, threads"
-+	depends on BR2_ARM_EABIHF || BR2_aarch64
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
+index 26687507f4..fc7e33339e 100644
+--- a/package/gtkmm3/gtkmm3.hash
++++ b/package/gtkmm3/gtkmm3.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.22/gtkmm-3.22.0.sha256sum
++# From https://download.gnome.org/sources/gtkmm/3.22/gtkmm-3.22.0.sha256sum
+ sha256  05da4d4b628fb20c8384630ddf478a3b5562952b2d6181fe28d58f6cbc0514f5  gtkmm-3.22.0.tar.xz
+ # Locally computed
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
+index 009889142e..d717c08bd8 100644
+--- a/package/gtkmm3/gtkmm3.mk
++++ b/package/gtkmm3/gtkmm3.mk
+@@ -7,7 +7,7 @@
+ GTKMM3_VERSION_MAJOR = 3.22
+ GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).0
+ GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
+-GTKMM3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
++GTKMM3_SITE = https://download.gnome.org/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
+ GTKMM3_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GTKMM3_LICENSE_FILES = COPYING COPYING.tools
+ GTKMM3_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
