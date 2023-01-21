@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB8DC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72CB6C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:31:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C06E483216;
-	Mon, 20 Feb 2023 23:30:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C06E483216
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A02D83E58;
+	Mon, 20 Feb 2023 23:31:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A02D83E58
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dz6tQe6EYSoh; Mon, 20 Feb 2023 23:30:57 +0000 (UTC)
+	with ESMTP id KEF42t97Gcul; Mon, 20 Feb 2023 23:31:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECBE383163;
-	Mon, 20 Feb 2023 23:30:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECBE383163
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AEDA61BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 553D383E5E;
+	Mon, 20 Feb 2023 23:31:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 553D383E5E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 957461BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D15656179B
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D15656179B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94E974175A
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94E974175A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oXfG1FbZTm8k for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IRExC7X401wR for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF42661385
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF42661385
+ by smtp2.osuosl.org (Postfix) with ESMTP id D21234174C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D21234174C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA9938648F; Mon, 20 Feb 2023 20:52:16 +0000 (UTC)
+ id CB3B886495; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 27 Dec 2022 22:45:19 +0100
+Date: Sat, 21 Jan 2023 13:53:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 90a543de880010776b291193eb0d3bc8d27fe3e8
-X-Git-Newrev: d77db2df74a3ccb430cbc326edef2c4a588878b0
+X-Git-Oldrev: bbad80aeb21d9657d85b722b02fdf3e66decfb8d
+X-Git-Newrev: 2334adaa974a7984a4bd3a9cf65e2187d25d8b2d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205216.CA9938648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/collectd: add
- rrdcached support
+Message-Id: <20230220205237.CB3B886495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/glibmm: switch to
+ https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,68 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d77db2df74a3ccb430cbc326edef2c4a588878b0
+commit: https://git.buildroot.net/buildroot/commit/?id=2334adaa974a7984a4bd3a9cf65e2187d25d8b2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The rrdcached plugin has status "supported":
-https://collectd.org/wiki/index.php/Plugin:RRDCacheD
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/collectd/Config.in   | 9 +++++++++
- package/collectd/collectd.mk | 3 ++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/glibmm/glibmm.hash | 2 +-
+ package/glibmm/glibmm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index fb76a105dc..a431da79f1 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -724,6 +724,15 @@ config BR2_PACKAGE_COLLECTD_RRDTOOL
- comment "rrdtool support needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
- 
-+if BR2_PACKAGE_COLLECTD_RRDTOOL
-+
-+config BR2_PACKAGE_COLLECTD_RRDCACHED
-+	bool "rrdcached"
-+	help
-+	  Use the RRDtool caching daemon.
-+
-+endif
-+
- config BR2_PACKAGE_COLLECTD_RIEMANN
- 	bool "riemann"
- 	# riemann-c-client -> protobuf-c
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 5510c265e8..6c993827c4 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -21,7 +21,7 @@ COLLECTD_PLUGINS_DISABLE = \
- 	gmond hddtemp intel_rdt java lpar \
- 	madwifi mbmon mic multimeter netapp notify_desktop numa \
- 	oracle perl pf pinba powerdns python routeros \
--	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
-+	sigrok tape target_v5upgrade teamspeak2 ted \
- 	tokyotyrant turbostat uuid varnish vserver write_kafka \
- 	write_mongodb xencpu xmms zfs_arc zone
- 
-@@ -134,6 +134,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_REGEX),--enable-match_regex,--disable-match-regex) \
- 	$(if $(BR2_PACKAGE_COLLECTD_REPLACE),--enable-target_replace,--disable-target_replace) \
- 	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),--enable-write_riemann,--disable-write_riemann) \
-+	$(if $(BR2_PACKAGE_COLLECTD_RRDCACHED),--enable-rrdcached,--disable-rrdcached) \
- 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),--enable-rrdtool,--disable-rrdtool) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SCALE),--enable-target_scale,--disable-target_scale) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SENSORS),--enable-sensors,--disable-sensors) \
+diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
+index f0bc7f4e71..ea256c3add 100644
+--- a/package/glibmm/glibmm.hash
++++ b/package/glibmm/glibmm.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.68/glibmm-2.68.2.sha256sum
++# From https://download.gnome.org/sources/glibmm/2.68/glibmm-2.68.2.sha256sum
+ sha256  91e0a8618f7b82db4aaf2648932ea2bcfe626ad030068c18fa2d106fd838d8ad  glibmm-2.68.2.tar.xz
+ # License files, locally calculated
+ sha256  3ea7fa7c5d9a3a113e950eca9cfb85107f096270d8e4dd99daa9d8abdebc60e7  COPYING
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index 525da6b618..7f37da8449 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
+@@ -9,7 +9,7 @@ GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).2
+ GLIBMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GLIBMM_LICENSE_FILES = COPYING COPYING.tools
+ GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.xz
+-GLIBMM_SITE = http://ftp.gnome.org/pub/gnome/sources/glibmm/$(GLIBMM_VERSION_MAJOR)
++GLIBMM_SITE = https://download.gnome.org/sources/glibmm/$(GLIBMM_VERSION_MAJOR)
+ GLIBMM_INSTALL_STAGING = YES
+ GLIBMM_DEPENDENCIES = libglib2 libsigc host-pkgconf
+ GLIBMM_CONF_OPTS = -Dbuild-examples=false
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
