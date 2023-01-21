@@ -4,77 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9D38C004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 14:42:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C49AC004D4
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 15:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4466A829F2;
-	Sat, 21 Jan 2023 14:42:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4466A829F2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F74182324;
+	Sat, 21 Jan 2023 15:18:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F74182324
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b-vjqOEKE0cf; Sat, 21 Jan 2023 14:42:41 +0000 (UTC)
+	with ESMTP id hJvcMtW0pr8w; Sat, 21 Jan 2023 15:18:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 649C58232F;
-	Sat, 21 Jan 2023 14:42:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 649C58232F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4A8781BF31D
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 14:42:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D58D8230C;
+	Sat, 21 Jan 2023 15:18:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D58D8230C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C4281BF377
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 15:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26DC440523
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 14:42:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26DC440523
+ by smtp1.osuosl.org (Postfix) with ESMTP id 777CD8230C
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 15:18:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 777CD8230C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8XPWSVVilU41 for <buildroot@lists.busybox.net>;
- Sat, 21 Jan 2023 14:42:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yWTILVYi1yeH for <buildroot@lists.busybox.net>;
+ Sat, 21 Jan 2023 15:18:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8FDC405C6
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
- [IPv6:2607:f8b0:4864:20::b2b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B8FDC405C6
- for <buildroot@buildroot.org>; Sat, 21 Jan 2023 14:42:37 +0000 (UTC)
-Received: by mail-yb1-xb2b.google.com with SMTP id d62so10036352ybh.8
- for <buildroot@buildroot.org>; Sat, 21 Jan 2023 06:42:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=5R8G+IckC9FGyt2bc12WZRDJ5qHvwVRH8irzUNA9EfQ=;
- b=fCA9ywhATxSrLieAjOzxLAg6B2z099uHvv3+WVB0kTWohrhmZiAxHcE6o4obDAH487
- 2iEAifgRKG9tkGjqh0eYWCh/feZM/FNA4EJlnv5ETk5VFc2OznMLtSVMYYWVfbYRmNfT
- xfS6N2fil4IpIHl2B9rlVU1So7c12iOgcG3lD1WTrSLjUGr55FYHOYIVAq5ZGD45u7Rk
- SUt0JOOeUpuWHZfXyHnsQbMzUPZu52X5sHTr5waVXO2Ykhs4mvs03hebhjF4qhtsOJNU
- g0DYq9Z2+7y2TG95YUi+JTgxcY14ChT1M6pdebw75+1u5lZdEYnLlaZYAxz/laWyV1q4
- 240g==
-X-Gm-Message-State: AFqh2kqFvsEHIzbNvWiqGwpDYqUgsyOYvH2MXz/0n0A69yhfYtv8ePdV
- BkXzJJAsXmfayNXxHE1tmxqzu19Z1YyUbCna/96HQzIdhydAXQwF
-X-Google-Smtp-Source: AMrXdXt0pchTg8j7jSuMoNaCWWWa6p7zLJ89Y3gkWpufFB2bovNzDorjcbW3EaV3+XDlGdzAGhO5RtNox6+0Rp3H30k=
-X-Received: by 2002:a25:4c8:0:b0:800:20c3:f9e5 with SMTP id
- 191-20020a2504c8000000b0080020c3f9e5mr819115ybe.26.1674312156516; Sat, 21 Jan
- 2023 06:42:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7C6D8228B
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D7C6D8228B
+ for <buildroot@buildroot.org>; Sat, 21 Jan 2023 15:18:21 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 7C7145FFA7;
+ Sat, 21 Jan 2023 16:18:15 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 21 Jan 2023 16:18:15 +0100
+Date: Sat, 21 Jan 2023 16:18:15 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Prasad Sankaran <prasad@cradlewise.com>
+Message-ID: <20230121151815.GD558596@scaer>
+References: <CANtE+cKcemOj_DTSOZ_TzuThSrXBwah38WJYM-AVH1nGTJikDw@mail.gmail.com>
 MIME-Version: 1.0
-Date: Sat, 21 Jan 2023 20:12:25 +0530
-Message-ID: <CANtE+cKcemOj_DTSOZ_TzuThSrXBwah38WJYM-AVH1nGTJikDw@mail.gmail.com>
-To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cradlewise-com.20210112.gappssmtp.com; s=20210112;
- h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=5R8G+IckC9FGyt2bc12WZRDJ5qHvwVRH8irzUNA9EfQ=;
- b=TQ9O0O+WlrQ1MTAILANFQw+AcIZzGfeVJmT9CUR9+7WKUnI7wdpIyR+ZG6AMHftR2c
- b3iTxNXnlO19BsNFQaJE31ExoF+IFn88VeJUw4TGrREQNG6ycHKB+INYQ2zP6h0X9dA1
- O6lIugzsHGoGtqCC2Umq4+D/iXMDSW58U0zy1mOEE/5J4TxxCsIJKPHHe8ZZB2JpAv60
- dj+DplDnBJwRaT/D4tOuqiieear4YGKZnw4iBv1U4Er0LDbf3bRMkmf53zZM8lk6jgEZ
- hGLTicOGLsUDKHxonfdXTsVzOIsKywvuOKchfvY5yWUEkKRa/VFpDJjsjv/aqm11ovRG
- MH4A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=cradlewise-com.20210112.gappssmtp.com
- header.i=@cradlewise-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=TQ9O0O+W
-Subject: [Buildroot] Not able to build python-numpy 1.23.5 on buildroot
+Content-Disposition: inline
+In-Reply-To: <CANtE+cKcemOj_DTSOZ_TzuThSrXBwah38WJYM-AVH1nGTJikDw@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1674314298;
+ bh=XpRLd2jSkVjMqGRAWfCvikkh+2f537wh2leuexGXAYA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=C2umR/O8uaaTmLvivEGDzZXMlaDiGKNTmdHetjfEmlLKzXb4jtUnZRg8yX2lE+aJH
+ KXlNaOgm0yYemM43Oz03TO85GB+TCZOw23JOWGJ2AhAaM0s+rHQc24NwEgxSHRcd+B
+ b/bG9HFhEyiRcyOccu7uTBUZRa4eXldSybLlJZBl9eXujX1wFLukYCY2UZjd1DZo7o
+ xUr3M4D23NVUhvsPf1gZKhEvxpN42Fdz3k5/BlahnirYVxDQ/Pa8f0bhBdnU4g3z5t
+ UF6qO47YjXG26+w//wuIYp3zEUZdKirdZMnzCPUShuGfQuQskmY2Hnv57z00dehdPg
+ 9AKNn9vdG5cSg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=C2umR/O8
+Subject: Re: [Buildroot] Not able to build python-numpy 1.23.5 on buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,122 +75,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Prasad Sankaran via buildroot <buildroot@buildroot.org>
-Reply-To: Prasad Sankaran <prasad@cradlewise.com>
-Cc: Archit Taneja <archit@cradlewise.com>
-Content-Type: multipart/mixed; boundary="===============6914382104180226020=="
+Cc: Archit Taneja <archit@cradlewise.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6914382104180226020==
-Content-Type: multipart/alternative; boundary="000000000000552d1b05f2c72d2d"
-
---000000000000552d1b05f2c72d2d
-Content-Type: text/plain; charset="UTF-8"
-
-Hi
-
-The following errors are reported while generating numpy/core/_
-multiarray_umath.cpython-38-aarch64-linux-gnu.so using
-aarch64-buildroot-linux-gnu-gcc.
-Is there a way to avoid including AVX512 .s files from the compilation?
-
-numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:19: Error:
-unknown mnemonic pushq' -- pushq %rbp'
-numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:21: Error:
-unknown mnemonic movq' -- movq %rsp,%rbp'
-numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:24: Error:
-unknown mnemonic andq' -- andq $-64,%rsp'
-numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:25: Error:
-unknown mnemonic subq' -- subq $192,%rsp'
-numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:26: Error:
-unknown mnemonic vmovups' -- vmovups __svml_dacos_data_internal(%rip),%zmm7'
-numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:27: Error:
-unknown mnemonic vmovups' -- vmovups
-64+__svml_dacos_data_internal(%rip),%zmm8'
-numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:30: Error:
-unknown mnemonic vmovups' -- vmovups
-128+__svml_dacos_data_internal(%rip),%zmm11'
-.......
-
---000000000000552d1b05f2c72d2d
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi</div><div><p dir=3D"auto" style=3D"box-sizing:bord=
-er-box;margin-top:0px;margin-bottom:16px;color:rgb(36,41,47);font-family:-a=
-pple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,&quot;Noto Sans&quot;,H=
-elvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoj=
-i&quot;;font-size:14px;font-style:normal;font-variant-ligatures:normal;font=
--variant-caps:normal;font-weight:400;letter-spacing:normal;text-align:start=
-;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0px;ba=
-ckground-color:rgb(255,255,255);text-decoration-style:initial;text-decorati=
-on-color:initial">The following errors are reported while generating numpy/=
-core/_<a href=3D"http://multiarray_umath.cpython-38-aarch64-linux-gnu.so" t=
-arget=3D"_blank">multiarray_umath.cpython-38-aarch64-linux-gnu.so</a> using=
- aarch64-buildroot-linux-gnu-gcc.<br style=3D"box-sizing:border-box">Is the=
-re a way to avoid including AVX512 .s files from the compilation?</p><p dir=
-=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom:16px;=
-color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quot;Sego=
-e UI&quot;,&quot;Noto Sans&quot;,Helvetica,Arial,sans-serif,&quot;Apple Col=
-or Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px;font-style:normal;=
-font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;lett=
-er-spacing:normal;text-align:start;text-indent:0px;text-transform:none;whit=
-e-space:normal;word-spacing:0px;background-color:rgb(255,255,255);text-deco=
-ration-style:initial;text-decoration-color:initial">numpy/core/src/umath/sv=
-ml/linux/avx512/svml_z0_acos_d_la.s:19: Error: unknown mnemonic<span>=C2=A0=
-</span><code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono=
--Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,mon=
-ospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;white-space:break-sp=
-aces;border-radius:6px">pushq&#39; -- </code>pushq %rbp&#39;<br style=3D"bo=
-x-sizing:border-box">numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_=
-la.s:21: Error: unknown mnemonic<span>=C2=A0</span><code style=3D"box-sizin=
-g:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Me=
-nlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding=
-:0.2em 0.4em;margin:0px;white-space:break-spaces;border-radius:6px">movq&#3=
-9; -- </code>movq %rsp,%rbp&#39;<br style=3D"box-sizing:border-box">numpy/c=
-ore/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:24: Error: unknown mnem=
-onic<span>=C2=A0</span><code style=3D"box-sizing:border-box;font-family:ui-=
-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberatio=
-n Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;whit=
-e-space:break-spaces;border-radius:6px">andq&#39; -- </code>andq $-64,%rsp&=
-#39;<br style=3D"box-sizing:border-box">numpy/core/src/umath/svml/linux/avx=
-512/svml_z0_acos_d_la.s:25: Error: unknown mnemonic<span>=C2=A0</span><code=
- style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&qu=
-ot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-=
-size:11.9px;padding:0.2em 0.4em;margin:0px;white-space:break-spaces;border-=
-radius:6px">subq&#39; -- </code>subq $192,%rsp&#39;<br style=3D"box-sizing:=
-border-box">numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:26: =
-Error: unknown mnemonic<span>=C2=A0</span><code style=3D"box-sizing:border-=
-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Conso=
-las,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.=
-4em;margin:0px;white-space:break-spaces;border-radius:6px">vmovups&#39; -- =
-</code>vmovups __svml_dacos_data_internal(%rip),%zmm7&#39;<br style=3D"box-=
-sizing:border-box">numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la=
-.s:27: Error: unknown mnemonic<span>=C2=A0</span><code style=3D"box-sizing:=
-border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menl=
-o,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0=
-.2em 0.4em;margin:0px;white-space:break-spaces;border-radius:6px">vmovups&#=
-39; -- </code>vmovups 64+__svml_dacos_data_internal(%rip),%zmm8&#39;<br sty=
-le=3D"box-sizing:border-box">numpy/core/src/umath/svml/linux/avx512/svml_z0=
-_acos_d_la.s:30: Error: unknown mnemonic<span>=C2=A0</span><code style=3D"b=
-ox-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&=
-quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px=
-;padding:0.2em 0.4em;margin:0px;white-space:break-spaces;border-radius:6px"=
->vmovups&#39; -- </code>vmovups 128+__svml_dacos_data_internal(%rip),%zmm11=
-&#39;<br style=3D"box-sizing:border-box">.......</p></div></div>
-
---000000000000552d1b05f2c72d2d--
-
---===============6914382104180226020==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6914382104180226020==--
+UHJhc2FkLCBBbGwsCgpPbiAyMDIzLTAxLTIxIDIwOjEyICswNTMwLCBQcmFzYWQgU2Fua2FyYW4g
+dmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gVGhlIGZvbGxvd2luZyBlcnJvcnMgYXJlIHJl
+cG9ydGVkIHdoaWxlIGdlbmVyYXRpbmcgbnVtcHkvY29yZS9fIFsxXW11bHRpYXJyYXlfdW1hdGgu
+Y3B5dGhvbi0zOC1hYXJjaDY0LWxpbnV4LWdudS5zbyB1c2luZwo+IGFhcmNoNjQtYnVpbGRyb290
+LWxpbnV4LWdudS1nY2MuCj4gSXMgdGhlcmUgYSB3YXkgdG8gYXZvaWQgaW5jbHVkaW5nIEFWWDUx
+MiAucyBmaWxlcyBmcm9tIHRoZSBjb21waWxhdGlvbj8KPiAKPiBudW1weS9jb3JlL3NyYy91bWF0
+aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjE5OiBFcnJvcjogdW5rbm93
+biBtbmVtb25pYyDCoCBwdXNocScgLS0gcHVzaHEgJXJicCcKPiBudW1weS9jb3JlL3NyYy91bWF0
+aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjIxOiBFcnJvcjogdW5rbm93
+biBtbmVtb25pYyDCoCBtb3ZxJyAtLSBtb3ZxICVyc3AsJXJicCcKPiBudW1weS9jb3JlL3NyYy91
+bWF0aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjI0OiBFcnJvcjogdW5r
+bm93biBtbmVtb25pYyDCoCBhbmRxJyAtLSBhbmRxICQtNjQsJXJzcCcKPiBudW1weS9jb3JlL3Ny
+Yy91bWF0aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjI1OiBFcnJvcjog
+dW5rbm93biBtbmVtb25pYyDCoCBzdWJxJyAtLSBzdWJxICQxOTIsJXJzcCcKPiBudW1weS9jb3Jl
+L3NyYy91bWF0aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjI2OiBFcnJv
+cjogdW5rbm93biBtbmVtb25pYyDCoCB2bW92dXBzJyAtLSB2bW92dXBzCj4gX19zdm1sX2RhY29z
+X2RhdGFfaW50ZXJuYWwoJXJpcCksJXptbTcnCj4gbnVtcHkvY29yZS9zcmMvdW1hdGgvc3ZtbC9s
+aW51eC9hdng1MTIvc3ZtbF96MF9hY29zX2RfbGEuczoyNzogRXJyb3I6IHVua25vd24gbW5lbW9u
+aWMgwqAgdm1vdnVwcycgLS0gdm1vdnVwcwo+IDY0K19fc3ZtbF9kYWNvc19kYXRhX2ludGVybmFs
+KCVyaXApLCV6bW04Jwo+IG51bXB5L2NvcmUvc3JjL3VtYXRoL3N2bWwvbGludXgvYXZ4NTEyL3N2
+bWxfejBfYWNvc19kX2xhLnM6MzA6IEVycm9yOiB1bmtub3duIG1uZW1vbmljIMKgIHZtb3Z1cHMn
+IC0tIHZtb3Z1cHMKPiAxMjgrX19zdm1sX2RhY29zX2RhdGFfaW50ZXJuYWwoJXJpcCksJXptbTEx
+JwoKSSB3YXMgbm90IGFibGUgdG8gcmVwcm9kdWNlIHN1Y2ggYW4gZXJyb3IgaGVyZSwgd2l0aCB0
+aGUgZm9sbG93aW5nCmRlZmNvbmZpZyBhbmQgbWFzdGVyIGFzIG9mIGNvbW1pdCBmMDkwMTE2MDY2
+OgoKICAgIEJSMl9hYXJjaDY0PXkKICAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQogICAgQlIy
+X1RPT0xDSEFJTl9FWFRFUk5BTF9CT09UTElOPXkKICAgIEJSMl9QRVJfUEFDS0FHRV9ESVJFQ1RP
+UklFUz15CiAgICBCUjJfUEFDS0FHRV9QWVRIT04zPXkKICAgIEJSMl9QQUNLQUdFX1BZVEhPTl9O
+VU1QWT15CgpDYW4geW91IHNoYXJlIGEgX21pbmltYWxfIGRlZmNvbmZpZyB0aGF0IGV4aGliaXRz
+IHRoZSBpc3N1ZT8KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0t
+LS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0t
+LS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVND
+SUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0
+d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwK
+fCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAg
+IHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwg
+Xy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0t
+LS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
