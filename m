@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76D87C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB97DC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26B75617B2;
-	Tue, 21 Feb 2023 01:09:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26B75617B2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 927C4617B5;
+	Tue, 21 Feb 2023 01:10:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 927C4617B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a7dhyIvhFj7Y; Tue, 21 Feb 2023 01:09:54 +0000 (UTC)
+	with ESMTP id 14ieGaF2I49e; Tue, 21 Feb 2023 01:10:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6868061399;
-	Tue, 21 Feb 2023 01:09:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6868061399
+	by smtp3.osuosl.org (Postfix) with ESMTP id D34D5612C1;
+	Tue, 21 Feb 2023 01:10:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D34D5612C1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 693E11BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6BBF91BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCF196FBAA
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC0596FB98
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCF196FBAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC0596FB98
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f93ymDL2ICld for <buildroot@lists.busybox.net>;
+ with ESMTP id wOY53ENnuopk for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFE316FBAE
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFE316FBAE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 12C4D6FBA2
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12C4D6FBA2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE5A67FF06; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+ id 0DD1E81979; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:58:33 +0100
+Date: Sat, 21 Jan 2023 13:59:17 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 824c40d39d16191681baa3869e1f6c5588a31d76
-X-Git-Newrev: 7a511e286d68e7abb9058421dda4c05e288f6cf4
+X-Git-Oldrev: 9da85317b3d9549c24e8941d069958ed2d71a120
+X-Git-Newrev: 70f4be5700faa6d3601d59d1dfbe3dbb251500bc
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205238.DE5A67FF06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libmediaart: switch to
+Message-Id: <20230220205239.0DD1E81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsecret: switch to
  https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,39 +63,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a511e286d68e7abb9058421dda4c05e288f6cf4
+commit: https://git.buildroot.net/buildroot/commit/?id=70f4be5700faa6d3601d59d1dfbe3dbb251500bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libmediaart/libmediaart.hash | 2 +-
- package/libmediaart/libmediaart.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsecret/libsecret.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
-index ebc914526b..34094744a9 100644
---- a/package/libmediaart/libmediaart.hash
-+++ b/package/libmediaart/libmediaart.hash
-@@ -1,4 +1,4 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.6.sha256sum:
-+# Hash from: https://download.gnome.org/sources/libmediaart/1.9/libmediaart-1.9.6.sha256sum:
- sha256  c3bc5025d7db380587f9c8eb800c611f6b5a16d6b4b78fcff93f62876a677f17  libmediaart-1.9.6.tar.xz
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index 82fe38ac1a..e98c66131e 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -6,7 +6,7 @@
  
- # Locally computed:
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 429e0c20de..d4480dbe5d 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -8,7 +8,7 @@ LIBMEDIAART_VERSION_MAJOR = 1.9
- LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).6
- LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
- LIBMEDIAART_SITE = \
--	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
-+	https://download.gnome.org/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
- LIBMEDIAART_LICENSE = LGPL-2.1+
- LIBMEDIAART_LICENSE_FILES = COPYING.LESSER
- LIBMEDIAART_INSTALL_STAGING = YES
+ LIBSECRET_VERSION_MAJOR = 0.20
+ LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).5
+-LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
++LIBSECRET_SITE = https://download.gnome.org/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+ LIBSECRET_INSTALL_STAGING = YES
+ LIBSECRET_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
