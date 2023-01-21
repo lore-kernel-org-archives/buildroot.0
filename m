@@ -1,69 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C49AC004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 15:18:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D568DC004D4
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 16:36:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F74182324;
-	Sat, 21 Jan 2023 15:18:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F74182324
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57A1260B74;
+	Sat, 21 Jan 2023 16:36:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57A1260B74
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hJvcMtW0pr8w; Sat, 21 Jan 2023 15:18:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rNhAjHPNd1F3; Sat, 21 Jan 2023 16:36:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D58D8230C;
-	Sat, 21 Jan 2023 15:18:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D58D8230C
+	by smtp3.osuosl.org (Postfix) with ESMTP id A73DA60B44;
+	Sat, 21 Jan 2023 16:36:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A73DA60B44
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9C4281BF377
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 15:18:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C5BB21BF41C
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 16:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 777CD8230C
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 15:18:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 777CD8230C
+ by smtp1.osuosl.org (Postfix) with ESMTP id A12E382400
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 16:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A12E382400
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yWTILVYi1yeH for <buildroot@lists.busybox.net>;
- Sat, 21 Jan 2023 15:18:22 +0000 (UTC)
+ with ESMTP id KZQSb4R9iKap for <buildroot@lists.busybox.net>;
+ Sat, 21 Jan 2023 16:35:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7C6D8228B
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D7C6D8228B
- for <buildroot@buildroot.org>; Sat, 21 Jan 2023 15:18:21 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 7C7145FFA7;
- Sat, 21 Jan 2023 16:18:15 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 21 Jan 2023 16:18:15 +0100
-Date: Sat, 21 Jan 2023 16:18:15 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Prasad Sankaran <prasad@cradlewise.com>
-Message-ID: <20230121151815.GD558596@scaer>
-References: <CANtE+cKcemOj_DTSOZ_TzuThSrXBwah38WJYM-AVH1nGTJikDw@mail.gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 943EB81D9F
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 943EB81D9F
+ for <buildroot@busybox.net>; Sat, 21 Jan 2023 16:35:58 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id l8so6159233wms.3
+ for <buildroot@busybox.net>; Sat, 21 Jan 2023 08:35:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=BV+p7A3eheC6SZZsOVhiX09309FNQN4F3OuWV2H+2ms=;
+ b=kXy+5XZlEZYzTmBUuhcEC0mXIcxOjIjHcr0FoxVEBzq2HuthZ9xgXS8+8WIJT1RHmS
+ t9LDd+ineSLPRoJ1PiQeYrVICoeb9wavNA4syAKp8s6mp8MIhUQ3Zm1RhYjllC+301p6
+ CHKmNGt0zcZA/f7j36EI0SrnJ6xZ2NI7Gg5sfU4WerciXOsJ657/YsG1ihC84jeS+srI
+ xbUwB78crh38kwSANC+9ig8G0HcyJh4T2eoZEXNwK+S5pmUuHxV+5MBrQMWzY6xOACXn
+ MxinSIGtKuM029eBhr5tK6HAEXXZDiY8UZnKp89Bb4zB3yuwo2yoMhWpMfuhsfPTE4al
+ fJHg==
+X-Gm-Message-State: AFqh2kreKJF7d1El0jwCyd3YUiCSb6UmjQzAz2xIoyG8XhPOiBOa9Ycb
+ wOBneli2LDBEG+uY7xLFkO0hYF9hBZ4=
+X-Google-Smtp-Source: AMrXdXvB1bICWyem6LRf4c7aSnrRATmQaYGgSxsE4enhqojyhGppSN4dKMR+TEmmP75URVdYtNiD/A==
+X-Received: by 2002:a05:600c:31a3:b0:3d6:8570:1239 with SMTP id
+ s35-20020a05600c31a300b003d685701239mr19129190wmp.16.1674318956751; 
+ Sat, 21 Jan 2023 08:35:56 -0800 (PST)
+Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ bi16-20020a05600c3d9000b003daf89e01d3sm5648794wmb.11.2023.01.21.08.35.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 21 Jan 2023 08:35:56 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sat, 21 Jan 2023 17:35:31 +0100
+Message-Id: <20230121163537.147981-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CANtE+cKcemOj_DTSOZ_TzuThSrXBwah38WJYM-AVH1nGTJikDw@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1674314298;
- bh=XpRLd2jSkVjMqGRAWfCvikkh+2f537wh2leuexGXAYA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=C2umR/O8uaaTmLvivEGDzZXMlaDiGKNTmdHetjfEmlLKzXb4jtUnZRg8yX2lE+aJH
- KXlNaOgm0yYemM43Oz03TO85GB+TCZOw23JOWGJ2AhAaM0s+rHQc24NwEgxSHRcd+B
- b/bG9HFhEyiRcyOccu7uTBUZRa4eXldSybLlJZBl9eXujX1wFLukYCY2UZjd1DZo7o
- xUr3M4D23NVUhvsPf1gZKhEvxpN42Fdz3k5/BlahnirYVxDQ/Pa8f0bhBdnU4g3z5t
- UF6qO47YjXG26+w//wuIYp3zEUZdKirdZMnzCPUShuGfQuQskmY2Hnv57z00dehdPg
- 9AKNn9vdG5cSg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=BV+p7A3eheC6SZZsOVhiX09309FNQN4F3OuWV2H+2ms=;
+ b=SWIsfJAbGMFsXHJFFGAtEAYrrCEYvNffRsoOpersPDBy6RGTTqAL4+l2S7qcAdtmrb
+ BSSaVt7e3DfQpye+bH6drnh8TAR3s0Y2s5cXzBuWKmotDAA07diMzWr4Zm/RdHcbWjnS
+ h01WMWoLu6Qu8+3r/Ca/4vLsZNkJ1hGXm7v18M8FRhClUbpMkTptLSrPulNiMxuKwSut
+ KH8kppWI+JFYgLT2BBwDEHwHqTalipTiYOKQTCi6Aji81Z0b8xV74jPW2PfkLLBZHF73
+ om4QbItnLQ4Ty9fmpItD0bhC/dr0ZQVgiY3kT9/qAvDdIrZcpi4wUccq1LDIqXo6EuMZ
+ tXYw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=C2umR/O8
-Subject: Re: [Buildroot] Not able to build python-numpy 1.23.5 on buildroot
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=SWIsfJAb
+Subject: [Buildroot] [PATCH 1/7] package/perl-data-optlist: bump to version
+ 0.113
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,49 +95,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Archit Taneja <archit@cradlewise.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UHJhc2FkLCBBbGwsCgpPbiAyMDIzLTAxLTIxIDIwOjEyICswNTMwLCBQcmFzYWQgU2Fua2FyYW4g
-dmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gVGhlIGZvbGxvd2luZyBlcnJvcnMgYXJlIHJl
-cG9ydGVkIHdoaWxlIGdlbmVyYXRpbmcgbnVtcHkvY29yZS9fIFsxXW11bHRpYXJyYXlfdW1hdGgu
-Y3B5dGhvbi0zOC1hYXJjaDY0LWxpbnV4LWdudS5zbyB1c2luZwo+IGFhcmNoNjQtYnVpbGRyb290
-LWxpbnV4LWdudS1nY2MuCj4gSXMgdGhlcmUgYSB3YXkgdG8gYXZvaWQgaW5jbHVkaW5nIEFWWDUx
-MiAucyBmaWxlcyBmcm9tIHRoZSBjb21waWxhdGlvbj8KPiAKPiBudW1weS9jb3JlL3NyYy91bWF0
-aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjE5OiBFcnJvcjogdW5rbm93
-biBtbmVtb25pYyDCoCBwdXNocScgLS0gcHVzaHEgJXJicCcKPiBudW1weS9jb3JlL3NyYy91bWF0
-aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjIxOiBFcnJvcjogdW5rbm93
-biBtbmVtb25pYyDCoCBtb3ZxJyAtLSBtb3ZxICVyc3AsJXJicCcKPiBudW1weS9jb3JlL3NyYy91
-bWF0aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjI0OiBFcnJvcjogdW5r
-bm93biBtbmVtb25pYyDCoCBhbmRxJyAtLSBhbmRxICQtNjQsJXJzcCcKPiBudW1weS9jb3JlL3Ny
-Yy91bWF0aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjI1OiBFcnJvcjog
-dW5rbm93biBtbmVtb25pYyDCoCBzdWJxJyAtLSBzdWJxICQxOTIsJXJzcCcKPiBudW1weS9jb3Jl
-L3NyYy91bWF0aC9zdm1sL2xpbnV4L2F2eDUxMi9zdm1sX3owX2Fjb3NfZF9sYS5zOjI2OiBFcnJv
-cjogdW5rbm93biBtbmVtb25pYyDCoCB2bW92dXBzJyAtLSB2bW92dXBzCj4gX19zdm1sX2RhY29z
-X2RhdGFfaW50ZXJuYWwoJXJpcCksJXptbTcnCj4gbnVtcHkvY29yZS9zcmMvdW1hdGgvc3ZtbC9s
-aW51eC9hdng1MTIvc3ZtbF96MF9hY29zX2RfbGEuczoyNzogRXJyb3I6IHVua25vd24gbW5lbW9u
-aWMgwqAgdm1vdnVwcycgLS0gdm1vdnVwcwo+IDY0K19fc3ZtbF9kYWNvc19kYXRhX2ludGVybmFs
-KCVyaXApLCV6bW04Jwo+IG51bXB5L2NvcmUvc3JjL3VtYXRoL3N2bWwvbGludXgvYXZ4NTEyL3N2
-bWxfejBfYWNvc19kX2xhLnM6MzA6IEVycm9yOiB1bmtub3duIG1uZW1vbmljIMKgIHZtb3Z1cHMn
-IC0tIHZtb3Z1cHMKPiAxMjgrX19zdm1sX2RhY29zX2RhdGFfaW50ZXJuYWwoJXJpcCksJXptbTEx
-JwoKSSB3YXMgbm90IGFibGUgdG8gcmVwcm9kdWNlIHN1Y2ggYW4gZXJyb3IgaGVyZSwgd2l0aCB0
-aGUgZm9sbG93aW5nCmRlZmNvbmZpZyBhbmQgbWFzdGVyIGFzIG9mIGNvbW1pdCBmMDkwMTE2MDY2
-OgoKICAgIEJSMl9hYXJjaDY0PXkKICAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQogICAgQlIy
-X1RPT0xDSEFJTl9FWFRFUk5BTF9CT09UTElOPXkKICAgIEJSMl9QRVJfUEFDS0FHRV9ESVJFQ1RP
-UklFUz15CiAgICBCUjJfUEFDS0FHRV9QWVRIT04zPXkKICAgIEJSMl9QQUNLQUdFX1BZVEhPTl9O
-VU1QWT15CgpDYW4geW91IHNoYXJlIGEgX21pbmltYWxfIGRlZmNvbmZpZyB0aGF0IGV4aGliaXRz
-IHRoZSBpc3N1ZT8KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0t
-LS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0t
-LS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVND
-SUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0
-d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwK
-fCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAg
-IHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwg
-Xy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0t
-LS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-data-optlist/perl-data-optlist.hash | 4 ++--
+ package/perl-data-optlist/perl-data-optlist.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/perl-data-optlist/perl-data-optlist.hash b/package/perl-data-optlist/perl-data-optlist.hash
+index 1c805acef..ccc05ae4d 100644
+--- a/package/perl-data-optlist/perl-data-optlist.hash
++++ b/package/perl-data-optlist/perl-data-optlist.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  3b2cdb7846391f9acaf4e948a9a6b21b  Data-OptList-0.112.tar.gz
+-sha256  62c60ccaae88d5339ae36bcc8940b03388cf84adbf27828b1f8b300307103bab  Data-OptList-0.112.tar.gz
++md5  cda08370c4058ba56e40c2f21d94d233  Data-OptList-0.113.tar.gz
++sha256  36aebc5817b7d4686b649434c2ee41f45c8bf97d4ca5a99f607cc40f695a4285  Data-OptList-0.113.tar.gz
+ 
+ # computed by scancpan
+ sha256  712f3e40537810ba3046533fd71d877f69ab446d5e8e8a1135771804494b8b42  LICENSE
+diff --git a/package/perl-data-optlist/perl-data-optlist.mk b/package/perl-data-optlist/perl-data-optlist.mk
+index 8e089245f..1a9aa05cc 100644
+--- a/package/perl-data-optlist/perl-data-optlist.mk
++++ b/package/perl-data-optlist/perl-data-optlist.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_DATA_OPTLIST_VERSION = 0.112
++PERL_DATA_OPTLIST_VERSION = 0.113
+ PERL_DATA_OPTLIST_SOURCE = Data-OptList-$(PERL_DATA_OPTLIST_VERSION).tar.gz
+ PERL_DATA_OPTLIST_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
+ PERL_DATA_OPTLIST_LICENSE = Artistic or GPL-1.0+
+-- 
+2.37.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
