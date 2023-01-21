@@ -1,51 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0F94C004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 14:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9D38C004D4
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 14:42:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 716BA400B9;
-	Sat, 21 Jan 2023 14:17:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 716BA400B9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4466A829F2;
+	Sat, 21 Jan 2023 14:42:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4466A829F2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b-vjqOEKE0cf; Sat, 21 Jan 2023 14:42:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 649C58232F;
+	Sat, 21 Jan 2023 14:42:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 649C58232F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A8781BF31D
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 14:42:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26DC440523
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 14:42:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26DC440523
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r23VVahlj6YN; Sat, 21 Jan 2023 14:17:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 44B4440385;
-	Sat, 21 Jan 2023 14:17:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44B4440385
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CF2C91BF31D
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 14:17:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A74BE41C2D
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 14:17:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A74BE41C2D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jQFzE2XLO6Qx for <buildroot@lists.busybox.net>;
- Sat, 21 Jan 2023 14:17:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D3AD41C2C
- for <buildroot@buildroot.org>; Sat, 21 Jan 2023 14:17:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D3AD41C2C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB4C986F68; Sat, 21 Jan 2023 14:17:32 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8XPWSVVilU41 for <buildroot@lists.busybox.net>;
+ Sat, 21 Jan 2023 14:42:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8FDC405C6
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
+ [IPv6:2607:f8b0:4864:20::b2b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B8FDC405C6
+ for <buildroot@buildroot.org>; Sat, 21 Jan 2023 14:42:37 +0000 (UTC)
+Received: by mail-yb1-xb2b.google.com with SMTP id d62so10036352ybh.8
+ for <buildroot@buildroot.org>; Sat, 21 Jan 2023 06:42:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=5R8G+IckC9FGyt2bc12WZRDJ5qHvwVRH8irzUNA9EfQ=;
+ b=fCA9ywhATxSrLieAjOzxLAg6B2z099uHvv3+WVB0kTWohrhmZiAxHcE6o4obDAH487
+ 2iEAifgRKG9tkGjqh0eYWCh/feZM/FNA4EJlnv5ETk5VFc2OznMLtSVMYYWVfbYRmNfT
+ xfS6N2fil4IpIHl2B9rlVU1So7c12iOgcG3lD1WTrSLjUGr55FYHOYIVAq5ZGD45u7Rk
+ SUt0JOOeUpuWHZfXyHnsQbMzUPZu52X5sHTr5waVXO2Ykhs4mvs03hebhjF4qhtsOJNU
+ g0DYq9Z2+7y2TG95YUi+JTgxcY14ChT1M6pdebw75+1u5lZdEYnLlaZYAxz/laWyV1q4
+ 240g==
+X-Gm-Message-State: AFqh2kqFvsEHIzbNvWiqGwpDYqUgsyOYvH2MXz/0n0A69yhfYtv8ePdV
+ BkXzJJAsXmfayNXxHE1tmxqzu19Z1YyUbCna/96HQzIdhydAXQwF
+X-Google-Smtp-Source: AMrXdXt0pchTg8j7jSuMoNaCWWWa6p7zLJ89Y3gkWpufFB2bovNzDorjcbW3EaV3+XDlGdzAGhO5RtNox6+0Rp3H30k=
+X-Received: by 2002:a25:4c8:0:b0:800:20c3:f9e5 with SMTP id
+ 191-20020a2504c8000000b0080020c3f9e5mr819115ybe.26.1674312156516; Sat, 21 Jan
+ 2023 06:42:36 -0800 (PST)
+MIME-Version: 1.0
+Date: Sat, 21 Jan 2023 20:12:25 +0530
+Message-ID: <CANtE+cKcemOj_DTSOZ_TzuThSrXBwah38WJYM-AVH1nGTJikDw@mail.gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 15:15:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4befb442e2fe1e5438fa5cee8c8a79ded69c832
-X-Git-Newrev: f0901160666852eaea15eeac4a1905cfff94bab1
-X-Patchwork-Hint: ignore
-Message-Id: <20230121141732.EB4C986F68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ipmitool: allow configuring PEN
- registry source
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cradlewise-com.20210112.gappssmtp.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=5R8G+IckC9FGyt2bc12WZRDJ5qHvwVRH8irzUNA9EfQ=;
+ b=TQ9O0O+WlrQ1MTAILANFQw+AcIZzGfeVJmT9CUR9+7WKUnI7wdpIyR+ZG6AMHftR2c
+ b3iTxNXnlO19BsNFQaJE31ExoF+IFn88VeJUw4TGrREQNG6ycHKB+INYQ2zP6h0X9dA1
+ O6lIugzsHGoGtqCC2Umq4+D/iXMDSW58U0zy1mOEE/5J4TxxCsIJKPHHe8ZZB2JpAv60
+ dj+DplDnBJwRaT/D4tOuqiieear4YGKZnw4iBv1U4Er0LDbf3bRMkmf53zZM8lk6jgEZ
+ hGLTicOGLsUDKHxonfdXTsVzOIsKywvuOKchfvY5yWUEkKRa/VFpDJjsjv/aqm11ovRG
+ MH4A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=cradlewise-com.20210112.gappssmtp.com
+ header.i=@cradlewise-com.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=TQ9O0O+W
+Subject: [Buildroot] Not able to build python-numpy 1.23.5 on buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,303 +86,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Prasad Sankaran via buildroot <buildroot@buildroot.org>
+Reply-To: Prasad Sankaran <prasad@cradlewise.com>
+Cc: Archit Taneja <archit@cradlewise.com>
+Content-Type: multipart/mixed; boundary="===============6914382104180226020=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0901160666852eaea15eeac4a1905cfff94bab1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============6914382104180226020==
+Content-Type: multipart/alternative; boundary="000000000000552d1b05f2c72d2d"
 
-The default, the IANA PEN registry used by ipmitool is large (4 MiB+)
-and changes at the whim of IANA, meaning reproducible builds may not be
-possible by using the default package.
+--000000000000552d1b05f2c72d2d
+Content-Type: text/plain; charset="UTF-8"
 
-Add a configuration option to specify the source of the registry file.
+Hi
 
-Remote and local files are supported. If no source is specified, no
-registry file will be installed to the target.
+The following errors are reported while generating numpy/core/_
+multiarray_umath.cpython-38-aarch64-linux-gnu.so using
+aarch64-buildroot-linux-gnu-gcc.
+Is there a way to avoid including AVX512 .s files from the compilation?
 
-Backport upstream patches to allow this to add requisite support:
-  Make a missing registry file non-fatal
-  Make downloading/installing the registry optional
+numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:19: Error:
+unknown mnemonic pushq' -- pushq %rbp'
+numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:21: Error:
+unknown mnemonic movq' -- movq %rsp,%rbp'
+numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:24: Error:
+unknown mnemonic andq' -- andq $-64,%rsp'
+numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:25: Error:
+unknown mnemonic subq' -- subq $192,%rsp'
+numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:26: Error:
+unknown mnemonic vmovups' -- vmovups __svml_dacos_data_internal(%rip),%zmm7'
+numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:27: Error:
+unknown mnemonic vmovups' -- vmovups
+64+__svml_dacos_data_internal(%rip),%zmm8'
+numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:30: Error:
+unknown mnemonic vmovups' -- vmovups
+128+__svml_dacos_data_internal(%rip),%zmm11'
+.......
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-[yann.morin.1998@free.fr:
-  - use https for the default URL
-  - use simple assignment for first _CONF_OPTS
-  - squeeze empty lines, comment closing endif
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...Do-not-require-the-IANA-PEN-registry-file.patch | 115 +++++++++++++++++++++
- ...ure.ac-allow-disabling-registry-downloads.patch |  75 ++++++++++++++
- package/ipmitool/Config.in                         |  12 +++
- package/ipmitool/ipmitool.mk                       |  18 ++++
- 4 files changed, 220 insertions(+)
+--000000000000552d1b05f2c72d2d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch b/package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch
-new file mode 100644
-index 0000000000..3f35a78af2
---- /dev/null
-+++ b/package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch
-@@ -0,0 +1,115 @@
-+From 26b088193a55624df4cbe2a0d33c7bba5bca108d Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <vfazio@gmail.com>
-+Date: Sat, 7 Jan 2023 21:02:48 -0600
-+Subject: [PATCH] Do not require the IANA PEN registry file
-+
-+Previously, ipmitool would fail to run if the local copy of the IANA PEN
-+registry could not be parsed.
-+
-+When the registry is not available the manufacturer will be "Unknown" but
-+ipmitool will otherwise function so should not be considered fatal.
-+
-+Also, fix an issue with improperly handling the `oem_info_list_load`
-+return value. Previously, in `ipmi_oem_info_init`, if `oem_info_list_load`
-+returned a negative value due to the registry file not existing, an
-+improper count would cause `oem_info_init_from_list` to aallocate a list
-+that didn't encompass the full header/tail list.
-+
-+  IANA PEN registry open failed: No such file or directory
-+    Allocating      3 entries
-+    [     1] 16777214 | A Debug Assisting Company, Ltd.
-+    [     0]  1048575 | Unspecified
-+
-+Now, use a signed int and ensure a valid count of loaded OEMs is used.
-+
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+
-+[vfazio: backport from upstream 26b088193a55624df4cbe2a0d33c7bba5bca108d]
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+---
-+ include/ipmitool/ipmi_strings.h |  2 +-
-+ lib/ipmi_main.c                 |  5 +----
-+ lib/ipmi_strings.c              | 19 +++++--------------
-+ 3 files changed, 7 insertions(+), 19 deletions(-)
-+
-+diff --git a/include/ipmitool/ipmi_strings.h b/include/ipmitool/ipmi_strings.h
-+index 17c37c6..d60179c 100644
-+--- a/include/ipmitool/ipmi_strings.h
-++++ b/include/ipmitool/ipmi_strings.h
-+@@ -55,7 +55,7 @@ extern const struct valstr ipmi_integrity_algorithms[];
-+ extern const struct valstr ipmi_encryption_algorithms[];
-+ extern const struct valstr ipmi_user_enable_status_vals[];
-+ extern const struct valstr *ipmi_oem_info;
-+-int ipmi_oem_info_init();
-++void ipmi_oem_info_init();
-+ void ipmi_oem_info_free();
-+ 
-+ extern const struct valstr picmg_frucontrol_vals[];
-+diff --git a/lib/ipmi_main.c b/lib/ipmi_main.c
-+index a673a30..510bc2d 100644
-+--- a/lib/ipmi_main.c
-++++ b/lib/ipmi_main.c
-+@@ -853,10 +853,7 @@ ipmi_main(int argc, char ** argv,
-+ 	}
-+ 
-+ 	/* load the IANA PEN registry */
-+-	if (ipmi_oem_info_init()) {
-+-		lprintf(LOG_ERR, "Failed to initialize the OEM info dictionary");
-+-		goto out_free;
-+-	}
-++	ipmi_oem_info_init();
-+ 
-+ 	/* run OEM setup if found */
-+ 	if (oemtype &&
-+diff --git a/lib/ipmi_strings.c b/lib/ipmi_strings.c
-+index 26b359f..c8fc2d0 100644
-+--- a/lib/ipmi_strings.c
-++++ b/lib/ipmi_strings.c
-+@@ -1719,39 +1719,30 @@ out:
-+ 	return rc;
-+ }
-+ 
-+-int ipmi_oem_info_init()
-++void ipmi_oem_info_init()
-+ {
-+ 	oem_valstr_list_t terminator = { { -1, NULL}, NULL }; /* Terminator */
-+ 	oem_valstr_list_t *oemlist = &terminator;
-+ 	bool free_strings = true;
-+-	size_t count;
-+-	int rc = -4;
-++	int count;
-+ 
-+ 	lprintf(LOG_INFO, "Loading IANA PEN Registry...");
-+ 
-+ 	if (ipmi_oem_info) {
-+ 		lprintf(LOG_INFO, "IANA PEN Registry is already loaded");
-+-		rc = 0;
-+ 		goto out;
-+ 	}
-+ 
-+-	if (!(count = oem_info_list_load(&oemlist))) {
-+-		/*
-+-		 * We can't identify OEMs without a loaded registry.
-+-		 * Set the pointer to dummy and return.
-+-		 */
-+-		ipmi_oem_info = ipmi_oem_info_dummy;
-+-		goto out;
-++	if ((count = oem_info_list_load(&oemlist)) < 1) {
-++		lprintf(LOG_WARN, "Failed to load entries from IANA PEN Registry");
-++		count = 0;
-+ 	}
-+ 
-+ 	/* In the array was allocated, don't free the strings at cleanup */
-+ 	free_strings = !oem_info_init_from_list(oemlist, count);
-+ 
-+-	rc = IPMI_CC_OK;
-+-
-+ out:
-+ 	oem_info_list_free(&oemlist, free_strings);
-+-	return rc;
-+ }
-+ 
-+ void ipmi_oem_info_free()
-+-- 
-+2.25.1
-+
-diff --git a/package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch b/package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch
-new file mode 100644
-index 0000000000..9a995b9a14
---- /dev/null
-+++ b/package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch
-@@ -0,0 +1,75 @@
-+From be11d948f89b10be094e28d8a0a5e8fb532c7b60 Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <vfazio@gmail.com>
-+Date: Wed, 11 Jan 2023 22:55:51 -0600
-+Subject: [PATCH] configure.ac: allow disabling registry downloads
-+
-+Some environments require reproducible builds. Since the IANA PEN
-+registry is constantly updating and there is no snapshot available,
-+installing ipmitool via `make install` is not reproducible.
-+
-+Provide a configure mechanism to disable the registry download/install..
-+
-+[vfazio: backport from upstream be11d948f89b10be094e28d8a0a5e8fb532c7b60]
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+---
-+ configure.ac | 30 ++++++++++++++++++++----------
-+ 1 file changed, 20 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4ee1be8..1dd2742 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -18,8 +18,6 @@ AC_PROG_LN_S
-+ AC_PROG_MAKE_SET
-+ AC_CHECK_PROG([RPMBUILD], [rpmbuild], [rpmbuild], [rpm])
-+ AC_CHECK_PROG([SED], [sed], [sed])
-+-AC_CHECK_PROG([WGET], [wget], [wget])
-+-AC_CHECK_PROG([CURL], [curl], [curl])
-+ 
-+ AC_HEADER_STDC
-+ AC_CHECK_HEADERS([stdlib.h string.h sys/ioctl.h sys/stat.h unistd.h paths.h])
-+@@ -56,21 +54,33 @@ if test "x$exec_prefix" = "xNONE"; then
-+ 	exec_prefix="$prefix"
-+ fi
-+ 
-+-if test "x$WGET" = "x"; then
-+-	if test "x$CURL" = "x"; then
-++dnl allow enabling/disabling the fetching of the IANA PEN registry
-++AC_ARG_ENABLE([registry-download],
-++	[AC_HELP_STRING([--enable-registry-download],
-++			[download/install the IANA PEN registry [default=yes]])],
-++	[xenable_registry_download=$enableval],
-++	[xenable_registry_download=yes])
-++
-++AM_CONDITIONAL([DOWNLOAD], [false])
-++
-++if test "x$xenable_registry_download" = "xyes"; then
-++	AC_CHECK_PROG([WGET], [wget], [wget])
-++	AC_CHECK_PROG([CURL], [curl], [curl])
-++
-++	if test "x$WGET" = "x" && test "x$CURL" = "x"; then
-+ 		AC_MSG_WARN([** Neither wget nor curl could be found.])
-+ 		AC_MSG_WARN([** IANA PEN database will not be installed by `make install` !])
-+ 	else
-+-		DOWNLOAD="$CURL --location --progress-bar"
-+ 		AM_CONDITIONAL([DOWNLOAD], [true])
-++		if test "x$WGET" != "x"; then
-++			DOWNLOAD="$WGET -c -nd -O -"
-++		else
-++			DOWNLOAD="$CURL --location --progress-bar"
-++		fi
-+ 	fi
-+-else
-+-	DOWNLOAD="$WGET -c -nd -O -"
-+-	AM_CONDITIONAL([DOWNLOAD], [true])
-+ fi
-+ 
-+-AC_MSG_WARN([** Download is:])
-+-AC_MSG_WARN($DOWNLOAD)
-++AC_MSG_WARN([** Download is: $DOWNLOAD])
-+ AC_SUBST(DOWNLOAD, $DOWNLOAD)
-+ 
-+ dnl
-+-- 
-+2.25.1
-+
-diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
-index dbd6483110..9516ff8596 100644
---- a/package/ipmitool/Config.in
-+++ b/package/ipmitool/Config.in
-@@ -9,6 +9,18 @@ config BR2_PACKAGE_IPMITOOL
- 
- if BR2_PACKAGE_IPMITOOL
- 
-+config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
-+	string "IANA PEN registry URL or path"
-+	default "https://www.iana.org/assignments/enterprise-numbers.txt"
-+	help
-+	  Enter an URL or a file path to the PEN registry to use.
-+
-+	  Note that the official registry is 4MiB+ and may change any
-+	  time and is thus not guaranteed to be reproducible.
-+
-+	  Leave empty to not use a registry; vendor IDs will be
-+	  displayed instead of the corresponding names.
-+
- config BR2_PACKAGE_IPMITOOL_LANPLUS
- 	bool "enable lanplus interface"
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
-index 5e34434a03..b3f1e217ff 100644
---- a/package/ipmitool/ipmitool.mk
-+++ b/package/ipmitool/ipmitool.mk
-@@ -13,6 +13,8 @@ IPMITOOL_CPE_ID_VENDOR = ipmitool_project
- IPMITOOL_AUTORECONF = YES
- IPMITOOL_DEPENDENCIES = host-pkgconf
- 
-+IPMITOOL_CONF_OPTS = --disable-registry-download
-+
- ifeq ($(BR2_PACKAGE_FREEIPMI),y)
- IPMITOOL_DEPENDENCIES += freeipmi
- IPMITOOL_CONF_OPTS += --enable-intf-free
-@@ -47,4 +49,20 @@ endef
- IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
- endif
- 
-+IPMITOOL_PEN_REG_URI = $(call qstrip,$(BR2_PACKAGE_IPMITOOL_PEN_REG_URI))
-+ifneq ($(IPMITOOL_PEN_REG_URI),)
-+ifneq ($(findstring ://,$(IPMITOOL_PEN_REG_URI)),)
-+IPMITOOL_EXTRA_DOWNLOADS += $(IPMITOOL_PEN_REG_URI)
-+BR_NO_CHECK_HASH_FOR += $(notdir $(IPMITOOL_PEN_REG_URI))
-+IPMITOOL_PEN_REG = $(IPMITOOL_DL_DIR)/$(notdir $(IPMITOOL_PEN_REG_URI))
-+else
-+IPMITOOL_PEN_REG = $(IPMITOOL_PEN_REG_URI)
-+endif #findstring
-+define IPMITOOL_INSTALL_PEN_REG
-+	$(INSTALL) -D -m 0644 $(IPMITOOL_PEN_REG) \
-+		$(TARGET_DIR)/usr/share/misc/enterprise-numbers
-+endef
-+IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_INSTALL_PEN_REG
-+endif # IPMITOOL_PEN_REG_URI !empty
-+
- $(eval $(autotools-package))
+<div dir=3D"ltr"><div>Hi</div><div><p dir=3D"auto" style=3D"box-sizing:bord=
+er-box;margin-top:0px;margin-bottom:16px;color:rgb(36,41,47);font-family:-a=
+pple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,&quot;Noto Sans&quot;,H=
+elvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoj=
+i&quot;;font-size:14px;font-style:normal;font-variant-ligatures:normal;font=
+-variant-caps:normal;font-weight:400;letter-spacing:normal;text-align:start=
+;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0px;ba=
+ckground-color:rgb(255,255,255);text-decoration-style:initial;text-decorati=
+on-color:initial">The following errors are reported while generating numpy/=
+core/_<a href=3D"http://multiarray_umath.cpython-38-aarch64-linux-gnu.so" t=
+arget=3D"_blank">multiarray_umath.cpython-38-aarch64-linux-gnu.so</a> using=
+ aarch64-buildroot-linux-gnu-gcc.<br style=3D"box-sizing:border-box">Is the=
+re a way to avoid including AVX512 .s files from the compilation?</p><p dir=
+=3D"auto" style=3D"box-sizing:border-box;margin-top:0px;margin-bottom:16px;=
+color:rgb(36,41,47);font-family:-apple-system,BlinkMacSystemFont,&quot;Sego=
+e UI&quot;,&quot;Noto Sans&quot;,Helvetica,Arial,sans-serif,&quot;Apple Col=
+or Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px;font-style:normal;=
+font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;lett=
+er-spacing:normal;text-align:start;text-indent:0px;text-transform:none;whit=
+e-space:normal;word-spacing:0px;background-color:rgb(255,255,255);text-deco=
+ration-style:initial;text-decoration-color:initial">numpy/core/src/umath/sv=
+ml/linux/avx512/svml_z0_acos_d_la.s:19: Error: unknown mnemonic<span>=C2=A0=
+</span><code style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono=
+-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,mon=
+ospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;white-space:break-sp=
+aces;border-radius:6px">pushq&#39; -- </code>pushq %rbp&#39;<br style=3D"bo=
+x-sizing:border-box">numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_=
+la.s:21: Error: unknown mnemonic<span>=C2=A0</span><code style=3D"box-sizin=
+g:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Me=
+nlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding=
+:0.2em 0.4em;margin:0px;white-space:break-spaces;border-radius:6px">movq&#3=
+9; -- </code>movq %rsp,%rbp&#39;<br style=3D"box-sizing:border-box">numpy/c=
+ore/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:24: Error: unknown mnem=
+onic<span>=C2=A0</span><code style=3D"box-sizing:border-box;font-family:ui-=
+monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberatio=
+n Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.4em;margin:0px;whit=
+e-space:break-spaces;border-radius:6px">andq&#39; -- </code>andq $-64,%rsp&=
+#39;<br style=3D"box-sizing:border-box">numpy/core/src/umath/svml/linux/avx=
+512/svml_z0_acos_d_la.s:25: Error: unknown mnemonic<span>=C2=A0</span><code=
+ style=3D"box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&qu=
+ot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-=
+size:11.9px;padding:0.2em 0.4em;margin:0px;white-space:break-spaces;border-=
+radius:6px">subq&#39; -- </code>subq $192,%rsp&#39;<br style=3D"box-sizing:=
+border-box">numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la.s:26: =
+Error: unknown mnemonic<span>=C2=A0</span><code style=3D"box-sizing:border-=
+box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Conso=
+las,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0.2em 0.=
+4em;margin:0px;white-space:break-spaces;border-radius:6px">vmovups&#39; -- =
+</code>vmovups __svml_dacos_data_internal(%rip),%zmm7&#39;<br style=3D"box-=
+sizing:border-box">numpy/core/src/umath/svml/linux/avx512/svml_z0_acos_d_la=
+.s:27: Error: unknown mnemonic<span>=C2=A0</span><code style=3D"box-sizing:=
+border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menl=
+o,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px;padding:0=
+.2em 0.4em;margin:0px;white-space:break-spaces;border-radius:6px">vmovups&#=
+39; -- </code>vmovups 64+__svml_dacos_data_internal(%rip),%zmm8&#39;<br sty=
+le=3D"box-sizing:border-box">numpy/core/src/umath/svml/linux/avx512/svml_z0=
+_acos_d_la.s:30: Error: unknown mnemonic<span>=C2=A0</span><code style=3D"b=
+ox-sizing:border-box;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&=
+quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:11.9px=
+;padding:0.2em 0.4em;margin:0px;white-space:break-spaces;border-radius:6px"=
+>vmovups&#39; -- </code>vmovups 128+__svml_dacos_data_internal(%rip),%zmm11=
+&#39;<br style=3D"box-sizing:border-box">.......</p></div></div>
+
+--000000000000552d1b05f2c72d2d--
+
+--===============6914382104180226020==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6914382104180226020==--
