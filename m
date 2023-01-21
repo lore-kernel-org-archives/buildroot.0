@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F20C27C76
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:17:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2617C004D4
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:17:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B43560FE6;
-	Sat, 21 Jan 2023 13:17:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B43560FE6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YRH0XcrGxFae; Sat, 21 Jan 2023 13:17:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C330D60FB0;
-	Sat, 21 Jan 2023 13:17:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C330D60FB0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 113101BF40B
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5638E82C75
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5638E82C75
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52CA182C35;
+	Sat, 21 Jan 2023 13:17:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52CA182C35
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id amOQc764IJ4u for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V0hI9rkhQHKH; Sat, 21 Jan 2023 13:17:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1FDE82BE7;
+	Sat, 21 Jan 2023 13:17:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1FDE82BE7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 18A851BF847
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4ADB940607
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ADB940607
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id alWFW2DqQZ9S for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89F4B82BF5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F83D4011C
  for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89F4B82BF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F83D4011C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A0C08694B; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
+ id 5CA9286962; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:52:07 +0100
+Date: Sat, 21 Jan 2023 13:51:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 14d70068be395f47a034e4275e9a26e19b2804db
-X-Git-Newrev: bbad80aeb21d9657d85b722b02fdf3e66decfb8d
+X-Git-Oldrev: 0e483a7340a4aeecf1d362328e06c2fcdec1dcae
+X-Git-Newrev: 695dd042dbbe3eb3ccffb812b8dc38c2aa7202be
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131609.7A0C08694B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/glib-networking: switch to https
- download
+Message-Id: <20230121131609.5CA9286962@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gconf: switch to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbad80aeb21d9657d85b722b02fdf3e66decfb8d
+commit: https://git.buildroot.net/buildroot/commit/?id=695dd042dbbe3eb3ccffb812b8dc38c2aa7202be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/glib-networking/glib-networking.hash | 2 +-
- package/glib-networking/glib-networking.mk   | 2 +-
+ package/gconf/gconf.hash | 2 +-
+ package/gconf/gconf.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
-index 347ef6777c..766efd0ced 100644
---- a/package/glib-networking/glib-networking.hash
-+++ b/package/glib-networking/glib-networking.hash
-@@ -1,3 +1,3 @@
--# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.70/glib-networking-2.70.1.sha256sum
-+# From https://download.gnome.org/sources/glib-networking/2.70/glib-networking-2.70.1.sha256sum
- sha256  2a16bfc2d271ccd3266e3fb462bc8a4103c02e81bbb339aa92d6fb060592d7bc  glib-networking-2.70.1.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index 4adc13d39f..b6d29110ed 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
+diff --git a/package/gconf/gconf.hash b/package/gconf/gconf.hash
+index 56d754a69e..ad0064fa99 100644
+--- a/package/gconf/gconf.hash
++++ b/package/gconf/gconf.hash
+@@ -1,4 +1,4 @@
+-# http://ftp.acc.umu.se/pub/gnome/sources/GConf/3.2/GConf-3.2.6.sha256sum
++# From https://download.gnome.org/sources/GConf/3.2/GConf-3.2.6.sha256sum
+ sha256  1912b91803ab09a5eed34d364bf09fe3a2a9c96751fde03a4e0cfa51a04d784c  GConf-3.2.6.tar.xz
+ # License files, locally calculated
+ sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING
+diff --git a/package/gconf/gconf.mk b/package/gconf/gconf.mk
+index c468d1433c..b84fa96082 100644
+--- a/package/gconf/gconf.mk
++++ b/package/gconf/gconf.mk
 @@ -6,7 +6,7 @@
  
- GLIB_NETWORKING_VERSION_MAJOR = 2.70
- GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
--GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
-+GLIB_NETWORKING_SITE = https://download.gnome.org/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- GLIB_NETWORKING_INSTALL_STAGING = YES
- GLIB_NETWORKING_DEPENDENCIES = \
+ GCONF_VERSION = 3.2.6
+ GCONF_SOURCE = GConf-$(GCONF_VERSION).tar.xz
+-GCONF_SITE = http://ftp.gnome.org/pub/gnome/sources/GConf/3.2
++GCONF_SITE = https://download.gnome.org/sources/GConf/3.2
+ GCONF_CONF_OPTS = --disable-orbit
+ GCONF_DEPENDENCIES = dbus dbus-glib libglib2 libxml2 \
+ 	host-intltool $(TARGET_NLS_DEPENDENCIES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
