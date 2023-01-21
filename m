@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D75F5C004D4
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 16:36:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F00E0C25B50
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 16:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5945E40936;
-	Sat, 21 Jan 2023 16:36:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5945E40936
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5695041B46;
+	Sat, 21 Jan 2023 16:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5695041B46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bmGVRxqwwmJ9; Sat, 21 Jan 2023 16:36:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V4XpSIe31Rue; Sat, 21 Jan 2023 16:36:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 938D0408D1;
-	Sat, 21 Jan 2023 16:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 938D0408D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 480B541A6D;
+	Sat, 21 Jan 2023 16:36:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 480B541A6D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A9D701BF41C
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 16:36:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 675EE1BF41C
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 16:36:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 856A182400
- for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 16:36:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 856A182400
+ by smtp1.osuosl.org (Postfix) with ESMTP id 430F681836
+ for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 16:36:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 430F681836
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rleOhbFkym9L for <buildroot@lists.busybox.net>;
- Sat, 21 Jan 2023 16:35:59 +0000 (UTC)
+ with ESMTP id O1aXn57asWIO for <buildroot@lists.busybox.net>;
+ Sat, 21 Jan 2023 16:36:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75C0C81836
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 75C0C81836
- for <buildroot@busybox.net>; Sat, 21 Jan 2023 16:35:59 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id k16so6162111wms.2
- for <buildroot@busybox.net>; Sat, 21 Jan 2023 08:35:59 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4489C81D9F
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4489C81D9F
+ for <buildroot@busybox.net>; Sat, 21 Jan 2023 16:36:00 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id k16so6162123wms.2
+ for <buildroot@busybox.net>; Sat, 21 Jan 2023 08:36:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=GNQfTgBJYm13jssN8Ck1egcZJZ5Y7pGzmkwZWH1GzxM=;
- b=ftpxVxUqInBXi0PtxPIarKvUsJQddL/wZOPmSOvng2z0xdu4CGFbnrDHYY9vxvNZ4g
- Lf9/mE9DwMBOJg1Ps0i6fJLTPjb8De2ddp0voKrvKNY4ss1IcrAiBu1WunWhSggWAOow
- Sk5mCR1C5jU2uazogBBgPZoN8EW1AcvIDdhoePwOnq27sBrMEfIsVomL2fIpym+Hdxxa
- gaggsaBw5nEAOsl5muEu95lqFE5nRwuyHpGoQURrLr85T3bOCNowkOm2dCVy5WDBiVZY
- UFV+wsf2V8d3EwH4pi+Of+kRg1XVWP//elPXU/8F3L2+egY7baL7AgnAprfKl5A919Va
- j0hA==
-X-Gm-Message-State: AFqh2ko2OXWkWJYIO8Rn31Ii30sOefdk5C5UEUbrdFjWn2ld1fSvEMHY
- PdLWoCYVSnrgNCXTXkmmE36EPN1MlBc=
-X-Google-Smtp-Source: AMrXdXsUct0v1Hs6as+L3CU994pTE+K5NsaHEtBZxaFYSf+zA4n9EdByDnsBvBO8pbTACqy5ic+WaA==
-X-Received: by 2002:a05:600c:3488:b0:3cf:68f8:790b with SMTP id
- a8-20020a05600c348800b003cf68f8790bmr14823707wmq.11.1674318957649; 
- Sat, 21 Jan 2023 08:35:57 -0800 (PST)
+ bh=aosH9XYO4bfUM3FwEwUN+yU8OAn3V4XWzWJLxic38vw=;
+ b=6JMWwGZCEHoLkKOCK/e4rxrhD/yIWt45fTUz6kFMZGKDTKNIjHxkwLmQaBJaVjaxOV
+ 1doXrMg645iAlYbp7/3OzdBGkh0eUyErlKvMNJstO3pEIs3kbEQc1n3ZfMx38y3yRqN5
+ RQfqqH7rQYzkSwN5I9ZFpu5di2bFPAn9U27i06xHsBkUj82ugf/2YPt9wnsV0W9E5f1O
+ 9e+3ciKoT0dlXAZA5SpQ9q7GKFMEVtaDSoTK2Iw306+xIl6gmiNuFGo1I704d5DuILFx
+ jO4BivgGDV9icGngZFKf2o7EZSN020VULQcJQyWx3ub6K0gwuJa9zg+khJPNSnOEDJFM
+ BRew==
+X-Gm-Message-State: AFqh2krljbGVdM/p9guVKVIXD98ULeIWOrfd4uG8mP0M7yINo6mu0wLt
+ e288r7Vcrm+UIYNweKeGtXirtjDNDt8=
+X-Google-Smtp-Source: AMrXdXt0IN0Fi4TcaBcDn0h3bYGmCzEpJsjC36vh4Moqb4Hh73ldvc5pJcONSh+gLW1lidbUf5IIyQ==
+X-Received: by 2002:a05:600c:1c1f:b0:3db:2d7e:1204 with SMTP id
+ j31-20020a05600c1c1f00b003db2d7e1204mr7894438wms.27.1674318958552; 
+ Sat, 21 Jan 2023 08:35:58 -0800 (PST)
 Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- bi16-20020a05600c3d9000b003daf89e01d3sm5648794wmb.11.2023.01.21.08.35.56
+ bi16-20020a05600c3d9000b003daf89e01d3sm5648794wmb.11.2023.01.21.08.35.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Jan 2023 08:35:57 -0800 (PST)
+ Sat, 21 Jan 2023 08:35:58 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Sat, 21 Jan 2023 17:35:32 +0100
-Message-Id: <20230121163537.147981-2-francois.perrad@gadz.org>
+Date: Sat, 21 Jan 2023 17:35:33 +0100
+Message-Id: <20230121163537.147981-3-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230121163537.147981-1-francois.perrad@gadz.org>
 References: <20230121163537.147981-1-francois.perrad@gadz.org>
@@ -75,18 +75,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=GNQfTgBJYm13jssN8Ck1egcZJZ5Y7pGzmkwZWH1GzxM=;
- b=TwbCqCcsi4iVuUGnEvcIKQ5fPwEg1RqC/Tj2lfmx/REdmMdACpEXeCjxKH7VM2KrZN
- EO3P+OQxx76lI2vm0yc6YhoRPUEZeExJc+h4RgZmLg6ErqpsCln6eGe8TL9e3EqnU3/A
- GX8bil+3rhMwnnlrcY9bsZWZjjZ+u4fHl882cbCYKUv7oNrMEFE8vz4VqRbMgBfyBk2r
- G7ShGrIw/vzeU1DFPfzmQa19cI9+1EIboW51/XHIWx+gVfhGECCcX2VXKUM09EGS9CW/
- vEbED5MBJQVOnwiLmNx7C7qERuiPZmxD0yT3++YGt+azCbJ96JBJcbApYVZIbQNpxXgn
- DX6w==
+ bh=aosH9XYO4bfUM3FwEwUN+yU8OAn3V4XWzWJLxic38vw=;
+ b=K+NfgbSuyb+qvAVLjIK+awve7a5WJ7DNa/NTEx5kiusYTUZoIzQU7+QHpDkealbWVR
+ aiVKwl/PV+WonD1HlN1cKxKvMNg5/fI82ySCnLHWcg2QbkwJEFgMbIUU8hoIn6Ugq4nO
+ XV9W9Lriwj/RkO1Bk+pYTrJWHVusOPD+xqj/rN9yXYLih6uLsKtqCNiaDqL6+O3vJ7MJ
+ ZK2JVLHinyH/G8M56FV2LaTrNE77ZpCePV1SjC5Mg8gEcPQBrdMsTdjIzr4Bak6Kk0xI
+ SfsMraUr7AMS07jmW7GfKHnzWVgA0ZYah3e1cp/m5u4FdaZb8OxlqWVD1Lnin1d7Ardc
+ 9H6g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=TwbCqCcs
-Subject: [Buildroot] [PATCH 2/7] package/perl-exporter-tiny: bump to version
- 1.006000
+ header.a=rsa-sha256 header.s=20210112 header.b=K+NfgbSu
+Subject: [Buildroot] [PATCH 3/7] package/perl-io-socket-ssl: bump to version
+ 2.080
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,49 +103,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-diff LICENSE:
--This software is copyright (c) 2020 by Toby Inkster.
-+This software is copyright (c) 2022 by Toby Inkster.
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-exporter-tiny/perl-exporter-tiny.hash | 7 +++----
- package/perl-exporter-tiny/perl-exporter-tiny.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.hash b/package/perl-exporter-tiny/perl-exporter-tiny.hash
-index c714ef902..0ecdf7848 100644
---- a/package/perl-exporter-tiny/perl-exporter-tiny.hash
-+++ b/package/perl-exporter-tiny/perl-exporter-tiny.hash
-@@ -1,7 +1,6 @@
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index 8c6bb3052..a4abcc33c 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+@@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  485897322a2514b4d6ca90b2daacb7cd  Exporter-Tiny-1.002002.tar.gz
--sha256  00f0b95716b18157132c6c118ded8ba31392563d19e490433e9a65382e707101  Exporter-Tiny-1.002002.tar.gz
-+md5  2d555e289eac6450052e8683c292cbf7  Exporter-Tiny-1.006000.tar.gz
-+sha256  d95479ff085699d6422f7fc8306db085e34b626438deb82ec82d41df2295f400  Exporter-Tiny-1.006000.tar.gz
+-md5  8f0f6bff4db5e4be6e848aa49fd29380  IO-Socket-SSL-2.075.tar.gz
+-sha256  c30ee2220b1e181a968ebbc81861d0cadf334b001377a44105ae5a8637ddae8c  IO-Socket-SSL-2.075.tar.gz
++md5  eaea5b17592ccbd925aff47747f41dde  IO-Socket-SSL-2.080.tar.gz
++sha256  cd0ed303b08a72c5c256a9ec3bbb6ff61360be3a2ff6d775e4f6e25375fa8d1f  IO-Socket-SSL-2.080.tar.gz
  
  # computed by scancpan
--sha256  f4cb223c8ac37d6ccd0e78b2892ca54a48a6adbe6a271c3c17c0226646297e66  COPYRIGHT
--sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
-+sha256  a4f85c6f4d6e8bdd37b7ab08013e3e3bee1fe8e910e20f8f54d5025ffe40f384  LICENSE
-diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.mk b/package/perl-exporter-tiny/perl-exporter-tiny.mk
-index c7abfbae2..489ee54e1 100644
---- a/package/perl-exporter-tiny/perl-exporter-tiny.mk
-+++ b/package/perl-exporter-tiny/perl-exporter-tiny.mk
-@@ -4,11 +4,11 @@
+ sha256  090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032  README
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index daa46acf9..d5c09d908 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_EXPORTER_TINY_VERSION = 1.002002
-+PERL_EXPORTER_TINY_VERSION = 1.006000
- PERL_EXPORTER_TINY_SOURCE = Exporter-Tiny-$(PERL_EXPORTER_TINY_VERSION).tar.gz
- PERL_EXPORTER_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_EXPORTER_TINY_LICENSE = Artistic or GPL-1.0+
--PERL_EXPORTER_TINY_LICENSE_FILES = COPYRIGHT LICENSE
-+PERL_EXPORTER_TINY_LICENSE_FILES = LICENSE
- PERL_EXPORTER_TINY_DISTNAME = Exporter-Tiny
- 
- $(eval $(perl-package))
+-PERL_IO_SOCKET_SSL_VERSION = 2.075
++PERL_IO_SOCKET_SSL_VERSION = 2.080
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
 -- 
 2.37.2
 
