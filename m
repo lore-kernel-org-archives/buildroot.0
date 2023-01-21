@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0812C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01C10C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:33:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D23583EBE;
-	Mon, 20 Feb 2023 23:33:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D23583EBE
+	by smtp1.osuosl.org (Postfix) with ESMTP id A777F83EC4;
+	Mon, 20 Feb 2023 23:33:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A777F83EC4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YFyyHVdbUugt; Mon, 20 Feb 2023 23:33:41 +0000 (UTC)
+	with ESMTP id oVvkF6KTgAUn; Mon, 20 Feb 2023 23:33:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9471C83313;
-	Mon, 20 Feb 2023 23:33:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9471C83313
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C24241BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 572D780DAD;
+	Mon, 20 Feb 2023 23:33:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 572D780DAD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 233701BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 830AC61779
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 830AC61779
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66B3B4175E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66B3B4175E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cGQegZpdzxbO for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QQO-tW0u0vEd for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E1A561784
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E1A561784
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C44C41751
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C44C41751
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D858828C8; Mon, 20 Feb 2023 20:52:17 +0000 (UTC)
+ id 99BF27FF06; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 28 Dec 2022 21:02:11 +0100
+Date: Sat, 21 Jan 2023 13:58:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 16b27f7cdbc8c203b3b957a33ade03739149021f
-X-Git-Newrev: d47f7279f516ba2bbc6d1fd9dd37636902b9bad3
+X-Git-Oldrev: 39c25a288e0dd64157485dfebd83ef8ce8c1f2b0
+X-Git-Newrev: 500f40bbc7a7657393dd308490afec3effee6dea
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205217.6D858828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rng-tools: fix build
- with updated jitterentropy-library
+Message-Id: <20230220205238.99BF27FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libgee: switch to
+ https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,113 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d47f7279f516ba2bbc6d1fd9dd37636902b9bad3
+commit: https://git.buildroot.net/buildroot/commit/?id=500f40bbc7a7657393dd308490afec3effee6dea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit a8807ddbe2 bumped package jitterentropy-library to version 3.4.1
-which broke building rng-tools.
-
-Add two upstream patches which improve jitterentropy-library detection.
-
-Fixes:
-http://autobuild.buildroot.net/results/a6f/a6f1381b3d1aa2a27412286167f5c8be5f6fdaf8/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...erentropy-detection-to-look-for-the-setti.patch | 30 +++++++++++++++++
- ...erentropy-library-to-timeout-fail-on-long.patch | 39 ++++++++++++++++++++++
- 2 files changed, 69 insertions(+)
+ package/libgee/libgee.hash | 2 +-
+ package/libgee/libgee.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch b/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
-new file mode 100644
-index 0000000000..553842640d
---- /dev/null
-+++ b/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
-@@ -0,0 +1,30 @@
-+From e2698477e8abf623c18ab28d33cc894ec882a706 Mon Sep 17 00:00:00 2001
-+From: Neil Horman <neil.horman@privafy.com>
-+Date: Fri, 18 Mar 2022 18:59:52 -0400
-+Subject: [PATCH] Adjust jitterentropy detection to look for the settick
-+ function
-+
-+Theres no great way to detect if jitterentropy has the internal timer
-+feature enabled so we have to look for a function that is only defined
-+when it is enabled
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[downloaded from upstream commit
-+ https://github.com/nhorman/rng-tools/commit/e2698477e8abf623c18ab28d33cc894ec882a706]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index e16e1a0..0f5a38e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -94,7 +94,7 @@ AS_IF(
-+ 		AC_SEARCH_LIBS(jent_version,jitterentropy,
-+ 				[AM_CONDITIONAL([JITTER], [true])
-+ 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
-+-				AC_CHECK_LIB(jitterentropy, jent_entropy_switch_notime_impl,
-++				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
-+ 				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
-+ 				[],-lpthread)],
-+ 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
-diff --git a/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch b/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
-new file mode 100644
-index 0000000000..9d8dbe2d0b
---- /dev/null
-+++ b/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
-@@ -0,0 +1,39 @@
-+From c29424f10a0dcbd18ac25607fa1c81c18a960e81 Mon Sep 17 00:00:00 2001
-+From: Neil Horman <nhorman@tuxdriver.com>
-+Date: Mon, 16 May 2022 13:38:54 -0400
-+Subject: [PATCH] Adjust jitterentropy library to timeout/fail on long delay
-+
-+[Bernd: removed description of unrelated part of the patch]
-+
-+Also while we're at it, I might have a build solution for the presence
-+of internal timers.  When jitterentropy is built without internal
-+timers, jent_notime_init is defined publically, but when it is built
-+with timers, its declared as a static symbol, preenting resolution, so
-+we can test to see if the function exists.  If it does we _don't_ have
-+notime support. The logic is a bit backwards, but i think it works
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[downloaded configure.ac patch from upstream commit
-+ https://github.com/nhorman/rng-tools/commit/57be6d4c90e78ea9ad036a3a6e9b09822ed4d219]
-+---
-+ configure.ac  |  6 ++---
-+ rngd_jitter.c | 62 ++++++++++++++++++++++++++++++++++++++-------------
-+ 2 files changed, 49 insertions(+), 19 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 52f2bb5..0af64e7 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -101,9 +101,9 @@ AS_IF(
-+ 		AC_SEARCH_LIBS(jent_version,jitterentropy,
-+ 				[AM_CONDITIONAL([JITTER], [true])
-+ 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
-+-				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
-+-				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
-+-				[],-lpthread)],
-++				AC_CHECK_LIB(jitterentropy, jent_notime_init,
-++				[],
-++				[AC_DEFINE([HAVE_JITTER_NOTIME],1, [Enable JITTER_NOTIME])],-lpthread)],
-+ 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
-+ 	], [AC_MSG_NOTICE([Disabling JITTER entropy source])]
-+ )
+diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
+index ea723481e4..f733bf34a8 100644
+--- a/package/libgee/libgee.hash
++++ b/package/libgee/libgee.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.6.sha256sum
++# From https://download.gnome.org/sources/libgee/0.20/libgee-0.20.6.sha256sum
+ sha256  1bf834f5e10d60cc6124d74ed3c1dd38da646787fbf7872220b8b4068e476d4d  libgee-0.20.6.tar.xz
+ 
+ # Hash for license file:
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 5ce56a2b3b..36eddef171 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBGEE_VERSION_MAJOR = 0.20
+ LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).6
+-LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
++LIBGEE_SITE = https://download.gnome.org/sources/libgee/$(LIBGEE_VERSION_MAJOR)
+ LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
+ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+ LIBGEE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
