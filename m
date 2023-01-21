@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2280C27C76
-	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6348C004D4
+	for <buildroot@archiver.kernel.org>; Sat, 21 Jan 2023 13:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5818341CA6;
-	Sat, 21 Jan 2023 13:20:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5818341CA6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 712D6829DB;
+	Sat, 21 Jan 2023 13:20:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 712D6829DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8_c8NhhRiVHV; Sat, 21 Jan 2023 13:20:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UXwiyUvwQbmN; Sat, 21 Jan 2023 13:20:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7425841C9D;
-	Sat, 21 Jan 2023 13:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7425841C9D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 228041BF847
+	by smtp1.osuosl.org (Postfix) with ESMTP id C320D81E28;
+	Sat, 21 Jan 2023 13:20:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C320D81E28
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A90A1BF40B
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77CCF41CD9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23DA340607
  for <buildroot@lists.busybox.net>; Sat, 21 Jan 2023 13:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77CCF41CD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23DA340607
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MKVhy-2x49Xc for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xSBrce2120ih for <buildroot@lists.busybox.net>;
  Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E52B41C9C
- for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E52B41C9C
+ by smtp2.osuosl.org (Postfix) with ESMTP id E260D40549
+ for <buildroot@buildroot.org>; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E260D40549
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B1D086946; Sat, 21 Jan 2023 13:16:10 +0000 (UTC)
+ id DF85A86946; Sat, 21 Jan 2023 13:16:09 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:59:17 +0100
+Date: Sat, 21 Jan 2023 13:57:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9da85317b3d9549c24e8941d069958ed2d71a120
-X-Git-Newrev: 70f4be5700faa6d3601d59d1dfbe3dbb251500bc
+X-Git-Oldrev: 01b5b18cbc0a86faff68ec4f67b707965ed332cf
+X-Git-Newrev: be4b3300085d1c2266a18e6615d9288759438d9c
 X-Patchwork-Hint: ignore
-Message-Id: <20230121131610.7B1D086946@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsecret: switch to https download
+Message-Id: <20230121131609.DF85A86946@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gupnp: switch to https download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,28 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70f4be5700faa6d3601d59d1dfbe3dbb251500bc
+commit: https://git.buildroot.net/buildroot/commit/?id=be4b3300085d1c2266a18e6615d9288759438d9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libsecret/libsecret.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gupnp/gupnp.hash | 2 +-
+ package/gupnp/gupnp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index 82fe38ac1a..e98c66131e 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index cc5e2b5775..823dbd7927 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
+@@ -1,4 +1,4 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.4/gupnp-1.4.3.sha256sum:
++# Hash from: https://download.gnome.org/sources/gupnp/1.4/gupnp-1.4.3.sha256sum:
+ sha256  14eda777934da2df743d072489933bd9811332b7b5bf41626b8032efb28b33ba  gupnp-1.4.3.tar.xz
  
- LIBSECRET_VERSION_MAJOR = 0.20
- LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).5
--LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
-+LIBSECRET_SITE = https://download.gnome.org/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
- LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
- LIBSECRET_INSTALL_STAGING = YES
- LIBSECRET_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
+ # Hash for license file:
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index dca747f064..f41f26d2dd 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -7,7 +7,7 @@
+ GUPNP_VERSION_MAJOR = 1.4
+ GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+-GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
++GUPNP_SITE = https://download.gnome.org/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.1+
+ GUPNP_LICENSE_FILES = COPYING
+ GUPNP_CPE_ID_VENDOR = gnome
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
