@@ -1,74 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16C9EC25B4E
-	for <buildroot@archiver.kernel.org>; Sun, 22 Jan 2023 09:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C64ADC25B4E
+	for <buildroot@archiver.kernel.org>; Sun, 22 Jan 2023 09:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 997684050C;
-	Sun, 22 Jan 2023 09:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 997684050C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 465C0410E3;
+	Sun, 22 Jan 2023 09:45:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 465C0410E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id swp3HYnFGdgn; Sun, 22 Jan 2023 09:13:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yDcTucbR-EtM; Sun, 22 Jan 2023 09:45:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E298840186;
-	Sun, 22 Jan 2023 09:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E298840186
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D708E1BF36C
- for <buildroot@lists.busybox.net>; Sun, 22 Jan 2023 09:13:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1B37410DB;
+	Sun, 22 Jan 2023 09:44:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1B37410DB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A1F0A1BF36C
+ for <buildroot@lists.busybox.net>; Sun, 22 Jan 2023 09:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD0D840186
- for <buildroot@lists.busybox.net>; Sun, 22 Jan 2023 09:13:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD0D840186
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D23760B5C
+ for <buildroot@lists.busybox.net>; Sun, 22 Jan 2023 09:44:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D23760B5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0wfPRvVK3bn2 for <buildroot@lists.busybox.net>;
- Sun, 22 Jan 2023 09:13:27 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7442E400E7
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7442E400E7
- for <buildroot@buildroot.org>; Sun, 22 Jan 2023 09:13:27 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 43C645FFA3;
- Sun, 22 Jan 2023 10:13:19 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 22 Jan 2023 10:13:18 +0100
-Date: Sun, 22 Jan 2023 10:13:18 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S70P5wMnm8Ti for <buildroot@lists.busybox.net>;
+ Sun, 22 Jan 2023 09:44:56 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3495C60B43
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3495C60B43
+ for <buildroot@buildroot.org>; Sun, 22 Jan 2023 09:44:56 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id r9so8327098wrw.4
+ for <buildroot@buildroot.org>; Sun, 22 Jan 2023 01:44:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4iPG1fc4GQhMqYoIwIMsKZJ+N951MmuynuRnZLpYMKY=;
+ b=vrTej3FlAOxBWE4SBBBXzGBR4W5pB89KOygzqTHyI+BgXFlB4T+PKFYYUQ8KcYGXG8
+ SqubA9uLZgBBtsdz9Exxa3HtjWEPiok3BaivDGRrK5fmXmobuZ7NykMz9G0LHuAJtCr/
+ 3o1lECQXcSaTtbgXhgNQlKEPdgJeo5R7FfCQMheOoakWnTnZFqwwVSNUD2qCYjLiyryx
+ mPBvr60Cw4FX6WFN2c99jWxklHu2pIcutG7+gkGIuREyZSyqzYvGD/GF1Dta2C+26jm3
+ RtRfclJARjYdpltg8kp53fen3WrjVrFUOOo2OFk+4vp4IivT69XpnWiUUsTPXQd5KlXA
+ DJNQ==
+X-Gm-Message-State: AFqh2kpwwW8iRNrfcRXaJ4BMTLRT8xZ6ak2Rm8PanLcPPzTE+1OmhMRb
+ MO8+QOebRXT76FG3eDJ14B8GDON0Ey4=
+X-Google-Smtp-Source: AMrXdXshF5PKWYCj+kr+aTKqY7Ns8Toe+81noNXCzWMYzvI8yBTHXkAKwkke8UEHTReYmsC0CvMzhA==
+X-Received: by 2002:a05:6000:386:b0:2be:c41:4758 with SMTP id
+ u6-20020a056000038600b002be0c414758mr22406471wrf.38.1674380694279; 
+ Sun, 22 Jan 2023 01:44:54 -0800 (PST)
+Received: from localhost.localdomain (1-1-22-171.ftth.cust.kwaoo.net.
+ [171.22.1.1]) by smtp.gmail.com with ESMTPSA id
+ ba9-20020a0560001c0900b002b57bae7174sm1964219wrb.5.2023.01.22.01.44.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 22 Jan 2023 01:44:53 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Nevo Hed <nhed+buildroot@starry.com>,
- Romain Naour <romain.naour@gmail.com>,
- Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20230122091318.GG558596@scaer>
-References: <20230105015759.63582-1-nhed+buildroot@starry.com>
- <20230105015759.63582-2-nhed+buildroot@starry.com>
- <20230121222752.GF558596@scaer>
+To: buildroot@buildroot.org
+Date: Sun, 22 Jan 2023 10:44:53 +0100
+Message-Id: <20230122094453.1381079-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230121222752.GF558596@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1674378804;
- bh=pblCOD5M4OH61j8JqDGV0Y2riWDA8a1TRP85JdkPX4o=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Gh/2B1d0p2OD11+NMPoMBocdWP9ZTuyfdlSu/D+Oj7R1kowahBggy7M7k44hytw5N
- ARBsv37aQhn02xnygowe8mEEpOJEOtJHDd0MZscO6e8izHL7AzmskoMPbmi7Ix6S4U
- uATucwrVEpQ9zJDIono1cKxpOsDRRIPjZSFis39f6rWXyIkBCmHxRYGY1znu5rNJCK
- DbhvC5rJZYkTRvDbgMWX+CQBPNTxqV6p7xrM3xSPaAzkoEvooKs0ElI+cn3EHIacr8
- lsh7joqGrcxD7/M5dzGZy84OZKLNC0GJd1CRbcRVMs1bV050WgMujAHwrdLWe8RqOO
- PZvujfBJ1kJ0w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Gh/2B1d0
-Subject: Re: [Buildroot] [PATCH 1/1] core: Use of percent_defconfig seems to
- impact performance
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=4iPG1fc4GQhMqYoIwIMsKZJ+N951MmuynuRnZLpYMKY=;
+ b=pKQ59i0NOQeYdGmfzrLNxGjFlpy2erk/3A1QnoKjPxgzzJhkh+fGbKT+Wjf8zbsybw
+ VDS0nB4XcbmF6oZfsWCz0u/DbrrI8hh4hTlsj1wG5SWXo5jCKqwFBEQd8apGUregOmj4
+ V76Jedb1WcgbDQ3lKs/zkZr/TVYH82Rbrlmb7MJgJiZKSqVVmmwaifCd2KqwMZ85Bk8k
+ nsep/8yY044ZdM4A3c4CsrnawLaQ//BtvmhlVz8qixx6U16xrL9HLOJUBGkhR7EjS2eg
+ 3SySku1u0GgMu9+uEVLX81fYF/yFyinUR6ZbNLJiG/3rY/Ypj09d1QP7KtAU9mIhiXp3
+ HT+Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=pKQ59i0N
+Subject: [Buildroot] [PATCH] system: add option for packages to require
+ /bin/sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,45 +94,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+Cc: Norbert Lange <nolange79@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Nevo, All,
+Some packages will require that /bin/sh exists and is a valid shell.
 
-On 2023-01-21 23:27 +0100, Yann E. MORIN spake thusly:
-> On 2023-01-04 20:57 -0500, Nevo Hed via buildroot spake thusly:
-> > Noticed a significant slowdown with rise of number of external trees
-> > in our env.  This slowdown seemed to be related to invocations if the
-> > percent_defconfig function (GNU Make 4.3).
-> So, the following change:
-> > -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
-> [--SNIP--]
-> > +%_defconfig: $(BUILD_DIR)/buildroot-config/conf  outputmakefile
-> broke the build when the output directory ends with _defconfig. For
-> example:
->     Makefile:1015: *** "Can't find /some/path/meh_defconfig".  Stop.
-[--SNIP--]
-> So, I think we have two options:
->   1. quickly find a fix that is not totally hackish (but with Romain, we
->      could not find something trivial that worked)
+For example, system needs a shell, but does not care much what it is. We
+could provide it with whatever the user configures as BR2_SYSTEM_BIN_SH,
+but that can be empty because of BR2_SYSTEM_BIN_SH_NONE.
 
-Hopefully I've found a non-hackish fix:
+So, we add an option to restrict the choice and forbid BR2_SYSTEM_BIN_SH_NONE
+from being a selectable option, this ensuring that there is a shell on
+the system. As a side effect, it also ensures that /bin/sh exists.
 
-    https://lore.kernel.org/buildroot/20230122090947.1369673-1-yann.morin.1998@free.fr/T/#u
+For systmd, we can then just tell it to unconditionally use /bin/sh as
+the default user shell, and that will also match whatever the user
+selected as the system-wide default shell.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Norbert Lange <nolange79@gmail.com>
+---
+Note: this is a prerequisite for the bump to systemd 252.4:
+    http://patchwork.ozlabs.org/project/buildroot/patch/20230115114840.9027-1-nolange79@gmail.com/
+---
+ system/Config.in | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
+diff --git a/system/Config.in b/system/Config.in
+index 806a747315..963192cb3f 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -320,6 +320,17 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	  the very least use a strong cryptographic hash for your
+ 	  password!
+ 
++config BR2_SYSTEM_NEEDS_BIN_SH
++	bool
++	# Busybox has a shell that does not need an MMU, but all the
++	# standalone shells need one. If BR2_PACKAGE_BUSYBOX is not
++	# set, BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is set, so we just need
++	# an MMU.
++	depends on BR2_USE_MMU || BR2_PACKAGE_BUSYBOX
++	help
++	  Have your package select this (and proapgate the dependencies)
++	  if it absolutely needs /bin/sh to exist and be a valid shell.
++
+ choice
+ 	bool "/bin/sh"
+ 	default BR2_SYSTEM_BIN_SH_DASH if !BR2_PACKAGE_BUSYBOX
+@@ -360,6 +371,7 @@ comment "bash, dash, mksh, zsh need BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+ 
+ config BR2_SYSTEM_BIN_SH_NONE
+ 	bool "none"
++	depends on !BR2_SYSTEM_NEEDS_BIN_SH
+ 
+ endchoice # /bin/sh
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
