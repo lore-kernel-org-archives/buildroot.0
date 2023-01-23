@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92ADCC54E94
-	for <buildroot@archiver.kernel.org>; Mon, 23 Jan 2023 15:15:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21F85C38142
+	for <buildroot@archiver.kernel.org>; Mon, 23 Jan 2023 15:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 05F4A40A8B;
-	Mon, 23 Jan 2023 15:15:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05F4A40A8B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C8CF40A91;
+	Mon, 23 Jan 2023 15:57:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C8CF40A91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K2VUeoKcDGJY; Mon, 23 Jan 2023 15:15:10 +0000 (UTC)
+	with ESMTP id hfI-euCtSiRY; Mon, 23 Jan 2023 15:57:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DA26440AAD;
-	Mon, 23 Jan 2023 15:15:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA26440AAD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CB23F1BF3D5
- for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 15:15:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD0B040A6D;
+	Mon, 23 Jan 2023 15:57:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD0B040A6D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D35E1BF3D5
+ for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 15:57:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A293841737
- for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 15:15:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A293841737
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38AB981FCF
+ for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 15:57:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38AB981FCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4n5M4PKr7AOM for <buildroot@lists.busybox.net>;
- Mon, 23 Jan 2023 15:15:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NRTj2Yq2YNle for <buildroot@lists.busybox.net>;
+ Mon, 23 Jan 2023 15:57:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C9A141774
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C9A141774
- for <buildroot@buildroot.org>; Mon, 23 Jan 2023 15:15:03 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id d2so11112541wrp.8
- for <buildroot@buildroot.org>; Mon, 23 Jan 2023 07:15:03 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 992F281FCC
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com
+ [IPv6:2607:f8b0:4864:20::642])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 992F281FCC
+ for <buildroot@buildroot.org>; Mon, 23 Jan 2023 15:57:05 +0000 (UTC)
+Received: by mail-pl1-x642.google.com with SMTP id b17so11817329pld.7
+ for <buildroot@buildroot.org>; Mon, 23 Jan 2023 07:57:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=7QwXZCX7ETgXm1SUSIAunQVgVevGuUASqrMzUQJ7PsM=;
- b=UvTRqr0skecnmJsROJPJENrGz0lNNEL9soxomtWsum8DrXU2gCdbUNj1v1GdE0UShn
- HVC4qXiC8WTZmH1AsdVUj99pwq03UsQqDxfhJWwbz5HEN9a94aGBak3JwHQB1mLNYL7m
- nevUBIbhrPAR+P1JlRLCEnttPVEWkbggG96cLyxpo9oJ+52YpApKYRpjFiu83+uHRxgY
- sC7lYffIkm9W0CWeg+bSQtuEogVdCqJ/pNffpIQs756iHNeIH9nhmq9dwy8KOM3UozOU
- SC6moPKxSDd7gkxPJPRlK4uQ2Dd2CWvqgfJ7REKyuAyxlj6i1B768N22miBkoPDoQei9
- ljPw==
-X-Gm-Message-State: AFqh2krWKSY9dHKnuzrh2nkdAjkMAkUsRvH+5VAtz990DI100YaS9eHO
- aFRagGv+1tmxMI6+KecN3nw0LTWywVw3bQjh
-X-Google-Smtp-Source: AMrXdXsQYQg8iPDNfB6Q4SlfU29q38h/98J5OZNNii0LK4jF/6G9xpjdsRm/1DYQezL/PRCwO+cIVA==
-X-Received: by 2002:a05:6000:120f:b0:2bd:befd:2061 with SMTP id
- e15-20020a056000120f00b002bdbefd2061mr22071869wrx.21.1674486901748; 
- Mon, 23 Jan 2023 07:15:01 -0800 (PST)
-Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
- [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- bu9-20020a056000078900b002be1dcb6efbsm18828293wrb.9.2023.01.23.07.15.01
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=VXfzopMnPNeOyDtZ8SgvPyBzXRsUPXY7W/NTfijdMCc=;
+ b=ADMVE0+fxnicO7k4d5O3bc3USTvxJnaeDMayabQ/3IfUqaN5gIwAfmAJYy8qb62i89
+ pDKe7g7emLgUKhtjcaBR9gBXSxrUfwIYmulABlG7a986jU54Pxj5bpcokK4TCDmG+7P5
+ fgafWwkdFAYlnOwFGVdgi2PGfTYFhlStI1L86Lql7PG06EftyJ/ujf4b/p5QBIS/1kZF
+ AY5SZ6TAbXtG5epa09UQqHgtE2P2mXjyXiHSlkLLKMlHPmhbOFV1kL6Ga67XjSp97c/H
+ bxGyjK/U9qFrCJMqojpshr/sDZ9aHwizLLefflwpg5ePtykt4Vn2jgjceesdgqC9dwCR
+ KGkA==
+X-Gm-Message-State: AFqh2kriHNpiVH80oU88yHB4i8VL+HTDr+bbiWGmm57CVCfLS+m2vq7n
+ 5SLFOzYgC5BeeRKuO2ZCTCVo54ayrt322w==
+X-Google-Smtp-Source: AMrXdXsuHAM1WrZl8h8txsKG3o4Gi+w0RInJyiS8B1CT6YRvBgZR9PvSJwj1TNgK4dzocuSzLu7Zgw==
+X-Received: by 2002:a17:902:7049:b0:194:c241:f604 with SMTP id
+ h9-20020a170902704900b00194c241f604mr19755999plt.57.1674489424974; 
+ Mon, 23 Jan 2023 07:57:04 -0800 (PST)
+Received: from localhost.localdomain (204-83-79-2.sktn.hsdb.sasknet.sk.ca.
+ [204.83.79.2]) by smtp.gmail.com with ESMTPSA id
+ a4-20020a63e844000000b004b6c3d7aa21sm20647861pgk.8.2023.01.23.07.57.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Jan 2023 07:15:01 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ Mon, 23 Jan 2023 07:57:04 -0800 (PST)
+From: Ramon Crichlow <rcrichlow9000@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 Jan 2023 16:14:59 +0100
-Message-Id: <20230123151459.1899697-1-thomas.devoogdt@barco.com>
-X-Mailer: git-send-email 2.39.0
+Date: Mon, 23 Jan 2023 09:56:59 -0600
+Message-Id: <20230123155659.4207-1-rcrichlow9000@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=7QwXZCX7ETgXm1SUSIAunQVgVevGuUASqrMzUQJ7PsM=;
- b=ApZdA1Po7A0u3SxOAhGT7saKEKx0xyqweLyi44bgwONeDqA8JR/KbQEKn3wdh73PLF
- jloR6tXazpMQU9wk7LauE5R6YNEs6pJ6mMLcOaOx15Zv+iYeAQy4U0xSHQGmALDV4dXb
- eVTIRCn8YcXmgCYVaoWAUDeVFxJqSSaE1ptuX4zEISYwSYZvktS+2PLSFgMK/3o68zWq
- +ntDzgML0mhp1RG1H3dnkLZuVthY8UYjrAQKa6TfJVtj6EQo1xGetPEbJTyTq2t+m3kR
- dvPvQ3EFwruPQ9im7SYzfArgLLEXOgsgD2cpjRvTSe1IUNX+nw/RDEj3ltDN6TrHQ7p/
- Ja2g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=VXfzopMnPNeOyDtZ8SgvPyBzXRsUPXY7W/NTfijdMCc=;
+ b=R9YU1Bl8+QMqoHsr0bENx2nsk7/xQSVW3Mw5iT+xmQxJLNfeb73GF1GlMsHn+zT4SD
+ WLbU6GmQSCvyFFr+MVyAbzz5GEwPWVY2seHe3Cpp3Mwunh+siRcUA+y7PrVrbB09l+6k
+ qK4EjURIJazxegkkqOD8vf2mEL1b6KJHpjS1thSF92kWcS+PgCianhndv/NPZLup+/fk
+ GP1Z29HvHMiOMEaAE5Zz9uaJL14ECmyLJK+AUj5TLVC2ZiwYvGKFSlrhbWn5TFb6aqJE
+ PAKYrqEZGUcGT1RwVtLrRDS+yMqKvKY946gzl91vPSs/TEfGayTK6z5SA1pz+xJOJVjA
+ 9JAw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ApZdA1Po
-Subject: [Buildroot] [PATCH v3] package/fluent-bit: add new package
+ header.a=rsa-sha256 header.s=20210112 header.b=R9YU1Bl8
+Subject: [Buildroot] [PATCH 1/1] Added beaglebone-green-wireless device tree
+ to beaglebone_defconfig and genimage.cfg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,226 +94,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, Grim Delcour <grim.delcour@barco.com>,
- Anton Danneels <anton.danneels@barco.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
+Cc: Ramon Crichlow <rcrichlow9000@gmail.com>,
+ Lothar Felten <lothar.felten@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fluent Bit is a super fast, lightweight, and highly
-scalable logging and metrics processor and forwarder.
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Ramon Crichlow <rcrichlow9000@gmail.com>
 ---
- package/Config.in                             |  1 +
- ...ts.txt-Miniz-compile-as-a-static-lib.patch | 36 ++++++++++++
- package/fluent-bit/Config.in                  | 13 +++++
- package/fluent-bit/S99fluent-bit              | 55 +++++++++++++++++++
- package/fluent-bit/fluent-bit.hash            |  3 +
- package/fluent-bit/fluent-bit.mk              | 43 +++++++++++++++
- 6 files changed, 151 insertions(+)
- create mode 100644 package/fluent-bit/0001-CMakeLists.txt-Miniz-compile-as-a-static-lib.patch
- create mode 100644 package/fluent-bit/Config.in
- create mode 100644 package/fluent-bit/S99fluent-bit
- create mode 100644 package/fluent-bit/fluent-bit.hash
- create mode 100644 package/fluent-bit/fluent-bit.mk
+ board/beaglebone/genimage.cfg | 1 +
+ configs/beaglebone_defconfig  | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 995dae2c57..b281a67157 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2610,6 +2610,7 @@ menu "System tools"
- 	source "package/efivar/Config.in"
- 	source "package/embiggen-disk/Config.in"
- 	source "package/emlog/Config.in"
-+	source "package/fluent-bit/Config.in"
- 	source "package/ftop/Config.in"
- 	source "package/getent/Config.in"
- 	source "package/gkrellm/Config.in"
-diff --git a/package/fluent-bit/0001-CMakeLists.txt-Miniz-compile-as-a-static-lib.patch b/package/fluent-bit/0001-CMakeLists.txt-Miniz-compile-as-a-static-lib.patch
-new file mode 100644
-index 0000000000..8594c2a6e6
---- /dev/null
-+++ b/package/fluent-bit/0001-CMakeLists.txt-Miniz-compile-as-a-static-lib.patch
-@@ -0,0 +1,36 @@
-+From b82a0d5f4f1d4c8cf6c5da542be999b30456e27c Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Mon, 23 Jan 2023 09:57:17 +0100
-+Subject: [PATCH] CMakeLists.txt: Miniz: compile as a static lib
-+
-+https://github.com/fluent/fluent-bit/issues/6711
-+
-+Buildroot enforces globally wide that all packages are
-+dynamically linked (if BR2_SHARED_LIBS), so that means
-+that these options slept through the subdirectories.
-+The libminiz.so is not installed by cmake, causing the
-+fluent-bit to crash. This patch forces libminiz to be
-+compiled statically.
-+
-+upstream: https://github.com/fluent/fluent-bit/pull/6723
-+
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ CMakeLists.txt | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index a7adb02de..ac1b9cd75 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -510,6 +510,7 @@ add_definitions(-DMPACK_EXTENSIONS=1)
-+ add_subdirectory(${FLB_PATH_LIB_MPACK} EXCLUDE_FROM_ALL)
-+ 
-+ # Miniz (zip)
-++FLB_OPTION(BUILD_SHARED_LIBS OFF)
-+ add_subdirectory(${FLB_PATH_LIB_MINIZ} EXCLUDE_FROM_ALL)
-+ 
-+ # ring buffer library
-+-- 
-+2.39.0
-+
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-new file mode 100644
-index 0000000000..c8f9d4e489
---- /dev/null
-+++ b/package/fluent-bit/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_FLUENT_BIT
-+	bool "fluent-bit"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBYAML
-+	help
-+	  Fast and Lightweight Logs and Metrics processor.
-+
-+	  https://github.com/fluent/fluent-bit
-+
-+comment "fluent-bit needs a glibc toolchain, dynamic library"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
-diff --git a/package/fluent-bit/S99fluent-bit b/package/fluent-bit/S99fluent-bit
-new file mode 100644
-index 0000000000..1d5a40e020
---- /dev/null
-+++ b/package/fluent-bit/S99fluent-bit
-@@ -0,0 +1,55 @@
-+#!/bin/sh
-+#
-+# Starts fluent-bit.
-+#
-+NAME=fluent-bit
-+DAEMON=/usr/bin/$NAME
-+PID_FILE="/var/run/$NAME.pid"
-+CONF_FILE="/etc/$NAME/$NAME.conf"
-+
-+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
-+
-+start() {
-+	printf "Starting fluent-bit: "
-+	start-stop-daemon -S -q -b -m -p $PID_FILE --exec $DAEMON -- -c $CONF_FILE
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+stop() {
-+	printf "Stopping fluent-bit: "
-+	start-stop-daemon -K -q -p $PID_FILE
-+	# https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/configuration-file#config_section
-+	# The default grace time is set to 5 seconds, so use 6 seconds to have some margin.
-+	TIMEOUT=6
-+	PID=$(cat $PID_FILE 2>/dev/null)
-+	while kill -0 $PID 2>/dev/null; do
-+		[ $TIMEOUT -eq 0 ] && echo "FAIL" && return 1
-+		TIMEOUT=$((TIMEOUT - 1))
-+		sleep 1
-+	done
-+	rm -f $PID_FILE
-+	echo "OK"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+start)
-+	start
-+	;;
-+stop)
-+	stop
-+	;;
-+restart | reload)
-+	restart
-+	;;
-+*)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+	;;
-+esac
-+
-+exit $?
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-new file mode 100644
-index 0000000000..ce7cea7b59
---- /dev/null
-+++ b/package/fluent-bit/fluent-bit.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  8ff5566389033669feabc9c69a5c6f417dad5c8b066454388e6a706507262acf  fluent-bit-2.0.8.tar.gz
-+sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-new file mode 100644
-index 0000000000..9f59316b5b
---- /dev/null
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# fluent-bit
-+#
-+################################################################################
-+
-+FLUENT_BIT_VERSION = 2.0.8
-+FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
-+FLUENT_BIT_LICENSE = Apache-2.0
-+FLUENT_BIT_LICENSE_FILES = LICENSE
-+FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml libopenssl
-+
-+FLUENT_BIT_CONF_OPTS += \
-+	-DFLB_DEBUG=No \
-+	-DFLB_RELEASE=Yes \
-+	-DFLB_EXAMPLES=No \
-+	-DFLB_CHUNK_TRACE=No \
-+	-DFLB_BACKTRACE=No
-+
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=Yes
-+FLUENT_BIT_DEPENDENCIES += luajit
-+else
-+FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=No
-+endif
-+
-+# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
-+# large file support.
-+# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information.
-+FLUENT_BIT_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -U_FILE_OFFSET_BITS"
-+
-+# Move the config files from /usr/etc/ to /etc/.
-+FLUENT_BIT_CONF_OPTS += \
-+	-DCMAKE_INSTALL_SYSCONFDIR="/etc/"
-+
-+define FLUENT_BIT_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
-+		$(TARGET_DIR)/etc/init.d/S99fluent-bit
-+endef
-+
-+$(eval $(cmake-package))
+diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
+index 42ca2cf107..987d205075 100644
+--- a/board/beaglebone/genimage.cfg
++++ b/board/beaglebone/genimage.cfg
+@@ -11,6 +11,7 @@ image boot.vfat {
+ 			"am335x-boneblack.dtb",
+ 			"am335x-bonegreen.dtb",
+ 			"am335x-boneblack-wireless.dtb",
++			"am335x-bonegreen-wireless.dtb",
+ 		}
+ 	}
+ 
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 06154d98b7..639b491e97 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.30-ti-r3)/linux-5.10.30-ti-r3.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ # Filesystem
 -- 
-2.39.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
