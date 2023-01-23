@@ -1,147 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20F2FC05027
-	for <buildroot@archiver.kernel.org>; Mon, 23 Jan 2023 13:26:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEA0DC05027
+	for <buildroot@archiver.kernel.org>; Mon, 23 Jan 2023 13:32:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 823734037E;
-	Mon, 23 Jan 2023 13:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 823734037E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ug0CxGqV6Xda; Mon, 23 Jan 2023 13:26:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7F0340472;
-	Mon, 23 Jan 2023 13:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7F0340472
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7429B1BF359
- for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 13:26:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F5CA81EFF
- for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 13:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F5CA81EFF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6060F81E00;
+	Mon, 23 Jan 2023 13:32:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6060F81E00
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2v41LEM6vYQb for <buildroot@lists.busybox.net>;
- Mon, 23 Jan 2023 13:26:00 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SEtmD6F4a3vg; Mon, 23 Jan 2023 13:32:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16BF881E68;
+	Mon, 23 Jan 2023 13:32:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16BF881E68
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 76ECC1BF359
+ for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 13:32:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B3F24056B
+ for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 13:32:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B3F24056B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4LpIvuP3Dg5K for <buildroot@lists.busybox.net>;
+ Mon, 23 Jan 2023 13:32:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23B158100D
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
- (mail-he1eur04on2071.outbound.protection.outlook.com [40.107.7.71])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 23B158100D
- for <buildroot@buildroot.org>; Mon, 23 Jan 2023 13:26:00 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BpKs2GFHwdVBLjMhykNGosWvcjDp4pTwzAKaa9JMhDnc/hLoDXGmJEsqmpZt4mal0/EK6rGf9zk2LUXlotX1mAFRTv9jfIe+GD+FrR24KJk/yQdF9AGYbzHkVZDDWv4JUzcMK0QMSH+TRz1pZj9KCkvKQctMpqa5bQapnP9htb4yeyw88kOr5CZWqE+UCJBZMjWhHNaPwq54465VgEkQga3BI9YJNdefwphi3AJ/MuuZy81wWJysojJMi42qORKH/Eehccw9VvpFZrHlGbSqTKmpXdHdQGEGmFfp61d+194ov8Yy2swWwjaL0SKuQ3zDhJNRvx2rGH0DZ6lpfscBWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mcY5GOu7ZbRXUfCkzvVFo645k5WKxDX7BwxUlgxcX6o=;
- b=AG5LHek3YrMXIODOsee3esvb09IdLAAxBtcSBeIjul4H4zaQzVp1ghB9kDp+0HIeysOcoBjq/3b0igJ9MDRsplPY+/4oUmpzS3zWfL2r4HQl8qzYja5TH5kfax5DzZRXBiqe+RCgrvGqYbokVF/t1JS6KLPFp/CayYHxj1SfM5XkAX+/J7osL+72tzCYK/XJyiH5n++gEhczOb5oL8uTuybSRy1raKNdUGzVVQMkcW3y35+XD4Io3lEyNPXvFCXklUd8onkiu/3/3GeXLsA6GMJPEgk9DCN74pw34FT8iX4A+oNjJNtNBI9JkP3ABfMB+TkS+QVvcnxcuH6CsiEkMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
- header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
- arc=none
-Received: from DU2PR04MB8536.eurprd04.prod.outlook.com (2603:10a6:10:2d7::10)
- by AS8PR04MB8545.eurprd04.prod.outlook.com (2603:10a6:20b:420::22)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Mon, 23 Jan
- 2023 13:25:54 +0000
-Received: from DU2PR04MB8536.eurprd04.prod.outlook.com
- ([fe80::24d3:14a5:eeda:6cdd]) by DU2PR04MB8536.eurprd04.prod.outlook.com
- ([fe80::24d3:14a5:eeda:6cdd%6]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
- 13:25:54 +0000
-Message-ID: <4f8c8871-d5cb-ccba-4e15-693f9c9f0a50@theobroma-systems.com>
-Date: Mon, 23 Jan 2023 14:25:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To: Kieran Bingham <kieran.bingham@ideasonboard.com>,
- Daniel Semkowicz <dse@thaumatec.com>, buildroot@buildroot.org
-References: <20230119143408.1911081-1-dse@thaumatec.com>
- <0c911dfb-083b-f5f0-c165-a665fc92006f@theobroma-systems.com>
- <167447511035.42371.11532947092483800306@Monstersaurus>
-In-Reply-To: <167447511035.42371.11532947092483800306@Monstersaurus>
-X-ClientProxiedBy: FR0P281CA0149.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::16) To DU2PR04MB8536.eurprd04.prod.outlook.com
- (2603:10a6:10:2d7::10)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 715EA4037E
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com
+ [209.85.167.43])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 715EA4037E
+ for <buildroot@buildroot.org>; Mon, 23 Jan 2023 13:32:30 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id d30so18148753lfv.8
+ for <buildroot@buildroot.org>; Mon, 23 Jan 2023 05:32:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ohDtHzm2M6Czp3Y+V7dEXz2BrFEGwE3OOxJs75hiJZI=;
+ b=r1tZ0bT8tKLyGKDuvxuzixYgVpsQvu04EE1jcn/3nZ1UZOcoqujVxjExgFu2c7J3MK
+ 0fvbqyaYihdEfe1kxNB9h5PRXB3sjOo7pV3ElMVBeOnNGOd3ZbQO9H9fv9/f34kxB+gV
+ isRYOiw92gTWN5d4GC84Y4tlfqPyEGFPonUHU66PijEONMI1msKyoF+cQp1W29GX3uGA
+ yo9HXtpTGrOuT5LB1j0Q1+zHDRF4rVQ5shawxVXQU0vJiyXzYbq+VQc9/xTAAQRH8jKh
+ n1skvUTGck9jUvKgQY5mxVRWFxrZ0i07I9KjWFypRgMOkx4XQzR4BmtV/PTVzbiATR3z
+ l4IQ==
+X-Gm-Message-State: AFqh2kpJuLdG4eBdnPre/q+/ecZxZr7S9AwBoYsFRD2KBveqVjr4oj7m
+ 8P+yI+4nFEwL70n2gbpldchqdGkpNmTIXu7E
+X-Google-Smtp-Source: AMrXdXsPs2l8EsaBAJaIz1/MFh35J0Bo/Hc1ITyo0EgtVocRkzUT3EoG19cQTn6CjSIn6Fr8XNkGPA==
+X-Received: by 2002:a05:6512:12cf:b0:4b5:5bc6:e3de with SMTP id
+ p15-20020a05651212cf00b004b55bc6e3demr8985498lfg.65.1674480747713; 
+ Mon, 23 Jan 2023 05:32:27 -0800 (PST)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com.
+ [209.85.167.48]) by smtp.gmail.com with ESMTPSA id
+ k17-20020a05651210d100b004ab2cb8deb5sm6511974lfg.18.2023.01.23.05.32.26
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 23 Jan 2023 05:32:27 -0800 (PST)
+Received: by mail-lf1-f48.google.com with SMTP id a11so18284562lfg.0
+ for <buildroot@buildroot.org>; Mon, 23 Jan 2023 05:32:26 -0800 (PST)
+X-Received: by 2002:a05:6512:3b9b:b0:4d5:850a:8330 with SMTP id
+ g27-20020a0565123b9b00b004d5850a8330mr1385873lfv.665.1674480746531; Mon, 23
+ Jan 2023 05:32:26 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8536:EE_|AS8PR04MB8545:EE_
-X-MS-Office365-Filtering-Correlation-Id: 132e4245-fe71-4e22-4a42-08dafd455ab0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LsvhaUV5iBP/l8tB/Jk+IZUjKElQYj69YU3kCk6AXn1Saaba0tqfdcp+0ZIqg2XhI8G+LimgzFU0PLpx2lmdJim3Ee6yUbGvAZh4l53tNf15CUVSuhAAPb2Ls+BdR3f4hiGqeBigPb515kJh1ipSOzqasN1Sev8mYytrOGX48hA1ZA4Rt1gd5VlzJywurvoembZwwenU7jXxHzqqrzLNEKfoeKhONvxbwV0BZM6RsO6X43Z8Lhm6b3jR+qer1juRQqXNIvg+S4tK8pCuf6chAEVJE8FMG6bO1FX6ViTxn0X1IDVg1vBvcqRJa9Fg+3IqRFQZPnzTi18b1nrbknGn0CN3l8Suuq1xFpIA6bkH8ss7TaPgcKFn+qlWEMQJd4cV0I4IBdkEaNp+8WmpsxXUWhhHV5DeQzWwDAjdmcKZ7YUjcRQz1AwPWranc0KivxzC8LCmMJYwrw9D6cHLMd4SOld0Y6X1xbHqinNm7NbVyaGY3xR9JQbrH0A9PI0aXO703qMFKt3aITM+R8CUs/n7ZZGktI8tVom11fOCYdn6Po4GrjlSv0BRuwAVE1YoUMUWThh8s9NUjvMO+GFa8rRvGQN+9vv1jqKGysDNOCIyZln792vtBo3yZLud6/s9ZyASimRsaNWVbmmVu9JBYGs0NYgYBNWAi5oKn2kJHbP203mx6O8ZlbmFSytvQsyWPf6DzW5pQli7zzR4RzWe8rckbltTu2vxUpZahQnzNXjHR2sGPv5mftDlENjDN3e70SRRb9Fr511GSEYGCNZhYRTbKQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DU2PR04MB8536.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(366004)(396003)(39850400004)(376002)(136003)(346002)(451199015)(83380400001)(38100700002)(31696002)(41300700001)(86362001)(44832011)(2906002)(8936002)(5660300002)(4326008)(8676002)(26005)(53546011)(186003)(6512007)(6506007)(66476007)(316002)(66946007)(2616005)(66556008)(478600001)(110136005)(966005)(6486002)(31686004)(36756003)(43740500002)(45980500001);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YU9lNGgyZ1FPN0RmeWRKY0pVdFhIUnFCdnFDZm83dGtBLzNoRGVtTHNZVVFV?=
- =?utf-8?B?N2lhYWk3bkhXcmhKd1NuSE1zekMxNk9xNm1Rem9QMWtmVUNnaVl0V1RYR2x3?=
- =?utf-8?B?UXpxOTVKanFEZkE5Q3FXVFFSYjJPL3RpY00zbWw1Slp6Z0g4OHNYUzR1RG5w?=
- =?utf-8?B?dmRWQWwzK0J4MjR1NUVlWHdEYWsyNHRuYWR3ek9TNklmSFBJQUVvbHhiRmhz?=
- =?utf-8?B?MGR4Um1Hcm01ZlQ4VmY5Q2FGN2xQblpSaDZ4ZGNSREFGYXdZS3M5ZlNDOXMr?=
- =?utf-8?B?ZXA1aERSdjlNVWNQL0VaYzMxU3FCdW5VdFVVVlZubWIrdjE4VkJTa0hMS0xr?=
- =?utf-8?B?d2JMSnl6clorc0NSdnNweW5xNEc5eC9LQnQ4UTZMa29lRlljalFHSFBUZy8z?=
- =?utf-8?B?RDJnTjRieUZMRnNlbERQNFJKMm50b2N1NkhLMXVKR2JJVjhMMmJramh1K0hZ?=
- =?utf-8?B?bUIyRTZteEZET3oxY1N3QTF6M3lpWkU0VEw5VlhjVjRBSmVwWVEzcFB4dldB?=
- =?utf-8?B?WHNLUGQrQUsxTWpVY0lHZ3JzbXU3cmZUak43TjducWZCd3cvUU1sRS9ucWNI?=
- =?utf-8?B?ZVNtWFRJRFlCTkxNWG5UL1hYd3JkOEh5ZkdrNTBya25wN0xkamw4QVIyaEFG?=
- =?utf-8?B?aFFyZHlPZEg0U3JvNFBiMkRPUXBGWVNwTHZMYStydVQzUnJUeE9ZUldrODRQ?=
- =?utf-8?B?TzhHVkN5YktBWGhsYmFjV1RjeWtnemxCSU04RjhtRml5ckNjNy9FK2xtU3cz?=
- =?utf-8?B?c2ZqVkJrNElwNjJqU3kybjBySlJJeXRVcTR0UnRSZWxNY3Y3bGpmVzF4WjhO?=
- =?utf-8?B?TW9aWnYrZEV0dlBWTjFuNmdSclVHRVovekN2WmRCYzNjYU9NbE8rN1hzYTFs?=
- =?utf-8?B?Y0JOTTlWdHUzZlZsenEwL3dON2pHNUpFZkZpbGVoS2pHWFlMeE1sclpuaUtv?=
- =?utf-8?B?ck9hMlY5Mkljc0o3OGJ4TGJaQWQvN1hhTDd4WWNRZWxhV0hjU05nemlIMlVi?=
- =?utf-8?B?eU43a1BWdTB3SHNsTUtxZHhoMlR5aU94QnY0YlJyTUFjQUkyL3ZhQVQ4M2pt?=
- =?utf-8?B?RHg3QVdmK0dmQkdFekRudUdkVmNZNmJZRmQ2K1JEZXFTblhPN2xTSWhGd3dh?=
- =?utf-8?B?VWhMaGZ4d0VTZC9DUE13dUE0MWRCMU92eG1tc0FLMnNpRkpGYXBYZ3hiSUl4?=
- =?utf-8?B?eGpsL2VRY1dwMEIzQ0FNNW9YWXhyS3lqU253SmczcXN1VVozSVRzWGxiRXZC?=
- =?utf-8?B?UWtiWEFWeU9PMEcySm5tT3RCT2gvMHlIalpoK2piV0hqeFcyUUZtT09PWmJF?=
- =?utf-8?B?bDJKeldMWDlrOXhPZ3dHK2o3UjdWU1oydUdYU21yS1hidkR5SDNuWVpJbVcz?=
- =?utf-8?B?Zy9UMXEwN1hXQW5zYUJqTjdreUtMdGhJZ28rTEkwQkNRSnBwYUVoTFpnS1NG?=
- =?utf-8?B?NVNaSmxwWVdyWklrenVtdFhQUWJPSmVIUmZRbnlrbkJXako0MUl3UlM5NXJv?=
- =?utf-8?B?bjNqYk02ako4REp5cHM1TkorVjF2eThuYk5ibnhLaG9tUnpydzhsdjQ2QURG?=
- =?utf-8?B?bEJyejl5Z1JZMDJCSXMzUTB6b2MybncvNHJUeEdDWnNhcS9PVXp1Y2o0dGFY?=
- =?utf-8?B?UUk5UmVLR1pXWXZhRmVnVUJLR0Ftd3ZIZG13WTI5N3AxdnFDbDl1VDZQOWtz?=
- =?utf-8?B?UjBPZGtQb0xQVHRqMmJhalI3WXNrRGQ1Rmd4L1Q5NUFFREl0WkM2M2xkdWQw?=
- =?utf-8?B?WEl0QVorMGdVTHlnVDRuVFQ3TW5ockkzTTRrL2w1WmczaVhVS1JJdTZ5VXpU?=
- =?utf-8?B?eDZwNDR4NEx3M0tFNGMzT2RUanlWZFpZTnFPdzhrOWxENGtjQ0ZBd3NicE9B?=
- =?utf-8?B?UXo1QWt1akVWZjRVSTZVS292a0ZEclNKRnZ2WWtuMlZheHFwcTM0cTdZVC9v?=
- =?utf-8?B?a3VNQ3owM0s3M1dIdXpTNTVQU3N0bUl4b0h6WkhjdmhudFQwZGdtV2lXWWRV?=
- =?utf-8?B?aVNVbHpXZmt2bzZYaldQNXczcUhuNXdjWStDMFdxb1duMkQ4aWJ3S1pBZEpy?=
- =?utf-8?B?VkVUQkpGZjNxbVBlcDlvRWFPNjMyQ3BCSkVpK1VBb2JLMUJVUEkzU0tJYzhV?=
- =?utf-8?B?ZiszR2VMUy83QWI4ck83bXRkMHIwMGZuTjhwMkxHeWZPOGhsaUxVOU9qY3ha?=
- =?utf-8?Q?Mwl2FxbzQLAHv8VsFCAtt40=3D?=
-X-OriginatorOrg: theobroma-systems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 132e4245-fe71-4e22-4a42-08dafd455ab0
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8536.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 13:25:54.3978 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s+SrftohXc6LImcD9YuxOQqdtztffkwKrw9dPLfTls2Hj3ri9cn+eIhoeXQ7fVth6NXnI9cw4Tdo0rvuN+lpb4ct9smJJccKQ8zeyi3vV7BlUEcZS/0C/IF9QWMbsKjq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8545
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=theobroma-systems.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mcY5GOu7ZbRXUfCkzvVFo645k5WKxDX7BwxUlgxcX6o=;
- b=RY+9D+kdTPXjafLuDZoGdH8fDcFiopToYi/2SWPQd5YlF8nonN7P1o7UdBp/4YzHkAPCYsBQXHQS4mByOS6+vd5pPsLPMyzt7O28DD2ERIuKevzfWtxjTcmfaGBb3plGwdk+BYmVPOqZvSnEaapbxn8Tz5fFk/aVoLWKGlIJeSGnDdoJ0vfyuHd1rT0Sq4+yCY6D5INfAVlwl9aAj7p69YBNtH0imoc7ipG3EOQK0X7wdPzNorwzLaWn2ECH10z/S2MGeD+oL95jtSzivMVlvUhnE2BYS+G2duBKftTpIleoZMiDx/MCSDgeSV9lsLckYpmyC3Vw1a3SDv8FFaxGmQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=theobroma-systems.com header.i=@theobroma-systems.com
- header.a=rsa-sha256 header.s=selector1 header.b=RY+9D+kd
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
-Subject: Re: [Buildroot] [PATCH] package/libcamera: Bump to version 0.0.3
+References: <20230123103224.1267225-1-thomas.devoogdt@barco.com>
+ <87ilgxa1od.fsf@dell.be.48ers.dk>
+In-Reply-To: <87ilgxa1od.fsf@dell.be.48ers.dk>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Mon, 23 Jan 2023 14:32:14 +0100
+X-Gmail-Original-Message-ID: <CACXRmJirfv=4wCfwBWf6aAh39P=CBc5wB8TA6Era1FLOisDgFQ@mail.gmail.com>
+Message-ID: <CACXRmJirfv=4wCfwBWf6aAh39P=CBc5wB8TA6Era1FLOisDgFQ@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH] package/fluent-bit: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -153,149 +88,398 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Quentin Schulz via buildroot <buildroot@buildroot.org>
-Reply-To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Cc: marcus.folkesson@gmail.com
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, Samuel Martin <s.martin49@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org,
+ Anton Danneels <anton.danneels@barco.com>,
+ Grim Delcour <grim.delcour@barco.com>
+Content-Type: multipart/mixed; boundary="===============6532743012751142023=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Kieran,
+--===============6532743012751142023==
+Content-Type: multipart/alternative; boundary="00000000000014936c05f2ee6e9f"
 
-On 1/23/23 12:58, Kieran Bingham wrote:
-> Quoting Quentin Schulz via buildroot (2023-01-23 10:57:16)
->> Hi Daniel,
->>
->> On 1/19/23 15:34, Daniel Semkowicz wrote:
->>> Libcamera recently started to version the software, so use the
->>> version tag instead of raw commit hash.
->>>
->>> Signed-off-by: Daniel Semkowicz <dse@thaumatec.com>
->>> ---
->>>    package/libcamera/libcamera.hash | 2 +-
->>>    package/libcamera/libcamera.mk   | 2 +-
->>>    2 files changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
->>> index 68c9c1f005..033e318910 100644
->>> --- a/package/libcamera/libcamera.hash
->>> +++ b/package/libcamera/libcamera.hash
->>> @@ -1,4 +1,4 @@
->>> -sha256  59318208a9c1b183cacaf5a7175568d8a9fa094f2dd8c9794269bb6e9636986e  libcamera-ba6435930f08e802cffc688d90f156a8959a0f86-br1.tar.gz
->>> +sha256  d7100286616550aca487b46ae9de2a70bb471352a332b8214901b4148739990f  libcamera-v0.0.3-br1.tar.gz
->>>    
->>>    # license files
->>>    sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
->>> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
->>> index 9c03d3a3b3..8979a43aca 100644
->>> --- a/package/libcamera/libcamera.mk
->>> +++ b/package/libcamera/libcamera.mk
->>> @@ -5,7 +5,7 @@
->>>    ################################################################################
->>>    
->>>    LIBCAMERA_SITE = https://urldefense.com/v3/__https://git.linuxtv.org/libcamera.git__;!!OOPJP91ZZw!gtcDP1maf3PoJO88myqzbBZyOhNYHg7g4jGwno19jy5tFEHRgUuyBqm2zECw5wQOF6S4k8pRivumP5qJXTknCnAEvbE$
->>> -LIBCAMERA_VERSION = ba6435930f08e802cffc688d90f156a8959a0f86
->>> +LIBCAMERA_VERSION = v0.0.3
->>
->> I would actually advocate against using git tags, they are not
->> guaranteed to be stable over time (one can remove or move a tag), as
->> opposed to a git hash which is guaranteed to be.
->>
->> Can you use the commit hash please?
-> 
-> Tags seem more convenient to me! - If you're not going to use the tag
-> points, why am I bothering to make tagged releases? I could go back to
-> just saying 'always use master as the latest release' if SHA1's are the
-> release point.
-> 
+--00000000000014936c05f2ee6e9f
+Content-Type: text/plain; charset="UTF-8"
 
-git tags aren't necessarily related to software releases, they just 
-happen to be. You could very well have releases without git tags though 
-that makes it quite difficult to know when a new release is out or to 
-know which commit exactly is a "release".
+Op ma 23 jan. 2023 om 13:13 schreef Peter Korsgaard <peter@korsgaard.com>:
+> >>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
+>
+>  > Fluent Bit is a super fast, lightweight, and highly
+>  > scalable logging and metrics processor and forwarder.
+>
+>  > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+>
+> Thanks. When you send an update to a patch, then please mark it as v2,
+> v3, .. (git send-email -v<n>) and include a summary of what you have
+> changed since the previous version for easier review:
+>
+>
+https://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
+>
+> > ---
+>  >  package/Config.in                  |  1 +
+>  >  package/fluent-bit/Config.in       | 13 ++++++++
+>  >  package/fluent-bit/S99fluent-bit   | 51 ++++++++++++++++++++++++++++++
+>  >  package/fluent-bit/fluent-bit.hash |  3 ++
+>  >  package/fluent-bit/fluent-bit.mk   | 43 +++++++++++++++++++++++++
+>  >  5 files changed, 111 insertions(+)
+>  >  create mode 100644 package/fluent-bit/Config.in
+>  >  create mode 100644 package/fluent-bit/S99fluent-bit
+>  >  create mode 100644 package/fluent-bit/fluent-bit.hash
+>  >  create mode 100644 package/fluent-bit/fluent-bit.mk
+>
+>  > diff --git a/package/Config.in b/package/Config.in
+>  > index 995dae2c57..b281a67157 100644
+>  > --- a/package/Config.in
+>  > +++ b/package/Config.in
+>  > @@ -2610,6 +2610,7 @@ menu "System tools"
+>  >      source "package/efivar/Config.in"
+>  >      source "package/embiggen-disk/Config.in"
+>  >      source "package/emlog/Config.in"
+>  > +    source "package/fluent-bit/Config.in"
+>  >      source "package/ftop/Config.in"
+>  >      source "package/getent/Config.in"
+>  >      source "package/gkrellm/Config.in"
+>  > diff --git a/package/fluent-bit/Config.in
+b/package/fluent-bit/Config.in
+>  > new file mode 100644
+>  > index 0000000000..c8f9d4e489
+>  > --- /dev/null
+>  > +++ b/package/fluent-bit/Config.in
+>  > @@ -0,0 +1,13 @@
+>  > +config BR2_PACKAGE_FLUENT_BIT
+>  > +    bool "fluent-bit"
+>  > +    depends on BR2_TOOLCHAIN_USES_GLIBC
+>  > +    depends on !BR2_STATIC_LIBS
+>  > +    select BR2_PACKAGE_OPENSSL
+>
+> Can this work with libressl? If not, then it needs to select
+> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
 
-Just FYI, git tags are not allowed in Yocto officially maintained 
-layers. This has something to do with Yocto enforcing tag re-fetching, 
-thus requiring network access, breaking the ability to build offline.
+I don't see any reasons why it shouldn't work with it. But I couldn't
+test it with ./utils/test-pkg (yet).
 
-> While, yes - tags can be deleted. I expect that any signed-by-me tag (or
-> any other future libcamera release maintainer) is the correct tag for
-> that release point. I would not expect to delete any tag once pushed to
-> a public host.
-> 
+>  > +stop() {
+>  > +    printf "Stopping fluent-bit: "
+>  > +    start-stop-daemon -K -q -p $PID_FILE
+>  > +    # Fluent-bit takes max 5 seconds to exit,
+>
+> Where does this guarantee come from?
 
-Expectations vs reality. People do all kinds of weird stuff. I was not 
-specifically talking about tag deletion but tag being moved. git hashes 
-aren't spared the deletion issue either (e.g. force-push to the git 
-branch). Considering I've seen this happen before, it's not an 
-hypothesis (that was a proprietary downstream project though). While I 
-appreciate with your experience with upstream projects you would know 
-that moving tags is really a bad idea, I was merely just pointing out a 
-pitfall of using git tags for builds that most people would like 
-reproducible.
+Part of the config, but the default is 5 seconds.
+https://github.com/fluent/fluent-bit/blob/617f69597e60c440e73667a11d40f9fec26aa57b/src/flb_engine.c#L526
+https://github.com/fluent/fluent-bit/blob/617f69597e60c440e73667a11d40f9fec26aa57b/src/flb_config.c#L125
 
-> 
->> @Kieran: do you have manually generated tarballs for versions somewhere
->> so we could use this instead of a git repo?
-> 
-> Do other projects honestly create manually generated tarballs?
-> 
+>  > +    # so wait max 30 x 0.2 = 6 seconds.
+>  > +    TIMEOUT=30
+>  > +    while pidof $NAME >/dev/null; do
+>
+> You already told start-stop-daemon to write a pidfile, so it would be
+> better to use that (and possibly remove it at the end). You can use kill
+> -0 <pid> to check if the pid is still running.
 
-I was just asking if there was one already available. I was not 
-requesting one :)
+Ok, will change that.
 
-> As in ... does the maintainer create a .tgz and scp it somewhere or some
-> such?
-> 
-> I would expect this can all be handled by git... - in particular, IMO -
-> the signed tags I push are what I expect to be possible to validate and
-> verify. Is it that the core issue here is that cgit isn't providing a
-> tarball?  (while Github does?)
-> 
+>  > +            [ $TIMEOUT -eq 0 ] && echo "FAIL" && return 1
+>  > +            TIMEOUT=$((TIMEOUT - 1))
+>  > +            sleep 0.2
+>
+> busybox sleep only support fractional seconds if FEATURE_FANCY_SLEEP is
+> enabled, so it would be better to use sleep 1.
 
-Buildroot validates the sources it gets anyways with the hash. So moving 
-the tag will break the builds on systems where the repo is not already 
-in cache in BR2_DL_DIR.
+Ok, will change that.
 
-Yocto has a strict requirement on automatically generated tarballs, 
-GitHub being one the tools generating them. Try to contribute a package 
-using GitHub archives/releases and I can guarantee you one of the first 
-comments you'll receive is that they don't want it, use git hashes 
-instead. Now, I see that Buildroot does not have the same restriction 
-since the github function is used to fetch releases. c.f. `git grep -A1 
--B1 "_SITE.*github" | grep "tar\.` for a list of impacted packages, and 
-https://git.busybox.net/buildroot/tree/package/pkg-download.mk#n63 for 
-the implementation.
+> > +     done
+>  > +    echo "OK"
+>  > +}
+>  > +restart() {
+>  > +    stop
+>  > +    start
+>  > +}
+>  > +
+>  > +case "$1" in
+>  > +start)
+>  > +    start
+>  > +    ;;
+>  > +stop)
+>  > +    stop
+>  > +    ;;
+>  > +restart | reload)
+>  > +    restart
+>  > +    ;;
+>  > +*)
+>  > +    echo "Usage: $0 {start|stop|restart}"
+>  > +    exit 1
+>  > +    ;;
+>  > +esac
+>  > +
+>  > +exit $?
+>  > diff --git a/package/fluent-bit/fluent-bit.hash
+b/package/fluent-bit/fluent-bit.hash
+>  > new file mode 100644
+>  > index 0000000000..ce7cea7b59
+>  > --- /dev/null
+>  > +++ b/package/fluent-bit/fluent-bit.hash
+>  > @@ -0,0 +1,3 @@
+>  > +# Locally computed
+>  > +sha256
+ 8ff5566389033669feabc9c69a5c6f417dad5c8b066454388e6a706507262acf
+ fluent-bit-2.0.8.tar.gz
+>  > +sha256
+ 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+>  > diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/
+fluent-bit.mk
+>  > new file mode 100644
+>  > index 0000000000..c213ca2239
+>  > --- /dev/null
+>  > +++ b/package/fluent-bit/fluent-bit.mk
+>  > @@ -0,0 +1,43 @@
+>  >
++################################################################################
+>  > +#
+>  > +# fluent-bit
+>  > +#
+>  >
++################################################################################
+>  > +
+>  > +FLUENT_BIT_VERSION = 2.0.8
+>  > +FLUENT_BIT_SITE = $(call
+github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+>  > +FLUENT_BIT_LICENSE = Apache-2.0
+>  > +FLUENT_BIT_LICENSE_FILES = LICENSE
+>  > +FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml libopenssl
+>  > +
+>  > +FLUENT_BIT_CONF_OPTS += \
+>  > +    -DFLB_DEBUG=No \
+>  > +    -DFLB_RELEASE=Yes \
+>  > +    -DFLB_EXAMPLES=No \
+>  > +    -DFLB_CHUNK_TRACE=No \
+>  > +    -DFLB_BACKTRACE=No \
+>  > +    -DFLB_LUAJIT=No
+>  > +
+>  > +# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc
+fts.h
+>  > +# large file support.
+>  > +# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more
+information.
+>  > +FLUENT_BIT_CONF_OPTS += \
+>  > +    -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
+>  > +    -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -U_FILE_OFFSET_BITS"
+>  > +
+>  > +# Move the config files from /usr/etc/ to /etc/.
+>  > +FLUENT_BIT_CONF_OPTS += \
+>  > +    -DCMAKE_INSTALL_SYSCONFDIR="/etc/"
+>
+> Hmm, why is this needed? This should already default to "etc"?
+> https://cmake.org/cmake/help/latest/command/install.html#installing-files
+>
+> I see that there are some bug reports related to this, E.G.:
+> https://github.com/fluent/fluent-bit/issues/6619
 
-AFAIR, it has to do with tarballs sometimes being recreated in the 
-future and, depending on the tool being used by GitHub or whatever, the 
-checksum changes (e.g. tarball creation date somewhere in the headers, 
-tarball tool version number in there, you name it, ...), breaking old 
-trees/projects.
+I guess that this option comes from CMake, based on other options:
+https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html#special-cases
 
-The issue in Buildroot is that the tag won't be re-fetched (while 
-re-fetching is enforced in Yocto for example), so you might have two PCs 
-building different git hashes because someone moved the tag upstream in 
--between builds, c.f. the docs:
-"""
-      due to local caching, Buildroot will not re-fetch the repository, 
-so people who expect to be able to follow the remote repository would be 
-quite surprised and disappointed;
-     because two builds can never be perfectly simultaneous, and because 
-the remote repository may get new commits on the branch anytime, two 
-users, using the same Buildroot tree and building the same 
-configuration, may get different source, thus rendering the build non 
-reproducible, and people would be quite surprised and disappointed.
-"""
+But I see that fluent-bit had to do the same for their docker file.
+https://github.com/fluent/fluent-bit/issues/6711#issuecomment-1400192636
 
-The first mail was just out-of-habit with what usually happens when 
-reviewing recipe patches on the Yocto ML. I understand that Buildroot 
-works differently and git tags may be enough for you/Buildroot maintainers.
+> > +
+>  > +define FLUENT_BIT_INSTALL_INIT_SYSV
+>  > +    $(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
+>  > +            $(TARGET_DIR)/etc/init.d/S99fluent-bit
+>  > +endef
+>  > +
+>  > +define FLUENT_BIT_POST_INSTALL_TARGET_HOOK
+>  > +    cp -dpf $(@D)/lib/libminiz*.so* $(TARGET_DIR)/usr/lib/
+>  > +endef
+>
+> Why is this needed? Is it possible to link against an external miniz? If
+> not, perhaps we should build with BUILD_SHARED_LIBS=off to ensure no
+> conflicts in case we ever get a miniz package?
 
-Cheers,
-Quentin
+Reported an issue related to the same problem:
+https://github.com/fluent/fluent-bit/issues/6711
+
+I'm still trying to find how to make sure that this library is
+statically linked.
+Enabling the miniz package in buildroot might not be a good idea
+related to versioning.
+
+> --
+> Bye, Peter Korsgaard
+>
+
+Kr,
+Thomas
+
+--00000000000014936c05f2ee6e9f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Op ma 23 jan. 2023 om 13:13 schreef Peter Korsgaard &lt;<a=
+ href=3D"mailto:peter@korsgaard.com">peter@korsgaard.com</a>&gt;:<br>&gt; &=
+gt;&gt;&gt;&gt;&gt; &quot;Thomas&quot; =3D=3D Thomas Devoogdt &lt;<a href=
+=3D"mailto:thomas@devoogdt.com">thomas@devoogdt.com</a>&gt; writes:<br>&gt;=
+<br>&gt; =C2=A0&gt; Fluent Bit is a super fast, lightweight, and highly<br>=
+&gt; =C2=A0&gt; scalable logging and metrics processor and forwarder.<br>&g=
+t;<br>&gt; =C2=A0&gt; Signed-off-by: Thomas Devoogdt &lt;<a href=3D"mailto:=
+thomas.devoogdt@barco.com">thomas.devoogdt@barco.com</a>&gt;<br>&gt;<br>&gt=
+; Thanks. When you send an update to a patch, then please mark it as v2,<br=
+>&gt; v3, .. (git send-email -v&lt;n&gt;) and include a summary of what you=
+ have<br>&gt; changed since the previous version for easier review:<br>&gt;=
+<br>&gt; <a href=3D"https://buildroot.org/downloads/manual/manual.html#_pat=
+ch_revision_changelog">https://buildroot.org/downloads/manual/manual.html#_=
+patch_revision_changelog</a><br>&gt;<br>&gt; &gt; ---<br>&gt; =C2=A0&gt; =
+=C2=A0package/Config.in =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0| =C2=A01 +<br>&gt; =C2=A0&gt; =C2=A0package/fluent-bit/Config=
+.in =C2=A0 =C2=A0 =C2=A0 | 13 ++++++++<br>&gt; =C2=A0&gt; =C2=A0package/flu=
+ent-bit/S99fluent-bit =C2=A0 | 51 ++++++++++++++++++++++++++++++<br>&gt; =
+=C2=A0&gt; =C2=A0package/fluent-bit/fluent-bit.hash | =C2=A03 ++<br>&gt; =
+=C2=A0&gt; =C2=A0package/fluent-bit/<a href=3D"http://fluent-bit.mk">fluent=
+-bit.mk</a> =C2=A0 | 43 +++++++++++++++++++++++++<br>&gt; =C2=A0&gt; =C2=A0=
+5 files changed, 111 insertions(+)<br>&gt; =C2=A0&gt; =C2=A0create mode 100=
+644 package/fluent-bit/Config.in<br>&gt; =C2=A0&gt; =C2=A0create mode 10064=
+4 package/fluent-bit/S99fluent-bit<br>&gt; =C2=A0&gt; =C2=A0create mode 100=
+644 package/fluent-bit/fluent-bit.hash<br>&gt; =C2=A0&gt; =C2=A0create mode=
+ 100644 package/fluent-bit/<a href=3D"http://fluent-bit.mk">fluent-bit.mk</=
+a><br>&gt;<br>&gt; =C2=A0&gt; diff --git a/package/Config.in b/package/Conf=
+ig.in<br>&gt; =C2=A0&gt; index 995dae2c57..b281a67157 100644<br>&gt; =C2=A0=
+&gt; --- a/package/Config.in<br>&gt; =C2=A0&gt; +++ b/package/Config.in<br>=
+&gt; =C2=A0&gt; @@ -2610,6 +2610,7 @@ menu &quot;System tools&quot;<br>&gt;=
+ =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0source &quot;package/efivar/Config.in&quot;=
+<br>&gt; =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0source &quot;package/embiggen-disk/=
+Config.in&quot;<br>&gt; =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0source &quot;package=
+/emlog/Config.in&quot;<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0source &quot;packa=
+ge/fluent-bit/Config.in&quot;<br>&gt; =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0source=
+ &quot;package/ftop/Config.in&quot;<br>&gt; =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0=
+source &quot;package/getent/Config.in&quot;<br>&gt; =C2=A0&gt; =C2=A0 =C2=
+=A0 =C2=A0source &quot;package/gkrellm/Config.in&quot;<br>&gt; =C2=A0&gt; d=
+iff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in<br>=
+&gt; =C2=A0&gt; new file mode 100644<br>&gt; =C2=A0&gt; index 0000000000..c=
+8f9d4e489<br>&gt; =C2=A0&gt; --- /dev/null<br>&gt; =C2=A0&gt; +++ b/package=
+/fluent-bit/Config.in<br>&gt; =C2=A0&gt; @@ -0,0 +1,13 @@<br>&gt; =C2=A0&gt=
+; +config BR2_PACKAGE_FLUENT_BIT<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0bool &qu=
+ot;fluent-bit&quot;<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0depends on BR2_TOOLCH=
+AIN_USES_GLIBC<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0depends on !BR2_STATIC_LIB=
+S<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0select BR2_PACKAGE_OPENSSL<br>&gt;<br>&=
+gt; Can this work with libressl? If not, then it needs to select<br>&gt; BR=
+2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL<br><br>I don&#39;t see any reasons why i=
+t shouldn&#39;t work with it. But I couldn&#39;t<br>test it with ./utils/te=
+st-pkg (yet).<br><br>&gt; =C2=A0&gt; +stop() {<br>&gt; =C2=A0&gt; + =C2=A0 =
+=C2=A0printf &quot;Stopping fluent-bit: &quot;<br>&gt; =C2=A0&gt; + =C2=A0 =
+=C2=A0start-stop-daemon -K -q -p $PID_FILE<br>&gt; =C2=A0&gt; + =C2=A0 =C2=
+=A0# Fluent-bit takes max 5 seconds to exit,<br>&gt;<br>&gt; Where does thi=
+s guarantee come from?<br><br>Part of the config, but the default is 5 seco=
+nds.<br><a href=3D"https://github.com/fluent/fluent-bit/blob/617f69597e60c4=
+40e73667a11d40f9fec26aa57b/src/flb_engine.c#L526">https://github.com/fluent=
+/fluent-bit/blob/617f69597e60c440e73667a11d40f9fec26aa57b/src/flb_engine.c#=
+L526</a><br><a href=3D"https://github.com/fluent/fluent-bit/blob/617f69597e=
+60c440e73667a11d40f9fec26aa57b/src/flb_config.c#L125">https://github.com/fl=
+uent/fluent-bit/blob/617f69597e60c440e73667a11d40f9fec26aa57b/src/flb_confi=
+g.c#L125</a><br><br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0# so wait max 30 x 0.2 =
+=3D 6 seconds.<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0TIMEOUT=3D30<br>&gt; =C2=
+=A0&gt; + =C2=A0 =C2=A0while pidof $NAME &gt;/dev/null; do<br>&gt;<br>&gt; =
+You already told start-stop-daemon to write a pidfile, so it would be<br>&g=
+t; better to use that (and possibly remove it at the end). You can use kill=
+<br>&gt; -0 &lt;pid&gt; to check if the pid is still running.<br><br>Ok, wi=
+ll change that.<br><br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0[ $TIMEOUT -eq 0 ] &amp;&amp; echo &quot;FAIL&quot; &amp;&amp; retur=
+n 1<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0TIMEOUT=
+=3D$((TIMEOUT - 1))<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0sleep 0.2<br>&gt;<br>&gt; busybox sleep only support fractional seco=
+nds if FEATURE_FANCY_SLEEP is<br>&gt; enabled, so it would be better to use=
+ sleep 1.<br><br>Ok, will change that.<br><br>&gt; &gt; + =C2=A0 =C2=A0 don=
+e<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0echo &quot;OK&quot;<br>&gt; =C2=A0&gt; =
++}<br>&gt; =C2=A0&gt; +restart() {<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0stop<b=
+r>&gt; =C2=A0&gt; + =C2=A0 =C2=A0start<br>&gt; =C2=A0&gt; +}<br>&gt; =C2=A0=
+&gt; +<br>&gt; =C2=A0&gt; +case &quot;$1&quot; in<br>&gt; =C2=A0&gt; +start=
+)<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0start<br>&gt; =C2=A0&gt; + =C2=A0 =C2=
+=A0;;<br>&gt; =C2=A0&gt; +stop)<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0stop<br>&=
+gt; =C2=A0&gt; + =C2=A0 =C2=A0;;<br>&gt; =C2=A0&gt; +restart | reload)<br>&=
+gt; =C2=A0&gt; + =C2=A0 =C2=A0restart<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0;;<=
+br>&gt; =C2=A0&gt; +*)<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0echo &quot;Usage: =
+$0 {start|stop|restart}&quot;<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0exit 1<br>&=
+gt; =C2=A0&gt; + =C2=A0 =C2=A0;;<br>&gt; =C2=A0&gt; +esac<br>&gt; =C2=A0&gt=
+; +<br>&gt; =C2=A0&gt; +exit $?<br>&gt; =C2=A0&gt; diff --git a/package/flu=
+ent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash<br>&gt; =C2=A0=
+&gt; new file mode 100644<br>&gt; =C2=A0&gt; index 0000000000..ce7cea7b59<b=
+r>&gt; =C2=A0&gt; --- /dev/null<br>&gt; =C2=A0&gt; +++ b/package/fluent-bit=
+/fluent-bit.hash<br>&gt; =C2=A0&gt; @@ -0,0 +1,3 @@<br>&gt; =C2=A0&gt; +# L=
+ocally computed<br>&gt; =C2=A0&gt; +sha256 =C2=A08ff5566389033669feabc9c69a=
+5c6f417dad5c8b066454388e6a706507262acf =C2=A0fluent-bit-2.0.8.tar.gz<br>&gt=
+; =C2=A0&gt; +sha256 =C2=A00d542e0c8804e39aa7f37eb00da5a762149dc682d7829451=
+287e11b938e94594 =C2=A0LICENSE<br>&gt; =C2=A0&gt; diff --git a/package/flue=
+nt-bit/<a href=3D"http://fluent-bit.mk">fluent-bit.mk</a> b/package/fluent-=
+bit/<a href=3D"http://fluent-bit.mk">fluent-bit.mk</a><br>&gt; =C2=A0&gt; n=
+ew file mode 100644<br>&gt; =C2=A0&gt; index 0000000000..c213ca2239<br>&gt;=
+ =C2=A0&gt; --- /dev/null<br>&gt; =C2=A0&gt; +++ b/package/fluent-bit/<a hr=
+ef=3D"http://fluent-bit.mk">fluent-bit.mk</a><br>&gt; =C2=A0&gt; @@ -0,0 +1=
+,43 @@<br>&gt; =C2=A0&gt; +################################################=
+################################<br>&gt; =C2=A0&gt; +#<br>&gt; =C2=A0&gt; +=
+# fluent-bit<br>&gt; =C2=A0&gt; +#<br>&gt; =C2=A0&gt; +####################=
+############################################################<br>&gt; =C2=A0=
+&gt; +<br>&gt; =C2=A0&gt; +FLUENT_BIT_VERSION =3D 2.0.8<br>&gt; =C2=A0&gt; =
++FLUENT_BIT_SITE =3D $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION)=
+)<br>&gt; =C2=A0&gt; +FLUENT_BIT_LICENSE =3D Apache-2.0<br>&gt; =C2=A0&gt; =
++FLUENT_BIT_LICENSE_FILES =3D LICENSE<br>&gt; =C2=A0&gt; +FLUENT_BIT_DEPEND=
+ENCIES =3D host-bison host-flex libyaml libopenssl<br>&gt; =C2=A0&gt; +<br>=
+&gt; =C2=A0&gt; +FLUENT_BIT_CONF_OPTS +=3D \<br>&gt; =C2=A0&gt; + =C2=A0 =
+=C2=A0-DFLB_DEBUG=3DNo \<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0-DFLB_RELEASE=3D=
+Yes \<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0-DFLB_EXAMPLES=3DNo \<br>&gt; =C2=
+=A0&gt; + =C2=A0 =C2=A0-DFLB_CHUNK_TRACE=3DNo \<br>&gt; =C2=A0&gt; + =C2=A0=
+ =C2=A0-DFLB_BACKTRACE=3DNo \<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0-DFLB_LUAJI=
+T=3DNo<br>&gt; =C2=A0&gt; +<br>&gt; =C2=A0&gt; +# Undefining _FILE_OFFSET_B=
+ITS here because of a &quot;bug&quot; with glibc fts.h<br>&gt; =C2=A0&gt; +=
+# large file support.<br>&gt; =C2=A0&gt; +# See <a href=3D"https://bugzilla=
+.redhat.com/show_bug.cgi?id=3D574992">https://bugzilla.redhat.com/show_bug.=
+cgi?id=3D574992</a> for more information.<br>&gt; =C2=A0&gt; +FLUENT_BIT_CO=
+NF_OPTS +=3D \<br>&gt; =C2=A0&gt; + =C2=A0 =C2=A0-DCMAKE_C_FLAGS=3D&quot;$(=
+TARGET_CFLAGS) -U_FILE_OFFSET_BITS&quot; \<br>&gt; =C2=A0&gt; + =C2=A0 =C2=
+=A0-DCMAKE_CXX_FLAGS=3D&quot;$(TARGET_CXXFLAGS) -U_FILE_OFFSET_BITS&quot;<b=
+r>&gt; =C2=A0&gt; +<br>&gt; =C2=A0&gt; +# Move the config files from /usr/e=
+tc/ to /etc/.<br>&gt; =C2=A0&gt; +FLUENT_BIT_CONF_OPTS +=3D \<br>&gt; =C2=
+=A0&gt; + =C2=A0 =C2=A0-DCMAKE_INSTALL_SYSCONFDIR=3D&quot;/etc/&quot;<br>&g=
+t;<br>&gt; Hmm, why is this needed? This should already default to &quot;et=
+c&quot;?<br>&gt; <a href=3D"https://cmake.org/cmake/help/latest/command/ins=
+tall.html#installing-files">https://cmake.org/cmake/help/latest/command/ins=
+tall.html#installing-files</a><br>&gt;<br>&gt; I see that there are some bu=
+g reports related to this, E.G.:<br>&gt; <a href=3D"https://github.com/flue=
+nt/fluent-bit/issues/6619">https://github.com/fluent/fluent-bit/issues/6619=
+</a><br><br>I guess that this option comes from CMake, based on other optio=
+ns:<br><a href=3D"https://cmake.org/cmake/help/latest/module/GNUInstallDirs=
+.html#special-cases">https://cmake.org/cmake/help/latest/module/GNUInstallD=
+irs.html#special-cases</a><br><br>But I see that fluent-bit had to do the s=
+ame for their docker file.<br><a href=3D"https://github.com/fluent/fluent-b=
+it/issues/6711#issuecomment-1400192636">https://github.com/fluent/fluent-bi=
+t/issues/6711#issuecomment-1400192636</a><br><br>&gt; &gt; +<br>&gt; =C2=A0=
+&gt; +define FLUENT_BIT_INSTALL_INIT_SYSV<br>&gt; =C2=A0&gt; + =C2=A0 =C2=
+=A0$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \<br>&gt; =C2=A0&=
+gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_DIR)/etc/init.d/S99=
+fluent-bit<br>&gt; =C2=A0&gt; +endef<br>&gt; =C2=A0&gt; +<br>&gt; =C2=A0&gt=
+; +define FLUENT_BIT_POST_INSTALL_TARGET_HOOK<br>&gt; =C2=A0&gt; + =C2=A0 =
+=C2=A0cp -dpf $(@D)/lib/libminiz*.so* $(TARGET_DIR)/usr/lib/<br>&gt; =C2=A0=
+&gt; +endef<br>&gt;<br>&gt; Why is this needed? Is it possible to link agai=
+nst an external miniz? If<br>&gt; not, perhaps we should build with BUILD_S=
+HARED_LIBS=3Doff to ensure no<br>&gt; conflicts in case we ever get a miniz=
+ package?<br><br>Reported an issue related to the same problem:<br><a href=
+=3D"https://github.com/fluent/fluent-bit/issues/6711">https://github.com/fl=
+uent/fluent-bit/issues/6711</a><br><br>I&#39;m still trying to find how to =
+make sure that this library is<br>statically linked.<br>Enabling the miniz =
+package in buildroot might not be a good idea<br>related to versioning.<br>=
+<br>&gt; --<br>&gt; Bye, Peter Korsgaard<br>&gt;<div><br></div><div>Kr,</di=
+v><div>Thomas</div></div>
+
+--00000000000014936c05f2ee6e9f--
+
+--===============6532743012751142023==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6532743012751142023==--
