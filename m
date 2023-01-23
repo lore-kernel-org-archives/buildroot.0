@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F522C38142
-	for <buildroot@archiver.kernel.org>; Mon, 23 Jan 2023 13:53:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92ADCC54E94
+	for <buildroot@archiver.kernel.org>; Mon, 23 Jan 2023 15:15:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 915D681F60;
-	Mon, 23 Jan 2023 13:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 915D681F60
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05F4A40A8B;
+	Mon, 23 Jan 2023 15:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05F4A40A8B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WDUSZMRditA8; Mon, 23 Jan 2023 13:53:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K2VUeoKcDGJY; Mon, 23 Jan 2023 15:15:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B233581F54;
-	Mon, 23 Jan 2023 13:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B233581F54
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 707731BF359
- for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 13:53:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA26440AAD;
+	Mon, 23 Jan 2023 15:15:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA26440AAD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CB23F1BF3D5
+ for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 15:15:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BEFE60D60
- for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 13:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BEFE60D60
+ by smtp4.osuosl.org (Postfix) with ESMTP id A293841737
+ for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 15:15:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A293841737
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GF5xd0PyYNii for <buildroot@lists.busybox.net>;
- Mon, 23 Jan 2023 13:52:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4n5M4PKr7AOM for <buildroot@lists.busybox.net>;
+ Mon, 23 Jan 2023 15:15:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE73A60C18
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AE73A60C18
- for <buildroot@buildroot.org>; Mon, 23 Jan 2023 13:52:58 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- f25-20020a1c6a19000000b003da221fbf48so8606253wmc.1
- for <buildroot@buildroot.org>; Mon, 23 Jan 2023 05:52:58 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C9A141774
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0C9A141774
+ for <buildroot@buildroot.org>; Mon, 23 Jan 2023 15:15:03 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id d2so11112541wrp.8
+ for <buildroot@buildroot.org>; Mon, 23 Jan 2023 07:15:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ZyqCxW2GajQd8FoWt3r0fRRJdijwz6oEghSyxkRBTS8=;
- b=rGueaR8juszqG91y4qn+uKEjWSz24i5Shn/aYLmuiYz7tsZpAQyn2mlPQ1zD6Rsji8
- /hsh2mb5yzF26hie7nbjmpJBcGcXw4kt0kTYyShmmJ/i0pcsBYLgmhugaqCyhUV+Duh5
- 2p+RT/rQYsthckpcqnaXaKGpUH3wQN6gw0pnMvz5QwTbf742f7pdJR59LdwJ6ptMezNV
- 7bqtOIctghcDrNxAqOqUafJOf5lxslblihWHFOIRsiWs29fF8yamCODg7JdGsoRpKu76
- EOS/lSh50HsbodVU5tZmoAXamv1kgvzpun0Ta6n2WdCXAMeriz+4QycRsWuRuKqIqvdL
- LmIQ==
-X-Gm-Message-State: AFqh2krRU2s+iI8cj+miRMwhwmT0zGOl27tAeEL48eRnDR7Rk7SqSbv/
- AX69ZIR5Dt0PbmBeaDT0RGFlOaqNZrvYuKPA
-X-Google-Smtp-Source: AMrXdXsLNd6zNnfzqzQMfRLU1kqItNbIk5WuKeAA1k12pbO49vh+Y30AuiYVKGbCrrryOh8Hua5wXA==
-X-Received: by 2002:a05:600c:331d:b0:3d3:591a:bfda with SMTP id
- q29-20020a05600c331d00b003d3591abfdamr31906784wmp.27.1674481976442; 
- Mon, 23 Jan 2023 05:52:56 -0800 (PST)
+ bh=7QwXZCX7ETgXm1SUSIAunQVgVevGuUASqrMzUQJ7PsM=;
+ b=UvTRqr0skecnmJsROJPJENrGz0lNNEL9soxomtWsum8DrXU2gCdbUNj1v1GdE0UShn
+ HVC4qXiC8WTZmH1AsdVUj99pwq03UsQqDxfhJWwbz5HEN9a94aGBak3JwHQB1mLNYL7m
+ nevUBIbhrPAR+P1JlRLCEnttPVEWkbggG96cLyxpo9oJ+52YpApKYRpjFiu83+uHRxgY
+ sC7lYffIkm9W0CWeg+bSQtuEogVdCqJ/pNffpIQs756iHNeIH9nhmq9dwy8KOM3UozOU
+ SC6moPKxSDd7gkxPJPRlK4uQ2Dd2CWvqgfJ7REKyuAyxlj6i1B768N22miBkoPDoQei9
+ ljPw==
+X-Gm-Message-State: AFqh2krWKSY9dHKnuzrh2nkdAjkMAkUsRvH+5VAtz990DI100YaS9eHO
+ aFRagGv+1tmxMI6+KecN3nw0LTWywVw3bQjh
+X-Google-Smtp-Source: AMrXdXsQYQg8iPDNfB6Q4SlfU29q38h/98J5OZNNii0LK4jF/6G9xpjdsRm/1DYQezL/PRCwO+cIVA==
+X-Received: by 2002:a05:6000:120f:b0:2bd:befd:2061 with SMTP id
+ e15-20020a056000120f00b002bdbefd2061mr22071869wrx.21.1674486901748; 
+ Mon, 23 Jan 2023 07:15:01 -0800 (PST)
 Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
  [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- hg8-20020a05600c538800b003d974076f13sm10576346wmb.3.2023.01.23.05.52.55
+ bu9-20020a056000078900b002be1dcb6efbsm18828293wrb.9.2023.01.23.07.15.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Jan 2023 05:52:56 -0800 (PST)
+ Mon, 23 Jan 2023 07:15:01 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 Jan 2023 14:52:53 +0100
-Message-Id: <20230123135253.1733981-1-thomas.devoogdt@barco.com>
+Date: Mon, 23 Jan 2023 16:14:59 +0100
+Message-Id: <20230123151459.1899697-1-thomas.devoogdt@barco.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=ZyqCxW2GajQd8FoWt3r0fRRJdijwz6oEghSyxkRBTS8=;
- b=dPLnrQV1yATVTqtpCZYWE+8z46lzMrGp8onzAr8RUZI6LGofx8CgE3aM+uV3yVtHEP
- fb7YNcVU3FsTrMZOINf7tpjBQCVc375u0G69Hcyf80pFtcNxGQuUk14OQOwQ9nQZdqJz
- MlP2o13gKzQ3WjJKAIEfAs8x/cfsEofpYyGh0dEHQ705yHv1S1ZQzx18ID01LqQTq2cr
- V12nOHlgvtDoewF6o5iVzI99Mdg7akY8IcgusPXh1JkRDV1nv/60MrolwzPkQCPeC60r
- aY/9qkl/DC0q0wQI6shKoMBa3TqfBegnkvXDDQfdsTpPNselYBpC9Kctk2uRo1boJV0w
- XrGw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=7QwXZCX7ETgXm1SUSIAunQVgVevGuUASqrMzUQJ7PsM=;
+ b=ApZdA1Po7A0u3SxOAhGT7saKEKx0xyqweLyi44bgwONeDqA8JR/KbQEKn3wdh73PLF
+ jloR6tXazpMQU9wk7LauE5R6YNEs6pJ6mMLcOaOx15Zv+iYeAQy4U0xSHQGmALDV4dXb
+ eVTIRCn8YcXmgCYVaoWAUDeVFxJqSSaE1ptuX4zEISYwSYZvktS+2PLSFgMK/3o68zWq
+ +ntDzgML0mhp1RG1H3dnkLZuVthY8UYjrAQKa6TfJVtj6EQo1xGetPEbJTyTq2t+m3kR
+ dvPvQ3EFwruPQ9im7SYzfArgLLEXOgsgD2cpjRvTSe1IUNX+nw/RDEj3ltDN6TrHQ7p/
+ Ja2g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=dPLnrQV1
-Subject: [Buildroot] [PATCH v2] package/fluent-bit: add new package
+ header.a=rsa-sha256 header.s=20210112 header.b=ApZdA1Po
+Subject: [Buildroot] [PATCH v3] package/fluent-bit: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,12 +107,14 @@ scalable logging and metrics processor and forwarder.
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
- package/Config.in                  |  1 +
- package/fluent-bit/Config.in       | 13 +++++++
- package/fluent-bit/S99fluent-bit   | 55 ++++++++++++++++++++++++++++++
- package/fluent-bit/fluent-bit.hash |  3 ++
- package/fluent-bit/fluent-bit.mk   | 43 +++++++++++++++++++++++
- 5 files changed, 115 insertions(+)
+ package/Config.in                             |  1 +
+ ...ts.txt-Miniz-compile-as-a-static-lib.patch | 36 ++++++++++++
+ package/fluent-bit/Config.in                  | 13 +++++
+ package/fluent-bit/S99fluent-bit              | 55 +++++++++++++++++++
+ package/fluent-bit/fluent-bit.hash            |  3 +
+ package/fluent-bit/fluent-bit.mk              | 43 +++++++++++++++
+ 6 files changed, 151 insertions(+)
+ create mode 100644 package/fluent-bit/0001-CMakeLists.txt-Miniz-compile-as-a-static-lib.patch
  create mode 100644 package/fluent-bit/Config.in
  create mode 100644 package/fluent-bit/S99fluent-bit
  create mode 100644 package/fluent-bit/fluent-bit.hash
@@ -131,6 +132,48 @@ index 995dae2c57..b281a67157 100644
  	source "package/ftop/Config.in"
  	source "package/getent/Config.in"
  	source "package/gkrellm/Config.in"
+diff --git a/package/fluent-bit/0001-CMakeLists.txt-Miniz-compile-as-a-static-lib.patch b/package/fluent-bit/0001-CMakeLists.txt-Miniz-compile-as-a-static-lib.patch
+new file mode 100644
+index 0000000000..8594c2a6e6
+--- /dev/null
++++ b/package/fluent-bit/0001-CMakeLists.txt-Miniz-compile-as-a-static-lib.patch
+@@ -0,0 +1,36 @@
++From b82a0d5f4f1d4c8cf6c5da542be999b30456e27c Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas.devoogdt@barco.com>
++Date: Mon, 23 Jan 2023 09:57:17 +0100
++Subject: [PATCH] CMakeLists.txt: Miniz: compile as a static lib
++
++https://github.com/fluent/fluent-bit/issues/6711
++
++Buildroot enforces globally wide that all packages are
++dynamically linked (if BR2_SHARED_LIBS), so that means
++that these options slept through the subdirectories.
++The libminiz.so is not installed by cmake, causing the
++fluent-bit to crash. This patch forces libminiz to be
++compiled statically.
++
++upstream: https://github.com/fluent/fluent-bit/pull/6723
++
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index a7adb02de..ac1b9cd75 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -510,6 +510,7 @@ add_definitions(-DMPACK_EXTENSIONS=1)
++ add_subdirectory(${FLB_PATH_LIB_MPACK} EXCLUDE_FROM_ALL)
++ 
++ # Miniz (zip)
+++FLB_OPTION(BUILD_SHARED_LIBS OFF)
++ add_subdirectory(${FLB_PATH_LIB_MINIZ} EXCLUDE_FROM_ALL)
++ 
++ # ring buffer library
++-- 
++2.39.0
++
 diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
 new file mode 100644
 index 0000000000..c8f9d4e489
@@ -222,7 +265,7 @@ index 0000000000..ce7cea7b59
 +sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
 diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
 new file mode 100644
-index 0000000000..c213ca2239
+index 0000000000..9f59316b5b
 --- /dev/null
 +++ b/package/fluent-bit/fluent-bit.mk
 @@ -0,0 +1,43 @@
@@ -243,8 +286,14 @@ index 0000000000..c213ca2239
 +	-DFLB_RELEASE=Yes \
 +	-DFLB_EXAMPLES=No \
 +	-DFLB_CHUNK_TRACE=No \
-+	-DFLB_BACKTRACE=No \
-+	-DFLB_LUAJIT=No
++	-DFLB_BACKTRACE=No
++
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=Yes
++FLUENT_BIT_DEPENDENCIES += luajit
++else
++FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=No
++endif
 +
 +# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
 +# large file support.
@@ -261,12 +310,6 @@ index 0000000000..c213ca2239
 +	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
 +		$(TARGET_DIR)/etc/init.d/S99fluent-bit
 +endef
-+
-+define FLUENT_BIT_POST_INSTALL_TARGET_HOOK
-+	cp -dpf $(@D)/lib/libminiz*.so* $(TARGET_DIR)/usr/lib/
-+endef
-+
-+FLUENT_BIT_POST_INSTALL_TARGET_HOOKS += FLUENT_BIT_POST_INSTALL_TARGET_HOOK
 +
 +$(eval $(cmake-package))
 -- 
