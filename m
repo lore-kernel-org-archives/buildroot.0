@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB4CC38142
-	for <buildroot@archiver.kernel.org>; Tue, 24 Jan 2023 09:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94BD2C38142
+	for <buildroot@archiver.kernel.org>; Tue, 24 Jan 2023 09:23:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2517740BD9;
-	Tue, 24 Jan 2023 09:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2517740BD9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 314A74150F;
+	Tue, 24 Jan 2023 09:23:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 314A74150F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9IGc478DrvI6; Tue, 24 Jan 2023 09:23:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5Qp3JrdFx_bO; Tue, 24 Jan 2023 09:23:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50AF340BE6;
-	Tue, 24 Jan 2023 09:23:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50AF340BE6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D13D1BF2B0
- for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 09:22:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D79DD4182D;
+	Tue, 24 Jan 2023 09:23:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D79DD4182D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F43D1BF2B0
+ for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 09:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04B7640289
- for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 09:22:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04B7640289
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03DAC41719
+ for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 09:22:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03DAC41719
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HCs-67HMWY-q for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id raZqnks8MFCY for <buildroot@lists.busybox.net>;
  Tue, 24 Jan 2023 09:22:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0532D401D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B81CD41622
 Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
  [IPv6:2607:f8b0:4864:20::136])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0532D401D2
- for <buildroot@buildroot.org>; Tue, 24 Jan 2023 09:22:46 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id i1so7175385ilu.8
- for <buildroot@buildroot.org>; Tue, 24 Jan 2023 01:22:46 -0800 (PST)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B81CD41622
+ for <buildroot@buildroot.org>; Tue, 24 Jan 2023 09:22:47 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id g16so1309579ilr.1
+ for <buildroot@buildroot.org>; Tue, 24 Jan 2023 01:22:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=r3u/8RbCXRmpx/Qmh2fzWXIPZParsUCqtk6wX+kbSgM=;
- b=jkZEb0uhgoUe+9LenPXvreXcg8Zb6MbzDIpztscHwon+TS/7OPDHf53NLEShzVLF0O
- vaCK26WOHAJZYMU9T3DEZQd2OCg6i0DEx9s9HAZyxdvxK2XeTM8rEUFY/lhDU4P64Pk/
- Wpi6c0qh8H97ilfcj8EL977VI/6xBuX2rU5X/H7d5JnJQ8Nhuqk3x0xmFrk837qrXohY
- aoQ3tJJvIx19E3g7UV9h6Wswe/dNTOAADFexk2ESisP4DJN68Pbjgt1o/JfQlbTdgZSa
- l8FSF7OveqU7fHVmR8UUgigmiajfP2q9VExljWz6CZYLqYbGfwWRcUfQy7Dn1Wf4nx7E
- e8FA==
-X-Gm-Message-State: AFqh2kqqTlwj5SARguvsA17eKOwLSLm+4Pj8+IAiyMka/Mv66S/PELxP
- qSKWTnouIZel5iJDRn1iAqn6w9KTChXRsQ==
-X-Google-Smtp-Source: AMrXdXuEfG2oyZtMRrz4YCXNZr9j6wMaL2487vD7iLAsUAueNcElL4GfSgB1xcQSz3lgZS0SaOkUrw==
-X-Received: by 2002:a05:6e02:214b:b0:30d:bfa3:ebce with SMTP id
- d11-20020a056e02214b00b0030dbfa3ebcemr25251145ilv.27.1674552165945; 
- Tue, 24 Jan 2023 01:22:45 -0800 (PST)
+ bh=lkj+Wg7JYz5qQJ692+OXUyVjNxR5na6ncsrvT7rc3Ek=;
+ b=0pGFFeyxIg2GEmLNvAIqapFxVvZx4cBQhiYxkLltchOBPLvBGJIj9l0gFDHojKH2cd
+ HTsvaWWH4D80cRJ5PcjtveU0GcNekyxaafaNJj0LYwfXDCPvlnYagKLh+3RqneQD+rHa
+ wPuSf6Je9Agkbj0tk3Hw/4BjWiW0Qoh75Lx8UO1j7nOv3F7sk1bCQO7CNDM0wgcWbiqP
+ e3Ot7M21tOwYmmezDC3L11Uj91vRKgXNrjMid1UtNGVGBQJwRULHds2i/nXWqjZ0G5ky
+ T6J4IbpIIRcpEhJ0N1i7BCkF1HUUs7enDHtfC7xxotM/XN3HwWPjejntmOBIJZS/zJQS
+ Paqg==
+X-Gm-Message-State: AFqh2kqAaTEdKauCEA4XT+NEyfz6sR9ctFFXbJFTfujf5MZSHGIZXsNJ
+ R210DGIyLsjLJm3+0s9C7EWXSCfZ0K0dOA==
+X-Google-Smtp-Source: AMrXdXvMfCDrhXWFiMI3rYpifPUAGlYpZs1usw/cqLpL5JaWuaFDn8XUvPbUeXuVEZl9kL+KdV/qAA==
+X-Received: by 2002:a92:cd85:0:b0:30f:55ee:2265 with SMTP id
+ r5-20020a92cd85000000b0030f55ee2265mr12508059ilb.28.1674552166570; 
+ Tue, 24 Jan 2023 01:22:46 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- v26-20020a02b91a000000b003a7d5061e1bsm524923jan.111.2023.01.24.01.22.44
+ v26-20020a02b91a000000b003a7d5061e1bsm524923jan.111.2023.01.24.01.22.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 24 Jan 2023 01:22:45 -0800 (PST)
+ Tue, 24 Jan 2023 01:22:46 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 24 Jan 2023 02:22:32 -0700
-Message-Id: <20230124092235.806969-5-james.hilliard1@gmail.com>
+Date: Tue, 24 Jan 2023 02:22:33 -0700
+Message-Id: <20230124092235.806969-6-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230124092235.806969-1-james.hilliard1@gmail.com>
 References: <20230124092235.806969-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=r3u/8RbCXRmpx/Qmh2fzWXIPZParsUCqtk6wX+kbSgM=;
- b=iqgL8DgXTMClMcQ3+4J9nMt6FOrGRjOaw0y6QjSvjfpeG5n8FjWpzFR92+y77j/JKn
- hP8h7Orn0WCuE5v5LK1LiB3vOL19JlPCLODV3RCtiLjbJ0jZLh9DqVFSFzSfy+kKtvIG
- jUxtfSGqTQuoaHT7DzHyjlyKU4oAu78alaOfbat92Eht6gkTs3yb5WbMjAnNExN+TbuZ
- fvB7Bmc/lTc6Ds/k8WzhcsOxVg10q8PQd9kJKHeu/kyAC8FfaiL+UZPr+xUstYl2zKf8
- 3GUHIkjeVbNt0n089eAJW0HDXXiOsCgZ60Zk446gzVb3kXd0WAlMc5aGRm9KDISQ/xdF
- EdvA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=lkj+Wg7JYz5qQJ692+OXUyVjNxR5na6ncsrvT7rc3Ek=;
+ b=INrtIQzstV/PMfE2XRRelFPUJqQCq2VW7HLLGXoTRf4j/ob3eeAbUHJAyN8Ye0VyVe
+ t7w9JWsbPz6Nr0JPHAv6V3YdTDHNWgQ2OdQmE3H+H5UrxyRUjZPfl9IQ5UgXQBlXuxbH
+ PHSsWdgWqQvLIOLaCL3ixGjEOOuxFid1qk6V0T5YE3nHcfGWNzQvi7FSj3zQWk8yCpmD
+ 7AEijaqn2n1u+NhCYf4TosXasZgozYl17k7A11VWBCBC2DRELj6vPWX8HfbomA2DZbR+
+ yikR/iC+UG6qB5r3Qkgr1ZyiYJXM9I6qn+Rd//z76cWxe4kGscaajJFI8rvUEw5/pzoF
+ HoAA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=iqgL8DgX
-Subject: [Buildroot] [PATCH v3 5/8] package/neon-2-sse: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=INrtIQzs
+Subject: [Buildroot] [PATCH v3 6/8] package/fft2d: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,90 +106,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+From: Stefan Hager <stefan.hager@ginzinger.com>
+
 This package is required by tensorflow-lite.
 
+This package doesn't provide a conventional install mechanism so
+we need to install it manually.
+
 Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/neon-2-sse/Config.in       |  9 +++++++++
- package/neon-2-sse/neon-2-sse.hash |  4 ++++
- package/neon-2-sse/neon-2-sse.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/neon-2-sse/Config.in
- create mode 100644 package/neon-2-sse/neon-2-sse.hash
- create mode 100644 package/neon-2-sse/neon-2-sse.mk
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/fft2d/Config.in  |  7 +++++++
+ package/fft2d/fft2d.hash |  4 ++++
+ package/fft2d/fft2d.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/fft2d/Config.in
+ create mode 100644 package/fft2d/fft2d.hash
+ create mode 100644 package/fft2d/fft2d.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index f48ea66660..a711f9f1ee 100644
+index a711f9f1ee..a2411bc749 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2704,6 +2704,7 @@ F:	package/ti-gfx/
+@@ -2703,6 +2703,7 @@ F:	package/ti-gfx/
+ 
  N:	Stefan Hager <stefan.hager@ginzinger.com>
  F:	package/cpuinfo/
++F:	package/fft2d/
  F:	package/gemmlowp/
-+F:	package/neon-2-sse/
+ F:	package/neon-2-sse/
  F:	package/ruy/
- 
- N:	Stefan Ott <stefan@ott.net>
 diff --git a/package/Config.in b/package/Config.in
-index 8f78080963..6377ddd2e5 100644
+index 6377ddd2e5..dd16df061c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2101,6 +2101,7 @@ endif
- 	source "package/msgpack/Config.in"
- 	source "package/musl-compat-headers/Config.in"
- 	source "package/musl-fts/Config.in"
-+	source "package/neon-2-sse/Config.in"
- 	source "package/openblas/Config.in"
- 	source "package/orc/Config.in"
- 	source "package/p11-kit/Config.in"
-diff --git a/package/neon-2-sse/Config.in b/package/neon-2-sse/Config.in
+@@ -2003,6 +2003,7 @@ menu "Other"
+ 	source "package/elfutils/Config.in"
+ 	source "package/ell/Config.in"
+ 	source "package/falcosecurity-libs/Config.in"
++	source "package/fft2d/Config.in"
+ 	source "package/fftw/Config.in"
+ 	source "package/flann/Config.in"
+ 	source "package/flatbuffers/Config.in"
+diff --git a/package/fft2d/Config.in b/package/fft2d/Config.in
 new file mode 100644
-index 0000000000..25613c5ec4
+index 0000000000..38394f6170
 --- /dev/null
-+++ b/package/neon-2-sse/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_NEON_2_SSE
-+	bool "neon-2-sse"
++++ b/package/fft2d/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_FFT2D
++	bool "fft2d"
 +	help
-+	  The platform independent header allowing to compile any
-+	  C/C++ code containing ARM NEON intrinsic functions for
-+	  x86 target systems using SIMD up to SSE4 intrinsic
-+	  functions.
++	  This is a package to calculate Discrete Fourier/Cosine/Sine
++	  Transforms of 2,3-dimensional sequences of length 2^N.
 +
-+	  https://github.com/intel/ARM_NEON_2_x86_SSE
-diff --git a/package/neon-2-sse/neon-2-sse.hash b/package/neon-2-sse/neon-2-sse.hash
++	  http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html
+diff --git a/package/fft2d/fft2d.hash b/package/fft2d/fft2d.hash
 new file mode 100644
-index 0000000000..ded20d58f5
+index 0000000000..a1b1a326ae
 --- /dev/null
-+++ b/package/neon-2-sse/neon-2-sse.hash
++++ b/package/fft2d/fft2d.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  019fbc7ec25860070a1d90e12686fc160cfb33e22aa063c80f52b363f1361e9d  neon-2-sse-a15b489e1222b2087007546b4912e21293ea86ff.tar.gz
++sha256  ada7e99087c4ed477bfdf11413f2ba8db8a840ba9bbf8ac94f4f3972e2a7cec9  fft2d.tgz
 +# License files, locally calculated
-+sha256  7022f51b439a5915e933ecc270c83e24ca0cb2cceeb08b0132dcd4dbb03ed2dc  LICENSE
-diff --git a/package/neon-2-sse/neon-2-sse.mk b/package/neon-2-sse/neon-2-sse.mk
++sha256  0b2a2082537735a2a576dbec2e8f9c1a09812eac6df6a389502a6ba860072906  readme2d.txt
+diff --git a/package/fft2d/fft2d.mk b/package/fft2d/fft2d.mk
 new file mode 100644
-index 0000000000..0e9d066abd
+index 0000000000..6263b1af38
 --- /dev/null
-+++ b/package/neon-2-sse/neon-2-sse.mk
-@@ -0,0 +1,14 @@
++++ b/package/fft2d/fft2d.mk
+@@ -0,0 +1,22 @@
 +################################################################################
 +#
-+# neon-2-sse
++# fft2d
 +#
 +################################################################################
 +
-+NEON_2_SSE_VERSION = a15b489e1222b2087007546b4912e21293ea86ff
-+NEON_2_SSE_SITE = $(call github,intel,ARM_NEON_2_x86_SSE,$(NEON_2_SSE_VERSION))
-+NEON_2_SSE_LICENSE = BSD-2-Clause
-+NEON_2_SSE_LICENSE_FILES = LICENSE
-+NEON_2_SSE_INSTALL_STAGING = YES
-+NEON_2_SSE_INSTALL_TARGET = NO
++FFT2D_VERSION = 2006.12.28
++FFT2D_SITE = https://www.kurims.kyoto-u.ac.jp/~ooura
++FFT2D_SOURCE = fft2d.tgz
++FFT2D_LICENSE = readme2d.txt
++FFT2D_LICENSE_FILES = readme2d.txt
++FFT2D_INSTALL_STAGING = YES
++FFT2D_INSTALL_TARGET = NO
 +
-+$(eval $(cmake-package))
++define FFT2D_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/fft2d
++	$(INSTALL) -m 0644 $(@D)/*.c $(STAGING_DIR)/usr/include/fft2d
++	$(INSTALL) -m 0644 $(@D)/*.f $(STAGING_DIR)/usr/include/fft2d
++	$(INSTALL) -m 0644 $(@D)/*.h $(STAGING_DIR)/usr/include/fft2d
++endef
++
++$(eval $(generic-package))
 -- 
 2.34.1
 
