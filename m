@@ -4,62 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C10FAC25B50
-	for <buildroot@archiver.kernel.org>; Mon, 23 Jan 2023 23:12:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57EB9C25B4E
+	for <buildroot@archiver.kernel.org>; Tue, 24 Jan 2023 05:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28C9B60FE1;
-	Mon, 23 Jan 2023 23:12:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28C9B60FE1
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1EF560E81;
+	Tue, 24 Jan 2023 05:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1EF560E81
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xxw7BOqu_qB9; Mon, 23 Jan 2023 23:12:48 +0000 (UTC)
+	with ESMTP id dnWv8LYylMyD; Tue, 24 Jan 2023 05:47:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3120860F36;
-	Mon, 23 Jan 2023 23:12:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3120860F36
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F087D1BF332
- for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 23:12:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A82BF60D63;
+	Tue, 24 Jan 2023 05:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A82BF60D63
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 52B761BF2AA
+ for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 05:47:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C936560F36
- for <buildroot@lists.busybox.net>; Mon, 23 Jan 2023 23:12:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C936560F36
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B90181FF4
+ for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 05:47:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B90181FF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EYyEI9mbgS5m for <buildroot@lists.busybox.net>;
- Mon, 23 Jan 2023 23:12:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yyqsVpKNa5Iq for <buildroot@lists.busybox.net>;
+ Tue, 24 Jan 2023 05:47:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A11BA60E85
-Received: from box.stevenhay.com (box.stevenhay.com
- [IPv6:2a01:7e01:e001:325::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A11BA60E85
- for <buildroot@buildroot.org>; Mon, 23 Jan 2023 23:12:44 +0000 (UTC)
-Received: from authenticated-user (box.stevenhay.com [172.104.133.13])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (No client certificate requested)
- by box.stevenhay.com (Postfix) with ESMTPSA id 2A82B22CC9;
- Mon, 23 Jan 2023 18:12:42 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5967C81FF0
+Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5967C81FF0
+ for <buildroot@buildroot.org>; Tue, 24 Jan 2023 05:47:55 +0000 (UTC)
+Received: by smtpng3.m.smailru.net with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1pKC9w-0001Cm-6K; Tue, 24 Jan 2023 08:47:52 +0300
 To: buildroot@buildroot.org
-Date: Tue, 24 Jan 2023 00:12:23 +0100
-Message-Id: <20230123231224.3772679-2-me@stevenhay.com>
+Date: Tue, 24 Jan 2023 08:47:46 +0300
+Message-Id: <20230124054748.13980-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=stevenhay.com; s=mail; t=1674515562;
- bh=Ht9xUivY0lfpOqq9oHiAfshOFoaFfrB3kIIXn3GG6qI=;
- h=From:To:Cc:Subject:Date:From;
- b=A0zJ6mCbuCmXdwpid7zCHbp9qXWAm4QvrKcqBeRFTwi+92I9Bg8WD65EGI9my9jJN
- vcvEQNY78ByfoIWJ8jc//t6DaQDxBPunKvUv17XfmhVdOVd/iApc3spQ0ftIj7FeJM
- nhe7W9QziL/fcUtNJG0TacfZNqOXsxtRNi20rS1ea9I/BdWCbUBP7ZdUEQC0vEOoEz
- /T/P74cLwpws2anVeL2iglO7CmHKp7YZTyDxXwDjt0oW7ByC1P/th7/y8zovpfRjEA
- 14AdOWJyC6cmxY0uz9Vi31E3WWmEHVGVuEIXrgtbetUecJNNyVKy6eg7qn3S7+tBCv
- sXY2qc5PQPKQA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=stevenhay.com header.i=@stevenhay.com
- header.a=rsa-sha256 header.s=mail header.b=A0zJ6mCb
-Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-depends allow for
- forward and reverse depends on same graph
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9A6D6F5724DD3A0B60E915A56FB921C507276FF3A4351DE38182A05F538085040682D4115A3FE1DEE724961AC4BD9FAB1BF7736B0E192CD392B4D93B172B817BF
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE782A779A89F7D69B2C2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE720512D700D076E85EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B6F1F7B995052D5CEAE36C4DD8C2A02B16D2978D10488E82F20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0A3E989B1926288338941B15DA834481FA18204E546F3947C0CABCCA60F52D7EBF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F7900637A3E1607A70BC73F0389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E7350555CCFDA08FA3FAC4224003CC83647689D4C264860C145E
+X-C1DE0DAB: 0D63561A33F958A53D3E1F0A5596A21A7EB448325F2526019B29C26F27ACB50E4EAF44D9B582CE87C8A4C02DF684249C2E763F503762DF50F2237FE565727C05
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D347215713CF3EEE9D101D59571F5B67F364F2EB4639907BC1F404FF28427CEE808D3D51F3D5946E09D1D7E09C32AA3244C39627CA4AD451E36CA0CC238C84C77BD55E75C8D0ED9F6EE729B2BEF169E0186
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2bioj4ukhBIi/0FDT6e2ZVQpcpw==
+X-Mailru-Sender: 689FA8AB762F73933AF1F914F131DBF5AE94EB6B0CCF7369F5E27A0B19D14D5698CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; s=mail4; 
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=e6D2OOkdXoNP9it7bvqxXdBPgk+Cbadj91hTLH55d7A=; 
+ t=1674539275;x=1674629275; 
+ b=UhCWLI26znjSTen/EOdSNtQNnZ1/Cl7/D9IAxDHPz1YqK95UQe/oWJYfJ3GtvOCETPt967yGnHgCRM7i/MmH8yHWIUQ/lcxpJiiQeiFG3fOOTBqY4WBNUSjXN7O1dnL6182/1lGM4J7BUSESZ70LJcxDvjsfg1/NO8PYWNvKhigLYFhoBgjYLX4WO3jUtjjYne6xBiWKgVHAYpi06r3IbS3bTRXRif3PTJmQxJiZdBsdCotHoWosa2TgQJYgoxLVRoyKNSlmhbTmfMNEXGoukdpUBPvITC/qecAgBw4uQBBspeBFsOJ6zjgPd82WT3IlfRIJh/uA64H6QA6Inkwb6Q==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=UhCWLI26
+X-Mailman-Original-Authentication-Results: smtpng3.m.smailru.net; auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: [Buildroot] [PATCH 1/3] package/postgresql: bump version to 15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,240 +75,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Steve Hay via buildroot <buildroot@buildroot.org>
-Reply-To: Steve Hay <me@stevenhay.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Steve Hay <me@stevenhay.com>
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The current implementation of buildroot depe dependency graphing
-either does forward- or reverse-dependency traversal.
+Release notes: https://www.postgresql.org/docs/release/15.1/
 
-This patch enables buildroot to graph forward and reverse dependencies on the
-graph for the same package: (Diagram Credit: Yann E. MORRIN)
-
-    $ make pkg-d-graph-both-depends
-
-    pkg A -.            .-> pkg E
-            \          /
-    pkg B ----> pkg D ----> pkg F
-            /          \
-    pkg C -'            '-> pkg G
-
-In the above example a single graph shows pkg {A,B,C} are needed
-by pkg D, and pkg D is a dependency of pkg {E,F,G}.
-
-The variables DEPTH and RDEPTH can be passed into the graphing functions to
-specify the maximum depths of direct and reverse dependencies to control graph
-size.
-
-Makefile documentation is also updated.
-
-Signed-off-by: Steve Hay <me@stevenhay.com>
-
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
-Changes v1 -> v2:
-  - Enhanced patch description. (Yann)
-  - Added Makefile documentation. (Yann)
-  - Completed the implementation of graph-both-depends. (Yann)
-  - Added ability to control depth of the generated graph.
-  - Ensured both forward and reverse dependencies are checked for --check-only case. (Yann)
----
- Makefile                      |  7 ++++
- package/pkg-generic.mk        |  7 +++-
- support/scripts/graph-depends | 69 ++++++++++++++++++++++-------------
- 3 files changed, 55 insertions(+), 28 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 8517d563d5..e47544fd42 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1163,7 +1163,14 @@ help:
- 	@echo '  <pkg>-show-recursive-rdepends'
- 	@echo '                         - Recursively list packages which have <pkg> as a dependency'
- 	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
-+	@echo '                             DEPTH, if set on the command line, is used to specify maximum'
-+	@echo '                               depth to graph dependencies.'
- 	@echo '  <pkg>-graph-rdepends   - Generate a graph of <pkg>'\''s reverse dependencies'
-+	@echo '                             RDEPTH, if set on the command line, is used to specify maximum'
-+	@echo '                               depth to graph reverse dependencies.'
-+	@echo '  <pkg>-graph-both-depends'
-+	@echo '                         - Generate a graph of both <pkg>'\''s forward and'
-+	@echo '                           reverse dependencies. DEPTH and RDEPTH work as described above.'
- 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
- 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
- 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 2f8ba39edf..6ddb304a12 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1031,10 +1031,13 @@ $(1)-show-info:
- 	$$(info $$(call clean-json,{ $$(call json-info,$(2)) }))
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 26bb626943..ef2806c2dd 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-14.6.tar.bz2.sha256
+-sha256  508840fc1809d39ab72274d5f137dabb9fd7fb4f933da4168aeebb20069edf22  postgresql-14.6.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-15.1.tar.bz2.sha256
++sha256  64fdf23d734afad0dfe4077daca96ac51dcd697e68ae2d3d4ca6c45cb14e21ae  postgresql-15.1.tar.bz2
+ # License file, Locally calculated
+ sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 502860bc99..5313e03b12 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(1)-graph-depends: graph-depends-requirements
--	$(call pkg-graph-depends,$(1),--direct)
-+	$(call pkg-graph-depends,$(1),--direct --depth $(or $(DEPTH),0))
- 
- $(1)-graph-rdepends: graph-depends-requirements
--	$(call pkg-graph-depends,$(1),--reverse)
-+	$(call pkg-graph-depends,$(1),--reverse --rdepth $(or $(RDEPTH),0))
-+
-+$(1)-graph-both-depends: graph-depends-requirements
-+	$(call pkg-graph-depends,$(1),--direct --reverse --depth $(or $(DEPTH),0) --rdepth $(or $(RDEPTH),0))
- 
- $(1)-all-source:	$(1)-source
- $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 3e3373950f..0285afb46d 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -159,11 +159,11 @@ def check_circular_deps(deps):
- 
- # This functions trims down the dependency list of all packages.
- # It applies in sequence all the dependency-elimination methods.
--def remove_extra_deps(deps, rootpkg, transitive, arrow_dir):
-+def remove_extra_deps(deps, rootpkg, transitive, direct):
-     # For the direct dependencies, find and eliminate mandatory
-     # deps, and add them to the root package. Don't do it for a
-     # reverse graph, because mandatory deps are only direct deps.
--    if arrow_dir == "forward":
-+    if direct:
-         for pkg in list(deps.keys()):
-             if not pkg == rootpkg:
-                 for d in get_mandatory_deps(pkg, deps):
-@@ -197,14 +197,16 @@ def print_attrs(outfile, pkg, pkg_type, pkg_version, depth, colors):
-     outfile.write("%s [color=%s,style=filled]\n" % (name, color))
- 
- 
-+
- # Print the dependency graph of a package
- def print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
--                   arrow_dir, draw_graph, depth, max_depth, pkg, colors, done_deps=None):
-+                   direct, draw_graph, depth, max_depth, pkg, colors, done_deps=None):
-     if done_deps is None:
-         done_deps = []
-     if pkg in done_deps:
-         return
-     done_deps.append(pkg)
-+
-     if draw_graph:
-         print_attrs(outfile, pkg, dict_types[pkg], dict_versions[pkg], depth, colors)
-     elif depth != 0:
-@@ -231,9 +233,12 @@ def print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exc
-                     break
-             if add:
-                 if draw_graph:
--                    outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
-+                    if direct:
-+                        outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), "forward"))
-+                    else:
-+                        outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(d), pkg_node_name(pkg), "forward"))
-                 print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
--                               arrow_dir, draw_graph, depth + 1, max_depth, d, colors, done_deps)
-+                               direct, draw_graph, depth + 1, max_depth, d, colors, done_deps)
- 
- 
- def parse_args():
-@@ -246,6 +251,8 @@ def parse_args():
-                         help="Graph the dependencies of PACKAGE")
-     parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
-                         help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
-+    parser.add_argument("--rdepth", metavar="RDEPTH", dest="rdepth", type=int, default=0,
-+                        help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
-     parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
-                         help="Do not graph past this package (can be given multiple times)." +
-                         " Can be a package name or a glob, " +
-@@ -265,9 +272,9 @@ def parse_args():
-                         default=False)
-     parser.add_argument("--no-transitive", dest="transitive", action='store_false',
-                         help="Draw (do not draw) transitive dependencies")
--    parser.add_argument("--direct", dest="direct", action='store_true', default=True,
-+    parser.add_argument("--direct", dest="direct", action='store_true', default=False,
-                         help="Draw direct dependencies (the default)")
--    parser.add_argument("--reverse", dest="direct", action='store_false',
-+    parser.add_argument("--reverse", dest="reverse", action='store_true', default=False,
-                         help="Draw reverse dependencies")
-     parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
-                         help="Quiet")
-@@ -292,6 +299,9 @@ def main():
-             sys.exit(1)
-         outfile = open(args.outfile, "w")
- 
-+    if not args.direct and not args.reverse: # select default direct if none is specified.
-+        args.direct = True
-+ 
-     if args.package is None:
-         mode = MODE_FULL
-         rootpkg = 'all'
-@@ -312,13 +322,9 @@ def main():
-     if args.exclude_mandatory:
-         exclude_list += MANDATORY_DEPS
- 
--    if args.direct:
--        arrow_dir = "forward"
--    else:
--        if mode == MODE_FULL:
--            logging.error("--reverse needs a package")
--            sys.exit(1)
--        arrow_dir = "back"
-+    if args.reverse and mode == MODE_FULL:
-+        logging.error("--reverse needs a package")
-+        sys.exit(1)
- 
-     draw_graph = not args.flat_list
- 
-@@ -330,23 +336,34 @@ def main():
-         logging.error("Error: incorrect color list '%s'" % args.colors)
-         sys.exit(1)
- 
--    deps, rdeps, dict_types, dict_versions = brpkgutil.get_dependency_tree()
--    dict_deps = deps if args.direct else rdeps
--
--    check_circular_deps(dict_deps)
--    if check_only:
--        sys.exit(0)
--
--    dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, arrow_dir)
- 
-     # Start printing the graph data
--    if draw_graph:
-+    if not check_only and draw_graph:
-         outfile.write("digraph G {\n")
- 
--    print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
--                   arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
-+    deps, rdeps, dict_types, dict_versions = brpkgutil.get_dependency_tree()
- 
--    if draw_graph:
-+    # forward
-+    if args.direct:
-+        dict_deps = deps
-+        direct = True
-+        check_circular_deps(dict_deps)
-+        if not check_only:
-+            dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, direct)
-+            print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
-+                           direct, draw_graph, 0, args.depth, rootpkg, colors)
-+
-+    # reverse
-+    if args.reverse:
-+        dict_deps = rdeps
-+        direct = False
-+        check_circular_deps(dict_deps)
-+        if not check_only:
-+            dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, direct)
-+            print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
-+                           direct, draw_graph, 0, args.rdepth, rootpkg, colors)
-+
-+    if not check_only and draw_graph:
-         outfile.write("}\n")
-     else:
-         outfile.write("\n")
+-POSTGRESQL_VERSION = 14.6
++POSTGRESQL_VERSION = 15.1
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
-2.30.2
+2.38.1
 
 _______________________________________________
 buildroot mailing list
