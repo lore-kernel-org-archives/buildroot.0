@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F739C25B4E
-	for <buildroot@archiver.kernel.org>; Tue, 24 Jan 2023 09:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63F04C54EB4
+	for <buildroot@archiver.kernel.org>; Tue, 24 Jan 2023 09:23:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BCDCF40BCB;
-	Tue, 24 Jan 2023 09:23:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCDCF40BCB
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA9B661021;
+	Tue, 24 Jan 2023 09:23:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA9B661021
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aNm-0W4hoFQz; Tue, 24 Jan 2023 09:23:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j_vX2AfHc_vq; Tue, 24 Jan 2023 09:23:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B5C640289;
-	Tue, 24 Jan 2023 09:22:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B5C640289
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 893F01BF2B0
- for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 09:22:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3179660FFF;
+	Tue, 24 Jan 2023 09:23:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3179660FFF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 69F9F1BF2B0
+ for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 09:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 619F6401D2
- for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 09:22:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 619F6401D2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5047161021
+ for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 09:22:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5047161021
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nOu4Z8Cv-N6N for <buildroot@lists.busybox.net>;
- Tue, 24 Jan 2023 09:22:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7hupApsaCWGU for <buildroot@lists.busybox.net>;
+ Tue, 24 Jan 2023 09:22:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C49F40BCB
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C49F40BCB
- for <buildroot@buildroot.org>; Tue, 24 Jan 2023 09:22:44 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id m15so7182622ilq.2
- for <buildroot@buildroot.org>; Tue, 24 Jan 2023 01:22:44 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4770260FFF
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4770260FFF
+ for <buildroot@buildroot.org>; Tue, 24 Jan 2023 09:22:45 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id f8so7178443ilj.5
+ for <buildroot@buildroot.org>; Tue, 24 Jan 2023 01:22:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=0SspQugj4Bm7C6sWS8CsB68Q00Y6SdY7IpsJlRivU3w=;
- b=XWCxS1vC8YZb1vdZj6Ttmveflh11EOp1L9HmVt+blc6aPYucq1NpqQBL9z3pHVOaeA
- sFRUF8CQ4lJp7kJAhyBlupSS2dnikT/XVJ+uAlt7bSS+vbS23Yl6AvkK/kyQm17QgYh+
- YXoWwtSxbK2x0eddSJAox5ziec79LjMXiMvE44YLwK/E+gDxFLWY/ZZnbLZ74V1cjtd/
- SUWH+WPI2b9xn7MYG82M1br64PIEB4zx/1iogFYn2OUQAK37RwcpGV+Qhg1aXZvirVUm
- ccjMWcHNDuEkLDwEUAr2BDHRb5YlCiAwCfObOXCLuCFEznCXtafTRWvoAj2ZRHAhWepO
- j1bw==
-X-Gm-Message-State: AFqh2ko8b1o+KZshvAjO+wgKWcHC/gvqWnEcfChIvuKBFKqwq5HEQMUr
- WMP1fKlJA//E5JOA2ugOvYH//btPk5K2bw==
-X-Google-Smtp-Source: AMrXdXsJHNX1YaqQI2NiOTXyyYAQSrQjqeeCGPXm+hsb3Mn004WF+BvU0iJiYbON/ZkIb+t2EGlWpA==
-X-Received: by 2002:a92:3204:0:b0:30c:22e:9af2 with SMTP id
- z4-20020a923204000000b0030c022e9af2mr19245992ile.13.1674552163297; 
- Tue, 24 Jan 2023 01:22:43 -0800 (PST)
+ bh=d3qb+pxPf/Y+6T98sQQywvS5ACnuKYTUZhHhDXq7ezc=;
+ b=pC044inKODv1HJf4qd6MReJ7O8Lb1wzbBmG7OfvEMsfvPTbWwAMndV3wXnHmtWSE92
+ Ga0i4cF5IkTK0eQTfnvn3KDQ8yRVUwwCRI9tMv4gf7kyzcBlFA3/P1mMKs+uW2U/JTiZ
+ 4nTavVB66CSuFlbB3mX4TSuXrmqQoAkaa+KYjNMB2pRtKwkgBJUD1jw4KakUCShldrmi
+ iAd1XJxYkP2OjsHm197teb733TyBInVtqjpwhB9xbNo3dd9kWmHEK7nT5YlpeZSxyGSH
+ OCoQPKjWiG4Okz1eIxZmSD74kvEaV0Ondsse1JUZ+JycTsjOZgk9KNUs6pNPQ8bQB7Ig
+ xU7A==
+X-Gm-Message-State: AFqh2kpGvaBEwP8LZRGarWKBJbNlBftZgpt+MPc2ILeYXfosOSBCb82T
+ eG0UKlivK5SvBu18Thz385Pff1VnTsfwTQ==
+X-Google-Smtp-Source: AMrXdXtZ0J9Zm1RFrV0lDV2v3Kyk7igjMz5Kz0yQTAYNdX8mFbhIUp/VEebacDwmaEVlAfez5W2vbg==
+X-Received: by 2002:a92:c261:0:b0:30f:641b:d12b with SMTP id
+ h1-20020a92c261000000b0030f641bd12bmr13872901ild.21.1674552164230; 
+ Tue, 24 Jan 2023 01:22:44 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- v26-20020a02b91a000000b003a7d5061e1bsm524923jan.111.2023.01.24.01.22.42
+ v26-20020a02b91a000000b003a7d5061e1bsm524923jan.111.2023.01.24.01.22.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Tue, 24 Jan 2023 01:22:43 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 24 Jan 2023 02:22:29 -0700
-Message-Id: <20230124092235.806969-2-james.hilliard1@gmail.com>
+Date: Tue, 24 Jan 2023 02:22:30 -0700
+Message-Id: <20230124092235.806969-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230124092235.806969-1-james.hilliard1@gmail.com>
 References: <20230124092235.806969-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=0SspQugj4Bm7C6sWS8CsB68Q00Y6SdY7IpsJlRivU3w=;
- b=RJ8QGMl2TUQTobnB75caWsyGmR3Am9O/jagWm6bOSNzQSK0ODOb5TbikZbcxq43HCZ
- 9AiB1Y4qRg+LBL9l7bUmBt0ySDavbkdqBgXLMPlvuXhFPLtLHJ5E+hm75Jao/ge6cSGU
- 2qPMmthVc1AqR3H2Fq+6Y+j5I8blCt4N6+d4ayKLZSZMabEvxXzK74EI+MV6vxue1BlV
- RgQkAjRYniR1N/a4i0TNQvYIwYMcOuL0w8bQ7hUFN82UoA+1nqMuvAxaBCI4nPE81qo2
- OLhC5NKSkOF8RqIW6ZlVFXmYC0i9Y60SfodIzhiBVz94q955blTz5iz5pVSeZ42gNUNU
- 7Jlg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=d3qb+pxPf/Y+6T98sQQywvS5ACnuKYTUZhHhDXq7ezc=;
+ b=puaP4DL26DkUnLzaPbwqfBQHXZgydHJb9JfiJH3LVRF1zqPir1j+F34Uijslg/J4C1
+ Y11/7IKXcS2P/M9MH9j5Ww5kbvuaAC26t28dkIo+nxz9OBo4RFDdK2xR/rZEtIkr2FaR
+ dTW/Po1+jf9OOR+eKzPQPJHWy3792CcMjp3sMaN4Pq+LSOb1NzHLNU0gYHA2aZOHuYUq
+ 1+W4spHCIUW/+Uu/leZgG9CoWAr6HbHecdFZcIranNiDdncMK9IvAMyB6mhFEyFEBlRD
+ 8YAku94XMoAYhxQXgyfNsmRBsn2Z7I6zHVCI5IFVKul0oM1uO2pkseUa7ye+JSMPJ4H2
+ ZSCQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=RJ8QGMl2
-Subject: [Buildroot] [PATCH v3 2/8] package/cpuinfo: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=puaP4DL2
+Subject: [Buildroot] [PATCH v3 3/8] package/ruy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,90 +115,96 @@ Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
 Changes v2 -> v3:
-  - move to libraries->hardware handling
+  - add C++14 dependency
 ---
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/cpuinfo/Config.in    |  9 +++++++++
- package/cpuinfo/cpuinfo.hash |  4 ++++
- package/cpuinfo/cpuinfo.mk   | 17 +++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/cpuinfo/Config.in
- create mode 100644 package/cpuinfo/cpuinfo.hash
- create mode 100644 package/cpuinfo/cpuinfo.mk
+ DEVELOPERS            |  1 +
+ package/Config.in     |  1 +
+ package/ruy/Config.in | 16 ++++++++++++++++
+ package/ruy/ruy.hash  |  4 ++++
+ package/ruy/ruy.mk    | 18 ++++++++++++++++++
+ 5 files changed, 40 insertions(+)
+ create mode 100644 package/ruy/Config.in
+ create mode 100644 package/ruy/ruy.hash
+ create mode 100644 package/ruy/ruy.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e8e0dffcd3..3fd5ea32bc 100644
+index 3fd5ea32bc..ba26d5f999 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2701,6 +2701,9 @@ F:	package/libvpx/
- F:	package/mesa3d-demos/
- F:	package/ti-gfx/
+@@ -2703,6 +2703,7 @@ F:	package/ti-gfx/
  
-+N:	Stefan Hager <stefan.hager@ginzinger.com>
-+F:	package/cpuinfo/
-+
+ N:	Stefan Hager <stefan.hager@ginzinger.com>
+ F:	package/cpuinfo/
++F:	package/ruy/
+ 
  N:	Stefan Ott <stefan@ott.net>
  F:	package/unbound/
- 
 diff --git a/package/Config.in b/package/Config.in
-index 995dae2c57..5537699c86 100644
+index 5537699c86..29d55ef2b3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1637,6 +1637,7 @@ menu "Hardware handling"
- 	source "package/bcm2835/Config.in"
- 	source "package/c-periphery/Config.in"
- 	source "package/ccid/Config.in"
-+	source "package/cpuinfo/Config.in"
- 	source "package/dtc/Config.in"
- 	source "package/gnu-efi/Config.in"
- 	source "package/hackrf/Config.in"
-diff --git a/package/cpuinfo/Config.in b/package/cpuinfo/Config.in
+@@ -2110,6 +2110,7 @@ endif
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
+ 	source "package/riemann-c-client/Config.in"
++	source "package/ruy/Config.in"
+ 	source "package/shapelib/Config.in"
+ 	source "package/skalibs/Config.in"
+ 	source "package/sphinxbase/Config.in"
+diff --git a/package/ruy/Config.in b/package/ruy/Config.in
 new file mode 100644
-index 0000000000..137f657d69
+index 0000000000..c46f5c6cc9
 --- /dev/null
-+++ b/package/cpuinfo/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_CPUINFO
-+	bool "cpuinfo"
++++ b/package/ruy/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_RUY
++	bool "ruy"
 +	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
++	select BR2_PACKAGE_CPUINFO
 +	help
-+	  CPU INFOrmation library, cpuinfo is a library to detect
-+	  essential for performance optimization information about
-+	  host CPU.
++	  Ruy is a matrix multiplication library. Its focus is to cover
++	  the matrix multiplication needs of neural network inference
++	  engines. Its initial user has been TensorFlow Lite, where it
++	  is used by default on the ARM CPU architecture.
 +
-+	  https://github.com/pytorch/cpuinfo
-diff --git a/package/cpuinfo/cpuinfo.hash b/package/cpuinfo/cpuinfo.hash
++	  https://github.com/google/ruy
++
++comment "ruy needs a toolchain w/ C++14"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/ruy/ruy.hash b/package/ruy/ruy.hash
 new file mode 100644
-index 0000000000..c3f70fa90f
+index 0000000000..98266b5881
 --- /dev/null
-+++ b/package/cpuinfo/cpuinfo.hash
++++ b/package/ruy/ruy.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  0936848904943381b2c01321101614776e43d583840ee0f3ceeea1e3fb7405f7  cpuinfo-de2fa78ebb431db98489e78603e4f77c1f6c5c57.tar.gz
++sha256  4da8572946007603378c5d0280f48c5b77f4d38763209f5306b57c7513d9a82e  ruy-3168a5c8f4c447fd8cea94078121ee2e2cd87df0.tar.gz
 +# License files, locally calculated
-+sha256  8e7e60636c3aa0cb03571a1a841ce5697f9551ff92b3c426c2561613d15ade70  LICENSE
-diff --git a/package/cpuinfo/cpuinfo.mk b/package/cpuinfo/cpuinfo.mk
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/ruy/ruy.mk b/package/ruy/ruy.mk
 new file mode 100644
-index 0000000000..ab6a0269ec
+index 0000000000..ceeea8cd58
 --- /dev/null
-+++ b/package/cpuinfo/cpuinfo.mk
-@@ -0,0 +1,17 @@
++++ b/package/ruy/ruy.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# cpuinfo
++# ruy
 +#
 +################################################################################
 +
-+CPUINFO_VERSION = de2fa78ebb431db98489e78603e4f77c1f6c5c57
-+CPUINFO_SITE = $(call github,pytorch,cpuinfo,$(CPUINFO_VERSION))
-+CPUINFO_LICENSE = BSD-2-Clause
-+CPUINFO_LICENSE_FILES = LICENSE
-+CPUINFO_INSTALL_STAGING = YES
-+CPUINFO_CONF_OPTS = \
-+	-DCPUINFO_BUILD_UNIT_TESTS=OFF \
-+	-DCPUINFO_BUILD_MOCK_TESTS=OFF \
-+	-DCPUINFO_BUILD_BENCHMARKS=OFF
++RUY_VERSION = 3168a5c8f4c447fd8cea94078121ee2e2cd87df0
++RUY_SITE = $(call github,google,ruy,$(RUY_VERSION))
++RUY_LICENSE = Apache-2.0
++RUY_LICENSE_FILES = LICENSE
++RUY_INSTALL_STAGING = YES
++RUY_DEPENDENCIES = cpuinfo
++RUY_CONF_OPTS = \
++	-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
++	-DRUY_FIND_CPUINFO=ON \
++	-DRUY_MINIMAL_BUILD=ON
 +
 +$(eval $(cmake-package))
 -- 
