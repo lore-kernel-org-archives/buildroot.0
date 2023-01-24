@@ -4,62 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A2CEC25B4E
-	for <buildroot@archiver.kernel.org>; Tue, 24 Jan 2023 13:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 222DCC38142
+	for <buildroot@archiver.kernel.org>; Tue, 24 Jan 2023 16:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A50C440C7C;
-	Tue, 24 Jan 2023 13:01:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A50C440C7C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7054E40C8E;
+	Tue, 24 Jan 2023 16:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7054E40C8E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C8mYB4wHlL_h; Tue, 24 Jan 2023 13:01:11 +0000 (UTC)
+	with ESMTP id 41YL3v_WJxrg; Tue, 24 Jan 2023 16:50:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 929FA414F1;
-	Tue, 24 Jan 2023 13:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 929FA414F1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9EF621BF2C5
- for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 13:01:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AAD9540C88;
+	Tue, 24 Jan 2023 16:50:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAD9540C88
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DE5571BF36F
+ for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 16:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8014C8197D
- for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 13:01:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8014C8197D
+ by smtp2.osuosl.org (Postfix) with ESMTP id C622140C88
+ for <buildroot@lists.busybox.net>; Tue, 24 Jan 2023 16:50:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C622140C88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2urWJEBgeTdH for <buildroot@lists.busybox.net>;
- Tue, 24 Jan 2023 13:01:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF3EF8193E
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF3EF8193E
- for <buildroot@buildroot.org>; Tue, 24 Jan 2023 13:01:02 +0000 (UTC)
-Received: from evilbit.green-communications.fr ([92.154.77.116]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis)
- id 1MqapC-1oyBVT04RM-00maBp; Tue, 24 Jan 2023 13:55:55 +0100
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-To: buildroot@buildroot.org
-Date: Tue, 24 Jan 2023 13:55:28 +0100
-Message-Id: <20230124125528.5801-1-nicolas.cavallari@green-communications.fr>
-X-Mailer: git-send-email 2.39.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9ryGHRR20ps4 for <buildroot@lists.busybox.net>;
+ Tue, 24 Jan 2023 16:50:33 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13DF940396
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
+ [IPv6:2607:f8b0:4864:20::102a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 13DF940396
+ for <buildroot@buildroot.org>; Tue, 24 Jan 2023 16:50:32 +0000 (UTC)
+Received: by mail-pj1-x102a.google.com with SMTP id
+ e10-20020a17090a630a00b0022bedd66e6dso2638039pjj.1
+ for <buildroot@buildroot.org>; Tue, 24 Jan 2023 08:50:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=L7b+m9hadnFkJKREZ2i5xFCv4RBOM3PU7zyQcHVYjaM=;
+ b=r5bPZYrONf4qVIccxTMsSz0yWxCCvOnurRQ7zgLYA3Az/MbjTraNXMeoref+mSNxca
+ Gy5ViJBglBi+ZLVKnSgc3uWDaJl+OCfNfYvhGtRGOTVxk2SZXYiYevUmawW2ZMo84Dm6
+ SWu86PeH8Gszu+bv4l2jEQQj+q9wBZcUiNKr4nvundXFv8GCEdZ6AbDKmLlA69lrA1FN
+ Ymz5qXXaKHAt8zqnt7nP93Tax2p4UYfTGEvJd1ngDl7X/sLNZFqeBtNxBWkCwPJiK0x0
+ eK77oQg4L49gaDF4WUzmk9ixPWrGe1Iha8zmAAp4SQ/ckvbJ77uer8hvY/jhj8dBGmlk
+ 0weA==
+X-Gm-Message-State: AFqh2kqgHHNWwaXP+yCzpDyqy1o/tbyuCF9lW//pVPuepeVbxT5nK00p
+ OXEOg/reAoWpcyjmu8qVMGFtdc1ctLpxGVNJaqfRyw==
+X-Google-Smtp-Source: AMrXdXt434IvB0OjGMjzAtXDZpkXaQwyYrHBsf/LchRJnfgfdjbwghvEXWQC+3TR93jeu//SqxeJvucxgk7ALVIes2s=
+X-Received: by 2002:a17:90a:9dcb:b0:22b:b9ee:eb14 with SMTP id
+ x11-20020a17090a9dcb00b0022bb9eeeb14mr1839552pjv.36.1674579032311; Tue, 24
+ Jan 2023 08:50:32 -0800 (PST)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:+awy9Tths8wDIX7izv4JEbyoWFW2ZRTBDJRoBx8HVuQqpwbYegp
- 1ye/8EzEVpFh53bbIhuqsi/71Tm4aEhZu8GdHNmS8qW/IWlYUCUzxC3ltYzx5W27mQSUaAn
- zy99PDApojCjIzsvnVoDXbih2F23+5+vaOlr64RTooVC1GPkAx4MPV0WephGDu6whvVX4fO
- G4zH8/iUs3exbHqMM74Jw==
-UI-OutboundReport: notjunk:1;M01:P0:SXmQZo7ysms=;TydNuCWvM4QMLrH4EYNjA1dfkWm
- Lp7UDxgNEvr+Xnnmrh9I6z7lvn4488dfPdRGmUR+2nXFRmgBBKm0231CG6v+S2Z4+HCg1RM1d
- vFVdMVOPzJSqule7f0B6+NrWOPeEj3u5ClbP8Z2hSuhRAHzT84SkrusuDmhBJWHkZuW20vRNH
- th5b37DwNHhJ/+GKe6lCP8E+MIiCN60DBBmGJqG7LNFiLlfYCxi5VwPWtfd28EkREMRsWbdON
- bDHfoI6wje6xMEJrCe9E16hIIPG/UIIxq8A+rI7OJp5ai08fLEel+NWbhhtCyWzGDUMu1UPGR
- F+Fd90+MOUFGJb6A7i3iPbGmYTCoSdClVO6CajbJVkeYmNneWOxN6RO1KgacBiNddPpLMYGQS
- LWjqkyMQJlo0RVhN/1tTJHNE1OF/7/jDY9fsw/SF7GqNp2W7jtHM/Ag7lIi22GgmJVPHmFSvk
- EwakMljZddxdWmFuVy7Ci3Ned1gTLvqFXNddrLojKAhwcX4mDWAG8k/8YKC9IDkUVCbai0bT2
- oORrm8jgmKF34GMf3lSHRaxtKIkj5V6Fvhmsdyy2gZMqy2GWh/5OCcCDoEV+7L6g0aRMC0IME
- aL7Ly45DjeN253nYrMtb3BoC5cZHZuJEIP8LCcOEkTMfJBmwOKA2EfuQU+Gr2LHDg10n1p10q
- aCM+Uod5b5byL7I+gf6EVLk5oxFWjkwn+mG9NSr0Pw==
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: security bump to 1.5.1
+References: <20230122090947.1369673-1-yann.morin.1998@free.fr>
+In-Reply-To: <20230122090947.1369673-1-yann.morin.1998@free.fr>
+Date: Tue, 24 Jan 2023 11:50:21 -0500
+Message-ID: <CABGDZC=gUDkp0YK1vEeKXSyNm045rb0d56fkHHzk6dHivwX5wQ@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=starry.com; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=L7b+m9hadnFkJKREZ2i5xFCv4RBOM3PU7zyQcHVYjaM=;
+ b=sEgI+VPaD5Ee83JZS9egugJz/WPPoyGeSBJlbyetshLX45uEkcyj/T4C4Nfza4ZI1E
+ IIXbL+xdQxr7PB4WQhp+yN06TAqwgKBeCDAG7tHT8ibAt4zCkz/Iat2dk1/d6dpJhXvY
+ NSiIAYCp7jgK6IVjJt2K6RU6M3h+/X39u2n7E=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=starry.com header.i=@starry.com
+ header.a=rsa-sha256 header.s=google header.b=sEgI+VPa
+Subject: Re: [Buildroot] [PATCH] Makefile: fix build when $(O) ends in
+ _defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,52 +87,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Nevo Hed via buildroot <buildroot@buildroot.org>
+Reply-To: Nevo Hed <nhed+buildroot@starry.com>
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2023-22742: when compiled with BR2_PACKAGE_LIBSSH2,
-libgit2 fails to verify SSH keys by default.
+Yann,
 
-https://github.com/libgit2/libgit2/blob/v1.5.1/docs/changelog.md
+Though I'm a tad baffled by the concept of naming anything but a
+defconfig (Kconf) file with the same pattern, the fix seems
+reasonable.
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--Nevo
 
-tested with test-pkg -a with
-BR2_PACKAGE_LIBGIT2=y
-BR2_PACKAGE_LIBSSH2=y
-BR2_PACKAGE_LIBZLIB=y
-
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index fb760fd4cc..e834525df5 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8de872a0f201b33d9522b817c92e14edb4efad18dae95cf156cf240b2efff93e  libgit2-1.5.0.tar.gz
-+sha256  7074f1e2697992b82402501182db254fe62d64877b12f6e4c64656516f4cde88  libgit2-1.5.1.tar.gz
- sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 9409011eb4..c962c8030f 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGIT2_VERSION = 1.5.0
-+LIBGIT2_VERSION = 1.5.1
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
--- 
-2.39.0
-
+On Sun, Jan 22, 2023 at 4:09 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Commit e6195c53041f (Makefile: fix use of many br2-external trees) fixed
+> a slowdown with many br2-external trees. In doing so, it changed the
+> type of the %_defconfig rule: the stem is no longer present in the
+> prerequisites, so it changes from a pattern rule to an implicit pattern
+> rule [0].
+>
+> It is not unusual to name the build directory after the defconfig that
+> is being built, so we may end up with a build directory named
+> meh_defconfig. Before e6195c53041f, the pattern rule would not match
+> [1], but now it does, which causes somewhat-cryptic build failures:
+>
+>     Makefile:1015: *** "Can't find /some/path/meh_defconfig".  Stop.
+>
+> The issue is that we have this set of rules and assignments (elided and
+> reordered for legibility):
+>
+>     all: world
+>     world: target-post-image
+>     target-post-image: staging-finalize
+>     staging-finalize: $(STAGING_DIR_SYMLINK)
+>     $(STAGING_DIR_SYMLINK): | $(BASE_DIR)
+>     BASE_DIR := $(CANONICAL_O)
+>     CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
+>
+> So, there is a rule that (eventually) has a dependency on $(O), but we
+> have no rule that provides it explicitly, so the %_defconfig rule kicks
+> in, with the stem as "/some/path/meh". When the loop searches all the
+> ".../configs/" directories for a file named ".../configs/%_defconfig",
+> it actually lookes for a file named ".../configs//some/path/meh_defconfig"
+> and that indeed never matches anything.
+>
+> The solution is to provide an actual rule for $(BASE_DIR), so that the
+> implicit rule does not kick in.
+>
+> [0] Terminology and behaviour in make is hard, so the terms we used here
+>     may be wrong or incorrectly used, and/or the explanations for the
+>     behavious be wrong or incomplete... Still, the reasoning stands, and
+>     the root cause is the removal of the stem in the RHS of the rule
+>     (adding one back does fix the issue).
+>
+> [1] not sure how the prerequisite was solved  before e6195c53041f,
+>     though...
+>
+> Fixes: e6195c53041f
+>
+> Reported-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Nevo Hed <nhed+buildroot@starry.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 8517d563d5..f39af5eae9 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1042,7 +1042,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>
+>  # staging and target directories do NOT list these as
+>  # dependencies anywhere else
+> -$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):
+> +$(BASE_DIR) $(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):
+>         @mkdir -p $@
+>
+>  # outputmakefile generates a Makefile in the output directory, if using a
+> --
+> 2.25.1
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
