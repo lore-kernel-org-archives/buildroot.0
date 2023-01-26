@@ -1,57 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E689EC54E94
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jan 2023 13:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDF14C54E94
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jan 2023 13:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 861F0401D8;
-	Thu, 26 Jan 2023 13:26:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 861F0401D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BD5882233;
+	Thu, 26 Jan 2023 13:27:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BD5882233
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k63dJnGghXGH; Thu, 26 Jan 2023 13:26:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qdDQj_A3wrs9; Thu, 26 Jan 2023 13:27:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D606040142;
-	Thu, 26 Jan 2023 13:26:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D606040142
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA0AF82184;
+	Thu, 26 Jan 2023 13:27:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA0AF82184
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 596A51BF48D
- for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 13:26:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B392F1BF48D
+ for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 13:27:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 409778225F
- for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 13:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 409778225F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9ABCA82245
+ for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 13:27:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ABCA82245
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b0qc_pQW7dqA for <buildroot@lists.busybox.net>;
- Thu, 26 Jan 2023 13:26:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 610FA82245
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 610FA82245
- for <buildroot@busybox.net>; Thu, 26 Jan 2023 13:26:42 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C3E9424000C;
- Thu, 26 Jan 2023 13:26:38 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pL2Gz-00G3Wp-T5; Thu, 26 Jan 2023 14:26:37 +0100
+ with ESMTP id D5vB61PLpp28 for <buildroot@lists.busybox.net>;
+ Thu, 26 Jan 2023 13:27:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4FB8581E07
+ for <buildroot@buildroot.org>; Thu, 26 Jan 2023 13:27:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FB8581E07
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3DEFC87DD8; Thu, 26 Jan 2023 13:27:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <fperrad@gmail.com>
-References: <20230123185847.159349-1-francois.perrad@gadz.org>
-Date: Thu, 26 Jan 2023 14:26:37 +0100
-In-Reply-To: <20230123185847.159349-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Mon, 23 Jan 2023 19:58:47 +0100")
-Message-ID: <87k0198m0i.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/nano: bump to version 7.2
+To: buildroot@buildroot.org
+Date: Thu, 26 Jan 2023 14:25:14 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cc47da516cf5b76752d63361a8a7579d93e6fbbb
+X-Git-Newrev: f5d73033b8683df83d0ca9eb172b885d33a5ea64
+X-Patchwork-Hint: ignore
+Message-Id: <20230126132752.3DEFC87DD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,20 +56,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f5d73033b8683df83d0ca9eb172b885d33a5ea64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Release notes: https://github.com/timescale/timescaledb/releases/tag/2.9.1
 
-Committed, thanks.
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index a970ffa1ad..a6560eb326 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  666f5427cb036500bca731d24d845285299cff82f576ad4474f85da682b2ee78  timescaledb-2.9.0.tar.gz
++sha256  883638f2e79d25ec88ee58f603f3c81c999b6364cb4c799919d363f04089b47b  timescaledb-2.9.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 7530368498..44e365285b 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.9.0
++TIMESCALEDB_VERSION = 2.9.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
