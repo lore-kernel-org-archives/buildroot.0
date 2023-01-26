@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7EE8C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 518BEC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:12:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E58A61149;
-	Tue, 21 Feb 2023 01:11:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E58A61149
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1E2A6114A;
+	Tue, 21 Feb 2023 01:12:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E2A6114A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oqopnLKw3oHp; Tue, 21 Feb 2023 01:11:58 +0000 (UTC)
+	with ESMTP id q-j9MKLkPZck; Tue, 21 Feb 2023 01:12:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE498612B1;
-	Tue, 21 Feb 2023 01:11:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE498612B1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47686613B3;
+	Tue, 21 Feb 2023 01:12:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47686613B3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 162501BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 18EB61BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B66656FBC0
+ by smtp3.osuosl.org (Postfix) with ESMTP id D7FA66FBC1
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B66656FBC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7FA66FBC1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n5XaHQdP_b6J for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+ with ESMTP id QEJRWP3San-5 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D516A6FBB8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D516A6FBB8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0903F6FBAE
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0903F6FBAE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C57D681979; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+ id 02DE981979; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Jan 2023 14:24:54 +0100
+Date: Thu, 26 Jan 2023 14:26:23 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6e0ba6bfc2d28a8079d336a18cc50f0825952ec2
-X-Git-Newrev: cc47da516cf5b76752d63361a8a7579d93e6fbbb
+X-Git-Oldrev: 5bce041aec61ac9925d5059edf13c9499896daac
+X-Git-Newrev: 5ec326fb97e51baa9f874d309a8fb2c69d6c8c18
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205239.C57D681979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libgit2: security bump
- to 1.5.1
+Message-Id: <20230220205240.02DE981979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nano: bump to version
+ 7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc47da516cf5b76752d63361a8a7579d93e6fbbb
+commit: https://git.buildroot.net/buildroot/commit/?id=5ec326fb97e51baa9f874d309a8fb2c69d6c8c18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2023-22742: when compiled with BR2_PACKAGE_LIBSSH2,
-libgit2 fails to verify SSH keys by default.
-
-https://github.com/libgit2/libgit2/blob/v1.5.1/docs/changelog.md
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index fb760fd4cc..e834525df5 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8de872a0f201b33d9522b817c92e14edb4efad18dae95cf156cf240b2efff93e  libgit2-1.5.0.tar.gz
-+sha256  7074f1e2697992b82402501182db254fe62d64877b12f6e4c64656516f4cde88  libgit2-1.5.1.tar.gz
- sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 9409011eb4..c962c8030f 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index f49b712093..3ca37c6337 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v7/nano-7.1.tar.xz.asc
++# https://www.nano-editor.org/dist/v7/nano-7.2.tar.xz.asc
+ # using key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
+-sha256  57ba751e9b7519f0f6ddee505202e387c75dde440c1f7aa1b9310cc381406836  nano-7.1.tar.xz
++sha256  86f3442768bd2873cec693f83cdf80b4b444ad3cc14760b74361474fc87a4526  nano-7.2.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 203c417f06..8a2003b92a 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBGIT2_VERSION = 1.5.0
-+LIBGIT2_VERSION = 1.5.1
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
+ NANO_VERSION_MAJOR = 7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).1
++NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
