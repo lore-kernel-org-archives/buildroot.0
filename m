@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28FBCC54E94
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jan 2023 16:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A287C05027
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jan 2023 16:10:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B9AE2414EE;
-	Thu, 26 Jan 2023 16:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9AE2414EE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D40C416F0;
+	Thu, 26 Jan 2023 16:10:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D40C416F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ogwmev1nhfRs; Thu, 26 Jan 2023 16:10:12 +0000 (UTC)
+	with ESMTP id or-6T9f6tR47; Thu, 26 Jan 2023 16:10:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 20AA4408ED;
-	Thu, 26 Jan 2023 16:10:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20AA4408ED
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D0D1C1BF46A
- for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 16:10:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E4914170D;
+	Thu, 26 Jan 2023 16:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E4914170D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B476D1BF46A
+ for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 16:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAF6082038
- for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 16:10:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAF6082038
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DD1860E08
+ for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 16:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DD1860E08
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 35sc3kks0-Ae for <buildroot@lists.busybox.net>;
- Thu, 26 Jan 2023 16:10:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z17FEO00JX0Y for <buildroot@lists.busybox.net>;
+ Thu, 26 Jan 2023 16:10:23 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DABE781BB0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DABE781BB0
- for <buildroot@buildroot.org>; Thu, 26 Jan 2023 16:10:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AB7B60D65
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5AB7B60D65
+ for <buildroot@buildroot.org>; Thu, 26 Jan 2023 16:10:23 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 571471BF204;
- Thu, 26 Jan 2023 16:10:06 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9604B2000A;
+ Thu, 26 Jan 2023 16:10:19 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pL4pB-00GEJk-GW; Thu, 26 Jan 2023 17:10:05 +0100
+ id 1pL4pO-00GEKb-MO; Thu, 26 Jan 2023 17:10:18 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230120192846.7362-1-fontaine.fabrice@gmail.com>
-Date: Thu, 26 Jan 2023 17:10:05 +0100
-In-Reply-To: <20230120192846.7362-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 20 Jan 2023 20:28:46 +0100")
-Message-ID: <87bkml8eg2.fsf@dell.be.48ers.dk>
+References: <20230120192952.8159-1-fontaine.fabrice@gmail.com>
+Date: Thu, 26 Jan 2023 17:10:18 +0100
+In-Reply-To: <20230120192952.8159-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 20 Jan 2023 20:29:52 +0100")
+Message-ID: <877cx98efp.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/lxc: security bump to version
- 5.0.2
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-future: security bump to
+ version 0.18.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
+Cc: Louis Aussedat <aussedat.louis@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
  buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -73,21 +73,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Fix CVE-2022-47952: lxc-user-nic in lxc through 5.0.1 is installed
- >   setuid root, and may allow local users to infer whether any file
- >   exists, even within a protected directory tree, because "Failed to
- >   open" often indicates that a file does not exist, whereas "does not
- >   refer to a network namespace path" often indicates that a file exists.
- >   NOTE: this is different from CVE-2018-6556 because the CVE-2018-6556
- >   fix design was based on the premise that "we will report back to the
- >   user that the open() failed but the user has no way of knowing why it
- >   failed"; however, in many realistic cases, there are no plausible
- >   reasons for failing except that the file does not exist.
- > - Drop patches (already in version)
+ > Fix CVE-2022-40899: An issue discovered in Python Charmers Future 0.18.2
+ > and earlier allows remote attackers to cause a denial of service via
+ > crafted Set-Cookie header from malicious web server.
+
+ > https://github.com/PythonCharmers/python-future/releases/tag/v0.18.3
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-I guess we don't install lxc-user-nic setuid root, but ok.
 
 Committed, thanks.
 
