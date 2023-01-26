@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04EADC05027
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jan 2023 16:11:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73479C54E94
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jan 2023 16:12:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B27841570;
-	Thu, 26 Jan 2023 16:11:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B27841570
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13506822A9;
+	Thu, 26 Jan 2023 16:12:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13506822A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mjqSy46b1Ei9; Thu, 26 Jan 2023 16:11:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 79SJLR1Q-37k; Thu, 26 Jan 2023 16:11:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4D5941926;
-	Thu, 26 Jan 2023 16:11:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4D5941926
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 326901BF976
- for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 16:11:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1CA282123;
+	Thu, 26 Jan 2023 16:11:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1CA282123
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C9021BF46A
+ for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 16:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D0EF408ED
+ by smtp1.osuosl.org (Postfix) with ESMTP id 044EE82123
  for <buildroot@lists.busybox.net>; Thu, 26 Jan 2023 16:11:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D0EF408ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 044EE82123
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SP4ucBZfrChU for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IGUlL3Lio7KM for <buildroot@lists.busybox.net>;
  Thu, 26 Jan 2023 16:11:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9EC0408B0
+ by smtp1.osuosl.org (Postfix) with ESMTP id B0C63820EA
  for <buildroot@buildroot.org>; Thu, 26 Jan 2023 16:11:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9EC0408B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0C63820EA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A5A1987E1C; Thu, 26 Jan 2023 16:11:15 +0000 (UTC)
+ id 9685287E18; Thu, 26 Jan 2023 16:11:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Jan 2023 17:08:23 +0100
+Date: Thu, 26 Jan 2023 17:07:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 722b84eafa5e3d9540e0a80bae0c971a3a778358
-X-Git-Newrev: cd7bfba252095ffaf93d22c7379b409bbdf64d46
+X-Git-Oldrev: 5ec326fb97e51baa9f874d309a8fb2c69d6c8c18
+X-Git-Newrev: 722b84eafa5e3d9540e0a80bae0c971a3a778358
 X-Patchwork-Hint: ignore
-Message-Id: <20230126161115.A5A1987E1C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lxc: security bump to version 5.0.2
+Message-Id: <20230126161115.9685287E18@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nginx: bump to version 1.22.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,360 +62,413 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd7bfba252095ffaf93d22c7379b409bbdf64d46
+commit: https://git.buildroot.net/buildroot/commit/?id=722b84eafa5e3d9540e0a80bae0c971a3a778358
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2022-47952: lxc-user-nic in lxc through 5.0.1 is installed
-  setuid root, and may allow local users to infer whether any file
-  exists, even within a protected directory tree, because "Failed to
-  open" often indicates that a file does not exist, whereas "does not
-  refer to a network namespace path" often indicates that a file exists.
-  NOTE: this is different from CVE-2018-6556 because the CVE-2018-6556
-  fix design was based on the premise that "we will report back to the
-  user that the open() failed but the user has no way of knowing why it
-  failed"; however, in many realistic cases, there are no plausible
-  reasons for failing except that the file does not exist.
-- Drop patches (already in version)
+- Drop eleventh patch (already in version)
+- Update hash of LICENSE file (update in year)
+- pcre2 is supported (and enabled by default) since
+  https://github.com/nginx/nginx/commit/c6fec0b027569a4e0b1d8aaee7dea0f2e4d6052b
+
+http://nginx.org/en/CHANGES-1.22
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...etect-where-struct-mount_attr-is-declared.patch | 186 ---------------------
- ...ll_method_async-to-replace-the-asyncv-one.patch |  47 ------
- ...003-build-detect-sys-pidfd.h-availability.patch |  55 ------
- package/lxc/lxc.hash                               |   2 +-
- package/lxc/lxc.mk                                 |   2 +-
- 5 files changed, 2 insertions(+), 290 deletions(-)
+ .../nginx/0011-Mp4-disabled-duplicate-atoms.patch  | 315 ---------------------
+ package/nginx/Config.in                            |   2 +-
+ package/nginx/nginx.hash                           |   4 +-
+ package/nginx/nginx.mk                             |  11 +-
+ 4 files changed, 7 insertions(+), 325 deletions(-)
 
-diff --git a/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch b/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch
+diff --git a/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch b/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch
 deleted file mode 100644
-index 8de7adcc56..0000000000
---- a/package/lxc/0001-build-detect-where-struct-mount_attr-is-declared.patch
+index 7baa810b56..0000000000
+--- a/package/nginx/0011-Mp4-disabled-duplicate-atoms.patch
 +++ /dev/null
-@@ -1,186 +0,0 @@
--From c1115e1503bf955c97f4cf3b925a6a9f619764c3 Mon Sep 17 00:00:00 2001
--From: Christian Brauner <brauner@kernel.org>
--Date: Tue, 9 Aug 2022 16:14:25 +0200
--Subject: [PATCH] build: detect where struct mount_attr is declared
+@@ -1,315 +0,0 @@
+-From 6b022a5556af22b6e18532e547a6ae46b0d8c6ea Mon Sep 17 00:00:00 2001
+-From: Roman Arutyunyan <arut@nginx.com>
+-Date: Wed, 19 Oct 2022 10:53:17 +0300
+-Subject: [PATCH] Mp4: disabled duplicate atoms.
 -
--Fixes: #4176
--Signed-off-by: Christian Brauner (Microsoft) <christian.brauner@ubuntu.com>
--[Retrieved from:
--https://github.com/lxc/lxc/commit/c1115e1503bf955c97f4cf3b925a6a9f619764c3]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Most atoms should not appear more than once in a container.  Previously,
+-this was not enforced by the module, which could result in worker process
+-crash, memory corruption and disclosure.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
-- meson.build                | 30 ++++++++++++++++++++++++++++--
-- src/lxc/conf.c             |  6 +++---
-- src/lxc/conf.h             |  2 +-
-- src/lxc/mount_utils.c      |  6 +++---
-- src/lxc/syscall_wrappers.h | 12 ++++++++++--
-- 5 files changed, 45 insertions(+), 11 deletions(-)
+- src/http/modules/ngx_http_mp4_module.c | 147 +++++++++++++++++++++++++
+- 1 file changed, 147 insertions(+)
 -
--diff --git a/meson.build b/meson.build
--index a145faf069..f679aabbc8 100644
----- a/meson.build
--+++ b/meson.build
--@@ -590,7 +590,6 @@ decl_headers = '''
-- foreach decl: [
--     '__aligned_u64',
--     'struct clone_args',
---    'struct mount_attr',
--     'struct open_how',
--     'struct rtnl_link_stats64',
-- ]
--@@ -610,7 +609,6 @@ foreach tuple: [
--     ['struct seccomp_notif_sizes'],
--     ['struct clone_args'],
--     ['__aligned_u64'],
---    ['struct mount_attr'],
--     ['struct open_how'],
--     ['struct rtnl_link_stats64'],
-- ]
--@@ -630,6 +628,34 @@ foreach tuple: [
--     endif
-- endforeach
+-diff --git a/src/http/modules/ngx_http_mp4_module.c b/src/http/modules/ngx_http_mp4_module.c
+-index 9c3f627f..4eff01e9 100644
+---- a/src/http/modules/ngx_http_mp4_module.c
+-+++ b/src/http/modules/ngx_http_mp4_module.c
+-@@ -1121,6 +1121,12 @@ ngx_http_mp4_read_ftyp_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-         return NGX_ERROR;
+-     }
 - 
--+## Types.
--+decl_headers = '''
--+#include <sys/mount.h>
--+'''
+-+    if (mp4->ftyp_atom.buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 ftyp atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
 -+
--+# We get -1 if the size cannot be determined
--+if cc.sizeof('struct mount_attr', prefix: decl_headers, args: '-D_GNU_SOURCE') > 0
--+    srcconf.set10('HAVE_' + 'struct mount_attr'.underscorify().to_upper(), true)
--+    found_types += 'struct mount_attr (sys/mount.h)'
--+else
--+    srcconf.set10('HAVE_' + 'struct mount_attr'.underscorify().to_upper(), false)
--+    missing_types += 'struct mount_attr (sys/mount.h)'
--+endif
+-     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
+- 
+-     ftyp_atom = ngx_palloc(mp4->request->pool, atom_size);
+-@@ -1179,6 +1185,12 @@ ngx_http_mp4_read_moov_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-         return NGX_DECLINED;
+-     }
+- 
+-+    if (mp4->moov_atom.buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 moov atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
 -+
--+## Types.
--+decl_headers = '''
--+#include <linux/mount.h>
--+'''
+-     conf = ngx_http_get_module_loc_conf(mp4->request, ngx_http_mp4_module);
+- 
+-     if (atom_data_size > mp4->buffer_size) {
+-@@ -1246,6 +1258,12 @@ ngx_http_mp4_read_mdat_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, mp4->file.log, 0, "mp4 mdat atom");
+- 
+-+    if (mp4->mdat_atom.buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 mdat atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
 -+
--+# We get -1 if the size cannot be determined
--+if cc.sizeof('struct mount_attr', prefix: decl_headers, args: '-D_GNU_SOURCE') > 0
--+    srcconf.set10('HAVE_UAPI_' + 'struct mount_attr'.underscorify().to_upper(), true)
--+    found_types += 'struct mount_attr (linux/mount.h)'
--+else
--+    srcconf.set10('HAVE_UAPI_' + 'struct mount_attr'.underscorify().to_upper(), false)
--+    missing_types += 'struct mount_attr (linux/mount.h)'
--+endif
+-     data = &mp4->mdat_data_buf;
+-     data->file = &mp4->file;
+-     data->in_file = 1;
+-@@ -1372,6 +1390,12 @@ ngx_http_mp4_read_mvhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, mp4->file.log, 0, "mp4 mvhd atom");
+- 
+-+    if (mp4->mvhd_atom.buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 mvhd atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
 -+
-- ## Headers.
-- foreach ident: [
--     ['bpf',               '''#include <sys/syscall.h>
--diff --git a/src/lxc/conf.c b/src/lxc/conf.c
--index ffbe74c2f6..4193cd07f5 100644
----- a/src/lxc/conf.c
--+++ b/src/lxc/conf.c
--@@ -2885,7 +2885,7 @@ static int __lxc_idmapped_mounts_child(struct lxc_handler *handler, FILE *f)
-- 		struct lxc_mount_options opts = {};
-- 		int dfd_from;
-- 		const char *source_relative, *target_relative;
---		struct lxc_mount_attr attr = {};
--+		struct mount_attr attr = {};
+-     atom_header = ngx_mp4_atom_header(mp4);
+-     mvhd_atom = (ngx_mp4_mvhd_atom_t *) atom_header;
+-     mvhd64_atom = (ngx_mp4_mvhd64_atom_t *) atom_header;
+-@@ -1637,6 +1661,13 @@ ngx_http_mp4_read_tkhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
 - 
-- 		ret = parse_lxc_mount_attrs(&opts, mntent.mnt_opts);
-- 		if (ret < 0)
--@@ -3005,7 +3005,7 @@ static int __lxc_idmapped_mounts_child(struct lxc_handler *handler, FILE *f)
-- 
-- 		/* Set propagation mount options. */
-- 		if (opts.attr.propagation) {
---			attr = (struct lxc_mount_attr) {
--+			attr = (struct mount_attr) {
-- 				.propagation = opts.attr.propagation,
-- 			};
-- 
--@@ -4109,7 +4109,7 @@ int lxc_idmapped_mounts_parent(struct lxc_handler *handler)
-- 
-- 	for (;;) {
-- 		__do_close int fd_from = -EBADF, fd_userns = -EBADF;
---		struct lxc_mount_attr attr = {};
--+		struct mount_attr attr = {};
-- 		struct lxc_mount_options opts = {};
-- 		ssize_t ret;
-- 
--diff --git a/src/lxc/conf.h b/src/lxc/conf.h
--index 7dc2f15b60..772479f9e1 100644
----- a/src/lxc/conf.h
--+++ b/src/lxc/conf.h
--@@ -223,7 +223,7 @@ struct lxc_mount_options {
-- 	unsigned long mnt_flags;
-- 	unsigned long prop_flags;
-- 	char *data;
---	struct lxc_mount_attr attr;
--+	struct mount_attr attr;
-- 	char *raw_options;
-- };
-- 
--diff --git a/src/lxc/mount_utils.c b/src/lxc/mount_utils.c
--index bba75f933c..88dd73ee36 100644
----- a/src/lxc/mount_utils.c
--+++ b/src/lxc/mount_utils.c
--@@ -31,7 +31,7 @@ lxc_log_define(mount_utils, lxc);
--  * setting in @attr_set, but must also specify MOUNT_ATTR__ATIME in the
--  * @attr_clr field.
--  */
---static inline void set_atime(struct lxc_mount_attr *attr)
--+static inline void set_atime(struct mount_attr *attr)
-- {
-- 	switch (attr->attr_set & MOUNT_ATTR__ATIME) {
-- 	case MOUNT_ATTR_RELATIME:
--@@ -272,7 +272,7 @@ int create_detached_idmapped_mount(const char *path, int userns_fd,
-- {
-- 	__do_close int fd_tree_from = -EBADF;
-- 	unsigned int open_tree_flags = OPEN_TREE_CLONE | OPEN_TREE_CLOEXEC;
---	struct lxc_mount_attr attr = {
--+	struct mount_attr attr = {
-- 		.attr_set	= MOUNT_ATTR_IDMAP | attr_set,
-- 		.attr_clr	= attr_clr,
-- 		.userns_fd	= userns_fd,
--@@ -335,7 +335,7 @@ int __fd_bind_mount(int dfd_from, const char *path_from, __u64 o_flags_from,
-- 		    __u64 attr_clr, __u64 propagation, int userns_fd,
-- 		    bool recursive)
-- {
---	struct lxc_mount_attr attr = {
--+	struct mount_attr attr = {
-- 		.attr_set	= attr_set,
-- 		.attr_clr	= attr_clr,
-- 		.propagation	= propagation,
--diff --git a/src/lxc/syscall_wrappers.h b/src/lxc/syscall_wrappers.h
--index a5e98b565c..c8a7d0c7b7 100644
----- a/src/lxc/syscall_wrappers.h
--+++ b/src/lxc/syscall_wrappers.h
--@@ -18,6 +18,12 @@
-- #include "macro.h"
-- #include "syscall_numbers.h"
-- 
--+#if HAVE_STRUCT_MOUNT_ATTR
--+#include <sys/mount.h>
--+#elif HAVE_UAPI_STRUCT_MOUNT_ATTR
--+#include <linux/mount.h>
--+#endif
+-     trak = ngx_mp4_last_trak(mp4);
 -+
-- #ifdef HAVE_LINUX_MEMFD_H
-- #include <linux/memfd.h>
-- #endif
--@@ -210,16 +216,18 @@ extern int fsmount(int fs_fd, unsigned int flags, unsigned int attr_flags);
-- /*
--  * mount_setattr()
--  */
---struct lxc_mount_attr {
--+#if !HAVE_STRUCT_MOUNT_ATTR && !HAVE_UAPI_STRUCT_MOUNT_ATTR
--+struct mount_attr {
-- 	__u64 attr_set;
-- 	__u64 attr_clr;
-- 	__u64 propagation;
-- 	__u64 userns_fd;
-- };
--+#endif
-- 
-- #if !HAVE_MOUNT_SETATTR
-- static inline int mount_setattr(int dfd, const char *path, unsigned int flags,
---				struct lxc_mount_attr *attr, size_t size)
--+				struct mount_attr *attr, size_t size)
-- {
-- 	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
-- }
-diff --git a/package/lxc/0002-use-sd_bus_call_method_async-to-replace-the-asyncv-one.patch b/package/lxc/0002-use-sd_bus_call_method_async-to-replace-the-asyncv-one.patch
-deleted file mode 100644
-index 22013cb363..0000000000
---- a/package/lxc/0002-use-sd_bus_call_method_async-to-replace-the-asyncv-one.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From b0abedf60b40adf0f2fb3cf9dfee4bc601f7b39f Mon Sep 17 00:00:00 2001
--From: Chen Qi <Qi.Chen@windriver.com>
--Date: Thu, 25 Aug 2022 05:45:53 -0700
--Subject: [PATCH] use sd_bus_call_method_async to replace the asyncv one
--
--The sd_bus_call_method_asyncv's 10th parameter is of type
--va_list and supplying NULL when invoking it causes compilation
--error. Just replace it with the async one.
--
--Signed-off-by: Chen Qi <Qi.Chen@windriver.com>
--[Retrieved from:
--https://github.com/lxc/lxc/commit/b0abedf60b40adf0f2fb3cf9dfee4bc601f7b39f]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- meson.build              | 4 ++--
-- src/lxc/cgroups/cgfsng.c | 2 +-
-- 2 files changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index 21955a0504..f8bdcf4e83 100644
----- a/meson.build
--+++ b/meson.build
--@@ -295,9 +295,9 @@ if not want_sd_bus.disabled()
--         has_sd_bus = false
--     endif
-- 
---    if not cc.has_function('sd_bus_call_method_asyncv', prefix: '#include <systemd/sd-bus.h>', dependencies: libsystemd) 
--+    if not cc.has_function('sd_bus_call_method_async', prefix: '#include <systemd/sd-bus.h>', dependencies: libsystemd) 
--         if not sd_bus_optional
---            error('libsystemd misses required sd_bus_call_method_asyncv function')
--+            error('libsystemd misses required sd_bus_call_method_async function')
--         endif
-- 
--         has_sd_bus = false
--diff --git a/src/lxc/cgroups/cgfsng.c b/src/lxc/cgroups/cgfsng.c
--index 8a3615893f..d90e5385e1 100644
----- a/src/lxc/cgroups/cgfsng.c
--+++ b/src/lxc/cgroups/cgfsng.c
--@@ -1232,7 +1232,7 @@ static int unpriv_systemd_create_scope(struct cgroup_ops *ops, struct lxc_conf *
-- 	if (r < 0)
-- 		return log_error(SYSTEMD_SCOPE_FAILED, "Failed to connect to user bus: %s", strerror(-r));
-- 
---	r = sd_bus_call_method_asyncv(bus, NULL, DESTINATION, PATH, INTERFACE, "Subscribe", NULL, NULL, NULL, NULL);
--+	r = sd_bus_call_method_async(bus, NULL, DESTINATION, PATH, INTERFACE, "Subscribe", NULL, NULL, NULL);
-- 	if (r < 0)
-- 		return log_error(SYSTEMD_SCOPE_FAILED, "Failed to subscribe to signals: %s", strerror(-r));
-- 
-diff --git a/package/lxc/0003-build-detect-sys-pidfd.h-availability.patch b/package/lxc/0003-build-detect-sys-pidfd.h-availability.patch
-deleted file mode 100644
-index 3aa598407f..0000000000
---- a/package/lxc/0003-build-detect-sys-pidfd.h-availability.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From ef1e0607b82e27350c2d677d649c6a0a9693fd40 Mon Sep 17 00:00:00 2001
--From: Christian Brauner <brauner@kernel.org>
--Date: Tue, 9 Aug 2022 16:27:40 +0200
--Subject: [PATCH] build: detect sys/pidfd.h availability
--
--Fixes: #4176
--Signed-off-by: Christian Brauner (Microsoft) <christian.brauner@ubuntu.com>
--
--[Retrieved from:
--https://github.com/lxc/lxc/commit/ef1e0607b82e27350c2d677d649c6a0a9693fd40]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- meson.build             | 1 +
-- src/lxc/process_utils.h | 6 ++++++
-- 2 files changed, 7 insertions(+)
--
--diff --git a/meson.build b/meson.build
--index f679aabbc8..e999542336 100644
----- a/meson.build
--+++ b/meson.build
--@@ -735,6 +735,7 @@ foreach tuple: [
--     ['sys/resource.h'],
--     ['sys/memfd.h'],
--     ['sys/personality.h'],
--+    ['sys/pidfd.h'],
--     ['sys/signalfd.h'],
--     ['sys/timerfd.h'],
--     ['pty.h'],
--diff --git a/src/lxc/process_utils.h b/src/lxc/process_utils.h
--index 9c15b15741..ed84741d0e 100644
----- a/src/lxc/process_utils.h
--+++ b/src/lxc/process_utils.h
--@@ -15,6 +15,10 @@
-- #include <sys/syscall.h>
-- #include <unistd.h>
-- 
--+#if HAVE_SYS_PIDFD_H
--+#include <sys/pidfd.h>
--+#endif
+-+    if (trak->out[NGX_HTTP_MP4_TKHD_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 tkhd atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
 -+
-- #include "compiler.h"
-- #include "syscall_numbers.h"
+-     trak->tkhd_size = atom_size;
+-     trak->movie_duration = duration;
 - 
--@@ -136,9 +140,11 @@
-- #endif
+-@@ -1676,6 +1707,12 @@ ngx_http_mp4_read_mdia_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
 - 
-- /* waitid */
--+#if !HAVE_SYS_PIDFD_H
-- #ifndef P_PIDFD
-- #define P_PIDFD 3
-- #endif
--+#endif
+-     trak = ngx_mp4_last_trak(mp4);
 - 
-- #ifndef CLONE_ARGS_SIZE_VER0
-- #define CLONE_ARGS_SIZE_VER0 64 /* sizeof first published struct */
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index c18e062cc1..2dd983a361 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
+-+    if (trak->out[NGX_HTTP_MP4_MDIA_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 mdia atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     atom = &trak->mdia_atom_buf;
+-     atom->temporary = 1;
+-     atom->pos = atom_header;
+-@@ -1799,6 +1836,13 @@ ngx_http_mp4_read_mdhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-     atom_size = sizeof(ngx_mp4_atom_header_t) + (size_t) atom_data_size;
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+-+
+-+    if (trak->out[NGX_HTTP_MP4_MDHD_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 mdhd atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     trak->mdhd_size = atom_size;
+-     trak->timescale = timescale;
+-     trak->duration = duration;
+-@@ -1862,6 +1906,12 @@ ngx_http_mp4_read_hdlr_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+- 
+-+    if (trak->out[NGX_HTTP_MP4_HDLR_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 hdlr atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     atom = &trak->hdlr_atom_buf;
+-     atom->temporary = 1;
+-     atom->pos = atom_header;
+-@@ -1890,6 +1940,12 @@ ngx_http_mp4_read_minf_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+- 
+-+    if (trak->out[NGX_HTTP_MP4_MINF_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 minf atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     atom = &trak->minf_atom_buf;
+-     atom->temporary = 1;
+-     atom->pos = atom_header;
+-@@ -1933,6 +1989,15 @@ ngx_http_mp4_read_vmhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+- 
+-+    if (trak->out[NGX_HTTP_MP4_VMHD_ATOM].buf
+-+        || trak->out[NGX_HTTP_MP4_SMHD_ATOM].buf)
+-+    {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 vmhd/smhd atom in \"%s\"",
+-+                      mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     atom = &trak->vmhd_atom_buf;
+-     atom->temporary = 1;
+-     atom->pos = atom_header;
+-@@ -1964,6 +2029,15 @@ ngx_http_mp4_read_smhd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+- 
+-+    if (trak->out[NGX_HTTP_MP4_VMHD_ATOM].buf
+-+        || trak->out[NGX_HTTP_MP4_SMHD_ATOM].buf)
+-+    {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 vmhd/smhd atom in \"%s\"",
+-+                      mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     atom = &trak->smhd_atom_buf;
+-     atom->temporary = 1;
+-     atom->pos = atom_header;
+-@@ -1995,6 +2069,12 @@ ngx_http_mp4_read_dinf_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+- 
+-+    if (trak->out[NGX_HTTP_MP4_DINF_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 dinf atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     atom = &trak->dinf_atom_buf;
+-     atom->temporary = 1;
+-     atom->pos = atom_header;
+-@@ -2023,6 +2103,12 @@ ngx_http_mp4_read_stbl_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+- 
+-+    if (trak->out[NGX_HTTP_MP4_STBL_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 stbl atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     atom = &trak->stbl_atom_buf;
+-     atom->temporary = 1;
+-     atom->pos = atom_header;
+-@@ -2144,6 +2230,12 @@ ngx_http_mp4_read_stsd_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+- 
+-+    if (trak->out[NGX_HTTP_MP4_STSD_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 stsd atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     atom = &trak->stsd_atom_buf;
+-     atom->temporary = 1;
+-     atom->pos = atom_header;
+-@@ -2212,6 +2304,13 @@ ngx_http_mp4_read_stts_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-     atom_end = atom_table + entries * sizeof(ngx_mp4_stts_entry_t);
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+-+
+-+    if (trak->out[NGX_HTTP_MP4_STTS_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 stts atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     trak->time_to_sample_entries = entries;
+- 
+-     atom = &trak->stts_atom_buf;
+-@@ -2480,6 +2579,13 @@ ngx_http_mp4_read_stss_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-                    "sync sample entries:%uD", entries);
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+-+
+-+    if (trak->out[NGX_HTTP_MP4_STSS_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 stss atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     trak->sync_samples_entries = entries;
+- 
+-     atom_table = atom_header + sizeof(ngx_http_mp4_stss_atom_t);
+-@@ -2678,6 +2784,13 @@ ngx_http_mp4_read_ctts_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-                    "composition offset entries:%uD", entries);
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+-+
+-+    if (trak->out[NGX_HTTP_MP4_CTTS_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 ctts atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     trak->composition_offset_entries = entries;
+- 
+-     atom_table = atom_header + sizeof(ngx_mp4_ctts_atom_t);
+-@@ -2881,6 +2994,13 @@ ngx_http_mp4_read_stsc_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-     atom_end = atom_table + entries * sizeof(ngx_mp4_stsc_entry_t);
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+-+
+-+    if (trak->out[NGX_HTTP_MP4_STSC_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 stsc atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     trak->sample_to_chunk_entries = entries;
+- 
+-     atom = &trak->stsc_atom_buf;
+-@@ -3213,6 +3333,13 @@ ngx_http_mp4_read_stsz_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-                    "sample uniform size:%uD, entries:%uD", size, entries);
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+-+
+-+    if (trak->out[NGX_HTTP_MP4_STSZ_ATOM].buf) {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 stsz atom in \"%s\"", mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     trak->sample_sizes_entries = entries;
+- 
+-     atom_table = atom_header + sizeof(ngx_mp4_stsz_atom_t);
+-@@ -3396,6 +3523,16 @@ ngx_http_mp4_read_stco_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-     atom_end = atom_table + entries * sizeof(uint32_t);
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+-+
+-+    if (trak->out[NGX_HTTP_MP4_STCO_ATOM].buf
+-+        || trak->out[NGX_HTTP_MP4_CO64_ATOM].buf)
+-+    {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 stco/co64 atom in \"%s\"",
+-+                      mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     trak->chunks = entries;
+- 
+-     atom = &trak->stco_atom_buf;
+-@@ -3602,6 +3739,16 @@ ngx_http_mp4_read_co64_atom(ngx_http_mp4_file_t *mp4, uint64_t atom_data_size)
+-     atom_end = atom_table + entries * sizeof(uint64_t);
+- 
+-     trak = ngx_mp4_last_trak(mp4);
+-+
+-+    if (trak->out[NGX_HTTP_MP4_STCO_ATOM].buf
+-+        || trak->out[NGX_HTTP_MP4_CO64_ATOM].buf)
+-+    {
+-+        ngx_log_error(NGX_LOG_ERR, mp4->file.log, 0,
+-+                      "duplicate mp4 stco/co64 atom in \"%s\"",
+-+                      mp4->file.name.data);
+-+        return NGX_ERROR;
+-+    }
+-+
+-     trak->chunks = entries;
+- 
+-     atom = &trak->co64_atom_buf;
+--- 
+-2.30.2
+-
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 90a0822298..406a1c861a 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -214,7 +214,7 @@ config BR2_PACKAGE_NGINX_HTTP_REFERER_MODULE
+ config BR2_PACKAGE_NGINX_HTTP_REWRITE_MODULE
+ 	bool "ngx_http_rewrite_module"
+ 	default y
+-	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  Enable ngx_http_rewrite_module
+ 
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 06d3392a2e..06454c5e32 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
 @@ -1,4 +1,4 @@
- # Locally calculated
--sha256  d8195423bb1e206f8521d24b6cde4789f043960c7cf065990a9cf741dcfd4222  lxc-5.0.1.tar.gz
-+sha256  bea08d2e49efcee34fa58acd2bc95c0adc64d291c07f4cfaf4ac1d8ac5a36f45  lxc-5.0.2.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index e1639c5f15..4a4d3a6212 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
+ # Locally calculated after checking pgp signature
+-sha256  e462e11533d5c30baa05df7652160ff5979591d291736cfa5edb9fd2edb48c49  nginx-1.20.1.tar.gz
++sha256  9ebb333a9e82b952acd3e2b4aeb1d4ff6406f72491bab6cd9fe69f0dea737f31  nginx-1.22.1.tar.gz
+ # License files, locally calculated
+-sha256  b57270c1f73eb6624b38b2d0a1affcec56b21fab39efbf8c837428f05cef1d73  LICENSE
++sha256  ececed0b0e7243a4766cbc62b26df4bd3513b41de3a07425da1679c836d06320  LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 62ea379ffc..10cc95d90e 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LXC_VERSION = 5.0.1
-+LXC_VERSION = 5.0.2
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+-NGINX_VERSION = 1.20.1
++NGINX_VERSION = 1.22.1
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
+@@ -19,9 +19,6 @@ NGINX_CONF_OPTS = \
+ 	--with-cpp="$(TARGET_CC)" \
+ 	--with-ld-opt="$(TARGET_LDFLAGS)"
+ 
+-# 0011-Mp4-disabled-duplicate-atoms.patch
+-NGINX_IGNORE_CVES += CVE-2022-41741 CVE-2022-41742
+-
+ # www-data user and group are used for nginx. Because these user and group
+ # are already set by buildroot, it is not necessary to redefine them.
+ # See system/skeleton/etc/passwd
+@@ -83,8 +80,8 @@ else
+ NGINX_CONF_ENV += ngx_force_have_libatomic=no
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PCRE),y)
+-NGINX_DEPENDENCIES += pcre
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++NGINX_DEPENDENCIES += pcre2
+ NGINX_CONF_OPTS += --with-pcre
+ else
+ NGINX_CONF_OPTS += --without-pcre
+@@ -167,7 +164,7 @@ NGINX_CONF_OPTS += --without-http_gzip_module
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NGINX_HTTP_REWRITE_MODULE),y)
+-NGINX_DEPENDENCIES += pcre
++NGINX_DEPENDENCIES += pcre2
+ else
+ NGINX_CONF_OPTS += --without-http_rewrite_module
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
