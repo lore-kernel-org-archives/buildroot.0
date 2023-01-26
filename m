@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72136C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:11:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BBB5C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:11:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F961611CA;
-	Tue, 21 Feb 2023 01:11:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F961611CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFCDC61B22;
+	Tue, 21 Feb 2023 01:11:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFCDC61B22
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QDgaYxPP7d6w; Tue, 21 Feb 2023 01:11:21 +0000 (UTC)
+	with ESMTP id 75xMNleA5mvJ; Tue, 21 Feb 2023 01:11:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62935617B4;
-	Tue, 21 Feb 2023 01:11:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62935617B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED73461B19;
+	Tue, 21 Feb 2023 01:11:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED73461B19
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF74D1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EF5E71BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A1726FBBC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C6756FBBE
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A1726FBBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C6756FBBE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hvlikiAbVu1O for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+ with ESMTP id xSB6cM9kUnrR for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 754906FBB3
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3EEF6FBA1
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 754906FBB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3EEF6FBA1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 739F17FF06; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id DDFF586496; Mon, 20 Feb 2023 20:52:39 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:59:43 +0100
+Date: Thu, 26 Jan 2023 14:25:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d3ecb398b113439351e8e26122763028efce10cd
-X-Git-Newrev: b3ff33a8b0de5a16e80fec567b8cb0e588d063a4
+X-Git-Oldrev: f5d73033b8683df83d0ca9eb172b885d33a5ea64
+X-Git-Newrev: 3621312a840306e38573c667459b5dee4db19531
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205239.739F17FF06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-gobject: switch
- to https download
+Message-Id: <20230220205239.DDFF586496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libosmium: bump
+ version to 2.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3ff33a8b0de5a16e80fec567b8cb0e588d063a4
+commit: https://git.buildroot.net/buildroot/commit/?id=3621312a840306e38573c667459b5dee4db19531
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Release-notes: https://github.com/osmcode/libosmium/releases/tag/v2.19.0
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-gobject/python-gobject.hash | 2 +-
- package/python-gobject/python-gobject.mk   | 2 +-
+ package/libosmium/libosmium.hash | 2 +-
+ package/libosmium/libosmium.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
-index 4398356006..2fb9d38ab0 100644
---- a/package/python-gobject/python-gobject.hash
-+++ b/package/python-gobject/python-gobject.hash
+diff --git a/package/libosmium/libosmium.hash b/package/libosmium/libosmium.hash
+index cb53a91c67..b055aa21ea 100644
+--- a/package/libosmium/libosmium.hash
++++ b/package/libosmium/libosmium.hash
 @@ -1,3 +1,3 @@
--# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.42/pygobject-3.42.2.sha256sum
-+# from https://download.gnome.org/sources/pygobject/3.42/pygobject-3.42.2.sha256sum
- sha256  ade8695e2a7073849dd0316d31d8728e15e1e0bc71d9ff6d1c09e86be52bc957  pygobject-3.42.2.tar.xz
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
-index 014090540f..a12ce5c107 100644
---- a/package/python-gobject/python-gobject.mk
-+++ b/package/python-gobject/python-gobject.mk
-@@ -7,7 +7,7 @@
- PYTHON_GOBJECT_VERSION_MAJOR = 3.42
- PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).2
- PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
--PYTHON_GOBJECT_SITE = https://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
-+PYTHON_GOBJECT_SITE = https://download.gnome.org/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
- PYTHON_GOBJECT_LICENSE = LGPL-2.1+
- PYTHON_GOBJECT_LICENSE_FILES = COPYING
- PYTHON_GOBJECT_INSTALL_STAGING = YES
+ # Locally calculated
+-sha256  c05a3e95c9c811521ebad8637e90f43ab8fb053b310875acce741cc4c17d6f59  libosmium-2.18.0.tar.gz
++sha256  6911a8ca8e81d49205357177982df908af11376919f93b814cccf02f1d4d63e3  libosmium-2.19.0.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
+diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
+index f7ced04de3..2725130e72 100644
+--- a/package/libosmium/libosmium.mk
++++ b/package/libosmium/libosmium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSMIUM_VERSION = 2.18.0
++LIBOSMIUM_VERSION = 2.19.0
+ LIBOSMIUM_SITE = $(call github,osmcode,libosmium,v$(LIBOSMIUM_VERSION))
+ LIBOSMIUM_LICENSE = BSL-1.0
+ LIBOSMIUM_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
