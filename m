@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0598C64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:13:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B3B3C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DC9161383;
-	Tue, 21 Feb 2023 01:13:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DC9161383
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7C3561784;
+	Tue, 21 Feb 2023 01:13:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7C3561784
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9GJdwpbtkF3P; Tue, 21 Feb 2023 01:13:01 +0000 (UTC)
+	with ESMTP id QKIDWxQ6cqIw; Tue, 21 Feb 2023 01:13:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA6D56F99C;
-	Tue, 21 Feb 2023 01:13:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA6D56F99C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15D6761145;
+	Tue, 21 Feb 2023 01:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15D6761145
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 71B471BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 20F511BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A15E6FBC7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45CA56FBA4
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A15E6FBC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45CA56FBA4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oTg9ta357_1m for <buildroot@lists.busybox.net>;
+ with ESMTP id upJxeAeBK5dw for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F1EB6FBBD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 718716FBB1
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F1EB6FBBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 718716FBB1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D97C828C8; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+ id 6C0988648F; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 11:22:09 +0100
+Date: Fri, 27 Jan 2023 11:38:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 58cc22a6d095b9b589e5b001e005032589749084
-X-Git-Newrev: fa341f029832a658865ed4b5849efc4b765452f9
+X-Git-Oldrev: 1005feccf52ce260aa794f4bf3fe84aa780b84cc
+X-Git-Newrev: 0939cecb401fa3a4227649b36bc4298790544928
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205240.4D97C828C8@busybox.osuosl.org>
+Message-Id: <20230220205240.6C0988648F@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- board/zynqmp/kria/uboot.fragment: remove unnecessary configs
+ configs/zynqmp_zcu106_defconfig: use Xilinx github for pmufw.elf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa341f029832a658865ed4b5849efc4b765452f9
+commit: https://git.buildroot.net/buildroot/commit/?id=0939cecb401fa3a4227649b36bc4298790544928
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Reduce the configs in the kria/uboot.fragment to only what is necessary.
-These 4 configs are already included in the xilinx_zynqmp_virt_defconfig, so
-it is redundant to include them in the kria/uboot.fragment file.  Applying
-this patch has zero impact on the u-boot binaries that are built.
-
-This patch has been build and run tested on a kria kv260 starter kit.
+Migrate zcu106_pmufw.elf location from nealfrager github to Xilinx github.
+The image is identical, so this patch has zero impact on functionality.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/zynqmp/kria/uboot.fragment | 4 ----
- 1 file changed, 4 deletions(-)
+ configs/zynqmp_zcu106_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/zynqmp/kria/uboot.fragment b/board/zynqmp/kria/uboot.fragment
-index 40709549dc..d8efc230a0 100644
---- a/board/zynqmp/kria/uboot.fragment
-+++ b/board/zynqmp/kria/uboot.fragment
-@@ -7,9 +7,5 @@ CONFIG_PHY=y
- CONFIG_PHY_XILINX_ZYNQMP=y
- CONFIG_PINCTRL=y
- CONFIG_PINCONF=y
--CONFIG_POWER_DOMAIN=y
--CONFIG_ZYNQMP_POWER_DOMAIN=y
--CONFIG_DM_RESET=y
--CONFIG_RESET_ZYNQMP=y
- CONFIG_VIDEO_ZYNQMP_DPSUB=y
- CONFIG_SF_DEFAULT_SPEED=40000000
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 699e528f32..88295571af 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -29,7 +29,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.2/zcu106/zcu106_pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/zcu106/zcu106_pmufw.elf"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
