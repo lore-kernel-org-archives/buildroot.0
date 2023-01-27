@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2A30C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:40:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B54EDC6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0BC483FAB;
-	Mon, 20 Feb 2023 23:40:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0BC483FAB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64FB083F9D;
+	Mon, 20 Feb 2023 23:41:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64FB083F9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Rs5KZY9kKZj; Mon, 20 Feb 2023 23:40:47 +0000 (UTC)
+	with ESMTP id A527jNUzEcD0; Mon, 20 Feb 2023 23:41:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 942B183FA8;
-	Mon, 20 Feb 2023 23:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 942B183FA8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 73AC21BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BF1783FB0;
+	Mon, 20 Feb 2023 23:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BF1783FB0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 137051BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E20D617B8
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E20D617B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id A64304176E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A64304176E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yKaB_wNC2Thd for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sar3lnIQYkIv for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1BF43610A8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BF43610A8
+ by smtp2.osuosl.org (Postfix) with ESMTP id B253B41762
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B253B41762
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 13889828C8; Mon, 20 Feb 2023 20:52:19 +0000 (UTC)
+ id A7E5A8648F; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Dec 2022 10:38:11 +0100
+Date: Fri, 27 Jan 2023 13:21:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 72576a661faf8e9d8021a8b110ce9318a9bc8f38
-X-Git-Newrev: 2f0a2a43bbfcb2aef1569b48277933264ec25feb
+X-Git-Oldrev: c373ca0572e2017e04bd48a9ce63151fb23e378a
+X-Git-Newrev: 6a0f7c39bcb48fc13aa2ce3fc4996baf1be66483
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205219.13889828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing: add test for
- python-munch
+Message-Id: <20230220205240.A7E5A8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fluent-bit: add new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,86 +57,216 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f0a2a43bbfcb2aef1569b48277933264ec25feb
+commit: https://git.buildroot.net/buildroot/commit/?id=6a0f7c39bcb48fc13aa2ce3fc4996baf1be66483
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fluent Bit is a super fast, lightweight, and highly
+scalable logging and metrics processor and forwarder.
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+[Peter: add DEVELOPERS entry, drop STATIC_LIBS dependency]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                           |  2 ++
- support/testing/tests/package/sample_python_munch.py | 20 ++++++++++++++++++++
- support/testing/tests/package/test_python_munch.py   | 12 ++++++++++++
- 3 files changed, 34 insertions(+)
+ DEVELOPERS                         |  3 ++
+ package/Config.in                  |  1 +
+ package/fluent-bit/Config.in       | 12 +++++++
+ package/fluent-bit/S99fluent-bit   | 72 ++++++++++++++++++++++++++++++++++++++
+ package/fluent-bit/fluent-bit.hash |  3 ++
+ package/fluent-bit/fluent-bit.mk   | 49 ++++++++++++++++++++++++++
+ 6 files changed, 140 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 0eea9c33d9..3217823b6f 100644
+index b973c37b82..385a46ccf9 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3133,10 +3133,12 @@ F:	package/x11r7/xapp_xinput-calibrator/
- F:	package/zlog/
- F:	support/testing/tests/package/sample_python_dicttoxml2.py
- F:	support/testing/tests/package/sample_python_dtschema.py
-+F:	support/testing/tests/package/sample_python_munch.py
- F:	support/testing/tests/package/test_libftdi1.py
- F:	support/testing/tests/package/test_python_can.py
- F:	support/testing/tests/package/test_python_dicttoxml2.py
- F:	support/testing/tests/package/test_python_dtschema.py
-+F:	support/testing/tests/package/test_python_munch.py
- F:	utils/scanpypi
+@@ -2820,6 +2820,9 @@ F:	support/testing/tests/package/test_perl_lwp_protocol_https.py
+ F:	utils/size-stats-compare
+ F:	toolchain/
  
- N:	Yunhao Tian <t123yh.xyz@gmail.com>
-diff --git a/support/testing/tests/package/sample_python_munch.py b/support/testing/tests/package/sample_python_munch.py
++N:	Thomas Devoogdt <thomas@devoogdt.com>
++F:	package/fluent-bit/
++
+ N:	Thomas Huth <huth@tuxfamily.org>
+ F:	board/qemu/m68k-mcf5208/
+ F:	configs/qemu_m68k_mcf5208_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index 995dae2c57..b281a67157 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2610,6 +2610,7 @@ menu "System tools"
+ 	source "package/efivar/Config.in"
+ 	source "package/embiggen-disk/Config.in"
+ 	source "package/emlog/Config.in"
++	source "package/fluent-bit/Config.in"
+ 	source "package/ftop/Config.in"
+ 	source "package/getent/Config.in"
+ 	source "package/gkrellm/Config.in"
+diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
 new file mode 100644
-index 0000000000..b45bec7b7e
+index 0000000000..11ceb55d4f
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_munch.py
-@@ -0,0 +1,20 @@
-+from munch import Munch
-+
-+b = Munch()
-+b.hello = 'world'
-+assert b.hello == 'world'
-+b['hello'] += "!"
-+assert b.hello == 'world!'
-+b.foo = Munch(lol=True)
-+assert b.foo.lol is True
-+assert b.foo is b['foo']
-+
-+assert sorted(b.keys()) == ['foo', 'hello']
-+
-+b.update({'ponies': 'are pretty!'}, hello=42)
-+assert b == Munch({'ponies': 'are pretty!', 'foo': Munch({'lol': True}), 'hello': 42})
-+
-+assert sorted([(k, b[k]) for k in b]) == [('foo', Munch({'lol': True})), ('hello', 42), ('ponies', 'are pretty!')]
-+
-+format_munch = Munch(knights='lolcats', ni='can haz')
-+assert "The {knights} who say {ni}!".format(**format_munch) == 'The lolcats who say can haz!'
-diff --git a/support/testing/tests/package/test_python_munch.py b/support/testing/tests/package/test_python_munch.py
-new file mode 100644
-index 0000000000..6853bbaac7
---- /dev/null
-+++ b/support/testing/tests/package/test_python_munch.py
++++ b/package/fluent-bit/Config.in
 @@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
++config BR2_PACKAGE_FLUENT_BIT
++	bool "fluent-bit"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBYAML
++	help
++	  Fast and Lightweight Logs and Metrics processor.
 +
++	  https://github.com/fluent/fluent-bit
 +
-+class TestPythonPy3Munch(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_MUNCH=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_munch.py"]
-+    timeout = 40
++comment "fluent-bit needs a glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/fluent-bit/S99fluent-bit b/package/fluent-bit/S99fluent-bit
+new file mode 100644
+index 0000000000..f4ba0e4448
+--- /dev/null
++++ b/package/fluent-bit/S99fluent-bit
+@@ -0,0 +1,72 @@
++#!/bin/sh
++
++DAEMON="fluent-bit"
++PID_FILE="/var/run/$DAEMON.pid"
++CONF_FILE="/etc/$DAEMON/$DAEMON.conf"
++
++FLUENT_BIT_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -b -m -p "$PID_FILE" --exec "/usr/bin/$DAEMON" \
++		-- -c "$CONF_FILE" $FLUENT_BIT_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PID_FILE"
++	status=$?
++
++	if [ -f "$PID_FILE" ]; then
++		pid=$(cat "$PID_FILE")
++		rm -f "$PID_FILE"
++
++		# https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/configuration-file#config_section
++		# The default grace time is set to 5 seconds, so use 6 seconds to have some margin.
++		timeout=6
++		while kill -0 "$pid" 2>/dev/null; do
++			[ $timeout -eq 0 ] && status=1 && break
++			timeout=$((timeout - 1))
++			sleep 1
++		done
++	fi
++
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++start)
++	start
++	;;
++stop)
++	stop
++	;;
++restart | reload)
++	restart
++	;;
++*)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++	;;
++esac
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+new file mode 100644
+index 0000000000..ce7cea7b59
+--- /dev/null
++++ b/package/fluent-bit/fluent-bit.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  8ff5566389033669feabc9c69a5c6f417dad5c8b066454388e6a706507262acf  fluent-bit-2.0.8.tar.gz
++sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+new file mode 100644
+index 0000000000..f7727834dd
+--- /dev/null
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# fluent-bit
++#
++################################################################################
++
++FLUENT_BIT_VERSION = 2.0.8
++FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
++FLUENT_BIT_LICENSE = Apache-2.0
++FLUENT_BIT_LICENSE_FILES = LICENSE
++FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml libopenssl
++
++FLUENT_BIT_CONF_OPTS += \
++	-DFLB_DEBUG=No \
++	-DFLB_RELEASE=Yes \
++	-DFLB_EXAMPLES=No \
++	-DFLB_CHUNK_TRACE=No \
++	-DFLB_BACKTRACE=No
++
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=Yes
++FLUENT_BIT_DEPENDENCIES += luajit
++else
++FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=No
++endif
++
++# Force bundled miniz to be linked statically.
++# https://github.com/fluent/fluent-bit/issues/6711
++FLUENT_BIT_CONF_OPTS += \
++	-DBUILD_SHARED_LIBS=OFF
++
++# Move the config files from /usr/etc/ to /etc/.
++# https://github.com/fluent/fluent-bit/issues/6619
++FLUENT_BIT_CONF_OPTS += \
++	-DCMAKE_INSTALL_SYSCONFDIR="/etc/"
++
++# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
++# large file support.
++# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information.
++FLUENT_BIT_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -U_FILE_OFFSET_BITS"
++
++define FLUENT_BIT_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
++		$(TARGET_DIR)/etc/init.d/S99fluent-bit
++endef
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
