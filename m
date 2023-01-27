@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35DC4C64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E3AC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D85D96FAF8;
-	Tue, 21 Feb 2023 01:14:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D85D96FAF8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2680F6FB08;
+	Tue, 21 Feb 2023 01:14:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2680F6FB08
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FUTPVUm35X_A; Tue, 21 Feb 2023 01:14:17 +0000 (UTC)
+	with ESMTP id VtbOwboiLAIQ; Tue, 21 Feb 2023 01:14:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D4C56FAE8;
-	Tue, 21 Feb 2023 01:14:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D4C56FAE8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A7C06FB0C;
+	Tue, 21 Feb 2023 01:14:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A7C06FB0C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D9AFE1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DC1031BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F03696FBCC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 00D1D6FBCD
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F03696FBCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00D1D6FBCD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2_O2T5ZEWgde for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+ with ESMTP id Jv3GZvoCANbL for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D17066FB8C
+ by smtp3.osuosl.org (Postfix) with ESMTP id E28AC6FBB8
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D17066FB8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E28AC6FBB8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2D5A828C8; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+ id D23C37FF06; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 13:37:08 +0100
+Date: Fri, 27 Jan 2023 13:42:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 11d7fb7013d0fbdb959897e00acc5955427a31de
-X-Git-Newrev: ccd391bfd94fdcaed77a2fe31c577e428cefc0ee
+X-Git-Oldrev: ccd391bfd94fdcaed77a2fe31c577e428cefc0ee
+X-Git-Newrev: 0c157330da49dcfe41fe7cef9fe4ec77636f326f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205240.C2D5A828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/openlayers: bump to
- version 7.2.2
+Message-Id: <20230220205240.D23C37FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sexpect: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +62,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccd391bfd94fdcaed77a2fe31c577e428cefc0ee
+commit: https://git.buildroot.net/buildroot/commit/?id=0c157330da49dcfe41fe7cef9fe4ec77636f326f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+sexpect is useful for shell controlled testing.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openlayers/openlayers.hash | 2 +-
- package/openlayers/openlayers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/sexpect/Config.in    |  8 ++++++++
+ package/sexpect/sexpect.hash |  3 +++
+ package/sexpect/sexpect.mk   | 13 +++++++++++++
+ 5 files changed, 26 insertions(+)
 
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index 1b3f3cce51..7e33716f78 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  37a0e5fde4df3db6e6c11ed0ceb8e20608121afe5f8f7f91cf03990e89a919ca  v7.1.0-package.zip
-+sha256  31b848cc55967c7de63fece8cd1699fc51152421d04653b859103c7391ad5bbe  v7.2.2-package.zip
- sha256  6c4347b83a8c9feef18d57b18e3b6c44cf901b3c344a4a1fbd837e421555ab8e  LICENSE.md
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 7396e38fb9..852f5f1dcf 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENLAYERS_VERSION = 7.1.0
-+OPENLAYERS_VERSION = 7.2.2
- OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-package.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 385a46ccf9..83fa9e403d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -294,6 +294,7 @@ F:	package/ebtables/
+ F:	package/i2c-tools/
+ F:	package/libcurl/
+ F:	package/libpcap/
++F:	package/sexpect/
+ F:	package/socat/
+ F:	package/strace/
+ F:	package/tcpdump/
+diff --git a/package/Config.in b/package/Config.in
+index b281a67157..eabb0d5201 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2568,6 +2568,7 @@ comment "Utilities"
+ 	source "package/rtty/Config.in"
+ 	source "package/screen/Config.in"
+ 	source "package/screenfetch/Config.in"
++	source "package/sexpect/Config.in"
+ 	source "package/sudo/Config.in"
+ 	source "package/terminology/Config.in"
+ 	source "package/time/Config.in"
+diff --git a/package/sexpect/Config.in b/package/sexpect/Config.in
+new file mode 100644
+index 0000000000..bdf5c3bbf5
+--- /dev/null
++++ b/package/sexpect/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_SEXPECT
++	bool "sexpect"
++	help
++	  sexpect is another implementation of Expect which is
++	  specifically designed for Shell scripts
++	  (sh, bash, ksh, zsh, ...)
++
++	  https://github.com/clarkwang/sexpect
+diff --git a/package/sexpect/sexpect.hash b/package/sexpect/sexpect.hash
+new file mode 100644
+index 0000000000..d512117626
+--- /dev/null
++++ b/package/sexpect/sexpect.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  f6801c8b979d56eec54aedd7ede06e2342f382cee291beea88b52869186c557c  sexpect-2.3.14.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/sexpect/sexpect.mk b/package/sexpect/sexpect.mk
+new file mode 100644
+index 0000000000..7b878600e4
+--- /dev/null
++++ b/package/sexpect/sexpect.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# sexpect
++#
++################################################################################
++
++SEXPECT_VERSION = 2.3.14
++SEXPECT_SITE = $(call github,clarkwang,sexpect,v$(SEXPECT_VERSION))
++SEXPECT_LICENSE = GPL-3.0
++SEXPECT_LICENSE_FILES = LICENSE
++SEXPECT_SUPPORTS_IN_SOURCE_BUILD = NO
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
