@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA9BC38142
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 11:08:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB390C54EAA
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 12:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00E6C41881;
-	Fri, 27 Jan 2023 11:08:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00E6C41881
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4377E827FA;
+	Fri, 27 Jan 2023 12:25:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4377E827FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YKLMnWufCjzS; Fri, 27 Jan 2023 11:08:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NXOZUBB0h64s; Fri, 27 Jan 2023 12:25:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 060FE416BA;
-	Fri, 27 Jan 2023 11:08:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 060FE416BA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A41D827FD;
+	Fri, 27 Jan 2023 12:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A41D827FD
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F8721BF2BA
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 11:08:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A9A161BF263
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5EBC60BF5
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 11:08:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5EBC60BF5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 902EB60B27
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:25:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 902EB60B27
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FeVYnyuEhTdK for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 11:08:44 +0000 (UTC)
+ with ESMTP id O_f8rqPPdMPP for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 12:24:59 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A00260B8C
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A00260B8C
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 11:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5465160AB2
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5465160AB2
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 12:24:59 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9B364C0005;
- Fri, 27 Jan 2023 11:08:40 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 58D0C60009;
+ Fri, 27 Jan 2023 12:24:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pLMb1-0006Im-EM; Fri, 27 Jan 2023 12:08:39 +0100
+ id 1pLNmo-001xuj-Ef; Fri, 27 Jan 2023 13:24:54 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Stefan Kuhne <Stefan.Kuhne@gmx.net>
-References: <21929154-7cb8-31ff-20de-d48d25e53423@carrier-2>
- <6e0a1eb8-4495-76a4-63a9-852fccbb9a79@carrier-2>
-Date: Fri, 27 Jan 2023 12:08:39 +0100
-In-Reply-To: <6e0a1eb8-4495-76a4-63a9-852fccbb9a79@carrier-2> (Stefan Kuhne's
- message of "Tue, 24 Jan 2023 19:37:27 +0100")
-Message-ID: <87zga45j60.fsf@dell.be.48ers.dk>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+References: <20230123151459.1899697-1-thomas.devoogdt@barco.com>
+ <20230125160513.2960401-1-thomas.devoogdt@barco.com>
+Date: Fri, 27 Jan 2023 13:24:54 +0100
+In-Reply-To: <20230125160513.2960401-1-thomas.devoogdt@barco.com> (Thomas
+ Devoogdt's message of "Wed, 25 Jan 2023 17:05:13 +0100")
+Message-ID: <87v8ks5fmx.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] Build of glib2 failed
+Subject: Re: [Buildroot] [PATCH v4] package/fluent-bit: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,33 +64,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Samuel Martin <s.martin49@gmail.com>, Grim Delcour <grim.delcour@barco.com>,
+ Anton Danneels <anton.danneels@barco.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Stefan" == Stefan Kuhne <Stefan.Kuhne@gmx.net> writes:
+>>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
 
- > Am 23.01.2023 um 20:32 schrieb Stefan Kuhne:
- > Hello.
+ > Fluent Bit is a super fast, lightweight, and highly
+ > scalable logging and metrics processor and forwarder.
 
- >> I've a problem to build glib2:
- >> 
- >> ...
- >> Library m found: YES
- >> Run-time dependency libffi found: YES 3.4.4
- >> Run-time dependency zlib found: YES 1.2.13
- >> Checking for function "ngettext" : NO
- >> Library intl found: NO
- >> 
- >> output/build/libglib2-2.72.3/meson.build:2102:4: ERROR: Automatic
- >> wrap-based subproject downloading is disabled
- >> 
- > I missed UCLIBC_HAS_INTL and UCLIBC_HAS_ICONV in uclibc config.
+ > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ > ---
 
-Yes, if you tweak the default uClibc-ng config then you may end up with
-build issues.
+ > Changes v3 -> v4:
+ >   - .mk: dropped patch & use BUILD_SHARED_LIBS=OFF
+
+With this we can presumably get rid of the BR2_STATIC_LIBS dependency
+(glibc still implies it though), so I've dropped that.
+
+ >   - .mk: added issue links
+ >   - .S99fluent-bit: fixed all the ./utils/check-package issues & synced with S01syslogd
+
+ > +# Force miniz to be compiled statically.
+
+I've slightly reworded this to make it clear miniz is bundled with
+fluent-bit. I've added a DEVELOPERS entry and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
