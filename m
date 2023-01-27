@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59DB3C54EAA
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 12:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66D48C54EAA
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 12:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBED441D00;
-	Fri, 27 Jan 2023 12:54:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBED441D00
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F28241CFB;
+	Fri, 27 Jan 2023 12:55:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F28241CFB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eWYvtPFSAw6M; Fri, 27 Jan 2023 12:54:12 +0000 (UTC)
+	with ESMTP id YsW-P7l3LX0f; Fri, 27 Jan 2023 12:55:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D33CB41D0C;
-	Fri, 27 Jan 2023 12:54:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D33CB41D0C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6BFFE1BF263
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:54:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47F5B41B76;
+	Fri, 27 Jan 2023 12:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47F5B41B76
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 642491BF263
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 535FF822DD
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:54:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 535FF822DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D31341B76
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:54:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D31341B76
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hNerbYvR0e-3 for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 12:54:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pA-wZBwH_npD for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 12:54:58 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F05F82C7D
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F05F82C7D
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 12:54:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF7AE419CB
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CF7AE419CB
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 12:54:57 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6AB9860009;
- Fri, 27 Jan 2023 12:54:06 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id C2A1B2000C;
+ Fri, 27 Jan 2023 12:54:54 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pLOF3-0020KI-Ea; Fri, 27 Jan 2023 13:54:05 +0100
+ id 1pLOFp-0020Pf-Tk; Fri, 27 Jan 2023 13:54:53 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-References: <20230116212558.2182684-1-aperez@igalia.com>
-Date: Fri, 27 Jan 2023 13:54:05 +0100
-In-Reply-To: <20230116212558.2182684-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Mon, 16 Jan 2023 23:25:58 +0200")
-Message-ID: <87wn583zpu.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230115182724.377966-1-fontaine.fabrice@gmail.com>
+Date: Fri, 27 Jan 2023 13:54:53 +0100
+In-Reply-To: <20230115182724.377966-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 15 Jan 2023 19:27:24 +0100")
+Message-ID: <87sffw3zoi.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/bubblewrap: bump to version
- 0.7.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: fix build with
+ libressl >= 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,15 +70,21 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This version contains a few minor fixes, provides better error messages,
- > and includes a new option to set the size of created tmpfs volumes.
- > Release notes:
+ > Fix the following build failure with libressl raised since bump to
+ > version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 
- >   https://github.com/containers/bubblewrap/releases/tag/v0.7.0
+ > In file included from /tmp/instance-10/output-1/build/mariadb-10.3.36/vio/viosslfactories.c:18:
+ > /tmp/instance-10/output-1/build/mariadb-10.3.36/vio/viosslfactories.c: In function 'get_dh2048':
+ > /tmp/instance-10/output-1/build/mariadb-10.3.36/include/ssl_compat.h:68:45: error: invalid use of incomplete typedef 'DH' {aka 'struct dh_st'}
+ >    68 | #define DH_set0_pqg(D,P,Q,G)            ((D)->p= (P), (D)->g= (G))
+ >       |                                             ^~
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/524198344aafca58d214537af64c5961c407b0f8
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
