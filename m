@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9C9C54EAA
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 12:26:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA413C38142
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 12:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C015241D29;
-	Fri, 27 Jan 2023 12:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C015241D29
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7687E6128F;
+	Fri, 27 Jan 2023 12:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7687E6128F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FlABkUC_iOvm; Fri, 27 Jan 2023 12:26:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tjyTMQQvVGE2; Fri, 27 Jan 2023 12:26:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D72A041CD2;
-	Fri, 27 Jan 2023 12:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D72A041CD2
+	by smtp3.osuosl.org (Postfix) with ESMTP id C164B61296;
+	Fri, 27 Jan 2023 12:26:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C164B61296
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2ACBA1BF263
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:26:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C92E81BF263
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:26:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04A0F82BC4
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04A0F82BC4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5FD8C82B51
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FD8C82B51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7CIn17qoXDeW for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 12:26:01 +0000 (UTC)
+ with ESMTP id kDB4vL36U-BS for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 12:26:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19EA882B8C
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 19EA882B8C
- for <buildroot@busybox.net>; Fri, 27 Jan 2023 12:26:01 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id r2so4808427wrv.7
- for <buildroot@busybox.net>; Fri, 27 Jan 2023 04:26:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E27B982BC4
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E27B982BC4
+ for <buildroot@busybox.net>; Fri, 27 Jan 2023 12:26:06 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id z5so4819025wrt.6
+ for <buildroot@busybox.net>; Fri, 27 Jan 2023 04:26:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FraZeKsUPLlVFnILKGFNv+e4v1g0/l6xNHfwIrNhnHM=;
- b=SXDv35+KoepuZM0VIV+Wws6pg7IHau/+5FkhZE4O3EKlhLE/ZhGjrxrDbgzxJ+0SAQ
- Wx+GJq7c66v+pdlHBqeVfyhgglUZOYzvC1xZVtY7KjC+pyHw98Pqq1szsCwLjKPE6mRv
- AshF4AoFhgCMYiQGEPL+O9z83Kr844Xpga20p4VhPcGL9DPo9rBq2ki2xxkW7/dgAWO2
- 9u8P47SE3biHw7A8V0IsC3C2yKIBjdTIlnFXQtX1dViKxiXESZJsfHahRsk8cTE6BMez
- uJuWICBPUlLjW+78AgcA3nPfV8Qvup9vri6zUl5dWK3y42/vu7HXw2HhPyMoJEjvmMrP
- C2xQ==
-X-Gm-Message-State: AFqh2kq1NDecT8bw5m+D+1CYSlpNpegierv7UzelvNvVkBKKLjtQJezo
- bfcm0kRZnqJK/GDqDAYqcaqMylWSr3g=
-X-Google-Smtp-Source: AMrXdXurbqxHGPkGSKJajDW/s1uQi4qaLU5y37tck2egLQYzG2xwZShKbRa8C27uCFzwWaB9X7R9ZQ==
-X-Received: by 2002:a5d:6f03:0:b0:29a:c631:e761 with SMTP id
- ay3-20020a5d6f03000000b0029ac631e761mr37764400wrb.43.1674822359048; 
- Fri, 27 Jan 2023 04:25:59 -0800 (PST)
+ bh=t/HcadLJ5UkPrOhVIBH3emjU+YKfTEswydh4Ol2/v7Y=;
+ b=CLJQwFO4DtB25/Y/g3KrOHDKHB6XR+nzZOrEaGtos9EzuaMTcB0LUwAk53fL2BFqcC
+ 1VPZrT27/5rQTnQnNa3i6SFzH/cYCo6DGTOAT2tjTs7i18POCeKy7KUQKbCuT83b2oKW
+ FnZHhKZLI7TK/FTGzGUdX0AO9II5Cto54kpMVlHJ41PB0kx0BZb5fQPsmDE6zsVMQlVo
+ Y9q5Ujl82K3wZquHxdC2cek2zzfuWS2xp2iP918u1T25m8y0hV3MlLev38uDRcVu9H5e
+ uAT85y9/eNyQ6JA3geWkU7ZqhVg/A39WB48d5AxeaJdCAypqG1UTGzvukiQwnP6eJrFo
+ y+3Q==
+X-Gm-Message-State: AO0yUKU7+5+yBmeJYgEvPf29moepASd2x3BVNUXFr0TEoIldlQwPDe52
+ v+RG77jOlQdSpNMvRyiK0yzhbOtGpmg=
+X-Google-Smtp-Source: AK7set8lPWMuUEcZdeNivbpQBOclEoBvmPwyMQxzM4Z35C6QU3teRCibQ8RXUtrwRWOfJxF9qDEH4Q==
+X-Received: by 2002:a05:6000:1542:b0:2bf:c319:c83f with SMTP id
+ 2-20020a056000154200b002bfc319c83fmr7957285wry.21.1674822365075; 
+ Fri, 27 Jan 2023 04:26:05 -0800 (PST)
 Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- d3-20020adffbc3000000b002bdd155ca4dsm3862870wrs.48.2023.01.27.04.25.58
+ y8-20020adfdf08000000b002bfb31bda06sm4107654wrl.76.2023.01.27.04.26.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Jan 2023 04:25:58 -0800 (PST)
+ Fri, 27 Jan 2023 04:26:04 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri, 27 Jan 2023 13:25:52 +0100
-Message-Id: <20230127122552.236033-1-francois.perrad@gadz.org>
+Date: Fri, 27 Jan 2023 13:26:02 +0100
+Message-Id: <20230127122602.236054-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FraZeKsUPLlVFnILKGFNv+e4v1g0/l6xNHfwIrNhnHM=;
- b=NliiiZT+PQoyCY2AsFz0pQXh1QwoEEw1eeiY9VZVvrCR/vWC4/81vL7DAqdjalGT4O
- 9at63+I08k0+CEtdM+HYWfTB8WQRAL/lnqSL+z1h+2QWHmUXY+eLuqp6Z05leckLyOGT
- CAP7uf3sxHso7O97JkoB5woK776YpMVAqQfybXWE+4djBe+z4JIQ0sYvSnr/h5Fnzzc6
- 8A6tHJomEl4iD7Kif+16afmM8WLz0ZGk2GLL7i7Y/IKgkzfkLE+4z6U2RtatQJ71u8Ae
- zZERWynN45bBdLGnDxBaoral5wb99FdbddQEzStpWPqsxuaeuEXc5kfjHDm/R53DEOkp
- 3wcw==
+ bh=t/HcadLJ5UkPrOhVIBH3emjU+YKfTEswydh4Ol2/v7Y=;
+ b=He/GpmxlHHKB/I2Jj7mGnWPUhDHBvzg53mG+ZOAYV2otenRLk9Uw4DsVzthEghco7b
+ yG1gpz1+QNCClVPZ4Bfy0pomiEeVcpPvvG2aLogVbgvyehIW6G0XBcRlxp2qI63N+s9k
+ 6g/jGx47vNGBs92M7YZg1+vcsQNSpAfsW0oyngStMM9WbWw6gjoWKef2AwoglWdSgwi4
+ dlN3hHOb57e1yZxz9UgjV2LJctN9uCTMgxAMZsdwAqhI9MRhpBTwyN96l1SovVqCURFt
+ dipMeqMznw/sqLEaLy/4ifHmWE18wTdwVDkUxgUw9vUYLk98IgpUKS3YHeIJHIaZ04rc
+ p8eA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=NliiiZT+
-Subject: [Buildroot] [PATCH] package/janet: bump to version 1.26.0
+ header.a=rsa-sha256 header.s=20210112 header.b=He/Gpmxl
+Subject: [Buildroot] [PATCH] package/luajit: bump to version
+ d0e88930ddde28ff662503f9f20facf34f7265aa
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,41 +100,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-diff LICENCE:
--Copyright (c) 2021 Calvin Rose and contributors
-+Copyright (c) 2023 Calvin Rose and contributors
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/janet/janet.hash | 4 ++--
- package/janet/janet.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luajit/luajit.hash | 2 +-
+ package/luajit/luajit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/janet/janet.hash b/package/janet/janet.hash
-index 5cd3db1c2..47e0de4a0 100644
---- a/package/janet/janet.hash
-+++ b/package/janet/janet.hash
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index d00cea4ee..c655e9931 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
 @@ -1,5 +1,5 @@
  # Locally calculated
--sha256  5bf9b680adbc5511835aec3787117df37032eef796e1664edbbcfd540b6acaf3  janet-1.25.0.tar.gz
-+sha256  c95dab93e8e4ebcab5c293d5ee448fb43ab8bd2f6391fd66a6ca92fe1ec72c03  janet-1.26.0.tar.gz
+-sha256  19a911fdd77af69e48fa50749606a9009696f543cc88e898b4480d8d3c8828f5  luajit-6c4826f12c4d33b8b978004bc681eb1eef2be977.tar.gz
++sha256  aa354d1265814db5a1ee9dfff6049e19b148e1fd818f1ecfa4fcf2b19f6e4dd9  luajit-d0e88930ddde28ff662503f9f20facf34f7265aa.tar.gz
  
  # Locally calculated
--sha256  e2d2ae8360d95386af751ac7d1a3da36ea8ceb230e5f0eba7eb762547b1c58c9  LICENSE
-+sha256  95fca700e8dce9699248e7cc80ac88ce2357874c8352cd2be4d18f183dc9710b  LICENSE
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index 284e6c264..db1eb2a5c 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
+ sha256  52fc5b15ac968ed81aabb4c1e23ab3bce50f57a5764e9cdca86b463a11072921  COPYRIGHT
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index c79f18bf6..09bde3590 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JANET_VERSION = 1.25.0
-+JANET_VERSION = 1.26.0
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
+-LUAJIT_VERSION = 6c4826f12c4d33b8b978004bc681eb1eef2be977
++LUAJIT_VERSION = d0e88930ddde28ff662503f9f20facf34f7265aa
+ LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
 -- 
 2.37.2
 
