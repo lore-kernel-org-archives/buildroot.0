@@ -1,58 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 176CBC38142
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 10:39:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 688DCC61DA4
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 10:39:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6297417D5;
-	Fri, 27 Jan 2023 10:39:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6297417D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id E595741CCE;
+	Fri, 27 Jan 2023 10:39:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E595741CCE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JJskbtqv-bwf; Fri, 27 Jan 2023 10:39:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rZ4YgbgeoV3H; Fri, 27 Jan 2023 10:39:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C923B417D3;
-	Fri, 27 Jan 2023 10:39:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C923B417D3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1130F41C8B;
+	Fri, 27 Jan 2023 10:39:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1130F41C8B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2F31D1BF306
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 10:39:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A4C0C1BF306
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 10:39:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 16638822D6
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 10:39:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16638822D6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8BDE6827A5
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 10:39:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BDE6827A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DAax-SLTR2K1 for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 10:38:59 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52C6F82214
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 52C6F82214
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 10:38:58 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 759612000B;
- Fri, 27 Jan 2023 10:38:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pLM8E-00HKT8-As; Fri, 27 Jan 2023 11:38:54 +0100
+ with ESMTP id M3UoOurGIRFI for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 10:39:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CAC9D82675
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 10:39:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAC9D82675
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B945387E15; Fri, 27 Jan 2023 10:39:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Neal Frager <neal.frager@amd.com>
-References: <20230127094400.6267-1-neal.frager@amd.com>
- <20230127094400.6267-3-neal.frager@amd.com>
-Date: Fri, 27 Jan 2023 11:38:54 +0100
-In-Reply-To: <20230127094400.6267-3-neal.frager@amd.com> (Neal Frager's
- message of "Fri, 27 Jan 2023 09:44:00 +0000")
-Message-ID: <87h6wc6z41.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 3/3] configs/zynqmp_zcu106_defconfig: use
+To: buildroot@buildroot.org
+Date: Fri, 27 Jan 2023 11:23:24 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fa341f029832a658865ed4b5849efc4b765452f9
+X-Git-Newrev: a200fc4ee34fa82a7f48107e6b76acd0db600c9f
+X-Patchwork-Hint: ignore
+Message-Id: <20230127103914.B945387E15@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynqmp_kria_kv260_defconfig: use
  Xilinx github for pmufw.elf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,24 +57,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: terry.oneal@amd.com, luca.ceresoli@bootlin.com, kris.chaplin@amd.com,
- thomas.petazzoni@bootlin.com, buildroot@buildroot.org, michal.simek@amd.com
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a200fc4ee34fa82a7f48107e6b76acd0db600c9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Migrate zcu106_pmufw.elf location from nealfrager github to Xilinx github.
- > The image is identical, so this patch has zero impact on functionality.
+Migrate kv260_pmufw.elf location from nealfrager github to Xilinx github.
+The image is identical, so this patch has zero impact on functionality.
 
- > Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/zynqmp_kria_kv260_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 94631da034..e180d5e7e7 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/nealfrager/buildroot-firmware/raw/v2022.2/kv260/kv260_pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/kv260/kv260_pmufw.elf"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
