@@ -1,90 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6744C38142
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF897C38142
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75BC3820DE;
-	Fri, 27 Jan 2023 14:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75BC3820DE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 530FD611F4;
+	Fri, 27 Jan 2023 14:25:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 530FD611F4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9Bqgo6uQMoSl; Fri, 27 Jan 2023 14:13:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yvBZrk23bTv4; Fri, 27 Jan 2023 14:25:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 977C88208F;
-	Fri, 27 Jan 2023 14:13:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 977C88208F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81D4B60E5C;
+	Fri, 27 Jan 2023 14:25:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81D4B60E5C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 464C71BF39E
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8ED161BF39E
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1CA77611F1
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CA77611F1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 689DB60AE7
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 689DB60AE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lx90jzUon5yW for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 14:11:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FD2161296
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6FD2161296
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 14:11:08 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id y69so1950702iof.3
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 06:11:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=5nef2vcq/7CURMbDXHA35whoXkmtlMhsXpgKmZPfq3g=;
- b=Kxd54k3AbhwiADuOJnFZOthUnPuJc0Logw+zbbvJptTbuOKMXmMw2lf/iv22CKP7je
- osfBpg49GOlsthnwLRK03NsVZmGICih7Ua4wcjAN/LPBRxxJDZcM6XsBqfyeCA6dhykT
- F82JkCJYeGNRu5Pqn3+COa0sTh9FG4PhlEs6H0tpM1wWa+OIWhVWs92F8OSdiOQCxYll
- AehwwJTxidTia9V7vPvzM/x0GuZWxrqFCuy0skCXeZE0katI+dbHfu2ins0udVxpTbHH
- Tw/kSKUj2MQT5MzQ7uv5wqnNbZ5HDSD+BnV7JN2XzdNrtB3yQgpPzrp4BQuJGSo2ZwjZ
- a3xg==
-X-Gm-Message-State: AO0yUKXyzKatfjVrhobpPlkLYzQ2Q5caUMCWwiCbgjBImTzySP6WHHJV
- 0VZ9O/WIOhqX51cF0er5kw110GOdTvNrOg==
-X-Google-Smtp-Source: AK7set/jgyEBZoSz605IGiSZyX3Su0QhSWQfzd4hb1d5Sy4lTxm3Lx2PVSsCvTsPXRww90VTiEmVvw==
-X-Received: by 2002:a05:6602:341a:b0:70b:4f72:9ee0 with SMTP id
- n26-20020a056602341a00b0070b4f729ee0mr3959495ioz.21.1674828667927; 
- Fri, 27 Jan 2023 06:11:07 -0800 (PST)
-Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
- [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Jan 2023 06:11:07 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 07:10:56 -0700
-Message-Id: <20230127141058.2180747-11-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230127141058.2180747-1-james.hilliard1@gmail.com>
-References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
+ with ESMTP id QaMUCYya7iOR for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 14:25:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A04360AE4
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1A04360AE4
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 14:25:13 +0000 (UTC)
+Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
+ (mreue010 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1MzQwa-1oPzan1AuW-00vOEy; Fri, 27 Jan 2023 15:25:09 +0100
+Message-ID: <5af8c479-7730-69e2-df16-b08770f492cd@vivier.eu>
+Date: Fri, 27 Jan 2023 15:25:08 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=5nef2vcq/7CURMbDXHA35whoXkmtlMhsXpgKmZPfq3g=;
- b=Vg0hZa9IwVV7JSu1DyC7r1NdQkX4ux8cCMpnn2a8aYKCIb2y5OHg8PnTF3sbr/SwCR
- dKw0Njfnwns1mP6/jKZPhdkkz6yK27eOFldrWIZ4oQN63Nc/DOIz7sIVcxPQcPsDFw9b
- GWpnKBRaktbhdExCqhsrMdAHR8tO6kn9m41B45ZITQ0ZYqPURryOXNXJ+Y4YQ3xAp+PZ
- lHHEzmuee6PJdu6k1CLjo3FtfoosNX+PyTMd/c5pI/JDiHyj7visXqXdxU0O032LPoA1
- ON4CM6ivLoqWZFqQcTmNziC4pp6rl8WuO6QIINA1c6V4+nTJAptU0emeqiOgckzpl4W1
- jWhQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Vg0hZa9I
-Subject: [Buildroot] [PATCH v4 11/13] package/fft2d: new package
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: fr
+To: buildroot@buildroot.org
+References: <20230108165438.1250779-1-laurent@vivier.eu>
+From: Laurent Vivier <laurent@vivier.eu>
+In-Reply-To: <20230108165438.1250779-1-laurent@vivier.eu>
+X-Provags-ID: V03:K1:27Ppu729606vTqFbmPrbH1iJFSFfh+k0V+gqpwVMtpWY1eXI9hv
+ hf0y02UY5KoQizeZaHhsUDvhjPBvAHOfnbVMM7dx1SBe1T2IpJT4I4Ld1dYimczuxXdXkPy
+ WT1agOa6mEbNwCsyxPLGf6ji1C0UK0JWK7gUdniOGTxlVo4v1fG83Fos4yPYQvK4e9sh3Ns
+ SWdDkSVN5OBl/MFqs3fTQ==
+UI-OutboundReport: notjunk:1;M01:P0:0/Cu7ZI9E38=;nb1Us+oIfvncrAiUSomdYb55BOm
+ Bb1oAYhWsEBsTZUGkahi+P+TxHrqzFwxA0t8oMDgzb1wbT37JdOnq6sz6B9ooewaoOcXC6Y0o
+ UTpbCYGn/FlkjVzCIK7R+mWCk6OxnYmgRFMQhEynpx5HQSK410kY7Uu6mV58ynxc3aO27IGSK
+ lQT9WCa40wVOJpy7U6kVVLVBhd2pvzMjQgmzHbU+0Qg4wvNFdVk+jm2uhkwpPvl4RLnyZUo6C
+ e+jzdsYK8dc1LK5WzPXv3LKG6kl0vZtnNCvIDn4l5YoI4VQ0jOswxabwDF27NpTj+LxRD40wl
+ hTVUeYAlbSdbtqWhcC3N1qf+dXymMoBGGII4xQqnsRzABYCXX5LW81UJE7NnJOwAZC2yX1Wqu
+ OeZ+Yej4p2Orjhu3GdZAXuHo5FQrfcjyR6ok0QiLYFb2dDsRUzXjhfezekco+aotCOro+uW01
+ iZCDPB+mFGwwYQzhPNB62a7HaoqfMVtbwKoTksAYXkh9O+YJycVp9c/4QaO7dGx9QwlUeQh9z
+ 3f1XKr3LuDFyjavx/dlBYrI1ofJC08sqIBQRPGDtpuL2+irbuNuFjosJibrEmtA3hYku1drgu
+ QfF5ylQ2kq48z1O+JvCy8pbbnG5viJdXVsbBwMoRLcHoLPXtRls3qyQTKAemKIl78KYTX5H31
+ XAXDs8KaKcojZwCCL2xeQrrSsXtel9r1JcfeqOwjWQ==
+Subject: Re: [Buildroot] [PATCH v8 0/3] package: add petitboot to use with
+ qemu-system-m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,119 +76,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stefan Hager <stefan.hager@ginzinger.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
+ =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Stefan Hager <stefan.hager@ginzinger.com>
-
-This package is required by tensorflow-lite.
-
-This package doesn't provide a conventional install mechanism so
-we need to install it manually.
-
-Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v3 -> v4:
-  - fix license
----
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/fft2d/Config.in  |  7 +++++++
- package/fft2d/fft2d.hash |  4 ++++
- package/fft2d/fft2d.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/fft2d/Config.in
- create mode 100644 package/fft2d/fft2d.hash
- create mode 100644 package/fft2d/fft2d.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cfb0a8228d..a9ecf7847f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2704,6 +2704,7 @@ F:	package/ti-gfx/
- N:	Stefan Hager <stefan.hager@ginzinger.com>
- F:	package/cpuinfo/
- F:	package/fp16/
-+F:	package/fft2d/
- F:	package/fxdiv/
- F:	package/gemmlowp/
- F:	package/neon-2-sse/
-diff --git a/package/Config.in b/package/Config.in
-index 26e37e2687..53f544ef40 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2003,6 +2003,7 @@ menu "Other"
- 	source "package/elfutils/Config.in"
- 	source "package/ell/Config.in"
- 	source "package/falcosecurity-libs/Config.in"
-+	source "package/fft2d/Config.in"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
- 	source "package/flatbuffers/Config.in"
-diff --git a/package/fft2d/Config.in b/package/fft2d/Config.in
-new file mode 100644
-index 0000000000..38394f6170
---- /dev/null
-+++ b/package/fft2d/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_FFT2D
-+	bool "fft2d"
-+	help
-+	  This is a package to calculate Discrete Fourier/Cosine/Sine
-+	  Transforms of 2,3-dimensional sequences of length 2^N.
-+
-+	  http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html
-diff --git a/package/fft2d/fft2d.hash b/package/fft2d/fft2d.hash
-new file mode 100644
-index 0000000000..a1b1a326ae
---- /dev/null
-+++ b/package/fft2d/fft2d.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  ada7e99087c4ed477bfdf11413f2ba8db8a840ba9bbf8ac94f4f3972e2a7cec9  fft2d.tgz
-+# License files, locally calculated
-+sha256  0b2a2082537735a2a576dbec2e8f9c1a09812eac6df6a389502a6ba860072906  readme2d.txt
-diff --git a/package/fft2d/fft2d.mk b/package/fft2d/fft2d.mk
-new file mode 100644
-index 0000000000..eac68325a1
---- /dev/null
-+++ b/package/fft2d/fft2d.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# fft2d
-+#
-+################################################################################
-+
-+FFT2D_VERSION = 2006.12.28
-+FFT2D_SITE = https://www.kurims.kyoto-u.ac.jp/~ooura
-+FFT2D_SOURCE = fft2d.tgz
-+FFT2D_LICENSE = MIT-like
-+FFT2D_LICENSE_FILES = readme2d.txt
-+FFT2D_INSTALL_STAGING = YES
-+FFT2D_INSTALL_TARGET = NO
-+
-+define FFT2D_INSTALL_STAGING_CMDS
-+	mkdir -p $(STAGING_DIR)/usr/include/fft2d
-+	$(INSTALL) -m 0644 $(@D)/*.c $(STAGING_DIR)/usr/include/fft2d
-+	$(INSTALL) -m 0644 $(@D)/*.f $(STAGING_DIR)/usr/include/fft2d
-+	$(INSTALL) -m 0644 $(@D)/*.h $(STAGING_DIR)/usr/include/fft2d
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpBbnkgY29tbWVudHM/CgpUaGFua3MsCkxhdXJlbnQKCkxlIDA4LzAxLzIwMjMgw6AgMTc6
+NTQsIExhdXJlbnQgVml2aWVyIGEgw6ljcml0wqA6Cj4gcWVtdS1zeXN0ZW0tbTY4ayBoYXMgaW50
+cm9kdWNlZCBpbiB2Ni4wIGEgbmV3IHB1cmUgdmlydHVhbCBtYWNoaW5lCj4gdGhhdCBpcyBub3cg
+c3VwcG9ydGVkIGJ5IGxpbnV4IHY1LjE5Lgo+IAo+IFRoZSBnb2FsIG9mIHRoaXMgc2VyaWVzIGlz
+IHRvIHByb3ZpZGUgcGV0aXRib290IGFzIGFuIGVtYmVkZGVkIGJvb3Rsb2FkZXIKPiBmb3IgaXQg
+KGxpa2UgaXQgaXMgZm9yIHRoZSBJQk0gUE9XRVIgbWFjaGluZSkuCj4gCj4gVGhlIGZpcnN0IHBh
+dGNoIGludHJvZHVjZXMgcGV0aXRib290IHBhY2thZ2UsIHRoZSBzZWNvbmQgcGF0Y2ggdGhlCj4g
+Y29uZmlndXJhdGlvbiB0byBidWlsZCBidWlsZHJvb3Qgd2l0aCBwZXRpdGJvb3QgZm9yIHRoZSBR
+RU1VIG1hY2hpbmUuCj4gCj4gWW91IGNhbiB0ZXN0IGl0IHdpdGg6Cj4gCj4gICAgcWVtdS1zeXN0
+ZW0tbTY4ayAtTSB2aXJ0IC1rZXJuZWwgaW1hZ2VzL3ZtbGludXggXAo+ICAgICAgICAgICAgICAg
+ICAgICAgLWluaXRyZCBpbWFnZXMvcm9vdGZzLmNwaW8ueHogXAo+ICAgICAgICAgICAgICAgICAg
+ICAgLWFwcGVuZCAiY29uc29sZT10dHlHRjAiIC0tbm9ncmFwaGljCj4gCj4gU2lnbmVkLW9mZi1i
+eTogTGF1cmVudCBWaXZpZXIgPGxhdXJlbnRAdml2aWVyLmV1Pgo+IAo+IHY4Ogo+ICAgIC0gdXNl
+IGxpbnV4LmZyYWdtZW50IHJhdGhlciB0aGFuIGxpbnV4LmNvbmZpZwo+ICAgIC0gcmViYXNlCj4g
+Cj4gdjc6Cj4gICAgLSBzZXQgQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81
+XzE5PXkKPiAgICAtIGZpeCBlcnJvcnMgcmVwb3J0ZWQgYnkgY2hlY2stcGFja2FnZQo+ICAgIC0g
+YWRkIGdpdGxhYiB0ZXN0aW5nIChDw6lkcmljKQo+ICAgIC0gdXBkYXRlIGJvb3QtcWVtdS1pbWFn
+ZS5weSB0byBzdXBwb3J0IHBldGl0Ym9vdAo+IAo+IHY2Ogo+ICAgIC0gcmViYXNlCj4gCj4gdjU6
+Cj4gICAgLSByZW1vdmUgQlIyX0NDQUNIRV9ESVIsIEJSMl9QQUNLQUdFX0RUQyBhbmQgQlIyX1BB
+Q0tBR0VfRFRDX1BST0dSQU1TCj4gCj4gdjQ6Cj4gICAgLSBhZGRyZXNzIFRob21hcycgY29tbWVu
+dHMKPiAgICAtIHJlbW92ZSBwZXRpdGJvb3QtbXRkIGNvbmZpZyBhcyBsaWJmbGFzaCBpcyBub3Qg
+YXZhaWxhYmxlCj4gCj4gdjM6IHYyOiB2MToKPiAgICAtIGZpcnN0IHZlcnNpb24sIEkgbWVzc2Vk
+IHVwIHdpdGggbGlzdCBzdWJzY3JpcHRpb24gYW5kIGdpdC1wdWJsaXNoLi4uCj4gCj4gTGF1cmVu
+dCBWaXZpZXIgKDMpOgo+ICAgIHBhY2thZ2U6IGFkZCBwZXRpdGJvb3QKPiAgICBib2FyZC9xZW11
+L202OGstdmlydDogQWRkIHZpcnQtbTY4ayBsaW51eCBjb25maWcKPiAgICBzdXBwb3J0L3Njcmlw
+dHMvYm9vdC1xZW11LWltYWdlLnB5OiBtYW5hZ2UgcGV0aXRib290IGludGVyZmFjZQo+IAo+ICAg
+REVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNSArKwo+ICAg
+Ym9hcmQvcWVtdS9tNjhrLXZpcnQvbGludXguZnJhZ21lbnQgICAgICAgICAgfCAyMSArKysrKysK
+PiAgIGJvYXJkL3FlbXUvbTY4ay12aXJ0L3JlYWRtZS50eHQgICAgICAgICAgICAgIHwgIDUgKysK
+PiAgIGNvbmZpZ3MvcWVtdV9tNjhrX3ZpcnRfcGV0aXRib290X2RlZmNvbmZpZyAgIHwgMzEgKysr
+KysrKysKPiAgIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+IDEgKwo+ICAgcGFja2FnZS9rZXhlYy9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgfCAg
+MiArLQo+ICAgcGFja2FnZS9wZXRpdGJvb3QvNjMtbWQtcmFpZC1hcnJheXMucnVsZXMgICAgfCA0
+MSArKysrKysrKysrKwo+ICAgcGFja2FnZS9wZXRpdGJvb3QvNjUtbWQtaW5jcmVtZW50YWwucnVs
+ZXMgICAgfCA2OSArKysrKysrKysrKysrKysrKysKPiAgIHBhY2thZ2UvcGV0aXRib290LzY2LWFk
+ZC1zZy1tb2R1bGUucnVsZXMgICAgIHwgIDIgKwo+ICAgcGFja2FnZS9wZXRpdGJvb3QvQ29uZmln
+LmluICAgICAgICAgICAgICAgICAgfCAyMyArKysrKysKPiAgIHBhY2thZ2UvcGV0aXRib290L1Mx
+NHNpbGVuY2UtY29uc29sZSAgICAgICAgIHwgIDkgKysrCj4gICBwYWNrYWdlL3BldGl0Ym9vdC9T
+MTVwYi1kaXNjb3ZlciAgICAgICAgICAgICB8IDM4ICsrKysrKysrKysKPiAgIHBhY2thZ2UvcGV0
+aXRib290L2ZzLW92ZXJsYXkvZXRjL2luaXR0YWIgICAgIHwgMzQgKysrKysrKysrCj4gICBwYWNr
+YWdlL3BldGl0Ym9vdC9mcy1vdmVybGF5L2V0Yy9sb2NhbGUgICAgICB8ICAxICsKPiAgIHBhY2th
+Z2UvcGV0aXRib290L2ZzLW92ZXJsYXkvaW5pdCAgICAgICAgICAgIHwgIDggKysKPiAgIHBhY2th
+Z2UvcGV0aXRib290L2tleGVjLXJlc3RhcnQgICAgICAgICAgICAgIHwgIDggKysKPiAgIHBhY2th
+Z2UvcGV0aXRib290L3BldGl0Ym9vdC1jb25zb2xlLXVpLnJ1bGVzIHwgIDYgKysKPiAgIHBhY2th
+Z2UvcGV0aXRib290L3BldGl0Ym9vdC5oYXNoICAgICAgICAgICAgIHwgIDIgKwo+ICAgcGFja2Fn
+ZS9wZXRpdGJvb3QvcGV0aXRib290Lm1rICAgICAgICAgICAgICAgfCA3NyArKysrKysrKysrKysr
+KysrKysrKwo+ICAgcGFja2FnZS9wZXRpdGJvb3QvcmVtb3ZhYmxlLWV2ZW50LXBvbGwucnVsZXMg
+fCAgNCArCj4gICBwYWNrYWdlL3BldGl0Ym9vdC9zaGVsbF9jb25maWcgICAgICAgICAgICAgICB8
+IDE5ICsrKysrCj4gICBwYWNrYWdlL3BldGl0Ym9vdC9zaGVsbF9wcm9maWxlICAgICAgICAgICAg
+ICB8ICAyICsKPiAgIHN1cHBvcnQvc2NyaXB0cy9ib290LXFlbXUtaW1hZ2UucHkgICAgICAgICAg
+IHwgMTMgKysrLQo+ICAgMjMgZmlsZXMgY2hhbmdlZCwgNDE3IGluc2VydGlvbnMoKyksIDQgZGVs
+ZXRpb25zKC0pCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvcWVtdS9tNjhrLXZpcnQvbGlu
+dXguZnJhZ21lbnQKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9xZW11L202OGstdmlydC9y
+ZWFkbWUudHh0Cj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgY29uZmlncy9xZW11X202OGtfdmlydF9w
+ZXRpdGJvb3RfZGVmY29uZmlnCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wZXRpdGJv
+b3QvNjMtbWQtcmFpZC1hcnJheXMucnVsZXMKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
+L3BldGl0Ym9vdC82NS1tZC1pbmNyZW1lbnRhbC5ydWxlcwo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2UvcGV0aXRib290LzY2LWFkZC1zZy1tb2R1bGUucnVsZXMKPiAgIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBwYWNrYWdlL3BldGl0Ym9vdC9Db25maWcuaW4KPiAgIGNyZWF0ZSBtb2RlIDEwMDc1
+NSBwYWNrYWdlL3BldGl0Ym9vdC9TMTRzaWxlbmNlLWNvbnNvbGUKPiAgIGNyZWF0ZSBtb2RlIDEw
+MDc1NSBwYWNrYWdlL3BldGl0Ym9vdC9TMTVwYi1kaXNjb3Zlcgo+ICAgY3JlYXRlIG1vZGUgMTAw
+NjQ0IHBhY2thZ2UvcGV0aXRib290L2ZzLW92ZXJsYXkvZXRjL2luaXR0YWIKPiAgIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBwYWNrYWdlL3BldGl0Ym9vdC9mcy1vdmVybGF5L2V0Yy9sb2NhbGUKPiAgIGNy
+ZWF0ZSBtb2RlIDEwMDc1NSBwYWNrYWdlL3BldGl0Ym9vdC9mcy1vdmVybGF5L2luaXQKPiAgIGNy
+ZWF0ZSBtb2RlIDEwMDc1NSBwYWNrYWdlL3BldGl0Ym9vdC9rZXhlYy1yZXN0YXJ0Cj4gICBjcmVh
+dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wZXRpdGJvb3QvcGV0aXRib290LWNvbnNvbGUtdWkucnVs
+ZXMKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3BldGl0Ym9vdC9wZXRpdGJvb3QuaGFz
+aAo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGV0aXRib290L3BldGl0Ym9vdC5tawo+
+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGV0aXRib290L3JlbW92YWJsZS1ldmVudC1w
+b2xsLnJ1bGVzCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wZXRpdGJvb3Qvc2hlbGxf
+Y29uZmlnCj4gICBjcmVhdGUgbW9kZSAxMDA3NTUgcGFja2FnZS9wZXRpdGJvb3Qvc2hlbGxfcHJv
+ZmlsZQo+IAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
