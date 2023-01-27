@@ -1,57 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52C88C38142
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 12:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A0BEC54EAA
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 12:49:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF8BC61296;
-	Fri, 27 Jan 2023 12:46:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF8BC61296
+	by smtp2.osuosl.org (Postfix) with ESMTP id 33D78417DF;
+	Fri, 27 Jan 2023 12:49:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33D78417DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N1gSL9YoJKhs; Fri, 27 Jan 2023 12:46:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cKr3aW5lOHiy; Fri, 27 Jan 2023 12:49:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36E3161291;
-	Fri, 27 Jan 2023 12:46:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E3161291
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 429341BF263
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:46:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75F1240B2F;
+	Fri, 27 Jan 2023 12:49:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75F1240B2F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C4D291BF263
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:48:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 298DA61291
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 298DA61291
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABD0340B2F
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 12:48:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABD0340B2F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id otx057ebAIm3 for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 12:46:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B96F611F1
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B96F611F1
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 12:46:32 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7B9A61C0009;
- Fri, 27 Jan 2023 12:46:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pLO7g-001zdA-FH; Fri, 27 Jan 2023 13:46:28 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hYdS_4yAFGt7 for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 12:48:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D8E1A4040D
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 12:48:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8E1A4040D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C619487EB3; Fri, 27 Jan 2023 12:48:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230115173240.81077-1-fontaine.fabrice@gmail.com>
-Date: Fri, 27 Jan 2023 13:46:28 +0100
-In-Reply-To: <20230115173240.81077-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 15 Jan 2023 18:32:40 +0100")
-Message-ID: <871qng5emz.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmodsecurity: bump to version
+To: buildroot@buildroot.org
+Date: Fri, 27 Jan 2023 13:46:23 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ef2af4b67f3403fc0feaca8a07d1733f17c6b316
+X-Git-Newrev: 1b20c52a5bb13fde04f4ad47fafd1daca664c2bb
+X-Patchwork-Hint: ignore
+Message-Id: <20230127124857.C619487EB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmodsecurity: bump to version
  3.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -64,21 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Frank Vanbever <frank.vanbever@essensium.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1b20c52a5bb13fde04f4ad47fafd1daca664c2bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.8
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.8
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libmodsecurity/libmodsecurity.hash | 4 ++--
+ package/libmodsecurity/libmodsecurity.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
+index 087157d162..7ba0ef7f18 100644
+--- a/package/libmodsecurity/libmodsecurity.hash
++++ b/package/libmodsecurity/libmodsecurity.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.7/modsecurity-v3.0.7.tar.gz.sha256
+-sha256  cfd8b7e7e6a0e9ca4e19b9adeb07594ba75eba16a66da5e9b0974c0117c21a34  modsecurity-v3.0.7.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.8/modsecurity-v3.0.8.tar.gz.sha256
++sha256  e241c89b3cd7e58a863d0d0d6b9b8ba4d33ffb0f51171044c258c62e3e7956c7  modsecurity-v3.0.8.tar.gz
+ # Localy calculated
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index 916ba8fbcb..e83fda895f 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMODSECURITY_VERSION = 3.0.7
++LIBMODSECURITY_VERSION = 3.0.8
+ LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
+ LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
+ LIBMODSECURITY_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
