@@ -4,55 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEA7CC54EAA
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 10:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA069C54EAA
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 10:47:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 97989826E5;
-	Fri, 27 Jan 2023 10:46:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97989826E5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61E7B82BC4;
+	Fri, 27 Jan 2023 10:47:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61E7B82BC4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DTUmFZCHnMnM; Fri, 27 Jan 2023 10:46:46 +0000 (UTC)
+	with ESMTP id 1poGzvFOceET; Fri, 27 Jan 2023 10:47:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3E8582B3E;
-	Fri, 27 Jan 2023 10:46:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3E8582B3E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D15EE1BF306
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 10:46:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B341E82B94;
+	Fri, 27 Jan 2023 10:47:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B341E82B94
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 171C91BF306
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 10:47:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B859361241
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 10:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B859361241
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE81D82B94
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 10:47:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE81D82B94
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CDj1b-WlP1-9 for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 10:46:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E65D6122A
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5E65D6122A
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 10:46:43 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F31AC1C000B;
- Fri, 27 Jan 2023 10:46:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pLMFi-00HLAF-TP; Fri, 27 Jan 2023 11:46:38 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DDXitFXTgrxD for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 10:47:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A32C826E5
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 10:47:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A32C826E5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EAA5987E60; Fri, 27 Jan 2023 10:46:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Marcus Folkesson <marcus.folkesson@gmail.com>
-References: <20230123133526.3371864-1-marcus.folkesson@gmail.com>
- <20230123133526.3371864-3-marcus.folkesson@gmail.com>
-Date: Fri, 27 Jan 2023 11:46:38 +0100
-In-Reply-To: <20230123133526.3371864-3-marcus.folkesson@gmail.com> (Marcus
- Folkesson's message of "Mon, 23 Jan 2023 14:35:26 +0100")
-Message-ID: <874jsc6yr5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 3/3] DEVELOPERS: add
+To: buildroot@buildroot.org
+Date: Fri, 27 Jan 2023 11:46:26 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3fac163b9315a26f2ad041e0624fac283078d795
+X-Git-Newrev: c373ca0572e2017e04bd48a9ce63151fb23e378a
+X-Patchwork-Hint: ignore
+Message-Id: <20230127104659.EAA5987E60@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: add Marcus Folkesson for
  libcamera/libcamera-apps
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,21 +57,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Marcus" == Marcus Folkesson <marcus.folkesson@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c373ca0572e2017e04bd48a9ce63151fb23e378a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libcamera-apps is orphaned, so take care of it.
- > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+libcamera-apps is orphaned, so take care of it.
 
-Committed, thanks.
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e8e0dffcd3..b973c37b82 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1890,6 +1890,8 @@ F:	support/testing/tests/package/test_python_pytest.py
+ F:	support/testing/tests/package/test_python_pytest_asyncio.py
+ 
+ N:	Marcus Folkesson <marcus.folkesson@gmail.com>
++F:	package/libcamera/
++F:	package/libcamera-apps/
+ F:	package/libostree/
+ F:	package/libselinux/
+ F:	package/libsemanage/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
