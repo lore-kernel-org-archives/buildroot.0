@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E919AC38142
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:11:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F785C54EAA
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:11:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C9B041814;
-	Fri, 27 Jan 2023 14:11:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C9B041814
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE07D41824;
+	Fri, 27 Jan 2023 14:11:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE07D41824
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id odioJjRvZTTn; Fri, 27 Jan 2023 14:11:36 +0000 (UTC)
+	with ESMTP id x8XDdd9ZMdLf; Fri, 27 Jan 2023 14:11:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74ED2408A5;
-	Fri, 27 Jan 2023 14:11:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74ED2408A5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B0DD21BF39E
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D552B41826;
+	Fri, 27 Jan 2023 14:11:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D552B41826
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C7E631BF39E
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98ED6417DF
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98ED6417DF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E15F82FBE
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E15F82FBE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XveUoniLgK4H for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 14:11:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fJgCu42ItawU for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 14:11:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56E03408A5
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 56E03408A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C3E182F4A
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0C3E182F4A
  for <buildroot@buildroot.org>; Fri, 27 Jan 2023 14:11:03 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id c66so1938788iof.12
+Received: by mail-io1-xd2c.google.com with SMTP id s26so1940919ioa.11
  for <buildroot@buildroot.org>; Fri, 27 Jan 2023 06:11:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=d3qb+pxPf/Y+6T98sQQywvS5ACnuKYTUZhHhDXq7ezc=;
- b=rKHOYbfESB2XzE7naXVzqaDgDIG1U+paro8Oa0g3h2Q1nWFeppicGLDWJlUFFvRapt
- 6ogFjZK2RjPIT+iRxXwo8gUVQ8BMRT5smgmtU4I3yjIuDRVgdyNhLW2kwIZQInaCg+Nu
- g8fOyxqixBN0bykqQyI9UaCsutyjCVnxyL9H3SONYYFo2o7fzUUdW4QBpaSerMrRiprg
- DEXr0TWaXZmJZo/ytN/zq0OZ1RZpgbS4KYfiJGMHR55/T3wDNWBUaqdttQ3M1/cQBcid
- yN7zi/8hoZym5Brdbd4YS8vJ9whooyFRl1t8QyaoaCWrCAio3RXyZM1zNwcqF6cc0pLq
- lJDA==
-X-Gm-Message-State: AFqh2krR8Q71o8RiI3Y0NtLC+YtEC0PIKdADQNkaG9Uv7sn+hybLNfQU
- yQ7SsFHc+s7uesHXojpXklk7AJ/KKSsRRA==
-X-Google-Smtp-Source: AMrXdXsbIn41MA3K17l5BMtv3JVP+KoArWxRch9wR9Fv+sOZvwIVnFT8oR87UnWEZHRQgrwZAEIUMQ==
-X-Received: by 2002:a05:6602:1516:b0:707:67c0:43a6 with SMTP id
- g22-20020a056602151600b0070767c043a6mr25253266iow.5.1674828662214; 
+ bh=HxiIk5b5RsOhHX2NxJcDXQsBEfCS6JaLqGGmfdhrJtY=;
+ b=fVk8E6VHaBetI9L9m6MJ3O+DWxL+6pCCSdkoM987UN26kPCrIGoNqQwZlM9eeETcVs
+ tD1meawXVto5AwQieshnT3nLj4rbQzZQ25HmUSlhIN/2NYwRHfFqMhgnbPQLHx5zrvNC
+ zY6mBJOr1tp5UUN6z8Hl9NFjldAoI99yfg+bhZMeW8KfO1QJMsMU+WD99qTs5OaNGIrp
+ G7QU1a6VhyCi0N6mucov9tlQBo1meYi/LzFryvJpXING/fZQHKFf7bkB+v1rZC2ECq40
+ bP867C5bLV/MyTsFA5mSp8JMhSaFPJqiR/hyV/zM+NbZwcn0/YawvSqc9126V5T68Zgj
+ AXCg==
+X-Gm-Message-State: AFqh2ko1wNE9kkbpRzDZ5UbdE2XRi0XaskNsvBxUM+hThm4RSis4U7/u
+ LAoTrN0/6UnPquHbZUGfpNc8ICPwSByo1Q==
+X-Google-Smtp-Source: AMrXdXsiqinZ8xJiZk4JqD/JZWEaHIxOoOTGzDdFYzXwPhRfT7+Dg9hLjngEUk4n3oZ3jT2O8hgKhA==
+X-Received: by 2002:a6b:3f06:0:b0:704:dbc5:1de4 with SMTP id
+ m6-20020a6b3f06000000b00704dbc51de4mr26736744ioa.21.1674828662915; 
  Fri, 27 Jan 2023 06:11:02 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.01
+ n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Jan 2023 06:11:01 -0800 (PST)
+ Fri, 27 Jan 2023 06:11:02 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 07:10:48 -0700
-Message-Id: <20230127141058.2180747-3-james.hilliard1@gmail.com>
+Date: Fri, 27 Jan 2023 07:10:49 -0700
+Message-Id: <20230127141058.2180747-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127141058.2180747-1-james.hilliard1@gmail.com>
 References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=d3qb+pxPf/Y+6T98sQQywvS5ACnuKYTUZhHhDXq7ezc=;
- b=mWPAWijyTw1Qekp9XlcS2R6viWyPOZmOwyVadi0xJbF9J9SfkgEG7pfxFJY1asAsF3
- AWjvICxumSupdZqfIuzzyE3aZGxA/7nF+BlewcoFJKQ/THXGuIJmACgRCJVXuC9v9ClP
- mHKsUHuagix11cYnIVBfXU3On3r8plEi7BILQsozoUYELzrvx59teQIhaj65KVQ5kZPQ
- /6iBatNTuETqePUMUeZke8qCSNBuybGAhizdyvbLjV+1zcsS2ZIMhdsn8CPvGKZIxSc/
- vkOrGTbFDdSTqg8gfE2H7tbkK1Xk3Irw8WfPu9HcRnMJayTKB92rpIcE+CCPyIsgooRY
- vtnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=HxiIk5b5RsOhHX2NxJcDXQsBEfCS6JaLqGGmfdhrJtY=;
+ b=d+CKyie0lcePY1mVifXM9oBJB59qPFwPMbE0GT5hEEFCTDnW5kbo9c1tPHQG9JEu8v
+ nrC6Xk5keGa757cHwaRagH5rhmo+T0zXrUNCbE7VMk/rMW/+1xVprMo+S1D6WbtHUYLd
+ 9rz8R5m9xTo2XpvSmfUcIck5GmDHdtjL0IeKXgUPsYfp/6hAVSrvAiNhPHyMbjItM/lQ
+ gwyD2VKNVkg+Ia7G6+b6Q8R+YZJx18BYaY02t9q/NGhHaT6ZnZNYskVJxxxLPD2ko+pw
+ 7j3B7wS2Unw+4NjjjGcaO70rgprkQhZR0Mhw1dFKTVoorhW2YqzaYYzZPUq5n62ECXyp
+ U8hQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mWPAWijy
-Subject: [Buildroot] [PATCH v4 03/13] package/ruy: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=d+CKyie0
+Subject: [Buildroot] [PATCH v4 04/13] package/gemmlowp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,96 +115,89 @@ Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
 Changes v2 -> v3:
-  - add C++14 dependency
+  - add C++11 dependency
 ---
- DEVELOPERS            |  1 +
- package/Config.in     |  1 +
- package/ruy/Config.in | 16 ++++++++++++++++
- package/ruy/ruy.hash  |  4 ++++
- package/ruy/ruy.mk    | 18 ++++++++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100644 package/ruy/Config.in
- create mode 100644 package/ruy/ruy.hash
- create mode 100644 package/ruy/ruy.mk
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/gemmlowp/Config.in     | 12 ++++++++++++
+ package/gemmlowp/gemmlowp.hash |  4 ++++
+ package/gemmlowp/gemmlowp.mk   | 15 +++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/gemmlowp/Config.in
+ create mode 100644 package/gemmlowp/gemmlowp.hash
+ create mode 100644 package/gemmlowp/gemmlowp.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3fd5ea32bc..ba26d5f999 100644
+index ba26d5f999..f48ea66660 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -2703,6 +2703,7 @@ F:	package/ti-gfx/
  
  N:	Stefan Hager <stefan.hager@ginzinger.com>
  F:	package/cpuinfo/
-+F:	package/ruy/
++F:	package/gemmlowp/
+ F:	package/ruy/
  
  N:	Stefan Ott <stefan@ott.net>
- F:	package/unbound/
 diff --git a/package/Config.in b/package/Config.in
-index 5537699c86..29d55ef2b3 100644
+index 29d55ef2b3..8f78080963 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2110,6 +2110,7 @@ endif
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
- 	source "package/riemann-c-client/Config.in"
-+	source "package/ruy/Config.in"
- 	source "package/shapelib/Config.in"
- 	source "package/skalibs/Config.in"
- 	source "package/sphinxbase/Config.in"
-diff --git a/package/ruy/Config.in b/package/ruy/Config.in
+@@ -2009,6 +2009,7 @@ menu "Other"
+ 	source "package/flatcc/Config.in"
+ 	source "package/gconf/Config.in"
+ 	source "package/gdal/Config.in"
++	source "package/gemmlowp/Config.in"
+ 	source "package/gflags/Config.in"
+ 	source "package/gli/Config.in"
+ 	source "package/glibmm/Config.in"
+diff --git a/package/gemmlowp/Config.in b/package/gemmlowp/Config.in
 new file mode 100644
-index 0000000000..c46f5c6cc9
+index 0000000000..379450d1b0
 --- /dev/null
-+++ b/package/ruy/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_RUY
-+	bool "ruy"
++++ b/package/gemmlowp/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_GEMMLOWP
++	bool "gemmlowp"
 +	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	select BR2_PACKAGE_CPUINFO
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
 +	help
-+	  Ruy is a matrix multiplication library. Its focus is to cover
-+	  the matrix multiplication needs of neural network inference
-+	  engines. Its initial user has been TensorFlow Lite, where it
-+	  is used by default on the ARM CPU architecture.
++	  Low-precision matrix multiplication.
 +
-+	  https://github.com/google/ruy
++	  https://github.com/google/gemmlowp
 +
-+comment "ruy needs a toolchain w/ C++14"
++comment "gemmlowp needs a toolchain w/ C++11"
 +	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/ruy/ruy.hash b/package/ruy/ruy.hash
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/gemmlowp/gemmlowp.hash b/package/gemmlowp/gemmlowp.hash
 new file mode 100644
-index 0000000000..98266b5881
+index 0000000000..7c56a18bb6
 --- /dev/null
-+++ b/package/ruy/ruy.hash
++++ b/package/gemmlowp/gemmlowp.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  4da8572946007603378c5d0280f48c5b77f4d38763209f5306b57c7513d9a82e  ruy-3168a5c8f4c447fd8cea94078121ee2e2cd87df0.tar.gz
++sha256  cc8a22b6f071c3781e6b4b72654c89b1cdc198e72ebadebb17638eac205344c1  gemmlowp-08e4bb339e34017a0835269d4a37c4ea04d15a69.tar.gz
 +# License files, locally calculated
 +sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/ruy/ruy.mk b/package/ruy/ruy.mk
+diff --git a/package/gemmlowp/gemmlowp.mk b/package/gemmlowp/gemmlowp.mk
 new file mode 100644
-index 0000000000..ceeea8cd58
+index 0000000000..1a36fc48f7
 --- /dev/null
-+++ b/package/ruy/ruy.mk
-@@ -0,0 +1,18 @@
++++ b/package/gemmlowp/gemmlowp.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# ruy
++# gemmlowp
 +#
 +################################################################################
 +
-+RUY_VERSION = 3168a5c8f4c447fd8cea94078121ee2e2cd87df0
-+RUY_SITE = $(call github,google,ruy,$(RUY_VERSION))
-+RUY_LICENSE = Apache-2.0
-+RUY_LICENSE_FILES = LICENSE
-+RUY_INSTALL_STAGING = YES
-+RUY_DEPENDENCIES = cpuinfo
-+RUY_CONF_OPTS = \
-+	-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-+	-DRUY_FIND_CPUINFO=ON \
-+	-DRUY_MINIMAL_BUILD=ON
++GEMMLOWP_VERSION = 08e4bb339e34017a0835269d4a37c4ea04d15a69
++GEMMLOWP_SITE = $(call github,google,gemmlowp,$(GEMMLOWP_VERSION))
++GEMMLOWP_LICENSE = Apache-2.0
++GEMMLOWP_LICENSE_FILES = LICENSE
++GEMMLOWP_INSTALL_STAGING = YES
++GEMMLOWP_INSTALL_TARGET = NO
++GEMMLOWP_SUBDIR = contrib
 +
 +$(eval $(cmake-package))
 -- 
