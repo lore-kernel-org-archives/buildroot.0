@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7876C54EAA
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D28EC38142
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:12:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82E9582FBE;
-	Fri, 27 Jan 2023 14:12:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82E9582FBE
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB49341D59;
+	Fri, 27 Jan 2023 14:12:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB49341D59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eBnH9q5mA0H7; Fri, 27 Jan 2023 14:12:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PoECU4NkJtrl; Fri, 27 Jan 2023 14:12:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCB3982F4A;
-	Fri, 27 Jan 2023 14:12:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCB3982F4A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6620841D62;
+	Fri, 27 Jan 2023 14:12:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6620841D62
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B732B1BF39E
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 55E4A1BF39E
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92522408A5
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92522408A5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E1AE408A5
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E1AE408A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TD4hUxraA4Rd for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 14:11:05 +0000 (UTC)
+ with ESMTP id 28Pdnc68v6LN for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 14:11:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D3AA40A71
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5D3AA40A71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A2D8417D2
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0A2D8417D2
  for <buildroot@buildroot.org>; Fri, 27 Jan 2023 14:11:05 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id y69so1950617iof.3
+Received: by mail-io1-xd33.google.com with SMTP id d22so1952808iof.5
  for <buildroot@buildroot.org>; Fri, 27 Jan 2023 06:11:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=AsvmJIKbPGU+BGaJFjJLe6oUehN5dmNEJLbP3jKT89I=;
- b=rub4FaXDv/DMHO8GsBZA3VYSg/nkW0ICMdNXog91UGZt8L2eeXdSRPNnGwVnNzoqTw
- zJmEEbZU/YwaZc4Cnilz3LQonIiSM2z/stgQPRIbr+6jHmttNgth8EvuwQQX8jNNZHeo
- A9fDTYjlJLewjQmwkfg05pTOuZeZvnyS64GDyYejHO0X2tECNkCLChXyBEVQcTfHQKDt
- EE4GRGmHf7/l3nUZz/dSUzafQXUL0JRp8GwYUd76qs/7uxDvi2vEDCo/n9+5V53ysOiZ
- nwgragK9RsiLF2hKw5smqVQro0vONzT47Q4COqG48BRMiZLmyflncD85oF74AtxI0W2D
- 6I+Q==
-X-Gm-Message-State: AO0yUKUFhQAQ1RSvHpw6MKyVXopbdFTLUHalpvDMVzEbnl1WejdTXEve
- xQtukz//d2253T+YZ/dXcvUkK/QH18DLZQ==
-X-Google-Smtp-Source: AK7set8e5xA+tyUeIQkFUyAZIB/hrzAk625ZemZwy2f+KG4j592nr74NM7wPRk/8JLoh2qAzX+/EGA==
-X-Received: by 2002:a05:6602:483:b0:707:dcd8:2aea with SMTP id
- y3-20020a056602048300b00707dcd82aeamr5772369iov.19.1674828664307; 
+ bh=w9eSnNng3QE2QDToqzxHeuEKwSxWMB92Y4jaSx1ImLA=;
+ b=NtWplVya+SKI0BhlOQehvYRKaMbVNQcEXcw6L6y9k345fw9YzEOA+hmyqenjUV3YL+
+ KrBwaOpEDl9bPNYgidJGUBCadJDGDvNHPjdP4c4jYj7AFzLwCs/fXYMmT605lQa+QKt/
+ 7oYVJDEuOB5QnY1wQOt8Bf8Bm/hnsnSZWR/kUUtooaTlu7o9fZlQG2gUwSer83x59CCY
+ QODF1qeMpZLWlCv8vKxiZRMVvHQLHn5oxQc2tIQO3zLlFKKvx7/pkC5qwovaScwF8maC
+ s0FA8+dxywYUuLSSCaRYAEpem2o/qvSpCkSriBeHaHELUiTVbGxz6vdjUuh6nRes+GDI
+ Lu1Q==
+X-Gm-Message-State: AFqh2kqu9TFbQwUZpHcDCzCM0BTqFjlkKijcehBxRAQI0NFOfYk8agGr
+ t9ZXENi5L5dF8SrvzatvqsPueo3XnAiSdg==
+X-Google-Smtp-Source: AMrXdXv1mzsT1aICImczyZ1de9xsuSCXStRkTHFAy4Lb5Qq1yIml7N25FkCelWBdTgVv5+Gs9tUvnQ==
+X-Received: by 2002:a5d:96c3:0:b0:6e0:256d:547a with SMTP id
+ r3-20020a5d96c3000000b006e0256d547amr29025719iol.14.1674828664983; 
  Fri, 27 Jan 2023 06:11:04 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.03
+ n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Jan 2023 06:11:03 -0800 (PST)
+ Fri, 27 Jan 2023 06:11:04 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 07:10:51 -0700
-Message-Id: <20230127141058.2180747-6-james.hilliard1@gmail.com>
+Date: Fri, 27 Jan 2023 07:10:52 -0700
+Message-Id: <20230127141058.2180747-7-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127141058.2180747-1-james.hilliard1@gmail.com>
 References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=AsvmJIKbPGU+BGaJFjJLe6oUehN5dmNEJLbP3jKT89I=;
- b=kqRUywPtElrdBipNqhLOwQRkR4/FzBVSADxK27MG5ohLZGhZCkQr97HYcDu6tE91uA
- k/nzwQfbKMEoPg+j9H3UeFe3UAhrsXcJnwSlSfLIvfPCjZ16MDukWfKCT8ue6FalGAeE
- LXrs/XeuC/9AJ7pc6s+PlPA4Vu3wmpMiRejAOKb9pqAPeJA6hjsLrNm5xzZRJ5lvPUYe
- 8WROB5WNOd2G1YKfZYBFhng8JJ3GTupte8SNdLaQhMHtSMWLoxy+8/2eyeLakzHeOMgo
- eEIOE5jji3GnF9dNfxNJJ6DYuJFs8O+ZvwrsYQQH2whkMaqIbLC1eAG20vLcoUvdprxl
- NuJA==
+ bh=w9eSnNng3QE2QDToqzxHeuEKwSxWMB92Y4jaSx1ImLA=;
+ b=qm1i0pkWXcnXdD5BGEvXrMZXA/nAtgWKZXj75FrH1m85+LvixyO5nJewai3rZSYoDt
+ fUswYnE/l97WGnVFpa4gxR3SHSOHEJFeFiPeXtn2cEgd5sbA93DvlZ/QWdKqpO08NR7k
+ Hjb+emIX76uL7uqGs9AW0ZyCiDFIJo3TqwEX/jvONU2dAmrGt+w8oVikMH5FaGOKwZ8+
+ 5uQ4Vp50LOvEGFhRll5EmfV93lf9ImM3rETU7jSGIv26VhfrbMTrj7rkzRTJt3H8f6HQ
+ J+Pu746nR40S7NmpB1OZPcedy4ubPdbPkuU4+FVgfGP1k6K4h1xFSRat7KhC/yxOX3Bc
+ TL2Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=kqRUywPt
-Subject: [Buildroot] [PATCH v4 06/13] package/fxdiv: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=qm1i0pkW
+Subject: [Buildroot] [PATCH v4 07/13] package/pthreadpool: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,84 +110,101 @@ This package is required by tensorflow-lite.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/fxdiv/Config.in  |  7 +++++++
- package/fxdiv/fxdiv.hash |  4 ++++
- package/fxdiv/fxdiv.mk   | 17 +++++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/fxdiv/Config.in
- create mode 100644 package/fxdiv/fxdiv.hash
- create mode 100644 package/fxdiv/fxdiv.mk
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/pthreadpool/Config.in        |  8 +++++++
+ package/pthreadpool/pthreadpool.hash |  4 ++++
+ package/pthreadpool/pthreadpool.mk   | 33 ++++++++++++++++++++++++++++
+ 5 files changed, 47 insertions(+)
+ create mode 100644 package/pthreadpool/Config.in
+ create mode 100644 package/pthreadpool/pthreadpool.hash
+ create mode 100644 package/pthreadpool/pthreadpool.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a711f9f1ee..b600c2914e 100644
+index b600c2914e..de15ae1d98 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2703,6 +2703,7 @@ F:	package/ti-gfx/
- 
- N:	Stefan Hager <stefan.hager@ginzinger.com>
- F:	package/cpuinfo/
-+F:	package/fxdiv/
+@@ -2706,6 +2706,7 @@ F:	package/cpuinfo/
+ F:	package/fxdiv/
  F:	package/gemmlowp/
  F:	package/neon-2-sse/
++F:	package/pthreadpool/
  F:	package/ruy/
+ 
+ N:	Stefan Ott <stefan@ott.net>
 diff --git a/package/Config.in b/package/Config.in
-index 6377ddd2e5..e393760b6a 100644
+index e393760b6a..426af4e143 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2007,6 +2007,7 @@ menu "Other"
- 	source "package/flann/Config.in"
- 	source "package/flatbuffers/Config.in"
- 	source "package/flatcc/Config.in"
-+	source "package/fxdiv/Config.in"
- 	source "package/gconf/Config.in"
- 	source "package/gdal/Config.in"
- 	source "package/gemmlowp/Config.in"
-diff --git a/package/fxdiv/Config.in b/package/fxdiv/Config.in
+@@ -2110,6 +2110,7 @@ endif
+ 	source "package/protobuf/Config.in"
+ 	source "package/protobuf-c/Config.in"
+ 	source "package/protozero/Config.in"
++	source "package/pthreadpool/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
+ 	source "package/riemann-c-client/Config.in"
+diff --git a/package/pthreadpool/Config.in b/package/pthreadpool/Config.in
 new file mode 100644
-index 0000000000..5aa714e44a
+index 0000000000..194ae33f85
 --- /dev/null
-+++ b/package/fxdiv/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_FXDIV
-+	bool "fxdiv"
++++ b/package/pthreadpool/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PTHREADPOOL
++	bool "pthreadpool"
++	select BR2_PACKAGE_FXDIV
 +	help
-+	  Header-only library for division via fixed-point
-+	  multiplication by inverse.
++	  Pthreadpool is a portable and efficient thread pool
++	  implementation.
 +
-+	  https://github.com/Maratyszcza/FXdiv
-diff --git a/package/fxdiv/fxdiv.hash b/package/fxdiv/fxdiv.hash
++	  https://github.com/Maratyszcza/pthreadpool
+diff --git a/package/pthreadpool/pthreadpool.hash b/package/pthreadpool/pthreadpool.hash
 new file mode 100644
-index 0000000000..2142d84e09
+index 0000000000..164ac55390
 --- /dev/null
-+++ b/package/fxdiv/fxdiv.hash
++++ b/package/pthreadpool/pthreadpool.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  ec74d882a0a47cfd9c0f95bc4fae9901a4ade802a96a3b76e02671bb7340a4c5  fxdiv-63058eff77e11aa15bf531df5dd34395ec3017c8.tar.gz
++sha256  ae75adb19807ea28582683b38dd4e79a6b287751452564b42e214bb21216ef14  pthreadpool-43edadc654d6283b4b6e45ba09a853181ae8e850.tar.gz
 +# License files, locally calculated
-+sha256  7cac00006125b1486a27e4801ed66357236e984c540bd323945ab7b66b078ec3  LICENSE
-diff --git a/package/fxdiv/fxdiv.mk b/package/fxdiv/fxdiv.mk
++sha256  57814a606b4d0fb087d9a534919084b6c11b58a4174cb5a4aef200187780dc3a  LICENSE
+diff --git a/package/pthreadpool/pthreadpool.mk b/package/pthreadpool/pthreadpool.mk
 new file mode 100644
-index 0000000000..56aaf11f88
+index 0000000000..4ef7949da2
 --- /dev/null
-+++ b/package/fxdiv/fxdiv.mk
-@@ -0,0 +1,17 @@
++++ b/package/pthreadpool/pthreadpool.mk
+@@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# fxdiv
++# pthreadpool
 +#
 +################################################################################
 +
-+FXDIV_VERSION = 63058eff77e11aa15bf531df5dd34395ec3017c8
-+FXDIV_SITE = $(call github,Maratyszcza,FXdiv,$(FXDIV_VERSION))
-+FXDIV_LICENSE = MIT
-+FXDIV_LICENSE_FILES = LICENSE
-+FXDIV_INSTALL_STAGING = YES
-+FXDIV_INSTALL_TARGET = NO
-+FXDIV_CONF_OPTS = \
-+	-DFXDIV_BUILD_TESTS=OFF \
-+	-DFXDIV_BUILD_BENCHMARKS=OFF
++PTHREADPOOL_VERSION = 43edadc654d6283b4b6e45ba09a853181ae8e850
++PTHREADPOOL_SITE = $(call github,Maratyszcza,pthreadpool,$(PTHREADPOOL_VERSION))
++PTHREADPOOL_LICENSE = BSD-2-Clause
++PTHREADPOOL_LICENSE_FILES = LICENSE
++PTHREADPOOL_INSTALL_STAGING = YES
++PTHREADPOOL_DEPENDENCIES = fxdiv
++
++PTHREADPOOL_CFLAGS = $(TARGET_CFLAGS)
++PTHREADPOOL_CXXFLAGS = $(TARGET_CXXFLAGS)
++
++ifeq ($(BR2_PACKAGE_CPUINFO),y)
++PTHREADPOOL_DEPENDENCIES += cpuinfo
++PTHREADPOOL_CFLAGS += -DPTHREADPOOL_USE_CPUINFO=1
++PTHREADPOOL_CXXFLAGS += -DPTHREADPOOL_USE_CPUINFO=1
++else
++PTHREADPOOL_CFLAGS += -DPTHREADPOOL_USE_CPUINFO=0
++PTHREADPOOL_CXXFLAGS += -DPTHREADPOOL_USE_CPUINFO=0
++endif
++
++PTHREADPOOL_CONF_OPTS = \
++	-DCMAKE_C_FLAGS="$(PTHREADPOOL_CFLAGS)" \
++	-DCMAKE_CXX_FLAGS="$(PTHREADPOOL_CXXFLAGS)" \
++	-DFXDIV_SOURCE_DIR="$(FXDIV_DIR)" \
++	-DPTHREADPOOL_BUILD_TESTS=OFF \
++	-DPTHREADPOOL_BUILD_BENCHMARKS=OFF
 +
 +$(eval $(cmake-package))
 -- 
