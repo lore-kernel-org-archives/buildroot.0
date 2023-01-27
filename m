@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49BF8C54EAA
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97643C54EAA
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD8AD417DF;
-	Fri, 27 Jan 2023 14:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD8AD417DF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E13C41D6B;
+	Fri, 27 Jan 2023 14:13:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E13C41D6B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cptl7b6dlfU4; Fri, 27 Jan 2023 14:12:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bvlypbD3tjXa; Fri, 27 Jan 2023 14:13:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14D6840A71;
-	Fri, 27 Jan 2023 14:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14D6840A71
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28D0C1BF976
+	by smtp4.osuosl.org (Postfix) with ESMTP id E195541D59;
+	Fri, 27 Jan 2023 14:13:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E195541D59
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D8591BF977
  for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01DEF82FBE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04A6B41D59
  for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01DEF82FBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04A6B41D59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CHe0eA5u-OHL for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 14:11:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K4FsWSFqCkZs for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 14:11:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD9A882F3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E1F141D2D
 Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
  [IPv6:2607:f8b0:4864:20::d2c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AD9A882F3D
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 14:11:07 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id s26so1941008ioa.11
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 06:11:07 -0800 (PST)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3E1F141D2D
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 14:11:09 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id 203so1936306iou.13
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 06:11:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=/AxlrULlPl5y/LjLhyenXxquJzr7GQTjeAH9N9wX1k4=;
- b=6AEQFZx5miVXXFKgjBmSYX5SofYVHOVkSpZAx/ZiPBgvhI7DVTt1woA4K+w0r78tie
- scivA4E+a6chrLXdZTz008DGM4vdTyoZdR+Bm6VODSFk9/OWHNI6aCaWuzt/orMukUGt
- 7O2QVYKXsiOvzp16mTqLaaf/IpgFgtIHX1Z0Vsey+EXxPi0hUUT+meuAyXgzJ8g6vrls
- kSZ74dtJdMxZV8FhOGbV0Wh8XeXdOKno6t7c8Tr75s74+h1QR13JkbkVSUtWSWX4T7t/
- TXTWHbz0HmN0hA7mi+JRCVvRCBIuX7bxbT0AVy0wkhvLXsa4WaZaVuvUPr9pUFggBgzy
- Qfmw==
-X-Gm-Message-State: AFqh2koyp4l/bdohDx/b0dGL1zirEkibhWhauVY5/Q+nJcH8LwK2P9vj
- VmDXfmOKMy88OXFfDw9x+c1nqXSGDdoddw==
-X-Google-Smtp-Source: AMrXdXuvttiRRJ0lzyArHNoZ19nGBYImz9CEtaAQS4q8bHnq5TYWPd92Qis85QL2/aSDhTTygZCDNA==
-X-Received: by 2002:a5d:805a:0:b0:6bc:d714:520f with SMTP id
- b26-20020a5d805a000000b006bcd714520fmr29092013ior.15.1674828667225; 
- Fri, 27 Jan 2023 06:11:07 -0800 (PST)
+ bh=qzmqLvImvYb2mjB6UNIoicAS51hLtjMPrlUkvW2lL6o=;
+ b=37VlHGx5muRiZ4qhJ4/BJPKtx85HIXUlD8rihUoXrNsg6dCxlFhbo/sFBsS9CR1rT7
+ uH4TBFywe9LKb4nlGkY21cwxmnIHMkOj9vl/lqDN/sqmxMjOazIWJydZjHLexjABAPKE
+ arvGeHSqcB71lf6/Nf2xdV7AAMGW9U+li6uSaLhw+muI3sbktg3Q0j8UCtyh8oRnSvUR
+ 7f4HFRItPAYUHBZNerjBBE/z0233gK8VSDDAB0Mok1MTPjTAIcS+kcYoUYAmecnyVXF6
+ q/7SuGRlz0CRYGJCv2ROIXrn4DodHNKo73gwLAvfET/NrYFBIiy+bLfzAHn0v64r7mzs
+ g+yw==
+X-Gm-Message-State: AFqh2kqE0M8mq5E3uw746h9E1E2u14pW5B0HvRS8Keg2/c5XZts38CiB
+ BDv4XowiLmDr2CTTDldtDy7/d9RKinUUhw==
+X-Google-Smtp-Source: AMrXdXt+IW1Gt/he/g2X9Yg2517zXpUvdEtsHqAeAaKHUL4BzjubWvm9qqVpw6sv/VkOacXNYlv7Ng==
+X-Received: by 2002:a6b:4410:0:b0:6d4:264f:2427 with SMTP id
+ r16-20020a6b4410000000b006d4264f2427mr26651417ioa.21.1674828668678; 
+ Fri, 27 Jan 2023 06:11:08 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.06
+ n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Jan 2023 06:11:06 -0800 (PST)
+ Fri, 27 Jan 2023 06:11:08 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 07:10:55 -0700
-Message-Id: <20230127141058.2180747-10-james.hilliard1@gmail.com>
+Date: Fri, 27 Jan 2023 07:10:57 -0700
+Message-Id: <20230127141058.2180747-12-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127141058.2180747-1-james.hilliard1@gmail.com>
 References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=/AxlrULlPl5y/LjLhyenXxquJzr7GQTjeAH9N9wX1k4=;
- b=Qo5KaB2i+RZPexN6Zhx6SWoAauRINweo+oA7s9hxJ3i2BVu9dHzG9/pgbnMTX0zcF6
- ZYGwMYTxj+50Fgcj1+ZuXPqflwe6Q+obcsgmuXhS02hCPV4nTC1h4Q2fN72d8o/vtmJ4
- TZN4vC7bd8roZK+e6sf2wAp7BspatpnXFOXUWX/Vu0iGJupcn89+GPu5EaCL1I3li2eI
- FmjV96Spx+74txBnijVzF9pkkIUcwNRflwNQxcJX3JiS1XPVp0gxmrGAw2ojvXOOLcXe
- h9Lo1NDCyGevbrRVHBFWzdg/dJ2Y+VphQaElkNJdhGXGLDfz8o3w3RXtCWiF7e/DdixZ
- UsJg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=qzmqLvImvYb2mjB6UNIoicAS51hLtjMPrlUkvW2lL6o=;
+ b=BRWn8h442cwhr7TKF9iq6WlQFuCJnw1NLLOqTXPoxIMkpQ9M7iw4LORdqr83GVzvyU
+ cxosIM685/Y5YZ22tbA24vCXy/cLSitXBglU/p0we3wJW9VcR9oCotFw6CJSpAsfspjI
+ pYiAlLhA7RnApNu32YW1jt5srtR+HJIa3H9ZqHLijuUtv6U4P3FgGV36C6+cEk9P4fGw
+ qsiLgrUS6zYuW5b7pN4nDAbMACcBF7Gler7KH/AlaV47UGBpxsXOtuOINP+IG/a3jfHX
+ u/30DI7JPUr0+ue0mTVC15i1CgqvRwxBWRzAemJ5UTQ2kCpBCucyZ7AV6r6U34c0D8By
+ Nz9w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Qo5KaB2i
-Subject: [Buildroot] [PATCH v4 10/13] package/xnnpack: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=BRWn8h44
+Subject: [Buildroot] [PATCH v4 12/13] package/farmhash: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,101 +106,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+From: Stefan Hager <stefan.hager@ginzinger.com>
+
 This package is required by tensorflow-lite.
 
+Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/xnnpack/Config.in    | 17 +++++++++++++++++
- package/xnnpack/xnnpack.hash |  4 ++++
- package/xnnpack/xnnpack.mk   | 18 ++++++++++++++++++
- 5 files changed, 41 insertions(+)
- create mode 100644 package/xnnpack/Config.in
- create mode 100644 package/xnnpack/xnnpack.hash
- create mode 100644 package/xnnpack/xnnpack.mk
+Changes v2 -> v3:
+  - add C++11 dependency
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/farmhash/Config.in     | 12 ++++++++++++
+ package/farmhash/farmhash.hash |  4 ++++
+ package/farmhash/farmhash.mk   | 14 ++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/farmhash/Config.in
+ create mode 100644 package/farmhash/farmhash.hash
+ create mode 100644 package/farmhash/farmhash.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index fc74c089fe..cfb0a8228d 100644
+index a9ecf7847f..2afe29be47 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2710,6 +2710,7 @@ F:	package/neon-2-sse/
- F:	package/psimd/
- F:	package/pthreadpool/
- F:	package/ruy/
-+F:	package/xnnpack/
+@@ -2703,6 +2703,7 @@ F:	package/ti-gfx/
  
- N:	Stefan Ott <stefan@ott.net>
- F:	package/unbound/
+ N:	Stefan Hager <stefan.hager@ginzinger.com>
+ F:	package/cpuinfo/
++F:	package/farmhash/
+ F:	package/fp16/
+ F:	package/fft2d/
+ F:	package/fxdiv/
 diff --git a/package/Config.in b/package/Config.in
-index d33806a013..26e37e2687 100644
+index 53f544ef40..a7c7e87c78 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2128,6 +2128,7 @@ endif
- 	source "package/uvw/Config.in"
- 	source "package/volk/Config.in"
- 	source "package/xapian/Config.in"
-+	source "package/xnnpack/Config.in"
- endmenu
- 
- menu "Security"
-diff --git a/package/xnnpack/Config.in b/package/xnnpack/Config.in
+@@ -2003,6 +2003,7 @@ menu "Other"
+ 	source "package/elfutils/Config.in"
+ 	source "package/ell/Config.in"
+ 	source "package/falcosecurity-libs/Config.in"
++	source "package/farmhash/Config.in"
+ 	source "package/fft2d/Config.in"
+ 	source "package/fftw/Config.in"
+ 	source "package/flann/Config.in"
+diff --git a/package/farmhash/Config.in b/package/farmhash/Config.in
 new file mode 100644
-index 0000000000..2016ce9817
+index 0000000000..ef22898774
 --- /dev/null
-+++ b/package/xnnpack/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_XNNPACK
-+	bool "xnnpack"
++++ b/package/farmhash/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_FARMHASH
++	bool "farmhash"
 +	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	select BR2_PACKAGE_CPUINFO
-+	select BR2_PACKAGE_FP16
-+	select BR2_PACKAGE_FXDIV
-+	select BR2_PACKAGE_PTHREADPOOL
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
 +	help
-+	  XNNPACK is a highly optimized solution for neural network
-+	  inference on ARM, x86, WebAssembly, and RISC-V platforms.
++	  FarmHash, a family of hash functions.
 +
-+	  https://github.com/google/XNNPACK
++	  https://github.com/google/farmhash
 +
-+comment "xnnpack needs a toolchain w/ C++14"
++comment "farmhash needs a toolchain w/ C++11"
 +	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/xnnpack/xnnpack.hash b/package/xnnpack/xnnpack.hash
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/farmhash/farmhash.hash b/package/farmhash/farmhash.hash
 new file mode 100644
-index 0000000000..249f553f2a
+index 0000000000..afdfc0f994
 --- /dev/null
-+++ b/package/xnnpack/xnnpack.hash
++++ b/package/farmhash/farmhash.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  5d70dde70c0b1aef9e608f5d193c148aa1e538574a98d912278b51e60f2457f2  xnnpack-1f7f6131f7be587d0a657d03bdd0161d67ba2700.tar.gz
++sha256  18392cf0736e1d62ecbb8d695c31496b6507859e8c75541d7ad0ba092dc52115  farmhash-0d859a811870d10f53a594927d0d0b97573ad06d.tar.gz
 +# License files, locally calculated
-+sha256  63f519e15726f4c4f830bd958f694c84fecb4e0a4cacc527d2696bb71ef95ada  LICENSE
-diff --git a/package/xnnpack/xnnpack.mk b/package/xnnpack/xnnpack.mk
++sha256  4162dd091caae234f72d3b57e138174f733e736b2430a4c51b098b17d866fcb6  COPYING
+diff --git a/package/farmhash/farmhash.mk b/package/farmhash/farmhash.mk
 new file mode 100644
-index 0000000000..d46b4c22de
+index 0000000000..6ab7d1a88b
 --- /dev/null
-+++ b/package/xnnpack/xnnpack.mk
-@@ -0,0 +1,18 @@
++++ b/package/farmhash/farmhash.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# xnnpack
++# farmhash
 +#
 +################################################################################
 +
-+XNNPACK_VERSION = 1f7f6131f7be587d0a657d03bdd0161d67ba2700
-+XNNPACK_SITE = $(call github,google,XNNPACK,$(XNNPACK_VERSION))
-+XNNPACK_LICENSE = BSD-3-Clause
-+XNNPACK_LICENSE_FILES = LICENSE
-+XNNPACK_INSTALL_STAGING = YES
-+XNNPACK_DEPENDENCIES = cpuinfo fp16 fxdiv pthreadpool
-+XNNPACK_CONF_OPTS = \
-+	-DXNNPACK_BUILD_TESTS=OFF \
-+	-DXNNPACK_BUILD_BENCHMARKS=OFF \
-+	-DXNNPACK_USE_SYSTEM_LIBS=ON
++FARMHASH_VERSION = 0d859a811870d10f53a594927d0d0b97573ad06d
++FARMHASH_SITE = $(call github,google,farmhash,$(FARMHASH_VERSION))
++FARMHASH_LICENSE = MIT
++FARMHASH_LICENSE_FILES = COPYING
++FARMHASH_INSTALL_STAGING = YES
++FARMHASH_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
 +
-+$(eval $(cmake-package))
++$(eval $(autotools-package))
 -- 
 2.34.1
 
