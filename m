@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0257C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A57EC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99A2061AD6;
-	Tue, 21 Feb 2023 01:14:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99A2061AD6
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD40F611A4;
+	Tue, 21 Feb 2023 01:15:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD40F611A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7eCwftT5iA27; Tue, 21 Feb 2023 01:14:54 +0000 (UTC)
+	with ESMTP id sTFXrGQrVzVK; Tue, 21 Feb 2023 01:15:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1FBA6F963;
-	Tue, 21 Feb 2023 01:14:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1FBA6F963
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C0976FB38;
+	Tue, 21 Feb 2023 01:15:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C0976FB38
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 092961BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 18F431BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 147376FBCE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 471C26FBAE
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 147376FBCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 471C26FBAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GN9JE_qEgopn for <buildroot@lists.busybox.net>;
+ with ESMTP id S3zlcZS56F9N for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18D0D6FBAE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24D55610C6
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18D0D6FBAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24D55610C6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1075D81979; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+ id 1CDA8828C8; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 13:46:23 +0100
+Date: Fri, 27 Jan 2023 13:54:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ef2af4b67f3403fc0feaca8a07d1733f17c6b316
-X-Git-Newrev: 1b20c52a5bb13fde04f4ad47fafd1daca664c2bb
+X-Git-Oldrev: 1b20c52a5bb13fde04f4ad47fafd1daca664c2bb
+X-Git-Newrev: b9735d0e74fb8588ebbf2d888b40caac0aa8fa98
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205241.1075D81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libmodsecurity: bump
- to version 3.0.8
+Message-Id: <20230220205241.1CDA8828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bubblewrap: bump to
+ version 0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b20c52a5bb13fde04f4ad47fafd1daca664c2bb
+commit: https://git.buildroot.net/buildroot/commit/?id=b9735d0e74fb8588ebbf2d888b40caac0aa8fa98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.8
+This version contains a few minor fixes, provides better error messages,
+and includes a new option to set the size of created tmpfs volumes.
+Release notes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://github.com/containers/bubblewrap/releases/tag/v0.7.0
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodsecurity/libmodsecurity.hash | 4 ++--
- package/libmodsecurity/libmodsecurity.mk   | 2 +-
+ package/bubblewrap/bubblewrap.hash | 4 ++--
+ package/bubblewrap/bubblewrap.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
-index 087157d162..7ba0ef7f18 100644
---- a/package/libmodsecurity/libmodsecurity.hash
-+++ b/package/libmodsecurity/libmodsecurity.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.7/modsecurity-v3.0.7.tar.gz.sha256
--sha256  cfd8b7e7e6a0e9ca4e19b9adeb07594ba75eba16a66da5e9b0974c0117c21a34  modsecurity-v3.0.7.tar.gz
-+# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.8/modsecurity-v3.0.8.tar.gz.sha256
-+sha256  e241c89b3cd7e58a863d0d0d6b9b8ba4d33ffb0f51171044c258c62e3e7956c7  modsecurity-v3.0.8.tar.gz
- # Localy calculated
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
-index 916ba8fbcb..e83fda895f 100644
---- a/package/libmodsecurity/libmodsecurity.mk
-+++ b/package/libmodsecurity/libmodsecurity.mk
+diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
+index 98fafc3679..0475f8882a 100644
+--- a/package/bubblewrap/bubblewrap.hash
++++ b/package/bubblewrap/bubblewrap.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/containers/bubblewrap/releases/tag/v0.6.2
+-sha256  8a0ec802d1b3e956c5bb0a40a81c9ce0b055a31bf30a8efa547433603b8af20b  bubblewrap-0.6.2.tar.xz
++# From https://github.com/containers/bubblewrap/releases/tag/v0.7.0
++sha256  764ab7100bd037ea53d440d362e099d7a425966bc62d1f00ab26b8fbb882a9dc  bubblewrap-0.7.0.tar.xz
+ 
+ # Hash for license files:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
+index 91864d2b76..658e6e113c 100644
+--- a/package/bubblewrap/bubblewrap.mk
++++ b/package/bubblewrap/bubblewrap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMODSECURITY_VERSION = 3.0.7
-+LIBMODSECURITY_VERSION = 3.0.8
- LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
- LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
- LIBMODSECURITY_INSTALL_STAGING = YES
+-BUBBLEWRAP_VERSION = 0.6.2
++BUBBLEWRAP_VERSION = 0.7.0
+ BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
+ BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
+ BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
