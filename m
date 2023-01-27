@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 369CBC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E1BFC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1D1C42D30;
-	Mon, 20 Feb 2023 21:21:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1D1C42D30
+	by smtp4.osuosl.org (Postfix) with ESMTP id D99AA42ADC;
+	Mon, 20 Feb 2023 21:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D99AA42ADC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Ve0nGbX9iba; Mon, 20 Feb 2023 21:20:59 +0000 (UTC)
+	with ESMTP id kzLMqNkrrKqP; Mon, 20 Feb 2023 21:21:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7366742C6E;
-	Mon, 20 Feb 2023 21:20:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7366742C6E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 193121BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6612142D3A;
+	Mon, 20 Feb 2023 21:21:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6612142D3A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A3A7D1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D4404158C
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D4404158C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B10441947
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B10441947
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g_5NdXOSUHzB for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bHJeUSiZg1M8 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A152540C42
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A152540C42
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E91E4192D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E91E4192D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D8D386494; Mon, 20 Feb 2023 20:51:52 +0000 (UTC)
+ id 7BED086496; Mon, 20 Feb 2023 20:52:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Nov 2022 11:00:51 +0100
+Date: Fri, 27 Jan 2023 11:44:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ef6c9da9d255f04847a89d22b99ab3605102d4cb
-X-Git-Newrev: 73f04f7f0cb5ab7b4df0f2e8c706d73e6d12b793
+X-Git-Oldrev: 0939cecb401fa3a4227649b36bc4298790544928
+X-Git-Newrev: 2890f308b5e884b2cbf9db3ccfd7ea7e0f4b0ddb
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205152.9D8D386494@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gnupg2: bump version
- to 2.3.8
+Message-Id: <20230220205240.7BED086496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcamera: bump to
+ version 0.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73f04f7f0cb5ab7b4df0f2e8c706d73e6d12b793
+commit: https://git.buildroot.net/buildroot/commit/?id=2890f308b5e884b2cbf9db3ccfd7ea7e0f4b0ddb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Brings a number of fixes: https://dev.gnupg.org/T6106
+Libcamera recently started to tag releases, so use the version tag instead
+of raw commit hash.
 
-Add patch 0001 to fix undefined reference to `ks_ldap_free_state'
-backported from commit 7011286ce6e1fb56c2989fdafbd11b931c489faa
-
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-[Peter: add changelog info]
+Signed-off-by: Daniel Semkowicz <dse@thaumatec.com>
+Reviewed-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/0001-ks_ldap_free_state.patch | 21 +++++++++++++++++++++
- package/gnupg2/gnupg2.hash                   | 10 +++++-----
- package/gnupg2/gnupg2.mk                     |  2 +-
- 3 files changed, 27 insertions(+), 6 deletions(-)
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnupg2/0001-ks_ldap_free_state.patch b/package/gnupg2/0001-ks_ldap_free_state.patch
-new file mode 100644
-index 0000000000..fa55d27c04
---- /dev/null
-+++ b/package/gnupg2/0001-ks_ldap_free_state.patch
-@@ -0,0 +1,21 @@
-+
-+Fix undefined reference to `ks_ldap_free_state' if OpenLDAP is not
-+installed
-+
-+Backported from: 7011286ce6e1fb56c2989fdafbd11b931c489faa
-+
-+Signed-off-by: Michael Fischer <mf@go-sys.de>
-+
-+--- a/dirmngr/server.c
-++++ b/dirmngr/server.c
-+@@ -3137,8 +3137,10 @@ start_command_handler (assuan_fd_t fd, unsigned int session_id)
-+                ctrl->refcount);
-+   else
-+     {
-++#if USE_LDAP
-+       ks_ldap_free_state (ctrl->ks_get_state);
-+       ctrl->ks_get_state = NULL;
-++#endif
-+       release_ctrl_ocsp_certs (ctrl);
-+       xfree (ctrl->server_local);
-+       dirmngr_deinit_default_ctrl (ctrl);
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index ec2654be7b..f9c071ad45 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2022q3/000474.html
--sha1  9255a70a984bfbfa5312a9a52a1cf47cb0d1fc84  gnupg-2.3.7.tar.bz2
-+# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000476.html
-+sha1  1f31b7b4c9c9adad97f94ea3acf1aa64c0424bcc  gnupg-2.3.8.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.3.7.tar.bz2.sig
--# using key 02F38DFF731FF97CB039A1DA549E695E905BA208
--sha256  ee163a5fb9ec99ffc1b18e65faef8d086800c5713d15a672ab57d3799da83669  gnupg-2.3.7.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.3.8.tar.bz2.sig
-+# using key 6DAA6E64A76D2840571B4902528897B826403ADA and AC8E115BF73E2D8D47FA9908E98E9B2D19C6C8BD
-+sha256  540b7a40e57da261fb10ef521a282e0021532a80fd023e75fb71757e8a4969ed  gnupg-2.3.8.tar.bz2
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 7d8424c136..9dc29ca99e 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 68c9c1f005..033e318910 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  59318208a9c1b183cacaf5a7175568d8a9fa094f2dd8c9794269bb6e9636986e  libcamera-ba6435930f08e802cffc688d90f156a8959a0f86-br1.tar.gz
++sha256  d7100286616550aca487b46ae9de2a70bb471352a332b8214901b4148739990f  libcamera-v0.0.3-br1.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 9c03d3a3b3..8979a43aca 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GNUPG2_VERSION = 2.3.7
-+GNUPG2_VERSION = 2.3.8
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = ba6435930f08e802cffc688d90f156a8959a0f86
++LIBCAMERA_VERSION = v0.0.3
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
