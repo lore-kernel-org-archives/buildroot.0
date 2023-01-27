@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97643C54EAA
-	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 145FCC38142
+	for <buildroot@archiver.kernel.org>; Fri, 27 Jan 2023 14:13:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E13C41D6B;
-	Fri, 27 Jan 2023 14:13:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E13C41D6B
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFDC0611F4;
+	Fri, 27 Jan 2023 14:13:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFDC0611F4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bvlypbD3tjXa; Fri, 27 Jan 2023 14:13:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Arw_NSkiLgSv; Fri, 27 Jan 2023 14:13:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E195541D59;
-	Fri, 27 Jan 2023 14:13:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E195541D59
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2D8591BF977
- for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDB3B612AC;
+	Fri, 27 Jan 2023 14:13:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDB3B612AC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3621C1BF39E
+ for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04A6B41D59
+ by smtp3.osuosl.org (Postfix) with ESMTP id BAA0460E5C
  for <buildroot@lists.busybox.net>; Fri, 27 Jan 2023 14:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04A6B41D59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAA0460E5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K4FsWSFqCkZs for <buildroot@lists.busybox.net>;
- Fri, 27 Jan 2023 14:11:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LAdvPY7idXug for <buildroot@lists.busybox.net>;
+ Fri, 27 Jan 2023 14:11:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E1F141D2D
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3E1F141D2D
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 14:11:09 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id 203so1936306iou.13
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 06:11:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98203611F4
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 98203611F4
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 14:11:07 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id k3so383302ioc.10
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 06:11:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=qzmqLvImvYb2mjB6UNIoicAS51hLtjMPrlUkvW2lL6o=;
- b=37VlHGx5muRiZ4qhJ4/BJPKtx85HIXUlD8rihUoXrNsg6dCxlFhbo/sFBsS9CR1rT7
- uH4TBFywe9LKb4nlGkY21cwxmnIHMkOj9vl/lqDN/sqmxMjOazIWJydZjHLexjABAPKE
- arvGeHSqcB71lf6/Nf2xdV7AAMGW9U+li6uSaLhw+muI3sbktg3Q0j8UCtyh8oRnSvUR
- 7f4HFRItPAYUHBZNerjBBE/z0233gK8VSDDAB0Mok1MTPjTAIcS+kcYoUYAmecnyVXF6
- q/7SuGRlz0CRYGJCv2ROIXrn4DodHNKo73gwLAvfET/NrYFBIiy+bLfzAHn0v64r7mzs
- g+yw==
-X-Gm-Message-State: AFqh2kqE0M8mq5E3uw746h9E1E2u14pW5B0HvRS8Keg2/c5XZts38CiB
- BDv4XowiLmDr2CTTDldtDy7/d9RKinUUhw==
-X-Google-Smtp-Source: AMrXdXt+IW1Gt/he/g2X9Yg2517zXpUvdEtsHqAeAaKHUL4BzjubWvm9qqVpw6sv/VkOacXNYlv7Ng==
-X-Received: by 2002:a6b:4410:0:b0:6d4:264f:2427 with SMTP id
- r16-20020a6b4410000000b006d4264f2427mr26651417ioa.21.1674828668678; 
- Fri, 27 Jan 2023 06:11:08 -0800 (PST)
+ bh=W0+E37xprYMc+R3i6ftgjflThv2FWnhYtgSlLRAIAAE=;
+ b=FgH2pvBgAZE1ugVef8fOE01mt9BdDPp/RSAQlaZwDoA6TVdcxLEtTL8mG62iBFakWi
+ dshZ895ttiV/jcqnIXJW/4DidZbYrXEzweX+TUa01opT8Nb+WnM+LfJK9fFjI+51JDuY
+ yeXJ+Yu0yWB7c0V/nOCYlWp9OCBP/JO1O4XQain2UMtFIp7+S0a2hksw0sWixz5ARB9i
+ 3E1klxdVsTtvOrsLUgyy56IdpHhRFt0NqCHPjSe7xEeRFDlWtngfoqnTqY26PiNFySpF
+ rXZnqkv4sEMClqTDXAUqYBpsM4TBrGiowVYriHqLOTD7ac68oHGEmr2+6vMvO7vUz/JS
+ shCQ==
+X-Gm-Message-State: AFqh2krX3RpHs4drwUuqPuPZHjrAdfzHbyO+xfSL1My5QJpCJBRh1IBS
+ CIJzhRbEqUpxkQcPCBESVvGS23Brb1uRjQ==
+X-Google-Smtp-Source: AMrXdXuRRtL3+J1vKYfQDDJ+jCTGSlH5djVRRwyM6vJyIDneVDRAQOyT0Me1voB2Kua9EXpLBE8XQA==
+X-Received: by 2002:a6b:e61a:0:b0:704:d0d8:632b with SMTP id
+ g26-20020a6be61a000000b00704d0d8632bmr27191701ioh.16.1674828666449; 
+ Fri, 27 Jan 2023 06:11:06 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.08
+ n2-20020a6bed02000000b006d8b7bcaa6esm1290806iog.4.2023.01.27.06.11.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Jan 2023 06:11:08 -0800 (PST)
+ Fri, 27 Jan 2023 06:11:05 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 07:10:57 -0700
-Message-Id: <20230127141058.2180747-12-james.hilliard1@gmail.com>
+Date: Fri, 27 Jan 2023 07:10:54 -0700
+Message-Id: <20230127141058.2180747-9-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127141058.2180747-1-james.hilliard1@gmail.com>
 References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qzmqLvImvYb2mjB6UNIoicAS51hLtjMPrlUkvW2lL6o=;
- b=BRWn8h442cwhr7TKF9iq6WlQFuCJnw1NLLOqTXPoxIMkpQ9M7iw4LORdqr83GVzvyU
- cxosIM685/Y5YZ22tbA24vCXy/cLSitXBglU/p0we3wJW9VcR9oCotFw6CJSpAsfspjI
- pYiAlLhA7RnApNu32YW1jt5srtR+HJIa3H9ZqHLijuUtv6U4P3FgGV36C6+cEk9P4fGw
- qsiLgrUS6zYuW5b7pN4nDAbMACcBF7Gler7KH/AlaV47UGBpxsXOtuOINP+IG/a3jfHX
- u/30DI7JPUr0+ue0mTVC15i1CgqvRwxBWRzAemJ5UTQ2kCpBCucyZ7AV6r6U34c0D8By
- Nz9w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=W0+E37xprYMc+R3i6ftgjflThv2FWnhYtgSlLRAIAAE=;
+ b=gtszJZi8FAssiaNJ5xMD1Kc3ha3FpcStMxRIR9WUMhQaDEcxsTIlKIyCFI/Itzxrei
+ Xli49NzWLsquefXfWDOeNi8NwHgZCkimitZe8yAcufYI5qZQkxYW94KHMTd/7WGgYgoT
+ XbwasDkbhCDrIs/pFhs35l6sWLbD5AcI2b/U9L3aBJXxmT2aRkGBmRoTy2A96+BXJl0D
+ 25f4AOKcKcFxupYzWHY44Nc31Nkr86Bav2J/72KfOR1yLBAzLP8B8wHH9osdGSTCHx7Z
+ kQYPYh+8v+ZsZkkAXmnXTc1n0fpWXzAaHDdvn9wGuZrBj3wK6Xlv4fi6YQD3iuvfk0kp
+ RPfg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BRWn8h44
-Subject: [Buildroot] [PATCH v4 12/13] package/farmhash: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=gtszJZi8
+Subject: [Buildroot] [PATCH v4 09/13] package/fp16: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,99 +106,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Stefan Hager <stefan.hager@ginzinger.com>
-
 This package is required by tensorflow-lite.
 
-Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v2 -> v3:
-  - add C++11 dependency
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/farmhash/Config.in     | 12 ++++++++++++
- package/farmhash/farmhash.hash |  4 ++++
- package/farmhash/farmhash.mk   | 14 ++++++++++++++
- 5 files changed, 32 insertions(+)
- create mode 100644 package/farmhash/Config.in
- create mode 100644 package/farmhash/farmhash.hash
- create mode 100644 package/farmhash/farmhash.mk
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/fp16/Config.in |  8 ++++++++
+ package/fp16/fp16.hash |  4 ++++
+ package/fp16/fp16.mk   | 19 +++++++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/fp16/Config.in
+ create mode 100644 package/fp16/fp16.hash
+ create mode 100644 package/fp16/fp16.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a9ecf7847f..2afe29be47 100644
+index 501bbff35e..fc74c089fe 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -2703,6 +2703,7 @@ F:	package/ti-gfx/
  
  N:	Stefan Hager <stefan.hager@ginzinger.com>
  F:	package/cpuinfo/
-+F:	package/farmhash/
- F:	package/fp16/
- F:	package/fft2d/
++F:	package/fp16/
  F:	package/fxdiv/
+ F:	package/gemmlowp/
+ F:	package/neon-2-sse/
 diff --git a/package/Config.in b/package/Config.in
-index 53f544ef40..a7c7e87c78 100644
+index a87f360221..d33806a013 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2003,6 +2003,7 @@ menu "Other"
- 	source "package/elfutils/Config.in"
- 	source "package/ell/Config.in"
- 	source "package/falcosecurity-libs/Config.in"
-+	source "package/farmhash/Config.in"
- 	source "package/fft2d/Config.in"
- 	source "package/fftw/Config.in"
+@@ -2007,6 +2007,7 @@ menu "Other"
  	source "package/flann/Config.in"
-diff --git a/package/farmhash/Config.in b/package/farmhash/Config.in
+ 	source "package/flatbuffers/Config.in"
+ 	source "package/flatcc/Config.in"
++	source "package/fp16/Config.in"
+ 	source "package/fxdiv/Config.in"
+ 	source "package/gconf/Config.in"
+ 	source "package/gdal/Config.in"
+diff --git a/package/fp16/Config.in b/package/fp16/Config.in
 new file mode 100644
-index 0000000000..ef22898774
+index 0000000000..e07c6ebb8a
 --- /dev/null
-+++ b/package/farmhash/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FARMHASH
-+	bool "farmhash"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++++ b/package/fp16/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_FP16
++	bool "fp16"
++	select BR2_PACKAGE_PSIMD
 +	help
-+	  FarmHash, a family of hash functions.
++	  Header-only library for conversion to/from half-precision
++	  floating point formats.
 +
-+	  https://github.com/google/farmhash
-+
-+comment "farmhash needs a toolchain w/ C++11"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/farmhash/farmhash.hash b/package/farmhash/farmhash.hash
++	  https://github.com/Maratyszcza/FP16
+diff --git a/package/fp16/fp16.hash b/package/fp16/fp16.hash
 new file mode 100644
-index 0000000000..afdfc0f994
+index 0000000000..63634eb2cf
 --- /dev/null
-+++ b/package/farmhash/farmhash.hash
++++ b/package/fp16/fp16.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  18392cf0736e1d62ecbb8d695c31496b6507859e8c75541d7ad0ba092dc52115  farmhash-0d859a811870d10f53a594927d0d0b97573ad06d.tar.gz
++sha256  a91f4770ff9c39f4d72e339c379f566b3bbb359fa66122d85fc0bae3dde7abc7  fp16-0a92994d729ff76a58f692d3028ca1b64b145d91.tar.gz
 +# License files, locally calculated
-+sha256  4162dd091caae234f72d3b57e138174f733e736b2430a4c51b098b17d866fcb6  COPYING
-diff --git a/package/farmhash/farmhash.mk b/package/farmhash/farmhash.mk
++sha256  17e4f539024be2749ee729d1e2f01d24cef12ece8c9bf18e91a4349be29c80bf  LICENSE
+diff --git a/package/fp16/fp16.mk b/package/fp16/fp16.mk
 new file mode 100644
-index 0000000000..6ab7d1a88b
+index 0000000000..52f48232fa
 --- /dev/null
-+++ b/package/farmhash/farmhash.mk
-@@ -0,0 +1,14 @@
++++ b/package/fp16/fp16.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# farmhash
++# fp16
 +#
 +################################################################################
 +
-+FARMHASH_VERSION = 0d859a811870d10f53a594927d0d0b97573ad06d
-+FARMHASH_SITE = $(call github,google,farmhash,$(FARMHASH_VERSION))
-+FARMHASH_LICENSE = MIT
-+FARMHASH_LICENSE_FILES = COPYING
-+FARMHASH_INSTALL_STAGING = YES
-+FARMHASH_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++FP16_VERSION = 0a92994d729ff76a58f692d3028ca1b64b145d91
++FP16_SITE = $(call github,Maratyszcza,FP16,$(FP16_VERSION))
++FP16_LICENSE = MIT
++FP16_LICENSE_FILES = LICENSE
++FP16_INSTALL_STAGING = YES
++FP16_INSTALL_TARGET = NO
++FP16_DEPENDENCIES = psimd
++FP16_CONF_OPTS = \
++	-DFP16_BUILD_TESTS=OFF \
++	-DFP16_BUILD_BENCHMARKS=OFF \
++	-DPSIMD_SOURCE_DIR="$(PSIMD_DIR)"
 +
-+$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
 2.34.1
 
