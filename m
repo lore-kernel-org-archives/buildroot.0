@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 768BBC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:48:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F4C7C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25D3E82894;
-	Mon, 20 Feb 2023 23:48:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25D3E82894
+	by smtp1.osuosl.org (Postfix) with ESMTP id E286B84143;
+	Mon, 20 Feb 2023 23:48:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E286B84143
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7Ufet2dZ9bvr; Mon, 20 Feb 2023 23:48:34 +0000 (UTC)
+	with ESMTP id 0J86VzZXhd5u; Mon, 20 Feb 2023 23:48:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5329584143;
-	Mon, 20 Feb 2023 23:48:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5329584143
+	by smtp1.osuosl.org (Postfix) with ESMTP id BDBFD84173;
+	Mon, 20 Feb 2023 23:48:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDBFD84173
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6FFBD1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 125F81BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2387341774
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E5A141785
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2387341774
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E5A141785
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id brJTwxhT-i2n for <buildroot@lists.busybox.net>;
+ with ESMTP id XVgdadVAQIH7 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 588FB41766
+ by smtp2.osuosl.org (Postfix) with ESMTP id 123C54177B
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 588FB41766
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 123C54177B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 535EF86495; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0E7208648F; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 17:39:58 +0100
+Date: Sat, 28 Jan 2023 23:40:47 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 47a74ffa8137c22686e6196e0b1e74861d1bd81c
-X-Git-Newrev: b86cc6a313773ac90bceabf376e33bba789c2950
+X-Git-Oldrev: f46e197374bdac762a628db5ce6977a148d74859
+X-Git-Newrev: a97ab5d2faf4c0498e1c7b4eb68f98fc2eb78060
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205243.535EF86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-greenlet: bump
- to version 2.0.2
+Message-Id: <20230220205243.0E7208648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rng-tools: bump to
+ version 6.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +56,255 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b86cc6a313773ac90bceabf376e33bba789c2950
+commit: https://git.buildroot.net/buildroot/commit/?id=a97ab5d2faf4c0498e1c7b4eb68f98fc2eb78060
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-greenlet/python-greenlet.hash | 4 ++--
- package/python-greenlet/python-greenlet.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+- Drop patches (already in version)
+- libcap is a mandatory dependency since
+  https://github.com/nhorman/rng-tools/commit/50afdce9d3fed6244a0cf772d38f2d8475312bc5
+- Add Qrypt support:
+  https://github.com/nhorman/rng-tools/commit/7ab7f540da567467055f77016590744d828fc9eb
 
-diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
-index 4e9e96398a..f378436beb 100644
---- a/package/python-greenlet/python-greenlet.hash
-+++ b/package/python-greenlet/python-greenlet.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/greenlet/json
--md5  8d0f10b807144a86b54841cfab2620a9  greenlet-2.0.1.tar.gz
--sha256  42e602564460da0e8ee67cb6d7236363ee5e131aa15943b6670e44e5c2ed0f67  greenlet-2.0.1.tar.gz
-+md5  e6637d59015cba7e86f2111e6aa8168b  greenlet-2.0.2.tar.gz
-+sha256  e7c8dc13af7db097bed64a051d2dd49e9f0af495c26995c00a9ee842690d34c0  greenlet-2.0.2.tar.gz
- # Locally computed sha256 checksums
- sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
- sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
-diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-index 232e2820f8..40f05f667e 100644
---- a/package/python-greenlet/python-greenlet.mk
-+++ b/package/python-greenlet/python-greenlet.mk
-@@ -4,9 +4,9 @@
+https://github.com/nhorman/rng-tools/releases/tag/v6.16
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...configure.ac-fix-build-without-sys-auxv.h.patch | 52 ----------------------
+ ...erentropy-detection-to-look-for-the-setti.patch | 30 -------------
+ ...erentropy-library-to-timeout-fail-on-long.patch | 39 ----------------
+ package/rng-tools/Config.in                        | 16 +++++++
+ package/rng-tools/rng-tools.hash                   |  2 +-
+ package/rng-tools/rng-tools.mk                     | 11 ++++-
+ 6 files changed, 26 insertions(+), 124 deletions(-)
+
+diff --git a/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch b/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch
+deleted file mode 100644
+index 0c15ab6b7d..0000000000
+--- a/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 6ea89861c300a732d1bbcffd085d92f5c4c9228e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 15 Aug 2022 11:57:21 +0200
+-Subject: [PATCH] configure.ac: fix build without sys/auxv.h
+-
+-Fix the following build failure on aarch64 without sys/auxv.h (e.g. on
+-uclibc) raised since version 6.13 and
+-https://github.com/nhorman/rng-tools/commit/9070a04adfcd21ec3839ee8ff190e7130ccd5c9b:
+-
+-rngd_rndr.c:34:10: fatal error: sys/auxv.h: No such file or directory
+-   34 | #include <sys/auxv.h>
+-      |          ^~~~~~~~~~~~
+-
+-The same issue could be raised on powerpc64le since version 6.11 and
+-https://github.com/nhorman/rng-tools/commit/ade348cdb90c25b44b203fd4e9c33ec4bccff323
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/41d5ab9e67eb0d8af8d789fc94d4366f130a7fb2
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/nhorman/rng-tools/commit/6ea89861c300a732d1bbcffd085d92f5c4c9228e]
+----
+- configure.ac | 11 +++++++----
+- 1 file changed, 7 insertions(+), 4 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 0af64e7..411c7b8 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -76,14 +76,17 @@ AC_PROG_GCC_TRADITIONAL
+- 
+- AX_PTHREAD
+- 
+-+dnl Checks for header files.
+-+AC_CHECK_HEADERS(sys/auxv.h)
+-+
+- AM_CONDITIONAL([RDRAND], [test $host_cpu = x86_64 || test $host_cpu = i686])
+- AS_IF([test $host_cpu = x86_64 || test $host_cpu = i686], [AC_DEFINE([HAVE_RDRAND],1,[Enable RDRAND])],[])
+- 
+--AM_CONDITIONAL([DARN], [test $host_cpu = powerpc64le])
+--AS_IF([test $host_cpu = powerpc64le], [AC_DEFINE([HAVE_DARN],1,[Enable DARN])],[])
+-+AM_CONDITIONAL([DARN], [test $host_cpu = powerpc64le -a "$ac_cv_header_sys_auxv_h" = "yes"])
+-+AS_IF([test $host_cpu = powerpc64le -a "$ac_cv_header_sys_auxv_h" = "yes"], [AC_DEFINE([HAVE_DARN],1,[Enable DARN])],[])
+- 
+--AM_CONDITIONAL([RNDR], [test $host_cpu = aarch64])
+--AS_IF([test $host_cpu = aarch64], [AC_DEFINE([HAVE_RNDR],1,[Enable RNDR])],[])
+-+AM_CONDITIONAL([RNDR], [test $host_cpu = aarch64 -a "$ac_cv_header_sys_auxv_h" = "yes"])
+-+AS_IF([test $host_cpu = aarch64 -a "$ac_cv_header_sys_auxv_h" = "yes"], [AC_DEFINE([HAVE_RNDR],1,[Enable RNDR])],[])
+- AM_CONDITIONAL([JITTER], [false])
+- 
+- AC_ARG_ENABLE(jitterentropy,
+diff --git a/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch b/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
+deleted file mode 100644
+index 553842640d..0000000000
+--- a/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From e2698477e8abf623c18ab28d33cc894ec882a706 Mon Sep 17 00:00:00 2001
+-From: Neil Horman <neil.horman@privafy.com>
+-Date: Fri, 18 Mar 2022 18:59:52 -0400
+-Subject: [PATCH] Adjust jitterentropy detection to look for the settick
+- function
+-
+-Theres no great way to detect if jitterentropy has the internal timer
+-feature enabled so we have to look for a function that is only defined
+-when it is enabled
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[downloaded from upstream commit
+- https://github.com/nhorman/rng-tools/commit/e2698477e8abf623c18ab28d33cc894ec882a706]
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index e16e1a0..0f5a38e 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -94,7 +94,7 @@ AS_IF(
+- 		AC_SEARCH_LIBS(jent_version,jitterentropy,
+- 				[AM_CONDITIONAL([JITTER], [true])
+- 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
+--				AC_CHECK_LIB(jitterentropy, jent_entropy_switch_notime_impl,
+-+				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
+- 				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
+- 				[],-lpthread)],
+- 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
+diff --git a/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch b/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
+deleted file mode 100644
+index 9d8dbe2d0b..0000000000
+--- a/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From c29424f10a0dcbd18ac25607fa1c81c18a960e81 Mon Sep 17 00:00:00 2001
+-From: Neil Horman <nhorman@tuxdriver.com>
+-Date: Mon, 16 May 2022 13:38:54 -0400
+-Subject: [PATCH] Adjust jitterentropy library to timeout/fail on long delay
+-
+-[Bernd: removed description of unrelated part of the patch]
+-
+-Also while we're at it, I might have a build solution for the presence
+-of internal timers.  When jitterentropy is built without internal
+-timers, jent_notime_init is defined publically, but when it is built
+-with timers, its declared as a static symbol, preenting resolution, so
+-we can test to see if the function exists.  If it does we _don't_ have
+-notime support. The logic is a bit backwards, but i think it works
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[downloaded configure.ac patch from upstream commit
+- https://github.com/nhorman/rng-tools/commit/57be6d4c90e78ea9ad036a3a6e9b09822ed4d219]
+----
+- configure.ac  |  6 ++---
+- rngd_jitter.c | 62 ++++++++++++++++++++++++++++++++++++++-------------
+- 2 files changed, 49 insertions(+), 19 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 52f2bb5..0af64e7 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -101,9 +101,9 @@ AS_IF(
+- 		AC_SEARCH_LIBS(jent_version,jitterentropy,
+- 				[AM_CONDITIONAL([JITTER], [true])
+- 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
+--				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
+--				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
+--				[],-lpthread)],
+-+				AC_CHECK_LIB(jitterentropy, jent_notime_init,
+-+				[],
+-+				[AC_DEFINE([HAVE_JITTER_NOTIME],1, [Enable JITTER_NOTIME])],-lpthread)],
+- 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
+- 	], [AC_MSG_NOTICE([Disabling JITTER entropy source])]
+- )
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index 0dd269c818..be3f078a0b 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -2,7 +2,9 @@ config BR2_PACKAGE_RNG_TOOLS
+ 	bool "rng-tools"
+ 	# pthread_setaffinity_np
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_USE_MMU # libcap
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Daemon to use hardware random number generators.
+@@ -35,7 +37,21 @@ config BR2_PACKAGE_RNG_TOOLS_NISTBEACON
+ 	  never be used for cryptographic purposes, or any use case in
+ 	  which random data should be known only by a single entity.
+ 
++config BR2_PACKAGE_RNG_TOOLS_QRYPT
++	bool "Qrypt Entropy Beacon support"
++	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_LIBCURL
++	help
++	  Enable Qrypt NIST-Beacon like entropy support.
++
++	  Entropy gathered from Qrypt server based entropy beacons. Like
++	  NIST, it should likely not be used directly in cryptographic
++	  operation, as the entropy may be intercepted over a network,
++	  but can provide copius amounts of entropy for non-crypto
++	  purposes.
++
+ endif
+ 
+ comment "rng-tools needs a toolchain w/ NPTL"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
+index be2ee13969..4c86791267 100644
+--- a/package/rng-tools/rng-tools.hash
++++ b/package/rng-tools/rng-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bff0c58dff90ec10bd61f672e48618e045155eabd60b32d63a9c4ffbdad05f3a  rng-tools-6.15.tar.gz
++sha256  17666c4745fb635d91df293be188daf94b9e465d51d8503c0195fa3beb390894  rng-tools-6.16.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index f736193a23..3e565103e4 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--PYTHON_GREENLET_VERSION = 2.0.1
-+PYTHON_GREENLET_VERSION = 2.0.2
- PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
--PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/fd/6a/f07b0028baff9bca61ecfcd9ee021e7e33369da8094f00eff409f2ff32be
-+PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/1e/1e/632e55a04d732c8184201238d911207682b119c35cecbb9a573a6c566731
- PYTHON_GREENLET_SETUP_TYPE = setuptools
- PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
- PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
+-RNG_TOOLS_VERSION = 6.15
++RNG_TOOLS_VERSION = 6.16
+ RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
+ RNG_TOOLS_LICENSE = GPL-2.0
+ RNG_TOOLS_LICENSE_FILES = COPYING
+ RNG_TOOLS_CPE_ID_VENDOR = rng-tools_project
+ RNG_TOOLS_SELINUX_MODULES = rngd
+ 
+-RNG_TOOLS_DEPENDENCIES = host-pkgconf openssl
++RNG_TOOLS_DEPENDENCIES = host-pkgconf libcap openssl
+ # From git
+ RNG_TOOLS_AUTORECONF = YES
+ 
+@@ -45,6 +45,13 @@ else
+ RNG_TOOLS_CONF_OPTS += --without-nistbeacon
+ endif
+ 
++ifeq ($(BR2_PACKAGE_RNG_TOOLS_QRYPT),y)
++RNG_TOOLS_DEPENDENCIES += jansson libcurl
++RNG_TOOLS_CONF_OPTS += --with-qrypt
++else
++RNG_TOOLS_CONF_OPTS += --without-qrypt
++endif
++
+ define RNG_TOOLS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
+ 		$(TARGET_DIR)/etc/init.d/S21rngd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
