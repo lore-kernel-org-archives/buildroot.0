@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B2DDC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:46:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9E43C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B93FA8406E;
-	Mon, 20 Feb 2023 23:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B93FA8406E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 681218405B;
+	Mon, 20 Feb 2023 23:46:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 681218405B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5fQWvmzJFjT6; Mon, 20 Feb 2023 23:46:28 +0000 (UTC)
+	with ESMTP id UDTsT8tv0Eif; Mon, 20 Feb 2023 23:46:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B581284070;
-	Mon, 20 Feb 2023 23:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B581284070
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E8B084070;
+	Mon, 20 Feb 2023 23:46:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E8B084070
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED2D81BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3AEC81BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D85C4177D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B00B41775
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D85C4177D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B00B41775
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8hBp9rFeYyNQ for <buildroot@lists.busybox.net>;
+ with ESMTP id w0tHNHxfm07B for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83A1B41777
+ by smtp2.osuosl.org (Postfix) with ESMTP id A99ED41779
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83A1B41777
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A99ED41779
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F37086495; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+ id A57488648F; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:46:11 +0100
+Date: Sat, 28 Jan 2023 22:55:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 08b680f6718746eeabf2b4a18111a0991744cda3
-X-Git-Newrev: 760894b72ed465f426cf848f561200a4656eda4a
+X-Git-Oldrev: 3c7a8620d69a154b9ff71005603509c1d5cfd269
+X-Git-Newrev: d33a8417bf1bc5d7276e19da5c37da210d4de31a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205242.7F37086495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xdriver_xf86-video-qxl: bump version to 0.1.6
+Message-Id: <20230220205242.A57488648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sdl2: security bump to
+ version 2.26.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,182 +59,138 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3124021494185973455=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3124021494185973455==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=760894b72ed465f426cf848f561200a4656eda4a
+commit: https://git.buildroot.net/buildroot/commit/?id=d33a8417bf1bc5d7276e19da5c37da210d4de31a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-January/003316.html
+- Drop patch (already in version)
+- Fix CVE-2022-4743: A potential memory leak issue was discovered in
+  SDL2 in GLES_CreateTexture() function in SDL_render_gles.c. The
+  vulnerability allows an attacker to cause a denial of service attack.
 
-Removed patch which was applied upstream.
+https://github.com/libsdl-org/SDL/releases/tag/release-2.26.0
+https://github.com/libsdl-org/SDL/releases/tag/release-2.26.1
+https://github.com/libsdl-org/SDL/releases/tag/release-2.26.2
 
-Switched tarball to xz and _SITE to https, added sha512 hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Fix-a-build-error-with-Xorg-master.patch  | 106 ---------------------
- .../xdriver_xf86-video-qxl.hash                    |   5 +-
- .../xdriver_xf86-video-qxl.mk                      |   6 +-
- 3 files changed, 6 insertions(+), 111 deletions(-)
+ ...oesn-t-have-a-mode-configured-use-the-pre.patch | 76 ----------------------
+ package/sdl2/sdl2.hash                             |  4 +-
+ package/sdl2/sdl2.mk                               |  2 +-
+ 3 files changed, 3 insertions(+), 79 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/0001-Fix-a-build-error-with-Xorg-master.patch b/package/x11r7/xdriver_xf86-video-qxl/0001-Fix-a-build-error-with-Xorg-master.patch
+diff --git a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch b/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
 deleted file mode 100644
-index d3257fba20..0000000000
---- a/package/x11r7/xdriver_xf86-video-qxl/0001-Fix-a-build-error-with-Xorg-master.patch
+index c8be280c56..0000000000
+--- a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
 +++ /dev/null
-@@ -1,106 +0,0 @@
--From 4e1963a812f2c1777ba5d56ea9e939a3e40a0496 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Zolt=C3=A1n=20B=C3=B6sz=C3=B6rm=C3=A9nyi?=
-- <zboszor@gmail.com>
--Date: Sat, 28 Aug 2021 15:38:40 +0200
--Subject: [PATCH] Fix a build  error with Xorg master
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,76 +0,0 @@
+-From da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29 Mon Sep 17 00:00:00 2001
+-From: Sam Lantinga <slouken@libsdl.org>
+-Date: Fri, 18 Nov 2022 12:17:27 -0800
+-Subject: [PATCH] If a CRTC doesn't have a mode configured, use the preferred
+- or largest mode as the default mode
 -
--Use xf86ReturnOptValBool() in get_bool_option() instead of
--options[option_index].value.bool to fix a compiler error with
--current Xorg xserver master branch.
+-Fixes https://github.com/libsdl-org/SDL/issues/6421
 -
--Also use xf86GetOptValInteger() in get_int_option() and
--xf86GetOptValString() in get_str_option() for consistency.
--
--The change causes a slight performance drop during option parsing
--because the passed-in index_value is no longer used as an index
--into the options array.
--
--Instead, it's used as a token now for the standard option getter
--functions which works since the index_value to the get_*_option()
--functions are identical to the value of options[n].token in the
--passed-in OptionInfoRec array.
--
--Also rename "int option_index" to "int token" for clarity in all
--three functions.
--
--Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
--
--Downloaded from upstream commit
--https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl/-/commit/4e1963a812f2c1777ba5d56ea9e939a3e40a0496
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[mf@go-sys.de: backport from upstream]
+-Signed-off-by: Michael Fischer <mf@go-sys.de>
+-[yann.morin.1998@free.fr: do an actual backport]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ----
-- src/qxl_option_helpers.c | 13 +++++++------
-- src/qxl_option_helpers.h |  6 +++---
-- 2 files changed, 10 insertions(+), 9 deletions(-)
+- src/video/kmsdrm/SDL_kmsdrmvideo.c | 35 +++++++++++++++++++++++++-----
+- 1 file changed, 29 insertions(+), 6 deletions(-)
 -
--diff --git a/src/qxl_option_helpers.c b/src/qxl_option_helpers.c
--index 2aba677..7707b7c 100644
----- a/src/qxl_option_helpers.c
--+++ b/src/qxl_option_helpers.c
--@@ -10,31 +10,32 @@
+-diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
+-index eae721455..eeeefef2b 100644
+---- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
+-+++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
+-@@ -666,8 +666,8 @@ KMSDRM_CrtcGetVrr(uint32_t drm_fd, uint32_t crtc_id)
+- /* Gets a DRM connector, builds an SDL_Display with it, and adds it to the
+-    list of SDL Displays in _this->displays[]  */
+- static void
+--KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
+--
+-+KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources)
+-+{
+-     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
+-     SDL_DisplayData *dispdata = NULL;
+-     SDL_VideoDisplay display = {0};
+-@@ -770,14 +770,37 @@ KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
+-         drmModeModeInfo *mode = &connector->modes[i];
 - 
-- #include "qxl_option_helpers.h"
-- 
---int get_int_option(OptionInfoPtr options, int option_index,
--+int get_int_option(OptionInfoPtr options, int token,
--                    const char *env_name)
-- {
--+    int value;
--     if (env_name && getenv(env_name)) {
--         return atoi(getenv(env_name));
+-         if (!SDL_memcmp(mode, &crtc->mode, sizeof(crtc->mode))) {
+--          mode_index = i;
+--          break;
+-+            mode_index = i;
+-+            break;
+-         }
 -     }
---    return options[option_index].value.num;
--+    return xf86GetOptValInteger(options, token, &value) ? value : 0;
-- }
 - 
---const char *get_str_option(OptionInfoPtr options, int option_index,
--+const char *get_str_option(OptionInfoPtr options, int token,
--                            const char *env_name)
-- {
--     if (getenv(env_name)) {
--         return getenv(env_name);
+-     if (mode_index == -1) {
+--      ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
+--      goto cleanup;
+-+        int current_area, largest_area = 0;
+-+
+-+        /* Find the preferred mode or the highest resolution mode */
+-+        for (i = 0; i < connector->count_modes; i++) {
+-+            drmModeModeInfo *mode = &connector->modes[i];
+-+
+-+            if (mode->type & DRM_MODE_TYPE_PREFERRED) {
+-+                mode_index = i;
+-+                break;
+-+            }
+-+
+-+            current_area = mode->hdisplay * mode->vdisplay;
+-+            if (current_area > largest_area) {
+-+                mode_index = i;
+-+                largest_area = current_area;
+-+            }
+-+        }
+-+        if (mode_index != -1) {
+-+            crtc->mode = connector->modes[mode_index];
+-+        }
+-+    }
+-+
+-+    if (mode_index == -1) {
+-+        ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
+-+        goto cleanup;
 -     }
---    return options[option_index].value.str;
--+    return xf86GetOptValString(options, token);
-- }
 - 
---int get_bool_option(OptionInfoPtr options, int option_index,
--+int get_bool_option(OptionInfoPtr options, int token,
--                      const char *env_name)
-- {
--     const char* value = getenv(env_name);
-- 
--     if (!value) {
---        return options[option_index].value.bool;
--+        return xf86ReturnOptValBool(options, token, FALSE);
--     }
--     if (strcmp(value, "0") == 0 ||
--         strcasecmp(value, "off") == 0 ||
--diff --git a/src/qxl_option_helpers.h b/src/qxl_option_helpers.h
--index 7c54c72..66d0a17 100644
----- a/src/qxl_option_helpers.h
--+++ b/src/qxl_option_helpers.h
--@@ -4,13 +4,13 @@
-- #include <xf86Crtc.h>
-- #include <xf86Opt.h>
-- 
---int get_int_option(OptionInfoPtr options, int option_index,
--+int get_int_option(OptionInfoPtr options, int token,
--                    const char *env_name);
-- 
---const char *get_str_option(OptionInfoPtr options, int option_index,
--+const char *get_str_option(OptionInfoPtr options, int token,
--                            const char *env_name);
-- 
---int get_bool_option(OptionInfoPtr options, int option_index,
--+int get_bool_option(OptionInfoPtr options, int token,
--                      const char *env_name);
-- 
-- #endif // OPTION_HELPERS_H
+-     /*********************************************/
 --- 
--GitLab
+-2.25.1
 -
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash
-index fdf0cc434d..2d728a7c03 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash
-+++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash
-@@ -1,4 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2016-December/002753.html
--sha256  b18682e04503c6326f7bf7190f3ee50a3d4d69758a2a3cc9af102a6b3f114c92  xf86-video-qxl-0.1.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-January/003316.html
-+sha256  2ad39558db47a8fcc036e290e0b084671e58d43344a57b279abd870c4c67965f  xf86-video-qxl-0.1.6.tar.xz
-+sha512  f6a42355915d2e8f8a842dc24fe6d012d123aa6d23eedea1a4771fb08f88e0298d76741755b88304d76c66b3aae15f9fca74d062be395e499a82ee8f4507c7e0  xf86-video-qxl-0.1.6.tar.xz
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 923a900dc0..86e0d86e7c 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.2.tar.gz.sig
+-sha256  b35ef0a802b09d90ed3add0dcac0e95820804202914f5bb7b0feb710f1a1329f  SDL2-2.24.2.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.2.tar.gz.sig
++sha256  95d39bc3de037fbdfa722623737340648de4f180a601b0afad27645d150b99e0  SDL2-2.26.2.tar.gz
  # Locally calculated
- sha256  83f3bf7be3fbf5e66174b8184bd837a6b44264f8e340126ea4d9e9ce956a1866  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-index ffbac05ec1..db0bbbaf65 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-+++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-@@ -4,9 +4,9 @@
+ sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index a1dc8b5b73..8995178e71 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_QXL_VERSION = 0.1.5
--XDRIVER_XF86_VIDEO_QXL_SOURCE = xf86-video-qxl-$(XDRIVER_XF86_VIDEO_QXL_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_QXL_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_QXL_VERSION = 0.1.6
-+XDRIVER_XF86_VIDEO_QXL_SOURCE = xf86-video-qxl-$(XDRIVER_XF86_VIDEO_QXL_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_QXL_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_QXL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_QXL_LICENSE_FILES = COPYING
- 
-
---===============3124021494185973455==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-SDL2_VERSION = 2.24.2
++SDL2_VERSION = 2.26.2
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3124021494185973455==--
