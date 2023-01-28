@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4731BC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE08CC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0E958315C;
-	Mon, 20 Feb 2023 23:45:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0E958315C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DF618405A;
+	Mon, 20 Feb 2023 23:46:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DF618405A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VwtYsd3BYOsg; Mon, 20 Feb 2023 23:45:51 +0000 (UTC)
+	with ESMTP id xzVi0wXOIKZu; Mon, 20 Feb 2023 23:46:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2897683E9B;
-	Mon, 20 Feb 2023 23:45:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2897683E9B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C14741BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id B031D84063;
+	Mon, 20 Feb 2023 23:46:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B031D84063
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DD9CB1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 620A161B18
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 620A161B18
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C98D4177C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C98D4177C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1rCY_kFCYEva for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CNsDZ4RuJcXM for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69DA1617B1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69DA1617B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A2B041775
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A2B041775
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66318828C8; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 72DA9828C8; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 17:22:54 +0100
+Date: Sat, 28 Jan 2023 22:45:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f496b36995c02f81b2404ef1f450ecbfba26aace
-X-Git-Newrev: a03e57ccbf432f73275869cf9a3e6a7a234cb5de
+X-Git-Oldrev: 39886a434a121afc89cf741d0f035422a70ba524
+X-Git-Newrev: 08b680f6718746eeabf2b4a18111a0991744cda3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205220.66318828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mfgtools: update URLs
- to NXPmicro github organization
+Message-Id: <20230220205242.72DA9828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +56,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a03e57ccbf432f73275869cf9a3e6a7a234cb5de
+commit: https://git.buildroot.net/buildroot/commit/?id=08b680f6718746eeabf2b4a18111a0991744cda3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-mfgtools was removed from the github codeauroraforum organization.
-It is now redirecting to NXPmicro. This patch updates the link to
-directly point to the correct place.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-January/000703.html
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mfgtools/Config.in.host | 2 +-
- package/mfgtools/mfgtools.mk    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mfgtools/Config.in.host b/package/mfgtools/Config.in.host
-index 2b506c8f67..f1e7ab58e3 100644
---- a/package/mfgtools/Config.in.host
-+++ b/package/mfgtools/Config.in.host
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_HOST_MFGTOOLS
- 	  production. The communication is done over USB using the
- 	  Freescale UTP protocol.
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index c1765c3eaa..03bf635816 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
--	  https://github.com/codeauroraforum/mfgtools
-+	  https://github.com/NXPmicro/mfgtools
- 
- comment "host mfgtools needs a toolchain w/ host gcc >= 4.9"
- 	depends on BR2_arm
-diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
-index 48ce5dda28..3de93936b8 100644
---- a/package/mfgtools/mfgtools.mk
-+++ b/package/mfgtools/mfgtools.mk
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.3.3
++MESA3D_HEADERS_VERSION = 22.3.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index c2ceaa6ead..e4de997f0e 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2023-January/000699.html
+-sha256  bed799788bf2bd9ef079d97cd8e09348bf53cb086818578e40773b2b17812922  mesa-22.3.3.tar.xz
+-sha512  dcf166bc7c80e6ad09337e0188219e5ea4bdc558bc4b4ca35ce30d5421568f6b5328e5508b3175a2696521214e466354d8652ade22468ce448d9f61d5709c8a1  mesa-22.3.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-January/000703.html
++sha256  37a1ddaf03f41919ee3c89c97cff41e87de96e00e9d3247959cc8279d8294593  mesa-22.3.4.tar.xz
++sha512  6af340153244d3e95d0e155a45d6db134335654d62590797ae0ef6ba44c2ccfe91ebf95f70ff82c67cee108ac35536767b1f6848d6d1129f52eb9e8414ee321d  mesa-22.3.4.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 9fa2c05230..cf2352a355 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- MFGTOOLS_VERSION = 0.02
--MFGTOOLS_SITE = $(call github,codeauroraforum,mfgtools,v$(MFGTOOLS_VERSION))
-+MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,v$(MFGTOOLS_VERSION))
- MFGTOOLS_SUBDIR = MfgToolLib
- MFGTOOLS_LICENSE = BSD-3-Clause or CPOL
- MFGTOOLS_LICENSE_FILES = LICENSE README.txt
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.3.3
++MESA3D_VERSION = 22.3.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
