@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E886BC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:21:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6AEAC61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CD1042D42;
-	Mon, 20 Feb 2023 21:21:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CD1042D42
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D1F942D53;
+	Mon, 20 Feb 2023 21:22:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D1F942D53
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id McFaExeyfk-D; Mon, 20 Feb 2023 21:21:54 +0000 (UTC)
+	with ESMTP id FcyOICWNdQyy; Mon, 20 Feb 2023 21:22:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6EC1242D2A;
-	Mon, 20 Feb 2023 21:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EC1242D2A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1540542D56;
+	Mon, 20 Feb 2023 21:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1540542D56
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DFB2C1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 110541BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6F5941947
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE9BA41990
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6F5941947
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE9BA41990
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lpLzZQRXt2RV for <buildroot@lists.busybox.net>;
+ with ESMTP id mkiuW0Z0QQk1 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CF3814192D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FE244194F
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF3814192D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FE244194F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C8E1B86496; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+ id 7E02786496; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:41:17 +0100
+Date: Sat, 28 Jan 2023 21:26:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3496f300a8ca2bb8b337db5d43be5b3293a4e9e4
-X-Git-Newrev: 11133fbf22c64906655b7269d247ceeec28d0b41
+X-Git-Oldrev: 6b7ef8030c829ac04c4e78d3f2c878f5c9483a78
+X-Git-Newrev: 2b43579e9453a4e4f0d25d902634ebd9f1721dfc
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205241.C8E1B86496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-data-optlist:
- bump to version 0.113
+Message-Id: <20230220205241.7E02786496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gdal: switch to cmake
+ build to fix libgeotiff detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +64,219 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11133fbf22c64906655b7269d247ceeec28d0b41
+commit: https://git.buildroot.net/buildroot/commit/?id=2b43579e9453a4e4f0d25d902634ebd9f1721dfc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+GDAL autoconf has wrong libgeotiff detection. It uses host's
+library if installed instead of buildroot one.
+Modern versions of gdal have no autoconf build scripts, just cmake only.
+
+So move to cmake build variant.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=15281
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-data-optlist/perl-data-optlist.hash | 4 ++--
- package/perl-data-optlist/perl-data-optlist.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gdal/gdal.mk | 168 ++++++++++++++++++++++++++-------------------------
+ 1 file changed, 87 insertions(+), 81 deletions(-)
 
-diff --git a/package/perl-data-optlist/perl-data-optlist.hash b/package/perl-data-optlist/perl-data-optlist.hash
-index 1c805acef7..ccc05ae4d6 100644
---- a/package/perl-data-optlist/perl-data-optlist.hash
-+++ b/package/perl-data-optlist/perl-data-optlist.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  3b2cdb7846391f9acaf4e948a9a6b21b  Data-OptList-0.112.tar.gz
--sha256  62c60ccaae88d5339ae36bcc8940b03388cf84adbf27828b1f8b300307103bab  Data-OptList-0.112.tar.gz
-+md5  cda08370c4058ba56e40c2f21d94d233  Data-OptList-0.113.tar.gz
-+sha256  36aebc5817b7d4686b649434c2ee41f45c8bf97d4ca5a99f607cc40f695a4285  Data-OptList-0.113.tar.gz
+diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
+index 33e7ba724a..2d6dff1a93 100644
+--- a/package/gdal/gdal.mk
++++ b/package/gdal/gdal.mk
+@@ -12,6 +12,15 @@ GDAL_LICENSE_FILES = LICENSE.TXT
+ GDAL_CPE_ID_VENDOR = osgeo
+ GDAL_INSTALL_STAGING = YES
+ GDAL_CONFIG_SCRIPTS = gdal-config
++GDAL_SUPPORTS_IN_SOURCE_BUILD = NO
++
++# Using 'make' with CMake's Makefile generator will not work, as
++# 'make' uses GNUmakefile first, but GNUmakefile is provided by
++# autotools in gdal. We need to force 'make' to use the Makefile,
++# which is generated by CMake. GNUmakefile and autoconf are dropped in
++# 3.6 so this can be dropped in future version.
++GDAL_MAKE_OPTS += -f Makefile
++
+ # gdal at its core only needs host-pkgconf, libgeotiff, proj and tiff
+ # but since by default mrf driver support is enabled, it also needs
+ # jpeg, libpng and zlib. By default there are also many other drivers
+@@ -20,97 +29,94 @@ GDAL_CONFIG_SCRIPTS = gdal-config
+ # respectively needed dependencies.
+ GDAL_DEPENDENCIES = host-pkgconf jpeg json-c libgeotiff libpng proj tiff zlib
  
- # computed by scancpan
- sha256  712f3e40537810ba3046533fd71d877f69ab446d5e8e8a1135771804494b8b42  LICENSE
-diff --git a/package/perl-data-optlist/perl-data-optlist.mk b/package/perl-data-optlist/perl-data-optlist.mk
-index 8e089245f6..1a9aa05cc9 100644
---- a/package/perl-data-optlist/perl-data-optlist.mk
-+++ b/package/perl-data-optlist/perl-data-optlist.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-# Yes, even though they have --with options, these few libraries are
++# Yes, even though they have -DDGDAL_USE options, a few libraries are
+ # mandatory. If we don't provide them, bundled versions are used.
+ GDAL_CONF_OPTS = \
+-	--with-geotiff \
+-	--with-jpeg \
+-	--with-libjson-c=$(STAGING_DIR)/usr \
+-	--with-libtool \
+-	--with-libz \
+-	--with-png \
+-	--with-proj \
+-	--without-armadillo \
+-	--without-blosc \
+-	--without-brunsli \
+-	--without-cfitsio \
+-	--without-crypto \
+-	--without-cryptopp \
+-	--without-curl \
+-	--without-dds \
+-	--without-ecw \
+-	--without-expat \
+-	--without-exr \
+-	--without-fgdb \
+-	--without-freexl \
+-	--without-geos \
+-	--without-gnm \
+-	--without-libkml \
+-	--without-lz4 \
+-	--without-gta \
+-	--without-hdf4 \
+-	--without-hdf5 \
+-	--without-hdfs \
+-	--without-heif \
+-	--without-idb \
+-	--without-jp2lura \
+-	--without-java \
+-	--without-jpeg12 \
+-	--without-jxl \
+-	--without-kakadu \
+-	--without-kea \
+-	--without-lerc \
+-	--without-gif \
+-	--without-liblzma \
+-	--without-libdeflate \
+-	--without-mongocxxv3 \
+-	--without-mrsid \
+-	--without-jp2mrsid \
+-	--without-macosx-framework \
+-	--without-msg \
+-	--without-mysql \
+-	--without-netcdf \
+-	--without-null \
+-	--without-oci \
+-	--without-odbc \
+-	--without-ogdi \
+-	--without-opencl \
+-	--without-openjpeg \
+-	--without-pam \
+-	--without-pcidsk \
+-	--without-pcraster \
+-	--without-pcre \
+-	--without-pcre2 \
+-	--without-pdfium \
+-	--without-podofo \
+-	--without-poppler \
+-	--without-python \
+-	--without-qhull \
+-	--without-rasdaman \
+-	--without-rasterlite2 \
+-	--without-rdb \
+-	--without-sfcgal \
+-	--without-sosi \
+-	--without-spatialite \
+-	--without-sqlite3 \
+-	--without-teigha \
+-	--without-tiledb \
+-	--without-webp \
+-	--without-xerces \
+-	--without-zstd
++	-DGDAL_USE_GEOTIFF=ON \
++	-DGDAL_USE_JPEG=ON \
++	-DGDAL_USE_JSONC=ON \
++	-DGDAL_USE_ZLIB=ON \
++	-DGDAL_USE_PNG=ON \
++	-DGDAL_USE_ARMADILLO=OFF \
++	-DGDAL_USE_BLOSC=OFF \
++	-DGDAL_USE_BRUNSLI=OFF \
++	-DGDAL_USE_CFITSIO=OFF \
++	-DGDAL_USE_OPENSSL=OFF \
++	-DGDAL_USE_CRYPTOPP=OFF \
++	-DGDAL_USE_CRNLIB=OFF \
++	-DGDAL_USE_CURL=OFF \
++	-DGDAL_USE_ECW=OFF \
++	-DGDAL_USE_EXPAT=OFF \
++	-DGDAL_USE_FILEGDB=OFF \
++	-DGDAL_USE_FREEXL=OFF \
++	-DGDAL_USE_GEOS=OFF \
++	-DGDAL_USE_LIBKML=OFF \
++	-DGDAL_USE_LZ4=OFF \
++	-DGDAL_USE_GTA=OFF \
++	-DGDAL_USE_HDF4=OFF \
++	-DGDAL_USE_HDF5=OFF \
++	-DGDAL_USE_HDFS=OFF \
++	-DGDAL_USE_HEIF=OFF \
++	-DGDAL_USE_IDB=OFF \
++	-DGDAL_USE_LURATECH=OFF \
++	-DGDAL_USE_JPEG12_INTERNAL=OFF \
++	-DGDAL_USE_JXL=OFF \
++	-DGDAL_USE_KDU=OFF \
++	-DGDAL_USE_KEA=OFF \
++	-DGDAL_USE_LERC=OFF \
++	-DGDAL_USE_GIF=OFF \
++	-DGDAL_USE_LIBLZMA=OFF \
++	-DGDAL_USE_DEFLATE=OFF \
++	-DGDAL_USE_MONGOCXX=OFF \
++	-DGDAL_USE_MRSID=OFF \
++	-DGDAL_USE_PUBLICDECOMPWT=OFF \
++	-DGDAL_USE_MYSQL=OFF \
++	-DGDAL_USE_NETCDF=OFF \
++	-DGDAL_USE_ORACLE=OFF \
++	-DGDAL_USE_ODBC=OFF \
++	-DGDAL_USE_OGDI=OFF \
++	-DGDAL_USE_OPENCL=OFF \
++	-DGDAL_USE_OPENEXR=OFF \
++	-DGDAL_USE_OPENJPEG=OFF \
++	-DGDAL_USE_PCRE=OFF \
++	-DGDAL_USE_PCRE2=OFF \
++	-DGDAL_USE_PDFIUM=OFF \
++	-DGDAL_USE_PODOFO=OFF \
++	-DGDAL_USE_POPPLER=OFF \
++	-DGDAL_USE_QHULL=OFF \
++	-DGDAL_USE_RASDAMAN=OFF \
++	-DGDAL_USE_RASTERLITE2=OFF \
++	-DGDAL_USE_RDB=OFF \
++	-DGDAL_USE_SFCGAL=OFF \
++	-DGDAL_USE_FYBA=OFF \
++	-DGDAL_USE_SPATIALITE=OFF \
++	-DGDAL_USE_SQLITE3=OFF \
++	-DGDAL_USE_TEIGHA=OFF \
++	-DGDAL_USE_TILEDB=OFF \
++	-DGDAL_USE_WEBP=OFF \
++	-DGDAL_USE_XERCESC=OFF \
++	-DGDAL_USE_ZSTD=OFF \
++	-DGDAL_ENABLE_DRIVER_PCIDSK=OFF \
++	-DGDAL_ENABLE_DRIVER_PCRASTER=OFF \
++	-DGDAL_ENABLE_DRIVER_NULL=OFF \
++	-DGDAL_ENABLE_MACOSX_FRAMEWORK=OFF \
++	-DENABLE_GNM=OFF \
++	-DENABLE_PAM=OFF \
++	-DBUILD_JAVA_BINDINGS=OFF \
++	-DBUILD_PYTHON_BINDINGS=OFF
  
--PERL_DATA_OPTLIST_VERSION = 0.112
-+PERL_DATA_OPTLIST_VERSION = 0.113
- PERL_DATA_OPTLIST_SOURCE = Data-OptList-$(PERL_DATA_OPTLIST_VERSION).tar.gz
- PERL_DATA_OPTLIST_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
- PERL_DATA_OPTLIST_LICENSE = Artistic or GPL-1.0+
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ GDAL_DEPENDENCIES += libxml2
+-GDAL_CONF_OPTS += --with-xml2
++GDAL_CONF_OPTS += -DGDAL_USE_LIBXML2=ON
+ else
+-GDAL_CONF_OPTS += --without-xml2
++GDAL_CONF_OPTS += -DGDAL_USE_LIBXML2=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+ GDAL_DEPENDENCIES += postgresql
+-GDAL_CONF_OPTS += --with-pg
++GDAL_CONF_OPTS += -DGDAL_USE_POSTGRESQL=ON
+ else
+-GDAL_CONF_OPTS += --without-pg
++GDAL_CONF_OPTS += -DGDAL_USE_POSTGRESQL=OFF
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
