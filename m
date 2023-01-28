@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1662C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:47:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AB63C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:47:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0E0E84069;
-	Mon, 20 Feb 2023 23:47:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0E0E84069
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38A31840B3;
+	Mon, 20 Feb 2023 23:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38A31840B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xUwN3tVhqEhf; Mon, 20 Feb 2023 23:47:06 +0000 (UTC)
+	with ESMTP id ddw8bcaWhJom; Mon, 20 Feb 2023 23:47:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B142584089;
-	Mon, 20 Feb 2023 23:47:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B142584089
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2067D1BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E17384101;
+	Mon, 20 Feb 2023 23:47:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E17384101
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 66CC41BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD9DB61B1E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD9DB61B1E
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6C5541779
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6C5541779
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uPKdi6ZGIVQk for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M9cfjdFVDkCY for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB030617B2
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB030617B2
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1E744176D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1E744176D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A76868648F; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id B11FF86495; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 17:23:01 +0100
+Date: Sat, 28 Jan 2023 22:56:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a5bdaf71c7c53655b5526f1fb6973c8fe98da8db
-X-Git-Newrev: 30668cf9187726731611f7f5f6602098866f3286
+X-Git-Oldrev: d33a8417bf1bc5d7276e19da5c37da210d4de31a
+X-Git-Newrev: e43a3c785b9666f3144e7905b27af920fff913e9
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205220.A76868648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/freescale_imx6dlsabreauto: update codeaurora URLs to github
+Message-Id: <20230220205242.B11FF86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kvm-unit-tests: bump
+ to version 2023-01-05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,78 +56,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30668cf9187726731611f7f5f6602098866f3286
+commit: https://git.buildroot.net/buildroot/commit/?id=e43a3c785b9666f3144e7905b27af920fff913e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-NXP moved all its open source code repositories from Code Aurora Forum
-to github. See for example:
-https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
+A new kvm-unit-tests version has recently been tagged, so let's
+update to that version now.
+This new version now features a --disable-werror parameter for
+the configure script, so we can drop the patch for disabling
+this manually now.
 
-Software packages are now grouped in several NXP github
-projects/organizations (nxp-imx, nxp-qoriq, ...). See:
-https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
-
-The NXP code published on Code Aurora is still present (at the time of
-this commit) but is no longer receiving updates. It is also expected
-to be shut down on 2023-03-31. The Code Aurora website
-https://source.codeaurora.org/ currently show the following message:
-"""
-Note: Qualcomm Innovation Center Inc. maintained repositories have
-migrated to git.codelinaro.org. QUIC repositories on this site will
-not receive any updates after March 31, 2022, and will be deleted on
-March 31, 2023. If your project depends on these repositories, please
-adjust your tooling configuration to use the new, up-to-date project
-location.
-"""
-
-For this reason, the NXP recipes using codeaurora.org urls need to be
-updated to the correct github.com replacement.
-
-Note: this commit does not change the component version. Only the
-download URL is updated. The archive content is expected to be the
-same.
-
-Note 2: this commit updates the Kernel and U-Boot download urls.
-The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/freescale_imx6dlsabreauto_defconfig | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ ...ile-remove-Werror-to-avoid-build-failures.patch | 30 ----------------------
+ package/kvm-unit-tests/kvm-unit-tests.hash         |  2 +-
+ package/kvm-unit-tests/kvm-unit-tests.mk           |  3 ++-
+ 3 files changed, 3 insertions(+), 32 deletions(-)
 
-diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
-index 8fe10f6275..4081fa74a2 100644
---- a/configs/freescale_imx6dlsabreauto_defconfig
-+++ b/configs/freescale_imx6dlsabreauto_defconfig
-@@ -16,9 +16,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+diff --git a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
+deleted file mode 100644
+index d07b9b6912..0000000000
+--- a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 08e14a662b9e75daec29722e49150869952ba1b6 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 20 Nov 2017 22:09:39 +0100
+-Subject: [PATCH] Makefile: remove -Werror to avoid build failures
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[Matthew: Refactoring of Thomas Petazzoni's original.]
+-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+-[Fabrice: updated for 2022-03-08]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 7231334..d9ad42b 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -53,7 +53,7 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
+- 
+- COMMON_CFLAGS += -g $(autodepend-flags) -fno-strict-aliasing -fno-common
+- COMMON_CFLAGS += -Wall -Wwrite-strings -Wempty-body -Wuninitialized
+--COMMON_CFLAGS += -Wignored-qualifiers -Werror -Wno-missing-braces
+-+COMMON_CFLAGS += -Wignored-qualifiers -Wno-missing-braces
+-
+- frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
+- fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
+-- 
+-2.14.2
+-
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.hash b/package/kvm-unit-tests/kvm-unit-tests.hash
+index 42c3b4a241..3b6d02dd8e 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.hash
++++ b/package/kvm-unit-tests/kvm-unit-tests.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c2edf2b188033a5d634150ecc797c797a85e5af8e3ef4ac3e583f60b2ee7bcf3  kvm-unit-tests-v2022-03-08.tar.bz2
++sha256  9c9b093ffe3fa33145a53102de9c3e2d55cd0cdc8a20cf172b726296ffe22f4f  kvm-unit-tests-v2023-01-05.tar.bz2
+ sha256  d9bbb60891710d248f01c8bdac50ef7ad39188de512610437872e83112b38a1b  COPYRIGHT
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index dd8f153710..956f07b304 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabreauto"
-@@ -38,7 +37,6 @@ BR2_PACKAGE_HOST_MTOOLS=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+-KVM_UNIT_TESTS_VERSION = 2022-03-08
++KVM_UNIT_TESTS_VERSION = 2023-01-05
+ KVM_UNIT_TESTS_SOURCE = kvm-unit-tests-v$(KVM_UNIT_TESTS_VERSION).tar.bz2
+ KVM_UNIT_TESTS_SITE = https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/archive/v$(KVM_UNIT_TESTS_VERSION)
+ KVM_UNIT_TESTS_LICENSE = GPL-2.0, LGPL-2.0
+@@ -31,6 +31,7 @@ KVM_UNIT_TESTS_ENDIAN = big
+ endif
+ 
+ KVM_UNIT_TESTS_CONF_OPTS =\
++	--disable-werror \
+ 	--arch="$(KVM_UNIT_TESTS_ARCH)" \
+ 	--processor="$(GCC_TARGET_CPU)" \
+ 	--endian="$(KVM_UNIT_TESTS_ENDIAN)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
