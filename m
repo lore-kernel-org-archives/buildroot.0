@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F1EC27C76
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 20:00:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43A71C38142
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 20:00:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC63A415FC;
-	Sat, 28 Jan 2023 20:00:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC63A415FC
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC3CC8144F;
+	Sat, 28 Jan 2023 20:00:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC3CC8144F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cjwndbr-MMFL; Sat, 28 Jan 2023 20:00:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r9006MxOO0eZ; Sat, 28 Jan 2023 20:00:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A665741603;
-	Sat, 28 Jan 2023 20:00:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A665741603
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3D3AF1BF48B
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:00:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3764780B80;
+	Sat, 28 Jan 2023 20:00:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3764780B80
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F7671BF48B
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:00:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1697941603
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1697941603
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08EFD81C26
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:00:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08EFD81C26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xo1el3Bwrjyq for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 20:00:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 233BA415FC
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 20:00:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 233BA415FC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C6C286F82; Sat, 28 Jan 2023 20:00:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 20:58:58 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5c6f32bd255fc97823d464beacfa905a141066ec
-X-Git-Newrev: b83a41ccd8c75caff009a826d938fd74a70a10f3
-X-Patchwork-Hint: ignore
-Message-Id: <20230128200038.0C6C286F82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luajit: bump to version
- d0e88930ddde28ff662503f9f20facf34f7265aa
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Dtt_KWohm0Kx for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 20:00:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7ABC81BFA
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D7ABC81BFA
+ for <buildroot@busybox.net>; Sat, 28 Jan 2023 20:00:51 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CAE25240002;
+ Sat, 28 Jan 2023 20:00:48 +0000 (UTC)
+Date: Sat, 28 Jan 2023 21:00:47 +0100
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230128210047.664e2cd4@windsurf>
+In-Reply-To: <20230127122610.236075-1-francois.perrad@gadz.org>
+References: <20230127122610.236075-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1674936049;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=hZV9Ua0kMGNgVmXGfXQdva40lVWhzWqdhZnz/jKuve4=;
+ b=SPWiRqBWqI/myvci/ZFlzj9M07X5wIO+ghE2pfa9XRaf6eM+c1o8nTQLSA28ycLMyzsN3c
+ K8hqKcKt4HeywfCqU1TCl4A8DqojEMrWTpf5wRDC00uql6SFJff4ZVCpj44hQvF1eCraRv
+ khYZrB4153bOIEbu0wVBkjHCl1Qj5g8rDvvjs1gN7HCeEYof20F7i5Zdq/KdvCbdS+g8Zf
+ SD0BV1lJV7oQHmj9iRMqtr8hQQS7wMQd3FxYiYbfVq/e0xFVn6aMD9TqMb9MD9hCRgeBLd
+ RsIZGEK6GTiQcSY4TxvGYz5Buv1FWb70QDA6MQ+QH5eqU93bN4Oqv26zU6GnAg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SPWiRqBW
+Subject: Re: [Buildroot] [PATCH] package/moarvm: bump to version 2022.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b83a41ccd8c75caff009a826d938fd74a70a10f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 27 Jan 2023 13:26:10 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/luajit/luajit.hash | 2 +-
- package/luajit/luajit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/moarvm/moarvm.hash | 2 +-
+>  package/moarvm/moarvm.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index d00cea4ee0..c655e9931c 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  19a911fdd77af69e48fa50749606a9009696f543cc88e898b4480d8d3c8828f5  luajit-6c4826f12c4d33b8b978004bc681eb1eef2be977.tar.gz
-+sha256  aa354d1265814db5a1ee9dfff6049e19b148e1fd818f1ecfa4fcf2b19f6e4dd9  luajit-d0e88930ddde28ff662503f9f20facf34f7265aa.tar.gz
- 
- # Locally calculated
- sha256  52fc5b15ac968ed81aabb4c1e23ab3bce50f57a5764e9cdca86b463a11072921  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index c79f18bf62..09bde3590f 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAJIT_VERSION = 6c4826f12c4d33b8b978004bc681eb1eef2be977
-+LUAJIT_VERSION = d0e88930ddde28ff662503f9f20facf34f7265aa
- LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
