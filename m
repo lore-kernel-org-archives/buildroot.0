@@ -1,49 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9455C38142
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 22:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9EE7C38142
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 22:52:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76A03416E4;
-	Sat, 28 Jan 2023 22:50:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76A03416E4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40D8B60E60;
+	Sat, 28 Jan 2023 22:52:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40D8B60E60
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4L_TEA_KgyyL; Sat, 28 Jan 2023 22:52:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5497760E53;
+	Sat, 28 Jan 2023 22:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5497760E53
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BC96D1BF44C
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 22:52:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9691D416EB
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 22:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9691D416EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KeK2QMJcEOx4; Sat, 28 Jan 2023 22:50:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B71C416E7;
-	Sat, 28 Jan 2023 22:50:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B71C416E7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 872D51BF44C
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 22:50:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 594F84050C
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 22:50:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 594F84050C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T6TR_86H63du for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 22:50:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1390B404EB
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 22:50:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1390B404EB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F035788078; Sat, 28 Jan 2023 22:50:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 23:40:47 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f46e197374bdac762a628db5ce6977a148d74859
-X-Git-Newrev: a97ab5d2faf4c0498e1c7b4eb68f98fc2eb78060
-X-Patchwork-Hint: ignore
-Message-Id: <20230128225020.F035788078@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rng-tools: bump to version 6.16
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nRwhZx88238p for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 22:52:49 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18C0C416E7
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com
+ [IPv6:2607:f8b0:4864:20::52b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 18C0C416E7
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 22:52:49 +0000 (UTC)
+Received: by mail-pg1-x52b.google.com with SMTP id e10so5370400pgc.9
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 14:52:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=p0F3TcLVfsw85nl3SGPSMjommAuI9Cz3bBFCTIFhKtw=;
+ b=P5hn0/WIUVmE2HchviL6j8OH7wYf9rXyXh761w5JtaLxUQk5JavhPxdHGHWhX9XSRs
+ U0b0pTQ6y26xW1VBY5jJsR8yg/K3GEUIoLDmgMQA00JsNwARStb6J8AvLYel+Gs0G/TG
+ cPDZyknQXP9UHG4TrHqrIqTGOgnVR5OPV3kjsOanCFwGCteA7S7w7qhGxfGB/TSFrjuE
+ VF1w4Uro76WDjfPMdlLGAczbW3VywiX7DvKNOYa+5H4MdFsaGVvI3z0Rsr46fLZpm3Ss
+ MY6lt8S/Uo+mNEBcjfi3Ox3MsbiHjc45EIVWUSjXoduSNRIGR80xomSrxPBwtzJoOSSI
+ vwsA==
+X-Gm-Message-State: AFqh2kp/TJbHr6F8CX9ac//CYDEiiB1U67ekvtBMpoK411b9spUYFaYu
+ 4hs6qKbkzaEvZy9n2fPlTu7d4mKMM27cqCUAROT0CGA61sQ=
+X-Google-Smtp-Source: AMrXdXuALr6zDlJOR+jliDCQPZufE1jb4zImWe8UUP0prq0TGIhvLN7D1qehUyhs93W7gclmrfohGk3mLyzEDvRdZB4=
+X-Received: by 2002:a62:686:0:b0:583:3ab6:10a2 with SMTP id
+ 128-20020a620686000000b005833ab610a2mr5848499pfg.15.1674946368414; Sat, 28
+ Jan 2023 14:52:48 -0800 (PST)
+MIME-Version: 1.0
+References: <CACHw65JhmQX27SkN0jSMAD-P=UuwOizZc+sG+WatprbH_PFFyQ@mail.gmail.com>
+ <20230128222102.2de52447@windsurf>
+In-Reply-To: <20230128222102.2de52447@windsurf>
+From: Ra C <rcrichlow9000@gmail.com>
+Date: Sat, 28 Jan 2023 16:52:37 -0600
+Message-ID: <CACHw65LWAuVTUqCCoJuS7XSXZF_vdUSHYHV0pkqw6-6OaT_n6A@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=p0F3TcLVfsw85nl3SGPSMjommAuI9Cz3bBFCTIFhKtw=;
+ b=Wk+w1S6ZLOKJItMh/Iwf50RoSwxw0FmeK+vhW76XSaZ9OIFjsMdqJwB0j89eORGher
+ 5dJ4uZXaMY1RPGv/v5XdnqC+UoTY+TJ7tPt5TEbGzg4m4J9wNnPBZzdZBrCIM+heWLB3
+ ZPY/6pL7qV+uS5xQ/gsSc6mOesSQIEVr5N0/FGY7Fk6186cLrVnaPaVZCuc4M2H1XPG6
+ ztCH1z7krKYoT9PXz1yhQd5L4n29KMhyeRGz8o+YYWLugweo7konsWYH9bV2Uy/bhJ1X
+ SyAEKH2Euipg8NBaKZCmPRavjslxikEAP10owv1EAkGzyvxcJfJQSHFad2Tnr65d9sHp
+ 8jLA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Wk+w1S6Z
+Subject: Re: [Buildroot] stm32mp1 kernel won't boot on custom board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,256 +90,164 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============0502111874875138006=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a97ab5d2faf4c0498e1c7b4eb68f98fc2eb78060
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============0502111874875138006==
+Content-Type: multipart/alternative; boundary="0000000000004eaa3605f35ad7ea"
 
-- Drop patches (already in version)
-- libcap is a mandatory dependency since
-  https://github.com/nhorman/rng-tools/commit/50afdce9d3fed6244a0cf772d38f2d8475312bc5
-- Add Qrypt support:
-  https://github.com/nhorman/rng-tools/commit/7ab7f540da567467055f77016590744d828fc9eb
+--0000000000004eaa3605f35ad7ea
+Content-Type: text/plain; charset="UTF-8"
 
-https://github.com/nhorman/rng-tools/releases/tag/v6.16
+Thomas ,
+Thanks for the comments.
+Here are the steps I took:
+1.  Decompiled the working dtb using :  dtc --sort --symbols -I dtb -O dts
+-o working.dts stm32mp157a-fsmp1b.dtb
+This gives the source device tree called working.dts (with no includes).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...configure.ac-fix-build-without-sys-auxv.h.patch | 52 ----------------------
- ...erentropy-detection-to-look-for-the-setti.patch | 30 -------------
- ...erentropy-library-to-timeout-fail-on-long.patch | 39 ----------------
- package/rng-tools/Config.in                        | 16 +++++++
- package/rng-tools/rng-tools.hash                   |  2 +-
- package/rng-tools/rng-tools.mk                     | 11 ++++-
- 6 files changed, 26 insertions(+), 124 deletions(-)
+On the 5.4 kernel buildroot:
+2.  Copied working.dts into output/build/linux-custom/arch/arm/boot/dts
+3.  Ran make menuconfig to add working to
+the BR2_LINUX_KERNEL_INTREE_DTS_NAME
+4.  Rebuilt.
+5.  Copied the output/images/working.dtb onto the sdcard and modified the
+extlinux.conf to use this dtb.
+6.  Boots OK.
 
-diff --git a/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch b/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch
-deleted file mode 100644
-index 0c15ab6b7d..0000000000
---- a/package/rng-tools/0001-configure.ac-fix-build-without-sys-auxv.h.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 6ea89861c300a732d1bbcffd085d92f5c4c9228e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 15 Aug 2022 11:57:21 +0200
--Subject: [PATCH] configure.ac: fix build without sys/auxv.h
--
--Fix the following build failure on aarch64 without sys/auxv.h (e.g. on
--uclibc) raised since version 6.13 and
--https://github.com/nhorman/rng-tools/commit/9070a04adfcd21ec3839ee8ff190e7130ccd5c9b:
--
--rngd_rndr.c:34:10: fatal error: sys/auxv.h: No such file or directory
--   34 | #include <sys/auxv.h>
--      |          ^~~~~~~~~~~~
--
--The same issue could be raised on powerpc64le since version 6.11 and
--https://github.com/nhorman/rng-tools/commit/ade348cdb90c25b44b203fd4e9c33ec4bccff323
--
--Fixes:
-- - http://autobuild.buildroot.org/results/41d5ab9e67eb0d8af8d789fc94d4366f130a7fb2
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/nhorman/rng-tools/commit/6ea89861c300a732d1bbcffd085d92f5c4c9228e]
-----
-- configure.ac | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 0af64e7..411c7b8 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -76,14 +76,17 @@ AC_PROG_GCC_TRADITIONAL
-- 
-- AX_PTHREAD
-- 
--+dnl Checks for header files.
--+AC_CHECK_HEADERS(sys/auxv.h)
--+
-- AM_CONDITIONAL([RDRAND], [test $host_cpu = x86_64 || test $host_cpu = i686])
-- AS_IF([test $host_cpu = x86_64 || test $host_cpu = i686], [AC_DEFINE([HAVE_RDRAND],1,[Enable RDRAND])],[])
-- 
---AM_CONDITIONAL([DARN], [test $host_cpu = powerpc64le])
---AS_IF([test $host_cpu = powerpc64le], [AC_DEFINE([HAVE_DARN],1,[Enable DARN])],[])
--+AM_CONDITIONAL([DARN], [test $host_cpu = powerpc64le -a "$ac_cv_header_sys_auxv_h" = "yes"])
--+AS_IF([test $host_cpu = powerpc64le -a "$ac_cv_header_sys_auxv_h" = "yes"], [AC_DEFINE([HAVE_DARN],1,[Enable DARN])],[])
-- 
---AM_CONDITIONAL([RNDR], [test $host_cpu = aarch64])
---AS_IF([test $host_cpu = aarch64], [AC_DEFINE([HAVE_RNDR],1,[Enable RNDR])],[])
--+AM_CONDITIONAL([RNDR], [test $host_cpu = aarch64 -a "$ac_cv_header_sys_auxv_h" = "yes"])
--+AS_IF([test $host_cpu = aarch64 -a "$ac_cv_header_sys_auxv_h" = "yes"], [AC_DEFINE([HAVE_RNDR],1,[Enable RNDR])],[])
-- AM_CONDITIONAL([JITTER], [false])
-- 
-- AC_ARG_ENABLE(jitterentropy,
-diff --git a/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch b/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
-deleted file mode 100644
-index 553842640d..0000000000
---- a/package/rng-tools/0002-Adjust-jitterentropy-detection-to-look-for-the-setti.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From e2698477e8abf623c18ab28d33cc894ec882a706 Mon Sep 17 00:00:00 2001
--From: Neil Horman <neil.horman@privafy.com>
--Date: Fri, 18 Mar 2022 18:59:52 -0400
--Subject: [PATCH] Adjust jitterentropy detection to look for the settick
-- function
--
--Theres no great way to detect if jitterentropy has the internal timer
--feature enabled so we have to look for a function that is only defined
--when it is enabled
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[downloaded from upstream commit
-- https://github.com/nhorman/rng-tools/commit/e2698477e8abf623c18ab28d33cc894ec882a706]
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index e16e1a0..0f5a38e 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -94,7 +94,7 @@ AS_IF(
-- 		AC_SEARCH_LIBS(jent_version,jitterentropy,
-- 				[AM_CONDITIONAL([JITTER], [true])
-- 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
---				AC_CHECK_LIB(jitterentropy, jent_entropy_switch_notime_impl,
--+				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
-- 				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
-- 				[],-lpthread)],
-- 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
-diff --git a/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch b/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
-deleted file mode 100644
-index 9d8dbe2d0b..0000000000
---- a/package/rng-tools/0003-Adjust-jitterentropy-library-to-timeout-fail-on-long.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From c29424f10a0dcbd18ac25607fa1c81c18a960e81 Mon Sep 17 00:00:00 2001
--From: Neil Horman <nhorman@tuxdriver.com>
--Date: Mon, 16 May 2022 13:38:54 -0400
--Subject: [PATCH] Adjust jitterentropy library to timeout/fail on long delay
--
--[Bernd: removed description of unrelated part of the patch]
--
--Also while we're at it, I might have a build solution for the presence
--of internal timers.  When jitterentropy is built without internal
--timers, jent_notime_init is defined publically, but when it is built
--with timers, its declared as a static symbol, preenting resolution, so
--we can test to see if the function exists.  If it does we _don't_ have
--notime support. The logic is a bit backwards, but i think it works
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[downloaded configure.ac patch from upstream commit
-- https://github.com/nhorman/rng-tools/commit/57be6d4c90e78ea9ad036a3a6e9b09822ed4d219]
-----
-- configure.ac  |  6 ++---
-- rngd_jitter.c | 62 ++++++++++++++++++++++++++++++++++++++-------------
-- 2 files changed, 49 insertions(+), 19 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 52f2bb5..0af64e7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -101,9 +101,9 @@ AS_IF(
-- 		AC_SEARCH_LIBS(jent_version,jitterentropy,
-- 				[AM_CONDITIONAL([JITTER], [true])
-- 				AC_DEFINE([HAVE_JITTER],1,[Enable JITTER])
---				AC_CHECK_LIB(jitterentropy, jent_notime_settick,
---				[AC_DEFINE([HAVE_JITTER_NOTIME],1,[Enable JITTER_NOTIME])],
---				[],-lpthread)],
--+				AC_CHECK_LIB(jitterentropy, jent_notime_init,
--+				[],
--+				[AC_DEFINE([HAVE_JITTER_NOTIME],1, [Enable JITTER_NOTIME])],-lpthread)],
-- 				AC_MSG_NOTICE([No Jitterentropy library found]),-lpthread)
-- 	], [AC_MSG_NOTICE([Disabling JITTER entropy source])]
-- )
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index 0dd269c818..be3f078a0b 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -2,7 +2,9 @@ config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
- 	# pthread_setaffinity_np
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_USE_MMU # libcap
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Daemon to use hardware random number generators.
-@@ -35,7 +37,21 @@ config BR2_PACKAGE_RNG_TOOLS_NISTBEACON
- 	  never be used for cryptographic purposes, or any use case in
- 	  which random data should be known only by a single entity.
- 
-+config BR2_PACKAGE_RNG_TOOLS_QRYPT
-+	bool "Qrypt Entropy Beacon support"
-+	select BR2_PACKAGE_JANSSON
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  Enable Qrypt NIST-Beacon like entropy support.
-+
-+	  Entropy gathered from Qrypt server based entropy beacons. Like
-+	  NIST, it should likely not be used directly in cryptographic
-+	  operation, as the entropy may be intercepted over a network,
-+	  but can provide copius amounts of entropy for non-crypto
-+	  purposes.
-+
- endif
- 
- comment "rng-tools needs a toolchain w/ NPTL"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-index be2ee13969..4c86791267 100644
---- a/package/rng-tools/rng-tools.hash
-+++ b/package/rng-tools/rng-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bff0c58dff90ec10bd61f672e48618e045155eabd60b32d63a9c4ffbdad05f3a  rng-tools-6.15.tar.gz
-+sha256  17666c4745fb635d91df293be188daf94b9e465d51d8503c0195fa3beb390894  rng-tools-6.16.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index f736193a23..3e565103e4 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--RNG_TOOLS_VERSION = 6.15
-+RNG_TOOLS_VERSION = 6.16
- RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
- RNG_TOOLS_CPE_ID_VENDOR = rng-tools_project
- RNG_TOOLS_SELINUX_MODULES = rngd
- 
--RNG_TOOLS_DEPENDENCIES = host-pkgconf openssl
-+RNG_TOOLS_DEPENDENCIES = host-pkgconf libcap openssl
- # From git
- RNG_TOOLS_AUTORECONF = YES
- 
-@@ -45,6 +45,13 @@ else
- RNG_TOOLS_CONF_OPTS += --without-nistbeacon
- endif
- 
-+ifeq ($(BR2_PACKAGE_RNG_TOOLS_QRYPT),y)
-+RNG_TOOLS_DEPENDENCIES += jansson libcurl
-+RNG_TOOLS_CONF_OPTS += --with-qrypt
-+else
-+RNG_TOOLS_CONF_OPTS += --without-qrypt
-+endif
-+
- define RNG_TOOLS_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
- 		$(TARGET_DIR)/etc/init.d/S21rngd
+7.  Built working.dtb using the same method as above using the 5.15 kernel
+buildroot.
+8.  Copied it to the sdcard and tried to boot the 5.15 kernel.
+9.  The 5.15 kernel cannot find the root device and loops endlessly in
+class_find_device() in drivers/base/class.c
+
+Note that the 2 dtbs built using the 5.4 kernel buildroot and the 5.15
+buildroot are identical (diff'ed them).
+
+The rootwait kernel argument is present.  I tried removing it and got a
+kernel panic.
+
+Regards, Ramon
+
+
+On Sat, Jan 28, 2023 at 3:21 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> On Sat, 28 Jan 2023 14:52:12 -0600
+> Ra C <rcrichlow9000@gmail.com> wrote:
+>
+> > I have a custom stm32mp157a board which runs OK with a modified 5.4
+> kernel.
+> > I want to migrate to the latest stm supported kernel.
+> > I built a stm32mp157a_dk1 target using the BR2_EXTERNAL feature described
+> > here: https://github.com/bootlin/buildroot-external-st which builds a
+> 5.15
+> > kernel.
+> >
+> > Using the same dtb , the 5.15 kernel fails to mount the root device (a
+>
+> What do you mean by "using the same DTB" ?
+>
+> Make sure to use the DTB that matches the kernel version you're using.
+> Even though DTBs are in theory kernel-version independent, there are
+> quite frequently some subtle changes that causes a DTB written for
+> kernel version X to not work with kernel version Y.
+>
+> Also, make sure to pass "rootwait" in your kernel command line, to tell
+> the kernel to wait for the root device to appear. As SD/MMC devices are
+> detected asynchronously, sometimes they are detected too late compared
+> to the point where the kernel attempts to mount the rootfs.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
+
+--0000000000004eaa3605f35ad7ea
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Thomas ,<div>Thanks for the comments.<div>Here are the ste=
+ps I took:</div><div>1.=C2=A0 Decompiled the working dtb using :=C2=A0 dtc =
+--sort --symbols -I dtb -O dts -o working.dts stm32mp157a-fsmp1b.dtb<br></d=
+iv><div>This gives the source device tree called working.dts (with no inclu=
+des).</div><div><br></div><div>On the 5.4 kernel buildroot:</div><div>2.=C2=
+=A0 Copied working.dts into output/build/linux-custom/arch/arm/boot/dts</di=
+v><div>3.=C2=A0 Ran make menuconfig to add working to the=C2=A0BR2_LINUX_KE=
+RNEL_INTREE_DTS_NAME</div><div>4.=C2=A0 Rebuilt.</div><div>5.=C2=A0 Copied =
+the output/images/working.dtb onto the sdcard and modified the extlinux.con=
+f to use this dtb.</div><div>6.=C2=A0 Boots OK.</div><div><br></div><div>7.=
+=C2=A0 Built working.dtb using the same method as above using the 5.15 kern=
+el buildroot.</div><div>8.=C2=A0 Copied it to the sdcard and tried to boot =
+the 5.15 kernel.=C2=A0=C2=A0</div><div>9.=C2=A0 The 5.15 kernel cannot find=
+ the root device and loops endlessly in class_find_device() in drivers/base=
+/class.c</div><div><br></div><div>Note that the 2 dtbs built using the 5.4 =
+kernel buildroot and the 5.15 buildroot are identical (diff&#39;ed them).</=
+div><div><br></div><div>The rootwait kernel argument is present.=C2=A0 I tr=
+ied=C2=A0removing it and got a kernel panic.</div><div><br></div><div>Regar=
+ds, Ramon</div><div><br></div></div></div><br><div class=3D"gmail_quote"><d=
+iv dir=3D"ltr" class=3D"gmail_attr">On Sat, Jan 28, 2023 at 3:21 PM Thomas =
+Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com" target=3D"_bl=
+ank">thomas.petazzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">On Sat, 28 Jan 2023 14:52:12 -0600<br>
+Ra C &lt;<a href=3D"mailto:rcrichlow9000@gmail.com" target=3D"_blank">rcric=
+hlow9000@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; I have a custom stm32mp157a board which runs OK with a modified 5.4 ke=
+rnel.<br>
+&gt; I want to migrate to the latest stm supported kernel.<br>
+&gt; I built a stm32mp157a_dk1 target using the BR2_EXTERNAL feature descri=
+bed<br>
+&gt; here: <a href=3D"https://github.com/bootlin/buildroot-external-st" rel=
+=3D"noreferrer" target=3D"_blank">https://github.com/bootlin/buildroot-exte=
+rnal-st</a> which builds a 5.15<br>
+&gt; kernel.<br>
+&gt; <br>
+&gt; Using the same dtb , the 5.15 kernel fails to mount the root device (a=
+<br>
+<br>
+What do you mean by &quot;using the same DTB&quot; ?<br>
+<br>
+Make sure to use the DTB that matches the kernel version you&#39;re using.<=
+br>
+Even though DTBs are in theory kernel-version independent, there are<br>
+quite frequently some subtle changes that causes a DTB written for<br>
+kernel version X to not work with kernel version Y.<br>
+<br>
+Also, make sure to pass &quot;rootwait&quot; in your kernel command line, t=
+o tell<br>
+the kernel to wait for the root device to appear. As SD/MMC devices are<br>
+detected asynchronously, sometimes they are detected too late compared<br>
+to the point where the kernel attempts to mount the rootfs.<br>
+<br>
+Best regards,<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div>
+
+--0000000000004eaa3605f35ad7ea--
+
+--===============0502111874875138006==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0502111874875138006==--
