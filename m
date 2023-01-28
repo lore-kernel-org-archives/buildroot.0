@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BC7FC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CC8DC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:17:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1FEC6FB81;
-	Tue, 21 Feb 2023 01:17:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1FEC6FB81
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2497961AFE;
+	Tue, 21 Feb 2023 01:17:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2497961AFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UBUaO9wf9J3e; Tue, 21 Feb 2023 01:17:00 +0000 (UTC)
+	with ESMTP id zCaqD_WqFEsR; Tue, 21 Feb 2023 01:17:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C83D6FB70;
-	Tue, 21 Feb 2023 01:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C83D6FB70
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6664A61ABC;
+	Tue, 21 Feb 2023 01:17:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6664A61ABC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B19CA1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B69E41BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17ADE6FBD8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17E756FBD9
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17ADE6FBD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17E756FBD9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N4cLQngLv5St for <buildroot@lists.busybox.net>;
+ with ESMTP id fuAB53FmOquk for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D05E6FBD0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D7E76FBCF
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D05E6FBD0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D7E76FBCF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F7D0828C8; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+ id 06F47828C8; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:43:56 +0100
+Date: Sat, 28 Jan 2023 22:41:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5d183a6d333eaf57b6a5f5c1a7eb323b5ada7cd6
-X-Git-Newrev: acc4570bf41d10573c73cda08defb385324becc6
+X-Git-Oldrev: e235a1daa4e24f1eb9f1d9307003fa29cfeedd88
+X-Git-Newrev: 2fb59f913d0e21a51491e64ea781702400cfcd5e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205242.3F7D0828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-peripheral-xarcade: bump version to 19.0.5-Matrix
+Message-Id: <20230220205242.06F47828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl-mojolicious:
+ security bump to version 9.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acc4570bf41d10573c73cda08defb385324becc6
+commit: https://git.buildroot.net/buildroot/commit/?id=2fb59f913d0e21a51491e64ea781702400cfcd5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+see https://metacpan.org/dist/Mojolicious/changes#L3
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash | 2 +-
- package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
-index 0ae1ffaa50..5467513a0b 100644
---- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
-+++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1327ecd05e2e66a4faf809efee4c5b99627912d971db26a0a905f0299e4f876b  kodi-peripheral-xarcade-19.0.4-Matrix.tar.gz
-+sha256  11f746cfeeffdfc1de6829d17aad999c8b598ca2239fcddb64801738546be6c9  kodi-peripheral-xarcade-19.0.5-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
-index 9ee26ea2fe..2d9e33b625 100644
---- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
-+++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index 97625d1290..989eaf3419 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  494db2d1529e84a2575527dae8f3672d  Mojolicious-9.26.tar.gz
+-sha256  9e428c5512698f05e151338d8fa12aede287ab3a5e429ec3d38c80a4a82c8d88  Mojolicious-9.26.tar.gz
++md5  523193316a839ff56a447f0f0c2e5b36  Mojolicious-9.31.tar.gz
++sha256  cb96ccd7a5319321ec6f57633c88bf17193d45169f4d7846da254bb6f9ed8312  Mojolicious-9.31.tar.gz
+ 
+ # computed by scancpan
+ sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index dbf2e61737..618327d09d 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PERIPHERAL_XARCADE_VERSION = 19.0.4-Matrix
-+KODI_PERIPHERAL_XARCADE_VERSION = 19.0.5-Matrix
- KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
- KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_XARCADE_LICENSE_FILES = LICENSE.md
+-PERL_MOJOLICIOUS_VERSION = 9.26
++PERL_MOJOLICIOUS_VERSION = 9.31
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
