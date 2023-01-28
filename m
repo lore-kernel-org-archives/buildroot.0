@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1461C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4341AC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73342612A6;
-	Tue, 21 Feb 2023 01:17:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73342612A6
+	by smtp3.osuosl.org (Postfix) with ESMTP id E770F6F9D4;
+	Tue, 21 Feb 2023 01:18:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E770F6F9D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F7s0eUivvKVw; Tue, 21 Feb 2023 01:17:49 +0000 (UTC)
+	with ESMTP id C4PEm2CNrdfs; Tue, 21 Feb 2023 01:18:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95B5A6FB96;
-	Tue, 21 Feb 2023 01:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95B5A6FB96
+	by smtp3.osuosl.org (Postfix) with ESMTP id 284156FB8E;
+	Tue, 21 Feb 2023 01:18:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 284156FB8E
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6A4C11BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 799DD1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68BD66FBDC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 651306FBDB
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68BD66FBDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 651306FBDB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id igTN8F-GJ9bl for <buildroot@lists.busybox.net>;
+ with ESMTP id 1N_E2sAcdWdi for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6975F6FBC8
+ by smtp3.osuosl.org (Postfix) with ESMTP id A0665610A6
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6975F6FBC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0665610A6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 575AB81979; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+ id 9A3C1828C8; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:44:28 +0100
+Date: Sat, 28 Jan 2023 22:51:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2952832a40b08e93bb3dc614bb2068b152b1919f
-X-Git-Newrev: 86fac589fbe1ec03ddc2478bff225e369302abfb
+X-Git-Oldrev: 9237132895d3a15f18fb563e189146c067c26aec
+X-Git-Newrev: 3c7a8620d69a154b9ff71005603509c1d5cfd269
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205242.575AB81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kodi: fix openrisc
- build
+Message-Id: <20230220205242.9A3C1828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lualogging: bump to
+ version 1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86fac589fbe1ec03ddc2478bff225e369302abfb
+commit: https://git.buildroot.net/buildroot/commit/?id=3c7a8620d69a154b9ff71005603509c1d5cfd269
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes build error not yet found by autobuilders
+diff COPYRIGHT:
+-Copyright (c) 2004-2022 Kepler Project.
++Copyright (c) 2004-2010 Kepler Project, 2011-2013 Neopallium, 2020-2023 Thijs Schreijer
 
--- System type: Linux
-CMake Error at cmake/scripts/linux/ArchSetup.cmake:42 (message):
-  Unknown CPU: or1k
-
-with this defconfig:
-
-BR2_or1k=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON3_PY_ONLY=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi/kodi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lualogging/lualogging.hash | 4 ++--
+ package/lualogging/lualogging.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 7d15e992fb..aaa165871c 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -136,7 +136,7 @@ else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
- KODI_CONF_OPTS += \
- 	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
- 	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
--else ifeq ($(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
-+else ifeq ($(BR2_or1k)$(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
- KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
- else
- # Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
+diff --git a/package/lualogging/lualogging.hash b/package/lualogging/lualogging.hash
+index 5ed012ea5c..af1ee1055d 100644
+--- a/package/lualogging/lualogging.hash
++++ b/package/lualogging/lualogging.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  285edf8abc9844cb37da94888ca01cb26a2ba08411ea13a3ee0f4d029ca512dd  lualogging-1.8.0-1.src.rock
+-sha256  d900082cb26f8cf4a491ca51c00241f2c2e9cd9ae3531c62234017a360706adb  lualogging/COPYRIGHT
++sha256  7bc2dcd13dbe85e48de50f05000b391e467a54d537b44ed856c1f7ad29c3549a  lualogging-1.8.2-1.src.rock
++sha256  9740a719a5e4ee280e65f42e3624354c3c4464e61d94de33efca9d7072d31092  lualogging/COPYRIGHT
+diff --git a/package/lualogging/lualogging.mk b/package/lualogging/lualogging.mk
+index 96c09c5a49..c7969fb7b3 100644
+--- a/package/lualogging/lualogging.mk
++++ b/package/lualogging/lualogging.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUALOGGING_VERSION = 1.8.0-1
++LUALOGGING_VERSION = 1.8.2-1
+ LUALOGGING_SUBDIR = lualogging
+ LUALOGGING_LICENSE = MIT
+ LUALOGGING_LICENSE_FILES = $(LUALOGGING_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
