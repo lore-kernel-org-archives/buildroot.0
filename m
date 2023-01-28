@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A57EC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9961AC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD40F611A4;
-	Tue, 21 Feb 2023 01:15:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD40F611A4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 533A36FB50;
+	Tue, 21 Feb 2023 01:15:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 533A36FB50
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sTFXrGQrVzVK; Tue, 21 Feb 2023 01:15:07 +0000 (UTC)
+	with ESMTP id FwF3dSktxuW5; Tue, 21 Feb 2023 01:15:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C0976FB38;
-	Tue, 21 Feb 2023 01:15:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C0976FB38
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89E9261293;
+	Tue, 21 Feb 2023 01:15:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89E9261293
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 18F431BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 28ABE1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 471C26FBAE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 473006FBC3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 471C26FBAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 473006FBC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S3zlcZS56F9N for <buildroot@lists.busybox.net>;
+ with ESMTP id UdhWrP9Y2Rgt for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 24D55610C6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60B776FBC8
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24D55610C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60B776FBC8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1CDA8828C8; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 4455A828C8; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 27 Jan 2023 13:54:02 +0100
+Date: Sat, 28 Jan 2023 20:58:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1b20c52a5bb13fde04f4ad47fafd1daca664c2bb
-X-Git-Newrev: b9735d0e74fb8588ebbf2d888b40caac0aa8fa98
+X-Git-Oldrev: 5c6f32bd255fc97823d464beacfa905a141066ec
+X-Git-Newrev: b83a41ccd8c75caff009a826d938fd74a70a10f3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205241.1CDA8828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bubblewrap: bump to
- version 0.7.0
+Message-Id: <20230220205241.4455A828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/luajit: bump to
+ version d0e88930ddde28ff662503f9f20facf34f7265aa
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +56,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9735d0e74fb8588ebbf2d888b40caac0aa8fa98
+commit: https://git.buildroot.net/buildroot/commit/?id=b83a41ccd8c75caff009a826d938fd74a70a10f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This version contains a few minor fixes, provides better error messages,
-and includes a new option to set the size of created tmpfs volumes.
-Release notes:
-
-  https://github.com/containers/bubblewrap/releases/tag/v0.7.0
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bubblewrap/bubblewrap.hash | 4 ++--
- package/bubblewrap/bubblewrap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luajit/luajit.hash | 2 +-
+ package/luajit/luajit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
-index 98fafc3679..0475f8882a 100644
---- a/package/bubblewrap/bubblewrap.hash
-+++ b/package/bubblewrap/bubblewrap.hash
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index d00cea4ee0..c655e9931c 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/containers/bubblewrap/releases/tag/v0.6.2
--sha256  8a0ec802d1b3e956c5bb0a40a81c9ce0b055a31bf30a8efa547433603b8af20b  bubblewrap-0.6.2.tar.xz
-+# From https://github.com/containers/bubblewrap/releases/tag/v0.7.0
-+sha256  764ab7100bd037ea53d440d362e099d7a425966bc62d1f00ab26b8fbb882a9dc  bubblewrap-0.7.0.tar.xz
+ # Locally calculated
+-sha256  19a911fdd77af69e48fa50749606a9009696f543cc88e898b4480d8d3c8828f5  luajit-6c4826f12c4d33b8b978004bc681eb1eef2be977.tar.gz
++sha256  aa354d1265814db5a1ee9dfff6049e19b148e1fd818f1ecfa4fcf2b19f6e4dd9  luajit-d0e88930ddde28ff662503f9f20facf34f7265aa.tar.gz
  
- # Hash for license files:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
-index 91864d2b76..658e6e113c 100644
---- a/package/bubblewrap/bubblewrap.mk
-+++ b/package/bubblewrap/bubblewrap.mk
+ # Locally calculated
+ sha256  52fc5b15ac968ed81aabb4c1e23ab3bce50f57a5764e9cdca86b463a11072921  COPYRIGHT
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index c79f18bf62..09bde3590f 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BUBBLEWRAP_VERSION = 0.6.2
-+BUBBLEWRAP_VERSION = 0.7.0
- BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
- BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
- BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
+-LUAJIT_VERSION = 6c4826f12c4d33b8b978004bc681eb1eef2be977
++LUAJIT_VERSION = d0e88930ddde28ff662503f9f20facf34f7265aa
+ LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
