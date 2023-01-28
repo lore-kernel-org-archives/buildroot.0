@@ -1,67 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDBFDC636CB
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 20:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 532D4C38142
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7802B404BB;
-	Sat, 28 Jan 2023 20:44:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7802B404BB
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD32060E41;
+	Sat, 28 Jan 2023 21:08:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD32060E41
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FYbPy9bkUD8h; Sat, 28 Jan 2023 20:44:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SFYK4E9FOBNw; Sat, 28 Jan 2023 21:08:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABF90402E7;
-	Sat, 28 Jan 2023 20:44:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABF90402E7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38D0360C15;
+	Sat, 28 Jan 2023 21:08:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38D0360C15
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3B3261BF327
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:44:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6F8831BF3C0
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:07:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F441416DC
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:44:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F441416DC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52F8841523
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:07:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52F8841523
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LBN7AXEpcBBH for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 20:44:14 +0000 (UTC)
+ with ESMTP id WITMpZrXGrmo for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 21:07:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E67B3416DB
- for <buildroot@uclibc.org>; Sat, 28 Jan 2023 20:44:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E67B3416DB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23A3141521
+ for <buildroot@uclibc.org>; Sat, 28 Jan 2023 21:07:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23A3141521
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id C781E82AA2; Sat, 28 Jan 2023 20:44:13 +0000 (UTC)
+ id 07F2187CED; Sat, 28 Jan 2023 21:07:58 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 28 Jan 2023 20:44:13 +0000
+Date: Sat, 28 Jan 2023 21:07:57 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.11
-X-Bugzilla-Keywords: FIXME
+X-Bugzilla-Version: 2022.02.8
+X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: thomas.petazzoni@bootlin.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: WONTFIX
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-15241-163-7AdQbkmJyw@https.bugs.busybox.net/>
-In-Reply-To: <bug-15241-163@https.bugs.busybox.net/>
-References: <bug-15241-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15181-163-9iaLyOY2Ft@https.bugs.busybox.net/>
+In-Reply-To: <bug-15181-163@https.bugs.busybox.net/>
+References: <bug-15181-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15241] post-build.sh PC grub config
+Subject: [Buildroot] [Bug 15181] Building libcurl fails due to faulty
+ package definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,33 +79,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15241
-
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WONTFIX
+https://bugs.busybox.net/show_bug.cgi?id=15181
 
 --- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Which post-build.sh script are you talking about?
+Thanks for the great investigation.
 
-post-build.sh scripts provided in Buildroot upstream are bound to a specific
-defconfig. They are not meant to be generic and valid for all situations.
+One question is whether the LD_LIBRARY_PATH trick is still needed? It was added
+back in 2009, so perhaps things have changed in libcurl?
 
-If we assume that you're talking about ./board/pc/post-build.sh, then this
-script is used by configs/pc_x86_64_bios_defconfig (which enables
-BR2_TARGET_GRUB2_I386_PC=y) and by configs/pc_x86_64_efi_defconfig (which
-enables BR2_TARGET_GRUB2_X86_64_EFI=y).
+This commit in libcurl:
 
-Therefore, this post-build.sh script is never used in a situation where both
-BR2_TARGET_GRUB2_I386_PC and BR2_TARGET_GRUB2_I386_EFI are used. Consequently,
-there is no bug.
+commit 2d4c2152c9eb3dbdf943de46ed8fc11285f1b90b
+Author: Daniel Stenberg <daniel@haxx.se>
+Date:   Fri Apr 13 14:07:39 2018 +0200
 
-If you create your own defconfig, which enables both BR2_TARGET_GRUB2_I386_EFI
-and BR2_TARGET_GRUB2_I386_PC, you need to provide your own post-build.sh
-script.
+seems to have reworked how this works, including for openssl.
+
+Also, I have removed the LD_LIBRARY_PATH tricked, and built the following
+configuration on an x86-64 machine (to have the target == host case):
+
+BR2_x86_64=y
+BR2_x86_corei7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_OPENSSL=y
+BR2_PACKAGE_LIBCURL=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+and it built just fine.
 
 -- 
 You are receiving this mail because:
