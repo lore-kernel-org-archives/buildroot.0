@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4E0BC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AC47C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:43:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0818812D7;
-	Mon, 20 Feb 2023 23:43:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0818812D7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15DFF83022;
+	Mon, 20 Feb 2023 23:43:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15DFF83022
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fxoio8P4uMIb; Mon, 20 Feb 2023 23:43:32 +0000 (UTC)
+	with ESMTP id SiaWfp0FSp_u; Mon, 20 Feb 2023 23:43:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE36484010;
-	Mon, 20 Feb 2023 23:43:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE36484010
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 69A221BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 518FA83E47;
+	Mon, 20 Feb 2023 23:43:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 518FA83E47
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E1901BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 13A8061B02
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13A8061B02
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A8FE41776
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A8FE41776
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tYjm8Wq5CA7M for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6PwSFPYw7n-C for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 221CC610AB
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 221CC610AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id A83654176F
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A83654176F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F81986495; Mon, 20 Feb 2023 20:52:20 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id A38588648F; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 17:22:48 +0100
+Date: Sat, 28 Jan 2023 22:23:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1ed90a96aa1f11fed19045036b4a10d9a8263a98
-X-Git-Newrev: cec5a941b0867803045450688fbec8992e48d81d
+X-Git-Oldrev: e84d84886daab3208dc209f362aabb4436ba00a6
+X-Git-Newrev: 0a8b4185c286fc842ba74d660ab7bfae0a1d648c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205220.1F81986495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/freescale-imx/imx-kobs: update to NXPmicro github organization
+Message-Id: <20230220205241.A38588648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linux-firmware: add
+ rtl8761b/rtl8761bu firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +56,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cec5a941b0867803045450688fbec8992e48d81d
+commit: https://git.buildroot.net/buildroot/commit/?id=0a8b4185c286fc842ba74d660ab7bfae0a1d648c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-imx-kobs was removed from the github codeauroraforum organization.
-It is now redirecting to NXPmicro. This patch updates the link to
-directly point to the correct place.
+Deploy rtl8761b/rtl8761bu firmwares as well.
 
-The commit also replaces the Config.in comment saying the package does
-not have an upstream by the github.com project page.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-kobs/Config.in   | 3 +--
- package/freescale-imx/imx-kobs/imx-kobs.mk | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/linux-firmware/linux-firmware.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/imx-kobs/Config.in b/package/freescale-imx/imx-kobs/Config.in
-index 61be9f26d4..a81842b9a5 100644
---- a/package/freescale-imx/imx-kobs/Config.in
-+++ b/package/freescale-imx/imx-kobs/Config.in
-@@ -5,5 +5,4 @@ config BR2_PACKAGE_IMX_KOBS
- 	  The imx-kobs tool is used for writing images to NAND on i.MX
- 	  platforms.
- 
--	  This library is provided by Freescale as-is and doesn't have
--	  an upstream.
-+	  https://github.com/NXPmicro/imx-kobs
-diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
-index d6a250cf72..91b39f6fa4 100644
---- a/package/freescale-imx/imx-kobs/imx-kobs.mk
-+++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- IMX_KOBS_VERSION = a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b
--IMX_KOBS_SITE = $(call github,codeauroraforum,imx-kobs,$(IMX_KOBS_VERSION))
-+IMX_KOBS_SITE = $(call github,NXPmicro,imx-kobs,$(IMX_KOBS_VERSION))
- IMX_KOBS_LICENSE = GPL-2.0+
- IMX_KOBS_LICENSE_FILES = COPYING
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 6990ef38ad..9d9d12bd5f 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -71,7 +71,9 @@ LINUX_FIRMWARE_FILES += \
+ 	rtl_bt/rtl8723a_fw.bin rtl_bt/rtl8723b_fw.bin \
+ 	rtl_bt/rtl8723bs_config-OBDA8723.bin \
+ 	rtl_bt/rtl8723bs_fw.bin rtl_bt/rtl8723d_config.bin \
+-	rtl_bt/rtl8723d_fw.bin rtl_bt/rtl8761a_fw.bin
++	rtl_bt/rtl8723d_fw.bin rtl_bt/rtl8761a_fw.bin \
++	rtl_bt/rtl8761b_fw.bin rtl_bt/rtl8761b_config.bin \
++	rtl_bt/rtl8761bu_fw.bin rtl_bt/rtl8761bu_config.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
+ endif
  
 _______________________________________________
 buildroot mailing list
