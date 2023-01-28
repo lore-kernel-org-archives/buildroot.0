@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9961AC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F260DC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:15:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 533A36FB50;
-	Tue, 21 Feb 2023 01:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 533A36FB50
+	by smtp3.osuosl.org (Postfix) with ESMTP id A13DD61AD7;
+	Tue, 21 Feb 2023 01:15:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A13DD61AD7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FwF3dSktxuW5; Tue, 21 Feb 2023 01:15:19 +0000 (UTC)
+	with ESMTP id f3O6aHFSKt5a; Tue, 21 Feb 2023 01:15:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89E9261293;
-	Tue, 21 Feb 2023 01:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89E9261293
+	by smtp3.osuosl.org (Postfix) with ESMTP id D667C6FB58;
+	Tue, 21 Feb 2023 01:15:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D667C6FB58
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 28ABE1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 38C061BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 473006FBC3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63C6C6FBD1
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 473006FBC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63C6C6FBD1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UdhWrP9Y2Rgt for <buildroot@lists.busybox.net>;
+ with ESMTP id YBNMioSdkigc for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 60B776FBC8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 736216FBC9
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60B776FBC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 736216FBC9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4455A828C8; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+ id 66D7381979; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 20:58:58 +0100
+Date: Sat, 28 Jan 2023 21:02:54 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5c6f32bd255fc97823d464beacfa905a141066ec
-X-Git-Newrev: b83a41ccd8c75caff009a826d938fd74a70a10f3
+X-Git-Oldrev: ea06798871d3a452011a8fa3c879a7a352032ff6
+X-Git-Newrev: af2788ea2ff34e5795ed10df8703bf0f89fda1d7
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205241.4455A828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/luajit: bump to
- version d0e88930ddde28ff662503f9f20facf34f7265aa
+Message-Id: <20230220205241.66D7381979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/postgresql: bump
+ version to 15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b83a41ccd8c75caff009a826d938fd74a70a10f3
+commit: https://git.buildroot.net/buildroot/commit/?id=af2788ea2ff34e5795ed10df8703bf0f89fda1d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Release notes: https://www.postgresql.org/docs/release/15.1/
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luajit/luajit.hash | 2 +-
- package/luajit/luajit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index d00cea4ee0..c655e9931c 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  19a911fdd77af69e48fa50749606a9009696f543cc88e898b4480d8d3c8828f5  luajit-6c4826f12c4d33b8b978004bc681eb1eef2be977.tar.gz
-+sha256  aa354d1265814db5a1ee9dfff6049e19b148e1fd818f1ecfa4fcf2b19f6e4dd9  luajit-d0e88930ddde28ff662503f9f20facf34f7265aa.tar.gz
- 
- # Locally calculated
- sha256  52fc5b15ac968ed81aabb4c1e23ab3bce50f57a5764e9cdca86b463a11072921  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index c79f18bf62..09bde3590f 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 26bb626943..ef2806c2dd 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-14.6.tar.bz2.sha256
+-sha256  508840fc1809d39ab72274d5f137dabb9fd7fb4f933da4168aeebb20069edf22  postgresql-14.6.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-15.1.tar.bz2.sha256
++sha256  64fdf23d734afad0dfe4077daca96ac51dcd697e68ae2d3d4ca6c45cb14e21ae  postgresql-15.1.tar.bz2
+ # License file, Locally calculated
+ sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 502860bc99..5313e03b12 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAJIT_VERSION = 6c4826f12c4d33b8b978004bc681eb1eef2be977
-+LUAJIT_VERSION = d0e88930ddde28ff662503f9f20facf34f7265aa
- LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
+-POSTGRESQL_VERSION = 14.6
++POSTGRESQL_VERSION = 15.1
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
