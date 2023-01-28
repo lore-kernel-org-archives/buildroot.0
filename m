@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76F1BC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC9EC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 317286176D;
-	Tue, 21 Feb 2023 01:19:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 317286176D
+	by smtp3.osuosl.org (Postfix) with ESMTP id A32C2606BF;
+	Tue, 21 Feb 2023 01:19:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A32C2606BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xdILUdc2NDld; Tue, 21 Feb 2023 01:19:05 +0000 (UTC)
+	with ESMTP id rpGZvTt36nkJ; Tue, 21 Feb 2023 01:19:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1305E6FB7A;
-	Tue, 21 Feb 2023 01:19:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1305E6FB7A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7B9CC1BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EDF46F9C8;
+	Tue, 21 Feb 2023 01:19:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EDF46F9C8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BB0ED1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5267641596
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5267641596
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB3FC6FBE2
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB3FC6FBE2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id szvc27P61DxZ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:59:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id njVCguHJ4AbR for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3254940C13
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3254940C13
+ by smtp3.osuosl.org (Postfix) with ESMTP id 07EBA6FBB4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07EBA6FBB4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F5CF86496; Mon, 20 Feb 2023 20:59:57 +0000 (UTC)
+ id E695E828C8; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 21:57:14 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 06af305874abc1eb4bb98dbd8aabe071fa5d77bc
-X-Git-Newrev: b3093e258aba57015d23d40ab478c818128c6a13
+Date: Sat, 28 Jan 2023 23:24:06 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 498797acce390a8c91b6a3c306a4655e83ae9f6f
+X-Git-Newrev: c4192ba970f33142c03792980e9f0625be07b31b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205957.1F5CF86496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nginx-naxsi: fix build with pcre2
+Message-Id: <20230220205242.E695E828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-uhid: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,253 +64,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3093e258aba57015d23d40ab478c818128c6a13
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=c4192ba970f33142c03792980e9f0625be07b31b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure raised since bump of nginx to version
-1.22.1 in commit 722b84eafa5e3d9540e0a80bae0c971a3a778358:
+This package requires CONFIG_UHID kernel support.
 
-/home/buildroot/autobuild/run/instance-2/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c: In function 'ngx_http_process_basic_rule_buffer':
-/home/buildroot/autobuild/run/instance-2/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c:205:61: error: invalid use of incomplete typedef 'ngx_regex_t' {aka 'struct pcre2_real_code_8'}
-  205 |       (tmp_idx < len && (match = pcre_exec(rl->br->rx->regex->code,
-      |                                                             ^~
-
-Fixes:
- - http://autobuild.buildroot.org/results/7fff888bd36710e2d2f5bb39a38597e8c04305ce
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nginx-naxsi/0002-PCRE2-compatibility.patch | 221 +++++++++++++++++++++
- 1 file changed, 221 insertions(+)
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/python-uhid/Config.in        |  6 ++++++
+ package/python-uhid/python-uhid.hash |  5 +++++
+ package/python-uhid/python-uhid.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 33 insertions(+)
 
-diff --git a/package/nginx-naxsi/0002-PCRE2-compatibility.patch b/package/nginx-naxsi/0002-PCRE2-compatibility.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e942b4b3f2..c8bc5eee22 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1401,6 +1401,7 @@ F:	package/python-tinycss2/
+ F:	package/python-tomli/
+ F:	package/python-typeguard/
+ F:	package/python-typing-inspect/
++F:	package/python-uhid/
+ F:	package/python-weasyprint/
+ F:	package/python-yarl/
+ F:	package/python-zopfli/
+diff --git a/package/Config.in b/package/Config.in
+index eabb0d5201..24be67b925 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1313,6 +1313,7 @@ menu "External python modules"
+ 	source "package/python-typing-inspect/Config.in"
+ 	source "package/python-u-msgpack/Config.in"
+ 	source "package/python-ubjson/Config.in"
++	source "package/python-uhid/Config.in"
+ 	source "package/python-ujson/Config.in"
+ 	source "package/python-unittest-xml-reporting/Config.in"
+ 	source "package/python-urllib3/Config.in"
+diff --git a/package/python-uhid/Config.in b/package/python-uhid/Config.in
 new file mode 100644
-index 0000000000..aa3df4dff7
+index 0000000000..6fdff95144
 --- /dev/null
-+++ b/package/nginx-naxsi/0002-PCRE2-compatibility.patch
-@@ -0,0 +1,221 @@
-+From 2937c44276cba21601ade4e265d32515f570d68c Mon Sep 17 00:00:00 2001
-+From: Danila Vershinin <ciapnz@gmail.com>
-+Date: Thu, 16 Jun 2022 01:22:23 +0300
-+Subject: [PATCH] PCRE2 compatibility (#587)
++++ b/package/python-uhid/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_UHID
++	bool "python-uhid"
++	help
++	  Pure Python typed UHID wrapper.
 +
-+* Fix: use pcre2 when building with nginx >= 1.21.5
++	  https://github.com/FFY00/python-uhid
+diff --git a/package/python-uhid/python-uhid.hash b/package/python-uhid/python-uhid.hash
+new file mode 100644
+index 0000000000..3faf6d9f23
+--- /dev/null
++++ b/package/python-uhid/python-uhid.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/uhid/json
++md5  1c62bbefe10923545bbdf42355d9be07  uhid-0.0.1.tar.gz
++sha256  3c782489890dbf33621fb2c30d1ac81fbc1b3ef1911ae7d4c73907cdc0f59aab  uhid-0.0.1.tar.gz
++# Locally computed sha256 checksums
++sha256  106a8f7c2c26bd2acc597c79a36a2fe3979f98a14dc14c6065b7dc9c58b27f33  LICENSE
+diff --git a/package/python-uhid/python-uhid.mk b/package/python-uhid/python-uhid.mk
+new file mode 100644
+index 0000000000..215545b60f
+--- /dev/null
++++ b/package/python-uhid/python-uhid.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# python-uhid
++#
++################################################################################
 +
-+I've tried to compile naxsi 1.3 as module for nginx 1.21.6, and got the error:
++PYTHON_UHID_VERSION = 0.0.1
++PYTHON_UHID_SOURCE = uhid-$(PYTHON_UHID_VERSION).tar.gz
++PYTHON_UHID_SITE = https://files.pythonhosted.org/packages/cb/44/6ebe9dceadc028507d16603e2bb542557a4c70c6032ef8ee507c3ce51283
++PYTHON_UHID_SETUP_TYPE = setuptools
++PYTHON_UHID_LICENSE = MIT
++PYTHON_UHID_LICENSE_FILES = LICENSE
 +
-+error: invalid use of incomplete typedef 'ngx_regex_t' {aka 'struct pcre2_real_code_8'}
-+  205 |       (tmp_idx < len && (match = pcre_exec(rl->br->rx->regex->code,
++define PYTHON_UHID_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INPUT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HID)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_UHID)
++endef
 +
-+I found this issue report: Ref: https://github.com/nbs-system/naxsi/issues/580
-+then i tried to solve the pcre2 compatibility issue.
-+
-+I've included an helper function that is 'copied' from: https://github.com/nginx/nginx/blob/master/src/core/ngx_regex.c#L393
-+that it is called in place of 'pcre_exec' when nginx_version >= 1021005
-+
-+Not sure if this is the best solution, but I managed to build naxsi 1.3 as module for nginx 1.21.6 succesfully, and it seems to work well.
-+
-+I'm not used to develop in C anymore (since 25 years ago, at least!), but I hope that this patch I made can help anybody else.
-+
-+* Added a check for nginx_version >= 1021005
-+
-+Added a check for nginx_version >= 1021005 to avoid helper function definition on older versions
-+
-+* Use NGX_PCRE2 conditional
-+
-+Update naxsi.h
-+
-+Don't include pcre.h in order for compilation to work both against pcre and pcre2
-+
-+Fix pcre vs pcre2 compilation
-+
-+Co-authored-by: laluigino <99279306+laluigino@users.noreply.github.com>
-+[Retrieved from:
-+https://github.com/nbs-system/naxsi/commit/2937c44276cba21601ade4e265d32515f570d68c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ naxsi_src/naxsi.h         |  1 -
-+ naxsi_src/naxsi_config.c  |  9 ++++-
-+ naxsi_src/naxsi_runtime.c | 82 ++++++++++++++++++++++++++++++++++++++-
-+ naxsi_src/naxsi_utils.c   |  8 ++++
-+ 4 files changed, 96 insertions(+), 4 deletions(-)
-+
-+diff --git a/naxsi_src/naxsi.h b/naxsi_src/naxsi.h
-+index 53df1bd8..b2f5c1a5 100644
-+--- a/naxsi_src/naxsi.h
-++++ b/naxsi_src/naxsi.h
-+@@ -19,7 +19,6 @@
-+ #include <ngx_http.h>
-+ #include <ngx_http_core_module.h>
-+ #include <ngx_md5.h>
-+-#include <pcre.h>
-+ 
-+ extern ngx_module_t ngx_http_naxsi_module;
-+ 
-+diff --git a/naxsi_src/naxsi_config.c b/naxsi_src/naxsi_config.c
-+index 4ea15567..6d2f0e23 100644
-+--- a/naxsi_src/naxsi_config.c
-++++ b/naxsi_src/naxsi_config.c
-+@@ -322,8 +322,11 @@ naxsi_zone(ngx_conf_t* r, ngx_str_t* tmp, ngx_http_rule_t* rule)
-+ 
-+         custom_rule->target_rx = ngx_pcalloc(r->pool, sizeof(ngx_regex_compile_t));
-+         return_value_if(!custom_rule->target_rx, NGX_CONF_ERROR);
-+-
-++#if (NGX_PCRE2)
-++        custom_rule->target_rx->options  = PCRE2_CASELESS | PCRE2_MULTILINE;
-++#else
-+         custom_rule->target_rx->options  = PCRE_CASELESS | PCRE_MULTILINE;
-++#endif
-+         custom_rule->target_rx->pattern  = custom_rule->target;
-+         custom_rule->target_rx->pool     = r->pool;
-+         custom_rule->target_rx->err.len  = 0;
-+@@ -442,7 +445,11 @@ naxsi_rx(ngx_conf_t* r, ngx_str_t* tmp, ngx_http_rule_t* rule)
-+   ha.len  = tmp->len - strlen(RX_T);
-+   rgc     = ngx_pcalloc(r->pool, sizeof(ngx_regex_compile_t));
-+   return_value_if(!rgc, NGX_CONF_ERROR);
-++#if (NGX_PCRE2)
-++  rgc->options  = PCRE2_CASELESS | PCRE2_MULTILINE;
-++#else
-+   rgc->options  = PCRE_CASELESS | PCRE_MULTILINE;
-++#endif
-+   rgc->pattern  = ha;
-+   rgc->pool     = r->pool;
-+   rgc->err.len  = 0;
-+diff --git a/naxsi_src/naxsi_runtime.c b/naxsi_src/naxsi_runtime.c
-+index d548ce37..784852b0 100644
-+--- a/naxsi_src/naxsi_runtime.c
-++++ b/naxsi_src/naxsi_runtime.c
-+@@ -181,6 +181,75 @@ ngx_http_naxsi_rawbody_parse(ngx_http_request_ctx_t* ctx,
-+ unsigned char*
-+ ngx_utf8_check(ngx_str_t* str);
-+ 
-++#if defined nginx_version && (nginx_version >= 1021005)
-++/*
-++ * variables to use pcre2
-++ */
-++static pcre2_match_data       *ngx_pcre2_match_data;
-++static ngx_uint_t              ngx_pcre2_match_data_size;
-++
-++/*
-++ * helper function to use pcre2
-++ */
-++ngx_int_t
-++ngx_pcre2_exec(ngx_regex_t *re, unsigned char* str, unsigned int len, ngx_int_t tmp_idx, int *captures, ngx_uint_t size)
-++{
-++    size_t      *ov;
-++    ngx_int_t    rc;
-++    ngx_uint_t   n, i;
-++
-++    /*
-++     * The pcre2_match() function might allocate memory for backtracking
-++     * frames, typical allocations are from 40k and above.  So the allocator
-++     * is configured to do direct allocations from heap during matching.
-++     */
-++
-++    if (ngx_pcre2_match_data == NULL
-++        || size > ngx_pcre2_match_data_size)
-++    {
-++        /*
-++         * Allocate a match data if not yet allocated or smaller than
-++         * needed.
-++         */
-++
-++        if (ngx_pcre2_match_data) {
-++            pcre2_match_data_free(ngx_pcre2_match_data);
-++        }
-++
-++        ngx_pcre2_match_data_size = size;
-++        ngx_pcre2_match_data = pcre2_match_data_create(size / 3, NULL);
-++
-++        if (ngx_pcre2_match_data == NULL) {
-++            rc = PCRE2_ERROR_NOMEMORY;
-++            goto failed;
-++        }
-++    }
-++
-++    rc = pcre2_match(re, str, len, tmp_idx, 0, ngx_pcre2_match_data, NULL);
-++
-++    if (rc < 0) {
-++        goto failed;
-++    }
-++
-++    n = pcre2_get_ovector_count(ngx_pcre2_match_data);
-++    ov = pcre2_get_ovector_pointer(ngx_pcre2_match_data);
-++
-++    if (n > size / 3) {
-++        n = size / 3;
-++    }
-++
-++    for (i = 0; i < n; i++) {
-++        captures[i * 2] = ov[i * 2];
-++        captures[i * 2 + 1] = ov[i * 2 + 1];
-++    }
-++
-++failed:
-++
-++    return rc;
-++
-++}
-++#endif
-++
-+ /*
-+ ** in : string to inspect, associated rule
-+ ** does : apply the rule on the string, return 1 if matched,
-+@@ -201,7 +270,14 @@ ngx_http_process_basic_rule_buffer(ngx_str_t* str, ngx_http_rule_t* rl, ngx_int_
-+     tmp_idx = 0;
-+     len     = str->len;
-+     while
-+-#if defined   nginx_version && (nginx_version >= 1002002 && nginx_version != 1003000)
-++#if (NGX_PCRE2)
-++      (tmp_idx < len && (match = ngx_pcre2_exec(rl->br->rx->regex,                         
-++                                           str->data,
-++                                           str->len,
-++                                           tmp_idx,
-++                                           captures,
-++                                           30)) >= 0)
-++#elif defined nginx_version && (nginx_version >= 1002002 && nginx_version != 1003000)
-+       (tmp_idx < len && (match = pcre_exec(rl->br->rx->regex->code,
-+                                            0,
-+                                            (const char*)str->data,
-+@@ -496,7 +572,9 @@ ngx_http_naxsi_pcre_wrapper(ngx_regex_compile_t* rx, unsigned char* str, unsigne
-+   int match;
-+   int captures[30];
-+ 
-+-#if defined   nginx_version && (nginx_version >= 1002002 && nginx_version != 1003000)
-++#if (NGX_PCRE2)
-++  match = ngx_pcre2_exec(rx->regex, str, len, 0, captures, 1);
-++#elif defined nginx_version && (nginx_version >= 1002002 && nginx_version != 1003000)
-+   match = pcre_exec(rx->regex->code, 0, (const char*)str, len, 0, 0, captures, 1);
-+ #elif defined nginx_version && (nginx_version > 1001011)
-+   match = pcre_exec(rx->regex->pcre, 0, (const char*)str, len, 0, 0, captures, 1);
-+diff --git a/naxsi_src/naxsi_utils.c b/naxsi_src/naxsi_utils.c
-+index e3d6f185..d2ecedec 100644
-+--- a/naxsi_src/naxsi_utils.c
-++++ b/naxsi_src/naxsi_utils.c
-+@@ -800,7 +800,11 @@ ngx_http_naxsi_create_hashtables_n(ngx_http_naxsi_loc_conf_t* dlc, ngx_conf_t* c
-+             ngx_pcalloc(cf->pool, sizeof(ngx_regex_compile_t));
-+           rgc = custloc_array(curr_r->br->custom_locations->elts)[name_idx].target_rx;
-+           if (rgc) {
-++#if (NGX_PCRE2)
-++            rgc->options  = PCRE2_CASELESS | PCRE2_MULTILINE;
-++#else
-+             rgc->options  = PCRE_CASELESS | PCRE_MULTILINE;
-++#endif
-+             rgc->pattern  = custloc_array(curr_r->br->custom_locations->elts)[name_idx].target;
-+             rgc->pool     = cf->pool;
-+             rgc->err.len  = 0;
-+@@ -816,7 +820,11 @@ ngx_http_naxsi_create_hashtables_n(ngx_http_naxsi_loc_conf_t* dlc, ngx_conf_t* c
-+             ngx_pcalloc(cf->pool, sizeof(ngx_regex_compile_t));
-+           rgc = custloc_array(curr_r->br->custom_locations->elts)[uri_idx].target_rx;
-+           if (rgc) {
-++#if (NGX_PCRE2)
-++            rgc->options  = PCRE2_CASELESS | PCRE2_MULTILINE;
-++#else
-+             rgc->options  = PCRE_CASELESS | PCRE_MULTILINE;
-++#endif
-+             rgc->pattern  = custloc_array(curr_r->br->custom_locations->elts)[uri_idx].target;
-+             rgc->pool     = cf->pool;
-+             rgc->err.len  = 0;
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
