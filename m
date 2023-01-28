@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFAC1C38142
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AA22C636CB
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C1F140583;
-	Sat, 28 Jan 2023 21:50:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C1F140583
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9EDE416BA;
+	Sat, 28 Jan 2023 21:51:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9EDE416BA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rWZSuYSU2Nu1; Sat, 28 Jan 2023 21:51:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 651D2416C0;
+	Sat, 28 Jan 2023 21:50:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 651D2416C0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E1F341BF3C0
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:50:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BCD5A404B9
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:50:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCD5A404B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r2KAzLYJFu8w; Sat, 28 Jan 2023 21:50:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8764040983;
-	Sat, 28 Jan 2023 21:50:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8764040983
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3E3531BF3C0
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:50:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1553481DF6
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:50:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1553481DF6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ghDwMSGG2Wgp for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7S7k6mp3XZPa for <buildroot@lists.busybox.net>;
  Sat, 28 Jan 2023 21:50:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFDFB81638
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA36740463
  for <buildroot@buildroot.org>; Sat, 28 Jan 2023 21:50:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFDFB81638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA36740463
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BAFB887FA3; Sat, 28 Jan 2023 21:50:43 +0000 (UTC)
+ id C5CF987F78; Sat, 28 Jan 2023 21:50:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:45:53 +0100
+Date: Sat, 28 Jan 2023 22:46:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39886a434a121afc89cf741d0f035422a70ba524
-X-Git-Newrev: 08b680f6718746eeabf2b4a18111a0991744cda3
+X-Git-Oldrev: 08b680f6718746eeabf2b4a18111a0991744cda3
+X-Git-Newrev: 760894b72ed465f426cf848f561200a4656eda4a
 X-Patchwork-Hint: ignore
-Message-Id: <20230128215043.BAFB887FA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 22.3.4
+Message-Id: <20230128215043.C5CF987F78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-qxl: bump
+ version to 0.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,65 +59,182 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1467242774872311452=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08b680f6718746eeabf2b4a18111a0991744cda3
+--===============1467242774872311452==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=760894b72ed465f426cf848f561200a4656eda4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2023-January/000703.html
+https://lists.x.org/archives/xorg-announce/2023-January/003316.html
+
+Removed patch which was applied upstream.
+
+Switched tarball to xz and _SITE to https, added sha512 hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../0001-Fix-a-build-error-with-Xorg-master.patch  | 106 ---------------------
+ .../xdriver_xf86-video-qxl.hash                    |   5 +-
+ .../xdriver_xf86-video-qxl.mk                      |   6 +-
+ 3 files changed, 6 insertions(+), 111 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index c1765c3eaa..03bf635816 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 22.3.3
-+MESA3D_HEADERS_VERSION = 22.3.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index c2ceaa6ead..e4de997f0e 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2023-January/000699.html
--sha256  bed799788bf2bd9ef079d97cd8e09348bf53cb086818578e40773b2b17812922  mesa-22.3.3.tar.xz
--sha512  dcf166bc7c80e6ad09337e0188219e5ea4bdc558bc4b4ca35ce30d5421568f6b5328e5508b3175a2696521214e466354d8652ade22468ce448d9f61d5709c8a1  mesa-22.3.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2023-January/000703.html
-+sha256  37a1ddaf03f41919ee3c89c97cff41e87de96e00e9d3247959cc8279d8294593  mesa-22.3.4.tar.xz
-+sha512  6af340153244d3e95d0e155a45d6db134335654d62590797ae0ef6ba44c2ccfe91ebf95f70ff82c67cee108ac35536767b1f6848d6d1129f52eb9e8414ee321d  mesa-22.3.4.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 9fa2c05230..cf2352a355 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-qxl/0001-Fix-a-build-error-with-Xorg-master.patch b/package/x11r7/xdriver_xf86-video-qxl/0001-Fix-a-build-error-with-Xorg-master.patch
+deleted file mode 100644
+index d3257fba20..0000000000
+--- a/package/x11r7/xdriver_xf86-video-qxl/0001-Fix-a-build-error-with-Xorg-master.patch
++++ /dev/null
+@@ -1,106 +0,0 @@
+-From 4e1963a812f2c1777ba5d56ea9e939a3e40a0496 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Zolt=C3=A1n=20B=C3=B6sz=C3=B6rm=C3=A9nyi?=
+- <zboszor@gmail.com>
+-Date: Sat, 28 Aug 2021 15:38:40 +0200
+-Subject: [PATCH] Fix a build  error with Xorg master
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Use xf86ReturnOptValBool() in get_bool_option() instead of
+-options[option_index].value.bool to fix a compiler error with
+-current Xorg xserver master branch.
+-
+-Also use xf86GetOptValInteger() in get_int_option() and
+-xf86GetOptValString() in get_str_option() for consistency.
+-
+-The change causes a slight performance drop during option parsing
+-because the passed-in index_value is no longer used as an index
+-into the options array.
+-
+-Instead, it's used as a token now for the standard option getter
+-functions which works since the index_value to the get_*_option()
+-functions are identical to the value of options[n].token in the
+-passed-in OptionInfoRec array.
+-
+-Also rename "int option_index" to "int token" for clarity in all
+-three functions.
+-
+-Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
+-
+-Downloaded from upstream commit
+-https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl/-/commit/4e1963a812f2c1777ba5d56ea9e939a3e40a0496
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/qxl_option_helpers.c | 13 +++++++------
+- src/qxl_option_helpers.h |  6 +++---
+- 2 files changed, 10 insertions(+), 9 deletions(-)
+-
+-diff --git a/src/qxl_option_helpers.c b/src/qxl_option_helpers.c
+-index 2aba677..7707b7c 100644
+---- a/src/qxl_option_helpers.c
+-+++ b/src/qxl_option_helpers.c
+-@@ -10,31 +10,32 @@
+- 
+- #include "qxl_option_helpers.h"
+- 
+--int get_int_option(OptionInfoPtr options, int option_index,
+-+int get_int_option(OptionInfoPtr options, int token,
+-                    const char *env_name)
+- {
+-+    int value;
+-     if (env_name && getenv(env_name)) {
+-         return atoi(getenv(env_name));
+-     }
+--    return options[option_index].value.num;
+-+    return xf86GetOptValInteger(options, token, &value) ? value : 0;
+- }
+- 
+--const char *get_str_option(OptionInfoPtr options, int option_index,
+-+const char *get_str_option(OptionInfoPtr options, int token,
+-                            const char *env_name)
+- {
+-     if (getenv(env_name)) {
+-         return getenv(env_name);
+-     }
+--    return options[option_index].value.str;
+-+    return xf86GetOptValString(options, token);
+- }
+- 
+--int get_bool_option(OptionInfoPtr options, int option_index,
+-+int get_bool_option(OptionInfoPtr options, int token,
+-                      const char *env_name)
+- {
+-     const char* value = getenv(env_name);
+- 
+-     if (!value) {
+--        return options[option_index].value.bool;
+-+        return xf86ReturnOptValBool(options, token, FALSE);
+-     }
+-     if (strcmp(value, "0") == 0 ||
+-         strcasecmp(value, "off") == 0 ||
+-diff --git a/src/qxl_option_helpers.h b/src/qxl_option_helpers.h
+-index 7c54c72..66d0a17 100644
+---- a/src/qxl_option_helpers.h
+-+++ b/src/qxl_option_helpers.h
+-@@ -4,13 +4,13 @@
+- #include <xf86Crtc.h>
+- #include <xf86Opt.h>
+- 
+--int get_int_option(OptionInfoPtr options, int option_index,
+-+int get_int_option(OptionInfoPtr options, int token,
+-                    const char *env_name);
+- 
+--const char *get_str_option(OptionInfoPtr options, int option_index,
+-+const char *get_str_option(OptionInfoPtr options, int token,
+-                            const char *env_name);
+- 
+--int get_bool_option(OptionInfoPtr options, int option_index,
+-+int get_bool_option(OptionInfoPtr options, int token,
+-                      const char *env_name);
+- 
+- #endif // OPTION_HELPERS_H
+--- 
+-GitLab
+-
+diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash
+index fdf0cc434d..2d728a7c03 100644
+--- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash
++++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash
+@@ -1,4 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-December/002753.html
+-sha256  b18682e04503c6326f7bf7190f3ee50a3d4d69758a2a3cc9af102a6b3f114c92  xf86-video-qxl-0.1.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-January/003316.html
++sha256  2ad39558db47a8fcc036e290e0b084671e58d43344a57b279abd870c4c67965f  xf86-video-qxl-0.1.6.tar.xz
++sha512  f6a42355915d2e8f8a842dc24fe6d012d123aa6d23eedea1a4771fb08f88e0298d76741755b88304d76c66b3aae15f9fca74d062be395e499a82ee8f4507c7e0  xf86-video-qxl-0.1.6.tar.xz
+ # Locally calculated
+ sha256  83f3bf7be3fbf5e66174b8184bd837a6b44264f8e340126ea4d9e9ce956a1866  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
+index ffbac05ec1..db0bbbaf65 100644
+--- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
++++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 22.3.3
-+MESA3D_VERSION = 22.3.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-XDRIVER_XF86_VIDEO_QXL_VERSION = 0.1.5
+-XDRIVER_XF86_VIDEO_QXL_SOURCE = xf86-video-qxl-$(XDRIVER_XF86_VIDEO_QXL_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_QXL_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_QXL_VERSION = 0.1.6
++XDRIVER_XF86_VIDEO_QXL_SOURCE = xf86-video-qxl-$(XDRIVER_XF86_VIDEO_QXL_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_QXL_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_QXL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_QXL_LICENSE_FILES = COPYING
+ 
+
+--===============1467242774872311452==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1467242774872311452==--
