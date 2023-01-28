@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F804C38142
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 20:02:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C4EEC27C76
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 20:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D65741743;
-	Sat, 28 Jan 2023 20:02:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D65741743
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1284340620;
+	Sat, 28 Jan 2023 20:03:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1284340620
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s07ZBq2x4WPF; Sat, 28 Jan 2023 20:02:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QyyReIFbBiyq; Sat, 28 Jan 2023 20:03:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F05A7416F2;
-	Sat, 28 Jan 2023 20:02:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F05A7416F2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D0BAF1BF48B
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:02:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 627CF40447;
+	Sat, 28 Jan 2023 20:03:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 627CF40447
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0587C1BF48B
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:03:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A97D460E00
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:02:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A97D460E00
+ by smtp1.osuosl.org (Postfix) with ESMTP id D326781E46
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:03:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D326781E46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e1mEVg4Id0oh for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 20:02:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73B3A60DC2
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 73B3A60DC2
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 20:02:26 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0558CC0002;
- Sat, 28 Jan 2023 20:02:22 +0000 (UTC)
-Date: Sat, 28 Jan 2023 21:02:22 +0100
-To: Alexander Egorenkov <egorenar@linux.ibm.com>
-Message-ID: <20230128210222.536febe5@windsurf>
-In-Reply-To: <20230125125311.165903-1-egorenar@linux.ibm.com>
-References: <20230125125311.165903-1-egorenar@linux.ibm.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1674936143;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ruSeFSjZbcb3W6DCzWP9iQlLJdkB8KetSif0dkbnW+M=;
- b=bLwTgFQlFygS21t8YlZ5+bwkPi8TNG5TKfsEKuobRU2DDHXSY7ajHaN4NOXZuXXdL3XZyf
- Y2Oh9eC8NCxooEVc+9WpHTn5RnaFAXagr6Rof09ZaRsFlebbv21KSMayiOEiIt9fun4F7C
- Xjq4KDAHdnY0PzMbfm1kFAKnFOwUR3nneUQVASczxKduw0NhX6x7CkAyArimucQtknVbLK
- tuwnGGirm+G1r2xcjl7v0jC+ej/fO4JjMQVnkkR4AnPUFkZiWfsLbOK2XZQJr8CrRbqpm6
- Oeurugk0Z/CMcZYuRBUfinIm+4DsqMayv5Vx943u+qKKJVoM0ZL/UTs/SGbs2Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bLwTgFQl
-Subject: Re: [Buildroot] [PATCH 1/1] configs/qemu_s390x: bump kernel version
- to 6.1.4
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fv3XfOJapoQm for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 20:03:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE9FB81E21
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 20:03:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE9FB81E21
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9D59987168; Sat, 28 Jan 2023 20:03:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 28 Jan 2023 21:02:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f6ec214a09741b2de6e408832d89f4b3c4f93484
+X-Git-Newrev: ea06798871d3a452011a8fa3c879a7a352032ff6
+X-Patchwork-Hint: ignore
+Message-Id: <20230128200321.9D59987168@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_s390x: bump kernel version to
+ 6.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,27 +58,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 25 Jan 2023 13:53:11 +0100
-Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ea06798871d3a452011a8fa3c879a7a352032ff6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-> ---
->  configs/qemu_s390x_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/qemu_s390x_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index 346df04ada..6bbcca0896 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -12,12 +12,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.4"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
