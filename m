@@ -1,83 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5963DC38142
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 00:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 676D0C54EAA
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 00:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B5AC740017;
-	Sat, 28 Jan 2023 00:17:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5AC740017
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0152282718;
+	Sat, 28 Jan 2023 00:36:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0152282718
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8OtGg_LXDL5U; Sat, 28 Jan 2023 00:17:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jjpcTLUciSTz; Sat, 28 Jan 2023 00:36:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8EAD4026F;
-	Sat, 28 Jan 2023 00:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8EAD4026F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F14C82684;
+	Sat, 28 Jan 2023 00:36:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F14C82684
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 348E11BF977
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 00:17:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4AF0C1BF977
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 00:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A930823C6
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 00:17:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A930823C6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 241FA82684
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 00:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 241FA82684
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f8fjaiHnWSX9 for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 00:17:39 +0000 (UTC)
+ with ESMTP id DLCP9MJ55A0Q for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 00:35:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F61882390
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
- [IPv6:2607:f8b0:4864:20::b2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8F61882390
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 00:17:39 +0000 (UTC)
-Received: by mail-yb1-xb2b.google.com with SMTP id m199so7943326ybm.4
- for <buildroot@buildroot.org>; Fri, 27 Jan 2023 16:17:39 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1825B82670
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
+ [IPv6:2001:4860:4864:20::2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1825B82670
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 00:35:57 +0000 (UTC)
+Received: by mail-oa1-x2e.google.com with SMTP id
+ 586e51a60fabf-142b72a728fso8644206fac.9
+ for <buildroot@buildroot.org>; Fri, 27 Jan 2023 16:35:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=6u0wtK00WWIFsgfeM2IY3WQUtmgJ2aZaQZ85N4iu1CI=;
- b=E+BxwB/uKKTa4kNhfSg2j+8tsDmaRHCKswnQpiRQL4KvDMjNBqS6NPbLNxML1sBbkM
- 49wOjKnjWO5zt2GYOKhspGiFM0FFX92nys0WZgyf8KT9MUfIbX0QXpiKt3bUZjT2XGHI
- S/MqBx+jySYhY1ULeDYwgxxh1WDtz3H75DIFwsY9u2IokEyxujpYi+j0JDIq7V4z47+N
- WxWM65fYE5IlTxqOo2CXRmwfcfzd9qt9f0E0wxR7Dtw17i0pfAc2HS9ZY+fzmw9ejnHF
- /DXbCd8e90YuVimce6Y0hR/NNbsbIVQ18dWsjV1kOOlTS6+lfjbGV7BJwzhXZqqdbSBs
- KbJA==
-X-Gm-Message-State: AFqh2kppRj6sJKUMsmLpbCBwHq8qgUIL3p5daIQ920tl8NUEuqdXJ2bV
- bYQ5oI+YkOEEqTFn6KU7g305euYVqgv5YWUZOrU=
-X-Google-Smtp-Source: AMrXdXuXq8Wz0vBLYgI+uZOSZhI54W1lFkcjXFwdjIBG0w1dXEF/fnEWVFvVtPGCi5ytjYtfQkZV1L4bpNxUZwR+h1c=
-X-Received: by 2002:a5b:ca:0:b0:7fb:feb3:380e with SMTP id
- d10-20020a5b00ca000000b007fbfeb3380emr2973778ybp.587.1674865058308; 
- Fri, 27 Jan 2023 16:17:38 -0800 (PST)
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=2SSflQVbMnHRITRpeJ7Fh3LLCMOEuqJ3pZBKItym2Lw=;
+ b=ACqGlJzdmo/tqySbsfZbRMC3uCucPq1bRd0XKTfh9q3ulQz/BLR+8fzcSKB5ppOYdO
+ SeAWkKbEs5tZ1afB9ryGOfZ7eSN+C36wvW+caJz/O7LTAd0p6Ts/AciU2xhXQ+CWEcfM
+ z/JPoGw+vHKwu+UCkoAviVLDZb3jFgTN/d058hNdMmtXwU/xlCF7CxOF21FMOjPMLE81
+ wgWDqQ6aO9wU0jq4h9gp1RKvZMwg487e3qtt4RetFqfpzRzCPSVXZxXLRW9sGSM4dg8U
+ kbsWikzwIZHSBMhJqNn8nRNJMf+UNLzC9UaoNZcT7lf3UwjxK8PshVVnIfB/BhlCTwx7
+ BkVA==
+X-Gm-Message-State: AO0yUKXYz3pS5+cVgUYzHnhpY+lQJ0R2Wx7gJEIfbKZWvdFR3TowlW5H
+ uanCR6Fz4azF7f4MXTcC/koK7FENmNCFUawUsRc=
+X-Google-Smtp-Source: AK7set/KNBtLyDKziJtD0a2RvTyo4bBfgY6yzNOfLjoTVvAvQMNVSrXNljdfSiDd3ymiBgzSlUgjZTvtBucmADYRpgA=
+X-Received: by 2002:a05:6871:6aaa:b0:163:501b:e7b with SMTP id
+ zf42-20020a0568716aaa00b00163501b0e7bmr602813oab.18.1674866157120; Fri, 27
+ Jan 2023 16:35:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127231808.1364957-1-a.partesotti@gmail.com>
-In-Reply-To: <20230127231808.1364957-1-a.partesotti@gmail.com>
-From: bryce.schober@gmail.com
-Date: Fri, 27 Jan 2023 16:17:02 -0800
-Message-ID: <CAJpxd07BcA_2mEosZwDFMjkzfUwu40-yMWE8DUeFeEoC+z-8HA@mail.gmail.com>
-To: Alessandro Partesotti <a.partesotti@gmail.com>
+References: <20220728014402.142320-1-james.hilliard1@gmail.com>
+ <20220728014402.142320-2-james.hilliard1@gmail.com>
+ <d23235cc-ab94-f5dc-f3c9-a22604b9d750@smile.fr>
+In-Reply-To: <d23235cc-ab94-f5dc-f3c9-a22604b9d750@smile.fr>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 27 Jan 2023 17:35:45 -0700
+Message-ID: <CADvTj4pwShLU1HNr_DeD-0zjCM336zmmS9zRE_6uN5iPOK7xbQ@mail.gmail.com>
+To: Romain Naour <romain.naour@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=6u0wtK00WWIFsgfeM2IY3WQUtmgJ2aZaQZ85N4iu1CI=;
- b=Q8AYg4f0/T9jCM+KlnPdIXDV6bRJyILvamIBF0GUQRs+2uYWsMG6LKeWXZVVr8EFo6
- qvzDlQ9Cb+uXrlboT7gwcmPmBag3rL4KXLNZThXUN33YQ4asCjzPIUqMLapIp6ePg9Qx
- JQ7M1TdWSssXXhGac/sj5xPHQ23RQitDUVk9NKFWS1ZFGJ6OggPSNt59VfubyZcNX1NJ
- fi6TP9+rreduz7GpS9uzyY6OP/LsX9P4BYGvnaGC6MiRGwokTaNs/PxOumKredM6/h0y
- KFJUIYj3M+m6DlfiQuOB7qapjD4fqiAeps9OFin85L5CXxMakjaFR/8gu4haeFo2pVQx
- rkUw==
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=2SSflQVbMnHRITRpeJ7Fh3LLCMOEuqJ3pZBKItym2Lw=;
+ b=fjMwCMjR3SP3Je2qfbb38FaG/9yngWIMJO2/HRLiWIVYpa+a32cIyxwi/C7wrrXgHb
+ sRfS7m5YawC+O5RN0oop87QX8tJLCx+ja4Ti6ZRb1O/o6pkbBvTurTE8ujxRS7NfDMsR
+ NuLB1UgqJ9uLxDXyv722R/iPSN1DTtomI8klXc3EHTnYxakpMQ9/y9JSsKyo1ifTs89C
+ TMeZl19F4E0qbEDO0ugYQwwTwcTQUCiW5xZeKQrtj/KlGK3/SPhIz61kgAq6sqZ922Os
+ 0yr7QBlQnzSNq2LI36b2Wh5wX6ahjO8yksCQARx0xx/3RC1VRbUmBWdwhMjYXC6Vy6gO
+ B8+A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Q8AYg4f0
-Subject: Re: [Buildroot] [PATCH 1/1] package/oatpp:: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=fjMwCMjR
+Subject: Re: [Buildroot] [PATCH 2/2] package/pkg-meson: generate relocatable
+ pkgconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,269 +94,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8774486709639145192=="
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8774486709639145192==
-Content-Type: multipart/alternative; boundary="000000000000d8e7db05f347e818"
-
---000000000000d8e7db05f347e818
-Content-Type: text/plain; charset="UTF-8"
-
-For https://oatpp.io/docs/, I get:
-
-server=oatpp/1.3.0
-code=500
-description=Internal Server Error
-message=Page not found
-
-It looks like it doesn't like trimming the URL, and
-https://oatpp.io/docs/start looks better.
-
-<><  <><  <><
-Bryce Schober
-
-
-On Fri, Jan 27, 2023 at 3:18 PM Alessandro Partesotti <
-a.partesotti@gmail.com> wrote:
-
-> This package introduce oatpp in BR buildsystem. oatpp must be used as
-> static linkable library in
-> $(STAGING_DIR)/usr/include/oatpp-$(OATPP_VERSION)/oatpp for user that want
-> to build therir own application by linking oatpp in a buildroot build
-> system.
->
-> Signed-off-by: Alessandro Partesotti <a.partesotti@gmail.com>
-> ---
->  package/Config.in       |  3 +++
->  package/oatpp/Config.in | 14 ++++++++++++++
->  package/oatpp/oatpp.mk  | 16 ++++++++++++++++
->  3 files changed, 33 insertions(+)
->  create mode 100644 package/oatpp/Config.in
->  create mode 100644 package/oatpp/oatpp.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 995dae2c57..481876a278 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1941,6 +1941,7 @@ menu "Networking"
->         source "package/nss-mdns/Config.in"
->         source "package/nss-myhostname/Config.in"
->         source "package/nss-pam-ldapd/Config.in"
-> +       source "package/oatpp/Config.in"
->         source "package/omniorb/Config.in"
->         source "package/open-isns/Config.in"
->         source "package/open62541/Config.in"
-> @@ -2702,4 +2703,6 @@ menu "Text editors and viewers"
->         source "package/vim/Config.in"
->  endmenu
->
-> +
->  endmenu
-> +
-> diff --git a/package/oatpp/Config.in b/package/oatpp/Config.in
-> new file mode 100644
-> index 0000000000..3cf6bf3ef5
-> --- /dev/null
-> +++ b/package/oatpp/Config.in
-> @@ -0,0 +1,14 @@
-> +comment "Oat++ needs a toolchain w/ C++, threads and Paranoid Unsafe Path
-> compiler flag disabled"
-> +        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> || BR2_COMPILER_PARANOID_UNSAFE_PATH
-> +
-> +config BR2_PACKAGE_OATPP
-> +       bool "Oat++"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on !BR2_COMPILER_PARANOID_UNSAFE_PATH
-> +       help
-> +               Oat++ is an open-source C++ web framework for highly
-> scalable and resource-efficient web applications.
-> +               It provides all the necessary components for
-> production-grade development.
-> +               This package allows you to use oatpp to statically build
-> this a project inside the staging directory.
-> +               See https://oatpp.io/docs/
-> +
-> diff --git a/package/oatpp/oatpp.mk b/package/oatpp/oatpp.mk
-> new file mode 100644
-> index 0000000000..7abdeb6de5
-> --- /dev/null
-> +++ b/package/oatpp/oatpp.mk
-> @@ -0,0 +1,16 @@
->
-> +################################################################################
-> +#
-> +# oatpp
-> +#
->
-> +################################################################################
-> +
-> +OATPP_VERSION= 1.3.0
-> +OATPP_SOURCE= $(OATPP_VERSION).tar.gz
-> +OATPP_SITE= https://github.com/oatpp/oatpp/archive/refs/tags
-> +#OATPP_SITE= git://github.com/oatpp/oatpp.git
-> +OATPP_INSTALL_STAGING= YES
-> +OATPP_INSTALL_TARGET= NO
-> +OATPP_MAKE=make
-> +
-> +$(eval $(cmake-package))
-> +
-> --
-> 2.25.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---000000000000d8e7db05f347e818
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">For=C2=A0<a href=3D"https://oatpp.io/docs=
-/" rel=3D"noreferrer" target=3D"_blank">https://oatpp.io/docs/</a>, I get:<=
-br><br>server=3Doatpp/1.3.0<br>code=3D500<br>description=3DInternal Server =
-Error<br>message=3DPage not found</div><div dir=3D"ltr"><br></div><div dir=
-=3D"ltr">It looks like it doesn&#39;t like trimming the URL, and=C2=A0<a hr=
-ef=3D"https://oatpp.io/docs/start">https://oatpp.io/docs/start</a>=C2=A0loo=
-ks better.<br clear=3D"all"><div><div dir=3D"ltr" class=3D"gmail_signature"=
-><div dir=3D"ltr"><div><div dir=3D"ltr"><div><div><br></div><div>&lt;&gt;&l=
-t; =C2=A0&lt;&gt;&lt; =C2=A0&lt;&gt;&lt;</div><div>Bryce Schober</div></div=
-></div></div></div></div></div><br></div><br><div class=3D"gmail_quote"><di=
-v dir=3D"ltr" class=3D"gmail_attr">On Fri, Jan 27, 2023 at 3:18 PM Alessand=
-ro Partesotti &lt;<a href=3D"mailto:a.partesotti@gmail.com">a.partesotti@gm=
-ail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"=
-margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-lef=
-t:1ex">This package introduce oatpp in BR buildsystem. oatpp must be used a=
-s static linkable library in $(STAGING_DIR)/usr/include/oatpp-$(OATPP_VERSI=
-ON)/oatpp for user that want to build therir own application by linking oat=
-pp in a buildroot build system.<br>
-<br>
-Signed-off-by: Alessandro Partesotti &lt;<a href=3D"mailto:a.partesotti@gma=
-il.com" target=3D"_blank">a.partesotti@gmail.com</a>&gt;<br>
----<br>
-=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 3 +++<br>
-=C2=A0package/oatpp/Config.in | 14 ++++++++++++++<br>
-=C2=A0package/oatpp/<a href=3D"http://oatpp.mk" rel=3D"noreferrer" target=
-=3D"_blank">oatpp.mk</a>=C2=A0 | 16 ++++++++++++++++<br>
-=C2=A03 files changed, 33 insertions(+)<br>
-=C2=A0create mode 100644 package/oatpp/Config.in<br>
-=C2=A0create mode 100644 package/oatpp/<a href=3D"http://oatpp.mk" rel=3D"n=
-oreferrer" target=3D"_blank">oatpp.mk</a><br>
-<br>
-diff --git a/package/Config.in b/package/Config.in<br>
-index 995dae2c57..481876a278 100644<br>
---- a/package/Config.in<br>
-+++ b/package/Config.in<br>
-@@ -1941,6 +1941,7 @@ menu &quot;Networking&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/nss-mdns/Config.in&quot;<b=
-r>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/nss-myhostname/Config.in&q=
-uot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/nss-pam-ldapd/Config.in&qu=
-ot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/oatpp/Config.in&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/omniorb/Config.in&quot;<br=
->
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/open-isns/Config.in&quot;<=
-br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/open62541/Config.in&quot;<=
-br>
-@@ -2702,4 +2703,6 @@ menu &quot;Text editors and viewers&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/vim/Config.in&quot;<br>
-=C2=A0endmenu<br>
-<br>
-+<br>
-=C2=A0endmenu<br>
-+<br>
-diff --git a/package/oatpp/Config.in b/package/oatpp/Config.in<br>
-new file mode 100644<br>
-index 0000000000..3cf6bf3ef5<br>
---- /dev/null<br>
-+++ b/package/oatpp/Config.in<br>
-@@ -0,0 +1,14 @@<br>
-+comment &quot;Oat++ needs a toolchain w/ C++, threads and Paranoid Unsafe =
-Path compiler flag disabled&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOL=
-CHAIN_HAS_THREADS || BR2_COMPILER_PARANOID_UNSAFE_PATH<br>
-+<br>
-+config BR2_PACKAGE_OATPP<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;Oat++&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_INSTALL_LIBSTDCPP<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_THREADS<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_COMPILER_PARANOID_UNSAFE_PATH<b=
-r>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Oat++ is an open-so=
-urce C++ web framework for highly scalable and resource-efficient web appli=
-cations.<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0It provides all the=
- necessary components for production-grade development.<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0This package allows=
- you to use oatpp to statically build this a project inside the staging dir=
-ectory.<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0See <a href=3D"http=
-s://oatpp.io/docs/" rel=3D"noreferrer" target=3D"_blank">https://oatpp.io/d=
-ocs/</a><br>
-+<br>
-diff --git a/package/oatpp/<a href=3D"http://oatpp.mk" rel=3D"noreferrer" t=
-arget=3D"_blank">oatpp.mk</a> b/package/oatpp/<a href=3D"http://oatpp.mk" r=
-el=3D"noreferrer" target=3D"_blank">oatpp.mk</a><br>
-new file mode 100644<br>
-index 0000000000..7abdeb6de5<br>
---- /dev/null<br>
-+++ b/package/oatpp/<a href=3D"http://oatpp.mk" rel=3D"noreferrer" target=
-=3D"_blank">oatpp.mk</a><br>
-@@ -0,0 +1,16 @@<br>
-+##########################################################################=
-######<br>
-+#<br>
-+# oatpp<br>
-+#<br>
-+##########################################################################=
-######<br>
-+<br>
-+OATPP_VERSION=3D 1.3.0<br>
-+OATPP_SOURCE=3D $(OATPP_VERSION).tar.gz<br>
-+OATPP_SITE=3D <a href=3D"https://github.com/oatpp/oatpp/archive/refs/tags"=
- rel=3D"noreferrer" target=3D"_blank">https://github.com/oatpp/oatpp/archiv=
-e/refs/tags</a><br>
-+#OATPP_SITE=3D git://<a href=3D"http://github.com/oatpp/oatpp.git" rel=3D"=
-noreferrer" target=3D"_blank">github.com/oatpp/oatpp.git</a><br>
-+OATPP_INSTALL_STAGING=3D YES<br>
-+OATPP_INSTALL_TARGET=3D NO<br>
-+OATPP_MAKE=3Dmake<br>
-+<br>
-+$(eval $(cmake-package))<br>
-+<br>
--- <br>
-2.25.1<br>
-<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div></div>
-
---000000000000d8e7db05f347e818--
-
---===============8774486709639145192==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8774486709639145192==--
+T24gV2VkLCBKYW4gMTEsIDIwMjMgYXQgODozMCBBTSBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91
+ckBzbWlsZS5mcj4gd3JvdGU6Cj4KPiBIaSBKYW1lcywKPgo+IExlIDI4LzA3LzIwMjIgw6AgMDM6
+NDQsIEphbWVzIEhpbGxpYXJkIGEgw6ljcml0IDoKPiA+IFRoaXMgZm9ybWF0IHByZXZlbnRzIHBr
+Z2NvbmZpZyBwYXRoIGlzc3VlcyB3aGVuIHVzaW5nIG1lc29uJ3MKPiA+IGJ1aWx0LWluIGluc3Rh
+bGwgZnVuY3Rpb25hbGl0eS4KPgo+IElzIGFueSBwYWNrYWdlIGN1cnJlbnRseSBhZmZlY3RlZCBi
+eSB0aGlzIGlzc3VlPwoKV2UgY3VycmVudGx5IGFyZW4ndCB1c2luZyBtZXNvbidzIGJ1aWx0LWlu
+IGluc3RhbGwgZmVhdHVyZSBBRkFJVSBzbyBJCmRvbid0IHRoaW5rCnRoZXJlJ3MgY3VycmVudGx5
+IGFueSBwYWNrYWdlcyBoYXZpbmcgaXNzdWVzIGhlcmUuCgo+Cj4gSSB3b3VsZCBhZGQgYSByZWZl
+cmVuY2UgbGluazoKPiBodHRwczovL21lc29uYnVpbGQuY29tL1BrZ2NvbmZpZy1tb2R1bGUuaHRt
+bCNyZWxvY2F0YWJsZS1wa2djb25maWctZmlsZXMKPgo+IEJlc3QgcmVnYXJkcywKPiBSb21haW4K
+Pgo+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdt
+YWlsLmNvbT4KPiA+IC0tLQo+ID4gIHBhY2thZ2UvcGtnLW1lc29uLm1rIHwgMiArKwo+ID4gIDEg
+ZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2Fn
+ZS9wa2ctbWVzb24ubWsgYi9wYWNrYWdlL3BrZy1tZXNvbi5tawo+ID4gaW5kZXggMTU2YjAwNWZk
+ZC4uMTgzMGM3YjEwYyAxMDA2NDQKPiA+IC0tLSBhL3BhY2thZ2UvcGtnLW1lc29uLm1rCj4gPiAr
+KysgYi9wYWNrYWdlL3BrZy1tZXNvbi5tawo+ID4gQEAgLTEzNCw2ICsxMzQsNyBAQCBkZWZpbmUg
+JCgyKV9DT05GSUdVUkVfQ01EUwo+ID4gICAgICAgQ1hYX0ZPUl9CVUlMRD0iJCQoSE9TVENYWCki
+IFwKPiA+ICAgICAgICQkKCQkKFBLRylfQ09ORl9FTlYpIFwKPiA+ICAgICAgICQkKE1FU09OKSBc
+Cj4gPiArICAgICAgICAgICAgIC0tcGtnY29uZmlnLnJlbG9jYXRhYmxlIFwKPiA+ICAgICAgICAg
+ICAgICAgLS1wcmVmaXg9L3VzciBcCj4gPiAgICAgICAgICAgICAgIC0tbGliZGlyPWxpYiBcCj4g
+PiAgICAgICAgICAgICAgIC0tZGVmYXVsdC1saWJyYXJ5PSQoaWYgJChCUjJfU1RBVElDX0xJQlMp
+LHN0YXRpYyxzaGFyZWQpIFwKPiA+IEBAIC0xNTQsNiArMTU1LDcgQEAgZGVmaW5lICQoMilfQ09O
+RklHVVJFX0NNRFMKPiA+ICAgICAgIG1rZGlyIC1wICQkKCQkKFBLRylfU1JDRElSKS9idWlsZAo+
+ID4gICAgICAgJCQoSE9TVF9DT05GSUdVUkVfT1BUUykgXAo+ID4gICAgICAgJCQoJCQoUEtHKV9D
+T05GX0VOVikgJCQoTUVTT04pIFwKPiA+ICsgICAgICAgICAgICAgLS1wa2djb25maWcucmVsb2Nh
+dGFibGUgXAo+ID4gICAgICAgICAgICAgICAtLXByZWZpeD0kJChIT1NUX0RJUikgXAo+ID4gICAg
+ICAgICAgICAgICAtLWxpYmRpcj1saWIgXAo+ID4gICAgICAgICAgICAgICAtLXN5c2NvbmZkaXI9
+JCQoSE9TVF9ESVIpL2V0YyBcCj4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
