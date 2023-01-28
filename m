@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBD4CC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:42:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33ED2C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CA45825C3;
-	Mon, 20 Feb 2023 23:42:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CA45825C3
+	by smtp1.osuosl.org (Postfix) with ESMTP id E559683FEC;
+	Mon, 20 Feb 2023 23:42:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E559683FEC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FUPXNNjqQady; Mon, 20 Feb 2023 23:42:15 +0000 (UTC)
+	with ESMTP id yId7BbjHgf2C; Mon, 20 Feb 2023 23:42:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C221E83FF0;
-	Mon, 20 Feb 2023 23:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C221E83FF0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28A0383FF1;
+	Mon, 20 Feb 2023 23:42:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28A0383FF1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E90511BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1FC1B1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A55A41598
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C86841773
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A55A41598
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C86841773
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XSh4sO_cg3we for <buildroot@lists.busybox.net>;
+ with ESMTP id cMXZGpohNCJs for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 529394176C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6BC1041766
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529394176C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BC1041766
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5039F7FF06; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
+ id 59A6086495; Mon, 20 Feb 2023 20:52:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 21:00:20 +0100
+Date: Sat, 28 Jan 2023 21:02:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b83a41ccd8c75caff009a826d938fd74a70a10f3
-X-Git-Newrev: f6ec214a09741b2de6e408832d89f4b3c4f93484
+X-Git-Oldrev: f6ec214a09741b2de6e408832d89f4b3c4f93484
+X-Git-Newrev: ea06798871d3a452011a8fa3c879a7a352032ff6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205241.5039F7FF06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/moarvm: bump to
- version 2022.12
+Message-Id: <20230220205241.59A6086495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/qemu_s390x: bump
+ kernel version to 6.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6ec214a09741b2de6e408832d89f4b3c4f93484
+commit: https://git.buildroot.net/buildroot/commit/?id=ea06798871d3a452011a8fa3c879a7a352032ff6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/qemu_s390x_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 45e8b56e98..624988215e 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  337ef04d16f826f99465c653b92006028fe220be68d3dcfd0729612f4f6b5b46  MoarVM-2022.07.tar.gz
-+sha256  51c3e9c9a7a191c148f213b65ae1f4fcfe5d4b7c16c86300e9ee8e18eaa8becb  MoarVM-2022.12.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 9820f318b6..ef9d29d5af 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index 346df04ada..6bbcca0896 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -12,12 +12,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
  
--MOARVM_VERSION = 2022.07
-+MOARVM_VERSION = 2022.12
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.4"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
