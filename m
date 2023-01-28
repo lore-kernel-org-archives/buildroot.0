@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 700C4C38142
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 20:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C0D4C27C76
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 20:26:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 238F081388;
-	Sat, 28 Jan 2023 20:06:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 238F081388
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92E0281DF6;
+	Sat, 28 Jan 2023 20:26:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92E0281DF6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DSqH2wT-xcG2; Sat, 28 Jan 2023 20:06:04 +0000 (UTC)
+	with ESMTP id ClHpuSsyiD5P; Sat, 28 Jan 2023 20:26:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7EE6C81350;
-	Sat, 28 Jan 2023 20:06:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EE6C81350
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 016801BF327
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:05:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 586B981E05;
+	Sat, 28 Jan 2023 20:26:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 586B981E05
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D5381BF327
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFD6360DC2
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:05:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFD6360DC2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2751E81E05
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:26:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2751E81E05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wrgy0bu3BbWY for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 20:05:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iMswdBNDjSn9 for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 20:26:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B1C360E00
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 20:05:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B1C360E00
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1948681DF6
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 20:26:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1948681DF6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7547787B39; Sat, 28 Jan 2023 20:05:46 +0000 (UTC)
+ id 0701587BF6; Sat, 28 Jan 2023 20:26:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 21:03:28 +0100
+Date: Sat, 28 Jan 2023 21:26:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af2788ea2ff34e5795ed10df8703bf0f89fda1d7
-X-Git-Newrev: 6b7ef8030c829ac04c4e78d3f2c878f5c9483a78
+X-Git-Oldrev: 6b7ef8030c829ac04c4e78d3f2c878f5c9483a78
+X-Git-Newrev: 2b43579e9453a4e4f0d25d902634ebd9f1721dfc
 X-Patchwork-Hint: ignore
-Message-Id: <20230128200546.7547787B39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: add myself to postgresql
- package
+Message-Id: <20230128202652.0701587BF6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdal: switch to cmake build to fix
+ libgeotiff detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +64,219 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b7ef8030c829ac04c4e78d3f2c878f5c9483a78
+commit: https://git.buildroot.net/buildroot/commit/?id=2b43579e9453a4e4f0d25d902634ebd9f1721dfc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+GDAL autoconf has wrong libgeotiff detection. It uses host's
+library if installed instead of buildroot one.
+Modern versions of gdal have no autoconf build scripts, just cmake only.
+
+So move to cmake build variant.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=15281
 
 Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/gdal/gdal.mk | 168 ++++++++++++++++++++++++++-------------------------
+ 1 file changed, 87 insertions(+), 81 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 83fa9e403d..4ead3a71f2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2087,6 +2087,7 @@ F:	package/libgeos/
- F:	package/libosmium/
- F:	package/osm2pgsql/
- F:	package/postgis/
-+F:	package/postgresql/
- F:	package/protozero/
- F:	package/timescaledb/
+diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
+index 33e7ba724a..2d6dff1a93 100644
+--- a/package/gdal/gdal.mk
++++ b/package/gdal/gdal.mk
+@@ -12,6 +12,15 @@ GDAL_LICENSE_FILES = LICENSE.TXT
+ GDAL_CPE_ID_VENDOR = osgeo
+ GDAL_INSTALL_STAGING = YES
+ GDAL_CONFIG_SCRIPTS = gdal-config
++GDAL_SUPPORTS_IN_SOURCE_BUILD = NO
++
++# Using 'make' with CMake's Makefile generator will not work, as
++# 'make' uses GNUmakefile first, but GNUmakefile is provided by
++# autotools in gdal. We need to force 'make' to use the Makefile,
++# which is generated by CMake. GNUmakefile and autoconf are dropped in
++# 3.6 so this can be dropped in future version.
++GDAL_MAKE_OPTS += -f Makefile
++
+ # gdal at its core only needs host-pkgconf, libgeotiff, proj and tiff
+ # but since by default mrf driver support is enabled, it also needs
+ # jpeg, libpng and zlib. By default there are also many other drivers
+@@ -20,97 +29,94 @@ GDAL_CONFIG_SCRIPTS = gdal-config
+ # respectively needed dependencies.
+ GDAL_DEPENDENCIES = host-pkgconf jpeg json-c libgeotiff libpng proj tiff zlib
  
+-# Yes, even though they have --with options, these few libraries are
++# Yes, even though they have -DDGDAL_USE options, a few libraries are
+ # mandatory. If we don't provide them, bundled versions are used.
+ GDAL_CONF_OPTS = \
+-	--with-geotiff \
+-	--with-jpeg \
+-	--with-libjson-c=$(STAGING_DIR)/usr \
+-	--with-libtool \
+-	--with-libz \
+-	--with-png \
+-	--with-proj \
+-	--without-armadillo \
+-	--without-blosc \
+-	--without-brunsli \
+-	--without-cfitsio \
+-	--without-crypto \
+-	--without-cryptopp \
+-	--without-curl \
+-	--without-dds \
+-	--without-ecw \
+-	--without-expat \
+-	--without-exr \
+-	--without-fgdb \
+-	--without-freexl \
+-	--without-geos \
+-	--without-gnm \
+-	--without-libkml \
+-	--without-lz4 \
+-	--without-gta \
+-	--without-hdf4 \
+-	--without-hdf5 \
+-	--without-hdfs \
+-	--without-heif \
+-	--without-idb \
+-	--without-jp2lura \
+-	--without-java \
+-	--without-jpeg12 \
+-	--without-jxl \
+-	--without-kakadu \
+-	--without-kea \
+-	--without-lerc \
+-	--without-gif \
+-	--without-liblzma \
+-	--without-libdeflate \
+-	--without-mongocxxv3 \
+-	--without-mrsid \
+-	--without-jp2mrsid \
+-	--without-macosx-framework \
+-	--without-msg \
+-	--without-mysql \
+-	--without-netcdf \
+-	--without-null \
+-	--without-oci \
+-	--without-odbc \
+-	--without-ogdi \
+-	--without-opencl \
+-	--without-openjpeg \
+-	--without-pam \
+-	--without-pcidsk \
+-	--without-pcraster \
+-	--without-pcre \
+-	--without-pcre2 \
+-	--without-pdfium \
+-	--without-podofo \
+-	--without-poppler \
+-	--without-python \
+-	--without-qhull \
+-	--without-rasdaman \
+-	--without-rasterlite2 \
+-	--without-rdb \
+-	--without-sfcgal \
+-	--without-sosi \
+-	--without-spatialite \
+-	--without-sqlite3 \
+-	--without-teigha \
+-	--without-tiledb \
+-	--without-webp \
+-	--without-xerces \
+-	--without-zstd
++	-DGDAL_USE_GEOTIFF=ON \
++	-DGDAL_USE_JPEG=ON \
++	-DGDAL_USE_JSONC=ON \
++	-DGDAL_USE_ZLIB=ON \
++	-DGDAL_USE_PNG=ON \
++	-DGDAL_USE_ARMADILLO=OFF \
++	-DGDAL_USE_BLOSC=OFF \
++	-DGDAL_USE_BRUNSLI=OFF \
++	-DGDAL_USE_CFITSIO=OFF \
++	-DGDAL_USE_OPENSSL=OFF \
++	-DGDAL_USE_CRYPTOPP=OFF \
++	-DGDAL_USE_CRNLIB=OFF \
++	-DGDAL_USE_CURL=OFF \
++	-DGDAL_USE_ECW=OFF \
++	-DGDAL_USE_EXPAT=OFF \
++	-DGDAL_USE_FILEGDB=OFF \
++	-DGDAL_USE_FREEXL=OFF \
++	-DGDAL_USE_GEOS=OFF \
++	-DGDAL_USE_LIBKML=OFF \
++	-DGDAL_USE_LZ4=OFF \
++	-DGDAL_USE_GTA=OFF \
++	-DGDAL_USE_HDF4=OFF \
++	-DGDAL_USE_HDF5=OFF \
++	-DGDAL_USE_HDFS=OFF \
++	-DGDAL_USE_HEIF=OFF \
++	-DGDAL_USE_IDB=OFF \
++	-DGDAL_USE_LURATECH=OFF \
++	-DGDAL_USE_JPEG12_INTERNAL=OFF \
++	-DGDAL_USE_JXL=OFF \
++	-DGDAL_USE_KDU=OFF \
++	-DGDAL_USE_KEA=OFF \
++	-DGDAL_USE_LERC=OFF \
++	-DGDAL_USE_GIF=OFF \
++	-DGDAL_USE_LIBLZMA=OFF \
++	-DGDAL_USE_DEFLATE=OFF \
++	-DGDAL_USE_MONGOCXX=OFF \
++	-DGDAL_USE_MRSID=OFF \
++	-DGDAL_USE_PUBLICDECOMPWT=OFF \
++	-DGDAL_USE_MYSQL=OFF \
++	-DGDAL_USE_NETCDF=OFF \
++	-DGDAL_USE_ORACLE=OFF \
++	-DGDAL_USE_ODBC=OFF \
++	-DGDAL_USE_OGDI=OFF \
++	-DGDAL_USE_OPENCL=OFF \
++	-DGDAL_USE_OPENEXR=OFF \
++	-DGDAL_USE_OPENJPEG=OFF \
++	-DGDAL_USE_PCRE=OFF \
++	-DGDAL_USE_PCRE2=OFF \
++	-DGDAL_USE_PDFIUM=OFF \
++	-DGDAL_USE_PODOFO=OFF \
++	-DGDAL_USE_POPPLER=OFF \
++	-DGDAL_USE_QHULL=OFF \
++	-DGDAL_USE_RASDAMAN=OFF \
++	-DGDAL_USE_RASTERLITE2=OFF \
++	-DGDAL_USE_RDB=OFF \
++	-DGDAL_USE_SFCGAL=OFF \
++	-DGDAL_USE_FYBA=OFF \
++	-DGDAL_USE_SPATIALITE=OFF \
++	-DGDAL_USE_SQLITE3=OFF \
++	-DGDAL_USE_TEIGHA=OFF \
++	-DGDAL_USE_TILEDB=OFF \
++	-DGDAL_USE_WEBP=OFF \
++	-DGDAL_USE_XERCESC=OFF \
++	-DGDAL_USE_ZSTD=OFF \
++	-DGDAL_ENABLE_DRIVER_PCIDSK=OFF \
++	-DGDAL_ENABLE_DRIVER_PCRASTER=OFF \
++	-DGDAL_ENABLE_DRIVER_NULL=OFF \
++	-DGDAL_ENABLE_MACOSX_FRAMEWORK=OFF \
++	-DENABLE_GNM=OFF \
++	-DENABLE_PAM=OFF \
++	-DBUILD_JAVA_BINDINGS=OFF \
++	-DBUILD_PYTHON_BINDINGS=OFF
+ 
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ GDAL_DEPENDENCIES += libxml2
+-GDAL_CONF_OPTS += --with-xml2
++GDAL_CONF_OPTS += -DGDAL_USE_LIBXML2=ON
+ else
+-GDAL_CONF_OPTS += --without-xml2
++GDAL_CONF_OPTS += -DGDAL_USE_LIBXML2=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+ GDAL_DEPENDENCIES += postgresql
+-GDAL_CONF_OPTS += --with-pg
++GDAL_CONF_OPTS += -DGDAL_USE_POSTGRESQL=ON
+ else
+-GDAL_CONF_OPTS += --without-pg
++GDAL_CONF_OPTS += -DGDAL_USE_POSTGRESQL=OFF
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
