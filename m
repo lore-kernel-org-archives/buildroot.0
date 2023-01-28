@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27EB8C38142
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 19:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92AECC27C76
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 19:58:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E45B40620;
-	Sat, 28 Jan 2023 19:58:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E45B40620
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9B6340620;
+	Sat, 28 Jan 2023 19:58:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9B6340620
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I4875H2CDM0H; Sat, 28 Jan 2023 19:58:04 +0000 (UTC)
+	with ESMTP id j6QwApWQ9qwf; Sat, 28 Jan 2023 19:58:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E23B340470;
-	Sat, 28 Jan 2023 19:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E23B340470
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2C2BC1BF48B
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 19:58:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3708E40983;
+	Sat, 28 Jan 2023 19:58:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3708E40983
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 198B91BF48B
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 19:58:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0263181BFA
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 19:58:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0263181BFA
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7E9441603
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 19:58:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7E9441603
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AERv-67NIEBo for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 19:58:00 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A08C81BBD
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9A08C81BBD
- for <buildroot@busybox.net>; Sat, 28 Jan 2023 19:57:59 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 39E4B40004;
- Sat, 28 Jan 2023 19:57:56 +0000 (UTC)
-Date: Sat, 28 Jan 2023 20:57:55 +0100
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20230128205755.79a0293d@windsurf>
-In-Reply-To: <20230127122552.236033-1-francois.perrad@gadz.org>
-References: <20230127122552.236033-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1674935876;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=abmwte2LlsyBRqhk/axZRKevsPc28L5AdDo9eGbkDDY=;
- b=d3H7lqobob13qV/kdRoDs0KZjEX+NaanGGxWOWNJq4J/YojnmCHN48aAm5RUL3JW/PiZBh
- fkJ+a4b1VCZV4DMhmSRoeopgVe1kMc7rO+UYsGtDMerzJHfu7s0GQQNwgZ8YyF9ocB0qWH
- G9e63C259/JOkWuK/qxTH7LTjPE39dJfUJArHB4QkgRFAlO68VstsVBCEQkAyLx3Fs2Vuq
- FwPxRUA2naAN0tAUWDTysFP2XiRdBNSVYKpUq3F1CRDKkDm8y27BiM+TsBHCNAWewzqqkZ
- Bx2WGadg7yW9RPZ7n8QRufRQ1nFpogWUrrAxMHJoBlpafk7yvbR26jdkcd/Bmg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=d3H7lqob
-Subject: Re: [Buildroot] [PATCH] package/janet: bump to version 1.26.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3aWa6_rdrwPW for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 19:58:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECC13415FC
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 19:58:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECC13415FC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D7E2786E1B; Sat, 28 Jan 2023 19:58:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 28 Jan 2023 20:57:14 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 22e926e9af915303180d35b5c41ea5fbf411d753
+X-Git-Newrev: 5c6f32bd255fc97823d464beacfa905a141066ec
+X-Patchwork-Hint: ignore
+Message-Id: <20230128195854.D7E2786E1B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/janet: bump to version 1.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +57,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 27 Jan 2023 13:25:52 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5c6f32bd255fc97823d464beacfa905a141066ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> diff LICENCE:
-> -Copyright (c) 2021 Calvin Rose and contributors
-> +Copyright (c) 2023 Calvin Rose and contributors
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/janet/janet.hash | 4 ++--
->  package/janet/janet.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+diff LICENCE:
+-Copyright (c) 2021 Calvin Rose and contributors
++Copyright (c) 2023 Calvin Rose and contributors
 
-Applied to master, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/janet/janet.hash | 4 ++--
+ package/janet/janet.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/janet/janet.hash b/package/janet/janet.hash
+index 5cd3db1c29..47e0de4a0f 100644
+--- a/package/janet/janet.hash
++++ b/package/janet/janet.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  5bf9b680adbc5511835aec3787117df37032eef796e1664edbbcfd540b6acaf3  janet-1.25.0.tar.gz
++sha256  c95dab93e8e4ebcab5c293d5ee448fb43ab8bd2f6391fd66a6ca92fe1ec72c03  janet-1.26.0.tar.gz
+ 
+ # Locally calculated
+-sha256  e2d2ae8360d95386af751ac7d1a3da36ea8ceb230e5f0eba7eb762547b1c58c9  LICENSE
++sha256  95fca700e8dce9699248e7cc80ac88ce2357874c8352cd2be4d18f183dc9710b  LICENSE
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index 284e6c2642..db1eb2a5c4 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANET_VERSION = 1.25.0
++JANET_VERSION = 1.26.0
+ JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
+ JANET_LICENSE = MIT
+ JANET_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
