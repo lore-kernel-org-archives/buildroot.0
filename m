@@ -1,72 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21FA5C38142
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE584C636CB
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C33E240983;
-	Sat, 28 Jan 2023 21:34:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C33E240983
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4142881E43;
+	Sat, 28 Jan 2023 21:40:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4142881E43
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qLq_SOJ3lZ3E; Sat, 28 Jan 2023 21:34:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EaWEMmzGgMCi; Sat, 28 Jan 2023 21:40:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 007D7404B9;
-	Sat, 28 Jan 2023 21:34:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 007D7404B9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 546121BF3C0
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:34:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A2CC81E4D;
+	Sat, 28 Jan 2023 21:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A2CC81E4D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EC5931BF3C0
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 28AFF404B9
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:34:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28AFF404B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id C07CC81E4D
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:40:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C07CC81E4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZNnSWYkJuKdc for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 21:34:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07D9940463
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 07D9940463
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 21:34:39 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7E1761C0003;
- Sat, 28 Jan 2023 21:34:36 +0000 (UTC)
-Date: Sat, 28 Jan 2023 22:34:35 +0100
-To: Vincent Fazio <vfazio@xes-inc.com>
-Message-ID: <20230128223435.2d708808@windsurf>
-In-Reply-To: <20230128223142.1c292f98@windsurf>
-References: <20230126185049.3600233-1-vfazio@xes-inc.com>
- <20230127201446.1181422-1-vfazio@xes-inc.com>
- <20230128223142.1c292f98@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1674941677;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tOo1jL2SDZQU5VzJY0sMWivvbOSCw+Yl95cI3GRM0w0=;
- b=aACKD2gR6b8I9oTmN0rDsDK4DEQna8VXCr33nGYwxUZQPFd3EoWN+VfBLpGHSLFy/1hvBd
- rNYBH7qDxKA853/Yw6H5ClnIGq1udNf+7cCv7RgT/k4pCR0LTJ8lMupmqPZUjqrVVJ2yjW
- 2QTNLFVi0H8bH+zGmYYtykYeM9DpA+/+c61IKMAJDYrb6Z0FleCPwjfjbNVT/UjSv7X90x
- Orhr4quPeWx6lseRVVcT2X9f8lM4LOvQO3/bCASlIzL7Gb9Ct1vBpJOAcPkehKu90VVDeS
- p4IADYXGI/jC5DLs1e2GR/tsfAaw3MLzcliTCpS0GmaTrCnGHb0P6ON9hVrDuQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aACKD2gR
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/ethtool: fix builds for
- older toolchains
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lHWeCwd5i01I for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 21:40:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EAADD81E43
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 21:40:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAADD81E43
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D377687EDF; Sat, 28 Jan 2023 21:40:08 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 28 Jan 2023 22:39:23 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7b88adbf8f77fa2cfc75a80ae1eb0310f9c5ca6c
+X-Git-Newrev: 3496f300a8ca2bb8b337db5d43be5b3293a4e9e4
+X-Patchwork-Hint: ignore
+Message-Id: <20230128214008.D377687EDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-greenlet: add missing C++
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,41 +58,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
- Matt Weber <matthew.weber@collins.com>, Vincent Fazio <vfazio@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 28 Jan 2023 22:31:42 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3496f300a8ca2bb8b337db5d43be5b3293a4e9e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >  package/ethtool/0001-uapi-Bring-in-if.h.patch | 483 ++++++++++++++++++
-> >  ...2-marvell.c-Fix-build-with-musl-libc.patch |  71 +++
-> >  2 files changed, 554 insertions(+)
-> >  create mode 100644 package/ethtool/0001-uapi-Bring-in-if.h.patch
-> >  create mode 100644 package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch  
-> 
-> Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.net/results/529/5291fe0fac1d5c7b6587e4a566991a764a2632fb
 
-Sorry, I messed up, I applied the v1 of the patch, which only added the
-0001-uapi-Bring-in-if.h.patch patch and not the musl fix.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-greenlet/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Could you resubmit the musl fix separately?
-
-In any case, having the musl fix in the patch titled "fix builds for
-older toolchains" was not really correct, as the musl fix has nothing
-to do with "older toolchains".
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/python-greenlet/Config.in b/package/python-greenlet/Config.in
+index 9f66ebe119..ae092e3ffe 100644
+--- a/package/python-greenlet/Config.in
++++ b/package/python-greenlet/Config.in
+@@ -12,7 +12,12 @@ config BR2_PACKAGE_PYTHON_GREENLET_ARCH_SUPPORTS
+ config BR2_PACKAGE_PYTHON_GREENLET
+ 	bool "python-greenlet"
+ 	depends on BR2_PACKAGE_PYTHON_GREENLET_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Lightweight in-process concurrent programming.
+ 
+ 	  https://github.com/python-greenlet/greenlet
++
++comment "python-greenlet needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON_GREENLET_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
