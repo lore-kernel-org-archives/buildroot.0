@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CC8DC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBFCCC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2497961AFE;
-	Tue, 21 Feb 2023 01:17:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2497961AFE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C5C9610BB;
+	Tue, 21 Feb 2023 01:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C5C9610BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zCaqD_WqFEsR; Tue, 21 Feb 2023 01:17:12 +0000 (UTC)
+	with ESMTP id Hou8rmMD35gg; Tue, 21 Feb 2023 01:17:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6664A61ABC;
-	Tue, 21 Feb 2023 01:17:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6664A61ABC
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE94A6FB38;
+	Tue, 21 Feb 2023 01:17:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE94A6FB38
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B69E41BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 118FB1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17E756FBD9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 37A6F610B7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17E756FBD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37A6F610B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fuAB53FmOquk for <buildroot@lists.busybox.net>;
+ with ESMTP id lTzCnIC1ntpl for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D7E76FBCF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39BEC6FBB8
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D7E76FBCF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39BEC6FBB8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06F47828C8; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+ id 3463181979; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:41:22 +0100
+Date: Sat, 28 Jan 2023 22:43:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e235a1daa4e24f1eb9f1d9307003fa29cfeedd88
-X-Git-Newrev: 2fb59f913d0e21a51491e64ea781702400cfcd5e
+X-Git-Oldrev: 26dabd73b4f75dd3a9e2b48f8e4a4f32d42e05f7
+X-Git-Newrev: 5d183a6d333eaf57b6a5f5c1a7eb323b5ada7cd6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205242.06F47828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-mojolicious:
- security bump to version 9.31
+Message-Id: <20230220205242.3463181979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/kodi-peripheral-joystick: bump version to 19.0.4-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb59f913d0e21a51491e64ea781702400cfcd5e
+commit: https://git.buildroot.net/buildroot/commit/?id=5d183a6d333eaf57b6a5f5c1a7eb323b5ada7cd6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-see https://metacpan.org/dist/Mojolicious/changes#L3
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index 97625d1290..989eaf3419 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  494db2d1529e84a2575527dae8f3672d  Mojolicious-9.26.tar.gz
--sha256  9e428c5512698f05e151338d8fa12aede287ab3a5e429ec3d38c80a4a82c8d88  Mojolicious-9.26.tar.gz
-+md5  523193316a839ff56a447f0f0c2e5b36  Mojolicious-9.31.tar.gz
-+sha256  cb96ccd7a5319321ec6f57633c88bf17193d45169f4d7846da254bb6f9ed8312  Mojolicious-9.31.tar.gz
- 
- # computed by scancpan
- sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index dbf2e61737..618327d09d 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 5ac4247cbf..0b483f70bf 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0a595933998565902f112f0d476ada1cd732a1961ed10b8a2b9a52ed8bd8c652  kodi-peripheral-joystick-19.0.3-Matrix.tar.gz
++sha256  a5c7c6b8b1f39c92d00289bd602ea2db13a3d3f73a50bd3f95ec08cf110a570e  kodi-peripheral-joystick-19.0.4-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index 1b2b3f4984..db1bc2c50f 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 9.26
-+PERL_MOJOLICIOUS_VERSION = 9.31
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.3-Matrix
++KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.4-Matrix
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
