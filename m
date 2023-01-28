@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDDAC636CB
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C94FBC636CB
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:46:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BF8560E52;
-	Sat, 28 Jan 2023 21:45:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BF8560E52
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zDnDwF6BjCmx; Sat, 28 Jan 2023 21:45:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D38BD60E41;
-	Sat, 28 Jan 2023 21:45:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D38BD60E41
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 47C541BF861
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:45:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22C71408B7
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:45:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22C71408B7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F2DF40583;
+	Sat, 28 Jan 2023 21:46:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F2DF40583
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PinbyN5nM2sd for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P2gy_cQ7ylmM; Sat, 28 Jan 2023 21:46:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB3A2404B9;
+	Sat, 28 Jan 2023 21:46:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB3A2404B9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6036F1BF863
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:45:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4772881E07
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:45:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4772881E07
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6g4dXa4ltH7s for <buildroot@lists.busybox.net>;
  Sat, 28 Jan 2023 21:45:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40FDB404B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 746E281DAB
  for <buildroot@buildroot.org>; Sat, 28 Jan 2023 21:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40FDB404B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 746E281DAB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D5DC87F81; Sat, 28 Jan 2023 21:45:21 +0000 (UTC)
+ id 4C6FB87F7B; Sat, 28 Jan 2023 21:45:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:44:09 +0100
+Date: Sat, 28 Jan 2023 22:44:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: acc4570bf41d10573c73cda08defb385324becc6
-X-Git-Newrev: 2952832a40b08e93bb3dc614bb2068b152b1919f
+X-Git-Oldrev: 86fac589fbe1ec03ddc2478bff225e369302abfb
+X-Git-Newrev: 39886a434a121afc89cf741d0f035422a70ba524
 X-Patchwork-Hint: ignore
-Message-Id: <20230128214521.2D5DC87F81@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi: fix armv5 build
+Message-Id: <20230128214521.4C6FB87F7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi: fix riscv build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2952832a40b08e93bb3dc614bb2068b152b1919f
+commit: https://git.buildroot.net/buildroot/commit/?id=39886a434a121afc89cf741d0f035422a70ba524
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Disable neon support when not available.
 
 Fixes build error not yet found by autobuilders
 
-/tmp/cc8LvPwi.s: Assembler messages:
-/tmp/cc8LvPwi.s:28: Error: selected processor does not support `vldmia r1,{ q4-q7 }' in ARM mode
-/tmp/cc8LvPwi.s:29: Error: selected processor does not support `vldmia r0,{ q8-q11 }' in ARM mode
-/tmp/cc8LvPwi.s:30: Error: selected processor does not support `vmul.f32 q0,q8,d8[0]' in ARM mode
-/tmp/cc8LvPwi.s:31: Error: selected processor does not support `vmul.f32 q1,q8,d10[0]' in ARM mode
-/tmp/cc8LvPwi.s:32: Error: selected processor does not support `vmul.f32 q2,q8,d12[0]' in ARM mode
-/tmp/cc8LvPwi.s:33: Error: selected processor does not support `vmul.f32 q3,q8,d14[0]' in ARM mode
-/tmp/cc8LvPwi.s:34: Error: selected processor does not support `vmla.f32 q0,q9,d8[1]' in ARM mode
-/tmp/cc8LvPwi.s:35: Error: selected processor does not support `vmla.f32 q1,q9,d10[1]' in ARM mode
-/tmp/cc8LvPwi.s:36: Error: selected processor does not support `vmla.f32 q2,q9,d12[1]' in ARM mode
-/tmp/cc8LvPwi.s:37: Error: selected processor does not support `vmla.f32 q3,q9,d14[1]' in ARM mode
-/tmp/cc8LvPwi.s:38: Error: selected processor does not support `vmla.f32 q0,q10,d9[0]' in ARM mode
-/tmp/cc8LvPwi.s:39: Error: selected processor does not support `vmla.f32 q1,q10,d11[0]' in ARM mode
-/tmp/cc8LvPwi.s:40: Error: selected processor does not support `vmla.f32 q2,q10,d13[0]' in ARM mode
-/tmp/cc8LvPwi.s:41: Error: selected processor does not support `vmla.f32 q3,q10,d15[0]' in ARM mode
-/tmp/cc8LvPwi.s:42: Error: selected processor does not support `vmla.f32 q0,q11,d9[1]' in ARM mode
-/tmp/cc8LvPwi.s:43: Error: selected processor does not support `vmla.f32 q1,q11,d11[1]' in ARM mode
-/tmp/cc8LvPwi.s:44: Error: selected processor does not support `vmla.f32 q2,q11,d13[1]' in ARM mode
-/tmp/cc8LvPwi.s:45: Error: selected processor does not support `vmla.f32 q3,q11,d15[1]' in ARM mode
-/tmp/cc8LvPwi.s:46: Error: selected processor does not support `vstmia r0,{ q0-q3 }' in ARM mode
+-- System type: Linux
+CMake Error at cmake/scripts/linux/ArchSetup.cmake:42 (message):
+  Unknown CPU: riscv32
 
-with this defconfig:
+using this defconfig:
 
-BR2_arm=y
+BR2_riscv=y
+BR2_RISCV_32=y
 BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_STABLE=y
 BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
 BR2_PACKAGE_KODI=y
 BR2_PACKAGE_MESA3D=y
@@ -109,28 +89,22 @@ BR2_PACKAGE_PYTHON3_PY_ONLY=y
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi/kodi.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/kodi/kodi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index dbe6c1e8f6..7d15e992fb 100644
+index aaa165871c..093b3aa9ae 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -144,6 +144,14 @@ else
- KODI_CONF_OPTS += -DWITH_CPU=$(BR2_ARCH)
- endif
- 
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+KODI_CONF_OPTS += -DENABLE_NEON=ON
-+else ifeq ($(BR2_aarch64),y)
-+KODI_CONF_OPTS += -DENABLE_NEON=ON
-+else
-+KODI_CONF_OPTS += -DENABLE_NEON=OFF
-+endif
-+
- ifeq ($(BR2_X86_CPU_HAS_SSE),y)
- KODI_CONF_OPTS += -D_SSE_OK=ON -D_SSE_TRUE=ON
+@@ -136,7 +136,7 @@ else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
+ KODI_CONF_OPTS += \
+ 	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
+ 	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
+-else ifeq ($(BR2_or1k)$(BR2_powerpc64)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
++else ifeq ($(BR2_or1k)$(BR2_powerpc64)$(BR2_riscv)$(BR2_sparc64)$(BR2_sh4)$(BR2_xtensa),y)
+ KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
  else
+ # Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
