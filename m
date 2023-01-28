@@ -1,80 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0250C636CB
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 20:52:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3EF9C636CB
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51D4F60E41;
-	Sat, 28 Jan 2023 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51D4F60E41
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4457240620;
+	Sat, 28 Jan 2023 21:19:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4457240620
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pu_00HEBZbSa; Sat, 28 Jan 2023 20:52:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AkdJIPfWdAZW; Sat, 28 Jan 2023 21:19:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9189860AB1;
-	Sat, 28 Jan 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9189860AB1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 809A21BF327
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:52:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 810574049D;
+	Sat, 28 Jan 2023 21:19:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 810574049D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F3011BF3C0
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:19:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AC7981A3E
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AC7981A3E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6792D4049D
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:19:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6792D4049D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k8NRhcIRIJOS for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 20:52:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8012781A39
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com
- [IPv6:2607:f8b0:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8012781A39
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 20:52:24 +0000 (UTC)
-Received: by mail-pg1-x531.google.com with SMTP id q9so5284946pgq.5
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 12:52:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=iIm2lSnD2QU1q7k6E801kEdZGdppeKZyc3Ep/vTJMQk=;
- b=fjWUzOxusvry2tExiGaiMofdKS17Id+hMJMpjKTL6I4rH/i7a5ZTG4RmvSTNGUDlaj
- /PQwY5cP6WPfjXL3WTbNIrz8jH669uR7YKFXudIIDPYlBbhCIZ3vMlIJZBzRsr6bk/c9
- GiyAqD6fiG54C20qHxBS/GedJ7RPjlWJclBkL4SjNG6ojWqEqStviVleuFbBTYnwqWSl
- SgFYhTDmkQCzwiFy/Qmpr74BVr0luwVJEtVEhv0oWdhwo3rm+oSodcBUXjQrjECPjP9t
- w42NV8ijiDXY+SM9S5xtzoLPODD0o18e+rjFiPGV9fE98d4AOGkkFCshBzCLu0Sf6Xzi
- GJKw==
-X-Gm-Message-State: AFqh2kqgYQROnDLWERKrNJpxCq99Wfp6wYfdMIh+P9x8pCTrGrssCL1Y
- lf6rUPdkeFUpJMoieEYs7i41P4EPnw+l0egYyrXHEHBS
-X-Google-Smtp-Source: AMrXdXsrCXm6FkVO/KWTEeXjwzGHd/tk/9aOYMbl4fTTJ4aT3bjON5duYWZEM7zhKaafb7WEVeVltgm8bqxBmMhuncI=
-X-Received: by 2002:a62:1c86:0:b0:58d:a84a:190b with SMTP id
- c128-20020a621c86000000b0058da84a190bmr5221854pfc.48.1674939143708; Sat, 28
- Jan 2023 12:52:23 -0800 (PST)
-MIME-Version: 1.0
-From: Ra C <rcrichlow9000@gmail.com>
-Date: Sat, 28 Jan 2023 14:52:12 -0600
-Message-ID: <CACHw65JhmQX27SkN0jSMAD-P=UuwOizZc+sG+WatprbH_PFFyQ@mail.gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UW-OhMRL1VtU for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 21:19:03 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 70594400AC
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 21:19:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70594400AC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5BE9C87D85; Sat, 28 Jan 2023 21:19:03 +0000 (UTC)
 To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=iIm2lSnD2QU1q7k6E801kEdZGdppeKZyc3Ep/vTJMQk=;
- b=AJ2vXpmtZ588+UXQrd1zPnh0TAunb+UXuKyxwg51Fr+LqLBJ5XV03b0/BNULLwb4xN
- NVOKmavCtjTTsvanGAP42uihisYU+ErI7N+T9AV42Z+fj7qxHjgOPqpbF3Mm4kdR8VJL
- lNXOf64TCF4PkHoycu45oW5tkFfDZRHv1qyXSIOR8GCILUqJOLxoCRq18G8rcr1lgZp7
- eslbMB0I5eU/OmdWdKwwLSU5YOF0ooj36BT/C/MYn32TXdszWDTIXZz6u1FsBZcbeiZB
- fPqEkA7yZytjSKK0+kLUVSsCElY7M3R18YVo7j7U8cZSBwcyFSD6pImnKTJXzEhMIay3
- hWhg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=AJ2vXpmt
-Subject: [Buildroot] stm32mp1 kernel won't boot on custom board
+Date: Sat, 28 Jan 2023 22:14:10 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2b43579e9453a4e4f0d25d902634ebd9f1721dfc
+X-Git-Newrev: e75f402ba6dbba26f4f35e0b064b269d75c9f6f2
+X-Patchwork-Hint: ignore
+Message-Id: <20230128211903.5BE9C87D85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mobile-broadband-provider-info:
+ bump version to 20221107
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,65 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6262639900220626852=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6262639900220626852==
-Content-Type: multipart/alternative; boundary="000000000000ae664e05f3592853"
+commit: https://git.buildroot.net/buildroot/commit/?id=e75f402ba6dbba26f4f35e0b064b269d75c9f6f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---000000000000ae664e05f3592853
-Content-Type: text/plain; charset="UTF-8"
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../mobile-broadband-provider-info.hash                               | 4 ++--
+ .../mobile-broadband-provider-info/mobile-broadband-provider-info.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I have a custom stm32mp157a board which runs OK with a modified 5.4 kernel.
-I want to migrate to the latest stm supported kernel.
-I built a stm32mp157a_dk1 target using the BR2_EXTERNAL feature described
-here: https://github.com/bootlin/buildroot-external-st which builds a 5.15
-kernel.
-
-Using the same dtb , the 5.15 kernel fails to mount the root device (a
-micro sd card on SDMMC1) and gets stuck in a loop looking for a device
-matching the PARTUUID in class_find_device().  The only devices listed are
-loop and ram.
-
-The probe function in drivers/mmc/host/mmci.c, which gets called in the
-working kernel prior to mounting the root device does not get called with
-the 5.15 kernel.
-
-I don't understand why this is happening given that the same device tree is
-used in both cases and not sure where next to look.
-
---000000000000ae664e05f3592853
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">I have a custom stm32mp157a board which runs OK with a mod=
-ified 5.4 kernel.<div>I want to migrate to the latest stm supported kernel.=
-</div><div>I built a stm32mp157a_dk1 target using the BR2_EXTERNAL feature =
-described here: <a href=3D"https://github.com/bootlin/buildroot-external-st=
-" target=3D"_blank">https://github.com/bootlin/buildroot-external-st</a> wh=
-ich builds a 5.15 kernel.</div><div><br></div><div>Using the same dtb , the=
- 5.15 kernel fails to mount the root device (a micro sd card on SDMMC1) and=
- gets stuck in a loop looking for a device matching the PARTUUID in=C2=A0cl=
-ass_find_device().=C2=A0 The only devices listed are loop and ram.</div><di=
-v><br></div><div>The probe function in drivers/mmc/host/mmci.c, which gets =
-called in the working kernel prior to mounting the root device does not get=
- called with the 5.15 kernel.</div><div><br></div><div>I don&#39;t understa=
-nd why this is happening given that the same device tree is used in both ca=
-ses and not sure where next to look.</div><div><br><div><br></div></div></d=
-iv>
-
---000000000000ae664e05f3592853--
-
---===============6262639900220626852==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/mobile-broadband-provider-info/mobile-broadband-provider-info.hash b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.hash
+index b0c0db1b84..c965f5c783 100644
+--- a/package/mobile-broadband-provider-info/mobile-broadband-provider-info.hash
++++ b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/mobile-broadband-provider-info/20190618/mobile-broadband-provider-info-20190618.sha256sum
+-sha256  c22d64a565d1975b9eecb6ed2eeaef18634bc6f385c8137d05e845d8fb3cce5b  mobile-broadband-provider-info-20190618.tar.xz
++# https://download.gnome.org/sources/mobile-broadband-provider-info/20221107/mobile-broadband-provider-info-20221107.sha256sum
++sha256  d93392566c347a96eed95da8c66a5da0dd94f4115cfb3a305ff2682c64cfd810  mobile-broadband-provider-info-20221107.tar.xz
+ # Locally computed
+ sha256  3d510b215a33087b9ceb9592da21575ea1f9f98bd4d983a38e65fe851a552174  COPYING
+diff --git a/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
+index ca6a8387c5..2744844951 100644
+--- a/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
++++ b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20190618
++MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20221107
+ MOBILE_BROADBAND_PROVIDER_INFO_SITE = https://download.gnome.org/sources/mobile-broadband-provider-info/$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION)
+ MOBILE_BROADBAND_PROVIDER_INFO_SOURCE = mobile-broadband-provider-info-$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION).tar.xz
+ MOBILE_BROADBAND_PROVIDER_INFO_LICENSE = Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6262639900220626852==--
