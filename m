@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3AD0C38142
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8A96C636CB
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 21:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51DF460750;
-	Sat, 28 Jan 2023 21:51:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51DF460750
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45492410CB;
+	Sat, 28 Jan 2023 21:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45492410CB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z6ZIAieWj3jO; Sat, 28 Jan 2023 21:51:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4573C408DD;
+	Sat, 28 Jan 2023 21:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4573C408DD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 96DC01BF3C0
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:50:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 70A0760C12
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:50:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70A0760C12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hJgNZycETuBq; Sat, 28 Jan 2023 21:51:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F07360C12;
-	Sat, 28 Jan 2023 21:51:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F07360C12
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DB3891BF3C0
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:50:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C09A981638
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 21:50:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C09A981638
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NnmueQ8ZNVD1 for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 21:50:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E359B81B83
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 21:50:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E359B81B83
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1EE287FA5; Sat, 28 Jan 2023 21:50:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:46:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 760894b72ed465f426cf848f561200a4656eda4a
-X-Git-Newrev: 9237132895d3a15f18fb563e189146c067c26aec
-X-Patchwork-Hint: ignore
-Message-Id: <20230128215043.D1EE287FA5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-vmware:
- bump version to 13.4.0
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qWyB43IPNU27 for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 21:50:58 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BD5D60750
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4BD5D60750
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 21:50:58 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4EBA020002;
+ Sat, 28 Jan 2023 21:50:56 +0000 (UTC)
+Date: Sat, 28 Jan 2023 22:50:55 +0100
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230128225055.4bd03d57@windsurf>
+In-Reply-To: <20230127190634.51992-1-bernd.kuhls@t-online.de>
+References: <20230127190634.51992-1-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1674942656;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=gbjT5cq5Nzh/2PaKkGGg5tsddhq+7rBsPnp3W9T7DUw=;
+ b=SsQm1tYUBVp7znuW8MBaWhnepgS/ZGTzOXicXMp6dTU1ambtOWPu+pt5n8Eu2IQ0FOX6/N
+ s7JhAlQmSSKuutpMmn45MtNPmvvQPOvhTPaf+EwD+LmuQvB/lkLw/TjXXyIJ6y1F3Ka26A
+ GtgYUVdSwm5hvpPuMrBAo4zQ9Ft2QUGGlYEkz2ns3/EDp1//c/O6qKmqmlSVrwlmWf9/J5
+ 6Q0eltTJubbUFUDY8x4NzX0H+XH7HMWLmUNx4jIUOmjNsIo46+mA5aaS2LK1NvFIFwDMP8
+ xXpj/YEQzdklSajvUnTdTJIPPblbuqHJJHLjp7TLskWuHx3OWE21k90v1wMSqw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SsQm1tYU
+Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,59 +78,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>, "Yann E
+ . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9237132895d3a15f18fb563e189146c067c26aec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 27 Jan 2023 20:06:34 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-January/003315.html
+> Release notes:
+> https://lists.freedesktop.org/archives/mesa-announce/2023-January/000703.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+>  package/mesa3d/mesa3d.hash               | 6 +++---
+>  package/mesa3d/mesa3d.mk                 | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
-Switched tarball to xz and _SITE to https.
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash      | 8 +++-----
- .../x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk  | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
-index fc69e01ffe..a6415703be 100644
---- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
-+++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-May/002895.html
--md5  08d66d062055080ff699ab4869726ea2  xf86-video-vmware-13.3.0.tar.bz2
--sha1  f01335fe6bdb507e749571bfcd69163aed97312a  xf86-video-vmware-13.3.0.tar.bz2
--sha256  47971924659e51666a757269ad941a059ef5afe7a47b5101c174a6022ac4066c  xf86-video-vmware-13.3.0.tar.bz2
--sha512  c318de893cae7b2b11e11c1b389ee47478b7c8d1f52c27099dbe453efec28f3e9da449217307a8c2251999eada66312f766996be1a6ead413b8b6dedc42c68ca  xf86-video-vmware-13.3.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-January/003315.html
-+sha256  aed31ee5ed5ecc6e2226705383e7ad06f7602c1376a295305f376b17af3eb81a  xf86-video-vmware-13.4.0.tar.xz
-+sha512  7cacde21a490501dd9c2e9121040274c1f6ef64e6dc0ef49946b400f6297fab73a6e9548e45fe8930cee9028e65e45aaff9ba489dd69ac75a5133114726bf55d  xf86-video-vmware-13.4.0.tar.xz
- # Locally computed
- sha256  7e59b8ca2a161855a60561f27ada8dfdbb678733eacdb23423fff6d21f9ad43b  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-index 5f0cb77bf8..37c2d67c19 100644
---- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-+++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.3.0
--XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_VMWARE_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.4.0
-+XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_VMWARE_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
- XDRIVER_XF86_VIDEO_VMWARE_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_VMWARE_DEPENDENCIES = mesa3d xserver_xorg-server xorgproto
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
