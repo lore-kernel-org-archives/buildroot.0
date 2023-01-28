@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05966C636CB
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 22:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 146D0C38142
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jan 2023 22:03:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 510FB416BA;
-	Sat, 28 Jan 2023 22:03:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 510FB416BA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87DCD416DC;
+	Sat, 28 Jan 2023 22:03:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87DCD416DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tb2nnBp4QuMT; Sat, 28 Jan 2023 22:03:37 +0000 (UTC)
+	with ESMTP id 1pVpOPzhe9pu; Sat, 28 Jan 2023 22:03:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8D80416BF;
-	Sat, 28 Jan 2023 22:03:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8D80416BF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EC7F61BF3C0
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 22:03:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15EF9416DB;
+	Sat, 28 Jan 2023 22:03:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15EF9416DB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A0171BF3C0
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 22:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C360260E41
- for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 22:03:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C360260E41
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14938416BF
+ for <buildroot@lists.busybox.net>; Sat, 28 Jan 2023 22:03:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14938416BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cFKze0aiUL85 for <buildroot@lists.busybox.net>;
- Sat, 28 Jan 2023 22:03:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m07kcQSP6b85 for <buildroot@lists.busybox.net>;
+ Sat, 28 Jan 2023 22:03:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB69A60C2C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6B9C416BA
  for <buildroot@buildroot.org>; Sat, 28 Jan 2023 22:03:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB69A60C2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6B9C416BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B78AD87FBC; Sat, 28 Jan 2023 22:03:33 +0000 (UTC)
+ id C2BAB87FBD; Sat, 28 Jan 2023 22:03:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:55:56 +0100
+Date: Sat, 28 Jan 2023 22:56:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c7a8620d69a154b9ff71005603509c1d5cfd269
-X-Git-Newrev: d33a8417bf1bc5d7276e19da5c37da210d4de31a
+X-Git-Oldrev: d33a8417bf1bc5d7276e19da5c37da210d4de31a
+X-Git-Newrev: e43a3c785b9666f3144e7905b27af920fff913e9
 X-Patchwork-Hint: ignore
-Message-Id: <20230128220333.B78AD87FBC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2: security bump to version
- 2.26.2
+Message-Id: <20230128220333.C2BAB87FBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kvm-unit-tests: bump to version
+ 2023-01-05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,132 +64,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d33a8417bf1bc5d7276e19da5c37da210d4de31a
+commit: https://git.buildroot.net/buildroot/commit/?id=e43a3c785b9666f3144e7905b27af920fff913e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop patch (already in version)
-- Fix CVE-2022-4743: A potential memory leak issue was discovered in
-  SDL2 in GLES_CreateTexture() function in SDL_render_gles.c. The
-  vulnerability allows an attacker to cause a denial of service attack.
+A new kvm-unit-tests version has recently been tagged, so let's
+update to that version now.
+This new version now features a --disable-werror parameter for
+the configure script, so we can drop the patch for disabling
+this manually now.
 
-https://github.com/libsdl-org/SDL/releases/tag/release-2.26.0
-https://github.com/libsdl-org/SDL/releases/tag/release-2.26.1
-https://github.com/libsdl-org/SDL/releases/tag/release-2.26.2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...oesn-t-have-a-mode-configured-use-the-pre.patch | 76 ----------------------
- package/sdl2/sdl2.hash                             |  4 +-
- package/sdl2/sdl2.mk                               |  2 +-
- 3 files changed, 3 insertions(+), 79 deletions(-)
+ ...ile-remove-Werror-to-avoid-build-failures.patch | 30 ----------------------
+ package/kvm-unit-tests/kvm-unit-tests.hash         |  2 +-
+ package/kvm-unit-tests/kvm-unit-tests.mk           |  3 ++-
+ 3 files changed, 3 insertions(+), 32 deletions(-)
 
-diff --git a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch b/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
+diff --git a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
 deleted file mode 100644
-index c8be280c56..0000000000
---- a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
+index d07b9b6912..0000000000
+--- a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
 +++ /dev/null
-@@ -1,76 +0,0 @@
--From da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29 Mon Sep 17 00:00:00 2001
--From: Sam Lantinga <slouken@libsdl.org>
--Date: Fri, 18 Nov 2022 12:17:27 -0800
--Subject: [PATCH] If a CRTC doesn't have a mode configured, use the preferred
-- or largest mode as the default mode
+@@ -1,30 +0,0 @@
+-From 08e14a662b9e75daec29722e49150869952ba1b6 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 20 Nov 2017 22:09:39 +0100
+-Subject: [PATCH] Makefile: remove -Werror to avoid build failures
 -
--Fixes https://github.com/libsdl-org/SDL/issues/6421
--
--[mf@go-sys.de: backport from upstream]
--Signed-off-by: Michael Fischer <mf@go-sys.de>
--[yann.morin.1998@free.fr: do an actual backport]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[Matthew: Refactoring of Thomas Petazzoni's original.]
+-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+-[Fabrice: updated for 2022-03-08]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- src/video/kmsdrm/SDL_kmsdrmvideo.c | 35 +++++++++++++++++++++++++-----
-- 1 file changed, 29 insertions(+), 6 deletions(-)
+- Makefile | 1 -
+- 1 file changed, 1 deletion(-)
 -
--diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
--index eae721455..eeeefef2b 100644
----- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
--+++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
--@@ -666,8 +666,8 @@ KMSDRM_CrtcGetVrr(uint32_t drm_fd, uint32_t crtc_id)
-- /* Gets a DRM connector, builds an SDL_Display with it, and adds it to the
--    list of SDL Displays in _this->displays[]  */
-- static void
---KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
---
--+KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources)
--+{
--     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
--     SDL_DisplayData *dispdata = NULL;
--     SDL_VideoDisplay display = {0};
--@@ -770,14 +770,37 @@ KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
--         drmModeModeInfo *mode = &connector->modes[i];
+-diff --git a/Makefile b/Makefile
+-index 7231334..d9ad42b 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -53,7 +53,7 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
 - 
--         if (!SDL_memcmp(mode, &crtc->mode, sizeof(crtc->mode))) {
---          mode_index = i;
---          break;
--+            mode_index = i;
--+            break;
--         }
--     }
-- 
--     if (mode_index == -1) {
---      ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
---      goto cleanup;
--+        int current_area, largest_area = 0;
--+
--+        /* Find the preferred mode or the highest resolution mode */
--+        for (i = 0; i < connector->count_modes; i++) {
--+            drmModeModeInfo *mode = &connector->modes[i];
--+
--+            if (mode->type & DRM_MODE_TYPE_PREFERRED) {
--+                mode_index = i;
--+                break;
--+            }
--+
--+            current_area = mode->hdisplay * mode->vdisplay;
--+            if (current_area > largest_area) {
--+                mode_index = i;
--+                largest_area = current_area;
--+            }
--+        }
--+        if (mode_index != -1) {
--+            crtc->mode = connector->modes[mode_index];
--+        }
--+    }
--+
--+    if (mode_index == -1) {
--+        ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
--+        goto cleanup;
--     }
-- 
--     /*********************************************/
---- 
--2.25.1
+- COMMON_CFLAGS += -g $(autodepend-flags) -fno-strict-aliasing -fno-common
+- COMMON_CFLAGS += -Wall -Wwrite-strings -Wempty-body -Wuninitialized
+--COMMON_CFLAGS += -Wignored-qualifiers -Werror -Wno-missing-braces
+-+COMMON_CFLAGS += -Wignored-qualifiers -Wno-missing-braces
 -
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 923a900dc0..86e0d86e7c 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.2.tar.gz.sig
--sha256  b35ef0a802b09d90ed3add0dcac0e95820804202914f5bb7b0feb710f1a1329f  SDL2-2.24.2.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.2.tar.gz.sig
-+sha256  95d39bc3de037fbdfa722623737340648de4f180a601b0afad27645d150b99e0  SDL2-2.26.2.tar.gz
- # Locally calculated
- sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index a1dc8b5b73..8995178e71 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
+- frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
+- fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
+-- 
+-2.14.2
+-
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.hash b/package/kvm-unit-tests/kvm-unit-tests.hash
+index 42c3b4a241..3b6d02dd8e 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.hash
++++ b/package/kvm-unit-tests/kvm-unit-tests.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c2edf2b188033a5d634150ecc797c797a85e5af8e3ef4ac3e583f60b2ee7bcf3  kvm-unit-tests-v2022-03-08.tar.bz2
++sha256  9c9b093ffe3fa33145a53102de9c3e2d55cd0cdc8a20cf172b726296ffe22f4f  kvm-unit-tests-v2023-01-05.tar.bz2
+ sha256  d9bbb60891710d248f01c8bdac50ef7ad39188de512610437872e83112b38a1b  COPYRIGHT
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index dd8f153710..956f07b304 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_VERSION = 2.24.2
-+SDL2_VERSION = 2.26.2
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+-KVM_UNIT_TESTS_VERSION = 2022-03-08
++KVM_UNIT_TESTS_VERSION = 2023-01-05
+ KVM_UNIT_TESTS_SOURCE = kvm-unit-tests-v$(KVM_UNIT_TESTS_VERSION).tar.bz2
+ KVM_UNIT_TESTS_SITE = https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/archive/v$(KVM_UNIT_TESTS_VERSION)
+ KVM_UNIT_TESTS_LICENSE = GPL-2.0, LGPL-2.0
+@@ -31,6 +31,7 @@ KVM_UNIT_TESTS_ENDIAN = big
+ endif
+ 
+ KVM_UNIT_TESTS_CONF_OPTS =\
++	--disable-werror \
+ 	--arch="$(KVM_UNIT_TESTS_ARCH)" \
+ 	--processor="$(GCC_TARGET_CPU)" \
+ 	--endian="$(KVM_UNIT_TESTS_ENDIAN)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
