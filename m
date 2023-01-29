@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D002C54EED
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 21:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3130C05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 21:07:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B5654160A;
-	Sun, 29 Jan 2023 21:07:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B5654160A
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0E848161D;
+	Sun, 29 Jan 2023 21:07:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0E848161D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yiM81xuntonW; Sun, 29 Jan 2023 21:07:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ekVHBvvOBF0O; Sun, 29 Jan 2023 21:07:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03FD8409A5;
-	Sun, 29 Jan 2023 21:07:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03FD8409A5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D51351BF576
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 21:06:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDA6981451;
+	Sun, 29 Jan 2023 21:07:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDA6981451
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BBA121BF576
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 21:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB8EC400CC
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 21:06:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB8EC400CC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 877DA60AEA
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 21:07:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 877DA60AEA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JY1XLbqUOPq6 for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 21:06:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3FZs-W_6VDVX for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 21:07:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2FC4403A2
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 21:06:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2FC4403A2
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1EE86077D
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 21:07:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1EE86077D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A9A387C4F; Sun, 29 Jan 2023 21:06:21 +0000 (UTC)
+ id A19F27F8DD; Sun, 29 Jan 2023 21:07:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 21:57:26 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 0682418f5a763dd83b443385c24cbccbe313f1a2
-X-Git-Newrev: 85e4bb34379126110a34785d7645929f1c3874eb
+Date: Sun, 29 Jan 2023 22:02:50 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: ae835e094f607d69f1c2581593a4c55723486c39
+X-Git-Newrev: 72c06e17641da8f3404e5969b78d000d508a0c2d
 X-Patchwork-Hint: ignore
-Message-Id: <20230129210621.9A9A387C4F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/ipmitool: fix
- broken IANA PEN registry URL
+Message-Id: <20230129210737.A19F27F8DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/xxhash: set
+ XXH_NO_INLINE_HINTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,63 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85e4bb34379126110a34785d7645929f1c3874eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=72c06e17641da8f3404e5969b78d000d508a0c2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Backport the upstream fix for the IANA Private Enterprise Numbers
-registry URL so the correct file gets downloaded and installed.
+Set XXH_NO_INLINE_HINTS to marks all internal functions as static,
+giving the compiler full control on whether to inline or not. This will
+fix the following build failure raised since bump to version 0.8.1 in
+commit 5dbdb2535c649ee617595b8c4ae3cbba0ee37b97:
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+In file included from xxhash.c:43:
+In function 'XXH3_accumulate',
+    inlined from 'XXH3_hashLong_internal_loop' at xxhash.h:4390:9,
+    inlined from 'XXH3_hashLong_64b_internal' at xxhash.h:4453:5,
+    inlined from 'XXH3_hashLong_64b_withSecret' at xxhash.h:4473:12,
+    inlined from 'XXH3_64bits_internal' at xxhash.h:4554:12,
+    inlined from 'XXH3_64bits_withSecret' at xxhash.h:4570:12:
+xxhash.h:4196:1: error: inlining failed in call to 'always_inline' 'XXH3_accumulate_512_scalar': function not considered for inlining
+ 4196 | XXH3_accumulate_512_scalar(void* XXH_RESTRICT acc,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f2c52238df97cc4c13117d8dc1423235231a094c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4b6ccffcfb84938d2f0813d7c98907d75b49b842)
+(cherry picked from commit 94b66fb49cd57d0863245fbe0a3dc0833e76aad0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../ipmitool/0002-Fix-enterprise-numbers-URL.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/xxhash/xxhash.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ipmitool/0002-Fix-enterprise-numbers-URL.patch b/package/ipmitool/0002-Fix-enterprise-numbers-URL.patch
-new file mode 100644
-index 0000000000..07cdbd4527
---- /dev/null
-+++ b/package/ipmitool/0002-Fix-enterprise-numbers-URL.patch
-@@ -0,0 +1,36 @@
-+From 1edb0e27e44196d1ebe449aba0b9be22d376bcb6 Mon Sep 17 00:00:00 2001
-+From: Alexander Amelkin <alexander@amelkin.msk.ru>
-+Date: Tue, 22 Nov 2022 13:55:33 +0300
-+Subject: [PATCH] Fix enterprise-numbers URL
-+
-+IANA has changed their URL scheme, and the content at the old URL for
-+enterprise-numbers switched from text/plain to text/html.
-+
-+Fix Makefile.am to use the new URL
-+
-+Resolves ipmitool/ipmitool#377
-+
-+Signed-off-by: Alexander Amelkin <alexander@amelkin.msk.ru>
-+
-+[vfazio: backport from upstream 1edb0e27e44196d1ebe449aba0b9be22d376bcb6]
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index ce3267f..3182a52 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -41,7 +41,7 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure configure-stamp \
-+ 	$(distdir).tar.gz $(distdir).tar.bz2
-+ 
-+ SUBDIRS = lib src include doc contrib control
-+-IANA_PEN = http://www.iana.org/assignments/enterprise-numbers
-++IANA_PEN = http://www.iana.org/assignments/enterprise-numbers.txt
-+ 
-+ dist-hook:
-+ 	cp control/ipmitool.spec $(distdir)
-+-- 
-+2.25.1
-+
+diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
+index 04bc98690f..40e3c2696c 100644
+--- a/package/xxhash/xxhash.mk
++++ b/package/xxhash/xxhash.mk
+@@ -28,6 +28,7 @@ endif
+ 
+ define XXHASH_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		CFLAGS="$(TARGET_CFLAGS) -DXXH_NO_INLINE_HINTS" \
+ 		$(XXHASH_TARGETS)
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
