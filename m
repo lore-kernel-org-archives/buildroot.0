@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AB63C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:47:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E494AC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:47:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38A31840B3;
-	Mon, 20 Feb 2023 23:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38A31840B3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C8AA83E09;
+	Mon, 20 Feb 2023 23:47:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C8AA83E09
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ddw8bcaWhJom; Mon, 20 Feb 2023 23:47:19 +0000 (UTC)
+	with ESMTP id 1z4eusLrQxEL; Mon, 20 Feb 2023 23:47:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E17384101;
-	Mon, 20 Feb 2023 23:47:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E17384101
+	by smtp1.osuosl.org (Postfix) with ESMTP id D373183EE1;
+	Mon, 20 Feb 2023 23:47:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D373183EE1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 66CC41BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0B9741BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6C5541779
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF4DB4176D
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6C5541779
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF4DB4176D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M9cfjdFVDkCY for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+ with ESMTP id ZhrtOId4RJKH for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C1E744176D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1E744176D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DE8B41774
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DE8B41774
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B11FF86495; Mon, 20 Feb 2023 20:52:42 +0000 (UTC)
+ id 1964586495; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 22:56:22 +0100
+Date: Sun, 29 Jan 2023 16:32:04 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d33a8417bf1bc5d7276e19da5c37da210d4de31a
-X-Git-Newrev: e43a3c785b9666f3144e7905b27af920fff913e9
+X-Git-Oldrev: a97ab5d2faf4c0498e1c7b4eb68f98fc2eb78060
+X-Git-Newrev: b535fd2a093eca5e8967a5c8004da55f7295d101
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205242.B11FF86495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kvm-unit-tests: bump
- to version 2023-01-05
+Message-Id: <20230220205243.1964586495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/multipath-tools: bump
+ to version 0.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,97 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e43a3c785b9666f3144e7905b27af920fff913e9
+commit: https://git.buildroot.net/buildroot/commit/?id=b535fd2a093eca5e8967a5c8004da55f7295d101
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-A new kvm-unit-tests version has recently been tagged, so let's
-update to that version now.
-This new version now features a --disable-werror parameter for
-the configure script, so we can drop the patch for disabling
-this manually now.
-
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ile-remove-Werror-to-avoid-build-failures.patch | 30 ----------------------
- package/kvm-unit-tests/kvm-unit-tests.hash         |  2 +-
- package/kvm-unit-tests/kvm-unit-tests.mk           |  3 ++-
- 3 files changed, 3 insertions(+), 32 deletions(-)
+ package/multipath-tools/multipath-tools.hash | 2 +-
+ package/multipath-tools/multipath-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-deleted file mode 100644
-index d07b9b6912..0000000000
---- a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 08e14a662b9e75daec29722e49150869952ba1b6 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 20 Nov 2017 22:09:39 +0100
--Subject: [PATCH] Makefile: remove -Werror to avoid build failures
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Matthew: Refactoring of Thomas Petazzoni's original.]
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
--[Fabrice: updated for 2022-03-08]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 7231334..d9ad42b 100644
----- a/Makefile
--+++ b/Makefile
--@@ -53,7 +53,7 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
-- 
-- COMMON_CFLAGS += -g $(autodepend-flags) -fno-strict-aliasing -fno-common
-- COMMON_CFLAGS += -Wall -Wwrite-strings -Wempty-body -Wuninitialized
---COMMON_CFLAGS += -Wignored-qualifiers -Werror -Wno-missing-braces
--+COMMON_CFLAGS += -Wignored-qualifiers -Wno-missing-braces
--
-- frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
-- fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
--- 
--2.14.2
--
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.hash b/package/kvm-unit-tests/kvm-unit-tests.hash
-index 42c3b4a241..3b6d02dd8e 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.hash
-+++ b/package/kvm-unit-tests/kvm-unit-tests.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c2edf2b188033a5d634150ecc797c797a85e5af8e3ef4ac3e583f60b2ee7bcf3  kvm-unit-tests-v2022-03-08.tar.bz2
-+sha256  9c9b093ffe3fa33145a53102de9c3e2d55cd0cdc8a20cf172b726296ffe22f4f  kvm-unit-tests-v2023-01-05.tar.bz2
- sha256  d9bbb60891710d248f01c8bdac50ef7ad39188de512610437872e83112b38a1b  COPYRIGHT
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index dd8f153710..956f07b304 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index 6f893d37ce..3f01408c76 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  7d5af5d86e43b757e253d1ba244aa8a9c09bfbb1677a72accb799b1bfcc0a9ac  multipath-tools-0.9.3.tar.gz
++sha256  6ed3cf6e786da20a451d9747cbd4c5817815388b8fc8022d1074b3018479031d  multipath-tools-0.9.4.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index d6abf68ca0..90394fae9f 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KVM_UNIT_TESTS_VERSION = 2022-03-08
-+KVM_UNIT_TESTS_VERSION = 2023-01-05
- KVM_UNIT_TESTS_SOURCE = kvm-unit-tests-v$(KVM_UNIT_TESTS_VERSION).tar.bz2
- KVM_UNIT_TESTS_SITE = https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/archive/v$(KVM_UNIT_TESTS_VERSION)
- KVM_UNIT_TESTS_LICENSE = GPL-2.0, LGPL-2.0
-@@ -31,6 +31,7 @@ KVM_UNIT_TESTS_ENDIAN = big
- endif
+-MULTIPATH_TOOLS_VERSION = 0.9.3
++MULTIPATH_TOOLS_VERSION = 0.9.4
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
  
- KVM_UNIT_TESTS_CONF_OPTS =\
-+	--disable-werror \
- 	--arch="$(KVM_UNIT_TESTS_ARCH)" \
- 	--processor="$(GCC_TARGET_CPU)" \
- 	--endian="$(KVM_UNIT_TESTS_ENDIAN)"
+ MULTIPATH_TOOLS_LICENSE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
