@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32B8CC05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 16:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA90CC61D97
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 16:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CCE60404B3;
-	Sun, 29 Jan 2023 16:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCE60404B3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2AF5881771;
+	Sun, 29 Jan 2023 16:30:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AF5881771
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RzqRsruiE6PM; Sun, 29 Jan 2023 16:27:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q1xSgusbdhkC; Sun, 29 Jan 2023 16:30:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D54ED4026F;
-	Sun, 29 Jan 2023 16:27:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D54ED4026F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A2508176E;
+	Sun, 29 Jan 2023 16:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A2508176E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 307701BF476
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:27:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5C8481BF476
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:30:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0A49E410A0
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:27:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A49E410A0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 434C741554
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:30:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 434C741554
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B4LR6zMBamsL for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 16:27:13 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2BF74109B
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2BF74109B
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:27:12 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id B2E405FFA6;
- Sun, 29 Jan 2023 17:27:06 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Jan 2023 17:27:06 +0100
-Date: Sun, 29 Jan 2023 17:27:06 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Dimi Tomov <dimi@tpm.dev>
-Message-ID: <20230129162706.GJ2632@scaer>
-References: <20230129074509.246281-1-dimi@tpm.dev>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230129074509.246281-1-dimi@tpm.dev>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675009629;
- bh=qgc4OJNR1f/uM939ecaPLPpOXhzxdTpoiazn5AGqXdE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uUR++8//kFpPTFqkNUyUDOvjeRvYaQxWxpzWz6W3LzguJInfaqGWoP+PYmSWzP9Kx
- UAVSzne7dTVt0If25aPYPOjnIIERbF792C2B29kOObtpsV6uoESJNxfdx49tMUxgjJ
- WfjrLL5vUW3Ls/XJSeR9qB+FI6TYKRXmjbSpI6KvJWcndaEIbPfdgbFy5B5GxsVlFx
- Jr/v08igi6xEXSqPL9l2cl+CxBlA2MBFRrLw/5aQzABVuQ3ZxDDsGvIa9GgTrHZMU9
- upkZSddguPe1IWfS4tWecz5Q+a7q6chKYs6jwLaUDWnm7WKhqr8S/BpxYbrrgY0WW4
- 4tpKm0Newczmw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uUR++8//
-Subject: Re: [Buildroot] [PATCH 1/1] package/wolftpm: bump version to v2.7.0
+ with ESMTP id Eu5hHnLhACjc for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 16:30:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D01C41553
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D01C41553
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 26F3B880BF; Sun, 29 Jan 2023 16:30:21 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 29 Jan 2023 17:30:00 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1e2e6e011a26d013869398299fc7bded38e8fdd7
+X-Git-Newrev: 4f97275bc78b717bec0c5d1efaaf73a0e6e36f53
+X-Patchwork-Hint: ignore
+Message-Id: <20230129163021.26F3B880BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ethtool: fix musl-libc builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,66 +56,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dimi, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4f97275bc78b717bec0c5d1efaaf73a0e6e36f53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-01-29 09:45 +0200, Dimi Tomov spake thusly:
-> From: Dimitar Tomov <dimi@tpm.dev>
-> 
-> Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+Upstream commit 1fa60003a8b8 made a change to headers that broke
+compiles for musl-libc based builds.
 
-Applied to master, thanks.
+Apply the patch slated to address the issue.
 
-Regards,
-Yann E. MORIN.
+Fixes:
+  - http://autobuild.buildroot.net/results/eafd07dddfe7e8b714fc3fcaf77a2d7150694ee2/
 
-> ---
->  package/wolftpm/wolftpm.hash | 2 +-
->  package/wolftpm/wolftpm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
-> index 735c731a53..3329528095 100644
-> --- a/package/wolftpm/wolftpm.hash
-> +++ b/package/wolftpm/wolftpm.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  78331cc2d98339247857f5ceb3e7cd3c4f5773e3d81bf1d73e8df9446e37472b  wolftpm-2.6.0.tar.gz
-> +sha256  d8e06e77893f104be7eb9421cac50518552ad9c5fc7fe8a9c1cdfaf4f11b92df  wolftpm-2.7.0.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-> diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
-> index 398fa668af..db332712f5 100644
-> --- a/package/wolftpm/wolftpm.mk
-> +++ b/package/wolftpm/wolftpm.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WOLFTPM_VERSION = 2.6.0
-> +WOLFTPM_VERSION = 2.7.0
->  WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
->  WOLFTPM_INSTALL_STAGING = YES
->  WOLFTPM_LICENSE = GPL-2.0+
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0002-marvell.c-Fix-build-with-musl-libc.patch  | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch b/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch
+new file mode 100644
+index 0000000000..f13edbbe50
+--- /dev/null
++++ b/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch
+@@ -0,0 +1,71 @@
++From a26296eea68aa6c16b253f34825c9b9007269672 Mon Sep 17 00:00:00 2001
++From: Florian Fainelli <f.fainelli@gmail.com>
++Date: Sat, 14 Jan 2023 08:34:11 -0800
++Subject: [PATCH] marvell.c: Fix build with musl-libc
++
++After commit 1fa60003a8b8 ("misc: header includes cleanup") we stopped
++including net/if.h which resolved the proper defines to pull in
++sys/types.h and provide a definition for u_int32_t. With musl-libc we
++would need to define _GNU_SOURCE to ensure that sys/types.h does provide a
++definition for u_int32_t.
++
++Rather, just replace u_uint{16,32}_t with the more standard
++uint{16,32}_t types from stdint.h
++
++Fixes: 1fa60003a8b8 ("misc: header includes cleanup")
++Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
++
++[Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20230114163411.3290201-4-f.fainelli@gmail.com/]
++Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
++---
++ marvell.c | 34 +++++++++++++++++-----------------
++ 1 file changed, 17 insertions(+), 17 deletions(-)
++
++diff --git a/marvell.c b/marvell.c
++index d3d570e..3f3aed8 100644
++--- a/marvell.c
+++++ b/marvell.c
++@@ -31,23 +31,23 @@ static void dump_timer(const char *name, const void *p)
++ static void dump_queue(const char *name, const void *a, int rx)
++ {
++ 	struct desc {
++-		u_int32_t		ctl;
++-		u_int32_t		next;
++-		u_int32_t		data_lo;
++-		u_int32_t		data_hi;
++-		u_int32_t		status;
++-		u_int32_t		timestamp;
++-		u_int16_t		csum2;
++-		u_int16_t		csum1;
++-		u_int16_t		csum2_start;
++-		u_int16_t		csum1_start;
++-		u_int32_t		addr_lo;
++-		u_int32_t		addr_hi;
++-		u_int32_t		count_lo;
++-		u_int32_t		count_hi;
++-		u_int32_t               byte_count;
++-		u_int32_t               csr;
++-		u_int32_t               flag;
+++		uint32_t		ctl;
+++		uint32_t		next;
+++		uint32_t		data_lo;
+++		uint32_t		data_hi;
+++		uint32_t		status;
+++		uint32_t		timestamp;
+++		uint16_t		csum2;
+++		uint16_t		csum1;
+++		uint16_t		csum2_start;
+++		uint16_t		csum1_start;
+++		uint32_t		addr_lo;
+++		uint32_t		addr_hi;
+++		uint32_t		count_lo;
+++		uint32_t		count_hi;
+++		uint32_t		byte_count;
+++		uint32_t		csr;
+++		uint32_t		flag;
++ 	};
++ 	const struct desc *d = a;
++ 
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
