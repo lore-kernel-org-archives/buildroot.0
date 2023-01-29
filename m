@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 692ECC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA880C61DA3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17C758417B;
-	Mon, 20 Feb 2023 23:49:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17C758417B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BB808436A;
+	Mon, 20 Feb 2023 23:50:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BB808436A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XV1PmL2fWzsy; Mon, 20 Feb 2023 23:49:50 +0000 (UTC)
+	with ESMTP id OG_vRMb_skr8; Mon, 20 Feb 2023 23:50:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49F808436A;
-	Mon, 20 Feb 2023 23:49:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49F808436A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 68A8F1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF1DD84386;
+	Mon, 20 Feb 2023 23:50:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF1DD84386
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2FAFD1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9645F61B27
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9645F61B27
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F11741789
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F11741789
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b1CrDHiR9SpL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eW955i44uDkP for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE00261AFB
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE00261AFB
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEE3A41780
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEE3A41780
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C808E828C8; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+ id BE77786496; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 18:21:14 +0100
+Date: Sun, 29 Jan 2023 18:17:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 76e610ef59f2c25577265a103dc37dce79b3e856
-X-Git-Newrev: bca2c28fc9ed2ebca91e6f1347d947389997a4c7
+X-Git-Oldrev: 352f4418e4ece05fc075f48e4af6f0918bf11873
+X-Git-Newrev: 121a9d3649498c5f6f3a5ae8a37d6befe2cc8ef8
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205221.C808E828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/modem-manager: disable
- man pages
+Message-Id: <20230220205243.BE77786496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/c-ares: security bump
+ to version 1.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,27 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bca2c28fc9ed2ebca91e6f1347d947389997a4c7
+commit: https://git.buildroot.net/buildroot/commit/?id=121a9d3649498c5f6f3a5ae8a37d6befe2cc8ef8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Low. Stack overflow in ares_set_sortlist() which is used during c-ares
+initialization and typically provided by an administrator and not an end
+user.
+
+https://c-ares.org/changelog.html#1_19_0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/modem-manager/modem-manager.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 5b8b9c5576..f1fc17523a 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -13,6 +13,7 @@ MODEM_MANAGER_SELINUX_MODULES = modemmanager
- MODEM_MANAGER_DEPENDENCIES = host-pkgconf dbus libglib2 $(TARGET_NLS_DEPENDENCIES) host-libxslt
- MODEM_MANAGER_INSTALL_STAGING = YES
- MODEM_MANAGER_CONF_OPTS = \
-+	-Dman=false \
- 	-Dpowerd_suspend_resume=false \
- 	-Dtests=false \
- 	-Dudevdir=/usr/lib/udev
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index af1f076aab..edf891674b 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  1a7d52a8a84a9fbffb1be9133c0f6e17217d91ea5a6fa61f6b4729cda78ebbcf  c-ares-1.18.1.tar.gz
++sha256  bfceba37e23fd531293829002cac0401ef49a6dc55923f7f92236585b7ad1dd3  c-ares-1.19.0.tar.gz
+ 
+ # Hash for license file
+ sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 0152759ebc..4332fc6919 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_ARES_VERSION = 1.18.1
++C_ARES_VERSION = 1.19.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
