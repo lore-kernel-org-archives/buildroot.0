@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDE80C05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 16:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C58C8C61D97
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 16:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BF2860C16;
-	Sun, 29 Jan 2023 16:43:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BF2860C16
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71E2960C2E;
+	Sun, 29 Jan 2023 16:43:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71E2960C2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YMPdbRo7yP5U; Sun, 29 Jan 2023 16:43:42 +0000 (UTC)
+	with ESMTP id zHeag0v7IFx7; Sun, 29 Jan 2023 16:43:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2E7060BEF;
-	Sun, 29 Jan 2023 16:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2E7060BEF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B35791BF476
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:42:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8478A60BEF;
+	Sun, 29 Jan 2023 16:43:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8478A60BEF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AEED1BF476
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:42:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 994D5400D9
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 994D5400D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C7D54155E
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C7D54155E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2gG9BAkrNDMP for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 16:42:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yM4gHf1zwi5Q for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 16:42:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BC5D1404B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id E423840993
  for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:42:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC5D1404B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E423840993
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9A8788168; Sun, 29 Jan 2023 16:42:33 +0000 (UTC)
+ id D29F788167; Sun, 29 Jan 2023 16:42:33 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 17:41:06 +0100
+Date: Sun, 29 Jan 2023 17:41:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e72cca9b2b60fe4fbac6b12461bf6ee4ecf08907
-X-Git-Newrev: 675fdc08f673bc992e9b169363c49fbd18662555
+X-Git-Oldrev: c4d75ef7c663e97baa98956fd30770b9b23b311a
+X-Git-Newrev: 3eb3116bfe8ef503acd7756f5071701132d430b1
 X-Patchwork-Hint: ignore
-Message-Id: <20230129164233.A9A8788168@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-outcome: new package
+Message-Id: <20230129164233.D29F788167@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-trio-websocket: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,87 +62,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=675fdc08f673bc992e9b169363c49fbd18662555
+commit: https://git.buildroot.net/buildroot/commit/?id=3eb3116bfe8ef503acd7756f5071701132d430b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-outcome/Config.in           |  7 +++++++
- package/python-outcome/python-outcome.hash |  7 +++++++
- package/python-outcome/python-outcome.mk   | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
+ DEVELOPERS                                               |  1 +
+ package/Config.in                                        |  1 +
+ package/python-trio-websocket/Config.in                  |  9 +++++++++
+ package/python-trio-websocket/python-trio-websocket.hash |  3 +++
+ package/python-trio-websocket/python-trio-websocket.mk   | 13 +++++++++++++
+ 5 files changed, 27 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 608512a4bb..b686dbd87a 100644
+index bb56753418..7e9e4df8f1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1388,6 +1388,7 @@ F:	package/python-logstash/
- F:	package/python-maturin/
- F:	package/python-multidict/
- F:	package/python-mypy-extensions/
-+F:	package/python-outcome/
- F:	package/python-pathspec/
- F:	package/python-pep517/
- F:	package/python-pycares/
+@@ -1403,6 +1403,7 @@ F:	package/python-terminaltables/
+ F:	package/python-tinycss2/
+ F:	package/python-tomli/
+ F:	package/python-trio/
++F:	package/python-trio-websocket/
+ F:	package/python-typeguard/
+ F:	package/python-typing-inspect/
+ F:	package/python-uhid/
 diff --git a/package/Config.in b/package/Config.in
-index 594590a52a..195398b844 100644
+index 2cb785c128..46679095b3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1148,6 +1148,7 @@ menu "External python modules"
- 	source "package/python-oauthlib/Config.in"
- 	source "package/python-opcua-asyncio/Config.in"
- 	source "package/python-orjson/Config.in"
-+	source "package/python-outcome/Config.in"
- 	source "package/python-packaging/Config.in"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-paramiko/Config.in"
-diff --git a/package/python-outcome/Config.in b/package/python-outcome/Config.in
+@@ -1307,6 +1307,7 @@ menu "External python modules"
+ 	source "package/python-traitlets/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-trio/Config.in"
++	source "package/python-trio-websocket/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+ 	source "package/python-txdbus/Config.in"
+diff --git a/package/python-trio-websocket/Config.in b/package/python-trio-websocket/Config.in
 new file mode 100644
-index 0000000000..bd51f3daea
+index 0000000000..7d35fd0296
 --- /dev/null
-+++ b/package/python-outcome/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_OUTCOME
-+	bool "python-outcome"
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++++ b/package/python-trio-websocket/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_TRIO_WEBSOCKET
++	bool "python-trio-websocket"
++	select BR2_PACKAGE_PYTHON_ASYNC_GENERATOR # runtime
++	select BR2_PACKAGE_PYTHON_TRIO # runtime
++	select BR2_PACKAGE_PYTHON_WSPROTO # runtime
 +	help
-+	  Capture the outcome of Python function calls.
++	  WebSocket library for Trio.
 +
-+	  https://github.com/python-trio/outcome
-diff --git a/package/python-outcome/python-outcome.hash b/package/python-outcome/python-outcome.hash
++	  https://github.com/HyperionGray/trio-websocket
+diff --git a/package/python-trio-websocket/python-trio-websocket.hash b/package/python-trio-websocket/python-trio-websocket.hash
 new file mode 100644
-index 0000000000..43796e89ac
+index 0000000000..3e6e832d90
 --- /dev/null
-+++ b/package/python-outcome/python-outcome.hash
-@@ -0,0 +1,7 @@
-+# md5, sha256 from https://pypi.org/pypi/outcome/json
-+md5  58612ee4407901985f85ad3869dd83b8  outcome-1.2.0.tar.gz
-+sha256  6f82bd3de45da303cf1f771ecafa1633750a358436a8bb60e06a1ceb745d2672  outcome-1.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  652c878488d1456361e08c3f8607fd7ba59892a14103d15cce4ff93c85b5cc8b  LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
-+sha256  3e6dae555eb92787fc82d1d48355677f454c7f65aeb38d3f9e72bf9a3daf034b  LICENSE.MIT
-diff --git a/package/python-outcome/python-outcome.mk b/package/python-outcome/python-outcome.mk
++++ b/package/python-trio-websocket/python-trio-websocket.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/trio-websocket/json
++md5  37b141910bdafa3c9b6731aa16646acc  trio-websocket-0.9.2.tar.gz
++sha256  a3d34de8fac26023eee701ed1e7bf4da9a8326b61a62934ec9e53b64970fd8fe  trio-websocket-0.9.2.tar.gz
+diff --git a/package/python-trio-websocket/python-trio-websocket.mk b/package/python-trio-websocket/python-trio-websocket.mk
 new file mode 100644
-index 0000000000..27d7fdede3
+index 0000000000..4522b87c9c
 --- /dev/null
-+++ b/package/python-outcome/python-outcome.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-trio-websocket/python-trio-websocket.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-outcome
++# python-trio-websocket
 +#
 +################################################################################
 +
-+PYTHON_OUTCOME_VERSION = 1.2.0
-+PYTHON_OUTCOME_SOURCE = outcome-$(PYTHON_OUTCOME_VERSION).tar.gz
-+PYTHON_OUTCOME_SITE = https://files.pythonhosted.org/packages/dd/91/741e1626e89fdc3664169e16300c59eefa4b23540cc6d6c70450f885098f
-+PYTHON_OUTCOME_SETUP_TYPE = setuptools
-+PYTHON_OUTCOME_LICENSE = Apache-2.0 or MIT
-+PYTHON_OUTCOME_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
++PYTHON_TRIO_WEBSOCKET_VERSION = 0.9.2
++PYTHON_TRIO_WEBSOCKET_SOURCE = trio-websocket-$(PYTHON_TRIO_WEBSOCKET_VERSION).tar.gz
++PYTHON_TRIO_WEBSOCKET_SITE = https://files.pythonhosted.org/packages/75/91/44a0a016025794ba9fef530a6fbe59987153e2cbea7e11fe2f3d8c618740
++PYTHON_TRIO_WEBSOCKET_SETUP_TYPE = setuptools
++PYTHON_TRIO_WEBSOCKET_LICENSE = MIT
 +
 +$(eval $(python-package))
 _______________________________________________
