@@ -1,88 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94590C61D97
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 06:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BA34C05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 08:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E67DA60ECA;
-	Sun, 29 Jan 2023 06:48:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E67DA60ECA
+	by smtp4.osuosl.org (Postfix) with ESMTP id DFF8041620;
+	Sun, 29 Jan 2023 08:32:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFF8041620
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lxoSyaQLEMV8; Sun, 29 Jan 2023 06:48:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NxKUvclHoTcK; Sun, 29 Jan 2023 08:32:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34BA660EC2;
-	Sun, 29 Jan 2023 06:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34BA660EC2
+	by smtp4.osuosl.org (Postfix) with ESMTP id D72C841626;
+	Sun, 29 Jan 2023 08:32:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D72C841626
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9A8121BF82F
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 06:48:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 58A191BF337
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 08:32:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73AE960EC2
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 06:48:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73AE960EC2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3217160C15
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 08:32:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3217160C15
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ezPTCY0aptQU for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 06:48:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69B6060E80
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 69B6060E80
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 06:48:44 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id l15so185748ilj.5
- for <buildroot@buildroot.org>; Sat, 28 Jan 2023 22:48:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=WknLzTr2dLWa4zcR2cMPgmsJCzjRJ55OF48C7Xe7+w4=;
- b=0bd6L8ICusLkb+BDxW6OESpiIQS/hAsdRtMpzPm7ZsoLDpko95XtmHyMtM5Fe67bee
- WVk4xNayd54fdZ26QTBES8oL7tJ/6xOfr+PcfzQKoCwqSjRzSECFmCDSxSRa0hWVokQZ
- 2bgnwCVL7wDFXLk5jZE1OxGG7QWUT8EiHWg89SSWThSCXaBLsQ1jh6V+XEbo/S5A10b1
- 0aE2+ElNAzusEDHuhZmZlPH9tzz38SYeIbXWN190LXlbOcMTFVNmgUuVgJThvMRgESfp
- B0wjFW6NpkV+GHwaqyFxCdWwcnC1Uepni7zaT11B3mvh6Oyt7bkghz7wOVDfRTVyuJhR
- rB/w==
-X-Gm-Message-State: AO0yUKXElz8ZGmAo1JZ+zpZZIZOW0Q/Ex5Qy1FL7AqYFHSMg6++Pn4ns
- jeDf5R2ykcJz7ROiMwPbQri85yEnrdTAkQ==
-X-Google-Smtp-Source: AK7set8rsR3oo+Fj8PAN5g2RpCYLTVqedCN0Lfze7TQWgaiXWXo9+I3Q+XbBVWIZv0Mov92TIUJKTQ==
-X-Received: by 2002:a05:6e02:20e1:b0:310:ac52:1cf6 with SMTP id
- q1-20020a056e0220e100b00310ac521cf6mr9809490ilv.29.1674974923107; 
- Sat, 28 Jan 2023 22:48:43 -0800 (PST)
-Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
- [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- v14-20020a92cd4e000000b0030edf556846sm2923014ilq.35.2023.01.28.22.48.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 28 Jan 2023 22:48:42 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ with ESMTP id AivvZZ19o8vG for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 08:32:03 +0000 (UTC)
+X-Greylist: delayed 00:46:40 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D141960C08
+Received: from delivery18.mailspamprotection.com
+ (delivery18.mailspamprotection.com [185.56.85.135])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D141960C08
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 08:32:02 +0000 (UTC)
+Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
+ helo=es87.siteground.eu)
+ by se18.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
+ (Exim 4.92) (envelope-from <dimi@tpm.dev>)
+ id 1pM2NK-000539-SV; Sun, 29 Jan 2023 01:45:21 -0600
+Received: from [95.111.54.43] (port=56654 helo=localhost.localdomain)
+ by es87.siteground.eu with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.96)
+ (envelope-from <dimi@tpm.dev>) id 1pM2NI-000NKV-2E;
+ Sun, 29 Jan 2023 07:45:16 +0000
+From: Dimi Tomov <dimi@tpm.dev>
 To: buildroot@buildroot.org
-Date: Sat, 28 Jan 2023 23:48:41 -0700
-Message-Id: <20230129064841.2831082-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 29 Jan 2023 09:45:09 +0200
+Message-Id: <20230129074509.246281-1-dimi@tpm.dev>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WknLzTr2dLWa4zcR2cMPgmsJCzjRJ55OF48C7Xe7+w4=;
- b=MsGyJTbJ2s9tDQZLOrNB7khV5v/YRAvscZmaRvvNVYWbnRG87LUJMsEWFQz8Wh+3IN
- kAi/mNEBF8dDnJ5k571MS+KaXgJIx+AjXUZiV00GJhI9F0TzEaA53tglhLHarX/Qf8yw
- Tigp7zFsMlPJHGuog5/y0CWrJA+wyXfw1YD9K2oxj7QtSlFVYfEoL7Woj+wRL+uCAh74
- sqZY7gAQAMP9vqmtkhu/P3gd0+7Jd8GGwAJ8RMLnY60maLc7L+efH1pqgu5P2s+Re5iV
- trOPH65lfo5QuMI/8GM6GDUkL83bEnReglRu8CfzX9j94SnQhP7JGxQtVRZBHHx751il
- rmCg==
+X-Originating-IP: 35.214.247.6
+X-SpamExperts-Domain: es87.siteground.eu
+X-SpamExperts-Username: 35.214.247.6
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00785891141234)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/Fywzlmd+WWFMbqKSpi7e2PUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xKipkaFeQDP2JiLCjsOSqCBHoJjdDPbdunZvlh+03gEx+y
+ AgUhs4TMs248ll4GqtGr/hqYzjDWzrFya1I3MqUAQaXPwIlI4yu/PH1NWDdGRQDwTY+YJmWvm39/
+ uo5ziShTtObPqIqeRAv2CqzEPfjvzn3+O390ZiUEIR10am7COXQg45AD+/l6P8h0+TPjaDxMfcvw
+ 9uVrltEafCGDyHAgHlsrgHdRWEueoBSMqiQzPh1yRvIbtitNGnLjaBpZxUE1lUtc0sYymngJCgc9
+ CmsixbRnzikbOeDgA3lYbBLbioPAgTtUp75uqlx0KezvZHXNck283Ma4f9Sv82S3dBYCh4qquF0m
+ STLvgCmSR4faGwwvmLeDYYVoZCdncqjCVTxqe+hzuzR4e2zKsft/i9azUpyDFBOp1ITdzGU/ruyy
+ 5nGfZreTrrCodBGR0eudR/Re4NVbVEBU/8Tv9RjL1Pyu39sUHXwyAFnSuVW90ZJgh3r6hAL/pjzQ
+ N/GQ45ibIzsEkC4p6ub0lMDXu5jHKgmeLKPFRdvGVz6FathkOrvSVdrtItr3uBzqAPuBJFUGX0Q2
+ t+qRiaPwgDRu7DKiN+p7bBfpnQAiZ9/ZqWhbBZN1xB+2FvX49cAdKCmINeQFZ0RFQVRTn8m0sooR
+ S7h6xdEgKTjECb0PwpN4olPuA0AI936c0SM84BxzaZIqKXfxGEIg2IO/jqGUcCa68likktQ46SeB
+ KJmBlMDme7P1FJK1el8fx2XLnRvLZaJFT83BKy4HmFDqewO9xyOqCYO8P1aHoGlJESAu14YV1AR3
+ U+UyFj+4P7/NsNT7JHCvOnHPp4Pdn+cousT5+gFGAcOaNJ6l+dSxHUtSz59+xi/FGxobR1FMy82T
+ FetP/kBSV5/trvtTk9ny2vM+IFavT6E+140lSi66606MmcL5+j5rbl/CvPs4zg7JC5EE3xJO3P3P
+ mVFy2DNwOgV373pfDhBQ21OdK8j0MlXJpYeYPfC0zHdZ/J5eJAr6utz50zF3Q796+PuYLgdrOtLC
+ bKvBiH1ahgeoC4oi1BMd6NlIvsvDiIUHqJSTET5IrgKSqpC5j8AO0HtX0QIjIjCn1zvQuUxCBw4J
+ 0zMC1EkB/dUo3Uq7Q+K/Z3ayN55WV0bFGLn8N/dDfCx2SKR4BpkzgM/GypUylheSR7d4CWpSt/sm
+ /gYhmNcISA==
+X-Report-Abuse-To: spam@quarantine2.mailspamprotection.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=tpm.dev; 
+ s=default; h=Date:Subject:Cc:To:From:list-help:list-unsubscribe:
+ list-subscribe:list-post:list-owner:list-archive;
+ bh=in6bs/HgTRhkBwYUM3if+HtzApB25Vt3gl/89vx5oyI=; b=GYkHapvRt48Q759nm6ZaVGpkcK
+ GHUUh/MXMjckh9tCJuubBGRPmhahMsF+JYAN06yOF+PjBfjMcsLhPqMrsyXELKPqufG2IU8MfdcNp
+ J2Zuc5lXN/f4YFdphINMT8SuLQAgnaGDn6eJ8rctaJsP6ohkG6fzIGJDqI1bTOn+kAxJAreWy6XX+
+ NkMGJBtc78KPpcJKGXBsTmFQQUJweWU4NPo11pXEuXiT/6p5bLXqaMSbrElRMNkhoeQhdjwDDJG3+
+ PXOkVjAx3a7+eXqNvYdTUNzHHgpaCLYDRAJweGeK7JQh1dXieeASYIoetNd6Jp+MJJcnrMDuKmV1v
+ DksRmXsQ==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=MsGyJTbJ
-Subject: [Buildroot] [PATCH 1/1] package/python-greenlet: bump to version
- 2.0.2
+ dkim=pass (2048-bit key) header.d=tpm.dev header.i=@tpm.dev
+ header.a=rsa-sha256 header.s=default header.b=GYkHapvR
+X-Mailman-Original-Authentication-Results: mailspamprotection.com; auth=pass
+ smtp.auth=35.214.247.6@es87.siteground.eu
+Subject: [Buildroot] [PATCH 1/1] package/wolftpm: bump version to v2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,49 +104,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Dimitar Tomov <dimi@tpm.dev>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-greenlet/python-greenlet.hash | 4 ++--
- package/python-greenlet/python-greenlet.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: Dimitar Tomov <dimi@tpm.dev>
 
-diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
-index 4e9e96398a..f378436beb 100644
---- a/package/python-greenlet/python-greenlet.hash
-+++ b/package/python-greenlet/python-greenlet.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/greenlet/json
--md5  8d0f10b807144a86b54841cfab2620a9  greenlet-2.0.1.tar.gz
--sha256  42e602564460da0e8ee67cb6d7236363ee5e131aa15943b6670e44e5c2ed0f67  greenlet-2.0.1.tar.gz
-+md5  e6637d59015cba7e86f2111e6aa8168b  greenlet-2.0.2.tar.gz
-+sha256  e7c8dc13af7db097bed64a051d2dd49e9f0af495c26995c00a9ee842690d34c0  greenlet-2.0.2.tar.gz
- # Locally computed sha256 checksums
- sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
- sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
-diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-index 232e2820f8..40f05f667e 100644
---- a/package/python-greenlet/python-greenlet.mk
-+++ b/package/python-greenlet/python-greenlet.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+---
+ package/wolftpm/wolftpm.hash | 2 +-
+ package/wolftpm/wolftpm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
+index 735c731a53..3329528095 100644
+--- a/package/wolftpm/wolftpm.hash
++++ b/package/wolftpm/wolftpm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  78331cc2d98339247857f5ceb3e7cd3c4f5773e3d81bf1d73e8df9446e37472b  wolftpm-2.6.0.tar.gz
++sha256  d8e06e77893f104be7eb9421cac50518552ad9c5fc7fe8a9c1cdfaf4f11b92df  wolftpm-2.7.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
+index 398fa668af..db332712f5 100644
+--- a/package/wolftpm/wolftpm.mk
++++ b/package/wolftpm/wolftpm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_GREENLET_VERSION = 2.0.1
-+PYTHON_GREENLET_VERSION = 2.0.2
- PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
--PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/fd/6a/f07b0028baff9bca61ecfcd9ee021e7e33369da8094f00eff409f2ff32be
-+PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/1e/1e/632e55a04d732c8184201238d911207682b119c35cecbb9a573a6c566731
- PYTHON_GREENLET_SETUP_TYPE = setuptools
- PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
- PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
+-WOLFTPM_VERSION = 2.6.0
++WOLFTPM_VERSION = 2.7.0
+ WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
+ WOLFTPM_INSTALL_STAGING = YES
+ WOLFTPM_LICENSE = GPL-2.0+
 -- 
-2.34.1
+2.27.0
 
 _______________________________________________
 buildroot mailing list
