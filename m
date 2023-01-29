@@ -1,98 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BA34C05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 08:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A11E1C05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 09:45:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFF8041620;
-	Sun, 29 Jan 2023 08:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFF8041620
+	by smtp1.osuosl.org (Postfix) with ESMTP id DEBD281A1C;
+	Sun, 29 Jan 2023 09:45:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEBD281A1C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NxKUvclHoTcK; Sun, 29 Jan 2023 08:32:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id alVt-Hu3lCWQ; Sun, 29 Jan 2023 09:45:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D72C841626;
-	Sun, 29 Jan 2023 08:32:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D72C841626
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 58A191BF337
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 08:32:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40502818E8;
+	Sun, 29 Jan 2023 09:45:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40502818E8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 327111BF3EB
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 09:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3217160C15
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 08:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3217160C15
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CF964015A
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 09:45:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CF964015A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AivvZZ19o8vG for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 08:32:03 +0000 (UTC)
-X-Greylist: delayed 00:46:40 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D141960C08
-Received: from delivery18.mailspamprotection.com
- (delivery18.mailspamprotection.com [185.56.85.135])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D141960C08
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 08:32:02 +0000 (UTC)
-Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
- helo=es87.siteground.eu)
- by se18.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
- (Exim 4.92) (envelope-from <dimi@tpm.dev>)
- id 1pM2NK-000539-SV; Sun, 29 Jan 2023 01:45:21 -0600
-Received: from [95.111.54.43] (port=56654 helo=localhost.localdomain)
- by es87.siteground.eu with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.96)
- (envelope-from <dimi@tpm.dev>) id 1pM2NI-000NKV-2E;
- Sun, 29 Jan 2023 07:45:16 +0000
-From: Dimi Tomov <dimi@tpm.dev>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vI30_kFcV1Tg for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 09:45:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7A02401C9
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E7A02401C9
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 09:45:45 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ m5-20020a05600c4f4500b003db03b2559eso6255251wmq.5
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 01:45:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=d8GyE5PMfTKTk7LomuP9/UER07JRm9q4457WpWPYMEI=;
+ b=xbEU0Q7JOhtzC3xX2yWPAFKrCYT3TI+hCFhlNsCDhffPMkbqB2TKjdW9xWA8prFddD
+ jxWShw0n/kI7ZiAtogboe2aeoUThqVWT9y/gZIJ9PbzfjUds9+lgFYpUEVCSpll333Iw
+ qDbfoEKNBAsNloAQuKaABnDk1siGzG7hBLycMULtXZIXgJxVWWc3hUhLKMtn8X/lolDc
+ v4r0Uk1m1YGGHikcfL+3B3GG13KFvsb/gQn4Qv9ztruSpp57jofXx3WINIUj5x5AlF+x
+ bfYTP7v+XaAvYhUHS5fdXRv/G8V7Yx7YomSb6lPnxWiv0D/HtrgeLscUhSd9eZskGNKf
+ MRsg==
+X-Gm-Message-State: AO0yUKVRQ2dK7WWMXURn3IFuiyaxG3R9Z57W0QMdh+sgzCJLJaeUo5D0
+ AuGT0W4VhncUGAONB2X8yh2tbAjiS33Zfzzr
+X-Google-Smtp-Source: AK7set/CZnoKRvO/rWqSQPg4VHzxzXsexFhJS9Y7imTfQJ3k8dpYWuSpGEWEnBjGfwRD/sb1osL9QQ==
+X-Received: by 2002:a05:600c:b50:b0:3dc:557f:6124 with SMTP id
+ k16-20020a05600c0b5000b003dc557f6124mr1017650wmr.5.1674985543127; 
+ Sun, 29 Jan 2023 01:45:43 -0800 (PST)
+Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
+ [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
+ d11-20020a05600c3acb00b003db30be4a54sm12634713wms.38.2023.01.29.01.45.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 29 Jan 2023 01:45:42 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 09:45:09 +0200
-Message-Id: <20230129074509.246281-1-dimi@tpm.dev>
-X-Mailer: git-send-email 2.27.0
+Date: Sun, 29 Jan 2023 10:45:28 +0100
+Message-Id: <20230129094530.884944-1-thomas.devoogdt@barco.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Originating-IP: 35.214.247.6
-X-SpamExperts-Domain: es87.siteground.eu
-X-SpamExperts-Username: 35.214.247.6
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00785891141234)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/Fywzlmd+WWFMbqKSpi7e2PUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xKipkaFeQDP2JiLCjsOSqCBHoJjdDPbdunZvlh+03gEx+y
- AgUhs4TMs248ll4GqtGr/hqYzjDWzrFya1I3MqUAQaXPwIlI4yu/PH1NWDdGRQDwTY+YJmWvm39/
- uo5ziShTtObPqIqeRAv2CqzEPfjvzn3+O390ZiUEIR10am7COXQg45AD+/l6P8h0+TPjaDxMfcvw
- 9uVrltEafCGDyHAgHlsrgHdRWEueoBSMqiQzPh1yRvIbtitNGnLjaBpZxUE1lUtc0sYymngJCgc9
- CmsixbRnzikbOeDgA3lYbBLbioPAgTtUp75uqlx0KezvZHXNck283Ma4f9Sv82S3dBYCh4qquF0m
- STLvgCmSR4faGwwvmLeDYYVoZCdncqjCVTxqe+hzuzR4e2zKsft/i9azUpyDFBOp1ITdzGU/ruyy
- 5nGfZreTrrCodBGR0eudR/Re4NVbVEBU/8Tv9RjL1Pyu39sUHXwyAFnSuVW90ZJgh3r6hAL/pjzQ
- N/GQ45ibIzsEkC4p6ub0lMDXu5jHKgmeLKPFRdvGVz6FathkOrvSVdrtItr3uBzqAPuBJFUGX0Q2
- t+qRiaPwgDRu7DKiN+p7bBfpnQAiZ9/ZqWhbBZN1xB+2FvX49cAdKCmINeQFZ0RFQVRTn8m0sooR
- S7h6xdEgKTjECb0PwpN4olPuA0AI936c0SM84BxzaZIqKXfxGEIg2IO/jqGUcCa68likktQ46SeB
- KJmBlMDme7P1FJK1el8fx2XLnRvLZaJFT83BKy4HmFDqewO9xyOqCYO8P1aHoGlJESAu14YV1AR3
- U+UyFj+4P7/NsNT7JHCvOnHPp4Pdn+cousT5+gFGAcOaNJ6l+dSxHUtSz59+xi/FGxobR1FMy82T
- FetP/kBSV5/trvtTk9ny2vM+IFavT6E+140lSi66606MmcL5+j5rbl/CvPs4zg7JC5EE3xJO3P3P
- mVFy2DNwOgV373pfDhBQ21OdK8j0MlXJpYeYPfC0zHdZ/J5eJAr6utz50zF3Q796+PuYLgdrOtLC
- bKvBiH1ahgeoC4oi1BMd6NlIvsvDiIUHqJSTET5IrgKSqpC5j8AO0HtX0QIjIjCn1zvQuUxCBw4J
- 0zMC1EkB/dUo3Uq7Q+K/Z3ayN55WV0bFGLn8N/dDfCx2SKR4BpkzgM/GypUylheSR7d4CWpSt/sm
- /gYhmNcISA==
-X-Report-Abuse-To: spam@quarantine2.mailspamprotection.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=tpm.dev; 
- s=default; h=Date:Subject:Cc:To:From:list-help:list-unsubscribe:
- list-subscribe:list-post:list-owner:list-archive;
- bh=in6bs/HgTRhkBwYUM3if+HtzApB25Vt3gl/89vx5oyI=; b=GYkHapvRt48Q759nm6ZaVGpkcK
- GHUUh/MXMjckh9tCJuubBGRPmhahMsF+JYAN06yOF+PjBfjMcsLhPqMrsyXELKPqufG2IU8MfdcNp
- J2Zuc5lXN/f4YFdphINMT8SuLQAgnaGDn6eJ8rctaJsP6ohkG6fzIGJDqI1bTOn+kAxJAreWy6XX+
- NkMGJBtc78KPpcJKGXBsTmFQQUJweWU4NPo11pXEuXiT/6p5bLXqaMSbrElRMNkhoeQhdjwDDJG3+
- PXOkVjAx3a7+eXqNvYdTUNzHHgpaCLYDRAJweGeK7JQh1dXieeASYIoetNd6Jp+MJJcnrMDuKmV1v
- DksRmXsQ==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=tpm.dev header.i=@tpm.dev
- header.a=rsa-sha256 header.s=default header.b=GYkHapvR
-X-Mailman-Original-Authentication-Results: mailspamprotection.com; auth=pass
- smtp.auth=35.214.247.6@es87.siteground.eu
-Subject: [Buildroot] [PATCH 1/1] package/wolftpm: bump version to v2.7.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=d8GyE5PMfTKTk7LomuP9/UER07JRm9q4457WpWPYMEI=;
+ b=nbWe+WegVi6OGfJU7c7/UJL2FZ6NULWRISV7QPJ5Xn/WGFs0r0Ojg4F/nbqV9lhZX6
+ beT0dZMskcDu5QLUCqpR3bYqhbctL0XIf07R1xlW8v6OG2wjTrlqTWPL6dL18nBxroxz
+ 7SO/ETymnrNiKgDvjLPDxgvXCOgzSr0pCK3zIuDIkG/gHA8yhT2Pi7yMUSeL2KtScGJq
+ K0LDiWGijaZV3rkEWkPVHeIRsCdQy91axJNje0m/I7KnzZvnlVgRpuaQuDNEprYq2aHT
+ VosEdF1oiErYMljddtJrgSaM4Z7CwxPS21E/2q6Xw1Uxrb6CURr8Mxgkg0Q4NJy9Cnd8
+ UfrA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=nbWe+Weg
+Subject: [Buildroot] [PATCH v2 1/3] package/fluent-bit: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,45 +95,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dimitar Tomov <dimi@tpm.dev>,
+Cc: Thomas Devoogdt <thomas.devoogdt@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Dimitar Tomov <dimi@tpm.dev>
+From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
 
-Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+Fixes:
+ - http://autobuild.buildroot.net/results/007/007c7c69e54b8ff663891da4535e2e95d40c42a2/build-end.log
+ - http://autobuild.buildroot.net/results/ede/ede6f9fb67c0c26ff02e71a3d20e3d4344ea59f0/build-end.log
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
 ---
- package/wolftpm/wolftpm.hash | 2 +-
- package/wolftpm/wolftpm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v1 --> v2:
+ - added package/ prefix to the git message
 
-diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
-index 735c731a53..3329528095 100644
---- a/package/wolftpm/wolftpm.hash
-+++ b/package/wolftpm/wolftpm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  78331cc2d98339247857f5ceb3e7cd3c4f5773e3d81bf1d73e8df9446e37472b  wolftpm-2.6.0.tar.gz
-+sha256  d8e06e77893f104be7eb9421cac50518552ad9c5fc7fe8a9c1cdfaf4f11b92df  wolftpm-2.7.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
-index 398fa668af..db332712f5 100644
---- a/package/wolftpm/wolftpm.mk
-+++ b/package/wolftpm/wolftpm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/fluent-bit/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
+index 11ceb55d4f..bd89c05faa 100644
+--- a/package/fluent-bit/Config.in
++++ b/package/fluent-bit/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_FLUENT_BIT
+ 	bool "fluent-bit"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBYAML
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_FLUENT_BIT
  
--WOLFTPM_VERSION = 2.6.0
-+WOLFTPM_VERSION = 2.7.0
- WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
- WOLFTPM_INSTALL_STAGING = YES
- WOLFTPM_LICENSE = GPL-2.0+
+ 	  https://github.com/fluent/fluent-bit
+ 
+-comment "fluent-bit needs a glibc toolchain"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
++comment "fluent-bit needs a glibc toolchain w/ C++"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
 -- 
-2.27.0
+2.39.0
 
 _______________________________________________
 buildroot mailing list
