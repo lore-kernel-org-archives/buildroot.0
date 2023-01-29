@@ -1,69 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D3C1C05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 16:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E60C05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 16:40:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 207428176F;
-	Sun, 29 Jan 2023 16:39:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 207428176F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id apOYC8dxh3_0; Sun, 29 Jan 2023 16:39:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 357768176D;
-	Sun, 29 Jan 2023 16:39:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 357768176D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D0D9D1BF476
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:39:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A7EE341570
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:39:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7EE341570
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18A1241570;
+	Sun, 29 Jan 2023 16:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18A1241570
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5_3PgQoiWTLi for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 16:39:09 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EdRuNsRsqPOB; Sun, 29 Jan 2023 16:40:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A4814155E;
+	Sun, 29 Jan 2023 16:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A4814155E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5147F1BF476
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:40:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 38CDF40108
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:40:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38CDF40108
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0yFRTzGYsYQO for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 16:40:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CE974088C
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1CE974088C
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:39:09 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 6AB565FF67;
- Sun, 29 Jan 2023 17:39:04 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Jan 2023 17:39:04 +0100
-Date: Sun, 29 Jan 2023 17:39:04 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Vincent Fazio <vfazio@xes-inc.com>
-Message-ID: <20230129163904.GL2632@scaer>
-References: <20230128191409.1472620-1-vfazio@xes-inc.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20ADA400D9
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 20ADA400D9
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:40:02 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id q5so9080993wrv.0
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 08:40:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=nmmpvvFc8A7UubUSlkcNZS/EZaBJ8EsWY/O8kAzB0AY=;
+ b=H4uGZs+ohU1RBIkMIdV+zgzRWC7t6LmFYprKiuB+3CNzcTFDPujgPTEPtPKtHHSzV6
+ p7fcPO/9y1JAjVsUEPsk1M63q/GzCWJ3tcTXKSPWWYrZxYwQTJ21ah7dEof4uQvkTYmM
+ atQlAr8zX+TJVJw4fRIgg50Zv6fvYX+nUF/VASBeTSjf8Fx7EiYhfyiFxZSV2Vk+sK/i
+ ar9guYlLlyzTq5WuL2HrjtL7dZNSayYIQ7KLtW+FYMbZx48XDgKbdJu0Y4oeeO44ZwTh
+ ha+7G5fJI/dLznQooJQog4bBO1A7005eH+jcNeCA5RwjjSqQU8cTWtKWv4sFAaUrdHfn
+ 4hwQ==
+X-Gm-Message-State: AO0yUKXTWCfh3CXwmwwByNFEB6RWA6kYhkzD1YdvqnGmUHKIIFBarwV3
+ srxgI/AQRNNVSZZk6Qu3+muZIX25XkE=
+X-Google-Smtp-Source: AK7set8knUke2ZonZI00eYNPklA9QcwGseffOA7fEqheFVznHAwpNCZX2CgnK+Vum5emJyTc4eSMvw==
+X-Received: by 2002:a5d:4cd0:0:b0:2bf:cfb4:817c with SMTP id
+ c16-20020a5d4cd0000000b002bfcfb4817cmr8954484wrt.35.1675010399882; 
+ Sun, 29 Jan 2023 08:39:59 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ x3-20020adfec03000000b002bfbf7679absm9609619wrn.107.2023.01.29.08.39.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 29 Jan 2023 08:39:59 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 29 Jan 2023 17:39:53 +0100
+Message-Id: <20230129163953.56236-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230128191409.1472620-1-vfazio@xes-inc.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675010346;
- bh=O3Dud90PqjHmY36AXCtKnI0PIKlrKkU8LBeNYxTCt30=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=oitYZ31mLw6oBksiGrAqdw7xr5n534MpCNt+YdS6RLcVkDl4B2a8HGZiqLZstYppl
- o/J2r0o9VjDeJRpxdCPf9doQyK4Zd9cJIn4qNB+Cgqq8FX7QHvmybU5SAFIuEV4hiu
- cARvNvX3x88wcPyMFNYOSlZBNG5HWcdhTUdpLRZLnF9T/X941WaE/bleHnS/av13ZI
- V3fUU32AtyzSczIc2I1h+baSL8N/dvRqDx90Y2SZJ/pR1YaX+k8nJ7TBMDdsIfZZy5
- O3hY6BKu/OgQy8Aw+p3LZI1vryQl6Wqq8kdDMKr8OTdyI9FWFXxRSw+9q52vqMgn0o
- C453+v3FsQyFg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=oitYZ31m
-Subject: Re: [Buildroot] [PATCH 1/1] package/bash: fix non-multibyte builds
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=nmmpvvFc8A7UubUSlkcNZS/EZaBJ8EsWY/O8kAzB0AY=;
+ b=Ne4aFIIIlj3K2n8fbCfH8hXZbrEVV+kfRVfXjY9dsrp6UiMoDV2ir3pYbqbKUCZvtV
+ k2d9RNWIjdV1fD9Y8I1ROUpShVa+cduNDq8tXKzI964j28Odo0uQxdMcaNdZBdFyC11F
+ vbw0Ti5WVrYVXjThjBMXf6irMZrXMip5jBNNspN9AUiC8yITE6/HjGRgTP6iY0/JGc1K
+ d2YE/E0NpBXoLH2R3XiaL6pv37ujAaTD81S9t+OWRrEryYe5/cDMZVOAekCNgKtaq+ss
+ tHbTrZsQEB9JMZuYw2d952ivNfwfy2V5g2EkOPtG0iWU7HstrMjuZhc5BzV4zxRnRNda
+ 27ZA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Ne4aFIII
+Subject: [Buildroot] [PATCH 1/1] package/vim: security bump to version
+ 9.0.1260
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,119 +94,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Vincent, All,
+- Fix CVE-2023-0049, CVE-2023-0051, CVE-2023-0054 and CVE-2023-0288
+- Update hash of README.txt: typo fixed by
+  https://github.com/vim/vim/commit/f1dcd14fc5d4370476cd82895a4479ca2d252e54
 
-On 2023-01-28 13:14 -0600, Vincent Fazio spake thusly:
-> Builds using toolchains without WCHAR support would fail due to an
-> undeclared reference to `shell_input_line_property`.
-> 
-> Fix this by using a guard to check if ENABLE_MULTIBYTE is defined.
-> 
-> Fixes:
->   - http://autobuild.buildroot.net/results/133ddcbc37512e6bcc5daab669ce316efa7ec4fc/
-> 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/vim/vim.hash | 4 ++--
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...compilation-for-non-multibyte-builds.patch | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch
-> 
-> diff --git a/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch b/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch
-> new file mode 100644
-> index 0000000000..d330de5cd4
-> --- /dev/null
-> +++ b/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch
-> @@ -0,0 +1,63 @@
-> +From 0217fc2816e47ee296472df71d1011f0eb2937e6 Mon Sep 17 00:00:00 2001
-> +From: Vincent Fazio <vfazio@gmail.com>
-> +Date: Fri, 27 Jan 2023 14:37:26 -0600
-> +Subject: [PATCH] parse.y: fix compilation for non-multibyte builds
-> +
-> +Builds configured with --disable-multibyte or when the toolchain does
-> +not have WCHAR support would encounter a compile error due to an
-> +undeclared reference to shell_input_line_property in shell_getc.
-> +
-> +Add a HANDLE_MULTIBYTE guard to conditionally compile the block that
-> +references shell_input_line_property in shell_getc as it's only declared
-> +when HANDLE_MULTIBYTE is defined.
-> +
-> +Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> +[Upstream status: https://savannah.gnu.org/patch/index.php?10309]
-> +---
-> + parse.y | 2 ++
-> + y.tab.c | 2 ++
-> + 2 files changed, 4 insertions(+)
-> +
-> +diff --git a/parse.y b/parse.y
-> +index 1d12e639..8f1355c6 100644
-> +--- a/parse.y
-> ++++ b/parse.y
-> +@@ -2625,6 +2625,7 @@ next_alias_char:
-> +       parser_state |= PST_ENDALIAS;
-> +       /* We need to do this to make sure last_shell_getc_is_singlebyte returns
-> + 	 true, since we are returning a single-byte space. */
-> ++#if defined (HANDLE_MULTIBYTE)
-> +       if (shell_input_line_index == shell_input_line_len && last_shell_getc_is_singlebyte == 0)
-> + 	{
-> + #if 0
-> +@@ -2638,6 +2639,7 @@ next_alias_char:
-> + 	  shell_input_line_property[shell_input_line_index - 1] = 1;
-> + #endif
-> + 	}
-> ++#endif /* HANDLE_MULTIBYTE */
-> +       return ' ';	/* END_ALIAS */
-> +     }
-> + #endif
-> +diff --git a/y.tab.c b/y.tab.c
-> +index 50c5845b..799f730f 100644
-> +--- a/y.tab.c
-> ++++ b/y.tab.c
-> +@@ -4936,6 +4936,7 @@ next_alias_char:
-> +       parser_state |= PST_ENDALIAS;
-> +       /* We need to do this to make sure last_shell_getc_is_singlebyte returns
-> + 	 true, since we are returning a single-byte space. */
-> ++#if defined (HANDLE_MULTIBYTE)
-> +       if (shell_input_line_index == shell_input_line_len && last_shell_getc_is_singlebyte == 0)
-> + 	{
-> + #if 0
-> +@@ -4949,6 +4950,7 @@ next_alias_char:
-> + 	  shell_input_line_property[shell_input_line_index - 1] = 1;
-> + #endif
-> + 	}
-> ++#endif /* HANDLE_MULTIBYTE */
-> +       return ' ';	/* END_ALIAS */
-> +     }
-> + #endif
-> +-- 
-> +2.25.1
-> +
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 03ee908db4..4000beedc1 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  c95c9abcf024bd6293ad199e4efa1c09452a9c6456c9cbaf53d896cf7b9f4d08  vim-9.0.0951.tar.gz
++sha256  bcaf9b21ab00ab49de4f3bdfda1bcda82533ec16c412824226544a3fce6506ff  vim-9.0.1260.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+-sha256  de04910387a62ad4f9b36b91457c8d5ef32733ac5d768a128071b93f4821fcd1  README.txt
++sha256  d187aff219161f37138479257f82d687ea10b2cdd17d58b53a3ec9b79d6dc870  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index d814c68630..e3648bfab9 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 9.0.0951
++VIM_VERSION = 9.0.1260
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
