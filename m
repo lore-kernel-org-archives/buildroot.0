@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D633C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3510C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:20:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FED76FBA5;
-	Tue, 21 Feb 2023 01:19:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FED76FBA5
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB03D6129D;
+	Tue, 21 Feb 2023 01:20:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB03D6129D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id faD9w7h3Yp5u; Tue, 21 Feb 2023 01:19:55 +0000 (UTC)
+	with ESMTP id EmV4GRHEXxsM; Tue, 21 Feb 2023 01:20:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 418916F9AC;
-	Tue, 21 Feb 2023 01:19:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 418916F9AC
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBE7461B27;
+	Tue, 21 Feb 2023 01:20:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBE7461B27
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CFF4B1BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DFED21BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C2886FBCB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E7276FBE5
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C2886FBCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E7276FBE5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5VOEEFYe62Ou for <buildroot@lists.busybox.net>;
+ with ESMTP id EXhcqlfxuZQE for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B5C46FBD3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C3C56FBDA
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B5C46FBD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C3C56FBDA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C99181979; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+ id 47E7E81979; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 17:41:03 +0100
+Date: Sun, 29 Jan 2023 17:37:06 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 14d301cbb621e1f044938d628ec47279a80ad7d0
-X-Git-Newrev: e72cca9b2b60fe4fbac6b12461bf6ee4ecf08907
+X-Git-Oldrev: 4f97275bc78b717bec0c5d1efaaf73a0e6e36f53
+X-Git-Newrev: 47a74ffa8137c22686e6196e0b1e74861d1bd81c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205243.6C99181979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-sniffio: new
- package
+Message-Id: <20230220205243.47E7E81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bash: fix
+ non-multibyte builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,88 +63,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e72cca9b2b60fe4fbac6b12461bf6ee4ecf08907
+commit: https://git.buildroot.net/buildroot/commit/?id=47a74ffa8137c22686e6196e0b1e74861d1bd81c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Builds using toolchains without WCHAR support would fail due to an
+undeclared reference to `shell_input_line_property`.
+
+Fix this by using a guard to check if ENABLE_MULTIBYTE is defined.
+
+Fixes:
+  - http://autobuild.buildroot.net/results/133ddcbc37512e6bcc5daab669ce316efa7ec4fc/
+
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-sniffio/Config.in           |  6 ++++++
- package/python-sniffio/python-sniffio.hash |  7 +++++++
- package/python-sniffio/python-sniffio.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
+ ...-fix-compilation-for-non-multibyte-builds.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6cf2b48a8f..608512a4bb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1396,6 +1396,7 @@ F:	package/python-pypa-build/
- F:	package/python-pyphen/
- F:	package/python-rtoml/
- F:	package/python-snappy/
-+F:	package/python-sniffio/
- F:	package/python-sockjs/
- F:	package/python-terminaltables/
- F:	package/python-tinycss2/
-diff --git a/package/Config.in b/package/Config.in
-index dd15467b11..594590a52a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1280,6 +1280,7 @@ menu "External python modules"
- 	source "package/python-smbus-cffi/Config.in"
- 	source "package/python-smmap2/Config.in"
- 	source "package/python-snappy/Config.in"
-+	source "package/python-sniffio/Config.in"
- 	source "package/python-socketio/Config.in"
- 	source "package/python-sockjs/Config.in"
- 	source "package/python-sortedcontainers/Config.in"
-diff --git a/package/python-sniffio/Config.in b/package/python-sniffio/Config.in
+diff --git a/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch b/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch
 new file mode 100644
-index 0000000000..6f3947afe6
+index 0000000000..d330de5cd4
 --- /dev/null
-+++ b/package/python-sniffio/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_SNIFFIO
-+	bool "python-sniffio"
-+	help
-+	  Sniff out which async library your code is running under.
++++ b/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch
+@@ -0,0 +1,63 @@
++From 0217fc2816e47ee296472df71d1011f0eb2937e6 Mon Sep 17 00:00:00 2001
++From: Vincent Fazio <vfazio@gmail.com>
++Date: Fri, 27 Jan 2023 14:37:26 -0600
++Subject: [PATCH] parse.y: fix compilation for non-multibyte builds
 +
-+	  https://github.com/python-trio/sniffio
-diff --git a/package/python-sniffio/python-sniffio.hash b/package/python-sniffio/python-sniffio.hash
-new file mode 100644
-index 0000000000..00af7c58bb
---- /dev/null
-+++ b/package/python-sniffio/python-sniffio.hash
-@@ -0,0 +1,7 @@
-+# md5, sha256 from https://pypi.org/pypi/sniffio/json
-+md5  abb96bcda81817d6c632915c53ac29c8  sniffio-1.3.0.tar.gz
-+sha256  e60305c5e5d314f5389259b7f22aaa33d8f7dee49763119234af3755c55b9101  sniffio-1.3.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  652c878488d1456361e08c3f8607fd7ba59892a14103d15cce4ff93c85b5cc8b  LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
-+sha256  3e6dae555eb92787fc82d1d48355677f454c7f65aeb38d3f9e72bf9a3daf034b  LICENSE.MIT
-diff --git a/package/python-sniffio/python-sniffio.mk b/package/python-sniffio/python-sniffio.mk
-new file mode 100644
-index 0000000000..fa369a0e2f
---- /dev/null
-+++ b/package/python-sniffio/python-sniffio.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-sniffio
-+#
-+################################################################################
++Builds configured with --disable-multibyte or when the toolchain does
++not have WCHAR support would encounter a compile error due to an
++undeclared reference to shell_input_line_property in shell_getc.
 +
-+PYTHON_SNIFFIO_VERSION = 1.3.0
-+PYTHON_SNIFFIO_SOURCE = sniffio-$(PYTHON_SNIFFIO_VERSION).tar.gz
-+PYTHON_SNIFFIO_SITE = https://files.pythonhosted.org/packages/cd/50/d49c388cae4ec10e8109b1b833fd265511840706808576df3ada99ecb0ac
-+PYTHON_SNIFFIO_SETUP_TYPE = setuptools
-+PYTHON_SNIFFIO_LICENSE = Apache-2.0 or MIT
-+PYTHON_SNIFFIO_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
++Add a HANDLE_MULTIBYTE guard to conditionally compile the block that
++references shell_input_line_property in shell_getc as it's only declared
++when HANDLE_MULTIBYTE is defined.
 +
-+$(eval $(python-package))
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[Upstream status: https://savannah.gnu.org/patch/index.php?10309]
++---
++ parse.y | 2 ++
++ y.tab.c | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/parse.y b/parse.y
++index 1d12e639..8f1355c6 100644
++--- a/parse.y
+++++ b/parse.y
++@@ -2625,6 +2625,7 @@ next_alias_char:
++       parser_state |= PST_ENDALIAS;
++       /* We need to do this to make sure last_shell_getc_is_singlebyte returns
++ 	 true, since we are returning a single-byte space. */
+++#if defined (HANDLE_MULTIBYTE)
++       if (shell_input_line_index == shell_input_line_len && last_shell_getc_is_singlebyte == 0)
++ 	{
++ #if 0
++@@ -2638,6 +2639,7 @@ next_alias_char:
++ 	  shell_input_line_property[shell_input_line_index - 1] = 1;
++ #endif
++ 	}
+++#endif /* HANDLE_MULTIBYTE */
++       return ' ';	/* END_ALIAS */
++     }
++ #endif
++diff --git a/y.tab.c b/y.tab.c
++index 50c5845b..799f730f 100644
++--- a/y.tab.c
+++++ b/y.tab.c
++@@ -4936,6 +4936,7 @@ next_alias_char:
++       parser_state |= PST_ENDALIAS;
++       /* We need to do this to make sure last_shell_getc_is_singlebyte returns
++ 	 true, since we are returning a single-byte space. */
+++#if defined (HANDLE_MULTIBYTE)
++       if (shell_input_line_index == shell_input_line_len && last_shell_getc_is_singlebyte == 0)
++ 	{
++ #if 0
++@@ -4949,6 +4950,7 @@ next_alias_char:
++ 	  shell_input_line_property[shell_input_line_index - 1] = 1;
++ #endif
++ 	}
+++#endif /* HANDLE_MULTIBYTE */
++       return ' ';	/* END_ALIAS */
++     }
++ #endif
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
