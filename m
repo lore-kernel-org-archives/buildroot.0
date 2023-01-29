@@ -1,134 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9368CC61D97
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 02:36:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 744A3C05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 03:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1056081CE3;
-	Sun, 29 Jan 2023 02:36:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1056081CE3
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6918416A5;
+	Sun, 29 Jan 2023 03:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6918416A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uEN4XpKYwCki; Sun, 29 Jan 2023 02:36:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pij2o3CYA33w; Sun, 29 Jan 2023 03:52:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4328981B9A;
-	Sun, 29 Jan 2023 02:36:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4328981B9A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D6721BF3E3
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 02:36:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AC9D416B7;
+	Sun, 29 Jan 2023 03:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AC9D416B7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C45D1BF255
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 03:52:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46EE7401C2
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 02:36:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46EE7401C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2C8E416B7
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 03:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2C8E416B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id clqmynezUeSy for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 02:36:41 +0000 (UTC)
-X-Greylist: delayed 00:15:14 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34318400D3
-Received: from USG02-BN3-obe.outbound.protection.office365.us
- (mail-bn3usg02on0131.outbound.protection.office365.us [23.103.208.131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 34318400D3
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 02:36:40 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=iVSIY9EnmDIA+HxKYQTC+taLAYGIHNf1uKx2XVD/zYY2o2byT1hnUCbDTpNi8k9nrUVSVAwaiep+zQPVIF8ibEcuhT2FnuaGt/I2GXK1Kd/LGteLSJKRQkn5XIUHNVLl9JEmrkx/GlhdYck0VAbQotl7Iuie6rGj6hfFOQZcu9YrAEa9T/SfEpthGGC7dmt9DUaArof9CpV5q/QcZAmKBuAS3BYrIMFJvn5lMi6tnnqorLftXcQ7cRjxAKB1XvSIAi/u2BFh+hnN5AGrA12V+iAxDk05AhVNDdE5S2oevoPzHL+kszjZsB0dpJ6CQOQ70/oQ175iR/RmK9Nfr5NCQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector5401;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kuC2U8N9twUG9Re8rKZeoPlxwfA2iqbtM58YaR0//dk=;
- b=TpUwpXjf/CUB2f2U7Hi53D+TEAmoyFEuYEBpaQ5ZsfgGd+QY2D4v7NzKpckpwGyF1zKeqTf5COnXdj+P/alo/XNVRMVgE9S03YL/bobUp1yXhMK0m2X0xvJ7qIsu3iqiz2DObA+PLYlhcgSLhQ3VlvNqyRADzg5v8TrvgDsd0Dh9j0G6SzCZI1B6onGpNtU79gnbXxKGOEKEaSDAuC/MHfT5II838BKkpceaqqNih09jem7cNtuAj3pLvGfWiePs1DKibFP4+C15OzCE5ZDi4gAhJoYnZJoOgOVtPVmXPTYLRnzs/W3tjJx6AiU2VY3BoP4S2COgDT8sL64sgvqGeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xes-inc.com; dmarc=pass action=none header.from=xes-inc.com;
- dkim=pass header.d=xes-inc.com; arc=none
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:18b::15)
- by PH1P110MB1068.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:174::11)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.30; Sun, 29 Jan
- 2023 02:21:18 +0000
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::772:4537:5767:b473]) by PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::772:4537:5767:b473%7]) with mapi id 15.20.6043.031; Sun, 29 Jan 2023
- 02:21:18 +0000
-From: Vincent Fazio <vfazio@xes-inc.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Thread-Topic: [External] - Re: [Buildroot] [PATCH v2 1/1] package/ethtool: fix
- builds for older toolchains
-Thread-Index: AQHZMowHfQiP+GEIOk61JKSXU8xP2q60WrsAgAAAzoCAAE9sUA==
-Date: Sun, 29 Jan 2023 02:21:18 +0000
-Message-ID: <PH1P110MB1603A0189A55206D3BD374509FD29@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
-References: <20230126185049.3600233-1-vfazio@xes-inc.com>
- <20230127201446.1181422-1-vfazio@xes-inc.com>
- <20230128223142.1c292f98@windsurf> <20230128223435.2d708808@windsurf>
-In-Reply-To: <20230128223435.2d708808@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH1P110MB1603:EE_|PH1P110MB1068:EE_
-x-ms-office365-filtering-correlation-id: e97338e7-54a4-4fb8-e424-08db019f8131
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rYuG89H1vYnAnP0h0JZtCY402yNc6F9dhGdMfVvSWFkw1RDmSgSlOcUbAUWM9cbbcMURMlO/ys3ra8dyPVWhYkROw1bxK9FFj/6pmrZ5owxKVHFVisdRDh7TiWLyU4YnfXLyIgVBcLLAQYd9M8UrVNVhmT421L11hRNrQuROTbbUbeMGU+PmAinR1RCTKCeLUAIkhMSIPXJy1PcVEu+uOYuOSbxTrTLZ9MoTcgdx8r2cDhrYfr7DVfOgp/BPdQi0GWMJZEl1/hoNI9GRXWHKoao5d3BBp+Y8iENGj4kyUAOt28ZiL2Tn35EGc/JAW/f5YWU5IzPFXaztnLKy4DB0IBottUEPuwQGPsKIeD2RJfhKwOc7isCg3SkBOPZ8r+u0qK4TruvxKwydhGZ0A+/aMn9udVKxVwvZzEz+bNoqtPax7W2137t8YKH9W/i46pK1+doGhaTaZ0NY0+szrsoBxqwEy6iSVSQJsQUDUVOactP6OWG9+nOzSCfm1iyB1AnxjGt00LjOD3uOUlL4pT//aL/hhMMwmFSWJFAUH8cSOTm6k3hPpjpSwaKp6EhrMtUidzt4sv6DqE51ksCtbWhtY9RcpT6tTYr36KuRYr5J8n6My63LAx32Du2T0A4L04ClWddpDXwL8nexkorgqDJqGPv0ssJM27L8/nYo9nbaz9idEH2nBBU2houW3cwcs7s+OQaCL/5HLupHG7qPJ9JS6QV1xWjDUlNj4h3vc11Syr4=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230025)(4636009)(396003)(366004)(39830400003)(136003)(451199018)(508600001)(966005)(71200400001)(7696005)(26005)(83380400001)(38070700005)(86362001)(41320700001)(122000001)(33656002)(55016003)(38100700002)(186003)(9686003)(53546011)(6506007)(4326008)(6916009)(52536014)(8676002)(66476007)(76116006)(64756008)(66946007)(66556008)(66446008)(54906003)(5660300002)(8936002)(41300700001)(2906002);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vhdIQ8maAgivWk/OffPpV3OAbBc+wSCXwxymSmX4f7sdbhTGIYJObQeEMKay?=
- =?us-ascii?Q?L/2tEgCqPL2V2SXSmUKdYZu378oKkNSDZbYPH7HR6ri7kha0/PLyZWgX7CVN?=
- =?us-ascii?Q?0dWqEqgOUhtqR6H0kYRqENKw8JTGNgSckHCH88lmPacqgoZ7HfNWNjWqf7nj?=
- =?us-ascii?Q?r4mDX+1VAvdUZvYQZlYTAgLlGXJIrNb2WXg+tcSD6+deZ3gNLW4aLi8FSsGM?=
- =?us-ascii?Q?H7srmWhBhwinqMb5NSJw5Q/5lokzIXqhp8h0/a7C5Z+LgYZpkAhF6ihxGt2n?=
- =?us-ascii?Q?MUNmZ5R+bu5qPG8OO4NJtkrqxFRVQOuCXtNN6acZ2ALTaWy5elE74uKQIdcO?=
- =?us-ascii?Q?FBdudgP1TCnn8DQUuYe0WpwGoU7KiyOfiu32wW39DSbsPs3fGYR9y0LXaJFN?=
- =?us-ascii?Q?uv4IDryW8HXC7F6P4EpExiLS0/KfzcJ+mPQlAb/XRalXbndc3DzmpgfK5Yat?=
- =?us-ascii?Q?lI094n0Qn7I/sgxmbfAyFBxWnSBi5NYQ8//UGXoIwDjatRmFe5cddlBu8Oo+?=
- =?us-ascii?Q?Qn8jE/PkWxQ3QbPqs+Tk23xvetEK8uTMz3XvXDuUlEvuL/i9u2GD7z32WQau?=
- =?us-ascii?Q?L1N4SYnJnt+/POReH7/zwryHhKd++Sjck/WE3aa9XbvxT5DnoHNLQDFN/rrO?=
- =?us-ascii?Q?AZlEfTyB6dqqyq0dBcSfsz9WJhUpnqFekXhHblA8LTeTPd953qcrthHlZ+n1?=
- =?us-ascii?Q?oCdINR823/jk8qDaxQ1ySeRFRcxAsQ0pjOZrm7L0lUmVtP+gvcVjD96Q5Ppw?=
- =?us-ascii?Q?Wpv7d/IRuMVNNOUjwb9iYl7jksnKOleEHWuKw3ZMsVw6QPAAhVtkZeIJhkdU?=
- =?us-ascii?Q?L7/jHdF4DmWADlDeS/KLQh43EdGvJ735OsuhGWWUILJqawrboi92FtBBSUsQ?=
- =?us-ascii?Q?5U86UB+X66H097Icju4AuQw14rKDNiEixlwbhr/0GHi6jFleVkZ+HciYFcKA?=
- =?us-ascii?Q?wsAhco6dYWCx7+oTsjCJaUE/lsR/p6jR5NJ8i4QFTJQB1YJnI+LMsj61Y2io?=
- =?us-ascii?Q?8cYJyuJTnVAzZAnYt+bSdXjnXa3dFmttWHK+O0YOEefs769S7Bmk0v3Qu22x?=
- =?us-ascii?Q?HHneHfWLvALaIusr/o0R8tANWLzBg2GD1PTf5Gc8ZZfthp97JhJJAijhLQ1U?=
- =?us-ascii?Q?L0W6bpdfJOR4NVm3qUQlu9ZQx+bJnGrRYR4L014kPMsHt1QwrO24Q8pdJ8U1?=
- =?us-ascii?Q?OAD5yyyyA5d71YiKDiUisfzDHSNVNEtejMg+1anRHkHMegjMYbFeQSOEnOaL?=
- =?us-ascii?Q?Ul/ChwHxWzCeZl5xOxGRKNjQHau4/6fc4lCG9NbqYjKjwB6AMzjJCSdMNWiU?=
- =?us-ascii?Q?Glu38R/dVaEFRKJAlFbTX/3WMT+gHMfNrYh/GYb4rkf91u/CUddDRYJrhn99?=
- =?us-ascii?Q?1diAgTQuyg/1PaJ/7lVmM2F0zdh8vEHytAmjWRn/GaCgt0TuOxKQukwnj6bN?=
- =?us-ascii?Q?4pZZuNrpl3nlRQ9sNf8tYNlQ+lADdq2mZljkfIE97JMvdpIQ+ymFBNGmRJA4?=
- =?us-ascii?Q?FttZ1nBik2AuG5A=3D?=
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JzqgQ6lnc8Xh for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 03:52:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9975E416A5
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9975E416A5
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 03:52:37 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id v2so844463iol.4
+ for <buildroot@buildroot.org>; Sat, 28 Jan 2023 19:52:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=KuTvG9LJ/ASi4h3hQ+XH/4WdXGJfI56sQIxP6lnBTsc=;
+ b=kbWB96xhJFoJotnn9NT0F+sDPuaYWvcd1EgtclknIfACw+sm/CYYnYuBKNQ8CUlobi
+ rTmWFvyFoFrt1I5GQRRr64UqUj1nDtIASCTBa2PNTcgzZeIjYTh5NzUYSgGkNdiOAXUP
+ RSDyCvWdUqY92M0aLBX6E+VboyMPP/MPCdjcPQaRnsctDN7pxsSRk5UEeyjjC4bm+2Xo
+ +Z0Y02sPJf/tlzdbuuwRA5+IJhqj+aDpFnvCUeeZOY4ILSbwpP0puTQ6Bv9bMbf9MJLh
+ VvFIoZRUzFKwQXsYRZ4bFcTgrxA88OfTYA/0x7PS3dbxR0DtU4pcwIkBUNmdWFBvQvG5
+ M7+g==
+X-Gm-Message-State: AO0yUKVqJcdrY+xpcx6Z7ZPVW6RagO/ebUbnmP5MpSsryaWw+ZsPiG51
+ A2npAgT2TmwXTKQXxuzV+XWVRwMCNZmXrA==
+X-Google-Smtp-Source: AK7set+/ASFcV6eC1wylJmHKNWmt60XvurHVOTiqr6zTa5WnIP9UvugaxpY9xIoMDZeq0v3ykKgT6A==
+X-Received: by 2002:a6b:e402:0:b0:707:dcd8:2aea with SMTP id
+ u2-20020a6be402000000b00707dcd82aeamr2918732iog.19.1674964356457; 
+ Sat, 28 Jan 2023 19:52:36 -0800 (PST)
+Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
+ [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
+ b21-20020a05660214d500b006f6623df63asm2874352iow.14.2023.01.28.19.52.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 28 Jan 2023 19:52:35 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 28 Jan 2023 20:52:26 -0700
+Message-Id: <20230129035232.2480871-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: xes-inc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e97338e7-54a4-4fb8-e424-08db019f8131
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jan 2023 02:21:18.1457 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 2925f1cd-bdc3-4a76-bb38-6159e20a17f1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH1P110MB1068
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xes-inc.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kuC2U8N9twUG9Re8rKZeoPlxwfA2iqbtM58YaR0//dk=;
- b=rCQ4bJHCpUnDOoWRrHq/0KYNNfEKJnch79IlHfqKFv4sTTTUX6//KUGFwwpCwrNqGY4kloSzusgiG82x6deTa1uS0PT0UOOVtqLpM/G7+aIsEk3U0Sq90sOOluqJPHj1Sr/7/lU/OQddCxa5uMKUp8uK0yke1g17+uQ6WKMA2dTUlY624qAzWnocnfy1JD/4+TtFXycSjR+Uaef0tuPlW6ssKr/xSrIKQYXaMdkEbU3X5PA1Hd4BlTabu1gYI/O53Tc3h9qRFIEIQZEBs4whx7BnlFl7Q5E7DWofByuL8oUChbXyo/nlFKOvlT7euT585Xjp0M6KU0ptdHy8MCtH/A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
- header.s=selector1 header.b=rCQ4bJHC
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xes-inc.com;
-Subject: Re: [Buildroot] [External] - Re: [PATCH v2 1/1] package/ethtool:
- fix builds for older toolchains
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=KuTvG9LJ/ASi4h3hQ+XH/4WdXGJfI56sQIxP6lnBTsc=;
+ b=G1Ko47O1NC1hDNLMLDDLPKgJhEPk+D9nnu5F7fZ4ZFgSdIUlKCYvjLGgOGJrh9OLN2
+ iWfcYHfThCyR+FoF4gkFyC79dF3ugliAwN0gQmBi/r4QV/h7JIauX214WoBHm7MineTC
+ OOOhvHdPbIPeFmfELSMWlH295ReTczT+kH8NOL3HfPA1CEzJ+Bj0b9xB73RdPxaki5/K
+ ZWvMoJsep1X6HBcRn3n8l7wCByZ5a7V53i0WDfDOA1OXN43pz5jP4AShkrr5UUZOFqFJ
+ gg3p6xy0k8sANcESfrGcOVD89VjT3Qh7L6ABkb0s48KPNKQQTu2I8XYc+iqgDEJ6dDeo
+ 2ecg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=G1Ko47O1
+Subject: [Buildroot] [PATCH v2 1/7] package/python-async-generator: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -140,63 +94,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
- Matt Weber <matthew.weber@collins.com>, Vincent Fazio <vfazio@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-async-generator/Config.in           |  6 ++++++
+ .../python-async-generator.hash                    |  7 +++++++
+ .../python-async-generator.mk                      | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-async-generator/Config.in
+ create mode 100644 package/python-async-generator/python-async-generator.hash
+ create mode 100644 package/python-async-generator/python-async-generator.mk
 
-> -----Original Message-----
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Sent: Saturday, January 28, 2023 3:35 PM
-> To: Vincent Fazio <vfazio@xes-inc.com>
-> Cc: buildroot@buildroot.org; Florian Fainelli <f.fainelli@gmail.com>; Matt
-> Weber <matthew.weber@collins.com>; Vincent Fazio <vfazio@gmail.com>
-> Subject: [External] - Re: [Buildroot] [PATCH v2 1/1] package/ethtool: fix
-> builds for older toolchains
-> 
-> On Sat, 28 Jan 2023 22:31:42 +0100
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> > >  package/ethtool/0001-uapi-Bring-in-if.h.patch | 483
-> > > ++++++++++++++++++  ...2-marvell.c-Fix-build-with-musl-libc.patch |
-> > > 71 +++
-> > >  2 files changed, 554 insertions(+)
-> > >  create mode 100644 package/ethtool/0001-uapi-Bring-in-if.h.patch
-> > >  create mode 100644
-> > > package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch
-> >
-> > Applied to master, thanks.
-> 
-> Sorry, I messed up, I applied the v1 of the patch, which only added the 0001-
-> uapi-Bring-in-if.h.patch patch and not the musl fix.
-> 
-> Could you resubmit the musl fix separately?
-
-Done
-https://patchwork.ozlabs.org/project/buildroot/patch/20230129021756.2845959-1-vfazio@xes-inc.com/
-
-> 
-> In any case, having the musl fix in the patch titled "fix builds for older
-> toolchains" was not really correct, as the musl fix has nothing to do with
-> "older toolchains".
-> 
-
-Totally fair, it was a quick change I made at the request of the original author. I should have reworded the commit and made sure I marked the previous patch as superseded (odd that it wasn't automatically marked though).
-
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin Embedded Linux and Kernel
-> engineering and training https://bootlin.com
-> CAUTION: This email originated from outside of the organization. Do not click
-> links or open attachments unless you recognize the sender and know the
-> content is safe.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c8bc5eee22..6cf2b48a8f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1365,6 +1365,7 @@ F:	package/python-aiosignal/
+ F:	package/python-aiozipkin/
+ F:	package/python-argon2-cffi/
+ F:	package/python-argon2-cffi-bindings/
++F:	package/python-async-generator/
+ F:	package/python-async-lru/
+ F:	package/python-async-timeout/
+ F:	package/python-bidict/
+diff --git a/package/Config.in b/package/Config.in
+index 24be67b925..dd15467b11 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -962,6 +962,7 @@ menu "External python modules"
+ 	source "package/python-arrow/Config.in"
+ 	source "package/python-asgiref/Config.in"
+ 	source "package/python-asn1crypto/Config.in"
++	source "package/python-async-generator/Config.in"
+ 	source "package/python-async-lru/Config.in"
+ 	source "package/python-async-timeout/Config.in"
+ 	source "package/python-attrs/Config.in"
+diff --git a/package/python-async-generator/Config.in b/package/python-async-generator/Config.in
+new file mode 100644
+index 0000000000..eb5720c652
+--- /dev/null
++++ b/package/python-async-generator/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_ASYNC_GENERATOR
++	bool "python-async-generator"
++	help
++	  Async generators and context managers for Python 3.5+.
++
++	  https://github.com/python-trio/async_generator
+diff --git a/package/python-async-generator/python-async-generator.hash b/package/python-async-generator/python-async-generator.hash
+new file mode 100644
+index 0000000000..3a94d5eb31
+--- /dev/null
++++ b/package/python-async-generator/python-async-generator.hash
+@@ -0,0 +1,7 @@
++# md5, sha256 from https://pypi.org/pypi/async_generator/json
++md5  078a29b4afb3d7f38c097a530f042a55  async_generator-1.10.tar.gz
++sha256  6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144  async_generator-1.10.tar.gz
++# Locally computed sha256 checksums
++sha256  b54d37617a67005623de975715952a2df062a2616c197bc3b6b451245b0c9265  LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
++sha256  3e6dae555eb92787fc82d1d48355677f454c7f65aeb38d3f9e72bf9a3daf034b  LICENSE.MIT
+diff --git a/package/python-async-generator/python-async-generator.mk b/package/python-async-generator/python-async-generator.mk
+new file mode 100644
+index 0000000000..d5e4f430fc
+--- /dev/null
++++ b/package/python-async-generator/python-async-generator.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-async-generator
++#
++################################################################################
++
++PYTHON_ASYNC_GENERATOR_VERSION = 1.10
++PYTHON_ASYNC_GENERATOR_SOURCE = async_generator-$(PYTHON_ASYNC_GENERATOR_VERSION).tar.gz
++PYTHON_ASYNC_GENERATOR_SITE = https://files.pythonhosted.org/packages/ce/b6/6fa6b3b598a03cba5e80f829e0dadbb49d7645f523d209b2fb7ea0bbb02a
++PYTHON_ASYNC_GENERATOR_SETUP_TYPE = setuptools
++PYTHON_ASYNC_GENERATOR_LICENSE = Apache-2.0 or MIT
++PYTHON_ASYNC_GENERATOR_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
++
++$(eval $(python-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
