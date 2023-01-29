@@ -1,90 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E798DC05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 21:33:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BB5CC05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 21:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DFF260B0F;
-	Sun, 29 Jan 2023 21:33:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DFF260B0F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A0B1817A3;
+	Sun, 29 Jan 2023 21:45:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A0B1817A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P2DLTnbCleBK; Sun, 29 Jan 2023 21:33:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id byWHgI1Z6MNO; Sun, 29 Jan 2023 21:45:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B468660BAA;
-	Sun, 29 Jan 2023 21:33:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B468660BAA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F9781BF576
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 21:33:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D5F881768;
+	Sun, 29 Jan 2023 21:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D5F881768
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AEA31BF576
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 21:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29A8840102
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 21:33:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29A8840102
+ by smtp1.osuosl.org (Postfix) with ESMTP id F235581777
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 21:45:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F235581777
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tr0NEmRoEgb3 for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 21:33:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lvtmghslS-Xt for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 21:45:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B790C400CC
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B790C400CC
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 21:33:02 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id m8so36903edd.10
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 13:33:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=IQPYoGsWCg5Gwf1QxmoXP6f6tLNu3vUA3envPCgV8rk=;
- b=KcExPernc6t5Bp25wnnVnjn2YeW90MhwfVwaNhzQtZ+mrvVXKlj8kkwU0irN6daD/S
- e66BXNelHa5Ky+hrF7NdvtRkdNC/+Ol4OMM38xlEwXETaGVGuFBFG0bmYFLiEi2QIDJn
- nDuDgTnDBGiRXQfi6JLHJfs9sPHJTXzOSGyzNzKGlRtU/eMIRf5cg4NH5sNBL/ysm3h7
- qKKeQ98RsIFibrQFlNJ8SL8UdixWe+AlK4710yiFPCoUV780TCzK8bMCEUauTDamKILC
- HZy7roA3BkQ/MaNpOHbieV3fCzhn+me8km3u6IPGSAsFoZBxN1+iG5nKMjTy4JU1v5Zz
- HSbg==
-X-Gm-Message-State: AO0yUKVb6ZuUxDxg2n6AuqpoK2bl8Oh+QfeJ8W8W6YtjTbRT53HtU8HS
- lw5ctXrk2pIr6yqlSxKlcvU8ktBPfvZ3Vi/+
-X-Google-Smtp-Source: AK7set88m/+0TUmpZHL+8+3mB69/svq1KiT/bjOabfat9Bm+3lV/PV+MZ2X/GlJAHvHW5gYrZdF5Jw==
-X-Received: by 2002:a05:6402:540a:b0:4a2:20ba:71e5 with SMTP id
- ev10-20020a056402540a00b004a220ba71e5mr7951339edb.26.1675027980668; 
- Sun, 29 Jan 2023 13:33:00 -0800 (PST)
-Received: from devlab.lan (93-43-212-100.ip93.fastwebnet.it. [93.43.212.100])
- by smtp.gmail.com with ESMTPSA id
- q6-20020a1709064cc600b0084d494b24dcsm5815894ejt.161.2023.01.29.13.32.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Jan 2023 13:33:00 -0800 (PST)
-From: Alessandro Partesotti <a.partesotti@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 22:32:56 +0100
-Message-Id: <20230129213256.1028798-1-a.partesotti@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230128094119.10660-1-a.partesotti@gmail.com>
-References: <20230128094119.10660-1-a.partesotti@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD7DC81768
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AD7DC81768
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 21:45:16 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id A04065FFA2;
+ Sun, 29 Jan 2023 22:45:07 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 29 Jan 2023 22:45:07 +0100
+Date: Sun, 29 Jan 2023 22:45:07 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230129214507.GY2632@scaer>
+References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
+ <20230127141058.2180747-4-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=IQPYoGsWCg5Gwf1QxmoXP6f6tLNu3vUA3envPCgV8rk=;
- b=omaDTfkr3C02+2tlYnD3+6fLlqF3zcxtbNIyRDJl3lz+wkTNYZa2Q2Ea3pCsMNQivq
- lUDAkUFiNA8rr0uSKm6zZpb5xNohRets1R574UhVIPyjvEwzPsJo62ejTUKSNjbQNuLd
- 8j5aF/FeXqz0e18d9ncG0tjd5xdfVtaejPuf1Q7TeEJXA27YYddabLZkbEEif66KlIF9
- KDFS+9yJYmHp3ffMtI1dVRUempQlz0nGYApjbVfe8kAoVWhmSXhUQ/FGt7/QuzumryLO
- quuYBwf8zD/bT9Be1OyV0osVveEoyREO1fyIu4wvVfsO5trhVsy0QQjUhJfy3zwrFywo
- DuTA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=omaDTfkr
-Subject: [Buildroot] [PATCH v2 1/1] package/oatpp:: new package
+Content-Disposition: inline
+In-Reply-To: <20230127141058.2180747-4-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1675028713;
+ bh=dQbDSVpNALYINPY8VbbSFK2BbqsQYRxrI7+HZ3fjJ0M=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=pnEhFRXgZF81R8FtXiw5UjoyrIOKcdbIyIceYwqDHVzJv/u9/8VeGzAbGDrxCnEbB
+ ktN2ZfFk/kM4hq5txG1Xl9JIhQDWWIp6KXKPVczDva6rHJRR+ztI8T464IXYry58xI
+ AHbRDgOodFlLGP08gvFAOhKaM0MrrweeZjccjMDq6Tq0M/fDNU9O9TO9FMPN70RlVi
+ zyRZA1iCdfYRr6qEewP27oLCQ6dYE9fyAhSdTICmXceNbDYR6Y+maX60eG4+pxlafK
+ Dcf21eOuN7kVrE1SWR3X7heSsYuL02CWmwfKdQxOWGJDjPsMf4Wgq7gPUz5IDvML5F
+ 2eItG8gfw+FeA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pnEhFRXg
+Subject: Re: [Buildroot] [PATCH v4 04/13] package/gemmlowp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,98 +76,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alessandro Partesotti <a.partesotti@gmail.com>,
+Cc: Stefan Hager <stefan.hager@ginzinger.com>,
  Samuel Martin <s.martin49@gmail.com>,
- "YANN E . MORIN" <yann.morin.1998@free.fr>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package introduce oatpp in BR buildsystem.
-Oatpp must be used as static library as upstreaam suggest.
+James, All,
 
-Signed-off-by: Alessandro Partesotti <a.partesotti@gmail.com>
----
-Changes v1 -> v2
-- indentation and spaces (suggested by Yann E. MORIN)
-- generic macro changes (suggested by Yann E. MORIN)
+On 2023-01-27 07:10 -0700, James Hilliard spake thusly:
+> From: Stefan Hager <stefan.hager@ginzinger.com>
+> 
+> This package is required by tensorflow-lite.
+> 
+> Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+> Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+[--SNIP--]
+> diff --git a/package/gemmlowp/gemmlowp.mk b/package/gemmlowp/gemmlowp.mk
+> new file mode 100644
+> index 0000000000..1a36fc48f7
+> --- /dev/null
+> +++ b/package/gemmlowp/gemmlowp.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# gemmlowp
+> +#
+> +################################################################################
+> +
+> +GEMMLOWP_VERSION = 08e4bb339e34017a0835269d4a37c4ea04d15a69
+> +GEMMLOWP_SITE = $(call github,google,gemmlowp,$(GEMMLOWP_VERSION))
+> +GEMMLOWP_LICENSE = Apache-2.0
+> +GEMMLOWP_LICENSE_FILES = LICENSE
+> +GEMMLOWP_INSTALL_STAGING = YES
+> +GEMMLOWP_INSTALL_TARGET = NO
+> +GEMMLOWP_SUBDIR = contrib
 
-Signed-off-by: Alessandro Partesotti <a.partesotti@gmail.com>
----
- package/Config.in        |  1 +
- package/oatpp/Config.in  | 13 +++++++++++++
- package/oatpp/oatpp.hash |  2 ++
- package/oatpp/oatpp.mk   | 16 ++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/oatpp/Config.in
- create mode 100644 package/oatpp/oatpp.hash
- create mode 100644 package/oatpp/oatpp.mk
+Upstream is very careful to point to some optimisations that are
+required or performance will suffer.
 
-diff --git a/package/Config.in b/package/Config.in
-index 995dae2c57..c7394ae53d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1941,6 +1941,7 @@ menu "Networking"
- 	source "package/nss-mdns/Config.in"
- 	source "package/nss-myhostname/Config.in"
- 	source "package/nss-pam-ldapd/Config.in"
-+	source "package/oatpp/Config.in"
- 	source "package/omniorb/Config.in"
- 	source "package/open-isns/Config.in"
- 	source "package/open62541/Config.in"
-diff --git a/package/oatpp/Config.in b/package/oatpp/Config.in
-new file mode 100644
-index 0000000000..44f0fabed8
---- /dev/null
-+++ b/package/oatpp/Config.in
-@@ -0,0 +1,13 @@
-+comment "Oat++ needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_OATPP
-+	bool "Oat++"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Oat++ is an open-source C++ web framework for highly
-+	  scalable and resource-efficient web applications.
-+	  It provides all the necessary components for
-+	  production-grade development.
-+	  See https://oatpp.io/docs/start
-diff --git a/package/oatpp/oatpp.hash b/package/oatpp/oatpp.hash
-new file mode 100644
-index 0000000000..fadea2a05f
---- /dev/null
-+++ b/package/oatpp/oatpp.hash
-@@ -0,0 +1,2 @@
-+# Hash from: https://github.com/oatpp/oatpp/archive/1.3.0/oatpp-1.3.0.tar.gz
-+sha512  4fe8587efe1b4ecae14554ec8edb209e5558a3e4a4e6ff49bbfaaf06d2cc12f2cc306c5edc43b8dafc465aff53098ad4bebb9971694761b91a553730d5acb59a  oatpp-1.3.0.tar.gz
-diff --git a/package/oatpp/oatpp.mk b/package/oatpp/oatpp.mk
-new file mode 100644
-index 0000000000..d146d05d53
---- /dev/null
-+++ b/package/oatpp/oatpp.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# oatpp
-+#
-+################################################################################
-+
-+OATPP_VERSION = 1.3.0
-+OATPP_LICENSE = Apache-2.0
-+OATPP_LICENSE_FILES = LICENSE
-+OATPP_SITE = $(call github,oatpp,oatpp,$(OATPP_VERSION))
-+OATPP_CMAKE_OPTS = -DBUILD_SHARED_LIBS=OFF
-+OATPP_INSTALL_STAGING= YES
-+# Only builds a static lib:
-+OATPP_INSTALL_TARGET= NO
-+
-+$(eval $(cmake-package))
+Notably, should be enabled:
+  - for x86: sse4.1
+  - for ARM: NEON
+
+For NEON, it seems this is automatically handled, though, based on
+looking at some macros:
+
+    internal/detect_platform.h
+    85 #if (defined __ARM_NEON) || (defined __ARM_NEON__)
+    86 #define GEMMLOWP_NEON
+    87 #endif
+
+For x86, we should probably have code like (what we have as
+BR2_X86_CPU_HAS_SSE4 seems to be SSE4.1, but it is not clear whether
+there is an actual delta between SSE4 and SSE4.1 [0], so let's be safe
+and assume that BR2_X86_CPU_HAS_SSE4 is not enough):
+
+    ifeq ($(BR2_X86_CPU_HAS_SSE42),y)
+    GEMMLOWP_OPTIM += -msse4.1
+    endif
+
+However, that same header seems to also have some detection based on
+macros... This needs to be cleared, maybe?
+
+[0] https://en.wikipedia.org/wiki/SSE4
+
+Regards,
+Yann E. MORIN.
+
+> +$(eval $(cmake-package))
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.25.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
