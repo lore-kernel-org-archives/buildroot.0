@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 621A8C61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:49:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3506C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 117ED831F2;
-	Mon, 20 Feb 2023 23:49:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 117ED831F2
+	by smtp1.osuosl.org (Postfix) with ESMTP id A16A28417C;
+	Mon, 20 Feb 2023 23:49:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A16A28417C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qLSCHerMnZNG; Mon, 20 Feb 2023 23:49:25 +0000 (UTC)
+	with ESMTP id Xi6cEQSuAwXn; Mon, 20 Feb 2023 23:49:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E638C83F10;
-	Mon, 20 Feb 2023 23:49:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E638C83F10
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5946D1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC38684123;
+	Mon, 20 Feb 2023 23:49:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC38684123
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 24E2F1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7DDD961040
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DDD961040
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B59F4177B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B59F4177B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QU2B_Ji5MMJn for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ckJZRCMQEZ9q for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 90F6261764
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90F6261764
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B1654177E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B1654177E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A7A98648F; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
+ id 87A3D828C8; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 17:23:23 +0100
+Date: Sun, 29 Jan 2023 17:41:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ca0d4287185c5f7f7c4fea7b405effdc0d19c93c
-X-Git-Newrev: 47f2896fe36b4439b80b149f86f1975c53b1e5bb
+X-Git-Oldrev: 675fdc08f673bc992e9b169363c49fbd18662555
+X-Git-Newrev: c09481f7f0419e8a69a2813052bc56895a598353
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205221.7A7A98648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/freescale_imx8qmmek:
- update codeaurora URLs to github
+Message-Id: <20230220205243.87A3D828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-trio: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,83 +63,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47f2896fe36b4439b80b149f86f1975c53b1e5bb
+commit: https://git.buildroot.net/buildroot/commit/?id=c09481f7f0419e8a69a2813052bc56895a598353
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-NXP moved all its open source code repositories from Code Aurora Forum
-to github. See for example:
-https://github.com/nxp-imx/meta-imx/commit/39bc4d81969a40e0da660519cf4ed083b9c53097
-
-Software packages are now grouped in several NXP github
-projects/organizations (nxp-imx, nxp-qoriq, ...). See:
-https://www.nxp.com/design/software/embedded-software/nxp-github:NXP-GITHUB
-
-The NXP code published on Code Aurora is still present (at the time of
-this commit) but is no longer receiving updates. It is also expected
-to be shut down on 2023-03-31. The Code Aurora website
-https://source.codeaurora.org/ currently show the following message:
-"""
-Note: Qualcomm Innovation Center Inc. maintained repositories have
-migrated to git.codelinaro.org. QUIC repositories on this site will
-not receive any updates after March 31, 2022, and will be deleted on
-March 31, 2023. If your project depends on these repositories, please
-adjust your tooling configuration to use the new, up-to-date project
-location.
-"""
-
-For this reason, the NXP recipes using codeaurora.org urls need to be
-updated to the correct github.com replacement.
-
-Note: this commit does not change the component version. Only the
-download URL is updated. The archive content is expected to be the
-same.
-
-Note 2: this commit updates the Kernel, U-Boot and ATF download urls.
-The method is also changed from _CUSTOM_GIT to _CUSTOM_TARBALL.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/freescale_imx8qmmek_defconfig | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/python-trio/Config.in        | 12 ++++++++++++
+ package/python-trio/python-trio.hash |  7 +++++++
+ package/python-trio/python-trio.mk   | 14 ++++++++++++++
+ 5 files changed, 35 insertions(+)
 
-diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
-index 8a0e866cee..75777646df 100644
---- a/configs/freescale_imx8qmmek_defconfig
-+++ b/configs/freescale_imx8qmmek_defconfig
-@@ -4,9 +4,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qm-mek.dtb"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qm-mek"
-@@ -20,16 +19,14 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qm_mek"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b686dbd87a..9fdc66f60b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1402,6 +1402,7 @@ F:	package/python-sockjs/
+ F:	package/python-terminaltables/
+ F:	package/python-tinycss2/
+ F:	package/python-tomli/
++F:	package/python-trio/
+ F:	package/python-typeguard/
+ F:	package/python-typing-inspect/
+ F:	package/python-uhid/
+diff --git a/package/Config.in b/package/Config.in
+index 195398b844..aa6bb7bce3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1306,6 +1306,7 @@ menu "External python modules"
+ 	source "package/python-tqdm/Config.in"
+ 	source "package/python-traitlets/Config.in"
+ 	source "package/python-treq/Config.in"
++	source "package/python-trio/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+ 	source "package/python-txdbus/Config.in"
+diff --git a/package/python-trio/Config.in b/package/python-trio/Config.in
+new file mode 100644
+index 0000000000..0aa53c90ca
+--- /dev/null
++++ b/package/python-trio/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_TRIO
++	bool "python-trio"
++	select BR2_PACKAGE_PYTHON_ASYNC_GENERATOR # runtime
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_IDNA # runtime
++	select BR2_PACKAGE_PYTHON_OUTCOME # runtime
++	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
++	select BR2_PACKAGE_PYTHON_SORTEDCONTAINERS # runtime
++	help
++	  A friendly Python library for async concurrency and I/O.
++
++	  https://github.com/python-trio/trio
+diff --git a/package/python-trio/python-trio.hash b/package/python-trio/python-trio.hash
+new file mode 100644
+index 0000000000..487194662e
+--- /dev/null
++++ b/package/python-trio/python-trio.hash
+@@ -0,0 +1,7 @@
++# md5, sha256 from https://pypi.org/pypi/trio/json
++md5  f7dbfa6a8722065f09da188641d8ed93  trio-0.22.0.tar.gz
++sha256  ce68f1c5400a47b137c5a4de72c7c901bd4e7a24fbdebfe9b41de8c6c04eaacf  trio-0.22.0.tar.gz
++# Locally computed sha256 checksums
++sha256  418d025e1284311f2690263e6efa6bf51585e5741818ece63e5862487e505bb9  LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
++sha256  faa301d72dcc023b432bd77dc08a773ca3449e5c27440b9d66eb46fb8500b430  LICENSE.MIT
+diff --git a/package/python-trio/python-trio.mk b/package/python-trio/python-trio.mk
+new file mode 100644
+index 0000000000..80da203c15
+--- /dev/null
++++ b/package/python-trio/python-trio.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-trio
++#
++################################################################################
++
++PYTHON_TRIO_VERSION = 0.22.0
++PYTHON_TRIO_SOURCE = trio-$(PYTHON_TRIO_VERSION).tar.gz
++PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/0b/b8/1b81d2149c3e2c25900d40b8e6c8d3ca502a3cc844b90c962b0854aaf3f3
++PYTHON_TRIO_SETUP_TYPE = setuptools
++PYTHON_TRIO_LICENSE = Apache-2.0 or MIT
++PYTHON_TRIO_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
