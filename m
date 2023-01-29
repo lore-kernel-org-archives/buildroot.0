@@ -4,85 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E60C05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 16:40:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF13AC05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 16:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18A1241570;
-	Sun, 29 Jan 2023 16:40:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18A1241570
+	by smtp4.osuosl.org (Postfix) with ESMTP id 402704155E;
+	Sun, 29 Jan 2023 16:40:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 402704155E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EdRuNsRsqPOB; Sun, 29 Jan 2023 16:40:05 +0000 (UTC)
+	with ESMTP id RoBh9F6uhGbr; Sun, 29 Jan 2023 16:40:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A4814155E;
-	Sun, 29 Jan 2023 16:40:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A4814155E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5147F1BF476
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:40:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DBEF415A4;
+	Sun, 29 Jan 2023 16:40:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DBEF415A4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 556791BF476
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38CDF40108
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:40:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38CDF40108
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D5094088C
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 16:40:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D5094088C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0yFRTzGYsYQO for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 16:40:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20ADA400D9
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 20ADA400D9
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:40:02 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id q5so9080993wrv.0
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 08:40:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=nmmpvvFc8A7UubUSlkcNZS/EZaBJ8EsWY/O8kAzB0AY=;
- b=H4uGZs+ohU1RBIkMIdV+zgzRWC7t6LmFYprKiuB+3CNzcTFDPujgPTEPtPKtHHSzV6
- p7fcPO/9y1JAjVsUEPsk1M63q/GzCWJ3tcTXKSPWWYrZxYwQTJ21ah7dEof4uQvkTYmM
- atQlAr8zX+TJVJw4fRIgg50Zv6fvYX+nUF/VASBeTSjf8Fx7EiYhfyiFxZSV2Vk+sK/i
- ar9guYlLlyzTq5WuL2HrjtL7dZNSayYIQ7KLtW+FYMbZx48XDgKbdJu0Y4oeeO44ZwTh
- ha+7G5fJI/dLznQooJQog4bBO1A7005eH+jcNeCA5RwjjSqQU8cTWtKWv4sFAaUrdHfn
- 4hwQ==
-X-Gm-Message-State: AO0yUKXTWCfh3CXwmwwByNFEB6RWA6kYhkzD1YdvqnGmUHKIIFBarwV3
- srxgI/AQRNNVSZZk6Qu3+muZIX25XkE=
-X-Google-Smtp-Source: AK7set8knUke2ZonZI00eYNPklA9QcwGseffOA7fEqheFVznHAwpNCZX2CgnK+Vum5emJyTc4eSMvw==
-X-Received: by 2002:a5d:4cd0:0:b0:2bf:cfb4:817c with SMTP id
- c16-20020a5d4cd0000000b002bfcfb4817cmr8954484wrt.35.1675010399882; 
- Sun, 29 Jan 2023 08:39:59 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- x3-20020adfec03000000b002bfbf7679absm9609619wrn.107.2023.01.29.08.39.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Jan 2023 08:39:59 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wEJNK04tYzF4 for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 16:40:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30E7641583
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:40:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30E7641583
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1F3EA880D2; Sun, 29 Jan 2023 16:40:16 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 17:39:53 +0100
-Message-Id: <20230129163953.56236-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=nmmpvvFc8A7UubUSlkcNZS/EZaBJ8EsWY/O8kAzB0AY=;
- b=Ne4aFIIIlj3K2n8fbCfH8hXZbrEVV+kfRVfXjY9dsrp6UiMoDV2ir3pYbqbKUCZvtV
- k2d9RNWIjdV1fD9Y8I1ROUpShVa+cduNDq8tXKzI964j28Odo0uQxdMcaNdZBdFyC11F
- vbw0Ti5WVrYVXjThjBMXf6irMZrXMip5jBNNspN9AUiC8yITE6/HjGRgTP6iY0/JGc1K
- d2YE/E0NpBXoLH2R3XiaL6pv37ujAaTD81S9t+OWRrEryYe5/cDMZVOAekCNgKtaq+ss
- tHbTrZsQEB9JMZuYw2d952ivNfwfy2V5g2EkOPtG0iWU7HstrMjuZhc5BzV4zxRnRNda
- 27ZA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Ne4aFIII
-Subject: [Buildroot] [PATCH 1/1] package/vim: security bump to version
- 9.0.1260
+Date: Sun, 29 Jan 2023 17:39:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 47a74ffa8137c22686e6196e0b1e74861d1bd81c
+X-Git-Newrev: b86cc6a313773ac90bceabf376e33bba789c2950
+X-Patchwork-Hint: ignore
+Message-Id: <20230129164016.1F3EA880D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-greenlet: bump to version
+ 2.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,49 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Fix CVE-2023-0049, CVE-2023-0051, CVE-2023-0054 and CVE-2023-0288
-- Update hash of README.txt: typo fixed by
-  https://github.com/vim/vim/commit/f1dcd14fc5d4370476cd82895a4479ca2d252e54
+commit: https://git.buildroot.net/buildroot/commit/?id=b86cc6a313773ac90bceabf376e33bba789c2950
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/vim/vim.hash | 4 ++--
- package/vim/vim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-greenlet/python-greenlet.hash | 4 ++--
+ package/python-greenlet/python-greenlet.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 03ee908db4..4000beedc1 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  c95c9abcf024bd6293ad199e4efa1c09452a9c6456c9cbaf53d896cf7b9f4d08  vim-9.0.0951.tar.gz
-+sha256  bcaf9b21ab00ab49de4f3bdfda1bcda82533ec16c412824226544a3fce6506ff  vim-9.0.1260.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
--sha256  de04910387a62ad4f9b36b91457c8d5ef32733ac5d768a128071b93f4821fcd1  README.txt
-+sha256  d187aff219161f37138479257f82d687ea10b2cdd17d58b53a3ec9b79d6dc870  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index d814c68630..e3648bfab9 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
+index 4e9e96398a..f378436beb 100644
+--- a/package/python-greenlet/python-greenlet.hash
++++ b/package/python-greenlet/python-greenlet.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/greenlet/json
+-md5  8d0f10b807144a86b54841cfab2620a9  greenlet-2.0.1.tar.gz
+-sha256  42e602564460da0e8ee67cb6d7236363ee5e131aa15943b6670e44e5c2ed0f67  greenlet-2.0.1.tar.gz
++md5  e6637d59015cba7e86f2111e6aa8168b  greenlet-2.0.2.tar.gz
++sha256  e7c8dc13af7db097bed64a051d2dd49e9f0af495c26995c00a9ee842690d34c0  greenlet-2.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
+ sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
+diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
+index 232e2820f8..40f05f667e 100644
+--- a/package/python-greenlet/python-greenlet.mk
++++ b/package/python-greenlet/python-greenlet.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--VIM_VERSION = 9.0.0951
-+VIM_VERSION = 9.0.1260
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
--- 
-2.39.0
-
+-PYTHON_GREENLET_VERSION = 2.0.1
++PYTHON_GREENLET_VERSION = 2.0.2
+ PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
+-PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/fd/6a/f07b0028baff9bca61ecfcd9ee021e7e33369da8094f00eff409f2ff32be
++PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/1e/1e/632e55a04d732c8184201238d911207682b119c35cecbb9a573a6c566731
+ PYTHON_GREENLET_SETUP_TYPE = setuptools
+ PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
+ PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
