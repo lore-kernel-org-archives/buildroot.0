@@ -1,93 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DF8BC05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 09:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D753C05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 11:42:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4CB640453;
-	Sun, 29 Jan 2023 09:46:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4CB640453
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7BDE41626;
+	Sun, 29 Jan 2023 11:42:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7BDE41626
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DwRCCU91ouRd; Sun, 29 Jan 2023 09:46:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bqEZIuQYCYUi; Sun, 29 Jan 2023 11:42:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 128D1403E9;
-	Sun, 29 Jan 2023 09:46:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 128D1403E9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13A251BF3EB
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 09:45:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D31DA41620;
+	Sun, 29 Jan 2023 11:42:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D31DA41620
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EE0461BF591
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 11:42:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2707401C9
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 09:45:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2707401C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7B4341620
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 11:42:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7B4341620
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 52XLeQU_LQBG for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 09:45:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCAF24015A
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DCAF24015A
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 09:45:50 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- l41-20020a05600c1d2900b003daf986faaeso6259008wms.3
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 01:45:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=DhFqRlp1GFLL15JGTAdBSPjtWr+Kv52gv3n6eiy8DM0=;
- b=jLBGL2O4+MCfCuDVvnqh6MajP+fbXeRdWv9ki7ritPB8R1z8jJy6UplNm96X4Oflcb
- Z5hC7AsCiza01foHoimKyZ9jk9QhcPB/Bzac1Ii9v9fPNEXu8tVI2xTzgrb845WGcQ4B
- SKXmR1ywRnNG7MGmcVFYWFrGpz41UQ/I13AB6BqobAPBA9XSeMy5/XkFEp1fbuDR5eMr
- GmJqvbCi6m8E44Sx0sRGqnyJRjOaYgMBhOuox1/F9HuSdlReE+OTWWD18Ujbehp2/Pxn
- CI9BLw/++DO3ykoljsDNoeWpQp+COBpAb6LSVS3TytXAA/aER64g6eY9YbwsgrVFu4/t
- hI6A==
-X-Gm-Message-State: AFqh2kqPUFUITtqODjKrIXY9quQlgxuCeozFITsj0FPPMid6c8mUFCJA
- jZJxEO+RqAFPK7IPL9+SePI394202bo9/z/M
-X-Google-Smtp-Source: AMrXdXvdLqcCLadXF8erKVOxb3D0eFrRKXMu8XJbBj6Kp00fJdVija4fnxFhKp3cLy6pVKOm0JTEww==
-X-Received: by 2002:a05:600c:4e05:b0:3c6:e61e:ae71 with SMTP id
- b5-20020a05600c4e0500b003c6e61eae71mr48288557wmq.1.1674985548349; 
- Sun, 29 Jan 2023 01:45:48 -0800 (PST)
-Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
- [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- d11-20020a05600c3acb00b003db30be4a54sm12634713wms.38.2023.01.29.01.45.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Jan 2023 01:45:48 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xt5BL5M2d3tc for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 11:42:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FA4A4161F
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FA4A4161F
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 11:42:13 +0000 (UTC)
+Received: from ubuntu-jammy.com (unknown [223.102.87.214])
+ by zwqz-smtp-mta-g0-4 (Coremail) with SMTP id _____wDXbteKW9Zjx_JdCA--.49624S2;
+ Sun, 29 Jan 2023 19:42:03 +0800 (CST)
+From: TIAN Yuanhao <tianyuanhao3@163.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 10:45:30 +0100
-Message-Id: <20230129094530.884944-3-thomas.devoogdt@barco.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230129094530.884944-1-thomas.devoogdt@barco.com>
-References: <20230129094530.884944-1-thomas.devoogdt@barco.com>
+Date: Sun, 29 Jan 2023 11:41:47 +0000
+Message-Id: <20230129114147.2504-1-tianyuanhao3@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-CM-TRANSID: _____wDXbteKW9Zjx_JdCA--.49624S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKr4xXFWxuryxXry7ArWfuFg_yoWkWFX_KF
+ 1UJr1UXrs5WrW8ZFyxtF15GFy5Ww1rGr4ktF1kKFnYyr1DJwn3tr10kryUJF15JF47Kryj
+ y3WDXr13ZFnF9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+ 9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRRSdy5UUUUU==
+X-Originating-IP: [223.102.87.214]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbBzhEGjWI0XLAkkgAAsY
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=DhFqRlp1GFLL15JGTAdBSPjtWr+Kv52gv3n6eiy8DM0=;
- b=FZentDWIiW4RylhRpLQGdukMasYyI2VOc1+Shcu7bpK7XvAx7ba6cHVdv4xkknCYlA
- R9OMpHxJjeF/QaukydBV9DbH/oF1KtmYz5ky+aJ2CnkUNthkecDoQOUhqgvGKE/TRMnH
- Oo8y0o/YJM8Qjjz591cIrripUB7FRJ7fOM4SStI6+rMtRq2FVnANN1fV75KShnyFMeQ8
- jslgR21ws0I4wcJVTtAAPdk6A0ocT/WG5/jztM5YhKC80hMjMFWwsMpYU33kzaBO+fn5
- ZyP4HyKR23d1vfNDBpKKS611YIsqc8HFB/Y164xXcFe8wiVaw3WrpANDBizFu1e+BhfQ
- CEnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=FZentDWI
-Subject: [Buildroot] [PATCH v2 3/3] package/fluent-bit: needs arch support
- for wasm
+ d=163.com; 
+ s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xHx4s
+ REdKGoDYbN2FUQIIPl4WBzzXgqKBkY1rOgigxI=; b=Ecg7oFNZ4QpkwfWT6HZPD
+ e/EDZxcwke23nmllDb8TPfKqeL2hN8xxu3HZiFkyEwilU5ilqpXZ3iRToV8+fW2P
+ MvesxSCC1cz0hNjwCPEv4Z2ClkydgybF+Vuws/MvxI4kyXfwJIDj0mXwuUkd/2Va
+ Z5em3btZMpDORv52lFQ7Uc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
+ header.a=rsa-sha256 header.s=s110527 header.b=Ecg7oFNZ
+Subject: [Buildroot] [PATCH 1/1] package/ttyd: bump to version 1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,68 +73,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas.devoogdt@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bartosz Bilas <b.bilas@grinn-global.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-
-See:
-https://github.com/fluent/fluent-bit/tree/master/lib/wasm-micro-runtime-WAMR-1.1.1#supported-architectures-and-platforms
-
-MIPS & RISCV32 are mentioned in the supported list,
-but that seems to be wrong, so excluded those.
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 ---
-v1 --> v2:
- - added package/ prefix to the git message
+ package/ttyd/ttyd.hash | 2 +-
+ package/ttyd/ttyd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/fluent-bit/Config.in     | 11 +++++++++++
- package/fluent-bit/fluent-bit.mk |  6 ++++++
- 2 files changed, 17 insertions(+)
-
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index bd89c05faa..0ed69e09ce 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -11,3 +11,14 @@ config BR2_PACKAGE_FLUENT_BIT
+diff --git a/package/ttyd/ttyd.hash b/package/ttyd/ttyd.hash
+index a2a933b63a..85bd71ba2d 100644
+--- a/package/ttyd/ttyd.hash
++++ b/package/ttyd/ttyd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  edc44cd5319c0c9d0858081496cae36fc5c54ee7722e0a547dde39537dfb63de  ttyd-1.7.2.tar.gz
++sha256  c9cf5eece52d27c5d728000f11315d36cb400c6948d1964a34a7eae74b454099  ttyd-1.7.3.tar.gz
+ sha256  8b7e100f8311cb428c57609164d93099bada2599f948359045d1ac876a7a625b  LICENSE
+diff --git a/package/ttyd/ttyd.mk b/package/ttyd/ttyd.mk
+index 085511b5fd..d17e21d60b 100644
+--- a/package/ttyd/ttyd.mk
++++ b/package/ttyd/ttyd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "fluent-bit needs a glibc toolchain w/ C++"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
-+
-+if BR2_PACKAGE_FLUENT_BIT
-+
-+config BR2_PACKAGE_FLUENT_BIT_WASM
-+	bool "Build with WASM runtime support"
-+	default y
-+	# see lib/wasm-micro-runtime-WAMR-1.1.1/README.md#supported-architectures-and-platforms
-+	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be || \
-+		(BR2_riscv && BR2_RISCV_64) || BR2_xtensa || BR2_arc
-+
-+endif
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index c84042a0fa..6e9a33e02e 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -17,6 +17,12 @@ FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_CHUNK_TRACE=No \
- 	-DFLB_BACKTRACE=No
- 
-+ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
-+FLUENT_BIT_CONF_OPTS += -DFLB_WASM=Yes
-+else
-+FLUENT_BIT_CONF_OPTS += -DFLB_WASM=No
-+endif
-+
- ifeq ($(BR2_PACKAGE_LUAJIT),y)
- FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=Yes
- FLUENT_BIT_DEPENDENCIES += luajit
+-TTYD_VERSION = 1.7.2
++TTYD_VERSION = 1.7.3
+ TTYD_SITE = $(call github,tsl0922,ttyd,$(TTYD_VERSION))
+ TTYD_LICENSE = MIT
+ TTYD_LICENSE_FILES = LICENSE
 -- 
-2.39.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
