@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33A4AC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA477C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D90416FAE0;
-	Tue, 21 Feb 2023 01:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D90416FAE0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D6DF6FB7B;
+	Tue, 21 Feb 2023 01:21:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D6DF6FB7B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qqCQc4QYNjTN; Tue, 21 Feb 2023 01:21:11 +0000 (UTC)
+	with ESMTP id P-tgdh4NuPCL; Tue, 21 Feb 2023 01:21:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07D9E6F9F0;
-	Tue, 21 Feb 2023 01:21:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07D9E6F9F0
+	by smtp3.osuosl.org (Postfix) with ESMTP id A26396F9C8;
+	Tue, 21 Feb 2023 01:21:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A26396F9C8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C3DF1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5BB321BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D070D6FBE9
+ by smtp3.osuosl.org (Postfix) with ESMTP id E81656FBEA
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D070D6FBE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E81656FBEA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i5pvi4GGXllJ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+ with ESMTP id z-mRQDjNw23W for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A86396FBA1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A86396FBA1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 292476FBC4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 292476FBC4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9711181979; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+ id 0E1CC828C8; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 17:41:12 +0100
+Date: Sun, 29 Jan 2023 22:59:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c09481f7f0419e8a69a2813052bc56895a598353
-X-Git-Newrev: c4d75ef7c663e97baa98956fd30770b9b23b311a
+X-Git-Oldrev: ee399a868957fbf963db525adeeb4ab2dd3f04fb
+X-Git-Newrev: 1e645ff7475710f4af9341602471dbeac387c776
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205243.9711181979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-wsproto: new
- package
+Message-Id: <20230220205244.0E1CC828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/neon-2-sse: add
+ missing coment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,87 +63,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4d75ef7c663e97baa98956fd30770b9b23b311a
+commit: https://git.buildroot.net/buildroot/commit/?id=1e645ff7475710f4af9341602471dbeac387c776
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+That was missed when applying ee399a8689 (package/neon-2-sse: new
+package)...
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-wsproto/Config.in           |  7 +++++++
- package/python-wsproto/python-wsproto.hash |  5 +++++
- package/python-wsproto/python-wsproto.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ package/neon-2-sse/neon-2-sse.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9fdc66f60b..bb56753418 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1407,6 +1407,7 @@ F:	package/python-typeguard/
- F:	package/python-typing-inspect/
- F:	package/python-uhid/
- F:	package/python-weasyprint/
-+F:	package/python-wsproto/
- F:	package/python-yarl/
- F:	package/python-zopfli/
- F:	package/rtl8192eu/
-diff --git a/package/Config.in b/package/Config.in
-index aa6bb7bce3..2cb785c128 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1340,6 +1340,7 @@ menu "External python modules"
- 	source "package/python-wrapt/Config.in"
- 	source "package/python-ws4py/Config.in"
- 	source "package/python-wsaccel/Config.in"
-+	source "package/python-wsproto/Config.in"
- 	source "package/python-wtforms/Config.in"
- 	source "package/python-xlib/Config.in"
- 	source "package/python-xlrd/Config.in"
-diff --git a/package/python-wsproto/Config.in b/package/python-wsproto/Config.in
-new file mode 100644
-index 0000000000..0610348b8d
---- /dev/null
-+++ b/package/python-wsproto/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_WSPROTO
-+	bool "python-wsproto"
-+	select BR2_PACKAGE_PYTHON_H11 # runtime
-+	help
-+	  WebSockets state-machine based protocol implementation.
-+
-+	  https://github.com/python-hyper/wsproto/
-diff --git a/package/python-wsproto/python-wsproto.hash b/package/python-wsproto/python-wsproto.hash
-new file mode 100644
-index 0000000000..4eb3195785
---- /dev/null
-+++ b/package/python-wsproto/python-wsproto.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/wsproto/json
-+md5  f64973434117e23d2079460ed64b05c3  wsproto-1.2.0.tar.gz
-+sha256  ad565f26ecb92588a3e43bc3d96164de84cd9902482b130d0ddbaa9664a85065  wsproto-1.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c0329a8dbf3437b095f7f5cf4257d6bb855e07120cae8786586073ff7a699959  LICENSE
-diff --git a/package/python-wsproto/python-wsproto.mk b/package/python-wsproto/python-wsproto.mk
-new file mode 100644
-index 0000000000..629f4431b4
---- /dev/null
-+++ b/package/python-wsproto/python-wsproto.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-wsproto
-+#
-+################################################################################
-+
-+PYTHON_WSPROTO_VERSION = 1.2.0
-+PYTHON_WSPROTO_SOURCE = wsproto-$(PYTHON_WSPROTO_VERSION).tar.gz
-+PYTHON_WSPROTO_SITE = https://files.pythonhosted.org/packages/c9/4a/44d3c295350d776427904d73c189e10aeae66d7f555bb2feee16d1e4ba5a
-+PYTHON_WSPROTO_SETUP_TYPE = setuptools
-+PYTHON_WSPROTO_LICENSE = MIT
-+PYTHON_WSPROTO_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/neon-2-sse/neon-2-sse.mk b/package/neon-2-sse/neon-2-sse.mk
+index 0e9d066abd..3e87c62e21 100644
+--- a/package/neon-2-sse/neon-2-sse.mk
++++ b/package/neon-2-sse/neon-2-sse.mk
+@@ -9,6 +9,7 @@ NEON_2_SSE_SITE = $(call github,intel,ARM_NEON_2_x86_SSE,$(NEON_2_SSE_VERSION))
+ NEON_2_SSE_LICENSE = BSD-2-Clause
+ NEON_2_SSE_LICENSE_FILES = LICENSE
+ NEON_2_SSE_INSTALL_STAGING = YES
++# Only installs a header
+ NEON_2_SSE_INSTALL_TARGET = NO
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
