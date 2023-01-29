@@ -4,97 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D7DEC05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 12:30:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3DFBC05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 15:31:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C0034156A;
-	Sun, 29 Jan 2023 12:30:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C0034156A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 186754027D;
+	Sun, 29 Jan 2023 15:31:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 186754027D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fd-3_AvfEU9x; Sun, 29 Jan 2023 12:30:19 +0000 (UTC)
+	with ESMTP id AwqgKYF5Ht2C; Sun, 29 Jan 2023 15:31:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F078141554;
-	Sun, 29 Jan 2023 12:30:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F078141554
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1320E1BF5F5
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 12:30:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69EB240986;
+	Sun, 29 Jan 2023 15:31:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69EB240986
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 96E9E1BF3DB
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 15:31:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1B2440529
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 12:30:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1B2440529
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6948F8132F
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 15:31:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6948F8132F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sE0Vh_-XY1FY for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 12:30:15 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDC6D40179
-Received: from delivery29.mailspamprotection.com
- (delivery29.mailspamprotection.com [185.56.85.159])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EDC6D40179
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 12:30:14 +0000 (UTC)
-Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
- helo=es87.siteground.eu)
- by se29.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
- (Exim 4.92) (envelope-from <dimi@tpm.dev>)
- id 1pM6p1-0001Dz-Sw; Sun, 29 Jan 2023 06:30:13 -0600
-Received: from [127.0.0.1] (port=45920 helo=es87.siteground.eu)
- by es87.siteground.eu with esmtpa (Exim 4.96)
- (envelope-from <dimi@tpm.dev>) id 1pM6oz-0007Ju-2q;
- Sun, 29 Jan 2023 12:30:09 +0000
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c9HIs1ynRW5T for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 15:31:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92D52812D7
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 92D52812D7
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 15:31:52 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3C3F15FF9D;
+ Sun, 29 Jan 2023 16:31:46 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 29 Jan 2023 16:31:45 +0100
+Date: Sun, 29 Jan 2023 16:31:45 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: carrier.nicolas0@gmail.com
+Message-ID: <20230129153145.GE2632@scaer>
+References: <20230117110440.3405234-1-carrier.nicolas0@gmail.com>
 MIME-Version: 1.0
-Date: Sun, 29 Jan 2023 14:30:09 +0200
-From: Dimi Tomov <dimi@tpm.dev>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20230129074509.246281-1-dimi@tpm.dev>
-References: <20230129074509.246281-1-dimi@tpm.dev>
-Message-ID: <79477989a889dc428dc9641ae7b3eade@tpm.dev>
-X-Sender: dimi@tpm.dev
-Organization: TPM.dev
-X-Originating-IP: 35.214.247.6
-X-SpamExperts-Domain: es87.siteground.eu
-X-SpamExperts-Username: 35.214.247.6
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00626076305434)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/oogVeoyItCi9Ct6527/eHPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5zHcgQ1GLCGZipGdBYX2IdejIhOyETOLJV5VgRmbWjZJaaj
- T7GK+pV+DB0C1T8MJSONp1orT0zdSv/EvZ56A6zUQaXPwIlI4yu/PH1NWDdGRWRhZm76tQ4LzJ0P
- Xg/Bcc5TtObPqIqeRAv2CqzEPfjvBK5fzIEWxOKtcShtfOYYenQg45AD+/l6P8h0+TPjaDxMfcvw
- 9uVrltEafCGDyHAgdas/VTNCC9cNG0ZUHetAVuAXlm/yIarJ6MLtuWSGk5WZn7S9PqmI7CxqPRD6
- uYFuaIUEDspIkEVhfGcIvgSEJ9vvQ7y3dU9ER0LU50yMqo3HL0jq0UTY1VJNLTVaix4USb4d2v72
- 6lpj8/w5Va6KvnTD1aveotlgoppd3/OkI+ve6RqPPT75ZQBVMc+Li61b6cTrAfIBtLJVe62uoyOA
- UtfsPev7LNp/T0V6wcNiJWH6ZboosCGGDrdx/yGEn66RE9n6xcs9dAjFcdYUmx6p0CV+3YBwFTmQ
- DwcsbTdCl4dB9WMTZUIC3ob4Msu0otgPqivUB0b1qGE4OurCSWk5mrwqyT5p50x81ZKcmzCu2U1F
- PahA+c6c9hzXhA/hAFzWs0BoW+zAoj3wlYkyQAvqJbvAleuUtPy8TsrLw6yMOVF3EqW8CgPw7EoL
- RLxPxZsAgFLjQLpHyp6ln/j1jDpTIUmCR0R7KNsho6aCUmp4CCjk1AsLUsKOC205gL30DOmtcZPi
- ank43QmWBquc5rhjKQ9B/gJ6M2x+ink+1RfbeZJ+yq1EyF+Ctn49BQ0HiFW86ctOVsoAU4w/3ZM9
- TbapkUsr8SkRYdcXTCWFdHP7AUsRFZ4oobg8BBg3Jq+ntzj0+lvMfyxgbl2R4qjXTRE+bEQ4A9yd
- qlBYa841NbfIhIrtFl9leV22orHMWR3xFJ8VBjs6orwzEcJnHQqd/K50h/N9jS2twbUA4P8/YGu4
- Z1tRXxKF5tPxTxfD0dMN+t5Z1dIenT1wRi1ArdyBVa46y1hd7+Z3ohEuqbhw2IGiK9DdiXSNwF/y
- iWMMKF9eAvfHpqK+P0Wc+fXgfpLjpGxn2zk1aMl3vInpojCKOhSgACsLxN0Dm6+b5joKnx+pjyIF
- lvmFLkwYbI6UWKgX6i/GVrKnKecf5lkbo3LX6pAIVSiL8e4Il1a850odPLnmNkz2MS+4ayUpOtEh
- dxekWDmK9g==
-X-Report-Abuse-To: spam@quarantine2.mailspamprotection.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=tpm.dev; 
- s=default; h=Subject:Cc:To:From:Date:list-help:list-unsubscribe:
- list-subscribe:list-post:list-owner:list-archive;
- bh=9weemBia4xfvplbUR3SEnh/hp0Wx5yEHv13uzhkajvI=; b=PjMJQ0MaVpDVVoS0lVANxkMs+I
- AG5on8NPAzrKvOVSZsqzYSBXhj0yehQPLuIEJ3qWDSQD2YANs2nmZkaZmIEgGt7TlAIwI/FcEbC22
- +l3INDdEe07TH1mXE5APeSWV4Gp51v0QXBW9Qp3mL2xdwI/XaBCwCj58qAexC2lXWG/Mpo6dr6vUu
- ZjPlz54joTHvOJNu405U1dpG9GlYrP0/Tdqfcb/jxa8k+jNmOv4rk463TwTRNQ9bSZU9BhLRr7z5H
- F8WYJEnJQcW1HmOrF8sPUgeQ7h1OpHLmsr/TmZ+2qINJM/DKPbcmQksIcIoOBe18XNojH+82dFbv9
- a8I1rSaw==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=tpm.dev header.i=@tpm.dev
- header.a=rsa-sha256 header.s=default header.b=PjMJQ0Ma
-X-Mailman-Original-Authentication-Results: mailspamprotection.com; auth=pass
- smtp.auth=35.214.247.6@es87.siteground.eu
-Subject: Re: [Buildroot] [PATCH 1/1] package/wolftpm: bump version to v2.7.0
+Content-Disposition: inline
+In-Reply-To: <20230117110440.3405234-1-carrier.nicolas0@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1675006309;
+ bh=GpfT3VI7BU4ncnsF/AAlGN6Epyo/Y+rJtCxJ5E24/DM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=eJo5yexO8963bJg778kSt5GDjJGtUjplqGKaOlEVB4RPxvWRUMBv9IOeWJm66toK8
+ qAMYTkxJKoDjxgALmU8RtoQPrBAOktsRhDnGoK4oI7837E8EeeI/fR7HGx3SXqLSRJ
+ t7Qb4ADYi6RyTgTNXU2BnHKy7hh8yA3/2ygI/J8GSfGqIa9sqbnCm9h4z241RJ5wQ0
+ bdr4Ujq8n76dEIXnLhdUIZJw5gBhBvzSYNsoLtTlcJzXsPYb+RkMLrqNo1b8GmH/g5
+ ZrdMMo6tmwqxPQxS3GudjUUGyKMtN95JEOMqC0Vg+w98esx2P6wysZDVoTJdGSatAY
+ fwFNZ/Q+bBpbw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=eJo5yexO
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: local and
+ override support in legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,64 +76,202 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Nicolas, All,
 
-This version bump is built against latest next and tested on STM32MP1 
-with ST33 TPM.
+Sorry for replying much later than I promised I would do...
 
-Thanks,
-Dimi
---
-Founder of TPM.dev
-
-On 2023-01-29 09:45 AM, Dimi Tomov wrote:
-> From: Dimitar Tomov <dimi@tpm.dev>
+On 2023-01-17 12:04 +0100, carrier.nicolas0@gmail.com spake thusly:
+> From: Nicolas Carrier <carrier.nicolas0@gmail.com>
 > 
-> Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+> Sources of packages which are using the 'local' _METHOD_SITE or
+> which declare an _OVERRIDE_SRC_DIR are not archived when generating
+> the legal-info target.
+
+That packages with an override-srcdir are not saved, is indeed
+on-purpose. An override-srcdir is meant as a way to develop on a
+package, rather than use its official download location.
+
+During development, such packages are most often stored in a local
+directory that is not tracked by the VCS (git, svn, etc...) and so
+are not reproducible, and thus such a build can't be meaningful as
+a production build, and thus we should not be able to produce a
+legal-info content in such a case, quite the opposite in fact: we do
+want to actually log that override packages are being used and that
+they were not saved.
+
+Some people do use that as a safeguard when generating the legal-info
+and passing it for publication, to ensure that there are actually no
+use of an override-srcdir package and that all the build is actually
+reproducible without local hacks. Changing the behaviour as you suggest
+would break for those users.
+
+Now, I do understand that you are (ab)using override-srcdir to use
+locally modified versions of packages that Buildroot would otherwise
+fetch from their remote locations.
+
+In that case, I would advise that you carry the necessary changes on
+your Buildroot tree, that change such packages from whatever site and
+site method Buildroot uses, to a path as the site, and "local" as the
+site method. Yes, this means you need to patch Buildroot, and probably
+carry that forever, but that is a very minor change [0].
+
+As for getting in compliance for such local sources, my first comment
+would be to point to the statement that the Buildroot developers made
+a while back, and that was committed to the manual:
+
+    https://buildroot.org/downloads/manual/manual.html#legal-info-buildroot
+
+    Nevertheless, the general view of the Buildroot developers is that
+    you should release the Buildroot source code along with the source
+    code of other packages when releasing a product that contains
+    GPL-licensed software. This is because the GNU GPL defines the
+    "complete source code" for an executable work as "all the source
+    code for all modules it contains, plus any associated interface
+    definition files, plus the scripts used to control compilation
+    and installation of the executable". Buildroot is part of the
+    _scripts used to control compilation and installation of the
+    executable_, and as such it is considered part of the material
+    that must be redistributed.
+
+Indeed, Buildroot contains the recipes that are used to configure,
+build, and then install the packages, and in some cases, even hack
+into the packages sources (with sed, awk...), and so Buildroot falls
+under the _scripts used to control compilation and installation of
+the executable_, and providing just the tarball and the patches would
+not be enough for those packages.
+
+Also, just providing the Buildroot source tree would not be enough
+either, as you'd need to also provide the .config (or defconfig) that
+was used to define the build, as that contains options that will
+ultimately have an impact on the artifacts (like the -mcpu setting, or
+the -O level...), and thus should also be considered as part of the
+aforementioned scripts.
+
+With that in mind, if you have packages that are "local" (either by
+their _SITE_METHOD or by being _OVERRIDE_SRCDIR), then you hopefully
+have them as part of the same VCS tree (or sub-tree, submodule...)
+as your Buildroot tree, in which case you should just need to provide
+the checkout of that tree that was used to do the build, and be in
+compliance for those packages.
+
+If you need to be able to separate FLOSS packages from proprietary ones,
+then Buildroot already helps you in that respect, by allowing you to use
+more than one br2-external trees at once, for example one with your
+FLOSS packages, and one with your proprietary sources; just exclude from
+the BR2_EXTERNAL variable, the br2-external tree(s) with your proprietary
+stuff, when you prepare your legal-info, and exclude them from the
+tarball you generate. If you have no proprietary source, then the point
+is moot; you can redistribute everything (but can still use more than
+one br2-external for other reasons, of course!).
+
+Bottom line: 1. I am opposed to making it possible to generate local
+archives from override-srcdir, and 2. I am not in favour of making it
+possible for local packages either.
+
+> This is problematic since those packages are the most likely to
+> require being published, because it's highly probable that their
+> sources have been modified.
+
+This is totally irrelevant: whether the sources are changed or not does
+not drive whether a package sources should be published. Believing so
+would be a gross misconception on how licenses such as the GPL work.
+Indeed, the GPL requires that the C&CS be published for any covered
+work; it does not condition that publication to it having been locally
+modified, or not, from wherever you got it from.
+
+[0] The alternative is of course that you push your changes to the
+corresponding upstreams, and carry those patches in a global-patch-dir;
+for those that are not upstreamable, you'd have to carry them for ever
+as well. And I see how it could be cumbersom for the kernel, which is
+the reason why we already have a wide range of solution for how to get
+the kernel source trees (arbitrary tarball URL, git, mercurial, or svn
+trees...).
+
+Regards,
+Yann E. MORIN.
+
+> This patch generates a tar.gz archive on the fly, containing the
+> result of the rsync of the package's source directory, using the
+> same arguments as during the preparation of a build.
+> Note that is not possible to archive the builddir, since it may
+> contain artifacts of previous compilations.
+> 
+> It is not possible to consider rsync as a "normal" download method
+> either (which would have solved the initial problem), because if we
+> do that:
+>  * the DL dir's content would be altered improperly
+>  * the rsync + tar gz overhead would be paid on compilation and is
+>    significant, for example, for a linux kernel
+>  * a hash file would be necessary, which would be a burden to
+>    maintain, for sources frequently modified
+> 
+> Signed-off-by: Nicolas Carrier <carrier.nicolas0@gmail.com>
 > ---
->  package/wolftpm/wolftpm.hash | 2 +-
->  package/wolftpm/wolftpm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/pkg-generic.mk | 23 ++++++++++++++++-------
+>  1 file changed, 16 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/wolftpm/wolftpm.hash 
-> b/package/wolftpm/wolftpm.hash
-> index 735c731a53..3329528095 100644
-> --- a/package/wolftpm/wolftpm.hash
-> +++ b/package/wolftpm/wolftpm.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256
-> 78331cc2d98339247857f5ceb3e7cd3c4f5773e3d81bf1d73e8df9446e37472b
-> wolftpm-2.6.0.tar.gz
-> +sha256
-> d8e06e77893f104be7eb9421cac50518552ad9c5fc7fe8a9c1cdfaf4f11b92df
-> wolftpm-2.7.0.tar.gz
->  sha256
-> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
-> LICENSE
-> diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
-> index 398fa668af..db332712f5 100644
-> --- a/package/wolftpm/wolftpm.mk
-> +++ b/package/wolftpm/wolftpm.mk
-> @@ -4,7 +4,7 @@
->  #
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 2f8ba39edf..a8760f40d4 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -660,6 +660,12 @@ $$(error $(1) has local site method, but `$(2)_SITE` is not defined)
+>  endif
+>  endif
+>  
+> +# for legal-info sources archival
+> +ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+> +$(2)_OVERRIDE_RSYNC_DIR = $$($(2)_BUILDDIR)/$$($(2)_BASENAME_RAW)
+> +$(2)_OVERRIDE_RSYNC_ARCHIVE = $$($(2)_OVERRIDE_RSYNC_DIR).tar.gz
+> +endif
+> +
+>  ifndef $(2)_LICENSE
+>   ifdef $(3)_LICENSE
+>    $(2)_LICENSE = $$($(3)_LICENSE)
+> @@ -1146,13 +1152,16 @@ else
+>  endif # license files
+>  
+>  ifeq ($$($(2)_REDISTRIBUTE),YES)
+> -ifeq ($$($(2)_SITE_METHOD),local)
+> -# Packages without a tarball: don't save and warn
+> -	@$$(call legal-warning-nosource,$$($(2)_RAWNAME),local)
+> -
+> -else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+> -	@$$(call legal-warning-nosource,$$($(2)_RAWNAME),override)
+> -
+> +ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+> +# Packages without a tarball: create one on the fly
+> +	@echo "Package is of type local or override, archive sources"
+> +	$$(Q)rm -rf $$($(2)_OVERRIDE_RSYNC_DIR) $$($(2)_OVERRIDE_RSYNC_ARCHIVE)
+> +	$$(Q)rsync -au --chmod=u=rwX,go=rX $$(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$$($(2)_OVERRIDE_SRCDIR))/ $$($(2)_OVERRIDE_RSYNC_DIR)/
+> +	$$(Q)tar -zcf $$($(2)_OVERRIDE_RSYNC_ARCHIVE) -C $$($(2)_OVERRIDE_RSYNC_DIR) $$$$(ls -A $$($(2)_OVERRIDE_RSYNC_DIR)/)
+> +	$$(Q)rm -rf $$($(2)_OVERRIDE_RSYNC_DIR)
+> +	$$(Q)support/scripts/hardlink-or-copy \
+> +			$$($(2)_OVERRIDE_RSYNC_ARCHIVE) \
+> +			$$($(2)_REDIST_SOURCES_DIR)$$(sep)
+>  else
+>  # Other packages
+>  
+> -- 
+> 2.30.2
 > 
-> ################################################################################
-> 
-> -WOLFTPM_VERSION = 2.6.0
-> +WOLFTPM_VERSION = 2.7.0
->  WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
->  WOLFTPM_INSTALL_STAGING = YES
->  WOLFTPM_LICENSE = GPL-2.0+
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
-Founder of TPM.dev
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
