@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5516C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D633C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:19:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89C186FB5E;
-	Tue, 21 Feb 2023 01:19:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89C186FB5E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FED76FBA5;
+	Tue, 21 Feb 2023 01:19:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FED76FBA5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zTVEYdL6Y_Nl; Tue, 21 Feb 2023 01:19:42 +0000 (UTC)
+	with ESMTP id faD9w7h3Yp5u; Tue, 21 Feb 2023 01:19:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2DC06F9AC;
-	Tue, 21 Feb 2023 01:19:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2DC06F9AC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 418916F9AC;
+	Tue, 21 Feb 2023 01:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 418916F9AC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CD4111BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CFF4B1BF94D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 267D1610CB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C2886FBCB
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 267D1610CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C2886FBCB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B7HXOHHegfyz for <buildroot@lists.busybox.net>;
+ with ESMTP id 5VOEEFYe62Ou for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43A526FBCF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B5C46FBD3
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43A526FBCF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B5C46FBD3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 317C3828C8; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
+ id 6C99181979; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 17:26:19 +0100
+Date: Sun, 29 Jan 2023 17:41:03 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 696b190e02fbb7f76c8865fa883e51514a7f0dcd
-X-Git-Newrev: 1e2e6e011a26d013869398299fc7bded38e8fdd7
+X-Git-Oldrev: 14d301cbb621e1f044938d628ec47279a80ad7d0
+X-Git-Newrev: e72cca9b2b60fe4fbac6b12461bf6ee4ecf08907
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205243.317C3828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wolftpm: bump version
- to v2.7.0
+Message-Id: <20230220205243.6C99181979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-sniffio: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e2e6e011a26d013869398299fc7bded38e8fdd7
+commit: https://git.buildroot.net/buildroot/commit/?id=e72cca9b2b60fe4fbac6b12461bf6ee4ecf08907
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wolftpm/wolftpm.hash | 2 +-
- package/wolftpm/wolftpm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/python-sniffio/Config.in           |  6 ++++++
+ package/python-sniffio/python-sniffio.hash |  7 +++++++
+ package/python-sniffio/python-sniffio.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
-diff --git a/package/wolftpm/wolftpm.hash b/package/wolftpm/wolftpm.hash
-index 735c731a53..3329528095 100644
---- a/package/wolftpm/wolftpm.hash
-+++ b/package/wolftpm/wolftpm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  78331cc2d98339247857f5ceb3e7cd3c4f5773e3d81bf1d73e8df9446e37472b  wolftpm-2.6.0.tar.gz
-+sha256  d8e06e77893f104be7eb9421cac50518552ad9c5fc7fe8a9c1cdfaf4f11b92df  wolftpm-2.7.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
-index 398fa668af..db332712f5 100644
---- a/package/wolftpm/wolftpm.mk
-+++ b/package/wolftpm/wolftpm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFTPM_VERSION = 2.6.0
-+WOLFTPM_VERSION = 2.7.0
- WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
- WOLFTPM_INSTALL_STAGING = YES
- WOLFTPM_LICENSE = GPL-2.0+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6cf2b48a8f..608512a4bb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1396,6 +1396,7 @@ F:	package/python-pypa-build/
+ F:	package/python-pyphen/
+ F:	package/python-rtoml/
+ F:	package/python-snappy/
++F:	package/python-sniffio/
+ F:	package/python-sockjs/
+ F:	package/python-terminaltables/
+ F:	package/python-tinycss2/
+diff --git a/package/Config.in b/package/Config.in
+index dd15467b11..594590a52a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1280,6 +1280,7 @@ menu "External python modules"
+ 	source "package/python-smbus-cffi/Config.in"
+ 	source "package/python-smmap2/Config.in"
+ 	source "package/python-snappy/Config.in"
++	source "package/python-sniffio/Config.in"
+ 	source "package/python-socketio/Config.in"
+ 	source "package/python-sockjs/Config.in"
+ 	source "package/python-sortedcontainers/Config.in"
+diff --git a/package/python-sniffio/Config.in b/package/python-sniffio/Config.in
+new file mode 100644
+index 0000000000..6f3947afe6
+--- /dev/null
++++ b/package/python-sniffio/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_SNIFFIO
++	bool "python-sniffio"
++	help
++	  Sniff out which async library your code is running under.
++
++	  https://github.com/python-trio/sniffio
+diff --git a/package/python-sniffio/python-sniffio.hash b/package/python-sniffio/python-sniffio.hash
+new file mode 100644
+index 0000000000..00af7c58bb
+--- /dev/null
++++ b/package/python-sniffio/python-sniffio.hash
+@@ -0,0 +1,7 @@
++# md5, sha256 from https://pypi.org/pypi/sniffio/json
++md5  abb96bcda81817d6c632915c53ac29c8  sniffio-1.3.0.tar.gz
++sha256  e60305c5e5d314f5389259b7f22aaa33d8f7dee49763119234af3755c55b9101  sniffio-1.3.0.tar.gz
++# Locally computed sha256 checksums
++sha256  652c878488d1456361e08c3f8607fd7ba59892a14103d15cce4ff93c85b5cc8b  LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
++sha256  3e6dae555eb92787fc82d1d48355677f454c7f65aeb38d3f9e72bf9a3daf034b  LICENSE.MIT
+diff --git a/package/python-sniffio/python-sniffio.mk b/package/python-sniffio/python-sniffio.mk
+new file mode 100644
+index 0000000000..fa369a0e2f
+--- /dev/null
++++ b/package/python-sniffio/python-sniffio.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-sniffio
++#
++################################################################################
++
++PYTHON_SNIFFIO_VERSION = 1.3.0
++PYTHON_SNIFFIO_SOURCE = sniffio-$(PYTHON_SNIFFIO_VERSION).tar.gz
++PYTHON_SNIFFIO_SITE = https://files.pythonhosted.org/packages/cd/50/d49c388cae4ec10e8109b1b833fd265511840706808576df3ada99ecb0ac
++PYTHON_SNIFFIO_SETUP_TYPE = setuptools
++PYTHON_SNIFFIO_LICENSE = Apache-2.0 or MIT
++PYTHON_SNIFFIO_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
