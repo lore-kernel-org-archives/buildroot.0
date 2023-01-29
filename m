@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9135CC05027
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 17:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A809C05027
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 19:03:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EFED60D63;
-	Sun, 29 Jan 2023 17:19:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EFED60D63
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D278415DE;
+	Sun, 29 Jan 2023 19:03:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D278415DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hTtu_dHFVLWq; Sun, 29 Jan 2023 17:18:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G6gJyxn_peV5; Sun, 29 Jan 2023 19:03:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4207E60C1C;
-	Sun, 29 Jan 2023 17:18:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4207E60C1C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39C6C415E0;
+	Sun, 29 Jan 2023 19:03:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39C6C415E0
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 10B761BF35F
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 17:18:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 09B881BF385
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 19:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEE2041581
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 17:18:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEE2041581
+ by smtp4.osuosl.org (Postfix) with ESMTP id E41D5415E0
+ for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 19:03:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E41D5415E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RARDzURionpQ for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 17:18:42 +0000 (UTC)
+ with ESMTP id YtlX_o05Or3d for <buildroot@lists.busybox.net>;
+ Sun, 29 Jan 2023 19:03:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9710A41525
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50AA6415DE
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9710A41525
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 17:18:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 50AA6415DE
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 19:03:31 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id E3BD35FFA1;
- Sun, 29 Jan 2023 18:18:38 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1F5875FFA2;
+ Sun, 29 Jan 2023 20:03:25 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Jan 2023 18:18:38 +0100
-Date: Sun, 29 Jan 2023 18:18:38 +0100
+ Sun, 29 Jan 2023 20:03:24 +0100
+Date: Sun, 29 Jan 2023 20:03:24 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230129171838.GQ2632@scaer>
-References: <20230129163953.56236-1-fontaine.fabrice@gmail.com>
+To: Prasad Sankaran <prasad@cradlewise.com>
+Message-ID: <20230129190324.GR2632@scaer>
+References: <CANtE+cKcemOj_DTSOZ_TzuThSrXBwah38WJYM-AVH1nGTJikDw@mail.gmail.com>
+ <20230121151815.GD558596@scaer>
+ <CANtE+c+-9WfkPOnQ-SzNokO46cZv0PZ3Awory61kSRuMPBPNLw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230129163953.56236-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <CANtE+c+-9WfkPOnQ-SzNokO46cZv0PZ3Awory61kSRuMPBPNLw@mail.gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675012721;
- bh=hNl88UhqU2DfuE90zXD8LJXGXZOI5+gZyyXPkJx8cw4=;
+ d=free.fr; s=smtp-20201208; t=1675019008;
+ bh=ClVu13+LHd02LCBpEQ4QipaT+DfxFhRnVFdWN6+w8dw=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Yci1bKqAZ0HSsvKQ69Zy705ruBY69H9qc9fU2048QWQbIbqx7JCnwBVdIlqEewMv1
- +goE9eS3Lpps+aES71q2Oi8BwH1XpGiOViZ2BtbDnZI4fWbOutLOUBETyq2VDbIeq2
- o6INO0kcAcTZLsiJAzkBnnubE1IG/Eq4yE6PjEyUAPik+o1UW6MoPBxrl63b8DpJZ3
- RnnPqTr83jPe90KkVZM9QPf0TsziHkornOi+NFeR5pXDRKM/u9UM4nz30H1Dnpiouh
- CUwS6WfLFsKGUfRLbJjzfjWFTRdRrnjUUvp27zN8iURl22aWXXg7s2bvTzkHWaniVR
- kCjS+5fDzqToA==
+ b=uCFjTLFlPIb3JTb/2GKhVmphkZVY0ak2EiqYYzIf3iE0xeVIZ4oSnOpIz1cdXPt9m
+ zUtktGEfo90GU4GPTZUYprq2kpgq2LhPxA72tjEBdBdFy7oINIta+4gQ9ILFZWRXaE
+ sHTyVJIt3dBrtxPekl0i0PINZUZYvNVmwNQs7tCaHIjmFfQoUjWPR110A99k+a0mdQ
+ U/YbdViapv1atMprP4qg7GxOILYG7nkGXMBw02Ov3Wm5pKdXwHoXgfFI4KP9dbUQWC
+ QDXMRqEeuqLMp57LkUSr1OQOPFw5Xv60Q4q89UpMNRi4ZuutPlfpRM2rOTCYjt0yRW
+ Wt+XWaTtqIluA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Yci1bKqA
-Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
- 9.0.1260
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uCFjTLFl
+Subject: Re: [Buildroot] Not able to build python-numpy 1.23.5 on buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,62 +77,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Archit Taneja <archit@cradlewise.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Prasad, All,
 
-On 2023-01-29 17:39 +0100, Fabrice Fontaine spake thusly:
-> - Fix CVE-2023-0049, CVE-2023-0051, CVE-2023-0054 and CVE-2023-0288
-> - Update hash of README.txt: typo fixed by
->   https://github.com/vim/vim/commit/f1dcd14fc5d4370476cd82895a4479ca2d252e54
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2023-01-25 21:06 +0530, Prasad Sankaran spake thusly:
+> Sorry for the late reply. I have attached the defconfig which we use.
 
-Applied to master, thanks.
+This is by far not a _minimal_ defconfig; it has a lot of packages
+enabled.
+
+Also, what version of Buildroot are you using? You have:
+  - gst1-plugins-bad libmms, removed in 202.02
+  - gcc 7.x and gst1-plugins-bad yadif, both removed in 2020.11,
+  - BR2_PACKAGE_CURL, renamed in 2020.02
+  - wpa-supplicant "new dbus", removed in 2019.11
+
+So you are using a very old Buildroot. Please update to master and
+try to reproduce the issue.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/vim/vim.hash | 4 ++--
->  package/vim/vim.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-> index 03ee908db4..4000beedc1 100644
-> --- a/package/vim/vim.hash
-> +++ b/package/vim/vim.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  c95c9abcf024bd6293ad199e4efa1c09452a9c6456c9cbaf53d896cf7b9f4d08  vim-9.0.0951.tar.gz
-> +sha256  bcaf9b21ab00ab49de4f3bdfda1bcda82533ec16c412824226544a3fce6506ff  vim-9.0.1260.tar.gz
->  sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
-> -sha256  de04910387a62ad4f9b36b91457c8d5ef32733ac5d768a128071b93f4821fcd1  README.txt
-> +sha256  d187aff219161f37138479257f82d687ea10b2cdd17d58b53a3ec9b79d6dc870  README.txt
-> diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-> index d814c68630..e3648bfab9 100644
-> --- a/package/vim/vim.mk
-> +++ b/package/vim/vim.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -VIM_VERSION = 9.0.0951
-> +VIM_VERSION = 9.0.1260
->  VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
->  VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
->  VIM_SUBDIR = src
-> -- 
-> 2.39.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
