@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EED43C54EAA
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 07:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0B06C54EED
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 07:08:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F80B60DC2;
-	Mon, 30 Jan 2023 07:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F80B60DC2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6nJoJfKP3pfW; Mon, 30 Jan 2023 07:08:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 644B960D52;
-	Mon, 30 Jan 2023 07:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 644B960D52
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B98E51BF3DA
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:08:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A049540919
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A049540919
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DCF4408F4;
+	Mon, 30 Jan 2023 07:08:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DCF4408F4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xi7MDawD2ikS for <buildroot@lists.busybox.net>;
- Mon, 30 Jan 2023 07:08:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B77408F4
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 10B77408F4
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 07:08:02 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y65LyTnCo8sC; Mon, 30 Jan 2023 07:08:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9881140933;
+	Mon, 30 Jan 2023 07:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9881140933
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EBA461BF3DA
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:08:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5E5060E81
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:08:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5E5060E81
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jlyJwD37rFzr for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 07:08:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B40F460C29
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B40F460C29
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 07:08:19 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 29CB95FFA0;
- Mon, 30 Jan 2023 08:07:58 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 095FD5FFA7;
+ Mon, 30 Jan 2023 08:08:16 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 30 Jan 2023 08:07:57 +0100
-Date: Mon, 30 Jan 2023 08:07:57 +0100
+ Mon, 30 Jan 2023 08:08:15 +0100
+Date: Mon, 30 Jan 2023 08:08:15 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230130070757.GD2632@scaer>
-References: <20230130041009.3531224-1-james.hilliard1@gmail.com>
+Message-ID: <20230130070815.GE2632@scaer>
+References: <20230130042913.3605338-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230130041009.3531224-1-james.hilliard1@gmail.com>
+In-Reply-To: <20230130042913.3605338-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675062480;
- bh=YduqvsR198a58aALiYtQgaU6OAN4vNgTduiMI+HsFa0=;
+ d=free.fr; s=smtp-20201208; t=1675062498;
+ bh=0gpbgirH3/1XvzDCOaCOo6K6RCQU+q7DqXdvXO5w5Tw=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=YSML0PelAwYcjD33dHTvNYzA91ydhNjgK25W68OSox19pOxIgQp19ZOTevzL3bEJv
- N0M5fcfv+hJiFN3tJWEwR3JNq8LVKzEu+kDuSIR5yZeiVRBTVLPY8guyDext1vURvm
- t4mNDaeKw5GwTJll6BckLn9F40HglmqvilJshBZVGLtjBNoaZ6/iFug2Kb5uhDggxe
- O2CArF9c2PGECR+jcwZrhjE6UWCLe8Q/8FNySUeKdj61wEkPsGuvcUJ5w0+f+isYV9
- m0BIRO2xKwNb6seaQFcS7RRExG06dstlFwUsZ5//xjr/zz75pq+5IdiSWwK2fx83OA
- wgVDw2sTyo9WA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=tX3AGoTF5kqiPq/nKjV8keGgHXm2+PSuqP2+lQsRlrXl7zd1++/hn8OlHJaSkVXeI
+ h4uh3IQ0bxAicd2tvdWf+5SwdiKiIqV9GgVGTFRikEGhyO9Mv2RiVGeUuTUzXFURjn
+ rgOO92c21pk8TYCEAII01ALzr0aNKYJ9UgonWZE93SAeUDkUyLOoyxRT9yCzlei66K
+ db1l8aNZ6pUb8/vVaM08DGHk/aGxqTjMRx625fRVs2GwuR7vg10UPdSWaDuswQMv/t
+ qwS5soedJ0ljApRDkQR0AKBQXJH88pFJhkAs/hlMvP8xCOuJMhgwlzjrNklRPrgPem
+ TGCce5xy70PtQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YSML0Pel
-Subject: Re: [Buildroot] [PATCH 1/1] package/neon-2-sse: fix build without
- C++ toolchain
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=tX3AGoTF
+Subject: Re: [Buildroot] [PATCH 1/1] package/fxdiv: fix build without C++
+ toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,15 +84,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 James, All,
 
-On 2023-01-29 21:10 -0700, James Hilliard spake thusly:
-> The cmake project for neon-2-sse doesn't correctly set the project
-> language to C which causes cmake to try and detect a C++ compiler.
+On 2023-01-29 21:29 -0700, James Hilliard spake thusly:
+> The cmake project for fxdiv sets the project language to C and CXX
+> even when only C is required.
 > 
-> Add a patch which fixes the project language setting.
+> Add a patch which disables CXX unless required.
 > 
 > Fixes:
->  - http://autobuild.buildroot.net/results/0eb/0ebb8c886e0a432b6fb43ab21010f625f6797b9e
->  - http://autobuild.buildroot.net/results/a5d/a5db2f286dbd69e84d518d086df857ef434b936a
+>  - http://autobuild.buildroot.net/results/b0f/b0f3b6352429a5156a8c3a2b932331753887b65b
+>  - http://autobuild.buildroot.net/results/52f/52f634c06bdfe983280a2c01bb9fec4b0e1a4b34
+>  - http://autobuild.buildroot.net/results/181/181b85d9dd505693ed23fab823085b001aa785f4
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
@@ -102,27 +103,25 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  .../neon-2-sse/0001-Fix-cmake-languages.patch | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/neon-2-sse/0001-Fix-cmake-languages.patch
+>  ...le-CXX-unless-building-tests-benchma.patch | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
 > 
-> diff --git a/package/neon-2-sse/0001-Fix-cmake-languages.patch b/package/neon-2-sse/0001-Fix-cmake-languages.patch
+> diff --git a/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
 > new file mode 100644
-> index 0000000000..e0becb1ffa
+> index 0000000000..0336f5e1cc
 > --- /dev/null
-> +++ b/package/neon-2-sse/0001-Fix-cmake-languages.patch
-> @@ -0,0 +1,40 @@
-> +From 186ec82e033d8c718d760d14945535a9d7e160fd Mon Sep 17 00:00:00 2001
+> +++ b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
+> @@ -0,0 +1,49 @@
+> +From 8c2d8fc60306a8edd21182a1f5f267a7aca55763 Mon Sep 17 00:00:00 2001
 > +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Sun, 29 Jan 2023 21:00:27 -0700
-> +Subject: [PATCH] Fix cmake languages
+> +Date: Sun, 29 Jan 2023 21:18:28 -0700
+> +Subject: [PATCH] CMake: don't enable CXX unless building tests/benchmarks
 > +
-> +When no language is set cmake defaults to C and CXX, since we support
-> +C by itself we should set the project language to C so that we don't
-> +get a compiler error when building without a CXX toolchain.
+> +We only need CXX support when building tests/benchmarks.
 > +
 > +Fixes:
-> +CMake Error at CMakeLists.txt:5 (project):
+> +CMake Error at CMakeLists.txt:4 (PROJECT):
 > +  No CMAKE_CXX_COMPILER could be found.
 > +
 > +  Tell CMake where to find the compiler by setting either the environment
@@ -131,24 +130,35 @@ Yann E. MORIN.
 > +
 > +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > +[Upstream status:
-> +https://github.com/intel/ARM_NEON_2_x86_SSE/pull/62]
+> +https://github.com/Maratyszcza/FXdiv/pull/3]
 > +---
-> + CMakeLists.txt | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> + CMakeLists.txt | 6 +++++-
+> + 1 file changed, 5 insertions(+), 1 deletion(-)
 > +
 > +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index e4b8980..8f58e79 100644
+> +index bcae6b5..c75f558 100644
 > +--- a/CMakeLists.txt
 > ++++ b/CMakeLists.txt
-> +@@ -2,7 +2,7 @@
-> + # Modification: Copyright (C) 2017 David Hirvonen
+> +@@ -1,7 +1,7 @@
+> + CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
 > + 
-> + cmake_minimum_required(VERSION 3.0)
-> +-project(NEON_2_SSE VERSION 1.0.0)
-> ++project(NEON_2_SSE VERSION 1.0.0 LANGUAGES C)
+> + # ---[ Project
+> +-PROJECT(FXdiv C CXX)
+> ++PROJECT(FXdiv C)
 > + 
-> + add_library(${PROJECT_NAME} INTERFACE)
+> + # ---[ Options.
+> + OPTION(FXDIV_USE_INLINE_ASSEMBLY "Allow use of inline assembly in FXdiv" OFF)
+> +@@ -16,6 +16,10 @@ ENDIF()
+> + # ---[ CMake options
+> + INCLUDE(GNUInstallDirs)
 > + 
+> ++IF(FXDIV_BUILD_TESTS OR FXDIV_BUILD_BENCHMARKS)
+> ++  ENABLE_LANGUAGE(CXX)
+> ++ENDIF()
+> ++
+> + IF(FXDIV_BUILD_TESTS)
+> +   ENABLE_TESTING()
+> + ENDIF()
 > +-- 
 > +2.34.1
 > +
