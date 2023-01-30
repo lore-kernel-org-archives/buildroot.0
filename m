@@ -4,82 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 037A2C54EED
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jan 2023 23:52:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5312C54EED
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 00:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59BBF813FC;
-	Sun, 29 Jan 2023 23:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59BBF813FC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B596817C3;
+	Mon, 30 Jan 2023 00:29:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B596817C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G7245gT8dL-M; Sun, 29 Jan 2023 23:52:04 +0000 (UTC)
+	with ESMTP id BbNccknbjYq4; Mon, 30 Jan 2023 00:29:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A518E813BD;
-	Sun, 29 Jan 2023 23:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A518E813BD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5460F1BF35C
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 23:52:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 703FB817E4;
+	Mon, 30 Jan 2023 00:29:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 703FB817E4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 131E51BF869
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 00:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2DD9740986
- for <buildroot@lists.busybox.net>; Sun, 29 Jan 2023 23:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DD9740986
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA44B40585
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 00:29:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA44B40585
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VhUswmqKD5b6 for <buildroot@lists.busybox.net>;
- Sun, 29 Jan 2023 23:52:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 49iMCjupugJz for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 00:29:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8B4940948
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
- [IPv6:2607:f8b0:4864:20::22d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D8B4940948
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 23:52:00 +0000 (UTC)
-Received: by mail-oi1-x22d.google.com with SMTP id dt8so5676261oib.0
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 15:52:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D78140220
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
+ [IPv6:2607:f8b0:4864:20::d31])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D78140220
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 00:29:02 +0000 (UTC)
+Received: by mail-io1-xd31.google.com with SMTP id q6so1245228ior.12
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:29:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=clpqPCEzHdm1hGPEyVWzUv6h2jX9h0c6iY/M7+5SIh0=;
- b=n0hPHAC1KDjsWvfM4lK6NiDa9VZqVI1J6PBAQ76nzLCMql9y2s9gqvIGg0cBl1y704
- neoZncXo/ER+Hf4HbMf+rEBDfnIld5+XHVzdWiWJsd/G1bWV6lu4GwTS05RI0J3oEW9K
- 5VJKHSuqcFgRZCncrBA8UWk1bN/f5Qhmbu6HXgTeh9owFEMsiegCvCcUHfrTLXpNYwPZ
- GJpPsDzcjJyv/1ZTey7TYN/lMc5djot9UXFXsSPvIIfqYGdFBTKpBfzlIKRHgJrRJOc7
- PxvqY+wIQuup3ZB8RD2BNNv/XfALxTdnmJm7/yHRMeJ1qv2akD3zlXjo4B32uA+p5wZW
- RqLg==
-X-Gm-Message-State: AO0yUKVNe9h9p0Sx1gOJfYKof7RgdsQRudHPZdJ9dUZCec766cOfyuMR
- 1rpIDq5VQogMOLRoSudfxFC2OTsHtg/5KcCMeDE=
-X-Google-Smtp-Source: AK7set/v2sc37hCUeP/qM8/4qT11+8qHq8b2n3L5bILOYC5far9OTdA0NAeWguOqnwGQDj2xpKVGipPsIDvMJ8nnZUk=
-X-Received: by 2002:a54:4002:0:b0:378:3f28:221f with SMTP id
- x2-20020a544002000000b003783f28221fmr86849oie.93.1675036319790; Sun, 29 Jan
- 2023 15:51:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
- <20230127141058.2180747-4-james.hilliard1@gmail.com>
- <20230129214649.GZ2632@scaer>
-In-Reply-To: <20230129214649.GZ2632@scaer>
+ bh=U/3lvft9edmDpME2GpkPPGZyjrHfe5++eUrlTNWLA+k=;
+ b=raGNOD/NDqZodh8Dw7U4VCbT8znIeK7i2Uq3Gicijd1b2w5e1SRh7ju4g3Irj38uv/
+ Y3odf5Acq+wNw82v6aWn9PuvQ3S8HUADA69Vl9DORJ+roJty95TP4E8SYYjb230Wg53z
+ bnejbbunra7WpYKRxMZpsoCytvg9l8bIN+zLpZSSnHX1KAl+depCN/ZgaUmbvCNRN15K
+ VODa12LscqZtvjCTBrJ17+Z3xXwE//1sm5QbIHsmxc06xowKkizVo7WR5vUz3WKyWxMz
+ EBvtDuVnAdaB+wVFOrkfhT905X7j2Zj8KembBJd4qBumdDCV+dpHDD2v65rm1Jav+qsN
+ 1E4g==
+X-Gm-Message-State: AFqh2ko3F+BCQZfcOJXmZD/qHAAp6MHc3z+lz424GbiwSMRZLc1GtJdp
+ Jk/FkfcwaIUbqBNTWTLJ52TnZpyVYzsu0g==
+X-Google-Smtp-Source: AMrXdXv6H1LAAWVvrtEvSVoRQCjKRTcwHbOIxut3vA6GWJJRb/j+dJhQ4nbsxJHmZzqczoR0AIjY5A==
+X-Received: by 2002:a5d:9158:0:b0:707:e4ef:deb0 with SMTP id
+ y24-20020a5d9158000000b00707e4efdeb0mr14462820ioq.16.1675038540871; 
+ Sun, 29 Jan 2023 16:29:00 -0800 (PST)
+Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
+ [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
+ q4-20020a02c8c4000000b00363d6918540sm1676570jao.171.2023.01.29.16.29.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 29 Jan 2023 16:29:00 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 29 Jan 2023 16:51:48 -0700
-Message-ID: <CADvTj4oxTat+vFLLvU3dewO4tL9JZ5kLmho-m6XNxj+bm2prgg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 29 Jan 2023 17:28:45 -0700
+Message-Id: <20230130002854.2300661-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=clpqPCEzHdm1hGPEyVWzUv6h2jX9h0c6iY/M7+5SIh0=;
- b=YdB5IncvX5Qwyc3rkZP1EdFV0wD8YF0/AG9r0qMoCqwWmgqM+Pc0Sj2LNK3EMB5Q5x
- sZ9yh4iE+UPwKcKRJIIoMX325nQ8PSMm651jy3THKmIWOJpoPhyYsWWdvjmJ1zYrRiO8
- MfkKfzejkYA1Egql2/eJ47mvOHxxVn2at77eQcgyGortchD+5asAKNiw+Fzk5JwDQsRb
- VDcoae/MdMiBSOg4iaZliLh6sgN7w6hLG4+/WeRLVKNsvFoq0K1Mb+aEHGLL5DioauO8
- F7ZxWUMadcx+Vlje+uIZDhC65x2++/xAJa9LH7HHmvGcsz6KmGLDf+X56y1xrxBud0TD
- lICQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=U/3lvft9edmDpME2GpkPPGZyjrHfe5++eUrlTNWLA+k=;
+ b=A7mJhkn6lL2vtktQNvqkrXIsSaj6nI267RGu39Y0tC+jlT2qi4Mof5UfTp4zW7UUxT
+ NO0Ac3n1GB2JGnxlJDL5BvAx/aVw1LyyCmyWMB+QvDj7pocQ70RFxGeGrbmaihQyTL+K
+ FPF7Hm6JS9Dku1o1dnKOR0+y5hs0XuvU4Y7MruyfLQH8XJBxCBxXKFKoX/vt7wtFXISo
+ cbCwBkHID3CkuoF7yRR7LAUF8A3B2m2CBoqtGDseDDdWOLagih8Rkznjd7QARn58yoMB
+ h+UBoqT09oUYPITwz7fR6GHPncznkcNhm598Ypf5UCphg4caa5H/7PDxkLW8uzWVHkM3
+ qVvw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=YdB5Incv
-Subject: Re: [Buildroot] [PATCH v4 04/13] package/gemmlowp: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=A7mJhkn6
+Subject: [Buildroot] [PATCH v5 01/10] package/cpuinfo: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,74 +94,159 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Stefan Hager <stefan.hager@ginzinger.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
  Samuel Martin <s.martin49@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Jan 29, 2023 at 2:46 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2023-01-27 07:10 -0700, James Hilliard spake thusly:
-> > From: Stefan Hager <stefan.hager@ginzinger.com>
-> >
-> > This package is required by tensorflow-lite.
-> >
-> > Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-> > Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> [--SNIP--]
-> > diff --git a/package/gemmlowp/gemmlowp.mk b/package/gemmlowp/gemmlowp.mk
-> > new file mode 100644
-> > index 0000000000..1a36fc48f7
-> > --- /dev/null
-> > +++ b/package/gemmlowp/gemmlowp.mk
-> > @@ -0,0 +1,15 @@
-> > +################################################################################
-> > +#
-> > +# gemmlowp
-> > +#
-> > +################################################################################
-> > +
-> > +GEMMLOWP_VERSION = 08e4bb339e34017a0835269d4a37c4ea04d15a69
-> > +GEMMLOWP_SITE = $(call github,google,gemmlowp,$(GEMMLOWP_VERSION))
-> > +GEMMLOWP_LICENSE = Apache-2.0
-> > +GEMMLOWP_LICENSE_FILES = LICENSE
-> > +GEMMLOWP_INSTALL_STAGING = YES
-> > +GEMMLOWP_INSTALL_TARGET = NO
->
-> Why not install to target? This needs a little explanations, even if
-> it's only a comment above, like:  # Only installs headers
+From: Stefan Hager <stefan.hager@ginzinger.com>
 
-Yeah, it's another header-only library.
+This package is required by tensorflow-lite.
 
->
-> Regards,
-> Yann E. MORIN.
->
-> > +GEMMLOWP_SUBDIR = contrib
-> > +
-> > +$(eval $(cmake-package))
-> > --
-> > 2.34.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Add a patch removing cpp requirement when not building tests.
+
+Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v4 -> v5:
+  - don't require cpp
+Changes v2 -> v3:
+  - move to libraries->hardware handling
+---
+ DEVELOPERS                                    |  3 ++
+ package/Config.in                             |  1 +
+ ...nable-CXX-only-when-needed-for-tests.patch | 36 +++++++++++++++++++
+ package/cpuinfo/Config.in                     |  8 +++++
+ package/cpuinfo/cpuinfo.hash                  |  4 +++
+ package/cpuinfo/cpuinfo.mk                    | 17 +++++++++
+ 6 files changed, 69 insertions(+)
+ create mode 100644 package/cpuinfo/0001-Enable-CXX-only-when-needed-for-tests.patch
+ create mode 100644 package/cpuinfo/Config.in
+ create mode 100644 package/cpuinfo/cpuinfo.hash
+ create mode 100644 package/cpuinfo/cpuinfo.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 706ee80ece..53f1052b07 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2723,6 +2723,9 @@ F:	package/libvpx/
+ F:	package/mesa3d-demos/
+ F:	package/ti-gfx/
+ 
++N:	Stefan Hager <stefan.hager@ginzinger.com>
++F:	package/cpuinfo/
++
+ N:	Stefan Ott <stefan@ott.net>
+ F:	package/unbound/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 83fddf316f..3a07074b10 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1645,6 +1645,7 @@ menu "Hardware handling"
+ 	source "package/bcm2835/Config.in"
+ 	source "package/c-periphery/Config.in"
+ 	source "package/ccid/Config.in"
++	source "package/cpuinfo/Config.in"
+ 	source "package/dtc/Config.in"
+ 	source "package/gnu-efi/Config.in"
+ 	source "package/hackrf/Config.in"
+diff --git a/package/cpuinfo/0001-Enable-CXX-only-when-needed-for-tests.patch b/package/cpuinfo/0001-Enable-CXX-only-when-needed-for-tests.patch
+new file mode 100644
+index 0000000000..ebd6ed36cd
+--- /dev/null
++++ b/package/cpuinfo/0001-Enable-CXX-only-when-needed-for-tests.patch
+@@ -0,0 +1,36 @@
++From b1261baefd2bb9095af56859c1cac6b1166fb13f Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sun, 29 Jan 2023 16:55:08 -0700
++Subject: [PATCH] Enable CXX only when needed for tests
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/pytorch/cpuinfo/pull/133]
++---
++ CMakeLists.txt | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index b2f9434..879c9fa 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -3,7 +3,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
++ # ---[ Setup project
++ PROJECT(
++     cpuinfo
++-    LANGUAGES C CXX
+++    LANGUAGES C
++     )
++ 
++ # ---[ Options.
++@@ -763,6 +763,7 @@ ENDIF()
++ 
++ # ---[ cpuinfo unit tests
++ IF(CPUINFO_SUPPORTED_PLATFORM AND CPUINFO_BUILD_UNIT_TESTS)
+++  ENABLE_LANGUAGE(CXX)
++   ADD_EXECUTABLE(init-test test/init.cc)
++   CPUINFO_TARGET_ENABLE_CXX11(init-test)
++   CPUINFO_TARGET_RUNTIME_LIBRARY(init-test)
++-- 
++2.34.1
++
+diff --git a/package/cpuinfo/Config.in b/package/cpuinfo/Config.in
+new file mode 100644
+index 0000000000..d3c3b08400
+--- /dev/null
++++ b/package/cpuinfo/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CPUINFO
++	bool "cpuinfo"
++	help
++	  CPU INFOrmation library, cpuinfo is a library to detect
++	  essential for performance optimization information about
++	  host CPU.
++
++	  https://github.com/pytorch/cpuinfo
+diff --git a/package/cpuinfo/cpuinfo.hash b/package/cpuinfo/cpuinfo.hash
+new file mode 100644
+index 0000000000..c3f70fa90f
+--- /dev/null
++++ b/package/cpuinfo/cpuinfo.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256  0936848904943381b2c01321101614776e43d583840ee0f3ceeea1e3fb7405f7  cpuinfo-de2fa78ebb431db98489e78603e4f77c1f6c5c57.tar.gz
++# License files, locally calculated
++sha256  8e7e60636c3aa0cb03571a1a841ce5697f9551ff92b3c426c2561613d15ade70  LICENSE
+diff --git a/package/cpuinfo/cpuinfo.mk b/package/cpuinfo/cpuinfo.mk
+new file mode 100644
+index 0000000000..ab6a0269ec
+--- /dev/null
++++ b/package/cpuinfo/cpuinfo.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# cpuinfo
++#
++################################################################################
++
++CPUINFO_VERSION = de2fa78ebb431db98489e78603e4f77c1f6c5c57
++CPUINFO_SITE = $(call github,pytorch,cpuinfo,$(CPUINFO_VERSION))
++CPUINFO_LICENSE = BSD-2-Clause
++CPUINFO_LICENSE_FILES = LICENSE
++CPUINFO_INSTALL_STAGING = YES
++CPUINFO_CONF_OPTS = \
++	-DCPUINFO_BUILD_UNIT_TESTS=OFF \
++	-DCPUINFO_BUILD_MOCK_TESTS=OFF \
++	-DCPUINFO_BUILD_BENCHMARKS=OFF
++
++$(eval $(cmake-package))
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
