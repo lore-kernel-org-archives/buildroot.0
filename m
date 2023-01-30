@@ -1,90 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E85FDC54EED
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 00:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF769C54EED
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 03:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7BE3F41603;
-	Mon, 30 Jan 2023 00:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BE3F41603
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4FC3F81327;
+	Mon, 30 Jan 2023 03:17:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FC3F81327
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pHJ9YQP7RNSb; Mon, 30 Jan 2023 00:31:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nbMyR-lhwpGV; Mon, 30 Jan 2023 03:17:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E500F4160F;
-	Mon, 30 Jan 2023 00:31:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E500F4160F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6834281319;
+	Mon, 30 Jan 2023 03:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6834281319
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 76BAE1BF869
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 00:29:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 797191BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 03:17:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5126860ADA
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 00:29:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5126860ADA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 52F6160D70
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 03:17:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52F6160D70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ty_KrCaxibll for <buildroot@lists.busybox.net>;
- Mon, 30 Jan 2023 00:29:09 +0000 (UTC)
+ with ESMTP id rnFIXBQe5vvb for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 03:17:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0148860B3D
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0148860B3D
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 00:29:08 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id m8so4571027ili.7
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 16:29:08 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C20D607A1
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
+ [IPv6:2607:f8b0:4864:20::235])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4C20D607A1
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 03:17:41 +0000 (UTC)
+Received: by mail-oi1-x235.google.com with SMTP id j21so69866oie.4
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 19:17:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=jqYPME6zRiekiH6mYQYFIXSaSGXzicR6dNtpX8DYi/c=;
- b=WaUF6eqyctqqmdcyMrI9XqRFla98dfH0OXbrT6MuGMfUBMinIDMeBNqPgjHS0mUPCF
- I4DTNMUbBlgYYlN0AYKTAYvruaCAbJt1uqMKrI/yWN/2cgxazuPCcvfxbWGzQIkcGlqH
- PfOkVCs9FE92YYoGwTUREGg5zYcYfagf/x3kTekrzfg3FHWeLM9wnMuJCqxbZYD1b7yq
- RwOAlQB0bOZSGgfWAUl005aUOmjlHMNTdDDHrKe0ohLs1xEpUPNM9tgWJWYhdcglvXMi
- Tpwx4t4RlJwZIKY/jNoD1JMNqMJVJ/sYsUxngIHZ+YCP2pA32YNfvgiLhIyNNKxilph/
- LmTg==
-X-Gm-Message-State: AO0yUKVg9rfG7iT2YoKoO9DPcB5WulVjBvJ2kxdjnQjTTSyNdAu5O2SR
- 1SftGyvRDxF8TPE7+WoS3EypSeuq8lU38w==
-X-Google-Smtp-Source: AK7set/Ib8bzvBZxV78dePXItclPzqIpaf2XK4dQCjMfYQrI7NLf7HyNGDoeocVC0KawtuX4zYLVnQ==
-X-Received: by 2002:a05:6e02:1a29:b0:310:e5f0:a4c9 with SMTP id
- g9-20020a056e021a2900b00310e5f0a4c9mr4010899ile.1.1675038547851; 
- Sun, 29 Jan 2023 16:29:07 -0800 (PST)
-Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
- [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- q4-20020a02c8c4000000b00363d6918540sm1676570jao.171.2023.01.29.16.29.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Jan 2023 16:29:07 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 17:28:54 -0700
-Message-Id: <20230130002854.2300661-10-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230130002854.2300661-1-james.hilliard1@gmail.com>
-References: <20230130002854.2300661-1-james.hilliard1@gmail.com>
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0QBfM76l5HHe8ClTZP0rNAav9vxQJMwnX/4phjIu5s0=;
+ b=R9twxhxFtKizy/qcRHm7x18l5FPrJ3cDpwLzjWuRgnshC1ZSQ3M+d4B7gSZkyD9D+S
+ FefSF33eGC2/Tt/CXoC/Ov6yu8NXblMKcr0d6bJ7aAugA+mnIoafhF5CW0i1lzVDxEn9
+ w+x+X8MrzQgrCn2VDGpqZtkzbb6/nTmMwNqnEYI20uhwhRATPnnHHD6s9HNQglDdBPSE
+ bglCFWENJdof+QHYHzlUJnWjpfdPLf8Zj0nTMwAqZO6W1KDiMvZ12y+NbzXGtqUUdBhA
+ LRYVmrE/l1J+M1v6+YPks5Vc80HHAgOE554PPAWTmGVoBFwRs43dxVvfnj+0YfxFnh1v
+ AUjQ==
+X-Gm-Message-State: AO0yUKWFmaSSgfo0Gp32+0yAcnUArt8cf249XYHd5byreizWTAvR29g3
+ N5fdzz41iTXmuxaPVf3eXT1QXaqi+PLh81JiN9o=
+X-Google-Smtp-Source: AK7set9h3uGlM9ywsDKWsEpQJGijITmTpT4fCRwC47PpHmyQpOwN0Xt6dBI0/PVXhrT9NKBsN0+BAZ0qMYVsNieffpU=
+X-Received: by 2002:aca:ef46:0:b0:378:3063:1399 with SMTP id
+ n67-20020acaef46000000b0037830631399mr156462oih.18.1675048659999; Sun, 29 Jan
+ 2023 19:17:39 -0800 (PST)
 MIME-Version: 1.0
+References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
+ <20230127141058.2180747-4-james.hilliard1@gmail.com>
+ <20230129214507.GY2632@scaer>
+In-Reply-To: <20230129214507.GY2632@scaer>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 29 Jan 2023 20:17:28 -0700
+Message-ID: <CADvTj4rYJHfDyhEmtogs0WQ30=FZQH8zWAcuwZMxmebq_iL7xA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=jqYPME6zRiekiH6mYQYFIXSaSGXzicR6dNtpX8DYi/c=;
- b=qko4XgfckzNqyf/TG5z/W6shHapAs5zuHHlEu3WLLJCB9d+q9gra9/wgfW2Z14DKaw
- W7a2hsIVkGWYgy/Oe24Rn01Ftdxgu5X3hqGT2c6FIVmmy5NPSRh5/MneRfCa7FIQijrp
- li4ZBvBRB/quTfMbFg5ivRNcBMB7xG6V/JddZ1nwVkdPh+VSU0VvlgxjypwSFpP7mM6f
- ev6sajjCwJSzE8Rk/sKCfEco3oXWQJAO9WmMLwMAR/iEJb/NNpayrx7HKoU8iUlmM5t6
- jsu5XbGPR0qANWZVTxvLbArC5fFiKmJcM5ejRke4Lt9LMVgRfrXcZZpIa6RkrEYtFdwB
- G3Fw==
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=0QBfM76l5HHe8ClTZP0rNAav9vxQJMwnX/4phjIu5s0=;
+ b=Lxnu7Dt6L6hHTM6Kq+CNz5YLgwkBY55WT4NnZZrag/c5jYHdsv8ClDB4rHsiwVYq4j
+ zdOpY1hCTnmGv6WuvZijP7anSd2P30w7XuRjWqbF341rj/dTTsvU2aD1JO6+9Jh+kTce
+ IgBhlTtErpwth/6G5Ub2xR33WTCi2v2TAhlYFeHgXZW+RVVmp6v0pv759/U93JYNl9ZI
+ b9AcRtqqTFWRRxWIPTIIQV5oYJ6hdUtIkSg0WQ4Qywe6+4ostDLz00FRAqsIGitQGc9G
+ g/UhNT9fTLBxL0iq2Bgj+ggC02Bc3wSenqLiPwFKUHvzgOW95grUyPxwfVVMnO+zRSQZ
+ M0uQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=qko4Xgfc
-Subject: [Buildroot] [PATCH v5 10/10] package/tensorflow-lite: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=Lxnu7Dt6
+Subject: Re: [Buildroot] [PATCH v4 04/13] package/gemmlowp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,311 +92,106 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Stefan Hager <stefan.hager@ginzinger.com>,
- James Hilliard <james.hilliard1@gmail.com>,
  Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Stefan Hager <stefan.hager@ginzinger.com>
+On Sun, Jan 29, 2023 at 2:45 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2023-01-27 07:10 -0700, James Hilliard spake thusly:
+> > From: Stefan Hager <stefan.hager@ginzinger.com>
+> >
+> > This package is required by tensorflow-lite.
+> >
+> > Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+> > Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> [--SNIP--]
+> > diff --git a/package/gemmlowp/gemmlowp.mk b/package/gemmlowp/gemmlowp.mk
+> > new file mode 100644
+> > index 0000000000..1a36fc48f7
+> > --- /dev/null
+> > +++ b/package/gemmlowp/gemmlowp.mk
+> > @@ -0,0 +1,15 @@
+> > +################################################################################
+> > +#
+> > +# gemmlowp
+> > +#
+> > +################################################################################
+> > +
+> > +GEMMLOWP_VERSION = 08e4bb339e34017a0835269d4a37c4ea04d15a69
+> > +GEMMLOWP_SITE = $(call github,google,gemmlowp,$(GEMMLOWP_VERSION))
+> > +GEMMLOWP_LICENSE = Apache-2.0
+> > +GEMMLOWP_LICENSE_FILES = LICENSE
+> > +GEMMLOWP_INSTALL_STAGING = YES
+> > +GEMMLOWP_INSTALL_TARGET = NO
+> > +GEMMLOWP_SUBDIR = contrib
+>
+> Upstream is very careful to point to some optimisations that are
+> required or performance will suffer.
+>
+> Notably, should be enabled:
+>   - for x86: sse4.1
+>   - for ARM: NEON
+>
+> For NEON, it seems this is automatically handled, though, based on
+> looking at some macros:
+>
+>     internal/detect_platform.h
+>     85 #if (defined __ARM_NEON) || (defined __ARM_NEON__)
+>     86 #define GEMMLOWP_NEON
+>     87 #endif
+>
+> For x86, we should probably have code like (what we have as
+> BR2_X86_CPU_HAS_SSE4 seems to be SSE4.1, but it is not clear whether
+> there is an actual delta between SSE4 and SSE4.1 [0], so let's be safe
+> and assume that BR2_X86_CPU_HAS_SSE4 is not enough):
+>
+>     ifeq ($(BR2_X86_CPU_HAS_SSE42),y)
+>     GEMMLOWP_OPTIM += -msse4.1
+>     endif
+>
+> However, that same header seems to also have some detection based on
+> macros... This needs to be cleared, maybe?
 
-This package adds the tensorflow lite runtime to buildroot.
+Well gemmlowp is effectively a header only library so optimization flags would
+not be set for the gemmlowp package itself but rather in something like the
+tensorflow-lite package which consumes the headers AFAIU.
 
-Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v3 -> v4:
-  - fix min gcc version
-  - enable xnnpack
-Changes v2 -> v3:
-  - drop architecture restrictions which appear inaccurate after adding neon-2-sse
-  - disable android only nnapi
-Changes v1 -> v2:
-  - fix label_image build
-  - more explicit cmake config
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- .../0001-lite-Update-CMakeLists.txt.patch     | 49 ++++++++++++++++++
- .../0002-Fix-FindFlatBuffers-cmake-file.patch | 37 ++++++++++++++
- ...ink-tensorflow-lite-against-gemmlowp.patch | 32 ++++++++++++
- package/tensorflow-lite/Config.in             | 27 ++++++++++
- package/tensorflow-lite/tensorflow-lite.hash  |  4 ++
- package/tensorflow-lite/tensorflow-lite.mk    | 51 +++++++++++++++++++
- 8 files changed, 202 insertions(+)
- create mode 100644 package/tensorflow-lite/0001-lite-Update-CMakeLists.txt.patch
- create mode 100644 package/tensorflow-lite/0002-Fix-FindFlatBuffers-cmake-file.patch
- create mode 100644 package/tensorflow-lite/0003-Don-t-link-tensorflow-lite-against-gemmlowp.patch
- create mode 100644 package/tensorflow-lite/Config.in
- create mode 100644 package/tensorflow-lite/tensorflow-lite.hash
- create mode 100644 package/tensorflow-lite/tensorflow-lite.mk
+Note there's technically an unused deprecated library that gets installed
+to staging, we don't install it to target since we don't have anything consuming
+that deprecated interface at all:
+https://github.com/google/gemmlowp#old-eightbitintgemm-legacy-deprecated-interface
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 12d4dc2014..d18ab04329 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2732,6 +2732,7 @@ F:	package/gemmlowp/
- F:	package/psimd/
- F:	package/pthreadpool/
- F:	package/ruy/
-+F:	package/tensorflow-lite/
- F:	package/xnnpack/
- 
- N:	Stefan Ott <stefan@ott.net>
-diff --git a/package/Config.in b/package/Config.in
-index e79f6fe28f..6aa5e2640c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2132,6 +2132,7 @@ endif
- 	source "package/sphinxbase/Config.in"
- 	source "package/startup-notification/Config.in"
- 	source "package/tbb/Config.in"
-+	source "package/tensorflow-lite/Config.in"
- 	source "package/tinycbor/Config.in"
- 	source "package/tz/Config.in"
- 	source "package/tzdata/Config.in"
-diff --git a/package/tensorflow-lite/0001-lite-Update-CMakeLists.txt.patch b/package/tensorflow-lite/0001-lite-Update-CMakeLists.txt.patch
-new file mode 100644
-index 0000000000..53b5170681
---- /dev/null
-+++ b/package/tensorflow-lite/0001-lite-Update-CMakeLists.txt.patch
-@@ -0,0 +1,49 @@
-+From 081c2e4e3cf021efb2853a485a18b563e88f6117 Mon Sep 17 00:00:00 2001
-+From: Terry Heo <terryheo@google.com>
-+Date: Tue, 1 Nov 2022 15:55:30 -0700
-+Subject: [PATCH] lite: Update CMakeLists.txt
-+
-+This changes are needed to build kernel tests.
-+
-+PiperOrigin-RevId: 485439972
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+081c2e4e3cf021efb2853a485a18b563e88f6117]
-+---
-+ tensorflow/lite/CMakeLists.txt | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/tensorflow/lite/CMakeLists.txt b/tensorflow/lite/CMakeLists.txt
-+index 9dfbb4b72f3..fd8b3faf1e2 100644
-+--- a/tensorflow/lite/CMakeLists.txt
-++++ b/tensorflow/lite/CMakeLists.txt
-+@@ -209,6 +209,9 @@ list(FILTER TFLITE_SRCS EXCLUDE REGEX ".*tflite_with_xnnpack\\.cc$")
-+ # Exclude Flex related files.
-+ list(FILTER TFLITE_SRCS EXCLUDE REGEX ".*with_selected_ops\\.cc$")
-+ 
-++# Exclude tensorflow_profiler_logger files.
-++list(FILTER TFLITE_SRCS EXCLUDE REGEX ".*tensorflow_profiler_logger\\.cc$")
-++
-+ if(_TFLITE_ENABLE_MMAP)
-+   list(FILTER TFLITE_SRCS EXCLUDE REGEX ".*mmap_allocation_disabled\\.cc$")
-+ else()
-+@@ -222,6 +225,7 @@ if(NOT "${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
-+ endif()
-+ populate_tflite_source_vars("core" TFLITE_CORE_SRCS)
-+ populate_tflite_source_vars("core/api" TFLITE_CORE_API_SRCS)
-++populate_tflite_source_vars("core/c" TFLITE_CORE_C_SRCS)
-+ populate_tflite_source_vars("c" TFLITE_C_SRCS)
-+ populate_tflite_source_vars("delegates" TFLITE_DELEGATES_SRCS)
-+ if(TFLITE_ENABLE_GPU)
-+@@ -483,6 +487,7 @@ endif()
-+ # TFLite library
-+ set(_ALL_TFLITE_SRCS
-+   ${TFLITE_CORE_API_SRCS}
-++  ${TFLITE_CORE_C_SRCS}
-+   ${TFLITE_CORE_SRCS}
-+   ${TFLITE_C_SRCS}
-+   ${TFLITE_DELEGATES_FLEX_SRCS}
-+-- 
-+2.34.1
-+
-diff --git a/package/tensorflow-lite/0002-Fix-FindFlatBuffers-cmake-file.patch b/package/tensorflow-lite/0002-Fix-FindFlatBuffers-cmake-file.patch
-new file mode 100644
-index 0000000000..e97bb3e52f
---- /dev/null
-+++ b/package/tensorflow-lite/0002-Fix-FindFlatBuffers-cmake-file.patch
-@@ -0,0 +1,37 @@
-+From a4ff4b5e952a22906ac0ed01e73f84f42926c325 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Thu, 24 Nov 2022 14:29:06 -0700
-+Subject: [PATCH] Fix FindFlatBuffers cmake file
-+
-+Capitalization needs to match for system cmake override to work:
-+https://github.com/google/flatbuffers/blob/v22.11.23/CMake/FindFlatBuffers.cmake
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://github.com/tensorflow/tensorflow/pull/58677]
-+---
-+ tensorflow/lite/CMakeLists.txt                                  | 2 +-
-+ .../modules/{FindFlatbuffers.cmake => FindFlatBuffers.cmake}    | 0
-+ 2 files changed, 1 insertion(+), 1 deletion(-)
-+ rename tensorflow/lite/tools/cmake/modules/{FindFlatbuffers.cmake => FindFlatBuffers.cmake} (100%)
-+
-+diff --git a/tensorflow/lite/CMakeLists.txt b/tensorflow/lite/CMakeLists.txt
-+index f9c30d6a046..c2ee9edfb61 100644
-+--- a/tensorflow/lite/CMakeLists.txt
-++++ b/tensorflow/lite/CMakeLists.txt
-+@@ -143,7 +143,7 @@ find_package(absl REQUIRED)
-+ find_package(Eigen3 REQUIRED)
-+ find_package(farmhash REQUIRED)
-+ find_package(fft2d REQUIRED)
-+-find_package(Flatbuffers REQUIRED)
-++find_package(FlatBuffers REQUIRED)
-+ find_package(gemmlowp REQUIRED)
-+ find_package(NEON_2_SSE REQUIRED)
-+ find_package(cpuinfo REQUIRED)  #CPUINFO is used by XNNPACK and RUY library
-+diff --git a/tensorflow/lite/tools/cmake/modules/FindFlatbuffers.cmake b/tensorflow/lite/tools/cmake/modules/FindFlatBuffers.cmake
-+similarity index 100%
-+rename from tensorflow/lite/tools/cmake/modules/FindFlatbuffers.cmake
-+rename to tensorflow/lite/tools/cmake/modules/FindFlatBuffers.cmake
-+-- 
-+2.34.1
-+
-diff --git a/package/tensorflow-lite/0003-Don-t-link-tensorflow-lite-against-gemmlowp.patch b/package/tensorflow-lite/0003-Don-t-link-tensorflow-lite-against-gemmlowp.patch
-new file mode 100644
-index 0000000000..dbee9942b3
---- /dev/null
-+++ b/package/tensorflow-lite/0003-Don-t-link-tensorflow-lite-against-gemmlowp.patch
-@@ -0,0 +1,32 @@
-+From fb584589f707853d85a081c99b1b82598c2631c1 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Thu, 24 Nov 2022 15:10:27 -0700
-+Subject: [PATCH] Don't link tensorflow-lite against gemmlowp
-+
-+We can't link against gemmlowp as it is a header only library.
-+
-+Fixes:
-+/bin/ld: cannot find -lgemmlowp: No such file or directory
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://github.com/tensorflow/tensorflow/pull/58678]
-+---
-+ tensorflow/lite/CMakeLists.txt | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/tensorflow/lite/CMakeLists.txt b/tensorflow/lite/CMakeLists.txt
-+index f9c30d6a046..3fe5ed15605 100644
-+--- a/tensorflow/lite/CMakeLists.txt
-++++ b/tensorflow/lite/CMakeLists.txt
-+@@ -560,7 +560,6 @@ target_link_libraries(tensorflow-lite
-+     farmhash
-+     fft2d_fftsg2d
-+     flatbuffers::flatbuffers
-+-    gemmlowp
-+     ruy::ruy
-+     pthreadpool
-+     ${CMAKE_DL_LIBS}
-+-- 
-+2.34.1
-+
-diff --git a/package/tensorflow-lite/Config.in b/package/tensorflow-lite/Config.in
-new file mode 100644
-index 0000000000..92a364ca36
---- /dev/null
-+++ b/package/tensorflow-lite/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_TENSORFLOW_LITE
-+	bool "tensorflow-lite"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_SHARED_LIBS
-+	select BR2_PACKAGE_CPUINFO
-+	select BR2_PACKAGE_EIGEN
-+	select BR2_PACKAGE_FARMHASH
-+	select BR2_PACKAGE_FFT2D
-+	select BR2_PACKAGE_FLATBUFFERS
-+	select BR2_PACKAGE_GEMMLOWP
-+	select BR2_PACKAGE_LIBABSEIL_CPP
-+	select BR2_PACKAGE_NEON_2_SSE
-+	select BR2_PACKAGE_RUY
-+	select BR2_PACKAGE_XNNPACK
-+	help
-+	  Tensorflow Lite dynamic library and headers: Inference engine
-+	  to run previously trained machine learning models.
-+
-+comment "tensorflow-lite needs a toolchain w/ glibc, C++17, threads"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || \
-+			!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "tensorflow-lite needs a toolchain w/ shared libraries"
-+	depends on !BR2_SHARED_LIBS
-diff --git a/package/tensorflow-lite/tensorflow-lite.hash b/package/tensorflow-lite/tensorflow-lite.hash
-new file mode 100644
-index 0000000000..7d9035707b
---- /dev/null
-+++ b/package/tensorflow-lite/tensorflow-lite.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  99c732b92b1b37fc243a559e02f9aef5671771e272758aa4aec7f34dc92dac48  tensorflow-lite-2.11.0.tar.gz
-+# License files, locally calculated
-+sha256  71c6915d04265772a0339bed47276942c678b45cc01534210ebe6984fd1aec65  LICENSE
-diff --git a/package/tensorflow-lite/tensorflow-lite.mk b/package/tensorflow-lite/tensorflow-lite.mk
-new file mode 100644
-index 0000000000..4f8e8b9595
---- /dev/null
-+++ b/package/tensorflow-lite/tensorflow-lite.mk
-@@ -0,0 +1,51 @@
-+################################################################################
-+#
-+# tensorflow-lite
-+#
-+################################################################################
-+
-+TENSORFLOW_LITE_VERSION = 2.11.0
-+TENSORFLOW_LITE_SITE =  $(call github,tensorflow,tensorflow,v$(TENSORFLOW_LITE_VERSION))
-+TENSORFLOW_LITE_INSTALL_STAGING = YES
-+TENSORFLOW_LITE_LICENSE = Apache-2.0
-+TENSORFLOW_LITE_LICENSE_FILES = LICENSE
-+TENSORFLOW_LITE_SUBDIR = tensorflow/lite
-+TENSORFLOW_LITE_SUPPORTS_IN_SOURCE_BUILD = NO
-+TENSORFLOW_LITE_DEPENDENCIES += \
-+	host-pkgconf \
-+	host-flatbuffers \
-+	cpuinfo \
-+	eigen \
-+	farmhash \
-+	fft2d \
-+	flatbuffers \
-+	gemmlowp \
-+	libabseil-cpp \
-+	neon-2-sse \
-+	ruy \
-+	xnnpack
-+
-+TENSORFLOW_LITE_CONF_OPTS = \
-+	-Dabsl_DIR=$(STAGING_DIR)/usr/lib/cmake/absl \
-+	-DBUILD_SHARED_LIBS=ON \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include/gemmlowp" \
-+	-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON \
-+	-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-+	-DEigen3_DIR=$(STAGING_DIR)/usr/share/eigen3/cmake \
-+	-DFARMHASH_SOURCE_DIR=$(FARMHASH_DIR) \
-+	-Dfarmhash_DIR=$(STAGING_DIR)/usr/lib \
-+	-DFETCHCONTENT_FULLY_DISCONNECTED=ON \
-+	-DFETCHCONTENT_QUIET=OFF \
-+	-DFFT2D_SOURCE_DIR=$(STAGING_DIR)/usr/include/fft2d \
-+	-DFlatBuffers_DIR=$(STAGING_DIR)/usr/lib/cmake/flatbuffers \
-+	-DNEON_2_SSE_DIR=$(STAGING_DIR)/usr/lib/cmake/NEON_2_SSE \
-+	-Dxnnpack_POPULATED=ON \
-+	-DTFLITE_ENABLE_EXTERNAL_DELEGATE=ON \
-+	-DTFLITE_ENABLE_GPU=OFF \
-+	-DTFLITE_ENABLE_INSTALL=ON \
-+	-DTFLITE_ENABLE_MMAP=ON \
-+	-DTFLITE_ENABLE_NNAPI=OFF \
-+	-DTFLITE_ENABLE_RUY=ON \
-+	-DTFLITE_ENABLE_XNNPACK=ON
-+
-+$(eval $(cmake-package))
--- 
-2.34.1
-
+>
+> [0] https://en.wikipedia.org/wiki/SSE4
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > +$(eval $(cmake-package))
+> > --
+> > 2.34.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
