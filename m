@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E4DEC636CD
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 21:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B813C636CD
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 21:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C85D41C67;
-	Mon, 30 Jan 2023 21:17:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C85D41C67
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18D57610CD;
+	Mon, 30 Jan 2023 21:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18D57610CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6vvAmT1eIDLv; Mon, 30 Jan 2023 21:17:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MvawyK_0SOf8; Mon, 30 Jan 2023 21:30:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0967C41CD3;
-	Mon, 30 Jan 2023 21:17:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0967C41CD3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C61241BF44A
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 21:16:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5935B61096;
+	Mon, 30 Jan 2023 21:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5935B61096
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 60CB31BF44A
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 21:30:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9FF3E81F0A
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 21:16:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FF3E81F0A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38F4A61100
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 21:30:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38F4A61100
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XNAuDURbaELr for <buildroot@lists.busybox.net>;
- Mon, 30 Jan 2023 21:16:40 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AECF81EA4
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4AECF81EA4
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 21:16:40 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 414B1240004;
- Mon, 30 Jan 2023 21:16:38 +0000 (UTC)
-Date: Mon, 30 Jan 2023 22:16:37 +0100
-To: Jerry Kooyman via buildroot <buildroot@buildroot.org>
-Message-ID: <20230130221637.3077e249@windsurf>
-In-Reply-To: <20230130150613.829127-1-jerry.kooyman@entrust.com>
-References: <20230130150613.829127-1-jerry.kooyman@entrust.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675113398;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zxQx1NJ4yhKC+J99DZM/zRXGUZkVI8E7iHjEa9vKkX4=;
- b=Jqj5suX2Lt2oLuhTd8xsL5hl6YVzARnCxPnFCZv18e5v4iylDVx8He2a/tlVIoN+Itb1YD
- Epj7LUg+HSn7GPIYpGF6Ro9uSFW8TBQjm6ZY5nwnCl0ccv8HPmaBeG+KjY/jfdvD0Gr2ej
- XOSoZc6RLLyeIaGEcbYmb/UCN6sPOAsjzkgrnljEH128qmweQQy9OVfaUshtO0bpLRq53T
- QyIkpCQJMnZEnUEe6Dd3bV9dEHbWctwR792XMtcvd/rMrnZX965ELjSkeTYrStDvC61ygW
- Ore4oN1h40mrpEOf3ZURYYgomNqGUFgD5EM96wGQytmIzxgjWkvO9eeXEHEFxA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Jqj5suX2
-Subject: Re: [Buildroot] [PATCH 1/1] boot/uboot: add
- BR2_TARGET_UBOOT_NEEDS_XXD option
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LLP8ZKiTpjeg for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 21:30:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7224361185
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 21:30:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7224361185
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5DCC9825B6; Mon, 30 Jan 2023 21:30:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 30 Jan 2023 22:28:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 319cc24aca38d6cb8898400694135b855731940f
+X-Git-Newrev: fd1d0a9cbf6de2c30fcfcc181b466a5f2b44dc54
+X-Patchwork-Hint: ignore
+Message-Id: <20230130213019.5DCC9825B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglebone: add support for
+ BeagleBone Green Wireless
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,35 +58,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: jerry.kooyman@entrust.com
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 30 Jan 2023 09:06:13 -0600
-Jerry Kooyman via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fd1d0a9cbf6de2c30fcfcc181b466a5f2b44dc54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Jerry Kooyman <jerry.kooyman@entrust.com>
-> 
-> A host dependency to xxd is required if the U-Boot board
-> configuration has CONFIG_USE_DEFAULT_ENV_FILE enabled. So
-> introduce a new BR U-Boot config option BR2_TARGET_UBOOT_NEEDS_XXD
-> to solve this problem. xxd is provided by host-vim.
-> 
-> Signed-off-by: Jerry Kooyman <jerry.kooyman@entrust.com>
-> ---
->  boot/uboot/Config.in | 8 ++++++++
->  boot/uboot/uboot.mk  | 4 ++++
->  2 files changed, 12 insertions(+)
+This commit adds support for the BeagleBone Green Wireless to the
+existing beaglebone_defconfig, by making sure the relevant Device Tree
+is built and installed.
 
-Applied to master, thanks.
+Signed-off-by: Ramon Crichlow <rcrichlow9000@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/beaglebone/genimage.cfg | 1 +
+ configs/beaglebone_defconfig  | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
+index 42ca2cf107..987d205075 100644
+--- a/board/beaglebone/genimage.cfg
++++ b/board/beaglebone/genimage.cfg
+@@ -11,6 +11,7 @@ image boot.vfat {
+ 			"am335x-boneblack.dtb",
+ 			"am335x-bonegreen.dtb",
+ 			"am335x-boneblack-wireless.dtb",
++			"am335x-bonegreen-wireless.dtb",
+ 		}
+ 	}
+ 
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 06154d98b7..639b491e97 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.30-ti-r3)/linux-5.10.30-ti-r3.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ # Filesystem
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
