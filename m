@@ -1,85 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF769C54EED
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 03:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67B67C54EAA
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 04:10:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4FC3F81327;
-	Mon, 30 Jan 2023 03:17:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FC3F81327
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9110C41591;
+	Mon, 30 Jan 2023 04:10:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9110C41591
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nbMyR-lhwpGV; Mon, 30 Jan 2023 03:17:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aZfMbAWdc4Z6; Mon, 30 Jan 2023 04:10:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6834281319;
-	Mon, 30 Jan 2023 03:17:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6834281319
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 797191BF8B4
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 03:17:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 669624159C;
+	Mon, 30 Jan 2023 04:10:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 669624159C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 33B471BF333
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 04:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52F6160D70
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 03:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52F6160D70
+ by smtp2.osuosl.org (Postfix) with ESMTP id 07BB140146
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 04:10:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07BB140146
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rnFIXBQe5vvb for <buildroot@lists.busybox.net>;
- Mon, 30 Jan 2023 03:17:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JmIOlibo3My1 for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 04:10:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C20D607A1
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
- [IPv6:2607:f8b0:4864:20::235])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4C20D607A1
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 03:17:41 +0000 (UTC)
-Received: by mail-oi1-x235.google.com with SMTP id j21so69866oie.4
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 19:17:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06A0540126
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 06A0540126
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 04:10:13 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id w13so609561ilv.3
+ for <buildroot@buildroot.org>; Sun, 29 Jan 2023 20:10:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=0QBfM76l5HHe8ClTZP0rNAav9vxQJMwnX/4phjIu5s0=;
- b=R9twxhxFtKizy/qcRHm7x18l5FPrJ3cDpwLzjWuRgnshC1ZSQ3M+d4B7gSZkyD9D+S
- FefSF33eGC2/Tt/CXoC/Ov6yu8NXblMKcr0d6bJ7aAugA+mnIoafhF5CW0i1lzVDxEn9
- w+x+X8MrzQgrCn2VDGpqZtkzbb6/nTmMwNqnEYI20uhwhRATPnnHHD6s9HNQglDdBPSE
- bglCFWENJdof+QHYHzlUJnWjpfdPLf8Zj0nTMwAqZO6W1KDiMvZ12y+NbzXGtqUUdBhA
- LRYVmrE/l1J+M1v6+YPks5Vc80HHAgOE554PPAWTmGVoBFwRs43dxVvfnj+0YfxFnh1v
- AUjQ==
-X-Gm-Message-State: AO0yUKWFmaSSgfo0Gp32+0yAcnUArt8cf249XYHd5byreizWTAvR29g3
- N5fdzz41iTXmuxaPVf3eXT1QXaqi+PLh81JiN9o=
-X-Google-Smtp-Source: AK7set9h3uGlM9ywsDKWsEpQJGijITmTpT4fCRwC47PpHmyQpOwN0Xt6dBI0/PVXhrT9NKBsN0+BAZ0qMYVsNieffpU=
-X-Received: by 2002:aca:ef46:0:b0:378:3063:1399 with SMTP id
- n67-20020acaef46000000b0037830631399mr156462oih.18.1675048659999; Sun, 29 Jan
- 2023 19:17:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
- <20230127141058.2180747-4-james.hilliard1@gmail.com>
- <20230129214507.GY2632@scaer>
-In-Reply-To: <20230129214507.GY2632@scaer>
+ bh=7DOZupcMmywVDQckO6Bp2wyKH6Rf/SqeJLbtj+NXgzw=;
+ b=QZk1vXv1t6WlDPQj2PRFZvmHBu5ywdGQ44wAXUW3n4q2k5tiaH0dNrjPD3Rwf6gaXT
+ FAfTCuQYC63X3T7frmBEiCTd54OSjd54Y1bqPqVbCt0jsavmWZvw2u3ldxIgZDDmQX1G
+ puHv16n0Sr6PpFfKl9uhzGoU8x+6+XYX/3sH/5LBOagtFgZ6y5/zSKzL7Sk37HQSSV7A
+ VgGxq9qVD2Ib7AmOMjPYm2p0Qfzgj4XH0pRnmBlYlY+1xR0XIJJqqXsodKC3eMSLJiTx
+ z/GeJR+nDn9Mh7Lzt9sI/NGuNFb2Jjpkwkw0PlTSp4Am51EiXpYqukFV1S5cKZ21KnsV
+ PnfQ==
+X-Gm-Message-State: AFqh2kr4qFQ3ADFNpsqiifIKq0fT2qLlXro7KsuprBhFrH0duN/Z41Wt
+ gwjkjW3/8L3bfKoA+mqytNHkPXZJTnPZQA==
+X-Google-Smtp-Source: AMrXdXvasV1ICETzisFlE1LYHe9xjOT2DcW7kzOtguZegGUx2hNs/SaLxCtx1k1xpp3cRpCbguTj8Q==
+X-Received: by 2002:a05:6e02:1a61:b0:30c:5c54:c25a with SMTP id
+ w1-20020a056e021a6100b0030c5c54c25amr46089462ilv.14.1675051812827; 
+ Sun, 29 Jan 2023 20:10:12 -0800 (PST)
+Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
+ [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
+ h13-20020a056638062d00b003a970f21f9asm3386738jar.78.2023.01.29.20.10.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 29 Jan 2023 20:10:12 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 29 Jan 2023 20:17:28 -0700
-Message-ID: <CADvTj4rYJHfDyhEmtogs0WQ30=FZQH8zWAcuwZMxmebq_iL7xA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 29 Jan 2023 21:10:09 -0700
+Message-Id: <20230130041009.3531224-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=0QBfM76l5HHe8ClTZP0rNAav9vxQJMwnX/4phjIu5s0=;
- b=Lxnu7Dt6L6hHTM6Kq+CNz5YLgwkBY55WT4NnZZrag/c5jYHdsv8ClDB4rHsiwVYq4j
- zdOpY1hCTnmGv6WuvZijP7anSd2P30w7XuRjWqbF341rj/dTTsvU2aD1JO6+9Jh+kTce
- IgBhlTtErpwth/6G5Ub2xR33WTCi2v2TAhlYFeHgXZW+RVVmp6v0pv759/U93JYNl9ZI
- b9AcRtqqTFWRRxWIPTIIQV5oYJ6hdUtIkSg0WQ4Qywe6+4ostDLz00FRAqsIGitQGc9G
- g/UhNT9fTLBxL0iq2Bgj+ggC02Bc3wSenqLiPwFKUHvzgOW95grUyPxwfVVMnO+zRSQZ
- M0uQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7DOZupcMmywVDQckO6Bp2wyKH6Rf/SqeJLbtj+NXgzw=;
+ b=U+pbFBhF62IJUOx2bwtkhSCOV5PazL+0CQvUhzriuBSbe/WSmgkWK5umxuzVu4WsM8
+ rmb7iRTsQaQ7ugcdyr4wJqJ0Hm75sBna+TLlShjN+CGmDeu+Rzv0JY3TOQX6vvLFo6Qg
+ M6J4u/JlZYE3bKtR1jjeTZJ2Zx1jRqu7BvsaS3e767PTjOc6lts5jMAFT5Rgr0JBPAM7
+ CK/x8p7DXdoh+Tv0IomqUJxsbIJ8a92bARKFhnh6q6v/B1+BZeOkmgLZnMyoW0Zu1JwD
+ 30s1T/zbfKfKDf0/yEJuMdrACd6D0CdGnzvhnz+TNz7zL/vqOyM5G071NVvAkS0SVOOB
+ 7INA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Lxnu7Dt6
-Subject: Re: [Buildroot] [PATCH v4 04/13] package/gemmlowp: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=U+pbFBhF
+Subject: [Buildroot] [PATCH 1/1] package/neon-2-sse: fix build without C++
+ toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,107 +94,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stefan Hager <stefan.hager@ginzinger.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Jan 29, 2023 at 2:45 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2023-01-27 07:10 -0700, James Hilliard spake thusly:
-> > From: Stefan Hager <stefan.hager@ginzinger.com>
-> >
-> > This package is required by tensorflow-lite.
-> >
-> > Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-> > Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> [--SNIP--]
-> > diff --git a/package/gemmlowp/gemmlowp.mk b/package/gemmlowp/gemmlowp.mk
-> > new file mode 100644
-> > index 0000000000..1a36fc48f7
-> > --- /dev/null
-> > +++ b/package/gemmlowp/gemmlowp.mk
-> > @@ -0,0 +1,15 @@
-> > +################################################################################
-> > +#
-> > +# gemmlowp
-> > +#
-> > +################################################################################
-> > +
-> > +GEMMLOWP_VERSION = 08e4bb339e34017a0835269d4a37c4ea04d15a69
-> > +GEMMLOWP_SITE = $(call github,google,gemmlowp,$(GEMMLOWP_VERSION))
-> > +GEMMLOWP_LICENSE = Apache-2.0
-> > +GEMMLOWP_LICENSE_FILES = LICENSE
-> > +GEMMLOWP_INSTALL_STAGING = YES
-> > +GEMMLOWP_INSTALL_TARGET = NO
-> > +GEMMLOWP_SUBDIR = contrib
->
-> Upstream is very careful to point to some optimisations that are
-> required or performance will suffer.
->
-> Notably, should be enabled:
->   - for x86: sse4.1
->   - for ARM: NEON
->
-> For NEON, it seems this is automatically handled, though, based on
-> looking at some macros:
->
->     internal/detect_platform.h
->     85 #if (defined __ARM_NEON) || (defined __ARM_NEON__)
->     86 #define GEMMLOWP_NEON
->     87 #endif
->
-> For x86, we should probably have code like (what we have as
-> BR2_X86_CPU_HAS_SSE4 seems to be SSE4.1, but it is not clear whether
-> there is an actual delta between SSE4 and SSE4.1 [0], so let's be safe
-> and assume that BR2_X86_CPU_HAS_SSE4 is not enough):
->
->     ifeq ($(BR2_X86_CPU_HAS_SSE42),y)
->     GEMMLOWP_OPTIM += -msse4.1
->     endif
->
-> However, that same header seems to also have some detection based on
-> macros... This needs to be cleared, maybe?
+The cmake project for neon-2-sse doesn't correctly set the project
+language to C which causes cmake to try and detect a C++ compiler.
 
-Well gemmlowp is effectively a header only library so optimization flags would
-not be set for the gemmlowp package itself but rather in something like the
-tensorflow-lite package which consumes the headers AFAIU.
+Add a patch which fixes the project language setting.
 
-Note there's technically an unused deprecated library that gets installed
-to staging, we don't install it to target since we don't have anything consuming
-that deprecated interface at all:
-https://github.com/google/gemmlowp#old-eightbitintgemm-legacy-deprecated-interface
+Fixes:
+ - http://autobuild.buildroot.net/results/0eb/0ebb8c886e0a432b6fb43ab21010f625f6797b9e
+ - http://autobuild.buildroot.net/results/a5d/a5db2f286dbd69e84d518d086df857ef434b936a
 
->
-> [0] https://en.wikipedia.org/wiki/SSE4
->
-> Regards,
-> Yann E. MORIN.
->
-> > +$(eval $(cmake-package))
-> > --
-> > 2.34.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ .../neon-2-sse/0001-Fix-cmake-languages.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/neon-2-sse/0001-Fix-cmake-languages.patch
+
+diff --git a/package/neon-2-sse/0001-Fix-cmake-languages.patch b/package/neon-2-sse/0001-Fix-cmake-languages.patch
+new file mode 100644
+index 0000000000..e0becb1ffa
+--- /dev/null
++++ b/package/neon-2-sse/0001-Fix-cmake-languages.patch
+@@ -0,0 +1,40 @@
++From 186ec82e033d8c718d760d14945535a9d7e160fd Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sun, 29 Jan 2023 21:00:27 -0700
++Subject: [PATCH] Fix cmake languages
++
++When no language is set cmake defaults to C and CXX, since we support
++C by itself we should set the project language to C so that we don't
++get a compiler error when building without a CXX toolchain.
++
++Fixes:
++CMake Error at CMakeLists.txt:5 (project):
++  No CMAKE_CXX_COMPILER could be found.
++
++  Tell CMake where to find the compiler by setting either the environment
++  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
++  to the compiler, or to the compiler name if it is in the PATH.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/intel/ARM_NEON_2_x86_SSE/pull/62]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e4b8980..8f58e79 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -2,7 +2,7 @@
++ # Modification: Copyright (C) 2017 David Hirvonen
++ 
++ cmake_minimum_required(VERSION 3.0)
++-project(NEON_2_SSE VERSION 1.0.0)
+++project(NEON_2_SSE VERSION 1.0.0 LANGUAGES C)
++ 
++ add_library(${PROJECT_NAME} INTERFACE)
++ 
++-- 
++2.34.1
++
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
