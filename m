@@ -1,61 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EE08C54EAA
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 17:44:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49DBFC54EED
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 17:44:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A043E40B2F;
-	Mon, 30 Jan 2023 17:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A043E40B2F
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD1E781E81;
+	Mon, 30 Jan 2023 17:44:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD1E781E81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ix1Tz8yofy9R; Mon, 30 Jan 2023 17:44:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZHY-cbDJuhI0; Mon, 30 Jan 2023 17:44:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBA7040AF4;
-	Mon, 30 Jan 2023 17:44:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBA7040AF4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3CEAD1BF28E
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 17:43:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 273F681C19;
+	Mon, 30 Jan 2023 17:44:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 273F681C19
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 16E7B1BF28E
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 17:44:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 821A74179E
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 17:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 821A74179E
+ by smtp3.osuosl.org (Postfix) with ESMTP id E535560FB8
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 17:44:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E535560FB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NnIKF6Fer73B for <buildroot@lists.busybox.net>;
- Mon, 30 Jan 2023 17:43:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xsosXVHxU_iA for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 17:44:35 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A16741847
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8A16741847
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 17:43:43 +0000 (UTC)
-Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
- by mailout11.t-online.de (Postfix) with SMTP id B44E98F4F;
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B76B060FAE
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B76B060FAE
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 17:44:35 +0000 (UTC)
+Received: from fwd82.dcpf.telekom.de (fwd82.aul.t-online.de [10.223.144.108])
+ by mailout12.t-online.de (Postfix) with SMTP id 5BBABD0BE;
  Mon, 30 Jan 2023 18:43:40 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.195.67]) by fwd84.t-online.de
+Received: from fli4l.lan.fli4l ([79.214.195.67]) by fwd82.t-online.de
  with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pMYBw-3OM8cz0; Mon, 30 Jan 2023 18:43:40 +0100
+ esmtp id 1pMYBw-3vM0V00; Mon, 30 Jan 2023 18:43:40 +0100
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59284)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pMYBv-00052S-2J;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pMYBv-00052S-31;
  Mon, 30 Jan 2023 18:43:39 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Mon, 30 Jan 2023 18:43:36 +0100
-Message-Id: <20230130174339.36794-2-bernd.kuhls@t-online.de>
+Date: Mon, 30 Jan 2023 18:43:39 +0100
+Message-Id: <20230130174339.36794-5-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230130174339.36794-1-bernd.kuhls@t-online.de>
 References: <20230130174339.36794-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1675100620-521BFA0B-5D29B14C/0/0 CLEAN NORMAL
-X-TOI-MSGID: 126a6fb9-87dc-43ea-aa65-a5b0cbfb53b1
-Subject: [Buildroot] [PATCH 2/5] package/libva: switch to meson
+X-TOI-EXPURGATEID: 150726::1675100620-12796992-918E624A/0/0 CLEAN NORMAL
+X-TOI-MSGID: f9755630-a3f3-4629-a6c7-eef500d00958
+Subject: [Buildroot] [PATCH 5/5] package/intel-mediasdk: bump version to
+ 23.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,76 +75,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The time between version 2.17.0 being tagged and the release of its
-tarball version containing autoconf scripts was three weeks now.
-With the switch to meson we can directly use the github-generated
-tarball while not needing to run autoreconf.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libva/libva.hash |  4 +---
- package/libva/libva.mk   | 19 +++++++++----------
- 2 files changed, 10 insertions(+), 13 deletions(-)
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 700ace0378..780c186069 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,3 @@
--# From https://github.com/intel/libva/releases/download/2.17.0/libva-2.17.0.tar.bz2.sha1sum
--sha1  997f7b3111bc5a4d32ec72e9d7f9fcfca41e4923  libva-2.17.0.tar.bz2
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 903b6f3394..a2c4243790 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  f3e5eb27c305e05a9bb62703d1915a127301cc0c4f9f209025767432230c4eac  libva-2.17.0.tar.bz2
-+sha256  8940541980ef998a36cd8f6ad905e81838ea4ddf56dc479ed2bebd12711e6001  libva-2.17.0.tar.gz
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index c6b9f63b10..f50010d9fc 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -5,8 +5,7 @@
+-sha256  3a671cc692da5111c041088f5e32528b4346e122e8a134fad71310c572705106  intel-mediasdk-22.6.5.tar.gz
++sha256  9208c35641ba995760d662689426a6c433973cf5283b8510f9cfb774e4b9cb38  intel-mediasdk-23.1.0.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index f7bce30c74..462d487ebe 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBVA_VERSION = 2.17.0
--LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
--LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
-+LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
- LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
- LIBVA_INSTALL_STAGING = YES
-@@ -14,25 +13,25 @@ LIBVA_DEPENDENCIES = host-pkgconf libdrm
- 
- # libdrm is a hard-dependency
- LIBVA_CONF_OPTS = \
--	--enable-drm \
--	--with-drivers-path="/usr/lib/va"
-+	-Ddisable_drm=false \
-+	-Ddriverdir="/usr/lib/va"
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
--LIBVA_CONF_OPTS += --enable-x11
-+LIBVA_CONF_OPTS += -Dwith_x11=yes
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
- LIBVA_DEPENDENCIES += libgl
--LIBVA_CONF_OPTS += --enable-glx
-+LIBVA_CONF_OPTS += -Dwith_glx=yes
- endif
- else
--LIBVA_CONF_OPTS += --disable-glx --disable-x11
-+LIBVA_CONF_OPTS += -Dwith_glx=no -Dwith_x11=no
- endif
- 
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- LIBVA_DEPENDENCIES += wayland
--LIBVA_CONF_OPTS += --enable-wayland
-+LIBVA_CONF_OPTS += -Dwith_wayland=yes
- else
--LIBVA_CONF_OPTS += --disable-wayland
-+LIBVA_CONF_OPTS += -Dwith_wayland=no
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-INTEL_MEDIASDK_VERSION = 22.6.5
++INTEL_MEDIASDK_VERSION = 23.1.0
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
