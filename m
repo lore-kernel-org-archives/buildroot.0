@@ -1,76 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77DB0C54EAA
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 12:20:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E0A6C54EAA
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 14:47:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1016417AD;
-	Mon, 30 Jan 2023 12:20:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1016417AD
+	by smtp3.osuosl.org (Postfix) with ESMTP id C791560F95;
+	Mon, 30 Jan 2023 14:47:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C791560F95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DO_2jx6UVpAx; Mon, 30 Jan 2023 12:20:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 32bM65eZ8ITb; Mon, 30 Jan 2023 14:47:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69593417AB;
-	Mon, 30 Jan 2023 12:20:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69593417AB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 074B160F69;
+	Mon, 30 Jan 2023 14:47:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 074B160F69
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3B8B91BF5A4
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 12:19:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 105D01BF37C
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 14:47:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16F62408ED
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 12:19:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16F62408ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEDB640A20
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 14:47:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEDB640A20
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Ed88GHiwk4s for <buildroot@lists.busybox.net>;
- Mon, 30 Jan 2023 12:19:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30740408B0
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com
- [209.85.221.48])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 30740408B0
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 12:19:42 +0000 (UTC)
-Received: by mail-wr1-f48.google.com with SMTP id d14so10855537wrr.9
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 04:19:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ynL8qf889uILhZiHzaL76NNaSbRZF37aqv+1EdnmFoc=;
- b=ppgQrTCWXRnSw+2zMUl3cZi5Uomclqql4TInfe+1D4wYx9b7FsI8tbFBZ8YLpzncfS
- Zq0FevGk4HYGbVUk64qIQ1Q+jdtQgc31MHwPogUWqXmypDFbqL7WYPQQsLRVhs7/R2CV
- bsnjNqdK+Ob2gBGhwjS9ERONMUQzulw6YkXn2h3RslfSn42Iw7PLLoDv3ZtJCCa0OIZH
- /J86IW+vx2seZ4Wp7Nh9ofdX9lyapfBkudBNFdeWSpZDEjvGc7yRPlaxWM2uZ/EPKpYf
- LU0PfKo9YsqKV2OX0grtXjiU1cYpL7SHuCcNIDgg2hi16AjWeHvowqspKakhSV4iHJSg
- aRTA==
-X-Gm-Message-State: AFqh2krxh6s2/9mXp2Ye6uHnaH2iOtTqeszwZ/8ydIcxX4rqbORMrWa1
- fW6kqH38g9f6m1wIV377fa2oJYSdBQy6gA==
-X-Google-Smtp-Source: AMrXdXtBi/uAFLMeQHwXcB7qvwpNMm9LDsY/zIzFvy/vTi4MlyohMjFsSFuSOqj6WXrjzyFZc9obKA==
-X-Received: by 2002:adf:da42:0:b0:2bf:1ec:a068 with SMTP id
- r2-20020adfda42000000b002bf01eca068mr31313024wrl.53.1675081179960; 
- Mon, 30 Jan 2023 04:19:39 -0800 (PST)
-Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
- [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- v2-20020adfe282000000b002bdec340a1csm11618612wri.110.2023.01.30.04.19.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Jan 2023 04:19:39 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
+ with ESMTP id GUp0XvgWwhTW for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 14:47:01 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D3BD405A4
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0D3BD405A4
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 14:47:00 +0000 (UTC)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4C14FC0004;
+ Mon, 30 Jan 2023 14:46:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 30 Jan 2023 13:19:30 +0100
-Message-Id: <20230130121930.3472747-3-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230130121930.3472747-1-thomas@devoogdt.com>
-References: <20230130121930.3472747-1-thomas@devoogdt.com>
+Date: Mon, 30 Jan 2023 15:46:52 +0100
+Message-Id: <20230130144655.1193660-2-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230130144655.1193660-1-maxime.chevallier@bootlin.com>
+References: <20230130144655.1193660-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 3/3] package/fluent-bit: needs arch support
- and C++ for wasm
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1675090018;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=wTcWxsC5HI15IlqtWZk/qLi9BQJ3xbA3Pwi3h3AlFis=;
+ b=fxqJqOgiBtlSYD2MKBwQgOCAlb88THiMVmtPt402z7iPkZeVNd5/ptY4YdM00NbuJ+UxeW
+ vmUgjTj+wf7pD+VFRUuHxE4sBddpbkOoaIVLdnWQG3vw/gKgf9zgsrjVLaE5mgeNrjetoN
+ w09DRfrubXuvgZad/P2FZH1wvQgbKHHPpkMAeczdLF0XTCkpJjNIkMcFhccgUU+SkpVSf8
+ ZO2gHX0ru6LYNRo3VkmvBm+h5YFGRjx4C2odmYUYKirz8fQ8qwsm1hSSXGCpQvlb5aJHdW
+ TZmOWcr9LJUMsgdPc7mlbVcmkZJo/wWYYvIX1gYMEqLN8/f0SZdYKnsPoA0nGw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fxqJqOgi
+Subject: [Buildroot] [PATCH 1/4] package/libtraceevent: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,74 +74,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas.devoogdt@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Maxime Chevallier via buildroot <buildroot@buildroot.org>
+Reply-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: Pierre Floury <pierre.floury@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Introduce the libtraceevent library, that used to be bundled with the
+trace-cmd tool. This library is now used by several tools and libraries
+such as trace-cmd, libtracefs and rtla.
 
-See:
-https://github.com/fluent/fluent-bit/tree/master/lib/wasm-micro-runtime-WAMR-1.1.1#supported-architectures-and-platforms
+This package tries to install libraries in /usr/local/lib by default,
+hence the redefinition of the "prefix" variable, so that the library
+gets installed in "/usr/lib" instead.
 
-MIPS & RISCV32 are mentioned in the supported list,
-but that seems to be wrong, so excluded those.
+The same applies to the pkgconfig handling of the proved Makefile, which
+installs the .pc files in the /usr/local area by default, hence the
+redefinition of the pkgconfig_dir to either the correct directory within the
+staging area, or to empty value for the target to avoid installing the .pc
+in that case.
 
-Fixes:
-- http://autobuild.buildroot.org/results/dfb/dfb8f71d7e016cdfd3beb4b8196081898bd49ae2/build-end.log
-- http://autobuild.buildroot.org/results/ecf/ecfe7b67af68cd7f397a50360900cd9a7afc830e/build-end.log
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
- package/fluent-bit/Config.in     | 15 +++++++++++++++
- package/fluent-bit/fluent-bit.mk |  6 ++++++
- 2 files changed, 21 insertions(+)
+ DEVELOPERS                             |  3 +++
+ package/Config.in                      |  1 +
+ package/libtraceevent/Config.in        |  9 +++++++
+ package/libtraceevent/libtraceevent.mk | 33 ++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+)
+ create mode 100644 package/libtraceevent/Config.in
+ create mode 100644 package/libtraceevent/libtraceevent.mk
 
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index 11ceb55d4f..50437cab60 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -10,3 +10,18 @@ config BR2_PACKAGE_FLUENT_BIT
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 706ee80ece..fcf05e0aa0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2106,6 +2106,9 @@ F:	package/postgresql/
+ F:	package/protozero/
+ F:	package/timescaledb/
  
- comment "fluent-bit needs a glibc toolchain"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
++N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
++F:	package/libtraceevent/
 +
-+if BR2_PACKAGE_FLUENT_BIT
+ N:	Michael Durrant <mdurrant@arcturusnetworks.com>
+ F:	board/arcturus/
+ F:	configs/arcturus_ucp1020_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index 83fddf316f..2f0e6dcb18 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -117,6 +117,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/kyua/Config.in"
+ 	source "package/latencytop/Config.in"
+ 	source "package/libbpf/Config.in"
++	source "package/libtraceevent/Config.in"
+ 	source "package/lmbench/Config.in"
+ 	source "package/lsof/Config.in"
+ 	source "package/ltp-testsuite/Config.in"
+diff --git a/package/libtraceevent/Config.in b/package/libtraceevent/Config.in
+new file mode 100644
+index 0000000000..d351e3b4de
+--- /dev/null
++++ b/package/libtraceevent/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBTRACEEVENT
++	bool "libtraceevent"
++	help
++	  libtraceevent is a library that interfaces with the ftrace
++	  subsystem in the linux kernel.
++	  It used to be bundled directly in the trace-cmd
++	  tool, but it was eventually extracted so that it can be used
++	  by multiple other tools and libraries, such as libtracefs and
++	  rtla.
+diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
+new file mode 100644
+index 0000000000..0125023508
+--- /dev/null
++++ b/package/libtraceevent/libtraceevent.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# libtraceevent
++#
++################################################################################
 +
-+config BR2_PACKAGE_FLUENT_BIT_WASM
-+	bool "Build with WASM runtime support"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	# see lib/wasm-micro-runtime-WAMR-1.1.1/README.md#supported-architectures-and-platforms
-+	default y if BR2_arc
-+	default y if BR2_arm || BR2_armeb
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_RISCV_64
-+	default y if BR2_xtensa
++LIBTRACEEVENT_VERSION = 1.7.1
++LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
++LIBTRACEEVENT_INSTALL_STAGING = YES
++LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
++LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
 +
-+endif
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index c84042a0fa..6e9a33e02e 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -17,6 +17,12 @@ FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_CHUNK_TRACE=No \
- 	-DFLB_BACKTRACE=No
- 
-+ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
-+FLUENT_BIT_CONF_OPTS += -DFLB_WASM=Yes
-+else
-+FLUENT_BIT_CONF_OPTS += -DFLB_WASM=No
-+endif
++define LIBTRACEEVENT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
 +
- ifeq ($(BR2_PACKAGE_LUAJIT),y)
- FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=Yes
- FLUENT_BIT_DEPENDENCIES += luajit
++define LIBTRACEEVENT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++	DESTDIR=$(STAGING_DIR) \
++	pkgconfig_dir="/usr/lib/pkgconfig" \
++	prefix="/usr" \
++	install
++endef
++
++define LIBTRACEEVENT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++	DESTDIR=$(TARGET_DIR) \
++	pkgconfig_dir="" \
++	prefix="/usr" \
++	install
++endef
++
++$(eval $(generic-package))
 -- 
-2.39.0
+2.39.1
 
 _______________________________________________
 buildroot mailing list
