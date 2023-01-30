@@ -1,68 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1543CC636D3
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 23:07:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0912C636CD
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 21:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0BE8820D6;
-	Wed,  8 Feb 2023 23:07:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0BE8820D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 715E640FF8;
+	Mon, 30 Jan 2023 21:23:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 715E640FF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IcRACGKGGjvi; Wed,  8 Feb 2023 23:07:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kOMii-8W60kF; Mon, 30 Jan 2023 21:23:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD948820C3;
-	Wed,  8 Feb 2023 23:07:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD948820C3
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC25240FCB;
+	Mon, 30 Jan 2023 21:23:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC25240FCB
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 09C0A1BF2A6
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 23:07:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A1CC01BF44A
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 21:23:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E518D41517
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 23:07:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E518D41517
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8908542A47
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 21:23:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8908542A47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o2ddnSHVVq_R for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 23:07:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A377E41061
-Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A377E41061
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 23:07:25 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.66.151])
- by Aruba Outgoing Smtp  with ESMTPSA
- id PtX7pysl2niHoPtX8pTp8U; Thu, 09 Feb 2023 00:07:22 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu,  9 Feb 2023 00:07:21 +0100
-Message-Id: <20230208230721.3269610-3-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230208230721.3269610-1-giulio.benetti@benettiengineering.com>
-References: <20230208230721.3269610-1-giulio.benetti@benettiengineering.com>
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfIRFQOlkk/yCs7FD9zHu8vxTS9b5oBfZHGy0azkCJP0CvnMrpAIl25pV8iSbRADF8o7zMJWOW6p7jXmwniJDLuBNWwshYaxXOhP/YYvyXl83ukaB9rw7
- 5K4r0GxNv1qDUPwH+di0Mdwnin1TtHYC7JZVXlk4JXa2ZdIntS7ALXqfOMZ3SvyXDC2Fn6QNQ/gGVLgWFWKxWWGhq+whV85rmkpAS0owxFSr0a9JXXinU4PO
- qj4mghoRKmWdeebru3WPRf3zbwVdItugl3PcAVwSmofMksIo+ofmOcGjpEo+69qEhfxBRG4Rf9+twMC9GUIjg7O4tMwEgrLQfowRcYHEtYE=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1675897642; bh=TVkHJvEsVRnOaBJqiE3prHtoUwcRu+7+Uxtips4QLNI=;
- h=From:To:Subject:Date:MIME-Version;
- b=W0VjA6K5knXVSZO/aIWf+ZvmlaZpA75ZTNzpBnNgoI1LwRCgBCJm8aCMeWImpE1DF
- K1Q/qPhS/xObG74eE7oCUvUc+kQBYCg+Tf3hcNMr+vFfG0ynBTCsl+1sOjvAcIRUUb
- LnRPmxO4u/BFmeVtuLfhuoUpftKLnm30kmLIWMdiNjn0StSj+eiu8bYzASWnTribDS
- 6KQOoDB9vMViLtjNkNogAVekHj7KnIMWdjMQY0/g7PFj6W+KvDThoqbwpFOUn1uacA
- U1oYRC+vcZL8uNBeMIo593xMZfMRldWDcfwX3p9Ytsfllu3r4+b+AZZtb4bPrAEtWL
- 2a3tDiv4xnkYQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=W0VjA6K5
-Subject: [Buildroot] [PATCH 2/2] package/harfbuzz: bump to version 6.0.0
+ with ESMTP id iadA4sQPxAIA for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 21:23:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61D9A42A4D
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 61D9A42A4D
+ for <buildroot@uclibc.org>; Mon, 30 Jan 2023 21:23:10 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1pMbcJ-00042X-BB
+ for buildroot@uclibc.org; Mon, 30 Jan 2023 22:23:07 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 30 Jan 2023 22:22:39 +0100
+Message-ID: <pan$3ecc$a270d623$db098d49$551a10ca@ID-313208.user.individual.net>
+References: <20230130174339.36794-1-bernd.kuhls@t-online.de>
+ <20230130174339.36794-3-bernd.kuhls@t-online.de>
+ <20230130221242.2aa95b6e__49270.7143466518$1675113191$gmane$org@windsurf>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 3/5] package/libva-utils: bump version to
+ 2.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,58 +61,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the major release changed all the packages that have direct
-dependency to harfbuzz has been succesfully built:
-- efl
-- libass
-- mupdf
-- pango
-- qt5base
-- qt5webengine
-- qt6base
-- sdl2_ttf
-- supertuxkart
-- vlc
-- webkitgtk
-- wpewebkit
+Am Mon, 30 Jan 2023 22:12:42 +0100 schrieb Thomas Petazzoni via buildroot:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Are you sure?
+> 
+> ERROR: libva-utils-2.17.1.tar.gz has wrong sha256 hash:
+> ERROR: expected:
+> 6ea5993c3eba230a979fa9d35b4cad8df06d4474a773dc0918033bf50353f966 ERROR:
+> got     :
+> ef681558ce294453945247e5874ceee5a7d3c08ff078ff1cc2a2e357871a81b6 ERROR:
+> Incomplete download, or man-in-the-middle (MITM) attack
+> 
+> Thomas
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 9489f25c6a..faae7b91e3 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d  harfbuzz-5.3.1.tar.xz
-+sha256  1d1010a1751d076d5291e433c138502a794d679a7498d1268ee21e2d4a140eb4  harfbuzz-6.0.0.tar.xz
- sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index b0112168e1..02fe4ecec3 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 5.3.1
-+HARFBUZZ_VERSION = 6.0.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
--- 
-2.34.1
+Hi Thomas,
+
+yes, I tested the hash. The 6ea... hash was also used by Archlinux and 
+Freshports:
+
+https://github.com/freebsd/freebsd-ports/commit/
+d2575a6e14071688e142525192ce2db19ea71c8b
+https://github.com/archlinux/svntogit-community/commit/
+c3c11ced639ca2b9ebe4227b4ade30ce6acebbee
+
+But you are right, the hash of a currently downloaded tarball is 
+different. Unfortunately I deleted the libva* tarballs but kept the 
+mediadriver one and will compare it asap.
+
+Regards, Bernd
 
 _______________________________________________
 buildroot mailing list
