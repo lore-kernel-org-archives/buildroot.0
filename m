@@ -4,67 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0B06C54EED
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 07:08:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 314E4C54EAA
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 07:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DCF4408F4;
-	Mon, 30 Jan 2023 07:08:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DCF4408F4
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA4DB416C6;
+	Mon, 30 Jan 2023 07:13:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA4DB416C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y65LyTnCo8sC; Mon, 30 Jan 2023 07:08:23 +0000 (UTC)
+	with ESMTP id tcQUX37IyQN1; Mon, 30 Jan 2023 07:13:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9881140933;
-	Mon, 30 Jan 2023 07:08:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9881140933
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD77C416C7;
+	Mon, 30 Jan 2023 07:13:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD77C416C7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EBA461BF3DA
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:08:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 04BED1BF3DA
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5E5060E81
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:08:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5E5060E81
+ by smtp3.osuosl.org (Postfix) with ESMTP id D281060C29
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:13:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D281060C29
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jlyJwD37rFzr for <buildroot@lists.busybox.net>;
- Mon, 30 Jan 2023 07:08:19 +0000 (UTC)
+ with ESMTP id KQ4QYLH0tPEG for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 07:13:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B40F460C29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D000460ACC
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B40F460C29
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 07:08:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D000460ACC
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 07:13:45 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 095FD5FFA7;
- Mon, 30 Jan 2023 08:08:16 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id CE4C95FFA5;
+ Mon, 30 Jan 2023 08:13:36 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 30 Jan 2023 08:08:15 +0100
-Date: Mon, 30 Jan 2023 08:08:15 +0100
+ Mon, 30 Jan 2023 08:13:36 +0100
+Date: Mon, 30 Jan 2023 08:13:36 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230130070815.GE2632@scaer>
-References: <20230130042913.3605338-1-james.hilliard1@gmail.com>
+Message-ID: <20230130071336.GF2632@scaer>
+References: <20230127141058.2180747-1-james.hilliard1@gmail.com>
+ <20230127141058.2180747-4-james.hilliard1@gmail.com>
+ <20230129214507.GY2632@scaer>
+ <CADvTj4rYJHfDyhEmtogs0WQ30=FZQH8zWAcuwZMxmebq_iL7xA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230130042913.3605338-1-james.hilliard1@gmail.com>
+In-Reply-To: <CADvTj4rYJHfDyhEmtogs0WQ30=FZQH8zWAcuwZMxmebq_iL7xA@mail.gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675062498;
- bh=0gpbgirH3/1XvzDCOaCOo6K6RCQU+q7DqXdvXO5w5Tw=;
+ d=free.fr; s=smtp-20201208; t=1675062823;
+ bh=5UNK95XL1eRWxm8s6T7wnImCx2PnUgBPhpae+voPrvo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=tX3AGoTF5kqiPq/nKjV8keGgHXm2+PSuqP2+lQsRlrXl7zd1++/hn8OlHJaSkVXeI
- h4uh3IQ0bxAicd2tvdWf+5SwdiKiIqV9GgVGTFRikEGhyO9Mv2RiVGeUuTUzXFURjn
- rgOO92c21pk8TYCEAII01ALzr0aNKYJ9UgonWZE93SAeUDkUyLOoyxRT9yCzlei66K
- db1l8aNZ6pUb8/vVaM08DGHk/aGxqTjMRx625fRVs2GwuR7vg10UPdSWaDuswQMv/t
- qwS5soedJ0ljApRDkQR0AKBQXJH88pFJhkAs/hlMvP8xCOuJMhgwlzjrNklRPrgPem
- TGCce5xy70PtQ==
+ b=E1FUHd2CZY2QyfvihJiyj+TV1Vt2wRiPcm/ZzYdd8SCEgiPtGg1kGFy69flVJGZep
+ ata8pOR3PF2L663mmwAjB2XxC0kQnGeU3E7h7/cItkgJD1nrNGtY6X+xYJoLLYH8cu
+ VMWG0m41kzi4PWh0yo52DIQHFZHuu6cYOMMEkv7H5m8IMkw1qOLcI5/ASUOoP1MNhM
+ zD6xwgPzMmZgkvcOSkNyCl0hzMIv+Lwl9HSfm8IiqVB7m4gTmLkVvjtcDijKCWrBTu
+ 8SN+CXF2wDMMuGO86FqAfCU2linxx0hlXI6KYGHrbLe+oQPeQJ1IlhgTQ5FlySon7K
+ 0l+LfMXpDEMWw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tX3AGoTF
-Subject: Re: [Buildroot] [PATCH 1/1] package/fxdiv: fix build without C++
- toolchain
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=E1FUHd2C
+Subject: Re: [Buildroot] [PATCH v4 04/13] package/gemmlowp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,7 +78,10 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Stefan Hager <stefan.hager@ginzinger.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -84,87 +89,77 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 James, All,
 
-On 2023-01-29 21:29 -0700, James Hilliard spake thusly:
-> The cmake project for fxdiv sets the project language to C and CXX
-> even when only C is required.
+On 2023-01-29 20:17 -0700, James Hilliard spake thusly:
+> On Sun, Jan 29, 2023 at 2:45 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > For x86, we should probably have code like (what we have as
+> > BR2_X86_CPU_HAS_SSE4 seems to be SSE4.1, but it is not clear whether
+> > there is an actual delta between SSE4 and SSE4.1 [0], so let's be safe
+> > and assume that BR2_X86_CPU_HAS_SSE4 is not enough):
+> >
+> >     ifeq ($(BR2_X86_CPU_HAS_SSE42),y)
+> >     GEMMLOWP_OPTIM += -msse4.1
+> >     endif
+> >
+> > However, that same header seems to also have some detection based on
+> > macros... This needs to be cleared, maybe?
 > 
-> Add a patch which disables CXX unless required.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/b0f/b0f3b6352429a5156a8c3a2b932331753887b65b
->  - http://autobuild.buildroot.net/results/52f/52f634c06bdfe983280a2c01bb9fec4b0e1a4b34
->  - http://autobuild.buildroot.net/results/181/181b85d9dd505693ed23fab823085b001aa785f4
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Well gemmlowp is effectively a header only library so optimization flags would
+> not be set for the gemmlowp package itself but rather in something like the
+> tensorflow-lite package which consumes the headers AFAIU.
 
-Applied to master, thanks.
+Yeah, I noticed that it was a header-only library only later...
+
+Still, for those packages, gemmlowp, neon-2-sse, maybe fxdiv, they do
+have a requirement that SSE be needed, so they should depend on that.
+For example:
+
+    config BR2_PACKAGES_GEMMLOWP_ARCH_SUPPORTS
+        bool
+        default y if BR2_X86_CPU_HAS_SSE42
+        default y if BR2_ARM_CPU_HAS_NEON
+
+Or:
+
+    config BR2_PACKAGES_NEON_2_SEE_ARCH_SUPPORTS
+        bool
+        default y if BR2_X86_CPU_HAS_SSE3
+
+Otherwise, those packages (notable neon-2-sse) don't make much sense, or
+will be horribly slow...
+
+Can you send a set of patches, please?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  ...le-CXX-unless-building-tests-benchma.patch | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
+> Note there's technically an unused deprecated library that gets installed
+> to staging, we don't install it to target since we don't have anything consuming
+> that deprecated interface at all:
+> https://github.com/google/gemmlowp#old-eightbitintgemm-legacy-deprecated-interface
 > 
-> diff --git a/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
-> new file mode 100644
-> index 0000000000..0336f5e1cc
-> --- /dev/null
-> +++ b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
-> @@ -0,0 +1,49 @@
-> +From 8c2d8fc60306a8edd21182a1f5f267a7aca55763 Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Sun, 29 Jan 2023 21:18:28 -0700
-> +Subject: [PATCH] CMake: don't enable CXX unless building tests/benchmarks
-> +
-> +We only need CXX support when building tests/benchmarks.
-> +
-> +Fixes:
-> +CMake Error at CMakeLists.txt:4 (PROJECT):
-> +  No CMAKE_CXX_COMPILER could be found.
-> +
-> +  Tell CMake where to find the compiler by setting either the environment
-> +  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
-> +  to the compiler, or to the compiler name if it is in the PATH.
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[Upstream status:
-> +https://github.com/Maratyszcza/FXdiv/pull/3]
-> +---
-> + CMakeLists.txt | 6 +++++-
-> + 1 file changed, 5 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index bcae6b5..c75f558 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -1,7 +1,7 @@
-> + CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
-> + 
-> + # ---[ Project
-> +-PROJECT(FXdiv C CXX)
-> ++PROJECT(FXdiv C)
-> + 
-> + # ---[ Options.
-> + OPTION(FXDIV_USE_INLINE_ASSEMBLY "Allow use of inline assembly in FXdiv" OFF)
-> +@@ -16,6 +16,10 @@ ENDIF()
-> + # ---[ CMake options
-> + INCLUDE(GNUInstallDirs)
-> + 
-> ++IF(FXDIV_BUILD_TESTS OR FXDIV_BUILD_BENCHMARKS)
-> ++  ENABLE_LANGUAGE(CXX)
-> ++ENDIF()
-> ++
-> + IF(FXDIV_BUILD_TESTS)
-> +   ENABLE_TESTING()
-> + ENDIF()
-> +-- 
-> +2.34.1
-> +
-> -- 
-> 2.34.1
-> 
+> >
+> > [0] https://en.wikipedia.org/wiki/SSE4
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > > +$(eval $(cmake-package))
+> > > --
+> > > 2.34.1
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot@buildroot.org
+> > > https://lists.buildroot.org/mailman/listinfo/buildroot
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
