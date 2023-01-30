@@ -1,87 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F7D3C54EED
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 04:29:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 797D5C54EAA
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jan 2023 07:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A279C60DC2;
-	Mon, 30 Jan 2023 04:29:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A279C60DC2
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7C71405B7;
+	Mon, 30 Jan 2023 07:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7C71405B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Us9-XLPVFbuO; Mon, 30 Jan 2023 04:29:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p_tTyXWbtWGK; Mon, 30 Jan 2023 07:06:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0BD660D88;
-	Mon, 30 Jan 2023 04:29:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0BD660D88
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 26DA11BF333
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 04:29:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1095040475;
+	Mon, 30 Jan 2023 07:06:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1095040475
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B1BE1BF3DA
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:06:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F42084161B
- for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 04:29:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F42084161B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12DA340475
+ for <buildroot@lists.busybox.net>; Mon, 30 Jan 2023 07:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12DA340475
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 36wEupUPkipd for <buildroot@lists.busybox.net>;
- Mon, 30 Jan 2023 04:29:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8D91409A8
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C8D91409A8
- for <buildroot@buildroot.org>; Mon, 30 Jan 2023 04:29:18 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id k13so1456223iob.9
- for <buildroot@buildroot.org>; Sun, 29 Jan 2023 20:29:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=E3FLcCx47tVEF6MdS9bt2ZcrWNybAJKjtw9ZA+Xfo0U=;
- b=kbcmOQCEsA8rT32/3ap409QFkrofLUtVZ3kv+pH+tm+eAhJapah/zrNjpt3nXoKkbt
- V1y6kqY8XTFCMpyjS1tWZt6wnH/fpvXpERJEzhfxY/Q1ta+xy0dGJmwpCqP/hodL/BWL
- IISxUOflGakpggbd/OF9qFZIo0d/5LIcY3+x0pgSJxtbYbbA3g8wF8O6mu5iDSMBulU/
- ua3l8MVV10EvJl9ZuxRRJVWAJp4NKeqnou7SpCe1hpD7y6LAnx/cAGA74UqhsXcej650
- it4/cjPMcbhhIYzhwiauOp3WR9jk9wVcI1qZTiMp/yubT7DKhV80kG5pe0LQAyTB88eN
- Ztkg==
-X-Gm-Message-State: AO0yUKXcoWMq0GIBi+Gm23TBTncesoOqnJA8d0rWEEJ1BKshQ+DSRzuJ
- rZpoItv8AulryDoq7KqmKS6+eP2Nzit02g==
-X-Google-Smtp-Source: AK7set+Pl/qNCDC8BmCIbgs0Z2a8gzlKaf+72M+pwopMW35lRM0loTiUB8VnBzb/IZWR+TpoKPnvow==
-X-Received: by 2002:a6b:c849:0:b0:707:a501:e788 with SMTP id
- y70-20020a6bc849000000b00707a501e788mr4724544iof.7.1675052957535; 
- Sun, 29 Jan 2023 20:29:17 -0800 (PST)
-Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
- [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- d3-20020a028583000000b003a7c47efde0sm4338153jai.11.2023.01.29.20.29.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Jan 2023 20:29:14 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MYBttIUe1fno for <buildroot@lists.busybox.net>;
+ Mon, 30 Jan 2023 07:06:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 087EA400F6
+ for <buildroot@buildroot.org>; Mon, 30 Jan 2023 07:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 087EA400F6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E7AC581666; Mon, 30 Jan 2023 07:06:29 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 21:29:13 -0700
-Message-Id: <20230130042913.3605338-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=E3FLcCx47tVEF6MdS9bt2ZcrWNybAJKjtw9ZA+Xfo0U=;
- b=N+/dRb+VProz5cS10vRcsEMZKtpXnKsa26UKprAvjdEdRjIbeGT7zHYLxeHgOiizzI
- HC0XoU5RiLV+dQJ//+EEZON9q3g73rmmyGeVddOLVwNcZCI1KKezANeJGf3HVGocO6gB
- bKDQmnOjcu4o7+q4xCfNtgrMLiWej9uy6ffMzUTdMyuLgR6SociurN+0oyQ+gHEhJQeH
- pl0y7FBARCsxwS19P7gPCj0s2WG38rBgD5VWFvZwjUe3Dij2KqIKpo68AeUKGflDJ2k7
- MICRuJkEIHUDvc+k5u3EuxChvlWwyWE6VYR85yqWxLdmCnhTY4o7ckR5j/dWZeCR9T7k
- LVPQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=N+/dRb+V
-Subject: [Buildroot] [PATCH 1/1] package/fxdiv: fix build without C++
+Date: Mon, 30 Jan 2023 08:06:14 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ed6062efbcda90eee7f523b3d63deb1fc36e4a17
+X-Git-Newrev: 36741b9461a629002296e5debae848fc7f6e152f
+X-Patchwork-Hint: ignore
+Message-Id: <20230130070629.E7AC581666@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/neon-2-sse: fix build without C++
  toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -94,43 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The cmake project for fxdiv sets the project language to C and CXX
-even when only C is required.
+commit: https://git.buildroot.net/buildroot/commit/?id=36741b9461a629002296e5debae848fc7f6e152f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch which disables CXX unless required.
+The cmake project for neon-2-sse doesn't correctly set the project
+language to C which causes cmake to try and detect a C++ compiler.
+
+Add a patch which fixes the project language setting.
 
 Fixes:
- - http://autobuild.buildroot.net/results/b0f/b0f3b6352429a5156a8c3a2b932331753887b65b
- - http://autobuild.buildroot.net/results/52f/52f634c06bdfe983280a2c01bb9fec4b0e1a4b34
- - http://autobuild.buildroot.net/results/181/181b85d9dd505693ed23fab823085b001aa785f4
+ - http://autobuild.buildroot.net/results/0eb/0ebb8c886e0a432b6fb43ab21010f625f6797b9e
+ - http://autobuild.buildroot.net/results/a5d/a5db2f286dbd69e84d518d086df857ef434b936a
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...le-CXX-unless-building-tests-benchma.patch | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
+ package/neon-2-sse/0001-Fix-cmake-languages.patch | 40 +++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
+diff --git a/package/neon-2-sse/0001-Fix-cmake-languages.patch b/package/neon-2-sse/0001-Fix-cmake-languages.patch
 new file mode 100644
-index 0000000000..0336f5e1cc
+index 0000000000..e0becb1ffa
 --- /dev/null
-+++ b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
-@@ -0,0 +1,49 @@
-+From 8c2d8fc60306a8edd21182a1f5f267a7aca55763 Mon Sep 17 00:00:00 2001
++++ b/package/neon-2-sse/0001-Fix-cmake-languages.patch
+@@ -0,0 +1,40 @@
++From 186ec82e033d8c718d760d14945535a9d7e160fd Mon Sep 17 00:00:00 2001
 +From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sun, 29 Jan 2023 21:18:28 -0700
-+Subject: [PATCH] CMake: don't enable CXX unless building tests/benchmarks
++Date: Sun, 29 Jan 2023 21:00:27 -0700
++Subject: [PATCH] Fix cmake languages
 +
-+We only need CXX support when building tests/benchmarks.
++When no language is set cmake defaults to C and CXX, since we support
++C by itself we should set the project language to C so that we don't
++get a compiler error when building without a CXX toolchain.
 +
 +Fixes:
-+CMake Error at CMakeLists.txt:4 (PROJECT):
++CMake Error at CMakeLists.txt:5 (project):
 +  No CMAKE_CXX_COMPILER could be found.
 +
 +  Tell CMake where to find the compiler by setting either the environment
@@ -139,41 +106,27 @@ index 0000000000..0336f5e1cc
 +
 +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 +[Upstream status:
-+https://github.com/Maratyszcza/FXdiv/pull/3]
++https://github.com/intel/ARM_NEON_2_x86_SSE/pull/62]
 +---
-+ CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index bcae6b5..c75f558 100644
++index e4b8980..8f58e79 100644
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
++@@ -2,7 +2,7 @@
++ # Modification: Copyright (C) 2017 David Hirvonen
 + 
-+ # ---[ Project
-+-PROJECT(FXdiv C CXX)
-++PROJECT(FXdiv C)
++ cmake_minimum_required(VERSION 3.0)
++-project(NEON_2_SSE VERSION 1.0.0)
+++project(NEON_2_SSE VERSION 1.0.0 LANGUAGES C)
 + 
-+ # ---[ Options.
-+ OPTION(FXDIV_USE_INLINE_ASSEMBLY "Allow use of inline assembly in FXdiv" OFF)
-+@@ -16,6 +16,10 @@ ENDIF()
-+ # ---[ CMake options
-+ INCLUDE(GNUInstallDirs)
++ add_library(${PROJECT_NAME} INTERFACE)
 + 
-++IF(FXDIV_BUILD_TESTS OR FXDIV_BUILD_BENCHMARKS)
-++  ENABLE_LANGUAGE(CXX)
-++ENDIF()
-++
-+ IF(FXDIV_BUILD_TESTS)
-+   ENABLE_TESTING()
-+ ENDIF()
 +-- 
 +2.34.1
 +
--- 
-2.34.1
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
