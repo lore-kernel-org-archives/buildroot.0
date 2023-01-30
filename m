@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7D08C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FDADC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55BAC61381;
-	Tue, 21 Feb 2023 01:21:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55BAC61381
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C3A96FBC3;
+	Tue, 21 Feb 2023 01:22:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C3A96FBC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zl7eKZgmtPA0; Tue, 21 Feb 2023 01:21:48 +0000 (UTC)
+	with ESMTP id VyJJDwLPyyc3; Tue, 21 Feb 2023 01:22:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BDCF6FB1C;
-	Tue, 21 Feb 2023 01:21:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BDCF6FB1C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2701D6FB76;
+	Tue, 21 Feb 2023 01:22:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2701D6FB76
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E3701BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E0301BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 24D4B6109E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 41AB46FBEC
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24D4B6109E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41AB46FBEC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 206EjloRs9mk for <buildroot@lists.busybox.net>;
+ with ESMTP id 4i9Tgy-HQj1A for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB2656FBE1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB2656FBE1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5EDCA6FB8C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EDCA6FB8C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3F7B828C8; Mon, 20 Feb 2023 20:52:43 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 47D2D81979; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 21:34:06 +0100
+Date: Mon, 30 Jan 2023 22:03:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 98f8ddbc74962ab33df5ada2ccb53a27c49e60f1
-X-Git-Newrev: 15864d79130479aa8d0c6990a95d9921892e822c
+X-Git-Oldrev: c93db6789b1afaba27703baf9d323bcb06e6430e
+X-Git-Newrev: 76152e95a9749d05c0e334e1fa6affdf9aeafb7f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205243.D3F7B828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{,
- lib}apparmor: bump to version 3.1.2
+Message-Id: <20230220205244.47D2D81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libva: bump version to
+ 2.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,81 +56,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15864d79130479aa8d0c6990a95d9921892e822c
+commit: https://git.buildroot.net/buildroot/commit/?id=76152e95a9749d05c0e334e1fa6affdf9aeafb7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the location where the hashes are retrieved from.
+Release notes: https://github.com/intel/libva/blob/v2.17-branch/NEWS
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-[yann.morin.1998@free.fr: hashes location changed]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/apparmor/apparmor.hash       | 4 ++--
- package/apparmor/apparmor.mk         | 4 ++--
- package/libapparmor/libapparmor.hash | 4 ++--
- package/libapparmor/libapparmor.mk   | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ package/libva/libva.hash | 6 +++---
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/apparmor/apparmor.hash b/package/apparmor/apparmor.hash
-index 497491b6c9..22037e3e11 100644
---- a/package/apparmor/apparmor.hash
-+++ b/package/apparmor/apparmor.hash
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 2916898c31..700ace0378 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
 @@ -1,5 +1,5 @@
--# From: https://gitlab.com/apparmor/apparmor/-/wikis/home#userspace
--sha256  09bf48d7a171f9790c39a1404bad105a788934cfe77b7490c7f5c63c2576b725  apparmor-3.0.4.tar.gz
-+# From https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_3.1.2
-+sha256  7cbd0b2f6393abf57acaf25dc2b32b2ae197c0b5b0d661e14be46127df93a5eb  apparmor-3.1.2.tar.gz
- 
- # locally computed
- sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index 76c9f2cafe..eeedd805e6 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -5,8 +5,8 @@
+-# From https://github.com/intel/libva/releases/download/2.16.0/libva-2.16.0.tar.bz2.sha1sum
+-sha1  ba1c0e196d69a26e54b065dc0f645bdf3be147a7  libva-2.16.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.17.0/libva-2.17.0.tar.bz2.sha1sum
++sha1  997f7b3111bc5a4d32ec72e9d7f9fcfca41e4923  libva-2.17.0.tar.bz2
+ # Locally computed
+-sha256  115faca0db2c417a37da49830870e260450fa13066f5e24e252a20c36d920a1c  libva-2.16.0.tar.bz2
++sha256  f3e5eb27c305e05a9bb62703d1915a127301cc0c4f9f209025767432230c4eac  libva-2.17.0.tar.bz2
+ sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 3b6e9580d3..c6b9f63b10 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version here, please also update the libapparmor package
--APPARMOR_VERSION_MAJOR = 3.0
--APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).4
-+APPARMOR_VERSION_MAJOR = 3.1
-+APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).2
- APPARMOR_SITE = https://launchpad.net/apparmor/$(APPARMOR_VERSION_MAJOR)/$(APPARMOR_VERSION)/+download
- APPARMOR_DL_SUBDIR = libapparmor
- APPARMOR_LICENSE = GPL-2.0
-diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
-index 9fbfe3b92e..574ff95b60 100644
---- a/package/libapparmor/libapparmor.hash
-+++ b/package/libapparmor/libapparmor.hash
-@@ -1,5 +1,5 @@
--# From: https://gitlab.com/apparmor/apparmor/-/wikis/home#userspace
--sha256  09bf48d7a171f9790c39a1404bad105a788934cfe77b7490c7f5c63c2576b725  apparmor-3.0.4.tar.gz
-+# From https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_3.1.2
-+sha256  7cbd0b2f6393abf57acaf25dc2b32b2ae197c0b5b0d661e14be46127df93a5eb  apparmor-3.1.2.tar.gz
- 
- # locally computed
- sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
-diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-index af59335933..7f3cfcab2f 100644
---- a/package/libapparmor/libapparmor.mk
-+++ b/package/libapparmor/libapparmor.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- # When updating the version here, please also update the apparmor package
--LIBAPPARMOR_VERSION_MAJOR = 3.0
--LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).4
-+LIBAPPARMOR_VERSION_MAJOR = 3.1
-+LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).2
- LIBAPPARMOR_SOURCE = apparmor-$(LIBAPPARMOR_VERSION).tar.gz
- LIBAPPARMOR_SITE = https://launchpad.net/apparmor/$(LIBAPPARMOR_VERSION_MAJOR)/$(LIBAPPARMOR_VERSION)/+download
- LIBAPPARMOR_LICENSE = LGPL-2.1
+-LIBVA_VERSION = 2.16.0
++LIBVA_VERSION = 2.17.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
