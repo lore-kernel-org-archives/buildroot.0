@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DC5BC61DA3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCCBCC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC9FC83852;
-	Mon, 20 Feb 2023 23:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC9FC83852
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C4A04C783;
+	Mon, 20 Feb 2023 23:53:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C4A04C783
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gh9s0s2hhdAA; Mon, 20 Feb 2023 23:52:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bsnaZBVhWlUQ; Mon, 20 Feb 2023 23:53:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9CB7843E6;
-	Mon, 20 Feb 2023 23:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9CB7843E6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2ED691BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 619244C9E3;
+	Mon, 20 Feb 2023 23:53:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 619244C9E3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 08A561BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E12261B22
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E12261B22
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6656C41783
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6656C41783
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3HeT4GNJAIPs for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0D97ffsG0ppx for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FFFE610B0
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FFFE610B0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F8F041766
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F8F041766
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 008D286495; Mon, 20 Feb 2023 20:52:21 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 5E00D8648F; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 31 Dec 2022 20:24:32 +0100
+Date: Mon, 30 Jan 2023 22:28:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2f54c2a841861ba587c9bbdd66d5164b6774d9e5
-X-Git-Newrev: e75f3962084045cf50f38f0adf8bfaa8da71dfd5
+X-Git-Oldrev: 319cc24aca38d6cb8898400694135b855731940f
+X-Git-Newrev: fd1d0a9cbf6de2c30fcfcc181b466a5f2b44dc54
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205222.008D286495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] linux: fix builds for kernels
- < 5.6 and host-gcc >= 10
+Message-Id: <20230220205244.5E00D8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/beaglebone: add
+ support for BeagleBone Green Wireless
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,80 +56,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e75f3962084045cf50f38f0adf8bfaa8da71dfd5
+commit: https://git.buildroot.net/buildroot/commit/?id=fd1d0a9cbf6de2c30fcfcc181b466a5f2b44dc54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-During a linux-backports update, it was found that kernel v3.10.108 was
-failing to compile. See:
-https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
+This commit adds support for the BeagleBone Green Wireless to the
+existing beaglebone_defconfig, by making sure the relevant Device Tree
+is built and installed.
 
-This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
-"linux: fix build with host-gcc 10+", which removes all declarations of
-"yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
-"%locations" directive is provided in the parser. See:
-https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
-
-Kernel versions < 5.6 did not include this directive, so removing all
-yylloc declararions in the parser also was failing for those version.
-
-In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
-This commit is included in kernel v5.6.
-
-This dtc update include the dtc commit:
-https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
-which adds the '%locations' directive.
-
-This commit fixes the issue by programmatically adding the '%locations'
-Bison directive, if it's not found in the parser file.
-
-Fixes:
-- https://bugs.busybox.net/show_bug.cgi?id=14971
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Ramon Crichlow <rcrichlow9000@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ board/beaglebone/genimage.cfg | 1 +
+ configs/beaglebone_defconfig  | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6b547a68ed..7645b5f507 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	WERROR=0 \
-+	REGENERATE_PARSERS=1 \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
+diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
+index 42ca2cf107..987d205075 100644
+--- a/board/beaglebone/genimage.cfg
++++ b/board/beaglebone/genimage.cfg
+@@ -11,6 +11,7 @@ image boot.vfat {
+ 			"am335x-boneblack.dtb",
+ 			"am335x-bonegreen.dtb",
+ 			"am335x-boneblack-wireless.dtb",
++			"am335x-bonegreen-wireless.dtb",
+ 		}
+ 	}
  
- ifeq ($(BR2_REPRODUCIBLE),y)
-@@ -286,6 +287,19 @@ define LINUX_DROP_YYLLOC
- endef
- LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 06154d98b7..639b491e97 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.30-ti-r3)/linux-5.10.30-ti-r3.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
-+# Kernel version < 5.6 breaks if host-gcc version is >= 10 and
-+# 'yylloc' symbol is removed in previous hook, due to missing
-+# '%locations' bison directive in dtc-parser.y.  See:
-+# https://bugs.busybox.net/show_bug.cgi?id=14971
-+define LINUX_ADD_DTC_LOCATIONS
-+	$(Q)DTC_PARSER=$(@D)/scripts/dtc/dtc-parser.y; \
-+	if test -e "$${DTC_PARSER}" \
-+		&& ! grep -Eq '^%locations$$' "$${DTC_PARSER}" ; then \
-+		$(SED) '/^%{$$/i %locations' "$${DTC_PARSER}"; \
-+	fi
-+endef
-+LINUX_POST_PATCH_HOOKS += LINUX_ADD_DTC_LOCATIONS
-+
- # Older linux kernels use deprecated perl constructs in timeconst.pl
- # that were removed for perl 5.22+ so it breaks on newer distributions
- # Try a dry-run patch to see if this applies, if it does go ahead
+ # Filesystem
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
