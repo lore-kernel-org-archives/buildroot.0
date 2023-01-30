@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5E3C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D3EC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B746D843CC;
-	Mon, 20 Feb 2023 23:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B746D843CC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 323A5843DB;
+	Mon, 20 Feb 2023 23:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 323A5843DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t6RFXHNKHbay; Mon, 20 Feb 2023 23:52:32 +0000 (UTC)
+	with ESMTP id KGfV5WFzQ-4T; Mon, 20 Feb 2023 23:52:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D51EC843D0;
-	Mon, 20 Feb 2023 23:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D51EC843D0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49BEE843DA;
+	Mon, 20 Feb 2023 23:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49BEE843DA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4A81B1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1FFD11BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 410694159C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2FDAF4178F
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 410694159C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FDAF4178F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aZP4harJGsYD for <buildroot@lists.busybox.net>;
+ with ESMTP id OECj6ytGy_Mk for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 367E341783
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36C8C41784
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 367E341783
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36C8C41784
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DFAF8648F; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+ id 32F2F86496; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 23:24:32 +0100
+Date: Mon, 30 Jan 2023 08:06:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1e645ff7475710f4af9341602471dbeac387c776
-X-Git-Newrev: ed6062efbcda90eee7f523b3d63deb1fc36e4a17
+X-Git-Oldrev: 36741b9461a629002296e5debae848fc7f6e152f
+X-Git-Newrev: 33c89f98377cb968b03eb1428af8a74eba9d13ce
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205244.1DFAF8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fxdiv: new package
+Message-Id: <20230220205244.32F2F86496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fxdiv: fix build
+ without C++ toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,93 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed6062efbcda90eee7f523b3d63deb1fc36e4a17
+commit: https://git.buildroot.net/buildroot/commit/?id=33c89f98377cb968b03eb1428af8a74eba9d13ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package is required by tensorflow-lite.
+The cmake project for fxdiv sets the project language to C and CXX
+even when only C is required.
+
+Add a patch which disables CXX unless required.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/b0f/b0f3b6352429a5156a8c3a2b932331753887b65b
+ - http://autobuild.buildroot.net/results/52f/52f634c06bdfe983280a2c01bb9fec4b0e1a4b34
+ - http://autobuild.buildroot.net/results/181/181b85d9dd505693ed23fab823085b001aa785f4
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/fxdiv/Config.in  |  7 +++++++
- package/fxdiv/fxdiv.hash |  4 ++++
- package/fxdiv/fxdiv.mk   | 19 +++++++++++++++++++
- 5 files changed, 32 insertions(+)
+ ...-enable-CXX-unless-building-tests-benchma.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8a652c7c12..706ee80ece 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1339,6 +1339,7 @@ N:	James Hilliard <james.hilliard1@gmail.com>
- F:	package/apcupsd/
- F:	package/bpftool/
- F:	package/exfatprogs/
-+F:	package/fxdiv/
- F:	package/gensio/
- F:	package/lua-std-debug/
- F:	package/lua-std-normalize/
-diff --git a/package/Config.in b/package/Config.in
-index 96a44a3623..83fddf316f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2014,6 +2014,7 @@ menu "Other"
- 	source "package/flann/Config.in"
- 	source "package/flatbuffers/Config.in"
- 	source "package/flatcc/Config.in"
-+	source "package/fxdiv/Config.in"
- 	source "package/gconf/Config.in"
- 	source "package/gdal/Config.in"
- 	source "package/gflags/Config.in"
-diff --git a/package/fxdiv/Config.in b/package/fxdiv/Config.in
+diff --git a/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
 new file mode 100644
-index 0000000000..5aa714e44a
+index 0000000000..0336f5e1cc
 --- /dev/null
-+++ b/package/fxdiv/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_FXDIV
-+	bool "fxdiv"
-+	help
-+	  Header-only library for division via fixed-point
-+	  multiplication by inverse.
++++ b/package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch
+@@ -0,0 +1,49 @@
++From 8c2d8fc60306a8edd21182a1f5f267a7aca55763 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sun, 29 Jan 2023 21:18:28 -0700
++Subject: [PATCH] CMake: don't enable CXX unless building tests/benchmarks
 +
-+	  https://github.com/Maratyszcza/FXdiv
-diff --git a/package/fxdiv/fxdiv.hash b/package/fxdiv/fxdiv.hash
-new file mode 100644
-index 0000000000..2142d84e09
---- /dev/null
-+++ b/package/fxdiv/fxdiv.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  ec74d882a0a47cfd9c0f95bc4fae9901a4ade802a96a3b76e02671bb7340a4c5  fxdiv-63058eff77e11aa15bf531df5dd34395ec3017c8.tar.gz
-+# License files, locally calculated
-+sha256  7cac00006125b1486a27e4801ed66357236e984c540bd323945ab7b66b078ec3  LICENSE
-diff --git a/package/fxdiv/fxdiv.mk b/package/fxdiv/fxdiv.mk
-new file mode 100644
-index 0000000000..06dbf0648d
---- /dev/null
-+++ b/package/fxdiv/fxdiv.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# fxdiv
-+#
-+################################################################################
++We only need CXX support when building tests/benchmarks.
 +
-+FXDIV_VERSION = 63058eff77e11aa15bf531df5dd34395ec3017c8
-+FXDIV_SITE = $(call github,Maratyszcza,FXdiv,$(FXDIV_VERSION))
-+FXDIV_LICENSE = MIT
-+FXDIV_LICENSE_FILES = LICENSE
-+FXDIV_INSTALL_STAGING = YES
-+# Only installs a header
-+FXDIV_INSTALL_TARGET = NO
++Fixes:
++CMake Error at CMakeLists.txt:4 (PROJECT):
++  No CMAKE_CXX_COMPILER could be found.
 +
-+FXDIV_CONF_OPTS = \
-+	-DFXDIV_BUILD_TESTS=OFF \
-+	-DFXDIV_BUILD_BENCHMARKS=OFF
++  Tell CMake where to find the compiler by setting either the environment
++  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
++  to the compiler, or to the compiler name if it is in the PATH.
 +
-+$(eval $(cmake-package))
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/Maratyszcza/FXdiv/pull/3]
++---
++ CMakeLists.txt | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index bcae6b5..c75f558 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,7 +1,7 @@
++ CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
++ 
++ # ---[ Project
++-PROJECT(FXdiv C CXX)
+++PROJECT(FXdiv C)
++ 
++ # ---[ Options.
++ OPTION(FXDIV_USE_INLINE_ASSEMBLY "Allow use of inline assembly in FXdiv" OFF)
++@@ -16,6 +16,10 @@ ENDIF()
++ # ---[ CMake options
++ INCLUDE(GNUInstallDirs)
++ 
+++IF(FXDIV_BUILD_TESTS OR FXDIV_BUILD_BENCHMARKS)
+++  ENABLE_LANGUAGE(CXX)
+++ENDIF()
+++
++ IF(FXDIV_BUILD_TESTS)
++   ENABLE_TESTING()
++ ENDIF()
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
