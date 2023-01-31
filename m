@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59475C38142
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 07:24:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E637DC38142
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 07:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB312418F1;
-	Wed,  1 Feb 2023 07:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB312418F1
+	by smtp4.osuosl.org (Postfix) with ESMTP id F03A6418EF;
+	Wed,  1 Feb 2023 07:24:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F03A6418EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HgOgscLtzoyy; Wed,  1 Feb 2023 07:24:22 +0000 (UTC)
+	with ESMTP id 3jOH8ys8GdoX; Wed,  1 Feb 2023 07:24:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA8DE418EF;
-	Wed,  1 Feb 2023 07:24:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA8DE418EF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8DBC01BF59F
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 07:24:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2EB4418F4;
+	Wed,  1 Feb 2023 07:24:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2EB4418F4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B48F61BF215
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 07:24:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 67EC381E62
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4EF564060E
  for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 07:24:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67EC381E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EF564060E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wl-oeR8b7MFZ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UQbTbSktqpbv for <buildroot@lists.busybox.net>;
  Wed,  1 Feb 2023 07:24:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B92581E44
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68F6C405DB
  for <buildroot@buildroot.org>; Wed,  1 Feb 2023 07:24:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B92581E44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68F6C405DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6992D82DF0; Wed,  1 Feb 2023 07:24:06 +0000 (UTC)
+ id 5322E82DD8; Wed,  1 Feb 2023 07:24:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 1 Feb 2023 08:22:25 +0100
+Date: Tue, 31 Jan 2023 23:34:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6f692c548904c5ae130f6e17e303ff4ad0b482b5
-X-Git-Newrev: aff4317797c34c78747f4c6c5ee8d9a1bc0ae270
+X-Git-Oldrev: 039dfca25290c4cebe1b7d859a03944598f4c104
+X-Git-Newrev: dedbc69022ba0beaf259463ac8082c86776f7e88
 X-Patchwork-Hint: ignore
-Message-Id: <20230201072406.6992D82DF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fluent-bit: needs arch support and
- C++ for wasm
+Message-Id: <20230201072406.5322E82DD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluent-bit: only require a C
+ compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,76 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aff4317797c34c78747f4c6c5ee8d9a1bc0ae270
+commit: https://git.buildroot.net/buildroot/commit/?id=dedbc69022ba0beaf259463ac8082c86776f7e88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See:
-https://github.com/fluent/fluent-bit/tree/master/lib/wasm-micro-runtime-WAMR-1.1.1#supported-architectures-and-platforms
-
-MIPS & RISCV32 are mentioned in the supported list,
-but that seems to be wrong, so excluded those.
-
 Fixes:
-- http://autobuild.buildroot.org/results/dfb/dfb8f71d7e016cdfd3beb4b8196081898bd49ae2/build-end.log
-- http://autobuild.buildroot.org/results/ecf/ecfe7b67af68cd7f397a50360900cd9a7afc830e/build-end.log
+- http://autobuild.buildroot.net/results/007/007c7c69e54b8ff663891da4535e2e95d40c42a2/build-end.log
+- http://autobuild.buildroot.net/results/ede/ede6f9fb67c0c26ff02e71a3d20e3d4344ea59f0/build-end.log
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-[Peter: Move arch dependency to _WASM_ARCH_SUPPORTS blind option, add help
-	text, use normal style for prompt and fix indentation]
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+[Peter: replace by upstream patch]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fluent-bit/Config.in     | 21 +++++++++++++++++++++
- package/fluent-bit/fluent-bit.mk |  6 ++++++
- 2 files changed, 27 insertions(+)
+ ...-CMakeLists.txt-only-require-a-C-compiler.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index 11ceb55d4f..6c2299e695 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -8,5 +8,26 @@ config BR2_PACKAGE_FLUENT_BIT
- 
- 	  https://github.com/fluent/fluent-bit
- 
-+if BR2_PACKAGE_FLUENT_BIT
+diff --git a/package/fluent-bit/0001-CMakeLists.txt-only-require-a-C-compiler.patch b/package/fluent-bit/0001-CMakeLists.txt-only-require-a-C-compiler.patch
+new file mode 100644
+index 0000000000..e71bcf0c0d
+--- /dev/null
++++ b/package/fluent-bit/0001-CMakeLists.txt-only-require-a-C-compiler.patch
+@@ -0,0 +1,27 @@
++From 7bcb502ebdcd647d6b83c972805e734ad522eb1a Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas.devoogdt@barco.com>
++Date: Mon, 30 Jan 2023 09:10:37 +0100
++Subject: [PATCH] CMakeLists.txt: only require a C compiler
 +
-+config BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
-+	bool
-+	# see lib/wasm-micro-runtime-WAMR-1.1.1/README.md#supported-architectures-and-platforms
-+	default y if BR2_arc
-+	default y if BR2_arm || BR2_armeb
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_RISCV_64
-+	default y if BR2_xtensa
++Fluent-bit is mostly written in C,
++so don't require CXX in the top-level project.
 +
-+config BR2_PACKAGE_FLUENT_BIT_WASM
-+	bool "wasm runtime support"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
-+	help
-+	  Support for WASM-based plugins.
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+endif
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index a7adb02de..3ff7360d8 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 3.12)
++-project(fluent-bit)
+++project(fluent-bit C)
++ 
++ # CMP0069 ensures that LTO is enabled for all compilers
++ cmake_policy(SET CMP0069 NEW)
++-- 
++2.30.2
 +
- comment "fluent-bit needs a glibc toolchain"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index c84042a0fa..6e9a33e02e 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -17,6 +17,12 @@ FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_CHUNK_TRACE=No \
- 	-DFLB_BACKTRACE=No
- 
-+ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
-+FLUENT_BIT_CONF_OPTS += -DFLB_WASM=Yes
-+else
-+FLUENT_BIT_CONF_OPTS += -DFLB_WASM=No
-+endif
-+
- ifeq ($(BR2_PACKAGE_LUAJIT),y)
- FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=Yes
- FLUENT_BIT_DEPENDENCIES += luajit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
