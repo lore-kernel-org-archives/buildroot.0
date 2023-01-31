@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA752C38142
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 07:23:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03554C05027
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 07:24:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 21AE240607;
-	Wed,  1 Feb 2023 07:23:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21AE240607
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C6404060C;
+	Wed,  1 Feb 2023 07:24:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C6404060C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bvyJKuGWIFhe; Wed,  1 Feb 2023 07:23:39 +0000 (UTC)
+	with ESMTP id XTIX6ArYAtu8; Wed,  1 Feb 2023 07:24:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0BEA405DB;
-	Wed,  1 Feb 2023 07:23:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0BEA405DB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 601421BF215
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 07:23:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CBAF8405DB;
+	Wed,  1 Feb 2023 07:24:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBAF8405DB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6511E1BF215
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 07:24:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39C6360E5D
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 07:23:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C6360E5D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4012B4060C
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 07:24:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4012B4060C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8ve_LSiU_k5G for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 07:23:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A489260BDE
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A489260BDE
- for <buildroot@buildroot.org>; Wed,  1 Feb 2023 07:23:33 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1F90640008;
- Wed,  1 Feb 2023 07:23:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pN7Sr-00AY7l-3w; Wed, 01 Feb 2023 08:23:29 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4TQpXmO0pmL7 for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 07:24:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 712CA405E8
+ for <buildroot@buildroot.org>; Wed,  1 Feb 2023 07:24:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 712CA405E8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5E4AC82DEA; Wed,  1 Feb 2023 07:24:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-References: <20230130121930.3472747-1-thomas@devoogdt.com>
- <20230130121930.3472747-3-thomas@devoogdt.com>
-Date: Wed, 01 Feb 2023 08:23:29 +0100
-In-Reply-To: <20230130121930.3472747-3-thomas@devoogdt.com> (Thomas Devoogdt's
- message of "Mon, 30 Jan 2023 13:19:30 +0100")
-Message-ID: <87357p4zny.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 3/3] package/fluent-bit: needs arch
- support and C++ for wasm
+To: buildroot@buildroot.org
+Date: Tue, 31 Jan 2023 23:35:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dedbc69022ba0beaf259463ac8082c86776f7e88
+X-Git-Newrev: 6f692c548904c5ae130f6e17e303ff4ad0b482b5
+X-Patchwork-Hint: ignore
+Message-Id: <20230201072406.5E4AC82DEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluent-bit: fix -latomic on
+ various platforms
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,85 +57,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas.devoogdt@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6f692c548904c5ae130f6e17e303ff4ad0b482b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
- > See:
- > https://github.com/fluent/fluent-bit/tree/master/lib/wasm-micro-runtime-WAMR-1.1.1#supported-architectures-and-platforms
+/home/thomas/br-test-pkg/bootlin-nios2-glibc/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/10.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: /tmp/fluent-bit.6F9rEA.ltrans28.ltrans.o: undefined reference to symbol '__atomic_compare_exchange_8@@LIBATOMIC_1.0'
+/home/thomas/br-test-pkg/bootlin-nios2-glibc/host/opt/ext-toolchain/bin/../lib/gcc/nios2-buildroot-linux-gnu/10.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: /home/thomas/br-test-pkg/bootlin-nios2-glibc/host/nios2-buildroot-linux-gnu/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+collect2: error: ld returned 1 exit status
 
- > MIPS & RISCV32 are mentioned in the supported list,
- > but that seems to be wrong, so excluded those.
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fluent-bit/fluent-bit.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- > Fixes:
- > - http://autobuild.buildroot.org/results/dfb/dfb8f71d7e016cdfd3beb4b8196081898bd49ae2/build-end.log
- > - http://autobuild.buildroot.org/results/ecf/ecfe7b67af68cd7f397a50360900cd9a7afc830e/build-end.log
-
- > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
- > ---
- >  package/fluent-bit/Config.in     | 15 +++++++++++++++
- >  package/fluent-bit/fluent-bit.mk |  6 ++++++
- >  2 files changed, 21 insertions(+)
-
- > diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
- > index 11ceb55d4f..50437cab60 100644
- > --- a/package/fluent-bit/Config.in
- > +++ b/package/fluent-bit/Config.in
- > @@ -10,3 +10,18 @@ config BR2_PACKAGE_FLUENT_BIT
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index f7727834dd..c84042a0fa 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -41,6 +41,12 @@ FLUENT_BIT_CONF_OPTS += \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
+ 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -U_FILE_OFFSET_BITS"
  
- >  comment "fluent-bit needs a glibc toolchain"
- >  	depends on !BR2_TOOLCHAIN_USES_GLIBC
- > +
- > +if BR2_PACKAGE_FLUENT_BIT
- > +
- > +config BR2_PACKAGE_FLUENT_BIT_WASM
- > +	bool "Build with WASM runtime support"
- > +	depends on BR2_INSTALL_LIBSTDCPP
- > +	# see lib/wasm-micro-runtime-WAMR-1.1.1/README.md#supported-architectures-and-platforms
- > +	default y if BR2_arc
- > +	default y if BR2_arm || BR2_armeb
- > +	default y if BR2_aarch64 || BR2_aarch64_be
- > +	default y if BR2_i386 || BR2_x86_64
- > +	default y if BR2_RISCV_64
- > +	default y if BR2_xtensa
-
-I know that Yann suggested this, but it doesn't work. We cannot mix the
-arch dependencies like this with an option with a prompt, because the
-user can still manually enable the option on an unsupported
-architecture.
-
-You were also missing some help text and I think this "filters written
-in WASM" feature is quite unlikely to be used, so I changed it to
-default off with:
-
-config BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
-	bool
-	# see lib/wasm-micro-runtime-WAMR-1.1.1/README.md#supported-architectures-and-platforms
-	default y if BR2_arc
-	default y if BR2_arm || BR2_armeb
-	default y if BR2_aarch64 || BR2_aarch64_be
-	default y if BR2_i386 || BR2_x86_64
-	default y if BR2_RISCV_64
-	default y if BR2_xtensa
-
-config BR2_PACKAGE_FLUENT_BIT_WASM
-	bool "wasm runtime support"
-	depends on BR2_INSTALL_LIBSTDCPP
-	depends on BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
-	help
-	  Support for WASM-based plugins.
-
-And committed, thanks.
-
--- 
-Bye, Peter Korsgaard
++# Uses __atomic_compare_exchange_8
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++FLUENT_BIT_CONF_OPTS += \
++	-DCMAKE_EXE_LINKER_FLAGS=-latomic
++endif
++
+ define FLUENT_BIT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
+ 		$(TARGET_DIR)/etc/init.d/S99fluent-bit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
