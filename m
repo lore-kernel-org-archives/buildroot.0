@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42076C636CD
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 13:51:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8002CC05027
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 13:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29F8240457;
-	Wed,  1 Feb 2023 13:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29F8240457
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A73D813AD;
+	Wed,  1 Feb 2023 13:52:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A73D813AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XF77uaPfsnFq; Wed,  1 Feb 2023 13:51:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mDx3tJVMpclB; Wed,  1 Feb 2023 13:52:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1E5A408A9;
-	Wed,  1 Feb 2023 13:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1E5A408A9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2428F1BF309
+	by smtp1.osuosl.org (Postfix) with ESMTP id 325A581E74;
+	Wed,  1 Feb 2023 13:52:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 325A581E74
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 54DB51BF95C
  for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 13:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2A8E40195
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 13:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2A8E40195
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2FCB560BE7
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 13:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FCB560BE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3FnHkGJM56Ky for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 13:51:26 +0000 (UTC)
-X-Greylist: delayed 00:05:07 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AFA54016E
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4AFA54016E
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PzxLraIL65t1 for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 13:51:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8956E60E6A
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8956E60E6A
  for <buildroot@buildroot.org>; Wed,  1 Feb 2023 13:51:26 +0000 (UTC)
 Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue106
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1N7yz7-1oab5h1OyJ-0152qo; Wed, 01
- Feb 2023 14:46:14 +0100
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1N4Q4m-1ofnkX1yb8-011SLX; Wed, 01
+ Feb 2023 14:46:15 +0100
 From: Laurent Vivier <laurent@vivier.eu>
 To: buildroot@buildroot.org
-Date: Wed,  1 Feb 2023 14:46:08 +0100
-Message-Id: <20230201134609.2040073-3-laurent@vivier.eu>
+Date: Wed,  1 Feb 2023 14:46:09 +0100
+Message-Id: <20230201134609.2040073-4-laurent@vivier.eu>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230201134609.2040073-1-laurent@vivier.eu>
 References: <20230201134609.2040073-1-laurent@vivier.eu>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:4fnSAys2jJvRBptZFiIyIGH8WzeVY7NM1PZL4ao+bPCqyrXeGFT
- sPbD3EkI2Nto/ZCnX7dPUN1h8NGKNAKeXQkxNHU4oAx4Y6bbilxZJgrcrmZsUB8CNp6TvNY
- 34uloY3z9fB+RvSSs2fJaXGqD2PFo1n6+x0Uc2u3np4kI9sua1mMBHtvAqoTgJqzDSJKIbz
- JL8UjB3fPe6jKNjfQvpHg==
-UI-OutboundReport: notjunk:1;M01:P0:EFGWX5Ld1rw=;kecL+fRCWa0IHXyVqYcdtv0vO5x
- 2UeX+0x1mi1jH3D04iySzuB7yTkF+yqjEt8/Qs2qjxNqbhWCuZXZUzq0cnIay05IjzQU17PaZ
- 9CJoHIC7m1atXTBOYzbason1Ox84n3L1fyCb4ANZnLOksWDhuxID7aNJ1eb5N2IufPNF9RMD4
- XVRJrMw03+fMVfUTHdv4Puy9IHyPqysHqwLI9EZGCtBO/nl2Erx83EJ5AfBc4g6sUOqhst9VJ
- /rx4KqBmOU4uewKaWARxcq411DOP+zR/L1mbxrgutEagywuGUgGFhmRB7EZIgmCuu1o2YkL4W
- lzrDs3eYHUSyge5Lkk/6a3tO/RnC1Ae405jEqAb26HsNugf71hY6pPPFCsHGVEfaJ43x0BxQH
- X3OWU6P2Yrr4KGIUV+63osbdEFeVmDP9gyM5kWn5xieOvQvq5pRc3QUqXY8LOdqV0oTSiUkB1
- Nhk6BhB8qRQFsatPxpR2WiOvITgIQIJorWv9oRmsV3zPf55vBrDZZkelLQol8AOE6Ve55UPaO
- Q2Pvc9rRUpxn0GLqcUWS+XxBe9TiTqbOv60fFvzcEXnCWWSoqcquJQcmDD4gNwihM7GfxRgwh
- 5E1xUDSguLnJUASA3cw734yaq+4cfp0iLNMqd0cE8Sw1l3fZ8/qES9XEtou/+uhq3YaJTt0vC
- o0+5HTvBCGC/0Gv5t04BHTM/eQcfwEVf0h8knvhUog==
-Subject: [Buildroot] [PATCH v9 2/3] board/qemu/m68k-virt: Add virt-m68k
- linux config
+X-Provags-ID: V03:K1:cBOcLghn2DzaAiFQiAPGPRkAme9bp2TYYs/sN+75x9duxXBNuJS
+ KDVKmK5rGqJjejkiZcFaPPpaeGGx2w134XilZ7YdxlNzkB4sKsO8mUdOPjuS2Wh1+yT4D0v
+ nunF7/yo4LASz4k13/02P5f7qwFUfaWDbke64xj8bsnlvIVJ/4qSNqwLcBkavawxt2QTTNg
+ 5hTFL4Vaj/lEy1zF/MdwQ==
+UI-OutboundReport: notjunk:1;M01:P0:59zJOULfA9Q=;l3aro4RQqP1P/mp5iEpBpU04FbS
+ 1Uxw9DS9o/ePy8QwKFzmPUJop+A9nE4kFPenPzdrKVqxiM5JeInw7IgG6dBeVod1IDz71c7bM
+ tyzrTAJ8NHrPkkdrneKYzDOLEDnwkck6xULErUyHNUJmOLPjfMKrlKWDl9AQ5f+WI+5eS6VYt
+ W22esNTFOGDtWV3CSvECabAQNJq4sPiqUBSuuOYJGDPucHTzfASDjM4+PXWouE3AAG6I4vpXM
+ 3iwmE+vMs1nCHpptQSTAScaN9v6aAC3a02fEYWm9ZRVKIm4L/+iWhjIeFI7+MikjOUPjSzgPY
+ Lbl1DmctCZkkdC+ujCExZQZcO8LFUm9Bt/k80H63FG430dpT7rmbHjFcVvk5V8Y0w2W1WqEcn
+ 2cNTl62MubVJB5tp0kGEgvhYbHLlRqiyx/irqJieb2onNPUsyJe2LHmA0HfWF7x96HtL1YLzW
+ 0LbqPcXEnVuWaZyoCc/zuRy+Hlp5xBFJ2VqZD2fbZWeHuhfgNqtuFz8+4WEfx2xpLv2KNxICp
+ PdO3TQVEKweqZeqZmNZeY6E99dnHhxEl69BSx7aDpOtNUYqFJOGLa8t8phCxwIMfwyIFyQ+7f
+ oZcxkicu/w0y95B4ZKxVwAZ5ktsb7qQ2r4eDnDTFRemEHYpv+X1iJNI7IS+49L1VMf4CWLsDf
+ uwdQwxFVLywTYjpzWHTPqJvmEG6JtD1KdJMRKWRxLg==
+Subject: [Buildroot] [PATCH v9 3/3] support/scripts/boot-qemu-image.py:
+ manage petitboot interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,104 +83,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Build a 5.19 (first version with the m68k virt machine) kernel
-for "qemu-system-m68k -M virt" machine.
+Petitboot doesn't start a shell but a GUI.
+Manage the menu to switch to the shell.
+Use "poweroff -f" as we don't have init
+
+Enable the test for qemu_m68K_virt.
 
 Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 ---
- DEVELOPERS                                 |  2 ++
- board/qemu/m68k-virt/linux.fragment        | 21 +++++++++++++++++
- board/qemu/m68k-virt/readme.txt            |  5 +++++
- configs/qemu_m68k_virt_petitboot_defconfig | 26 ++++++++++++++++++++++
- 4 files changed, 54 insertions(+)
- create mode 100644 board/qemu/m68k-virt/linux.fragment
- create mode 100644 board/qemu/m68k-virt/readme.txt
- create mode 100644 configs/qemu_m68k_virt_petitboot_defconfig
+ configs/qemu_m68k_virt_petitboot_defconfig |  5 +++++
+ support/scripts/boot-qemu-image.py         | 13 ++++++++++---
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d56e4643eaf8..9db1568422a8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1768,6 +1768,8 @@ F:	package/open-lldp/
- 
- N:	Laurent Vivier <laurent@vivier.eu>
- F:	package/petitboot/
-+F:	board/qemu/m68k-virt/
-+F:	configs/qemu_m68k_virt_petitboot_defconfig
- 
- N:	Lee Jones <lee.jones@linaro.org>
- F:	boot/afboot-stm32/
-diff --git a/board/qemu/m68k-virt/linux.fragment b/board/qemu/m68k-virt/linux.fragment
-new file mode 100644
-index 000000000000..49416982601c
---- /dev/null
-+++ b/board/qemu/m68k-virt/linux.fragment
-@@ -0,0 +1,21 @@
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_KEXEC=y
-+CONFIG_BOOTINFO_PROC=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_MD=y
-+CONFIG_MD_LINEAR=y
-+CONFIG_MD_MULTIPATH=y
-+CONFIG_MD_FAULTY=y
-+CONFIG_BLK_DEV_DM=y
-+CONFIG_DM_UNSTRIPED=y
-+CONFIG_DM_CRYPT=y
-+CONFIG_DM_SNAPSHOT=y
-+CONFIG_DM_THIN_PROVISIONING=y
-+CONFIG_DM_CACHE=y
-+CONFIG_DM_WRITECACHE=y
-+CONFIG_DM_EBS=y
-+CONFIG_DM_ERA=y
-+CONFIG_DM_CLONE=y
-+CONFIG_DM_MIRROR=y
-+CONFIG_DM_RAID=y
-+CONFIG_DM_ZERO=y
-diff --git a/board/qemu/m68k-virt/readme.txt b/board/qemu/m68k-virt/readme.txt
-new file mode 100644
-index 000000000000..714b74c70ea1
---- /dev/null
-+++ b/board/qemu/m68k-virt/readme.txt
-@@ -0,0 +1,5 @@
-+Run the emulation with:
-+
-+ qemu-system-m68k -M virt -kernel output/images/vmlinux -initrd output/images/rootfs.cpio.xz -append "console=ttyGF0" --nographic # qemu_m68k_virt_petitboot_defconfig
-+
-+The petiboot menu will appear in the terminal where QEMU has been started.
 diff --git a/configs/qemu_m68k_virt_petitboot_defconfig b/configs/qemu_m68k_virt_petitboot_defconfig
-new file mode 100644
-index 000000000000..b3497c12b46b
---- /dev/null
+index b3497c12b46b..cb63a2deeed4 100644
+--- a/configs/qemu_m68k_virt_petitboot_defconfig
 +++ b/configs/qemu_m68k_virt_petitboot_defconfig
-@@ -0,0 +1,26 @@
-+BR2_m68k=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_CCACHE=y
-+BR2_RELRO_NONE=y
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Petitboot"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_MERGED_USR=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyGF0"
-+BR2_ROOTFS_OVERLAY="package/petitboot/fs-overlay"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
-+BR2_LINUX_KERNEL_DEFCONFIG="virt"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/m68k-virt/linux.fragment"
-+BR2_LINUX_KERNEL_XZ=y
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_KEXEC=y
-+BR2_PACKAGE_KEXEC_ZLIB=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_NET_TOOLS=y
-+BR2_PACKAGE_NETCAT=y
-+BR2_PACKAGE_RSYNC=y
-+BR2_PACKAGE_PETITBOOT=y
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_XZ=y
+@@ -8,6 +8,8 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_MERGED_USR=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyGF0"
+ BR2_ROOTFS_OVERLAY="package/petitboot/fs-overlay"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+@@ -24,3 +26,6 @@ BR2_PACKAGE_RSYNC=y
+ BR2_PACKAGE_PETITBOOT=y
+ BR2_TARGET_ROOTFS_CPIO=y
+ BR2_TARGET_ROOTFS_CPIO_XZ=y
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
+index ba50ea69ee9a..8dd3b4c654e1 100755
+--- a/support/scripts/boot-qemu-image.py
++++ b/support/scripts/boot-qemu-image.py
+@@ -36,7 +36,7 @@ def main():
+     time.sleep(1)
+ 
+     try:
+-        child.expect(["buildroot login:"], timeout=600)
++        idx = child.expect(["buildroot login:", "Exit to shell"], timeout=600)
+     except pexpect.EOF as e:
+         # Some emulations require a fork of qemu-system, which may be
+         # missing on the system, and is not provided by Buildroot.
+@@ -55,7 +55,11 @@ def main():
+         print("System did not boot in time, exiting.")
+         sys.exit(1)
+ 
+-    child.sendline("root\r")
++    if idx == 0:
++        child.sendline("root\r")
++    elif idx == 1:
++        time.sleep(1)
++        child.sendline("\r")
+ 
+     try:
+         child.expect(["# "], timeout=600)
+@@ -66,7 +70,10 @@ def main():
+         print("Timeout while waiting for shell")
+         sys.exit(1)
+ 
+-    child.sendline("poweroff\r")
++    if idx == 0:
++        child.sendline("poweroff\r")
++    elif idx == 1:
++        child.sendline("poweroff -f\r")
+ 
+     try:
+         child.expect(["System halted"], timeout=600)
 -- 
 2.39.1
 
