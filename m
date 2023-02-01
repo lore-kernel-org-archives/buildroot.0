@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D219BC05027
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 05:19:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54C63C38142
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 05:19:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 782A5813FA;
-	Wed,  1 Feb 2023 05:19:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 782A5813FA
+	by smtp1.osuosl.org (Postfix) with ESMTP id F257481E04;
+	Wed,  1 Feb 2023 05:19:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F257481E04
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ebnlr_4ugqjE; Wed,  1 Feb 2023 05:19:39 +0000 (UTC)
+	with ESMTP id nS-wbLqyzfoz; Wed,  1 Feb 2023 05:19:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A97A814AB;
-	Wed,  1 Feb 2023 05:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A97A814AB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0E3951BF2F0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BF1D81E0B;
+	Wed,  1 Feb 2023 05:19:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BF1D81E0B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 285291BF95C
  for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 05:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA3F9813C4
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 05:17:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA3F9813C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02C34405BB
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 05:17:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02C34405BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id On8L4K7HpPCL for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 05:17:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oyoVTP7divX6 for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 05:17:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2B6580B54
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F2B6580B54
- for <buildroot@buildroot.org>; Wed,  1 Feb 2023 05:17:17 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id g16so7490342ilr.1
- for <buildroot@buildroot.org>; Tue, 31 Jan 2023 21:17:17 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7831405AE
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D7831405AE
+ for <buildroot@buildroot.org>; Wed,  1 Feb 2023 05:17:19 +0000 (UTC)
+Received: by mail-io1-xd2b.google.com with SMTP id j4so3566189iog.8
+ for <buildroot@buildroot.org>; Tue, 31 Jan 2023 21:17:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=2ObjKxvht5FkgBF/av+H/hmFkeX/4SFwvndsm88XGRY=;
- b=Gs7iTa2j73vUefCErII5RuwrH3O5l/rJTK7o6bKTSn3FQNNfr99ujntg8eMMervmyN
- 6DGong/dYwzIRPxWG87l6yQhLJTXjEq+KgMKE6laddGafBn3Ik3oL9yxYQd3xURVpi5V
- gWkFUOPQg4LScPtVgYl3+uHb6AmTaSETRj1FHB3KCNJFGExvuhOwasXfObr8qwRNEM+v
- ybP0IXLH8yBWRweLFeyZl/n9oCEsTtquVyfJLJ/swpyl0wC686mlmkZXXLuO3/logREg
- fWHO9J598sahnfvl7tBe7ADmbQoPX7GpfsN+CtSXekneSuBq0CP1kI0mwYywPGAQaR0v
- 2F/A==
-X-Gm-Message-State: AO0yUKUU+Z6BGPpiZf4kYp4NqqbDCCl4XI5nT+RxyJx6A6jVIsIGfdLX
- kUS+bSJBrcZQ8PlA4vkMT1bbnQKJf/i5EQ==
-X-Google-Smtp-Source: AK7set8TGiJtAjwh4x/IJz/2rznjXus9EYjwOVwEZYLkoEPgKCm24T1ubKxa5aaR2KfhVF1Bt7QqbA==
-X-Received: by 2002:a05:6e02:20cb:b0:310:e8d2:91aa with SMTP id
- 11-20020a056e0220cb00b00310e8d291aamr852096ilq.10.1675228636867; 
- Tue, 31 Jan 2023 21:17:16 -0800 (PST)
+ bh=kcPiskXBLmoG4+GRcpKfmaXB8xplo88bMXnui7RsfqE=;
+ b=ud7hoiKsD2+8mFTH9raZvDQKI2oC0P26SAGLCYtDVpZgQWmWtiyXJHwR0fwcH/WXuh
+ sunkxbQ5m2tBRnHz4r9W7xfUpY0mYh01KujvhAti8ndZQbX4pmcr6CmccJa8LitaA9Qv
+ b8u2fjpzt5hQmK/MHRVp/3+3oHPC90FGK/d2YAU50EKuRH7v2XDVMBmaSN6zDdocvP4O
+ ouK1psmMFuOoS8f0B9f40R/9XKOocYzGz34Q2T7XQBLVzPf0WHjODPBDROAfnMPQFSIT
+ FEJwA1xPJm38lOo++BybZ8XSJJVSKSED1RZuQUI+Ct/30hozABepWwBxNdorEPW6pqDp
+ 6vlw==
+X-Gm-Message-State: AO0yUKVSEnCEyPWe/BPuFeiqlvtdsnXyoraIG/t17DBRb/oiJuLfP91k
+ 1dYVkvB2dM9xJWFcgJL0tedQGc6DL5gQDQ==
+X-Google-Smtp-Source: AK7set8pVfxbT0s63KHdB76hhx4p473DAMcD3/5zoZaigdenjGv9sd44iTN+fCUMpEpNHZfsCzohcg==
+X-Received: by 2002:a05:6602:408a:b0:6ee:f9e1:423a with SMTP id
+ bl10-20020a056602408a00b006eef9e1423amr925598iob.11.1675228638816; 
+ Tue, 31 Jan 2023 21:17:18 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- k9-20020a02ccc9000000b003a961e5d33fsm6235960jaq.49.2023.01.31.21.17.16
+ k9-20020a02ccc9000000b003a961e5d33fsm6235960jaq.49.2023.01.31.21.17.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 31 Jan 2023 21:17:16 -0800 (PST)
+ Tue, 31 Jan 2023 21:17:18 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 31 Jan 2023 22:16:56 -0700
-Message-Id: <20230201051658.383420-11-james.hilliard1@gmail.com>
+Date: Tue, 31 Jan 2023 22:16:58 -0700
+Message-Id: <20230201051658.383420-13-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230201051658.383420-1-james.hilliard1@gmail.com>
 References: <20230201051658.383420-1-james.hilliard1@gmail.com>
@@ -74,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=2ObjKxvht5FkgBF/av+H/hmFkeX/4SFwvndsm88XGRY=;
- b=nXkvmX9kFKQoWQMMvG/YUFqxWFUYIu455MmpFjE9+NR7h14gc1anj0gaflUTQOtqzY
- Hz8hNMiqLAQ+z6P4rAy/4JtY1wUxJrbFHrIuAlQX2pFO9Uwmq3Rb/1jC33VOEr9nlXzb
- YwY0MMhVeim6uqDi7Pg58JelpFva+QDBUBeq2ZyJrUMBwkBeOgPdW+6vEDtt5WMIfq8W
- ulK64cHOFL1chcMhogjzpTC0BiEBQ+12Lw8OWYMIunZ1ui+NV3lW5JJ+2FpCCdTyIsIB
- irQ4oozpdGNlKp/mvGjSMWg7gCFImz1PX0vrBocaADVdoQlWGsDBGVSUhHVXsQap/w7H
- /Rdw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=kcPiskXBLmoG4+GRcpKfmaXB8xplo88bMXnui7RsfqE=;
+ b=kmva4fgWFIDAQbi5IRxgPs+2bPt6k+fU/pcXI+dRVVYqwUtvA5e28n3HMnDppFoppw
+ cwA/8VRCWCIeXEG0Uv2J3B8jvoslFXW27yGUWSQnuzIvTaSUVGiqnz5tG42u+5Oxe1t7
+ qkMkLAiK05Li1SlulNOVl4+RS4n/4pBDnquYrhCoO+z0JcOFThFj73+ga7gNxhVw6g9M
+ pWw/FJM1aWn6i5IIAQNqbgyoN7Khh2pmDZRZH0Mf/f4WQYXliGft6Clbq53/OQG5eQ34
+ d13NT/WyyxKwL8epKYnmDPG6x2Mak1acKYevBRVLvh6Po7intkOHaU4VOci8NADYRxOD
+ 9/jg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=nXkvmX9k
-Subject: [Buildroot] [PATCH 11/13] package/gstreamer1-editing-services: bump
- version to 1.22.0
+ header.a=rsa-sha256 header.s=20210112 header.b=kmva4fgW
+Subject: [Buildroot] [PATCH 13/13] package/gst1-python: bump version to
+ 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,83 +105,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a patch fixing an incorrect gstreamer-validate-1.0 dependency
-name.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...treamer-validate-1.0-dependency-name.patch | 35 +++++++++++++++++++
- .../gstreamer1-editing-services.hash          |  4 +--
- .../gstreamer1-editing-services.mk            |  2 +-
- 3 files changed, 38 insertions(+), 3 deletions(-)
- create mode 100644 package/gstreamer1/gstreamer1-editing-services/0001-Fix-gstreamer-validate-1.0-dependency-name.patch
+ package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/0001-Fix-gstreamer-validate-1.0-dependency-name.patch b/package/gstreamer1/gstreamer1-editing-services/0001-Fix-gstreamer-validate-1.0-dependency-name.patch
-new file mode 100644
-index 0000000000..6c190d3727
---- /dev/null
-+++ b/package/gstreamer1/gstreamer1-editing-services/0001-Fix-gstreamer-validate-1.0-dependency-name.patch
-@@ -0,0 +1,35 @@
-+From c3edd999195445319ea619b6d719d7743f5b560d Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Tue, 31 Jan 2023 21:38:09 -0700
-+Subject: [PATCH] Fix gstreamer-validate-1.0 dependency name
-+
-+The gst-devtools project generates gstreamer-validate-1.0.pc, this
-+must match the dependency in gst-editing-services for detection
-+to work properly.
-+
-+Fixes:
-+Run-time dependency gst-validate-1.0 found: NO (tried pkgconfig and cmake)
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/3859]
-+---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index bdc47f5d8b..b949f55317 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -110,7 +110,7 @@ if host_machine.system() != 'windows'
-+ endif
-+ gstcontroller_dep = dependency('gstreamer-controller-1.0', version : gst_req,
-+   fallback : ['gstreamer', 'gst_controller_dep'])
-+-gstvalidate_dep = dependency('gst-validate-1.0', version : gst_req, required : get_option('validate'),
-++gstvalidate_dep = dependency('gstreamer-validate-1.0', version : gst_req, required : get_option('validate'),
-+   fallback : ['gst-devtools', 'validate_dep'])
-+ 
-+ gio_dep = dependency('gio-2.0', version: glib_req)
-+-- 
-+2.34.1
-+
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 308596d7cd..bd5dcfdbaf 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.20.4.tar.xz.sha256sum
--sha256  aa03e983af5d79c1befffe3575b034e60960619a96bf877447cb73c28016fc41  gst-editing-services-1.20.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.0.tar.xz.sha256sum
-+sha256  2a23856379af03586b66c193910fa8bb963024580bc2337c7405578dc077aa79  gst-editing-services-1.22.0.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 77feb15991..0ae9205c3b 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
+index adb116ac4c..128a739c2c 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.hash
++++ b/package/gstreamer1/gst1-python/gst1-python.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.20.4.tar.xz.sha256sum
+-sha256  5eb4136d03e2a495f4499c8b2e6d9d3e7b5e73c5a8b8acf9213d57bc6a7bd3c1  gst-python-1.20.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.0.tar.xz.sha256sum
++sha256  6c63ad364ca4617eb2cbb3975ab26c66760eb3c7a6adf5be69f99c11e21ef3a5  gst-python-1.22.0.tar.xz
+ sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index feb2de718a..2fc268b0ac 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.20.4
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.0
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+-GST1_PYTHON_VERSION = 1.20.4
++GST1_PYTHON_VERSION = 1.22.0
+ GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
+ GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
+ GST1_PYTHON_INSTALL_STAGING = YES
 -- 
 2.34.1
 
