@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F317C38142
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 05:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22312C05027
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 05:19:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9EA280B54;
-	Wed,  1 Feb 2023 05:18:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9EA280B54
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A55E819F3;
+	Wed,  1 Feb 2023 05:19:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A55E819F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zTXxhoM32TIa; Wed,  1 Feb 2023 05:18:48 +0000 (UTC)
+	with ESMTP id VikTPy3Ky57B; Wed,  1 Feb 2023 05:19:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E923A813F7;
-	Wed,  1 Feb 2023 05:18:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E923A813F7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B68B01BF2F0
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 05:17:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2134814AB;
+	Wed,  1 Feb 2023 05:18:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2134814AB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 41EF91BF2F0
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 05:17:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90F53405BB
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 05:17:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90F53405BB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29269409E6
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 05:17:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29269409E6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gyIfu5jiHJ_B for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 05:17:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fz5R0f-_ET9I for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 05:17:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE505405AE
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE505405AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3275409EB
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E3275409EB
  for <buildroot@buildroot.org>; Wed,  1 Feb 2023 05:17:15 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id u7so5946140ilg.4
+Received: by mail-il1-x12d.google.com with SMTP id h18so4700644ilj.6
  for <buildroot@buildroot.org>; Tue, 31 Jan 2023 21:17:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=zIEZ1RXIWguF/OaUKcBM3+yHarP1E1OHXTsKyXbC3W4=;
- b=f2UKr5jsW1/i4AKIIqfcfpDVvs5j7tnD3h9ERrcPLuiWYtwuDIz6XD9tJBqeutn4+G
- gfPumTJugtV5xabXKz4XBFnv7B5DOrpWmC1lz1MlRlfpvg6mrDrV1eb8U/o4i8+6F7j0
- nQwkxdjrhLOUd6HwV3PoVyDL6c0LiqDO9Aj51rdVocKU4s/DE+bjwoMf6P9dA2vOCx4i
- +20xjqTKPkFssMkPrw/xUgaW41/90MGZyCA867LcTHSnzmbmtGYjYbELm+XnzkEYo2u/
- GhP+NtyhWMQW5BmkEGL4IreiYV2Ki5qrIeKuJURmdsWT6HFmKshP7+fLccH1qrT+wBKi
- f/+w==
-X-Gm-Message-State: AO0yUKUCzOOYELpKDsdUBWVWQtKQuMwdIkwOit3eZcSUKCfnKTkyDi93
- cdCMYXXgHPCdGbgwdn3oDI2idH+22HmY3g==
-X-Google-Smtp-Source: AK7set+B5Z66xtbX+3MmVBMBFZN8edzf9JG1fLVHrbJSoVZ7PVqjUMgjgSpY0CmbG1MUIHafCsOpTg==
-X-Received: by 2002:a05:6e02:2149:b0:311:ad48:ff26 with SMTP id
- d9-20020a056e02214900b00311ad48ff26mr408990ilv.14.1675228634703; 
- Tue, 31 Jan 2023 21:17:14 -0800 (PST)
+ bh=/zQE1cvBBAnHhdx1eaF9Xrlp/hs5nAaV/1aj63iWZ4w=;
+ b=6krjVZNZ/KI3/bw1wZ33Kt6P+kyyrAwM00CHM3k9202zdwzApM6H5TZSXTTO1y6EbY
+ nnUMsVAzpRQmUj5C2UPOqqvGJyrGGywGzIgF5IjEml7iMD21FBMkuc6kLX2+ihM9dQmW
+ dCwFeb3a+Q1BQ6dS2Na4h4OFPuEJ+YPk1Eu070V5QWGVKg5uoAfuwjSToQiw8Aj+/Ww/
+ YaTf5cNwKH2D62rXicZCEKp9DgCCn8au77Icwhido3V9KK09/kRL5z+kOL87uVu+YUOJ
+ RGhFM1mDTpAEsw5PWTwWokIjd8IZjJiPiY8VrVmtvm+GXz9smJmyr4SdvnDCYmrtLYCR
+ 6HSg==
+X-Gm-Message-State: AO0yUKU9cjLwybg7EU5hkUBl4rsCxKb/oJxI73sKGau7z3gA41R1qs6q
+ DFZr6ZNgLXzyNnxqIPKPSfKFKKI8sNY+mA==
+X-Google-Smtp-Source: AK7set/2gjOrGl8BJGayQWM0c8nwzMKfp+aRgrw50EvQvbMDrAQFBfv0h8um0fzL60ZPCH2QX0DAJQ==
+X-Received: by 2002:a05:6e02:156e:b0:310:e9e7:e8dc with SMTP id
+ k14-20020a056e02156e00b00310e9e7e8dcmr1003735ilu.15.1675228635398; 
+ Tue, 31 Jan 2023 21:17:15 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
  k9-20020a02ccc9000000b003a961e5d33fsm6235960jaq.49.2023.01.31.21.17.14
@@ -63,8 +63,8 @@ Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  Tue, 31 Jan 2023 21:17:14 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 31 Jan 2023 22:16:53 -0700
-Message-Id: <20230201051658.383420-8-james.hilliard1@gmail.com>
+Date: Tue, 31 Jan 2023 22:16:54 -0700
+Message-Id: <20230201051658.383420-9-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230201051658.383420-1-james.hilliard1@gmail.com>
 References: <20230201051658.383420-1-james.hilliard1@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=zIEZ1RXIWguF/OaUKcBM3+yHarP1E1OHXTsKyXbC3W4=;
- b=EQoht1AUbJ1peTvdTHr1fV2PnxvBBE7mncfVvsiynsjChOW+X7GJVV8V+cSXen2z79
- g2xbKo1zG+jXCBcgV0tVnC5mNXsCtelR91aToY1yjAzy4slGDMuYontzkWI9LX+6//bi
- PC0ZupOuc9KcWFQZdMBoi4RE/4HQuswWre2y4unQxAtpapj3mCytqy+xrSnQ3lLOnfoc
- 5M1AKoYgEomsadz+LJJOESaXQ1qTlyihnkv5rws7qV6gJ2zIuKfkun38S40xljLwy/Jb
- gb7AgOnBk3TpVpqRwuqjOdBwH60QXE/h3YhCEEmnnri2qDduYgdGx+5Kvb4HQPzqXcAW
- JLvg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=/zQE1cvBBAnHhdx1eaF9Xrlp/hs5nAaV/1aj63iWZ4w=;
+ b=i5xB5la69mcTPEqiJib20kaoaxgbOXr/5bFCV0AeffoB2+OMNsgcyTKE6mhPJVHUGt
+ epMS9ZUVHkz+6Coua7tLgfx16CJ8ijohVVjJgoUikvByWwCsqVODPaFvviFbKBHj/f8z
+ 1MFjApbXZE3GoPwDhXn1St0e/TmoCla8UoY6SXIcXhme2mE+shauixpeOtpqKcIHWoVH
+ DnpnOejo6jKHpcTrv1uEZJk5tUY9UlPbs9msp7YyQaszNDOZeoruDYA+uBse9XtSvo1F
+ r/JHaae7GI2+ynKegIz6qrYn6LIoB9fUB2MCbfmdg9TzO6ffaq72EkUfVfGTDlYj4OV2
+ yJgQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EQoht1AU
-Subject: [Buildroot] [PATCH 08/13] package/gst1-libav: bump version to 1.22.0
+ header.a=rsa-sha256 header.s=20210112 header.b=i5xB5la6
+Subject: [Buildroot] [PATCH 09/13] package/gst1-vaapi: bump version to 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,35 +104,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Update config option names and dependency requirements.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash |  4 +-
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 37 +++++++++++++++----
+ 2 files changed, 31 insertions(+), 10 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 78f5b5bb07..c2c58ab2fe 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index 5baaa4dfb7..6dec625c93 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.20.4.tar.xz.sha256sum
--sha256  04ccbdd58fb31dd94098da599209834a0e7661638c5703381dd0a862c56fc532  gst-libav-1.20.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.22.0.tar.xz.sha256sum
-+sha256  0e48407b4905227a260213dbda84cba3812f0530fc7a75b43829102ef82810f1  gst-libav-1.22.0.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index a867af5147..d4b3873af1 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.20.4.tar.xz.sha256sum
+-sha256  ab12596144c05506e9782374c5d2cdfb3069fca89908d6de360d947bb77fd06a  gstreamer-vaapi-1.20.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.22.0.tar.xz.sha256sum
++sha256  593ccad19f88e5fa29f40f98356c007806bd535828707b1406944d16a90bdff5  gstreamer-vaapi-1.22.0.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index bd6c16be3e..3d9eb91ffb 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_LIBAV_VERSION = 1.20.4
-+GST1_LIBAV_VERSION = 1.22.0
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_LICENSE = LGPL-2.1+
+-GST1_VAAPI_VERSION = 1.20.4
++GST1_VAAPI_VERSION = 1.22.0
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
+@@ -18,19 +18,40 @@ GST1_VAAPI_DEPENDENCIES += \
+ 	libdrm
+ 
+ GST1_VAAPI_CONF_OPTS += \
+-	-Dwith_drm=yes \
+-	-Dwith_x11=no \
+-	-Dwith_glx=no \
+-	-Dwith_wayland=no \
+-	-Dwith_egl=no \
++	-Ddrm=enabled \
++	-Degl=enabled \
+ 	-Dexamples=disabled \
+ 	-Dtests=disabled \
+ 	-Ddoc=disabled
+ 
+ ifeq ($(BR2_PACKAGE_GST1_VAAPI_ENCODERS),y)
+-GST1_VAAPI_CONF_OPTS += -Dwith_encoders=yes
++GST1_VAAPI_CONF_OPTS += -Dencoders=enabled
+ else
+-GST1_VAAPI_CONF_OPTS += -Dwith_encoders=no
++GST1_VAAPI_CONF_OPTS += -Dencoders=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
++GST1_VAAPI_CONF_OPTS += -Degl=enabled
++GST1_VAAPI_DEPENDENCIES += libegl
++else
++GST1_VAAPI_CONF_OPTS += -Degl=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++GST1_VAAPI_CONF_OPTS += -Dwayland=enabled
++else
++GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++GST1_VAAPI_CONF_OPTS += -Dx11=enabled
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++GST1_VAAPI_CONF_OPTS += -Dglx=enabled
++else
++GST1_VAAPI_CONF_OPTS += -Dglx=disabled
++endif
++else
++GST1_VAAPI_CONF_OPTS += -Dx11=disabled -Dglx=disabled
+ endif
+ 
+ $(eval $(meson-package))
 -- 
 2.34.1
 
