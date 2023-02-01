@@ -1,87 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5973C38142
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 18:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8095CC05027
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 18:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 226EE60FB0;
-	Wed,  1 Feb 2023 18:05:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 226EE60FB0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B61C8138A;
+	Wed,  1 Feb 2023 18:10:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B61C8138A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J9ZnEv3DztNd; Wed,  1 Feb 2023 18:05:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jkyTrhQHD43T; Wed,  1 Feb 2023 18:10:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B04F60FE5;
-	Wed,  1 Feb 2023 18:05:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B04F60FE5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D73D81BF29D
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 18:04:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 442BF81430;
+	Wed,  1 Feb 2023 18:10:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 442BF81430
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DB9561BF29D
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 18:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B10A660FE5
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 18:04:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B10A660FE5
+ by smtp1.osuosl.org (Postfix) with ESMTP id B39C3812F0
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 18:10:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B39C3812F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BF5RjUb4tT0n for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 18:04:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b2qKtOLNqwrc for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 18:10:09 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2088B60FB0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2088B60FB0
- for <buildroot@buildroot.org>; Wed,  1 Feb 2023 18:04:56 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.15]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MqJqD-1os3P62mCR-00nUdV; Wed, 01
- Feb 2023 19:04:51 +0100
-Date: Wed, 1 Feb 2023 19:04:50 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Kenneth Roland <kjroland75@hotmail.com>
-Message-ID: <20230201190450.4636771a@gmx.net>
-In-Reply-To: <20230201184154.2c7e2680@gmx.net>
-References: <BN0PR10MB535094D28596AC0858222678D6D19@BN0PR10MB5350.namprd10.prod.outlook.com>
- <BN0PR10MB5350E76531565457919042C8D6D19@BN0PR10MB5350.namprd10.prod.outlook.com>
- <20230201184154.2c7e2680@gmx.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7646D81378
+Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7646D81378
+ for <buildroot@buildroot.org>; Wed,  1 Feb 2023 18:10:09 +0000 (UTC)
+Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
+ by mailout08.t-online.de (Postfix) with SMTP id 9306810226;
+ Wed,  1 Feb 2023 19:10:06 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.195.67]) by fwd74.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pNHYc-2L4Oi90; Wed, 1 Feb 2023 19:10:06 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47604)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pNHYb-0004E5-39;
+ Wed, 01 Feb 2023 19:10:06 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Wed,  1 Feb 2023 19:10:05 +0100
+Message-Id: <20230201181005.731564-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:3fIb8I8WR57kp/sRn3jSNlJpshgii+uMpKxqzYCmXSEK333ZUaW
- od0uoyvN3mtPyyzNts+esY750WNEVVQHlh/0Y4nQCQ5Cg6Mqlag3vVpNMK4E1S213JScUjf
- 0XA0QtIdGJelfcCA4Z3zFUYxy/s94pInjPV7PINhyOxLl8sWC/Qs+SqQI7hr2nJJ6kBqn5A
- 6vz6GFt8WqXLZoZOvpFHA==
-UI-OutboundReport: notjunk:1;M01:P0:uXg4gsc9SlQ=;WP+JjDCekbf3eDLs/St+1CqIkFp
- PU7kGtG7MFucb8+a/5IclsWp+Av+0auON1JOeJFduHbsXrDfbi5ChoeHMd2uIInSvefq6oQgq
- D8GCajYKV06etlSUneOW0izRPl7sqOjx7fKw9rWbkDzoYkpU+1txQHyLy+3hrSk6WMtarnF+S
- /UYzw7y3ud5baR7cNO22Ol+zXxp3LQv/DVicnIjW1F6/faM9b+jO7NK59kGHf8TfKrr5UWnq3
- jc4M6Se3sFevHOh7qJ0KUfjzqXtHswYrcay+q2g4b/JcsWrITOl2mTk55lhoixAj1Oj6YFd5h
- 5mKeF21xDPb/0j/e8mTkZR/Jexm4Wcm+H00Fsu4eJwS1VzmR17EB3xrjJm4mLfitVcHc0q6gT
- gSyQlDl60+VP88ECj1UWUmFvcl62Ps7wTwqLC+EY0z+nSN36kDRZYMCYelEPDX8DfV6gdVn49
- J1lvkiCWs93fr2IaGE/7lHazRrPMI2e3sp7XbRcEciZJzLLuYfrguu6LOZmLHacMvgM49KgNE
- LzcSXoU6W9uI0nJkxUpyj+kD9cVV/ddmwGrv+oLgw3U5Z/wry2dH67YYDIA8iC58GCrx1K+es
- SHh9VnlNGxFsJlhWABnRJoIuFtwqXVGv+1UM08n5Dwbsi5mLy1FlJXHDcw1IUEbtfsXfJQC+K
- bwazy8D6GXq33uT/aEP6ac4IWgq1R3yRXaswPbhpXqJuHKMDeZLjXxhA1r7AyqO8CQxfsTMCX
- kkxn7X1rykNT2kmromIaZInEmJFDoF5K4LzuS87OAtqX3+7RYcHYpa77EtQG6dUAOqYhpKV4T
- pArex+9DS60ahxGeUY8uotEmxlQKvT/s77yAeFOSgkwO56pUKmLYAkKiNsEOimUw2N57GgWyk
- o1UAG5sWZTZG09IejsX+sMC8ciMrbzzALJxViS9K8L2iueh3n2ee7Q/FE6mlrJbn+km8bkGAy
- sh699w==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1675274691; bh=RFWgkvdQuxAipd2lU3ZJRPtT1ImE66UDcOAFiZ2Aep4=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=RrjtmTSuoeWmUJi7Z+z1E7QHqVAh5ykPOP2Dqh5C7uZ5YlSpJXo7SWQX6A5Wnig4j
- ue4YOXlAe8icVu8FgtkQmQeCnq3cixQFs6vvv94uAFxNeZflDhCtsHDDFnNEJVu8LF
- Zp9AZiHhbua7j83vyW8UuRQv5kLqfi6RnbCW3xOBYwcSkGVVzz0ASij1PDBaiKJ5mZ
- A3z79hMdcHLzAWeXUZ4UnccZ8jFTAD9THBIwKUfXY0Mo99jk1PxoSz7Bfu4wV0LCfq
- lYiZS6wJ0yf0N2hKyhihe8Mc5RpGDEKIwhSu3z1Hfws+oPGpvN1OBHhkksyAQSJnwK
- U4nxtCg3ocYCg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=RrjtmTSu
-Subject: Re: [Buildroot] Libarchive always throws an error when building
+X-TOI-EXPURGATEID: 150726::1675275006-B182A007-F75F4133/0/0 CLEAN NORMAL
+X-TOI-MSGID: 7aaba33a-155a-4f4d-87c1-1acadffaacc1
+Subject: [Buildroot] [PATCH v2 1/1] package/libarchive: Only add "iconv" to
+ the .pc file if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,101 +66,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gKiwKCk9uIFdlZCwgMSBGZWIgMjAyMyAxODo0MTo1NCArMDEwMCwgUGV0ZXIgU2VpZGVy
-ZXIgPHBzLnJlcG9ydEBnbXgubmV0PiB3cm90ZToKCj4gSGVsbG8gUm9sYW5kLAo+IAo+IE9uIFdl
-ZCwgMSBGZWIgMjAyMyAxNTo1Nzo1MiArMDAwMCwgS2VubmV0aCBSb2xhbmQgPGtqcm9sYW5kNzVA
-aG90bWFpbC5jb20+IHdyb3RlOgo+IAo+ID4gSGVsbG8gQnVpbGRyb290IHRlYW0sCj4gPiBJIGd1
-ZXNzIHRoaXMgaXMgbXkgd2F5IG9mIHN1Ym1pdHRpbmcgYSBidWcgcmVwb3J0LCBoZXJlIGdvZXMu
-Cj4gPiAKPiA+IEN1cnJlbnQgLmNvbmZpZyBpcyBhdHRhY2hlZCwgYnV0IHJlbmFtZWQgYXMgYnVp
-bGRyb290LmNvbmZpZyBhcyBJIGNvdWxkbid0IGdldCBEb2xwaGluIChLREUpIHRvIHNob3cgdGhl
-IGhpZGRlbiBmaWxlLiBUaGlzIHByb2plY3Qgb2YgbWluZSB3YXMgdG8gYnVpbGQgYW4gSVNPIGZv
-ciBhbiBvbGQgVGhpbmtwYWQgdGhhdCB3b3VsZCBhY3QgYXMgYSByZWNpZXZlciBmcm9tIGh0dHBz
-Oi8vZ2l0aHViLmNvbS9iYWRhaXgvc25hcGNhc3QsIGJ1dCBJIGNvdWxkbid0IGZpbmQgYW55dGhp
-bmcgdXNlZnVsIG9uIHRoaXMgbGliYXJjaGl2ZSBlcnJvci4gImxpYmFyY2hpdmUtZGV2IiBpcyBp
-bnN0YWxsZWQgb24gdGhlIGhvc3QgdXNpbmcgImFwdCBpbnN0YWxsIi4gWW91IGd1eXMgcHJvYmFi
-bHkga25vdyBob3cgdG8gcmVjcmVhdGUgdGhpcywgYnV0IHRoZSBob3N0IGlzIGp1c3QgYSBEZWJp
-YW4gbmV0aW5zdCwgbm8gREUsIGFuZCB0aGVuIGdpdCBpbnN0YWxsZWQuIEluc3RhbGxlZCBkZXBl
-bmRlbmNpZXMgYXMgb2YgaHR0cHM6Ly9tZWRpdW0uY29tL0BodW5ncnlzcGlkZXIvYnVpbGRpbmct
-Y3VzdG9tLWxpbnV4LWZvci1yYXNwYmVycnktcGktdXNpbmctYnVpbGRyb290LWY4MWVmYzdhYTgx
-NywgY2xvbmVkIHRoZSBCdWlsZHJvb3QgcmVwbyBmcm9tIEdpdGh1YiwgIiBtYWtlIHBjX3g4Nl82
-NF9iaW9zX2RlZmNvbmZpZyIsIGFuZCB0aGVuIHJlcGxhY2VkIHRoZSAuY29uZmlnIGZpbGUgZ2Vu
-ZXJhdGVkIGJ5IHRoZSBvbmUgSSB1c2VkIHRoZSBmaXJzdCB0aW1lICh3YXMgc2FuaXR5L2RlcGVu
-ZGFuY3kgY2hlY2tpbmcpLiBSYW4gbWFrZSwgd2hpY2ggcmFuIGZvciBhYm91dCBhIGdvb2QgMzAt
-NDUgbWlucyB1bnRpbCBpdCBzdG9wcGVkIGFuZCBJIHNhdyB0aGUgbGliYXJjaGl2ZSBlcnJvci4K
-PiA+IAo+ID4gSG9zdCBpbmZvICh1bmFtZSAtYSkKPiA+IExpbnV4IGJsYWNrYm94IDYuMC4wLTAu
-ZGViMTEuNi1hbWQ2NCAjMSBTTVAgUFJFRU1QVF9EWU5BTUlDIERlYmlhbiA2LjAuMTItMX5icG8x
-MSsxICgyMDIyLTEyLTE5KSB4ODZfNjQgR05VL0xpbnV4Cj4gPiAKPiA+IGBgYGNoZWNraW5nIHdo
-ZXRoZXIgdGhlIC9tbnQvaGRkL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9iaW4veDg2XzY0LWJ1aWxk
-cm9vdC1saW51eC1nbnUtZ2NjIGxpbmtlciAoL21udC9oZGQvYnVpbGRyb290L291dHB1dC9ob3N0
-L2Jpbi94ODZfNjQtYnVpbGRyb290LWxpbnV4LWdudS1sZCAtbSBlbGZfCj4gPiB4ODZfNjQpIHN1
-cHBvcnRzIHNoYXJlZCBsaWJyYXJpZXMuLi4geWVzCj4gPiBjaGVja2luZyB3aGV0aGVyIC1sYyBz
-aG91bGQgYmUgZXhwbGljaXRseSBsaW5rZWQgaW4uLi4gbm8KPiA+IGNoZWNraW5nIGR5bmFtaWMg
-bGlua2VyIGNoYXJhY3RlcmlzdGljcy4uLiBHTlUvTGludXggbGQuc28KPiA+IGNoZWNraW5nIGhv
-dyB0byBoYXJkY29kZSBsaWJyYXJ5IHBhdGhzIGludG8gcHJvZ3JhbXMuLi4gaW1tZWRpYXRlCj4g
-PiBjaGVja2luZyB3aGV0aGVyIHN0cmlwcGluZyBsaWJyYXJpZXMgaXMgcG9zc2libGUuLi4geWVz
-Cj4gPiBjaGVja2luZyBpZiBsaWJ0b29sIHN1cHBvcnRzIHNoYXJlZCBsaWJyYXJpZXMuLi4geWVz
-Cj4gPiBjaGVja2luZyB3aGV0aGVyIHRvIGJ1aWxkIHNoYXJlZCBsaWJyYXJpZXMuLi4geWVzCj4g
-PiBjaGVja2luZyB3aGV0aGVyIHRvIGJ1aWxkIHN0YXRpYyBsaWJyYXJpZXMuLi4gbm8KPiA+IGNo
-ZWNraW5nIHBrZy1jb25maWcgaXMgYXQgbGVhc3QgdmVyc2lvbiAwLjIwLi4uIHllcwo+ID4gY2hl
-Y2tpbmcgZm9yIExJQkFSQ0hJVkUuLi4gbm8KPiA+IGNvbmZpZ3VyZTogZXJyb3I6IFBhY2thZ2Ug
-cmVxdWlyZW1lbnRzIChsaWJhcmNoaXZlKSB3ZXJlIG5vdCBtZXQ6Cj4gPiAKPiA+IFBhY2thZ2Ug
-J2ljb252JywgcmVxdWlyZWQgYnkgJ2xpYmFyY2hpdmUnLCBub3QgZm91bmQKPiA+IAo+ID4gQ29u
-c2lkZXIgYWRqdXN0aW5nIHRoZSBQS0dfQ09ORklHX1BBVEggZW52aXJvbm1lbnQgdmFyaWFibGUg
-aWYgeW91Cj4gPiBpbnN0YWxsZWQgc29mdHdhcmUgaW4gYSBub24tc3RhbmRhcmQgcHJlZml4Lgo+
-ID4gCj4gPiBBbHRlcm5hdGl2ZWx5LCB5b3UgbWF5IHNldCB0aGUgZW52aXJvbm1lbnQgdmFyaWFi
-bGVzIExJQkFSQ0hJVkVfQ0ZMQUdTCj4gPiBhbmQgTElCQVJDSElWRV9MSUJTIHRvIGF2b2lkIHRo
-ZSBuZWVkIHRvIGNhbGwgcGtnLWNvbmZpZy4KPiA+IFNlZSB0aGUgcGtnLWNvbmZpZyBtYW4gcGFn
-ZSBmb3IgbW9yZSBkZXRhaWxzLgo+ID4gbWFrZTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmljLm1r
-OjI4MzogL21udC9oZGQvYnVpbGRyb290L291dHB1dC9idWlsZC9vcGtnLTAuNC41Ly5zdGFtcF9j
-b25maWd1cmVkXSBFcnJvciAxYGBgICAKPiAKPiBGcm9tIGhvc3QveDg2XzY0LWJ1aWxkcm9vdC1s
-aW51eC1nbnUvc3lzcm9vdC91c3IvbGliL3BrZ2NvbmZpZy9saWJhcmNoaXZlLnBjOgo+IAo+IAlb
-Li4uXQo+IAlSZXF1aXJlcy5wcml2YXRlOiBpY29udiBsaWJzc2wgbGliY3J5cHRvCj4gCj4gCj4g
-RnJvbSBidWlsZC9saWJhcmNoaXZlLTMuNi4yL2NvbmZpZ3VyZS5hYzoKPiAKPiAJQUNfQVJHX1dJ
-VEgoW2ljb252XSwKPiAJICBBU19IRUxQX1NUUklORyhbLS13aXRob3V0LWljb252XSwgW0Rvbid0
-IHRyeSB0byBsaW5rIGFnYWluc3QgaWNvbnZdKSkKPiAKPiAKPiBBbmQgd2l0aCB0aGUgZm9sbG93
-aW5nIGxvY2FsIGJ1aWxkcm9vdCBwYXRjaDoKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJh
-cmNoaXZlL2xpYmFyY2hpdmUubWsgYi9wYWNrYWdlL2xpYmFyY2hpdmUvbGliYXJjaGl2ZS5tawo+
-IGluZGV4IGNmYzE0OGQwMWQuLjAyY2NhOWNlZTkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9saWJh
-cmNoaXZlL2xpYmFyY2hpdmUubWsKPiArKysgYi9wYWNrYWdlL2xpYmFyY2hpdmUvbGliYXJjaGl2
-ZS5tawo+IEBAIC03MCw3ICs3MCw3IEBAIGVuZGlmCj4gIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTElC
-SUNPTlYpLHkpCj4gIExJQkFSQ0hJVkVfREVQRU5ERU5DSUVTICs9IGxpYmljb252Cj4gIGVsc2UK
-PiAtTElCQVJDSElWRV9DT05GX09QVFMgKz0gLS13aXRob3V0LWxpYmljb252LXByZWZpeAo+ICtM
-SUJBUkNISVZFX0NPTkZfT1BUUyArPSAtLXdpdGhvdXQtbGliaWNvbnYtcHJlZml4IC0td2l0aG91
-dC1pY29udgo+ICBlbmRpZgoKQnV0IHRoZSByaWdodCBmaXggc2hvdWxkIGJlIHRoaXMgWzFdIGxp
-YmFyY2hpdmUgdXBzdHJlYW0gY29tbWl0ICh1bnRlc3RlZCkuLi4KClJlZ2FyZHMsClBldGVyCgoK
-WzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9saWJhcmNoaXZlL2xpYmFyY2hpdmUvY29tbWl0LzFmMzVj
-NDY2YWFhOTQ0NDMzNWExYjg1NGIwYjcyMjNiMGQyMzQ2YzIKCgo+ICAKPiAgaWZlcSAoJChCUjJf
-UEFDS0FHRV9MSUJYTUwyKSx5KQo+IAo+IAo+IFRoZSBvcGtnIHBhY2thZ2UgYnVpbGRzIHdpdGhv
-dXQgZXJyb3JzIChhZnRlciByZS1idWlsZCBvZiB0aGUgbGliYXJjaGl2ZSBwYWNrYWdlKS4uLgo+
-IAo+IFJlZ2FyZHMsCj4gUGV0ZXIKPiAKPiAKPiA+IAo+ID4gW2h0dHBzOi8vbWlyby5tZWRpdW0u
-Y29tL21heC8xMjAwLzAqNkoxZlhCVEVzUE9EdzVJNV08aHR0cHM6Ly9tZWRpdW0uY29tL0BodW5n
-cnlzcGlkZXIvYnVpbGRpbmctY3VzdG9tLWxpbnV4LWZvci1yYXNwYmVycnktcGktdXNpbmctYnVp
-bGRyb290LWY4MWVmYzdhYTgxNz4KPiA+IEJ1aWxkaW5nIGN1c3RvbSBMaW51eCBmb3IgUmFzcGJl
-cnJ5IFBpIHVzaW5nIEJ1aWxkcm9vdDxodHRwczovL21lZGl1bS5jb20vQGh1bmdyeXNwaWRlci9i
-dWlsZGluZy1jdXN0b20tbGludXgtZm9yLXJhc3BiZXJyeS1waS11c2luZy1idWlsZHJvb3QtZjgx
-ZWZjN2FhODE3Pgo+ID4gQ29ubmVjdCB0aGUgVVNCIGVuZCBvZiB0aGUgVVNCIHRvIFNlcmlhbCBj
-YWJsZSB0byB5b3VyIGNvbXB1dGVyIGFuZCBvcGVuIHRoZSBzZXJpYWwgcG9ydCB1c2luZyBhIHNl
-cmlhbCB0ZXJtaW5hbCBzb2Z0d2FyZSBzdWNoIGFzIEd0a3Rlcm0gd2l0aCBiYXVkIHJhdGUgc2V0
-IHRvIDExNTIwMCAuCj4gPiBtZWRpdW0uY29tCj4gPiDunJEKPiA+IO6ckQo+ID4g7pyRCj4gPiAK
-PiA+IAo+ID4gW2h0dHBzOi8vb3BlbmdyYXBoLmdpdGh1YmFzc2V0cy5jb20vMzlhYmVhODc3MGUz
-YWUzMzkzMWY4NTk4MzM1ZjhiM2IwNGY4YTI4OGZjYzdlN2Y0NTc5Y2YyZWE3NGFmYmIzNy9iYWRh
-aXgvc25hcGNhc3RdPGh0dHBzOi8vZ2l0aHViLmNvbS9iYWRhaXgvc25hcGNhc3Q+Cj4gPiBHaXRI
-dWIgLSBiYWRhaXgvc25hcGNhc3Q6IFN5bmNocm9ub3VzIG11bHRpcm9vbSBhdWRpbyBwbGF5ZXI8
-aHR0cHM6Ly9naXRodWIuY29tL2JhZGFpeC9zbmFwY2FzdD4KPiA+IEluc3RhbGxhdGlvbiBmcm9t
-IHNvdXJjZS4gUGxlYXNlIGZvbGxvdyB0aGlzIGd1aWRlIHRvIGJ1aWxkIFNuYXBjYXN0IGZvci4g
-TGludXg7IEZyZWVCU0Q7IG1hY09TOyBBbmRyb2lkOyBPcGVuV3J0OyBCdWlsZHJvb3Q7IFJhc3Bi
-ZXJyeSBQaTsgV2luZG93czsgU25hcE9TLiBUaGUgYnJhdmVzdCBhbW9uZyB5b3UgbWF5IGJlIGlu
-dGVyZXN0ZWQgaW4gU25hcE9TLCBhIHNtYWxsIGFuZCBmYXN0LWJvb3RpbmcgImp1c3QgZW5vdWdo
-IiBPUyB0byBydW4gU25hcGNhc3QgYXMgYW4gYXBwbGlhbmNlLi4gVGhlcmUgaXMgYSBndWlkZSAo
-d2l0aCB0aGUgbmVjZXNzYXJ5IGJ1aWxkZmlsZXMpIGF2YWlsYWJsZSB0byBidWlsZCBTbmFwT1Ms
-IHdoaWNoIGNvbWVzIGluIHR3byBmbGF2b3JzOgo+ID4gZ2l0aHViLmNvbQo+ID4g7pyRCj4gPiDu
-nJEKPiA+IO6ckQo+ID4g7pyRCj4gPiAKPiA+ICAgCj4gCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+Fix the following build failure with fwup raised since bump to version
+3.6.2 in commit 380341b249175382691f268de4b41d3843ff0acc and
+https://github.com/libarchive/libarchive/commit/a83f3d327aefe8d628230f326621b014d82f55b4
+
+checking for pkg-config... /tmp/instance-19/output-1/host/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for ARCHIVE... no
+configure: error: Requires libarchive. Libarchive must be built with zlib support.
+
+Fixes:
+http://autobuild.buildroot.net/results/f5d/f5d549fb4f08156ba5952ce75926f7fd2242bfdf/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: added dependency to host-pkgconf to fix autoconf error
+
+ ...y-add-iconv-to-the-pc-file-if-needed.patch | 44 +++++++++++++++++++
+ package/libarchive/libarchive.mk              |  4 ++
+ 2 files changed, 48 insertions(+)
+ create mode 100644 package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
+
+diff --git a/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch b/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
+new file mode 100644
+index 0000000000..c93944f789
+--- /dev/null
++++ b/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
+@@ -0,0 +1,44 @@
++From 1f35c466aaa9444335a1b854b0b7223b0d2346c2 Mon Sep 17 00:00:00 2001
++From: Peter Pentchev <roam@ringlet.net>
++Date: Thu, 29 Dec 2022 00:04:40 +0200
++Subject: [PATCH] Only add "iconv" to the .pc file if needed (#1825)
++
++Hi,
++
++Thanks for writing and maintaining libarchive!
++
++What do you think about this trivial change that does not add "iconv" to
++the pkg-config file's list of required packages unless it is actually
++needed? On at least Debian GNU/Linux systems, the iconv(3) function is
++part of the system C library and there is no Debian package that
++installs an iconv.pc file, so I had to make this change to the Debian
++package of libarchive.
++
++Thanks again, and keep up the great work!
++
++G'luck,
++Peter
++
++Downloaded from upstream commit:
++https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ configure.ac | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 99bff20d1..e2715cfde 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -378,7 +378,9 @@ if test "x$with_iconv" != "xno"; then
++     AC_CHECK_HEADERS([localcharset.h])
++     am_save_LIBS="$LIBS"
++     LIBS="${LIBS} ${LIBICONV}"
++-    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
+++    if test -n "$LIBICONV"; then
+++      LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
+++    fi
++     AC_CHECK_FUNCS([locale_charset])
++     LIBS="${am_save_LIBS}"
++     if test "x$ac_cv_func_locale_charset" != "xyes"; then
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index cfc148d01d..cd7c13fbed 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -11,6 +11,10 @@ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+ LIBARCHIVE_LICENSE_FILES = COPYING
+ LIBARCHIVE_CPE_ID_VENDOR = libarchive
++# We're patching configure.ac
++LIBARCHIVE_AUTORECONF = YES
++# needed for autoreconf
++LIBARCHIVE_DEPENDENCIES += host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.39.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
