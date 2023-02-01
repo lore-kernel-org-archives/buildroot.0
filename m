@@ -1,71 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDC79C05027
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 22:34:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 225B2C636D4
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 22:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FC3A81E82;
-	Wed,  1 Feb 2023 22:34:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FC3A81E82
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCFB740002;
+	Wed,  1 Feb 2023 22:51:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCFB740002
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TmV0x9bIRc-g; Wed,  1 Feb 2023 22:51:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB68340B29;
+	Wed,  1 Feb 2023 22:51:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB68340B29
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 79C451BF47F
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 22:51:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 538738137A
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 22:51:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 538738137A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5ToJKKyjJm6e; Wed,  1 Feb 2023 22:34:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BA4381E76;
-	Wed,  1 Feb 2023 22:34:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BA4381E76
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E4491BF95C
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 22:32:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF22441825
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 22:32:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF22441825
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BDdvZ3k9Utfy for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 22:32:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18570417FA
-Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18570417FA
- for <buildroot@buildroot.org>; Wed,  1 Feb 2023 22:32:45 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.66.151])
- by Aruba Outgoing Smtp  with ESMTPSA
- id NLekpeh5dvodANLempwuwK; Wed, 01 Feb 2023 23:32:44 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0NdPk51ss65g for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 22:51:07 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CF77812F0
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9CF77812F0
+ for <buildroot@buildroot.org>; Wed,  1 Feb 2023 22:51:07 +0000 (UTC)
+Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
+ by mailout09.t-online.de (Postfix) with SMTP id 9DD45C3CD
+ for <buildroot@buildroot.org>; Wed,  1 Feb 2023 23:51:04 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.195.67]) by fwd76.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pNLwW-1jYb3J0; Wed, 1 Feb 2023 23:51:04 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43632)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pNLwW-0003jr-0C
+ for buildroot@buildroot.org; Wed, 01 Feb 2023 23:51:04 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Wed,  1 Feb 2023 23:32:39 +0100
-Message-Id: <20230201223241.3867678-6-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230201223241.3867678-1-giulio.benetti@benettiengineering.com>
-References: <20230201223241.3867678-1-giulio.benetti@benettiengineering.com>
+Date: Wed,  1 Feb 2023 23:51:04 +0100
+Message-Id: <20230201225104.3433262-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfHx0opEOFD0m8Wd5y0YKymLKMxwAcVQVwUmah0myaD/0L/m+lziVFSt8tTKC1CnAFuZotZWgNTvHjRVKcJQXTkD2CNP1w80/rghyFAcoVxOh6kjynPPJ
- WJGf8htjbp3u4AVmDAQpnz4EzXWwD4Jiwq9B9cz5Vbt8rIB2vWHJG52WVrE+t9U7w+mU75jmgPNBPcDxICaFacSgC9Prpi4YaSH41COfdOYvWaPX6IIlaz52
- THG7mnXdXxFubkanPIGEOTKSQL5p1SsapRQpAWpIFSA79STn0AuS23fG0HcK2T0RLCJXfb+xIUzwYaUu9Ppdvzyw/6ZzkJ6nJC6q23Z+oeRN59fB8/fGQdEJ
- IWUMyriOMWoiSjNCdHfnKvFqdoYtEeIv8SkhLePBWe0S1iSNeWTSoLrcHImb8FVG8NbuSS1AYM9yl7w+sbbHZe02pPevPA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1675290764; bh=/wrd/JOIYjZvbh3gfQrihEgGF4OMslfX5jqPOUTgFdA=;
- h=From:To:Subject:Date:MIME-Version;
- b=SMeBaK8uNwU/tMiUleMzAujhspSrK9DyLGYc2h9qW6CqFKHx9cbYi7qmAmhtDm6Xq
- UoWy+yWTVtXI1NnrAuDbZa02j4Z2Il7pWeZ028Lr9UDsm7K5WkzcAb9cU4FZiR7LFk
- yt/0XL/Ko5r1pPHrVZRL9CmLgfcj2HFjJhlRBYIGSp6A6mY0P8/baNyRVNqKLJPgFZ
- f1ga9LqLEN+lBzc7ZbgBFxBdhEwEwMZi2ZSvwohmXPGSXFv62hCG/0Pi9ge1O0aAhE
- GD6usWWME6eogwWHHpPI0M9Ai+5yOpxBrgVv8NU8AAsfs45/7ruMfXGtUdt5y59Yz6
- R5XvDa6sIJznw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=SMeBaK8u
-Subject: [Buildroot] [PATCH 5/7]
- configs/olimex_a20_olinuxino_micro_defconfig: bump Linux to 6.1.9 and
- U-Boot to 2023.01
+X-TOI-EXPURGATEID: 150726::1675291864-E5D7A2C2-16AB4498/0/0 CLEAN NORMAL
+X-TOI-MSGID: dca32cec-238b-46ce-9619-ced93686cc9c
+Subject: [Buildroot] [PATCH 1/1] package/kodi: fix build error with newer
+ mesa3d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,55 +66,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Leon Anavi <leon.anavi@konsulko.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Jagan Teki <jagan@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- configs/olimex_a20_olinuxino_micro_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Fixes build error:
 
-diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-index 1394c0b8b8..a7a6eb51a0 100644
---- a/configs/olimex_a20_olinuxino_micro_defconfig
-+++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 5.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
-+# Linux headers same as kernel, a 6.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.9"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-micro"
-@@ -33,7 +33,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino_MICRO"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+output/build/kodi-19.5-Matrix/xbmc/windowing/X11/GLContextEGL.h:16:10:
+ fatal error: EGL/eglextchromium.h: No such file or directory
+   16 | #include <EGL/eglextchromium.h>
+
+introduced by mesa3d 22.3 with this commit
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/f5bb9dd738ace274c97507adea073b6c609469b2
+
+using this defconfig
+
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_PY_ONLY=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/0005-Fix-EGL-build.patch | 58 +++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/kodi/0005-Fix-EGL-build.patch
+
+diff --git a/package/kodi/0005-Fix-EGL-build.patch b/package/kodi/0005-Fix-EGL-build.patch
+new file mode 100644
+index 0000000000..cefa8cbdb4
+--- /dev/null
++++ b/package/kodi/0005-Fix-EGL-build.patch
+@@ -0,0 +1,58 @@
++From 3fed131284b53b0e42c87c672f02dc3e91e40b22 Mon Sep 17 00:00:00 2001
++From: Alan Swanson <reiver@improbability.net>
++Date: Mon, 19 Dec 2022 21:28:13 +0200
++Subject: [PATCH] Work around Mesa eglchromium.h removal
++
++I have polished Alan's snippet to buildable state and tested
++on Kodi from Debian sid.
++
++Backported EGL fix from upstream commit:
++https://github.com/xbmc/xbmc/commit/2968130023ea6ee4327119dc969758840c4a5941
++
++Signed-off-by: Vasyl Gello <vasek.gello@gmail.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ cmake/modules/FindEGL.cmake       | 6 ++++++
++ xbmc/windowing/X11/GLContextEGL.h | 4 ++++
++ 2 files changed, 10 insertions(+)
++
++diff --git a/cmake/modules/FindEGL.cmake b/cmake/modules/FindEGL.cmake
++index b00fe08a25f95..a68a8db901222 100644
++--- a/cmake/modules/FindEGL.cmake
+++++ b/cmake/modules/FindEGL.cmake
++@@ -9,6 +9,7 @@
++ # EGL_INCLUDE_DIRS - the EGL include directory
++ # EGL_LIBRARIES - the EGL libraries
++ # EGL_DEFINITIONS - the EGL definitions
+++# HAVE_EGLEXTANGLE - if eglext_angle.h exists else use eglextchromium.h
++ #
++ # and the following imported targets::
++ #
++@@ -35,6 +36,11 @@ if(EGL_FOUND)
++   set(EGL_LIBRARIES ${EGL_LIBRARY})
++   set(EGL_INCLUDE_DIRS ${EGL_INCLUDE_DIR})
++   set(EGL_DEFINITIONS -DHAS_EGL=1)
+++  include(CheckIncludeFiles)
+++  check_include_files("EGL/egl.h;EGL/eglext.h;EGL/eglext_angle.h" HAVE_EGLEXTANGLE)
+++  if(HAVE_EGLEXTANGLE)
+++    list(APPEND EGL_DEFINITIONS "-DHAVE_EGLEXTANGLE=1")
+++  endif()
++ 
++   if(NOT TARGET EGL::EGL)
++     add_library(EGL::EGL UNKNOWN IMPORTED)
++diff --git a/xbmc/windowing/X11/GLContextEGL.h b/xbmc/windowing/X11/GLContextEGL.h
++index 99a6a9024e8c6..afea0b7c43eac 100644
++--- a/xbmc/windowing/X11/GLContextEGL.h
+++++ b/xbmc/windowing/X11/GLContextEGL.h
++@@ -13,7 +13,11 @@
++ #include "threads/CriticalSection.h"
++ 
++ #include <EGL/eglext.h>
+++#ifdef HAVE_EGLEXTANGLE
+++#include <EGL/eglext_angle.h>
+++#else
++ #include <EGL/eglextchromium.h>
+++#endif
++ #include <X11/Xutil.h>
++ 
++ class CGLContextEGL : public CGLContext
 -- 
-2.34.1
+2.39.1
 
 _______________________________________________
 buildroot mailing list
