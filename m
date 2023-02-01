@@ -1,60 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8095CC05027
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 18:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B4C8C38142
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 19:27:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B61C8138A;
-	Wed,  1 Feb 2023 18:10:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B61C8138A
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD7B5610B3;
+	Wed,  1 Feb 2023 19:27:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD7B5610B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jkyTrhQHD43T; Wed,  1 Feb 2023 18:10:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aMmZpGjWH025; Wed,  1 Feb 2023 19:27:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 442BF81430;
-	Wed,  1 Feb 2023 18:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 442BF81430
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DB9561BF29D
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 18:10:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EB72610A3;
+	Wed,  1 Feb 2023 19:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EB72610A3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 089661BF31A
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 19:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B39C3812F0
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 18:10:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B39C3812F0
+ by smtp3.osuosl.org (Postfix) with ESMTP id D677A610A3
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 19:27:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D677A610A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b2qKtOLNqwrc for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 18:10:09 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7646D81378
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7646D81378
- for <buildroot@buildroot.org>; Wed,  1 Feb 2023 18:10:09 +0000 (UTC)
-Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
- by mailout08.t-online.de (Postfix) with SMTP id 9306810226;
- Wed,  1 Feb 2023 19:10:06 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.195.67]) by fwd74.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pNHYc-2L4Oi90; Wed, 1 Feb 2023 19:10:06 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47604)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pNHYb-0004E5-39;
- Wed, 01 Feb 2023 19:10:06 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bmW0CEEYD84Z for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 19:27:17 +0000 (UTC)
+X-Greylist: delayed 00:05:12 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A798361076
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de
+ [81.169.146.220])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A798361076
+ for <buildroot@buildroot.org>; Wed,  1 Feb 2023 19:27:16 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1675279634; cv=none;
+ d=strato.com; s=strato-dkim-0002;
+ b=YXs6tkRByGKiKYzhgWCb1LHYUmwbtMQV1LcXXWu+mJFL/O8YI5Nrkg+VbOrvOpNYOt
+ reweqlk3IzLqbP71t5XKW4ObcO78IR/P2nlKlvoUXqu5VTcCv/KhNkTcpbJHhX+X7zHC
+ /cZOyvmgbijkosVFwHpxVTffdzdSGpbNAo6WSqBYWmMoXYyctR0KpP0TjO/cb1JrBbiP
+ nNSjrNgRyXXALp2vxZUw4JN0zdWl/i68xZPOL+MrNOPGwSh5vSiOLygeQa0JJTqTfTR5
+ hHUEx7ypOPfxoPQcCRbYH+NGbRFDjLQv8+b+aI4CEFw81xAvSB8jpft/tyOz+koM4zk0
+ SbEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675279634;
+ s=strato-dkim-0002; d=strato.com;
+ h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
+ bh=B5ePxmuSoz262eVRTugeop1GcihQaHYg10YM8fJFecw=;
+ b=jN9zI6/G/36mlshhpO0xHK4pCwh8Wod5E3ho3Xce7BvP3BhW8cB0vB8hqGAww9n6yn
+ PbcMj9Vb9HwrdB7gj1pioECL2sk6NQSV0YaHbMCeWV7RdWrVVthIoRIUAf62+tC16wB4
+ oOheVjBEevAW2EKn6XzveaguLuClJKR57wj+zsv5qmoaNlU2ujkmjttWIvtKcr9XsmLN
+ E+Sw3MQaiQ8jUMY4fSgr+vf6Y8XZWjmvatkspZ37PJK8/rBEfZEQP2THOzrwydvogts3
+ jZTpen8g2Cs9rz00Xq4TiCSsdnedrBN4p1mYiDmmqN5C1Y67CfmydydtF6VOmy+BvMFo
+ tjPQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+X-RZG-AUTH: ":ImkWY2CseuihIZy6ZWWciR6unPhpN+aXzZGGjY6ptdusOK7nWzzuvt/yikxl+SKU"
+Received: from tesla.fritz.box by smtp.strato.de (RZmta 49.2.2 DYNA|AUTH)
+ with ESMTPSA id xd73d3z11JREZcd
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+ (Client did not present a certificate) for <buildroot@buildroot.org>;
+ Wed, 1 Feb 2023 20:27:14 +0100 (CET)
+From: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>
 To: buildroot@buildroot.org
-Date: Wed,  1 Feb 2023 19:10:05 +0100
-Message-Id: <20230201181005.731564-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.1
+Date: Wed,  1 Feb 2023 20:27:11 +0100
+Message-Id: <20230201192711.1632095-1-nerv@dawncrow.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1675275006-B182A007-F75F4133/0/0 CLEAN NORMAL
-X-TOI-MSGID: 7aaba33a-155a-4f4d-87c1-1acadffaacc1
-Subject: [Buildroot] [PATCH v2 1/1] package/libarchive: Only add "iconv" to
- the .pc file if needed
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ t=1675279634; 
+ s=strato-dkim-0002; d=dawncrow.de;
+ h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
+ bh=B5ePxmuSoz262eVRTugeop1GcihQaHYg10YM8fJFecw=;
+ b=L48qN5mQmWt/43uxKaro04veM4kWKla8yliJlJZkQAvoguP4rXHFE500VFaWUuMwlO
+ CNbL0vNRE9tziDr0DujUVQk8ewRY7Hz33hUjHUpRzcEWdaTIIAH4YXXRmKsEvEBKqF7i
+ wY8E6Fz5YGcAVL6DnWlrlizZ3Oyt8pkJCB/nYy1pBGLHItp71EcvcyUmW748zrTamVvA
+ V7JsTAlGb30UKFM7/VWDdRfqaVKCyAsZFZFjNrE6BlcBnM2qlMzwTaS8cZPD079QL6nA
+ M8LTXOdE5YESDsf7qJazzTye06nUiRkxX3lmmd6iSYg6ZKsF56J3xOvCre2r/2l7YL3i
+ aQEg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=dawncrow.de header.i=@dawncrow.de
+ header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=L48qN5mQ
+Subject: [Buildroot] [PATCH] DEVELOPERS: Remove openal from my list
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,102 +96,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with fwup raised since bump to version
-3.6.2 in commit 380341b249175382691f268de4b41d3843ff0acc and
-https://github.com/libarchive/libarchive/commit/a83f3d327aefe8d628230f326621b014d82f55b4
-
-checking for pkg-config... /tmp/instance-19/output-1/host/bin/pkg-config
-checking pkg-config is at least version 0.9.0... yes
-checking for ARCHIVE... no
-configure: error: Requires libarchive. Libarchive must be built with zlib support.
-
-Fixes:
-http://autobuild.buildroot.net/results/f5d/f5d549fb4f08156ba5952ce75926f7fd2242bfdf/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: added dependency to host-pkgconf to fix autoconf error
-
- ...y-add-iconv-to-the-pc-file-if-needed.patch | 44 +++++++++++++++++++
- package/libarchive/libarchive.mk              |  4 ++
- 2 files changed, 48 insertions(+)
- create mode 100644 package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
-
-diff --git a/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch b/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
-new file mode 100644
-index 0000000000..c93944f789
---- /dev/null
-+++ b/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
-@@ -0,0 +1,44 @@
-+From 1f35c466aaa9444335a1b854b0b7223b0d2346c2 Mon Sep 17 00:00:00 2001
-+From: Peter Pentchev <roam@ringlet.net>
-+Date: Thu, 29 Dec 2022 00:04:40 +0200
-+Subject: [PATCH] Only add "iconv" to the .pc file if needed (#1825)
-+
-+Hi,
-+
-+Thanks for writing and maintaining libarchive!
-+
-+What do you think about this trivial change that does not add "iconv" to
-+the pkg-config file's list of required packages unless it is actually
-+needed? On at least Debian GNU/Linux systems, the iconv(3) function is
-+part of the system C library and there is no Debian package that
-+installs an iconv.pc file, so I had to make this change to the Debian
-+package of libarchive.
-+
-+Thanks again, and keep up the great work!
-+
-+G'luck,
-+Peter
-+
-+Downloaded from upstream commit:
-+https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 99bff20d1..e2715cfde 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -378,7 +378,9 @@ if test "x$with_iconv" != "xno"; then
-+     AC_CHECK_HEADERS([localcharset.h])
-+     am_save_LIBS="$LIBS"
-+     LIBS="${LIBS} ${LIBICONV}"
-+-    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
-++    if test -n "$LIBICONV"; then
-++      LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
-++    fi
-+     AC_CHECK_FUNCS([locale_charset])
-+     LIBS="${am_save_LIBS}"
-+     if test "x$ac_cv_func_locale_charset" != "xyes"; then
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index cfc148d01d..cd7c13fbed 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -11,6 +11,10 @@ LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
- LIBARCHIVE_LICENSE_FILES = COPYING
- LIBARCHIVE_CPE_ID_VENDOR = libarchive
-+# We're patching configure.ac
-+LIBARCHIVE_AUTORECONF = YES
-+# needed for autoreconf
-+LIBARCHIVE_DEPENDENCIES += host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
- ifeq ($(BR2_STATIC_LIBS),y)
--- 
-2.39.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogQW5kcsOpIFp3aW5nIDxuZXJ2QGRhd25jcm93LmRlPgotLS0KIERFVkVM
+T1BFUlMgfCAxIC0KIDEgZmlsZSBjaGFuZ2VkLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEv
+REVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXggZTE5MDg3YzU3Ny4uZDUyNjQ1MWNhMyAxMDA2
+NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9ERVZFTE9QRVJTCkBAIC0xMzMsNyArMTMzLDYgQEAg
+RjoJYm9vdC90aS1rMy1yNS1sb2FkZXIvCiAKIE46CUFuZHLDqSBad2luZyA8bmVydkBkYXduY3Jv
+dy5kZT4KIEY6CXBhY2thZ2UvbGlia3JiNS8KLUY6CXBhY2thZ2Uvb3BlbmFsLwogRjoJcGFja2Fn
+ZS9wN3ppcC8KIEY6CXBhY2thZ2Uvd2luZS8KIAotLSAKMi4yNS4xCgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
