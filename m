@@ -1,95 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDFD5C636D4
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 22:16:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 910F5C05027
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 22:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64D4960F9B;
-	Wed,  1 Feb 2023 22:16:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64D4960F9B
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF7DB81E53;
+	Wed,  1 Feb 2023 22:32:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF7DB81E53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oENiT2ftzDWX; Wed,  1 Feb 2023 22:16:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UFEGMUTMk2kn; Wed,  1 Feb 2023 22:32:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C55660E22;
-	Wed,  1 Feb 2023 22:16:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C55660E22
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2CB331BF47F
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 22:16:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF1F981E76;
+	Wed,  1 Feb 2023 22:32:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF1F981E76
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D810A1BF47F
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 22:32:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F400F4093D
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 22:16:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F400F4093D
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA09381E75
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 22:32:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA09381E75
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c7xK7jW0RZn5 for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 22:16:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CB254088F
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
- [IPv6:2607:f8b0:4864:20::1033])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9CB254088F
- for <buildroot@buildroot.org>; Wed,  1 Feb 2023 22:16:48 +0000 (UTC)
-Received: by mail-pj1-x1033.google.com with SMTP id m11so178153pji.0
- for <buildroot@buildroot.org>; Wed, 01 Feb 2023 14:16:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=RggF2mv/H4MiVAcLoXX0ULp1VnAfvubhbl4NQSMLYgU=;
- b=qnVYsEOMYafUIxzUfiDsZB+J3xg9jyFUcRCBaY/YY2VhR6sf0M9hOIdFE0eM+zV1JZ
- w1QDTW8kwMrmLMwzo9OW6W33cL0NuOMO1KJgTvI5rMJPXiGUtdMj6dqWZdGlla2lvq+y
- 5tivJQtJT/ytTzW1eCfaH9SEfVhtg4QCljK7SqUeLlReAgUPfNah/0fHiXlEyzTANqda
- FfNXyAn1KnvIUqIZIZBUygphAqwm1BXHVxA14KhrAxxZ0fXIckiKiBVM90/WE0NZQTiN
- Oh1clDVuXFN5W+lawqeET0VQZ4ny8mqQz1pnzGofDZGRVVaYE1ZugVTL14Fdf0m0OJ1M
- ecHw==
-X-Gm-Message-State: AO0yUKWnpFOOSuOZtK6ciefkOwCK3ZhQdVuYcFFTmnX/6yHgTxPNujgp
- FJWZ+ET50vnfCSssRapPtQ+ijg==
-X-Google-Smtp-Source: AK7set9Dt7jTX8OwQjfzIkuYs59QzJrqYdG5itgjl1ZwKy7jNkS7MtWwzvoOYqSAFZyz2Xd41skGiQ==
-X-Received: by 2002:a17:90b:390f:b0:230:1784:eab1 with SMTP id
- ob15-20020a17090b390f00b002301784eab1mr4264601pjb.15.1675289808049; 
- Wed, 01 Feb 2023 14:16:48 -0800 (PST)
-Received: from [192.168.0.164] (S0106f875a4344b41.gv.shawcable.net.
- [70.67.112.211]) by smtp.gmail.com with ESMTPSA id
- n6-20020a17090ade8600b00212e5068e17sm1817646pjv.40.2023.02.01.14.16.47
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 01 Feb 2023 14:16:47 -0800 (PST)
-Message-ID: <a8bf6373-ac4c-1872-3943-8fa9c6594ca5@threespeedlogic.com>
-Date: Wed, 1 Feb 2023 14:16:47 -0800
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4nogQjtnUreI for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 22:32:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 102C981E53
+Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 102C981E53
+ for <buildroot@buildroot.org>; Wed,  1 Feb 2023 22:32:45 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.66.151])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id NLekpeh5dvodANLelpwuvr; Wed, 01 Feb 2023 23:32:43 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Wed,  1 Feb 2023 23:32:36 +0100
+Message-Id: <20230201223241.3867678-3-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230201223241.3867678-1-giulio.benetti@benettiengineering.com>
+References: <20230201223241.3867678-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-References: <20230201195956.1758827-1-gsmecher@threespeedlogic.com>
- <20230201225237.0fb5dacb@booty>
-From: Graeme Smecher <gsmecher@threespeedlogic.com>
-In-Reply-To: <20230201225237.0fb5dacb@booty>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=threespeedlogic-com.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=RggF2mv/H4MiVAcLoXX0ULp1VnAfvubhbl4NQSMLYgU=;
- b=LBDyyGI76AdC9bUYw68eFDFNJr0rNV9TWlQmSSrTp5quEaksG+hCOUuSql4LXlYhit
- a8JLnF7aeNAju6nON6pa4D4WbKO8+HYKmnPZvHlm2tRxh6cJHCH/ryfUKeEyRJrTRGRO
- FPnpEyc2PtEdYBkQ7dk59vVgBdbe6sAJRm5/J7zLw2Eum20FuZ3ZckNP5oYXpsxoCDsE
- TxloDkZCzbcRnREstZY4ZtUVkK2OUvpew4F36DzhaJNEOq+y2sWh6eaauFWciKV/d6AM
- nw2+nIGugq68xKKSUbjZ6O3sNkQ83lCQ3yQE7fwQXi7L8eR1GoA0buTO3JtY7zr1kj75
- YTDA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=threespeedlogic-com.20210112.gappssmtp.com
- header.i=@threespeedlogic-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=LBDyyGI7
-Subject: Re: [Buildroot] [PATCH 1/1] board/zynqmp/post-image.sh: Don't
- insist on a xilinx/ prefix for .dts files.
+X-CMAE-Envelope: MS4xfEJ0J9xZUaLGPDnIovPeTsk0HLGmCMDpguqb6+whaO/RfbqotOuOzRZAQOYI6SujK9GsOXTdA2XwkRMtDOVsYQZNKjhYFi01cATBZMSjTZl/8ES/OIsl
+ tn+43YN2Ysqinl05PIgjL4+XwoQ8ozjkXYrKkvF2oC30c/dn4/BC0sdExX58LckW61IbYANixEN58FjoFtpSRZsQP8V+y0GgiNCD/gEfxTH7yf6ZIeXw/UkB
+ TfOMDsdx3UHV0/T/Vldwv0pWiexnjOQVHU374o88vZT4KyGVBrOe0ASsXUa7GDOxaYVERTzeQPCCKGWrugAkFz6WECGth9UK88cNirgxnZvFW0AvMUmGO1pk
+ +7qMvxOUcuf9Qwn+IEoC1KnnEOZqi7YNvea052ymuQTcmvOWkBZduwIeakLJJiszj/bhqeYLuTYm2U6OIvN0whUY/+36wQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1675290763; bh=/mYiP75F4KlYeI2iK/QA5n9H58fiKTwXtJwuS+PlTl8=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=PnAlXh/zR72MGUQzMZkAq82Wio6pTet7eRV2r0P3dcJpO8hGfxPZ1uGNVh5Pr649N
+ 80vBbOpAKg1+//6ezhpxakv8xyk521HBWJdWKArgaWp0fPMGOXnbvAKJuwHv7k3Y4h
+ FaaA4ISPe+OwEEUl9dcG86WuXXSAnH11CH6uSXYoa920Ebx0211q91NRKKSLzGRKBI
+ ShnFEE4xI3EaejU8w0g7JsRUu86omw2s/o8s9ILWlMXDP1r749fGuOy5sCLmplUVdb
+ 7dSyw3+IC7DQDW9xPHek4R3MBFOth9IFTca1+e45ck3CxSNXdz7m6Llg/hmTwZqeSj
+ /qzaIDEsXkYVQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=PnAlXh/z
+Subject: [Buildroot] [PATCH 2/7] configs/olimex_a13_olinuxino_defconfig:
+ bump Linux to 6.1.9 and U-Boot to 2023.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,67 +76,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Leon Anavi <leon.anavi@konsulko.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Jagan Teki <jagan@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ configs/olimex_a13_olinuxino_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-On 2023-02-01 13:52, Luca Ceresoli wrote:
-> Hi Graeme,
-> 
-> On Wed,  1 Feb 2023 11:59:56 -0800
-> Graeme Smecher <gsmecher@threespeedlogic.com> wrote:
-> 
->> If using BR2_LINUX_KERNEL_CUSTOM_DTS_PATH to copy .dts files from
->> buildroot into the linux tree, these .dts files are copied to
->> arch/arm64/boot. Unfortunately, the post-image.sh script expects to find
->> them in arch/arm64/boot/xilinx.
->>
->> This patch does not require the xilinx/ prefix to be present when
->> symlinking the device-tree to system.dtb where u-boot expects to find
->> it.
->>
->> Signed-off-by: Graeme Smecher <gsmecher@threespeedlogic.com>
->> ---
->>   board/zynqmp/post-image.sh | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
->> index ed6dbe188c..c5de2db820 100755
->> --- a/board/zynqmp/post-image.sh
->> +++ b/board/zynqmp/post-image.sh
->> @@ -5,7 +5,7 @@
->>   # devicetree listed in the config.
->>   
->>   FIRST_DT=$(sed -nr \
->> -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
->> +               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
-> 
-> I think the following simpler change would also work. Can you check
-> that please?
-> 
-> -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
-> +               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="([-_/[:alnum:]\\.]*).*"$|\2|p' \
+diff --git a/configs/olimex_a13_olinuxino_defconfig b/configs/olimex_a13_olinuxino_defconfig
+index 6d25d7d0a1..8469ce1fd0 100644
+--- a/configs/olimex_a13_olinuxino_defconfig
++++ b/configs/olimex_a13_olinuxino_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 5.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a13-olinuxino"
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A13-OLinuXino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+@@ -28,7 +28,7 @@ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.9"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-- 
+2.34.1
 
-Assuming you intended \1, not \2 here - this suggestion breaks behaviour for a couple of defconfigs in the tree. If I run the ZCU106 defconfig through this regexp, I get:
-
-	$ cat configs/zynqmp_zcu106_defconfig | sed -nr -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="([-_/[:alnum:]\\.]*).*"$|\1|p'
-	xilinx/zynqmp-zcu106-revA
-
-...this creates a dangling symlink in output/images (system.dtb -> xilinx/zynqmp-zcu106-revA.dtb).
-
-The right behaviour is to strip any prefixes that exist, without requiring any. Something like:
-
--               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
-+               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(.*/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
-
-This is less Xilinx-specific, although it seems a tad greedy.
-
-best,
-Graeme
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
