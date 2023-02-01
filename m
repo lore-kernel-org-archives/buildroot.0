@@ -1,88 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7CDFC38142
-	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 09:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3BBFC636D3
+	for <buildroot@archiver.kernel.org>; Wed,  1 Feb 2023 11:36:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35DB5403F5;
-	Wed,  1 Feb 2023 09:02:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35DB5403F5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0148360EB8;
+	Wed,  1 Feb 2023 11:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0148360EB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7_APU1x-qSUu; Wed,  1 Feb 2023 09:02:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id etRly4b11kC1; Wed,  1 Feb 2023 11:36:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24271403CA;
-	Wed,  1 Feb 2023 09:02:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24271403CA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 24F061BF2F2
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 09:02:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37D9960B78;
+	Wed,  1 Feb 2023 11:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37D9960B78
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FE681BF3E5
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 11:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF09E813D5
- for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 09:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF09E813D5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0503940982
+ for <buildroot@lists.busybox.net>; Wed,  1 Feb 2023 11:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0503940982
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Anr1b9owT8MW for <buildroot@lists.busybox.net>;
- Wed,  1 Feb 2023 09:02:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HQBOOAcXYwGd for <buildroot@lists.busybox.net>;
+ Wed,  1 Feb 2023 11:36:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 831C0813C4
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 831C0813C4
- for <buildroot@busybox.net>; Wed,  1 Feb 2023 09:02:45 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id bg26so6256454wmb.0
- for <buildroot@busybox.net>; Wed, 01 Feb 2023 01:02:45 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FC45400E7
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
+ [IPv6:2607:f8b0:4864:20::235])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2FC45400E7
+ for <buildroot@buildroot.org>; Wed,  1 Feb 2023 11:36:28 +0000 (UTC)
+Received: by mail-oi1-x235.google.com with SMTP id p133so15437989oig.8
+ for <buildroot@buildroot.org>; Wed, 01 Feb 2023 03:36:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=aFowBkq5vDDd6JSqMVBMuYCt4XcPOuXubkVm6fxakPQ=;
- b=tniGBq4ZAbI+6y4UrwxroQZvNCiZiAcxl2Y69mhGlAgq+61+OPI79RyHqe6RiebBUy
- loq2QgmZUUJZ0OsJVU8cZ6FQMnlLjhO3W945QHwQ44HgZ3nAeiK8MS0Nj4RF2OS9+Wag
- 6wQ9zFHP+Zhe2U7ln1VNWSIS6n0itHWY2DIuwReUZ+VGGVX2T2lG3AWa4mqAPSdCITSc
- S7JQcOiFZJDSb5irRkQB/lo1gnh4x//1qGBFc5lfgzeNi3mRMrV98qgdlK/usquYmm7e
- 3/gUNxKLmJSSivCpseBEcHKs8pf6+dwHqMJDALnOi9FhTuEVXP1xA/kXL7DhPQQLLXmV
- xaAQ==
-X-Gm-Message-State: AO0yUKVpPXSHN5/Zi+rD3UTirwXG6oGKIjW0Kz9IHJelknEJdIMwvwvt
- MhxOuAxg+u5Gg9PkahCReDv1HGqZ9Ww=
-X-Google-Smtp-Source: AK7set/FIDqTghPHLIJCLFGV7G5UVqOJma082vdIKU+QDY+D7V8J7XBDGlgaQpmrQNL7/xc3UuAjFA==
-X-Received: by 2002:a05:600c:1d1b:b0:3dd:1ba9:d2d1 with SMTP id
- l27-20020a05600c1d1b00b003dd1ba9d2d1mr6781105wms.21.1675242163707; 
- Wed, 01 Feb 2023 01:02:43 -0800 (PST)
-Received: from vm-22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- e18-20020a05600c4e5200b003dc1f466a25sm1127695wmq.25.2023.02.01.01.02.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 Feb 2023 01:02:43 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Wed,  1 Feb 2023 10:02:24 +0100
-Message-Id: <20230201090224.17033-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.37.2
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=AmyNWj2004YnEMUq/e1mYiIEK9fPGSW5ZgRyXdmyZZg=;
+ b=bnPFuc8Vt455ZSyV7Ouij2Bt95zfPM/SRIBbNHqf2c2EeWO1FPNFyG4mgAH64yCDMi
+ 7EMVWOzZgLnSmndCNVpfJ4PpQdzn3v8iTFLvYngOXa0UiuoLrg7OpJnFiuttxz6w1i87
+ +XSvdkItGeI4M/bbf+Jh/06u8mcN1g7xBVuVgbduRy9ER6DOeUF91q+d9qxXn74fpEHo
+ UkHyyfPGYCsFvNTGXvNDJDQ0YnNI1ogovgGGDKy928UdwJTaLcIdsBCJOVNY+W5SsO1E
+ loRfQglcIxzHgUJPMLqJALGkUGlp3jST4WHkHHACF3XDqPUsfDQGOLE0gqIIU3az6OUf
+ DjlQ==
+X-Gm-Message-State: AO0yUKW7h/gNF8hGMT4WUS/cev3UvRCF0R/bMJSb3z4eDNRcPujDt3DP
+ roh9ozhHCeRx5KpMFgGgDIMzdE0q4nWqjxONz9ZBfBrEt5U=
+X-Google-Smtp-Source: AK7set+NTyXpqgV2VPMsrp1FZUT37T3m646D/rf0NPOHAlGJzCsDUDWXXrsEfIGwup/mwkmnD4dyn30YZlVltZox9ZA=
+X-Received: by 2002:aca:6548:0:b0:378:51ce:f949 with SMTP id
+ j8-20020aca6548000000b0037851cef949mr156009oiw.170.1675251387028; Wed, 01 Feb
+ 2023 03:36:27 -0800 (PST)
 MIME-Version: 1.0
+From: Takashi Yasuda <proud4124@gmail.com>
+Date: Wed, 1 Feb 2023 19:31:43 +0000
+Message-ID: <CALy0T5G0AhS735OSWAiJg_bySv9xUgxqt2nYMDb71s4fOpDsAw@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=aFowBkq5vDDd6JSqMVBMuYCt4XcPOuXubkVm6fxakPQ=;
- b=TH1hC1OqsAvEU3dmug+H3V2QAGGUsQeGIArepHGQygrkIQ2+Pung1G4bRy7WBifNQt
- ivG12iKEzsnTFgCeH9OFf/vm8Tb1eEK6ijKICMj4Z9fSE5wYPS51hIawZQCoFKQ30wUg
- SJxOsxvUkdO2ol/878TMT5YgT6NbHkFrzq6Q5M+sBptgmYPpWqHftd81KNNjPDTLmAtQ
- YQHQM6UozctzyBLuGrr20vOLKxhFdg8NjG1VFpe/zBXH+uuzIIfZDd1Satcemgn6ePKj
- Ez2uXm4G439M7BtCtD/CEhv9V5cd7JunhVek9x70Is+pK0r3UgXCctBrFQ4VTADhpiPP
- 3YNw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=AmyNWj2004YnEMUq/e1mYiIEK9fPGSW5ZgRyXdmyZZg=;
+ b=gA5qjJ6ktDOWXzevkHJX/jqbAOdC7EEAULawbxSUBoROI8Fv0i2lCnw4ekCW0b4IXa
+ Rusa1rt53rilM63EPV8B8ajFJ1LvP+t6WS1Z0ROeuGr4ij+RBK371KcB9BdGam1scsTA
+ t3i3/VJOOZHmvj8/mCacjd+2LszEdbCCROLAB6lewpwCtJYWCUQ3Dp27N2PP8mXKBgXt
+ 7l033X/khjAGM5kv2jviP1Ww9KGi5WmBUqzAE+OdTPcOH0S1thdHvt9J8DERtYTTL/70
+ cxiv1I3Wf7tdisEzrNX7DX+IrwFgVUmxvWrnzIFo+x5beJbFNFcMhD/rd4KlR0xkUzNm
+ bykw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=TH1hC1Oq
-Subject: [Buildroot] [PATCH] package/luaposix: bump to version 36.1
+ header.a=rsa-sha256 header.s=20210112 header.b=gA5qjJ6k
+Subject: [Buildroot] libc testsuite
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,43 +86,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1204167851355956560=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luaposix/luaposix.hash | 2 +-
- package/luaposix/luaposix.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--===============1204167851355956560==
+Content-Type: multipart/alternative; boundary="000000000000d5589505f3a1db38"
 
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index fc0b5fa74..2d54a6901 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e0fcb4996f76aa49ae3e5edf69978171091e3d69d5de5589d591d227f8a427c1  luaposix-36.0.tar.gz
-+sha256  7944c2b4fbcef0667d407302740d87645325e751fd8d819f2b253c5d9ad0d497  luaposix-36.1.tar.gz
- sha256  ea0fdaae50b0d31a81c2c99f4354264783c71043fd40522feaa40eecc069599b  LICENSE
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 1a537defc..d17c8188b 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAPOSIX_VERSION = 36.0
-+LUAPOSIX_VERSION = 36.1
- LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = LICENSE
--- 
-2.37.2
+--000000000000d5589505f3a1db38
+Content-Type: text/plain; charset="UTF-8"
+
+Hi all,
+
+I'm looking for the alternative to in-tree glibc testsuite [1] to test the
+libc installed on my board, especially for comparing the stabilities of
+glibc, musl, and uclibc, regardless of the architecture. I found the
+uclibc-ng-test [2], but it seems to be no longer actively maintained, so
+the test cases may be outdated. Is there a more reliable option?
+
+Thanks,
+Yasuda
+
+[1] https://github.com/bminor/glibc/blob/master/scripts/evaluate-test.sh
+[2] https://github.com/wbx-github/uclibc-ng-test
+
+--000000000000d5589505f3a1db38
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi all,</div><div><br></div>I&#39;m looking for the a=
+lternative to in-tree glibc testsuite [1] to test the libc installed on my =
+board, especially for comparing the stabilities of glibc, musl, and uclibc,=
+ regardless of the architecture. I found the uclibc-ng-test [2], but it see=
+ms to be no longer actively maintained, so the test cases may be outdated. =
+Is there a more reliable option?<br><div><br></div><div>Thanks,</div><div>Y=
+asuda</div><div><br></div><div>[1]=C2=A0<a href=3D"https://github.com/bmino=
+r/glibc/blob/master/scripts/evaluate-test.sh" target=3D"_blank">https://git=
+hub.com/bminor/glibc/blob/master/scripts/evaluate-test.sh</a><br>[2]=C2=A0<=
+a href=3D"https://github.com/wbx-github/uclibc-ng-test" target=3D"_blank">h=
+ttps://github.com/wbx-github/uclibc-ng-test</a></div></div>
+
+--000000000000d5589505f3a1db38--
+
+--===============1204167851355956560==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1204167851355956560==--
