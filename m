@@ -1,76 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3625DC05027
-	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 07:16:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F291C05027
+	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 08:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CFAFC81008;
-	Thu,  2 Feb 2023 07:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFAFC81008
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66018402E0;
+	Thu,  2 Feb 2023 08:21:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66018402E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m836LWLdGaET; Thu,  2 Feb 2023 07:16:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Yigx3NmmBmGG; Thu,  2 Feb 2023 08:21:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1AEE80FB1;
-	Thu,  2 Feb 2023 07:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1AEE80FB1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AC01402E2;
+	Thu,  2 Feb 2023 08:21:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AC01402E2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3E9EE1BF2B4
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 07:16:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 63E9B1BF386
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 08:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18F8E40318
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 07:16:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F8E40318
+ by smtp4.osuosl.org (Postfix) with ESMTP id 39B8C402E0
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 08:21:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39B8C402E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nUfm_OdTmebL for <buildroot@lists.busybox.net>;
- Thu,  2 Feb 2023 07:16:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72B7B41A3E
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com
- [209.85.221.42])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 72B7B41A3E
- for <buildroot@buildroot.org>; Thu,  2 Feb 2023 07:16:06 +0000 (UTC)
-Received: by mail-wr1-f42.google.com with SMTP id m7so799993wru.8
- for <buildroot@buildroot.org>; Wed, 01 Feb 2023 23:16:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=JfSehkWS/YueKfJCLdbNbpI7CT6IWXHRcVYqVb/Ogz4=;
- b=NwpdMe18g3xJabbkZ5nL8MDmodZQV/gOmp5cNvtwgOCd7cZfxaqdDW7G9GeIlR4a4c
- 8cZcBpjDCGy+tYArJEoWo/ZomnzfM6FqHBqZDzdT5YY+aa1swTQ1e9VQpouaQakwlKea
- fcLaM3G/t0mJtLeEuGwIWhqjQTavHH/R57cr+0Bcrfb27UaOIoggUSSfRbA5IjXv8B2M
- +KMWoXps82MSVcuFRehVxv88SajIkxfZf2VBFuAdSrZTRDNcQNsmmIZ7vn2b9GlbKiVe
- ns0a1XXIMxcsvpbTPvr7bKG6VusHvRb+JL3jffgKJlIBcHBA1HGR3QDIx+wFRWzVkuoJ
- Z67g==
-X-Gm-Message-State: AO0yUKXmUgi1aKTzJYqsjgOD0DIQ/n0Q/xNwZFwW2IfCwmhE6DQuBF4p
- RtXi2r3zCZkYFj4TqZkwrB3ftrZoDiOnAqXL
-X-Google-Smtp-Source: AK7set9hsZnca4GsSkln5cDQ4zaGgCDhR90hi54Zcwg5p2FLnCHcdzVt8oF8VqL0gBJSeKEDzHivKQ==
-X-Received: by 2002:adf:fbc8:0:b0:2bf:ae2f:576f with SMTP id
- d8-20020adffbc8000000b002bfae2f576fmr4227866wrs.14.1675322164180; 
- Wed, 01 Feb 2023 23:16:04 -0800 (PST)
-Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
- [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- a17-20020adffb91000000b002bddac15b3dsm18708954wrr.33.2023.02.01.23.16.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 Feb 2023 23:16:03 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Date: Thu,  2 Feb 2023 08:15:18 +0100
-Message-Id: <20230202071518.3961314-2-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230202071518.3961314-1-thomas@devoogdt.com>
-References: <20230202071518.3961314-1-thomas@devoogdt.com>
+ with ESMTP id 2UKXmgA3VGQI for <buildroot@lists.busybox.net>;
+ Thu,  2 Feb 2023 08:21:28 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D7B4402DC
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D7B4402DC
+ for <buildroot@buildroot.org>; Thu,  2 Feb 2023 08:21:27 +0000 (UTC)
+Received: from booty (unknown [77.244.183.192])
+ (Authenticated sender: luca.ceresoli@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 14402C000C;
+ Thu,  2 Feb 2023 08:21:21 +0000 (UTC)
+Date: Thu, 2 Feb 2023 09:21:20 +0100
+To: Graeme Smecher <gsmecher@threespeedlogic.com>
+Message-ID: <20230202092120.319d6b00@booty>
+In-Reply-To: <a8bf6373-ac4c-1872-3943-8fa9c6594ca5@threespeedlogic.com>
+References: <20230201195956.1758827-1-gsmecher@threespeedlogic.com>
+ <20230201225237.0fb5dacb@booty>
+ <a8bf6373-ac4c-1872-3943-8fa9c6594ca5@threespeedlogic.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/fluent-bit: add support for non glibc
- toolchain
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1675326082;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=wN4XXLsgI0qEAuBwL8DD1w5Gxt0DDvG0CpUg6tWnQFQ=;
+ b=liTI5brYriNeE0KMDwkYbzHewwuBIk6917pZPD8gLqQ7M/cAoq+ejN0gnuQUGoTvir/zw6
+ Yyn/goI9mAGOlNxe34za1bW3Ef8NGrteOR0xVrd1fS/tMJAxwkTWHpmyM/J6IFVx4cYJL6
+ 9uMkXAcyYQBUjOpvgcBfPbem/sfcvltmmozAOx+kUFhPURxFlcKeSxvA7R9nOGGugWY9NE
+ fr35F2e4LKHxec5pfeD1GSSfrl9guxnQe3PVOHinAclR4Ck230oleuuyE4yILsIK6BABPD
+ KBhdISz1lYKeui4aW9t2Ven0/dDHb+7juE3qYGpA5hQAO3gbGes0ZsDYQ9+Qww==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=liTI5brY
+Subject: Re: [Buildroot] [PATCH 1/1] board/zynqmp/post-image.sh: Don't
+ insist on a xilinx/ prefix for .dts files.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,236 +79,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Hi Graeme,
 
-- require threads and dynamic library support
-- require sync_4 support
-- provide fts.h trough musl-fts
+On Wed, 1 Feb 2023 14:16:47 -0800
+Graeme Smecher <gsmecher@threespeedlogic.com> wrote:
 
-static_assert is not available if no C++ toolchain or no glibc
-is used, so add two patches to fix this
+> Hi Luca,
+> 
+> On 2023-02-01 13:52, Luca Ceresoli wrote:
+> > Hi Graeme,
+> > 
+> > On Wed,  1 Feb 2023 11:59:56 -0800
+> > Graeme Smecher <gsmecher@threespeedlogic.com> wrote:
+> >   
+> >> If using BR2_LINUX_KERNEL_CUSTOM_DTS_PATH to copy .dts files from
+> >> buildroot into the linux tree, these .dts files are copied to
+> >> arch/arm64/boot. Unfortunately, the post-image.sh script expects to find
+> >> them in arch/arm64/boot/xilinx.
+> >>
+> >> This patch does not require the xilinx/ prefix to be present when
+> >> symlinking the device-tree to system.dtb where u-boot expects to find
+> >> it.
+> >>
+> >> Signed-off-by: Graeme Smecher <gsmecher@threespeedlogic.com>
+> >> ---
+> >>   board/zynqmp/post-image.sh | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
+> >> index ed6dbe188c..c5de2db820 100755
+> >> --- a/board/zynqmp/post-image.sh
+> >> +++ b/board/zynqmp/post-image.sh
+> >> @@ -5,7 +5,7 @@
+> >>   # devicetree listed in the config.
+> >>   
+> >>   FIRST_DT=$(sed -nr \
+> >> -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
+> >> +               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \  
+> > 
+> > I think the following simpler change would also work. Can you check
+> > that please?
+> > 
+> > -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
+> > +               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="([-_/[:alnum:]\\.]*).*"$|\2|p' \  
+> 
+> Assuming you intended \1, not \2 here - this suggestion breaks behaviour for a couple of defconfigs in the tree. If I run the ZCU106 defconfig through this regexp, I get:
+> 
+> 	$ cat configs/zynqmp_zcu106_defconfig | sed -nr -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="([-_/[:alnum:]\\.]*).*"$|\1|p'
+> 	xilinx/zynqmp-zcu106-revA
+> 
+> ...this creates a dangling symlink in output/images (system.dtb -> xilinx/zynqmp-zcu106-revA.dtb).
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
----
- .../0002-lib-c-ares-fixup-static_assert.patch | 56 +++++++++++++++++++
- .../0003-lib-cfl-fixup-static_assert.patch    | 33 +++++++++++
- package/fluent-bit/Config.in                  | 10 +++-
- package/fluent-bit/fluent-bit.mk              | 11 +++-
- 4 files changed, 105 insertions(+), 5 deletions(-)
- create mode 100644 package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
- create mode 100644 package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch
+Right.
 
-No idea if there is interrese
+> The right behaviour is to strip any prefixes that exist, without requiring any. Something like:
+> 
+> -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
+> +               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(.*/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
+> 
+> This is less Xilinx-specific, although it seems a tad greedy.
 
-                             arm-aarch64 [ 1/44]: OK
-                   bootlin-aarch64-glibc [ 2/44]: OK
-               bootlin-arcle-hs38-uclibc [ 3/44]: OK
-                    bootlin-armv5-uclibc [ 4/44]: OK
-                     bootlin-armv7-glibc [ 5/44]: OK
-                   bootlin-armv7m-uclibc [ 6/44]: SKIPPED
-                      bootlin-armv7-musl [ 7/44]: OK
-                bootlin-m68k-5208-uclibc [ 8/44]: SKIPPED
-               bootlin-m68k-68040-uclibc [ 9/44]: OK
-             bootlin-microblazeel-uclibc [10/44]: OK
-                bootlin-mipsel32r6-glibc [11/44]: OK
-                   bootlin-mipsel-uclibc [12/44]: OK
-                     bootlin-nios2-glibc [13/44]: OK
-                 bootlin-openrisc-uclibc [14/44]: OK
-        bootlin-powerpc64le-power8-glibc [15/44]: OK
-           bootlin-powerpc-e500mc-uclibc [16/44]: OK
-                   bootlin-riscv32-glibc [17/44]: OK
-                   bootlin-riscv64-glibc [18/44]: OK
-                    bootlin-riscv64-musl [19/44]: OK
-                      bootlin-sh4-uclibc [20/44]: OK
-                   bootlin-sparc64-glibc [21/44]: OK
-                    bootlin-sparc-uclibc [22/44]: SKIPPED
-                    bootlin-x86-64-glibc [23/44]: OK
-                     bootlin-x86-64-musl [24/44]: OK
-                   bootlin-x86-64-uclibc [25/44]: OK
-                   bootlin-xtensa-uclibc [26/44]: OK
-                            br-arm-basic [27/44]: OK
-                    br-arm-full-nothread [28/44]: SKIPPED
-                      br-arm-full-static [29/44]: SKIPPED
-                   br-i386-pentium4-full [30/44]: OK
-                br-i386-pentium-mmx-musl [31/44]: OK
-                      br-mips64-n64-full [32/44]: OK
-                 br-mips64r6-el-hf-glibc [33/44]: OK
-               br-powerpc-603e-basic-cpp [34/44]: OK
-               br-powerpc64-power7-glibc [35/44]: OK
-                       linaro-aarch64-be [36/44]: OK
-                          linaro-aarch64 [37/44]: OK
-                              linaro-arm [38/44]: OK
-                     sourcery-arm-armv4t [39/44]: OK
-                            sourcery-arm [40/44]: OK
-                     sourcery-arm-thumb2 [41/44]: OK
-                         sourcery-mips64 [42/44]: OK
-                           sourcery-mips [43/44]: OK
-                          sourcery-nios2 [44/44]: OK
-44 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Yes, better keeping the xilinx prefix as this is a xilinx-specific
+script anyway.
 
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-diff --git a/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch b/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
-new file mode 100644
-index 0000000000..de5d0d06a8
---- /dev/null
-+++ b/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
-@@ -0,0 +1,56 @@
-+From aca354ae22c55fa6051d04a9f674fe0825443a94 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Wed, 1 Feb 2023 11:26:56 +0100
-+Subject: [PATCH] lib: c-ares: fixup static_assert
-+
-+"undefined reference to 'static_assert'"
-+
-+Not defined when using uClibc or if not C++ >= 11.
-+
-+upstream: https://github.com/c-ares/c-ares/issues/504
-+
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ lib/c-ares-1.18.1/configure                      | 4 ++++
-+ lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4 | 3 +++
-+ 2 files changed, 7 insertions(+)
-+
-+diff --git a/lib/c-ares-1.18.1/configure b/lib/c-ares-1.18.1/configure
-+index 737f0a0dd..b99b7ed49 100755
-+--- a/lib/c-ares-1.18.1/configure
-++++ b/lib/c-ares-1.18.1/configure
-+@@ -6316,6 +6316,8 @@ else $as_nop
-+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+ /* end confdefs.h.  */
-+ 
-++#define static_assert _Static_assert
-++
-+   template <typename T>
-+     struct check
-+     {
-+@@ -6393,6 +6395,8 @@ else $as_nop
-+          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+ /* end confdefs.h.  */
-+ 
-++#define static_assert _Static_assert
-++
-+   template <typename T>
-+     struct check
-+     {
-+diff --git a/lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4 b/lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4
-+index 229de3091..fe4a11c67 100644
-+--- a/lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4
-++++ b/lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4
-+@@ -37,6 +37,9 @@
-+ #serial 9
-+ 
-+ m4_define([_AX_CXX_COMPILE_STDCXX_11_testbody], [[
-++
-++#define static_assert _Static_assert
-++
-+   template <typename T>
-+     struct check
-+     {
-+-- 
-+2.39.0
-+
-diff --git a/package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch b/package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch
-new file mode 100644
-index 0000000000..7b99a8e4de
---- /dev/null
-+++ b/package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch
-@@ -0,0 +1,33 @@
-+From 8d17fc961fef2e88f4c8fa2316af925d5466ca4d Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Wed, 1 Feb 2023 11:38:15 +0100
-+Subject: [PATCH] lib: cfl: fixup static_assert
-+
-+"undefined reference to 'static_assert'"
-+
-+Not defined when using uClibc or if not C++ >= 11.
-+
-+upstream: https://github.com/Cyan4973/xxHash/commit/6189ecd3d44a693460f86280ccf49d33cb4b18e1
-+
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ lib/cfl/lib/xxhash/xxhash.h | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/lib/cfl/lib/xxhash/xxhash.h b/lib/cfl/lib/xxhash/xxhash.h
-+index 08ab79457..511c4d12b 100644
-+--- a/lib/cfl/lib/xxhash/xxhash.h
-++++ b/lib/cfl/lib/xxhash/xxhash.h
-+@@ -1546,8 +1546,7 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size)
-+ /* note: use after variable declarations */
-+ #ifndef XXH_STATIC_ASSERT
-+ #  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)    /* C11 */
-+-#    include <assert.h>
-+-#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
-++#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { _Static_assert((c),m); } while(0)
-+ #  elif defined(__cplusplus) && (__cplusplus >= 201103L)            /* C++11 */
-+ #    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
-+ #  else
-+-- 
-+2.39.0
-+
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index 6c2299e695..f53eacb447 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_FLUENT_BIT
- 	bool "fluent-bit"
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBYAML
- 	help
-@@ -29,5 +32,6 @@ config BR2_PACKAGE_FLUENT_BIT_WASM
- 
- endif
- 
--comment "fluent-bit needs a glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+comment "fluent-bit needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 6e9a33e02e..151afc34aa 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -47,12 +47,19 @@ FLUENT_BIT_CONF_OPTS += \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
- 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -U_FILE_OFFSET_BITS"
- 
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
-+FLUENT_BIT_DEPENDENCIES += musl-fts
-+FLUENT_BIT_LINKER_FLAGS += -lfts
-+endif
-+
- # Uses __atomic_compare_exchange_8
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--FLUENT_BIT_CONF_OPTS += \
--	-DCMAKE_EXE_LINKER_FLAGS=-latomic
-+FLUENT_BIT_LINKER_FLAGS += -latomic
- endif
- 
-+FLUENT_BIT_CONF_OPTS += \
-+	-DCMAKE_EXE_LINKER_FLAGS="$(FLUENT_BIT_LINKER_FLAGS)"
-+
- define FLUENT_BIT_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
- 		$(TARGET_DIR)/etc/init.d/S99fluent-bit
 -- 
-2.39.0
-
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
