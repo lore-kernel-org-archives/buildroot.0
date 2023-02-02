@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F571C05027
-	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 13:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F36CC64EC3
+	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 13:51:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF4DF40260;
-	Thu,  2 Feb 2023 13:46:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF4DF40260
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DDBE41C3A;
+	Thu,  2 Feb 2023 13:51:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DDBE41C3A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FXpC-ZHzxISZ; Thu,  2 Feb 2023 13:46:31 +0000 (UTC)
+	with ESMTP id mAV9fiA1OJo3; Thu,  2 Feb 2023 13:51:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC1AF4028B;
-	Thu,  2 Feb 2023 13:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC1AF4028B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 50BA71BF30A
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:46:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 301A241C2C;
+	Thu,  2 Feb 2023 13:51:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 301A241C2C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 75F0F1BF30A
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:51:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31CD161106
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:46:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31CD161106
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56331403F8
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:51:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56331403F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kpaWfvszQT99 for <buildroot@lists.busybox.net>;
- Thu,  2 Feb 2023 13:46:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wHvJnYk5rekz for <buildroot@lists.busybox.net>;
+ Thu,  2 Feb 2023 13:51:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F6FE60B50
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com
- [209.85.216.41])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F6FE60B50
- for <buildroot@buildroot.org>; Thu,  2 Feb 2023 13:46:26 +0000 (UTC)
-Received: by mail-pj1-f41.google.com with SMTP id mi9so1934498pjb.4
- for <buildroot@buildroot.org>; Thu, 02 Feb 2023 05:46:26 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21BDB40120
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com
+ [209.85.216.53])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 21BDB40120
+ for <buildroot@buildroot.org>; Thu,  2 Feb 2023 13:51:05 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id
+ n20-20020a17090aab9400b00229ca6a4636so5643877pjq.0
+ for <buildroot@buildroot.org>; Thu, 02 Feb 2023 05:51:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=x3P30c/q4xMhJ1EG/cq39seJj6VT3aoHUxNSnn4K3h4=;
- b=brGoX60TXKRTUNsxxMNqz+O3hI0rImh2xibGyWbw9eM/TAEMBRPkO19GmIfLBSCm7f
- sS8waK099R6x0zWH79DFnDZIJ79nknaq2XAIbs44C9F/h25Asgq9rw2zyGUD2PTGX4SH
- 4MpFIWi+wqdzRRwf1mfeZmf05dQ7Ffzwh/PXJs6X0D9Yjo7RArSMrtFnmlYuEyaxGI1O
- /G6hyDKilerdd9zqbXoNDf2PZfHwdPJ9ZDGPlL1yY6LFWKvdGmA8EBKBlx8PEbI7G4tU
- KEFKj1D9MDo0O0bAPAguWdCzfeZhkJuVHW3wW/moNR5AwcZQpGUZh7wwPaw1D9RoUGwu
- cKmQ==
-X-Gm-Message-State: AO0yUKVzjTWd0yNzuWcxLEA0g+VHlreqvvuCT+hRwqupoukSMp2xJ8eY
- i60ApDgo0+hO2uAxl3pP/9WdymGGNdC2Pw==
-X-Google-Smtp-Source: AK7set8XfHYwSRwjcJQfloj13SK2JFe5am3vAFgu2mM3s/U58mVCUbYg9PRtKzWf18cR+Bbv6L1TwQ==
-X-Received: by 2002:a17:902:e54d:b0:194:a602:13c8 with SMTP id
- n13-20020a170902e54d00b00194a60213c8mr8939860plf.52.1675345586059; 
- Thu, 02 Feb 2023 05:46:26 -0800 (PST)
+ bh=OT/pUQ2u0OiVlnFAWzq9G7itRLawc21UvmyigXA2N1g=;
+ b=8CPRAbFv7yaPvQHnsap7iO+WB3taa8OylVuJ95W1TfUFzFgQVeDWzwq7CcHHjLdi9+
+ wykVZfi2ZqjQkz7jeYk9N01bCgvPmjfRltDoUyEn5fsKZW6a9Wdbca+Aykr4R7gRngez
+ f2rrHSeORosANA0WlB71Pd09yIhrA1e4Kv5q9ZMLmMGhwia4HoSsCI+SHkI7rrevdHAP
+ +hopBK1G8L6O8D2GelGaSEwtBkTabZdM2M1nUDCBABg4pBSx05djiWruguld8ox9VZNP
+ /GbhHOL/vhIUW0SGk+EpPUI8Y5PyGmWbwP8o1whLFxVzZp38eYrCXQ1Oi9VcsyD6ACAA
+ SDiA==
+X-Gm-Message-State: AO0yUKUDrgWnpK+tDYeFt/4o+l8ZMjmSHt2f+8ua/V3CjR+4gMr/vdvf
+ JpynsxKMuQ2Nq7RRYa8sjmmgcl4ByilQbw==
+X-Google-Smtp-Source: AK7set92oYHqE3NRnztH+uk/YSWWGW0eSpWdxCuZ4++dnE2/2iY7Z6Whjs+dtifhNUeENO2ob7eirg==
+X-Received: by 2002:a17:902:d482:b0:196:2b0d:fece with SMTP id
+ c2-20020a170902d48200b001962b0dfecemr8527494plg.15.1675345864096; 
+ Thu, 02 Feb 2023 05:51:04 -0800 (PST)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- o9-20020a170902778900b00186b69157ecsm13673834pll.202.2023.02.02.05.46.24
+ jc7-20020a17090325c700b00192588bcce7sm13764903plb.125.2023.02.02.05.51.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Feb 2023 05:46:25 -0800 (PST)
+ Thu, 02 Feb 2023 05:51:03 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu,  2 Feb 2023 05:46:23 -0800
-Message-Id: <20230202134623.1912767-1-christian@paral.in>
+Date: Thu,  2 Feb 2023 05:51:01 -0800
+Message-Id: <20230202135101.1949947-1-christian@paral.in>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/1] package/moby-buildkit: bump to version
- 0.11.2
+Subject: [Buildroot] [PATCH 1/1] package/nerdctl: bump version to 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,36 +89,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/moby/buildkit/releases/tag/v0.11.2
+https://github.com/containerd/nerdctl/releases/tag/v1.2.0
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/moby-buildkit/moby-buildkit.hash | 2 +-
- package/moby-buildkit/moby-buildkit.mk   | 2 +-
+ package/nerdctl/nerdctl.hash | 2 +-
+ package/nerdctl/nerdctl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/moby-buildkit/moby-buildkit.hash b/package/moby-buildkit/moby-buildkit.hash
-index 43ee1b12c9..ef927636d9 100644
---- a/package/moby-buildkit/moby-buildkit.hash
-+++ b/package/moby-buildkit/moby-buildkit.hash
+diff --git a/package/nerdctl/nerdctl.hash b/package/nerdctl/nerdctl.hash
+index e253fb74b2..8f2c678198 100644
+--- a/package/nerdctl/nerdctl.hash
++++ b/package/nerdctl/nerdctl.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5ffe5a2d11736719649dae962461f66df394ae4cc1e58294e5f2bd4d4632d9d0  moby-buildkit-0.10.6.tar.gz
-+sha256  b1746575f37715a8a2f2df5bab77ea081ba8436854e241792702109fc9e3653d  moby-buildkit-0.11.2.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
-index 59d68a7dca..a25f676710 100644
---- a/package/moby-buildkit/moby-buildkit.mk
-+++ b/package/moby-buildkit/moby-buildkit.mk
+ # Computed locally
+-sha256  ae468c65480e9c6679e0dd23d466b723e7f19bff779d4e2e0fa4629be343af2a  nerdctl-1.0.0.tar.gz
++sha256  08a84b9481b37dbd8cc6f955dbec0c18a1934bcffeb135fd5d2dc23987152b7c  nerdctl-1.2.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/nerdctl/nerdctl.mk b/package/nerdctl/nerdctl.mk
+index fdf60cb189..7556bcc391 100644
+--- a/package/nerdctl/nerdctl.mk
++++ b/package/nerdctl/nerdctl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOBY_BUILDKIT_VERSION = 0.10.6
-+MOBY_BUILDKIT_VERSION = 0.11.2
- MOBY_BUILDKIT_SITE = $(call github,moby,buildkit,v$(MOBY_BUILDKIT_VERSION))
- MOBY_BUILDKIT_LICENSE = Apache-2.0
- MOBY_BUILDKIT_LICENSE_FILES = LICENSE
+-NERDCTL_VERSION = 1.0.0
++NERDCTL_VERSION = 1.2.0
+ NERDCTL_SITE = $(call github,containerd,nerdctl,v$(NERDCTL_VERSION))
+ 
+ NERDCTL_LICENSE = Apache-2.0
 -- 
 2.39.1
 
