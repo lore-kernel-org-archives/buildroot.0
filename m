@@ -4,70 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F291C05027
-	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 08:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78984C636D4
+	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 08:50:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66018402E0;
-	Thu,  2 Feb 2023 08:21:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66018402E0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02DAF41A55;
+	Thu,  2 Feb 2023 08:50:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02DAF41A55
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yigx3NmmBmGG; Thu,  2 Feb 2023 08:21:32 +0000 (UTC)
+	with ESMTP id fv0EuTMjTzYV; Thu,  2 Feb 2023 08:50:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AC01402E2;
-	Thu,  2 Feb 2023 08:21:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AC01402E2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 63E9B1BF386
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 08:21:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E080941B2C;
+	Thu,  2 Feb 2023 08:50:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E080941B2C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B55E1BF386
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 08:50:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39B8C402E0
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 08:21:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39B8C402E0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4BF6481E85
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 08:50:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BF6481E85
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2UKXmgA3VGQI for <buildroot@lists.busybox.net>;
- Thu,  2 Feb 2023 08:21:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D7B4402DC
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D7B4402DC
- for <buildroot@buildroot.org>; Thu,  2 Feb 2023 08:21:27 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 14402C000C;
- Thu,  2 Feb 2023 08:21:21 +0000 (UTC)
-Date: Thu, 2 Feb 2023 09:21:20 +0100
-To: Graeme Smecher <gsmecher@threespeedlogic.com>
-Message-ID: <20230202092120.319d6b00@booty>
-In-Reply-To: <a8bf6373-ac4c-1872-3943-8fa9c6594ca5@threespeedlogic.com>
-References: <20230201195956.1758827-1-gsmecher@threespeedlogic.com>
- <20230201225237.0fb5dacb@booty>
- <a8bf6373-ac4c-1872-3943-8fa9c6594ca5@threespeedlogic.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rtbV_bAuzxkY for <buildroot@lists.busybox.net>;
+ Thu,  2 Feb 2023 08:50:05 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA12A81DFB
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CA12A81DFB
+ for <buildroot@buildroot.org>; Thu,  2 Feb 2023 08:50:04 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id bk15so3866102ejb.9
+ for <buildroot@buildroot.org>; Thu, 02 Feb 2023 00:50:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ZuDjW8faFlkfANYdJ6Z6zjcdZPPtnTFYwYVEjLms3no=;
+ b=nb2NhqS9smCydGHRqeiqdJrsSV4Uicjb127YoSHe0KaF/qtXnmu5BWVX1FsxxjZmBG
+ X0jl0Kl/IhfSRGhCtRrEU+lxQVb0RvJOMHqmBbY2RcW+pX/gcce0mOb5746Nj4IJOofk
+ FJmY330ntg5XJsEH7rngYRj/MdJSrcFr6HaUBNndMgGbVrUiW2R5/TB6fmNEde5PqewG
+ ear7eeTjrNxFjlw0Bp5WLPPB7o/ZqaCYz+Q3B6+IaUXLRf4q/2cF9gpeFc3IMCGG/Avr
+ PpVGmWpP78vt+FnCPE3SOSUdX3fnlgAzX2moTG1kDZoSMAE5Sn9UYt3CZsOAMU2Hm1Kv
+ zj2w==
+X-Gm-Message-State: AO0yUKUXDK+HiQSe3DLyw+uRuPf20JzuQvuoplJA98ctxw2yqOj/Eg1O
+ lXicXSVrR5Y8tBNhfbxKCAzg/HJBSYl3BKkr6FU=
+X-Google-Smtp-Source: AK7set8bMPcrwXhRnvw3jyWS1NLotiO2eiofOqpmZD5+GddsSpkaKBmnfJlUB9vtn2qeo5vdQpxq6A==
+X-Received: by 2002:a17:906:178f:b0:88f:87f0:c919 with SMTP id
+ t15-20020a170906178f00b0088f87f0c919mr534211eje.64.1675327802547; 
+ Thu, 02 Feb 2023 00:50:02 -0800 (PST)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com.
+ [209.85.218.42]) by smtp.gmail.com with ESMTPSA id
+ my31-20020a1709065a5f00b0088cf92eb0e1sm3191094ejc.150.2023.02.02.00.50.01
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 02 Feb 2023 00:50:02 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id qw12so3967614ejc.2
+ for <buildroot@buildroot.org>; Thu, 02 Feb 2023 00:50:01 -0800 (PST)
+X-Received: by 2002:a17:906:88a:b0:87b:d3b3:94f0 with SMTP id
+ n10-20020a170906088a00b0087bd3b394f0mr1645302eje.61.1675327801558; Thu, 02
+ Feb 2023 00:50:01 -0800 (PST)
 MIME-Version: 1.0
+References: <CAFza+u8Ez40pCa05x=gUoB8bG=vL1mxspnMs2DyMBnLgp+80VA@mail.gmail.com>
+In-Reply-To: <CAFza+u8Ez40pCa05x=gUoB8bG=vL1mxspnMs2DyMBnLgp+80VA@mail.gmail.com>
+Date: Thu, 2 Feb 2023 00:49:50 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2rtcynkCBsz=_9yANOEguyPCOcQDj8_ns+cv8RS8+8t9A@mail.gmail.com>
+Message-ID: <CA+h8R2rtcynkCBsz=_9yANOEguyPCOcQDj8_ns+cv8RS8+8t9A@mail.gmail.com>
+To: Buildroot Mailing List <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675326082;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wN4XXLsgI0qEAuBwL8DD1w5Gxt0DDvG0CpUg6tWnQFQ=;
- b=liTI5brYriNeE0KMDwkYbzHewwuBIk6917pZPD8gLqQ7M/cAoq+ejN0gnuQUGoTvir/zw6
- Yyn/goI9mAGOlNxe34za1bW3Ef8NGrteOR0xVrd1fS/tMJAxwkTWHpmyM/J6IFVx4cYJL6
- 9uMkXAcyYQBUjOpvgcBfPbem/sfcvltmmozAOx+kUFhPURxFlcKeSxvA7R9nOGGugWY9NE
- fr35F2e4LKHxec5pfeD1GSSfrl9guxnQe3PVOHinAclR4Ck230oleuuyE4yILsIK6BABPD
- KBhdISz1lYKeui4aW9t2Ven0/dDHb+7juE3qYGpA5hQAO3gbGes0ZsDYQ9+Qww==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=liTI5brY
-Subject: Re: [Buildroot] [PATCH 1/1] board/zynqmp/post-image.sh: Don't
- insist on a xilinx/ prefix for .dts files.
+ d=paral.in; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=ZuDjW8faFlkfANYdJ6Z6zjcdZPPtnTFYwYVEjLms3no=;
+ b=Qx+Z6taWS6OdX2tZ3uF2YYAIB6iUL4rXABdqpbR9zfTphX5y3qOQnhRisKdS1DlUkn
+ hg4ALBuQY7OjxQTImbM4r0Kq1GDKbgf1A80BrfWI/PF5CUUNhcGFGEwcBNbwUjFD2Snb
+ tNrK0XH351vIw+JnS6kd+dccF4cDXQa7uP9nDgkMKl8RVozxpBzkoyeflrSE7pLtJYml
+ lQmuJTCBHJC6qzNUQksLhG3I/1lmPN+2ba9CxyfvHl/axlqd6UpeLWPN9jQj9yIVeSUw
+ WPM3QuA4zLnJF7u3D5mOEnOksAFNp2dcbAoIJZFgLtyusuVSLR5QWIfKRoGtqolCJ5hc
+ eoWg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
+ header.a=rsa-sha256 header.s=google header.b=Qx+Z6taW
+Subject: [Buildroot] Go 1.20 changes required in Buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,83 +100,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Graeme,
+Hi all,
 
-On Wed, 1 Feb 2023 14:16:47 -0800
-Graeme Smecher <gsmecher@threespeedlogic.com> wrote:
+Go 1.20 includes a change which breaks our build infra for go in Buildroot:
 
-> Hi Luca,
-> 
-> On 2023-02-01 13:52, Luca Ceresoli wrote:
-> > Hi Graeme,
-> > 
-> > On Wed,  1 Feb 2023 11:59:56 -0800
-> > Graeme Smecher <gsmecher@threespeedlogic.com> wrote:
-> >   
-> >> If using BR2_LINUX_KERNEL_CUSTOM_DTS_PATH to copy .dts files from
-> >> buildroot into the linux tree, these .dts files are copied to
-> >> arch/arm64/boot. Unfortunately, the post-image.sh script expects to find
-> >> them in arch/arm64/boot/xilinx.
-> >>
-> >> This patch does not require the xilinx/ prefix to be present when
-> >> symlinking the device-tree to system.dtb where u-boot expects to find
-> >> it.
-> >>
-> >> Signed-off-by: Graeme Smecher <gsmecher@threespeedlogic.com>
-> >> ---
-> >>   board/zynqmp/post-image.sh | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
-> >> index ed6dbe188c..c5de2db820 100755
-> >> --- a/board/zynqmp/post-image.sh
-> >> +++ b/board/zynqmp/post-image.sh
-> >> @@ -5,7 +5,7 @@
-> >>   # devicetree listed in the config.
-> >>   
-> >>   FIRST_DT=$(sed -nr \
-> >> -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
-> >> +               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \  
-> > 
-> > I think the following simpler change would also work. Can you check
-> > that please?
-> > 
-> > -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
-> > +               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="([-_/[:alnum:]\\.]*).*"$|\2|p' \  
-> 
-> Assuming you intended \1, not \2 here - this suggestion breaks behaviour for a couple of defconfigs in the tree. If I run the ZCU106 defconfig through this regexp, I get:
-> 
-> 	$ cat configs/zynqmp_zcu106_defconfig | sed -nr -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="([-_/[:alnum:]\\.]*).*"$|\1|p'
-> 	xilinx/zynqmp-zcu106-revA
-> 
-> ...this creates a dangling symlink in output/images (system.dtb -> xilinx/zynqmp-zcu106-revA.dtb).
+https://go.dev/doc/go1.20#bootstrap
 
-Right.
+The minimum required version of go-bootstrap is now go 1.17.13 or later.
 
-> The right behaviour is to strip any prefixes that exist, without requiring any. Something like:
-> 
-> -               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
-> +               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(.*/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
-> 
-> This is less Xilinx-specific, although it seems a tad greedy.
+Otherwise the build fails with this error:
 
-Yes, better keeping the xilinx prefix as this is a xilinx-specific
-script anyway.
+building_Go_requires_Go_1_17_13_or_later
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+As Go 1.4 was the previous version that could be compiled with C,
+there is now no way to bootstrap go with a C compiler.
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+... unless a process like this is used:
+
+ - build host-go-bootstrap-1.4-20170531
+ - build host-go-bootstrap-1.19.5 with go1.4-bootstrap
+ - build host-go-1.20 with host-go-bootstrap-1.19.5
+
+... which could be viable for Buildroot, at least for now.
+
+Previous discussion on this:
+
+https://lore.kernel.org/all/20220525234312.643dfc03@windsurf/T/
+
+An existing patch is still Pending Review which fixes a separate but
+related issue: we cannot build go-bootstrap-1.4 on arm64. The proposed
+fix above would still not work correctly on arm64. That patch linked
+above fixes this issue by using a Go compiler installed on the host
+machine (/usr/bin/go) to bootstrap host-go in that case.
+
+I'll send a patch soon which upgrades to go1.20 using the above
+3-stage bootstrap process. It's not pretty, but it will work for now.
+
+A potentially cleaner solution would be to bootstrap with gccgo, or
+depend on the host Go binaries to bootstrap (as linked above), or to
+download pre-compiled binaries to bootstrap.
+
+Best regards,
+Christian Stewart
+
+---------- Forwarded message ---------
+From: 'Michael Knyszek' via golang-nuts <golang-nuts@googlegroups.com>
+Date: Wed, Feb 1, 2023 at 11:36 AM
+Subject: [go-nuts] Go 1.20 is released
+To: <golang-announce@googlegroups.com>
+Cc: golang-dev <golang-dev@googlegroups.com>, golang-nuts
+<golang-nuts@googlegroups.com>
+
+
+Hello gophers,
+
+We have just released Go 1.20.
+
+To find out what has changed in Go 1.20, read the release notes:
+https://go.dev/doc/go1.20
+
+You can download binary and source distributions from our download page:
+https://go.dev/dl/#go1.20
+
+If you have Go installed already, an easy way to try go1.20
+is by using the go command:
+$ go install golang.org/dl/go1.20@latest
+$ go1.20 download
+
+To compile from source using a Git clone, update to the release with
+git checkout go1.20 and build as usual.
+
+Thanks to everyone who contributed to the release!
+
+Cheers,
+Michael, Matthew, and Dmitri for the Go team
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
