@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2777FC61DA4
-	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 13:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE495C61DA4
+	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 13:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABBE7418C1;
-	Thu,  2 Feb 2023 13:26:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABBE7418C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56BE041BC3;
+	Thu,  2 Feb 2023 13:32:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56BE041BC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uySEc4baV3yq; Thu,  2 Feb 2023 13:26:58 +0000 (UTC)
+	with ESMTP id HwxWL6r9rgqj; Thu,  2 Feb 2023 13:31:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8744D418BC;
-	Thu,  2 Feb 2023 13:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8744D418BC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F311D1BF30A
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:26:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A7F741BBE;
+	Thu,  2 Feb 2023 13:31:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A7F741BBE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 52C961BF30A
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD769418BC
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD769418BC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2945281F90
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:31:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2945281F90
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sQ3qjIFI8ejM for <buildroot@lists.busybox.net>;
- Thu,  2 Feb 2023 13:26:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8vhgkhZCxtjT for <buildroot@lists.busybox.net>;
+ Thu,  2 Feb 2023 13:31:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD469416F1
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com
- [209.85.214.180])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BD469416F1
- for <buildroot@buildroot.org>; Thu,  2 Feb 2023 13:26:54 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id z1so1791102plg.6
- for <buildroot@buildroot.org>; Thu, 02 Feb 2023 05:26:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55E9781F83
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com
+ [209.85.210.176])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 55E9781F83
+ for <buildroot@buildroot.org>; Thu,  2 Feb 2023 13:31:55 +0000 (UTC)
+Received: by mail-pf1-f176.google.com with SMTP id u5so1175632pfm.10
+ for <buildroot@buildroot.org>; Thu, 02 Feb 2023 05:31:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=j4Qj1+XwCzfmpLKlmPIxVoyLc7btV/bfEuOMM2MAXbc=;
- b=h8Shp8gNFY/O6iT3xvq24Hcdji9B5dKGrK5XoHBODydP592q/rGQKh491ghiYUCz1K
- Y1oBuPmUeh4zBj1ycljw3goSapKqL0DvqWuZMs9+tVfRc7j+m0CfFxqJ2huAHY2P9Hwa
- jY8GeofWe47kcP7I8NdUYhzDXv0r+6jqZYIV7UsvinT5lcqf0I5uzAOtL4GNj6XwEpPD
- W9MsNfYG/f1Z81tU5C6q51oPf6TWLnQUkHLtGR3PFvczRDZTbGDSLaKikTy6ZIKy4HTY
- K1U45h1EJTDaEQ2uCjLo3QqVGUjvHrTcpgml4X6QBo0gNYzjvXpD4NHMXSn9pgT8wTur
- PlvQ==
-X-Gm-Message-State: AO0yUKWJZ7EYvp68otiJowVJoUsQFDrKoSy5cWmgXk72pT3TQLYvDwPJ
- G1MiV4iJq+F6cvEoQygL0AAGNPPyoBAkFQ==
-X-Google-Smtp-Source: AK7set//yWdEQY38S1MSh3e4WJ044YEYuYj/+iwrSdoCJ66l+6yR3qa172jQh+2ywZ2wsG2EiCo7Ow==
-X-Received: by 2002:a05:6a21:999a:b0:bc:cd2c:dfce with SMTP id
- ve26-20020a056a21999a00b000bccd2cdfcemr8027272pzb.31.1675344413681; 
- Thu, 02 Feb 2023 05:26:53 -0800 (PST)
+ bh=QhgqWXnoZ6RXSSOgf9s8aVPOL/xbyfcgh3ejbdxTIzU=;
+ b=u84y8+6rdBvJPVkrBbqYVeDEb8FlIfXGvIJAY4KmdKrUxmdVDKFd184922/5bSga96
+ JnMxddcFQvL0WTCvtlYeXGcd/9dVNWop8ZmI9H73jLtrEvx33mCClXnazI7jEu8//EmL
+ 2kaFxgkkEpTJVSJkAQ9RWovcTqwxcLazaRWI5OP7b/L7h1VhOJZxp4K2CaDPxSpYJrfD
+ p3zsU0USB1ipl+h7wM1g8BHgIjK2UaB905UuFPkJPh9KOmjO8kDzsxZt9LoggvsRWFnA
+ 0OyhYBOQU8kmn2w4/AeExErFqyfUYMUPsTYOXA7p/WODwv0SMWXMBT45mSqww3w60fNG
+ cQTg==
+X-Gm-Message-State: AO0yUKUhhpkej8/AHUoXaanhW4x/7vw2Z1bMXarbPNDnNzL6o1yhcHvw
+ fyr6G7KBIZmfXAkyyFlRNjLT/dy1IRXZMA==
+X-Google-Smtp-Source: AK7set8uE1X8/Sx4+NDQsmj4DAw8ar1hTvoSIei6mwn1H5h4c0as0MbN+fASvAbHCVQ8Don7jZbj9A==
+X-Received: by 2002:a05:6a00:ace:b0:592:591f:196b with SMTP id
+ c14-20020a056a000ace00b00592591f196bmr7321612pfl.18.1675344714276; 
+ Thu, 02 Feb 2023 05:31:54 -0800 (PST)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- h6-20020a170902f7c600b001963232f49dsm7541851plw.233.2023.02.02.05.26.52
+ p6-20020a056a000a0600b00581013fcbe1sm13560563pfh.159.2023.02.02.05.31.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Feb 2023 05:26:53 -0800 (PST)
+ Thu, 02 Feb 2023 05:31:53 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu,  2 Feb 2023 05:26:50 -0800
-Message-Id: <20230202132650.1537778-1-christian@paral.in>
+Date: Thu,  2 Feb 2023 05:31:51 -0800
+Message-Id: <20230202133151.1671576-1-christian@paral.in>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/1] package/balena-engine: bump to version
- 20.10.26
+Subject: [Buildroot] [PATCH v1 1/1] package/cni-plugins: bump version to
+ 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,71 +89,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This update requires a workaround for the non-standard vendor/ structure in the
-balena-engine repository, which has an invalid vendor/modules.txt file.
+Adds new device driver main/dummy and various bug fixes/cleanups.
 
-Removing the vendor/modules.txt file fixes the build error.
-
-Reference: https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-
-The go download post-process script uses go mod init to create the go.mod file
-which specifies a language version of go1.16 on default. Use go mod edit to
-adjust the go.mod file to the required minimum version go1.19 for generic types
-used by docker-engine. (Fixes a build error).
-
-Remove the vendor/archive sub-tree (fixes a build error) because Go no longer
-allows having duplicate packages in GOPATH and GOROOT. vendor/archive/tar cannot
-be in vendor/ because it exists in the standard library. Remove it from vendor/.
-
-https://github.com/balena-os/balena-engine/releases/tag/v20.10.26
+https://github.com/containernetworking/plugins/releases/tag/v1.2.0
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/balena-engine/balena-engine.hash |  2 +-
- package/balena-engine/balena-engine.mk   | 14 +++++++++++++-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/cni-plugins/cni-plugins.hash | 2 +-
+ package/cni-plugins/cni-plugins.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/balena-engine/balena-engine.hash b/package/balena-engine/balena-engine.hash
-index 4adb8ce561..6a92a40cc8 100644
---- a/package/balena-engine/balena-engine.hash
-+++ b/package/balena-engine/balena-engine.hash
+diff --git a/package/cni-plugins/cni-plugins.hash b/package/cni-plugins/cni-plugins.hash
+index fc3b5a7ead..0c3e07c91c 100644
+--- a/package/cni-plugins/cni-plugins.hash
++++ b/package/cni-plugins/cni-plugins.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  4fb38109d133d499de366466a612fb6f523ea99d56fcd69b45dc494a75fbce0f  balena-engine-20.10.21.tar.gz
-+sha256  1482b64e35d5406be719e362647ed7d0599cf4eead7770247ebd972c4c85ede5  balena-engine-20.10.26.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/balena-engine/balena-engine.mk b/package/balena-engine/balena-engine.mk
-index ecfb62bfbf..3b8b2f9ac6 100644
---- a/package/balena-engine/balena-engine.mk
-+++ b/package/balena-engine/balena-engine.mk
+-sha256  c86c44877c47f69cd23611e22029ab26b613f620195b76b3ec20f589367a7962  cni-plugins-1.1.1.tar.gz
++sha256  f3496ddda9c7770a0b695b67ae7ee80a4ee331ac2745af4830054b81627f79b7  cni-plugins-1.2.0.tar.gz
+ sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/cni-plugins/cni-plugins.mk b/package/cni-plugins/cni-plugins.mk
+index b30937095a..be02c2ff45 100644
+--- a/package/cni-plugins/cni-plugins.mk
++++ b/package/cni-plugins/cni-plugins.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BALENA_ENGINE_VERSION = 20.10.21
-+BALENA_ENGINE_VERSION = 20.10.26
- BALENA_ENGINE_SITE = $(call github,balena-os,balena-engine,v$(BALENA_ENGINE_VERSION))
- 
- BALENA_ENGINE_LICENSE = Apache-2.0
-@@ -34,6 +34,18 @@ BALENA_ENGINE_TAGS = \
- 
- BALENA_ENGINE_BUILD_TARGETS = cmd/balena-engine
- 
-+# remove the conflicting vendor/modules.txt
-+# remove the conflicting vendor/archive (not allowed in go1.20)
-+# https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-+define BALENA_ENGINE_CONFIGURE_CMDS
-+	if [ -f $(@D)/vendor/modules.txt ]; then \
-+		rm $(@D)/vendor/modules.txt; \
-+	fi
-+	if [ -d $(@D)/vendor/archive ]; then \
-+		rm -rf $(@D)/vendor/archive; \
-+	fi
-+endef
-+
- ifeq ($(BR2_INIT_SYSTEMD),y)
- BALENA_ENGINE_DEPENDENCIES += systemd
- BALENA_ENGINE_TAGS += journald
+-CNI_PLUGINS_VERSION = 1.1.1
++CNI_PLUGINS_VERSION = 1.2.0
+ CNI_PLUGINS_SITE = $(call github,containernetworking,plugins,v$(CNI_PLUGINS_VERSION))
+ CNI_PLUGINS_LICENSE = Apache-2.0
+ CNI_PLUGINS_LICENSE_FILES = LICENSE
+@@ -12,6 +12,7 @@ CNI_PLUGINS_LICENSE_FILES = LICENSE
+ CNI_PLUGINS_BUILD_TARGETS = \
+ 	plugins/ipam/dhcp \
+ 	plugins/main/bridge \
++	plugins/main/dummy \
+ 	plugins/main/host-device \
+ 	plugins/main/ipvlan \
+ 	plugins/main/loopback \
 -- 
 2.39.1
 
