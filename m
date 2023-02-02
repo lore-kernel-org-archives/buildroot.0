@@ -1,71 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 472B7C61DA4
-	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 07:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3625DC05027
+	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 07:16:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A671A60E27;
-	Thu,  2 Feb 2023 07:15:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A671A60E27
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFAFC81008;
+	Thu,  2 Feb 2023 07:16:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFAFC81008
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KtJDGgi-xPzf; Thu,  2 Feb 2023 07:15:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m836LWLdGaET; Thu,  2 Feb 2023 07:16:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 914756102D;
-	Thu,  2 Feb 2023 07:15:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 914756102D
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1AEE80FB1;
+	Thu,  2 Feb 2023 07:16:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1AEE80FB1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 771A61BF2B4
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 07:15:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3E9EE1BF2B4
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 07:16:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 504DB41A4B
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 07:15:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 504DB41A4B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18F8E40318
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 07:16:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F8E40318
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ws2YiIak8PRW for <buildroot@lists.busybox.net>;
- Thu,  2 Feb 2023 07:15:45 +0000 (UTC)
+ with ESMTP id nUfm_OdTmebL for <buildroot@lists.busybox.net>;
+ Thu,  2 Feb 2023 07:16:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2A9D41A3E
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com
- [209.85.221.49])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2A9D41A3E
- for <buildroot@buildroot.org>; Thu,  2 Feb 2023 07:15:44 +0000 (UTC)
-Received: by mail-wr1-f49.google.com with SMTP id q5so856402wrv.0
- for <buildroot@buildroot.org>; Wed, 01 Feb 2023 23:15:44 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72B7B41A3E
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com
+ [209.85.221.42])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 72B7B41A3E
+ for <buildroot@buildroot.org>; Thu,  2 Feb 2023 07:16:06 +0000 (UTC)
+Received: by mail-wr1-f42.google.com with SMTP id m7so799993wru.8
+ for <buildroot@buildroot.org>; Wed, 01 Feb 2023 23:16:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=N7K/ygHjrpozEz1Be1gU1UWWXJjdi0um4HMaQptUIl0=;
- b=KQAwDaJYohtlvyc0r9cL8aFnqD9YurATmvfDnKZ3UTAmiDfeWE/RC0qXWFAmmWwee/
- Zloauz9k7pRE2C6Gbypa2YbrZGc0JTWR68esCz5byT7TUpk88DevPRzejefCQ/F6IdsW
- a2fpPH4X+cnUssM8corrMI8xBdhXIaVBbc1hYoSDC0TB8R6J6n/LE7NHnVHuXMIaHxdR
- GCVuINDkUfakOMlcPVEJ9tF9HmVly8H99ypzu+dEvYeopSqbvPPDVt0BvM6IPFNavNuO
- Ka5+1Ws9w68vsGPBDjw+zz+GF4OF2ecc9+c9otnW/6vfwBJSw1zsnSeVP6QJxOWWao3v
- zNEw==
-X-Gm-Message-State: AO0yUKWIjhPpjj2L87S3nlDX6YKY1sGSQLor4CHfYF5ovaa3YWzg49CH
- KJdXuBVXXqM+Z8SZKm9mFccB3NIq8RCBdN7i
-X-Google-Smtp-Source: AK7set91k+18RKV0iP+/+wTOozrAjh6RLwIuC6qc3eK3CGdAxs5eHKTuor6Tk4EioZ5vq3N6uflbsA==
-X-Received: by 2002:a5d:6b89:0:b0:2bf:b571:1f18 with SMTP id
- n9-20020a5d6b89000000b002bfb5711f18mr5133227wrx.61.1675322142402; 
- Wed, 01 Feb 2023 23:15:42 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=JfSehkWS/YueKfJCLdbNbpI7CT6IWXHRcVYqVb/Ogz4=;
+ b=NwpdMe18g3xJabbkZ5nL8MDmodZQV/gOmp5cNvtwgOCd7cZfxaqdDW7G9GeIlR4a4c
+ 8cZcBpjDCGy+tYArJEoWo/ZomnzfM6FqHBqZDzdT5YY+aa1swTQ1e9VQpouaQakwlKea
+ fcLaM3G/t0mJtLeEuGwIWhqjQTavHH/R57cr+0Bcrfb27UaOIoggUSSfRbA5IjXv8B2M
+ +KMWoXps82MSVcuFRehVxv88SajIkxfZf2VBFuAdSrZTRDNcQNsmmIZ7vn2b9GlbKiVe
+ ns0a1XXIMxcsvpbTPvr7bKG6VusHvRb+JL3jffgKJlIBcHBA1HGR3QDIx+wFRWzVkuoJ
+ Z67g==
+X-Gm-Message-State: AO0yUKXmUgi1aKTzJYqsjgOD0DIQ/n0Q/xNwZFwW2IfCwmhE6DQuBF4p
+ RtXi2r3zCZkYFj4TqZkwrB3ftrZoDiOnAqXL
+X-Google-Smtp-Source: AK7set9hsZnca4GsSkln5cDQ4zaGgCDhR90hi54Zcwg5p2FLnCHcdzVt8oF8VqL0gBJSeKEDzHivKQ==
+X-Received: by 2002:adf:fbc8:0:b0:2bf:ae2f:576f with SMTP id
+ d8-20020adffbc8000000b002bfae2f576fmr4227866wrs.14.1675322164180; 
+ Wed, 01 Feb 2023 23:16:04 -0800 (PST)
 Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
  [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- a17-20020adffb91000000b002bddac15b3dsm18708954wrr.33.2023.02.01.23.15.41
+ a17-20020adffb91000000b002bddac15b3dsm18708954wrr.33.2023.02.01.23.16.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 Feb 2023 23:15:41 -0800 (PST)
+ Wed, 01 Feb 2023 23:16:03 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Thu,  2 Feb 2023 08:15:17 +0100
-Message-Id: <20230202071518.3961314-1-thomas@devoogdt.com>
+Date: Thu,  2 Feb 2023 08:15:18 +0100
+Message-Id: <20230202071518.3961314-2-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230202071518.3961314-1-thomas@devoogdt.com>
+References: <20230202071518.3961314-1-thomas@devoogdt.com>
 MIME-Version: 1.0
 Subject: [Buildroot] [PATCH] package/fluent-bit: add support for non glibc
  toolchain
@@ -94,7 +96,7 @@ From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 - require sync_4 support
 - provide fts.h trough musl-fts
 
-'static_assert()' is not available if no C++ toolchain or no glibc
+static_assert is not available if no C++ toolchain or no glibc
 is used, so add two patches to fix this
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
@@ -107,13 +109,7 @@ Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
  create mode 100644 package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
  create mode 100644 package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch
 
-No idea if there is an interest in uClibc or musl-enabled toolchains regarding buildroot?
-I was able to compile fluent-bit for most of the supported platforms with a limited amount
-of changes.
-
-I had to create two patches in two libs. One (cfl) was already upstreamed,
-and added the link to it. The other (c-ares) should be fixed by the m4 bump. I guess that
-fluent-bit will bump those sub-libs over time, so we can drop these patches.
+No idea if there is interrese
 
                              arm-aarch64 [ 1/44]: OK
                    bootlin-aarch64-glibc [ 2/44]: OK
@@ -160,6 +156,7 @@ fluent-bit will bump those sub-libs over time, so we can drop these patches.
                            sourcery-mips [43/44]: OK
                           sourcery-nios2 [44/44]: OK
 44 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
 
 diff --git a/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch b/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
 new file mode 100644
