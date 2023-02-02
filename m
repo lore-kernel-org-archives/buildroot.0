@@ -1,73 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64252C05027
-	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 11:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C816AC05027
+	for <buildroot@archiver.kernel.org>; Thu,  2 Feb 2023 13:09:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E37EC81F5F;
-	Thu,  2 Feb 2023 11:29:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E37EC81F5F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4lbTGNcQVxWj; Thu,  2 Feb 2023 11:29:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B67681F5C;
-	Thu,  2 Feb 2023 11:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B67681F5C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD5B31BF484
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 11:29:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3DD441A6C
- for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 11:29:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3DD441A6C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2432441B7E;
+	Thu,  2 Feb 2023 13:09:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2432441B7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D0BGHJwLm3yq for <buildroot@lists.busybox.net>;
- Thu,  2 Feb 2023 11:29:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6956241A3E
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6956241A3E
- for <buildroot@buildroot.org>; Thu,  2 Feb 2023 11:29:48 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D5C9A2000D;
- Thu,  2 Feb 2023 11:29:44 +0000 (UTC)
-Date: Thu, 2 Feb 2023 12:29:43 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230202122943.3c2851d7@booty>
-In-Reply-To: <20230201223241.3867678-6-giulio.benetti@benettiengineering.com>
-References: <20230201223241.3867678-1-giulio.benetti@benettiengineering.com>
- <20230201223241.3867678-6-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E4F5DWjRmLEX; Thu,  2 Feb 2023 13:08:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E86B41BD0;
+	Thu,  2 Feb 2023 13:08:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E86B41BD0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B5B121BF30A
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:08:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CE6F403F8
+ for <buildroot@lists.busybox.net>; Thu,  2 Feb 2023 13:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CE6F403F8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5JsYnGlSVJ3p for <buildroot@lists.busybox.net>;
+ Thu,  2 Feb 2023 13:08:52 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F56D40120
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5F56D40120
+ for <buildroot@buildroot.org>; Thu,  2 Feb 2023 13:08:52 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id ud5so5802077ejc.4
+ for <buildroot@buildroot.org>; Thu, 02 Feb 2023 05:08:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=yAMUnbjQKTsBCQPuKlp6d18CJK1AZt3RAGgDI3iPtwE=;
+ b=EwTLiBlTVuCrqbHFxEIwbXqNWKbGdY/qehwAIllWBG6ctaNqsUkaNVKX1ZJ/6LqRox
+ 0GVV66QuBMhV77QfnAKsxKn/qr3ruQVPqWWq5ZnBuHXk7FPOlVXgktcW4VibIBk0DQx8
+ CaBvXbK5NYGYv+RZloVRthdB00eNfB63JpvhT3uXAtLn1jmzxbCfoAYBbAqQK9zkfLXS
+ NicCdAVbjP8OFdorWDYCK4fPkYU87y7eaGPtDa7Am3nuQh1rqwKzxJ7T+k13dp6IkIJG
+ A1G3ozyAkk2FLJs2P0ZDqmAfvM/lBZ5u/Kw/P3S0EluS1E4qWXRHAm0+EQYcJUhOoI4z
+ Krlw==
+X-Gm-Message-State: AO0yUKXC5Y91fyG9i3tS/3kKAJKzm37gykydrAygRicyXyd0Nh1sqBpU
+ 9wWB6Uf2c5kh4AIxAgvVoY7bt+VifZ7O1R8g870=
+X-Google-Smtp-Source: AK7set+eFkSVSE45/NRPzxRSxq6iIcbFuPBx7AtLP218vAWcfQXikf9a0KfHUqTu8aP/oNPEArlvug==
+X-Received: by 2002:a17:907:6290:b0:88d:ba89:1853 with SMTP id
+ nd16-20020a170907629000b0088dba891853mr2125999ejc.36.1675343330219; 
+ Thu, 02 Feb 2023 05:08:50 -0800 (PST)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com.
+ [209.85.218.46]) by smtp.gmail.com with ESMTPSA id
+ dc19-20020a170906c7d300b00887a28ac01asm6792930ejb.31.2023.02.02.05.08.49
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 02 Feb 2023 05:08:49 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id k4so5848481eje.1
+ for <buildroot@buildroot.org>; Thu, 02 Feb 2023 05:08:49 -0800 (PST)
+X-Received: by 2002:a17:906:a2c9:b0:88c:ee63:bafe with SMTP id
+ by9-20020a170906a2c900b0088cee63bafemr1684107ejb.27.1675343329223; Thu, 02
+ Feb 2023 05:08:49 -0800 (PST)
 MIME-Version: 1.0
+References: <20230202105544.315452-1-christian@paral.in>
+In-Reply-To: <20230202105544.315452-1-christian@paral.in>
+Date: Thu, 2 Feb 2023 05:08:37 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2oHeV+cTWDzPfKzFPg3_F5df-t4b=bZC4EZNVCRgsVVuw@mail.gmail.com>
+Message-ID: <CA+h8R2oHeV+cTWDzPfKzFPg3_F5df-t4b=bZC4EZNVCRgsVVuw@mail.gmail.com>
+To: Christian Stewart <christian@paral.in>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675337385;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=V23iCBmyPemAC+HpcPhkJNvPgLJSdA9GidTedAnVQb4=;
- b=HFcbPQEIJLD11webPNWBImfrFwvCB6pcxotROzoCDzMtwlkFd757YVuMVUMGeAldzaLe6X
- pTdd3hEfIZMwFhBD+bgHW9z6AQ2sg3eHbq9KipwzpU57OM3BzHJgk/yeQ+HHrgtziyaWwu
- QfD4nEO/+INJI6jqdtJgJ1BVyT7sV/ghYi5D4hFZsJkB890saw6Uf8i3yrls27DHqGWCec
- +vdXvKCvFonFLzCxSPbjBWqy4XWRPutJlBp78louRxzYa8WqfvK8So3KiJXo8EnYMmmmwf
- Ik2ij1E9muc+8UI7QJxf9zaOjEyUGquIrWv0R6/cZOMNWFHrYpdSHv0q7gIQPw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HFcbPQEI
-Subject: Re: [Buildroot] [PATCH 5/7]
- configs/olimex_a20_olinuxino_micro_defconfig: bump Linux to 6.1.9 and
- U-Boot to 2023.01
+ d=paral.in; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=yAMUnbjQKTsBCQPuKlp6d18CJK1AZt3RAGgDI3iPtwE=;
+ b=FoT04Sk3EYLc2QnxDavS/L6RzUwAF2+KqARGZKWFX+U+S3jAMENClbblBmNyvVDrCR
+ XiE1evH8VzmDFgtdKrGBUrXx5seQ0wr5nVqAWieOq40iJJ8GRelxXPkL6/1z4tvLYRjo
+ uJJ2MtaYdGAFoLL2J5gRYxqsH4GogmHikJossI/2ecfAOfcWe+uV4iSbFI+ZRE6JQBpW
+ tQKmv9NUbgRy1FyXdvWeM9TDwEELlN9TfHza1Y1/uyU27KNBw+kefGpimcM4gwIFaOFU
+ sVlfGzZYwM/Ynce13EEzxGbI47V2gwQHbYAgl1UA/Y4OOZAZX84YnshhCztbKJWcbVrz
+ KwjA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
+ header.a=rsa-sha256 header.s=google header.b=FoT04Sk3
+Subject: Re: [Buildroot] [PATCH v1 1/3] package/go-bootstrap: split into two
+ stages: go1.4 and go1.19.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,35 +101,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Leon Anavi <leon.anavi@konsulko.com>,
- Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Anisse Astier <anisse@astier.eu>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
+Hi all,
 
-On Wed,  1 Feb 2023 23:32:39 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Thu, Feb 2, 2023 at 2:55 AM Christian Stewart <christian@paral.in> wrote:
+> +# Use go-bootstrap-stage1 to bootstrap.
+> +HOST_GO_BOOTSTRAP_STAGE2_DEPENDENCIES = host-go-bootstrap-stage1
+> +HOST_GO_BOOTSTRAP_STAGE2_MAKE_ENV +=   GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE2_BOOTSTRAP_ROOT)
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+This HOST_GO_BOOTSTRAP_STAGE2_MAKE_ENV += line should be dropped (it's
+overwritten below in the file).
 
-Thanks, this was a good opportunity to remove the dust from my Mini
-and power it on once again!
-
-For this patch:
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
-For the whole series:
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks,
+Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
