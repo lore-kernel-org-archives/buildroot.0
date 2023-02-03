@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D6ECC636CC
-	for <buildroot@archiver.kernel.org>; Fri,  3 Feb 2023 07:28:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AB21C61DA4
+	for <buildroot@archiver.kernel.org>; Fri,  3 Feb 2023 07:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7BA981EEB;
-	Fri,  3 Feb 2023 07:28:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7BA981EEB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7319E61261;
+	Fri,  3 Feb 2023 07:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7319E61261
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tCEmsKDN-36E; Fri,  3 Feb 2023 07:28:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bQ-u85NAiO7x; Fri,  3 Feb 2023 07:29:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32A7981E96;
-	Fri,  3 Feb 2023 07:28:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32A7981E96
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ADAE91BF3A8
- for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:28:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC76761245;
+	Fri,  3 Feb 2023 07:29:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC76761245
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 82E421BF3A8
+ for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88BCE40FDC
- for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:28:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88BCE40FDC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 690DB61245
+ for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:29:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 690DB61245
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MG_N9Jq3kQOb for <buildroot@lists.busybox.net>;
- Fri,  3 Feb 2023 07:28:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NUZDOvsWTxin for <buildroot@lists.busybox.net>;
+ Fri,  3 Feb 2023 07:28:59 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C2E540159
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C2E540159
- for <buildroot@buildroot.org>; Fri,  3 Feb 2023 07:28:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 678576101F
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 678576101F
+ for <buildroot@buildroot.org>; Fri,  3 Feb 2023 07:28:59 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D9FF64000E;
- Fri,  3 Feb 2023 07:28:37 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0CB02240004;
+ Fri,  3 Feb 2023 07:28:56 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pNqUu-00Cq4g-Rd; Fri, 03 Feb 2023 08:28:36 +0100
+ id 1pNqVD-00Cq68-Pv; Fri, 03 Feb 2023 08:28:55 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Christian Stewart <christian@paral.in>
-References: <20230202134149.1864294-1-christian@paral.in>
-Date: Fri, 03 Feb 2023 08:28:36 +0100
-In-Reply-To: <20230202134149.1864294-1-christian@paral.in> (Christian
- Stewart's message of "Thu, 2 Feb 2023 05:41:49 -0800")
-Message-ID: <87sffn2onv.fsf@dell.be.48ers.dk>
+References: <20230202133453.1747150-1-christian@paral.in>
+Date: Fri, 03 Feb 2023 08:28:55 +0100
+In-Reply-To: <20230202133453.1747150-1-christian@paral.in> (Christian
+ Stewart's message of "Thu, 2 Feb 2023 05:34:53 -0800")
+Message-ID: <87o7qb2onc.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/docker-compose: security bump
- version to 2.15.1
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/containerd: bump to version
+ 1.6.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,10 +73,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > Fix CVE-2022-27664 and CVE-2022-32149 high-risk vulnerability.
- > Many other bugfixes, enhancements, and improvements.
-
- > https://github.com/docker/compose/releases/tag/v2.15.1
+ > Bugfixes and improvements.
+ > https://github.com/containerd/containerd/releases/tag/v1.6.16
 
  > Signed-off-by: Christian Stewart <christian@paral.in>
 
