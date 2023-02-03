@@ -1,57 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53B0AC636CC
-	for <buildroot@archiver.kernel.org>; Fri,  3 Feb 2023 07:39:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77375C61DA4
+	for <buildroot@archiver.kernel.org>; Fri,  3 Feb 2023 07:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0304341058;
-	Fri,  3 Feb 2023 07:39:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0304341058
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0659B82074;
+	Fri,  3 Feb 2023 07:39:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0659B82074
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1SCZilFnaU0U; Fri,  3 Feb 2023 07:39:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sshF2I-DWBmD; Fri,  3 Feb 2023 07:39:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CF6840150;
-	Fri,  3 Feb 2023 07:39:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CF6840150
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F1611BF3A8
- for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:39:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58D5A81EA3;
+	Fri,  3 Feb 2023 07:39:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58D5A81EA3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DE3691BF3A8
+ for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 39F4240150
- for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:39:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39F4240150
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7F5D81EA3
+ for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:39:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7F5D81EA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tzywhwmsDpOx for <buildroot@lists.busybox.net>;
- Fri,  3 Feb 2023 07:39:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OciL9zO1Dqmr for <buildroot@lists.busybox.net>;
+ Fri,  3 Feb 2023 07:39:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AC9A400CB
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3AC9A400CB
- for <buildroot@buildroot.org>; Fri,  3 Feb 2023 07:39:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE18980BCE
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BE18980BCE
+ for <buildroot@buildroot.org>; Fri,  3 Feb 2023 07:39:54 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EEB1824000D;
- Fri,  3 Feb 2023 07:39:16 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id E92706000A;
+ Fri,  3 Feb 2023 07:39:50 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pNqfE-00CwHP-2P; Fri, 03 Feb 2023 08:39:16 +0100
+ id 1pNqfl-00CwLa-SA; Fri, 03 Feb 2023 08:39:49 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Christian Stewart <christian@paral.in>
-References: <20230203034443.326513-1-christian@paral.in>
-Date: Fri, 03 Feb 2023 08:39:16 +0100
-In-Reply-To: <20230203034443.326513-1-christian@paral.in> (Christian Stewart's
- message of "Thu, 2 Feb 2023 19:44:40 -0800")
-Message-ID: <877cwz2o63.fsf@dell.be.48ers.dk>
+References: <20230202133453.1747150-1-christian@paral.in>
+ <87o7qb2onc.fsf@dell.be.48ers.dk>
+ <CA+h8R2pFZ+rS4ftSxLVM-EPS=N2ViSiGw_VQ=Sb=VN_jArbC8g@mail.gmail.com>
+Date: Fri, 03 Feb 2023 08:39:49 +0100
+In-Reply-To: <CA+h8R2pFZ+rS4ftSxLVM-EPS=N2ViSiGw_VQ=Sb=VN_jArbC8g@mail.gmail.com>
+ (Christian Stewart's message of "Thu, 2 Feb 2023 23:37:55 -0800")
+Message-ID: <87357n2o56.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/4] package/containerd: bump to version
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/containerd: bump to version
  1.6.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,7 +67,8 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -73,22 +76,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > Bugfixes and improvements.
- > We now install the containerd.service systemd unit.
+ > Hi Peter,
+ > I also sent a v2 of this series which adds the containerd.service for
+ > systemd.
 
- > https://github.com/containerd/containerd/releases/tag/v1.6.16
-
- > Signed-off-by: Christian Stewart <christian@paral.in>
-
- > ---
-
- > v1 -> v2:
-
- >  - install containerd systemd unit (now required by docker-engine and others)
-
- > Signed-off-by: Christian Stewart <christian@paral.in>
-
-Sorry, this is the commit I've applied, not v1.
+Yes, that is the one I have applied, not v1. Sorry about the confusion.
 
 -- 
 Bye, Peter Korsgaard
