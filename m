@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F74CC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1FFDC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:22:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B22A6FBD6;
-	Tue, 21 Feb 2023 01:22:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B22A6FBD6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73274611B4;
+	Tue, 21 Feb 2023 01:22:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73274611B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hVIX5dM5AF-f; Tue, 21 Feb 2023 01:22:38 +0000 (UTC)
+	with ESMTP id SqR9FXFuHQ1G; Tue, 21 Feb 2023 01:22:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B8C86FBD8;
-	Tue, 21 Feb 2023 01:22:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B8C86FBD8
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABE8E6FBDD;
+	Tue, 21 Feb 2023 01:22:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABE8E6FBDD
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 927CE1BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A35E81BF94D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74F926FBEE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9FABC6FBE6
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74F926FBEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FABC6FBE6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oT7L48Q05Gzd for <buildroot@lists.busybox.net>;
+ with ESMTP id kxLQGxTRKKfD for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 83CBA6FBE6
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBA266FBDA
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83CBA6FBE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBA266FBDA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D9DE828C8; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+ id B237781979; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Jan 2023 22:56:46 +0100
+Date: Fri, 3 Feb 2023 08:26:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7115ab39189a6c660745267d8bf0bf41cf8b3db7
-X-Git-Newrev: 7316a0c2c22c8207edff531544e6eb0d6326b45c
+X-Git-Oldrev: aff4317797c34c78747f4c6c5ee8d9a1bc0ae270
+X-Git-Newrev: 67c92fbd5004a750e6af253dd1eba4c3f669ef42
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205244.7D9DE828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ulogd: dbi needs
- threads
+Message-Id: <20230220205244.B237781979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-compose:
+ security bump version to 2.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,43 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7316a0c2c22c8207edff531544e6eb0d6326b45c
+commit: https://git.buildroot.net/buildroot/commit/?id=67c92fbd5004a750e6af253dd1eba4c3f669ef42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 3b3dbd0183265c3f7da49b0b331688fb7573383f forgot to disable dbi
-without threads
+Fix CVE-2022-27664 and CVE-2022-32149 high-risk vulnerability.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Many other bugfixes, enhancements, and improvements.
+
+https://github.com/docker/compose/releases/tag/v2.15.1
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ulogd/ulogd.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/docker-compose/docker-compose.hash | 2 +-
+ package/docker-compose/docker-compose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-index 561429599c..7d4a1fde4d 100644
---- a/package/ulogd/ulogd.mk
-+++ b/package/ulogd/ulogd.mk
-@@ -41,7 +41,11 @@ else
- ULOGD_CONF_OPTS += --disable-sqlite3
- endif
- else
--ULOGD_CONF_OPTS += --disable-mysql --disable-pgsql --disable-sqlite3
-+ULOGD_CONF_OPTS += \
-+	--disable-dbi \
-+	--disable-mysql \
-+	--disable-pgsql \
-+	--disable-sqlite3
- endif
+diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
+index 7a7ab5f110..2c924d5080 100644
+--- a/package/docker-compose/docker-compose.hash
++++ b/package/docker-compose/docker-compose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5cbf6cd1dd8ce98c5e2d62ca7f622e96abce444979b8e8852b033213a98e2049  docker-compose-2.14.0.tar.gz
++sha256  346571ca487bf3f4b3dc9caeadc88a645354b0e098fa60f350249ec35ab3f240  docker-compose-2.15.1.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
+index ef9ee97196..3bced8bb7b 100644
+--- a/package/docker-compose/docker-compose.mk
++++ b/package/docker-compose/docker-compose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+-DOCKER_COMPOSE_VERSION = 2.14.0
++DOCKER_COMPOSE_VERSION = 2.15.1
+ DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
+ DOCKER_COMPOSE_LICENSE = Apache-2.0
+ DOCKER_COMPOSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
