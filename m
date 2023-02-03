@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A924AC636CC
-	for <buildroot@archiver.kernel.org>; Fri,  3 Feb 2023 07:40:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ABC7C636CC
+	for <buildroot@archiver.kernel.org>; Fri,  3 Feb 2023 07:41:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BAF481EA3;
-	Fri,  3 Feb 2023 07:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BAF481EA3
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA1B0429B6;
+	Fri,  3 Feb 2023 07:41:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA1B0429B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ce2b87ig8ypx; Fri,  3 Feb 2023 07:40:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nwVkjGx8tb78; Fri,  3 Feb 2023 07:41:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF99681F27;
-	Fri,  3 Feb 2023 07:40:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF99681F27
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 509531BF977
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA05C41731;
+	Fri,  3 Feb 2023 07:41:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA05C41731
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D0E5A1BF3A8
  for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:40:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30B6D82074
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9F6340362
  for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 07:40:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30B6D82074
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9F6340362
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RWoU7e6SJIbk for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gDYh0r3ffyy6 for <buildroot@lists.busybox.net>;
  Fri,  3 Feb 2023 07:40:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5567181EA3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9415E402A8
  for <buildroot@buildroot.org>; Fri,  3 Feb 2023 07:40:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5567181EA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9415E402A8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 42F2383611; Fri,  3 Feb 2023 07:40:21 +0000 (UTC)
+ id 7D0E683611; Fri,  3 Feb 2023 07:40:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 3 Feb 2023 08:32:00 +0100
+Date: Fri, 3 Feb 2023 08:32:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 67c92fbd5004a750e6af253dd1eba4c3f669ef42
-X-Git-Newrev: bb6410b09b339a372e1cc9b9f09901635ebdf406
+X-Git-Oldrev: def789059af78cd65294cafa4288cb41691e86c7
+X-Git-Newrev: c7ea83dd2df315ba4f492a9ef6b24152ba4cc4f3
 X-Patchwork-Hint: ignore
-Message-Id: <20230203074021.42F2383611@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cni-plugins: bump version to 1.2.0
+Message-Id: <20230203074021.7D0E683611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/containerd: bump to version 1.6.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,50 +62,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb6410b09b339a372e1cc9b9f09901635ebdf406
+commit: https://git.buildroot.net/buildroot/commit/?id=c7ea83dd2df315ba4f492a9ef6b24152ba4cc4f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adds new device driver main/dummy and various bug fixes/cleanups.
+Bugfixes and improvements.
 
-https://github.com/containernetworking/plugins/releases/tag/v1.2.0
+We now install the containerd.service systemd unit.
+
+https://github.com/containerd/containerd/releases/tag/v1.6.16
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cni-plugins/cni-plugins.hash | 2 +-
- package/cni-plugins/cni-plugins.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/cni-plugins/cni-plugins.hash b/package/cni-plugins/cni-plugins.hash
-index fc3b5a7ead..0c3e07c91c 100644
---- a/package/cni-plugins/cni-plugins.hash
-+++ b/package/cni-plugins/cni-plugins.hash
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 04a29949d7..16474089d1 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  c86c44877c47f69cd23611e22029ab26b613f620195b76b3ec20f589367a7962  cni-plugins-1.1.1.tar.gz
-+sha256  f3496ddda9c7770a0b695b67ae7ee80a4ee331ac2745af4830054b81627f79b7  cni-plugins-1.2.0.tar.gz
- sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/cni-plugins/cni-plugins.mk b/package/cni-plugins/cni-plugins.mk
-index b30937095a..be02c2ff45 100644
---- a/package/cni-plugins/cni-plugins.mk
-+++ b/package/cni-plugins/cni-plugins.mk
+ # Computed locally
+-sha256  b86e5c42f58b8348422c972513ff49783c0d505ed84e498d0d0245c5992e4320  containerd-1.6.12.tar.gz
++sha256  e0a893cf67df9dfaecbcde2ba4e896efb3a86ffe48dcfe0d2b26f7cf19b5af3a  containerd-1.6.16.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 192175800c..4a0d6ec38b 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CNI_PLUGINS_VERSION = 1.1.1
-+CNI_PLUGINS_VERSION = 1.2.0
- CNI_PLUGINS_SITE = $(call github,containernetworking,plugins,v$(CNI_PLUGINS_VERSION))
- CNI_PLUGINS_LICENSE = Apache-2.0
- CNI_PLUGINS_LICENSE_FILES = LICENSE
-@@ -12,6 +12,7 @@ CNI_PLUGINS_LICENSE_FILES = LICENSE
- CNI_PLUGINS_BUILD_TARGETS = \
- 	plugins/ipam/dhcp \
- 	plugins/main/bridge \
-+	plugins/main/dummy \
- 	plugins/main/host-device \
- 	plugins/main/ipvlan \
- 	plugins/main/loopback \
+-CONTAINERD_VERSION = 1.6.12
++CONTAINERD_VERSION = 1.6.16
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
+@@ -41,4 +41,10 @@ else
+ CONTAINERD_TAGS += no_btrfs
+ endif
+ 
++define CONTAINERD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/containerd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/containerd.service
++	$(SED) 's,/usr/local/bin,/usr/bin,g' $(TARGET_DIR)/usr/lib/systemd/system/containerd.service
++endef
++
+ $(eval $(golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
