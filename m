@@ -4,67 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 158C6C636CC
-	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 14:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DCE2C61DA4
+	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 19:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6C0160F7D;
-	Sat,  4 Feb 2023 14:55:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6C0160F7D
+	by smtp3.osuosl.org (Postfix) with ESMTP id A69C660FB7;
+	Sat,  4 Feb 2023 19:54:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A69C660FB7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UdsK75u8NgRG; Sat,  4 Feb 2023 14:55:24 +0000 (UTC)
+	with ESMTP id ds9uNLWSpvgi; Sat,  4 Feb 2023 19:54:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAAED60F7E;
-	Sat,  4 Feb 2023 14:55:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAAED60F7E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2018F1BF425
- for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 14:55:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D254760FC7;
+	Sat,  4 Feb 2023 19:54:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D254760FC7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 545E81BF2A0
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 19:54:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE73582136
- for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 14:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE73582136
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF36060EAA
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 19:54:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF36060EAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pTbviQwQl3nT for <buildroot@lists.busybox.net>;
- Sat,  4 Feb 2023 14:55:21 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB8B882112
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DB8B882112
- for <buildroot@buildroot.org>; Sat,  4 Feb 2023 14:55:20 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.102.219])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id B3C0919F5AE;
- Sat,  4 Feb 2023 15:55:15 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Feb 2023 15:55:14 +0100
-Date: Sat, 4 Feb 2023 15:55:14 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20230204145514.GD24755@scaer>
-References: <20230201181005.731564-1-bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S-gKHv31-XhE for <buildroot@lists.busybox.net>;
+ Sat,  4 Feb 2023 19:54:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6A1160FB7
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
+ [IPv6:2607:f8b0:4864:20::102b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B6A1160FB7
+ for <buildroot@buildroot.org>; Sat,  4 Feb 2023 19:54:39 +0000 (UTC)
+Received: by mail-pj1-x102b.google.com with SMTP id
+ n20-20020a17090aab9400b00229ca6a4636so11835786pjq.0
+ for <buildroot@buildroot.org>; Sat, 04 Feb 2023 11:54:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=vJ5SEIF7kO4pWPxJ0K53tHAin0Ti52uk4t7UU4dplZc=;
+ b=pgugWOHx864oq4Ku7zPEEDVKCzDttTRGdeR3GtxhgYK6U8vQbWIDYyakYsiqF73rcG
+ fCkBemYFFKEDC9/dwjyjA4vwAukj5EUSL4O+6NduEBHaxJnHbSp+7rPKtKpt1bzEEuM7
+ SiDq03tYmnhRr19Dx5RwpE5M+OTMJibFI9WZG5vKTcyWNHxIQvcuTY2Px8lvl9CkX1EE
+ MjyHpJDSOVrPS896tHLat5WCUeFLVY2FnJVbE3rBPsL6K1RkPLfMHGhnTHhi0J8NI+27
+ FUNXXFFhT7xCZjXdEkFSNjzwWG/QQfy4n3nBAmRuJSdAIfiVSAen316jW7Q7gkHFhloN
+ FVGg==
+X-Gm-Message-State: AO0yUKWoG4vwqHEI95WFByljT6RwQ9BrC+qMrIukQCiDg3Aqf0buIseA
+ JpoxALIxzEmCH24/iP9WLwW4XeYMFj4hkfweX1uGtEA/
+X-Google-Smtp-Source: AK7set8khu4mOItumMPWngKtEQ7bHHA4oDx4JWhRvFaOVrKW4XZpdz1UlLCys3G3kBQJ61o4lN1uDnZ4hctRYzAs6+E=
+X-Received: by 2002:a17:90a:9903:b0:22c:7e3:6d9f with SMTP id
+ b3-20020a17090a990300b0022c07e36d9fmr2188940pjp.21.1675540478710; Sat, 04 Feb
+ 2023 11:54:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230201181005.731564-1-bernd.kuhls@t-online.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675522519;
- bh=8aIl9NhY7jB6ioi7dCGqYB7ZeTfd2g5TSUc/5nRDXdM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=QIQUW7RHvmpQeHtoevCddewULQWHwdDsMgNEGP5l+e6+SWaSyTQUPWzBbm00pWsiZ
- nzK+7S+ZvHcoq89byyJDpP1rSAuBnFy24J6GZtOXGca89KSyma6CbR7CgBiBDmUdpO
- r4pd+y0nUAnfRP7N5LuMY1U783jwGoboli5tlnxYQQYzH/5mfkbCLDHePZhKU0PaVE
- rjpT+HScog1f6z8xAgSNbK9K++X43R/jHw2wCUaIer2j5XioLwlIQeaMj4VlgqVBG/
- i82PHuL2ZJREP26K4KN/quY1jKfx2FYSKDvUHcYsu0cop5/NDtAeRmmM+P+un0zSWi
- +BL72nOUDR6oQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QIQUW7RH
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/libarchive: Only add "iconv"
- to the .pc file if needed
+References: <20230202152743.3916949-1-arnout@mind.be>
+In-Reply-To: <20230202152743.3916949-1-arnout@mind.be>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sat, 4 Feb 2023 13:54:27 -0600
+Message-ID: <CALq67GCHdrUwsotb-tUTSsGnsbYp30dCgfxcHhv_zZ4xLueVNw@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=vJ5SEIF7kO4pWPxJ0K53tHAin0Ti52uk4t7UU4dplZc=;
+ b=O4VgtXqwkrlnR46rT/U6hPdy8bjzKNvgo32pUUarmm2Ln30K4ATsiyjAld4gKXQmdY
+ tSHKCpyzz+gJ1psr/2lG7FBCc4rwYxHSyoNdT7n1VTIRmCLEjVuPM9ejY+5ttZcG7K96
+ fV96cn+CXOzageNoY46npeJsJwEJPryFRl4SIaD9ynNR3sJjImfyIN6g9xpldOtetJnR
+ kIoz/nOLiRizsPZlMnfToti+w7Ky2Oc3GO/AhpRyHGHJPHQBQxmJtb4Wair/ksE/bmQJ
+ Y3DWXw2zmLZLqDrfwBn2FO9Yi3aEiIXF/rOd71gdKWKshAgBniVMrPdOSvlk+8vIzURT
+ J9/g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=O4VgtXqw
+Subject: Re: [Buildroot] [PATCH] package/python-pytest: remove runtime
+ dependency on python-toml
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,122 +91,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+On Thu, Feb 2, 2023 at 9:28 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+> Since version 7.2 [1], with Python 3.11+ pytest no longer uses tomli to
+> parse pyproject.toml but instead uses tomllib which is part of Python
+> itself [2]. Note that toml was replaced with tomli in version 7.0, so
+> the dependency was anyway incorrect.
+>
+> Note that tomllib is unconditionally installed as part of Python 3.11,
+> there is no PYTHON3_LIBTOML option or anything like that that needs to
+> be selected.
+>
+> [1] https://docs.pytest.org/en/latest/changelog.html#pytest-7-2-0-2022-10-23
+> [2] https://github.com/pytest-dev/pytest/pull/9741
+>
+> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 
-On 2023-02-01 19:10 +0100, Bernd Kuhls spake thusly:
-> Fix the following build failure with fwup raised since bump to version
-> 3.6.2 in commit 380341b249175382691f268de4b41d3843ff0acc and
-> https://github.com/libarchive/libarchive/commit/a83f3d327aefe8d628230f326621b014d82f55b4
-> 
-> checking for pkg-config... /tmp/instance-19/output-1/host/bin/pkg-config
-> checking pkg-config is at least version 0.9.0... yes
-> checking for ARCHIVE... no
-> configure: error: Requires libarchive. Libarchive must be built with zlib support.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f5d/f5d549fb4f08156ba5952ce75926f7fd2242bfdf/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
+Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
 
 > ---
-> v2: added dependency to host-pkgconf to fix autoconf error
-> 
->  ...y-add-iconv-to-the-pc-file-if-needed.patch | 44 +++++++++++++++++++
->  package/libarchive/libarchive.mk              |  4 ++
->  2 files changed, 48 insertions(+)
->  create mode 100644 package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
-> 
-> diff --git a/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch b/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
-> new file mode 100644
-> index 0000000000..c93944f789
-> --- /dev/null
-> +++ b/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
-> @@ -0,0 +1,44 @@
-> +From 1f35c466aaa9444335a1b854b0b7223b0d2346c2 Mon Sep 17 00:00:00 2001
-> +From: Peter Pentchev <roam@ringlet.net>
-> +Date: Thu, 29 Dec 2022 00:04:40 +0200
-> +Subject: [PATCH] Only add "iconv" to the .pc file if needed (#1825)
-> +
-> +Hi,
-> +
-> +Thanks for writing and maintaining libarchive!
-> +
-> +What do you think about this trivial change that does not add "iconv" to
-> +the pkg-config file's list of required packages unless it is actually
-> +needed? On at least Debian GNU/Linux systems, the iconv(3) function is
-> +part of the system C library and there is no Debian package that
-> +installs an iconv.pc file, so I had to make this change to the Debian
-> +package of libarchive.
-> +
-> +Thanks again, and keep up the great work!
-> +
-> +G'luck,
-> +Peter
-> +
-> +Downloaded from upstream commit:
-> +https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + configure.ac | 4 +++-
-> + 1 file changed, 3 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 99bff20d1..e2715cfde 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -378,7 +378,9 @@ if test "x$with_iconv" != "xno"; then
-> +     AC_CHECK_HEADERS([localcharset.h])
-> +     am_save_LIBS="$LIBS"
-> +     LIBS="${LIBS} ${LIBICONV}"
-> +-    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
-> ++    if test -n "$LIBICONV"; then
-> ++      LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
-> ++    fi
-> +     AC_CHECK_FUNCS([locale_charset])
-> +     LIBS="${am_save_LIBS}"
-> +     if test "x$ac_cv_func_locale_charset" != "xyes"; then
-> diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-> index cfc148d01d..cd7c13fbed 100644
-> --- a/package/libarchive/libarchive.mk
-> +++ b/package/libarchive/libarchive.mk
-> @@ -11,6 +11,10 @@ LIBARCHIVE_INSTALL_STAGING = YES
->  LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
->  LIBARCHIVE_LICENSE_FILES = COPYING
->  LIBARCHIVE_CPE_ID_VENDOR = libarchive
-> +# We're patching configure.ac
-> +LIBARCHIVE_AUTORECONF = YES
-> +# needed for autoreconf
-> +LIBARCHIVE_DEPENDENCIES += host-pkgconf
->  
->  ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
->  ifeq ($(BR2_STATIC_LIBS),y)
-> -- 
+> I can't be bother with sending a patch changing toml to tomli for
+> 2022.11 - it's going EOL in two months anyway, and apparently nobody
+> noticed...
+> ---
+>  package/python-pytest/Config.in | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
+> index c3956c76d2..9bbc9ea2d2 100644
+> --- a/package/python-pytest/Config.in
+> +++ b/package/python-pytest/Config.in
+> @@ -5,7 +5,6 @@ config BR2_PACKAGE_PYTHON_PYTEST
+>         select BR2_PACKAGE_PYTHON_PACKAGING # runtime
+>         select BR2_PACKAGE_PYTHON_PLUGGY # runtime
+>         select BR2_PACKAGE_PYTHON_PY # runtime
+> -       select BR2_PACKAGE_PYTHON_TOML # runtime
+>         select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
+>         help
+>           pytest is a framework that makes building simple and scalable
+> --
 > 2.39.1
-> 
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
