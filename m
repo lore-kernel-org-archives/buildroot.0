@@ -1,50 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 052A8C61DA4
-	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 22:36:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BF1BC61DA4
+	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 22:43:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A6AF818D4;
-	Sat,  4 Feb 2023 22:36:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A6AF818D4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3195B60FE4;
+	Sat,  4 Feb 2023 22:43:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3195B60FE4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oUBj7N8Wlaxo; Sat,  4 Feb 2023 22:36:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jklslxeKazhE; Sat,  4 Feb 2023 22:43:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C6B581492;
-	Sat,  4 Feb 2023 22:36:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C6B581492
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D42C81BF429
- for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 22:35:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D32860FDB;
+	Sat,  4 Feb 2023 22:43:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D32860FDB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C61B1BF429
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 22:43:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ADDD3417A2
- for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 22:35:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADDD3417A2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 572754048E
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 22:43:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 572754048E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R2ARdg_occpg for <buildroot@lists.busybox.net>;
- Sat,  4 Feb 2023 22:35:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A70E641705
- for <buildroot@buildroot.org>; Sat,  4 Feb 2023 22:35:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A70E641705
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 932BB835AB; Sat,  4 Feb 2023 22:35:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T85CV-00dF9q for <buildroot@lists.busybox.net>;
+ Sat,  4 Feb 2023 22:43:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81FA24010E
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 81FA24010E
+ for <buildroot@buildroot.org>; Sat,  4 Feb 2023 22:43:47 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 47D2F100003;
+ Sat,  4 Feb 2023 22:43:43 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pORG3-00DSfa-ED; Sat, 04 Feb 2023 23:43:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 4 Feb 2023 23:33:17 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9717b303683ba7ec035de004c6f2ddd195d07808
-X-Git-Newrev: a2c3e8ea8b2107ac514baddaed97921112a90cb7
-X-Patchwork-Hint: ignore
-Message-Id: <20230204223549.932BB835AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luaposix: bump to version 36.1
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20230201051658.383420-1-james.hilliard1@gmail.com>
+Date: Sat, 04 Feb 2023 23:43:43 +0100
+In-Reply-To: <20230201051658.383420-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Tue, 31 Jan 2023 22:16:46 -0700")
+Message-ID: <878rhd1274.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 01/13] package/libnice: bump to version
+ 0.1.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,44 +63,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Gregory Dymarek <gregd72002@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2c3e8ea8b2107ac514baddaed97921112a90cb7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/luaposix/luaposix.hash | 2 +-
- package/luaposix/luaposix.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index fc0b5fa747..2d54a6901e 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e0fcb4996f76aa49ae3e5edf69978171091e3d69d5de5589d591d227f8a427c1  luaposix-36.0.tar.gz
-+sha256  7944c2b4fbcef0667d407302740d87645325e751fd8d819f2b253c5d9ad0d497  luaposix-36.1.tar.gz
- sha256  ea0fdaae50b0d31a81c2c99f4354264783c71043fd40522feaa40eecc069599b  LICENSE
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 1a537defc4..d17c8188b5 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAPOSIX_VERSION = 36.0
-+LUAPOSIX_VERSION = 36.1
- LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = LICENSE
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
