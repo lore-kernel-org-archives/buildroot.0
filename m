@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A4DEC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86268C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:23:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCF4D605B3;
-	Tue, 21 Feb 2023 01:23:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCF4D605B3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 237166F9E8;
+	Tue, 21 Feb 2023 01:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 237166F9E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ppn0Psry_FVk; Tue, 21 Feb 2023 01:23:43 +0000 (UTC)
+	with ESMTP id KsgIL88fKzfv; Tue, 21 Feb 2023 01:23:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 178BD6FBB0;
-	Tue, 21 Feb 2023 01:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 178BD6FBB0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62A936FBF3;
+	Tue, 21 Feb 2023 01:23:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62A936FBF3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 289A91BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 385C21BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 13B3D6FBF6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 192356FBF7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13B3D6FBF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 192356FBF7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KV0ANPN6eMqY for <buildroot@lists.busybox.net>;
+ with ESMTP id GWzINtQJVePt for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EF756FBEB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B0B06FBE0
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EF756FBEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B0B06FBE0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 361D781979; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 27FAA828C8; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Feb 2023 15:30:48 +0100
+Date: Sat, 4 Feb 2023 15:00:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 13de1138f89909890e945b6e433e64ebbaab01ff
-X-Git-Newrev: 28ca1da23433d58112304c191c319ac11edc5d77
+X-Git-Oldrev: 607eafa2cd0656929db4bc8a743b28b0c48df8e5
+X-Git-Newrev: 13de1138f89909890e945b6e433e64ebbaab01ff
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205245.361D781979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/openvpn: get rid of -e
- in S60openvpn shebang
+Message-Id: <20230220205245.27FAA828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/iwd: bump to version
+ 2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28ca1da23433d58112304c191c319ac11edc5d77
+commit: https://git.buildroot.net/buildroot/commit/?id=13de1138f89909890e945b6e433e64ebbaab01ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The -e switch makes the script terminate on error from
-start-stop-daemon, rendering unreachable the code that checks the exit
-status.
-
-There is no need in the -e switch in the first place either, as the
-script takes care of errors handling.
-
-Signed-off-by: Sergey Organov <sorganov@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/S60openvpn | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvpn/S60openvpn b/package/openvpn/S60openvpn
-index f097cf11ec..00156c80db 100644
---- a/package/openvpn/S60openvpn
-+++ b/package/openvpn/S60openvpn
-@@ -1,4 +1,4 @@
--#!/bin/sh -e
-+#!/bin/sh
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index e7971cd637..be048b3da6 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
+-sha256  9fd13512dc27d83efb8d341f7df98f5488f70131686021fcd0d93fc97af013b8  iwd-1.30.tar.xz
++sha256  dfeada6d1680221fb128dc6be50fc2d6b40e314b98458acbd696418f8da5c570  iwd-2.2.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index 5ffbde334e..b0a2f6e9ed 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
  #
- # Original version by Robert Leslie
- # <rob@mars.org>, edited by iwj and cs
+ ################################################################################
+ 
+-IWD_VERSION = 1.30
++IWD_VERSION = 2.2
+ IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
+ IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+ IWD_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
