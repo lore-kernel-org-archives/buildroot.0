@@ -1,51 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83823C636CC
-	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 23:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28BF3C61DA4
+	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 23:23:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D1EB60FF8;
-	Sat,  4 Feb 2023 23:23:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D1EB60FF8
+	by smtp2.osuosl.org (Postfix) with ESMTP id CD1B5404C2;
+	Sat,  4 Feb 2023 23:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD1B5404C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GK7T4BfK9yI7; Sat,  4 Feb 2023 23:23:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1U0gwW0l-JiP; Sat,  4 Feb 2023 23:23:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A8A260DA0;
-	Sat,  4 Feb 2023 23:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A8A260DA0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 297511BF2B5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 348E2401CA;
+	Sat,  4 Feb 2023 23:23:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 348E2401CA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B56F11BF2B5
  for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 23:19:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73CBB41A58
- for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 23:19:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73CBB41A58
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BC3882009
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 23:19:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BC3882009
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id idnH8wBP5D70 for <buildroot@lists.busybox.net>;
- Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6469941A56
- for <buildroot@buildroot.org>; Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6469941A56
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FEB9836A7; Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RriYCqJj7I_f for <buildroot@lists.busybox.net>;
+ Sat,  4 Feb 2023 23:19:39 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCD1D8200D
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CCD1D8200D
+ for <buildroot@buildroot.org>; Sat,  4 Feb 2023 23:19:38 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1A2B8FF804;
+ Sat,  4 Feb 2023 23:19:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pORol-00DTQu-D7; Sun, 05 Feb 2023 00:19:35 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 4 Feb 2023 23:47:30 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e30ce907d58e5f675704545599ca77ce2035acd2
-X-Git-Newrev: dde95c589767fe995f338d34a3ea9e5e8743c6d9
-X-Patchwork-Hint: ignore
-Message-Id: <20230204231934.4FEB9836A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gst1-plugins-base: bump version to
- 1.22.0
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20230201051658.383420-1-james.hilliard1@gmail.com>
+ <20230201051658.383420-11-james.hilliard1@gmail.com>
+Date: Sun, 05 Feb 2023 00:19:35 +0100
+In-Reply-To: <20230201051658.383420-11-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Tue, 31 Jan 2023 22:16:56 -0700")
+Message-ID: <87wn4xxblk.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 11/13] package/gstreamer1-editing-services:
+ bump version to 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,183 +65,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Gregory Dymarek <gregd72002@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dde95c589767fe995f338d34a3ea9e5e8743c6d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-The videoconvert and videoscale plugins have been combined into
-the new videoconvertscale plugin.
+ > Add a patch fixing an incorrect gstreamer-validate-1.0 dependency
+ > name.
 
-Rework config options using videoconvert/videoscale to use the new
-videoconvertscale option.
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy                                           | 14 ++++++++++++++
- package/gstreamer1/gst1-plugins-base/Config.in             | 13 ++++---------
- .../gstreamer1/gst1-plugins-base/gst1-plugins-base.hash    |  4 ++--
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk  | 14 ++++----------
- package/gstreamer1/gstreamer1-editing-services/Config.in   |  3 +--
- package/webkitgtk/Config.in                                |  3 +--
- package/wpewebkit/Config.in                                |  3 +--
- 7 files changed, 27 insertions(+), 27 deletions(-)
+Committed, thanks.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 41c5fdefb3..3fff2b1ddd 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,20 @@ endif
- 
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
-+	bool "videoscale removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERTSCALE
-+	help
-+	  The videoscale option has been combined with videoconvert.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
-+	bool "videoconvert removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERTSCALE
-+	help
-+	  The videoconvert option has been combined with videoscale.
-+
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
- 	bool "imx-gpu-viv X11 output has been removed"
- 	select BR2_LEGACY
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index bd4ee0b994..df10774ac7 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -59,10 +59,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING
- 	help
- 	  various encoding-related elements
- 
--config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
--	bool "videoconvert"
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERTSCALE
-+	bool "videoconvertscale (mandatory for video playback)"
-+	default y
- 	help
--	  Colorspace conversion
-+	  Colorspace conversion, resizes video
- 
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO
- 	bool "gio"
-@@ -123,12 +124,6 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE
- 	help
- 	  Adjusts video frames
- 
--config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
--	bool "videoscale (mandatory for video playback)"
--	default y
--	help
--	  Resizes video
--
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
- 	bool "volume (mandatory for audio playback)"
- 	default y
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index 5c729d832f..bac4f8398a 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.20.4.tar.xz.sha256sum
--sha256  8d181b7abe4caf23ee9f9ec5b4d3e232640452464e39495bfffb6d776fc97225  gst-plugins-base-1.20.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.22.0.tar.xz.sha256sum
-+sha256  f53672294f3985d56355c8b1df8f6b49c8c8721106563e19f53be3507ff2229d  gst-plugins-base-1.22.0.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index d225cdf910..7d509331fe 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BASE_VERSION = 1.20.4
-+GST1_PLUGINS_BASE_VERSION = 1.22.0
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
-@@ -147,10 +147,10 @@ else
- GST1_PLUGINS_BASE_CONF_OPTS += -Dencoding=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT),y)
--GST1_PLUGINS_BASE_CONF_OPTS += -Dvideoconvert=enabled
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERTSCALE),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += -Dvideoconvertscale=enabled
- else
--GST1_PLUGINS_BASE_CONF_OPTS += -Dvideoconvert=disabled
-+GST1_PLUGINS_BASE_CONF_OPTS += -Dvideoconvertscale=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO),y)
-@@ -219,12 +219,6 @@ else
- GST1_PLUGINS_BASE_CONF_OPTS += -Dvideorate=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE),y)
--GST1_PLUGINS_BASE_CONF_OPTS += -Dvideoscale=enabled
--else
--GST1_PLUGINS_BASE_CONF_OPTS += -Dvideoscale=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME),y)
- GST1_PLUGINS_BASE_CONF_OPTS += -Dvolume=enabled
- else
-diff --git a/package/gstreamer1/gstreamer1-editing-services/Config.in b/package/gstreamer1/gstreamer1-editing-services/Config.in
-index 9c41e8142b..e824781d47 100644
---- a/package/gstreamer1/gstreamer1-editing-services/Config.in
-+++ b/package/gstreamer1/gstreamer1-editing-services/Config.in
-@@ -6,9 +6,8 @@ config BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOMIXER # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE # runtime
--	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT # runtime
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERTSCALE # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC # runtime
--	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE # runtime
- 	help
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index cafe497491..dc5d738dae 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -104,8 +104,7 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
--	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
--	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERTSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 04ed40bd92..7a8dc557c3 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -97,8 +97,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
--	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
--	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERTSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
