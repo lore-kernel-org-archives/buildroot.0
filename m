@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59D92C61DA4
-	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 23:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E405C636CC
+	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 23:21:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 006C160A99;
-	Sat,  4 Feb 2023 23:21:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 006C160A99
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4453060FFF;
+	Sat,  4 Feb 2023 23:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4453060FFF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cLLNh-Yp0AGV; Sat,  4 Feb 2023 23:21:02 +0000 (UTC)
+	with ESMTP id qClwN_2r46vm; Sat,  4 Feb 2023 23:21:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C3FA60D6D;
-	Sat,  4 Feb 2023 23:21:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C3FA60D6D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 739361BF861
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FF1D61013;
+	Sat,  4 Feb 2023 23:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FF1D61013
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FB931BF2B5
  for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 23:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E2478201D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69A9460FDC
  for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 23:19:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E2478201D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69A9460FDC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LgOubWeKeI9S for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hud4-SEARw_t for <buildroot@lists.busybox.net>;
  Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7743182009
+ by smtp3.osuosl.org (Postfix) with ESMTP id 844B260D6D
  for <buildroot@buildroot.org>; Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7743182009
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 844B260D6D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 67545836A2; Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
+ id 74341836A6; Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Feb 2023 23:50:54 +0100
+Date: Sat, 4 Feb 2023 23:51:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d019b4c061e1ba1dc08ac680996e022720fcf097
-X-Git-Newrev: 895840edd2784492d9b7066330b43842b703343b
+X-Git-Oldrev: 895840edd2784492d9b7066330b43842b703343b
+X-Git-Newrev: 2f1fef1499427d508363c29920468e8f5a495709
 X-Patchwork-Hint: ignore
-Message-Id: <20230204231934.67545836A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gst1-plugins-bad: bump version to
+Message-Id: <20230204231934.74341836A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-plugins-ugly: bump version to
  1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,39 +63,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=895840edd2784492d9b7066330b43842b703343b
+commit: https://git.buildroot.net/buildroot/commit/?id=2f1fef1499427d508363c29920468e8f5a495709
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Remove xingmux config option which has been moved to the
+gst1-plugins-good package.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy                                            | 7 +++++++
+ package/gstreamer1/gst1-plugins-ugly/Config.in              | 5 -----
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 8 +-------
+ 4 files changed, 10 insertions(+), 14 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index c8789a707d..90b3a18982 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3fff2b1ddd..1c5af2652a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
++	bool "xingmux moved"
++	select BR2_LEGACY
++	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_XINGMUX
++	help
++	  The xingmux option has been moved to gst1-plugins-good.
++
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
+ 	bool "videoscale removed"
+ 	select BR2_LEGACY
+diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
+index ba19989892..54766ffa8c 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/Config.in
++++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
+@@ -26,11 +26,6 @@ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB
+ 	help
+ 	  DVD subtitle parser and decoder
+ 
+-config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
+-	bool "xingmux"
+-	help
+-	  Add XING tags to mpeg audio files
+-
+ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA
+ 	bool "realmedia"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index 4ec29e6894..21579216df 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.20.4.tar.xz.sha256sum
--sha256  a1a3f53b3604d9a04fdd0bf9a1a616c3d2dab5320489e9ecee1178e81e33a16a  gst-plugins-bad-1.20.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.22.0.tar.xz.sha256sum
-+sha256  3c9d9300f5f4fb3e3d36009379d1fb6d9ecd79c1a135df742b8a68417dd663a1  gst-plugins-bad-1.22.0.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 14710a2501..8f11ce6b37 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.20.4.tar.xz.sha256sum
+-sha256  5c9ec6bab96517e438b3f9bae0ceb84d3436f3da9bbe180cf4d28e32a7251b59  gst-plugins-ugly-1.20.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.0.tar.xz.sha256sum
++sha256  a644dc981afa2d8d3a913f763ab9523c0620ee4e65a7ec73c7721c29da3c5a0c  gst-plugins-ugly-1.22.0.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 20382719c3..9f16fa3da8 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BAD_VERSION = 1.20.4
-+GST1_PLUGINS_BAD_VERSION = 1.22.0
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+-GST1_PLUGINS_UGLY_VERSION = 1.20.4
++GST1_PLUGINS_UGLY_VERSION = 1.22.0
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+@@ -51,12 +51,6 @@ else
+ GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdsub=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX),y)
+-GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=enabled
+-else
+-GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA),y)
+ GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=enabled
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
