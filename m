@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56FDFC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDEA0C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04E8E4ECA3;
-	Tue, 21 Feb 2023 00:01:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E8E4ECA3
+	by smtp4.osuosl.org (Postfix) with ESMTP id A177F4EDFF;
+	Tue, 21 Feb 2023 00:01:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A177F4EDFF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1IduafPUjv2i; Tue, 21 Feb 2023 00:01:15 +0000 (UTC)
+	with ESMTP id NP7Kfe68Cv44; Tue, 21 Feb 2023 00:01:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D95EF4ED13;
-	Tue, 21 Feb 2023 00:01:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D95EF4ED13
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 52E351BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DCF04EE6C;
+	Tue, 21 Feb 2023 00:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DCF04EE6C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 568371BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCDA16F9AC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCDA16F9AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id F28044179E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F28044179E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tZW2VIzXdxKl for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DgW_HwAH8IEp for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED05661AD6
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED05661AD6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2266540C13
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2266540C13
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EAEE086495; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+ id 1C67A8648F; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:21:47 +0100
+Date: Sun, 5 Feb 2023 00:18:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 90e65e46b7c00218058e32efd079df291b736c4a
-X-Git-Newrev: 1cb6906eeb5a79bf222e881b7170d6d97280370a
+X-Git-Oldrev: dd333b414005f1191dd03908df1964fae19b2ec2
+X-Git-Newrev: b53e11f2ec049002a4c3c2829aaa0e7a31551f1e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205223.EAEE086495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/grpc: bump to version
- 1.51.1
+Message-Id: <20230220205246.1C67A8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gst1-python: bump
+ version to 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cb6906eeb5a79bf222e881b7170d6d97280370a
+commit: https://git.buildroot.net/buildroot/commit/?id=b53e11f2ec049002a4c3c2829aaa0e7a31551f1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grpc/grpc.hash | 2 +-
- package/grpc/grpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 4d838703cc..e6b76dcb5e 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
+diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
+index adb116ac4c..128a739c2c 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.hash
++++ b/package/gstreamer1/gst1-python/gst1-python.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  76900ab068da86378395a8e125b5cc43dfae671e09ff6462ddfef18676e2165a  grpc-1.50.0.tar.gz
-+sha256  b55696fb249669744de3e71acc54a9382bea0dce7cd5ba379b356b12b82d4229  grpc-1.51.1.tar.gz
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 9aac241e47..9125b1f9f6 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
+-# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.20.4.tar.xz.sha256sum
+-sha256  5eb4136d03e2a495f4499c8b2e6d9d3e7b5e73c5a8b8acf9213d57bc6a7bd3c1  gst-python-1.20.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.0.tar.xz.sha256sum
++sha256  6c63ad364ca4617eb2cbb3975ab26c66760eb3c7a6adf5be69f99c11e21ef3a5  gst-python-1.22.0.tar.xz
+ sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index feb2de718a..2fc268b0ac 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GRPC_VERSION = 1.50.0
-+GRPC_VERSION = 1.51.1
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
- GRPC_LICENSE_FILES = LICENSE
+-GST1_PYTHON_VERSION = 1.20.4
++GST1_PYTHON_VERSION = 1.22.0
+ GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
+ GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
+ GST1_PYTHON_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
