@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 819F6C05027
-	for <buildroot@archiver.kernel.org>; Fri,  3 Feb 2023 23:05:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 989FBC636CC
+	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 11:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C8D261327;
-	Fri,  3 Feb 2023 23:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C8D261327
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE62241591;
+	Sat,  4 Feb 2023 11:48:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE62241591
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nyNJDQVNwvse; Fri,  3 Feb 2023 23:05:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id stSQNYgVMECm; Sat,  4 Feb 2023 11:48:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53AFF6132D;
-	Fri,  3 Feb 2023 23:05:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53AFF6132D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A24C31BF280
- for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 23:05:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4536341575;
+	Sat,  4 Feb 2023 11:48:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4536341575
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AA141BF42C
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 11:48:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 76BDF82236
- for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 23:05:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76BDF82236
+ by smtp2.osuosl.org (Postfix) with ESMTP id 456764013F
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 11:48:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 456764013F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pEc-d1fGy9k0 for <buildroot@lists.busybox.net>;
- Fri,  3 Feb 2023 23:05:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4D7F821EF
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E4D7F821EF
- for <buildroot@buildroot.org>; Fri,  3 Feb 2023 23:05:00 +0000 (UTC)
-Received: from 91-153-34-153.elisa-laajakaista.fi ([91.153.34.153] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1pO572-008ciF-NI; Sat, 04 Feb 2023 00:04:56 +0100
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 3ca0d38c;
- Fri, 3 Feb 2023 23:04:55 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e2g5BVjESVfT for <buildroot@lists.busybox.net>;
+ Sat,  4 Feb 2023 11:48:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61402400FC
+ for <buildroot@buildroot.org>; Sat,  4 Feb 2023 11:48:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61402400FC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 49FAE82B38; Sat,  4 Feb 2023 11:48:05 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  4 Feb 2023 01:04:55 +0200
-Message-Id: <20230203230455.1566166-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=nhpac3ZVgRnXsbMWrdzmCvea1JUpkXVeFGC13vxsIWI=; b=rhthJlOikeeWnYNhg84iNQzNJ7
- b3s6OV+g5bWA3g/dd5NSh0pDFH1ohHrDyP6UTU4g0rRFQ7pIR3gWL1ftZ5oPsvTNjEQN8j2bIEoHs
- k7F5e7d1RlZbEpxcA0i/uIJfig3I0Uck1ZVX4FYiZFXJkjUFXSFehZayeHECAPUTOTfHORrukr/SM
- 9QhwFfHHfE+kO9inLN4E5qLLVPaBNEaZOQAiOdT2N9j5UzyZnXWHuYFMhAZYbNSOLms1Gh6NHRaOj
- mIg+M6BcxNEoxGk7bCwdLd2AOVsouXVffkUrgkJ3irj4Bt+UotTZHSsgprMnvPzaJsNf/fJHUblE9
- l2kmnGTg==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=rhthJlOi
-Subject: [Buildroot] [PATCH] package/wpewebkit: security bump to version
- 2.38.4
+Date: Sat, 4 Feb 2023 12:46:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c7ea83dd2df315ba4f492a9ef6b24152ba4cc4f3
+X-Git-Newrev: ca203080d132d44fc0b62148066b85cce66628fa
+X-Patchwork-Hint: ignore
+Message-Id: <20230204114805.49FAE82B38@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
+ version 2.38.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,61 +57,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=ca203080d132d44fc0b62148066b85cce66628fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Bugfix release, with many security fixes, including (but not limited to)
 patches for CVE-2023-23517, CVE-2023-23518, and CVE-2022-42826.
 
 Release notes:
 
-  https://wpewebkit.org/release/wpewebkit-2.38.4.html
+  https://webkitgtk.org/2023/02/02/webkitgtk2.38.4-released.html
 
 Accompanying security advisory:
 
-  https://wpewebkit.org/security/WSA-2023-0001.html
+  https://webkitgtk.org/security/WSA-2023-0001.html
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index ccd928b3df..dcd082e045 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index eff7f5c18f..34fd19d3de 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.38.3.tar.xz.sums
--md5  60f79ff8dc68280f756963af23b67d6d  wpewebkit-2.38.3.tar.xz
--sha1  de15119a0dc29776d3a11fca1df4238b471f960f  wpewebkit-2.38.3.tar.xz
--sha256  1dd9075eec7253a1b0d038a73f92ddbb9174394e6a7527ec07b4464fa6290498  wpewebkit-2.38.3.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.38.4.tar.xz.sums
-+md5  1c947ef5b73049fc6c102c92013009bf  wpewebkit-2.38.4.tar.xz
-+sha1  7fe9a7d98401256b0c9872f1c2b702e56840cbd3  wpewebkit-2.38.4.tar.xz
-+sha256  8c1bc113ef151fb0be2640824d323bc755dc97295ab7a1bc05e7ec589937a07b  wpewebkit-2.38.4.tar.xz
+-# From https://webkitgtk.org/releases/webkitgtk-2.38.3.tar.xz.sums
+-md5  1c1cc5eb59273091e228406937b23947  webkitgtk-2.38.3.tar.xz
+-sha1  04cb5923d8ac6f435424b74115c3219ec597e9ad  webkitgtk-2.38.3.tar.xz
+-sha256  41f001d1ed448c6936b394a9f20e4640eebf83a7f08262df28504f7410604a5a  webkitgtk-2.38.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.38.4.tar.xz.sums
++md5  1c9ca83a0ad7e4ca9e933094572cb7d9  webkitgtk-2.38.4.tar.xz
++sha1  38b47df2be9bfb97d68fce8c7fa2819966a79036  webkitgtk-2.38.4.tar.xz
++sha256  4f47ea29a2d4d5f15eef3dc9e2d6c6f067e8de863a3f64455e1ccf9693cc1d36  webkitgtk-2.38.4.tar.xz
  
  # Hashes for license files:
  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 4c50ed9955..34ee405de1 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index b1bca7b88a..b42ac3b644 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.38.3
-+WPEWEBKIT_VERSION = 2.38.4
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
--- 
-2.39.1
-
+-WEBKITGTK_VERSION = 2.38.3
++WEBKITGTK_VERSION = 2.38.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
