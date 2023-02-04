@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5674C636CC
-	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 23:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59D92C61DA4
+	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 23:21:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B662419D6;
-	Sat,  4 Feb 2023 23:20:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B662419D6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 006C160A99;
+	Sat,  4 Feb 2023 23:21:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 006C160A99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pHLjrf_PGzy9; Sat,  4 Feb 2023 23:20:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cLLNh-Yp0AGV; Sat,  4 Feb 2023 23:21:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 235DF41A4A;
-	Sat,  4 Feb 2023 23:20:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 235DF41A4A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D2891BF2B5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C3FA60D6D;
+	Sat,  4 Feb 2023 23:21:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C3FA60D6D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 739361BF861
  for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 23:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27ACE40A02
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E2478201D
  for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 23:19:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27ACE40A02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E2478201D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hkFwrM2TiWxY for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LgOubWeKeI9S for <buildroot@lists.busybox.net>;
  Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4DDD7404C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7743182009
  for <buildroot@buildroot.org>; Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DDD7404C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7743182009
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37FA0836A4; Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
+ id 67545836A2; Sat,  4 Feb 2023 23:19:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Feb 2023 23:42:23 +0100
+Date: Sat, 4 Feb 2023 23:50:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a2c3e8ea8b2107ac514baddaed97921112a90cb7
-X-Git-Newrev: c392e8b76f73d2b8ebfba2117ed6b03d902b8243
+X-Git-Oldrev: d019b4c061e1ba1dc08ac680996e022720fcf097
+X-Git-Newrev: 895840edd2784492d9b7066330b43842b703343b
 X-Patchwork-Hint: ignore
-Message-Id: <20230204231934.37FA0836A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnice: bump to version 0.1.21
+Message-Id: <20230204231934.67545836A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-plugins-bad: bump version to
+ 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c392e8b76f73d2b8ebfba2117ed6b03d902b8243
+commit: https://git.buildroot.net/buildroot/commit/?id=895840edd2784492d9b7066330b43842b703343b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnice/libnice.hash | 2 +-
- package/libnice/libnice.mk   | 4 ++--
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnice/libnice.hash b/package/libnice/libnice.hash
-index 83b28a9ad9..cf6d825f83 100644
---- a/package/libnice/libnice.hash
-+++ b/package/libnice/libnice.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking pgp signature
--sha256  6747af710998cf708a2e8ceef51cccd181373d94201dd4b8d40797a070ed47cc  libnice-0.1.19.tar.gz
-+sha256  72e73a2acf20f59093e21d5601606e405873503eb35f346fa621de23e99b3b39  libnice-0.1.21.tar.gz
- 
- # Hash for license files:
- sha256  9246b2ee8b1db30cf03d5d9719ad8bb5edce1cadc85f8cfef319c23d24d950b5  COPYING
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-index 2b223bedd3..56ee35e452 100644
---- a/package/libnice/libnice.mk
-+++ b/package/libnice/libnice.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+index c8789a707d..90b3a18982 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.20.4.tar.xz.sha256sum
+-sha256  a1a3f53b3604d9a04fdd0bf9a1a616c3d2dab5320489e9ecee1178e81e33a16a  gst-plugins-bad-1.20.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.22.0.tar.xz.sha256sum
++sha256  3c9d9300f5f4fb3e3d36009379d1fb6d9ecd79c1a135df742b8a68417dd663a1  gst-plugins-bad-1.22.0.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 14710a2501..8f11ce6b37 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNICE_VERSION = 0.1.19
--LIBNICE_SITE = http://nice.freedesktop.org/releases
-+LIBNICE_VERSION = 0.1.21
-+LIBNICE_SITE = https://libnice.freedesktop.org/releases
- LIBNICE_LICENSE = MPL-1.1 or LGPL-2.1
- LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
- LIBNICE_DEPENDENCIES = libglib2 host-pkgconf
+-GST1_PLUGINS_BAD_VERSION = 1.20.4
++GST1_PLUGINS_BAD_VERSION = 1.22.0
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
