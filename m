@@ -1,68 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF846C61DA4
-	for <buildroot@archiver.kernel.org>; Fri,  3 Feb 2023 16:20:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DA0FC636CC
+	for <buildroot@archiver.kernel.org>; Sat,  4 Feb 2023 14:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EB76821D4;
-	Fri,  3 Feb 2023 16:20:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EB76821D4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 995E360F7F;
+	Sat,  4 Feb 2023 14:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 995E360F7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OpDcReeiZt09; Fri,  3 Feb 2023 16:20:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CF_eFpQCUhlz; Sat,  4 Feb 2023 14:54:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 863D1821BF;
-	Fri,  3 Feb 2023 16:20:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 863D1821BF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1092F1BF283
- for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 16:20:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0C7B60F7D;
+	Sat,  4 Feb 2023 14:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0C7B60F7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B64691BF425
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 14:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDAEB42AC1
- for <buildroot@lists.busybox.net>; Fri,  3 Feb 2023 16:20:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDAEB42AC1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D9BA404F4
+ for <buildroot@lists.busybox.net>; Sat,  4 Feb 2023 14:54:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D9BA404F4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sBhC6x8wBGqb for <buildroot@lists.busybox.net>;
- Fri,  3 Feb 2023 16:20:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F118A42ABD
- for <buildroot@uclibc.org>; Fri,  3 Feb 2023 16:20:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F118A42ABD
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id D940182A7C; Fri,  3 Feb 2023 16:20:41 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Fri, 03 Feb 2023 16:20:41 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.11.1
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: trivial
-X-Bugzilla-Who: jbittner.br.bugs@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15316-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iKQaIrYyuJEi for <buildroot@lists.busybox.net>;
+ Sat,  4 Feb 2023 14:54:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE3694049F
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BE3694049F
+ for <buildroot@uclibc.org>; Sat,  4 Feb 2023 14:54:44 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [92.184.102.219])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 6721E19F57E;
+ Sat,  4 Feb 2023 15:54:39 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 04 Feb 2023 15:54:38 +0100
+Date: Sat, 4 Feb 2023 15:54:38 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230204145438.GC24755@scaer>
+References: <20221218130225.353325-1-fontaine.fabrice__19944.8251792759$1671368580$gmane$org@gmail.com>
+ <pan$aaf4e$5422814b$c7c50bb1$109f6e8e@ID-313208.user.individual.net>
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15316] New: xscreensaver should check if linux-pam
- is enabled
+Content-Disposition: inline
+In-Reply-To: <pan$aaf4e$5422814b$c7c50bb1$109f6e8e@ID-313208.user.individual.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1675522481;
+ bh=vxU/oxVuHm7GJxyvA6bMxt27S6KNVTQTDF+sNiJE2KU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=k7zxJuEtuaUITED/me0zEsHoXJTKufQ7S1h/7Vh4/Plixz061Pi0Hhd4xoMnPQrkx
+ nqZFq6dBVPSc0yaFjepDGe6MmXCusSBdIqqIJBNF43m/UHtINTUaZ8Sgz+m7UJJEHz
+ naOiPRtZ1CFdKkv4RCE9XTAuUBolG7gxM3vyCa/vF+hT3PcpUgMF8DoD0nGWQ3wnpr
+ yuV3GZxHTihK5bxAo8z5KcjN2JajM2Jw+jIXb/o0TA9TpFRPdC+rPl461C9Ku82oPQ
+ pI5lqldDPIO8DAc2CAQIleHpBGJ2gC62Zvrv/AsJ3R6fJh4xXNjBgzxhfVasgZduqh
+ V2xnn5c1FyphQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=k7zxJuEt
+Subject: Re: [Buildroot] [PATCH 1/1] package/libarchive: do not add iconv
+ for Requires.private
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,39 +77,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@uclibc.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15316
+Fabrice, All,
 
-            Bug ID: 15316
-           Summary: xscreensaver should check if linux-pam is enabled
-           Product: buildroot
-           Version: 2022.11.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: jbittner.br.bugs@gmail.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+On 2022-12-29 18:53 +0100, Bernd Kuhls spake thusly:
+> Am Sun, 18 Dec 2022 14:02:25 +0100 schrieb Fabrice Fontaine:
+> 
+> > Fix the following build failure with fwup raised since bump to version
+> > 3.6.2 in commit 380341b249175382691f268de4b41d3843ff0acc and
+> > https://github.com/libarchive/libarchive/commit/
+> a83f3d327aefe8d628230f326621b014d82f55b4:
+> > 
+> > checking for pkg-config... /tmp/instance-19/output-1/host/bin/pkg-config
+> > checking pkg-config is at least version 0.9.0... yes checking for
+> > ARCHIVE... no configure: error: Requires libarchive. Libarchive must be
+> > built with zlib support.
+> 
+> Hi,
+> 
+> upstream committed a different fix:
+> http://patchwork.ozlabs.org/project/buildroot/patch/
+> 20221229175254.224876-1-bernd.kuhls@t-online.de/
 
-At present, xscreensaver needs to be setuid root to read /etc/shadow to handle
-login verification for screen locking.  By having xscreensaver check if
-linux-pam is enabled and adding --with-pam to ./configure, screen locking can
-be enabled without setuid.
+I have applied that patch from Bernd instead, thanks.
 
-Note: the relevant utility from linux-pam, unix_chkpwd *DOES* need to be setuid
-root
+Regards,
+Yann E. MORIN.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
