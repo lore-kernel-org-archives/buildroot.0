@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DED2C636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:58:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 820CEC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 23:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F8AE4ECFF;
-	Mon, 20 Feb 2023 23:58:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F8AE4ECFF
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1BE04ED57;
+	Mon, 20 Feb 2023 23:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1BE04ED57
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e5CKmefhoQw4; Mon, 20 Feb 2023 23:58:02 +0000 (UTC)
+	with ESMTP id ULp48UFKIKMi; Mon, 20 Feb 2023 23:58:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2090E4ED30;
-	Mon, 20 Feb 2023 23:58:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2090E4ED30
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5B2981BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD8F14ED6B;
+	Mon, 20 Feb 2023 23:58:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD8F14ED6B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 613B71BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 416006F963
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 416006F963
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CD2241796
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CD2241796
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ge60TwDljkMs for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XPRfiBswDdBs for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6353561B07
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6353561B07
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F31541784
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F31541784
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60865828C8; Mon, 20 Feb 2023 20:52:23 +0000 (UTC)
+ id 7B5DB86495; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 17:44:44 +0100
+Date: Sat, 4 Feb 2023 23:44:03 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e7792f539e440d40566bfab3dd86881a8f8edd7a
-X-Git-Newrev: aa35d8d071faf68abc4538be2a3bb636ea6b4a2c
+X-Git-Oldrev: c392e8b76f73d2b8ebfba2117ed6b03d902b8243
+X-Git-Newrev: e30ce907d58e5f675704545599ca77ce2035acd2
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205223.60865828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qcom-db410c-firmware:
- fix typo for <pkg>_LICENSE
+Message-Id: <20230220205245.7B5DB86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gstreamer1: bump to
+ version 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa35d8d071faf68abc4538be2a3bb636ea6b4a2c
+commit: https://git.buildroot.net/buildroot/commit/?id=e30ce907d58e5f675704545599ca77ce2035acd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Cc: Mike Frampton <mikeframpo@gmail.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qcom-db410c-firmware/qcom-db410c-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-index 9ef32cc9d4..cf4b59b72e 100644
---- a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-+++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-@@ -8,7 +8,7 @@ QCOM_DB410C_FIRMWARE_VERSION = 1034.2.1
- QCOM_DB410C_FIRMWARE_BASE = linux-board-support-package-r$(QCOM_DB410C_FIRMWARE_VERSION)
- QCOM_DB410C_FIRMWARE_SOURCE = $(QCOM_DB410C_FIRMWARE_BASE).zip
- QCOM_DB410C_FIRMWARE_SITE = https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware
--QCOM_DB410C_FIRMWARE_LICENCE = Qualcomm firmware license
-+QCOM_DB410C_FIRMWARE_LICENSE = Qualcomm firmware license
- QCOM_DB410C_FIRMWARE_LICENSE_FILES = LICENSE
- QCOM_DB410C_FIRMWARE_DEPENDENCIES = host-mtools
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 5fb52606fe..db0ed5bede 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.20.4.tar.xz.sha256sum
+-sha256  67c1edf8c3c339cda5dde85f4f7b953bb9607c2d13ae970e2491c5c4c055ef5f  gstreamer-1.20.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.22.0.tar.xz.sha256sum
++sha256  78d21b5469ac93edafc6d8ceb63bc82f6cbbee94d2f866cca6b9252157ee0a09  gstreamer-1.22.0.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 16c016b145..09d1a10ce7 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-GSTREAMER1_VERSION = 1.20.4
++GSTREAMER1_VERSION = 1.22.0
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
