@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8E9CC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A4DEC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:23:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 604C86FBEB;
-	Tue, 21 Feb 2023 01:23:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 604C86FBEB
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCF4D605B3;
+	Tue, 21 Feb 2023 01:23:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCF4D605B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bxTcvZAYKaXE; Tue, 21 Feb 2023 01:23:30 +0000 (UTC)
+	with ESMTP id ppn0Psry_FVk; Tue, 21 Feb 2023 01:23:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 607FB6137D;
-	Tue, 21 Feb 2023 01:23:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 607FB6137D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 178BD6FBB0;
+	Tue, 21 Feb 2023 01:23:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 178BD6FBB0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 187641BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 289A91BF94D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F054E6FBF2
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F054E6FBF2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13B3D6FBF6
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13B3D6FBF6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xnlHHpeXsyTx for <buildroot@lists.busybox.net>;
+ with ESMTP id KV0ANPN6eMqY for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B6C56FBA1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B6C56FBA1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EF756FBEB
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EF756FBEB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EAB6881979; Mon, 20 Feb 2023 20:52:44 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 361D781979; Mon, 20 Feb 2023 20:52:45 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 3 Feb 2023 08:32:09 +0100
+Date: Sat, 4 Feb 2023 15:30:48 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: def789059af78cd65294cafa4288cb41691e86c7
-X-Git-Newrev: c7ea83dd2df315ba4f492a9ef6b24152ba4cc4f3
+X-Git-Oldrev: 13de1138f89909890e945b6e433e64ebbaab01ff
+X-Git-Newrev: 28ca1da23433d58112304c191c319ac11edc5d77
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205244.EAB6881979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/containerd: bump to
- version 1.6.16
+Message-Id: <20230220205245.361D781979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/openvpn: get rid of -e
+ in S60openvpn shebang
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7ea83dd2df315ba4f492a9ef6b24152ba4cc4f3
+commit: https://git.buildroot.net/buildroot/commit/?id=28ca1da23433d58112304c191c319ac11edc5d77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bugfixes and improvements.
+The -e switch makes the script terminate on error from
+start-stop-daemon, rendering unreachable the code that checks the exit
+status.
 
-We now install the containerd.service systemd unit.
+There is no need in the -e switch in the first place either, as the
+script takes care of errors handling.
 
-https://github.com/containerd/containerd/releases/tag/v1.6.16
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Sergey Organov <sorganov@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/openvpn/S60openvpn | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 04a29949d7..16474089d1 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  b86e5c42f58b8348422c972513ff49783c0d505ed84e498d0d0245c5992e4320  containerd-1.6.12.tar.gz
-+sha256  e0a893cf67df9dfaecbcde2ba4e896efb3a86ffe48dcfe0d2b26f7cf19b5af3a  containerd-1.6.16.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 192175800c..4a0d6ec38b 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/openvpn/S60openvpn b/package/openvpn/S60openvpn
+index f097cf11ec..00156c80db 100644
+--- a/package/openvpn/S60openvpn
++++ b/package/openvpn/S60openvpn
+@@ -1,4 +1,4 @@
+-#!/bin/sh -e
++#!/bin/sh
  #
- ################################################################################
- 
--CONTAINERD_VERSION = 1.6.12
-+CONTAINERD_VERSION = 1.6.16
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
-@@ -41,4 +41,10 @@ else
- CONTAINERD_TAGS += no_btrfs
- endif
- 
-+define CONTAINERD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/containerd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/containerd.service
-+	$(SED) 's,/usr/local/bin,/usr/bin,g' $(TARGET_DIR)/usr/lib/systemd/system/containerd.service
-+endef
-+
- $(eval $(golang-package))
+ # Original version by Robert Leslie
+ # <rob@mars.org>, edited by iwj and cs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
