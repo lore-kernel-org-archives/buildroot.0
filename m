@@ -1,50 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF5CDC636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:29:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1862FC636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 718E7410C4;
-	Sun,  5 Feb 2023 12:29:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 718E7410C4
+	by smtp1.osuosl.org (Postfix) with ESMTP id B36728127D;
+	Sun,  5 Feb 2023 12:31:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B36728127D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IQjsqNOFnL9s; Sun,  5 Feb 2023 12:29:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jcpLHwYVPAtQ; Sun,  5 Feb 2023 12:31:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 422CE410CA;
-	Sun,  5 Feb 2023 12:29:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 422CE410CA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D2B511BF364
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:29:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBE4381211;
+	Sun,  5 Feb 2023 12:31:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBE4381211
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DF7D11BF364
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:31:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B92AF410CA
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:29:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B92AF410CA
+ by smtp1.osuosl.org (Postfix) with ESMTP id C2FC981211
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:31:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2FC981211
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RoVmnP_RkIUk for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 12:29:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B8D5410C4
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:29:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B8D5410C4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6936483798; Sun,  5 Feb 2023 12:29:36 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 13:29:22 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f802249c6227fa1b7299e59d8fff43b98cb2106d
-X-Git-Newrev: 8f291a384388a4d48c118b68fb25affb868fb280
-X-Patchwork-Hint: ignore
-Message-Id: <20230205122936.6936483798@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gst1-plugins-bad: add new va option
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SpJtR2hzREbS for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 12:31:18 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 868A781099
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 868A781099
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:31:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id AE737240002;
+ Sun,  5 Feb 2023 12:31:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pOeAt-00DerB-JR; Sun, 05 Feb 2023 13:31:15 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Joachim Wiberg <troglobit@gmail.com>
+References: <20230123051808.2213859-1-troglobit@gmail.com>
+Date: Sun, 05 Feb 2023 13:31:15 +0100
+In-Reply-To: <20230123051808.2213859-1-troglobit@gmail.com> (Joachim Wiberg's
+ message of "Mon, 23 Jan 2023 06:18:07 +0100")
+Message-ID: <877cwwxpik.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/ssdp-responder: fix misspelled
+ define directive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,73 +63,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f291a384388a4d48c118b68fb25affb868fb280
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Joachim" == Joachim Wiberg <troglobit@gmail.com> writes:
 
-This option enables va plugin support.
+ > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 
-These plugins are vaapi based encoders/decoders that are eventually
-intended to replace the legacy vaapi plugins.
+Committed to 2022.11.x and 2022.02.x, thanks.
 
-Details:
-https://gstreamer.freedesktop.org/documentation/va/index.html
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gstreamer1/gst1-plugins-bad/Config.in           | 11 +++++++++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 10 ++++++++++
- 2 files changed, 21 insertions(+)
-
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index bcb4cb1545..1e89cd124f 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -629,6 +629,17 @@ comment "uvch264 needs a toolchain w/ threads, wchar, gcc >= 4.9"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA
-+	bool "va"
-+	depends on !BR2_STATIC_LIBS # libva
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
-+	select BR2_PACKAGE_LIBVA
-+	help
-+	  VA-API new plugin
-+
-+comment "va needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
- 	bool "voaacenc"
- 	select BR2_PACKAGE_VO_AACENC
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 8f11ce6b37..dfe1f1c9eb 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -745,6 +745,16 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += -Duvch264=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dva=enabled
-+GST1_PLUGINS_BAD_DEPENDENCIES += libva
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+GST1_PLUGINS_BAD_DEPENDENCIES += libdrm
-+endif
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dva=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC),y)
- GST1_PLUGINS_BAD_CONF_OPTS += -Dvoaacenc=enabled
- GST1_PLUGINS_BAD_DEPENDENCIES += vo-aacenc
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
