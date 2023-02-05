@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36B9CC636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE98CC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:27:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAE5E60767;
-	Sun,  5 Feb 2023 14:27:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAE5E60767
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZFM4OoKZMWyl; Sun,  5 Feb 2023 14:27:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E66EA60776;
-	Sun,  5 Feb 2023 14:27:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E66EA60776
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5719B1BF475
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:27:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3204540124
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:27:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3204540124
+	by smtp2.osuosl.org (Postfix) with ESMTP id 840BD40135;
+	Sun,  5 Feb 2023 14:27:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 840BD40135
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mM_-S3TVZYmB for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 14:27:12 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z9nokYX_TGa5; Sun,  5 Feb 2023 14:27:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB7EB4012F;
+	Sun,  5 Feb 2023 14:27:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB7EB4012F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D5A11BF475
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:27:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7B1C4176C
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:27:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7B1C4176C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FpphlqqUMxVA for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 14:27:47 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 415964010D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63C124176A
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 415964010D
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:27:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 63C124176A
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:27:47 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [92.184.112.201])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 19E4F13F88E;
- Sun,  5 Feb 2023 15:27:07 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id D99C713F88E;
+ Sun,  5 Feb 2023 15:27:41 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 Feb 2023 15:27:05 +0100
-Date: Sun, 5 Feb 2023 15:27:05 +0100
+ Sun, 05 Feb 2023 15:27:40 +0100
+Date: Sun, 5 Feb 2023 15:27:40 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230205142705.GJ2960@scaer>
-References: <20230205140602.161881-1-fontaine.fabrice@gmail.com>
+Message-ID: <20230205142740.GK2960@scaer>
+References: <20230205140002.154492-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230205140602.161881-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20230205140002.154492-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675607229;
- bh=WqAaFDUTbo17aGDUzL44vvKQL/DoQubD9VGRDKoKLzw=;
+ d=free.fr; s=smtp-20201208; t=1675607265;
+ bh=fRjszyA5cYC6XQ/NRWzbA4QDcyFEqd9axzec52ND65s=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=myLXrTCwrpHiGCOumDa89BYRpTFDfbIUdN8bgWV8SuXZEmzg0OBpHZ4NWm46k0EYL
- 24Tn6rFlpiJK07QsSbM8tpIWxTzJ1HRv3Waquna+ZKRJl8hg6wDd1mhJb8wNonDGi4
- Nwj1I1ln0Qa1QoHI0ujQDpMcvWIslekt+oFDZkydmjXBq4i6YCzI+2ZEgDC1pCVjAV
- PHKmcix/smdpzRLrvZ/F0A9c/ymWpr3fXNf+KKWKxnme6MzUjdnKpltVVxszr61UH8
- 1ubi9cPjeYpWbbLWK6+UnRadXvntF4DPy/+JRDqBcjnaKhueO3mvS+XryIKKjQ0+Jz
- 2Fq2td9A8DRaQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=osNoVHJHWsA7IZu8xiL9q0PXbJhxdDd8/KOfGFIq1CDSQOoGbAuPEDfSkWT77/G4L
+ X3EKe+Llp1me9HEH2/mOVlbuy7OYMGRSEPKTuj13XEKmYd9+EwBj7amBroILsFY3j2
+ TC3FRtghfHQZHjoUVoRdpTcy5trYElasp3rfgX6H7CYltSGsTUwIG3a/w7a2L6NmGe
+ SQONxAkdfgANDWCnPP3WMOZ7EDAxWScDw6QtBgucUFHrOYqrL5CPpew9UnzfIvichP
+ BKRmnQZBWE3ODrkmAUfPudqgmU0jAJRFMtKwUd0eD/VBfGwSyQBCpu3JcDukACAxbH
+ 3zuZBcuiztnCw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=myLXrTCw
-Subject: Re: [Buildroot] [PATCH 1/1] package/upx: security bump to version
- 4.0.2
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=osNoVHJH
+Subject: Re: [Buildroot] [PATCH 1/1] package/modsecurity2: security bump to
+ version 2.9.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,7 +76,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: =?utf-8?B?SGVydsOp?= Codina <herve.codina@bootlin.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -84,17 +85,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2023-02-05 15:06 +0100, Fabrice Fontaine spake thusly:
-> Fix CVE-2023-23456: A heap-based buffer overflow issue was discovered in
-> UPX in PackTmt::pack() in p_tmt.cpp file. The flow allows an attacker to
-> cause a denial of service (abort) via a crafted file.
+On 2023-02-05 15:00 +0100, Fabrice Fontaine spake thusly:
+> - Fix CVE-2023-24021: Incorrect handling of '\0' bytes in file uploads
+>   in ModSecurity before 2.9.7 may allow for Web Application Firewall
+>   bypasses and buffer overflows on the Web Application Firewall when
+>   executing rules that read the FILES_TMP_CONTENT collection.
+> - host-pkgconf is mandatory and used to find libxml2 since
+>   https://github.com/SpiderLabs/ModSecurity/commit/baa38ddbaf55a87afecad7a1e1760c69a2689787
+> - pcre2 is supported since:
+>   https://github.com/SpiderLabs/ModSecurity/commit/8fc0b519b7a6c023259753a21f33bf3649a25b14
 > 
-> Fix CVE-2023-23457: A Segmentation fault was found in UPX in
-> PackLinuxElf64::invert_pt_dynamic() in p_lx_elf.cpp. An attacker with a
-> crafted input file allows invalid memory address access that could lead
-> to a denial of service.
-> 
-> https://github.com/upx/upx/blob/v4.0.2/NEWS
+> https://github.com/SpiderLabs/ModSecurity/blob/v2.9.7/CHANGES
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -104,32 +105,63 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/upx/upx.hash | 2 +-
->  package/upx/upx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/modsecurity2/Config.in         | 2 +-
+>  package/modsecurity2/modsecurity2.hash | 4 ++--
+>  package/modsecurity2/modsecurity2.mk   | 7 +++----
+>  3 files changed, 6 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/upx/upx.hash b/package/upx/upx.hash
-> index 9f7c40c819..7c24906152 100644
-> --- a/package/upx/upx.hash
-> +++ b/package/upx/upx.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  77003c8e2e29aa9804e2fbaeb30f055903420b3e01d95eafe01aed957fb7e190  upx-4.0.1-src.tar.xz
-> +sha256  1221e725b1a89e06739df27fae394d6bc88aedbe12f137c630ec772522cbc76f  upx-4.0.2-src.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/upx/upx.mk b/package/upx/upx.mk
-> index ef346b2310..6018b0a63d 100644
-> --- a/package/upx/upx.mk
-> +++ b/package/upx/upx.mk
+> diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
+> index 2870386a99..fb1bfc960e 100644
+> --- a/package/modsecurity2/Config.in
+> +++ b/package/modsecurity2/Config.in
+> @@ -2,7 +2,7 @@ config BR2_PACKAGE_MODSECURITY2
+>  	bool "modsecurity2"
+>  	depends on BR2_PACKAGE_APACHE
+>  	select BR2_PACKAGE_LIBXML2
+> -	select BR2_PACKAGE_PCRE
+> +	select BR2_PACKAGE_PCRE2
+>  	help
+>  	  ModSecurity is an open source, cross-platform web application
+>  	  firewall (WAF) module. Known as the "Swiss Army Knife" of
+> diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
+> index a19f4823a8..2c77ffd830 100644
+> --- a/package/modsecurity2/modsecurity2.hash
+> +++ b/package/modsecurity2/modsecurity2.hash
+> @@ -1,5 +1,5 @@
+> -# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.5/modsecurity-2.9.5.tar.gz.sha256
+> -sha256  e2bfc8cd8b8de1e21f054d310543373ea5d89adbd96784e832be0da3e4dc149e  modsecurity-2.9.5.tar.gz
+> +# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
+> +sha256  2a28fcfccfef21581486f98d8d5fe0397499749b8380f60ec7bb1c08478e1839  modsecurity-2.9.7.tar.gz
+>  
+>  # Locally computed
+>  sha256  2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9  LICENSE
+> diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
+> index a1ad8fe5bc..c251291e64 100644
+> --- a/package/modsecurity2/modsecurity2.mk
+> +++ b/package/modsecurity2/modsecurity2.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -UPX_VERSION = 4.0.1
-> +UPX_VERSION = 4.0.2
->  UPX_SITE = https://github.com/upx/upx/releases/download/v$(UPX_VERSION)
->  UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
->  UPX_LICENSE = GPL-2.0+
+> -MODSECURITY2_VERSION = 2.9.5
+> +MODSECURITY2_VERSION = 2.9.7
+>  MODSECURITY2_SOURCE = modsecurity-$(MODSECURITY2_VERSION).tar.gz
+>  MODSECURITY2_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
+>  MODSECURITY2_LICENSE = Apache-2.0
+> @@ -12,11 +12,10 @@ MODSECURITY2_LICENSE_FILES = LICENSE
+>  MODSECURITY2_CPE_ID_VENDOR = trustwave
+>  MODSECURITY2_CPE_ID_PRODUCT = modsecurity
+>  MODSECURITY2_INSTALL_STAGING = YES
+> -MODSECURITY2_DEPENDENCIES = apache libxml2 pcre
+> +MODSECURITY2_DEPENDENCIES = host-pkgconf apache libxml2 pcre2
+>  
+>  MODSECURITY2_CONF_OPTS = \
+> -	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
+> -	--with-libxml=$(STAGING_DIR)/usr \
+> +	--with-pcre2=$(STAGING_DIR)/usr/bin/pcre2-config \
+>  	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
+>  	--with-apu=$(STAGING_DIR)/usr/bin/apu-1-config \
+>  	--with-apxs=$(STAGING_DIR)/usr/bin/apxs \
 > -- 
 > 2.39.0
 > 
