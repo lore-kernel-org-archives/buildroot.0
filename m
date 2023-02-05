@@ -1,61 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D156C636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 08:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D1AEC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 08:20:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A1A54010F;
-	Sun,  5 Feb 2023 08:16:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A1A54010F
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA18641851;
+	Sun,  5 Feb 2023 08:20:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA18641851
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jd1ZXLEYZ3DP; Sun,  5 Feb 2023 08:16:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OY7kresrLv82; Sun,  5 Feb 2023 08:20:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC4CB40106;
-	Sun,  5 Feb 2023 08:16:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC4CB40106
+	by smtp4.osuosl.org (Postfix) with ESMTP id B444F41859;
+	Sun,  5 Feb 2023 08:20:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B444F41859
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0B0B21BF20B
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 08:16:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C7761BF20B
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 08:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D9B81400F3
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 08:16:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9B81400F3
+ by smtp2.osuosl.org (Postfix) with ESMTP id D68B8400D7
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 08:20:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D68B8400D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5aZzf7uXVGnv for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 08:16:33 +0000 (UTC)
+ with ESMTP id 4J9yiLCRZmrM for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 08:20:18 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85541400D7
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 85541400D7
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 08:16:33 +0000 (UTC)
-Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
- by mailout04.t-online.de (Postfix) with SMTP id 42EA920ACB;
- Sun,  5 Feb 2023 09:16:20 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.195.67]) by fwd83.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pOaCA-1tlsgb0; Sun, 5 Feb 2023 09:16:18 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34828)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pOaCA-0008Sg-0N;
- Sun, 05 Feb 2023 09:16:18 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sun,  5 Feb 2023 09:16:16 +0100
-Message-Id: <20230205081617.113018-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230205081617.113018-1-bernd.kuhls@t-online.de>
-References: <20230205081617.113018-1-bernd.kuhls@t-online.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 873B5400AF
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 873B5400AF
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 08:20:18 +0000 (UTC)
+Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 45F49BDE0395;
+ Sun,  5 Feb 2023 09:20:15 +0100 (CET)
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1675584978-23FFC378-E346FC51/0/0 CLEAN NORMAL
-X-TOI-MSGID: 78310a1d-af90-43fe-a494-d7780327c0e5
-Subject: [Buildroot] [PATCH 2/3] package/sofia-sip: bump version to 1.13.12
+Date: Sun, 05 Feb 2023 09:20:15 +0100
+From: Andreas Ziegler <br015@umbiko.net>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+In-Reply-To: <mailman.18015.1675100677.179342.buildroot@buildroot.org>
+References: <mailman.18015.1675100677.179342.buildroot@buildroot.org>
+Message-ID: <bd47b6d90e460842dbe8252016f2b077@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 0.103.7 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1675585215; bh=TxJaSEhNp6SpZ+BfUc6wccn6WzmfpIer9Ap+EnqgV28=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=agvhRHVV6Os8Ku5ImJBy9ZS6wAH2IWz/AH4WoJEkMpGkmkWlCvsc9HixklMXfn83c
+ I8KG7+/j/eE9akQXM3BQkW1YpSmHY6Gp5Ue0j6WRMykGhFb0m+I/ozeXj4mKPaO4Lm
+ iIK//z4GcNbC17VF0wEsVJ5luUQdsjEMfMcsVXgk=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=umbiko.net header.i=@umbiko.net
+ header.a=rsa-sha256 header.s=mail header.b=agvhRHVV
+Subject: Re: [Buildroot] [PATCH 1/4] package/libtraceevent: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,54 +70,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gregory Dymarek <gregd72002@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Pierre Floury <pierre.floury@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch to github helper due to lack of upstream-provided tarball.
+Hi Maxime,
 
-Needed for upcoming bump of freeswitch to version 1.10.9.
+libtraceevent and libtracefs are libraries, thus should be positioned 
+under "Target packages" -> "Libraries".
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/sofia-sip/sofia-sip.hash | 2 +-
- package/sofia-sip/sofia-sip.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Introducing a "Debugging, profiling and benchmark" category here would 
+probably be appropriate.
 
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index 776136bb15..4617725571 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  daf75c41408c559c2d58a8fd4d39be4a8ff5144bc1db220d4dbc28deeed6670a  sofia-sip-1.13.9-f6ee306084.tar.gz
-+sha256  03dda8653367501b7b1188a6b6513416902372e27475553de9318ee89ac390ff  sofia-sip-1.13.12.tar.gz
- sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
- sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 9071d964e4..59c365365b 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--SOFIA_SIP_VERSION = 1.13.9
--SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-f6ee306084.tar.gz
--SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs/sofia-sip
-+SOFIA_SIP_VERSION = 1.13.12
-+SOFIA_SIP_SITE = $(call github,freeswitch,sofia-sip,v$(SOFIA_SIP_VERSION))
- SOFIA_SIP_INSTALL_STAGING = YES
-+# Fetched from github, no pre-generated configure script provided
-+SOFIA_SIP_AUTORECONF = YES
- SOFIA_SIP_DEPENDENCIES = host-pkgconf
- SOFIA_SIP_LICENSE = LGPL-2.1+
- SOFIA_SIP_LICENSE_FILES = COPYING COPYRIGHTS
--- 
-2.39.1
+Tested successfully on x86_64 hardware.
 
+Kind regards,
+Andreas
+
+On 2023-01-30 18:44, Maxime Chevallier wrote:
+> 
+> Introduce the libtraceevent library, that used to be bundled with the
+> trace-cmd tool. This library is now used by several tools and libraries
+> such as trace-cmd, libtracefs and rtla.
+> 
+> This package tries to install libraries in /usr/local/lib by default,
+> hence the redefinition of the "prefix" variable, so that the library
+> gets installed in "/usr/lib" instead.
+> 
+> The same applies to the pkgconfig handling of the proved Makefile, 
+> which
+> installs the .pc files in the /usr/local area by default, hence the
+> redefinition of the pkgconfig_dir to either the correct directory 
+> within the
+> staging area, or to empty value for the target to avoid installing the 
+> .pc
+> in that case.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> ---
+>  DEVELOPERS                             |  3 +++
+>  package/Config.in                      |  1 +
+>  package/libtraceevent/Config.in        |  9 +++++++
+>  package/libtraceevent/libtraceevent.mk | 33 ++++++++++++++++++++++++++
+>  4 files changed, 46 insertions(+)
+>  create mode 100644 package/libtraceevent/Config.in
+>  create mode 100644 package/libtraceevent/libtraceevent.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 706ee80ece..fcf05e0aa0 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2106,6 +2106,9 @@ F:	package/postgresql/
+>  F:	package/protozero/
+>  F:	package/timescaledb/
+> 
+> +N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
+> +F:	package/libtraceevent/
+> +
+>  N:	Michael Durrant <mdurrant@arcturusnetworks.com>
+>  F:	board/arcturus/
+>  F:	configs/arcturus_ucp1020_defconfig
+> diff --git a/package/Config.in b/package/Config.in
+> index 83fddf316f..2f0e6dcb18 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -117,6 +117,7 @@ menu "Debugging, profiling and benchmark"
+>  	source "package/kyua/Config.in"
+>  	source "package/latencytop/Config.in"
+>  	source "package/libbpf/Config.in"
+> +	source "package/libtraceevent/Config.in"
+>  	source "package/lmbench/Config.in"
+>  	source "package/lsof/Config.in"
+>  	source "package/ltp-testsuite/Config.in"
+> diff --git a/package/libtraceevent/Config.in 
+> b/package/libtraceevent/Config.in
+> new file mode 100644
+> index 0000000000..d351e3b4de
+> --- /dev/null
+> +++ b/package/libtraceevent/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_LIBTRACEEVENT
+> +	bool "libtraceevent"
+> +	help
+> +	  libtraceevent is a library that interfaces with the ftrace
+> +	  subsystem in the linux kernel.
+> +	  It used to be bundled directly in the trace-cmd
+> +	  tool, but it was eventually extracted so that it can be used
+> +	  by multiple other tools and libraries, such as libtracefs and
+> +	  rtla.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
