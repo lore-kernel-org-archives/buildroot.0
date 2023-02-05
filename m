@@ -1,88 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B5BC636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:25:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36B9CC636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:27:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C00080ABF;
-	Sun,  5 Feb 2023 14:25:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C00080ABF
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAE5E60767;
+	Sun,  5 Feb 2023 14:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAE5E60767
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x6yWfTXxNsRH; Sun,  5 Feb 2023 14:25:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZFM4OoKZMWyl; Sun,  5 Feb 2023 14:27:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61E2880AAD;
-	Sun,  5 Feb 2023 14:25:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61E2880AAD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2489C1BF475
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:25:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E66EA60776;
+	Sun,  5 Feb 2023 14:27:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E66EA60776
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5719B1BF475
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F2DF681DEE
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:25:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2DF681DEE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3204540124
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:27:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3204540124
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X8MfLTmVPqGv for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 14:25:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3A7281DEA
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F3A7281DEA
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:25:50 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id h16so8262989wrz.12
- for <buildroot@buildroot.org>; Sun, 05 Feb 2023 06:25:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=i1yus/O0lpfluEyvZGZk7EgBJIIJIUgy8m5hIY2YBAg=;
- b=GwGRFl4K6OjOx32nTpR+gRE4/B4k6fj3SbgN9I1ZtuBRiSSL30I3AB3x26om1LG/aW
- zhvYXS0Qv40LyD48vJ87exv7KoTcBwNt4AxajL3IwmYGx6nnb2UehOj7YqRlGSouarAJ
- U6xdah8A9mKehV5SAyFytBtEQwtw1ejTJQfGFh106DymUlsybfCtdMm+y+pSIZZiEO8R
- 2Kxas8i4B+u9aPtg2nouDlRDAlttDvQkaHAkRmOgewXlNqmLC303wangvWOPko0VotPV
- NeM832EpjYrxbiSbg2OaNdFFWIMZwU1Wzpejct6MexnOSCgXyq8rPLKX37HgrABOr/el
- ZHBg==
-X-Gm-Message-State: AO0yUKU9fkf8JagweWXNt76yU3C9xqNVctY1tdI/EMwZJ+kab77IQBct
- YfvKKzrDN1cUlF/vsNE/Msyskt3UZF8=
-X-Google-Smtp-Source: AK7set/+R6zY5LebfxgQNXsx3TxAnL6Z3yCyplRj6yldgj0cuoA0hEd+J20q2SIyYSlvJV3yp6q8sg==
-X-Received: by 2002:adf:fd4a:0:b0:2c3:ea63:37b2 with SMTP id
- h10-20020adffd4a000000b002c3ea6337b2mr131901wrs.2.1675607148976; 
- Sun, 05 Feb 2023 06:25:48 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- f9-20020a5d4dc9000000b002bfb37497a8sm6555486wru.31.2023.02.05.06.25.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Feb 2023 06:25:48 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  5 Feb 2023 15:25:43 +0100
-Message-Id: <20230205142543.285695-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mM_-S3TVZYmB for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 14:27:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 415964010D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 415964010D
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:27:12 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [92.184.112.201])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 19E4F13F88E;
+ Sun,  5 Feb 2023 15:27:07 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 05 Feb 2023 15:27:05 +0100
+Date: Sun, 5 Feb 2023 15:27:05 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230205142705.GJ2960@scaer>
+References: <20230205140602.161881-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=i1yus/O0lpfluEyvZGZk7EgBJIIJIUgy8m5hIY2YBAg=;
- b=NdpGWtYBnzZcaHq6+R3WTrFEy7HUSPV49rMgyImVljH6ykfRqfq7NZvro0Cu3dPjtw
- Q3NAkN0i7BAA1ST8zIrcYA5feS8uPpYGxlM2zcnEG44usIvybT+94xBH0KvI0oBvgtaR
- eoblAIysDKTyLcHjcvRW6/I6mZI+h4C2f8bRJijfHTggRglzPkcz/fys+bJE85BzBAHI
- rg1mgJri73DPqvn/D2hZcdmpfNH6mEfHa600FOJn0OOGKL8/kixvO9QP6Naau3YP5XvF
- 5nN0/dssEaMiqe2/COBWTN2PakkjgjvHMPR1mFny09xDKdbFDAp8QkHt+IRJkxAcEVXG
- kQUQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=NdpGWtYB
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
- 4.0.3
+Content-Disposition: inline
+In-Reply-To: <20230205140602.161881-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1675607229;
+ bh=WqAaFDUTbo17aGDUzL44vvKQL/DoQubD9VGRDKoKLzw=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=myLXrTCwrpHiGCOumDa89BYRpTFDfbIUdN8bgWV8SuXZEmzg0OBpHZ4NWm46k0EYL
+ 24Tn6rFlpiJK07QsSbM8tpIWxTzJ1HRv3Waquna+ZKRJl8hg6wDd1mhJb8wNonDGi4
+ Nwj1I1ln0Qa1QoHI0ujQDpMcvWIslekt+oFDZkydmjXBq4i6YCzI+2ZEgDC1pCVjAV
+ PHKmcix/smdpzRLrvZ/F0A9c/ymWpr3fXNf+KKWKxnme6MzUjdnKpltVVxszr61UH8
+ 1ubi9cPjeYpWbbLWK6+UnRadXvntF4DPy/+JRDqBcjnaKhueO3mvS+XryIKKjQ0+Jz
+ 2Fq2td9A8DRaQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=myLXrTCw
+Subject: Re: [Buildroot] [PATCH 1/1] package/upx: security bump to version
+ 4.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,61 +76,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-0411, CVE-2023-0412, CVE-2023-0413, CVE-2023-0414,
-CVE-2023-0415, CVE-2023-0416 and CVE-2023-0417
+Fabrice, All,
 
-https://www.wireshark.org/security/wnpa-sec-2023-01
-https://www.wireshark.org/security/wnpa-sec-2023-02
-https://www.wireshark.org/security/wnpa-sec-2023-03
-https://www.wireshark.org/security/wnpa-sec-2023-04
-https://www.wireshark.org/security/wnpa-sec-2023-05
-https://www.wireshark.org/security/wnpa-sec-2023-06
-https://www.wireshark.org/security/wnpa-sec-2023-07
+On 2023-02-05 15:06 +0100, Fabrice Fontaine spake thusly:
+> Fix CVE-2023-23456: A heap-based buffer overflow issue was discovered in
+> UPX in PackTmt::pack() in p_tmt.cpp file. The flow allows an attacker to
+> cause a denial of service (abort) via a crafted file.
+> 
+> Fix CVE-2023-23457: A Segmentation fault was found in UPX in
+> PackLinuxElf64::invert_pt_dynamic() in p_lx_elf.cpp. An attacker with a
+> crafted input file allows invalid memory address access that could lead
+> to a denial of service.
+> 
+> https://github.com/upx/upx/blob/v4.0.2/NEWS
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-https://www.wireshark.org/docs/relnotes/wireshark-4.0.3.html
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index e9026b8caa..7128b560ae 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.2.txt
--sha1  0127180ff18515b086fe5603f767f53ddaa64c1a  wireshark-4.0.2.tar.xz
--sha256  f35915699f2f9b28ddb211202d40ec8984e5834d3c911483144a4984ba44411d  wireshark-4.0.2.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.3.txt
-+sha1  243b0057cfe6d447662e81b5646110aaf8b63c81  wireshark-4.0.3.tar.xz
-+sha256  6c51e15bcc0afb93734e686dbff354ffd159f570bd2904bcbbad6f3feb7e9511  wireshark-4.0.3.tar.xz
- 
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index e2a424ef0f..12c36575df 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 4.0.2
-+WIRESHARK_VERSION = 4.0.3
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+> ---
+>  package/upx/upx.hash | 2 +-
+>  package/upx/upx.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/upx/upx.hash b/package/upx/upx.hash
+> index 9f7c40c819..7c24906152 100644
+> --- a/package/upx/upx.hash
+> +++ b/package/upx/upx.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  77003c8e2e29aa9804e2fbaeb30f055903420b3e01d95eafe01aed957fb7e190  upx-4.0.1-src.tar.xz
+> +sha256  1221e725b1a89e06739df27fae394d6bc88aedbe12f137c630ec772522cbc76f  upx-4.0.2-src.tar.xz
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+> index ef346b2310..6018b0a63d 100644
+> --- a/package/upx/upx.mk
+> +++ b/package/upx/upx.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -UPX_VERSION = 4.0.1
+> +UPX_VERSION = 4.0.2
+>  UPX_SITE = https://github.com/upx/upx/releases/download/v$(UPX_VERSION)
+>  UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
+>  UPX_LICENSE = GPL-2.0+
+> -- 
+> 2.39.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.39.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
