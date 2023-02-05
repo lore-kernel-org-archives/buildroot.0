@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40795C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 765F6C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6F8A61761;
-	Tue, 21 Feb 2023 01:26:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6F8A61761
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28E156FAF4;
+	Tue, 21 Feb 2023 01:27:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28E156FAF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zd34NC1U62w3; Tue, 21 Feb 2023 01:26:51 +0000 (UTC)
+	with ESMTP id DdWjzvoaO-h3; Tue, 21 Feb 2023 01:27:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19CEB6FB61;
-	Tue, 21 Feb 2023 01:26:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19CEB6FB61
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D9E76FC26;
+	Tue, 21 Feb 2023 01:27:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D9E76FC26
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 137D31BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10FE71BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 663726FC01
+ by smtp3.osuosl.org (Postfix) with ESMTP id 633BC6FBA1
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 663726FC01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 633BC6FBA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VYO-pwdNSyLk for <buildroot@lists.busybox.net>;
+ with ESMTP id Fc7F6zjWx730 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9ABC86FBF9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B6A76FBE4
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ABC86FBF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B6A76FBE4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9650B81979; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+ id 77A8B828C8; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 13:18:54 +0100
+Date: Sun, 5 Feb 2023 13:18:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e4ac41042515944eafb892c8c26ea3b940211136
-X-Git-Newrev: a3d7f7a73bb025152e6594ab812a2bfa893851f9
+X-Git-Oldrev: 720d30f9d29327e326916457bb74eeeb976b3ff1
+X-Git-Newrev: e624207495b25403ad370d595ebb37fad3f74176
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205246.9650B81979@busybox.osuosl.org>
+Message-Id: <20230220205246.77A8B828C8@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- configs/olimex_a64_olinuxino_defconfig: bump Linux to 6.1.9,
- U-Boot to 2023.01 and ATF to v2.8
+ configs/olimex_a20_olinuxino_lime_defconfig: bump Linux to 6.1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,66 +64,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3d7f7a73bb025152e6594ab812a2bfa893851f9
+commit: https://git.buildroot.net/buildroot/commit/?id=e624207495b25403ad370d595ebb37fad3f74176
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Linux 6.1.9 installs more modules and this makes rootfs size to increase
-and the default 60M size is not enough. So let's expand rootfs size to
-120M.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/olimex_a64_olinuxino_defconfig | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ configs/olimex_a20_olinuxino_lime_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/olimex_a64_olinuxino_defconfig b/configs/olimex_a64_olinuxino_defconfig
-index 53e8c2ece5..dd445e8ce0 100644
---- a/configs/olimex_a64_olinuxino_defconfig
-+++ b/configs/olimex_a64_olinuxino_defconfig
-@@ -2,13 +2,13 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index f685d19421..25ecf31146 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
  
--# Linux headers same as kernel, a 5.15 series
+-# Linux headers same as kernel, a 5.15 LTS series
 -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+# Linux headers same as kernel, a 6.1 series
++# Linux headers same as kernel, a 6.1 LTS series
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
  
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.8"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
-@@ -16,7 +16,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="a64-olinuxino"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-@@ -33,7 +33,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/olimex/a64-olinuxino/boot
+ # Toolchain
+ # glibc is needed for sunxi-mali-utgard package.
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.7"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.86"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.9"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-olinuxino"
-@@ -43,6 +43,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Olimex A64-OLinuXino"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
