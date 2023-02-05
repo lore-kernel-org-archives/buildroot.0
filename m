@@ -1,51 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1E09C636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B5BC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85E9E60774;
-	Sun,  5 Feb 2023 14:25:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85E9E60774
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C00080ABF;
+	Sun,  5 Feb 2023 14:25:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C00080ABF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ap2VRO6_LT_f; Sun,  5 Feb 2023 14:25:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x6yWfTXxNsRH; Sun,  5 Feb 2023 14:25:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B05AF60758;
-	Sun,  5 Feb 2023 14:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B05AF60758
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3DA371BF869
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:25:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61E2880AAD;
+	Sun,  5 Feb 2023 14:25:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61E2880AAD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2489C1BF475
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2AE0B60761
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:25:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AE0B60761
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2DF681DEE
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2DF681DEE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D0DgF9texDzK for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 14:25:02 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5087060758
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:25:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5087060758
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EDC683883; Sun,  5 Feb 2023 14:25:02 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X8MfLTmVPqGv for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 14:25:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3A7281DEA
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3A7281DEA
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:25:50 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id h16so8262989wrz.12
+ for <buildroot@buildroot.org>; Sun, 05 Feb 2023 06:25:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=i1yus/O0lpfluEyvZGZk7EgBJIIJIUgy8m5hIY2YBAg=;
+ b=GwGRFl4K6OjOx32nTpR+gRE4/B4k6fj3SbgN9I1ZtuBRiSSL30I3AB3x26om1LG/aW
+ zhvYXS0Qv40LyD48vJ87exv7KoTcBwNt4AxajL3IwmYGx6nnb2UehOj7YqRlGSouarAJ
+ U6xdah8A9mKehV5SAyFytBtEQwtw1ejTJQfGFh106DymUlsybfCtdMm+y+pSIZZiEO8R
+ 2Kxas8i4B+u9aPtg2nouDlRDAlttDvQkaHAkRmOgewXlNqmLC303wangvWOPko0VotPV
+ NeM832EpjYrxbiSbg2OaNdFFWIMZwU1Wzpejct6MexnOSCgXyq8rPLKX37HgrABOr/el
+ ZHBg==
+X-Gm-Message-State: AO0yUKU9fkf8JagweWXNt76yU3C9xqNVctY1tdI/EMwZJ+kab77IQBct
+ YfvKKzrDN1cUlF/vsNE/Msyskt3UZF8=
+X-Google-Smtp-Source: AK7set/+R6zY5LebfxgQNXsx3TxAnL6Z3yCyplRj6yldgj0cuoA0hEd+J20q2SIyYSlvJV3yp6q8sg==
+X-Received: by 2002:adf:fd4a:0:b0:2c3:ea63:37b2 with SMTP id
+ h10-20020adffd4a000000b002c3ea6337b2mr131901wrs.2.1675607148976; 
+ Sun, 05 Feb 2023 06:25:48 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ f9-20020a5d4dc9000000b002bfb37497a8sm6555486wru.31.2023.02.05.06.25.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 05 Feb 2023 06:25:48 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 15:24:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae65870e652088dd65ca41d63304893d1d4443a2
-X-Git-Newrev: 42e34cf10f9eb037aa8c48a4fb9e8f521901b983
-X-Patchwork-Hint: ignore
-Message-Id: <20230205142502.3EDC683883@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/modsecurity2: security bump to
- version 2.9.7
+Date: Sun,  5 Feb 2023 15:25:43 +0100
+Message-Id: <20230205142543.285695-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=i1yus/O0lpfluEyvZGZk7EgBJIIJIUgy8m5hIY2YBAg=;
+ b=NdpGWtYBnzZcaHq6+R3WTrFEy7HUSPV49rMgyImVljH6ykfRqfq7NZvro0Cu3dPjtw
+ Q3NAkN0i7BAA1ST8zIrcYA5feS8uPpYGxlM2zcnEG44usIvybT+94xBH0KvI0oBvgtaR
+ eoblAIysDKTyLcHjcvRW6/I6mZI+h4C2f8bRJijfHTggRglzPkcz/fys+bJE85BzBAHI
+ rg1mgJri73DPqvn/D2hZcdmpfNH6mEfHa600FOJn0OOGKL8/kixvO9QP6Naau3YP5XvF
+ 5nN0/dssEaMiqe2/COBWTN2PakkjgjvHMPR1mFny09xDKdbFDAp8QkHt+IRJkxAcEVXG
+ kQUQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=NdpGWtYB
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 4.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,86 +94,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42e34cf10f9eb037aa8c48a4fb9e8f521901b983
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix CVE-2023-0411, CVE-2023-0412, CVE-2023-0413, CVE-2023-0414,
+CVE-2023-0415, CVE-2023-0416 and CVE-2023-0417
 
-- Fix CVE-2023-24021: Incorrect handling of '\0' bytes in file uploads
-  in ModSecurity before 2.9.7 may allow for Web Application Firewall
-  bypasses and buffer overflows on the Web Application Firewall when
-  executing rules that read the FILES_TMP_CONTENT collection.
-- host-pkgconf is mandatory and used to find libxml2 since
-  https://github.com/SpiderLabs/ModSecurity/commit/baa38ddbaf55a87afecad7a1e1760c69a2689787
-- pcre2 is supported since:
-  https://github.com/SpiderLabs/ModSecurity/commit/8fc0b519b7a6c023259753a21f33bf3649a25b14
+https://www.wireshark.org/security/wnpa-sec-2023-01
+https://www.wireshark.org/security/wnpa-sec-2023-02
+https://www.wireshark.org/security/wnpa-sec-2023-03
+https://www.wireshark.org/security/wnpa-sec-2023-04
+https://www.wireshark.org/security/wnpa-sec-2023-05
+https://www.wireshark.org/security/wnpa-sec-2023-06
+https://www.wireshark.org/security/wnpa-sec-2023-07
 
-https://github.com/SpiderLabs/ModSecurity/blob/v2.9.7/CHANGES
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.3.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/modsecurity2/Config.in         | 2 +-
- package/modsecurity2/modsecurity2.hash | 4 ++--
- package/modsecurity2/modsecurity2.mk   | 7 +++----
- 3 files changed, 6 insertions(+), 7 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
-index 2870386a99..fb1bfc960e 100644
---- a/package/modsecurity2/Config.in
-+++ b/package/modsecurity2/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_MODSECURITY2
- 	bool "modsecurity2"
- 	depends on BR2_PACKAGE_APACHE
- 	select BR2_PACKAGE_LIBXML2
--	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PCRE2
- 	help
- 	  ModSecurity is an open source, cross-platform web application
- 	  firewall (WAF) module. Known as the "Swiss Army Knife" of
-diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
-index a19f4823a8..2c77ffd830 100644
---- a/package/modsecurity2/modsecurity2.hash
-+++ b/package/modsecurity2/modsecurity2.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.5/modsecurity-2.9.5.tar.gz.sha256
--sha256  e2bfc8cd8b8de1e21f054d310543373ea5d89adbd96784e832be0da3e4dc149e  modsecurity-2.9.5.tar.gz
-+# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
-+sha256  2a28fcfccfef21581486f98d8d5fe0397499749b8380f60ec7bb1c08478e1839  modsecurity-2.9.7.tar.gz
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index e9026b8caa..7128b560ae 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.2.txt
+-sha1  0127180ff18515b086fe5603f767f53ddaa64c1a  wireshark-4.0.2.tar.xz
+-sha256  f35915699f2f9b28ddb211202d40ec8984e5834d3c911483144a4984ba44411d  wireshark-4.0.2.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.3.txt
++sha1  243b0057cfe6d447662e81b5646110aaf8b63c81  wireshark-4.0.3.tar.xz
++sha256  6c51e15bcc0afb93734e686dbff354ffd159f570bd2904bcbbad6f3feb7e9511  wireshark-4.0.3.tar.xz
  
- # Locally computed
- sha256  2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9  LICENSE
-diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
-index a1ad8fe5bc..c251291e64 100644
---- a/package/modsecurity2/modsecurity2.mk
-+++ b/package/modsecurity2/modsecurity2.mk
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index e2a424ef0f..12c36575df 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MODSECURITY2_VERSION = 2.9.5
-+MODSECURITY2_VERSION = 2.9.7
- MODSECURITY2_SOURCE = modsecurity-$(MODSECURITY2_VERSION).tar.gz
- MODSECURITY2_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
- MODSECURITY2_LICENSE = Apache-2.0
-@@ -12,11 +12,10 @@ MODSECURITY2_LICENSE_FILES = LICENSE
- MODSECURITY2_CPE_ID_VENDOR = trustwave
- MODSECURITY2_CPE_ID_PRODUCT = modsecurity
- MODSECURITY2_INSTALL_STAGING = YES
--MODSECURITY2_DEPENDENCIES = apache libxml2 pcre
-+MODSECURITY2_DEPENDENCIES = host-pkgconf apache libxml2 pcre2
- 
- MODSECURITY2_CONF_OPTS = \
--	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
--	--with-libxml=$(STAGING_DIR)/usr \
-+	--with-pcre2=$(STAGING_DIR)/usr/bin/pcre2-config \
- 	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
- 	--with-apu=$(STAGING_DIR)/usr/bin/apu-1-config \
- 	--with-apxs=$(STAGING_DIR)/usr/bin/apxs \
+-WIRESHARK_VERSION = 4.0.2
++WIRESHARK_VERSION = 4.0.3
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+-- 
+2.39.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
