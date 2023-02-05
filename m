@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1862FC636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07DEEC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:31:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B36728127D;
-	Sun,  5 Feb 2023 12:31:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B36728127D
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAD95606F5;
+	Sun,  5 Feb 2023 12:31:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAD95606F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jcpLHwYVPAtQ; Sun,  5 Feb 2023 12:31:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z7ZSPVC_9T8L; Sun,  5 Feb 2023 12:31:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBE4381211;
-	Sun,  5 Feb 2023 12:31:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBE4381211
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF7D11BF364
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:31:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC76F605DB;
+	Sun,  5 Feb 2023 12:31:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC76F605DB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D7A2B1BF364
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C2FC981211
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:31:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2FC981211
+ by smtp2.osuosl.org (Postfix) with ESMTP id B282F4010C
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B282F4010C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SpJtR2hzREbS for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 12:31:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 868A781099
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 868A781099
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:31:18 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AE737240002;
- Sun,  5 Feb 2023 12:31:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pOeAt-00DerB-JR; Sun, 05 Feb 2023 13:31:15 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zH78qO3dI8aj for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 12:31:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA84140106
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:31:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA84140106
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D641C837A1; Sun,  5 Feb 2023 12:31:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Joachim Wiberg <troglobit@gmail.com>
-References: <20230123051808.2213859-1-troglobit@gmail.com>
-Date: Sun, 05 Feb 2023 13:31:15 +0100
-In-Reply-To: <20230123051808.2213859-1-troglobit@gmail.com> (Joachim Wiberg's
- message of "Mon, 23 Jan 2023 06:18:07 +0100")
-Message-ID: <877cwwxpik.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/ssdp-responder: fix misspelled
- define directive
+To: buildroot@buildroot.org
+Date: Sun, 5 Feb 2023 13:31:03 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 486eae3194824239eab90a71c61be4154ec1a0c6
+X-Git-Newrev: 03c15062c33a92145ef28d71819ce52adb8851fe
+X-Patchwork-Hint: ignore
+Message-Id: <20230205123151.D641C837A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/ssdp-responder:
+ fix misspelled define directive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,20 +57,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Joachim" == Joachim Wiberg <troglobit@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=03c15062c33a92145ef28d71819ce52adb8851fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6e0ba6bfc2d28a8079d336a18cc50f0825952ec2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ssdp-responder/ssdp-responder.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2022.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
+index 3fee4c2006..d878e3c629 100644
+--- a/package/ssdp-responder/ssdp-responder.mk
++++ b/package/ssdp-responder/ssdp-responder.mk
+@@ -25,7 +25,7 @@ define SSDP_RESPONDER_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50ssdpd
+ endef
+ 
+-define SSDP-RESPONDER_INSTALL_INIT_SYSTEMD
++define SSDP_RESPONDER_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 $(@D)/ssdp-responder.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/ssdp-responder.service
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
