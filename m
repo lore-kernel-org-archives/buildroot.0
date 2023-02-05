@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4F13C636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC03EC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:21:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76630403B8;
-	Sun,  5 Feb 2023 12:21:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76630403B8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FB0F403B8;
+	Sun,  5 Feb 2023 12:21:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FB0F403B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pt7ZfoSv9nzd; Sun,  5 Feb 2023 12:21:29 +0000 (UTC)
+	with ESMTP id 8EFHjpRpeumR; Sun,  5 Feb 2023 12:21:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39CF4402B9;
-	Sun,  5 Feb 2023 12:21:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39CF4402B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5661C408C9;
+	Sun,  5 Feb 2023 12:21:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5661C408C9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E764A1BF364
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:21:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A87A1BF869
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1CF4414BF
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA6AC417E2
  for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:21:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1CF4414BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA6AC417E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ahT4ZlMrSWOa for <buildroot@lists.busybox.net>;
+ with ESMTP id 0BCT7cttACBH for <buildroot@lists.busybox.net>;
  Sun,  5 Feb 2023 12:21:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC4AB410D8
+ by smtp4.osuosl.org (Postfix) with ESMTP id F22E24146F
  for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:21:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC4AB410D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F22E24146F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D634D8377B; Sun,  5 Feb 2023 12:21:12 +0000 (UTC)
+ id DF1208377C; Sun,  5 Feb 2023 12:21:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 13:20:45 +0100
+Date: Sun, 5 Feb 2023 13:20:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a3d7f7a73bb025152e6594ab812a2bfa893851f9
-X-Git-Newrev: 6c8cda8c94e00dc4571a6ad1b3f9c1c617a63873
+X-Git-Oldrev: 6c8cda8c94e00dc4571a6ad1b3f9c1c617a63873
+X-Git-Newrev: 70477e5fee6e92b1d783257a8b3e57a78007438e
 X-Patchwork-Hint: ignore
-Message-Id: <20230205122112.D634D8377B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: Remove openal from my list
+Message-Id: <20230205122112.DF1208377C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/zynqmp/post-image.sh: Don't insist
+ on a xilinx/ prefix for .dts files.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +59,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5183136818466709011=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5183136818466709011==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6c8cda8c94e00dc4571a6ad1b3f9c1c617a63873
+commit: https://git.buildroot.net/buildroot/commit/?id=70477e5fee6e92b1d783257a8b3e57a78007438e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: André Zwing <nerv@dawncrow.de>
+If using BR2_LINUX_KERNEL_CUSTOM_DTS_PATH to copy .dts files from
+buildroot into the linux tree, these .dts files are copied to
+arch/arm64/boot. Unfortunately, the post-image.sh script expects to find
+them in arch/arm64/boot/xilinx.
+
+This patch does not require the xilinx/ prefix to be present when
+symlinking the device-tree to system.dtb where u-boot expects to find
+it.
+
+Signed-off-by: Graeme Smecher <gsmecher@threespeedlogic.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+ board/zynqmp/post-image.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e19087c577..d526451ca3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -133,7 +133,6 @@ F:	boot/ti-k3-r5-loader/
+diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
+index ed6dbe188c..c5de2db820 100755
+--- a/board/zynqmp/post-image.sh
++++ b/board/zynqmp/post-image.sh
+@@ -5,7 +5,7 @@
+ # devicetree listed in the config.
  
- N:	André Zwing <nerv@dawncrow.de>
- F:	package/libkrb5/
--F:	package/openal/
- F:	package/p7zip/
- F:	package/wine/
+ FIRST_DT=$(sed -nr \
+-               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
++               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
+                ${BR2_CONFIG})
  
-
---===============5183136818466709011==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ [ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5183136818466709011==--
