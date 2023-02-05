@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00C55C636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 10:51:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5603AC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 10:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F04A860709;
-	Sun,  5 Feb 2023 10:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F04A860709
+	by smtp1.osuosl.org (Postfix) with ESMTP id F323881E7E;
+	Sun,  5 Feb 2023 10:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F323881E7E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nrx6McCc-ADe; Sun,  5 Feb 2023 10:51:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cUo9UH1VcbJU; Sun,  5 Feb 2023 10:51:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 307726072A;
-	Sun,  5 Feb 2023 10:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 307726072A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 08F301BF869
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35C8181E80;
+	Sun,  5 Feb 2023 10:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35C8181E80
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A6EA1BF8B4
  for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E3B34417B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id D809C8140E
  for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:51:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B34417B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D809C8140E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bio4zeGXaFFF for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lsJgx44Vgj1K for <buildroot@lists.busybox.net>;
  Sun,  5 Feb 2023 10:51:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE889417B8
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED6DC813C5
  for <buildroot@buildroot.org>; Sun,  5 Feb 2023 10:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE889417B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED6DC813C5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C94B283733; Sun,  5 Feb 2023 10:51:19 +0000 (UTC)
+ id DC05E83735; Sun,  5 Feb 2023 10:51:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 Jan 2023 22:50:56 +0100
+Date: Sun, 5 Feb 2023 11:48:23 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 00fbc1c7db58c44474c1d4afa5e528606ff93b36
-X-Git-Newrev: 5f496bb8b96938c7c103e52e68bc81425d37f2f1
+X-Git-Oldrev: 2724f705c3ad766d31551ddcc56b7e73081f6551
+X-Git-Newrev: db058b26f0694742a12381e2075ef297cdff076c
 X-Patchwork-Hint: ignore
-Message-Id: <20230205105119.C94B283733@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/wpewebkit:
- security bump to version 2.38.3
+Message-Id: <20230205105119.DC05E83735@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x]
+ package/x11r7/xlib_libXpm: security bump version to 3.5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,66 +63,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f496bb8b96938c7c103e52e68bc81425d37f2f1
+commit: https://git.buildroot.net/buildroot/commit/?id=db058b26f0694742a12381e2075ef297cdff076c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Bugfix release, with security fixes for CVE-2022-42852, CVE-2022-42856,
-CVE-2022-42867, CVE-2022-46691, CVE-2022-46692, CVE-2022-46698,
-CVE-2022-46699, CVE-2022-46700, CVE-2022-42823, and CVE-2022-42799.
-
 Release notes:
+https://lists.x.org/archives/xorg-announce/2023-January/003313.html
 
-  https://wpewebkit.org/release/wpewebkit-2.38.3.html
-  https://wpewebkit.org/release/wpewebkit-2.38.2.html
-  https://wpewebkit.org/release/wpewebkit-2.38.1.html
+Fixes CVE-2022-4883, CVE-2022-44617 & CVE-2022-46285:
+https://lists.x.org/archives/xorg-announce/2023-January/003312.html
 
-Accompanying security advisories:
+Updated license hash due to upstream commit:
+https://gitlab.freedesktop.org/xorg/lib/libxpm/-/commit/501494c6c68a84114fdd0b44d4b67ef9cde776c9
 
-  https://wpewebkit.org/security/WSA-2022-0011.html
-  https://wpewebkit.org/security/WSA-2022-0010.html
+Added configure option to disable compressed pixmaps support:
+https://gitlab.freedesktop.org/xorg/lib/libxpm/-/commit/4841039e5385f264d12757903894f47c64f59361
 
-Additionally, the update brings in important bug fixes for the
-Bubblewrap sandbox support, scrolling in certain web sites, multimedia
-playback, and build fixes.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d8bbc215f5b6c978e9506927675181bbda06567f)
+(cherry picked from commit a0dfd717f3ff888b4ab6d8c40bb6a01a939370cb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xlib_libXpm/xlib_libXpm.hash | 8 ++++----
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 3 ++-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 5dd64b34b7..ccd928b3df 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.38.0.tar.xz.sums
--md5  e0e6b98c86351c39e41da475afc50780  wpewebkit-2.38.0.tar.xz
--sha1  66e6dd1c285a21ce50370fb4d60332838d801663  wpewebkit-2.38.0.tar.xz
--sha256  e653e12eca63e6371c06d4cd9efcd5492db67f7d9ef324fd5d8668b1151e72b2  wpewebkit-2.38.0.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.38.3.tar.xz.sums
-+md5  60f79ff8dc68280f756963af23b67d6d  wpewebkit-2.38.3.tar.xz
-+sha1  de15119a0dc29776d3a11fca1df4238b471f960f  wpewebkit-2.38.3.tar.xz
-+sha256  1dd9075eec7253a1b0d038a73f92ddbb9174394e6a7527ec07b4464fa6290498  wpewebkit-2.38.3.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 001c701ee9..b2bbc0301b 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
+index 9ccfb4c8de..733c404543 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-November/003261.html
+-sha256  f7eb8f69c039281def8258ae6859adb5f050fbe161ab3d6a2d6ef109a603eac2  libXpm-3.5.14.tar.xz
+-sha512  c3fe554453068a6b188d3cad2cb3648e84b7f1909aea8f213daadce3d444b34361c3b2edce14a4fd481f97e4dc45c3125e2483ff4f44b3390a75829ed2782e4b  libXpm-3.5.14.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-January/003313.html
++sha256  60bb906c5c317a6db863e39b69c4a83fdbd2ae2154fcf47640f8fefc9fdfd1c1  libXpm-3.5.15.tar.xz
++sha512  955d716fcea2c9d868ab941c56f017b39bfa0f47fd2904e9b04c6a9be17f23f8b8c906da9c90a89a789f1f399d419641705ff5b6f9921820e34d4807c7a1992f  libXpm-3.5.15.tar.xz
+ # Locally calculated
+-sha256  ed3b06bb3b75a0954bd6837a96b41a4676f60dfeee647271613aadecc0fd596e  COPYING
++sha256  a80d706759624a04aa90fd62bc644a360fc3d72e08dcbfb129f167c11ca285de  COPYING
+ sha256  cbe4ced0abc8a32bea471204ae01038c202758ce4e772d3d329a341ffa761e71  COPYRIGHT
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index 417dcfec38..970ec93407 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.38.0
-+WPEWEBKIT_VERSION = 2.38.3
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-XLIB_LIBXPM_VERSION = 3.5.14
++XLIB_LIBXPM_VERSION = 3.5.15
+ XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
+ XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXPM_LICENSE = MIT
+@@ -16,6 +16,7 @@ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ XLIB_LIBXPM_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
++XLIB_LIBXPM_CONF_OPTS = --disable-open-zfile
+ 
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+ XLIB_LIBXPM_CONF_ENV += ac_cv_search_gettext=no
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
