@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77ACCC636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D29FDC636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2549960760;
-	Sun,  5 Feb 2023 14:42:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2549960760
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D919416DD;
+	Sun,  5 Feb 2023 14:43:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D919416DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9gy66EKfieAR; Sun,  5 Feb 2023 14:42:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AgyGielXqKA5; Sun,  5 Feb 2023 14:43:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DCF8606C0;
-	Sun,  5 Feb 2023 14:42:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DCF8606C0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F00471BF475
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:42:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C487415E5;
+	Sun,  5 Feb 2023 14:43:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C487415E5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CCA91BF475
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D70F7813B9
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:42:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D70F7813B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64037415E5
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:43:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64037415E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OEc9u2gY104w for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 14:42:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7F39813B8
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D7F39813B8
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:42:47 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.112.201])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3B30C13F87F;
- Sun,  5 Feb 2023 15:42:43 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 Feb 2023 15:42:42 +0100
-Date: Sun, 5 Feb 2023 15:42:42 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230205144242.GO2960@scaer>
-References: <20230205132307.41753-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230205132307.41753-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675608165;
- bh=8d5DKLe1ifWSHzeg1TbX1Sq34Mz9VMQ0UvH5PP1T+Hs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cO9GocAYxabIvIZNeBNQLnUFt5342lFjWx8F5N0xkfoe+VTZukzVSNmlNqroS/UAV
- NXnNAwE3CGw6BcOnJJQb2hyWLEUX52DYTj8Xo9ianpCr4lJSOGlNc5yYpPa9Hiq/Ml
- x8hdAiPQ3Z3UXxX2X+QadvFhdPFex9yDPu/BAdJkClsz7gY1wm8m2tnZPS/MR8pnyJ
- wpLXnbXOuYVOiTEY1KxdcJENut0uX64WyLHMkfYVtO3GUTY63qyFbVn7xvhK3Xllpj
- 2rELG8DD2A2rMlevRbwD+Y+oF24SmCvDQRz8RfADdjq16ZlOGfAth53wMWzSZFplC/
- RONJD8Vuiw6Nw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=cO9GocAY
-Subject: Re: [Buildroot] [PATCH 1/1] package/tmux: add utf8proc optional
- dependency
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GoNj47SQxh2i for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 14:43:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F2AF40990
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:43:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F2AF40990
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6CEC9838B6; Sun,  5 Feb 2023 14:43:23 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 5 Feb 2023 15:42:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1f618aa388535181c281c85e2b5264532de4ef0f
+X-Git-Newrev: 5a7b1b913e756358b40359115c12fff241d4ca92
+X-Patchwork-Hint: ignore
+Message-Id: <20230205144323.6CEC9838B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/z3: bump to version 4.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,62 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5a7b1b913e756358b40359115c12fff241d4ca92
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-02-05 14:23 +0100, Fabrice Fontaine spake thusly:
-> utf8proc is an optional dependency since version 2.3 and
-> https://github.com/tmux/tmux/commit/6c94774b70f72952c4c512e4aa59a207ca1c34f2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For change log since v4.12.0, see:
+- https://github.com/Z3Prover/z3/releases/tag/z3-4.12.1
 
-Applied to master, thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/z3/z3.hash | 2 +-
+ package/z3/z3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/tmux/tmux.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-> index 281b7d8ee6..b1c0af1a83 100644
-> --- a/package/tmux/tmux.mk
-> +++ b/package/tmux/tmux.mk
-> @@ -11,6 +11,13 @@ TMUX_LICENSE_FILES = COPYING
->  TMUX_CPE_ID_VENDOR = tmux_project
->  TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
->  
-> +ifeq ($(BR2_PACKAGE_UTF8PROC),y)
-> +TMUX_DEPENDENCIES += utf8proc
-> +TMUX_CONF_OPTS += --enable-utf8proc
-> +else
-> +TMUX_CONF_OPTS += --disable-utf8proc
-> +endif
-> +
->  # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
->  # can reject the user connection. See man shells.
->  define TMUX_ADD_TMUX_TO_SHELLS
-> -- 
-> 2.39.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/z3/z3.hash b/package/z3/z3.hash
+index 517e2f4923..8a511c3fe5 100644
+--- a/package/z3/z3.hash
++++ b/package/z3/z3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5f575f0a3950760436217da1cc1a714569b6d4f664a75bb6775876328cf0a580  z3-4.12.0.tar.gz
++sha256  a3735fabf00e1341adcc70394993c05fd3e2ae167a3e9bb46045e33084eb64a3  z3-4.12.1.tar.gz
+ sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
+diff --git a/package/z3/z3.mk b/package/z3/z3.mk
+index ecd79325dc..45c412ad12 100644
+--- a/package/z3/z3.mk
++++ b/package/z3/z3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-Z3_VERSION = 4.12.0
++Z3_VERSION = 4.12.1
+ Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
+ Z3_LICENSE = MIT
+ Z3_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
