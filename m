@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11DB3C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7E11C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B77E4EF48;
-	Tue, 21 Feb 2023 00:05:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B77E4EF48
+	by smtp4.osuosl.org (Postfix) with ESMTP id 677D04ED39;
+	Tue, 21 Feb 2023 00:05:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 677D04ED39
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8IZi8uzT6mYJ; Tue, 21 Feb 2023 00:05:08 +0000 (UTC)
+	with ESMTP id DK9zh11MFZRQ; Tue, 21 Feb 2023 00:05:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DE114EF24;
-	Tue, 21 Feb 2023 00:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DE114EF24
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 83E5B1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 679934EE9D;
+	Tue, 21 Feb 2023 00:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 679934EE9D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 647FC1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51B3B6F9D4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51B3B6F9D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C1F040C13
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C1F040C13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EimJSiQLDUYX for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A9RjxCpbBFFy for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E9AF61B07
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E9AF61B07
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A234417A0
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A234417A0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5BBB68648F; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 39C608648F; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:25:25 +0100
+Date: Sun, 5 Feb 2023 15:24:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 64a03682cc1a90a311b2331224deac62f8c8940f
-X-Git-Newrev: f6e88fff91dd4702c725f47fb4fdd1a00b228f64
+X-Git-Oldrev: ae65870e652088dd65ca41d63304893d1d4443a2
+X-Git-Newrev: 42e34cf10f9eb037aa8c48a4fb9e8f521901b983
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205224.5BBB68648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/prosody: bump to
- version 0.11.14
+Message-Id: <20230220205247.39C608648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/modsecurity2: security
+ bump to version 2.9.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6e88fff91dd4702c725f47fb4fdd1a00b228f64
+commit: https://git.buildroot.net/buildroot/commit/?id=42e34cf10f9eb037aa8c48a4fb9e8f521901b983
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/prosody/prosody.hash | 8 ++++----
- package/prosody/prosody.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+- Fix CVE-2023-24021: Incorrect handling of '\0' bytes in file uploads
+  in ModSecurity before 2.9.7 may allow for Web Application Firewall
+  bypasses and buffer overflows on the Web Application Firewall when
+  executing rules that read the FILES_TMP_CONTENT collection.
+- host-pkgconf is mandatory and used to find libxml2 since
+  https://github.com/SpiderLabs/ModSecurity/commit/baa38ddbaf55a87afecad7a1e1760c69a2689787
+- pcre2 is supported since:
+  https://github.com/SpiderLabs/ModSecurity/commit/8fc0b519b7a6c023259753a21f33bf3649a25b14
 
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index 3a3a363a4b..1fd1abafe9 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,8 +1,8 @@
- # Locally computed:
--md5  7214ee57d4702585bd0d3428e69790b4  prosody-0.11.13.tar.gz
--sha1  1cc5a72d98738872d0c1a4c34b1fcb8878348c7d  prosody-0.11.13.tar.gz
--sha256  39c61b346a09b5125b604cb969e14206cbbcb86c81156ffc6ba2d62527cf0432  prosody-0.11.13.tar.gz
--sha512  7616785536b7b51767a26963a80c961ef2403609e1e78dda3f88cf68c00d5bb899278c70a22b006b58c36c62cbb1bbd390a9298bad5b8d6524928a1cd5457813  prosody-0.11.13.tar.gz
-+md5  93665d86c47e99c9c525610ac53400fb  prosody-0.11.14.tar.gz
-+sha1  abbd0ad42e2b30051f4d3f198c54a52b4e9f39d0  prosody-0.11.14.tar.gz
-+sha256  ec0c7447ec07ed336b6912d06a2f533439cb16d60d8d3bffa8ce46269ee52c87  prosody-0.11.14.tar.gz
-+sha512  128e12427ae0b5080fd3cc2380974c04570b16f0f79de7b39ef85cec6e8f579bee2d1150ce70ca731222c487dba646cbcd48bdb4a102a14395644eb5f19f1c88  prosody-0.11.14.tar.gz
+https://github.com/SpiderLabs/ModSecurity/blob/v2.9.7/CHANGES
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/modsecurity2/Config.in         | 2 +-
+ package/modsecurity2/modsecurity2.hash | 4 ++--
+ package/modsecurity2/modsecurity2.mk   | 7 +++----
+ 3 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
+index 2870386a99..fb1bfc960e 100644
+--- a/package/modsecurity2/Config.in
++++ b/package/modsecurity2/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_MODSECURITY2
+ 	bool "modsecurity2"
+ 	depends on BR2_PACKAGE_APACHE
+ 	select BR2_PACKAGE_LIBXML2
+-	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  ModSecurity is an open source, cross-platform web application
+ 	  firewall (WAF) module. Known as the "Swiss Army Knife" of
+diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
+index a19f4823a8..2c77ffd830 100644
+--- a/package/modsecurity2/modsecurity2.hash
++++ b/package/modsecurity2/modsecurity2.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.5/modsecurity-2.9.5.tar.gz.sha256
+-sha256  e2bfc8cd8b8de1e21f054d310543373ea5d89adbd96784e832be0da3e4dc149e  modsecurity-2.9.5.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
++sha256  2a28fcfccfef21581486f98d8d5fe0397499749b8380f60ec7bb1c08478e1839  modsecurity-2.9.7.tar.gz
  
- # Hash for license file:
- sha256  bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index 62ba073b9e..b5d89ebba4 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
+ # Locally computed
+ sha256  2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9  LICENSE
+diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
+index a1ad8fe5bc..c251291e64 100644
+--- a/package/modsecurity2/modsecurity2.mk
++++ b/package/modsecurity2/modsecurity2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PROSODY_VERSION = 0.11.13
-+PROSODY_VERSION = 0.11.14
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
+-MODSECURITY2_VERSION = 2.9.5
++MODSECURITY2_VERSION = 2.9.7
+ MODSECURITY2_SOURCE = modsecurity-$(MODSECURITY2_VERSION).tar.gz
+ MODSECURITY2_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
+ MODSECURITY2_LICENSE = Apache-2.0
+@@ -12,11 +12,10 @@ MODSECURITY2_LICENSE_FILES = LICENSE
+ MODSECURITY2_CPE_ID_VENDOR = trustwave
+ MODSECURITY2_CPE_ID_PRODUCT = modsecurity
+ MODSECURITY2_INSTALL_STAGING = YES
+-MODSECURITY2_DEPENDENCIES = apache libxml2 pcre
++MODSECURITY2_DEPENDENCIES = host-pkgconf apache libxml2 pcre2
+ 
+ MODSECURITY2_CONF_OPTS = \
+-	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
+-	--with-libxml=$(STAGING_DIR)/usr \
++	--with-pcre2=$(STAGING_DIR)/usr/bin/pcre2-config \
+ 	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
+ 	--with-apu=$(STAGING_DIR)/usr/bin/apu-1-config \
+ 	--with-apxs=$(STAGING_DIR)/usr/bin/apxs \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
