@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4B88C636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 17:10:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA95EC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 21:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 471F360692;
-	Sun,  5 Feb 2023 17:10:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 471F360692
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AJoqOS7QyjR2; Sun,  5 Feb 2023 17:10:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E18D6077D;
-	Sun,  5 Feb 2023 17:10:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E18D6077D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A6EA91BF3EE
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 17:10:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E43981A4E
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 17:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E43981A4E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30DB981B04;
+	Sun,  5 Feb 2023 21:25:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30DB981B04
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wgk2a1LhXa8b for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 17:10:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEC5E81A47
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 17:10:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEC5E81A47
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D017838E1; Sun,  5 Feb 2023 17:10:24 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id coLKSDBYIbFH; Sun,  5 Feb 2023 21:25:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 693338194C;
+	Sun,  5 Feb 2023 21:25:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 693338194C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 099C21BF407
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 21:25:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6F1641634
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 21:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6F1641634
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9i03SGKslkzr for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 21:25:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA9EB41622
+Received: from smtpdh20-2.aruba.it (smtpdh20-2.aruba.it [62.149.155.165])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA9EB41622
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 21:25:24 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.66.151])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id OmVmpZ6Np4l6gOmVmpfkXN; Sun, 05 Feb 2023 22:25:22 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 18:07:09 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 03c15062c33a92145ef28d71819ce52adb8851fe
-X-Git-Newrev: b25f3d1723a35e1dffcfcb0168367697ba20e2b1
-X-Patchwork-Hint: ignore
-Message-Id: <20230205171024.9D017838E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/libgit2: security
- bump to 1.5.1
+Date: Sun,  5 Feb 2023 22:25:21 +0100
+Message-Id: <20230205212521.903480-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230205131559.6f79944f@windsurf>
+References: <20230205131559.6f79944f@windsurf>
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfETpCfFOKL0bmtH+Q5MOGjroN0y/z3aswkvvF7yJbG8kbyb9LBgRz0JoRtOKY2UFG/QftlKrQtSk6gAs/nAahyNBq3YR5SYDOiUVn7vPi716Tq7V8sBG
+ IHPOhI6BrKyVM9dcuVpMJ1+BupO3WE/S4CGnFOgn8WxLS1BCxA1Nr4Z+UrQKdPDRzNsarKRaArOoDuE5X1TzDN6jGTq6R1nzgF+e5PtMQ6sDLs1UYH68hbEH
+ vtzKmc0CvnyTMVqJK4/zv2YPtT3dUeWpIP7i8HOh9OXvotKKsWTdmAQs3TPDGxSG5f4FQnsW7TwspVjp3zOT8N/g1ay70c6CMl2q5BPAknYeXFbHaZ5YYS9Z
+ QM/pV8dR9G2q8epZy3aBdMCNkIEYOPs13NGNWuSA74X7MqZUXgY5zvqLFMINauP9gdNGSn92
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1675632322; bh=FhXqq2lajaJZ18aMK/cqU8bH9fRAoZ3VK39aEfC2x+c=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Ensgi3R4zQwqvsJ6OPQNhUtx5K5O6PBP/nHoTZy96+2zwtLd+5XGfHjdAvms/h2uc
+ 8NBNdKe+90U+aZvDtwHq2E1nRLKACkgnkiWZkCeqqBUG2kUJ4SoSwzdWBUSb3l4MEI
+ chcO4FIdkL58pJzlhM1DqW0l5Cn+xuYlOgyJYz7nIP8Y+v1q414Oqn08wFKoNikgHU
+ 3Qhp55JBtID5Wa/Qfij3kKooH1uDqo75gyiKW1K6fx9A4f8HFbnrbYCwG+sKlXQvPQ
+ sw10xxXR3MZdCpqzNgnLrrkEF2rkIKYsu9jV5fGBeTGe83lcDtwJ4feU1I6hHvYPmS
+ RfElZxYwvS9ww==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=Ensgi3R4
+Subject: [Buildroot] [PATCH v2] toolchain/Config.in: extend gcc bug 43744 to
+ every sh architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +76,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b25f3d1723a35e1dffcfcb0168367697ba20e2b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+Gcc bug 43744 affects seems to affect all SH family because it already
+affects:
+1) sh4, here you can find a buildroot defconfig that fails to build:
+http://autobuild.buildroot.net/results/1db/1db6c59c98e3c09fa13277076ee2fbe7967f1f6b/defconfig
+2) sh4a, here you can find a buildroot defconfig that fails to build:
+http://autobuild.buildroot.net/results/cf272cdc5be2faf4070de3d235ec7a0f7190867a/defconfig
+Note also that gcc bugzilla entry reports the bug for SH and not for
+sub-architectures:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43744
 
-Fixes CVE-2023-22742: when compiled with BR2_PACKAGE_LIBSSH2,
-libgit2 fails to verify SSH keys by default.
+So let's extend the bug to BR2_sh to match the entire SH architecture.
 
-https://github.com/libgit2/libgit2/blob/v1.5.1/docs/changelog.md
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cc47da516cf5b76752d63361a8a7579d93e6fbbb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+V1->V2:
+* add a commit log with details about gcc bug 43744 as pointed by Thomas Petazzoni
+---
+ toolchain/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index fb760fd4cc..e834525df5 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8de872a0f201b33d9522b817c92e14edb4efad18dae95cf156cf240b2efff93e  libgit2-1.5.0.tar.gz
-+sha256  7074f1e2697992b82402501182db254fe62d64877b12f6e4c64656516f4cde88  libgit2-1.5.1.tar.gz
- sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 9409011eb4..c962c8030f 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 544b423001..01215e0e96 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -115,7 +115,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+ 	bool
+ 	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9
+-	depends on BR2_sh4
++	depends on BR2_sh
  
--LIBGIT2_VERSION = 1.5.0
-+LIBGIT2_VERSION = 1.5.1
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. This bug no
+ # longer exists in gcc 8.x.
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
