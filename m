@@ -4,66 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 133E8C636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 10:19:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5495FC636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 10:19:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1CA5440106;
-	Sun,  5 Feb 2023 10:19:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CA5440106
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD48A40125;
+	Sun,  5 Feb 2023 10:19:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD48A40125
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VJNl7RH6RRzx; Sun,  5 Feb 2023 10:19:07 +0000 (UTC)
+	with ESMTP id AfwTi2pD7wuh; Sun,  5 Feb 2023 10:19:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46672400EF;
-	Sun,  5 Feb 2023 10:19:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46672400EF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB5A91BF3BE
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:19:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2CDE4010D;
+	Sun,  5 Feb 2023 10:19:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2CDE4010D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 97AF21BF3BE
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C539960736
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:19:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C539960736
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E99840106
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:19:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E99840106
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0oJI94Olvjjo for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 10:19:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B237A60709
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B237A60709
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 10:19:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6LoGGRX1U6Lb for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 10:19:17 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80B7440125
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 80B7440125
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 10:19:17 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [92.184.112.161])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 6A9377802FE;
- Sun,  5 Feb 2023 11:18:56 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id C8360780350;
+ Sun,  5 Feb 2023 11:19:11 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 Feb 2023 11:18:55 +0100
-Date: Sun, 5 Feb 2023 11:18:55 +0100
+ Sun, 05 Feb 2023 11:19:10 +0100
+Date: Sun, 5 Feb 2023 11:19:10 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20230205101855.GB2960@scaer>
+Message-ID: <20230205101910.GC2960@scaer>
 References: <20230205081617.113018-1-bernd.kuhls@t-online.de>
+ <20230205081617.113018-2-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230205081617.113018-1-bernd.kuhls@t-online.de>
+In-Reply-To: <20230205081617.113018-2-bernd.kuhls@t-online.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675592339;
- bh=krf/thj5xjvWpy2c6Wb6ywl3iLMLXcoZpFpTG657VVw=;
+ d=free.fr; s=smtp-20201208; t=1675592355;
+ bh=MA2bY7w+yYnw7Lkx7L2BWax62TN3nFvDPHf9HXeINug=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=vOtBVBQTENBB/GMXwkYEJOU8tlEIFD3jRAvzBb8rAxJPRFF+5/XLjM9Lhknq+i5kV
- tN191nKf72IcPAjJJWnk1UzcojkEynC1XKm/xduu+MqdYTaEEyAbKmZO5fpJrQGB6L
- 3FpgmI9bVAdGVHoUvZCPuZTCu8ZZxyeJYWzA/W7htbEfkhzwB/Wg4Tjtes4roN1qfm
- M59oube4yYnADFFcXASC54LVXS5LES4aySs9s5MqPzICBY58HzTizWbdqjUyWp1krS
- 4q8tFae7qYHBR7JwCwjTIxOM2VJgDgVnVyNdlbA2RfjGrRnhpTJcJ8bMZDXUOHDAqD
- V5HnssGW4fm8A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=qJ8T8+SJDQTXmxCgImlj5JvVzDibA5clNcPIzSff6Hnn/YwgNeETpsSYPBXcmdbCQ
+ u+oJCsFKzuun7/1+aQWbHKzLmSKTbMPn9sGnZ94TVCHccZMr8lZg2NLxXzbkOiKESW
+ sskHnw6iq3gIEJj52izZL7cd6pFvDCgu0jbiA+Cwl8Ujal6oCOTfQYazxevHEryCrl
+ vrgcRnrBDw2XlIUnbW3rmLTao6Sle83EeMikPwVgMPLiJ5g1qQZbtD92K4TEaSO7ea
+ oM3PAQi+W/KLvF6CK3jQ28aHwuiBuFPknP7Q/aMBTia3+0OyLqFQUV3OwNE9nvPaRe
+ EdfaFpUg5B+Aw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=vOtBVBQT
-Subject: Re: [Buildroot] [PATCH 1/3] package/libks: bump version to 1.8.2
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qJ8T8+SJ
+Subject: Re: [Buildroot] [PATCH 2/3] package/sofia-sip: bump version to
+ 1.13.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,10 +86,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Bernd, All,
 
 On 2023-02-05 09:16 +0100, Bernd Kuhls spake thusly:
+> Switch to github helper due to lack of upstream-provided tarball.
+> 
 > Needed for upcoming bump of freeswitch to version 1.10.9.
-
-Please also mention that in the package that actually requires the bump.
-
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Applied to master, thanks.
@@ -96,32 +98,39 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libks/libks.hash | 2 +-
->  package/libks/libks.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/sofia-sip/sofia-sip.hash | 2 +-
+>  package/sofia-sip/sofia-sip.mk   | 7 ++++---
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/libks/libks.hash b/package/libks/libks.hash
-> index d4ad7ebbbc..dba442bdd2 100644
-> --- a/package/libks/libks.hash
-> +++ b/package/libks/libks.hash
-> @@ -1,3 +1,3 @@
+> diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
+> index 776136bb15..4617725571 100644
+> --- a/package/sofia-sip/sofia-sip.hash
+> +++ b/package/sofia-sip/sofia-sip.hash
+> @@ -1,4 +1,4 @@
 >  # Locally computed
-> -sha256  b42544a5544ac00ceeb0675a9e6a99c8e6ecc752452c7f38c6ffe32fbedb906d  libks-1.8.0.tar.gz
-> +sha256  131d7896c81a7f3c9bf06860e4f564ca558d4be1614568fec688b3eb66d38107  libks-1.8.2.tar.gz
->  sha256  1d1327f37b58a4c9ce520fcf9dd3f348c7c639229ee7aed41c47164a8f7836cd  copyright
-> diff --git a/package/libks/libks.mk b/package/libks/libks.mk
-> index 4aca5c5c4c..c4f0cd5c78 100644
-> --- a/package/libks/libks.mk
-> +++ b/package/libks/libks.mk
-> @@ -4,7 +4,7 @@
+> -sha256  daf75c41408c559c2d58a8fd4d39be4a8ff5144bc1db220d4dbc28deeed6670a  sofia-sip-1.13.9-f6ee306084.tar.gz
+> +sha256  03dda8653367501b7b1188a6b6513416902372e27475553de9318ee89ac390ff  sofia-sip-1.13.12.tar.gz
+>  sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
+>  sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
+> diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
+> index 9071d964e4..59c365365b 100644
+> --- a/package/sofia-sip/sofia-sip.mk
+> +++ b/package/sofia-sip/sofia-sip.mk
+> @@ -4,10 +4,11 @@
 >  #
 >  ################################################################################
 >  
-> -LIBKS_VERSION = 1.8.0
-> +LIBKS_VERSION = 1.8.2
->  LIBKS_SITE = $(call github,signalwire,libks,v$(LIBKS_VERSION))
->  LIBKS_LICENSE = MIT
->  LIBKS_LICENSE_FILES = copyright
+> -SOFIA_SIP_VERSION = 1.13.9
+> -SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-f6ee306084.tar.gz
+> -SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs/sofia-sip
+> +SOFIA_SIP_VERSION = 1.13.12
+> +SOFIA_SIP_SITE = $(call github,freeswitch,sofia-sip,v$(SOFIA_SIP_VERSION))
+>  SOFIA_SIP_INSTALL_STAGING = YES
+> +# Fetched from github, no pre-generated configure script provided
+> +SOFIA_SIP_AUTORECONF = YES
+>  SOFIA_SIP_DEPENDENCIES = host-pkgconf
+>  SOFIA_SIP_LICENSE = LGPL-2.1+
+>  SOFIA_SIP_LICENSE_FILES = COPYING COPYRIGHTS
 > -- 
 > 2.39.1
 > 
