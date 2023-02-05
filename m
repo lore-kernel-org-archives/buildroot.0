@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0835CC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:27:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4105C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5CEC6FE5F;
-	Tue, 21 Feb 2023 01:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5CEC6FE5F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53A206F9F0;
+	Tue, 21 Feb 2023 01:28:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53A206F9F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4maGCcQfuRe0; Tue, 21 Feb 2023 01:27:53 +0000 (UTC)
+	with ESMTP id dtSkhoqK7-Gv; Tue, 21 Feb 2023 01:28:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F34FF6FB9D;
-	Tue, 21 Feb 2023 01:27:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F34FF6FB9D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A0B96FE65;
+	Tue, 21 Feb 2023 01:28:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A0B96FE65
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7CC611BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A1651BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACD166FBB4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACD166FBB4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 054936FC07
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 054936FC07
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q99MadYa4vVY for <buildroot@lists.busybox.net>;
+ with ESMTP id BZNTSvgd5ERQ for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D38C26FBEF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D38C26FBEF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F07D61084
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F07D61084
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2A7186495; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+ id 0D7EC828C8; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 13:28:07 +0100
+Date: Sun, 5 Feb 2023 15:11:25 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 122c85985f199f48f02c5fbd411111629023fc37
-X-Git-Newrev: f802249c6227fa1b7299e59d8fff43b98cb2106d
+X-Git-Oldrev: d4ecefa3ccbe29b1e047c97a995a7c966a191583
+X-Git-Newrev: 93e7fc3e53bff9db971f3ae951d93d3bd1a39d1e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205246.C2A7186495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pytest: remove
- runtime dependency on python-toml
+Message-Id: <20230220205247.0D7EC828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain: make paranoid check
+ of library/header paths unconditional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +57,172 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f802249c6227fa1b7299e59d8fff43b98cb2106d
+commit: https://git.buildroot.net/buildroot/commit/?id=93e7fc3e53bff9db971f3ae951d93d3bd1a39d1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since version 7.2 [1], with Python 3.11+ pytest no longer uses tomli to
-parse pyproject.toml but instead uses tomllib which is part of Python
-itself [2]. Note that toml was replaced with tomli in version 7.0, so
-the dependency was anyway incorrect.
+When we introduced support for the paranoid check of unsafe libraries
+and headers path with commit 4ac8f78d3771 (Add option for paranoid
+unsafe path checking) back in 2014, we made it optional, as we expected
+that would break quite a few packages.
 
-Note that tomllib is unconditionally installed as part of Python 3.11,
-there is no PYTHON3_LIBTOML option or anything like that that needs to
-be selected.
+Now, almost 8 years later, we only have three packages that explicitly
+reference the option (dillo, gnuradio, and libtalloc), either in a patch
+or in their .mk.
 
-[1] https://docs.pytest.org/en/latest/changelog.html#pytest-7-2-0-2022-10-23
-[2] https://github.com/pytest-dev/pytest/pull/9741
+The option has been enabled by default since 2016, with 61c8854cef2a
+(toolchain: enable paranoid unsafe path check by default), and that has
+not triggered many build failures in a while.
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The minimal defconfig used by test-pkg has also had it enabled as of
+b6c98b3549d8 (minimal.config: add BR2_COMPILER_PARANOID_UNSAFE_PATH=y)
+in 2017.
+
+It is time to make that globally unconditional now.
+
+There is still a remnant, in our binutils patches. As our toolchain may
+get used outside of Buildroot, people may got the expectation that path
+poisoning is only a warning, so we keep the current behaviour.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pytest/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ Config.in                               | 18 ------------------
+ package/Makefile.in                     |  3 +--
+ support/config-fragments/minimal.config |  1 -
+ toolchain/toolchain-wrapper.c           | 21 ++++-----------------
+ 4 files changed, 5 insertions(+), 38 deletions(-)
 
-diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
-index c3956c76d2..9bbc9ea2d2 100644
---- a/package/python-pytest/Config.in
-+++ b/package/python-pytest/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_PYTHON_PYTEST
- 	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
- 	select BR2_PACKAGE_PYTHON_PLUGGY # runtime
- 	select BR2_PACKAGE_PYTHON_PY # runtime
--	select BR2_PACKAGE_PYTHON_TOML # runtime
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
+diff --git a/Config.in b/Config.in
+index 86699f58c6..0d7641633c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -685,24 +685,6 @@ config BR2_GLOBAL_PATCH_DIR
+ 
+ menu "Advanced"
+ 
+-config BR2_COMPILER_PARANOID_UNSAFE_PATH
+-	bool "paranoid check of library/header paths"
+-	default y
+-	help
+-	  By default, when this option is disabled, when the Buildroot
+-	  cross-compiler will encounter an unsafe library or header path
+-	  (such as /usr/include, or /usr/lib), the compiler will display
+-	  a warning.
+-
+-	  By enabling this option, this warning is turned into an error,
+-	  which will completely abort the build when such unsafe paths
+-	  are encountered.
+-
+-	  Note that this mechanism is available for both the internal
+-	  toolchain (through the toolchain wrapper and binutils patches)
+-	  and external toolchain backends (through the toolchain
+-	  wrapper).
+-
+ config BR2_FORCE_HOST_BUILD
+ 	bool "Force the building of host dependencies"
  	help
- 	  pytest is a framework that makes building simple and scalable
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 7f1b00ba24..d70aded82b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -426,9 +426,8 @@ else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
+ endif
+ 
+-ifeq ($(BR2_COMPILER_PARANOID_UNSAFE_PATH),y)
++# Used by our binutils patches.
+ export BR_COMPILER_PARANOID_UNSAFE_PATH=enabled
+-endif
+ 
+ include package/pkg-download.mk
+ include package/pkg-autotools.mk
+diff --git a/support/config-fragments/minimal.config b/support/config-fragments/minimal.config
+index 71344e2c69..3430fcce11 100644
+--- a/support/config-fragments/minimal.config
++++ b/support/config-fragments/minimal.config
+@@ -4,5 +4,4 @@ BR2_INIT_NONE=y
+ BR2_SYSTEM_BIN_SH_NONE=y
+ # BR2_PACKAGE_BUSYBOX is not set
+ # BR2_TARGET_ROOTFS_TAR is not set
+-BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 37b24dd24a..4c08e97237 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -154,12 +154,9 @@ static const struct str_len_s unsafe_opts[] = {
+  * or separated (e.g. -I /foo/bar). In the first case, we need only print
+  * the argument as it already contains the path (arg_has_path), while in
+  * the second case we need to print both (!arg_has_path).
+- *
+- * If paranoid, exit in error instead of just printing a warning.
+  */
+ static void check_unsafe_path(const char *arg,
+ 			      const char *path,
+-			      int paranoid,
+ 			      int arg_has_path)
+ {
+ 	const struct str_len_s *p;
+@@ -168,14 +165,12 @@ static void check_unsafe_path(const char *arg,
+ 		if (strncmp(path, p->str, p->len))
+ 			continue;
+ 		fprintf(stderr,
+-			"%s: %s: unsafe header/library path used in cross-compilation: '%s%s%s'\n",
++			"%s: ERROR: unsafe header/library path used in cross-compilation: '%s%s%s'\n",
+ 			program_invocation_short_name,
+-			paranoid ? "ERROR" : "WARNING",
+ 			arg,
+ 			arg_has_path ? "" : "' '", /* close single-quote, space, open single-quote */
+ 			arg_has_path ? "" : path); /* so that arg and path are properly quoted. */
+-		if (paranoid)
+-			exit(1);
++		exit(1);
+ 	}
+ }
+ 
+@@ -250,8 +245,6 @@ int main(int argc, char **argv)
+ 	char *progpath = argv[0];
+ 	char *basename;
+ 	char *env_debug;
+-	char *paranoid_wrapper;
+-	int paranoid;
+ 	int ret, i, count = 0, debug = 0, found_shared = 0;
+ 
+ 	/* Debug the wrapper to see arguments it was called with.
+@@ -470,12 +463,6 @@ int main(int argc, char **argv)
+ #endif
+ 	}
+ 
+-	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
+-		paranoid = 1;
+-	else
+-		paranoid = 0;
+-
+ 	/* Check for unsafe library and header paths */
+ 	for (i = 1; i < argc; i++) {
+ 		const struct str_len_s *opt;
+@@ -492,9 +479,9 @@ int main(int argc, char **argv)
+ 				i++;
+ 				if (i == argc)
+ 					break;
+-				check_unsafe_path(argv[i-1], argv[i], paranoid, 0);
++				check_unsafe_path(argv[i-1], argv[i], 0);
+ 			} else
+-				check_unsafe_path(argv[i], argv[i] + opt->len, paranoid, 1);
++				check_unsafe_path(argv[i], argv[i] + opt->len, 1);
+ 		}
+ 	}
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
