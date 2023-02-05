@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D6DC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:29:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23DF3C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 747B56FB61;
-	Tue, 21 Feb 2023 01:29:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 747B56FB61
+	by smtp3.osuosl.org (Postfix) with ESMTP id D03806FB10;
+	Tue, 21 Feb 2023 01:29:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D03806FB10
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ad-k3VNbw4Cp; Tue, 21 Feb 2023 01:29:45 +0000 (UTC)
+	with ESMTP id v8yGS07ZPBHn; Tue, 21 Feb 2023 01:29:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B0CDA6FC07;
-	Tue, 21 Feb 2023 01:29:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0CDA6FC07
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13D186FFF7;
+	Tue, 21 Feb 2023 01:29:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13D186FFF7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 568A61BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D08E91BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F5806FC0D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8157F6FC0E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F5806FC0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8157F6FC0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9xyfePesrr26 for <buildroot@lists.busybox.net>;
+ with ESMTP id ZDpExPshFLQI for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F2D76FBFA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6641F6FC02
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F2D76FBFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6641F6FC02
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97B20828C8; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+ id 50B4081979; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 09:54:21 +0100
+Date: Sun, 5 Feb 2023 15:37:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c90bd74ebb264ccc925f10a142ccd82ef63a4601
-X-Git-Newrev: 80d98cd2a1c0eeb5c3083b3265c4f3221d1cb3c5
+X-Git-Oldrev: 02befac8f9404ae30d0d090221d21a8460c82ec7
+X-Git-Newrev: ce2ac1fecfdd61c01bb34984624f2d37fea91f91
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205247.97B20828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libcamera-apps: bump
- to version 1.1.1
+Message-Id: <20230220205247.50B4081979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wireshark: security
+ bump to version 4.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +57,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80d98cd2a1c0eeb5c3083b3265c4f3221d1cb3c5
+commit: https://git.buildroot.net/buildroot/commit/?id=ce2ac1fecfdd61c01bb34984624f2d37fea91f91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcamera-apps/libcamera-apps.hash | 2 +-
- package/libcamera-apps/libcamera-apps.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fix CVE-2023-0411, CVE-2023-0412, CVE-2023-0413, CVE-2023-0414,
+CVE-2023-0415, CVE-2023-0416 and CVE-2023-0417
 
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-index cc2d3b6926..fbb3150cb5 100644
---- a/package/libcamera-apps/libcamera-apps.hash
-+++ b/package/libcamera-apps/libcamera-apps.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2d895ad5d11a6004b1e84eb8d486d5dca64dda1b41e0f4f3f87904666f249e3e  libcamera-apps-1.1.0.tar.gz
-+sha256  c05e29e02da05fa92739941295d96dcb93324805f7b348ad182e7e29e7e0c520  libcamera-apps-1.1.1.tar.gz
- sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index a5d9227250..290ee9a026 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
+https://www.wireshark.org/security/wnpa-sec-2023-01
+https://www.wireshark.org/security/wnpa-sec-2023-02
+https://www.wireshark.org/security/wnpa-sec-2023-03
+https://www.wireshark.org/security/wnpa-sec-2023-04
+https://www.wireshark.org/security/wnpa-sec-2023-05
+https://www.wireshark.org/security/wnpa-sec-2023-06
+https://www.wireshark.org/security/wnpa-sec-2023-07
+
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.3.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index e9026b8caa..7128b560ae 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.2.txt
+-sha1  0127180ff18515b086fe5603f767f53ddaa64c1a  wireshark-4.0.2.tar.xz
+-sha256  f35915699f2f9b28ddb211202d40ec8984e5834d3c911483144a4984ba44411d  wireshark-4.0.2.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.3.txt
++sha1  243b0057cfe6d447662e81b5646110aaf8b63c81  wireshark-4.0.3.tar.xz
++sha256  6c51e15bcc0afb93734e686dbff354ffd159f570bd2904bcbbad6f3feb7e9511  wireshark-4.0.3.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index e2a424ef0f..12c36575df 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCAMERA_APPS_VERSION = 1.1.0
-+LIBCAMERA_APPS_VERSION = 1.1.1
- LIBCAMERA_APPS_SITE = $(call github,raspberrypi,libcamera-apps,v$(LIBCAMERA_APPS_VERSION))
- LIBCAMERA_APPS_LICENSE = BSD-2-Clause
- LIBCAMERA_APPS_LICENSE_FILES = license.txt
+-WIRESHARK_VERSION = 4.0.2
++WIRESHARK_VERSION = 4.0.3
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
