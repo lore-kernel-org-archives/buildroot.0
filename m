@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20582C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:26:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D450DC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:26:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFE366FC03;
-	Tue, 21 Feb 2023 01:26:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFE366FC03
+	by smtp3.osuosl.org (Postfix) with ESMTP id 775776FC16;
+	Tue, 21 Feb 2023 01:26:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 775776FC16
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Orkx66hbmXc; Tue, 21 Feb 2023 01:26:26 +0000 (UTC)
+	with ESMTP id c0YMJhoGc76Z; Tue, 21 Feb 2023 01:26:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BBDB6FC19;
-	Tue, 21 Feb 2023 01:26:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BBDB6FC19
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD1A36FBA3;
+	Tue, 21 Feb 2023 01:26:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD1A36FBA3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F10E1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4ED041BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30BD26FBFE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A5796FBDD
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30BD26FBFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A5796FBDD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p3LBiCXuoNn9 for <buildroot@lists.busybox.net>;
+ with ESMTP id r4UuDd4Jl4Op for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 445DD6FBA1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 710416FBE0
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 445DD6FBA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 710416FBE0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4259081979; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 6205F81979; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 11:16:19 +0100
+Date: Sun, 5 Feb 2023 13:18:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6e09e7987b986d01e86e4ec45319e2dd5945259c
-X-Git-Newrev: 8bb962724e3a76112b7c374ae6a1c4521f97cc65
+X-Git-Oldrev: f54c7ffce70d583dbd85718f23d1bd7b18a0a744
+X-Git-Newrev: 2b85b4d21d96f232b09b27eaf70a869c5bf66a30
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205246.4259081979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sofia-sip: bump
- version to 1.13.12
+Message-Id: <20230220205246.6205F81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/olimex_a13_olinuxino_defconfig: bump Linux to 6.1.9 and U-Boot to
+ 2023.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +57,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bb962724e3a76112b7c374ae6a1c4521f97cc65
+commit: https://git.buildroot.net/buildroot/commit/?id=2b85b4d21d96f232b09b27eaf70a869c5bf66a30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Switch to github helper due to lack of upstream-provided tarball.
-
-Needed for upcoming bump of freeswitch to version 1.10.9.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sofia-sip/sofia-sip.hash | 2 +-
- package/sofia-sip/sofia-sip.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ configs/olimex_a13_olinuxino_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index 776136bb15..4617725571 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  daf75c41408c559c2d58a8fd4d39be4a8ff5144bc1db220d4dbc28deeed6670a  sofia-sip-1.13.9-f6ee306084.tar.gz
-+sha256  03dda8653367501b7b1188a6b6513416902372e27475553de9318ee89ac390ff  sofia-sip-1.13.12.tar.gz
- sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
- sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 9071d964e4..59c365365b 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
+diff --git a/configs/olimex_a13_olinuxino_defconfig b/configs/olimex_a13_olinuxino_defconfig
+index 6d25d7d0a1..8469ce1fd0 100644
+--- a/configs/olimex_a13_olinuxino_defconfig
++++ b/configs/olimex_a13_olinuxino_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
  
--SOFIA_SIP_VERSION = 1.13.9
--SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-f6ee306084.tar.gz
--SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs/sofia-sip
-+SOFIA_SIP_VERSION = 1.13.12
-+SOFIA_SIP_SITE = $(call github,freeswitch,sofia-sip,v$(SOFIA_SIP_VERSION))
- SOFIA_SIP_INSTALL_STAGING = YES
-+# Fetched from github, no pre-generated configure script provided
-+SOFIA_SIP_AUTORECONF = YES
- SOFIA_SIP_DEPENDENCIES = host-pkgconf
- SOFIA_SIP_LICENSE = LGPL-2.1+
- SOFIA_SIP_LICENSE_FILES = COPYING COPYRIGHTS
+-# Linux headers same as kernel, a 5.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a13-olinuxino"
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A13-OLinuXino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+@@ -28,7 +28,7 @@ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.9"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
