@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC475C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:26:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20582C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FAB46FC20;
-	Tue, 21 Feb 2023 01:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FAB46FC20
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFE366FC03;
+	Tue, 21 Feb 2023 01:26:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFE366FC03
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B8VSVaUY_VGd; Tue, 21 Feb 2023 01:26:13 +0000 (UTC)
+	with ESMTP id 3Orkx66hbmXc; Tue, 21 Feb 2023 01:26:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86E946FB76;
-	Tue, 21 Feb 2023 01:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86E946FB76
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BBDB6FC19;
+	Tue, 21 Feb 2023 01:26:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BBDB6FC19
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 74F141BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F10E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2FC226FBFD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30BD26FBFE
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FC226FBFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30BD26FBFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 75cN5CXpjiEX for <buildroot@lists.busybox.net>;
+ with ESMTP id p3LBiCXuoNn9 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F1716FBDD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 445DD6FBA1
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F1716FBDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 445DD6FBA1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4CF68828C8; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+ id 4259081979; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 13:15:54 +0100
+Date: Sun, 5 Feb 2023 11:16:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8bb962724e3a76112b7c374ae6a1c4521f97cc65
-X-Git-Newrev: 2e1b425a810981c3394426f09842518d9ee445ae
+X-Git-Oldrev: 6e09e7987b986d01e86e4ec45319e2dd5945259c
+X-Git-Newrev: 8bb962724e3a76112b7c374ae6a1c4521f97cc65
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205246.4CF68828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gst1-vaapi: fix x11
- dependencies
+Message-Id: <20230220205246.4259081979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sofia-sip: bump
+ version to 1.13.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e1b425a810981c3394426f09842518d9ee445ae
+commit: https://git.buildroot.net/buildroot/commit/?id=8bb962724e3a76112b7c374ae6a1c4521f97cc65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The x11 feature needs libx11 and libxrandr support.
+Switch to github helper due to lack of upstream-provided tarball.
 
-Select and depend on these when x11 is enabled.
+Needed for upcoming bump of freeswitch to version 1.10.9.
 
-Fixes:
-gst1-vaapi-1.22.0/meson.build:96:0: ERROR: Dependency "xrandr" not found, tried pkgconfig and cmake
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gstreamer1/gst1-vaapi/Config.in     | 2 ++
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk | 3 ++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ package/sofia-sip/sofia-sip.hash | 2 +-
+ package/sofia-sip/sofia-sip.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
-index ade8b83a5f..a1062097ed 100644
---- a/package/gstreamer1/gst1-vaapi/Config.in
-+++ b/package/gstreamer1/gst1-vaapi/Config.in
-@@ -8,6 +8,8 @@ config BR2_PACKAGE_GST1_VAAPI
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD # gstreamer-codecparsers
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
- 	help
- 	  gstreamer-vaapi consists in a collection of VA-API based
- 	  plugins for GStreamer and helper libraries.
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 3d9eb91ffb..9533cdf2b6 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-@@ -43,8 +43,9 @@ else
- GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
- endif
+diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
+index 776136bb15..4617725571 100644
+--- a/package/sofia-sip/sofia-sip.hash
++++ b/package/sofia-sip/sofia-sip.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  daf75c41408c559c2d58a8fd4d39be4a8ff5144bc1db220d4dbc28deeed6670a  sofia-sip-1.13.9-f6ee306084.tar.gz
++sha256  03dda8653367501b7b1188a6b6513416902372e27475553de9318ee89ac390ff  sofia-sip-1.13.12.tar.gz
+ sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
+ sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
+diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
+index 9071d964e4..59c365365b 100644
+--- a/package/sofia-sip/sofia-sip.mk
++++ b/package/sofia-sip/sofia-sip.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_XORG7),y)
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBXRANDR),yy)
- GST1_VAAPI_CONF_OPTS += -Dx11=enabled
-+GST1_VAAPI_DEPENDENCIES += xlib_libX11 xlib_libXrandr
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
- GST1_VAAPI_CONF_OPTS += -Dglx=enabled
- else
+-SOFIA_SIP_VERSION = 1.13.9
+-SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-f6ee306084.tar.gz
+-SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs/sofia-sip
++SOFIA_SIP_VERSION = 1.13.12
++SOFIA_SIP_SITE = $(call github,freeswitch,sofia-sip,v$(SOFIA_SIP_VERSION))
+ SOFIA_SIP_INSTALL_STAGING = YES
++# Fetched from github, no pre-generated configure script provided
++SOFIA_SIP_AUTORECONF = YES
+ SOFIA_SIP_DEPENDENCIES = host-pkgconf
+ SOFIA_SIP_LICENSE = LGPL-2.1+
+ SOFIA_SIP_LICENSE_FILES = COPYING COPYRIGHTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
