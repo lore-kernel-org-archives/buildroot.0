@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92BEAC636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 23:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94061C636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 23:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E6A8401D8;
-	Sun,  5 Feb 2023 23:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E6A8401D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39681400D8;
+	Sun,  5 Feb 2023 23:02:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39681400D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JZAD6pr2Nqvf; Sun,  5 Feb 2023 23:02:45 +0000 (UTC)
+	with ESMTP id cgiIKgAe3ssX; Sun,  5 Feb 2023 23:02:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DDCF400D8;
-	Sun,  5 Feb 2023 23:02:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DDCF400D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4FC0040201;
+	Sun,  5 Feb 2023 23:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FC0040201
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E54B1BF39C
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 23:02:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B40F31BF39C
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 23:02:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43D1C415FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A413409A7
  for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 23:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D1C415FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A413409A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SfvtyTUXTqmN for <buildroot@lists.busybox.net>;
+ with ESMTP id 5QF3bbJqw1FE for <buildroot@lists.busybox.net>;
  Sun,  5 Feb 2023 23:02:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 10117409A7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5847F415F4
  for <buildroot@buildroot.org>; Sun,  5 Feb 2023 23:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10117409A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5847F415F4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDF41838F5; Sun,  5 Feb 2023 23:02:40 +0000 (UTC)
+ id 46236838F5; Sun,  5 Feb 2023 23:02:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 00:01:29 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 66cec4d25c48d8acdd6d85b4ea176a0cbac91501
-X-Git-Newrev: c2284f82eca1d1ca61c0e4d54b67590f6a6090e7
+Date: Mon, 6 Feb 2023 00:01:10 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 4631f48fe79aa83d352fb5eb254f39ea54926ba6
+X-Git-Newrev: 14e35225d8e314c4ded7799843fb80de8e182e28
 X-Patchwork-Hint: ignore
-Message-Id: <20230205230240.EDF41838F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/python-future:
+Message-Id: <20230205230241.46236838F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/python-future:
  security bump to version 0.18.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2284f82eca1d1ca61c0e4d54b67590f6a6090e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=14e35225d8e314c4ded7799843fb80de8e182e28
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 Fix CVE-2022-40899: An issue discovered in Python Charmers Future 0.18.2
 and earlier allows remote attackers to cause a denial of service via
