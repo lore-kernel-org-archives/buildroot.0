@@ -1,51 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5603AC636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 10:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8251C636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 10:53:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F323881E7E;
-	Sun,  5 Feb 2023 10:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F323881E7E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FF9160737;
+	Sun,  5 Feb 2023 10:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FF9160737
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cUo9UH1VcbJU; Sun,  5 Feb 2023 10:51:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sKcVr_DG3Kjd; Sun,  5 Feb 2023 10:53:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35C8181E80;
-	Sun,  5 Feb 2023 10:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35C8181E80
+	by smtp3.osuosl.org (Postfix) with ESMTP id B866460709;
+	Sun,  5 Feb 2023 10:53:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B866460709
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A6EA1BF8B4
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:51:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 208C81BF3BE
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D809C8140E
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:51:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D809C8140E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 06EF981E8A
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 10:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06EF981E8A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lsJgx44Vgj1K for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 10:51:20 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED6DC813C5
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 10:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED6DC813C5
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC05E83735; Sun,  5 Feb 2023 10:51:19 +0000 (UTC)
+ with ESMTP id 2xjhszGhor4g for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 10:53:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0895D81E87
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0895D81E87
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 10:53:39 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4D2DEE0008;
+ Sun,  5 Feb 2023 10:53:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pOceP-00DWLE-HY; Sun, 05 Feb 2023 11:53:37 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 11:48:23 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 2724f705c3ad766d31551ddcc56b7e73081f6551
-X-Git-Newrev: db058b26f0694742a12381e2075ef297cdff076c
-X-Patchwork-Hint: ignore
-Message-Id: <20230205105119.DC05E83735@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- package/x11r7/xlib_libXpm: security bump version to 3.5.15
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230205081617.113018-1-bernd.kuhls@t-online.de>
+ <20230205081617.113018-3-bernd.kuhls@t-online.de>
+ <d57c991e-a8f5-bad2-e25f-7bfa03fa610d@korsgaard.com>
+ <20230205101557.GA2960@scaer>
+Date: Sun, 05 Feb 2023 11:53:37 +0100
+In-Reply-To: <20230205101557.GA2960@scaer> (Yann E. MORIN's message of "Sun, 5
+ Feb 2023 11:15:57 +0100")
+Message-ID: <87fsbkxu1a.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 3/3] package/freeswitch: security bump
+ version to 1.10.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,72 +67,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db058b26f0694742a12381e2075ef297cdff076c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-January/003313.html
+ > Peter, All,
+ > On 2023-02-05 10:01 +0100, Peter Korsgaard spake thusly:
+ >> On 05/02/2023 09.16, Bernd Kuhls wrote:
+ >> >Release notes:
+ >> >https://github.com/signalwire/freeswitch/releases/tag/v1.10.9
+ >> >
+ >> >Upstream removed zrtp support:
+ >> >https://github.com/signalwire/freeswitch/pull/1848
+ >> >
+ >> >Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> 
+ >> Fixed the checkpatch warning and applied, thanks;
 
-Fixes CVE-2022-4883, CVE-2022-44617 & CVE-2022-46285:
-https://lists.x.org/archives/xorg-announce/2023-January/003312.html
+ > You only applied this patch 3/3, but patches 1/3 and 2/3 (likbks and
+ > sofia-sip bumps) are marked as being needed first. So I've applied them
+ > now.
 
-Updated license hash due to upstream commit:
-https://gitlab.freedesktop.org/xorg/lib/libxpm/-/commit/501494c6c68a84114fdd0b44d4b67ef9cde776c9
+Ups, thanks for fixing it!
 
-Added configure option to disable compressed pixmaps support:
-https://gitlab.freedesktop.org/xorg/lib/libxpm/-/commit/4841039e5385f264d12757903894f47c64f59361
+ > Bernd, it would have been nice that the patch bumping freeswitch would
+ > mention that it has a dependency on newer libks and sofia-sip versions.
+ > Indeed, if the freeswitch bump is backported to a maintenance branch,
+ > them the two other bumps will have to be backported too, and if that is
+ > not mentioned in the commit log, that will not be obvious to notice.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a0dfd717f3ff888b4ab6d8c40bb6a01a939370cb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xlib_libXpm/xlib_libXpm.hash | 8 ++++----
- package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+Yes please!
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-index 9ccfb4c8de..733c404543 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003261.html
--sha256  f7eb8f69c039281def8258ae6859adb5f050fbe161ab3d6a2d6ef109a603eac2  libXpm-3.5.14.tar.xz
--sha512  c3fe554453068a6b188d3cad2cb3648e84b7f1909aea8f213daadce3d444b34361c3b2edce14a4fd481f97e4dc45c3125e2483ff4f44b3390a75829ed2782e4b  libXpm-3.5.14.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-January/003313.html
-+sha256  60bb906c5c317a6db863e39b69c4a83fdbd2ae2154fcf47640f8fefc9fdfd1c1  libXpm-3.5.15.tar.xz
-+sha512  955d716fcea2c9d868ab941c56f017b39bfa0f47fd2904e9b04c6a9be17f23f8b8c906da9c90a89a789f1f399d419641705ff5b6f9921820e34d4807c7a1992f  libXpm-3.5.15.tar.xz
- # Locally calculated
--sha256  ed3b06bb3b75a0954bd6837a96b41a4676f60dfeee647271613aadecc0fd596e  COPYING
-+sha256  a80d706759624a04aa90fd62bc644a360fc3d72e08dcbfb129f167c11ca285de  COPYING
- sha256  cbe4ced0abc8a32bea471204ae01038c202758ce4e772d3d329a341ffa761e71  COPYRIGHT
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 417dcfec38..970ec93407 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXPM_VERSION = 3.5.14
-+XLIB_LIBXPM_VERSION = 3.5.15
- XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
- XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
-@@ -16,6 +16,7 @@ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
- 	$(TARGET_NLS_DEPENDENCIES)
- XLIB_LIBXPM_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+XLIB_LIBXPM_CONF_OPTS = --disable-open-zfile
- 
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
- XLIB_LIBXPM_CONF_ENV += ac_cv_search_gettext=no
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
