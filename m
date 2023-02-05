@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F893C636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:09:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5F9EC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:16:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF79740226;
-	Sun,  5 Feb 2023 12:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF79740226
+	by smtp1.osuosl.org (Postfix) with ESMTP id 590C481098;
+	Sun,  5 Feb 2023 12:16:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 590C481098
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mhV4bqrSp0nc; Sun,  5 Feb 2023 12:09:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id domN9x2Oe5FS; Sun,  5 Feb 2023 12:16:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DEF4417E1;
-	Sun,  5 Feb 2023 12:09:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DEF4417E1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 599FB1BF364
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:09:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB98681200;
+	Sun,  5 Feb 2023 12:16:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB98681200
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A6C361BF364
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41220417E1
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:09:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41220417E1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A5AA81298
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:16:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A5AA81298
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ndCoiNovD6OM for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 12:09:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B6A940226
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:09:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B6A940226
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 091E58373F; Sun,  5 Feb 2023 12:09:21 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 13:04:18 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fe8c4143f77b1037a2391963cd379d2eea906444
-X-Git-Newrev: 70485003c5a6e8a3508760db46a98d2d9b20df2a
-X-Patchwork-Hint: ignore
-Message-Id: <20230205120921.091E58373F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/git: security
- bump to version 2.31.6
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qB6Sig1tpjJg for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 12:16:04 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A73E80D50
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A73E80D50
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:16:04 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A03B8100003;
+ Sun,  5 Feb 2023 12:16:00 +0000 (UTC)
+Date: Sun, 5 Feb 2023 13:15:59 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230205131559.6f79944f@windsurf>
+In-Reply-To: <20230202154239.325711-1-giulio.benetti@benettiengineering.com>
+References: <20230202154239.325711-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1675599361;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Cya/8gMLuXMALXeKlXkuZHQnldcmvnpZ94M0hFgYgsE=;
+ b=Bw+ulCV/Up4/VrGhhu4Lju2w8vKB1yQuJmSDUAuadpJkaoVgP1Eu0JrSo1a6kU9NO6IvRe
+ tsjsvTPS0054IWg7fG8E9ryP4Cm2CzuId6UvatlZWK/hiq2SwCVCqSmXdHXomDSLtqsBCr
+ GVi3dts3Ar2ys8qxs6wS/KAqXV23ySs076dBLjiqO6BAg1t9I69TcEx6lNqW3+dWZNxhND
+ QTU1d9pUTw+uxN3wu4MJj4mrRy2451uy6M7ZvS1/Q5JnOhXqcB/b7F37//xYnsOG9Y7+6c
+ 2bh3NZuSlT1fQrShbIPxbzNI+Gk2XKnyh2Ep+4ZqA1NWpizmVQwKk+5/psgXpg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Bw+ulCV/
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain/Config.in: extend gcc bug
+ 43744 to every sh architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,91 +76,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>, Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70485003c5a6e8a3508760db46a98d2d9b20df2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+On Thu,  2 Feb 2023 16:42:38 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Fixes the following security issues:
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
- * CVE-2022-41903:
+It would be nice to have a non-empty commit log, which explains which
+other CPU is affected by the bug, and perhaps a defconfig that exhibits
+the issue, or something like that.
 
-   git log has the ability to display commits using an arbitrary
-   format with its --format specifiers. This functionality is also
-   exposed to git archive via the export-subst gitattribute.
+Thanks a lot!
 
-   When processing the padding operators (e.g., %<(, %<|(, %>(,
-   %>>(, or %><( ), an integer overflow can occur in
-   pretty.c::format_and_pad_commit() where a size_t is improperly
-   stored as an int, and then added as an offset to a subsequent
-   memcpy() call.
-
-   This overflow can be triggered directly by a user running a
-   command which invokes the commit formatting machinery (e.g., git
-   log --format=...). It may also be triggered indirectly through
-   git archive via the export-subst mechanism, which expands format
-   specifiers inside of files within the repository during a git
-   archive.
-
-   This integer overflow can result in arbitrary heap writes, which
-   may result in remote code execution.
-
- * CVE-2022-23521:
-
-    gitattributes are a mechanism to allow defining attributes for
-    paths. These attributes can be defined by adding a `.gitattributes`
-    file to the repository, which contains a set of file patterns and
-    the attributes that should be set for paths matching this pattern.
-
-    When parsing gitattributes, multiple integer overflows can occur
-    when there is a huge number of path patterns, a huge number of
-    attributes for a single pattern, or when the declared attribute
-    names are huge.
-
-    These overflows can be triggered via a crafted `.gitattributes` file
-    that may be part of the commit history. Git silently splits lines
-    longer than 2KB when parsing gitattributes from a file, but not when
-    parsing them from the index. Consequentially, the failure mode
-    depends on whether the file exists in the working tree, the index or
-    both.
-
-    This integer overflow can result in arbitrary heap reads and writes,
-    which may result in remote code execution.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/git/git.hash b/package/git/git.hash
-index af09ea817b..9a472b49ec 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  dbc80f88d36fcde2c7acaaa9343cfab0f56effe9aee60e5eb00f3f36b8a619b4  git-2.31.5.tar.xz
-+sha256  e0fa851e4ccb990c57793a3cfcbf7c8981fbacab175025ea15db9ecd57434cee  git-2.31.6.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 653b4f46ad..0b4e93a8b6 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.31.5
-+GIT_VERSION = 2.31.6
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
