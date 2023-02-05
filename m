@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7451C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:03:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA22C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:03:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E3A04EEC5;
-	Tue, 21 Feb 2023 00:03:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E3A04EEC5
+	by smtp4.osuosl.org (Postfix) with ESMTP id D349E4ECB3;
+	Tue, 21 Feb 2023 00:03:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D349E4ECB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UzP7Iw-f6fVu; Tue, 21 Feb 2023 00:03:19 +0000 (UTC)
+	with ESMTP id LcSaQFnEus1j; Tue, 21 Feb 2023 00:03:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 483D84EEC1;
-	Tue, 21 Feb 2023 00:03:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 483D84EEC1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DBC631BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB0E64E22C;
+	Tue, 21 Feb 2023 00:03:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB0E64E22C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 450D81BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:58:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1044F61089
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1044F61089
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62D6F4159B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62D6F4159B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hDZmcly9nPt5 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y0ycJMUJ7mYj for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 342D2617B1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 342D2617B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E65341784
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E65341784
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 227C9828C8; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 8C2A286495; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:22:16 +0100
+Date: Sun, 5 Feb 2023 13:18:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e49d4fe20cbdf6195f23e4e920b1314786e1dac1
-X-Git-Newrev: 6bee8635d90f3f9e3d04e03a9db2f37a387e077c
+X-Git-Oldrev: f23405b39a850b54c61b719bf7d079664d773fc6
+X-Git-Newrev: e4ac41042515944eafb892c8c26ea3b940211136
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205224.227C9828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libpcap: bump to
- version 1.10.2
+Message-Id: <20230220205246.8C2A286495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/olimex_a33_olinuxino_defconfig: bump Linux to 6.1.9 and U-Boot to
+ 2023.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,59 +57,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bee8635d90f3f9e3d04e03a9db2f37a387e077c
+commit: https://git.buildroot.net/buildroot/commit/?id=e4ac41042515944eafb892c8c26ea3b940211136
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libpcap/Config.in    | 2 +-
- package/libpcap/libpcap.hash | 4 ++--
- package/libpcap/libpcap.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ configs/olimex_a33_olinuxino_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpcap/Config.in b/package/libpcap/Config.in
-index a5f64bdc81..7ffac64c46 100644
---- a/package/libpcap/Config.in
-+++ b/package/libpcap/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBPCAP
- 	  A system-independent library for user-level network packet
- 	  capture.
+diff --git a/configs/olimex_a33_olinuxino_defconfig b/configs/olimex_a33_olinuxino_defconfig
+index cdbc63efe1..35398ac6da 100644
+--- a/configs/olimex_a33_olinuxino_defconfig
++++ b/configs/olimex_a33_olinuxino_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
  
--	  http://www.tcpdump.org/
-+	  https://www.tcpdump.org/
-diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
-index 84c8e405df..b87d9d04ef 100644
---- a/package/libpcap/libpcap.hash
-+++ b/package/libpcap/libpcap.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.tcpdump.org/release/libpcap-1.10.1.tar.gz.sig
--sha256  ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4  libpcap-1.10.1.tar.gz
-+# https://www.tcpdump.org/release/libpcap-1.10.2.tar.gz.sig
-+sha256  db6d79d4ad03b8b15fb16c42447d093ad3520c0ec0ae3d331104dcfb1ce77560  libpcap-1.10.2.tar.gz
+-# Linux headers same as kernel, a 5.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
  
- # Hash for license file:
- sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 21422b2c0a..173207de63 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPCAP_VERSION = 1.10.1
-+LIBPCAP_VERSION = 1.10.2
- LIBPCAP_SITE = https://www.tcpdump.org/release
- LIBPCAP_LICENSE = BSD-3-Clause
- LIBPCAP_LICENSE_FILES = LICENSE
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="A33-olinuxino"
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A33-OLinuXino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+@@ -31,7 +31,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/olimex/a33_olinuxino/boot
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.9"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
