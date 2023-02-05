@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 161D3C636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F893C636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:09:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A811740226;
-	Sun,  5 Feb 2023 12:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A811740226
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF79740226;
+	Sun,  5 Feb 2023 12:09:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF79740226
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PP2zctf5vA7U; Sun,  5 Feb 2023 12:08:11 +0000 (UTC)
+	with ESMTP id mhV4bqrSp0nc; Sun,  5 Feb 2023 12:09:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A47C4022E;
-	Sun,  5 Feb 2023 12:08:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A47C4022E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DEF4417E1;
+	Sun,  5 Feb 2023 12:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DEF4417E1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 027EA1BF364
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:08:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 599FB1BF364
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC3A840226
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC3A840226
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41220417E1
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:09:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41220417E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mJdF22wnperY for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 12:08:07 +0000 (UTC)
+ with ESMTP id ndCoiNovD6OM for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 12:09:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B89334022E
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:08:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B89334022E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B6A940226
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B6A940226
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F59D8373B; Sun,  5 Feb 2023 12:08:07 +0000 (UTC)
+ id 091E58373F; Sun,  5 Feb 2023 12:09:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 13:05:42 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: db058b26f0694742a12381e2075ef297cdff076c
-X-Git-Newrev: 486eae3194824239eab90a71c61be4154ec1a0c6
+Date: Sun, 5 Feb 2023 13:04:18 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: fe8c4143f77b1037a2391963cd379d2eea906444
+X-Git-Newrev: 70485003c5a6e8a3508760db46a98d2d9b20df2a
 X-Patchwork-Hint: ignore
-Message-Id: <20230205120807.9F59D8373B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/git: security
+Message-Id: <20230205120921.091E58373F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/git: security
  bump to version 2.31.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=486eae3194824239eab90a71c61be4154ec1a0c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=70485003c5a6e8a3508760db46a98d2d9b20df2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Fixes the following security issues:
 
