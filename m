@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1000C636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 02:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 403C7C636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 04:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 271FC41854;
-	Sun,  5 Feb 2023 02:37:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 271FC41854
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93DAE60C25;
+	Sun,  5 Feb 2023 04:22:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93DAE60C25
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N6kbGwtGDSc3; Sun,  5 Feb 2023 02:37:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kG9SJfH3XCc1; Sun,  5 Feb 2023 04:22:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEB8C4184C;
-	Sun,  5 Feb 2023 02:37:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEB8C4184C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C66E81BF28B
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 02:37:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAB1760BEB;
+	Sun,  5 Feb 2023 04:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAB1760BEB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 636681BF3F9
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 04:22:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A15B34026A
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 02:37:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A15B34026A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F34381757
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 04:22:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F34381757
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LmCokwR1Sn87 for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 02:37:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PaTkhv9Io2Tj for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 04:22:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5154A400D2
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5154A400D2
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 02:37:19 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id u8so3551796ilq.13
- for <buildroot@buildroot.org>; Sat, 04 Feb 2023 18:37:19 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0137681756
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0137681756
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 04:22:41 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id h18so3610908ilj.6
+ for <buildroot@buildroot.org>; Sat, 04 Feb 2023 20:22:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=fX7ScOBVX5cE1utnC/gFJx6Wd6K+RAKp7MBH0URFLKM=;
- b=utc8i68ofXBVJxOVvUCwt9nDy5gYaV59SjVgUh4x3hp7pxdB/8f/EMwuUJ1mpXPcYI
- fKqI6U/P0VVnG2PuEq4n3Viyf0PLgtMxWCtR8tY9/EJoEEydJHUvt8PHViAX1TpHWOv3
- BgWWpgla7bEMkD9pH1frUuWYQYhjVkDmBibl57hSFwNylS157kPk5eopBlQYr4t+BreN
- anXpiQD3DKTHJ1ABV/3t8OKPGO8TcakKJ1By89lCoynjD99cdVl33gQM+L3sBAgy0ITd
- a7yOi+h7zykI3iQVP1e36J2I8n6NjfSyWxK1YMZruVBwjb7Kje/wC9MnVTL2i3pheT5l
- ycjA==
-X-Gm-Message-State: AO0yUKUd2VieF3O7Uo5H3CnJ56sPkVRvCS1UyrE6XiV6KPevaLzyUCg2
- 7AZQs5Z+FVw76zW4unsVz0pvp5+2xkVfyw==
-X-Google-Smtp-Source: AK7set+4WYTh7qpe6YJQr0fBSpqhjS3NPg8qJCUFJ0TPI7Aow2PikQ5MaVdseXBebIi9TzqLlWJWxQ==
-X-Received: by 2002:a05:6e02:12e2:b0:311:19ad:720a with SMTP id
- l2-20020a056e0212e200b0031119ad720amr12298360iln.29.1675564638155; 
- Sat, 04 Feb 2023 18:37:18 -0800 (PST)
+ bh=3Cqjyz8tL8zRar1pd1GeYPQLWw1OsgFJyhcI6ATGi5w=;
+ b=b0MrkOHgz2DFJKDPeaKnaUw5uQDc0AwrR9ii40o8PP1ypHLay+aMM6MSzfzR/GvaNO
+ WeRMaBJ77uNujIB4Ad2G52S+bKkTWQKF8JAmDOv2D4s1FSO4xIoMJzTHbJpQjBky4mx4
+ aO3O4ecM978q6UKYKulQEcCxMd0wvukkZF2Q3yE2KircUkpx3FZ3Hr6+TWyTQbfpMW+H
+ 3+MG84X2gufcWeYBbJB0bWkAj2rrnG66DWT7yN6k/blzo0u/yc+rMOqpkuShkevs1U/r
+ wYROeFKUMWJPUFpXfTqULWNmulAFk2vEX/Ujm52TU4ct3btJ8WOFn8aPx9mFNw+JPfus
+ xIHA==
+X-Gm-Message-State: AO0yUKW3+V0pe699frZeZ7l8WRRTR+fUKXX+0yR2+eE40xRoHUBv0UTP
+ zfw9kWX5oVwgwhHCvrbqk0yk942ajnvnMA==
+X-Google-Smtp-Source: AK7set8fVGOXiK1I2iweEb2h+0k+uo5D3+Dx5sBEiqeBqHYkJcXoBiMXoZGxXgY8wOg87wbprEKUHg==
+X-Received: by 2002:a05:6e02:1b09:b0:30d:c0b3:3272 with SMTP id
+ i9-20020a056e021b0900b0030dc0b33272mr16636602ilv.0.1675570960883; 
+ Sat, 04 Feb 2023 20:22:40 -0800 (PST)
 Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
  [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- r22-20020a02c6d6000000b0039e68e9988csm2196691jan.56.2023.02.04.18.37.17
+ i15-20020a92c94f000000b00304ae88ebebsm2066712ilq.88.2023.02.04.20.22.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Feb 2023 18:37:17 -0800 (PST)
+ Sat, 04 Feb 2023 20:22:40 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Feb 2023 19:37:09 -0700
-Message-Id: <20230205023709.799349-1-james.hilliard1@gmail.com>
+Date: Sat,  4 Feb 2023 21:22:32 -0700
+Message-Id: <20230205042232.1014672-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=fX7ScOBVX5cE1utnC/gFJx6Wd6K+RAKp7MBH0URFLKM=;
- b=lqmGjXr6n61CzV6znoVKnylb6SfodXbYU0WZTU6iWmltFVjTuPpFM+mOPWJC9O8Ntt
- zSAp5wuyIuDZ299AL/3Yj55VVi7qJbyzy9eVAKQ7dPVrIWaL5lzQ//kv2Fur8Th67ewV
- E68yanQDHSHZrwMONfTqMGz+mFhYy23FOy849VxUf684D9PsxTSBwpmeJmIIXDEiFw0v
- ECYlhDnOfyOsTzX8NbVxePn9zFYwD/xL3kv0k1sUW5jkXIlIXrbq52u+pSVHKHPw8C57
- DnrK9sJomSiqLbydUlToKVzkCNFNLkSRWi4lvNlHN4f+fpPRDVT3pxGsLZ1Qr6AAZ5/p
- xC+A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=3Cqjyz8tL8zRar1pd1GeYPQLWw1OsgFJyhcI6ATGi5w=;
+ b=IEe050bdSIdVSWcgYcFIvFRodyEg7aBV/CGGrN8ckSUNg+pSutsEoeFBkHZsVTRIYm
+ qPH4DBDVrh5EiuTv9aHn1w7i6K8xPda6FpNOHF8vIB88kHT/Sm72kW0nGAUEoFLBlTzu
+ 19xDxC1RRY3/u2iJtmc+hn+DOFzhsVg3Vb7U/r7UJQgJg9hR1PWWGRpulHa9bYr5EvUZ
+ cREcqPWsMk39m/Zj/zQXsINLI+x28Ib6dBDAit015XLE1+Srf/AoAqBeM6oq+AjTRBBw
+ Lb4tnL4/r/gvd5awL1yeb0yQu7Rio9HAMcxIYHYdJE0pPWynZxsLfTS5jfS7IFWlT8aT
+ rPrg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=lqmGjXr6
-Subject: [Buildroot] [PATCH 1/1] package/gst1-vaapi: fix x11 dependencies
+ header.a=rsa-sha256 header.s=20210112 header.b=IEe050bd
+Subject: [Buildroot] [PATCH 1/1] package/gst1-plugins-bad: add new va option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,47 +99,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The x11 feature needs libx11 and libxrandr support.
+This option enables va plugin support.
 
-Select and depend on these when x11 is enabled.
+These plugins are vaapi based encoders/decoders that are eventually
+intended to replace the legacy vaapi plugins.
 
-Fixes:
-gst1-vaapi-1.22.0/meson.build:96:0: ERROR: Dependency "xrandr" not found, tried pkgconfig and cmake
+Details:
+https://gstreamer.freedesktop.org/documentation/va/index.html
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/gstreamer1/gst1-vaapi/Config.in     | 2 ++
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk | 3 ++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in         | 11 +++++++++++
+ .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 10 ++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
-index ade8b83a5f..a1062097ed 100644
---- a/package/gstreamer1/gst1-vaapi/Config.in
-+++ b/package/gstreamer1/gst1-vaapi/Config.in
-@@ -8,6 +8,8 @@ config BR2_PACKAGE_GST1_VAAPI
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD # gstreamer-codecparsers
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
- 	help
- 	  gstreamer-vaapi consists in a collection of VA-API based
- 	  plugins for GStreamer and helper libraries.
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 3d9eb91ffb..9533cdf2b6 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-@@ -43,8 +43,9 @@ else
- GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index bcb4cb1545..1e89cd124f 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -629,6 +629,17 @@ comment "uvch264 needs a toolchain w/ threads, wchar, gcc >= 4.9"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA
++	bool "va"
++	depends on !BR2_STATIC_LIBS # libva
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
++	select BR2_PACKAGE_LIBVA
++	help
++	  VA-API new plugin
++
++comment "va needs a toolchain w/ threads, dynamic library"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
+ 	bool "voaacenc"
+ 	select BR2_PACKAGE_VO_AACENC
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 8f11ce6b37..dfe1f1c9eb 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -745,6 +745,16 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += -Duvch264=disabled
  endif
  
--ifeq ($(BR2_PACKAGE_XORG7),y)
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBXRANDR),yy)
- GST1_VAAPI_CONF_OPTS += -Dx11=enabled
-+GST1_VAAPI_DEPENDENCIES += xlib_libX11 xlib_libXrandr
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
- GST1_VAAPI_CONF_OPTS += -Dglx=enabled
- else
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA),y)
++GST1_PLUGINS_BAD_CONF_OPTS += -Dva=enabled
++GST1_PLUGINS_BAD_DEPENDENCIES += libva
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++GST1_PLUGINS_BAD_DEPENDENCIES += libdrm
++endif
++else
++GST1_PLUGINS_BAD_CONF_OPTS += -Dva=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dvoaacenc=enabled
+ GST1_PLUGINS_BAD_DEPENDENCIES += vo-aacenc
 -- 
 2.34.1
 
