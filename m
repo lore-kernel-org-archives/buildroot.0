@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36F1FC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1B7EC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5E3F6FE5C;
-	Tue, 21 Feb 2023 01:27:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5E3F6FE5C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BA216FB6C;
+	Tue, 21 Feb 2023 01:27:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BA216FB6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5bwFAFnpN_zM; Tue, 21 Feb 2023 01:27:28 +0000 (UTC)
+	with ESMTP id gbt0uyhMG-jA; Tue, 21 Feb 2023 01:27:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 345556FC26;
-	Tue, 21 Feb 2023 01:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 345556FC26
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FCC16FBFA;
+	Tue, 21 Feb 2023 01:27:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FCC16FBFA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C7D081BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 793E71BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FDE56FC03
+ by smtp3.osuosl.org (Postfix) with ESMTP id B49AB6FC04
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FDE56FC03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B49AB6FC04
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lTGs5b0vUNEj for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+ with ESMTP id QvWGMNBz0biZ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA3C56FBB4
+ by smtp3.osuosl.org (Postfix) with ESMTP id E0EC26FBF1
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA3C56FBB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0EC26FBF1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8BB281979; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+ id CEF4C828C8; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 13:24:10 +0100
+Date: Sun, 5 Feb 2023 13:29:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 70477e5fee6e92b1d783257a8b3e57a78007438e
-X-Git-Newrev: 122c85985f199f48f02c5fbd411111629023fc37
+X-Git-Oldrev: f802249c6227fa1b7299e59d8fff43b98cb2106d
+X-Git-Newrev: 8f291a384388a4d48c118b68fb25affb868fb280
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205246.B8BB281979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/versal/post-image.sh: do
- not require xilinx/ prefix for .dts files
+Message-Id: <20230220205246.CEF4C828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gst1-plugins-bad: add
+ new va option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,49 +57,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=122c85985f199f48f02c5fbd411111629023fc37
+commit: https://git.buildroot.net/buildroot/commit/?id=8f291a384388a4d48c118b68fb25affb868fb280
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If using BR2_LINUX_KERNEL_CUSTOM_DTS_PATH to copy .dts files from
-buildroot into the linux tree, these .dts files are copied to
-arch/arm64/boot. Unfortunately, the post-image.sh script expects to find
-them in arch/arm64/boot/xilinx.
+This option enables va plugin support.
 
-This patch does not require the xilinx/ prefix to be present when
-symlinking the device-tree to system.dtb where u-boot expects to find
-it.
+These plugins are vaapi based encoders/decoders that are eventually
+intended to replace the legacy vaapi plugins.
 
-It is effectively applying the below patch for zynqmp to versal as well:
-https://patchwork.ozlabs.org/project/buildroot/patch/20230201195956.1758827-1-gsmecher@threespeedlogic.com/
+Details:
+https://gstreamer.freedesktop.org/documentation/va/index.html
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/versal/post-image.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 11 +++++++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 10 ++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
-index f45f29a155..92e65ed3b7 100755
---- a/board/versal/post-image.sh
-+++ b/board/versal/post-image.sh
-@@ -5,7 +5,7 @@
- # devicetree listed in the config.
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index bcb4cb1545..1e89cd124f 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -629,6 +629,17 @@ comment "uvch264 needs a toolchain w/ threads, wchar, gcc >= 4.9"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  
- FIRST_DT=$(sed -nr \
--               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]\\.]*).*"$|\1|p' \
-+               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
-                ${BR2_CONFIG})
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA
++	bool "va"
++	depends on !BR2_STATIC_LIBS # libva
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
++	select BR2_PACKAGE_LIBVA
++	help
++	  VA-API new plugin
++
++comment "va needs a toolchain w/ threads, dynamic library"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
+ 	bool "voaacenc"
+ 	select BR2_PACKAGE_VO_AACENC
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 8f11ce6b37..dfe1f1c9eb 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -745,6 +745,16 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += -Duvch264=disabled
+ endif
  
- [ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA),y)
++GST1_PLUGINS_BAD_CONF_OPTS += -Dva=enabled
++GST1_PLUGINS_BAD_DEPENDENCIES += libva
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++GST1_PLUGINS_BAD_DEPENDENCIES += libdrm
++endif
++else
++GST1_PLUGINS_BAD_CONF_OPTS += -Dva=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dvoaacenc=enabled
+ GST1_PLUGINS_BAD_DEPENDENCIES += vo-aacenc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
