@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A065C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:07:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04EFAC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:07:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08E3F4ED9B;
-	Tue, 21 Feb 2023 00:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08E3F4ED9B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CFEF4EF76;
+	Tue, 21 Feb 2023 00:07:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CFEF4EF76
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YvjM48wvBxlt; Tue, 21 Feb 2023 00:07:13 +0000 (UTC)
+	with ESMTP id aZJYhb40RChk; Tue, 21 Feb 2023 00:07:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8AD94EF8C;
-	Tue, 21 Feb 2023 00:07:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8AD94EF8C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 568DD1BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 852EB4EF93;
+	Tue, 21 Feb 2023 00:07:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 852EB4EF93
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8057C1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF1476F9E0
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF1476F9E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52E5941782
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52E5941782
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V1aaDKMQxRkw for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tTlmv7aA3ET4 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1301A61094
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1301A61094
+ by smtp2.osuosl.org (Postfix) with ESMTP id 76D5B41799
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76D5B41799
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F2D31828C8; Mon, 20 Feb 2023 20:52:24 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7189986495; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:37:37 +0100
+Date: Sun, 5 Feb 2023 16:02:31 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 935f8774e5b10028c71d85c014380dd67714af5c
-X-Git-Newrev: 8ebb0f810a21103af0bd6d988a24645503e7d10e
+X-Git-Oldrev: 5a7b1b913e756358b40359115c12fff241d4ca92
+X-Git-Newrev: 78e3637dd26766976d09e5d8286613f67975f8d6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205224.F2D31828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-mediasdk: bump
- version to 22.6.5
+Message-Id: <20230220205247.7189986495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fluent-bit: fix
+ openssl dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ebb0f810a21103af0bd6d988a24645503e7d10e
+commit: https://git.buildroot.net/buildroot/commit/?id=78e3637dd26766976d09e5d8286613f67975f8d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/intel-mediasdk/intel-mediasdk.hash | 2 +-
- package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fix the following build failure raised since the addition of the package
+in commit 6a0f7c39bcb48fc13aa2ce3fc4996baf1be66483:
 
-diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
-index 7cbedb7127..903b6f3394 100644
---- a/package/intel-mediasdk/intel-mediasdk.hash
-+++ b/package/intel-mediasdk/intel-mediasdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  197acd056f81e9ff1c27068d50e8c84c2014d94c7ac17cad69d5c2d61e445fd3  intel-mediasdk-22.6.4.tar.gz
-+sha256  3a671cc692da5111c041088f5e32528b4346e122e8a134fad71310c572705106  intel-mediasdk-22.6.5.tar.gz
- sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index 3bd6197779..f7bce30c74 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Makefile:576: *** libopenssl is in the dependency chain of fluent-bit that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/9c3b8e19063f7587877fdb0598739b55abccb3e8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/fluent-bit/fluent-bit.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 879437e5f4..13077e53cc 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -10,7 +10,7 @@ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
+ FLUENT_BIT_CPE_ID_VENDOR = treasuredata
+ FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
+-FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml libopenssl
++FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml openssl
  
--INTEL_MEDIASDK_VERSION = 22.6.4
-+INTEL_MEDIASDK_VERSION = 22.6.5
- INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
- INTEL_MEDIASDK_LICENSE = MIT
- INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+ FLUENT_BIT_CONF_OPTS += \
+ 	-DFLB_DEBUG=No \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
