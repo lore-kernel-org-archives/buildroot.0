@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FDDDC636D3
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:12:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6895C636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:13:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CB1681AD1;
-	Sun,  5 Feb 2023 14:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CB1681AD1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eySNfCXN1Z7d; Sun,  5 Feb 2023 14:12:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57D6A81971;
-	Sun,  5 Feb 2023 14:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57D6A81971
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DBF791BF475
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:12:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6B9F40124
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6B9F40124
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5703840131;
+	Sun,  5 Feb 2023 14:13:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5703840131
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Icx_D-yYhOGO for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 14:12:49 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD96C4010D
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD96C4010D
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:12:49 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.112.201])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 63F8B13F8CD;
- Sun,  5 Feb 2023 15:12:43 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 Feb 2023 15:12:42 +0100
-Date: Sun, 5 Feb 2023 15:12:42 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20230205141242.GI2960@scaer>
-References: <20221107214903.1565321-1-yann.morin.1998@free.fr>
- <20230205150023.105dfc14@windsurf>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230205150023.105dfc14@windsurf>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675606367;
- bh=Fjs8ohyjD/rYNE/tNpp4RwZ/l8E+0m6I1Ei0WOZc8QQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=r1/b6FIbnjE5f7teu/S5/pydQgn+M2WX9tjEhXLCAeKCluNQ9X7BJIFaAWsmn/aIW
- WYVZsG7P5QZdr7fSJxDHzXdZC6iYWmPUJ5Eoybo3e6yMC++lJ/OsfYH/3+Wo1ZtAuY
- WAWAxwGjI8WjAdVvfg0iRX2GDxq9KD/bdlZNHI5/J0wNiiEy1lAd6ovyEuBVih4gV1
- O/AEkJxB3YwBMWypiw8tcHHUkFAr6Yr7cgFvM145hK86h98mVjhNKxuGFX4JmVYVI2
- 8OY7uQ9yBi0KX/g3OnpzM4wEzJoXjf/SJVa5Fo2tJAHnPsHF8bMrV3mvx37FKjKLng
- eqCJDggYvNM8g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=r1/b6FIb
-Subject: Re: [Buildroot] [PATCH] toolchain: make paranoid check of
- library/header paths unconditional
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3TfgoHpwZLd9; Sun,  5 Feb 2023 14:13:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52E2A40124;
+	Sun,  5 Feb 2023 14:13:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52E2A40124
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 65B681BF475
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:13:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F74860750
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:13:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F74860750
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zjcRv7rACr9i for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 14:13:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3FF6260746
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:13:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FF6260746
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2F75283842; Sun,  5 Feb 2023 14:13:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 5 Feb 2023 15:13:15 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 93e7fc3e53bff9db971f3ae951d93d3bd1a39d1e
+X-Git-Newrev: f6f15e85b3ac58ba1d387ea86945d3fabf4f8990
+X-Patchwork-Hint: ignore
+Message-Id: <20230205141346.2F75283842@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elf2flt: fix error when building
+ gdb for target on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,52 +56,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f6f15e85b3ac58ba1d387ea86945d3fabf4f8990
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-02-05 15:00 +0100, Thomas Petazzoni via buildroot spake thusly:
-> On Mon,  7 Nov 2022 22:49:03 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > When we introduced support for the paranoid check of unsafe libraries
-> > and headers path with commit 4ac8f78d3771 (Add option for paranoid
-> > unsafe path checking) back in 2014, we made it optional, as we expected
-> > that would break quite a few packages.
-[--SNIP--]
-> > It is time to make that globally unconditional now.
-> > 
-> > There is still a remnant, in our binutils patches. As our toolchain may
-> > get used outside of Buildroot, people may got the expectation that path
-> > poisoning is only a warning, so we keep the current behaviour.
-> > 
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Romain Naour <romain.naour@gmail.com>
-> > ---
-> >  Config.in                               | 18 ------------------
-> >  package/Makefile.in                     |  3 +--
-> >  support/config-fragments/minimal.config |  1 -
-> >  toolchain/toolchain-wrapper.c           | 21 ++++-----------------
-> >  4 files changed, 5 insertions(+), 38 deletions(-)
-> 
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thomas reported that m68k fails to build when enabling BR2_PACKAGE_GDB.
 
-Applied to master, thanks.
+It fails when building gdb for the target with the following error:
+elf2flt: ERROR: text=0x3c826 overlaps data=0x256e0 ?
 
-Regards,
-Yann E. MORIN.
+It turns out that the gdb binary has another problematic input section
+(.gcc_except_table), which causes elf2flt to try to append to the .text
+output section, after it has already moved on with appending sections
+to the .data output section.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+elf2flt cannot append to a previous output section once it has moved on
+to another output section.
+
+Update the existing elf2flt patch to also add an exception for
+.gcc_except_table.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-fatal-error-regression-on-m68k-xtensa-ri.patch | 47 +++++++++++-----------
+ 1 file changed, 24 insertions(+), 23 deletions(-)
+
+diff --git a/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch b/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
+index 278709cb1c..616bbc891f 100644
+--- a/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
++++ b/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
+@@ -1,8 +1,7 @@
+-From 65ac5f9e69cfb989d970da74c41e478774d29be5 Mon Sep 17 00:00:00 2001
++From a8c9f650b82109abf7aa730f298ea5182ed62613 Mon Sep 17 00:00:00 2001
+ From: Niklas Cassel <niklas.cassel@wdc.com>
+ Date: Tue, 9 Aug 2022 21:06:05 +0200
+-Subject: [PATCH] elf2flt: fix fatal error regression on m68k, xtensa,
+- riscv64
++Subject: [PATCH] elf2flt: fix fatal error regression on m68k, xtensa, riscv64
+ 
+ Commit ba379d08bb78 ("elf2flt: fix for segfault on some ARM ELFs")
+ changed the condition of which input sections that should be included
+@@ -12,16 +11,15 @@ to:
+ ((a->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
+ (SEC_DATA | SEC_READONLY | SEC_RELOC))
+ 
+-On ARM, the .eh_frame input section does not have the SEC_RELOC flag
+-set, so this specific change had no effect on ARM.
++On ARM, the .eh_frame input section does not have the SEC_RELOC flag set,
++so on ARM, this change caused .eh_frame to move from .text to .data.
+ 
+-However, on e.g. m68k and riscv64, the .eh_frame input section does
+-have the SEC_RELOC flag set, which means that after commit ba379d08bb78
+-("elf2flt: fix for segfault on some ARM ELFs"), read-only relocation
+-data sections were placed in .text output section, instead of .data
+-output section.
++However, on e.g. m68k, xtensa and riscv64, the .eh_frame input section
++does have the SEC_RELOC flag set, which means that the change in
++commit ba379d08bb78 ("elf2flt: fix for segfault on some ARM ELFs")
++caused .eh_frame to move in an opposite way, i.e. from .data to .text.
+ 
+-This will result in a fatal error on m68k, xtensa and riscv64:
++This resulted in a fatal error on m68k, xtensa and riscv64:
+ ERROR: text=0x3bab8 overlaps data=0x33f60 ?
+ 
+ This is because elf2flt cannot append to .text after .data has been
+@@ -36,21 +34,26 @@ to .text after .data has been appended to (which will require elf2flt
+ to move/relocate everything that has already been appended to .data,
+ since the virtual addresses are contiguous).
+ 
+-However, for now, add an exception for m68k, xtensa and riscv64
+-(specifically for the problematic input section, .eh_frame), so that we
+-get the same behavior as older elf2flt releases, where we put read-only
+-relocation data in .data, which was working perfectly fine.
++However, for now, add an exception for input sections which have all
++three flags SEC_DATA, SEC_READONLY, and SEC_RELOC set, and which have a
++name equal to a problematic input section (.eh_frame, .gcc_except_table).
++That way, we get the same behavior as older elf2flt releases for m68k,
++xtensa and riscv64, where we put read-only relocation data in .data,
++which was working perfectly fine.
++
++This exception will not change any behavior on ARM, as the .eh_frame
++input section does not have flag SEC_RELOC set.
+ 
+ Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+ ---
+- elf2flt.c | 11 +++++++++--
+- 1 file changed, 9 insertions(+), 2 deletions(-)
++ elf2flt.c | 9 +++++++--
++ 1 file changed, 7 insertions(+), 2 deletions(-)
+ 
+ diff --git a/elf2flt.c b/elf2flt.c
+-index 9c32f9a..a680c89 100644
++index e0d7891..39d035f 100644
+ --- a/elf2flt.c
+ +++ b/elf2flt.c
+-@@ -340,8 +340,15 @@ compare_relocs (const void *pa, const void *pb)
++@@ -341,8 +341,13 @@ compare_relocs (const void *pa, const void *pb)
+  static bool
+  ro_reloc_data_section_should_be_in_text(asection *s)
+  {
+@@ -58,10 +61,8 @@ index 9c32f9a..a680c89 100644
+ -	  (SEC_DATA | SEC_READONLY | SEC_RELOC);
+ +  if ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
+ +      (SEC_DATA | SEC_READONLY | SEC_RELOC)) {
+-+#if defined(TARGET_m68k) || defined(TARGET_riscv64) || defined(TARGET_xtensa)
+-+    if (!strcmp(".eh_frame", s->name))
+++    if (!strcmp(".eh_frame", s->name) || !strcmp(".gcc_except_table", s->name))
+ +      return false;
+-+#endif
+ +    return true;
+ +  }
+ +  return false;
+@@ -69,5 +70,5 @@ index 9c32f9a..a680c89 100644
+  
+  static uint32_t *
+ -- 
+-2.37.1
++2.39.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
