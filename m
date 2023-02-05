@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 403C7C636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 04:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 634E3C636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 08:16:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93DAE60C25;
-	Sun,  5 Feb 2023 04:22:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93DAE60C25
+	by smtp2.osuosl.org (Postfix) with ESMTP id B6EE5400AF;
+	Sun,  5 Feb 2023 08:16:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6EE5400AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kG9SJfH3XCc1; Sun,  5 Feb 2023 04:22:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lyzzkbzeev5C; Sun,  5 Feb 2023 08:16:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAB1760BEB;
-	Sun,  5 Feb 2023 04:22:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAB1760BEB
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1EA4400D7;
+	Sun,  5 Feb 2023 08:16:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1EA4400D7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 636681BF3F9
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 04:22:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 063121BF20B
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 08:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F34381757
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 04:22:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F34381757
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFDC58183D
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 08:16:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFDC58183D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PaTkhv9Io2Tj for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 04:22:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0137681756
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0137681756
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 04:22:41 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id h18so3610908ilj.6
- for <buildroot@buildroot.org>; Sat, 04 Feb 2023 20:22:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3Cqjyz8tL8zRar1pd1GeYPQLWw1OsgFJyhcI6ATGi5w=;
- b=b0MrkOHgz2DFJKDPeaKnaUw5uQDc0AwrR9ii40o8PP1ypHLay+aMM6MSzfzR/GvaNO
- WeRMaBJ77uNujIB4Ad2G52S+bKkTWQKF8JAmDOv2D4s1FSO4xIoMJzTHbJpQjBky4mx4
- aO3O4ecM978q6UKYKulQEcCxMd0wvukkZF2Q3yE2KircUkpx3FZ3Hr6+TWyTQbfpMW+H
- 3+MG84X2gufcWeYBbJB0bWkAj2rrnG66DWT7yN6k/blzo0u/yc+rMOqpkuShkevs1U/r
- wYROeFKUMWJPUFpXfTqULWNmulAFk2vEX/Ujm52TU4ct3btJ8WOFn8aPx9mFNw+JPfus
- xIHA==
-X-Gm-Message-State: AO0yUKW3+V0pe699frZeZ7l8WRRTR+fUKXX+0yR2+eE40xRoHUBv0UTP
- zfw9kWX5oVwgwhHCvrbqk0yk942ajnvnMA==
-X-Google-Smtp-Source: AK7set8fVGOXiK1I2iweEb2h+0k+uo5D3+Dx5sBEiqeBqHYkJcXoBiMXoZGxXgY8wOg87wbprEKUHg==
-X-Received: by 2002:a05:6e02:1b09:b0:30d:c0b3:3272 with SMTP id
- i9-20020a056e021b0900b0030dc0b33272mr16636602ilv.0.1675570960883; 
- Sat, 04 Feb 2023 20:22:40 -0800 (PST)
-Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
- [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- i15-20020a92c94f000000b00304ae88ebebsm2066712ilq.88.2023.02.04.20.22.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Feb 2023 20:22:40 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ with ESMTP id MjggwAD0HewV for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 08:16:21 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68EA2815CC
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 68EA2815CC
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 08:16:21 +0000 (UTC)
+Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
+ by mailout07.t-online.de (Postfix) with SMTP id B42EEA624;
+ Sun,  5 Feb 2023 09:16:18 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.195.67]) by fwd84.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pOaCA-3PMHgH0; Sun, 5 Feb 2023 09:16:18 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34828)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pOaCA-0008Sg-0h;
+ Sun, 05 Feb 2023 09:16:18 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat,  4 Feb 2023 21:22:32 -0700
-Message-Id: <20230205042232.1014672-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun,  5 Feb 2023 09:16:17 +0100
+Message-Id: <20230205081617.113018-3-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230205081617.113018-1-bernd.kuhls@t-online.de>
+References: <20230205081617.113018-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3Cqjyz8tL8zRar1pd1GeYPQLWw1OsgFJyhcI6ATGi5w=;
- b=IEe050bdSIdVSWcgYcFIvFRodyEg7aBV/CGGrN8ckSUNg+pSutsEoeFBkHZsVTRIYm
- qPH4DBDVrh5EiuTv9aHn1w7i6K8xPda6FpNOHF8vIB88kHT/Sm72kW0nGAUEoFLBlTzu
- 19xDxC1RRY3/u2iJtmc+hn+DOFzhsVg3Vb7U/r7UJQgJg9hR1PWWGRpulHa9bYr5EvUZ
- cREcqPWsMk39m/Zj/zQXsINLI+x28Ib6dBDAit015XLE1+Srf/AoAqBeM6oq+AjTRBBw
- Lb4tnL4/r/gvd5awL1yeb0yQu7Rio9HAMcxIYHYdJE0pPWynZxsLfTS5jfS7IFWlT8aT
- rPrg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=IEe050bd
-Subject: [Buildroot] [PATCH 1/1] package/gst1-plugins-bad: add new va option
+X-TOI-EXPURGATEID: 150726::1675584978-39FF2A0B-07E92BFB/0/0 CLEAN NORMAL
+X-TOI-MSGID: 9caefc65-d0ba-46cf-b9b0-4bdacc42f700
+Subject: [Buildroot] [PATCH 3/3] package/freeswitch: security bump version
+ to 1.10.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,71 +68,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Gregory Dymarek <gregd72002@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This option enables va plugin support.
+Release notes:
+https://github.com/signalwire/freeswitch/releases/tag/v1.10.9
 
-These plugins are vaapi based encoders/decoders that are eventually
-intended to replace the legacy vaapi plugins.
+Upstream removed zrtp support:
+https://github.com/signalwire/freeswitch/pull/1848
 
-Details:
-https://gstreamer.freedesktop.org/documentation/va/index.html
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in         | 11 +++++++++++
- .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 10 ++++++++++
- 2 files changed, 21 insertions(+)
+Upstream release notes declares:
+"This is an important release containing security fixes and stability
+ improvements." without mentioning any CVEs.
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index bcb4cb1545..1e89cd124f 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -629,6 +629,17 @@ comment "uvch264 needs a toolchain w/ threads, wchar, gcc >= 4.9"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ package/freeswitch/freeswitch.hash |  5 ++---
+ package/freeswitch/freeswitch.mk   | 11 +----------
+ 2 files changed, 3 insertions(+), 13 deletions(-)
+
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 18a36ff23c..3518d60b49 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,11 +1,10 @@
+-# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.8.-release.tar.xz.sha256
+-sha256  1176b26b2f463de2980e5be953f81ced94d23c784452bd41e086d3933a88be5f  freeswitch-1.10.8.-release.tar.xz
++# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.9.-release.tar.xz.sha256
++sha256  f649d53af7beccb59c1d03864cd8f2d287e4ea26ef652b5c4969d29121ced063 freeswitch-1.10.9.-release.tar.xz
+ # Locally computed
+ sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
+ sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
+ sha256  e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
+ sha256  2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  libs/libyuv/LICENSE
+-sha256  7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/libzrtp/src/zrtp_legal.c
+ sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  libs/srtp/LICENSE
+ sha256  ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/mod/codecs/mod_isac/LICENSE
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 6234dd8e97..7497cc4964 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA
-+	bool "va"
-+	depends on !BR2_STATIC_LIBS # libva
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
-+	select BR2_PACKAGE_LIBVA
-+	help
-+	  VA-API new plugin
-+
-+comment "va needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
- 	bool "voaacenc"
- 	select BR2_PACKAGE_VO_AACENC
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 8f11ce6b37..dfe1f1c9eb 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -745,6 +745,16 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += -Duvch264=disabled
- endif
+-FREESWITCH_VERSION = 1.10.8
++FREESWITCH_VERSION = 1.10.9
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
+ FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
+@@ -81,15 +81,6 @@ FREESWITCH_CONF_OPTS = \
+ 	--without-python \
+ 	--disable-system-xmlrpc-c
  
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dva=enabled
-+GST1_PLUGINS_BAD_DEPENDENCIES += libva
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+GST1_PLUGINS_BAD_DEPENDENCIES += libdrm
-+endif
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dva=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC),y)
- GST1_PLUGINS_BAD_CONF_OPTS += -Dvoaacenc=enabled
- GST1_PLUGINS_BAD_DEPENDENCIES += vo-aacenc
+-# zrtp supports a limited set of archs, sparc support is also broken due
+-# to a broken ld call by gcc, see libs/libzrtp/include/zrtp_config.h
+-ifeq ($(BR2_i386)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le)$(BR2_x86_64),y)
+-FREESWITCH_LICENSE_FILES += libs/libzrtp/src/zrtp_legal.c
+-FREESWITCH_CONF_OPTS += --enable-zrtp
+-else
+-FREESWITCH_CONF_OPTS += --disable-zrtp
+-endif
+-
+ # Enable optional modules
+ FREESWITCH_ENABLED_MODULES += \
+ 	applications/mod_avmd \
 -- 
-2.34.1
+2.39.1
 
 _______________________________________________
 buildroot mailing list
