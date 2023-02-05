@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64A13C636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41B2EC636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 111D5605E3;
-	Sun,  5 Feb 2023 12:36:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 111D5605E3
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b9dSUs-WuCEC; Sun,  5 Feb 2023 12:36:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFF29605DB;
-	Sun,  5 Feb 2023 12:36:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFF29605DB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A7D661BF364
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:36:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82ACB4010C
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:36:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82ACB4010C
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDA694010C;
+	Sun,  5 Feb 2023 12:36:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDA694010C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kscZFsggO4Qj for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 12:36:15 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zlrp_Z1CUVkZ; Sun,  5 Feb 2023 12:36:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4D204010D;
+	Sun,  5 Feb 2023 12:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4D204010D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E7891BF364
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:36:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9C6C4031E
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9C6C4031E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HlxgNOfCX4Lr for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 12:36:29 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2923D40106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84A134030C
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2923D40106
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:36:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 84A134030C
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:36:29 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [92.184.112.17])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 8C4542003DC;
- Sun,  5 Feb 2023 13:36:07 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 0F2662003ED;
+ Sun,  5 Feb 2023 13:36:24 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 Feb 2023 13:36:06 +0100
-Date: Sun, 5 Feb 2023 13:36:06 +0100
+ Sun, 05 Feb 2023 13:36:23 +0100
+Date: Sun, 5 Feb 2023 13:36:23 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230205123606.GD2960@scaer>
-References: <20230204203750.513283-1-giulio.benetti@benettiengineering.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230205123623.GE2960@scaer>
+References: <20230205042232.1014672-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230204203750.513283-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230205042232.1014672-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675600571;
- bh=SSfOy2akVEXyx9LWlOoJ7NzqaRzCMa8KZzoFLLBmF6c=;
+ d=free.fr; s=smtp-20201208; t=1675600587;
+ bh=NB+j7RTb1qZtTu0qlJc9D4qPbdVwi7ptGtlDfMn3Cn8=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DbJiNypxcBXHGN3bq3jO0pXVJkgiK97DoPa69IJ3KdEn++LHXc+9aOtnQGLiyvm2e
- e2lyTssNETOvgeVNJjQFRhlsUbFXcxH/7z65P8uB86tX/Eqzo9pFb9T0IMw6rgT53x
- Q+9gbR659x9FKtRguuzOUft2lq9uIpet57x6zC27RY1xoiSi/1LVLfw5ezRjuh017K
- VKRHxhkMUvqJ5kh4ztPTGNEPmHSE8xIzR4nWf16TGUNXMgVkPSM0r4Vjy4Dd7agaFe
- 5WQrUExWyJTpVgAD1UCIdq2XdAss3UcGQFhBCw/Yea327XJWS72/0lS1SQtKYYAK24
- CH6uLAALiwVsA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=DpBmfQn/juwrIRNA1pXhaPANTl6WaG/6rIVMQn7pAfkHXyX90hwrbrRjAG7mWJqT2
+ mxWOqjyuRUGkDyO/cIypXhobcFJmsgWOqr7pHZNup9qMoy+9kwvdiSxsYKxhNuFbDn
+ VcBjjXcR/gI5Y9EHufj4T1sv9XNrREyBzVMW6qwFy9Ub2qbF6plpzsOm01x7vM0e6t
+ OGz5BReY/oZN8mgWq3vZSYKid7NJeZRCAwn69LSo51w1tlr53k/vtv/n6dGYezsC8Z
+ IN9FqrBj+NOPSBd8VvsN3emoJY+VA0qbngBYrPetUFb4op72T+WKnSJAd3UYxaok0a
+ z52bwcesa3dQg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DbJiNypx
-Subject: Re: [Buildroot] [PATCH] package/libfuse3: bump to version 3.13.1
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DpBmfQn/
+Subject: Re: [Buildroot] [PATCH 1/1] package/gst1-plugins-bad: add new va
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,19 +76,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+James, All,
 
-On 2023-02-04 21:37 +0100, Giulio Benetti spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/a98/a984d275d949e8dc989870d2d2b6f6c7168d52bb/
+On 2023-02-04 21:22 -0700, James Hilliard spake thusly:
+> This option enables va plugin support.
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> These plugins are vaapi based encoders/decoders that are eventually
+> intended to replace the legacy vaapi plugins.
+> 
+> Details:
+> https://gstreamer.freedesktop.org/documentation/va/index.html
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Applied to master, thanks.
 
@@ -95,32 +101,53 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libfuse3/libfuse3.hash | 2 +-
->  package/libfuse3/libfuse3.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/gstreamer1/gst1-plugins-bad/Config.in         | 11 +++++++++++
+>  .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 10 ++++++++++
+>  2 files changed, 21 insertions(+)
 > 
-> diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-> index 691bfbc9d6..f697f4ad3f 100644
-> --- a/package/libfuse3/libfuse3.hash
-> +++ b/package/libfuse3/libfuse3.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated sha256 checksums
-> -sha256  224544214204eb348b548d6faa7a9bc91b053aacfc92e8b5da3f478c76ae4a03  libfuse3-3.13.0.tar.gz
-> +sha256  96399b09b91bc717a9e96ffea660d611e6a342547c1abd4d0e858b3dca9d5a13  libfuse3-3.13.1.tar.gz
->  sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-> index d94f7d3d3a..a2e9775868 100644
-> --- a/package/libfuse3/libfuse3.mk
-> +++ b/package/libfuse3/libfuse3.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index bcb4cb1545..1e89cd124f 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -629,6 +629,17 @@ comment "uvch264 needs a toolchain w/ threads, wchar, gcc >= 4.9"
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+>  		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 >  
-> -LIBFUSE3_VERSION = 3.13.0
-> +LIBFUSE3_VERSION = 3.13.1
->  LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
->  LIBFUSE3_LICENSE = LGPL-2.1
->  LIBFUSE3_LICENSE_FILES = LICENSE
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA
+> +	bool "va"
+> +	depends on !BR2_STATIC_LIBS # libva
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
+> +	select BR2_PACKAGE_LIBVA
+> +	help
+> +	  VA-API new plugin
+> +
+> +comment "va needs a toolchain w/ threads, dynamic library"
+> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
+>  	bool "voaacenc"
+>  	select BR2_PACKAGE_VO_AACENC
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index 8f11ce6b37..dfe1f1c9eb 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -745,6 +745,16 @@ else
+>  GST1_PLUGINS_BAD_CONF_OPTS += -Duvch264=disabled
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA),y)
+> +GST1_PLUGINS_BAD_CONF_OPTS += -Dva=enabled
+> +GST1_PLUGINS_BAD_DEPENDENCIES += libva
+> +ifeq ($(BR2_PACKAGE_LIBDRM),y)
+> +GST1_PLUGINS_BAD_DEPENDENCIES += libdrm
+> +endif
+> +else
+> +GST1_PLUGINS_BAD_CONF_OPTS += -Dva=disabled
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC),y)
+>  GST1_PLUGINS_BAD_CONF_OPTS += -Dvoaacenc=enabled
+>  GST1_PLUGINS_BAD_DEPENDENCIES += vo-aacenc
 > -- 
 > 2.34.1
 > 
