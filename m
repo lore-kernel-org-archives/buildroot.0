@@ -1,69 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0870CC636CC
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:36:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18251C636CC
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 12:41:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 979FC60591;
-	Sun,  5 Feb 2023 12:36:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 979FC60591
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E7C5415A9;
+	Sun,  5 Feb 2023 12:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E7C5415A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZypM0Qf5n8qj; Sun,  5 Feb 2023 12:36:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1uqRbqY-v90h; Sun,  5 Feb 2023 12:40:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DD196060A;
-	Sun,  5 Feb 2023 12:36:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DD196060A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 602751BF364
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:36:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 866A3415AB;
+	Sun,  5 Feb 2023 12:40:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 866A3415AB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3132E1BF364
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4719281501
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:36:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4719281501
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B7F84010C
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 12:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B7F84010C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AELm7w4M6atS for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 12:36:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gt9JZxhO8SVV for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 12:40:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E944814B8
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2E944814B8
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:36:50 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.112.17])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id AFD7A2003E0;
- Sun,  5 Feb 2023 13:36:45 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 Feb 2023 13:36:44 +0100
-Date: Sun, 5 Feb 2023 13:36:44 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230205123644.GF2960@scaer>
-References: <20230205023709.799349-1-james.hilliard1@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E809640106
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E809640106
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 12:40:54 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id a2so7903798wrd.6
+ for <buildroot@buildroot.org>; Sun, 05 Feb 2023 04:40:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=jNRIUVf7u5cNFT5XjY0xgTQt3DcM+0AtRuOk8Fsxi2I=;
+ b=mufi0CsBETOYFM0NZXegjaxeqcufASR0WfrYmEy2Eks5Hwj7osudmSkcWVa7C0pS3r
+ vsGkkuuoAt0K2M99dfrT1LsCdlljky2/LTiNt43in7oTQ3KBN0er4R1IRcYp95JmLb24
+ uDCAvnrYYw3G5FXYZZIGc4ftf5gNUtBH1I1jKE1irwOR4To2gyJ8iOMBIsiO5+uckifd
+ XNrucZ14Qwo+RRhV6ClFPqOI+huWWvKV0i8AekerJ0KALcDk5ObXJ1w44iRI0OBQ5cDP
+ Ia4UMnDL4HYWxz/XFnz/0mcBG9GxTYJI9F4Qz7LaBCvqKV/kYUO7LkkJA72VeOP53wnO
+ AmfA==
+X-Gm-Message-State: AO0yUKV4S2gp4uTfOJjrI51lhqi6ox9dWHtMMP7gOKDjC/uqtPH3+fKH
+ 2d5h4tXyZ78dYaj0kxFF4upbDieM7IA=
+X-Google-Smtp-Source: AK7set83yz1wchLWI36NYnCRCwFNS7Phf5mnZIEdCvvCnDnsLX3+1Ln8Q8ziSYk/qGs1Zp9SnljWkw==
+X-Received: by 2002:adf:f946:0:b0:2bf:b281:1bbb with SMTP id
+ q6-20020adff946000000b002bfb2811bbbmr13242730wrr.36.1675600852780; 
+ Sun, 05 Feb 2023 04:40:52 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ o5-20020a5d62c5000000b002c3e1e1dcd7sm2938068wrv.104.2023.02.05.04.40.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 05 Feb 2023 04:40:52 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  5 Feb 2023 13:40:49 +0100
+Message-Id: <20230205124049.5139-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230205023709.799349-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675600608;
- bh=wr5wZgCBeD4wyY8nccWBtD4DiQ+5rQZV364KWxtCmxw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=U6IG46+cus1Y5nJdjzJMqzuRPgwFpGRs+2ZyiHgIG3vVGf6Hnq5xnX76nXoxuZnNa
- n3aJMwmJcKFLVWdXuAoj+mMKc+F7kHFcO6wSuAykTz1/0ZtF6ihA2GxfDh2B/syGT4
- hia8vlwprFCVdU6zYs9OfD8tyG21s6CrYDfwxsoxg3OwOJAIS6vRpZuMWftyNl9bjB
- R2ch8zP+Rpy7PDJSZXtNgakvkKgleyQqUokEjtOEL6d2fpGn40lgEhza58ZJFQxgsW
- KTxXqmvdFisQeZj4fTCgI9OXHh5UL0QJh9cJJOgNP17qtzgjAjiUMYZsG97ujH+k2P
- B+YC3irX4iQLg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=U6IG46+c
-Subject: Re: [Buildroot] [PATCH 1/1] package/gst1-vaapi: fix x11 dependencies
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=jNRIUVf7u5cNFT5XjY0xgTQt3DcM+0AtRuOk8Fsxi2I=;
+ b=iHRaEmzxgv4T70rJmaF23gN1TQ2FY3VbRkswpv0FA9+Z0FBK5wqHOZZcRVex3Fw13A
+ pIkhnz50d2pau0zPS748cr/5aya+AFoeVYwbqFCR88Yas7k3D9STKU5sjBoIJozPY9AY
+ E9uXM35vJPDgKwfE1fLWmGvXOstQ01sA2Fnd5VSDNDobP/dprPuPvmVGu8JB0sVqffvk
+ NfKHWrsVVepoqHjFLs/goyfSUvDuBqAqcJJLYAyzAVzXl2gtdLYO9WWJA2ztarmE2c60
+ 8SBh2AaAcWdGS6wJivfdUNIHEBudXT+SF5tXps03qZU/dmPW8LWP5/Dsw/93sdPGmLAb
+ sJ6Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=iHRaEmzx
+Subject: [Buildroot] [PATCH 1/1] package/fluent-bit: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,77 +93,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Thomas Devoogdt <thomas@devoogdt.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+cpe:2.3:a:treasuredata:fluent_bit is a valid CPE identifier for this
+package:
 
-On 2023-02-04 19:37 -0700, James Hilliard spake thusly:
-> The x11 feature needs libx11 and libxrandr support.
-> 
-> Select and depend on these when x11 is enabled.
-> 
-> Fixes:
-> gst1-vaapi-1.22.0/meson.build:96:0: ERROR: Dependency "xrandr" not found, tried pkgconfig and cmake
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atreasuredata%3Afluent_bit
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/fluent-bit/fluent-bit.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/gstreamer1/gst1-vaapi/Config.in     | 2 ++
->  package/gstreamer1/gst1-vaapi/gst1-vaapi.mk | 3 ++-
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
-> index ade8b83a5f..a1062097ed 100644
-> --- a/package/gstreamer1/gst1-vaapi/Config.in
-> +++ b/package/gstreamer1/gst1-vaapi/Config.in
-> @@ -8,6 +8,8 @@ config BR2_PACKAGE_GST1_VAAPI
->  	select BR2_PACKAGE_LIBDRM
->  	select BR2_PACKAGE_GST1_PLUGINS_BASE
->  	select BR2_PACKAGE_GST1_PLUGINS_BAD # gstreamer-codecparsers
-> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
->  	help
->  	  gstreamer-vaapi consists in a collection of VA-API based
->  	  plugins for GStreamer and helper libraries.
-> diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-> index 3d9eb91ffb..9533cdf2b6 100644
-> --- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-> +++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-> @@ -43,8 +43,9 @@ else
->  GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_XORG7),y)
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBXRANDR),yy)
->  GST1_VAAPI_CONF_OPTS += -Dx11=enabled
-> +GST1_VAAPI_DEPENDENCIES += xlib_libX11 xlib_libXrandr
->  ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
->  GST1_VAAPI_CONF_OPTS += -Dglx=enabled
->  else
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 6e9a33e02e..879437e5f4 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -8,6 +8,8 @@ FLUENT_BIT_VERSION = 2.0.8
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
++FLUENT_BIT_CPE_ID_VENDOR = treasuredata
++FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
+ FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml libopenssl
+ 
+ FLUENT_BIT_CONF_OPTS += \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
