@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBCF3C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B221C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74AAF60D53;
-	Tue, 21 Feb 2023 01:28:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74AAF60D53
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A75F6FBDB;
+	Tue, 21 Feb 2023 01:28:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A75F6FBDB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HPKauoJn8azy; Tue, 21 Feb 2023 01:28:30 +0000 (UTC)
+	with ESMTP id Y1FpvBXJZir3; Tue, 21 Feb 2023 01:28:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 959BB6FBDB;
-	Tue, 21 Feb 2023 01:28:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 959BB6FBDB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31DEC6FFEA;
+	Tue, 21 Feb 2023 01:28:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31DEC6FFEA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 316AF1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B774A1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D8296FC09
+ by smtp3.osuosl.org (Postfix) with ESMTP id 247EB6FC0B
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D8296FC09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 247EB6FC0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PXcy3a0R_sxH for <buildroot@lists.busybox.net>;
+ with ESMTP id RNQ_CBaJns3o for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 326CB6FBFF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 02C076FBFC
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 326CB6FBFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02C076FBFC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E095828C8; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+ id 00C4681979; Mon, 20 Feb 2023 20:52:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 15:24:34 +0100
+Date: Sun, 5 Feb 2023 15:03:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 32602f9cbb7ec0e0beca5ea0d69671ff41d46323
-X-Git-Newrev: ae65870e652088dd65ca41d63304893d1d4443a2
+X-Git-Oldrev: ea47e177f093d7378e8e8e1f50d6f4e3fce0a088
+X-Git-Newrev: d4ecefa3ccbe29b1e047c97a995a7c966a191583
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205247.2E095828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/opusfile: fix
- CVE-2022-47021
+Message-Id: <20230220205247.00C4681979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perftest: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +62,196 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae65870e652088dd65ca41d63304893d1d4443a2
+commit: https://git.buildroot.net/buildroot/commit/?id=d4ecefa3ccbe29b1e047c97a995a7c966a191583
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-A null pointer dereference issue was discovered in functions op_get_data
-and op_open1 in opusfile.c in xiph opusfile 0.9 thru 0.12 allows
-attackers to cause denial of service or other unspecified impacts.
+Open Fabrics Performance Tests.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This is a collection of tests written over uverbs intended
+for use as a performance micro-benchmark. The tests may be
+used for HW or SW tuning as well as for functional testing.
+
+https://github.com/linux-rdma/perftest
+
+Tested-by: Shamraiz Ashraf <shamraizashraf092@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+[yann.morin.1998@free.fr
+  - move all arch-related dependencies to _ARCH_SUPPORTS
+  - include musl condition in comment and its dependnecies
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...e-allocation-failure-from-ogg_sync_buffer.patch | 44 ++++++++++++++++++++++
- package/opusfile/opusfile.mk                       |  3 ++
- 2 files changed, 47 insertions(+)
+ DEVELOPERS                                     |  2 ++
+ package/Config.in                              |  1 +
+ package/perftest/Config.in                     | 41 ++++++++++++++++++++++
+ package/perftest/perftest.hash                 |  3 ++
+ package/perftest/perftest.mk                   | 15 ++++++++
+ support/testing/tests/package/test_perftest.py | 48 ++++++++++++++++++++++++++
+ 6 files changed, 110 insertions(+)
 
-diff --git a/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch b/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 73905748ce..3eb7fba339 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1691,6 +1691,7 @@ F:	package/gnupg2/
+ F:	package/glslsandbox-player/
+ F:	package/octave/
+ F:	package/ola/
++F:	package/perftest/
+ F:	package/ptm2human/
+ F:	package/python-distro/
+ F:	package/python-gnupg/
+@@ -1708,6 +1709,7 @@ F:	support/testing/tests/package/test_ncdu.py
+ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
++F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_python_distro.py
+ F:	support/testing/tests/package/test_python_gnupg.py
+ F:	support/testing/tests/package/test_python_pyalsa.py
+diff --git a/package/Config.in b/package/Config.in
+index 1f6db14d56..f32209db95 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -133,6 +133,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/oprofile/Config.in"
+ 	source "package/pax-utils/Config.in"
+ 	source "package/pcm-tools/Config.in"
++	source "package/perftest/Config.in"
+ 	source "package/piglit/Config.in"
+ 	source "package/ply/Config.in"
+ 	source "package/poke/Config.in"
+diff --git a/package/perftest/Config.in b/package/perftest/Config.in
 new file mode 100644
-index 0000000000..2ef08502ab
+index 0000000000..25cd1a9b8d
 --- /dev/null
-+++ b/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
-@@ -0,0 +1,44 @@
-+From 0a4cd796df5b030cb866f3f4a5e41a4b92caddf5 Mon Sep 17 00:00:00 2001
-+From: Ralph Giles <giles@thaumas.net>
-+Date: Tue, 6 Sep 2022 19:04:31 -0700
-+Subject: [PATCH] Propagate allocation failure from ogg_sync_buffer.
++++ b/package/perftest/Config.in
+@@ -0,0 +1,41 @@
++config BR2_PACKAGE_PERFTEST_ARCH_SUPPORTS
++	bool
++	# Accurate cycle measurement in perftest is implemented for a
++	# limited set of architectures, see:
++	# https://github.com/linux-rdma/perftest/blob/v4.5-0.20/src/get_clock.h
++	# Note: the package has also a fallback to use "asm/timex.h"
++	# from the Kernel, in
++	# "$(LINUX_DIR)/arch/$(KERNEL_ARCH)/include". It is not
++	# reflected here as this path is not well tested.
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 && !BR2_ARM_CPU_ARMV6
++	default y if BR2_aarch64
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_s390x
++	default y if BR2_sparc || BR2_sparc64
++	default y if BR2_riscv
++	depends on BR2_USE_MMU # rdma-core
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # rdma-core
 +
-+Instead of segfault, report OP_EFAULT if ogg_sync_buffer returns
-+a null pointer. This allows more graceful recovery by the caller
-+in the unlikely event of a fallible ogg_malloc call.
++config BR2_PACKAGE_PERFTEST
++	bool "perftest"
++	depends on BR2_PACKAGE_PERFTEST_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS # rdma-core
++	# musl does not define sysconf(_SC_LEVEL1_DCACHE_LINESIZE)
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_PCIUTILS
++	select BR2_PACKAGE_RDMA_CORE
++	help
++	  Open Fabrics Performance Tests.
 +
-+We do check the return value elsewhere in the code, so the new
-+checks make the code more consistent.
++	  This is a collection of tests written over uverbs intended
++	  for use as a performance micro-benchmark. The tests may be
++	  used for HW or SW tuning as well as for functional testing.
 +
-+Thanks to https://github.com/xiph/opusfile/issues/36 for reporting.
++	  https://github.com/linux-rdma/perftest
 +
-+Signed-off-by: Timothy B. Terriberry <tterribe@xiph.org>
-+Signed-off-by: Mark Harris <mark.hsj@gmail.com>
++comment "perftest needs a glibc or uClibc toolchain w/ threads, dynamic library"
++	depends on BR2_PACKAGE_PERFTEST_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/perftest/perftest.hash b/package/perftest/perftest.hash
+new file mode 100644
+index 0000000000..4333231c44
+--- /dev/null
++++ b/package/perftest/perftest.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  32e667dac1c0dd41a3951c5a54b961a8e28db5d9478caea2dfc268a312968c99  perftest-4.5-0.20.tar.gz
++sha256  763adb7d5094f2127b026adea8701f042d28d4b1f6fb8b6e828989227a9cf7f5  COPYING
+diff --git a/package/perftest/perftest.mk b/package/perftest/perftest.mk
+new file mode 100644
+index 0000000000..7ad20d0974
+--- /dev/null
++++ b/package/perftest/perftest.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# perftest
++#
++################################################################################
 +
-+[Retrieved from:
-+https://github.com/xiph/opusfile/commit/0a4cd796df5b030cb866f3f4a5e41a4b92caddf5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/opusfile.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++PERFTEST_VERSION = 4.5-0.20
++PERFTEST_SITE = $(call github,linux-rdma,perftest,v$(PERFTEST_VERSION))
++PERFTEST_LICENSE = GPL-2.0 or BSD-2-Clause
++PERFTEST_LICENSE_FILES = COPYING
++PERFTEST_DEPENDENCIES = pciutils rdma-core
++# Fetched from Github, with no configure script
++PERFTEST_AUTORECONF = YES
 +
-+diff --git a/src/opusfile.c b/src/opusfile.c
-+index ca219b2..3c3c81e 100644
-+--- a/src/opusfile.c
-++++ b/src/opusfile.c
-+@@ -148,6 +148,7 @@ static int op_get_data(OggOpusFile *_of,int _nbytes){
-+   int            nbytes;
-+   OP_ASSERT(_nbytes>0);
-+   buffer=(unsigned char *)ogg_sync_buffer(&_of->oy,_nbytes);
-++  if(OP_UNLIKELY(buffer==NULL))return OP_EFAULT;
-+   nbytes=(int)(*_of->callbacks.read)(_of->stream,buffer,_nbytes);
-+   OP_ASSERT(nbytes<=_nbytes);
-+   if(OP_LIKELY(nbytes>0))ogg_sync_wrote(&_of->oy,nbytes);
-+@@ -1527,6 +1528,7 @@ static int op_open1(OggOpusFile *_of,
-+   if(_initial_bytes>0){
-+     char *buffer;
-+     buffer=ogg_sync_buffer(&_of->oy,(long)_initial_bytes);
-++    if(OP_UNLIKELY(buffer==NULL))return OP_EFAULT;
-+     memcpy(buffer,_initial_data,_initial_bytes*sizeof(*buffer));
-+     ogg_sync_wrote(&_of->oy,(long)_initial_bytes);
-+   }
-diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
-index 72ae82e801..63553a81e7 100644
---- a/package/opusfile/opusfile.mk
-+++ b/package/opusfile/opusfile.mk
-@@ -11,6 +11,9 @@ OPUSFILE_LICENSE = BSD-3-Clause
- OPUSFILE_LICENSE_FILES = COPYING
- OPUSFILE_INSTALL_STAGING = YES
- 
-+# 0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
-+OPUSFILE_IGNORE_CVES += CVE-2022-47021
++$(eval $(autotools-package))
+diff --git a/support/testing/tests/package/test_perftest.py b/support/testing/tests/package/test_perftest.py
+new file mode 100644
+index 0000000000..680b70d784
+--- /dev/null
++++ b/support/testing/tests/package/test_perftest.py
+@@ -0,0 +1,48 @@
++import os
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPUSFILE_DEPENDENCIES += openssl
- else
++import infra.basetest
++
++
++class TestPerftest(infra.basetest.BRTest):
++
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.91"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_IPROUTE2=y
++        BR2_PACKAGE_LIBMNL=y
++        BR2_PACKAGE_RDMA_CORE=y
++        BR2_PACKAGE_PERFTEST=y
++        """.format(
++            infra.filepath("tests/package/test_rdma_core/linux-rdma.fragment")
++        )
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
++        self.emulator.login()
++
++        # Add the rxe0 interface
++        self.assertRunOk("ip link set dev eth0 up")
++        self.assertRunOk("rdma link add rxe0 type rxe netdev eth0")
++
++        # start a server
++        self.assertRunOk("ib_read_bw > /dev/null 2>&1 &")
++
++        # start a client
++        self.assertRunOk("sleep 1 && ib_read_bw 127.0.0.1")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
