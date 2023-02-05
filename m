@@ -4,66 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60178C636CD
-	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35C7FC636CD
+	for <buildroot@archiver.kernel.org>; Sun,  5 Feb 2023 14:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06D9D60774;
-	Sun,  5 Feb 2023 14:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06D9D60774
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF19B6077D;
+	Sun,  5 Feb 2023 14:39:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF19B6077D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7gVzquZylhRq; Sun,  5 Feb 2023 14:32:06 +0000 (UTC)
+	with ESMTP id SmUeqF9725cD; Sun,  5 Feb 2023 14:39:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DF2560761;
-	Sun,  5 Feb 2023 14:32:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DF2560761
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8F3311BF475
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:32:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C12D60776;
+	Sun,  5 Feb 2023 14:39:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C12D60776
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FAD01BF475
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7651E60761
- for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:32:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7651E60761
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA70741558
+ for <buildroot@lists.busybox.net>; Sun,  5 Feb 2023 14:39:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA70741558
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oWzyMZ9U2EeY for <buildroot@lists.busybox.net>;
- Sun,  5 Feb 2023 14:32:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31BD060760
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 31BD060760
- for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:32:02 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.112.201])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1E7E913F8DA;
- Sun,  5 Feb 2023 15:31:55 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 Feb 2023 15:31:52 +0100
-Date: Sun, 5 Feb 2023 15:31:52 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230205143152.GM2960@scaer>
-References: <20230205124049.5139-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230205124049.5139-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675607519;
- bh=FESjDjXQyXv1Mj+hDRWnesz63H8O8QAeJFceaMWAbAc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ti+JpNp694IlZth2XfPLFlvd4Bn4iB/Kgq3fNQyXyRmAJOYuaRT9YRkyv4usvW8NE
- NqcIDNtxZVnjRDmypCo9wCkRiS+K3wFJXX8Q/vddYwVlqRKB9j/2npT+c8OPzJ2Ova
- uwANn/pZXqJ6IA4+ukDFyEU1ijm+sLXA932iMcQMtmRot6v9YEAYQOCk2JDEjbhjbY
- GpV+cDajcqBvZ+BTAoD7xcyDHrPut8oos8E/PTk4N36rlbadWf2W0GGjd4c9bEwrl1
- VsOHyGohDnwQ4wfP/npErXb68SFiHCthuFH0NqHiPYXjVnFcj1nbXesUb9LghkQzNk
- sepZdE2S1M5pg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ti+JpNp6
-Subject: Re: [Buildroot] [PATCH 1/1] package/fluent-bit: add CPE variables
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DNmWy4EmGEpa for <buildroot@lists.busybox.net>;
+ Sun,  5 Feb 2023 14:39:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA86F4150E
+ for <buildroot@buildroot.org>; Sun,  5 Feb 2023 14:39:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA86F4150E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C4FA7838A5; Sun,  5 Feb 2023 14:39:27 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 5 Feb 2023 15:37:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 02befac8f9404ae30d0d090221d21a8460c82ec7
+X-Git-Newrev: ce2ac1fecfdd61c01bb34984624f2d37fea91f91
+X-Patchwork-Hint: ignore
+Message-Id: <20230205143927.C4FA7838A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireshark: security bump to
+ version 4.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,62 +57,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ce2ac1fecfdd61c01bb34984624f2d37fea91f91
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-02-05 13:40 +0100, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:treasuredata:fluent_bit is a valid CPE identifier for this
-> package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atreasuredata%3Afluent_bit
+Fix CVE-2023-0411, CVE-2023-0412, CVE-2023-0413, CVE-2023-0414,
+CVE-2023-0415, CVE-2023-0416 and CVE-2023-0417
 
-Even though it's not obvious from the github repository, I checked and
-indeed Treasure Data is the original "editor" for fluentbit.
+https://www.wireshark.org/security/wnpa-sec-2023-01
+https://www.wireshark.org/security/wnpa-sec-2023-02
+https://www.wireshark.org/security/wnpa-sec-2023-03
+https://www.wireshark.org/security/wnpa-sec-2023-04
+https://www.wireshark.org/security/wnpa-sec-2023-05
+https://www.wireshark.org/security/wnpa-sec-2023-06
+https://www.wireshark.org/security/wnpa-sec-2023-07
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.3.html
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/fluent-bit/fluent-bit.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-> index 6e9a33e02e..879437e5f4 100644
-> --- a/package/fluent-bit/fluent-bit.mk
-> +++ b/package/fluent-bit/fluent-bit.mk
-> @@ -8,6 +8,8 @@ FLUENT_BIT_VERSION = 2.0.8
->  FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
->  FLUENT_BIT_LICENSE = Apache-2.0
->  FLUENT_BIT_LICENSE_FILES = LICENSE
-> +FLUENT_BIT_CPE_ID_VENDOR = treasuredata
-> +FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
->  FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml libopenssl
->  
->  FLUENT_BIT_CONF_OPTS += \
-> -- 
-> 2.39.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index e9026b8caa..7128b560ae 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.2.txt
+-sha1  0127180ff18515b086fe5603f767f53ddaa64c1a  wireshark-4.0.2.tar.xz
+-sha256  f35915699f2f9b28ddb211202d40ec8984e5834d3c911483144a4984ba44411d  wireshark-4.0.2.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.3.txt
++sha1  243b0057cfe6d447662e81b5646110aaf8b63c81  wireshark-4.0.3.tar.xz
++sha256  6c51e15bcc0afb93734e686dbff354ffd159f570bd2904bcbbad6f3feb7e9511  wireshark-4.0.3.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index e2a424ef0f..12c36575df 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 4.0.2
++WIRESHARK_VERSION = 4.0.3
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
