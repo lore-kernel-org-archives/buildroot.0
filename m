@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E776C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B537C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:33:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A15E6FB57;
-	Tue, 21 Feb 2023 01:32:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A15E6FB57
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D0CF6FB8A;
+	Tue, 21 Feb 2023 01:33:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D0CF6FB8A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cmWRBQtgZeSr; Tue, 21 Feb 2023 01:32:57 +0000 (UTC)
+	with ESMTP id LrVdl-6usx7t; Tue, 21 Feb 2023 01:33:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FDF06FBD8;
-	Tue, 21 Feb 2023 01:32:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FDF06FBD8
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF6166FBE7;
+	Tue, 21 Feb 2023 01:33:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF6166FBE7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6EE941BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 260631BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEE536FC05
+ by smtp3.osuosl.org (Postfix) with ESMTP id D1A426FC1C
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEE536FC05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1A426FC1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2mnPrDUiY6Mz for <buildroot@lists.busybox.net>;
+ with ESMTP id xmsTDUOWE6Lx for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 002E66FBEF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 002E66FBEF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 077946FC06
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 077946FC06
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2DD4828C8; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+ id 04C9681979; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 14:19:30 +0100
+Date: Mon, 6 Feb 2023 14:22:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d3cab8f29eb9c7e573099a4a0e45f251e4f15f97
-X-Git-Newrev: 0b42512f2f6c3957637d698de20c3930dfcd85e3
+X-Git-Oldrev: 5bd2cafc326141eede4f917069ed21b6d38f88c2
+X-Git-Newrev: 0ad3ae14c52ed0aac872875ca7f87cdcf6942128
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205248.E2DD4828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/optee-os: rewrap
- Config.in help text to fix check-package warning
+Message-Id: <20230220205249.04C9681979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ support/scripts/generate-gitlab-ci-yml: improve test-pkg support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,53 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b42512f2f6c3957637d698de20c3930dfcd85e3
+commit: https://git.buildroot.net/buildroot/commit/?id=0ad3ae14c52ed0aac872875ca7f87cdcf6942128
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
+Following the example of test-pkg config described in commit
+"12c7a05da1 utils/test-pkg: add gitlab-ci support" to test a defconfig
+fragment that contains a disabled option is currently possible, but
+it do requires one to change the git config core.commentChart so the
+lines starting with "#" are not discarded by git when creating/editing
+the commit message.
 
-boot/optee-os/Config.in:140: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+For instance, without the indentation the 3rd line below would be
+excluded from the commit message when the editor is closed:
+    test-pkg config:
+    SOME_OPTION=y
+    # OTHER_OPTION is not set
+    SOME_VARIABLE="some value"
 
-which is a warning that was introduced by commit
-46306d135e5aab14073eece713d38e8c827c58ae ("boot/optee-os: add
-out-of-source OPTEE-OS device tree support").
+Requiring to change git configs is not very nice.
+So make the developer's life easier by changing the sed expression to
+remove indentation with spaces from a defconfig fragment found on a
+commit message.
+For instance these lines become valid and generate a defconfig fragment
+without the indentation of one space to be tested in GitLab CI:
+test-pkg config:
+ SOME_OPTION=y
+ # OTHER_OPTION is not set
+ SOME_VARIABLE="some value"
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/optee-os/Config.in | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ support/scripts/generate-gitlab-ci-yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 617ff93c44..a3cb8390b4 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -134,12 +134,13 @@ config BR2_TARGET_OPTEE_OS_CUSTOM_DTS_PATH
- 	string "Device Tree Source file paths"
- 	help
- 	  Space-separated list of paths to device tree source files
--	  that will be copied to core/arch/arm/dts/ before starting the
--	  build.
-+	  that will be copied to core/arch/arm/dts/ before starting
-+	  the build.
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index aa43aac019..27f586f1b6 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -91,7 +91,7 @@ gen_tests() {
  
--	  To use this device tree source file, the OP-TEE OS configuration
--	  must refer to it with the CFG_EMBED_DTB_SOURCE_FILE option and
--	  no platform flavor needs to be specified.
-+	  To use this device tree source file, the OP-TEE OS
-+	  configuration must refer to it with the
-+	  CFG_EMBED_DTB_SOURCE_FILE option and no platform flavor
-+	  needs to be specified.
- 
- config BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES
- 	string "Additional build variables"
+     # Retrieve defconfig for test-pkg from the git commit message (if any)
+     if grep -q -E '^test-pkg config:$' <<<"${CI_COMMIT_DESCRIPTION}"; then
+-        sed -r -n -e '/^test-pkg config:$/{:a;n;p;ba;}' \
++        sed -r -n -e '/^test-pkg config:$/{:a;n;s/^ +//;p;ba;}' \
+             <<<"${CI_COMMIT_DESCRIPTION}" \
+             >defconfig.frag
+         if [ ! -s defconfig.frag ]; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
