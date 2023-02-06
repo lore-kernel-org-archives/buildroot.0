@@ -1,68 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D30C61DA4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 22:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D75EAC05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 22:05:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E619560C30;
-	Mon,  6 Feb 2023 22:02:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E619560C30
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4273741754;
+	Mon,  6 Feb 2023 22:05:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4273741754
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UYDVhdrBMCeB; Mon,  6 Feb 2023 22:02:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sWD-2uFkUBPk; Mon,  6 Feb 2023 22:05:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35BEA60C2C;
-	Mon,  6 Feb 2023 22:02:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35BEA60C2C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FF0B41746;
+	Mon,  6 Feb 2023 22:05:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FF0B41746
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A0F5A1BF2A7
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:02:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A95521BF422
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A0DF40566
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:02:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A0DF40566
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F8C140383
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:05:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F8C140383
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j_-n4prCj5Dh for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 22:02:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 394B44016B
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 394B44016B
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 22:02:05 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 838ED240007;
- Mon,  6 Feb 2023 22:02:04 +0000 (UTC)
-Date: Mon, 6 Feb 2023 23:02:03 +0100
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20230206230203.70e2dbd8@windsurf>
-In-Reply-To: <YywR+1YTnzQtkCrC@waldemar-brodkorb.de>
-References: <YywR+1YTnzQtkCrC@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+ with ESMTP id QLz-NIR1vCJ5 for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 22:05:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CA434016B
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8CA434016B
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 22:05:49 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1DB1E1C0003;
+ Mon,  6 Feb 2023 22:05:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pP9cQ-00ED13-Aj; Mon, 06 Feb 2023 23:05:46 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230206171544.35665-1-fontaine.fabrice@gmail.com>
+Date: Mon, 06 Feb 2023 23:05:46 +0100
+In-Reply-To: <20230206171544.35665-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 6 Feb 2023 18:15:44 +0100")
+Message-ID: <87357i8n5x.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675720924;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7rRLvjo757/DCrOuuEZoKvj0LBklCw1WT1/WKkdqWe4=;
- b=oA47FqFVRv1w0sJXRABxQ3dkP6NVg6+ELph53pZYykozcPh7fleEfeO8QYYpKS4j5d3iDC
- WWw/RxCLfH6TY5v7GeQadhl1H7QsnaA5ShEdqwCY3y9FWgPA2i8IyGUXJSv4mbGtohslfl
- fcEyOQBGMM5Dxi6MX5geYbz5CfkjgdEeyNqGMAu7HZRNbouIBWihuqz35pyKPihoEuwjbF
- UXMsIlsc8yiE1IJoX8qnVXY0SOuRAmaOs/mD8ygWnExm/SOryC9ljhbIxj82dDu2JVig2H
- Jh/2bZK1EOXqaWrxpArydXXkZBI02LR2ePGLRBk2ZmNp4LyZ3phraKf4QEpyxA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oA47FqFV
-Subject: Re: [Buildroot] [PATCH] configs/stm32f746g-disco: new defconfig
+Subject: Re: [Buildroot] [PATCH 2020.02.x] package/lxc: fix CVE-2022-47952
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,69 +63,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 22 Sep 2022 09:42:51 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Add support for ST Microsystems STM32F746G-DISCO board.
-> See here for hardware details:
-> https://www.st.com/en/evaluation-tools/32f746gdiscovery.html
-> 
-> The LCD and Ethernet are _not_ yet supported by Linux upstream.
-> The RAM is very limited, so the init script is stolen from the
-> RISCV noMMU systems to support booting to a shell without crashing.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > lxc-user-nic in lxc through 5.0.1 is installed setuid root, and may
+ > allow local users to infer whether any file exists, even within a
+ > protected directory tree, because "Failed to open" often indicates that
+ > a file does not exist, whereas "does not refer to a network namespace
+ > path" often indicates that a file exists. NOTE: this is different from
+ > CVE-2018-6556 because the CVE-2018-6556 fix design was based on the
+ > premise that "we will report back to the user that the open() failed but
+ > the user has no way of knowing why it failed"; however, in many
+ > realistic cases, there are no plausible reasons for failing except that
+ > the file does not exist.
 
-Sorry for the very very slow feedback. It mostly looks good of course,
-but there are two things that bother me. One very small and easy to
-address, another not so difficult, but I'm not entirely sure how to
-address it.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-See below.
+It is 2022.02.x, not 2020.02.x ;)
 
-> diff --git a/board/stmicroelectronics/stm32f746g-disco/rootfs_overlay/sbin/init b/board/stmicroelectronics/stm32f746g-disco/rootfs_overlay/sbin/init
-> new file mode 100755
-> index 0000000000..1285fd4420
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f746g-disco/rootfs_overlay/sbin/init
-> @@ -0,0 +1,41 @@
-> +#!/bin/sh
-> +
-> +# This script replaces the default busybox init process to avoid having that
-> +# process staying alive and sleeping in the background, (uselessly) consuming
-> +# precious memory.
+Committed to 2022.02.x, thanks.
 
-[...]
-
-What bothers me is that board/canaan/k210-soc/rootfs_overlay/sbin/init
-is exactly the same script, so we're duplicating it. Can we do
-something about it? I'm not exactly sure. A minimal "init" package for
-noMMU systems maybe?
-
-Also, do you really need this minimal init?
-stm32f469_disco_sd_defconfig doesn't need it apparently.
-
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10-rc5"
-
-Can we switch to a non-rc version?
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
