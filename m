@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9B14C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:35:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52CCCC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A35F86F9DC;
-	Tue, 21 Feb 2023 01:35:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A35F86F9DC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BFEE6058D;
+	Tue, 21 Feb 2023 01:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BFEE6058D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FkbBaXTSa3ZP; Tue, 21 Feb 2023 01:35:16 +0000 (UTC)
+	with ESMTP id 8rmY95bFuZnc; Tue, 21 Feb 2023 01:35:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B356470072;
-	Tue, 21 Feb 2023 01:35:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B356470072
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35D506FBE2;
+	Tue, 21 Feb 2023 01:35:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35D506FBE2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A1141BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5CAE41BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A8B8D6FC25
+ by smtp3.osuosl.org (Postfix) with ESMTP id A8A7D6FBFA
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8B8D6FC25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8A7D6FBFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZIXf5ftYBIDe for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+ with ESMTP id 3VqRwVochdeY for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B7E036FC11
+ by smtp3.osuosl.org (Postfix) with ESMTP id E75936FBEF
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7E036FC11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E75936FBEF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B25B281979; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+ id D5FA781979; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 14:24:36 +0100
+Date: Mon, 6 Feb 2023 14:28:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f461543d9c0f8ea1586004e51561ba0a37b8aecf
-X-Git-Newrev: b2661fe63990386cf2626ce1dd26919346ca86c0
+X-Git-Oldrev: efc223abd4fe764f8af8238aec67e8cb700db45e
+X-Git-Newrev: 3727229222f23d151a4991ef3db451df6362ce83
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205249.B25B281979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ti-sgx-km: properly
- handle legacy for removed options
+Message-Id: <20230220205249.D5FA781979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rpi-userland: fix typo
+ for BR2_aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,121 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2661fe63990386cf2626ce1dd26919346ca86c0
+commit: https://git.buildroot.net/buildroot/commit/?id=3727229222f23d151a4991ef3db451df6362ce83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit "c38b5566fe package/ti-sgx-{km, um, demos}: bump to latest TI
-version", added in release 2020.02, removed some options that were
-previously renamed in release 2018.05.
+Commit "59adb53c4c package/rpi-userland: add support for aarch64"
+introduced a typo in the condition that shows a comment in menuconfig.
 
-Update the legacy entry for 2018.05 and add the corresponding legacy
-entries for 2020.02.
+Fix the typo: BR2_arch64 -> BR2_aarch64
 
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Cc: Tim Gover <tim.gover@raspberrypi.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy | 66 +++++++++++++++++++++++++++++++++++---------------------
- 1 file changed, 42 insertions(+), 24 deletions(-)
+ package/rpi-userland/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 22d7fbe4be..42dbe6ef5a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -1759,6 +1759,35 @@ config BR2_PACKAGE_RPI_USERLAND_START_VCFILED
- 	help
- 	  The vcfiled support was removed upstream.
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index cfb472808b..4219bdb9c4 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -40,6 +40,6 @@ config BR2_PACKAGE_RPI_USERLAND_HELLO
+ endif
  
-+config BR2_PACKAGE_TI_SGX_KM_AM335X
-+	bool "ti-sgx-km AM335X option removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_TI_SGX_KM
-+	help
-+	  Starting from buildroot release 2020.02, the buildroot package
-+	  only supports the target am335x.
-+
-+config BR2_PACKAGE_TI_SGX_KM_AM437X
-+	bool "ti-sgx-km AM437X option removed"
-+	select BR2_LEGACY
-+	help
-+	  Starting from buildroot release 2020.02, the buildroot package
-+	  only supports the target am335x.
-+
-+config BR2_PACKAGE_TI_SGX_KM_AM4430
-+	bool "ti-sgx-km AM4430 option removed"
-+	select BR2_LEGACY
-+	help
-+	  Starting from buildroot release 2020.02, the buildroot package
-+	  only supports the target am335x.
-+
-+config BR2_PACKAGE_TI_SGX_KM_AM5430
-+	bool "ti-sgx-km AM5430 option removed"
-+	select BR2_LEGACY
-+	help
-+	  Starting from buildroot release 2020.02, the buildroot package
-+	  only supports the target am335x.
-+
- comment "Legacy options removed in 2019.11"
- 
- config BR2_PACKAGE_OPENVMTOOLS_PROCPS
-@@ -2732,45 +2761,34 @@ config BR2_PACKAGE_MEDIAART_BACKEND_QT
- 	  BR2_PACKAGE_MEDIAART_BACKEND_QT has been renamed to
- 	  BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
- 
--# Note: BR2_PACKAGE_TI_SGX_AM335X is still referenced from
--# package/ti-sgx-km/Config.in
- config BR2_PACKAGE_TI_SGX_AM335X
--	bool "ti-sgx-km AM335X option renamed"
-+	bool "ti-sgx-km AM335X option removed"
- 	select BR2_LEGACY
-+	select BR2_PACKAGE_TI_SGX_KM
- 	help
--	  For consistency reasons, the option
--	  BR2_PACKAGE_TI_SGX_AM335X has been renamed to
--	  BR2_PACKAGE_TI_SGX_KM_AM335X.
-+	  Starting from buildroot release 2020.02, the buildroot package
-+	  only supports the target am335x.
- 
--# Note: BR2_PACKAGE_TI_SGX_AM437X is still referenced from
--# package/ti-sgx-km/Config.in
- config BR2_PACKAGE_TI_SGX_AM437X
--	bool "ti-sgx-km AM437X option renamed"
-+	bool "ti-sgx-km AM437X option removed"
- 	select BR2_LEGACY
- 	help
--	  For consistency reasons, the option
--	  BR2_PACKAGE_TI_SGX_AM437X has been renamed to
--	  BR2_PACKAGE_TI_SGX_KM_AM437X.
-+	  Starting from buildroot release 2020.02, the buildroot package
-+	  only supports the target am335x.
- 
--# Note: BR2_PACKAGE_TI_SGX_AM4430 is still referenced from
--# package/ti-sgx-km/Config.in
- config BR2_PACKAGE_TI_SGX_AM4430
--	bool "ti-sgx-km AM4430 option renamed"
-+	bool "ti-sgx-km AM4430 option removed"
- 	select BR2_LEGACY
- 	help
--	  For consistency reasons, the option
--	  BR2_PACKAGE_TI_SGX_AM4430 has been renamed to
--	  BR2_PACKAGE_TI_SGX_KM_AM4430.
-+	  Starting from buildroot release 2020.02, the buildroot package
-+	  only supports the target am335x.
- 
--# Note: BR2_PACKAGE_TI_SGX_AM5430 is still referenced from
--# package/ti-sgx-km/Config.in
- config BR2_PACKAGE_TI_SGX_AM5430
--	bool "ti-sgx-km AM5430 option renamed"
-+	bool "ti-sgx-km AM5430 option removed"
- 	select BR2_LEGACY
- 	help
--	  For consistency reasons, the option
--	  BR2_PACKAGE_TI_SGX_AM5430 has been renamed to
--	  BR2_PACKAGE_TI_SGX_KM_AM5430.
-+	  Starting from buildroot release 2020.02, the buildroot package
-+	  only supports the target am335x.
- 
- config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
- 	bool "janus-gateway audio-bridge option renamed"
+ comment "rpi-userland needs a toolchain w/ C++, threads, dynamic library"
+-	depends on BR2_arm || BR2_arch64
++	depends on BR2_arm || BR2_aarch64
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
