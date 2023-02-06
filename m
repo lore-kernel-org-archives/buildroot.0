@@ -1,91 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A9F9C61DA4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 12:04:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4935FC05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A96981B36;
-	Mon,  6 Feb 2023 12:04:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A96981B36
+	by smtp3.osuosl.org (Postfix) with ESMTP id C398260B03;
+	Mon,  6 Feb 2023 13:01:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C398260B03
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tXQxtAJjHWpt; Mon,  6 Feb 2023 13:01:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B09D60B4E;
+	Mon,  6 Feb 2023 13:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B09D60B4E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CEDF01BF4D5
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:01:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B50D480F04
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:01:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B50D480F04
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2t5210XYT8ez; Mon,  6 Feb 2023 12:04:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBDBC81442;
-	Mon,  6 Feb 2023 12:04:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBDBC81442
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 135E71BF397
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 12:04:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0EE9410E0
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 12:04:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0EE9410E0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zeoBVD136lrZ for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 12:04:07 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JT28JHiowcpm for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 13:01:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A93A6409A5
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A93A6409A5
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 12:04:07 +0000 (UTC)
-Received: by mail-il1-x132.google.com with SMTP id k12so4576664ilv.10
- for <buildroot@buildroot.org>; Mon, 06 Feb 2023 04:04:07 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DA3780E48
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5DA3780E48
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 13:01:03 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ l21-20020a05600c1d1500b003dfe462b7e4so4663750wms.0
+ for <buildroot@buildroot.org>; Mon, 06 Feb 2023 05:01:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=sCwM/ljQTAxMd80XMJi8HCvLKE4slIqhVz/emowmomw=;
- b=PKqg2GRO7pgdlmEJmU8es+bTd6NBdXLw0rj8Af3Hzwkzc5Ea/UdOZe7G+dgDcfTE7u
- Ms/4ZIQif3hsoXN7ni69CagLABB4Fw+akB1blWO/sMRmr9+WsNZnSRkEdCm+ZI4YHi7P
- oQzeKEGOXB5pX81vDgEDbiF5xz8PFsJJMck+HtC6IgMUiwEXO3Va1WB2Gf/oK/HljI/i
- Lg0kOE8chfs+tGlo9+TZiH+KoyRA5qYmBw97VdE0x5cYMK3e5FsifqUT7CI2V5ZxRYBV
- 1K7OMWpAraYpcCF3Pe+h3tuiaIdj8p+ExSRURK+JJNOc4Rus6935li/mVNrDGiOFH/yi
- Ku0A==
-X-Gm-Message-State: AO0yUKUscz/XzrOoQZahhOeVMRGsbOQUkqwmJAqrs5cZCpG1+pEtucJw
- 1qp14V/p5ytFBwgh6uUwxROicYgKt2eOjQ==
-X-Google-Smtp-Source: AK7set/GOSkNdrEJqRNpZkretTvuKuptG2Qxvagd2bP+hLsuO2q8mj57zqC/ntvZ9z4kjQGukF6uUQ==
-X-Received: by 2002:a05:6e02:dc3:b0:313:b9d5:7d4a with SMTP id
- l3-20020a056e020dc300b00313b9d57d4amr3978632ilj.26.1675685046416; 
- Mon, 06 Feb 2023 04:04:06 -0800 (PST)
-Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
- [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- z12-20020a02938c000000b0039ea34dffcdsm3467587jah.129.2023.02.06.04.04.05
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/KrSOmsSRPqcir/0rw/xX+kZWT9UKau/hFEopU+1+w8=;
+ b=McFZjMkQfICM+p7hta3lHJTXlra88vr3dhE2Nc7dZG1wIt5bEjoCttN9iMTvl9UCgh
+ mLDbX5v5zds/ArPP7OEQoiJhNt+Ynh8xe+S9TVClSRXhs3ihpJgFOo2ZqzYc+nE/nNHw
+ 5PEmq/5DYOS30CUJpOsj6W1kpOVCotaPx+9bPhkXrUhEXd+cIkJ6hW2GVhelh3sJSEy+
+ JSNkCuwKmIylyH9slvdC8hg19TsBUfJW6+SvGoML3y7PoUc4EqwiCgkaPStwKopEB/8T
+ BHfxzWFY+NcLlWnFbsam9BP83jL8HENRfeuqaAAt5DWvBSZVKfmKFusYxIM7S+YGnMsz
+ qR1Q==
+X-Gm-Message-State: AO0yUKXz4LRCId3TVMsFizfJeocHFiQOt5LJQ0icwCn3Iuoalq1tmyB2
+ nMun2D0O6ByIt7tGzgXEq+uzL1zHPtwvtbND5q7WZA==
+X-Google-Smtp-Source: AK7set+dcfRt9oXF/XXzvIXzG6QtqPY2DBcOBmdEd6I0zSEobCIaoaMegNaRf8vdt69941FBE4yfiA==
+X-Received: by 2002:a05:600c:5543:b0:3df:5eb:828c with SMTP id
+ iz3-20020a05600c554300b003df05eb828cmr10796755wmb.32.1675688461246; 
+ Mon, 06 Feb 2023 05:01:01 -0800 (PST)
+Received: from localhost.localdomain (cpe1150018.bra.be.verixi.net.
+ [85.119.216.19]) by smtp.gmail.com with ESMTPSA id
+ n6-20020a05600c4f8600b003daf672a616sm11598226wmq.22.2023.02.06.05.01.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Feb 2023 04:04:05 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Mon, 06 Feb 2023 05:01:00 -0800 (PST)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon,  6 Feb 2023 05:04:00 -0700
-Message-Id: <20230206120400.3188421-2-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230206120400.3188421-1-james.hilliard1@gmail.com>
-References: <20230206120400.3188421-1-james.hilliard1@gmail.com>
+Date: Mon,  6 Feb 2023 14:00:57 +0100
+Message-Id: <20230206130057.352443-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=sCwM/ljQTAxMd80XMJi8HCvLKE4slIqhVz/emowmomw=;
- b=SjKKIx4SQw+bS+0uXH78HipKsh4W/SkwS2ijoNUpBsvHxnV8f82x9+1XYhYbBMd/0j
- +Qp3Jaw1Mykqrn0PyP9QQHo0YgKdQowCI7xiXoKwAUgTr5l7vthrXz8GkDFhhEfIon0F
- RR3qrP8UA/z6taoXbOMx4p/UXM+ylZKLzDFwLCjCRPFKJH1M2rgbeO4/tvi58UjjPEZ/
- iAFxHqc2w1Yu6IKYQBt+YSkflPt01kcRWTGU8laATfE6Vt+/g8vcxXd9REUl2NfYkoPR
- QwWuLDjc4yDAvfQIiqyk1MmDVeItcdVp1Ci1+NBHXqWxsK/gyXRZ+XTB2bF4K2lS66l1
- x9zA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=SjKKIx4S
-Subject: [Buildroot] [PATCH 2/2] package/python-pypa-build: bump to version
- 0.10.0
+ d=amarulasolutions.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/KrSOmsSRPqcir/0rw/xX+kZWT9UKau/hFEopU+1+w8=;
+ b=LMew00xXbiOUdZ8DW9sR8KLhOYNtzypier6P3DX0r08sscDN9Ucj9DDBGQxigEGgTI
+ e1QaZBTtivzbif4p+m5UymnR3rxalEVpdpCdvx1NeCuPSh70YvmKKcupvy7Zxu8H8QO0
+ KZTB2igsZ0X1DMqAgHcXqsE3R6uiSI4av0GcQ=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=LMew00xX
+Subject: [Buildroot] [PATCH] package/qt6/qt6serialbus: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,62 +92,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Jesse Van Gavere <jesseevg@gmail.com>, thomas.petazzoni@bootlin.com,
+ Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate to flit-bootstrap build backend.
+From: Jesse Van Gavere <jesseevg@gmail.com>
 
-Remove no longer needed host-python-pep517 dependency.
-
-Add new host-python-pyproject-hooks dependency.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/python-pypa-build/python-pypa-build.hash | 4 ++--
- package/python-pypa-build/python-pypa-build.mk   | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+v1->v2:
+* LICENSE/LICENSE_FILES: one per line
+* Selecting BR2_PACKAGE_QT6BASE_NETWORK to make the package compile,
+  fixes "Failed to find required Qt component "Network"."
 
-diff --git a/package/python-pypa-build/python-pypa-build.hash b/package/python-pypa-build/python-pypa-build.hash
-index 4c02ee1dce..9da56f9f68 100644
---- a/package/python-pypa-build/python-pypa-build.hash
-+++ b/package/python-pypa-build/python-pypa-build.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/build/json
--md5  f2dc1823b0eff7037e19be18e354b2f1  build-0.9.0.tar.gz
--sha256  1a07724e891cbd898923145eb7752ee7653674c511378eb9c7691aab1612bc3c  build-0.9.0.tar.gz
-+md5  742e7cd0a67455c1df90061b42088bd2  build-0.10.0.tar.gz
-+sha256  d5b71264afdb5951d6704482aac78de887c80691c52b88a9ad195983ca2c9269  build-0.10.0.tar.gz
- # Locally computed sha256 checksums
- sha256  aaf9a29ca5907971ccf07de025375db34539a8d5eeebce20b46099805722106f  LICENSE
-diff --git a/package/python-pypa-build/python-pypa-build.mk b/package/python-pypa-build/python-pypa-build.mk
-index adc124b074..d7c03323b7 100644
---- a/package/python-pypa-build/python-pypa-build.mk
-+++ b/package/python-pypa-build/python-pypa-build.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
+ package/qt6/Config.in                      |  1 +
+ package/qt6/qt6serialbus/Config.in         | 15 ++++++++
+ package/qt6/qt6serialbus/qt6serialbus.hash | 11 ++++++
+ package/qt6/qt6serialbus/qt6serialbus.mk   | 45 ++++++++++++++++++++++
+ 4 files changed, 72 insertions(+)
+ create mode 100644 package/qt6/qt6serialbus/Config.in
+ create mode 100644 package/qt6/qt6serialbus/qt6serialbus.hash
+ create mode 100644 package/qt6/qt6serialbus/qt6serialbus.mk
+
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 4b2b9a1174..b0cc008df5 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -39,6 +39,7 @@ menuconfig BR2_PACKAGE_QT6
+ if BR2_PACKAGE_QT6
  
--PYTHON_PYPA_BUILD_VERSION = 0.9.0
-+PYTHON_PYPA_BUILD_VERSION = 0.10.0
- PYTHON_PYPA_BUILD_SOURCE = build-$(PYTHON_PYPA_BUILD_VERSION).tar.gz
--PYTHON_PYPA_BUILD_SITE = https://files.pythonhosted.org/packages/0f/61/aaf43fbb36cc4308be8ac8088f52db9622b0dbf1f0880c1016ae6aa03f46
-+PYTHON_PYPA_BUILD_SITE = https://files.pythonhosted.org/packages/de/1c/fb62f81952f0e74c3fbf411261d1adbdd2d615c89a24b42d0fe44eb4bcf3
- PYTHON_PYPA_BUILD_LICENSE = MIT
- PYTHON_PYPA_BUILD_LICENSE_FILES = LICENSE
--PYTHON_PYPA_BUILD_SETUP_TYPE = setuptools
-+PYTHON_PYPA_BUILD_SETUP_TYPE = flit-bootstrap
- HOST_PYTHON_PYPA_BUILD_DEPENDENCIES = \
- 	host-python-packaging \
--	host-python-pep517
-+	host-python-pyproject-hooks
+ source "package/qt6/qt6base/Config.in"
++source "package/qt6/qt6serialbus/Config.in"
+ source "package/qt6/qt6serialport/Config.in"
  
- $(eval $(host-python-package))
+ endif
+diff --git a/package/qt6/qt6serialbus/Config.in b/package/qt6/qt6serialbus/Config.in
+new file mode 100644
+index 0000000000..1f24310e61
+--- /dev/null
++++ b/package/qt6/qt6serialbus/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_QT6SERIALBUS
++	bool "qt6serialbus"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6 # CAN FD
++	select BR2_PACKAGE_QT6SERIALPORT
++	select BR2_PACKAGE_QT6BASE_NETWORK
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt6serialbus module.
++
++	  https://doc.qt.io/qt-6/qtserialbus-index.html
++
++comment "qt6serialbus needs headers >= 3.6"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.hash b/package/qt6/qt6serialbus/qt6serialbus.hash
+new file mode 100644
+index 0000000000..57b68f47e8
+--- /dev/null
++++ b/package/qt6/qt6serialbus/qt6serialbus.hash
+@@ -0,0 +1,11 @@
++# Downloaded from https://download.qt.io/archive/qt/6.4/6.4.0/submodules/qtserialbus-everywhere-src-6.4.0.tar.xz.sha256
++sha256  efca55677c12085a85b6c0e0f401332922ebc8226b18b7fc9bb9c0d48549ea91  qtserialbus-everywhere-src-6.4.0.tar.xz
++
++# Hashes for license files:
++sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
++sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
++sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
++sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.mk b/package/qt6/qt6serialbus/qt6serialbus.mk
+new file mode 100644
+index 0000000000..fe69119a58
+--- /dev/null
++++ b/package/qt6/qt6serialbus/qt6serialbus.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# qt6serialbus
++#
++################################################################################
++
++QT6SERIALBUS_VERSION = $(QT6_VERSION)
++QT6SERIALBUS_SITE = $(QT6_SITE)
++QT6SERIALBUS_SOURCE = qtserialbus-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALBUS_VERSION).tar.xz
++QT6SERIALBUS_INSTALL_STAGING = YES
++QT6SERIALBUS_SUPPORTS_IN_SOURCE_BUILD = NO
++
++QT6SERIALBUS_LICENSE = \
++	GPL-2.0+ or LGPL-3.0, \
++	GPL-3.0, GFDL-1.3 no invariants (docs)
++
++QT6SERIALBUS_LICENSE_FILES = \
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/GPL-3.0-only.txt \
++	LICENSES/LGPL-3.0-only.txt \
++	LICENSES/GFDL-1.3-no-invariants-only.txt
++
++QT6SERIALBUS_CONF_OPTS = \
++	-GNinja \
++	-DQT_HOST_PATH=$(HOST_DIR) \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF
++
++QT6SERIALBUS_DEPENDENCIES = \
++	qt6serialport
++
++define QT6SERIALBUS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERIALBUS_BUILDDIR)
++endef
++
++define QT6SERIALBUS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6SERIALBUS_BUILDDIR) --prefix $(STAGING_DIR)/usr
++endef
++
++define QT6SERIALBUS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6SERIALBUS_BUILDDIR) --prefix $(TARGET_DIR)/usr
++endef
++
++$(eval $(cmake-package))
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
