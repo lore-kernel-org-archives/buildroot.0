@@ -4,48 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE0BC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 10:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8B74C05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 10:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DEBF4157D;
-	Mon,  6 Feb 2023 10:55:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DEBF4157D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43990409E7;
+	Mon,  6 Feb 2023 10:57:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43990409E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f4nVuOG9fyat; Mon,  6 Feb 2023 10:55:34 +0000 (UTC)
+	with ESMTP id wVl0BpsXVjIj; Mon,  6 Feb 2023 10:57:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BF6E416A5;
-	Mon,  6 Feb 2023 10:55:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BF6E416A5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 971A91BF2CF
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:54:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDD6A409FE;
+	Mon,  6 Feb 2023 10:57:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDD6A409FE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1105D1BF2CF
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:57:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7051D402EB
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:54:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7051D402EB
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE963409FE
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:57:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE963409FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mCpPQLO5asmc for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 10:54:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6CDBB40339
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 10:54:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CDBB40339
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57344835C2; Mon,  6 Feb 2023 10:54:50 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 11:26:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 316e149611a761db04171ee6141048d9057183c8
-X-Git-Newrev: 4bbda72743d39df29dfc91e0f52be02b2d465f6d
-X-Patchwork-Hint: ignore
-Message-Id: <20230206105450.57344835C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/checkpackagelib: warn about
- redefined config
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N09ijNeDRjoj for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 10:57:01 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17D0E409E3
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 17D0E409E3
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 10:57:01 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1CD1F13F87F;
+ Mon,  6 Feb 2023 11:56:50 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 06 Feb 2023 11:56:49 +0100
+Date: Mon, 6 Feb 2023 11:56:49 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: KAMenyaev@sberdevices.ru
+Message-ID: <20230206105649.GA3565@scaer>
+References: <20220920232154.1219792-1-KAMenyaev@sberdevices.ru>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220920232154.1219792-1-KAMenyaev@sberdevices.ru>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1675681018;
+ bh=enSfB7A6TUk7lFQ3rk1/rWL9nVEF16zIzSepmHrDn8c=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Xlod4XvdU1WreYRO6Pzpkg+bUQj3Nu75h9kZamPX0DnxKMR4+rYH4ZQQ84ucK+Am9
+ u7Q4LFzDBCJD0ji9vwFUkEIHX1ERT2ISrC8pCXo08CeHkyULmvyCjBzub03ifbWJ6M
+ OVvgaGPa8DmWxDbOT3bMPnLCLJpxxNO6Mi6oxKdSqyBTpUbiwyoy/uZuDYcZAstwFR
+ x1tJ0zg0P/yRt64sQTPfOWqMMM160pdOyl896k7bZDVLsPa1+dfl5yqrgfVGrNFYVy
+ UkxEZrs4agKxTY0wX2HueFMYTak7ZQH6Mw+RrSPXI0RzWMbhdnJlyKPplHmeW0KaWI
+ nL38f4won6Ykg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Xlod4Xvd
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-iniparse: add
+ host-python-iniparse
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,167 +76,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>, sdfw_system_team@sberdevices.ru,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bbda72743d39df29dfc91e0f52be02b2d465f6d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Konstantin, All,
 
-Warn the developer in the case the same config is declared more than
-once in the same Config.in file.
-But take into account the conditional code that lets the config be
-visible and warn only when it is declared more than once in the same
-conditions.
-For instance, do not warn for:
- if BR2_PACKAGE_BUSYBOX
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
+On 2022-09-21 02:21 +0300, KAMenyaev@sberdevices.ru spake thusly:
+> From: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
+> 
+> Make the host variant of python-iniparse
+> as host-crudini dependency.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- utils/checkpackagelib/lib_config.py      | 38 ++++++++++++++++
- utils/checkpackagelib/test_lib_config.py | 78 ++++++++++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
+I added a note why we need a Config.in.host entry (usually, for libs, we
+do not add one, but here we must slect pythn-six, which has one).
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index b05831f2c3..f26ca0d898 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -233,3 +233,41 @@ class Indent(_CheckFunction):
-                 return ["{}:{}: should not be indented"
-                         .format(self.filename, lineno),
-                         text]
-+
-+
-+class RedefinedConfig(_CheckFunction):
-+    CONFIG = re.compile(r"^\s*(menu|)config\s+(BR2_\w+)\b")
-+    IF = re.compile(r"^\s*if\s+([^#]*)\b")
-+    ENDIF = re.compile(r"^\s*endif\b")
-+
-+    def before(self):
-+        self.configs = {}
-+        self.conditional = []
-+
-+    def check_line(self, lineno, text):
-+        if _empty_or_comment(text) or _part_of_help_text(text):
-+            return
-+
-+        m = self.IF.search(text)
-+        if m is not None:
-+            condition = m.group(1)
-+            self.conditional.append(condition)
-+            return
-+
-+        m = self.ENDIF.search(text)
-+        if m is not None:
-+            self.conditional.pop()
-+            return
-+
-+        m = self.CONFIG.search(text)
-+        if m is None:
-+            return
-+        config = m.group(2)
-+
-+        key = (config, ' AND '.join(self.conditional))
-+        if key in self.configs.keys():
-+            previous_line = self.configs[key]
-+            return ["{}:{}: config {} redeclared (previous line: {})"
-+                    .format(self.filename, lineno, config, previous_line),
-+                    text]
-+        self.configs[key] = lineno
-diff --git a/utils/checkpackagelib/test_lib_config.py b/utils/checkpackagelib/test_lib_config.py
-index 91a549adf2..474d17105e 100644
---- a/utils/checkpackagelib/test_lib_config.py
-+++ b/utils/checkpackagelib/test_lib_config.py
-@@ -385,3 +385,81 @@ Indent = [
- def test_Indent(testname, filename, string, expected):
-     warnings = util.check_file(m.Indent, filename, string)
-     assert warnings == expected
-+
-+
-+RedefinedConfig = [
-+    ('no redefinition',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO_BAR\n'
-+     'bool "foo"\n',
-+     []),
-+    ('no conditional',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_BAR\n'
-+     'bool "bar"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n',
-+     [['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('three times',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n',
-+     [['any:3: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n'],
-+      ['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('same conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_BAR\n'
-+     'bool "bar"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     [['any:6: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('equivalent conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     [['any:8: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('not equivalent conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'if !BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     []),
-+    ]
-+
-+
-+@pytest.mark.parametrize('testname,filename,string,expected', RedefinedConfig)
-+def test_RedefinedConfig(testname, filename, string, expected):
-+    warnings = util.check_file(m.RedefinedConfig, filename, string)
-+    assert warnings == expected
+> Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
+> ---
+[--SNIP--]
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index f437ef680c..fb805577d1 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -72,6 +72,7 @@ menu "Host utilities"
+>  	source "package/pkgconf/Config.in.host"
+>  	source "package/pru-software-support/Config.in.host"
+>  	source "package/pwgen/Config.in.host"
+> +	source "package/python-iniparse/Config.in.host
+
+I reordered this in alphabetical order.
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+>  	source "package/python-cython/Config.in.host"
+>  	source "package/python-greenlet/Config.in.host"
+>  	source "package/python-kflash/Config.in.host"
+> diff --git a/package/python-iniparse/Config.in.host b/package/python-iniparse/Config.in.host
+> new file mode 100644
+> index 0000000000..e93022e815
+> --- /dev/null
+> +++ b/package/python-iniparse/Config.in.host
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_HOST_PYTHON_INIPARSE
+> +	bool "host python-iniparse"
+> +	select BR2_PACKAGE_HOST_PYTHON_SIX # runtime
+> +	help
+> +	  iniparse is an INI parser for Python which is API compatible
+> +	  with the standard library's ConfigParser, preserves
+> +	  structure of INI files (order of sections & options,
+> +	  indentation, comments, and blank lines are preserved when
+> +	  data is updated), and is more convenient to use.
+> +
+> +	  https://pypi.python.org/pypi/iniparse
+> diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
+> index d31a490bd8..e76987d1e9 100644
+> --- a/package/python-iniparse/python-iniparse.mk
+> +++ b/package/python-iniparse/python-iniparse.mk
+> @@ -12,3 +12,4 @@ PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
+>  PYTHON_INIPARSE_SETUP_TYPE = setuptools
+>  
+>  $(eval $(python-package))
+> +$(eval $(host-python-package))
+> -- 
+> 2.37.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
