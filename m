@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C05EC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 10:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73298C05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 10:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1580B402F3;
-	Mon,  6 Feb 2023 10:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1580B402F3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E81F4031D;
+	Mon,  6 Feb 2023 10:19:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E81F4031D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UTMoi-1kLDDm; Mon,  6 Feb 2023 10:17:47 +0000 (UTC)
+	with ESMTP id eF7Sw4-Axde0; Mon,  6 Feb 2023 10:19:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49E78402E4;
-	Mon,  6 Feb 2023 10:17:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49E78402E4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DC6F31BF2CF
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:17:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7448B402E4;
+	Mon,  6 Feb 2023 10:19:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7448B402E4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 711871BF2CF
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:19:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6707605E3
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:17:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6707605E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A05B41608
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:19:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A05B41608
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dujvxcqIhNWx for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 10:17:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E27D960598
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 10:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E27D960598
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFC8083A3D; Mon,  6 Feb 2023 10:17:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MBUtk8CdCTBN for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 10:19:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06B1B41605
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 06B1B41605
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 10:19:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A0B0A6000D;
+ Mon,  6 Feb 2023 10:19:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pOybE-00Dne7-Eu; Mon, 06 Feb 2023 11:19:48 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 11:17:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11d98385f56e61e2928707f056c001ceec5d06e9
-X-Git-Newrev: c6929c0cdd944c86b0affbe04cf72c2c0398da64
-X-Patchwork-Hint: ignore
-Message-Id: <20230206101742.CFC8083A3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iwd: bump to version 2.3
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230205145532.659422-1-fontaine.fabrice@gmail.com>
+Date: Mon, 06 Feb 2023 11:19:48 +0100
+In-Reply-To: <20230205145532.659422-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 5 Feb 2023 15:55:32 +0100")
+Message-ID: <875ycfdrjv.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/tmux: bump to version 3.3a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +63,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6929c0cdd944c86b0affbe04cf72c2c0398da64
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/iwd/iwd.hash | 2 +-
- package/iwd/iwd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > systemd is an optional dependency since
+ > https://github.com/tmux/tmux/commit/fc7f1e7acb3539a43df46136e971f770515e0b0d
 
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index be048b3da6..1647f93d9e 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
--sha256  dfeada6d1680221fb128dc6be50fc2d6b40e314b98458acbd696418f8da5c570  iwd-2.2.tar.xz
-+sha256  b0506d797a8bfb88f3c3eeea5e49dcf4ee8e6cef118f57c118e587eeb377ac64  iwd-2.3.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index b0a2f6e9ed..c54031b102 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IWD_VERSION = 2.2
-+IWD_VERSION = 2.3
- IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
- IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
- IWD_LICENSE = LGPL-2.1+
+ > https://github.com/tmux/tmux/blob/3.3a/CHANGES
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
