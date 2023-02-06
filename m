@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655DEC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 411F7C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 206B86FC17;
-	Tue, 21 Feb 2023 01:36:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 206B86FC17
+	by smtp3.osuosl.org (Postfix) with ESMTP id F05F370021;
+	Tue, 21 Feb 2023 01:36:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F05F370021
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vEUgXO6Wa-tK; Tue, 21 Feb 2023 01:36:07 +0000 (UTC)
+	with ESMTP id tyrKxHMkJzVO; Tue, 21 Feb 2023 01:36:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5D0E7007D;
-	Tue, 21 Feb 2023 01:36:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5D0E7007D
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5D817002D;
+	Tue, 21 Feb 2023 01:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5D817002D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 600211BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 632171BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 166C16FC21
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A2A96FC2C
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 166C16FC21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A2A96FC2C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IxPMVe_LBuh4 for <buildroot@lists.busybox.net>;
+ with ESMTP id 4eqj3xbdlrCO for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F290C6FC1E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F290C6FC1E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 14F60610A4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14F60610A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF4D3828C8; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-From: Arnout Vandecappelle <arnout@mind.be>
+ id 132D581979; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 15:54:38 +0100
+Date: Mon, 6 Feb 2023 16:30:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 00410ab668833d822f645fffd782ce11253457b1
-X-Git-Newrev: 579b65b55234d298570e5191efb509905933eef5
+X-Git-Oldrev: 01ce9e95eb4f7fb731b20f3973edd582d4640084
+X-Git-Newrev: aa7d11a2ad984930eb8e8830c44cbabebdcf8568
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205249.EF4D3828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/genrandconfig: migrate
- to asyncio subprocess calls
+Message-Id: <20230220205250.132D581979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/xdriver_xf86-video-imx-viv: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,217 +63,173 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=579b65b55234d298570e5191efb509905933eef5
+commit: https://git.buildroot.net/buildroot/commit/?id=aa7d11a2ad984930eb8e8830c44cbabebdcf8568
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since genrandconfig no longer appears to support python2 we can
-migrate the subprocess calls to use asyncio variants.
+Commit 424f53ac0730 (package/freescale-imx/imx-gpu-viv: drop X11 output)
+dropped BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11 which xdriver_xf86-video-imx-viv
+depends on, so the package is no longer selectable.
 
-This has the advantage of allowing for runners like autobuild-run to
-integrate directly into genrandconfig by calling the asyncio
-gen_config using importlib instead of having to run genrandconfig as
-a subprocess.
+So drop the package and add a legacy symbol for it.
 
-Using asyncio is advantageous here as it eliminates the requirement
-for the runner to deal with blocking subprocess calls(by having to
-use threading for example).
-
-Also cleanup some unused functions/python2 compatibility shims.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 85 +++++++++++++++++++++++++++++++++++------------------
- 1 file changed, 56 insertions(+), 29 deletions(-)
+ Config.in.legacy                                   |  6 +++
+ DEVELOPERS                                         |  2 -
+ package/x11r7/Config.in                            |  1 -
+ package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 44 ----------------------
+ .../xdriver_xf86-video-imx-viv.hash                |  3 --
+ .../xdriver_xf86-video-imx-viv.mk                  | 34 -----------------
+ 6 files changed, 6 insertions(+), 84 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index b4ebb9a9be..b3576f8a51 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -19,24 +19,19 @@
- # This script generates a random configuration for testing Buildroot.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 191a209eeb..8b7ecd840b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -197,6 +197,12 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+ 	help
+ 	  The X11 output was dropped by NXP.
  
- from binascii import hexlify
--import contextlib
-+import asyncio
- import csv
- import os
- from random import randint
--import subprocess
- import sys
- import traceback
- from distutils.version import StrictVersion
- import platform
++config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
++	bool "xf86-video-imx-viv has been removed"
++	select BR2_LEGACY
++	help
++	  The X11 output was dropped by NXP.
++
+ config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
+ 	string "the QEMU specific targets option has been removed"
+ 	help
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 97c28fbdd8..6597225ac3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1106,7 +1106,6 @@ F:	package/gstreamer1/gst1-imx/
+ F:	package/libimxvpuapi/
+ F:	package/mfgtools/
+ F:	package/sshpass/
+-F:	package/x11r7/xdriver_xf86-video-imx-viv/
  
--if sys.hexversion >= 0x3000000:
--    import urllib.request as _urllib
-+if sys.version_info < (3, 8):
-+    from asyncio import coroutine
- else:
--    import urllib2 as _urllib
+ N:	Geoff Levand <geoff@infradead.org>
+ F:	package/flannel/
+@@ -1487,7 +1486,6 @@ F:	package/lxc/
+ F:	package/strongswan/
+ F:	package/wmctrl/
+ F:	package/x11r7/xdriver_xf86-video-imx/
+-F:	package/x11r7/xdriver_xf86-video-imx-viv/
+ 
+ N:	Jesse Van Gavere <jesseevg@gmail.com>
+ F:	package/qt6/
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 4d3613cf4d..365de34c98 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -165,7 +165,6 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xdriver_xf86-video-geode/Config.in
+ 		source package/x11r7/xdriver_xf86-video-i128/Config.in
+ 		source package/x11r7/xdriver_xf86-video-imx/Config.in
+-		source package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+ 		source package/x11r7/xdriver_xf86-video-intel/Config.in
+ 		source package/x11r7/xdriver_xf86-video-mach64/Config.in
+ 		source package/x11r7/xdriver_xf86-video-mga/Config.in
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+deleted file mode 100644
+index 984f63d6d3..0000000000
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
++++ /dev/null
+@@ -1,44 +0,0 @@
+-config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+-	bool "xf86-video-imx-viv"
+-	depends on BR2_PACKAGE_HAS_LIBGL
+-	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+-	depends on BR2_PACKAGE_IMX_GPU_G2D
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
+-	select BR2_PACKAGE_LIBDRM
+-	select BR2_PACKAGE_XORGPROTO
+-	help
+-	  X.Org driver for iMX6 GPU (Vivante)
 -
+-	  Notice EGL and GLes2 APIs are correctly supported. This
+-	  driver should also be able to provide Desktop OpenGL
+-	  implementation but, this feature seems broken since quite
+-	  some time.
 -
--def urlopen_closing(uri):
--    return contextlib.closing(_urllib.urlopen(uri))
-+    from types import coroutine
- 
- 
- class SystemInfo:
-@@ -65,6 +60,7 @@ class SystemInfo:
-         # --
-         return None
- 
-+    @coroutine
-     def has(self, prog):
-         """Checks whether a program is available.
-         Lazily evaluates missing entries.
-@@ -80,11 +76,13 @@ class SystemInfo:
-         have_it = self.find_prog(prog)
-         # java[c] needs special care
-         if have_it and prog in ('java', 'javac'):
--            with open(os.devnull, "w") as devnull:
--                if subprocess.call("%s -version | grep gcj" % prog,
--                                   shell=True,
--                                   stdout=devnull, stderr=devnull) != 1:
--                    have_it = False
-+            proc = yield from asyncio.create_subprocess_shell(
-+                "%s -version | grep gcj" % prog,
-+                stdout=asyncio.subprocess.DEVNULL,
-+                stderr=asyncio.subprocess.DEVNULL)
-+            ret = yield from proc.wait()
-+            if ret != 1:
-+                have_it = False
-         # --
-         self.progs[prog] = have_it
-         return have_it
-@@ -161,6 +159,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
-     return configs
- 
- 
-+@coroutine
- def is_toolchain_usable(configfile, config):
-     """Check if the toolchain is actually usable."""
- 
-@@ -181,7 +180,11 @@ def is_toolchain_usable(configfile, config):
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
--            ldd_version_output = subprocess.check_output(['ldd', '--version'])
-+            proc = yield from asyncio.create_subprocess_exec(
-+                'ldd', '--version', stdout=asyncio.subprocess.PIPE)
-+            ldd_version_output, _ = yield from proc.communicate()
-+            if proc.returncode:
-+                return False
-             glibc_version = ldd_version_output.decode().splitlines()[0].split()[-1]
-             if StrictVersion('2.14') > StrictVersion(glibc_version):
-                 print("WARN: ignoring the Linaro ARM toolchains because too old host glibc", file=sys.stderr)
-@@ -190,6 +193,7 @@ def is_toolchain_usable(configfile, config):
-     return True
- 
- 
-+@coroutine
- def fixup_config(sysinfo, configfile):
-     """Finalize the configuration and reject any problematic combinations
- 
-@@ -206,7 +210,8 @@ def fixup_config(sysinfo, configfile):
- 
-     BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
- 
--    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not sysinfo.has("java"):
-+    has_java = yield from sysinfo.has("java")
-+    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not has_java:
-         return False
-     # The ctng toolchain is affected by PR58854
-     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
-@@ -649,6 +654,7 @@ def fixup_config(sysinfo, configfile):
-     return True
- 
- 
-+@coroutine
- def gen_config(args):
-     """Generate a new random configuration
- 
-@@ -707,7 +713,8 @@ def gen_config(args):
- 
-     # Randomly enable BR2_REPRODUCIBLE 10% of times
-     # also enable tar filesystem images for testing
--    if sysinfo.has("diffoscope") and randint(0, 10) == 0:
-+    has_diffoscope = yield from sysinfo.has("diffoscope")
-+    if has_diffoscope and randint(0, 10) == 0:
-         configlines.append("BR2_REPRODUCIBLE=y\n")
-         configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
- 
-@@ -721,10 +728,14 @@ def gen_config(args):
-     with open(configfile, "w+") as configf:
-         configf.writelines(configlines)
- 
--    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                           "olddefconfig"])
-+    proc = yield from asyncio.create_subprocess_exec(
-+        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
-+    ret = yield from proc.wait()
-+    if ret:
-+        return ret
- 
--    if not is_toolchain_usable(configfile, toolchainconfig):
-+    toolchain_usable = yield from is_toolchain_usable(configfile, toolchainconfig)
-+    if not toolchain_usable:
-         return 2
- 
-     # Now, generate the random selection of packages, and fixup
-@@ -744,19 +755,31 @@ def gen_config(args):
-             "KCONFIG_PROBABILITY=%d" % randint(1, 20),
-             "randpackageconfig" if args.toolchains_csv else "randconfig"
-         ]
--        subprocess.check_call(make_rand)
-+        proc = yield from asyncio.create_subprocess_exec(*make_rand)
-+        ret = yield from proc.wait()
-+        if ret:
-+            return ret
- 
--        if fixup_config(sysinfo, configfile):
-+        ret = yield from fixup_config(sysinfo, configfile)
-+        if ret:
-             break
- 
--    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                           "olddefconfig"])
-+    proc = yield from asyncio.create_subprocess_exec(
-+        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
-+    ret = yield from proc.wait()
-+    if ret:
-+        return ret
- 
--    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                           "savedefconfig"])
-+    proc = yield from asyncio.create_subprocess_exec(
-+        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "savedefconfig")
-+    ret = yield from proc.wait()
-+    if ret:
-+        return ret
- 
--    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                            "dependencies"])
-+    proc = yield from asyncio.create_subprocess_exec(
-+        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "dependencies")
-+    ret = yield from proc.wait()
-+    return ret
- 
- 
- if __name__ == '__main__':
-@@ -788,7 +811,11 @@ if __name__ == '__main__':
-     args.outputdir = os.path.abspath(args.outputdir)
- 
-     try:
--        ret = gen_config(args)
-+        if sys.version_info < (3, 7):
-+            loop = asyncio.get_event_loop()
-+            ret = loop.run_until_complete(gen_config(args))
-+        else:
-+            ret = asyncio.run(gen_config(args))
-     except Exception:
-         traceback.print_exc()
-         parser.exit(1)
+-	  To use this driver, add correct configuration to your
+-	  /etc/X11/xorg.conf:
+-
+-	  Section "Device"
+-	    [...]
+-	    Driver          "vivante"
+-	    Option          "vivante_fbdev" "/dev/fbX"
+-	  EndSection
+-
+-	  Don't forget to load galcore.ko and create /dev/galcore
+-	  before using this driver (else, Xorg will exit with an
+-	  obscure message like "Segmentation fault at address 0xc").
+-
+-comment "xf86-video-imx-viv needs an OpenGL backend"
+-	depends on BR2_arm
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+-
+-comment "xf86-video-imx-viv depends on imx-gpu-viv with X11 output"
+-	depends on BR2_arm
+-	depends on !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+-
+-comment "xf86-video-imx-viv depends on imx-gpu-g2d"
+-	depends on BR2_arm
+-	depends on !BR2_PACKAGE_IMX_GPU_G2D
+-	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+deleted file mode 100644
+index b79c236478..0000000000
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  8fe1f57334b22926d4ff3b0b9fdf50af835a99cdfd0ad3ba6a604b226b723e89  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga.tar.gz
+-sha256  9d3e373f0440cc0c58853e963636a7c1ffda9308ec5f30ebe9adfb9c16a8a1e4  COPYING-MIT
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+deleted file mode 100644
+index 3b346f323a..0000000000
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ /dev/null
+@@ -1,34 +0,0 @@
+-################################################################################
+-#
+-# xdriver_xf86-video-imx-viv
+-#
+-################################################################################
+-
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_4.9.x_1.0.0_ga
+-XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(call github,nxp-imx,xf86-video-imx-vivante,$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION))
+-XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv imx-gpu-g2d xserver_xorg-server \
+-	xorgproto libdrm
+-XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE_FILES = COPYING-MIT
+-XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
+-XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/EXA/src -f makefile.linux
+-
+-define XDRIVER_XF86_VIDEO_IMX_VIV_BUILD_CMDS
+-	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) sysroot=$(STAGING_DIR) \
+-		BUSID_HAS_NUMBER=1 BUILD_IN_YOCTO=1 XSERVER_GREATER_THAN_13=1 \
+-		CFLAGS="$(TARGET_CFLAGS)"
+-endef
+-
+-define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING_CMDS
+-	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) prefix=$(STAGING_DIR)/usr install
+-	$(INSTALL) -D -m 644 $(@D)/EXA/src/vivante_gal/vivante_priv.h \
+-		$(STAGING_DIR)/usr/include/vivante_priv.h
+-	$(INSTALL) -D -m 644 $(@D)/EXA/src/vivante_gal/vivante_gal.h \
+-		$(STAGING_DIR)/usr/include/vivante_gal.h
+-endef
+-
+-define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_TARGET_CMDS
+-	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) prefix=$(TARGET_DIR)/usr install
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
