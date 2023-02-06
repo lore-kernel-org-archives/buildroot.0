@@ -1,85 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23D3DC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 20:59:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F927C636D3
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 21:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91F334173E;
-	Mon,  6 Feb 2023 20:59:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91F334173E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3786E60BFD;
+	Mon,  6 Feb 2023 21:08:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3786E60BFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0AXkzTTk79gL; Mon,  6 Feb 2023 20:59:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dMGX9UzRsSw0; Mon,  6 Feb 2023 21:08:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6D1541739;
-	Mon,  6 Feb 2023 20:59:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6D1541739
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8A6921BF2A7
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 20:59:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AEA660BFE;
+	Mon,  6 Feb 2023 21:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AEA660BFE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 830B41BF951
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7198A4174F
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 20:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7198A4174F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5CBB360BFE
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:08:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CBB360BFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 78aHp3PX-ufq for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 20:59:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21D004173E
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 21D004173E
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 20:59:08 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id qw12so37973714ejc.2
- for <buildroot@buildroot.org>; Mon, 06 Feb 2023 12:59:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=g7SW4NVP4pWl8pBc9id7QlZ39AClkADJZVJ5WKDZWZk=;
- b=1stO7v/FCwcoMRIat0CWf72Ypx1JbyKnTIIncDUSk9Q/BduvKX0C0iRU1ICUwm/YEP
- xBSIia+Y5zQkHWTOCshzR4ZVToFprTX3w2aaNCZiONNwFXNO0TJFt986aPHZXcIq3iTV
- DoKwy//ZqTa0dqt94VsJJnm8eaJXWogfWrzgieA4FMGAFgOBQQIujWouEoQql3zLjsgU
- wR2oAt4fLZ3ivWIpBJmOjVZQFu9bpTwRYRTFXgzpJTDhi5gxJJ/56DQJ0CUp0hVDvux0
- Pl98JE985IVeTpwLFQbgZSv9tksZs/7K7DvjFc0X+mqx21HtcKR7knOqhiG9j37xqAxS
- LdPQ==
-X-Gm-Message-State: AO0yUKWgoWk0Mnbc9H2CJYOeEFkDSX/VbRJEfKRKZX3Ak9lv3alZvoXj
- pRClnY28bWi35fK2N4rUy4iXeNn+saVTqPxA4FIrI99jBo0=
-X-Google-Smtp-Source: AK7set/tZ5N61IIqb/H0BEPfIsHt03rbeQccIJLit+CaJcWVSEoVPz60+jDlUYPeQ/FeKxPNSlCKFs2M4Yzhz2KtACc=
-X-Received: by 2002:a17:906:29cc:b0:886:221b:44e3 with SMTP id
- y12-20020a17090629cc00b00886221b44e3mr224337eje.40.1675717146215; Mon, 06 Feb
- 2023 12:59:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20221126003807.462157-1-pevik@seznam.cz>
- <20230206112156.GC3565@scaer>
-In-Reply-To: <20230206112156.GC3565@scaer>
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 6 Feb 2023 21:58:54 +0100
-Message-ID: <CAB1t1CzEZsN5kGcr35+tSW36z6cNaUitAou5_fStHMzwuu0uHg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=g7SW4NVP4pWl8pBc9id7QlZ39AClkADJZVJ5WKDZWZk=;
- b=h4XzyoLKIjhrqMg8v7Pn07klq1ojS+LyIndb7SmDYfzSruoRq15nK/WZxlkBiEIAQW
- 8OT9lW2B6xet+c9RhX9dlHZuIf/t6+W+d3pj1J/2jQbq4/UBOPchWzGnKYv1FTbEC3yX
- qIDklZrxLBhQsVwmDGWGfgBqDwnrB9oqa8PXKBAMHFvYB5dEZ8/sCRU/rOhAb7nVWh0M
- FTucdiMghsn1ERfuvPydKRjZovWmRlWrvUa4Vn0FN8YkJ7eMg7fU34MSn9XGV9oavPIZ
- X01RX+I76URWYapM9KkBzNldDmy5aVA94MXLt1+ZT8hb3DA7bbuxjbabp1UxFnHwWiGe
- nbMQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=h4XzyoLK
-Subject: Re: [Buildroot] [PATCH 1/1] package/iputils: bump version to
- 20221126
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k6mxYa-UYoPi for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 21:08:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83A1C60BFD
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 21:08:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83A1C60BFD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 71BC983CFF; Mon,  6 Feb 2023 21:08:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 Feb 2023 18:54:18 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d631615eb1b833977003039626a0194589334f45
+X-Git-Newrev: dd28acc1e8085c15d12e233090550580dafe1f96
+X-Patchwork-Hint: ignore
+Message-Id: <20230206210854.71BC983CFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Makefile: add target to update
+ .checkpackageignore
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,20 +56,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org, Petr Vorel <pevik@seznam.cz>,
- Matt Weber <matthew.weber@collins.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=dd28acc1e8085c15d12e233090550580dafe1f96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-thanks a lot for merging. I completely forgot on this patch, I'm glad
-it was not lost in the queue.
+When a developer fixes an ignored warning from check-package, he/she
+needs to update .checkpackageignore
+By running './utils/docker-run make check-package' the developer
+receives a warning about this.
+Make that change easier to make, by adding a helper target on Makefile.
 
-Kind regards,
-Petr
+Add an option --failed-only to check-package that generates output in
+the format:
+<filename> <check_function> [<check_function> ...]
+This is the very same format used by check-package ignore file.
+
+Add the phony target .checkpackageignore
+
+So one can update the ignore file using:
+$ ./utils/docker-run make .checkpackageignore
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile            |  5 +++++
+ utils/check-package | 13 ++++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index f39af5eae9..817cfed13c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1261,6 +1261,11 @@ check-package:
+ 		-a -not -name '*.orig' -a -not -name '*.rej' \
+ 		-exec ./utils/check-package --exclude=Sob {} +
+ 
++.PHONY: .checkpackageignore
++.checkpackageignore:
++	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name '*.patch' \) \
++		-exec ./utils/check-package --exclude=Sob --failed-only {} > .checkpackageignore +
++
+ include docs/manual/manual.mk
+ -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
+ 
+diff --git a/utils/check-package b/utils/check-package
+index f08e76b374..848311bac8 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -63,11 +63,17 @@ def parse_args():
+                         help="do not run the specified functions (debug)")
+     parser.add_argument("--dry-run", action="store_true", help="print the "
+                         "functions that would be called for each file (debug)")
++    parser.add_argument("--failed-only", action="store_true", help="print only"
++                        " the name of the functions that failed (debug)")
+ 
+     flags = parser.parse_args()
+ 
+     flags.ignore_list = get_ignored_parsers_per_file(flags.intree_only, flags.ignore_filename)
+ 
++    if flags.failed_only:
++        flags.dry_run = False
++        flags.verbose = -1
++
+     return flags
+ 
+ 
+@@ -221,6 +227,11 @@ def check_file_using_lib(fname):
+                   .format(fname, should_fail, flags.ignore_filename))
+             nwarnings += 1
+ 
++    if flags.failed_only:
++        if len(failed) > 0:
++            f = " ".join(sorted(failed))
++            print("{} {}".format(fname, f))
++
+     return nwarnings, nlines
+ 
+ 
+@@ -259,7 +270,7 @@ def __main__():
+         print("{} lines processed".format(total_lines), file=sys.stderr)
+         print("{} warnings generated".format(total_warnings), file=sys.stderr)
+ 
+-    if total_warnings > 0:
++    if total_warnings > 0 and not flags.failed_only:
+         sys.exit(1)
+ 
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
