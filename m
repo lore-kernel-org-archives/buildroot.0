@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15F6CC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3557C61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:24:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3EA44048B;
-	Mon,  6 Feb 2023 13:24:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3EA44048B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 523FF81B36;
+	Mon,  6 Feb 2023 13:24:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 523FF81B36
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SAU9WbBbyfZ0; Mon,  6 Feb 2023 13:24:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GoHEiCLB4kaL; Mon,  6 Feb 2023 13:24:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB6F140491;
-	Mon,  6 Feb 2023 13:24:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB6F140491
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C98A91BF2A7
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 868E081B3E;
+	Mon,  6 Feb 2023 13:24:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 868E081B3E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 184B41BF2A7
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3DEB840483
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DEB840483
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30CB181518
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30CB181518
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F1wtOv1pkyNI for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DHW7fV901p2w for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 13:23:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5335740459
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E45881BB4
  for <buildroot@buildroot.org>; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5335740459
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E45881BB4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F27283C25; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
+ id 6950B83C24; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 Date: Mon, 6 Feb 2023 14:22:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 01c0fb3862bce6605881d9e32c29b5f7373bb2f9
-X-Git-Newrev: 29c9b4435503d1b3130ce37dcab88c89156b1481
+X-Git-Oldrev: 032cfbc716749869b185f83dab450ec47f969765
+X-Git-Newrev: 367bd65f3c216426e2fc21742dbff11ea8d896d7
 X-Patchwork-Hint: ignore
-Message-Id: <20230206132305.3F27283C25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/checkpackagelib: warn about ifdef on
- .mk
+Message-Id: <20230206132305.6950B83C24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-headers: remove bogus symbol
+ BR2_PACKAGE_HOST_LINUX_HEADERS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,147 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29c9b4435503d1b3130ce37dcab88c89156b1481
+commit: https://git.buildroot.net/buildroot/commit/?id=367bd65f3c216426e2fc21742dbff11ea8d896d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There are two legitimate cases to prefer ifdef over ifeq in package
-recipes: command-line overrides are allowed for busybox and uclibc
-configs.
+The package host-linux-headers does not exist and there were never
+references to this symbol in the tree, do drop it.
 
-Except for that, all package in tree already use ifeq, so warn the
-developer adding/changing a package to use ifeq instead of ifdef, in
-order to keep consistence across packages.
-file.mk:2: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL
-file.mk:5: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL
-
-The difference between ifeq and ifdef is that ifdef doesn't expand
-recursively.
-
-Add comments to busybox and uclibc packages to avoid a warning in such
-special cases.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.mk           |  1 +
- package/uclibc/uclibc.mk             |  1 +
- utils/checkpackagelib/lib_mk.py      | 18 ++++++++++++++
- utils/checkpackagelib/test_lib_mk.py | 48 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 68 insertions(+)
+ package/linux-headers/Config.in.host | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 0f14bf999d..f8f9cb5616 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -110,6 +110,7 @@ BUSYBOX_MAKE_OPTS = \
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3a5207e0b6..1146231e41 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -1,8 +1,5 @@
+ comment "Kernel Header Options"
  
- # specifying BUSYBOX_CONFIG_FILE on the command-line overrides the .config
- # setting.
-+# check-package disable Ifdef
- ifndef BUSYBOX_CONFIG_FILE
- BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
- endif
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 0ddf7dfa6d..125aa4cdcf 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -22,6 +22,7 @@ UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
- 
- # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
- # setting.
-+# check-package disable Ifdef
- ifndef UCLIBC_CONFIG_FILE
- UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
- endif
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index b50a19ac62..8adf844e9a 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -21,6 +21,24 @@ continue_conditional = ["elif", "else"]
- end_conditional = ["endif"]
- 
- 
-+class Ifdef(_CheckFunction):
-+    IFDEF = re.compile(r"^\s*(else\s+|)(ifdef|ifndef)\s")
-+
-+    def check_line(self, lineno, text):
-+        m = self.IFDEF.search(text)
-+        if m is None:
-+            return
-+        word = m.group(2)
-+        if word == 'ifdef':
-+            return ["{}:{}: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL"
-+                    .format(self.filename, lineno),
-+                    text]
-+        else:
-+            return ["{}:{}: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL"
-+                    .format(self.filename, lineno),
-+                    text]
-+
-+
- class Indent(_CheckFunction):
-     COMMENT = re.compile(r"^\s*#")
-     CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional + continue_conditional)))
-diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-index 49fa216fcd..80a1736b4e 100644
---- a/utils/checkpackagelib/test_lib_mk.py
-+++ b/utils/checkpackagelib/test_lib_mk.py
-@@ -3,6 +3,54 @@ import checkpackagelib.test_util as util
- import checkpackagelib.lib_mk as m
- 
- 
-+Ifdef = [
-+    ('ignore commented line',
-+     'any',
-+     '# ifdef\n',
-+     []),
-+    ('simple',
-+     'any',
-+     '\n'
-+     'ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE\n'
-+     'endif\n',
-+     [['any:2: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL',
-+       'ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE\n']]),
-+    ('ignore indentation',
-+     'any',
-+     '  ifdef FOO\n'
-+     '  endif\n'
-+     '\tifdef BAR\n'
-+     'endif\n',
-+     [['any:1: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL',
-+       '  ifdef FOO\n'],
-+      ['any:3: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL',
-+       '\tifdef BAR\n']]),
-+    ('typo',
-+     'any',
-+     '\n'
-+     'ifndef ($(BR2_ENABLE_LOCALE),y)\n'
-+     'endif\n',
-+     [['any:2: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL',
-+       'ifndef ($(BR2_ENABLE_LOCALE),y)\n']]),
-+    ('else ifdef',
-+     'any',
-+     'else ifdef  SYMBOL # comment\n',
-+     [['any:1: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL',
-+       'else ifdef  SYMBOL # comment\n']]),
-+    ('else ifndef',
-+     'any',
-+     '\t else  ifndef\t($(SYMBOL),y) # comment\n',
-+     [['any:1: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL',
-+       '\t else  ifndef\t($(SYMBOL),y) # comment\n']]),
-+    ]
-+
-+
-+@pytest.mark.parametrize('testname,filename,string,expected', Ifdef)
-+def test_Ifdef(testname, filename, string, expected):
-+    warnings = util.check_file(m.Ifdef, filename, string)
-+    assert warnings == expected
-+
-+
- Indent = [
-     ('ignore comment at beginning of line',
-      'any',
+-config BR2_PACKAGE_HOST_LINUX_HEADERS
+-	bool
+-
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
