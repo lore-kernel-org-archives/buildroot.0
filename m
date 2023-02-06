@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD6C6C05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 10:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D844C05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 10:03:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AC5D607F0;
-	Mon,  6 Feb 2023 10:03:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AC5D607F0
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3B4B60ACE;
+	Mon,  6 Feb 2023 10:03:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3B4B60ACE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id enjDxnisENvl; Mon,  6 Feb 2023 10:03:17 +0000 (UTC)
+	with ESMTP id ghGcJ_nr9CQk; Mon,  6 Feb 2023 10:03:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B368560AD8;
-	Mon,  6 Feb 2023 10:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B368560AD8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CA4191BF4E3
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:03:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D08EF60ACA;
+	Mon,  6 Feb 2023 10:03:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D08EF60ACA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D8BB31BF4E3
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:03:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2EA6414C8
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2EA6414C8
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2F3381470
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:03:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2F3381470
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8YWDiQQK0AsB for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 10:03:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BEE1414C6
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2BEE1414C6
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 10:03:12 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 365B640002;
- Mon,  6 Feb 2023 10:03:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pOyL8-00DnD0-Dm; Mon, 06 Feb 2023 11:03:10 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20221127141926.1976657-1-ricardo.martincoski@gmail.com>
-Date: Mon, 06 Feb 2023 11:03:10 +0100
-In-Reply-To: <20221127141926.1976657-1-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 27 Nov 2022 11:19:26 -0300")
-Message-ID: <87edr3dsbl.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [next] package/thermald: bump to 2.5.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qu4aF40kBDJm for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 10:03:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF11681405
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 10:03:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF11681405
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9B99A839FF; Mon,  6 Feb 2023 10:03:15 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Mon, 6 Feb 2023 11:02:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3c7fece853f3def9a425eccc384b9dacb1010051
+X-Git-Newrev: 5be76a39d3a0c21d6f3ceeab0889edc3cec9f2f3
+X-Patchwork-Hint: ignore
+Message-Id: <20230206100315.9B99A839FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/yajl: explicitly request a tag in
+ _SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5be76a39d3a0c21d6f3ceeab0889edc3cec9f2f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > README.txt states only these changes:
- > - Static analysis fixes
- > - Missing init, which causes skipping of conditions in a Dell system
+The yajl repository has both a branch and a tag names 2.1.0. Because of
+this, when we use the usual github URL [1], github doesn't return a
+tarball but rather an ASCII string:
+   the given path has multiple possibilities: #<Git::Ref:0x00007f193bebe4d8>, #<Git::Ref:0x00007f193bebd858>
 
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+This obviously (and fortunately) leads to a hash check failure.
 
-Committed, thanks.
+To make sure we get the tag and not the branch, we should use a URL that
+explicitly asks for refs/tags/2.1.0 [2]. We can't change VERSION to
+include refs/tags, because that also affects the _SOURCE default, the
+contents of the tarball, the CPE ID and the release-monitoring access.
+Therefore, add the refs/tags/ prefix to the github helper call.
 
--- 
-Bye, Peter Korsgaard
+[1] https://github.com/lloyd/yajl/archive/2.1.0/yajl-2.1.0.tar.gz
+[1] https://github.com/lloyd/yajl/archive/refs/tags/2.1.0/yajl-2.1.0.tar.gz
+
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/yajl/yajl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
+index 1fb16f50e9..d14a68b402 100644
+--- a/package/yajl/yajl.mk
++++ b/package/yajl/yajl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ YAJL_VERSION = 2.1.0
+-YAJL_SITE = $(call github,lloyd,yajl,$(YAJL_VERSION))
++YAJL_SITE = $(call github,lloyd,yajl,refs/tags/$(YAJL_VERSION))
+ YAJL_INSTALL_STAGING = YES
+ YAJL_LICENSE = ISC
+ YAJL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
