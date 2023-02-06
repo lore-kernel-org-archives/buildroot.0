@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4581EC61DA4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 10:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E078C61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 10:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC86681454;
-	Mon,  6 Feb 2023 10:58:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC86681454
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAAAC60AA3;
+	Mon,  6 Feb 2023 10:59:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAAAC60AA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JkMys8WYt2nW; Mon,  6 Feb 2023 10:58:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id witIdT_50lUF; Mon,  6 Feb 2023 10:59:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1467781450;
-	Mon,  6 Feb 2023 10:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1467781450
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A28F51BF2CF
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:58:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECD7360A89;
+	Mon,  6 Feb 2023 10:59:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECD7360A89
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45D5A1BF2BD
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8AA894036F
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:58:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AA894036F
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9223409FE
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 10:59:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9223409FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fM60ud0wmMQs for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 10:58:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB655402EB
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 10:58:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB655402EB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA67783967; Mon,  6 Feb 2023 10:58:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 11:57:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11e75ecbf092420f00f0fc88a7183d5d99887ff1
-X-Git-Newrev: 06646238303b974e4bce81143a6c022fdf790568
-X-Patchwork-Hint: ignore
-Message-Id: <20230206105838.BA67783967@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libass: bump version to 0.17.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AyYlCXbhmuGY for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 10:59:27 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 566A8409E7
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 566A8409E7
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 10:59:27 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E695860009;
+ Mon,  6 Feb 2023 10:59:23 +0000 (UTC)
+Date: Mon, 6 Feb 2023 11:59:22 +0100
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230206115922.5aaad8c4@windsurf>
+In-Reply-To: <20221212202728.1531746-1-bernd.kuhls@t-online.de>
+References: <20221212202728.1531746-1-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1675681165;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=r7GuoKPL/6VP1x4RKU1VJ6WBoP5LnDi3VAT4psIS1vg=;
+ b=oQ/5RlaOP6R47CuqkAlEB0lEQGg7Io8rm12/CBuoUjzYJW458J7qrgQgBIJ8BOcRVH4ldw
+ MNLYeCmRhlq3tNnGPBWZA0aHPjUAjEDBU3RKqLDMpE+E9yOyhM96Av5aWs4hKdGacJdQja
+ xbSaKxUxNgHPwDnloYv7+G7/43coowTwwRmVSGPNecv9qTYd1iES21Akb63CHWdvHWhvaU
+ RnXImXmYTYG+k432H5TGOO+TLNT9NOHp/IVdRzdUieoXzSXvS8n9td2pfSWXy9H3IJgRl7
+ CoU9lL3HgX7B+bQbb2pkaNp4IJSHG9azGS+iBfRDB3euIw5A9JQdjoPNGW7Mlg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oQ/5RlaO
+Subject: Re: [Buildroot] [PATCH 1/2] package/libunibreak: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,60 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06646238303b974e4bce81143a6c022fdf790568
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 12 Dec 2022 21:27:27 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Release notes: https://github.com/libass/libass/releases/tag/0.17.0
+> Introduced as optional dependency with libass 0.17.0.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> Build-tested using this defconfig
 
-Added new optional dependency to libunibreak introduced by this bump.
+Both patches applied, thanks!
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libass/libass.hash | 2 +-
- package/libass/libass.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index b8952a4730..beb7639b1f 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5dbde9e22339119cf8eed59eea6c623a0746ef5a90b689e68a090109078e3c08  libass-0.16.0.tar.xz
-+sha256  971e2e1db59d440f88516dcd1187108419a370e64863f70687da599fdf66cc1a  libass-0.17.0.tar.xz
- sha256  f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index 4ba812e3fc..1cc8310312 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBASS_VERSION = 0.16.0
-+LIBASS_VERSION = 0.17.0
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
-@@ -33,4 +33,11 @@ else
- LIBASS_CONF_OPTS += --disable-fontconfig --disable-require-system-font-provider
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBUNIBREAK),y)
-+LIBASS_DEPENDENCIES += libunibreak
-+LIBASS_CONF_OPTS += --enable-libunibreak
-+else
-+LIBASS_CONF_OPTS += --disable-libunibreak
-+endif
-+
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
