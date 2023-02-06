@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BCEDC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:09:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EC0AC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:09:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AFBB4EF54;
-	Tue, 21 Feb 2023 00:09:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AFBB4EF54
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9D6742B03;
+	Tue, 21 Feb 2023 00:09:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9D6742B03
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oenB1q0Eojrw; Tue, 21 Feb 2023 00:09:29 +0000 (UTC)
+	with ESMTP id 4KcDM-cWRW44; Tue, 21 Feb 2023 00:09:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2AA474F03A;
-	Tue, 21 Feb 2023 00:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AA474F03A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1012D1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3FA04F04A;
+	Tue, 21 Feb 2023 00:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3FA04F04A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FFA41BF27E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 15CD86FAAC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15CD86FAAC
+ by smtp2.osuosl.org (Postfix) with ESMTP id D12B6417B9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D12B6417B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rQGumEnOa533 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KYX-54fI2Efp for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 647EE6FA04
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 647EE6FA04
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15C89417B1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15C89417B1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D7008648F; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
+ id 03EA78648F; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 22:54:58 +0100
+Date: Mon, 6 Feb 2023 11:19:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cbb6a55e6e03ea0b4e0a9b744f289e11da963c62
-X-Git-Newrev: c4f2459e8a94c1f30c0fcbeb3cd72b62b5ee3e64
+X-Git-Oldrev: c6929c0cdd944c86b0affbe04cf72c2c0398da64
+X-Git-Newrev: e279599d255a79c08ef20b97b96eb248689d52a9
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205225.5D7008648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/glib-networking: drop
- dangling GLIB_NETWORKING_INSTALL_TARGET_OPTS
+Message-Id: <20230220205248.03EA78648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tmux: bump to version
+ 3.3a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4f2459e8a94c1f30c0fcbeb3cd72b62b5ee3e64
+commit: https://git.buildroot.net/buildroot/commit/?id=e279599d255a79c08ef20b97b96eb248689d52a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In 2015, commit "3fe434bf35 glib-networking: specify GIO_MODULE_DIR for
-target" correctly used <pkg>_INSTALL_TARGET_OPTS with an autotools
-package.
+systemd is an optional dependency since
+https://github.com/tmux/tmux/commit/fc7f1e7acb3539a43df46136e971f770515e0b0d
 
-But later on, in 2018, commit "928a72c49f package/glib-networking: bump
-version to 2.56.1" changed the package to use the meson infra, that does
-not support <pkg>_INSTALL_TARGET_OPTS.
+https://github.com/tmux/tmux/blob/3.3a/CHANGES
 
-So this symbol is bogus since 2018. Drop it now.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glib-networking/glib-networking.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/tmux/tmux.hash | 2 +-
+ package/tmux/tmux.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index e8905dfff4..4adc13d39f 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -21,8 +21,6 @@ GLIB_NETWORKING_CONF_OPTS = \
- GLIB_NETWORKING_LICENSE = LGPL-2.0+
- GLIB_NETWORKING_LICENSE_FILES = COPYING
- GLIB_NETWORKING_CPE_ID_VENDOR = gnome
--GLIB_NETWORKING_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) \
--	GIO_MODULE_DIR=/usr/lib/gio/modules install
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index 75538e09ae..b5c0fe58d0 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  918f7220447bef33a1902d4faff05317afd9db4ae1c9971bef5c787ac6c88386  tmux-3.1c.tar.gz
++sha256  e4fd347843bd0772c4f48d6dde625b0b109b7a380ff15db21e97c11a4dcdf93f  tmux-3.3a.tar.gz
+ sha256  c031bd37f464c534277814f6aa38686fa023d094261d57fd2545ad592bb53ccd  COPYING
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index b1c0af1a83..47ee9b16ca 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,13 +4,20 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- GLIB_NETWORKING_DEPENDENCIES += gnutls
+-TMUX_VERSION = 3.1c
++TMUX_VERSION = 3.3a
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = COPYING
+ TMUX_CPE_ID_VENDOR = tmux_project
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++TMUX_DEPENDENCIES += systemd
++TMUX_CONF_OPTS += --enable-systemd
++else
++TMUX_CONF_OPTS += --disable-systemd
++endif
++
+ ifeq ($(BR2_PACKAGE_UTF8PROC),y)
+ TMUX_DEPENDENCIES += utf8proc
+ TMUX_CONF_OPTS += --enable-utf8proc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
