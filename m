@@ -1,58 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B4FBC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 11:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2B88C05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 11:14:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33E104036F;
-	Mon,  6 Feb 2023 11:13:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33E104036F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 623DF414C6;
+	Mon,  6 Feb 2023 11:14:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 623DF414C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Rnw4UgBkMXP; Mon,  6 Feb 2023 11:13:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UEfs2k3dBPqU; Mon,  6 Feb 2023 11:14:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4AE0B40354;
-	Mon,  6 Feb 2023 11:13:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AE0B40354
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F4CE1BF397
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:13:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57C73414D1;
+	Mon,  6 Feb 2023 11:14:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57C73414D1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C3AA1BF397
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:14:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED00A81464
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:13:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED00A81464
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56B09414BF
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:14:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56B09414BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id INdyoDmdPtAI for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 11:13:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FCBA8144E
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3FCBA8144E
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 11:13:13 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0E9FA24000D;
- Mon,  6 Feb 2023 11:13:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pOzQs-00DphX-8B; Mon, 06 Feb 2023 12:13:10 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-12-ricardo.martincoski@gmail.com>
-Date: Mon, 06 Feb 2023 12:13:10 +0100
-In-Reply-To: <20221127130739.1862398-12-ricardo.martincoski@gmail.com>
- (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:25 -0300")
-Message-ID: <87o7q7avy1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 11/25] package/busybox: add comment about
- variable override
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kakqUf0503Td for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 11:14:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59593414C6
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 11:14:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59593414C6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3E8FD83AAC; Mon,  6 Feb 2023 11:14:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 Feb 2023 12:13:36 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 46306d135e5aab14073eece713d38e8c827c58ae
+X-Git-Newrev: 3def0679e3a424983354346eb517bbaa07b905df
+X-Patchwork-Hint: ignore
+Message-Id: <20230206111414.3E8FD83AAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: work around gcc bug
+ 43744
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,24 +56,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3def0679e3a424983354346eb517bbaa07b905df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The same comment already exists for UCLIBC_CONFIG_FILE.
- > Both variables can be override from command-line, as described in the
- > manual, at section 'Environment variables'.
+Package postgresql suffers from gcc bug 43744 other than 85180, so let's
+work around disabling compiler optimization for this gcc bug too.
 
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/cf272cdc5be2faf4070de3d235ec7a0f7190867a
 
-Committed, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/postgresql/postgresql.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 5313e03b12..2ffcac6595 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -101,7 +101,7 @@ endif
+ 
+ POSTGRESQL_CFLAGS = $(TARGET_CFLAGS)
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++ifneq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_43744)$(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),)
+ POSTGRESQL_CFLAGS += -O0
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
