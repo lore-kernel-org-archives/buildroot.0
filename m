@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8EF6C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:33:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F34C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BFE37002F;
-	Tue, 21 Feb 2023 01:33:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BFE37002F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98E1A70050;
+	Tue, 21 Feb 2023 01:33:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98E1A70050
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G8Zg4zgtb4UQ; Tue, 21 Feb 2023 01:33:24 +0000 (UTC)
+	with ESMTP id wvTdJg5PXYrG; Tue, 21 Feb 2023 01:33:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 499096FBC0;
-	Tue, 21 Feb 2023 01:33:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 499096FBC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id D65407004C;
+	Tue, 21 Feb 2023 01:33:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D65407004C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 807631BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 69E981BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EDFF06FC1D
+ by smtp3.osuosl.org (Postfix) with ESMTP id F15E96FC06
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDFF06FC1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F15E96FC06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YTBVWVgBTaNA for <buildroot@lists.busybox.net>;
+ with ESMTP id SYLLM2kX8wVg for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 266F36FC14
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BE82610A4
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 266F36FC14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BE82610A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2400A81979; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+ id 19917828C8; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 Date: Mon, 6 Feb 2023 14:22:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 04a4b86a982e307268d660a38d231315134572fb
-X-Git-Newrev: 01cb02cfaecb34fd7d413775673e78272c68f85f
+X-Git-Oldrev: e6ae82531928662764536cadbe2d6f3c558e7de2
+X-Git-Newrev: 04a4b86a982e307268d660a38d231315134572fb
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205249.2400A81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pugixml:
- unconditionally set BUILD_DEFINES
+Message-Id: <20230220205249.19917828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/live555: fix build
+ config with locale
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01cb02cfaecb34fd7d413775673e78272c68f85f
+commit: https://git.buildroot.net/buildroot/commit/?id=04a4b86a982e307268d660a38d231315134572fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The ifdef construct intended to avoid passing -DBUILD_DEFINES="" was
-never needed, because even upstream version v1.9 used in 2019 when the
-configuration options were added, can handle an empty string for
-BUILD_DEFINES.
-In fact an empty string is the default for v1.9 if it is not passed
-during configure.
+Using current conditional code, added in 2014:
 
-Also, the host variant already sets BUILD_DEFINES unconditionally.
+ifndef ($(BR2_ENABLE_LOCALE),y)
+LIVE555_CFLAGS += -DLOCALE_NOT_USED
+endif
 
-So remove the unneeded conditional.
+the define LOCALE_NOT_USED is always passed on CFLAGS, because there is
+no symbol with following names defined:
+ "(y,y)" -> not defined when BR2_ENABLE_LOCALE=y
+ "(,y)" -> not defined when BR2_ENABLE_LOCALE is not set
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>
+So fix the typo, switching ifndef to ifneq.
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pugixml/pugixml.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/live555/live555.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index c796186827..7d4f47c6fa 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -29,9 +29,7 @@ ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
- PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index effd4517cf..56ed705783 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -39,7 +39,7 @@ else
+ LIVE555_CFLAGS += -DNO_OPENSSL
  endif
  
--ifdef PUGIXML_BUILD_DEFINES
- PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
--endif
+-ifndef ($(BR2_ENABLE_LOCALE),y)
++ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIVE555_CFLAGS += -DLOCALE_NOT_USED
+ endif
  
- HOST_PUGIXML_CONF_OPTS += \
- 	-DBUILD_PKGCONFIG=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
