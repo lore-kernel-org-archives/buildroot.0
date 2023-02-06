@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00388C61DA4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 11:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAB50C61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 11:21:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 23F8140354;
-	Mon,  6 Feb 2023 11:21:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23F8140354
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EidfUh5KEiET; Mon,  6 Feb 2023 11:21:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 54AE040339;
-	Mon,  6 Feb 2023 11:21:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54AE040339
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8471E1BF397
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:21:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66F5F607FE
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:21:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66F5F607FE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6374660A7E;
+	Mon,  6 Feb 2023 11:21:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6374660A7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4ThQQxdR4cJJ for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 11:21:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27882605AF
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 27882605AF
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 11:21:33 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A3D22E000F;
- Mon,  6 Feb 2023 11:21:31 +0000 (UTC)
-Date: Mon, 6 Feb 2023 12:21:30 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230206122130.25893d8a@windsurf>
-In-Reply-To: <20230202154239.325711-2-giulio.benetti@benettiengineering.com>
-References: <20230202154239.325711-1-giulio.benetti@benettiengineering.com>
- <20230202154239.325711-2-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675682492;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Zs91A/bKCKqR6TKZYyUFaYfg54bnEH7DmzQcMv8u2fc=;
- b=Xcvm97Ck9CcFFNHeYoBBs77GMTfDeDOi/dW6GQuCqPh+J/dVPxvCdHsN8YwBjJunRT4bnX
- qsxufJI05KoyRdJcrL1nwDS8mIRzSEEs8TRyQRZ01Oiivj5QCc7pNo0LahQ/8m3zrz68c0
- /N3c+Q2cWb9HxWQn5e+9/CRTmkFaL0V0SDbDYGcHy8XsJi5J7PI2e1w3E1LPekiw+uxLGk
- IXoA1estsNIOfLdc+8r+3VfkCF7368bFj4zh/LpLEdMxjUBYArhoBmjay/0lGFjJGfHBjR
- LkoWKfSORIQCsXw9rrm5976NfOXo9Fy5Ep1Jn7UM8llxKINvBWyOfBu96BabmQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Xcvm97Ck
-Subject: Re: [Buildroot] [PATCH 2/2] package/postgresql: work around gcc bug
- 43744
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G4TJ4PHhW6js; Mon,  6 Feb 2023 11:21:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7ECCC607FE;
+	Mon,  6 Feb 2023 11:21:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ECCC607FE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B2C01BF397
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:21:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5553E81442
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:21:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5553E81442
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WS4fr2LRy2ms for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 11:21:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CAC48141D
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 11:21:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CAC48141D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 56B1983AC8; Mon,  6 Feb 2023 11:21:41 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 6 Feb 2023 12:20:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3def0679e3a424983354346eb517bbaa07b905df
+X-Git-Newrev: b89eff429d4e8ad447addd53fde629676e19b76c
+X-Patchwork-Hint: ignore
+Message-Id: <20230206112141.56B1983AC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iputils: bump version to 20221126
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,46 +56,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio,
+commit: https://git.buildroot.net/buildroot/commit/?id=b89eff429d4e8ad447addd53fde629676e19b76c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  2 Feb 2023 16:42:39 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+This release removed: ninfod, rarpd, rdisc
+=> add entries to Config.in.legacy.
 
-> Package postgresql suffers from gcc bug 43744 other than 85180, so let's
-> work around disabling compiler optimization for this gcc bug too.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/cf272cdc5be2faf4070de3d235ec7a0f7190867a
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/postgresql/postgresql.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+LICENSE file got updated (just to use SPDX)
+=> update checksum.
 
-Applied to master, thanks. However, you should have resent a v2 of this
-patch together with the v2 of the first patch. Never resend partial
-series, but instead always, always, always, always, always, always,
-always, always, always, always, always, always, always resend a full
-series, even if only one patch changed. Sending partial series is
-extremely confusing for the people reviewing/applying the patches.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy             | 24 ++++++++++++++++++++++++
+ package/iputils/Config.in    | 25 -------------------------
+ package/iputils/iputils.hash |  6 +++---
+ package/iputils/iputils.mk   |  9 ++-------
+ 4 files changed, 29 insertions(+), 35 deletions(-)
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e5cfcea8fa..94d6ce19f5 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,30 @@ endif
+ 
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_IPUTILS_NINFOD
++	bool "iputils 20221126 removed ninfod"
++	select BR2_LEGACY
++	help
++	  iputils 20221126 removed ninfod.
++
++config BR2_PACKAGE_IPUTILS_RARPD
++	bool "iputils 20221126 removed rarpd"
++	select BR2_LEGACY
++	help
++	  iputils 20221126 removed rarpd.
++
++config BR2_PACKAGE_IPUTILS_RDISC
++	bool "iputils 20221126 removed rdisc"
++	select BR2_LEGACY
++	help
++	  iputils 20221126 removed rdisc.
++
++config BR2_PACKAGE_IPUTILS_RDISC_SERVER
++	bool "iputils 20221126 removed rdisc"
++	select BR2_LEGACY
++	help
++	  iputils 20221126 removed rdisc.
++
+ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
+ 	bool "xingmux moved"
+ 	select BR2_LEGACY
+diff --git a/package/iputils/Config.in b/package/iputils/Config.in
+index 1a8b555570..ec7bc5418d 100644
+--- a/package/iputils/Config.in
++++ b/package/iputils/Config.in
+@@ -28,37 +28,12 @@ config BR2_PACKAGE_IPUTILS_PING
+ 	help
+ 	  Installs ping.
+ 
+-config BR2_PACKAGE_IPUTILS_RARPD
+-	bool "rarpd"
+-	help
+-	  Installs rarpd.
+-
+-config BR2_PACKAGE_IPUTILS_RDISC
+-	bool "rdisc"
+-	default y
+-	help
+-	  Installs rdisc.
+-
+-config BR2_PACKAGE_IPUTILS_RDISC_SERVER
+-	bool "rdisc (server code)"
+-	default y
+-	depends on BR2_PACKAGE_IPUTILS_RDISC
+-	help
+-	  Builds rdisc with server code.
+-
+ config BR2_PACKAGE_IPUTILS_TRACEPATH
+ 	bool "tracepath"
+ 	default y
+ 	help
+ 	  Installs tracepath.
+ 
+-config BR2_PACKAGE_IPUTILS_NINFOD
+-	bool "ninfod"
+-	default y
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
+-	help
+-	  Installs ninfod.
+-
+ comment "ninfod needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+index db52d990f2..ea23f27f3c 100644
+--- a/package/iputils/iputils.hash
++++ b/package/iputils/iputils.hash
+@@ -1,6 +1,6 @@
+-# https://github.com/iputils/iputils/releases/download/20211215/sha256sum.asc
+-sha256  b6f67fc705490673ff4471d006221b4a2f1b1180b929d9fefd771352621ccedf  iputils-20211215.tar.gz
++# https://github.com/iputils/iputils/releases/download/20221126/sha256sum.asc
++sha256  745ea711fe06d5c57d470d21acce3c3ab866eb6afb69379a16c6d60b89bd4311  iputils-20221126.tar.gz
+ # Locally computed
+-sha256  973281334c2da6364fa6bdc44c1f0f8d60d80d73c782982ffc5d53b0a31aa042  LICENSE
++sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
+ sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/LICENSE.GPL2
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 84059de330..fe4468ec19 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -11,7 +11,7 @@
+ # and IPv6 updates.
+ # http://www.spinics.net/lists/netdev/msg279881.html
+ 
+-IPUTILS_VERSION = 20211215
++IPUTILS_VERSION = 20221126
+ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
+ IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+@@ -21,19 +21,14 @@ IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ # Selectively build binaries
+ IPUTILS_CONF_OPTS += \
+ 	-DBUILD_CLOCKDIFF=$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),true,false) \
+-	-DBUILD_RARPD=$(if $(BR2_PACKAGE_IPUTILS_RARPD),true,false) \
+-	-DBUILD_RDISC=$(if $(BR2_PACKAGE_IPUTILS_RDISC),true,false) \
+-	-DENABLE_RDISC_SERVER=$(if $(BR2_PACKAGE_IPUTILS_RDISC_SERVER),true,false) \
+ 	-DBUILD_TRACEPATH=$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),true,false) \
+-	-DBUILD_NINFOD=$(if $(BR2_PACKAGE_IPUTILS_NINFOD),true,false) \
+ 	-DSKIP_TESTS=true
+ 
+ # Selectively select the appropriate SELinux refpolicy modules
+ IPUTILS_SELINUX_MODULES = \
+ 	$(if $(BR2_PACKAGE_IPUTILS_ARPING),netutils) \
+ 	$(if $(BR2_PACKAGE_IPUTILS_PING),netutils) \
+-	$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),netutils) \
+-	$(if $(BR2_PACKAGE_IPUTILS_RDISC),rdisc)
++	$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),netutils)
+ 
+ #
+ # arping
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
