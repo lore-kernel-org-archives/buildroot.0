@@ -1,70 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D757C61DA4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 11:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA4FFC64EC3
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 11:24:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 342B9416F9;
-	Mon,  6 Feb 2023 11:22:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 342B9416F9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A29081491;
+	Mon,  6 Feb 2023 11:24:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A29081491
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1XZdu-YBg2wk; Mon,  6 Feb 2023 11:22:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3cuYZJJudEnQ; Mon,  6 Feb 2023 11:24:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0E9B4156C;
-	Mon,  6 Feb 2023 11:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0E9B4156C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 17CD61BF397
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:22:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FFE381495;
+	Mon,  6 Feb 2023 11:24:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FFE381495
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B27221BF397
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DEF5560A8C
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEF5560A8C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89198402EB
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89198402EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UrtlSPfGcBFq for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 11:22:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T5KomPVt7teB for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 11:24:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76379605AF
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 76379605AF
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 11:22:02 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7F8D813F88E;
- Mon,  6 Feb 2023 12:21:56 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 06 Feb 2023 12:21:56 +0100
-Date: Mon, 6 Feb 2023 12:21:56 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Petr Vorel <pevik@seznam.cz>
-Message-ID: <20230206112156.GC3565@scaer>
-References: <20221126003807.462157-1-pevik@seznam.cz>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE269400BF
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE269400BF
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 11:24:50 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ j29-20020a05600c1c1d00b003dc52fed235so8502418wms.1
+ for <buildroot@buildroot.org>; Mon, 06 Feb 2023 03:24:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Y70xbsrz4ujXzlK4gBHKiDazPBmxlC7hErUZq4Mqykk=;
+ b=xSFjFDRFuhjB1BZCHD1n2UYMqAvKTcg+Q7RAmITmMpfIU6m/Czf6Gda45pxqEMZxQp
+ FSFJD2T8P2DlOF/FQckYxksEvH2P6dmipfhJyt0T0/XFPgrpkcjay9KAFnBAzz1KLwX/
+ frqWI/LyDaNRC/SaKydHPKAJgbIVVMjUSjc40d3YncsO6CoCz/HmTIJShExnIcXx1S5K
+ 4ghXMCv7W345AVIa/7v12vz91dlYQLm8TI2gKUXI9OcoJc8UmrOpuCBzIpEusHgsUuvB
+ Gb++jvtIt3rpq/0WDwcn5zprNvKWFw134PSi1YGTTSVf9SsUsy3jVzlxzdLjcQrOCE9f
+ 57Gg==
+X-Gm-Message-State: AO0yUKWp3uwL89uzy2Qscw2b/m8XbcLvX4sxbjOtdJxGyRrzyyo9p+f9
+ 3OZDgGJWlmo6FjF50hOwwdp6Iw==
+X-Google-Smtp-Source: AK7set/wfc0rhu/A1OwFCgce8Yyf+rZ6glnFlwAEtPhHEkZi7oe+3IsDLufuyhbaIoo06TcjRgk2Pw==
+X-Received: by 2002:a1c:4c17:0:b0:3da:2a59:8a4f with SMTP id
+ z23-20020a1c4c17000000b003da2a598a4fmr18579052wmf.38.1675682688928; 
+ Mon, 06 Feb 2023 03:24:48 -0800 (PST)
+Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ j14-20020a05600c130e00b003df241f52e8sm10026535wmf.42.2023.02.06.03.24.48
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 06 Feb 2023 03:24:48 -0800 (PST)
+Message-ID: <2bdc57cb-e5c9-127d-dd3e-da4bb35f89f1@mind.be>
+Date: Mon, 6 Feb 2023 12:24:46 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221126003807.462157-1-pevik@seznam.cz>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675682519;
- bh=LfqIOPgS9Ove+oVHV1k2sCmVHAg8z2C0t7/EoOqC2Lg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=F5KNBnEmQbf9zuUZSIgT2iOGCdy+QWuTjbjHEisJn+PT/twlM27GQ+vbtKDyJZaG1
- j8mqlrwHNvlh8+7xDFLF98SamY2IbvfPuDCzU07OMNM1bdkJ27WPfXA+6tTDFFw0cg
- zC1afD5kAQgaBKlLdOsUxCjJ/m31WEw0pxWN4O7LPy34YiVvk9jzf4RRwAelHFSxHR
- iyvH7xGOe/s3gY6Md+lGx5W43igMtgIvxRgjNYBDP9K8JOr2rLnCJW+0c6J/D+BP6A
- m79g5HFTYiHFeFnHpNrgdXfuKTY5Sn6Y0UuDL58pwG9fhSZGPQ0TFw3hh7w5s2WB/l
- AMGxXBmuXLmnQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=F5KNBnEm
-Subject: Re: [Buildroot] [PATCH 1/1] package/iputils: bump version to
- 20221126
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-GB
+To: Alsey Coleman Miller <alseycmiller@gmail.com>, buildroot@buildroot.org
+References: <20220329215433.1018660-1-alseycmiller@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20220329215433.1018660-1-alseycmiller@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Y70xbsrz4ujXzlK4gBHKiDazPBmxlC7hErUZq4Mqykk=;
+ b=hiulfyh3dD5+fAbsAFo2FbNaIHsQAV7SAljSke36i4yw3WYyoXqv9UTjflzI3LIZjo
+ Fv07PKm1A76VE0AMopxNKFRIIzf2gZDWSjM05IlAohfAR/rXwjVO1nbKEhm01Q3MDn0c
+ ecTbimTQDzj3c6WQPHKImv8DSyQjlumgR+yn75YNVJ07xsij9aFBy/2KuubwAZPSKlu5
+ VWpO9welOab5a+j6hNu+N37kqYDKR/LI8xHGCp+oH2kA396icsmikwz21Gd1gWIMs7MN
+ s6w4O8tfNsicCN3mG9sC1MdQvwo14SAQBA+tGgJicIKQY/I7lHkgKqysLbzeVOPAqFDy
+ 2rAg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=hiulfyh3
+Subject: Re: [Buildroot] [PATCH 1/2] package/libdispatch: add libdispatch
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,177 +100,296 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: James Hillard <james.hilliard1@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Petr, All,
+  Hi Alsey,
 
-On 2022-11-26 01:38 +0100, Petr Vorel spake thusly:
-> From: Petr Vorel <petr.vorel@gmail.com>
-> 
-> This release removed: ninfod, rarpd, rdisc
-> => add entries to Config.in.legacy.
-> 
-> LICENSE file got updated (just to use SPDX)
-> => update checksum.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+  Sorry for the extremely late feedback on this. There were a few issues with 
+your contribution and I wasn't able to fix them up myself, so I marked the 
+series as Changes Requested. See below for my comments.
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+On 29/03/2022 23:54, Alsey Coleman Miller wrote:
+> Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
 > ---
->  Config.in.legacy             | 24 ++++++++++++++++++++++++
->  package/iputils/Config.in    | 25 -------------------------
->  package/iputils/iputils.hash |  6 +++---
->  package/iputils/iputils.mk   |  9 ++-------
->  4 files changed, 29 insertions(+), 35 deletions(-)
+>   DEVELOPERS                           |  3 ++
+>   package/Config.in                    |  1 +
+>   package/libdispatch/Config.in        | 43 +++++++++++++++++++++++
+>   package/libdispatch/libdispatch.hash |  1 +
+>   package/libdispatch/libdispatch.mk   | 52 ++++++++++++++++++++++++++++
+>   5 files changed, 100 insertions(+)
+>   create mode 100644 package/libdispatch/Config.in
+>   create mode 100644 package/libdispatch/libdispatch.hash
+>   create mode 100644 package/libdispatch/libdispatch.mk
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index b3c35d6b07..6d20092ca4 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,30 @@ endif
->  
->  comment "Legacy options removed in 2022.11"
->  
-> +config BR2_PACKAGE_IPUTILS_NINFOD
-> +	bool "iputils 20221126 removed ninfod"
-> +	select BR2_LEGACY
-> +	help
-> +	  iputils 20221126 removed ninfod.
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a66b9d7eee..555ec0175b 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -122,6 +122,9 @@ F:	boot/opensbi/
+>   F:	configs/hifive_unleashed_defconfig
+>   F:	package/xen/
+>   
+> +N:	Alsey Miller <alseycmiller@gmail.com>
+> +F:	package/libdispatch/
 > +
-> +config BR2_PACKAGE_IPUTILS_RARPD
-> +	bool "iputils 20221126 removed rarpd"
-> +	select BR2_LEGACY
-> +	help
-> +	  iputils 20221126 removed rarpd.
-> +
-> +config BR2_PACKAGE_IPUTILS_RDISC
-> +	bool "iputils 20221126 removed rdisc"
-> +	select BR2_LEGACY
-> +	help
-> +	  iputils 20221126 removed rdisc.
-> +
-> +config BR2_PACKAGE_IPUTILS_RDISC_SERVER
-> +	bool "iputils 20221126 removed rdisc"
-> +	select BR2_LEGACY
-> +	help
-> +	  iputils 20221126 removed rdisc.
-> +
->  config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
->  	bool "libopenssl rc5 was never enabled"
->  	select BR2_LEGACY
-> diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-> index 1a8b555570..ec7bc5418d 100644
-> --- a/package/iputils/Config.in
-> +++ b/package/iputils/Config.in
-> @@ -28,37 +28,12 @@ config BR2_PACKAGE_IPUTILS_PING
->  	help
->  	  Installs ping.
->  
-> -config BR2_PACKAGE_IPUTILS_RARPD
-> -	bool "rarpd"
-> -	help
-> -	  Installs rarpd.
-> -
-> -config BR2_PACKAGE_IPUTILS_RDISC
-> -	bool "rdisc"
-> -	default y
-> -	help
-> -	  Installs rdisc.
-> -
-> -config BR2_PACKAGE_IPUTILS_RDISC_SERVER
-> -	bool "rdisc (server code)"
-> -	default y
-> -	depends on BR2_PACKAGE_IPUTILS_RDISC
-> -	help
-> -	  Builds rdisc with server code.
-> -
->  config BR2_PACKAGE_IPUTILS_TRACEPATH
->  	bool "tracepath"
->  	default y
->  	help
->  	  Installs tracepath.
->  
-> -config BR2_PACKAGE_IPUTILS_NINFOD
-> -	bool "ninfod"
-> -	default y
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
-> -	help
-> -	  Installs ninfod.
-> -
->  comment "ninfod needs a toolchain w/ threads"
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS
->  
-> diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-> index db52d990f2..ea23f27f3c 100644
-> --- a/package/iputils/iputils.hash
-> +++ b/package/iputils/iputils.hash
-> @@ -1,6 +1,6 @@
-> -# https://github.com/iputils/iputils/releases/download/20211215/sha256sum.asc
-> -sha256  b6f67fc705490673ff4471d006221b4a2f1b1180b929d9fefd771352621ccedf  iputils-20211215.tar.gz
-> +# https://github.com/iputils/iputils/releases/download/20221126/sha256sum.asc
-> +sha256  745ea711fe06d5c57d470d21acce3c3ab866eb6afb69379a16c6d60b89bd4311  iputils-20221126.tar.gz
->  # Locally computed
-> -sha256  973281334c2da6364fa6bdc44c1f0f8d60d80d73c782982ffc5d53b0a31aa042  LICENSE
-> +sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
->  sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/LICENSE.GPL2
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 84059de330..fe4468ec19 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -11,7 +11,7 @@
->  # and IPv6 updates.
->  # http://www.spinics.net/lists/netdev/msg279881.html
->  
-> -IPUTILS_VERSION = 20211215
-> +IPUTILS_VERSION = 20221126
->  IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
->  IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
->  IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
-> @@ -21,19 +21,14 @@ IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
->  # Selectively build binaries
->  IPUTILS_CONF_OPTS += \
->  	-DBUILD_CLOCKDIFF=$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),true,false) \
-> -	-DBUILD_RARPD=$(if $(BR2_PACKAGE_IPUTILS_RARPD),true,false) \
-> -	-DBUILD_RDISC=$(if $(BR2_PACKAGE_IPUTILS_RDISC),true,false) \
-> -	-DENABLE_RDISC_SERVER=$(if $(BR2_PACKAGE_IPUTILS_RDISC_SERVER),true,false) \
->  	-DBUILD_TRACEPATH=$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),true,false) \
-> -	-DBUILD_NINFOD=$(if $(BR2_PACKAGE_IPUTILS_NINFOD),true,false) \
->  	-DSKIP_TESTS=true
->  
->  # Selectively select the appropriate SELinux refpolicy modules
->  IPUTILS_SELINUX_MODULES = \
->  	$(if $(BR2_PACKAGE_IPUTILS_ARPING),netutils) \
->  	$(if $(BR2_PACKAGE_IPUTILS_PING),netutils) \
-> -	$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),netutils) \
-> -	$(if $(BR2_PACKAGE_IPUTILS_RDISC),rdisc)
-> +	$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),netutils)
->  
->  #
->  # arping
-> -- 
-> 2.38.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+>   N:	Alvaro G. M <alvaro.gamez@hazent.com>
+>   F:	package/dcron/
+>   F:	package/libxmlrpc/
+> diff --git a/package/Config.in b/package/Config.in
+> index 0d5d763180..e217ff5282 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1968,6 +1968,7 @@ menu "Other"
+>   	source "package/libcrossguid/Config.in"
+>   	source "package/libcsv/Config.in"
+>   	source "package/libdaemon/Config.in"
+> +	source "package/libdispatch/Config.in"
+>   	source "package/libeastl/Config.in"
+>   	source "package/libee/Config.in"
+>   	source "package/libev/Config.in"
+> diff --git a/package/libdispatch/Config.in b/package/libdispatch/Config.in
+> new file mode 100644
+> index 0000000000..f4fa5e47fb
+> --- /dev/null
+> +++ b/package/libdispatch/Config.in
+> @@ -0,0 +1,43 @@
+> +config BR2_PACKAGE_LIBDISPATCH_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_x86_64
+> +	default y if BR2_aarch64
+> +	default y if BR2_arm
+> +	default y if BR2_powerpc
+> +	default y if BR2_mips
+> +	default y if BR2_mipsel
+> +	default y if BR2_mips64
+> +	default y if BR2_mips64el
+> +	default y if BR2_RISCV_64
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  Please add an explanation in the commit log about where this range of 
+supported architectures comes from.
+
+  Also, I expect that on ARM and possibly powerpc there are tighter constraints 
+than this.
+
+
+> +config BR2_PACKAGE_LIBDISPATCH_TARGET_ARCH
+> +	string
+> +	default "aarch64" if BR2_aarch64
+> +	default "armv5" if BR2_ARM_CPU_ARMV5
+> +	default "armv6" if BR2_ARM_CPU_ARMV6
+> +	default "armv7" if BR2_ARM_CPU_ARMV7A
+
+  We also have armv7m and armv4 which are not covered here.
+
+> +	default "x86_64" if BR2_x86_64
+> +	default "powerpc" if BR2_powerpc
+> +	default "mips" if BR2_mips
+> +	default "mipsel" if BR2_mipsel
+> +	default "mips64" if BR2_mips64
+> +	default "mips64el" if BR2_mips64el
+> +	default "riscv64" if BR2_RISCV_64
+
+  You can simplify BR2_PACKAGE_LIBDISPATCH_ARCH_SUPPORTS like this:
+
+config BR2_PACKAGE_LIBDISPATCH_ARCH_SUPPORTS
+	bool
+	default y
+	depends on BR2_PACKAGE_LIBDISPATCH_TARGET_ARCH != ""
+
+> +
+> +config BR2_PACKAGE_LIBDISPATCH
+> +	bool "libdispatch"
+> +	depends on BR2_PACKAGE_LIBDISPATCH_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+
+  Again, please explain in the commit message where the glibc dependency comes from.
+
+> +	select BR2_PACKAGE_LIBBSD
+
+  Please include the libbsd dependencies (as far as they're not covered by the 
+libdispatch dependencies themselves):
+
+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
+	depends on BR2_USE_WCHAR # libbsd
+
+
+> +	
+> +	help
+> +	  Grand Central Dispatch (GCD or libdispatch) provides comprehensive support for concurrent code execution on multicore hardware.
+
+  Please wrap at 72 columns (where the tab counts as 8 spaces).
+utils/check-package will warn about this.
+
+> +
+> +	  http://swift.org
+
+  Is there no URL specific to libdispatch?
+
+> +
+> +comment "libdispatch needs a toolchain w/ Glibc, wchar, threads, C++, dynamic library"
+> +	depends on BR2_PACKAGE_LIBDISPATCH_ARCH_SUPPORTS
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+
+  There is no C++ dependency in the package itself...
+
+> +		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
+> \ No newline at end of file
+
+  Please add a newline at the end of the file.
+
+> diff --git a/package/libdispatch/libdispatch.hash b/package/libdispatch/libdispatch.hash
+> new file mode 100644
+> index 0000000000..64543b56eb
+> --- /dev/null
+> +++ b/package/libdispatch/libdispatch.hash
+> @@ -0,0 +1 @@
+> +sha256 d2bbfb5b98d129caa2c6bd7662c850bf57cb434572d09844b56641c4558906ab libdispatch-swift-5.6-RELEASE.tar.gz
+
+  Please add a hash for the license files.
+
+> diff --git a/package/libdispatch/libdispatch.mk b/package/libdispatch/libdispatch.mk
+> new file mode 100644
+> index 0000000000..79fc4f7780
+> --- /dev/null
+> +++ b/package/libdispatch/libdispatch.mk
+> @@ -0,0 +1,52 @@
+> +### Grand Central Dispatch
+> +LIBDISPATCH_VERSION = 5.6
+> +LIBDISPATCH_SITE = $(call github,apple,swift-corelibs-libdispatch,swift-$(LIBDISPATCH_VERSION)-RELEASE)
+
+  I guess this is a swift-specific fork of libdispatch? If yes, then the swift 
+bit should probably still be in _VERSION, i.e.
+
+LIBDISPATH_VERSION = swift-5.6
+
+  Alternatively, the package should be named something like libdispatch-swift.
+
+
+> +LIBDISPATCH_LICENSE = Apache-2.0
+> +LIBDISPATCH_LICENSE_FILES = LICENSE
+> +LIBDISPATCH_INSTALL_STAGING = YES
+> +LIBDISPATCH_SUPPORTS_IN_SOURCE_BUILD = NO
+> +LIBDISPATCH_DEPENDENCIES = host-clang host-lld libbsd
+
+  clang and lld (if they're supposed to build for the target) need a dependency 
+on BR2_PACKAGE_LLVM_ARCH_SUPPORTS and BR2_HOST_GCC_AT_LEAST_5
+
+  Also you should select BR2_PACKAGE_HOST_LLD in Config.in.
+
+> +
+> +LIBDISPATCH_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LIBDISPATCH_TARGET_ARCH))
+> +LIBDISPATCH_CLANG_PATH = $(HOST_DIR)/bin
+
+  It's not worth adding a variable for this, just use $(HOST_DIR)/bin directly 
+below.
+
+> +
+> +ifeq ($(LIBDISPATCH_TARGET_ARCH),armv7)
+> +LIBDISPATCH_TARGET_NAME		= armv7-unknown-linux-gnueabihf
+> +else ifeq ($(LIBDISPATCH_TARGET_ARCH),armv6)
+> +LIBDISPATCH_TARGET_NAME		= armv6-unknown-linux-gnueabihf
+> +else ifeq ($(LIBDISPATCH_TARGET_ARCH),armv5)
+> +LIBDISPATCH_TARGET_NAME		= armv5-unknown-linux-gnueabi
+> +else
+> +LIBDISPATCH_TARGET_NAME		= $(LIBDISPATCH_TARGET_ARCH)-unknown-linux-gnu
+
+  Instead of defining this here, define it like that in LIBDISPATCH_TARGET_ARCH 
+directly, i.e. include the unknown-linux-gnu* in 
+BR2_PACKAGE_LIBDISPATCH_TARGET_ARCH.
+
+
+> +endif
+> +
+> +ifeq ($(LIBDISPATCH_TARGET_ARCH),armv5)
+> +LIBDISPATCH_EXTRA_FLAGS		= -march=armv5te
+
+  Not all our armv5 variants are armv5te I believe...
+
+> +else ifeq ($(LIBDISPATCH_TARGET_ARCH),riscv64)
+> +LIBDISPATCH_EXTRA_FLAGS		= -mno-relax -mabi=lp64 -march=rv64imac -mfloat-abi=soft
+
+  Having to specify all of this sounds very very wrong. We define the ABI and 
+arch elsewhere depending on config options, if you're overriding here it's not 
+going to be compatible with libc.
+
+  I'm not sure about the -mno-relax, that might be needed. But please document 
+in the commit message why.
+
+> +else ifeq ($(LIBDISPATCH_TARGET_ARCH),mipsel)
+> +LIBDISPATCH_EXTRA_FLAGS		= -msoft-float
+> +else ifeq ($(LIBDISPATCH_TARGET_ARCH),mips64el)
+> +LIBDISPATCH_EXTRA_FLAGS		= -msoft-float
+
+  Again, floating point ABI should be defined in our ABI definition or it's not 
+going to be compatible. If it requires soft float, we need to depend on 
+BR2_MIPS_SOFT_FLOAT in Config.in.
+
+  -msoft-float and other ABI options are passed along by the toolchain wrapper, 
+so if these are somehow needed in EXTRA_FLAGS after all, something somewhere is 
+really broken. This needs to be analyzed and explained in detail.
+
+> +else ifeq ($(LIBDISPATCH_TARGET_ARCH),powerpc)
+> +LIBDISPATCH_EXTRA_FLAGS		= -mcpu=7400
+
+  We support many, many other powerpc CPUs, so please explain why this is needed 
+and why it works on all other CPUs.
+
+> +else
+> +LIBDISPATCH_EXTRA_FLAGS		=
+> +endif
+> +
+> +LIBDISPATCH_CONF_OPTS += \
+> +	-DLibRT_LIBRARIES="${STAGING_DIR}/usr/lib/librt.a" \
+> +	-DCMAKE_C_COMPILER=$(LIBDISPATCH_CLANG_PATH)/clang \
+> +	-DCMAKE_CXX_COMPILER=$(LIBDISPATCH_CLANG_PATH)/clang++ \
+> +	-DCMAKE_C_FLAGS="-w -fuse-ld=lld $(LIBDISPATCH_EXTRA_FLAGS) -target $(LIBDISPATCH_TARGET_NAME) --sysroot=$(STAGING_DIR) -I$(STAGING_DIR)/usr/include -B$(STAGING_DIR)/usr/lib -B$(HOST_DIR)/lib/gcc/$(GNU_TARGET_NAME)/$(call qstrip,$(BR2_GCC_VERSION)) -L$(HOST_DIR)/lib/gcc/$(GNU_TARGET_NAME)/$(call qstrip,$(BR2_GCC_VERSION))" \
+
+  Please wrap this extremely long line. Also, since it's reused for CXX flags, 
+it probably makes sense to define a variable for this.
+
+  -fuse-ld should probably be given a full path to $(HOST_DIR)/bin/lld instead 
+of relying on $PATH.
+
+  --sysroot, -I, -B, -L options shouldn't be needed, they should already be part 
+of the toolchain wrapper. However, the toolchain wrapper for clang is fairly 
+recent and doesn't see that much use, so something may be missing there. Still, 
+if there is a problem, it should probably be handled in the toolchain wrapper an 
+not here.
+
+> +	-DCMAKE_C_LINK_FLAGS="-target $(LIBDISPATCH_TARGET_NAME) --sysroot=$(STAGING_DIR)" \
+
+  Again, --sysrot should already be handled by the toolchain wrapper.
+
+> +	-DCMAKE_CXX_FLAGS="-w -fuse-ld=lld $(LIBDISPATCH_EXTRA_FLAGS) -target $(LIBDISPATCH_TARGET_NAME) --sysroot=$(STAGING_DIR) -I$(STAGING_DIR)/usr/include -I$(HOST_DIR)/$(GNU_TARGET_NAME)/include/c++/$(call qstrip,$(BR2_GCC_VERSION))/ -I$(HOST_DIR)/$(GNU_TARGET_NAME)/include/c++/$(call qstrip,$(BR2_GCC_VERSION))/$(GNU_TARGET_NAME) -B$(STAGING_DIR)/usr/lib -B$(HOST_DIR)/lib/gcc/$(GNU_TARGET_NAME)/$(call qstrip,$(BR2_GCC_VERSION)) -L$(HOST_DIR)/lib/gcc/$(GNU_TARGET_NAME)/$(call qstrip,$(BR2_GCC_VERSION))" \
+> +	-DCMAKE_CXX_LINK_FLAGS="-target $(LIBDISPATCH_TARGET_NAME) --sysroot=$(STAGING_DIR)" \
+> +
+> +define LIBDISPATCH_INSTALL_TARGET_CMDS
+> +	(cd $(LIBDISPATCH_BUILDDIR) && \
+> +	cp ./*.so $(TARGET_DIR)/usr/lib/ \
+
+  Doesn't the CMakeLists.txt have proper install commands? If not, please 
+document in the commit message.
+
+  Also, no need to cd, just do
+
+	cp $(LIBDISPATCH_BUILDDIR)/*.so $(TARGET_DIR)/usr/lib/
+
+
+  Regards,
+  Arnout
+
+
+> +	)
+> +endef
+> +
+> +$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
