@@ -1,87 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68809C636D3
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 16:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 233DEC636D3
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 16:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E849581415;
-	Mon,  6 Feb 2023 16:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E849581415
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QBWlkvbF0GUS; Mon,  6 Feb 2023 16:33:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF1098188B;
-	Mon,  6 Feb 2023 16:33:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF1098188B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A1D9A1BF33A
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 16:33:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85E4B60B3A
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 16:33:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85E4B60B3A
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3F1260B3D;
+	Mon,  6 Feb 2023 16:39:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3F1260B3D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id urveZg5Kio0X for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 16:33:45 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Nf2NLSG_atb9; Mon,  6 Feb 2023 16:39:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB20D60B43;
+	Mon,  6 Feb 2023 16:39:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB20D60B43
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A0A5B1BF33A
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 16:39:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7504D81852
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 16:39:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7504D81852
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3_J6iwi5g_oE for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 16:39:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C95C60B38
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
- [IPv6:2001:4860:4864:20::32])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6C95C60B38
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 16:33:45 +0000 (UTC)
-Received: by mail-oa1-x32.google.com with SMTP id
- 586e51a60fabf-15ff0a1f735so15761411fac.5
- for <buildroot@buildroot.org>; Mon, 06 Feb 2023 08:33:45 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B3C5817A4
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B3C5817A4
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 16:39:40 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ l37-20020a05600c1d2500b003dfe46a9801so7823067wms.0
+ for <buildroot@buildroot.org>; Mon, 06 Feb 2023 08:39:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ehbK5vzz0tYT2Lo9vyFLoRbnud7Tpv++K9yu4U7CqLE=;
- b=cU171C+cO1Big9nto5VEOMigD5KcdaLgRnT9rSAY+nwbZFtBy6I939uFIXuSgmS8uB
- +ldp6SbJ6Muxn5f4eGvBe2yczLgtPgEdGx2L+9VKj3LCmItnePi8l25V0NlCIwWLbFlj
- BtWJ9epHdBeuvaQTYdeKDxXMQjUN/uwRmeeakvV1k97VarLv743W1yutMsgIO94m20oq
- 8P31s6UKX13uTtXiC7go2gN/93Qkm39vfVd5kHzKr6H9wu38xhTaQBBnx5r2bss68uDe
- i02qx22lL7qRacpZHjNpTbbHmgnQ9J1+Jc2SB4usRIa70d/pwAgaLChXDPy0obSTKaSO
- 9D/g==
-X-Gm-Message-State: AO0yUKWHa+EYrkG6EUTr3/OfRQelpybcz69rHU/lVAxMPxkOpLpIuNJ1
- OqdOeA/2GArSB+KDoRinAY/rFqPy3v2Ok2GN4sI=
-X-Google-Smtp-Source: AK7set+s2abj0rF1m72hqo6OLh8jiNmXeyiuwv4ZsBVmZH+6GB23GKkjoGwgMjfMb7hvXLEcTFavg64WTPJ0lr/bRaE=
-X-Received: by 2002:a05:6870:a44f:b0:169:fd7c:d154 with SMTP id
- n15-20020a056870a44f00b00169fd7cd154mr839273oal.93.1675701224402; Mon, 06 Feb
- 2023 08:33:44 -0800 (PST)
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=1lAO+X0YK6BMtnP6XeNAe7CXymNmfzFhNUULcXB1H4k=;
+ b=PMih59k6VkZlh2MmslDasNF6kKHk1wei/1wyNe47NZE6Op2+T1X4vp9rtg/CK5lihV
+ J+Q90UYRoa2DYrMZiWluUEwQ8Wv9lJtfKiqeczQ6axWzok3IgCSWlU1EjURPYekyDLr2
+ QMeyRuOKtq/zAZ75IKurf96ZMZLjQ2f+H/xRD+oEBH74Srpf7R4R4pwENA435TbY+MtJ
+ 0eaUH/cuhcRzXVedKYPSRRgblKSBoNCLZo8CUlxyGOee0I0TW2ivsQjj8qEibDn0JMK+
+ PFBGtZK2qf8xIVsarsRbSiM81dy+P7vIY1lqcvU3ZEuGMVXQIm4/nGcCd/CN1zKKQnPC
+ oMbg==
+X-Gm-Message-State: AO0yUKUaw0srGWiu236DaREjk5b+2XxEJZxkset3SngFKDVXTpeFUfd5
+ LsHnI7IKPXTIpF/yXreeJg8AEIh78gXcVZoi
+X-Google-Smtp-Source: AK7set+HupjeGNu49Gobr7wnySPMrERrXMSX7V/RsHNCg22cu1yg2PN0k3oSxL45RU3eI8SdQQwtEw==
+X-Received: by 2002:a05:600c:3423:b0:3e0:185:e916 with SMTP id
+ y35-20020a05600c342300b003e00185e916mr338465wmp.13.1675701578909; 
+ Mon, 06 Feb 2023 08:39:38 -0800 (PST)
+Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ bv20-20020a0560001f1400b002bc8130cca7sm9079707wrb.23.2023.02.06.08.39.37
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 06 Feb 2023 08:39:38 -0800 (PST)
+Message-ID: <50d6810c-888f-940e-50ac-13e4a8a1aa3c@mind.be>
+Date: Mon, 6 Feb 2023 17:39:36 +0100
 MIME-Version: 1.0
-References: <20230130002854.2300661-1-james.hilliard1@gmail.com>
- <301bf244-5eb8-3903-3371-80de9a6810aa@smile.fr>
- <282c5a46-37ed-6c07-9b72-86133a71750a@smile.fr>
-In-Reply-To: <282c5a46-37ed-6c07-9b72-86133a71750a@smile.fr>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 6 Feb 2023 09:33:33 -0700
-Message-ID: <CADvTj4o+c+9BvVXH2=6RsEgwjRbDBSHq+2+6_Whg3=esfUYVbA@mail.gmail.com>
-To: Romain Naour <romain.naour@smile.fr>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220413224004.1225568-1-james.hilliard1@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20220413224004.1225568-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ehbK5vzz0tYT2Lo9vyFLoRbnud7Tpv++K9yu4U7CqLE=;
- b=oTFnCkypRRmN9aAjJzsHx6TK7ZfmaR9jI3s+C9tXaxqulxg2gE1+tnodJI0PZXi0H5
- 35xfr1i+/WyXzIQjVoECRrqGc6frED4HMnTI30q+Om6AZeFWymIKCn2gSc1cud+X6IOz
- MD48xamroS9o21/8o0JYkR8dcqcKgvmTbeUc2GuEaRDIVxCCmI80w9oxVbbLBRatihAy
- ArkGT19m0hrW3JruLoHwRZWapkEjQ6s0Fo7Zfh6WWGKNzna/umdlCOvpLeQpNxUMkwCl
- PVnUyQR18FqQolh91j2jJheO1P24pByzcoAdkh5Pw80TgqS1Ao//TnxF2+CXsOUzfByk
- gulg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=oTFnCkyp
-Subject: Re: [Buildroot] [PATCH v5 01/10] package/cpuinfo: new package
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=1lAO+X0YK6BMtnP6XeNAe7CXymNmfzFhNUULcXB1H4k=;
+ b=F74RAvwFGV0+XyG3UODbrAF71xjGK3hlQqlA2kNrAd4FwgJHIKEeTeVaSwm5AowxdN
+ sWI5YnEDyLlSZUDuoPwbA5Jh3KAySdhe1rInqiEvIG37wSul17Ke/V1nlsjGNo37fsHm
+ o6bAm7DXib2hVxrGSjI8hc0DBpt3RKPuXherWkWaNiXvZXDZyO6NTXrPr3nX7vxUzZWB
+ 0rfvRAVAHQnNnUF7vSRhNmb2p6noCmP02Sk7iOGXBBjG+8ww5X3q8CwF13isriMslWWX
+ 6yuDxnzfSMwS9H35b3iq9RDON+PGfvILub1heaokAZ/0Sg5gnDX5Kik6JBd6jXma2zsf
+ i6NA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=F74RAvwF
+Subject: Re: [Buildroot] [PATCH v2 1/1] utils/genrandconfig: migrate to
+ asyncio subprocess calls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,58 +100,258 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stefan Hager <stefan.hager@ginzinger.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBGZWIgNiwgMjAyMyBhdCA5OjI0IEFNIFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3Vy
-QHNtaWxlLmZyPiB3cm90ZToKPgo+IEhlbGxvIEphbWVzLAo+Cj4gTGUgMDYvMDIvMjAyMyDDoCAx
-Njo1MywgUm9tYWluIE5hb3VyIGEgw6ljcml0IDoKPiA+IEhlbGxvIEphbWVzLAo+ID4KPiA+IExl
-IDMwLzAxLzIwMjMgw6AgMDE6MjgsIEphbWVzIEhpbGxpYXJkIGEgw6ljcml0IDoKPiA+PiBGcm9t
-OiBTdGVmYW4gSGFnZXIgPHN0ZWZhbi5oYWdlckBnaW56aW5nZXIuY29tPgo+ID4+Cj4gPj4gVGhp
-cyBwYWNrYWdlIGlzIHJlcXVpcmVkIGJ5IHRlbnNvcmZsb3ctbGl0ZS4KPiA+Pgo+ID4+IEFkZCBh
-IHBhdGNoIHJlbW92aW5nIGNwcCByZXF1aXJlbWVudCB3aGVuIG5vdCBidWlsZGluZyB0ZXN0cy4K
-PiA+Pgo+ID4+IFRlc3RlZC1ieTogU3RlZmFuIEhhZ2VyIDxzdGVmYW4uaGFnZXJAZ2luemluZ2Vy
-LmNvbT4KPiA+PiBTaWduZWQtb2ZmLWJ5OiBTdGVmYW4gSGFnZXIgPHN0ZWZhbi5oYWdlckBnaW56
-aW5nZXIuY29tPgo+ID4+IFNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxs
-aWFyZDFAZ21haWwuY29tPgo+ID4+IC0tLQo+ID4+IENoYW5nZXMgdjQgLT4gdjU6Cj4gPj4gICAt
-IGRvbid0IHJlcXVpcmUgY3BwCj4gPj4gQ2hhbmdlcyB2MiAtPiB2MzoKPiA+PiAgIC0gbW92ZSB0
-byBsaWJyYXJpZXMtPmhhcmR3YXJlIGhhbmRsaW5nCj4gPj4gLS0tCj4KPiBbLi4uXQo+Cj4gPj4g
-ZGlmZiAtLWdpdCBhL3BhY2thZ2UvY3B1aW5mby9Db25maWcuaW4gYi9wYWNrYWdlL2NwdWluZm8v
-Q29uZmlnLmluCj4gPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+PiBpbmRleCAwMDAwMDAwMDAw
-Li5kM2MzYjA4NDAwCj4gPj4gLS0tIC9kZXYvbnVsbAo+ID4+ICsrKyBiL3BhY2thZ2UvY3B1aW5m
-by9Db25maWcuaW4KPiA+PiBAQCAtMCwwICsxLDggQEAKPiA+PiArY29uZmlnIEJSMl9QQUNLQUdF
-X0NQVUlORk8KPiA+PiArICAgIGJvb2wgImNwdWluZm8iCj4gPgo+ID4gSGF2ZSB5b3UgY2hlY2tl
-ZCBjcHVpbmZvIGRlcGVuZGVuY2llcyA/Cj4gPgo+ID4gSXQgc2VlbXMgWE5OUGFjayB1c2VkIGJ5
-IGNwdWluZm8gaXMgNjRiaXRzIGFyY2hpdGVjdHVyZXMgb25seToKPiA+Cj4gPiBDTWFrZSBXYXJu
-aW5nIGF0IENNYWtlTGlzdHMudHh0OjY5IChNRVNTQUdFKToKPiA+IFRhcmdldCBwcm9jZXNzb3Ig
-YXJjaGl0ZWN0dXJlICJsIiBpcyBub3Qgc3VwcG9ydGVkIGluIGNwdWluZm8uICBjcHVpbmZvCj4g
-PiB3aWxsIGNvbXBpbGUsIGJ1dCBjcHVpbmZvX2luaXRpYWxpemUoKSB3aWxsIGFsd2F5cyBmYWls
-Lgo+ID4KPiA+IGhpbnQ6Cj4gPiBodHRwczovL2dpdGh1Yi5jb20vTm9idW9Uc3VrYW1vdG8vbWV0
-YS10ZW5zb3JmbG93LWxpdGUvYmxvYi9tYWluL3JlY2lwZXMtdG9vbHMvdGVuc29yZmxvdy1saXRl
-L3RlbnNvcmZsb3ctbGl0ZS1iZW5jaG1hcmtfMi4xMS4wLmJiI0wzMwo+ID4KPiA+IEFuZCB0cmln
-Z2VyIGEgYnVpbGQgaXNzdWUgb24gdUNsaWJjLW5nIGR1ZSB0byBtaXNzaW5nIGhlYWRlcjoKPiA+
-Cj4gPiBjcHVpbmZvLWRlMmZhNzhlYmI0MzFkYjk4NDg5ZTc4NjAzZTRmNzdjMWY2YzVjNTcvc3Jj
-L2FybS9saW51eC9od2NhcC5jOjE5OjExOgo+ID4gZmF0YWwgZXJyb3I6IHN5cy9hdXh2Lmg6IE5v
-IHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKPiA+ICAgIDE5IHwgICNpbmNsdWRlIDxzeXMvYXV4di5o
-Pgo+ID4KPiA+IEFsc28gc3RhdGljIGJ1aWxkIGlzIG5vdCBsaWtlbHkgc3VwcG9ydGVkOgo+ID4K
-PiA+IGNwdWluZm8tZGUyZmE3OGViYjQzMWRiOTg0ODllNzg2MDNlNGY3N2MxZjZjNWM1Ny9zcmMv
-YXJtL2xpbnV4L2h3Y2FwLmM6ODoxMDoKPiA+IGZhdGFsIGVycm9yOiBkbGZjbi5oOiBObyBzdWNo
-IGZpbGUgb3IgZGlyZWN0b3J5Cj4gPiAgICAgOCB8ICNpbmNsdWRlIDxkbGZjbi5oPgo+Cj4gQWN0
-dWFsbHkgdGhlcmUgaXMgYW4gYXJjaGl0ZWN0dXJlIGRlcGVuZGVuY3k6IHg4NiwgeDg2XzY0LCBh
-cm0sIGFhcmNoNjQuCj4gQWxzbyBpdCByZXF1aXJlcyB0aHJlYWRzIHN1cHBvcnQ6Cj4KPiBodHRw
-czovL2dpdGh1Yi5jb20vcHl0b3JjaC9jcHVpbmZvL2Jsb2IvbWFpbi9zcmMvaW5pdC5jI0wyNAoK
-V2VsbC4uLnRob3NlIGFyY2hpdGVjdHVyZSBkZXBlbmRlbmNpZXMga2luZGEgbG9vayBsaWtlIHJ1
-bnRpbWUgZGVwcwp0byBtZS4uLmEgY29uc3VtaW5nIGFwcGxpY2F0aW9uIGNvdWxkIGNhbGwgY3B1
-aW5mb19pbml0aWFsaXplKCkgd2l0aAplcnJvciBoYW5kbGluZyBhbmQgZmFsbGJhY2sgdG8gc29t
-ZSBvdGhlciBjb2RlcGF0aCBhdXRvbWF0aWNhbGx5IG9uCmZhaWx1cmUuCgpTbyBwcm9iYWJseSB3
-ZSBkb24ndCB3YW50IHRvIGFwcGx5IGFuIGFyY2hpdGVjdHVyZSByZXN0cmljdGlvbiB1bmxlc3MK
-dGhlcmUncyBhbiBhY3R1YWwgYnVpbGQgZmFpbHVyZS4KCj4KPiBCZXN0IHJlZ2FyZHMsCj4gUm9t
-YWluCj4KPiA+Cj4gPiBCZXN0IHJlZ2FyZHMsCj4gPiBSb21haW4KPiA+Cl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+  Hi James,
+
+On 14/04/2022 00:40, James Hilliard wrote:
+> Since genrandconfig no longer appears to support python2 we can
+> migrate the subprocess calls to use asyncio variants.
+> 
+> This has the advantage of allowing for runners like autobuild-run to
+> integrate directly into genrandconfig by calling the asyncio
+> gen_config using importlib instead of having to run genrandconfig as
+> a subprocess.
+> 
+> Using asyncio is advantageous here as it eliminates the requirement
+> for the runner to deal with blocking subprocess calls(by having to
+> use threading for example).
+> 
+> Also cleanup some unused functions/python2 compatibility shims.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+  I finally applied to master. Needed to resolve some conflicts, but otherwise 
+no changes. I still do have a few comments though.
+
+> ---
+> Changes v1 -> v2:
+>    - compatibility shims for python 3.4 and newer
+> ---
+>   utils/genrandconfig | 94 +++++++++++++++++++++++++++++----------------
+>   1 file changed, 61 insertions(+), 33 deletions(-)
+> 
+> diff --git a/utils/genrandconfig b/utils/genrandconfig
+> index 59fe34e58d..aa82a41d5c 100755
+> --- a/utils/genrandconfig
+> +++ b/utils/genrandconfig
+> @@ -18,23 +18,18 @@
+>   
+>   # This script generates a random configuration for testing Buildroot.
+>   
+> -import contextlib
+> +import asyncio
+>   import csv
+>   import os
+>   from random import randint
+> -import subprocess
+>   import sys
+>   from distutils.version import StrictVersion
+>   import platform
+>   
+> -if sys.hexversion >= 0x3000000:
+> -    import urllib.request as _urllib
+> +if sys.version_info < (3, 8):
+> +    from asyncio import coroutine
+>   else:
+> -    import urllib2 as _urllib
+> -
+> -
+> -def urlopen_closing(uri):
+> -    return contextlib.closing(_urllib.urlopen(uri))
+> +    from types import coroutine
+>   
+>   
+>   class SystemInfo:
+> @@ -63,6 +58,7 @@ class SystemInfo:
+>           # --
+>           return None
+>   
+> +    @coroutine
+>       def has(self, prog):
+
+  Isn't the usual way to use
+
+	async def has(self, prog):
+
+? Or does that mean something different?
+
+
+>           """Checks whether a program is available.
+>           Lazily evaluates missing entries.
+> @@ -78,11 +74,13 @@ class SystemInfo:
+>           have_it = self.find_prog(prog)
+>           # java[c] needs special care
+>           if have_it and prog in ('java', 'javac'):
+> -            with open(os.devnull, "w") as devnull:
+> -                if subprocess.call("%s -version | grep gcj" % prog,
+> -                                   shell=True,
+> -                                   stdout=devnull, stderr=devnull) != 1:
+> -                    have_it = False
+> +            proc = yield from asyncio.create_subprocess_shell(
+> +                "%s -version | grep gcj" % prog,
+
+  Perhaps we should also start using f-strings. That bumps the requirement to 
+python 3.6 but I don't think it's unreasonable for genrandconfig.
+
+> +                stdout=asyncio.subprocess.DEVNULL,
+> +                stderr=asyncio.subprocess.DEVNULL)
+> +            ret = yield from proc.wait()
+> +            if ret != 1:
+> +                have_it = False
+>           # --
+>           self.progs[prog] = have_it
+>           return have_it
+> @@ -159,6 +157,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
+>       return configs
+>   
+>   
+> +@coroutine
+>   def is_toolchain_usable(configfile, config):
+>       """Check if the toolchain is actually usable."""
+>   
+> @@ -179,8 +178,12 @@ def is_toolchain_usable(configfile, config):
+>              'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
+>              'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
+>              'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
+> -            ldd_version_output = subprocess.check_output(['ldd', '--version'])
+> -            glibc_version = ldd_version_output.splitlines()[0].split()[-1]
+> +            proc = yield from asyncio.create_subprocess_exec(
+> +                'ldd', '--version', stdout=asyncio.subprocess.PIPE)
+> +            ldd_version_output, _ = yield from proc.communicate()
+> +            if proc.returncode:
+> +                return False
+> +            glibc_version = ldd_version_output.splitlines()[0].split()[-1].decode('utf-8')
+
+  The decode was already added in commit 
+12e4f7c5c43fb7b4db6d6548b9dbabb9c1b5f875 so I didn't modify this line.
+
+>               if StrictVersion('2.14') > StrictVersion(glibc_version):
+>                   print("WARN: ignoring the Linaro ARM toolchains because too old host glibc", file=sys.stderr)
+>                   return False
+> @@ -188,6 +191,7 @@ def is_toolchain_usable(configfile, config):
+>       return True
+>   
+>   
+> +@coroutine
+>   def fixup_config(sysinfo, configfile):
+>       """Finalize the configuration and reject any problematic combinations
+>   
+> @@ -202,7 +206,8 @@ def fixup_config(sysinfo, configfile):
+>   
+>       BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
+>   
+> -    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not sysinfo.has("java"):
+> +    has_java = yield from sysinfo.has("java")
+> +    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not has_java:
+>           return False
+>       # The ctng toolchain is affected by PR58854
+>       if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+> @@ -507,6 +512,7 @@ def fixup_config(sysinfo, configfile):
+>       return True
+>   
+>   
+> +@coroutine
+>   def gen_config(args):
+>       """Generate a new random configuration
+>   
+> @@ -565,7 +571,8 @@ def gen_config(args):
+>   
+>       # Randomly enable BR2_REPRODUCIBLE 10% of times
+>       # also enable tar filesystem images for testing
+> -    if sysinfo.has("diffoscope") and randint(0, 10) == 0:
+> +    has_diffoscope = yield from sysinfo.has("diffoscope")
+> +    if has_diffoscope and randint(0, 10) == 0:
+>           configlines.append("BR2_REPRODUCIBLE=y\n")
+>           configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
+>   
+> @@ -579,10 +586,14 @@ def gen_config(args):
+>       with open(configfile, "w+") as configf:
+>           configf.writelines(configlines)
+>   
+> -    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+> -                           "olddefconfig"])
+> +    proc = yield from asyncio.create_subprocess_exec(
+> +        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
+> +    ret = yield from proc.wait()
+> +    if ret:
+> +        return ret
+>   
+> -    if not is_toolchain_usable(configfile, toolchainconfig):
+> +    toolchain_usable = yield from is_toolchain_usable(configfile, toolchainconfig)
+> +    if not toolchain_usable:
+>           return 2
+>   
+>       # Now, generate the random selection of packages, and fixup
+> @@ -596,21 +607,34 @@ def gen_config(args):
+>                     file=sys.stderr)
+>               return 1
+>           bounded_loop -= 1
+> -        subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+> -                               "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+> -                               "randpackageconfig" if args.toolchains_csv else "randconfig"])
+> -
+> -        if fixup_config(sysinfo, configfile):
+> +        proc = yield from asyncio.create_subprocess_exec(
+> +            "make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+> +            "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+> +            "randpackageconfig" if args.toolchains_csv else "randconfig")
+
+  This was refactored a bit, can you check if I fixed it up correctly?
+
+  Regards,
+  Arnout
+
+> +        ret = yield from proc.wait()
+> +        if ret:
+> +            return ret
+> +
+> +        ret = yield from fixup_config(sysinfo, configfile)
+> +        if ret:
+>               break
+>   
+> -    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+> -                           "olddefconfig"])
+> +    proc = yield from asyncio.create_subprocess_exec(
+> +        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
+> +    ret = yield from proc.wait()
+> +    if ret:
+> +        return ret
+>   
+> -    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+> -                           "savedefconfig"])
+> +    proc = yield from asyncio.create_subprocess_exec(
+> +        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "savedefconfig")
+> +    ret = yield from proc.wait()
+> +    if ret:
+> +        return ret
+>   
+> -    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+> -                            "dependencies"])
+> +    proc = yield from asyncio.create_subprocess_exec(
+> +        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "dependencies")
+> +    ret = yield from proc.wait()
+> +    return ret
+>   
+>   
+>   if __name__ == '__main__':
+> @@ -642,7 +666,11 @@ if __name__ == '__main__':
+>       args.outputdir = os.path.abspath(args.outputdir)
+>   
+>       try:
+> -        ret = gen_config(args)
+> +        if sys.version_info < (3, 7):
+> +            loop = asyncio.get_event_loop()
+> +            ret = loop.run_until_complete(gen_config(args))
+> +        else:
+> +            ret = asyncio.run(gen_config(args))
+>       except Exception as e:
+>           print(str(e), file=sys.stderr)
+>           parser.exit(1)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
