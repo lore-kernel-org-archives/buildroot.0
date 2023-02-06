@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 218A6C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6500C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:32:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C69556FBB6;
-	Tue, 21 Feb 2023 01:31:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C69556FBB6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 684C47003C;
+	Tue, 21 Feb 2023 01:32:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 684C47003C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sz1b-S_JJzOZ; Tue, 21 Feb 2023 01:31:54 +0000 (UTC)
+	with ESMTP id hVgRn4_6QgE3; Tue, 21 Feb 2023 01:32:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E898C6FBDE;
-	Tue, 21 Feb 2023 01:31:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E898C6FBDE
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2DDE7003F;
+	Tue, 21 Feb 2023 01:32:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2DDE7003F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7F9D91BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D01111BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F3266FC16
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CC3F6FBF9
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F3266FC16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CC3F6FBF9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KkOWFa-yItk9 for <buildroot@lists.busybox.net>;
+ with ESMTP id BHBm2mo4mcRI for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CBDF6FBE4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9361D6FC0F
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CBDF6FBE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9361D6FC0F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58C4181979; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+ id 90DE8828C8; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 11:57:08 +0100
+Date: Mon, 6 Feb 2023 12:00:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4bbda72743d39df29dfc91e0f52be02b2d465f6d
-X-Git-Newrev: 014180011d4333a73857bbd327c5c2aef7f4b43e
+X-Git-Oldrev: 101b05a37479c31e397cdabad06e346665c93eba
+X-Git-Newrev: 87af250c0e136bf8751e1fc8a6196f9b25a0b64e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205248.58C4181979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libunibreak: new
- package
+Message-Id: <20230220205248.90DE8828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-iniparse: add
+ host-python-iniparse
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,95 +57,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=014180011d4333a73857bbd327c5c2aef7f4b43e
+commit: https://git.buildroot.net/buildroot/commit/?id=87af250c0e136bf8751e1fc8a6196f9b25a0b64e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Introduced as optional dependency with libass 0.17.0.
+Make the host variant of python-iniparse as host-crudini dependency.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Note: usually, we would not have needed to add a Config.in.host,
+because it is jsut a library, but since there is an Config.in.host
+for python-six, we need to select it, so we need an host entry.
+
+Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
+Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998@free.fr:
+  - add the note
+  - reorder alphabetically
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/libunibreak/Config.in        |  8 ++++++++
- package/libunibreak/libunibreak.hash |  3 +++
- package/libunibreak/libunibreak.mk   | 13 +++++++++++++
- 5 files changed, 26 insertions(+)
+ package/Config.in.host                     |  1 +
+ package/python-iniparse/Config.in.host     | 11 +++++++++++
+ package/python-iniparse/python-iniparse.mk |  1 +
+ 3 files changed, 13 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3eb7fba339..97c28fbdd8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -395,6 +395,7 @@ F:	package/libsndfile/
- F:	package/libsoundtouch/
- F:	package/libsquish/
- F:	package/libudfread/
-+F:	package/libunibreak/
- F:	package/liburiparser/
- F:	package/libutp/
- F:	package/libva/
-diff --git a/package/Config.in b/package/Config.in
-index f32209db95..7817b51fc2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2157,6 +2157,7 @@ menu "Text and terminal handling"
- 	source "package/libestr/Config.in"
- 	source "package/libfribidi/Config.in"
- 	source "package/libiconv/Config.in"
-+	source "package/libunibreak/Config.in"
- 	source "package/libunistring/Config.in"
- 	source "package/linenoise/Config.in"
- 	source "package/ncurses/Config.in"
-diff --git a/package/libunibreak/Config.in b/package/libunibreak/Config.in
+diff --git a/package/Config.in.host b/package/Config.in.host
+index b76bea60d0..0f612d7872 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -77,6 +77,7 @@ menu "Host utilities"
+ 	source "package/pwgen/Config.in.host"
+ 	source "package/python-cython/Config.in.host"
+ 	source "package/python-greenlet/Config.in.host"
++	source "package/python-iniparse/Config.in.host
+ 	source "package/python-kflash/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
+ 	source "package/python-pyyaml/Config.in.host"
+diff --git a/package/python-iniparse/Config.in.host b/package/python-iniparse/Config.in.host
 new file mode 100644
-index 0000000000..101d621fd6
+index 0000000000..e93022e815
 --- /dev/null
-+++ b/package/libunibreak/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBUNIBREAK
-+	bool "libunibreak"
++++ b/package/python-iniparse/Config.in.host
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HOST_PYTHON_INIPARSE
++	bool "host python-iniparse"
++	select BR2_PACKAGE_HOST_PYTHON_SIX # runtime
 +	help
-+	  libunibreak is an implementation of the line breaking and word
-+	  breaking algorithms as described in Unicode Standard Annex 14
-+	  and Unicode Standard Annex 29.
++	  iniparse is an INI parser for Python which is API compatible
++	  with the standard library's ConfigParser, preserves
++	  structure of INI files (order of sections & options,
++	  indentation, comments, and blank lines are preserved when
++	  data is updated), and is more convenient to use.
 +
-+	  https://github.com/adah1972/libunibreak
-diff --git a/package/libunibreak/libunibreak.hash b/package/libunibreak/libunibreak.hash
-new file mode 100644
-index 0000000000..bb85f21cdc
---- /dev/null
-+++ b/package/libunibreak/libunibreak.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  dd1a92d4c5646aa0e457ff41d89812ec5243863be6c20bbcb5ee380f3dd78377  libunibreak-5.1.tar.gz
-+sha256  0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db  LICENCE
-diff --git a/package/libunibreak/libunibreak.mk b/package/libunibreak/libunibreak.mk
-new file mode 100644
-index 0000000000..fa52116c1f
---- /dev/null
-+++ b/package/libunibreak/libunibreak.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libunibreak
-+#
-+################################################################################
-+
-+LIBUNIBREAK_VERSION = 5.1
-+LIBUNIBREAK_SITE = https://github.com/adah1972/libunibreak/releases/download/libunibreak_$(subst .,_,$(LIBUNIBREAK_VERSION))
-+LIBUNIBREAK_INSTALL_STAGING = YES
-+LIBUNIBREAK_LICENSE = Zlib
-+LIBUNIBREAK_LICENSE_FILES = LICENCE
-+
-+$(eval $(autotools-package))
++	  https://pypi.python.org/pypi/iniparse
+diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
+index d31a490bd8..e76987d1e9 100644
+--- a/package/python-iniparse/python-iniparse.mk
++++ b/package/python-iniparse/python-iniparse.mk
+@@ -12,3 +12,4 @@ PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
+ PYTHON_INIPARSE_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
