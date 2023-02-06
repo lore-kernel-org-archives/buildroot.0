@@ -1,60 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A429C05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 15:05:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 256F7C636D3
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 15:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C35B6415EF;
-	Mon,  6 Feb 2023 15:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C35B6415EF
+	by smtp3.osuosl.org (Postfix) with ESMTP id C86AF60B05;
+	Mon,  6 Feb 2023 15:08:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C86AF60B05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eDcfS9hSI2pS; Mon,  6 Feb 2023 15:05:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lyw3t-wFcA2w; Mon,  6 Feb 2023 15:08:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DD83415E2;
-	Mon,  6 Feb 2023 15:05:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DD83415E2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 089B91BF3E0
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 15:05:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABF8660AEE;
+	Mon,  6 Feb 2023 15:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABF8660AEE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A3D0E1BF3E0
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 15:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E45CA40459
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 15:05:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E45CA40459
+ by smtp1.osuosl.org (Postfix) with ESMTP id 865A781424
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 15:08:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 865A781424
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0ceCY1gLT00J for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 15:05:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC5B24036F
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC5B24036F
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 15:05:21 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3829720005;
- Mon,  6 Feb 2023 15:05:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pP33V-00DxBw-7j; Mon, 06 Feb 2023 16:05:17 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-18-ricardo.martincoski@gmail.com>
- <87v8kf9g9l.fsf@dell.be.48ers.dk>
-Date: Mon, 06 Feb 2023 16:05:17 +0100
-In-Reply-To: <87v8kf9g9l.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 06 Feb 2023 12:37:10 +0100")
-Message-ID: <87k00u96mq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gaqC4-9kxkPp for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 15:08:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7137D8141D
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7137D8141D
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 15:08:50 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id u8so4766258ilq.13
+ for <buildroot@buildroot.org>; Mon, 06 Feb 2023 07:08:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Eif3ulbn/xolaNSAv/0Pp0cteR7l0H4maZ4cu/QjmSs=;
+ b=IiiENAbdGQV+3s89QsuUbx4Mi7h9IQGTvinW07UL6GjSk6iVUzIjv8MoRbtHttldyY
+ LDx/R6+H0Ia4s6jMzHAcs0vmr61Kd0wt0kg/1Jz6pjbujdakzNs+E93Oq35BFd+QEA1Q
+ PKADcuXNCv5DP2/c9j5mjBTAG0fN8yKfKrOz3iB7MbcdDZ4j/ENK0YGIp6NR9Ufi+DM6
+ vBcuQTTRXfP2eST5q79LgdLnk37ZBs1yAXtu0mimXZXNcDMuRTqrj+kATXwLMC3fppGB
+ SuqoxCyrTDOFH/cXlSBUPf+rYfQVDcBNVsS0SqR6F1kFnihsNsbBBRF89UTpKFXoUu6/
+ AGqA==
+X-Gm-Message-State: AO0yUKWOB+37h3R06FRVvDpaG/7LsdeuTJNPWCwnqbfelvRUg0b029wI
+ PqS2e1/xCAUlejfM/QvZ7cW0aAWzGUaDeA==
+X-Google-Smtp-Source: AK7set+JF9LxgYfeS3sj+YCo4Kpi3YTbEk0pMs3E0oR31te2+97eQnfRsQ1N4DKFnBasHEloNHvtSQ==
+X-Received: by 2002:a05:6e02:4a4:b0:313:c1f7:5ef6 with SMTP id
+ e4-20020a056e0204a400b00313c1f75ef6mr2769650ils.3.1675696129109; 
+ Mon, 06 Feb 2023 07:08:49 -0800 (PST)
+Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
+ [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
+ b89-20020a0295e2000000b003a9962a24d1sm3668632jai.122.2023.02.06.07.08.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 06 Feb 2023 07:08:48 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  6 Feb 2023 08:08:47 -0700
+Message-Id: <20230206150847.3621475-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 17/25] package/gitlab-runner: ensure use of
- LIBCURL_OPENSSL
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Eif3ulbn/xolaNSAv/0Pp0cteR7l0H4maZ4cu/QjmSs=;
+ b=ac2Pmp73yv9sgknJGFttgVUl1iW1++7rEzXzPmK2i0xmsMtHxWUZb3AwbluF91bT3e
+ csaUvF0ajGsxVMMimI7dovMaO+vigrvWPbgQkDRgnjLwXPQYxx5nhe5mtEbOzh1rZqR6
+ /XaSj88jImgX70jX0yDwbPmwdVKMtFczzkQToBsXcGTA2IKI1D6nMy5N8ZaSvt1BiOCf
+ h+IO6oeC1Ug2Dnjj62nshdysjGv7arhRq6FnlmEs9o3TVBEKgTDzUbdbxswCZo7TQ2pw
+ jy+NuibdMQdvSepJklNSNIYpUV/9CubvjTljVSWpiyGV+88NjlOo89OJsvZ1Oy+VUY2n
+ XAZw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ac2Pmp73
+Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: switch to async/await
+ format
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,62 +94,190 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+This requires python 3.6 or newer but is a bit cleaner.
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
- >> Currently this minimal config is accepted while it shouldn't:
- >> BR2_x86_i686=y
- >> BR2_PACKAGE_BEARSSL=y
- >> BR2_PACKAGE_LIBCURL_BEARSSL=y
- >> BR2_PACKAGE_GITLAB_RUNNER=y
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ utils/genrandconfig | 62 +++++++++++++++++----------------------------
+ 1 file changed, 23 insertions(+), 39 deletions(-)
 
- >> BR2_PACKAGE_GITLAB_RUNNER selects BR2_PACKAGE_LIBCURL_OPENSSL.
- >> Kconfig does not enforce a select when the symbol selected is part of a
- >> choice. See similar explanation on [1] and [2].
-
- >> Doing something similar to [3] and depending on the choice option
- >> instead of selecting it would create a Kconfig recursive dependency.
-
- >> Just dropping the ineffective select would keep the above defconfig
- >> snippet as an accepted one.
-
- >> Adding a comment to the menu, i.e.:
- >> comment "gitlab-runner must use BR2_PACKAGE_LIBCURL_OPENSSL"
- >> depends on BR2_PACKAGE_GITLAB_RUNNER
- >> depends on !BR2_PACKAGE_LIBCURL_OPENSSL
- >> could improve user experience but it also keeps the above defconfig
- >> snippet as an accepted one.
-
- >> So bail out the build when gitlab-runner is enabled and libcurl-openssl
- >> is not selected, similar to what is done in [4].
-
- >> [1] "a44b1c1405 legacy: update the BR2_PREFER_STATIC_LIB option"
- >> [2] "b1d5aa1bc2 package/qwt: Fix selecting OpenGL support in qt4"
- >> [3] "9fc652a373 package/libmodsecurity: needs dynamic library with
- >> libcurl and mbedtls"
- >> [4] "fda53f0791 package/Makefile.in: add detection for the lack of C
- >> library"
-
- >> Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
- >> Cc: Romain Naour <romain.naour@gmail.com>
- >> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
- > The change as such is fine, but why does gitlab-runner really need the
- > curl binary to use the openssl backend? Perhaps it is just about curl
- > having HTTPS support?
-
-A that is presumably what was meant I have instead changed it to use
-the BR2_PACKAGE_LIBCURL_FORCE_TLS option.
-
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index b3576f8a51..8947898d88 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -28,11 +28,6 @@ import traceback
+ from distutils.version import StrictVersion
+ import platform
+ 
+-if sys.version_info < (3, 8):
+-    from asyncio import coroutine
+-else:
+-    from types import coroutine
+-
+ 
+ class SystemInfo:
+     DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
+@@ -60,8 +55,7 @@ class SystemInfo:
+         # --
+         return None
+ 
+-    @coroutine
+-    def has(self, prog):
++    async def has(self, prog):
+         """Checks whether a program is available.
+         Lazily evaluates missing entries.
+ 
+@@ -76,11 +70,11 @@ class SystemInfo:
+         have_it = self.find_prog(prog)
+         # java[c] needs special care
+         if have_it and prog in ('java', 'javac'):
+-            proc = yield from asyncio.create_subprocess_shell(
++            proc = await asyncio.create_subprocess_shell(
+                 "%s -version | grep gcj" % prog,
+                 stdout=asyncio.subprocess.DEVNULL,
+                 stderr=asyncio.subprocess.DEVNULL)
+-            ret = yield from proc.wait()
++            ret = await proc.wait()
+             if ret != 1:
+                 have_it = False
+         # --
+@@ -159,8 +153,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
+     return configs
+ 
+ 
+-@coroutine
+-def is_toolchain_usable(configfile, config):
++async def is_toolchain_usable(configfile, config):
+     """Check if the toolchain is actually usable."""
+ 
+     with open(configfile) as configf:
+@@ -180,9 +173,9 @@ def is_toolchain_usable(configfile, config):
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
+-            proc = yield from asyncio.create_subprocess_exec(
++            proc = await asyncio.create_subprocess_exec(
+                 'ldd', '--version', stdout=asyncio.subprocess.PIPE)
+-            ldd_version_output, _ = yield from proc.communicate()
++            ldd_version_output, _ = await proc.communicate()
+             if proc.returncode:
+                 return False
+             glibc_version = ldd_version_output.decode().splitlines()[0].split()[-1]
+@@ -193,8 +186,7 @@ def is_toolchain_usable(configfile, config):
+     return True
+ 
+ 
+-@coroutine
+-def fixup_config(sysinfo, configfile):
++async def fixup_config(sysinfo, configfile):
+     """Finalize the configuration and reject any problematic combinations
+ 
+     This function returns 'True' when the configuration has been
+@@ -210,8 +202,7 @@ def fixup_config(sysinfo, configfile):
+ 
+     BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
+ 
+-    has_java = yield from sysinfo.has("java")
+-    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not has_java:
++    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not await sysinfo.has("java"):
+         return False
+     # The ctng toolchain is affected by PR58854
+     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+@@ -654,8 +645,7 @@ def fixup_config(sysinfo, configfile):
+     return True
+ 
+ 
+-@coroutine
+-def gen_config(args):
++async def gen_config(args):
+     """Generate a new random configuration
+ 
+     This function generates the configuration, by choosing a random
+@@ -713,8 +703,7 @@ def gen_config(args):
+ 
+     # Randomly enable BR2_REPRODUCIBLE 10% of times
+     # also enable tar filesystem images for testing
+-    has_diffoscope = yield from sysinfo.has("diffoscope")
+-    if has_diffoscope and randint(0, 10) == 0:
++    if await sysinfo.has("diffoscope") and randint(0, 10) == 0:
+         configlines.append("BR2_REPRODUCIBLE=y\n")
+         configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
+ 
+@@ -728,14 +717,13 @@ def gen_config(args):
+     with open(configfile, "w+") as configf:
+         configf.writelines(configlines)
+ 
+-    proc = yield from asyncio.create_subprocess_exec(
++    proc = await asyncio.create_subprocess_exec(
+         "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
+-    ret = yield from proc.wait()
++    ret = await proc.wait()
+     if ret:
+         return ret
+ 
+-    toolchain_usable = yield from is_toolchain_usable(configfile, toolchainconfig)
+-    if not toolchain_usable:
++    if not await is_toolchain_usable(configfile, toolchainconfig):
+         return 2
+ 
+     # Now, generate the random selection of packages, and fixup
+@@ -749,37 +737,33 @@ def gen_config(args):
+                   file=sys.stderr)
+             return 1
+         bounded_loop -= 1
+-        make_rand = [
++        proc = await asyncio.create_subprocess_exec(
+             "make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+             "KCONFIG_SEED=0x%s" % hexlify(os.urandom(4)).decode("ascii").upper(),
+             "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+-            "randpackageconfig" if args.toolchains_csv else "randconfig"
+-        ]
+-        proc = yield from asyncio.create_subprocess_exec(*make_rand)
+-        ret = yield from proc.wait()
++            "randpackageconfig" if args.toolchains_csv else "randconfig")
++        ret = await proc.wait()
+         if ret:
+             return ret
+ 
+-        ret = yield from fixup_config(sysinfo, configfile)
+-        if ret:
++        if await fixup_config(sysinfo, configfile):
+             break
+ 
+-    proc = yield from asyncio.create_subprocess_exec(
++    proc = await asyncio.create_subprocess_exec(
+         "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
+-    ret = yield from proc.wait()
++    ret = await proc.wait()
+     if ret:
+         return ret
+ 
+-    proc = yield from asyncio.create_subprocess_exec(
++    proc = await asyncio.create_subprocess_exec(
+         "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "savedefconfig")
+-    ret = yield from proc.wait()
++    ret = await proc.wait()
+     if ret:
+         return ret
+ 
+-    proc = yield from asyncio.create_subprocess_exec(
++    proc = await asyncio.create_subprocess_exec(
+         "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "dependencies")
+-    ret = yield from proc.wait()
+-    return ret
++    return await proc.wait()
+ 
+ 
+ if __name__ == '__main__':
 -- 
-Bye, Peter Korsgaard
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
