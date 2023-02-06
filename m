@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B40CDC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48E46C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6812E4F012;
-	Tue, 21 Feb 2023 00:12:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6812E4F012
+	by smtp4.osuosl.org (Postfix) with ESMTP id E272E4EF83;
+	Tue, 21 Feb 2023 00:12:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E272E4EF83
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id syHl9gawcAv1; Tue, 21 Feb 2023 00:12:40 +0000 (UTC)
+	with ESMTP id hQlyDbLJJLnK; Tue, 21 Feb 2023 00:12:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 435054F034;
-	Tue, 21 Feb 2023 00:12:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 435054F034
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 526DD1BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDA944F103;
+	Tue, 21 Feb 2023 00:12:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDA944F103
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C9BEA1BF27E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABCB161B25
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABCB161B25
+ by smtp2.osuosl.org (Postfix) with ESMTP id B8B40417BD
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8B40417BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vG5CLs5mNHZz for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3lCZ7Lt4T45D for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3E886F9F4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3E886F9F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id E77E941788
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E77E941788
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E210386495; Mon, 20 Feb 2023 20:52:25 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id D5CED8648F; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jan 2023 23:09:59 +0100
+Date: Mon, 6 Feb 2023 12:36:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ca5cd8d67554c568daee4da1f058bcf3b35b2976
-X-Git-Newrev: 11479db32c5ea6bbdd7ce9b77873561a2ca07cfb
+X-Git-Oldrev: 6ddc29708d3c82f2f6055b596e484a6d963a6eae
+X-Git-Newrev: d3cab8f29eb9c7e573099a4a0e45f251e4f15f97
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205225.E210386495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wpa_supplicant: drop
- dangling WPA_SUPPLICANT_{LDFLAGS, MAKE_ENV}
+Message-Id: <20230220205248.D5CED8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/Config.in.host: fix
+ missing double-quote
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11479db32c5ea6bbdd7ce9b77873561a2ca07cfb
+commit: https://git.buildroot.net/buildroot/commit/?id=d3cab8f29eb9c7e573099a4a0e45f251e4f15f97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit "0340b45da0 wpa_supplicant: bump to version 1.0" from 2012
-converted the package to use the generic infra, but added a bogus
-WPA_SUPPLICANT_LDFLAGS end left a dangling WPA_SUPPLICANT_MAKE_ENV.
+Commit c96b2b21f7ae (package/python-iniparse: add host-python-iniparse)
+missed that.
 
-Drop the symbols that are not used since 2012.
-
-Cc: Matt Weber <matthew.weber@collins.com>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reported-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index e5e3938be1..42c6f772ac 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -13,7 +13,6 @@ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
- WPA_SUPPLICANT_SUBDIR = wpa_supplicant
- WPA_SUPPLICANT_DBUS_SERVICE = fi.w1.wpa_supplicant1
- WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
--WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
- 
- # install the wpa_client library
-@@ -157,9 +156,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
- WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf dbus
--WPA_SUPPLICANT_MAKE_ENV = \
--	PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
--	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
- WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
- define WPA_SUPPLICANT_INSTALL_DBUS_NEW
- 	$(INSTALL) -m 0644 -D \
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 8d28f426d1..dcadbfdfc1 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -78,7 +78,7 @@ menu "Host utilities"
+ 	source "package/pwgen/Config.in.host"
+ 	source "package/python-cython/Config.in.host"
+ 	source "package/python-greenlet/Config.in.host"
+-	source "package/python-iniparse/Config.in.host
++	source "package/python-iniparse/Config.in.host"
+ 	source "package/python-kflash/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
+ 	source "package/python-pyyaml/Config.in.host"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
