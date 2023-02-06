@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CADC4C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F12D2C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7ED3D4F278;
-	Tue, 21 Feb 2023 00:20:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7ED3D4F278
+	by smtp4.osuosl.org (Postfix) with ESMTP id 938CA4F29C;
+	Tue, 21 Feb 2023 00:20:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 938CA4F29C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LEakcpooYzPu; Tue, 21 Feb 2023 00:20:39 +0000 (UTC)
+	with ESMTP id pyG7NnrXUGKt; Tue, 21 Feb 2023 00:20:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7004342A16;
-	Tue, 21 Feb 2023 00:20:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7004342A16
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 984121BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FFE24F296;
+	Tue, 21 Feb 2023 00:20:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FFE24F296
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 437C51BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 22CAB6FAB0
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22CAB6FAB0
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFE45417D1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFE45417D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TnmtoChbDCZ7 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1xxFzboglG1W for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F48B61B07
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F48B61B07
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26674417C7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26674417C7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DB8E828C8; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
+ id 1685E86495; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Jan 2023 16:05:08 +0100
+Date: Mon, 6 Feb 2023 23:32:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3a22b009992883ad57553ffb3f194303f90ad1a4
-X-Git-Newrev: 0c8eefa6a4e2a40ee9b832d5f1e71bf4ddfd9f1e
+X-Git-Oldrev: a94d39d693d84f96f996a6a3decfecc60a9625bd
+X-Git-Newrev: ce3d349384f4d80ed8fc50a82ff864bd5bcf6375
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205227.5DB8E828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnss: bump version
- to 3.87
+Message-Id: <20230220205251.1685E86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcamera: bump to
+ version 0.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c8eefa6a4e2a40ee9b832d5f1e71bf4ddfd9f1e
+commit: https://git.buildroot.net/buildroot/commit/?id=ce3d349384f4d80ed8fc50a82ff864bd5bcf6375
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Reviewed-by: Quentin Schulz <foss+buildroot@0leil.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 50c5e583af..f847ec4f77 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 033e318910..ea204aee98 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
 @@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_86_RTM/src/SHA256SUMS
--sha256  3f385fc686476bbba811035fa6821b542475d55747b18c20c221d4d66573b975  nss-3.86.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_87_RTM/src/SHA256SUMS
-+sha256  68a1894496d3d158babc75f8a5dda3f55b7c1560573936e3b101a10fa4ac152d  nss-3.87.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index cee0e596a1..90fd9259d5 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
+-sha256  d7100286616550aca487b46ae9de2a70bb471352a332b8214901b4148739990f  libcamera-v0.0.3-br1.tar.gz
++sha256  13e53b33652b16454264b6eff0a6f032aa9331f919b07b6d0e622917ed7f7dd8  libcamera-v0.0.4-br1.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 8979a43aca..01c4cb2ff2 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBNSS_VERSION = 3.86
-+LIBNSS_VERSION = 3.87
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = v0.0.3
++LIBCAMERA_VERSION = v0.0.4
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
