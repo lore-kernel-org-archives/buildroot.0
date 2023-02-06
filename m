@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7192C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FCA6C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:13:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89FC74EE4F;
-	Tue, 21 Feb 2023 00:13:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89FC74EE4F
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC54B436C3;
+	Tue, 21 Feb 2023 00:13:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC54B436C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AnajT9oleUXy; Tue, 21 Feb 2023 00:13:21 +0000 (UTC)
+	with ESMTP id J1Y0D_7fQi9j; Tue, 21 Feb 2023 00:13:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 334C34EE6E;
-	Tue, 21 Feb 2023 00:13:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 334C34EE6E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A67131BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E480942D32;
+	Tue, 21 Feb 2023 00:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E480942D32
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 41CFB1BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5A396F9EC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5A396F9EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2D7F417C0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2D7F417C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9UKgUUTWxVbu for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Vkr32uY0gcA for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 125E26FAA8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 125E26FAA8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E2D8415A4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E2D8415A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 105058648F; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+ id 0F20C8648F; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Jan 2023 08:47:46 +0100
+Date: Mon, 6 Feb 2023 14:22:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f8a2e1dc08a4de2db903a4a5a41c8541e6abfe81
-X-Git-Newrev: 14956d8908776e52ea9ace2fbb3f41716ebb4262
+X-Git-Oldrev: 0ad3ae14c52ed0aac872875ca7f87cdcf6942128
+X-Git-Newrev: e6ae82531928662764536cadbe2d6f3c558e7de2
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205226.105058648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/checkpolicy: drop
- bogus CHECKPOLICY_STAGING_CMDS
+Message-Id: <20230220205249.0F20C8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fwts: use ifeq instead
+ of ifdef
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14956d8908776e52ea9ace2fbb3f41716ebb4262
+commit: https://git.buildroot.net/buildroot/commit/?id=e6ae82531928662764536cadbe2d6f3c558e7de2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit "b06110621d checkpolicy: allow compiling for target" contains a
-typo that prevents installing to staging. It also forgot to enable
-CHECKPOLICY_INSTALL_STAGING.
+The conditional code using ifdef was added in 2018 and works as
+expected.
+But there is no reason to use ifdef instead of ifeq.
 
-But the package does not install headers or libraries, only ELF and
-manual files.
-So instead of fixing the install to staging, drop the bogus
-CHECKPOLICY_STAGING_CMDS.
+For consistence, switch to use ifeq like almost all packages already do.
 
-Cc: Clayton Shotwell <clayton.shotwell@collins.com>
-Cc: Matt Weber <matthew.weber@collins.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/checkpolicy/checkpolicy.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/fwts/fwts.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index af9a58cee8..baf16fb802 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -20,11 +20,6 @@ define CHECKPOLICY_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
- endef
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index b208aa0c14..f04c7a848f 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -15,7 +15,7 @@ FWTS_DEPENDENCIES = host-bison host-flex host-pkgconf libglib2 libbsd \
+ 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+ 	$(if $(BR2_PACKAGE_DTC),dtc)
  
--define CHECKPOLICY_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
--
--endef
--
- define CHECKPOLICY_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CHECKPOLICY_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- endef
+-ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
++ifeq ($(BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE),y)
+ FWTS_MODULE_SUBDIRS = efi_runtime
+ $(eval $(kernel-module))
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
