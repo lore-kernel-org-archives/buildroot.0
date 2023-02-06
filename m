@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94E45C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:31:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 218A6C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:31:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 401AC6FBA0;
-	Tue, 21 Feb 2023 01:31:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 401AC6FBA0
+	by smtp3.osuosl.org (Postfix) with ESMTP id C69556FBB6;
+	Tue, 21 Feb 2023 01:31:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C69556FBB6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nyFusLq6IcDU; Tue, 21 Feb 2023 01:31:41 +0000 (UTC)
+	with ESMTP id sz1b-S_JJzOZ; Tue, 21 Feb 2023 01:31:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 620057002D;
-	Tue, 21 Feb 2023 01:31:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 620057002D
+	by smtp3.osuosl.org (Postfix) with ESMTP id E898C6FBDE;
+	Tue, 21 Feb 2023 01:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E898C6FBDE
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 60BCC1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F9D91BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4226461084
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F3266FC16
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4226461084
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F3266FC16
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8JL2m2wunKUn for <buildroot@lists.busybox.net>;
+ with ESMTP id KkOWFa-yItk9 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7219E6FBFF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CBDF6FBE4
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7219E6FBFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CBDF6FBE4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62DC9828C8; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+ id 58C4181979; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 6 Feb 2023 11:57:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 014180011d4333a73857bbd327c5c2aef7f4b43e
-X-Git-Newrev: 75c313816eb526fe09a6baab8b327279e01be5ef
+X-Git-Oldrev: 4bbda72743d39df29dfc91e0f52be02b2d465f6d
+X-Git-Newrev: 014180011d4333a73857bbd327c5c2aef7f4b43e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205248.62DC9828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/barebox: use $$ instead
- of $ where needed
+Message-Id: <20230220205248.58C4181979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libunibreak: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75c313816eb526fe09a6baab8b327279e01be5ef
+commit: https://git.buildroot.net/buildroot/commit/?id=014180011d4333a73857bbd327c5c2aef7f4b43e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit c90bd74ebb264ccc925f10a142ccd82ef63a4601 ("boot/barebox: pass
-required environment variables for reproducible build") caused the
-build to generate a spurious error message due to the $(shell
-... date -d @$(SOURCE_DATE_EPOCH)) command being executed even when
-BR2_REPRODUCIBLE was disabled.
+Introduced as optional dependency with libass 0.17.0.
 
-This is due to the fact that variable references must be done using $$
-within macros. This commit fixes that for the two variables that we
-are referencing in the code added in commit
-c90bd74ebb264ccc925f10a142ccd82ef63a4601.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/barebox/barebox.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/libunibreak/Config.in        |  8 ++++++++
+ package/libunibreak/libunibreak.hash |  3 +++
+ package/libunibreak/libunibreak.mk   | 13 +++++++++++++
+ 5 files changed, 26 insertions(+)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 90be8c1ecc..a0cfaffe09 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -74,11 +74,11 @@ endif
- $(1)_MAKE_FLAGS = ARCH=$$($(1)_ARCH) CROSS_COMPILE="$$(TARGET_CROSS)"
- $(1)_MAKE_ENV = $$(TARGET_MAKE_ENV)
- 
--ifeq ($(BR2_REPRODUCIBLE),y)
-+ifeq ($$(BR2_REPRODUCIBLE),y)
- $(1)_MAKE_ENV += \
- 	KBUILD_BUILD_USER=buildroot \
- 	KBUILD_BUILD_HOST=buildroot \
--	KBUILD_BUILD_TIMESTAMP="$(shell LC_ALL=C date -d @$(SOURCE_DATE_EPOCH))"
-+	KBUILD_BUILD_TIMESTAMP="$$(shell LC_ALL=C date -d @$(SOURCE_DATE_EPOCH))"
- endif
- 
- ifeq ($$(BR2_TARGET_$(1)_USE_DEFCONFIG),y)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3eb7fba339..97c28fbdd8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -395,6 +395,7 @@ F:	package/libsndfile/
+ F:	package/libsoundtouch/
+ F:	package/libsquish/
+ F:	package/libudfread/
++F:	package/libunibreak/
+ F:	package/liburiparser/
+ F:	package/libutp/
+ F:	package/libva/
+diff --git a/package/Config.in b/package/Config.in
+index f32209db95..7817b51fc2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2157,6 +2157,7 @@ menu "Text and terminal handling"
+ 	source "package/libestr/Config.in"
+ 	source "package/libfribidi/Config.in"
+ 	source "package/libiconv/Config.in"
++	source "package/libunibreak/Config.in"
+ 	source "package/libunistring/Config.in"
+ 	source "package/linenoise/Config.in"
+ 	source "package/ncurses/Config.in"
+diff --git a/package/libunibreak/Config.in b/package/libunibreak/Config.in
+new file mode 100644
+index 0000000000..101d621fd6
+--- /dev/null
++++ b/package/libunibreak/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBUNIBREAK
++	bool "libunibreak"
++	help
++	  libunibreak is an implementation of the line breaking and word
++	  breaking algorithms as described in Unicode Standard Annex 14
++	  and Unicode Standard Annex 29.
++
++	  https://github.com/adah1972/libunibreak
+diff --git a/package/libunibreak/libunibreak.hash b/package/libunibreak/libunibreak.hash
+new file mode 100644
+index 0000000000..bb85f21cdc
+--- /dev/null
++++ b/package/libunibreak/libunibreak.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  dd1a92d4c5646aa0e457ff41d89812ec5243863be6c20bbcb5ee380f3dd78377  libunibreak-5.1.tar.gz
++sha256  0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db  LICENCE
+diff --git a/package/libunibreak/libunibreak.mk b/package/libunibreak/libunibreak.mk
+new file mode 100644
+index 0000000000..fa52116c1f
+--- /dev/null
++++ b/package/libunibreak/libunibreak.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libunibreak
++#
++################################################################################
++
++LIBUNIBREAK_VERSION = 5.1
++LIBUNIBREAK_SITE = https://github.com/adah1972/libunibreak/releases/download/libunibreak_$(subst .,_,$(LIBUNIBREAK_VERSION))
++LIBUNIBREAK_INSTALL_STAGING = YES
++LIBUNIBREAK_LICENSE = Zlib
++LIBUNIBREAK_LICENSE_FILES = LICENCE
++
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
