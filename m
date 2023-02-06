@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 415D8C61DA4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:30:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA16CC05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:31:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B22C6410BD;
-	Mon,  6 Feb 2023 13:30:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B22C6410BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9EB1981094;
+	Mon,  6 Feb 2023 13:31:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EB1981094
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id accl886lSANM; Mon,  6 Feb 2023 13:30:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 85jCcWnpNgeW; Mon,  6 Feb 2023 13:31:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 901A6410B2;
-	Mon,  6 Feb 2023 13:30:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 901A6410B2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B1928124A;
+	Mon,  6 Feb 2023 13:31:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B1928124A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD06C1BF2A7
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:30:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7B8DA1BF2A7
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6B87410BA
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:30:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6B87410BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62AB0409DD
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:30:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62AB0409DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KduwfehUo85A for <buildroot@lists.busybox.net>;
+ with ESMTP id fiOEeY2yvtLd for <buildroot@lists.busybox.net>;
  Mon,  6 Feb 2023 13:30:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF9A5409DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD7CC410B2
  for <buildroot@buildroot.org>; Mon,  6 Feb 2023 13:30:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF9A5409DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD7CC410B2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A8CB83C4D; Mon,  6 Feb 2023 13:30:23 +0000 (UTC)
+ id A7E1B83C4A; Mon,  6 Feb 2023 13:30:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 14:28:08 +0100
+Date: Mon, 6 Feb 2023 14:28:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a97a4a74aa993b09b958639e2276e7f5cf7a75d2
-X-Git-Newrev: efc223abd4fe764f8af8238aec67e8cb700db45e
+X-Git-Oldrev: efc223abd4fe764f8af8238aec67e8cb700db45e
+X-Git-Newrev: 3727229222f23d151a4991ef3db451df6362ce83
 X-Patchwork-Hint: ignore
-Message-Id: <20230206133023.9A8CB83C4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sunxi-mali-utgard: properly handle
- legacy for renamed options
+Message-Id: <20230206133023.A7E1B83C4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-userland: fix typo for
+ BR2_aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efc223abd4fe764f8af8238aec67e8cb700db45e
+commit: https://git.buildroot.net/buildroot/commit/?id=3727229222f23d151a4991ef3db451df6362ce83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit "6a7a652b14 package/sunxi-mali-utgard: rename from
-sunxi-mali-mainline" tried to add legacy handling but the new symbols
-are part of a choice, and Kconfig does not enforce the select of a
-option from a choice.
+Commit "59adb53c4c package/rpi-userland: add support for aarch64"
+introduced a typo in the condition that shows a comment in menuconfig.
 
-Update the legacy entry for 2022.02, following the example described in
-the beginning of the file.
+Fix the typo: BR2_arch64 -> BR2_aarch64
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Cc: Tim Gover <tim.gover@raspberrypi.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                    | 6 ++++--
- package/sunxi-mali-utgard/Config.in | 2 ++
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/rpi-userland/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 53fe2f0b97..4bfebe3f89 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -761,20 +761,22 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE
- config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
- 	bool "sunxi-mali-mainline-r6p2 was renamed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
- 	help
- 	  The sunxi-mali-mainline package has been renamed
- 	  sunxi-mali-utgard, the suboptions of this package have also
- 	  been renamed accordingly.
-+# Note: BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 is still referenced from
-+# package/sunxi-mali-utgard/Config.in
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index cfb472808b..4219bdb9c4 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -40,6 +40,6 @@ config BR2_PACKAGE_RPI_USERLAND_HELLO
+ endif
  
- config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1
- 	bool "sunxi-mali-mainline-r8p1 was renamed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1
- 	help
- 	  The sunxi-mali-mainline package has been renamed
- 	  sunxi-mali-utgard, the suboptions of this package have also
- 	  been renamed accordingly.
-+# Note: BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1 is still referenced from
-+# package/sunxi-mali-utgard/Config.in
- 
- config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
- 	bool "qt5webkit-examples removed"
-diff --git a/package/sunxi-mali-utgard/Config.in b/package/sunxi-mali-utgard/Config.in
-index ff49ea03f1..59ac21f5ab 100644
---- a/package/sunxi-mali-utgard/Config.in
-+++ b/package/sunxi-mali-utgard/Config.in
-@@ -20,6 +20,8 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- 
- choice
- 	prompt "Version"
-+	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 # legacy
-+	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1 # legacy
- 	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
- 	help
- 	  Select the version of the userspace module.
+ comment "rpi-userland needs a toolchain w/ C++, threads, dynamic library"
+-	depends on BR2_arm || BR2_arch64
++	depends on BR2_arm || BR2_aarch64
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
