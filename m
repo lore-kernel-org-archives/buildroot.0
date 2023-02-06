@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C955C636D3
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 21:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9C3AC05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 21:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28B4F60C00;
-	Mon,  6 Feb 2023 21:09:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28B4F60C00
+	by smtp2.osuosl.org (Postfix) with ESMTP id 525794053F;
+	Mon,  6 Feb 2023 21:10:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 525794053F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EVF04rLDwr_C; Mon,  6 Feb 2023 21:09:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b8FeVKRNgycd; Mon,  6 Feb 2023 21:10:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C6CD60C01;
-	Mon,  6 Feb 2023 21:09:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C6CD60C01
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E29D4053D;
+	Mon,  6 Feb 2023 21:10:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E29D4053D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 69D581BF2A4
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:08:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 399E01BF2A4
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:08:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CBDF60BFD
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CBDF60BFD
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBCA560BFD
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBCA560BFD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uZUMtwUU-DIn for <buildroot@lists.busybox.net>;
+ with ESMTP id O1g_NJ2dh4a9 for <buildroot@lists.busybox.net>;
  Mon,  6 Feb 2023 21:08:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6DE4560BF8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7814760BFB
  for <buildroot@buildroot.org>; Mon,  6 Feb 2023 21:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DE4560BF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7814760BFB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 598AC83CFD; Mon,  6 Feb 2023 21:08:54 +0000 (UTC)
+ id 65D4F83CFE; Mon,  6 Feb 2023 21:08:54 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 6 Feb 2023 18:54:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3274404b361b8d243fa593391dc6a7c9c47b9961
-X-Git-Newrev: ddf4586b00a97c41c4ad4d50da4282c62940c05b
+X-Git-Oldrev: ddf4586b00a97c41c4ad4d50da4282c62940c05b
+X-Git-Newrev: d631615eb1b833977003039626a0194589334f45
 X-Patchwork-Hint: ignore
-Message-Id: <20230206210854.598AC83CFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/check-package: decouple adding rules
- from fixing all intree files
+Message-Id: <20230206210854.65D4F83CFE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test check-package ignore
+ list
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,216 +64,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddf4586b00a97c41c4ad4d50da4282c62940c05b
+commit: https://git.buildroot.net/buildroot/commit/?id=d631615eb1b833977003039626a0194589334f45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When a new check_function is added to check-package, often there are
-files in the tree that would generate warnings.
+Extend test_check_package to also check the ignore list functionality.
+Check:
+- the entries in the ignore list use relative path;
+- an entry in the ignore list actually ignores the warning;
+- an outdated entry in the ignore list generates a warning by its own,
+  preventing the ignoring list to grow indefinitely.
 
-An example is the Sob check_function for patch files:
-| $ ./utils/check-package --i Sob $(git ls-files) >/dev/null
-| 369301 lines processed
-| 46 warnings generated
-Currently these warnings are listed when calling check-package directly,
-and also at the output of pkg-stats, but the check_function does not run
-on 'make check-package' (that is used to catch regressions on GitLab CI
-'check-package' job) until all warnings in the tree are fixed.
-This (theoretically) allows new .patch files be added without SoB,
-without the GitLab CI catching it.
+For this to work, add 3 test fixtures, listing entries for an
+pre-existing file in the br2-external used in the test.
 
-So add a way to check-package itself ignore current warnings, while
-still catching new files that do not follow that new check_function.
-
-Add a file named .checkpackageignore to the buildroot topdir.
-It contains the list of check_functions that are expected to fail for
-each given intree file tested by check-package.
-Each entries is in the format:
-<filename> <check_function> [<check_function> ...]
-
-These are 2 examples of possible entries:
-package/initscripts/init.d/rcK ConsecutiveEmptyLines EmptyLastLine Shellcheck
-utils/test-pkg Shellcheck
-
-Keeping such a list allows us to have fine-grained control over which
-warning to ignore.
-
-In order to avoid this list to grow indefinitely, containing entries for
-files that are already fixed, make each entry an 'expected to fail'
-instead of just an 'ignore', and generate a warning if a check_function
-that was expect to fail for a given files does not generate that
-warning.
-Unfortunately one case that do not generate warning is an entry for a
-file that is deleted in a later commit.
-
-By default, all checks are applied. The --ignore-list option allows to
-specify a file that contains the list of warnings that should be
-ignored.
-
-The paths in the ignore file must be relative to the location of the
-ignore file itself, which means:
-
- - in the main Buildroot tree, the paths in the ignore file are
-   relative to the root of the main Buildroot tree
-
- - in a BR2_EXTERNAL tree, if the ignore file is at the root of the
-   BR2_EXTERNAL, the paths it contains must be relative to that root
-   of the BR2_EXTERNAL
-
-This is one more step towards standardizing the use of just 'make
-check-package' before submitting patches to the list.
-
-Cc: Sen Hastings <sen@phobosdpl.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore |  0
- utils/check-package | 78 ++++++++++++++++++++++++++++++++++++++++++-----------
- 2 files changed, 62 insertions(+), 16 deletions(-)
+ .../tests/utils/br2-external/.checkpackageignore   |  1 +
+ .../utils/br2-external/package/.checkpackageignore |  1 +
+ .../package/.checkpackageignore_outdated           |  1 +
+ support/testing/tests/utils/test_check_package.py  | 31 ++++++++++++++++++++++
+ 4 files changed, 34 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
+diff --git a/support/testing/tests/utils/br2-external/.checkpackageignore b/support/testing/tests/utils/br2-external/.checkpackageignore
 new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/utils/check-package b/utils/check-package
-index f64daed84c..f08e76b374 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -19,6 +19,24 @@ VERBOSE_LEVEL_TO_SHOW_IGNORED_FILES = 3
- flags = None  # Command line arguments.
+index 0000000000..efb7680173
+--- /dev/null
++++ b/support/testing/tests/utils/br2-external/.checkpackageignore
+@@ -0,0 +1 @@
++package/external/external.mk PackageHeader
+diff --git a/support/testing/tests/utils/br2-external/package/.checkpackageignore b/support/testing/tests/utils/br2-external/package/.checkpackageignore
+new file mode 100644
+index 0000000000..5f4a5e1187
+--- /dev/null
++++ b/support/testing/tests/utils/br2-external/package/.checkpackageignore
+@@ -0,0 +1 @@
++external/external.mk PackageHeader
+diff --git a/support/testing/tests/utils/br2-external/package/.checkpackageignore_outdated b/support/testing/tests/utils/br2-external/package/.checkpackageignore_outdated
+new file mode 100644
+index 0000000000..1df59f3bed
+--- /dev/null
++++ b/support/testing/tests/utils/br2-external/package/.checkpackageignore_outdated
+@@ -0,0 +1 @@
++external/external.mk Indent NewlineAtEof PackageHeader
+diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
+index c70ba02324..ce1998753c 100644
+--- a/support/testing/tests/utils/test_check_package.py
++++ b/support/testing/tests/utils/test_check_package.py
+@@ -75,6 +75,12 @@ class TestCheckPackage(unittest.TestCase):
+         generated = int(stderr[1].split()[0])
+         self.assertGreater(generated, 0)
  
- 
-+def get_ignored_parsers_per_file(intree_only, ignore_filename):
-+    ignored = dict()
-+    entry_base_dir = ''
++    def assert_no_warnings_generated_for_file(self, stderr):
++        """Infer from check-package stderr if no warning was generated and fail otherwise."""
++        self.assertIn("warnings generated", stderr[1], stderr)
++        generated = int(stderr[1].split()[0])
++        self.assertEqual(generated, 0)
 +
-+    if not ignore_filename:
-+        return ignored
+     def test_run(self):
+         """Test the various ways the script can be called in a simple top to
+         bottom sequence."""
+@@ -201,3 +207,28 @@ class TestCheckPackage(unittest.TestCase):
+         self.assert_file_was_processed(m)
+         self.assert_warnings_generated_for_file(m)
+         self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(abs_file), w)
 +
-+    filename = os.path.abspath(ignore_filename)
-+    entry_base_dir = os.path.join(os.path.dirname(filename))
++        # br2-external with ignore list
++        topdir_path = infra.filepath("tests/utils/br2-external")
++        topdir_file = os.path.join(topdir_path, "package/external/external.mk")
++        subdir_path = infra.filepath("tests/utils/br2-external/package")
++        subdir_file = os.path.join(subdir_path, "external/external.mk")
 +
-+    with open(filename, "r") as f:
-+        for line in f.readlines():
-+            filename, warnings_str = line.split(' ', 1)
-+            warnings = warnings_str.split()
-+            ignored[os.path.join(entry_base_dir, filename)] = warnings
-+    return ignored
++        w, m = call_script(["check-package", "--ignore-list=.checkpackageignore", "-b", topdir_file],
++                           self.WITH_UTILS_IN_PATH, topdir_path)
++        self.assert_file_was_processed(m)
++        self.assert_no_warnings_generated_for_file(m)
 +
++        w, m = call_script(["check-package", "--ignore-list=.checkpackageignore", "-b", subdir_file],
++                           self.WITH_UTILS_IN_PATH, subdir_path)
++        self.assert_file_was_processed(m)
++        self.assert_no_warnings_generated_for_file(m)
 +
- def parse_args():
-     parser = argparse.ArgumentParser()
- 
-@@ -29,6 +47,8 @@ def parse_args():
- 
-     parser.add_argument("--br2-external", "-b", dest='intree_only', action="store_false",
-                         help="do not apply the pathname filters used for intree files")
-+    parser.add_argument("--ignore-list", dest='ignore_filename', action="store",
-+                        help='override the default list of ignored warnings')
- 
-     parser.add_argument("--manual-url", action="store",
-                         default="http://nightly.buildroot.org/",
-@@ -44,7 +64,11 @@ def parse_args():
-     parser.add_argument("--dry-run", action="store_true", help="print the "
-                         "functions that would be called for each file (debug)")
- 
--    return parser.parse_args()
-+    flags = parser.parse_args()
-+
-+    flags.ignore_list = get_ignored_parsers_per_file(flags.intree_only, flags.ignore_filename)
-+
-+    return flags
- 
- 
- CONFIG_IN_FILENAME = re.compile(r"Config\.\S*$")
-@@ -120,21 +144,25 @@ def is_external_tool(m):
-     return common_inspect_rules(m)
- 
- 
--def print_warnings(warnings):
-+def print_warnings(warnings, xfail):
-     # Avoid the need to use 'return []' at the end of every check function.
-     if warnings is None:
--        return 0  # No warning generated.
-+        return 0, 0  # No warning generated.
- 
-+    if xfail:
-+        return 0, 1  # Warning not generated, fail expected for this file.
-     for level, message in enumerate(warnings):
-         if flags.verbose >= level:
-             print(message.replace("\t", "< tab  >").rstrip())
--    return 1  # One more warning to count.
-+    return 1, 1  # One more warning to count.
- 
- 
- def check_file_using_lib(fname):
-     # Count number of warnings generated and lines processed.
-     nwarnings = 0
-     nlines = 0
-+    xfail = flags.ignore_list.get(os.path.abspath(fname), [])
-+    failed = set()
- 
-     lib = get_lib_from_filename(fname)
-     if not lib:
-@@ -150,10 +178,13 @@ def check_file_using_lib(fname):
-         print("{}: would run: {}".format(fname, functions_to_run))
-         return nwarnings, nlines
- 
--    objects = [c[1](fname, flags.manual_url) for c in internal_functions]
-+    objects = [[c[0], c[1](fname, flags.manual_url)] for c in internal_functions]
- 
--    for cf in objects:
--        nwarnings += print_warnings(cf.before())
-+    for name, cf in objects:
-+        warn, fail = print_warnings(cf.before(), name in xfail)
-+        if fail > 0:
-+            failed.add(name)
-+        nwarnings += warn
-     if six.PY3:
-         f = open(fname, "r", errors="surrogateescape")
-     else:
-@@ -161,19 +192,34 @@ def check_file_using_lib(fname):
-     lastline = ""
-     for lineno, text in enumerate(f.readlines()):
-         nlines += 1
--        for cf in objects:
-+        for name, cf in objects:
-             if cf.disable.search(lastline):
-                 continue
--            nwarnings += print_warnings(cf.check_line(lineno + 1, text))
-+            warn, fail = print_warnings(cf.check_line(lineno + 1, text), name in xfail)
-+            if fail > 0:
-+                failed.add(name)
-+            nwarnings += warn
-         lastline = text
-     f.close()
--    for cf in objects:
--        nwarnings += print_warnings(cf.after())
--
--    tools = [c[1](fname) for c in external_tools]
--
--    for tool in tools:
--        nwarnings += print_warnings(tool.run())
-+    for name, cf in objects:
-+        warn, fail = print_warnings(cf.after(), name in xfail)
-+        if fail > 0:
-+            failed.add(name)
-+        nwarnings += warn
-+
-+    tools = [[c[0], c[1](fname)] for c in external_tools]
-+
-+    for name, tool in tools:
-+        warn, fail = print_warnings(tool.run(), name in xfail)
-+        if fail > 0:
-+            failed.add(name)
-+        nwarnings += warn
-+
-+    for should_fail in xfail:
-+        if should_fail not in failed:
-+            print("{}:0: {} was expected to fail, did you fixed the file and forgot to update {}?"
-+                  .format(fname, should_fail, flags.ignore_filename))
-+            nwarnings += 1
- 
-     return nwarnings, nlines
- 
++        w, m = call_script(["check-package", "--ignore-list=.checkpackageignore_outdated", "-b", subdir_file],
++                           self.WITH_UTILS_IN_PATH, subdir_path)
++        self.assert_file_was_processed(m)
++        self.assert_warnings_generated_for_file(m)
++        self.assertIn("{}:0: Indent was expected to fail, did you fixed the file and forgot to update .checkpackageignore_outdated?"
++                      .format(subdir_file), w)
++        self.assertIn("{}:0: NewlineAtEof was expected to fail, did you fixed the file and forgot to update .checkpackageignore_outdated?"
++                      .format(subdir_file), w)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
