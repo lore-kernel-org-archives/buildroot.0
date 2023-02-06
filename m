@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23DF3C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:29:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03234C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:30:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D03806FB10;
-	Tue, 21 Feb 2023 01:29:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D03806FB10
+	by smtp3.osuosl.org (Postfix) with ESMTP id A87C37000C;
+	Tue, 21 Feb 2023 01:30:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A87C37000C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v8yGS07ZPBHn; Tue, 21 Feb 2023 01:29:58 +0000 (UTC)
+	with ESMTP id QB7M8v8ODvTd; Tue, 21 Feb 2023 01:30:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13D186FFF7;
-	Tue, 21 Feb 2023 01:29:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13D186FFF7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9529A70022;
+	Tue, 21 Feb 2023 01:30:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9529A70022
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D08E91BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D437E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8157F6FC0E
+ by smtp3.osuosl.org (Postfix) with ESMTP id B11336FC02
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8157F6FC0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B11336FC02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZDpExPshFLQI for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+ with ESMTP id SUzWrwuxg6dS for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6641F6FC02
+ by smtp3.osuosl.org (Postfix) with ESMTP id E64FA6FBF1
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6641F6FC02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E64FA6FBF1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 50B4081979; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id D5A5E86496; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 5 Feb 2023 15:37:50 +0100
+Date: Mon, 6 Feb 2023 11:02:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 02befac8f9404ae30d0d090221d21a8460c82ec7
-X-Git-Newrev: ce2ac1fecfdd61c01bb34984624f2d37fea91f91
+X-Git-Oldrev: 3c7fece853f3def9a425eccc384b9dacb1010051
+X-Git-Newrev: 5be76a39d3a0c21d6f3ceeab0889edc3cec9f2f3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205247.50B4081979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wireshark: security
- bump to version 4.0.3
+Message-Id: <20230220205247.D5A5E86496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/yajl: explicitly
+ request a tag in _SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce2ac1fecfdd61c01bb34984624f2d37fea91f91
+commit: https://git.buildroot.net/buildroot/commit/?id=5be76a39d3a0c21d6f3ceeab0889edc3cec9f2f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix CVE-2023-0411, CVE-2023-0412, CVE-2023-0413, CVE-2023-0414,
-CVE-2023-0415, CVE-2023-0416 and CVE-2023-0417
+The yajl repository has both a branch and a tag names 2.1.0. Because of
+this, when we use the usual github URL [1], github doesn't return a
+tarball but rather an ASCII string:
+   the given path has multiple possibilities: #<Git::Ref:0x00007f193bebe4d8>, #<Git::Ref:0x00007f193bebd858>
 
-https://www.wireshark.org/security/wnpa-sec-2023-01
-https://www.wireshark.org/security/wnpa-sec-2023-02
-https://www.wireshark.org/security/wnpa-sec-2023-03
-https://www.wireshark.org/security/wnpa-sec-2023-04
-https://www.wireshark.org/security/wnpa-sec-2023-05
-https://www.wireshark.org/security/wnpa-sec-2023-06
-https://www.wireshark.org/security/wnpa-sec-2023-07
+This obviously (and fortunately) leads to a hash check failure.
 
-https://www.wireshark.org/docs/relnotes/wireshark-4.0.3.html
+To make sure we get the tag and not the branch, we should use a URL that
+explicitly asks for refs/tags/2.1.0 [2]. We can't change VERSION to
+include refs/tags, because that also affects the _SOURCE default, the
+contents of the tarball, the CPE ID and the release-monitoring access.
+Therefore, add the refs/tags/ prefix to the github helper call.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[1] https://github.com/lloyd/yajl/archive/2.1.0/yajl-2.1.0.tar.gz
+[1] https://github.com/lloyd/yajl/archive/refs/tags/2.1.0/yajl-2.1.0.tar.gz
+
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/yajl/yajl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index e9026b8caa..7128b560ae 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.2.txt
--sha1  0127180ff18515b086fe5603f767f53ddaa64c1a  wireshark-4.0.2.tar.xz
--sha256  f35915699f2f9b28ddb211202d40ec8984e5834d3c911483144a4984ba44411d  wireshark-4.0.2.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.3.txt
-+sha1  243b0057cfe6d447662e81b5646110aaf8b63c81  wireshark-4.0.3.tar.xz
-+sha256  6c51e15bcc0afb93734e686dbff354ffd159f570bd2904bcbbad6f3feb7e9511  wireshark-4.0.3.tar.xz
- 
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index e2a424ef0f..12c36575df 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
+index 1fb16f50e9..d14a68b402 100644
+--- a/package/yajl/yajl.mk
++++ b/package/yajl/yajl.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--WIRESHARK_VERSION = 4.0.2
-+WIRESHARK_VERSION = 4.0.3
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ YAJL_VERSION = 2.1.0
+-YAJL_SITE = $(call github,lloyd,yajl,$(YAJL_VERSION))
++YAJL_SITE = $(call github,lloyd,yajl,refs/tags/$(YAJL_VERSION))
+ YAJL_INSTALL_STAGING = YES
+ YAJL_LICENSE = ISC
+ YAJL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
