@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9218DC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 22:24:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 232A9C61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 22:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 126FC40577;
-	Mon,  6 Feb 2023 22:24:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 126FC40577
+	by smtp2.osuosl.org (Postfix) with ESMTP id BAC7240570;
+	Mon,  6 Feb 2023 22:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAC7240570
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zIzKr7mAZ3bd; Mon,  6 Feb 2023 22:24:27 +0000 (UTC)
+	with ESMTP id GSBGxEdTaU-A; Mon,  6 Feb 2023 22:24:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2AE6840383;
-	Mon,  6 Feb 2023 22:24:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AE6840383
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 919101BF422
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA08C40577;
+	Mon,  6 Feb 2023 22:24:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA08C40577
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9557F1BF951
  for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67BE260BE2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F85A410B1
  for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:24:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67BE260BE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F85A410B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7vmET4a4blMN for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LcnF_I26Ka6H for <buildroot@lists.busybox.net>;
  Mon,  6 Feb 2023 22:24:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9234960BAB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18F85408FD
  for <buildroot@buildroot.org>; Mon,  6 Feb 2023 22:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9234960BAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F85408FD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8231B83DD8; Mon,  6 Feb 2023 22:24:23 +0000 (UTC)
+ id 03E0083DD8; Mon,  6 Feb 2023 22:24:23 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 23:23:54 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fa75c4a3054e0cd3457f9e50deb1b9c06325c242
-X-Git-Newrev: a94d39d693d84f96f996a6a3decfecc60a9625bd
+Date: Mon, 6 Feb 2023 22:42:59 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: c2284f82eca1d1ca61c0e4d54b67590f6a6090e7
+X-Git-Newrev: 399ca20e6b73eaab94ce7ae1c8a4cde96e2c7b2a
 X-Patchwork-Hint: ignore
-Message-Id: <20230206222423.8231B83DD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5: fix build failure due to
- libressl use
+Message-Id: <20230206222423.03E0083DD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/lxc: fix
+ CVE-2022-47952
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,79 +57,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a94d39d693d84f96f996a6a3decfecc60a9625bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=399ca20e6b73eaab94ce7ae1c8a4cde96e2c7b2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Qt5 only supports openssl, check [0] and [1]. So in qt5base.mk let's check
-if BR2_PACKAGE_LIBOPENSSL is enabled instead of BR2_PACKAGE_OPENSSL(that
-could be openssl or libressl) and for qt5enginio and qt5webkit let's select
-BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL instead of only BR2_PACKAGE_OPENSSL.
-This way we make sure that only openssl is selected and not libressl or
-other future openssl-like implementations.
+lxc-user-nic in lxc through 5.0.1 is installed setuid root, and may
+allow local users to infer whether any file exists, even within a
+protected directory tree, because "Failed to open" often indicates that
+a file does not exist, whereas "does not refer to a network namespace
+path" often indicates that a file exists. NOTE: this is different from
+CVE-2018-6556 because the CVE-2018-6556 fix design was based on the
+premise that "we will report back to the user that the open() failed but
+the user has no way of knowing why it failed"; however, in many
+realistic cases, there are no plausible reasons for failing except that
+the file does not exist.
 
-Fixes:
-http://autobuild.buildroot.net/results/a956b48b782dbaa055d7146360465e2493a809d9/
-
-[0]: https://doc.qt.io/qt-5/ssl.html#enabling-and-disabling-ssl-support
-[1]: https://bugreports.qt.io/browse/QTBUG-68374
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/qt5base.mk   | 4 ++--
- package/qt5/qt5enginio/Config.in | 2 ++
- package/qt5/qt5webkit/Config.in  | 2 ++
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ ...5-Patching-an-incoming-CVE-CVE-2022-47952.patch | 73 ++++++++++++++++++++++
+ package/lxc/lxc.mk                                 |  3 +
+ 2 files changed, 76 insertions(+)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index a81892422c..efa0e16e9a 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -229,8 +229,8 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-eglfs
- endif
+diff --git a/package/lxc/0005-Patching-an-incoming-CVE-CVE-2022-47952.patch b/package/lxc/0005-Patching-an-incoming-CVE-CVE-2022-47952.patch
+new file mode 100644
+index 0000000000..071734848a
+--- /dev/null
++++ b/package/lxc/0005-Patching-an-incoming-CVE-CVE-2022-47952.patch
+@@ -0,0 +1,73 @@
++From 1b0469530d7a38b8f8990e114b52530d1bf7f3b8 Mon Sep 17 00:00:00 2001
++From: Maher Azzouzi <maherazz04@gmail.com>
++Date: Sun, 25 Dec 2022 13:50:25 +0100
++Subject: [PATCH] Patching an incoming CVE (CVE-2022-47952)
++
++lxc-user-nic in lxc through 5.0.1 is installed setuid root, and may
++allow local users to infer whether any file exists, even within a
++protected directory tree, because "Failed to open" often indicates
++that a file does not exist, whereas "does not refer to a network
++namespace path" often indicates that a file exists. NOTE: this is
++different from CVE-2018-6556 because the CVE-2018-6556 fix design was
++based on the premise that "we will report back to the user that the
++open() failed but the user has no way of knowing why it failed";
++however, in many realistic cases, there are no plausible reasons for
++failing except that the file does not exist.
++
++PoC:
++> % ls /l
++> ls: cannot open directory '/l': Permission denied
++> % /usr/lib/x86_64-linux-gnu/lxc/lxc-user-nic delete lol lol /l/h/tt h h
++> cmd/lxc_user_nic.c: 1096: main: Failed to open "/l/h/tt" <----- file does not exist.
++> % /usr/lib/x86_64-linux-gnu/lxc/lxc-user-nic delete lol lol /l/h/t h h
++> cmd/lxc_user_nic.c: 1101: main: Path "/l/h/t" does not refer to a network namespace path <---- file exist!
++
++Signed-off-by: MaherAzzouzi <maherazz04@gmail.com>
++Acked-by: Serge Hallyn <serge@hallyn.com>
++
++[Retrieved from:
++https://github.com/lxc/lxc/commit/1b0469530d7a38b8f8990e114b52530d1bf7f3b8]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/lxc/cmd/lxc_user_nic.c | 15 ++++++---------
++ 1 file changed, 6 insertions(+), 9 deletions(-)
++
++diff --git a/src/lxc/cmd/lxc_user_nic.c b/src/lxc/cmd/lxc_user_nic.c
++index a91e2259d5..69bc6f17d1 100644
++--- a/src/lxc/cmd/lxc_user_nic.c
+++++ b/src/lxc/cmd/lxc_user_nic.c
++@@ -1085,20 +1085,17 @@ int main(int argc, char *argv[])
++ 	} else if (request == LXC_USERNIC_DELETE) {
++ 		char opath[LXC_PROC_PID_FD_LEN];
++ 
++-		/* Open the path with O_PATH which will not trigger an actual
++-		 * open(). Don't report an errno to the caller to not leak
++-		 * information whether the path exists or not.
++-		 * When stracing setuid is stripped so this is not a concern
++-		 * either.
++-		 */
+++		// Keep in mind CVE-2022-47952: It's crucial not to leak any
+++		// information whether open() succeeded of failed.
+++
++ 		netns_fd = open(args.pid, O_PATH | O_CLOEXEC);
++ 		if (netns_fd < 0) {
++-			usernic_error("Failed to open \"%s\"\n", args.pid);
+++			usernic_error("Failed while opening netns file for \"%s\"\n", args.pid);
++ 			_exit(EXIT_FAILURE);
++ 		}
++ 
++ 		if (!fhas_fs_type(netns_fd, NSFS_MAGIC)) {
++-			usernic_error("Path \"%s\" does not refer to a network namespace path\n", args.pid);
+++			usernic_error("Failed while opening netns file for \"%s\"\n", args.pid);
++ 			close(netns_fd);
++ 			_exit(EXIT_FAILURE);
++ 		}
++@@ -1112,7 +1109,7 @@ int main(int argc, char *argv[])
++ 		/* Now get an fd that we can use in setns() calls. */
++ 		ret = open(opath, O_RDONLY | O_CLOEXEC);
++ 		if (ret < 0) {
++-			CMD_SYSERROR("Failed to open \"%s\"\n", args.pid);
+++			CMD_SYSERROR("Failed while opening netns file for \"%s\"\n", args.pid);
++ 			close(netns_fd);
++ 			_exit(EXIT_FAILURE);
++ 		}
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index cece27411e..8fdb6855d1 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -12,6 +12,9 @@ LXC_CPE_ID_VENDOR = linuxcontainers
+ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
  
--QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_OPENSSL),-openssl,-no-openssl)
--QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_OPENSSL),openssl)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBOPENSSL),-openssl,-no-openssl)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBOPENSSL),openssl)
- 
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),-fontconfig,-no-fontconfig)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),fontconfig)
-diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
-index b738f0db7c..a1ac6f8ca0 100644
---- a/package/qt5/qt5enginio/Config.in
-+++ b/package/qt5/qt5enginio/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_QT5ENGINIO
- 	bool "qt5enginio"
- 	select BR2_PACKAGE_OPENSSL
-+	# Only openssl is supported by qt5
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_NETWORK
- 	help
-diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
-index 26c3897d1d..9b84ac5f96 100644
---- a/package/qt5/qt5webkit/Config.in
-+++ b/package/qt5/qt5webkit/Config.in
-@@ -16,6 +16,8 @@ config BR2_PACKAGE_QT5WEBKIT
- 	select BR2_PACKAGE_LEVELDB
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_OPENSSL
-+	# Only openssl is supported by qt5
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_QT5BASE_ICU
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
++# 0005-Patching-an-incoming-CVE-CVE-2022-47952.patch
++LXC_IGNORE_CVES += CVE-2022-47952
++
+ LXC_CONF_OPTS = \
+ 	--disable-apparmor \
+ 	--disable-examples \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
