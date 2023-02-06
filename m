@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2251EC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC6F6C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4918611BC;
-	Tue, 21 Feb 2023 01:34:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4918611BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C1C770062;
+	Tue, 21 Feb 2023 01:34:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C1C770062
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VVM3BnzHDE8c; Tue, 21 Feb 2023 01:34:01 +0000 (UTC)
+	with ESMTP id MY4b5Ll7GSi5; Tue, 21 Feb 2023 01:34:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 001807005D;
-	Tue, 21 Feb 2023 01:33:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 001807005D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9012170060;
+	Tue, 21 Feb 2023 01:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9012170060
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 21AAD1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EEA981BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2930F610C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2C18E6FC14
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2930F610C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C18E6FC14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BM_TnWnPpz8H for <buildroot@lists.busybox.net>;
+ with ESMTP id Rs2DAL3wZDWA for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54F316FC0C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 782976FC18
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54F316FC0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 782976FC18
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 40E2C81979; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+ id 7498081979; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 Date: Mon, 6 Feb 2023 14:22:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cc3a4a7b1de7b158354c650d234339e8a969a730
-X-Git-Newrev: f043f928674e94687d1d3173394142271ca3d397
+X-Git-Oldrev: 9b1b1763b754f8a25cf0f2a7fe05e53d256fe675
+X-Git-Newrev: 032cfbc716749869b185f83dab450ec47f969765
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205249.40E2C81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pugixml: use explicit
- build options
+Message-Id: <20230220205249.7498081979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] system: remove use of legacy
+ md5 option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f043f928674e94687d1d3173394142271ca3d397
+commit: https://git.buildroot.net/buildroot/commit/?id=032cfbc716749869b185f83dab450ec47f969765
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit upstream 986b7ffd01aedcd4f2aa16e78e4cad9313b6d7b2
-"Add Cmake options for pugiconfig.hpp" added feature toogles to release
-v1.12, including PUGIXML_NO_XPATH and PUGIXML_COMPACT.
+Commit "bf3626002f system cfg: remove mkpasswd MD5 format option", from
+release 2019.02, moved the symbol to legacy handling, but the symbol is
+still referenced.
 
-Commit upstream 5f49f2c6575cc2b7d343f8d41581fe92d69d7b52
-"Mark advanced options and removed redundant ones" removed CMake
-specific support for PUGIXML_HEADER_ONLY and PUGIXML_HAS_LONG_LONG, but
-they can still be provided using PUGIXML_BUILD_DEFINES, starting from
-release v1.12.
+Remove the reference to it.
 
-So use the explicit build options PUGIXML_NO_XPATH and PUGIXML_COMPACT,
-but keep using PUGIXML_BUILD_DEFINES to set PUGIXML_HEADER_ONLY and
-PUGIXML_HAS_LONG_LONG.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pugixml/pugixml.mk | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ system/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index 1a915980a5..c8d59f0864 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -12,6 +12,18 @@ PUGIXML_CPE_ID_VENDOR = pugixml_project
+diff --git a/system/Config.in b/system/Config.in
+index 731dceaa17..deb464f4d0 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -78,7 +78,6 @@ endchoice # Passwd encoding
  
- PUGIXML_INSTALL_STAGING = YES
+ config BR2_TARGET_GENERIC_PASSWD_METHOD
+ 	string
+-	default "md5"       if BR2_TARGET_GENERIC_PASSWD_MD5
+ 	default "sha-256"   if BR2_TARGET_GENERIC_PASSWD_SHA256
+ 	default "sha-512"   if BR2_TARGET_GENERIC_PASSWD_SHA512
  
-+ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),y)
-+PUGIXML_CONF_OPTS += -DPUGIXML_NO_XPATH=OFF
-+else
-+PUGIXML_CONF_OPTS += -DPUGIXML_NO_XPATH=ON
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
-+PUGIXML_CONF_OPTS += -DPUGIXML_COMPACT=ON
-+else
-+PUGIXML_CONF_OPTS += -DPUGIXML_COMPACT=OFF
-+endif
-+
- # Pugixml will automatically enable 'long long' support on C++11 compilers,
- # which means gcc 4.8+. As gcc always supports the 'long long' type,
- # force-enable this option to support older gcc versions. See also:
-@@ -19,12 +31,6 @@ PUGIXML_INSTALL_STAGING = YES
- PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
- HOST_PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
- 
--ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
--PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
--endif
--ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
--PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
--endif
- ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
- PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
- endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
