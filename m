@@ -1,87 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E53EC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 17:15:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C9E3C05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 18:14:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C3F880AAB;
-	Mon,  6 Feb 2023 17:15:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C3F880AAB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Po8ux-w6h6nj; Mon,  6 Feb 2023 17:15:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B152481934;
-	Mon,  6 Feb 2023 17:15:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B152481934
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 67CF11BF338
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 17:15:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2CBF7410B8
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 17:15:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CBF7410B8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C87F40E46;
+	Mon,  6 Feb 2023 18:14:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C87F40E46
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CgjXnqDfFKih for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 17:15:51 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8zplI-x-0tTU; Mon,  6 Feb 2023 18:14:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A54241678;
+	Mon,  6 Feb 2023 18:14:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A54241678
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FE7D1BF2CD
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 18:14:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2689F600D4
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 18:14:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2689F600D4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5bF3SNooU0Uh for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 18:13:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E494401D2
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8E494401D2
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 17:15:51 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id bk16so11052213wrb.11
- for <buildroot@buildroot.org>; Mon, 06 Feb 2023 09:15:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52CE060B9B
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 52CE060B9B
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 18:13:58 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id k13so3816854wrh.8
+ for <buildroot@buildroot.org>; Mon, 06 Feb 2023 10:13:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=UFcZeUfg/mEoJaea8zLfKPL58SgiYk9hdHCCA5IRPuw=;
- b=lGKzWfbuPJLPUwdJtHgi4r2gQ6pB5A5VxmBWQ2wdFXfncizq7d1v5tG/sCcIX3adNA
- 90fIjh7pxcxHhVQEjyNyxIZQze3sIOUkEUkNQMD0Ue8Zifpsfwo+kE1D7xkG1MgWzv4F
- 63uLO9kL2QTykO4cvkmA+rpNC4l5jBMBTIklZsqTJjSFqVYo1AKhZfvqvjgj1xhX19eJ
- yxUedT7PptiFbAHsk6d9W6rcVuL2A2JuETqmW0h9r3fRtkGOm6N1IA5WdynmLqHPuwtc
- udYvkYtsaY7G4UTFvOFGF3RswEXtLmKKwBBDXX6KkybVWDzBK55Y78YUfeXmLKm1H/Ym
- 3sHQ==
-X-Gm-Message-State: AO0yUKWOud5oqxT+jjQoESVbz7hFhSMEL1oXOIBSj1/sWa3QZaUHKmNO
- YuvOvmNTJPUSkEWVP+3uDCqfa9yAhiA=
-X-Google-Smtp-Source: AK7set+FZ8eWFjh5bjyloyIng05pqTd5FNl42PNLUtiLDThYJpn0cmYwCm6m20zOIro2XR8lqyl6ng==
-X-Received: by 2002:adf:f4d2:0:b0:2bf:cd20:bdb7 with SMTP id
- h18-20020adff4d2000000b002bfcd20bdb7mr259043wrp.64.1675703749338; 
- Mon, 06 Feb 2023 09:15:49 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- p10-20020a5d59aa000000b002be5401ef5fsm9474527wrr.39.2023.02.06.09.15.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Feb 2023 09:15:48 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  6 Feb 2023 18:15:44 +0100
-Message-Id: <20230206171544.35665-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.0
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=IIDvCfZmpfAjbxW4QBHKNDJMxCz2JFq/OsVT+cWgILY=;
+ b=TDv0S8hPe+oCSvZKWgnYqDNnozb/EE0nX5MTO3lC1C9HWcILOgx+rw7gQKzV4u7RIJ
+ JhLaqRBCKvUJtTqW3okIF/+5ObBvtE5J/PUYFhyZtOuoQsc/DROGkMbkr8nVc1lT89Wk
+ AAVjXUu6sjfP5uijsBL9oxSIg6d9l00LHcj58SVImgAJVjPHMquYAGTLBEMEFN6Fvryx
+ V+2bTAlZrP8BHnP4BJtZERxAty+kHSggburWIcMQc1v3l/B0WPmYyoSxkDxk1+SB4HMs
+ r8+uQh63W9zFiptOXxK8JTw0WEnaKF+p9vCbfg4B09DaWnJ1zP6kAxGD7uGofkZ4BxPL
+ u6Ww==
+X-Gm-Message-State: AO0yUKWypJWj3JnUQEq6dgRTpnnWitgtA4LaBtCpeO7K6d84g3xdSqnM
+ ghWjLoKFPrAtEsGNoO1qwKDbbw==
+X-Google-Smtp-Source: AK7set/40CtWmEpEyj3U4zPaBxzHG0JLExXWXcihMOgeoEMZuaqKBbyx2Xl2qeAxs+E+Hx2nXhf7gw==
+X-Received: by 2002:a05:6000:799:b0:236:695b:82d4 with SMTP id
+ bu25-20020a056000079900b00236695b82d4mr22618990wrb.30.1675707236229; 
+ Mon, 06 Feb 2023 10:13:56 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ j6-20020adfb306000000b002c3d29d83d2sm8907121wrd.63.2023.02.06.10.13.55
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 06 Feb 2023 10:13:55 -0800 (PST)
+Message-ID: <1f8f6719-f816-b7a4-6837-840db623461a@smile.fr>
+Date: Mon, 6 Feb 2023 19:13:54 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20230130002854.2300661-1-james.hilliard1@gmail.com>
+ <301bf244-5eb8-3903-3371-80de9a6810aa@smile.fr>
+ <282c5a46-37ed-6c07-9b72-86133a71750a@smile.fr>
+ <CADvTj4o+c+9BvVXH2=6RsEgwjRbDBSHq+2+6_Whg3=esfUYVbA@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <CADvTj4o+c+9BvVXH2=6RsEgwjRbDBSHq+2+6_Whg3=esfUYVbA@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UFcZeUfg/mEoJaea8zLfKPL58SgiYk9hdHCCA5IRPuw=;
- b=mNGBjNLpVkHw3OlYUN2EmgbveiF+4AQA9sDog9h9i1KJSuNaL9rLFmmRJlzBllYFhe
- 0+tpYgL28PcUa+Xnstb8XX5HBpHYHZ1hNlO3mubkKQ5zL6oZp1S/49XDiBUEgfRxlnWh
- 4bnQvUcJN3hgA3DXONx7HM42KlBmCtc2z/cecVcX93SMYRcNTTqgk56BhY25+8ERH+Xn
- MuaeVCqHJHd5TRCw3f4P7xEpMys94dbwa/QGglVTgXOSgQEHTy5H1FdqHz8hsuDv/gag
- kKDEyU+m05fVG3FbsPylSGfaxHTNLxxtn+H2+QMQvEgQGVX4nKUaPbXkHDrSWlZhIwHG
- AnQQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mNGBjNLp
-Subject: [Buildroot] [PATCH 2020.02.x] package/lxc: fix CVE-2022-47952
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=IIDvCfZmpfAjbxW4QBHKNDJMxCz2JFq/OsVT+cWgILY=;
+ b=h2hx7QzzBHW2bb0QwuFCmawqLnaclQaRq5ApPeNbYwhXMPECu6+9O+h+r1/4THZwHg
+ 1UVUOkhtvtuuN6UPp5xV5YbD2knqqoU1+kPVOKOfktAjVzCRTYnCsDg6eOq3aWBewnOV
+ W8WyqR4AU/k94Ziszt5uh12j5+4PCG0T5iSzmD2vxJLQFYLWgm5o9ZGybmJJRlwW8j7V
+ 90+8MLiIsFg5ImKW44sIQWkxYPX8TqshKJsuYsq9kZei/8p8NlKNSPg3rtPr8KqeyH83
+ l0uT3go3SW6BtC9a0nKJPAwobd9/CurxcGOlIbm/diu/ZECjqNhX6cnHSp5AlPy1FR5D
+ uQoA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=h2hx7Qzz
+Subject: Re: [Buildroot] [PATCH v5 01/10] package/cpuinfo: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,129 +104,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Stefan Hager <stefan.hager@ginzinger.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-lxc-user-nic in lxc through 5.0.1 is installed setuid root, and may
-allow local users to infer whether any file exists, even within a
-protected directory tree, because "Failed to open" often indicates that
-a file does not exist, whereas "does not refer to a network namespace
-path" often indicates that a file exists. NOTE: this is different from
-CVE-2018-6556 because the CVE-2018-6556 fix design was based on the
-premise that "we will report back to the user that the open() failed but
-the user has no way of knowing why it failed"; however, in many
-realistic cases, there are no plausible reasons for failing except that
-the file does not exist.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ching-an-incoming-CVE-CVE-2022-47952.patch | 73 +++++++++++++++++++
- package/lxc/lxc.mk                            |  3 +
- 2 files changed, 76 insertions(+)
- create mode 100644 package/lxc/0005-Patching-an-incoming-CVE-CVE-2022-47952.patch
-
-diff --git a/package/lxc/0005-Patching-an-incoming-CVE-CVE-2022-47952.patch b/package/lxc/0005-Patching-an-incoming-CVE-CVE-2022-47952.patch
-new file mode 100644
-index 0000000000..071734848a
---- /dev/null
-+++ b/package/lxc/0005-Patching-an-incoming-CVE-CVE-2022-47952.patch
-@@ -0,0 +1,73 @@
-+From 1b0469530d7a38b8f8990e114b52530d1bf7f3b8 Mon Sep 17 00:00:00 2001
-+From: Maher Azzouzi <maherazz04@gmail.com>
-+Date: Sun, 25 Dec 2022 13:50:25 +0100
-+Subject: [PATCH] Patching an incoming CVE (CVE-2022-47952)
-+
-+lxc-user-nic in lxc through 5.0.1 is installed setuid root, and may
-+allow local users to infer whether any file exists, even within a
-+protected directory tree, because "Failed to open" often indicates
-+that a file does not exist, whereas "does not refer to a network
-+namespace path" often indicates that a file exists. NOTE: this is
-+different from CVE-2018-6556 because the CVE-2018-6556 fix design was
-+based on the premise that "we will report back to the user that the
-+open() failed but the user has no way of knowing why it failed";
-+however, in many realistic cases, there are no plausible reasons for
-+failing except that the file does not exist.
-+
-+PoC:
-+> % ls /l
-+> ls: cannot open directory '/l': Permission denied
-+> % /usr/lib/x86_64-linux-gnu/lxc/lxc-user-nic delete lol lol /l/h/tt h h
-+> cmd/lxc_user_nic.c: 1096: main: Failed to open "/l/h/tt" <----- file does not exist.
-+> % /usr/lib/x86_64-linux-gnu/lxc/lxc-user-nic delete lol lol /l/h/t h h
-+> cmd/lxc_user_nic.c: 1101: main: Path "/l/h/t" does not refer to a network namespace path <---- file exist!
-+
-+Signed-off-by: MaherAzzouzi <maherazz04@gmail.com>
-+Acked-by: Serge Hallyn <serge@hallyn.com>
-+
-+[Retrieved from:
-+https://github.com/lxc/lxc/commit/1b0469530d7a38b8f8990e114b52530d1bf7f3b8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/lxc/cmd/lxc_user_nic.c | 15 ++++++---------
-+ 1 file changed, 6 insertions(+), 9 deletions(-)
-+
-+diff --git a/src/lxc/cmd/lxc_user_nic.c b/src/lxc/cmd/lxc_user_nic.c
-+index a91e2259d5..69bc6f17d1 100644
-+--- a/src/lxc/cmd/lxc_user_nic.c
-++++ b/src/lxc/cmd/lxc_user_nic.c
-+@@ -1085,20 +1085,17 @@ int main(int argc, char *argv[])
-+ 	} else if (request == LXC_USERNIC_DELETE) {
-+ 		char opath[LXC_PROC_PID_FD_LEN];
-+ 
-+-		/* Open the path with O_PATH which will not trigger an actual
-+-		 * open(). Don't report an errno to the caller to not leak
-+-		 * information whether the path exists or not.
-+-		 * When stracing setuid is stripped so this is not a concern
-+-		 * either.
-+-		 */
-++		// Keep in mind CVE-2022-47952: It's crucial not to leak any
-++		// information whether open() succeeded of failed.
-++
-+ 		netns_fd = open(args.pid, O_PATH | O_CLOEXEC);
-+ 		if (netns_fd < 0) {
-+-			usernic_error("Failed to open \"%s\"\n", args.pid);
-++			usernic_error("Failed while opening netns file for \"%s\"\n", args.pid);
-+ 			_exit(EXIT_FAILURE);
-+ 		}
-+ 
-+ 		if (!fhas_fs_type(netns_fd, NSFS_MAGIC)) {
-+-			usernic_error("Path \"%s\" does not refer to a network namespace path\n", args.pid);
-++			usernic_error("Failed while opening netns file for \"%s\"\n", args.pid);
-+ 			close(netns_fd);
-+ 			_exit(EXIT_FAILURE);
-+ 		}
-+@@ -1112,7 +1109,7 @@ int main(int argc, char *argv[])
-+ 		/* Now get an fd that we can use in setns() calls. */
-+ 		ret = open(opath, O_RDONLY | O_CLOEXEC);
-+ 		if (ret < 0) {
-+-			CMD_SYSERROR("Failed to open \"%s\"\n", args.pid);
-++			CMD_SYSERROR("Failed while opening netns file for \"%s\"\n", args.pid);
-+ 			close(netns_fd);
-+ 			_exit(EXIT_FAILURE);
-+ 		}
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 7994dffcf5..881869969d 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -13,6 +13,9 @@ LXC_INSTALL_STAGING = YES
- # We're patching configure.ac
- LXC_AUTORECONF = YES
- 
-+# 0005-Patching-an-incoming-CVE-CVE-2022-47952.patch
-+LXC_IGNORE_CVES += CVE-2022-47952
-+
- LXC_CONF_OPTS = \
- 	--disable-apparmor \
- 	--disable-examples \
--- 
-2.39.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TGUgMDYvMDIvMjAyMyDDoCAxNzozMywgSmFtZXMgSGlsbGlhcmQgYSDDqWNyaXTCoDoKPiBPbiBN
+b24sIEZlYiA2LCAyMDIzIGF0IDk6MjQgQU0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21p
+bGUuZnI+IHdyb3RlOgo+Pgo+PiBIZWxsbyBKYW1lcywKPj4KPj4gTGUgMDYvMDIvMjAyMyDDoCAx
+Njo1MywgUm9tYWluIE5hb3VyIGEgw6ljcml0IDoKPj4+IEhlbGxvIEphbWVzLAo+Pj4KPj4+IExl
+IDMwLzAxLzIwMjMgw6AgMDE6MjgsIEphbWVzIEhpbGxpYXJkIGEgw6ljcml0IDoKPj4+PiBGcm9t
+OiBTdGVmYW4gSGFnZXIgPHN0ZWZhbi5oYWdlckBnaW56aW5nZXIuY29tPgo+Pj4+Cj4+Pj4gVGhp
+cyBwYWNrYWdlIGlzIHJlcXVpcmVkIGJ5IHRlbnNvcmZsb3ctbGl0ZS4KPj4+Pgo+Pj4+IEFkZCBh
+IHBhdGNoIHJlbW92aW5nIGNwcCByZXF1aXJlbWVudCB3aGVuIG5vdCBidWlsZGluZyB0ZXN0cy4K
+Pj4+Pgo+Pj4+IFRlc3RlZC1ieTogU3RlZmFuIEhhZ2VyIDxzdGVmYW4uaGFnZXJAZ2luemluZ2Vy
+LmNvbT4KPj4+PiBTaWduZWQtb2ZmLWJ5OiBTdGVmYW4gSGFnZXIgPHN0ZWZhbi5oYWdlckBnaW56
+aW5nZXIuY29tPgo+Pj4+IFNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxs
+aWFyZDFAZ21haWwuY29tPgo+Pj4+IC0tLQo+Pj4+IENoYW5nZXMgdjQgLT4gdjU6Cj4+Pj4gICAt
+IGRvbid0IHJlcXVpcmUgY3BwCj4+Pj4gQ2hhbmdlcyB2MiAtPiB2MzoKPj4+PiAgIC0gbW92ZSB0
+byBsaWJyYXJpZXMtPmhhcmR3YXJlIGhhbmRsaW5nCj4+Pj4gLS0tCj4+Cj4+IFsuLi5dCj4+Cj4+
+Pj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvY3B1aW5mby9Db25maWcuaW4gYi9wYWNrYWdlL2NwdWlu
+Zm8vQ29uZmlnLmluCj4+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4+PiBpbmRleCAwMDAwMDAw
+MDAwLi5kM2MzYjA4NDAwCj4+Pj4gLS0tIC9kZXYvbnVsbAo+Pj4+ICsrKyBiL3BhY2thZ2UvY3B1
+aW5mby9Db25maWcuaW4KPj4+PiBAQCAtMCwwICsxLDggQEAKPj4+PiArY29uZmlnIEJSMl9QQUNL
+QUdFX0NQVUlORk8KPj4+PiArICAgIGJvb2wgImNwdWluZm8iCj4+Pgo+Pj4gSGF2ZSB5b3UgY2hl
+Y2tlZCBjcHVpbmZvIGRlcGVuZGVuY2llcyA/Cj4+Pgo+Pj4gSXQgc2VlbXMgWE5OUGFjayB1c2Vk
+IGJ5IGNwdWluZm8gaXMgNjRiaXRzIGFyY2hpdGVjdHVyZXMgb25seToKPj4+Cj4+PiBDTWFrZSBX
+YXJuaW5nIGF0IENNYWtlTGlzdHMudHh0OjY5IChNRVNTQUdFKToKPj4+IFRhcmdldCBwcm9jZXNz
+b3IgYXJjaGl0ZWN0dXJlICJsIiBpcyBub3Qgc3VwcG9ydGVkIGluIGNwdWluZm8uICBjcHVpbmZv
+Cj4+PiB3aWxsIGNvbXBpbGUsIGJ1dCBjcHVpbmZvX2luaXRpYWxpemUoKSB3aWxsIGFsd2F5cyBm
+YWlsLgo+Pj4KPj4+IGhpbnQ6Cj4+PiBodHRwczovL2dpdGh1Yi5jb20vTm9idW9Uc3VrYW1vdG8v
+bWV0YS10ZW5zb3JmbG93LWxpdGUvYmxvYi9tYWluL3JlY2lwZXMtdG9vbHMvdGVuc29yZmxvdy1s
+aXRlL3RlbnNvcmZsb3ctbGl0ZS1iZW5jaG1hcmtfMi4xMS4wLmJiI0wzMwo+Pj4KPj4+IEFuZCB0
+cmlnZ2VyIGEgYnVpbGQgaXNzdWUgb24gdUNsaWJjLW5nIGR1ZSB0byBtaXNzaW5nIGhlYWRlcjoK
+Pj4+Cj4+PiBjcHVpbmZvLWRlMmZhNzhlYmI0MzFkYjk4NDg5ZTc4NjAzZTRmNzdjMWY2YzVjNTcv
+c3JjL2FybS9saW51eC9od2NhcC5jOjE5OjExOgo+Pj4gZmF0YWwgZXJyb3I6IHN5cy9hdXh2Lmg6
+IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKPj4+ICAgIDE5IHwgICNpbmNsdWRlIDxzeXMvYXV4
+di5oPgo+Pj4KPj4+IEFsc28gc3RhdGljIGJ1aWxkIGlzIG5vdCBsaWtlbHkgc3VwcG9ydGVkOgo+
+Pj4KPj4+IGNwdWluZm8tZGUyZmE3OGViYjQzMWRiOTg0ODllNzg2MDNlNGY3N2MxZjZjNWM1Ny9z
+cmMvYXJtL2xpbnV4L2h3Y2FwLmM6ODoxMDoKPj4+IGZhdGFsIGVycm9yOiBkbGZjbi5oOiBObyBz
+dWNoIGZpbGUgb3IgZGlyZWN0b3J5Cj4+PiAgICAgOCB8ICNpbmNsdWRlIDxkbGZjbi5oPgo+Pgo+
+PiBBY3R1YWxseSB0aGVyZSBpcyBhbiBhcmNoaXRlY3R1cmUgZGVwZW5kZW5jeTogeDg2LCB4ODZf
+NjQsIGFybSwgYWFyY2g2NC4KPj4gQWxzbyBpdCByZXF1aXJlcyB0aHJlYWRzIHN1cHBvcnQ6Cj4+
+Cj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9weXRvcmNoL2NwdWluZm8vYmxvYi9tYWluL3NyYy9pbml0
+LmMjTDI0Cj4gCj4gV2VsbC4uLnRob3NlIGFyY2hpdGVjdHVyZSBkZXBlbmRlbmNpZXMga2luZGEg
+bG9vayBsaWtlIHJ1bnRpbWUgZGVwcwo+IHRvIG1lLi4uYSBjb25zdW1pbmcgYXBwbGljYXRpb24g
+Y291bGQgY2FsbCBjcHVpbmZvX2luaXRpYWxpemUoKSB3aXRoCj4gZXJyb3IgaGFuZGxpbmcgYW5k
+IGZhbGxiYWNrIHRvIHNvbWUgb3RoZXIgY29kZXBhdGggYXV0b21hdGljYWxseSBvbgo+IGZhaWx1
+cmUuCj4gCj4gU28gcHJvYmFibHkgd2UgZG9uJ3Qgd2FudCB0byBhcHBseSBhbiBhcmNoaXRlY3R1
+cmUgcmVzdHJpY3Rpb24gdW5sZXNzCj4gdGhlcmUncyBhbiBhY3R1YWwgYnVpbGQgZmFpbHVyZS4K
+CldpdGggdGhlIHNvdXJjZXJ5LWFybS1hcm12NHQgY3B1aW5mbyBidWlsZCB3aWxsIGZhaWw6CgpD
+TWFrZSBXYXJuaW5nIGF0IENNYWtlTGlzdHMudHh0OjY5IChNRVNTQUdFKToKICBUYXJnZXQgcHJv
+Y2Vzc29yIGFyY2hpdGVjdHVyZSAiYXJtdjRsIiBpcyBub3Qgc3VwcG9ydGVkIGluIGNwdWluZm8u
+CiAgY3B1aW5mbyB3aWxsIGNvbXBpbGUsIGJ1dCBjcHVpbmZvX2luaXRpYWxpemUoKSB3aWxsIGFs
+d2F5cyBmYWlsLgoKbGliY3B1aW5mby5zbzogaGlkZGVuIHN5bWJvbCBgY3B1aW5mb19hcm1fbGlu
+dXhfaW5pdCcgaXNuJ3QgZGVmaW5lZAoKVGhlIGFyY2hpdGVjdHVyZSBzdXBwb3J0IG90aGVyIHRo
+YW4gYW5ub3VuY2VkIChhcm0sYWFyY2g2NCwgeDg2IGFuZCB4ODZfNjQpCnNlZW1zIHVuY2VydGFp
+bi4gSW4gZG91YnQsIGl0IHNlZW1zIHRvIGJlIGxlZ2l0IHRvIGFkZCBhcmNoaXRlY3R1cmUgZGVw
+ZW5kZW5jaWVzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+Pgo+PiBCZXN0IHJlZ2FyZHMs
+Cj4+IFJvbWFpbgo+Pgo+Pj4KPj4+IEJlc3QgcmVnYXJkcywKPj4+IFJvbWFpbgo+Pj4KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
