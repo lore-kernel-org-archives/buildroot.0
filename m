@@ -1,59 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68BFEC61DA4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 11:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9020C05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 11:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C093410A8;
-	Mon,  6 Feb 2023 11:06:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C093410A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 600CD40328;
+	Mon,  6 Feb 2023 11:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 600CD40328
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E-Ugo2sePE2U; Mon,  6 Feb 2023 11:06:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tuzy7jnVBr9U; Mon,  6 Feb 2023 11:07:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12BAC410C2;
-	Mon,  6 Feb 2023 11:06:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12BAC410C2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 17CB71BF397
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:06:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 76BE440364;
+	Mon,  6 Feb 2023 11:07:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76BE440364
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 859831BF397
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E61B8410A8
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:06:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E61B8410A8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D5B0402EB
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 11:07:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D5B0402EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hTk7M7O2kYLd for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 11:06:12 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05722409FE
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 05722409FE
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 11:06:11 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AE876C0007;
- Mon,  6 Feb 2023 11:06:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pOzK4-00DpPw-UD; Mon, 06 Feb 2023 12:06:08 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-8-ricardo.martincoski@gmail.com>
-Date: Mon, 06 Feb 2023 12:06:08 +0100
-In-Reply-To: <20221127130739.1862398-8-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 27 Nov 2022 10:07:21 -0300")
-Message-ID: <875ycfcau7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 07/25] package/live555: fix build config with
- locale
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r6vWn23IgYK4 for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 11:07:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 958AA400BF
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 11:07:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 958AA400BF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 81C6B83A9C; Mon,  6 Feb 2023 11:07:22 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 Feb 2023 12:07:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c96b2b21f7aedd78094fd009f03d8f82361e5105
+X-Git-Newrev: 46306d135e5aab14073eece713d38e8c827c58ae
+X-Patchwork-Hint: ignore
+Message-Id: <20230206110722.81C6B83A9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/optee-os: add out-of-source OPTEE-OS
+ device tree support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +56,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=46306d135e5aab14073eece713d38e8c827c58ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Using current conditional code, added in 2014:
- > ifndef ($(BR2_ENABLE_LOCALE),y)
- > LIVE555_CFLAGS += -DLOCALE_NOT_USED
- > endif
+Similarly to U-Boot, this patch adds the ability to copy in and build
+out-of-source device tree sources during an OPTEE-OS build. To build
+the external device tree source file, the OP-TEE OS configuration must
+refer to it with the CFG_EMBED_DTB_SOURCE_FILE option and no platform
+flavor needs to be specified.
 
- > the define LOCALE_NOT_USED is always passed on CFLAGS, because there is
- > no symbol with following names defined:
- >  "(y,y)" -> not defined when BR2_ENABLE_LOCALE=y
- >  "(,y)" -> not defined when BR2_ENABLE_LOCALE is not set
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/optee-os/Config.in   | 11 +++++++++++
+ boot/optee-os/optee-os.mk |  5 +++++
+ 2 files changed, 16 insertions(+)
 
- > So fix the typo, switching ifndef to ifneq.
-
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 8bcce22306..617ff93c44 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -130,6 +130,17 @@ config BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR
+ 	  Value for the optional PLATFORM_FLAVOR build directive
+ 	  provided to OP-TEE OS.
+ 
++config BR2_TARGET_OPTEE_OS_CUSTOM_DTS_PATH
++	string "Device Tree Source file paths"
++	help
++	  Space-separated list of paths to device tree source files
++	  that will be copied to core/arch/arm/dts/ before starting the
++	  build.
++
++	  To use this device tree source file, the OP-TEE OS configuration
++	  must refer to it with the CFG_EMBED_DTB_SOURCE_FILE option and
++	  no platform flavor needs to be specified.
++
+ config BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES
+ 	string "Additional build variables"
+ 	help
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 38b0d367ef..33b4e2e1ab 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -84,6 +84,8 @@ endif
+ 
+ OPTEE_OS_IMAGE_FILES = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CORE_IMAGES))
+ 
++OPTEE_OS_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_OPTEE_OS_CUSTOM_DTS_PATH))
++
+ ifeq ($(BR2_TARGET_OPTEE_OS_CORE),y)
+ define OPTEE_OS_BUILD_CORE
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) O=$(OPTEE_OS_BUILDDIR_OUT) \
+@@ -120,6 +122,9 @@ endef
+ endif # BR2_TARGET_OPTEE_OS_SDK
+ 
+ define OPTEE_OS_BUILD_CMDS
++	$(if $(OPTEE_OS_CUSTOM_DTS_PATH),
++		cp -f $(OPTEE_OS_CUSTOM_DTS_PATH) $(@D)/core/arch/arm/dts/
++	)
+ 	$(OPTEE_OS_BUILD_CORE)
+ 	$(OPTEE_OS_BUILD_SDK)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
