@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49850C61DA4
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 21:39:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65F5AC61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 21:40:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAD9B4056E;
-	Mon,  6 Feb 2023 21:39:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAD9B4056E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 160A740575;
+	Mon,  6 Feb 2023 21:40:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 160A740575
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RPqrmZ4NbU3n; Mon,  6 Feb 2023 21:39:40 +0000 (UTC)
+	with ESMTP id yPubVtKYZoAF; Mon,  6 Feb 2023 21:40:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F309340569;
-	Mon,  6 Feb 2023 21:39:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F309340569
+	by smtp2.osuosl.org (Postfix) with ESMTP id 353324056C;
+	Mon,  6 Feb 2023 21:40:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 353324056C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B99391BF2A4
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:39:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 071251BF2A4
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F84641754
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:39:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F84641754
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1EE041740
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 21:39:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1EE041740
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KlAxKlGduPfN for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 21:39:36 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43AAA415AE
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 43AAA415AE
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 21:39:36 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 111A120008;
- Mon,  6 Feb 2023 21:39:33 +0000 (UTC)
-Date: Mon, 6 Feb 2023 22:39:33 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20230206223933.63f0a397@windsurf>
-In-Reply-To: <cover.1663699017.git.yann.morin.1998@free.fr>
-References: <cover.1663699017.git.yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675719574;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=F0DlEDoru1g5urZq1JmlS+6U2o41UsWewaSpnxfukBw=;
- b=AndEapt3us6YuZktn7J5t1PhnBW7ZaGoSnFnT26lZfGrnGHllxlWcvA/HvSvd1hbZXfN4z
- 8UhZGW6z4+XC27PGQimjx553Dk/t4ndAOxex06z9MoPPXrh31Bpw46RxRiObf1LkTKjv0S
- TAVrHIJxU7UNs8hmGXQ/uuRO7rTXAQ/Js2PMZY56FAN2eQrANMX/BOn4QOMOCC6x50pYFy
- UWPliNj32D2xfmWoLKedWF7QSPEzy3Guy5g1+lSnpwM9lSmHyOdr6dSzpyw2yMntambjnp
- SYOv3KVrEA15mB4jRQwfjuifCMoAx1oBf/JwS6SRNRKATVfaTCHJSQwRlcgflA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AndEapt3
-Subject: Re: [Buildroot] [PATCH 0/2] dracut: extend support and tests
- (branch yem/dracut)
+ with ESMTP id nBCQEXuGBdqN for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 21:39:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7264415AE
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 21:39:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7264415AE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B167A83D34; Mon,  6 Feb 2023 21:39:56 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 6 Feb 2023 22:39:15 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f20611347fcce58f89f1fedf2cebaf8b2e077f67
+X-Git-Newrev: 5aab8c59d5b310540105166e7b48faf3d5bd200b
+X-Patchwork-Hint: ignore
+Message-Id: <20230206213956.B167A83D34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
+ require FindBin perl package for libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,29 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Adam Duskett <aduskett@gmail.com>,
- Thierry Bultel <thierry.bultel@linatsea.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 20 Sep 2022 20:37:09 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5aab8c59d5b310540105166e7b48faf3d5bd200b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Yann E. MORIN (2):
->       fs/cpio: allow users to provide their own dracut modules
->       support/tests/cpio: extend runtime tests for extra dract modules
+Fixes:
+http://autobuild.buildroot.net/results/5d1/5d10f4f545dccf126e3f5b5efce777a393c5e7bc/
+http://autobuild.buildroot.net/results/7c2/7c2df31c6eb34b68e460e092d8c262bdc6c8f25a/
 
-Both finally applied. Thanks!
+The configure script of (host-)libopenssl needs the FindBin perl module on the host:
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Can't locate FindBin.pm in @INC (you may need to install the FindBin module)
+(@INC contains: /home/buildroot/autobuild/instance-2/output-1/host/lib/perl
+/usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36
+/usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5
+/usr/share/perl5) at ./Configure line 15.  BEGIN failed--compilation aborted
+at ./Configure line 15.
+
+As this is needed for both libopenssl and host-libopenssl (which does not
+have a corresponding config symbol in the .config), we have to require it
+unconditionally.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/dependencies/dependencies.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 4b5012b807..afd30008e8 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -268,6 +268,7 @@ fi
+ required_perl_modules="Data::Dumper" # Needed to build host-autoconf
+ required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by host-libxml-parser-perl
+ required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
++required_perl_modules="$required_perl_modules FindBin" # Used by (host-)libopenssl
+ 
+ if grep -q ^BR2_PACKAGE_MPV=y $BR2_CONFIG ; then
+     required_perl_modules="$required_perl_modules Math::BigInt"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
