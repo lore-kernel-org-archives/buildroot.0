@@ -1,96 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1493C05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 05:11:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D91B0C05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 05:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3864F400D2;
-	Mon,  6 Feb 2023 05:11:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3864F400D2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FD61605BA;
+	Mon,  6 Feb 2023 05:27:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FD61605BA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id im0cdpL6udXK; Mon,  6 Feb 2023 05:27:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27DB9605D6;
+	Mon,  6 Feb 2023 05:27:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27DB9605D6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 094521BF35E
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 05:27:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6EF5400DC
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 05:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6EF5400DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9pGGqvu_RkjF; Mon,  6 Feb 2023 05:11:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CF67400D7;
-	Mon,  6 Feb 2023 05:11:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CF67400D7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 643AA1BF35E
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 05:11:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 38F5D813AD
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 05:11:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38F5D813AD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WxRUK0OpxRTP for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 05:11:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FF2E813AA
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1FF2E813AA
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 05:11:17 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id ud5so30930738ejc.4
- for <buildroot@buildroot.org>; Sun, 05 Feb 2023 21:11:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=g22OXPnhI3RladBuQHv1doxylxOo8f/+W4XEqXy2w6g=;
- b=CTIaSy0Exd6P/fEAG5e3g2mEi/GWvj4iRJqGPqtdhiXNRF8I1qCsZ1qP4qw8QccTc/
- nBbI7YlegVpByCjLMn9ihHSW+l/OOhq8PHLIPzSb7BfPRms1raxnYAArgvFGaIcQjwKX
- Cdr2BuAdSn1i413gwKtXMqVWT9uodXBrwCMC4mXLux8noVhrqaGS6YYo0Y7+YnCgmVKk
- S1oCd0dxVdCvOTDbjgeD/33nwRK5OlDbCsKLgXRe4rmZBdc8CdgDSqqFbEu6EG4orNX9
- /H8t3UnFfqaR/XlPq2DpHGPNLCkvn+KTRuPeJ9pnWwcsM2b+FFlpnKkPzHphl++1+s0t
- YWXw==
-X-Gm-Message-State: AO0yUKVO1hU0dyLGGBFvYCrOWuuKxwjoTP219k86dkPLQsaBjhbov8OA
- cM3rPBy1GvxCOJ7FuAQhruqZXHWKeRmQ2k02JRM=
-X-Google-Smtp-Source: AK7set+tPHCgVcRqkDPUYj0RPmyMvA/KxQmLxcbx+n9VwkvMf8DV8PnCXya90tp22Js54bHPEUuKHg==
-X-Received: by 2002:a17:906:c30b:b0:878:7cf3:a9e7 with SMTP id
- s11-20020a170906c30b00b008787cf3a9e7mr19957672ejz.65.1675660276079; 
- Sun, 05 Feb 2023 21:11:16 -0800 (PST)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com.
- [209.85.218.43]) by smtp.gmail.com with ESMTPSA id
- y14-20020a17090668ce00b0087329ff591esm4944370ejr.132.2023.02.05.21.11.15
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 05 Feb 2023 21:11:15 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id hr39so1316631ejc.7
- for <buildroot@buildroot.org>; Sun, 05 Feb 2023 21:11:15 -0800 (PST)
-X-Received: by 2002:a17:906:8da:b0:88b:1344:9709 with SMTP id
- o26-20020a17090608da00b0088b13449709mr5527812eje.162.1675660275080; Sun, 05
- Feb 2023 21:11:15 -0800 (PST)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uyupPlr2Ds54 for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 05:27:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58F60400D7
+Received: from box.stevenhay.com (box.stevenhay.com
+ [IPv6:2a01:7e01:e001:325::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 58F60400D7
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 05:27:19 +0000 (UTC)
+Received: from authenticated-user (box.stevenhay.com [172.104.133.13])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+ (No client certificate requested)
+ by box.stevenhay.com (Postfix) with ESMTPSA id 944152026A;
+ Mon,  6 Feb 2023 00:27:13 -0500 (EST)
+Message-ID: <f16b6e5d-8a3c-5216-b146-59a3f68cab66@stevenhay.com>
+Date: Mon, 6 Feb 2023 00:27:12 -0500
 MIME-Version: 1.0
-References: <20230202132650.1537778-1-christian@paral.in>
- <20230205153552.GS2960@scaer>
-In-Reply-To: <20230205153552.GS2960@scaer>
-Date: Sun, 5 Feb 2023 21:11:06 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2pdn2d5CbpqTY0Z5VPUCtUbrvZVDT1ZCT3ZWAzYutrS-A@mail.gmail.com>
-Message-ID: <CA+h8R2pdn2d5CbpqTY0Z5VPUCtUbrvZVDT1ZCT3ZWAzYutrS-A@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=paral.in; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=g22OXPnhI3RladBuQHv1doxylxOo8f/+W4XEqXy2w6g=;
- b=BYIh2hKciVR2VyIcsaRRxSFJGtnYfiXIf861iMM9HhLxb3Vfqq7L15tkycwTAdXoYZ
- K6BgWFqBEoSNgiU99Rq+5Jiyuh0JOqrKW65KfA6TFH1VYW2VKuBphl6lggjZiEftQie+
- FSTKO5IGGHy74Ul+CA+ZVyA41nJY/0lWyi7LmY7h/iC9b8fXspNkXJvZ5PZvxy49e/B5
- IwZHFA+Bw6tjuwQ3t0FzaANGBQh4AEpvuJkBlHja/z9n7GQEl5SUEtoTP8nXWaeDK8T8
- aNbeN5GZq/67Ja1H7FwxYtaR5iSbI52zrvbf06htBBndTnpTK9+CD+SOqqf2MW7MC6tq
- J4RA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
- header.a=rsa-sha256 header.s=google header.b=BYIh2hKc
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/balena-engine: bump to
- version 20.10.26
+To: buildroot@buildroot.org
+References: <20230123231224.3772679-2-me@stevenhay.com>
+Content-Language: en-US
+In-Reply-To: <20230123231224.3772679-2-me@stevenhay.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=stevenhay.com; s=mail; t=1675661234;
+ bh=whSvJ/dct4UdGPHXQ6foF28WBEcO5HL584nwVEG24Qw=;
+ h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
+ b=anW5jKJqZo6bSVqtCr4hvaQ77DG9oULd6r75HMMWB2wLTMLxIDDkTOB4SJAkn9CsT
+ YiRN0OCj88TP80nNsvoygHoLseJdj2ISd3LKAn1VWwNVXJbi2tLiCA3pVcKeI2gOga
+ hYOme0fsEpt9bWstNF8JMeuTPavqVZN9hSU8L2SeiUGG+1cWS8EhlOeiNoT6C+quOe
+ tUTmBbJAa+yRZLtQoMY3KnNHYGvfTTG25lufZV+7FQ4XT00v06VCkbdTvL/Nnt74br
+ cWRnRXAG2gmbO2sH6EdMsbMj7xsvjMCvhyuGpurFXcLdz7rzJ1V49ZEco5fsAW0gPY
+ XvOS6C/LQqbxQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=stevenhay.com header.i=@stevenhay.com
+ header.a=rsa-sha256 header.s=mail header.b=anW5jKJq
+Subject: Re: [Buildroot] [PATCH 2/2] support/scripts/graph-depends allow for
+ forward and reverse depends on same graph
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,101 +74,245 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============3049124404623134020=="
+From: =?utf-8?b?yo7JkEggx53KjMedyodTIHZpYSBidWlsZHJvb3Q=?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?B?yo7JkEggx53KjMedyodT?= <me@stevenhay.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, thomas.petazzoni@bootlin.com
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3049124404623134020==
-Content-Type: multipart/alternative; boundary="00000000000075e33e05f4010f20"
+All,
 
---00000000000075e33e05f4010f20
-Content-Type: text/plain; charset="UTF-8"
+Wanted to bump this email thread to see what we think of the second part 
+(the meat) of this patch.
 
-Yann,
-
-On Sun, Feb 5, 2023, 7:36 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-
-> Christian, All,
+On 1/23/23 6:12 PM, Steve Hay wrote:
+> The current implementation of buildroot depe dependency graphing
+> either does forward- or reverse-dependency traversal.
 >
-> On 2023-02-02 05:26 -0800, Christian Stewart via buildroot spake thusly:
-> > This update requires a workaround for the non-standard vendor/ structure
-> in the
-> > balena-engine repository, which has an invalid vendor/modules.txt file.
-> >
-> > Removing the vendor/modules.txt file fixes the build error.
-> >
-> > Reference:
-> https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-> >
-> > The go download post-process script uses go mod init to create the
-> go.mod file
+> This patch enables buildroot to graph forward and reverse dependencies on the
+> graph for the same package: (Diagram Credit: Yann E. MORRIN)
 >
-> That's not correct. The download go-post-process script does not run
-> that command at all.
+>      $ make pkg-d-graph-both-depends
 >
-
-My mistake, I had a commit in my working branch that adds go mod init if
-the go.mod doesn't exist.
-
-Thanks,
-Christian
-
-
+>      pkg A -.            .-> pkg E
+>              \          /
+>      pkg B ----> pkg D ----> pkg F
+>              /          \
+>      pkg C -'            '-> pkg G
 >
-
---00000000000075e33e05f4010f20
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Yann,<br><br><div class=3D"gmail_quote"><div dir=3D"=
-ltr" class=3D"gmail_attr">On Sun, Feb 5, 2023, 7:36 AM Yann E. MORIN &lt;<a=
- href=3D"mailto:yann.morin.1998@free.fr">yann.morin.1998@free.fr</a>&gt; wr=
-ote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;=
-border-left:1px #ccc solid;padding-left:1ex">Christian, All,<br>
-<br>
-On 2023-02-02 05:26 -0800, Christian Stewart via buildroot spake thusly:<br=
+> In the above example a single graph shows pkg {A,B,C} are needed
+> by pkg D, and pkg D is a dependency of pkg {E,F,G}.
 >
-&gt; This update requires a workaround for the non-standard vendor/ structu=
-re in the<br>
-&gt; balena-engine repository, which has an invalid vendor/modules.txt file=
-.<br>
-&gt; <br>
-&gt; Removing the vendor/modules.txt file fixes the build error.<br>
-&gt; <br>
-&gt; Reference: <a href=3D"https://github.com/moby/moby/issues/44618#issuec=
-omment-1343565705" rel=3D"noreferrer noreferrer" target=3D"_blank">https://=
-github.com/moby/moby/issues/44618#issuecomment-1343565705</a><br>
-&gt; <br>
-&gt; The go download post-process script uses go mod init to create the go.=
-mod file<br>
-<br>
-That&#39;s not correct. The download go-post-process script does not run<br=
+> The variables DEPTH and RDEPTH can be passed into the graphing functions to
+> specify the maximum depths of direct and reverse dependencies to control graph
+> size.
 >
-that command at all.<br></blockquote></div></div><div dir=3D"auto"><br></di=
-v><div dir=3D"auto">My mistake, I had a commit in my working branch that ad=
-ds go mod init if the go.mod doesn&#39;t exist.</div><div dir=3D"auto"><br>=
-</div><div dir=3D"auto">Thanks,</div><div dir=3D"auto">Christian</div><div =
-dir=3D"auto"><br></div><div dir=3D"auto"><div class=3D"gmail_quote"><blockq=
-uote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc =
-solid;padding-left:1ex"><br>
-</blockquote></div></div></div>
-
---00000000000075e33e05f4010f20--
-
---===============3049124404623134020==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> Makefile documentation is also updated.
+>
+> Signed-off-by: Steve Hay <me@stevenhay.com>
+>
+> ---
+> Changes v1 -> v2:
+>    - Enhanced patch description. (Yann)
+>    - Added Makefile documentation. (Yann)
+>    - Completed the implementation of graph-both-depends. (Yann)
+>    - Added ability to control depth of the generated graph.
+>    - Ensured both forward and reverse dependencies are checked for --check-only case. (Yann)
+> ---
+>   Makefile                      |  7 ++++
+>   package/pkg-generic.mk        |  7 +++-
+>   support/scripts/graph-depends | 69 ++++++++++++++++++++++-------------
+>   3 files changed, 55 insertions(+), 28 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 8517d563d5..e47544fd42 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1163,7 +1163,14 @@ help:
+>   	@echo '  <pkg>-show-recursive-rdepends'
+>   	@echo '                         - Recursively list packages which have <pkg> as a dependency'
+>   	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
+> +	@echo '                             DEPTH, if set on the command line, is used to specify maximum'
+> +	@echo '                               depth to graph dependencies.'
+>   	@echo '  <pkg>-graph-rdepends   - Generate a graph of <pkg>'\''s reverse dependencies'
+> +	@echo '                             RDEPTH, if set on the command line, is used to specify maximum'
+> +	@echo '                               depth to graph reverse dependencies.'
+> +	@echo '  <pkg>-graph-both-depends'
+> +	@echo '                         - Generate a graph of both <pkg>'\''s forward and'
+> +	@echo '                           reverse dependencies. DEPTH and RDEPTH work as described above.'
+>   	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+>   	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+>   	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 2f8ba39edf..6ddb304a12 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -1031,10 +1031,13 @@ $(1)-show-info:
+>   	$$(info $$(call clean-json,{ $$(call json-info,$(2)) }))
+>   
+>   $(1)-graph-depends: graph-depends-requirements
+> -	$(call pkg-graph-depends,$(1),--direct)
+> +	$(call pkg-graph-depends,$(1),--direct --depth $(or $(DEPTH),0))
+>   
+>   $(1)-graph-rdepends: graph-depends-requirements
+> -	$(call pkg-graph-depends,$(1),--reverse)
+> +	$(call pkg-graph-depends,$(1),--reverse --rdepth $(or $(RDEPTH),0))
+> +
+> +$(1)-graph-both-depends: graph-depends-requirements
+> +	$(call pkg-graph-depends,$(1),--direct --reverse --depth $(or $(DEPTH),0) --rdepth $(or $(RDEPTH),0))
+>   
+>   $(1)-all-source:	$(1)-source
+>   $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index 3e3373950f..0285afb46d 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -159,11 +159,11 @@ def check_circular_deps(deps):
+>   
+>   # This functions trims down the dependency list of all packages.
+>   # It applies in sequence all the dependency-elimination methods.
+> -def remove_extra_deps(deps, rootpkg, transitive, arrow_dir):
+> +def remove_extra_deps(deps, rootpkg, transitive, direct):
+>       # For the direct dependencies, find and eliminate mandatory
+>       # deps, and add them to the root package. Don't do it for a
+>       # reverse graph, because mandatory deps are only direct deps.
+> -    if arrow_dir == "forward":
+> +    if direct:
+>           for pkg in list(deps.keys()):
+>               if not pkg == rootpkg:
+>                   for d in get_mandatory_deps(pkg, deps):
+> @@ -197,14 +197,16 @@ def print_attrs(outfile, pkg, pkg_type, pkg_version, depth, colors):
+>       outfile.write("%s [color=%s,style=filled]\n" % (name, color))
+>   
+>   
+> +
+>   # Print the dependency graph of a package
+>   def print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+> -                   arrow_dir, draw_graph, depth, max_depth, pkg, colors, done_deps=None):
+> +                   direct, draw_graph, depth, max_depth, pkg, colors, done_deps=None):
+>       if done_deps is None:
+>           done_deps = []
+>       if pkg in done_deps:
+>           return
+>       done_deps.append(pkg)
+> +
+>       if draw_graph:
+>           print_attrs(outfile, pkg, dict_types[pkg], dict_versions[pkg], depth, colors)
+>       elif depth != 0:
+> @@ -231,9 +233,12 @@ def print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exc
+>                       break
+>               if add:
+>                   if draw_graph:
+> -                    outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
+> +                    if direct:
+> +                        outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), "forward"))
+> +                    else:
+> +                        outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(d), pkg_node_name(pkg), "forward"))
+>                   print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+> -                               arrow_dir, draw_graph, depth + 1, max_depth, d, colors, done_deps)
+> +                               direct, draw_graph, depth + 1, max_depth, d, colors, done_deps)
+>   
+>   
+>   def parse_args():
+> @@ -246,6 +251,8 @@ def parse_args():
+>                           help="Graph the dependencies of PACKAGE")
+>       parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
+>                           help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
+> +    parser.add_argument("--rdepth", metavar="RDEPTH", dest="rdepth", type=int, default=0,
+> +                        help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
+>       parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
+>                           help="Do not graph past this package (can be given multiple times)." +
+>                           " Can be a package name or a glob, " +
+> @@ -265,9 +272,9 @@ def parse_args():
+>                           default=False)
+>       parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+>                           help="Draw (do not draw) transitive dependencies")
+> -    parser.add_argument("--direct", dest="direct", action='store_true', default=True,
+> +    parser.add_argument("--direct", dest="direct", action='store_true', default=False,
+>                           help="Draw direct dependencies (the default)")
+> -    parser.add_argument("--reverse", dest="direct", action='store_false',
+> +    parser.add_argument("--reverse", dest="reverse", action='store_true', default=False,
+>                           help="Draw reverse dependencies")
+>       parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
+>                           help="Quiet")
+> @@ -292,6 +299,9 @@ def main():
+>               sys.exit(1)
+>           outfile = open(args.outfile, "w")
+>   
+> +    if not args.direct and not args.reverse: # select default direct if none is specified.
+> +        args.direct = True
+> +
+>       if args.package is None:
+>           mode = MODE_FULL
+>           rootpkg = 'all'
+> @@ -312,13 +322,9 @@ def main():
+>       if args.exclude_mandatory:
+>           exclude_list += MANDATORY_DEPS
+>   
+> -    if args.direct:
+> -        arrow_dir = "forward"
+> -    else:
+> -        if mode == MODE_FULL:
+> -            logging.error("--reverse needs a package")
+> -            sys.exit(1)
+> -        arrow_dir = "back"
+> +    if args.reverse and mode == MODE_FULL:
+> +        logging.error("--reverse needs a package")
+> +        sys.exit(1)
+>   
+>       draw_graph = not args.flat_list
+>   
+> @@ -330,23 +336,34 @@ def main():
+>           logging.error("Error: incorrect color list '%s'" % args.colors)
+>           sys.exit(1)
+>   
+> -    deps, rdeps, dict_types, dict_versions = brpkgutil.get_dependency_tree()
+> -    dict_deps = deps if args.direct else rdeps
+> -
+> -    check_circular_deps(dict_deps)
+> -    if check_only:
+> -        sys.exit(0)
+> -
+> -    dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, arrow_dir)
+>   
+>       # Start printing the graph data
+> -    if draw_graph:
+> +    if not check_only and draw_graph:
+>           outfile.write("digraph G {\n")
+>   
+> -    print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+> -                   arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
+> +    deps, rdeps, dict_types, dict_versions = brpkgutil.get_dependency_tree()
+>   
+> -    if draw_graph:
+> +    # forward
+> +    if args.direct:
+> +        dict_deps = deps
+> +        direct = True
+> +        check_circular_deps(dict_deps)
+> +        if not check_only:
+> +            dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, direct)
+> +            print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+> +                           direct, draw_graph, 0, args.depth, rootpkg, colors)
+> +
+> +    # reverse
+> +    if args.reverse:
+> +        dict_deps = rdeps
+> +        direct = False
+> +        check_circular_deps(dict_deps)
+> +        if not check_only:
+> +            dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, direct)
+> +            print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
+> +                           direct, draw_graph, 0, args.rdepth, rootpkg, colors)
+> +
+> +    if not check_only and draw_graph:
+>           outfile.write("}\n")
+>       else:
+>           outfile.write("\n")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3049124404623134020==--
