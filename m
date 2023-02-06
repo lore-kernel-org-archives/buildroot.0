@@ -1,51 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C902C636D3
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 15:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D258C636D4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 15:54:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0429D60B24;
-	Mon,  6 Feb 2023 15:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0429D60B24
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA90D815CA;
+	Mon,  6 Feb 2023 15:54:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA90D815CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fyZN9dHaEd82; Mon,  6 Feb 2023 15:31:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G-6Jlt8DjiDz; Mon,  6 Feb 2023 15:54:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14F2C60B13;
-	Mon,  6 Feb 2023 15:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14F2C60B13
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B98D91BF3E0
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 15:30:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D035A81586;
+	Mon,  6 Feb 2023 15:54:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D035A81586
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F4DF1BF3E0
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 15:54:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1C8E40489
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 15:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1C8E40489
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC3754161F
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 15:54:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC3754161F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KcCumNUYf4bD for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 15:30:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 223B840482
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 15:30:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 223B840482
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A2CB83CA1; Mon,  6 Feb 2023 15:30:40 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 16:30:20 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 01ce9e95eb4f7fb731b20f3973edd582d4640084
-X-Git-Newrev: aa7d11a2ad984930eb8e8830c44cbabebdcf8568
-X-Patchwork-Hint: ignore
-Message-Id: <20230206153040.0A2CB83CA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xdriver_xf86-video-imx-viv: drop
- package
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8Fmb4RTI-Jcg for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 15:54:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E15424155F
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E15424155F
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 15:54:01 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id q8so8999702wmo.5
+ for <buildroot@buildroot.org>; Mon, 06 Feb 2023 07:54:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=fGL8NG+T8PuNZaDHban9mzdF2yoZSEJhNg61IwVn3Pc=;
+ b=xuV/YSnqxbnVMyXtDtTfjJ9i6azRpTmYey32XRBHAsu6VfGk0aRpSyVsWQH2E7d/JY
+ aWWnaUe9vy64ADc1akPqbNljCj3qekwvy0qhoUutdswYTnfoPBX5MAW4L3vAB0FZajpJ
+ b6B3dltW/Zp91AL5WyauuO07a8QTLDtTDTN8kmmys5yaeARMoB9Z1nPQoeQw6qc6TwTU
+ snD0qd5ZuvSZJLI+EmvApxp3UxXOICTc8atsle56S2r3oVE1xJ81nc7JGuFO5zdVyj5u
+ U5W2iWhdrCkj/Wkj2QG6WYy+R9qsvNl3j8w9RYALml8k7lF2a2ghGKGW47Y843Fx4CXM
+ g3AA==
+X-Gm-Message-State: AO0yUKWtyjj2uArZ2e6942s8pktO6NUcdm/b+7AOt7B/Rys3wsIDFV/1
+ y3JB0T00wd8saaMgt5FyTrfFnp055DsJDVnP
+X-Google-Smtp-Source: AK7set9qWlAgcrPQUbGcFoFQ+Enmq9XTCsSn7cU31Qe2TKf6y/gD5pjaHO9MCr1hyi08V7hE0YYqUg==
+X-Received: by 2002:a05:600c:1c87:b0:3dc:42d2:aee4 with SMTP id
+ k7-20020a05600c1c8700b003dc42d2aee4mr167570wms.25.1675698839947; 
+ Mon, 06 Feb 2023 07:53:59 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ f21-20020a05600c43d500b003dc0cb5e3f1sm11202084wmn.46.2023.02.06.07.53.59
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 06 Feb 2023 07:53:59 -0800 (PST)
+Message-ID: <301bf244-5eb8-3903-3371-80de9a6810aa@smile.fr>
+Date: Mon, 6 Feb 2023 16:53:58 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20230130002854.2300661-1-james.hilliard1@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20230130002854.2300661-1-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=fGL8NG+T8PuNZaDHban9mzdF2yoZSEJhNg61IwVn3Pc=;
+ b=qwBg+ozTlWGPcxFsPMmjssU9fJuyPpX8Fb8MzMSBht4vTMzOJCpMicsRqZjDLDgaWt
+ KgJGCXNnpWcEWekh6yJlH7gflWnQ2LbHsDLmtFog75mSghk/hNnhqApAjUg9jixTZX4C
+ VRrcnHUp0YA97cqAnGYNrZvBqad2bBKwNuG2ZlCZdG/c6Tq6ipffoqEJBHdokO/AoFCC
+ 7NUb+4cTt2EwHUeKuVAS3k17e3+iYw+LKJXPJtn5Ygd5z7I+m/qsnasm9/6JRcOXT2q2
+ 60lvBa4Xgk3VmZ3m4LBueWRO8fNBN8/FzkhG0mKpLq63yQkESL4/NG/8EOaQyb3r4Xc2
+ I0EQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=qwBg+ozT
+Subject: Re: [Buildroot] [PATCH v5 01/10] package/cpuinfo: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,180 +101,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Stefan Hager <stefan.hager@ginzinger.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa7d11a2ad984930eb8e8830c44cbabebdcf8568
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit 424f53ac0730 (package/freescale-imx/imx-gpu-viv: drop X11 output)
-dropped BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11 which xdriver_xf86-video-imx-viv
-depends on, so the package is no longer selectable.
-
-So drop the package and add a legacy symbol for it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy                                   |  6 +++
- DEVELOPERS                                         |  2 -
- package/x11r7/Config.in                            |  1 -
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 44 ----------------------
- .../xdriver_xf86-video-imx-viv.hash                |  3 --
- .../xdriver_xf86-video-imx-viv.mk                  | 34 -----------------
- 6 files changed, 6 insertions(+), 84 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 191a209eeb..8b7ecd840b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -197,6 +197,12 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
- 	help
- 	  The X11 output was dropped by NXP.
- 
-+config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
-+	bool "xf86-video-imx-viv has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The X11 output was dropped by NXP.
-+
- config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
- 	string "the QEMU specific targets option has been removed"
- 	help
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 97c28fbdd8..6597225ac3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1106,7 +1106,6 @@ F:	package/gstreamer1/gst1-imx/
- F:	package/libimxvpuapi/
- F:	package/mfgtools/
- F:	package/sshpass/
--F:	package/x11r7/xdriver_xf86-video-imx-viv/
- 
- N:	Geoff Levand <geoff@infradead.org>
- F:	package/flannel/
-@@ -1487,7 +1486,6 @@ F:	package/lxc/
- F:	package/strongswan/
- F:	package/wmctrl/
- F:	package/x11r7/xdriver_xf86-video-imx/
--F:	package/x11r7/xdriver_xf86-video-imx-viv/
- 
- N:	Jesse Van Gavere <jesseevg@gmail.com>
- F:	package/qt6/
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 4d3613cf4d..365de34c98 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -165,7 +165,6 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdriver_xf86-video-geode/Config.in
- 		source package/x11r7/xdriver_xf86-video-i128/Config.in
- 		source package/x11r7/xdriver_xf86-video-imx/Config.in
--		source package/x11r7/xdriver_xf86-video-imx-viv/Config.in
- 		source package/x11r7/xdriver_xf86-video-intel/Config.in
- 		source package/x11r7/xdriver_xf86-video-mach64/Config.in
- 		source package/x11r7/xdriver_xf86-video-mga/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-deleted file mode 100644
-index 984f63d6d3..0000000000
---- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-+++ /dev/null
-@@ -1,44 +0,0 @@
--config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
--	bool "xf86-video-imx-viv"
--	depends on BR2_PACKAGE_HAS_LIBGL
--	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
--	depends on BR2_PACKAGE_IMX_GPU_G2D
--	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
--	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XORGPROTO
--	help
--	  X.Org driver for iMX6 GPU (Vivante)
--
--	  Notice EGL and GLes2 APIs are correctly supported. This
--	  driver should also be able to provide Desktop OpenGL
--	  implementation but, this feature seems broken since quite
--	  some time.
--
--	  To use this driver, add correct configuration to your
--	  /etc/X11/xorg.conf:
--
--	  Section "Device"
--	    [...]
--	    Driver          "vivante"
--	    Option          "vivante_fbdev" "/dev/fbX"
--	  EndSection
--
--	  Don't forget to load galcore.ko and create /dev/galcore
--	  before using this driver (else, Xorg will exit with an
--	  obscure message like "Segmentation fault at address 0xc").
--
--comment "xf86-video-imx-viv needs an OpenGL backend"
--	depends on BR2_arm
--	depends on !BR2_PACKAGE_HAS_LIBGL
--	depends on BR2_TOOLCHAIN_HAS_SYNC_1
--
--comment "xf86-video-imx-viv depends on imx-gpu-viv with X11 output"
--	depends on BR2_arm
--	depends on !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
--	depends on BR2_TOOLCHAIN_HAS_SYNC_1
--
--comment "xf86-video-imx-viv depends on imx-gpu-g2d"
--	depends on BR2_arm
--	depends on !BR2_PACKAGE_IMX_GPU_G2D
--	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
--	depends on BR2_TOOLCHAIN_HAS_SYNC_1
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-deleted file mode 100644
-index b79c236478..0000000000
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  8fe1f57334b22926d4ff3b0b9fdf50af835a99cdfd0ad3ba6a604b226b723e89  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga.tar.gz
--sha256  9d3e373f0440cc0c58853e963636a7c1ffda9308ec5f30ebe9adfb9c16a8a1e4  COPYING-MIT
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-deleted file mode 100644
-index 3b346f323a..0000000000
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ /dev/null
-@@ -1,34 +0,0 @@
--################################################################################
--#
--# xdriver_xf86-video-imx-viv
--#
--################################################################################
--
--XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_4.9.x_1.0.0_ga
--XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(call github,nxp-imx,xf86-video-imx-vivante,$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION))
--XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv imx-gpu-g2d xserver_xorg-server \
--	xorgproto libdrm
--XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = MIT
--XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE_FILES = COPYING-MIT
--XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
--XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/EXA/src -f makefile.linux
--
--define XDRIVER_XF86_VIDEO_IMX_VIV_BUILD_CMDS
--	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) sysroot=$(STAGING_DIR) \
--		BUSID_HAS_NUMBER=1 BUILD_IN_YOCTO=1 XSERVER_GREATER_THAN_13=1 \
--		CFLAGS="$(TARGET_CFLAGS)"
--endef
--
--define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING_CMDS
--	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) prefix=$(STAGING_DIR)/usr install
--	$(INSTALL) -D -m 644 $(@D)/EXA/src/vivante_gal/vivante_priv.h \
--		$(STAGING_DIR)/usr/include/vivante_priv.h
--	$(INSTALL) -D -m 644 $(@D)/EXA/src/vivante_gal/vivante_gal.h \
--		$(STAGING_DIR)/usr/include/vivante_gal.h
--endef
--
--define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_TARGET_CMDS
--	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) prefix=$(TARGET_DIR)/usr install
--endef
--
--$(eval $(generic-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSmFtZXMsCgpMZSAzMC8wMS8yMDIzIMOgIDAxOjI4LCBKYW1lcyBIaWxsaWFyZCBhIMOp
+Y3JpdMKgOgo+IEZyb206IFN0ZWZhbiBIYWdlciA8c3RlZmFuLmhhZ2VyQGdpbnppbmdlci5jb20+
+Cj4gCj4gVGhpcyBwYWNrYWdlIGlzIHJlcXVpcmVkIGJ5IHRlbnNvcmZsb3ctbGl0ZS4KPiAKPiBB
+ZGQgYSBwYXRjaCByZW1vdmluZyBjcHAgcmVxdWlyZW1lbnQgd2hlbiBub3QgYnVpbGRpbmcgdGVz
+dHMuCj4gCj4gVGVzdGVkLWJ5OiBTdGVmYW4gSGFnZXIgPHN0ZWZhbi5oYWdlckBnaW56aW5nZXIu
+Y29tPgo+IFNpZ25lZC1vZmYtYnk6IFN0ZWZhbiBIYWdlciA8c3RlZmFuLmhhZ2VyQGdpbnppbmdl
+ci5jb20+Cj4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBn
+bWFpbC5jb20+Cj4gLS0tCj4gQ2hhbmdlcyB2NCAtPiB2NToKPiAgIC0gZG9uJ3QgcmVxdWlyZSBj
+cHAKPiBDaGFuZ2VzIHYyIC0+IHYzOgo+ICAgLSBtb3ZlIHRvIGxpYnJhcmllcy0+aGFyZHdhcmUg
+aGFuZGxpbmcKPiAtLS0KPiAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDMgKysKPiAgcGFja2FnZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDEgKwo+ICAuLi5uYWJsZS1DWFgtb25seS13aGVuLW5lZWRlZC1mb3ItdGVzdHMu
+cGF0Y2ggfCAzNiArKysrKysrKysrKysrKysrKysrCj4gIHBhY2thZ2UvY3B1aW5mby9Db25maWcu
+aW4gICAgICAgICAgICAgICAgICAgICB8ICA4ICsrKysrCj4gIHBhY2thZ2UvY3B1aW5mby9jcHVp
+bmZvLmhhc2ggICAgICAgICAgICAgICAgICB8ICA0ICsrKwo+ICBwYWNrYWdlL2NwdWluZm8vY3B1
+aW5mby5tayAgICAgICAgICAgICAgICAgICAgfCAxNyArKysrKysrKysKPiAgNiBmaWxlcyBjaGFu
+Z2VkLCA2OSBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2NwdWlu
+Zm8vMDAwMS1FbmFibGUtQ1hYLW9ubHktd2hlbi1uZWVkZWQtZm9yLXRlc3RzLnBhdGNoCj4gIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2NwdWluZm8vQ29uZmlnLmluCj4gIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBwYWNrYWdlL2NwdWluZm8vY3B1aW5mby5oYXNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBwYWNrYWdlL2NwdWluZm8vY3B1aW5mby5tawo+IAo+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJT
+IGIvREVWRUxPUEVSUwo+IGluZGV4IDcwNmVlODBlY2UuLjUzZjEwNTJiMDcgMTAwNjQ0Cj4gLS0t
+IGEvREVWRUxPUEVSUwo+ICsrKyBiL0RFVkVMT1BFUlMKPiBAQCAtMjcyMyw2ICsyNzIzLDkgQEAg
+RjoJcGFja2FnZS9saWJ2cHgvCj4gIEY6CXBhY2thZ2UvbWVzYTNkLWRlbW9zLwo+ICBGOglwYWNr
+YWdlL3RpLWdmeC8KPiAgCj4gK046CVN0ZWZhbiBIYWdlciA8c3RlZmFuLmhhZ2VyQGdpbnppbmdl
+ci5jb20+Cj4gK0Y6CXBhY2thZ2UvY3B1aW5mby8KPiArCj4gIE46CVN0ZWZhbiBPdHQgPHN0ZWZh
+bkBvdHQubmV0Pgo+ICBGOglwYWNrYWdlL3VuYm91bmQvCj4gIAo+IGRpZmYgLS1naXQgYS9wYWNr
+YWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggODNmZGRmMzE2Zi4uM2Ew
+NzA3NGIxMCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2Uv
+Q29uZmlnLmluCj4gQEAgLTE2NDUsNiArMTY0NSw3IEBAIG1lbnUgIkhhcmR3YXJlIGhhbmRsaW5n
+Igo+ICAJc291cmNlICJwYWNrYWdlL2JjbTI4MzUvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNr
+YWdlL2MtcGVyaXBoZXJ5L0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS9jY2lkL0NvbmZp
+Zy5pbiIKPiArCXNvdXJjZSAicGFja2FnZS9jcHVpbmZvL0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAi
+cGFja2FnZS9kdGMvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2dudS1lZmkvQ29uZmln
+LmluIgo+ICAJc291cmNlICJwYWNrYWdlL2hhY2tyZi9Db25maWcuaW4iCj4gZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvY3B1aW5mby8wMDAxLUVuYWJsZS1DWFgtb25seS13aGVuLW5lZWRlZC1mb3ItdGVz
+dHMucGF0Y2ggYi9wYWNrYWdlL2NwdWluZm8vMDAwMS1FbmFibGUtQ1hYLW9ubHktd2hlbi1uZWVk
+ZWQtZm9yLXRlc3RzLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAw
+MDAwLi5lYmQ2ZWQzNmNkCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvY3B1aW5mby8w
+MDAxLUVuYWJsZS1DWFgtb25seS13aGVuLW5lZWRlZC1mb3ItdGVzdHMucGF0Y2gKPiBAQCAtMCww
+ICsxLDM2IEBACj4gK0Zyb20gYjEyNjFiYWVmZDJiYjkwOTVhZjU2ODU5YzFjYWM2YjExNjZmYjEz
+ZiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogSmFtZXMgSGlsbGlhcmQgPGphbWVz
+LmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4gK0RhdGU6IFN1biwgMjkgSmFuIDIwMjMgMTY6NTU6MDgg
+LTA3MDAKPiArU3ViamVjdDogW1BBVENIXSBFbmFibGUgQ1hYIG9ubHkgd2hlbiBuZWVkZWQgZm9y
+IHRlc3RzCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlh
+cmQxQGdtYWlsLmNvbT4KPiArW1Vwc3RyZWFtIHN0YXR1czoKPiAraHR0cHM6Ly9naXRodWIuY29t
+L3B5dG9yY2gvY3B1aW5mby9wdWxsLzEzM10KPiArLS0tCj4gKyBDTWFrZUxpc3RzLnR4dCB8IDMg
+KystCj4gKyAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4g
+Kwo+ICtkaWZmIC0tZ2l0IGEvQ01ha2VMaXN0cy50eHQgYi9DTWFrZUxpc3RzLnR4dAo+ICtpbmRl
+eCBiMmY5NDM0Li44NzljOWZhIDEwMDY0NAo+ICstLS0gYS9DTWFrZUxpc3RzLnR4dAo+ICsrKysg
+Yi9DTWFrZUxpc3RzLnR4dAo+ICtAQCAtMyw3ICszLDcgQEAgQ01BS0VfTUlOSU1VTV9SRVFVSVJF
+RChWRVJTSU9OIDMuNSBGQVRBTF9FUlJPUikKPiArICMgLS0tWyBTZXR1cCBwcm9qZWN0Cj4gKyBQ
+Uk9KRUNUKAo+ICsgICAgIGNwdWluZm8KPiArLSAgICBMQU5HVUFHRVMgQyBDWFgKPiArKyAgICBM
+QU5HVUFHRVMgQwo+ICsgICAgICkKPiArIAo+ICsgIyAtLS1bIE9wdGlvbnMuCj4gK0BAIC03NjMs
+NiArNzYzLDcgQEAgRU5ESUYoKQo+ICsgCj4gKyAjIC0tLVsgY3B1aW5mbyB1bml0IHRlc3RzCj4g
+KyBJRihDUFVJTkZPX1NVUFBPUlRFRF9QTEFURk9STSBBTkQgQ1BVSU5GT19CVUlMRF9VTklUX1RF
+U1RTKQo+ICsrICBFTkFCTEVfTEFOR1VBR0UoQ1hYKQo+ICsgICBBRERfRVhFQ1VUQUJMRShpbml0
+LXRlc3QgdGVzdC9pbml0LmNjKQo+ICsgICBDUFVJTkZPX1RBUkdFVF9FTkFCTEVfQ1hYMTEoaW5p
+dC10ZXN0KQo+ICsgICBDUFVJTkZPX1RBUkdFVF9SVU5USU1FX0xJQlJBUlkoaW5pdC10ZXN0KQo+
+ICstLSAKPiArMi4zNC4xCj4gKwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2NwdWluZm8vQ29uZmln
+LmluIGIvcGFja2FnZS9jcHVpbmZvL0NvbmZpZy5pbgo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4g
+aW5kZXggMDAwMDAwMDAwMC4uZDNjM2IwODQwMAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNr
+YWdlL2NwdWluZm8vQ29uZmlnLmluCj4gQEAgLTAsMCArMSw4IEBACj4gK2NvbmZpZyBCUjJfUEFD
+S0FHRV9DUFVJTkZPCj4gKwlib29sICJjcHVpbmZvIgoKSGF2ZSB5b3UgY2hlY2tlZCBjcHVpbmZv
+IGRlcGVuZGVuY2llcyA/CgpJdCBzZWVtcyBYTk5QYWNrIHVzZWQgYnkgY3B1aW5mbyBpcyA2NGJp
+dHMgYXJjaGl0ZWN0dXJlcyBvbmx5OgoKQ01ha2UgV2FybmluZyBhdCBDTWFrZUxpc3RzLnR4dDo2
+OSAoTUVTU0FHRSk6ClRhcmdldCBwcm9jZXNzb3IgYXJjaGl0ZWN0dXJlICJsIiBpcyBub3Qgc3Vw
+cG9ydGVkIGluIGNwdWluZm8uICBjcHVpbmZvCndpbGwgY29tcGlsZSwgYnV0IGNwdWluZm9faW5p
+dGlhbGl6ZSgpIHdpbGwgYWx3YXlzIGZhaWwuCgpoaW50OgpodHRwczovL2dpdGh1Yi5jb20vTm9i
+dW9Uc3VrYW1vdG8vbWV0YS10ZW5zb3JmbG93LWxpdGUvYmxvYi9tYWluL3JlY2lwZXMtdG9vbHMv
+dGVuc29yZmxvdy1saXRlL3RlbnNvcmZsb3ctbGl0ZS1iZW5jaG1hcmtfMi4xMS4wLmJiI0wzMwoK
+QW5kIHRyaWdnZXIgYSBidWlsZCBpc3N1ZSBvbiB1Q2xpYmMtbmcgZHVlIHRvIG1pc3NpbmcgaGVh
+ZGVyOgoKY3B1aW5mby1kZTJmYTc4ZWJiNDMxZGI5ODQ4OWU3ODYwM2U0Zjc3YzFmNmM1YzU3L3Ny
+Yy9hcm0vbGludXgvaHdjYXAuYzoxOToxMToKZmF0YWwgZXJyb3I6IHN5cy9hdXh2Lmg6IE5vIHN1
+Y2ggZmlsZSBvciBkaXJlY3RvcnkKICAgMTkgfCAgI2luY2x1ZGUgPHN5cy9hdXh2Lmg+CgpBbHNv
+IHN0YXRpYyBidWlsZCBpcyBub3QgbGlrZWx5IHN1cHBvcnRlZDoKCmNwdWluZm8tZGUyZmE3OGVi
+YjQzMWRiOTg0ODllNzg2MDNlNGY3N2MxZjZjNWM1Ny9zcmMvYXJtL2xpbnV4L2h3Y2FwLmM6ODox
+MDoKZmF0YWwgZXJyb3I6IGRsZmNuLmg6IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKICAgIDgg
+fCAjaW5jbHVkZSA8ZGxmY24uaD4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiArCWhlbHAKPiAr
+CSAgQ1BVIElORk9ybWF0aW9uIGxpYnJhcnksIGNwdWluZm8gaXMgYSBsaWJyYXJ5IHRvIGRldGVj
+dAo+ICsJICBlc3NlbnRpYWwgZm9yIHBlcmZvcm1hbmNlIG9wdGltaXphdGlvbiBpbmZvcm1hdGlv
+biBhYm91dAo+ICsJICBob3N0IENQVS4KPiArCj4gKwkgIGh0dHBzOi8vZ2l0aHViLmNvbS9weXRv
+cmNoL2NwdWluZm8KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9jcHVpbmZvL2NwdWluZm8uaGFzaCBi
+L3BhY2thZ2UvY3B1aW5mby9jcHVpbmZvLmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
+ZGV4IDAwMDAwMDAwMDAuLmMzZjcwZmE5MGYKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2Fn
+ZS9jcHVpbmZvL2NwdWluZm8uaGFzaAo+IEBAIC0wLDAgKzEsNCBAQAo+ICsjIExvY2FsbHkgY2Fs
+Y3VsYXRlZAo+ICtzaGEyNTYgIDA5MzY4NDg5MDQ5NDMzODFiMmMwMTMyMTEwMTYxNDc3NmU0M2Q1
+ODM4NDBlZTBmM2NlZWVhMWUzZmI3NDA1ZjcgIGNwdWluZm8tZGUyZmE3OGViYjQzMWRiOTg0ODll
+Nzg2MDNlNGY3N2MxZjZjNWM1Ny50YXIuZ3oKPiArIyBMaWNlbnNlIGZpbGVzLCBsb2NhbGx5IGNh
+bGN1bGF0ZWQKPiArc2hhMjU2ICA4ZTdlNjA2MzZjM2FhMGNiMDM1NzFhMWE4NDFjZTU2OTdmOTU1
+MWZmOTJiM2M0MjZjMjU2MTYxM2QxNWFkZTcwICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvY3B1aW5mby9jcHVpbmZvLm1rIGIvcGFja2FnZS9jcHVpbmZvL2NwdWluZm8ubWsKPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmFiNmEwMjY5ZWMKPiAtLS0gL2Rl
+di9udWxsCj4gKysrIGIvcGFja2FnZS9jcHVpbmZvL2NwdWluZm8ubWsKPiBAQCAtMCwwICsxLDE3
+IEBACj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMKPiArIyBjcHVpbmZvCj4gKyMKPiAr
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArCj4gK0NQVUlORk9fVkVSU0lPTiA9IGRlMmZhNzhl
+YmI0MzFkYjk4NDg5ZTc4NjAzZTRmNzdjMWY2YzVjNTcKPiArQ1BVSU5GT19TSVRFID0gJChjYWxs
+IGdpdGh1YixweXRvcmNoLGNwdWluZm8sJChDUFVJTkZPX1ZFUlNJT04pKQo+ICtDUFVJTkZPX0xJ
+Q0VOU0UgPSBCU0QtMi1DbGF1c2UKPiArQ1BVSU5GT19MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+
+ICtDUFVJTkZPX0lOU1RBTExfU1RBR0lORyA9IFlFUwo+ICtDUFVJTkZPX0NPTkZfT1BUUyA9IFwK
+PiArCS1EQ1BVSU5GT19CVUlMRF9VTklUX1RFU1RTPU9GRiBcCj4gKwktRENQVUlORk9fQlVJTERf
+TU9DS19URVNUUz1PRkYgXAo+ICsJLURDUFVJTkZPX0JVSUxEX0JFTkNITUFSS1M9T0ZGCj4gKwo+
+ICskKGV2YWwgJChjbWFrZS1wYWNrYWdlKSkKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
