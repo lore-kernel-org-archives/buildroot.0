@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E279BC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:16:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3B94C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:16:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80D4F4F198;
-	Tue, 21 Feb 2023 00:16:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80D4F4F198
+	by smtp4.osuosl.org (Postfix) with ESMTP id 580974F180;
+	Tue, 21 Feb 2023 00:16:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 580974F180
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pp7Svucia0gf; Tue, 21 Feb 2023 00:16:19 +0000 (UTC)
+	with ESMTP id ZxTXwvpkQ_Ut; Tue, 21 Feb 2023 00:16:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CB334EFC5;
-	Tue, 21 Feb 2023 00:16:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CB334EFC5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 25EA41BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 057EA4F16E;
+	Tue, 21 Feb 2023 00:16:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 057EA4F16E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AAD11BF27E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68DC36FAE0
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68DC36FAE0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B914417C4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B914417C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W3gRyDqO7MqG for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gyTpoGxUopVH for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A0AF6FAB8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A0AF6FAB8
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD71F417BF
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD71F417BF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97A2D828C8; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+ id CB1B28648F; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Jan 2023 10:51:09 +0100
+Date: Mon, 6 Feb 2023 14:28:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 01518e5660366be41e6a8e0a0f2b487d7cdf48a2
-X-Git-Newrev: a16221834a0c7a8744f620c2cada751c693279d4
+X-Git-Oldrev: a97a4a74aa993b09b958639e2276e7f5cf7a75d2
+X-Git-Newrev: efc223abd4fe764f8af8238aec67e8cb700db45e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205226.97A2D828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
- mesa3d-headers}: bump version to 22.3.2
+Message-Id: <20230220205249.CB1B28648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sunxi-mali-utgard:
+ properly handle legacy for renamed options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,59 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a16221834a0c7a8744f620c2cada751c693279d4
+commit: https://git.buildroot.net/buildroot/commit/?id=efc223abd4fe764f8af8238aec67e8cb700db45e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-dev/2022-December/225903.html
+Commit "6a7a652b14 package/sunxi-mali-utgard: rename from
+sunxi-mali-mainline" tried to add legacy handling but the new symbols
+are part of a choice, and Kconfig does not enforce the select of a
+option from a choice.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Update the legacy entry for 2022.02, following the example described in
+the beginning of the file.
+
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ Config.in.legacy                    | 6 ++++--
+ package/sunxi-mali-utgard/Config.in | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index e5988cad5e..f6b3ade3ea 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 53fe2f0b97..4bfebe3f89 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -761,20 +761,22 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
+ 	bool "sunxi-mali-mainline-r6p2 was renamed"
+ 	select BR2_LEGACY
+-	select BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
+ 	help
+ 	  The sunxi-mali-mainline package has been renamed
+ 	  sunxi-mali-utgard, the suboptions of this package have also
+ 	  been renamed accordingly.
++# Note: BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 is still referenced from
++# package/sunxi-mali-utgard/Config.in
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 22.3.1
-+MESA3D_HEADERS_VERSION = 22.3.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 613ebce89f..e902e6b828 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2022-December/000697.html
--sha256  3c9cd611c0859d307aba0659833386abdca4c86162d3c275ba5be62d16cf31eb  mesa-22.3.1.tar.xz
--sha512  8a7aee67f6351de293d23425229eb7c42d6918fe9ffb46c6e5df9609f79633c98ab78e892507fe48055c51fa88bf103d7b7baa58e826b1758f66067048baed5b  mesa-22.3.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-dev/2022-December/225903.html
-+sha256  c15df758a8795f53e57f2a228eb4593c22b16dffd9b38f83901f76cd9533140b  mesa-22.3.2.tar.xz
-+sha512  32934dd23cfcd6165c365597d9a469da0b806b72ea98a200f499344c3b47815db3bf78875b4ea766d2d28d9c70b50c1615d2d3fcbfd4769447fe0a9d3b32951f  mesa-22.3.2.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index b6f1214102..523b642d0c 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1
+ 	bool "sunxi-mali-mainline-r8p1 was renamed"
+ 	select BR2_LEGACY
+-	select BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1
+ 	help
+ 	  The sunxi-mali-mainline package has been renamed
+ 	  sunxi-mali-utgard, the suboptions of this package have also
+ 	  been renamed accordingly.
++# Note: BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1 is still referenced from
++# package/sunxi-mali-utgard/Config.in
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 22.3.1
-+MESA3D_VERSION = 22.3.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+ config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
+ 	bool "qt5webkit-examples removed"
+diff --git a/package/sunxi-mali-utgard/Config.in b/package/sunxi-mali-utgard/Config.in
+index ff49ea03f1..59ac21f5ab 100644
+--- a/package/sunxi-mali-utgard/Config.in
++++ b/package/sunxi-mali-utgard/Config.in
+@@ -20,6 +20,8 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 
+ choice
+ 	prompt "Version"
++	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 # legacy
++	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1 # legacy
+ 	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
+ 	help
+ 	  Select the version of the userspace module.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
