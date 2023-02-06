@@ -4,47 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFD4C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:19:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5506C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:19:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1CCE4F217;
-	Tue, 21 Feb 2023 00:19:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1CCE4F217
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A3DB4F21C;
+	Tue, 21 Feb 2023 00:19:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A3DB4F21C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xFLjxzPFB40Y; Tue, 21 Feb 2023 00:19:16 +0000 (UTC)
+	with ESMTP id tcZ5e9TnGJ7T; Tue, 21 Feb 2023 00:19:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A768F4F219;
-	Tue, 21 Feb 2023 00:19:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A768F4F219
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28E994F23D;
+	Tue, 21 Feb 2023 00:19:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28E994F23D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B1631BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A5761BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4EEAF417C9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96942417B7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EEAF417C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96942417B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X1HwyZ49EfDx for <buildroot@lists.busybox.net>;
+ with ESMTP id B8oH78DEH3jW for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D3BC417B5
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0E10417C5
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D3BC417B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0E10417C5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6AEAE8648F; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
+ id C3FD67FF06; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 18:54:18 +0100
+Date: Mon, 6 Feb 2023 22:39:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d631615eb1b833977003039626a0194589334f45
-X-Git-Newrev: dd28acc1e8085c15d12e233090550580dafe1f96
+X-Git-Oldrev: f20611347fcce58f89f1fedf2cebaf8b2e077f67
+X-Git-Newrev: 5aab8c59d5b310540105166e7b48faf3d5bd200b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205250.6AEAE8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Makefile: add target to update
- .checkpackageignore
+Message-Id: <20230220205250.C3FD67FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ support/dependencies/dependencies.sh: require FindBin perl package for
+ libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,99 +58,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd28acc1e8085c15d12e233090550580dafe1f96
+commit: https://git.buildroot.net/buildroot/commit/?id=5aab8c59d5b310540105166e7b48faf3d5bd200b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When a developer fixes an ignored warning from check-package, he/she
-needs to update .checkpackageignore
-By running './utils/docker-run make check-package' the developer
-receives a warning about this.
-Make that change easier to make, by adding a helper target on Makefile.
+Fixes:
+http://autobuild.buildroot.net/results/5d1/5d10f4f545dccf126e3f5b5efce777a393c5e7bc/
+http://autobuild.buildroot.net/results/7c2/7c2df31c6eb34b68e460e092d8c262bdc6c8f25a/
 
-Add an option --failed-only to check-package that generates output in
-the format:
-<filename> <check_function> [<check_function> ...]
-This is the very same format used by check-package ignore file.
+The configure script of (host-)libopenssl needs the FindBin perl module on the host:
 
-Add the phony target .checkpackageignore
+Can't locate FindBin.pm in @INC (you may need to install the FindBin module)
+(@INC contains: /home/buildroot/autobuild/instance-2/output-1/host/lib/perl
+/usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36
+/usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5
+/usr/share/perl5) at ./Configure line 15.  BEGIN failed--compilation aborted
+at ./Configure line 15.
 
-So one can update the ignore file using:
-$ ./utils/docker-run make .checkpackageignore
+As this is needed for both libopenssl and host-libopenssl (which does not
+have a corresponding config symbol in the .config), we have to require it
+unconditionally.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile            |  5 +++++
- utils/check-package | 13 ++++++++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ support/dependencies/dependencies.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Makefile b/Makefile
-index f39af5eae9..817cfed13c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1261,6 +1261,11 @@ check-package:
- 		-a -not -name '*.orig' -a -not -name '*.rej' \
- 		-exec ./utils/check-package --exclude=Sob {} +
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 4b5012b807..afd30008e8 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -268,6 +268,7 @@ fi
+ required_perl_modules="Data::Dumper" # Needed to build host-autoconf
+ required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by host-libxml-parser-perl
+ required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
++required_perl_modules="$required_perl_modules FindBin" # Used by (host-)libopenssl
  
-+.PHONY: .checkpackageignore
-+.checkpackageignore:
-+	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name '*.patch' \) \
-+		-exec ./utils/check-package --exclude=Sob --failed-only {} > .checkpackageignore +
-+
- include docs/manual/manual.mk
- -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
- 
-diff --git a/utils/check-package b/utils/check-package
-index f08e76b374..848311bac8 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -63,11 +63,17 @@ def parse_args():
-                         help="do not run the specified functions (debug)")
-     parser.add_argument("--dry-run", action="store_true", help="print the "
-                         "functions that would be called for each file (debug)")
-+    parser.add_argument("--failed-only", action="store_true", help="print only"
-+                        " the name of the functions that failed (debug)")
- 
-     flags = parser.parse_args()
- 
-     flags.ignore_list = get_ignored_parsers_per_file(flags.intree_only, flags.ignore_filename)
- 
-+    if flags.failed_only:
-+        flags.dry_run = False
-+        flags.verbose = -1
-+
-     return flags
- 
- 
-@@ -221,6 +227,11 @@ def check_file_using_lib(fname):
-                   .format(fname, should_fail, flags.ignore_filename))
-             nwarnings += 1
- 
-+    if flags.failed_only:
-+        if len(failed) > 0:
-+            f = " ".join(sorted(failed))
-+            print("{} {}".format(fname, f))
-+
-     return nwarnings, nlines
- 
- 
-@@ -259,7 +270,7 @@ def __main__():
-         print("{} lines processed".format(total_lines), file=sys.stderr)
-         print("{} warnings generated".format(total_warnings), file=sys.stderr)
- 
--    if total_warnings > 0:
-+    if total_warnings > 0 and not flags.failed_only:
-         sys.exit(1)
- 
- 
+ if grep -q ^BR2_PACKAGE_MPV=y $BR2_CONFIG ; then
+     required_perl_modules="$required_perl_modules Math::BigInt"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
