@@ -1,87 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C54DC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 594B9C05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 167804155E;
-	Mon,  6 Feb 2023 13:48:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 167804155E
+	by smtp3.osuosl.org (Postfix) with ESMTP id C705F60AE8;
+	Mon,  6 Feb 2023 13:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C705F60AE8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qxFE0vvtJSPD; Mon,  6 Feb 2023 13:48:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YZkwOvfHEe4F; Mon,  6 Feb 2023 13:49:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E330D41568;
-	Mon,  6 Feb 2023 13:48:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E330D41568
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3A52D1BF2A7
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:48:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C9C3605D6;
+	Mon,  6 Feb 2023 13:49:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C9C3605D6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5382D1BF2A7
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14C8040459
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:48:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14C8040459
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D17C81271
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:49:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D17C81271
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cWvAUW9Wjqo3 for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 13:48:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n06uSoIA0iU1 for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 13:49:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA4B34021C
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DA4B34021C
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 13:48:43 +0000 (UTC)
-Received: by mail-il1-x135.google.com with SMTP id o13so853154ilt.4
- for <buildroot@buildroot.org>; Mon, 06 Feb 2023 05:48:43 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B7CC80F59
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
+ [IPv6:2001:4860:4864:20::30])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2B7CC80F59
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 13:49:42 +0000 (UTC)
+Received: by mail-oa1-x30.google.com with SMTP id
+ 586e51a60fabf-15fe106c7c7so15117962fac.8
+ for <buildroot@buildroot.org>; Mon, 06 Feb 2023 05:49:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=jFk1zquuoh3yL2tLFwbN14151xx0qULveLRKypdjcr0=;
- b=TVTLtQWqcsj5KBLJzbOb6axS9y08qO+q9LbMpYUP0oT9/bndnKXeydlLPGYn0fz2u2
- aTiSG0subbgTg9thJUK/QtCpkc6b+cn+a/Epg3ju5whv45Wi1Fr9xWYnj4rJVWHoMWeK
- 2vA3yFoW+xpMMozz/WFu0ytNg6x01s+bET3301YGecUVT6QFptu23MiAGecIP+71WkkF
- hAh42us0AhMBwjkR4w2RuFtlnQ1qpjfT8kUdU5gPisnOZwbbD2R7fFxeti23kcEYX8WB
- JqVuTQOUhbLxJLM9XuHiM8bT9RbvAPHazkkr7UvhKobnZbJqGkq/W7tYr5vlb/1B8pg1
- Sl/A==
-X-Gm-Message-State: AO0yUKUFx1y3VJ/xYOtOItXe/ZO/JM5Z0Co5OAahot0gborz42AWeTKh
- 0kdapBP3OcVJJMv3bE4P9fGkCSmcCbrFdg==
-X-Google-Smtp-Source: AK7set+05AH8IETcKREqEOk1ttREwyvsBxBrU9//DWt6Pq9vmP0TuL7Cim7wFDWMMQ+X/C8NoVEwhQ==
-X-Received: by 2002:a05:6e02:1a6d:b0:313:c82c:1a9e with SMTP id
- w13-20020a056e021a6d00b00313c82c1a9emr2584444ilv.1.1675691322801; 
- Mon, 06 Feb 2023 05:48:42 -0800 (PST)
-Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
- [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
- q22-20020a02c8d6000000b003be862e0dfasm2395198jao.125.2023.02.06.05.48.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Feb 2023 05:48:42 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  6 Feb 2023 06:48:38 -0700
-Message-Id: <20230206134838.3397457-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=6iA7AB3mRP1w2qz1ZbjPzJDeyBaArnAaQhCLPBh1duM=;
+ b=Avrsu5vIXbFowTyEHtbcYBII8o7FScyMcJ7NoX60RDyrmeHEoA58yhxrc3g1aWENth
+ WO52VRBr1yTa1dmMZ2+kz2h+Q3tinoUyFLW1IuP72my/ARRZ8uH1c1I06CltJg4dqJkS
+ IIVjMIqrADyOxBfd2Lmt1aZxMPbioxL9ZB2psy8K4CggG+ha/pX7lZ+R9Lj0yBHzYPHt
+ ckoktpC5EP0YWeKA7KSiynsGMoco8/QkhJahRHtmV7OjQhYedNumZWu94zU8f7PcxfS4
+ 7fRbUE+fLEUaEmFhPWNANxpRl1Dfd5bWX+a3qqAcyTQibGJkccw5+tVrpSdVXPvHNown
+ KRJQ==
+X-Gm-Message-State: AO0yUKXFZhnscP9oysYJXX43cj6Btu3pDhX6dD4n8mFNjQ9Bt03kw0Sr
+ pQ6x9V7jIWl7zWmh0UKQpLT8VW63V5Qg6keiGitE0Xk23rjO7Q==
+X-Google-Smtp-Source: AK7set+j95WJ2a52yhcEdXFw1qdEq6JlDnLl7CfoRFhXhMm3nDln2y8a9tXv3DTY0X0hyCRXwYZWdNeeGhgxOHtKEwM=
+X-Received: by 2002:a05:6870:a44f:b0:169:fd7c:d154 with SMTP id
+ n15-20020a056870a44f00b00169fd7cd154mr793161oal.93.1675691381204; Mon, 06 Feb
+ 2023 05:49:41 -0800 (PST)
 MIME-Version: 1.0
+References: <20230129035232.2480871-1-james.hilliard1@gmail.com>
+ <20230129035232.2480871-5-james.hilliard1@gmail.com>
+ <87wn4u9atb.fsf@dell.be.48ers.dk>
+In-Reply-To: <87wn4u9atb.fsf@dell.be.48ers.dk>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 6 Feb 2023 06:49:29 -0700
+Message-ID: <CADvTj4q9z1Fo_wNDN4rQejbwWU-AoGov1COfR9YrFV8ymp3T=Q@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jFk1zquuoh3yL2tLFwbN14151xx0qULveLRKypdjcr0=;
- b=ZT0PB1JztbmJlrXfQ+aYYHbSKqF9PLehw/69b9kTujPT8xIsknbeSY6DzNlOuu//wW
- +4hMUBrtYZW6tBMXN9j1Y0WmrNEATpaKGQIiY4OfGPfWJXlXZ/oXFaSPDiFTYf2WJCEy
- yFOJScciHyPgsPOd5fCduRFF6u6vNav6lkxrXdXwVxz72n1IYMIiHsVzR8hzmZsTxoEb
- mw999UqeqI5cV1BzJEeaYfWYM7n0qAh9iYJm8WiWAxRQN7Gv/gbNB7j8rRFQnGfI6/J7
- jklKSgp3aJ+0r41J9YvTCECjxZuxnDleWcZurkDBHphmq598NEEd4vjAkODgePSKH8ZI
- Iwdw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=6iA7AB3mRP1w2qz1ZbjPzJDeyBaArnAaQhCLPBh1duM=;
+ b=M7hQ+G62xpVwcgR7hMJmT2M3y27mcaospIXsvqfL5xfClIFXcZwfRGD2yHF89rwzp8
+ j10C0dYkm10rDRKerl1k02/CjDJiYbQJwjDHdwCo7D932s+w0iq3qtT3uA8/QQA3Ky+k
+ i/YhUz5m/49a++L1c4m2mCAMcQTFie4vtHUTpZfUo7WLNDNWevUuCjCDmhDyd2Y+ozhh
+ oFxnQAIrq3Cev/hPpEKSCWgeMB+jyeFrq+1WugBw8KDOISup9xoeFcAMpZDa/+HlX4yC
+ loetmSXqdwi3c4APYkb3YWB0/F+O9dTqGvkvPJhGoG3dnXg3sVpeBiLUh8yOpGNRpgZ8
+ sNLQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZT0PB1Jz
-Subject: [Buildroot] [PATCH 1/1] package/python-h11: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=M7hQ+G62
+Subject: Re: [Buildroot] [PATCH v2 5/7] package/python-wsproto: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,97 +92,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: yann.morin.1998@free.fr, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/python-h11/Config.in       |  7 +++++++
- package/python-h11/python-h11.hash |  5 +++++
- package/python-h11/python-h11.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-h11/Config.in
- create mode 100644 package/python-h11/python-h11.hash
- create mode 100644 package/python-h11/python-h11.mk
+On Mon, Feb 6, 2023 at 6:34 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>
+> Hi,
+>
+>  > +++ b/package/python-wsproto/Config.in
+>  > @@ -0,0 +1,7 @@
+>  > +config BR2_PACKAGE_PYTHON_WSPROTO
+>  > +    bool "python-wsproto"
+>  > +    select BR2_PACKAGE_PYTHON_H11 # runtime
+>
+> Something missing - We do not have a python-h11 package?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 97c28fbdd8..5d788ecebf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1381,6 +1381,7 @@ F:	package/python-flatbuffers/
- F:	package/python-fonttools/
- F:	package/python-frozenlist/
- F:	package/python-greenlet/
-+F:	package/python-h11/
- F:	package/python-hatchling/
- F:	package/python-hatch-fancy-pypi-readme/
- F:	package/python-hatch-vcs/
-diff --git a/package/Config.in b/package/Config.in
-index 7817b51fc2..b6211f1102 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1071,6 +1071,7 @@ menu "External python modules"
- 	source "package/python-gpiozero/Config.in"
- 	source "package/python-greenlet/Config.in"
- 	source "package/python-gunicorn/Config.in"
-+	source "package/python-h11/Config.in"
- 	source "package/python-h2/Config.in"
- 	source "package/python-hiredis/Config.in"
- 	source "package/python-hpack/Config.in"
-diff --git a/package/python-h11/Config.in b/package/python-h11/Config.in
-new file mode 100644
-index 0000000000..736620d782
---- /dev/null
-+++ b/package/python-h11/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_H11
-+	bool "python-h11"
-+	help
-+	  A pure-Python, bring-your-own-I/O implementation of
-+	  HTTP/1.1.
-+
-+	  https://github.com/python-hyper/h11
-diff --git a/package/python-h11/python-h11.hash b/package/python-h11/python-h11.hash
-new file mode 100644
-index 0000000000..0c65a11d00
---- /dev/null
-+++ b/package/python-h11/python-h11.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/h11/json
-+md5  84c33fc0aa1f868928114c4d02c43dc2  h11-0.14.0.tar.gz
-+sha256  8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d  h11-0.14.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361  LICENSE.txt
-diff --git a/package/python-h11/python-h11.mk b/package/python-h11/python-h11.mk
-new file mode 100644
-index 0000000000..d7dca5244b
---- /dev/null
-+++ b/package/python-h11/python-h11.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-h11
-+#
-+################################################################################
-+
-+PYTHON_H11_VERSION = 0.14.0
-+PYTHON_H11_SOURCE = h11-$(PYTHON_H11_VERSION).tar.gz
-+PYTHON_H11_SITE = https://files.pythonhosted.org/packages/f5/38/3af3d3633a34a3316095b39c8e8fb4853a28a536e55d347bd8d8e9a14b03
-+PYTHON_H11_SETUP_TYPE = setuptools
-+PYTHON_H11_LICENSE = MIT
-+PYTHON_H11_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
--- 
-2.34.1
+Hmm, yeah, not sure why that didn't get sent before:
+https://patchwork.ozlabs.org/project/buildroot/patch/20230206134838.3397457-1-james.hilliard1@gmail.com/
 
+>
+> --
+> Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
