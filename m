@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35976C05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:24:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28D81C61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:24:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC62B60AFD;
-	Mon,  6 Feb 2023 13:24:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC62B60AFD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VG4Wl6qd3ymA; Mon,  6 Feb 2023 13:24:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22A4D60AEE;
-	Mon,  6 Feb 2023 13:24:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22A4D60AEE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 89DFD1BF2A7
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 202C5403B8
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 202C5403B8
+	by smtp2.osuosl.org (Postfix) with ESMTP id B811C40477;
+	Mon,  6 Feb 2023 13:24:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B811C40477
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lvybp_0h5cyj for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eQCRaBjuUkJE; Mon,  6 Feb 2023 13:24:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB5B640459;
+	Mon,  6 Feb 2023 13:24:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB5B640459
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 18D651BF2A7
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F170381B3E
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F170381B3E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QH_bdyG7kheX for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 13:23:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B490403E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A82581BB2
  for <buildroot@buildroot.org>; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B490403E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A82581BB2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 296DA83C28; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
+ id 4803983C23; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 Date: Mon, 6 Feb 2023 14:22:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cc3a4a7b1de7b158354c650d234339e8a969a730
-X-Git-Newrev: f043f928674e94687d1d3173394142271ca3d397
+X-Git-Oldrev: 29c9b4435503d1b3130ce37dcab88c89156b1481
+X-Git-Newrev: abcecd737b198e8a1a48bf4533e5c2b8de8b8cf4
 X-Patchwork-Hint: ignore
-Message-Id: <20230206132305.296DA83C28@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pugixml: use explicit build options
+Message-Id: <20230206132305.4803983C23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/toolchain-buildroot: add comment
+ about using virtual package infra
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,67 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f043f928674e94687d1d3173394142271ca3d397
+commit: https://git.buildroot.net/buildroot/commit/?id=abcecd737b198e8a1a48bf4533e5c2b8de8b8cf4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit upstream 986b7ffd01aedcd4f2aa16e78e4cad9313b6d7b2
-"Add Cmake options for pugiconfig.hpp" added feature toogles to release
-v1.12, including PUGIXML_NO_XPATH and PUGIXML_COMPACT.
+Commit "9a8ec9195c toolchain/toolchain-buildroot: migrate to virtual
+package infrastructure" made the packages toolchain and
+toolchain-buildroot to use the virtual package infra even they being
+generic packages.
+This works because on package/pkg-virtual.mk when a package do not
+define neither _PROVIDES_ or _HAS_ symbols, only _IS_VIRTUAL is set to
+YES and _VERSION and _SOURCE are set to empty before relaying the call
+to inner-generic-package.
 
-Commit upstream 5f49f2c6575cc2b7d343f8d41581fe92d69d7b52
-"Mark advanced options and removed redundant ones" removed CMake
-specific support for PUGIXML_HEADER_ONLY and PUGIXML_HAS_LONG_LONG, but
-they can still be provided using PUGIXML_BUILD_DEFINES, starting from
-release v1.12.
+Add a comment explaining why the virtual package infra is used in these
+cases.
 
-So use the explicit build options PUGIXML_NO_XPATH and PUGIXML_COMPACT,
-but keep using PUGIXML_BUILD_DEFINES to set PUGIXML_HEADER_ONLY and
-PUGIXML_HAS_LONG_LONG.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pugixml/pugixml.mk | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ toolchain/toolchain-buildroot/toolchain-buildroot.mk | 3 +++
+ toolchain/toolchain/toolchain.mk                     | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index 1a915980a5..c8d59f0864 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -12,6 +12,18 @@ PUGIXML_CPE_ID_VENDOR = pugixml_project
+diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+index b30cc332d2..6da64b7c77 100644
+--- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+@@ -14,4 +14,7 @@ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
  
- PUGIXML_INSTALL_STAGING = YES
+ TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
  
-+ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),y)
-+PUGIXML_CONF_OPTS += -DPUGIXML_NO_XPATH=OFF
-+else
-+PUGIXML_CONF_OPTS += -DPUGIXML_NO_XPATH=ON
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
-+PUGIXML_CONF_OPTS += -DPUGIXML_COMPACT=ON
-+else
-+PUGIXML_CONF_OPTS += -DPUGIXML_COMPACT=OFF
-+endif
-+
- # Pugixml will automatically enable 'long long' support on C++11 compilers,
- # which means gcc 4.8+. As gcc always supports the 'long long' type,
- # force-enable this option to support older gcc versions. See also:
-@@ -19,12 +31,6 @@ PUGIXML_INSTALL_STAGING = YES
- PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
- HOST_PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
- 
--ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
--PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
--endif
--ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
--PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
--endif
- ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
- PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
++# Not really a virtual package, but we use the virtual package infra here so
++# both the build log and build directory look nicer (toolchain-buildroot-virtual
++# instead of toolchain-buildroot-undefined)
+ $(eval $(virtual-package))
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index 18f1dbea1a..ac60a7b248 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -47,4 +47,7 @@ endef
+ TOOLCHAIN_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_GLIBC_COPY_NSSWITCH_FILE
  endif
+ 
++# Not really a virtual package, but we use the virtual package infra here so
++# both the build log and build directory look nicer (toolchain-virtual instead
++# of toolchain-undefined)
+ $(eval $(virtual-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
