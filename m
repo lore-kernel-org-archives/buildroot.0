@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84338C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:15:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF5AFC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:16:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 319794F164;
-	Tue, 21 Feb 2023 00:15:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 319794F164
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BB594F0A2;
+	Tue, 21 Feb 2023 00:16:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BB594F0A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sxOggae5j5AH; Tue, 21 Feb 2023 00:15:52 +0000 (UTC)
+	with ESMTP id ESAGdtzTCvCJ; Tue, 21 Feb 2023 00:16:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D86DC4F052;
-	Tue, 21 Feb 2023 00:15:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D86DC4F052
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 156A41BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C6A44F16E;
+	Tue, 21 Feb 2023 00:16:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C6A44F16E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DE5181BF27E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 518FA6FADC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 518FA6FADC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 726FF417BC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 726FF417BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5d0LffGl2OCR for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7ine0tzpkqMl for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D5516FABC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D5516FABC
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0FDB417B7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0FDB417B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87F728648F; Mon, 20 Feb 2023 20:52:26 +0000 (UTC)
+ id A75AF8648F; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Jan 2023 10:25:14 +0100
+Date: Mon, 6 Feb 2023 14:22:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d7d48b9840d242acf1b8bfb141c89904e53301fe
-X-Git-Newrev: 01518e5660366be41e6a8e0a0f2b487d7cdf48a2
+X-Git-Oldrev: eb8f38891b16e5fb0f010c658b271e22670a1633
+X-Git-Newrev: f461543d9c0f8ea1586004e51561ba0a37b8aecf
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205226.87F728648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/janus-gateway: bump to
- version 1.1.1
+Message-Id: <20230220205249.A75AF8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lua: properly handle
+ legacy for removed version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01518e5660366be41e6a8e0a0f2b487d7cdf48a2
+commit: https://git.buildroot.net/buildroot/commit/?id=f461543d9c0f8ea1586004e51561ba0a37b8aecf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/meetecho/janus-gateway/blob/v1.1.1/CHANGELOG.md
+Commit "297613f1c7 package/lua: remove 5.2.x version" tried to add
+legacy handling but the new symbols are part of a choice, and Kconfig
+does not enforce the select of a option from a choice.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Update the legacy entry for 2019.02, following the example described in
+the beginning of the file.
+
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/janus-gateway/janus-gateway.hash | 2 +-
- package/janus-gateway/janus-gateway.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy      | 2 +-
+ package/lua/Config.in | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index 5d73ede87f..7a87ae737a 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5b8a7304761783585bfa8db7471bf8c393fa2a0ffc346747afadc0c1a9d213f5  janus-gateway-1.0.3.tar.gz
-+sha256  bb83c19d6137e39833e8eb2b1deeecb33b5d19d4f503d51703bdcc478c447940  janus-gateway-1.1.1.tar.gz
- sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 9a74350b2c..0d906f1b62 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 73d8ab4ca7..22d7fbe4be 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -2224,9 +2224,9 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
+ config BR2_PACKAGE_LUA_5_2
+ 	bool "Lua 5.2.x version removed"
+ 	select BR2_LEGACY
+-	select BR2_PACKAGE_LUA_5_3
+ 	help
+ 	  The Lua 5.2.x version was removed.
++# Note: BR2_PACKAGE_LUA_5_2 is still referenced from package/lua/Config.in
  
--JANUS_GATEWAY_VERSION = 1.0.3
-+JANUS_GATEWAY_VERSION = 1.1.1
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
- JANUS_GATEWAY_LICENSE_FILES = COPYING
+ config BR2_TARGET_GENERIC_PASSWD_MD5
+ 	bool "target passwd md5 format support has been removed"
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 456f3b8c12..888c34b21d 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
+ 
+ choice
+ 	prompt "Lua Version"
++	default BR2_PACKAGE_LUA_5_3 if BR2_PACKAGE_LUA_5_2 # legacy
+ 	default BR2_PACKAGE_LUA_5_4
+ 	help
+ 	  Select the version of Lua API/ABI you wish to use.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
