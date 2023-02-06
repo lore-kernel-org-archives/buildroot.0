@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E293C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:35:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655DEC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:36:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10589611C1;
-	Tue, 21 Feb 2023 01:35:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10589611C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 206B86FC17;
+	Tue, 21 Feb 2023 01:36:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 206B86FC17
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sDpXAC88Ld7K; Tue, 21 Feb 2023 01:35:54 +0000 (UTC)
+	with ESMTP id vEUgXO6Wa-tK; Tue, 21 Feb 2023 01:36:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3279B7000A;
-	Tue, 21 Feb 2023 01:35:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3279B7000A
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5D0E7007D;
+	Tue, 21 Feb 2023 01:36:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5D0E7007D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 501B71BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 600211BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 172C76FC29
+ by smtp3.osuosl.org (Postfix) with ESMTP id 166C16FC21
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 172C76FC29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 166C16FC21
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 69fDsOrglLhd for <buildroot@lists.busybox.net>;
+ with ESMTP id IxPMVe_LBuh4 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F1BC6FC20
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F1BC6FC20
+ by smtp3.osuosl.org (Postfix) with ESMTP id F290C6FC1E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F290C6FC1E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2116C828C8; Mon, 20 Feb 2023 20:52:50 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id EF4D3828C8; Mon, 20 Feb 2023 20:52:49 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 16:30:20 +0100
+Date: Mon, 6 Feb 2023 15:54:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: aa7d11a2ad984930eb8e8830c44cbabebdcf8568
-X-Git-Newrev: 71c132494062055bf07c23617a56f0b705dbe93b
+X-Git-Oldrev: 00410ab668833d822f645fffd782ce11253457b1
+X-Git-Newrev: 579b65b55234d298570e5191efb509905933eef5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205250.2116C828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-h11: new package
+Message-Id: <20230220205249.EF4D3828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/genrandconfig: migrate
+ to asyncio subprocess calls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,87 +63,217 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71c132494062055bf07c23617a56f0b705dbe93b
+commit: https://git.buildroot.net/buildroot/commit/?id=579b65b55234d298570e5191efb509905933eef5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/python-h11/Config.in       |  7 +++++++
- package/python-h11/python-h11.hash |  5 +++++
- package/python-h11/python-h11.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+Since genrandconfig no longer appears to support python2 we can
+migrate the subprocess calls to use asyncio variants.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6597225ac3..4c2352b617 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1380,6 +1380,7 @@ F:	package/python-flatbuffers/
- F:	package/python-fonttools/
- F:	package/python-frozenlist/
- F:	package/python-greenlet/
-+F:	package/python-h11/
- F:	package/python-hatchling/
- F:	package/python-hatch-fancy-pypi-readme/
- F:	package/python-hatch-vcs/
-diff --git a/package/Config.in b/package/Config.in
-index 7817b51fc2..b6211f1102 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1071,6 +1071,7 @@ menu "External python modules"
- 	source "package/python-gpiozero/Config.in"
- 	source "package/python-greenlet/Config.in"
- 	source "package/python-gunicorn/Config.in"
-+	source "package/python-h11/Config.in"
- 	source "package/python-h2/Config.in"
- 	source "package/python-hiredis/Config.in"
- 	source "package/python-hpack/Config.in"
-diff --git a/package/python-h11/Config.in b/package/python-h11/Config.in
-new file mode 100644
-index 0000000000..736620d782
---- /dev/null
-+++ b/package/python-h11/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_H11
-+	bool "python-h11"
-+	help
-+	  A pure-Python, bring-your-own-I/O implementation of
-+	  HTTP/1.1.
-+
-+	  https://github.com/python-hyper/h11
-diff --git a/package/python-h11/python-h11.hash b/package/python-h11/python-h11.hash
-new file mode 100644
-index 0000000000..0c65a11d00
---- /dev/null
-+++ b/package/python-h11/python-h11.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/h11/json
-+md5  84c33fc0aa1f868928114c4d02c43dc2  h11-0.14.0.tar.gz
-+sha256  8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d  h11-0.14.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361  LICENSE.txt
-diff --git a/package/python-h11/python-h11.mk b/package/python-h11/python-h11.mk
-new file mode 100644
-index 0000000000..d7dca5244b
---- /dev/null
-+++ b/package/python-h11/python-h11.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-h11
-+#
-+################################################################################
-+
-+PYTHON_H11_VERSION = 0.14.0
-+PYTHON_H11_SOURCE = h11-$(PYTHON_H11_VERSION).tar.gz
-+PYTHON_H11_SITE = https://files.pythonhosted.org/packages/f5/38/3af3d3633a34a3316095b39c8e8fb4853a28a536e55d347bd8d8e9a14b03
-+PYTHON_H11_SETUP_TYPE = setuptools
-+PYTHON_H11_LICENSE = MIT
-+PYTHON_H11_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+This has the advantage of allowing for runners like autobuild-run to
+integrate directly into genrandconfig by calling the asyncio
+gen_config using importlib instead of having to run genrandconfig as
+a subprocess.
+
+Using asyncio is advantageous here as it eliminates the requirement
+for the runner to deal with blocking subprocess calls(by having to
+use threading for example).
+
+Also cleanup some unused functions/python2 compatibility shims.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ utils/genrandconfig | 85 +++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 56 insertions(+), 29 deletions(-)
+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index b4ebb9a9be..b3576f8a51 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -19,24 +19,19 @@
+ # This script generates a random configuration for testing Buildroot.
+ 
+ from binascii import hexlify
+-import contextlib
++import asyncio
+ import csv
+ import os
+ from random import randint
+-import subprocess
+ import sys
+ import traceback
+ from distutils.version import StrictVersion
+ import platform
+ 
+-if sys.hexversion >= 0x3000000:
+-    import urllib.request as _urllib
++if sys.version_info < (3, 8):
++    from asyncio import coroutine
+ else:
+-    import urllib2 as _urllib
+-
+-
+-def urlopen_closing(uri):
+-    return contextlib.closing(_urllib.urlopen(uri))
++    from types import coroutine
+ 
+ 
+ class SystemInfo:
+@@ -65,6 +60,7 @@ class SystemInfo:
+         # --
+         return None
+ 
++    @coroutine
+     def has(self, prog):
+         """Checks whether a program is available.
+         Lazily evaluates missing entries.
+@@ -80,11 +76,13 @@ class SystemInfo:
+         have_it = self.find_prog(prog)
+         # java[c] needs special care
+         if have_it and prog in ('java', 'javac'):
+-            with open(os.devnull, "w") as devnull:
+-                if subprocess.call("%s -version | grep gcj" % prog,
+-                                   shell=True,
+-                                   stdout=devnull, stderr=devnull) != 1:
+-                    have_it = False
++            proc = yield from asyncio.create_subprocess_shell(
++                "%s -version | grep gcj" % prog,
++                stdout=asyncio.subprocess.DEVNULL,
++                stderr=asyncio.subprocess.DEVNULL)
++            ret = yield from proc.wait()
++            if ret != 1:
++                have_it = False
+         # --
+         self.progs[prog] = have_it
+         return have_it
+@@ -161,6 +159,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
+     return configs
+ 
+ 
++@coroutine
+ def is_toolchain_usable(configfile, config):
+     """Check if the toolchain is actually usable."""
+ 
+@@ -181,7 +180,11 @@ def is_toolchain_usable(configfile, config):
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
+-            ldd_version_output = subprocess.check_output(['ldd', '--version'])
++            proc = yield from asyncio.create_subprocess_exec(
++                'ldd', '--version', stdout=asyncio.subprocess.PIPE)
++            ldd_version_output, _ = yield from proc.communicate()
++            if proc.returncode:
++                return False
+             glibc_version = ldd_version_output.decode().splitlines()[0].split()[-1]
+             if StrictVersion('2.14') > StrictVersion(glibc_version):
+                 print("WARN: ignoring the Linaro ARM toolchains because too old host glibc", file=sys.stderr)
+@@ -190,6 +193,7 @@ def is_toolchain_usable(configfile, config):
+     return True
+ 
+ 
++@coroutine
+ def fixup_config(sysinfo, configfile):
+     """Finalize the configuration and reject any problematic combinations
+ 
+@@ -206,7 +210,8 @@ def fixup_config(sysinfo, configfile):
+ 
+     BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
+ 
+-    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not sysinfo.has("java"):
++    has_java = yield from sysinfo.has("java")
++    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not has_java:
+         return False
+     # The ctng toolchain is affected by PR58854
+     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+@@ -649,6 +654,7 @@ def fixup_config(sysinfo, configfile):
+     return True
+ 
+ 
++@coroutine
+ def gen_config(args):
+     """Generate a new random configuration
+ 
+@@ -707,7 +713,8 @@ def gen_config(args):
+ 
+     # Randomly enable BR2_REPRODUCIBLE 10% of times
+     # also enable tar filesystem images for testing
+-    if sysinfo.has("diffoscope") and randint(0, 10) == 0:
++    has_diffoscope = yield from sysinfo.has("diffoscope")
++    if has_diffoscope and randint(0, 10) == 0:
+         configlines.append("BR2_REPRODUCIBLE=y\n")
+         configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
+ 
+@@ -721,10 +728,14 @@ def gen_config(args):
+     with open(configfile, "w+") as configf:
+         configf.writelines(configlines)
+ 
+-    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                           "olddefconfig"])
++    proc = yield from asyncio.create_subprocess_exec(
++        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
++    ret = yield from proc.wait()
++    if ret:
++        return ret
+ 
+-    if not is_toolchain_usable(configfile, toolchainconfig):
++    toolchain_usable = yield from is_toolchain_usable(configfile, toolchainconfig)
++    if not toolchain_usable:
+         return 2
+ 
+     # Now, generate the random selection of packages, and fixup
+@@ -744,19 +755,31 @@ def gen_config(args):
+             "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+             "randpackageconfig" if args.toolchains_csv else "randconfig"
+         ]
+-        subprocess.check_call(make_rand)
++        proc = yield from asyncio.create_subprocess_exec(*make_rand)
++        ret = yield from proc.wait()
++        if ret:
++            return ret
+ 
+-        if fixup_config(sysinfo, configfile):
++        ret = yield from fixup_config(sysinfo, configfile)
++        if ret:
+             break
+ 
+-    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                           "olddefconfig"])
++    proc = yield from asyncio.create_subprocess_exec(
++        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
++    ret = yield from proc.wait()
++    if ret:
++        return ret
+ 
+-    subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                           "savedefconfig"])
++    proc = yield from asyncio.create_subprocess_exec(
++        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "savedefconfig")
++    ret = yield from proc.wait()
++    if ret:
++        return ret
+ 
+-    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                            "dependencies"])
++    proc = yield from asyncio.create_subprocess_exec(
++        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "dependencies")
++    ret = yield from proc.wait()
++    return ret
+ 
+ 
+ if __name__ == '__main__':
+@@ -788,7 +811,11 @@ if __name__ == '__main__':
+     args.outputdir = os.path.abspath(args.outputdir)
+ 
+     try:
+-        ret = gen_config(args)
++        if sys.version_info < (3, 7):
++            loop = asyncio.get_event_loop()
++            ret = loop.run_until_complete(gen_config(args))
++        else:
++            ret = asyncio.run(gen_config(args))
+     except Exception:
+         traceback.print_exc()
+         parser.exit(1)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
