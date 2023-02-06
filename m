@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAF35C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:30:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75972C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:30:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AD9E6FFFD;
-	Tue, 21 Feb 2023 01:30:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AD9E6FFFD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 237A66FB58;
+	Tue, 21 Feb 2023 01:30:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 237A66FB58
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B03-P5g3pODY; Tue, 21 Feb 2023 01:30:36 +0000 (UTC)
+	with ESMTP id prO3Zd_IrRXU; Tue, 21 Feb 2023 01:30:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF60C7001C;
-	Tue, 21 Feb 2023 01:30:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF60C7001C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AED570024;
+	Tue, 21 Feb 2023 01:30:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AED570024
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CDF871BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DD8401BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:03:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D091D6FC10
+ by smtp3.osuosl.org (Postfix) with ESMTP id E31F96FC12
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D091D6FC10
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E31F96FC12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ulTTVlzEm29U for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+ with ESMTP id 9glT_Xr4SNKH for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5AED6FC06
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5AED6FC06
+ by smtp3.osuosl.org (Postfix) with ESMTP id 126AF6FC08
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 126AF6FC08
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B658B828C8; Mon, 20 Feb 2023 20:52:47 +0000 (UTC)
+ id 0F10A828C8; Mon, 20 Feb 2023 20:52:48 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 10:51:28 +0100
+Date: Mon, 6 Feb 2023 11:19:44 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ee7cf14b5188aca5f17dd38ab0b6673d5789942b
-X-Git-Newrev: ca97c78ee0e069c70b8fa051012ea02c911dbf2d
+X-Git-Oldrev: e279599d255a79c08ef20b97b96eb248689d52a9
+X-Git-Newrev: 67ceef8affcb0300efcabab886e9819f56351fd6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205247.B658B828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/website: fixing js for
- the new feed source
+Message-Id: <20230220205248.0F10A828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xmrig: bump version to
+ 6.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,124 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca97c78ee0e069c70b8fa051012ea02c911dbf2d
+commit: https://git.buildroot.net/buildroot/commit/?id=67ceef8affcb0300efcabab886e9819f56351fd6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Feed source is moved to a local atom file available on the web server to
-remove further problems with unreliable feed sources.
-Moving the feed required a bit of refactor of the load_activity function
-so it won't download two times te same url.
+Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
 
-This change requires a cron job like this enabled on the website:
-* * * * * wget -O new.atom https://lore.kernel.org/buildroot/new.atom
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/js/buildroot.js | 70 +++++++++++++++++++++++++-------------------
- 1 file changed, 40 insertions(+), 30 deletions(-)
+ package/xmrig/xmrig.hash | 2 +-
+ package/xmrig/xmrig.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
-index bf80f11d7a..288e3e745c 100644
---- a/docs/website/js/buildroot.js
-+++ b/docs/website/js/buildroot.js
-@@ -1,39 +1,50 @@
--function load_activity(feedurl, divid) {
--    let container = document.getElementById(divid);
-+function display_activity(result, activity) {
-+    let loaded = 0;
-+    let nb_display = 8;
-+    let container;
-+    if (result==null) return;
-+    for (let i = 0; i < result.feed.entry.length; i++) {
-+        let entry = result.feed.entry[i];
-+        if (activity==="commit" && entry.title.toString().indexOf("git commit") !== -1) {
-+            container = document.getElementById("commit-activity");
-+        } else if (activity==="mailing-list" && entry.title.toString().indexOf("git commit") === -1) {
-+            container = document.getElementById("mailing-list-activity");
-+        } else {
-+            continue;
-+        }
-+        loaded += 1
-+        if (loaded > nb_display)
-+            break;
-+        let div = document.createElement("p");
-+        let link = document.createElement("a");
-+        let d = new Date(entry.updated);
-+        let data = '[' + d.toLocaleDateString() + '] ' + entry.title;
-+        let text = document.createTextNode(data);
-+        link.appendChild(text);
-+        link.title = entry.title;
-+        link.href = entry.link._href;
-+        div.appendChild(link);
-+        container.appendChild(div);
-+    }
-+    for (let i = 0; i < (nb_display - loaded); i++) {
-+        container.appendChild(document.createElement("p"));
-+    }
-+}
-+
-+function load_activity(feedurl) {
-     $.ajax({
--      url: "https://cors-anywhere.herokuapp.com/" + feedurl
-+      url: feedurl
-     })
-     .done(function(data){
-         let x2js = new X2JS();
-         let result = x2js.xml_str2json(data.documentElement.outerHTML);
--        let loaded = 0;
--        let nb_display = 8;
--        if (result==null) return;
--        for (let i = 0; i < result.feed.entry.length; i++) {
--            let entry = result.feed.entry[i];
--            if (entry.title.indexOf("git commit") !== -1)
--                continue;
--            loaded += 1;
--            if (loaded > nb_display)
--                break;
--            let div = document.createElement("p");
--            let link = document.createElement("a");
--            let d = new Date(entry.published);
--            let data = '[' + d.toLocaleDateString() + '] ' + entry.title;
--            let text = document.createTextNode(data);
--            link.appendChild(text);
--            link.title = entry.title;
--            link.href = entry.link._href;
--            div.appendChild(link);
--            container.appendChild(div);
--        }
--        let empty = nb_display - loaded;
--        for (let i = 0; i < empty; i++) {
--            container.appendChild(document.createElement("p"));
--        }
-+        display_activity(result, "commit");
-+        display_activity(result, "mailing-list");
-     });
- }
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+index 3c50faf23f..781e089de8 100644
+--- a/package/xmrig/xmrig.hash
++++ b/package/xmrig/xmrig.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f97fe20248e0eb452f77e9b69f2fb1510b852152b3af4f9a8b20680c854888d1  xmrig-6.18.1.tar.gz
++sha256  772f947058e5b89ca9bf34128487def47796870b547439a9b0524ddd1899420c  xmrig-6.19.0.tar.gz
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+index ca5bcecfbe..f345ba9cf9 100644
+--- a/package/xmrig/xmrig.mk
++++ b/package/xmrig/xmrig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+
-+
- function google_analytics() {
-     let _gaq = _gaq || [];
-     _gaq.push(['_setAccount', 'UA-21761074-1']);
-@@ -86,8 +97,7 @@ jQuery(document).ready(function($) {
-     url = url.split(/[\\/]/).pop();
-     $('.nav a[href="/' + url + '"]').parent().addClass('active');
- 
--    load_activity("http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-busybox-ft2.xml", "mailing-list-activity");
--    load_activity("http://git.buildroot.org/buildroot/atom/?h=master", "commit-activity");
-+    load_activity("/new.atom");
- 
-     $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://bootlin.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
- });
+-XMRIG_VERSION = 6.18.1
++XMRIG_VERSION = 6.19.0
+ XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+ XMRIG_LICENSE = GPL-3.0+
+ XMRIG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
