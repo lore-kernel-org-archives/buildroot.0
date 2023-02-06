@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04AC3C05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C78AC05027
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 13:23:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5E6181B3E;
-	Mon,  6 Feb 2023 13:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5E6181B3E
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCAE181518;
+	Mon,  6 Feb 2023 13:23:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCAE181518
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7V_RFYTFn6x0; Mon,  6 Feb 2023 13:23:21 +0000 (UTC)
+	with ESMTP id aYRtWYxBdlAD; Mon,  6 Feb 2023 13:23:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB2AB81A3E;
-	Mon,  6 Feb 2023 13:23:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB2AB81A3E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 170CD1BF951
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED3AC81BCB;
+	Mon,  6 Feb 2023 13:23:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED3AC81BCB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 254561BF955
  for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E525460AAF
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E525460AAF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C725408F7
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 13:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C725408F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cMwy-_5n-VLm for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QL_waBKTL9rf for <buildroot@lists.busybox.net>;
  Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 26A4160A7A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15C52408DD
  for <buildroot@buildroot.org>; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26A4160A7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15C52408DD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14C1583C26; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
+ id 01E5483C24; Mon,  6 Feb 2023 13:23:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 Date: Mon, 6 Feb 2023 14:22:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04a4b86a982e307268d660a38d231315134572fb
-X-Git-Newrev: 01cb02cfaecb34fd7d413775673e78272c68f85f
+X-Git-Oldrev: 0ad3ae14c52ed0aac872875ca7f87cdcf6942128
+X-Git-Newrev: e6ae82531928662764536cadbe2d6f3c558e7de2
 X-Patchwork-Hint: ignore
-Message-Id: <20230206132305.14C1583C26@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pugixml: unconditionally set
- BUILD_DEFINES
+Message-Id: <20230206132305.01E5483C24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fwts: use ifeq instead of ifdef
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +62,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01cb02cfaecb34fd7d413775673e78272c68f85f
+commit: https://git.buildroot.net/buildroot/commit/?id=e6ae82531928662764536cadbe2d6f3c558e7de2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ifdef construct intended to avoid passing -DBUILD_DEFINES="" was
-never needed, because even upstream version v1.9 used in 2019 when the
-configuration options were added, can handle an empty string for
-BUILD_DEFINES.
-In fact an empty string is the default for v1.9 if it is not passed
-during configure.
+The conditional code using ifdef was added in 2018 and works as
+expected.
+But there is no reason to use ifdef instead of ifeq.
 
-Also, the host variant already sets BUILD_DEFINES unconditionally.
-
-So remove the unneeded conditional.
+For consistence, switch to use ifeq like almost all packages already do.
 
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pugixml/pugixml.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/fwts/fwts.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index c796186827..7d4f47c6fa 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -29,9 +29,7 @@ ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
- PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index b208aa0c14..f04c7a848f 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -15,7 +15,7 @@ FWTS_DEPENDENCIES = host-bison host-flex host-pkgconf libglib2 libbsd \
+ 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+ 	$(if $(BR2_PACKAGE_DTC),dtc)
+ 
+-ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
++ifeq ($(BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE),y)
+ FWTS_MODULE_SUBDIRS = efi_runtime
+ $(eval $(kernel-module))
  endif
- 
--ifdef PUGIXML_BUILD_DEFINES
- PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
--endif
- 
- HOST_PUGIXML_CONF_OPTS += \
- 	-DBUILD_PKGCONFIG=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
