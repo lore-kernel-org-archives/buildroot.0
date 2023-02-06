@@ -1,50 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1ACFC05027
-	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 22:32:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50AB3C61DA4
+	for <buildroot@archiver.kernel.org>; Mon,  6 Feb 2023 22:45:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 467104058B;
-	Mon,  6 Feb 2023 22:32:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 467104058B
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3CEE81389;
+	Mon,  6 Feb 2023 22:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3CEE81389
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O5E55-rXAVdd; Mon,  6 Feb 2023 22:32:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IZ2RH8Vvt7VZ; Mon,  6 Feb 2023 22:45:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E5DE40585;
-	Mon,  6 Feb 2023 22:32:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E5DE40585
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E0601BF422
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:32:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06B168137B;
+	Mon,  6 Feb 2023 22:45:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06B168137B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 314E91BF422
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C6E64151F
- for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:32:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C6E64151F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F69A8137B
+ for <buildroot@lists.busybox.net>; Mon,  6 Feb 2023 22:45:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F69A8137B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZV_TWUyhF7nb for <buildroot@lists.busybox.net>;
- Mon,  6 Feb 2023 22:32:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F85E414E4
- for <buildroot@buildroot.org>; Mon,  6 Feb 2023 22:32:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F85E414E4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2760883DF5; Mon,  6 Feb 2023 22:32:22 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 Feb 2023 23:32:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a94d39d693d84f96f996a6a3decfecc60a9625bd
-X-Git-Newrev: ce3d349384f4d80ed8fc50a82ff864bd5bcf6375
-X-Patchwork-Hint: ignore
-Message-Id: <20230206223222.2760883DF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcamera: bump to version 0.0.4
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4kEYZST10uxX for <buildroot@lists.busybox.net>;
+ Mon,  6 Feb 2023 22:45:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF95E81374
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CF95E81374
+ for <buildroot@buildroot.org>; Mon,  6 Feb 2023 22:45:24 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A79D860005;
+ Mon,  6 Feb 2023 22:45:21 +0000 (UTC)
+Date: Mon, 6 Feb 2023 23:45:20 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230206234520.4a140264@windsurf>
+In-Reply-To: <20220929104648.324977-1-giulio.benetti@benettiengineering.com>
+References: <20220928205527.GH1419013@scaer>
+ <20220929104648.324977-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1675723522;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+pFEwxL8tQnHovPAljk8v2iTgIvtaTRXlVKFSIdt0sU=;
+ b=f0pmqJXzRb3BndkJ77tg53A51FppmnAMekqHP/i+clw62MLrabWiBZLBFATuhnUb8AyfTQ
+ ACTpYTTkauYyGoElgny4nspy4sUtqbqBvcXPJS8m8znpHuXlK5AJAlB+hsmp8bXcBzN8DK
+ 5tiblSR2g8XdgkZuuEj/fYqX+98JAL9qjxy2FUxgclAtLLwVT9qYFAzh3ygZMDpLi2oxL7
+ krtWUhvJZhH4gToIpsMjKC5eWFsZt9zNiAONOojnGOKnYDuXlpgosuHiFsEkaK7vxT+en3
+ Ppcg9SMmwUQVhhHHhWZhj0JKKKWgynKFcEF8oJX49+im88Bh1BrZQ7zPAuSyRw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=f0pmqJXz
+Subject: Re: [Buildroot] [PATCH v2] package/qt5: fix build failure due to
+ libressl use
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +77,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>, "Yann E
+ . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce3d349384f4d80ed8fc50a82ff864bd5bcf6375
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 29 Sep 2022 12:46:48 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Reviewed-by: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Qt5 only supports openssl, check [0] and [1]. So in qt5base.mk let's check
+> if BR2_PACKAGE_LIBOPENSSL is enabled instead of BR2_PACKAGE_OPENSSL(that
+> could be openssl or libressl) and for qt5enginio and qt5webkit let's select
+> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL instead of only BR2_PACKAGE_OPENSSL.
+> This way we make sure that only openssl is selected and not libressl or
+> other future openssl-like implementations.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/a956b48b782dbaa055d7146360465e2493a809d9/
+> 
+> [0]: https://doc.qt.io/qt-5/ssl.html#enabling-and-disabling-ssl-support
+> [1]: https://bugreports.qt.io/browse/QTBUG-68374
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> V1->V2:
+> * select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL instead of BR2_PACKAGE_LIBOPENSSL
+> ---
+>  package/qt5/qt5base/qt5base.mk   | 4 ++--
+>  package/qt5/qt5enginio/Config.in | 1 +
+>  package/qt5/qt5webkit/Config.in  | 1 +
+>  3 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 033e318910..ea204aee98 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  d7100286616550aca487b46ae9de2a70bb471352a332b8214901b4148739990f  libcamera-v0.0.3-br1.tar.gz
-+sha256  13e53b33652b16454264b6eff0a6f032aa9331f919b07b6d0e622917ed7f7dd8  libcamera-v0.0.4-br1.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 8979a43aca..01c4cb2ff2 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = v0.0.3
-+LIBCAMERA_VERSION = v0.0.4
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
