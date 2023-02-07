@@ -1,70 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFDA6C636D4
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:03:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB60CC636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E2E940120;
-	Tue,  7 Feb 2023 17:03:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E2E940120
+	by smtp1.osuosl.org (Postfix) with ESMTP id 881F281E2B;
+	Tue,  7 Feb 2023 17:03:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 881F281E2B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NiiGgEQOmOmu; Tue,  7 Feb 2023 17:03:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DEF181E2D;
+	Tue,  7 Feb 2023 17:03:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DEF181E2D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A5EE91BF5F8
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:03:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DC6D40A68
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:03:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DC6D40A68
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V1Nu--k7nTFV; Tue,  7 Feb 2023 17:03:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EA5940A68;
-	Tue,  7 Feb 2023 17:03:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EA5940A68
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 629241BF5F8
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:03:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4892F4159C
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4892F4159C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oZZY4ecV3vmC for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 17:03:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8217D40877
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8217D40877
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:03:06 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 78C7713F8DB;
- Tue,  7 Feb 2023 18:03:01 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 07 Feb 2023 18:03:01 +0100
-Date: Tue, 7 Feb 2023 18:03:01 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Sebastian Weyer <sebastian.weyer@smile.fr>
-Message-ID: <20230207170301.GK4124@scaer>
-References: <20230207165031.17188-1-sebastian.weyer@smile.fr>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y7iCTpSyWn8P for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 17:03:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D56940120
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D56940120
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:03:09 +0000 (UTC)
+Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
+ by mail.xes-mad.com (Postfix) with ESMTP id 7D0F320C39;
+ Tue,  7 Feb 2023 11:03:07 -0600 (CST)
+From: Vincent Fazio <vfazio@xes-inc.com>
+To: buildroot@buildroot.org
+Date: Tue,  7 Feb 2023 11:03:03 -0600
+Message-Id: <20230207170303.2508780-1-vfazio@xes-inc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230207165031.17188-1-sebastian.weyer@smile.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675789383;
- bh=g8Xg9xd2k2Q/owyLhwKwObfbAdnDnmOZ6xz+SF9ibyE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MFyQ1QIqoMnVrI6m7iRt2dCha5jwyfywMUcETxK21SpOhGuvSaJSBRAZzdD1byBSo
- G+zdBj0j6BS5L11OfwwfVEfmyOCiezKrF0GX3gmKxm7vPLUM7vsi290oIVBlULkjCD
- xAQOMM7+5JBKfuSyyCrxp8v5N3ul4vvNBLzK3bsTUu9Syy1RJtBQPOiGuUbzg9NgVL
- iGu8TLylavl3igY3bL7xFe/T6Li4r3vOH/UMqw5z0kxV1d9yskHFEspZ6oxQBt9jmc
- suvT5XbweBy9l9a4hkg0cQGGceq4DGJlkXoojoMzcT5lumGHXENLM+JRBOsY9RcFv9
- YgTgpjiiyIoPg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MFyQ1QIq
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: test_rust.py: Add test
- to check correct vendoring
+ d=xes-inc.com; s=mail; 
+ t=1675789387; bh=ZmWAbyx7GzZVdQQ+zrsi0PL5z4jZFx59cRPv27cIyAE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ZIwQfgUvrwXYU9dmXzolzBN0tv+MCx5j/FY1+Kv7yo5h/nUGnPy56MrRCpYG13/jt
+ xoMPAP0p3edzHJ2AbCh/cwQrjq3LIFmURtsn+G+ufm0MJjaFtIZJAH8C9WbAuxSK5b
+ sUOTqZ3uqgtsC30sCBUXCjaAicuSFaq/jvvIc9CM=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
+ header.a=rsa-sha256 header.s=mail header.b=ZIwQfgUv
+Subject: [Buildroot] [PATCH 1/1] package/xz: fix microblaze compiles
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,120 +66,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Vincent Fazio <vfazio@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sebastian, All,
+From: Vincent Fazio <vfazio@gmail.com>
 
-On 2023-02-07 17:50 +0100, Sebastian Weyer spake thusly:
-> Currently the tests TestRust and TestRustBin do check for vendoring by
-> requiring package ripgrep to be built but only if the download
-> directory is already empty, otherwise the existing contents of the download
-> directory will be reused and therefore not be redownloaded.
-> 
-> This new test will only verify that the required packages are downloaded
-> and vendored correctly without doing a runtime test. It does so by setting a
-> path to a folder "dl" inside the build directory (output-directory/testname/)
-> and then setting the environment variable BR2_DL_DIR to this path before the
-> build starts. This code was essentially copied from the file
-> test_gitforge.py which was added in commit
-> 1ca6ab6ace3c1f9edfbfd16b57d1280b3ea2c6f5
+Patch xz to check if __attribute__((symver ..)) is supported via a
+compile check during configure.
 
-There is a missing piece in this otherwise detailed commit log: why set
-BR2_DL_DIR in the environment, rather than set it in the config options?
+Fixes:
+  http://autobuild.buildroot.org/results/c0d/c0de72e5a34b379e0c516ad08984bb2c4b0abb5c//
 
-The reason is that a user may already have BR2_DL_DIR set in their own
-envronment, and that would override the dl dir we set in the config
-options.
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+---
+ ...0001-Detect-symver-attribute-support.patch | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/xz/0001-Detect-symver-attribute-support.patch
 
-No need to respin, that can be fixed when applying.
-
-Regards,
-Yann E. MORIN.
-
-> We want the package ripgrep to be built since it requires vendoring
-> directly. Additionally we want the package python-cryptography to be
-> built because it has rust dependencies and therefore indirectly also requires
-> vendoring.
-> 
-> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
-> ---
->  support/testing/tests/package/test_rust.py | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-> index fb9dd2d916..763125ca20 100644
-> --- a/support/testing/tests/package/test_rust.py
-> +++ b/support/testing/tests/package/test_rust.py
-> @@ -1,4 +1,5 @@
->  import os
-> +import shutil
->  
->  import infra.basetest
->  
-> @@ -54,3 +55,44 @@ class TestRust(TestRustBase):
->      def test_run(self):
->          self.login()
->          self.assertRunOk("rg Buildroot /etc/issue")
-> +
-> +
-> +class TestRustVendoring(infra.basetest.BRConfigTest):
-> +    config = \
-> +        """
-> +        BR2_arm=y
-> +        BR2_cortex_a9=y
-> +        BR2_ARM_ENABLE_NEON=y
-> +        BR2_ARM_ENABLE_VFP=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        BR2_PACKAGE_HOST_RUSTC=y
-> +        BR2_PACKAGE_RIPGREP=y
-> +        BR2_PACKAGE_PYTHON3=y
-> +        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-> +        BR2_BACKUP_SITE=""
-> +        """
-> +
-> +    def setUp(self):
-> +        super(TestRustVendoring, self).setUp()
-> +
-> +    def tearDown(self):
-> +        self.show_msg("Cleaning up")
-> +        if self.b and not self.keepbuilds:
-> +            self.b.delete()
-> +
-> +    def check_download(self, package):
-> +        # store downloaded tarball inside the output dir so the test infra
-> +        # cleans it up at the end
-> +        dl_dir = os.path.join(self.builddir, "dl")
-> +        # enforce we test the download
-> +        if os.path.exists(dl_dir):
-> +            shutil.rmtree(dl_dir)
-> +        env = {"BR2_DL_DIR": dl_dir}
-> +        self.b.build(["{}-dirclean".format(package),
-> +                      "{}-legal-info".format(package)],
-> +                     env)
-> +
-> +    def test_run(self):
-> +        self.check_download("ripgrep")
-> +        self.check_download("python-cryptography")
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/xz/0001-Detect-symver-attribute-support.patch b/package/xz/0001-Detect-symver-attribute-support.patch
+new file mode 100644
+index 0000000000..9ec43ea7a0
+--- /dev/null
++++ b/package/xz/0001-Detect-symver-attribute-support.patch
+@@ -0,0 +1,61 @@
++From 231add523328ad9e021d8f2b02697b6a11719430 Mon Sep 17 00:00:00 2001
++From: Vincent Fazio <vfazio@gmail.com>
++Date: Tue, 7 Feb 2023 08:51:24 -0600
++Subject: [PATCH] Detect symver attribute support
++
++On non-ELF platforms, such as microblaze, builds will fail when trying
++to add symver information because  __attribute__((symver ..)) is not
++supported even though __has_attribute(__symver__) returns true.
++
++Support for symver needs to be detected via a compile test since
++__has_attribute can report false positives [0].
++
++Add a configure compile check for __attribute__((symver ..)) to ensure
++it is supported and define a variable to advertise support.
++
++[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c1
++
++Upstream: https://github.com/tukaani-project/xz/pull/32
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++---
++ configure.ac                | 9 +++++++++
++ src/liblzma/common/common.h | 2 +-
++ 2 files changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5ad5589..08c623a 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -791,6 +791,15 @@ else
++ 				time with Libtool if neither --with-pic nor
++ 				--without-pic is used). This define must be
++ 				used together with liblzma_linux.map.])
+++			OLD_CFLAGS="$CFLAGS"
+++			CFLAGS="$CFLAGS -Werror"  # we need -Werror to make sure the attribute is not ignored
+++			AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+++				[__attribute__ ((symver ("test@TEST"))) void foo(void) { }
+++				])],
+++				[AC_DEFINE([HAVE_SYMVER_ATTRIBUTE], [1],
+++					[Define to 1 if GCC supports the symver attribute])],
+++				[])
+++			CFLAGS="$OLD_CFLAGS"
++ 			;;
++ 		*)
++ 			enable_symbol_versions=generic
++diff --git a/src/liblzma/common/common.h b/src/liblzma/common/common.h
++index 11fec52..1d2ef9c 100644
++--- a/src/liblzma/common/common.h
+++++ b/src/liblzma/common/common.h
++@@ -76,7 +76,7 @@
++ // too (which doesn't support __symver__) so use it to detect if __symver__
++ // is available. This should be far more reliable than looking at compiler
++ // version macros as nowadays especially __GNUC__ is defined by many compilers.
++-#	if lzma_has_attribute(__symver__)
+++#	if defined(HAVE_SYMVER_ATTRIBUTE) 
++ #		define LZMA_SYMVER_API(extnamever, type, intname) \
++ 			extern __attribute__((__symver__(extnamever))) \
++ 					LZMA_API(type) intname
++-- 
++2.25.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
