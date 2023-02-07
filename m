@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38F07C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 14:32:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 360C4C636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 14:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C26AA81E56;
-	Tue,  7 Feb 2023 14:32:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C26AA81E56
+	by smtp2.osuosl.org (Postfix) with ESMTP id D241840A14;
+	Tue,  7 Feb 2023 14:32:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D241840A14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Sk88bRDC2vW; Tue,  7 Feb 2023 14:32:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6ff5WLz3HCRe; Tue,  7 Feb 2023 14:32:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00A0081E4B;
-	Tue,  7 Feb 2023 14:32:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00A0081E4B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 224401BF2CA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 123A440A12;
+	Tue,  7 Feb 2023 14:32:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 123A440A12
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 60C861BF2CA
  for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 14:30:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 092FC81E44
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3AAA160F48
  for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 14:30:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 092FC81E44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AAA160F48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pf0DYbP44Ywt for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y4RXvct7Rwg9 for <buildroot@lists.busybox.net>;
  Tue,  7 Feb 2023 14:30:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37B5081759
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 37B5081759
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70BBD60B9A
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 70BBD60B9A
  for <buildroot@buildroot.org>; Tue,  7 Feb 2023 14:30:20 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id u10so8110998wmj.3
+Received: by mail-wm1-x331.google.com with SMTP id
+ l21-20020a05600c1d1500b003dfe462b7e4so1145461wms.0
  for <buildroot@buildroot.org>; Tue, 07 Feb 2023 06:30:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=wpYx6ITi7uvGsdFupDsp5Zl5kvIOYZAO4VfGRoKr0C8=;
- b=v6msfsiXJZAhXiof/Z849xefZ8Ay+VeoHEKtDrNke9Ya0g/fpbhFdO4EEnzj1hY02+
- y5C3bv+N8UquVRJ9KrxQHsZKXtQD2zlPi0XHC6NGPm2LX7r6ialo32Q6wge4qUaU3O6J
- UUipjrb8Gij7xHBsOb1DJ+Z6rIlvbQs26CQ4rf354WbTmxZ/OFfgTP45Cfsg8CSfU0Zc
- +REspXxvuoRYMPJMZKlruvvcYdY3DRcmqWJJHRPO+r/GuAcpmIDLX7fTobHOTA/PUg3z
- H6e3uSGqy5vrbuMDKbl9p6DbhZI+SGd2JopOw6o7zVzvh3jSBl5CrhFs4oLMxiskE86S
- vZBg==
-X-Gm-Message-State: AO0yUKVcA+6IoqruYDDkYA0yplNLgTOUVSqjKF6ALz85z/hWQjQaO/Mq
- 5Ig2VPdGuk3Xv8nudTt9YOUPL2WQl893sMX2hORaWg==
-X-Google-Smtp-Source: AK7set9ZA0xdTeCUbaigtL0Nzv7nCKswXW4LrPdKoUaitJtGTxONMt+2d9oqVKiCblgvjtEtjtAmtw==
-X-Received: by 2002:a05:600c:1693:b0:3dc:5baf:df01 with SMTP id
- k19-20020a05600c169300b003dc5bafdf01mr3275678wmn.5.1675780219554; 
- Tue, 07 Feb 2023 06:30:19 -0800 (PST)
+ bh=HCeADxDVwWd1EMDZ9I/kxdtdSk4YpPoKUn/XQyYd0HQ=;
+ b=eyX0tSueKgdEk/WJdQztauCeu03xqIjzPtqMYa3YJfGiHkzlkSlwd6s/Uc0B4PIH1t
+ kwfcD0CGutt5GDrPgNPlFrcPkewJArRqiOlAEKCmLhYV8NpbTNUHUH8MSPfPyKo7XBYl
+ Fu9b7KJyfWRzL0bm3yh0KK/stvMHUvZbD+He2LzQ9lGWHUhhhgakU9WKjng/z8E2sJgd
+ n4gOSS3eZU9xzKlTJkyU6KY01fErqiQyLcqiebZXvmqJaEC8rlZezLQmIm7FvBnDbDZx
+ Vh91Io9w2mDkZ+yUw0CgTAR5sJObSPvTQnR1WOULXxaqTSF+peqkRY485SwWrppKlgBB
+ 2SsQ==
+X-Gm-Message-State: AO0yUKWQUgjHnBOlCnFFsgje4rxWzdQWQuE3iJedSGOvuSve5dVUBeCO
+ mDv2jXU4UF80mfPAjyH7Db191kwuvw2co1273+tB+g==
+X-Google-Smtp-Source: AK7set9WP9M5SSHBlD8tuvuZEyVoA9xOAmONFAat91V/MwTzI+eRZJTle4iIamJsKf9RoPMaq4z44Q==
+X-Received: by 2002:a05:600c:490a:b0:3d3:4007:9c88 with SMTP id
+ f10-20020a05600c490a00b003d340079c88mr4026387wmp.18.1675780218339; 
+ Tue, 07 Feb 2023 06:30:18 -0800 (PST)
 Received: from angeloc.wifiguest.local (cpe1150018.bra.be.verixi.net.
  [85.119.216.19]) by smtp.gmail.com with ESMTPSA id
- l16-20020a1c7910000000b003dc1d668866sm18537074wme.10.2023.02.07.06.30.18
+ l16-20020a1c7910000000b003dc1d668866sm18537074wme.10.2023.02.07.06.30.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Feb 2023 06:30:18 -0800 (PST)
+ Tue, 07 Feb 2023 06:30:17 -0800 (PST)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue,  7 Feb 2023 15:30:03 +0100
-Message-Id: <20230207143006.2681335-10-angelo@amarulasolutions.com>
+Date: Tue,  7 Feb 2023 15:30:02 +0100
+Message-Id: <20230207143006.2681335-9-angelo@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230207143006.2681335-1-angelo@amarulasolutions.com>
 References: <20230207143006.2681335-1-angelo@amarulasolutions.com>
@@ -74,16 +75,16 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wpYx6ITi7uvGsdFupDsp5Zl5kvIOYZAO4VfGRoKr0C8=;
- b=OGLIxuPZMKE5LjESvV86klsaieyODy50ZDxJbRFPtwmyWb8ZxTdSCyp4RfDh/+o7Nr
- Rzn12W5mjGieTtV3/wiqfN0pbDYW052ItGRRZSVkXAyF11LiLqsemxFmBzgnKVQ5S33A
- 17I2iNiT6HTSwRYNgzgR+4uM+K30t3qEly2Pg=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=HCeADxDVwWd1EMDZ9I/kxdtdSk4YpPoKUn/XQyYd0HQ=;
+ b=dtPb0YxzWbkrLz0hnE9bJYaPudJQVA8dZHISY007VnX/hCJkru64KDI4ktfif2clNG
+ V7UiogeQeEOYne+p0rjjjJExEl3rJaYyOY1SY55x8Urm/u8HBytWPM0c0i2Fs3sOXF7S
+ RqEiva6o7H8iX9kz4XNLzPFM8Mk0bK+4W4+H0=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=OGLIxuPZ
-Subject: [Buildroot] [PATCH v5 09/12] package/qt6/qt6base: add support for
- libinput
+ header.b=dtPb0Yxz
+Subject: [Buildroot] [PATCH v5 08/12] package/qt6/qt6base: add support for
+ tslib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,27 +107,45 @@ From: Jesse Van Gavere <jesseevg@gmail.com>
 Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
+ package/qt6/qt6base/Config.in  | 6 ++++++
  package/qt6/qt6base/qt6base.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ 2 files changed, 13 insertions(+)
 
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index 0f1c9fccd2..dbf9c93123 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -224,6 +224,12 @@ config BR2_PACKAGE_QT6BASE_TEST
+ 	help
+ 	  This options enables the Qt6Test library.
+ 
++config BR2_PACKAGE_QT6BASE_TSLIB
++	bool "Enable Tslib support"
++	select BR2_PACKAGE_TSLIB
++	help
++	  This options enables the Tslib plugin
++
+ config BR2_PACKAGE_QT6BASE_XML
+ 	bool "XML module"
+ 	help
 diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index c878a2e2b6..be17b63c6a 100644
+index 41c7a8b350..c878a2e2b6 100644
 --- a/package/qt6/qt6base/qt6base.mk
 +++ b/package/qt6/qt6base/qt6base.mk
 @@ -231,6 +231,13 @@ else
  QT6BASE_CONF_OPTS += -DFEATURE_widgets=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBINPUT),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_libinput=ON
-+QT6BASE_DEPENDENCIES += libinput
++ifeq ($(BR2_PACKAGE_QT6BASE_TSLIB),y)
++QT6BASE_CONF_OPTS += -DFEATURE_tslib=ON
++QT6BASE_DEPENDENCIES += tslib
 +else
-+QT6BASE_CONF_OPTS += -DFEATURE_libinput=OFF
++QT6BASE_CONF_OPTS += -DFEATURE_tslib=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_QT6BASE_TSLIB),y)
- QT6BASE_CONF_OPTS += -DFEATURE_tslib=ON
- QT6BASE_DEPENDENCIES += tslib
+ ifeq ($(BR2_PACKAGE_QT6BASE_EGLFS),y)
+ QT6BASE_CONF_OPTS += -DFEATURE_egl=ON -DFEATURE_eglfs=ON
+ QT6BASE_DEPENDENCIES += libegl
 -- 
 2.25.1
 
