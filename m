@@ -1,89 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B27C636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 14:32:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC2C5C636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 15:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EB7A81DE8;
-	Tue,  7 Feb 2023 14:32:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EB7A81DE8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6840040A6A;
+	Tue,  7 Feb 2023 15:03:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6840040A6A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gp6lRJMKhmps; Tue,  7 Feb 2023 14:32:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZOoEGGsjoqjS; Tue,  7 Feb 2023 15:03:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2BBD6812C6;
-	Tue,  7 Feb 2023 14:32:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BBD6812C6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF2D41BF2CA
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 14:30:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48C8740A64;
+	Tue,  7 Feb 2023 15:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48C8740A64
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E54F1BF2CA
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:03:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B91A660F48
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 14:30:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B91A660F48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35C6D40A64
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:03:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35C6D40A64
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c1wTfod3_79v for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 14:30:25 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D508060B9A
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D508060B9A
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 14:30:24 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id z13so3693516wmp.2
- for <buildroot@buildroot.org>; Tue, 07 Feb 2023 06:30:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=tFCnaPkhZ5JshYoxSnfZYCVWwTB4kljjkIk5CNzkOGE=;
- b=QkIOLpGbLO8sBtMYChoe3/ax7Vjy/fcxH/EBstCXjVujEEBxnKnfkQeWGKZkVrhuca
- /ltSgW+3lNNrebwUQ2kUqBvvwBTncjiQiImbVqsjvXjQDoGnI1AWB6odvglTEXnU/YcW
- m5vSIZxuc16XBZEWXvudAxtx4U2TIXTrbBd0SGnYDJEEMl7hLARh1UlxBAYZUJZ5Dguq
- RgxgQ8D2wQ5f32ss4Z0rcnMiwaLKMz0+ps5eWwGFg+Ujlr4COeyKHha7byk4c9jmGfob
- YG0qv4yaCZMAMvEPT4tcL5wfnmWrZfr+sLaHnlVUO1bKRAlG/G4B0trBJqCSvmh/hRDB
- hOQA==
-X-Gm-Message-State: AO0yUKUEhtDL65NXqxdMyIvY4H5dMxE8WzHy7iumojcN9JuRGYI9F8Y3
- ybfHO1qCvO16BO1GlQFjYjSRTmYfW0vnpC0MC0M7CQ==
-X-Google-Smtp-Source: AK7set9hCpVmBjlYdP/CdUKAY6TAmNjozgrz64AtU35vrh4XoLz1FUlkyFEdMzgRcrseGOlb5mn+cg==
-X-Received: by 2002:a05:600c:490a:b0:3dc:433a:e952 with SMTP id
- f10-20020a05600c490a00b003dc433ae952mr3236117wmp.33.1675780222775; 
- Tue, 07 Feb 2023 06:30:22 -0800 (PST)
-Received: from angeloc.wifiguest.local (cpe1150018.bra.be.verixi.net.
- [85.119.216.19]) by smtp.gmail.com with ESMTPSA id
- l16-20020a1c7910000000b003dc1d668866sm18537074wme.10.2023.02.07.06.30.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Feb 2023 06:30:21 -0800 (PST)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e3-tKpIloD5l for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 15:03:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FBAB40A59
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 15:03:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FBAB40A59
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 493D3841CE; Tue,  7 Feb 2023 15:03:45 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue,  7 Feb 2023 15:30:06 +0100
-Message-Id: <20230207143006.2681335-13-angelo@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230207143006.2681335-1-angelo@amarulasolutions.com>
-References: <20230207143006.2681335-1-angelo@amarulasolutions.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=tFCnaPkhZ5JshYoxSnfZYCVWwTB4kljjkIk5CNzkOGE=;
- b=IuWVa0JuD8eeG81TDSF2azFZy8dN4IyM89ZewCElmmuP+24aKbrS3SjrEvlp1FTf0l
- j/YCt/HVk2XQX9RStlgFBIcjZMwAIgJYwidUqYoLvaZamk9u5tnQ5SC/T+3aQdWoDdMw
- V3Nb+YIBA+maz67XNZjzCDtCCYshX/vjHesNQ=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=IuWVa0Ju
-Subject: [Buildroot] [PATCH v5 12/12] package/qt6/qt6base: add support for
- building examples
+Date: Tue, 7 Feb 2023 16:03:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7231701a290ba447fde9807ba9d260022ddfc8e4
+X-Git-Newrev: 4a6f9d2516820c296a8af788b259ca96926cd60d
+X-Patchwork-Hint: ignore
+Message-Id: <20230207150345.493D3841CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/urandom-scripts: actually credit
+ seed files via seedrng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,72 +57,203 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: jesseevg@gmail.com, Angelo Compagnucci <angelo@amarulasolutions.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Jesse Van Gavere <jesseevg@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=4a6f9d2516820c296a8af788b259ca96926cd60d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The select option makes the default examples set to actually compile.
+The RNG can't actually be seeded from a shell script, due to the
+reliance on ioctls. For this reason, Busybox 1.36.0 contains SeedRNG, a
+tiny program meant to be called at startup and shutdown (and at
+arbitrary other points in between if desired). Note that initially,
+the way seedrng was included in busybox broke things quite severely, but
+now it's been reverted to a reasonably acceptable version.
 
-Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+This is a significant improvement over the current init script, which
+doesn't credit entropy and whose hashing in shell scripts is sort of
+fragile.
+
+Because seedrng is part of busybox, urandom-scripts now depends on
+BR2_PACKAGE_BUSYBOX. This can be removed again if later we add a
+standalone seedrng package.
+
+Add a decent explanation to the init script about the need for a
+persistent directory to make this actually work.
+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+[Arnout:
+ - Remove busybox patch, it's now part of busybox 1.36.0.
+ - Depend on busybox.
+ - Fix shellcheck errors.
+ - Use DAEMON and SEEDRNG_ARGS.
+ - Don't bother with "seed_dir" and "skip_credit" variables.
+ - Rename to S20seedrng.
+]
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/qt6/qt6base/Config.in  | 18 ++++++++++++++++++
- package/qt6/qt6base/qt6base.mk |  6 ++++++
- 2 files changed, 24 insertions(+)
+ package/urandom-scripts/Config.in          |  5 +--
+ package/urandom-scripts/S20seedrng         | 40 +++++++++++++++++
+ package/urandom-scripts/S20urandom         | 70 ------------------------------
+ package/urandom-scripts/urandom-scripts.mk |  4 +-
+ 4 files changed, 43 insertions(+), 76 deletions(-)
 
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index cb2d7d34c2..365a8cca82 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -30,6 +30,24 @@ config BR2_PACKAGE_QT6BASE_DBUS
+diff --git a/package/urandom-scripts/Config.in b/package/urandom-scripts/Config.in
+index 987e442e22..6b4a609f95 100644
+--- a/package/urandom-scripts/Config.in
++++ b/package/urandom-scripts/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_URANDOM_SCRIPTS
+ 	bool "urandom-initscripts"
+ 	default y if BR2_PACKAGE_INITSCRIPTS
++	depends on BR2_PACKAGE_BUSYBOX
+ 	depends on !BR2_PACKAGE_SYSTEMD
  	help
- 	  This option enables the D-Bus module.
+ 	  Initscript to preserve the random seed between reboots.
+-
+-	  WARNING: this is a poor fit to try and get high-quality
+-	  entropy at boot. There are better ways, like haveged, or
+-	  rng-tools.
+diff --git a/package/urandom-scripts/S20seedrng b/package/urandom-scripts/S20seedrng
+new file mode 100644
+index 0000000000..0fea0bea83
+--- /dev/null
++++ b/package/urandom-scripts/S20seedrng
+@@ -0,0 +1,40 @@
++#! /bin/sh
++#
++# Preserve the random seed between reboots. See urandom(4).
++#
++# This script can be called multiple times during operation (e.g. with
++# "reload" argument) to refresh the seed.
++
++# The following arguments can be added to SEEDRNG_ARGS in
++# /etc/default/seedrng:
++#   --seed-dir=/path/to/seed/directory
++#     Path to the directory where the seed and the lock files are stored.
++#     for optimal operation, this should be a persistent, writeable
++#     location. Default is /var/lib/seedrng
++#
++#  --skip-credit
++#     Set this to true only if you do not want seed files to actually
++#     credit the RNG, for example if you plan to replicate this file
++#     system image and do not have the wherewithal to first delete the
++#     contents of /var/lib/seedrng.
++#
++# Example:
++# SEEDRNG_ARGS="--seed-dir=/data/seedrng --skip-credit"
++#
++
++DAEMON="seedrng"
++SEEDRNG_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++case "$1" in
++	start|stop|restart|reload)
++		# Never fail, as this isn't worth making a fuss
++		# over if it doesn't go as planned.
++		# shellcheck disable=SC2086 # we need the word splitting
++		seedrng $SEEDRNG_ARGS || true;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/urandom-scripts/S20urandom b/package/urandom-scripts/S20urandom
+deleted file mode 100644
+index 6c6aea9eee..0000000000
+--- a/package/urandom-scripts/S20urandom
++++ /dev/null
+@@ -1,70 +0,0 @@
+-#! /bin/sh
+-#
+-# Preserve the random seed between reboots. See urandom(4).
+-#
+-
+-# Quietly do nothing if /dev/urandom does not exist
+-[ -c /dev/urandom ] || exit 0
+-
+-URANDOM_SEED="/var/lib/random-seed"
+-
+-# shellcheck source=/dev/null
+-[ -r "/etc/default/urandom" ] && . "/etc/default/urandom"
+-
+-if pool_bits=$(cat /proc/sys/kernel/random/poolsize 2> /dev/null); then
+-	pool_size=$((pool_bits/8))
+-else
+-	pool_size=512
+-fi
+-
+-init_rng() {
+-	[ -f "$URANDOM_SEED" ] || return 0
+-	printf 'Initializing random number generator: '
+-	dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
+-	status=$?
+-	if [ "$status" -eq 0 ]; then
+-		echo "OK"
+-	else
+-		echo "FAIL"
+-	fi
+-	return "$status"
+-}
+-
+-save_random_seed() {
+-	printf 'Saving random seed: '
+-	status=1
+-	if touch "$URANDOM_SEED.new" 2> /dev/null; then
+-		old_umask=$(umask)
+-		umask 077
+-		dd if=/dev/urandom of="$URANDOM_SEED.tmp" bs="$pool_size" count=1 2> /dev/null
+-		cat "$URANDOM_SEED" "$URANDOM_SEED.tmp" 2>/dev/null \
+-			| sha256sum \
+-			| cut -d ' ' -f 1 > "$URANDOM_SEED.new" && \
+-		mv "$URANDOM_SEED.new" "$URANDOM_SEED" && status=0
+-		rm -f "$URANDOM_SEED.tmp"
+-		umask "$old_umask"
+-		if [ "$status" -eq 0 ]; then
+-			echo "OK"
+-		else
+-			echo "FAIL"
+-		fi
+-
+-	else
+-		echo "SKIP (read-only file system detected)"
+-	fi
+-	return "$status"
+-}
+-
+-case "$1" in
+-	start|restart|reload)
+-		# Carry a random seed from start-up to start-up
+-		# Load and then save the whole entropy pool
+-		init_rng && save_random_seed;;
+-	stop)
+-		# Carry a random seed from shut-down to start-up
+-		# Save the whole entropy pool
+-		save_random_seed;;
+-	*)
+-		echo "Usage: $0 {start|stop|restart|reload}"
+-		exit 1
+-esac
+diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
+index 2c09728c46..32f3e09343 100644
+--- a/package/urandom-scripts/urandom-scripts.mk
++++ b/package/urandom-scripts/urandom-scripts.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
-+config BR2_PACKAGE_QT6BASE_EXAMPLES
-+	bool "Compile and install examples "
-+	depends on BR2_PACKAGE_QT6_GL_SUPPORTS
-+	select BR2_PACKAGE_QT6BASE_DBUS
-+	select BR2_PACKAGE_QT6BASE_NETWORK
-+	select BR2_PACKAGE_QT6BASE_XML
-+	select BR2_PACKAGE_QT6BASE_DBUS
-+	select BR2_PACKAGE_QT6BASE_GUI
-+	select BR2_PACKAGE_QT6BASE_WIDGETS
-+	select BR2_PACKAGE_QT6BASE_OPENGL
-+	select BR2_PACKAGE_QT6BASE_OPENGL_LIB
-+	select BR2_PACKAGE_QT6BASE_CONCURRENT
-+	help
-+	  If unsure, say N.
-+
-+comment "Building examples needs OpenGL/DBus support"
-+	depends on !BR2_PACKAGE_QT6_GL_SUPPORTS || !BR2_PACKAGE_DBUS
-+
- config BR2_PACKAGE_QT6BASE_GUI
- 	bool "gui module"
- 	select BR2_PACKAGE_FREETYPE
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 9f82cfc276..0e72485d88 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -313,6 +313,12 @@ QT6BASE_CONF_OPTS += -DFEATURE_dbus=OFF
- HOST_QT6BASE_CONF_OPTS += -DFEATURE_dbus=OFF
- endif
+ define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20urandom \
+-		$(TARGET_DIR)/etc/init.d/S20urandom
++	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20seedrng \
++		$(TARGET_DIR)/etc/init.d/S20seedrng
+ endef
  
-+ifeq ($(BR2_PACKAGE_QT6BASE_EXAMPLES),y)
-+QT6BASE_CONF_OPTS += -DQT_BUILD_EXAMPLES=ON
-+else
-+QT6BASE_CONF_OPTS += -DQT_BUILD_EXAMPLES=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT6BASE_NETWORK),y)
- QT6BASE_CONF_OPTS += -DFEATURE_network=ON
- else
--- 
-2.25.1
-
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
