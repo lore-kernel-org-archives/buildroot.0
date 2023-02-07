@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6E52C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:45:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F451C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 892F37011C;
-	Tue, 21 Feb 2023 01:45:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 892F37011C
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3FBB7012B;
+	Tue, 21 Feb 2023 01:45:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3FBB7012B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ohwuAb5mB6s; Tue, 21 Feb 2023 01:45:35 +0000 (UTC)
+	with ESMTP id hE4r7NXumD6v; Tue, 21 Feb 2023 01:45:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B428B7011A;
-	Tue, 21 Feb 2023 01:45:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B428B7011A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2730970123;
+	Tue, 21 Feb 2023 01:45:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2730970123
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 826881BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9254F1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 347496FBE4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 479966FFFD
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 347496FBE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 479966FFFD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AKQvN4XkDpj0 for <buildroot@lists.busybox.net>;
+ with ESMTP id 8Xa4JfzZyPko for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23855610DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6946E6FC18
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23855610DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6946E6FC18
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E64181979; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+ id 679E6828C8; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 22:55:49 +0100
+Date: Tue, 7 Feb 2023 23:13:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e92bb8f1c9523227413500380df16bfc64053fad
-X-Git-Newrev: a016b693f7830f3c8ae815851d3204b8b6e99821
+X-Git-Oldrev: bfad9bef35e984f00ae70f1cd51cc75b89ff5efc
+X-Git-Newrev: 57a64a702a1c162a33097db7ee7e069fb64b39df
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205254.1E64181979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] gitlab-ci: fix pipelines
+Message-Id: <20230220205254.679E6828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl-mail-dkim: bump
+ version to 1.20220520
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a016b693f7830f3c8ae815851d3204b8b6e99821
+commit: https://git.buildroot.net/buildroot/commit/?id=57a64a702a1c162a33097db7ee7e069fb64b39df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When gitlab prepares a job to run, it checks out the repository with a
-non-root user, and spawns a container that runs as root, with some UID
-mapping that makes the files be owned by root in the container. However,
-our pipelines run as a nont-root user.
-
-Commit bde165f7ad (.gitlab-ci.yml: update Docker image to use) updated
-the docker image that is used to run in our pipelines.
-
-That new image includes a git version that is stricter about the
-ownership of the git tree it is acting in: git aborts in error when the
-user running it does not own the repository.
-
-We use `git ls-tree` quite a lot in our check-{flake8,package,symbols}
-rules, so they all fail (in various ways).
-
-To fix this, we either need to fix the ownership or tell git to ignore
-the situation.
-
-It is most probably impossible to change the ownership of the files: we
-run as non-root,and the files belong to root (in the container). So
-we're stuck.
-
-The alternative, is to do as git suggest, and tell it to ignore the
-situation. In a local setup, this would be very insecure, but in the
-pipelines, this is in a throw-away container, where a single user exists
-and is running, so we don't care much (if at all).
-
-Add a global before_script that registers the git config to ignore
-ownership issues in the buildroot repository; see [0] for the definition
-of the CI_PROJECT_DIR variable. Note: unlike what is said in there, and
-in [1], the value actually seen in CI_PROJECT_DIR is already prefixed
-with CI_BUILDS_DIR (the documentation is unclear about that point).
-
-[0] https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
-[1] https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/misc/gitlab-ci.yml.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
+ package/perl-mail-dkim/perl-mail-dkim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 9c1faf0d5f..38aca31fb5 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -1,3 +1,6 @@
-+before_script:
-+  - git config --global --add safe.directory ${CI_PROJECT_DIR}
-+
- .check-check-package_base:
-     script:
-         - python3 -m pytest -v utils/checkpackagelib/
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
+index e94adfc6ed..6edeaa9d8b 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.hash
++++ b/package/perl-mail-dkim/perl-mail-dkim.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  9de35f8aa77a85dc17423cbcce2bf46d  Mail-DKIM-1.20200824.tar.gz
+-sha256  871d329830acb4840423aa59036622fb2ee394efc1d09316dcc32ae94454e916  Mail-DKIM-1.20200824.tar.gz
++md5  5a0dec58f0c2526521b2952a3c126906  Mail-DKIM-1.20220520.tar.gz
++sha256  8ac4b8c84bbfad00a3d24bf676493d207dd3cd4a735efabb9e17181534f23646  Mail-DKIM-1.20220520.tar.gz
+ 
+ # computed by scancpan
+ sha256  ffaa40feb768566e52d93879fedd2c5483828b6de483874f30a0a4425351555f  LICENSE
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
+index e67bf5ee18..f3383a02bf 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.mk
++++ b/package/perl-mail-dkim/perl-mail-dkim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_MAIL_DKIM_VERSION = 1.20200824
++PERL_MAIL_DKIM_VERSION = 1.20220520
+ PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
+ PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
+ PERL_MAIL_DKIM_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
