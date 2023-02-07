@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC81EC636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 10:40:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 586FEC636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 10:40:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AAF140934;
-	Tue,  7 Feb 2023 10:40:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AAF140934
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF93B414C2;
+	Tue,  7 Feb 2023 10:40:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF93B414C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XPaGmE_j6ET8; Tue,  7 Feb 2023 10:40:03 +0000 (UTC)
+	with ESMTP id nfreh7vkVJZ6; Tue,  7 Feb 2023 10:40:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70FCA4092C;
-	Tue,  7 Feb 2023 10:40:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70FCA4092C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CD7501BF27A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A79A41748;
+	Tue,  7 Feb 2023 10:40:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A79A41748
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D68B61BF95C
  for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:40:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A718960E55
+ by smtp1.osuosl.org (Postfix) with ESMTP id B13D581444
  for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:40:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A718960E55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B13D581444
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s2pOrtUzn5GS for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mOWe5Djzq9KU for <buildroot@lists.busybox.net>;
  Tue,  7 Feb 2023 10:39:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB0F760B00
+ by smtp1.osuosl.org (Postfix) with ESMTP id D3E2881442
  for <buildroot@buildroot.org>; Tue,  7 Feb 2023 10:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB0F760B00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3E2881442
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B682384033; Tue,  7 Feb 2023 10:39:59 +0000 (UTC)
+ id C1F0C84034; Tue,  7 Feb 2023 10:39:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 11:39:38 +0100
+Date: Tue, 7 Feb 2023 11:39:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 26893ab1c67d7df8c1b71269051ad41b5ea03e5e
-X-Git-Newrev: 7ff52ac09b1c21fdce65deae39127b31d47858e9
+X-Git-Oldrev: 7ff52ac09b1c21fdce65deae39127b31d47858e9
+X-Git-Newrev: 537daa143b237e88f2e272056bb05771db7f48d1
 X-Patchwork-Hint: ignore
-Message-Id: <20230207103959.B682384033@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uuu: bump to version 1.5.21
+Message-Id: <20230207103959.C1F0C84034@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mcelog: bump to version 191
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ff52ac09b1c21fdce65deae39127b31d47858e9
+commit: https://git.buildroot.net/buildroot/commit/?id=537daa143b237e88f2e272056bb05771db7f48d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fixed android super.img loop download 52byte after some block
-- Use login header as in curl
-- Skip sleep in usb_add
-- Add empty line after input password
-- linux prompt ask user name and password for http(s) download
-- fix linux build failure
+Create .os_version to specify the version since there is no git
+checkout available.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+https://github.com/andikleen/mcelog/releases/tag/v191
+https://github.com/andikleen/mcelog/releases/tag/v190
+
+Signed-off-by: Jordan Speicher <jordan@jspeicher.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uuu/uuu.hash | 2 +-
- package/uuu/uuu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mcelog/mcelog.hash | 2 +-
+ package/mcelog/mcelog.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index cc1cd83266..a5b665620c 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  932c0a4acde0f52b907f5693c6d133c83142c4ca6e9df05a38b3ac1e50628883  uuu_source-1.5.11.tar.gz
-+sha256  e89d3665af499ab71360d948176cf64619b082f8272a994d1fbfc000e67c0f14  uuu_source-1.5.21.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
- sha256  584bfbb18b4c08b872d48b80419dd453307212a144134fb516bd6ddc0700c2e8  README.md
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 647015e2dd..1a5f84ce4d 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
+index e0350b085d..23fd4e50f3 100644
+--- a/package/mcelog/mcelog.hash
++++ b/package/mcelog/mcelog.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  30364d134ff416f3f9469720add84bdccea226268d334f06022110f484550cd9  mcelog-189.tar.gz
++sha256  b3b2616acde7afba4752d4dc447a2c2ad5a75da65e7496e0da30f8f8d2015cfa  mcelog-191.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index 8b5876d32e..9f7194e376 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
+@@ -4,13 +4,14 @@
  #
  ################################################################################
  
--UUU_VERSION = 1.5.11
-+UUU_VERSION = 1.5.21
- UUU_SOURCE = uuu_source-$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+-MCELOG_VERSION = 189
++MCELOG_VERSION = 191
+ MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
+ MCELOG_LICENSE = GPL-2.0
+ MCELOG_LICENSE_FILES = LICENSE
+ MCELOG_SELINUX_MODULES = mcelog
+ 
+ define MCELOG_BUILD_CMDS
++	echo "$(MCELOG_VERSION)" > $(@D)/.os_version
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
