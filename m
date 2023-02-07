@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 944E0C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:39:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69771C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:40:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50F366FBF1;
-	Tue, 21 Feb 2023 01:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50F366FBF1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14F606FB96;
+	Tue, 21 Feb 2023 01:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14F606FB96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FgynojCftXT4; Tue, 21 Feb 2023 01:39:52 +0000 (UTC)
+	with ESMTP id z61Fgoizbg2e; Tue, 21 Feb 2023 01:40:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B1CE700A3;
-	Tue, 21 Feb 2023 01:39:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B1CE700A3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D0AB700A3;
+	Tue, 21 Feb 2023 01:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D0AB700A3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 86F381BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 964811BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A21A6FE61
+ by smtp3.osuosl.org (Postfix) with ESMTP id E890D6FE66
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A21A6FE61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E890D6FE66
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iwbAwDVZqGhC for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
+ with ESMTP id TASEbqLxe5q4 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 976856FE5C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 976856FE5C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13C8D6FC28
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13C8D6FC28
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B31E81979; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
+ id 03BDF86495; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 11:05:45 +0100
+Date: Tue, 7 Feb 2023 12:28:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 29fd8481e22fd7e8ac00e0bc47614ff06be33706
-X-Git-Newrev: 485b47e025541a58358d8852c600b8e7644b4ec6
+X-Git-Oldrev: 1a1081dcbf8d706b08df53fe2ff2d652caf889ae
+X-Git-Newrev: 231d00e63ac08c98d7e823c3bd60a618ff322577
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205251.8B31E81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/docker-engine: bump
- version to v23.0.0
+Message-Id: <20230220205252.03BDF86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain/toolchain-wrapper.c:
+ set CCACHE env variables only when ccache is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,100 +63,114 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=485b47e025541a58358d8852c600b8e7644b4ec6
+commit: https://git.buildroot.net/buildroot/commit/?id=231d00e63ac08c98d7e823c3bd60a618ff322577
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This update requires a few workaround for the non-standard vendor/
-structure in the docker-engine repository.
+This commit modifies the toolchain-wrapper to make sure that the
+CCACHE_COMPILERCHECK and CCACHE_BASEDIR are only set if ccache support
+is enabled. Indeed, when BR2_USE_CCACHE is not set (or to a value
+different than 1), we don't call the compiler with ccache, so there is
+no reason to set those ccache environment variables, and they could
+potentially conflict with a separate usage of ccache, outside of
+Buildroot, for example when using the Buildroot SDK.
 
-First, as the vendor/ directory exists, our go-post-process script does
-not do the vendoring, and exits early, which is exactly what we need.
+In particular, the value of CCACHE_BASEDIR doesn't not make any sense
+when the Buildroot toolchain is not used during the Buildroot build,
+as it points to the output directory $(BASE_DIR).
 
-Second, docker-engine does not use the "new" go.mod mechanism, so it
-does not ship any go.mod file, so our go-post-proces, exiting early,
-does not check that the go.mod file exists, and thus does not fail,
-which is again exactly what we need.
+We pay attention to also not show those variables as being set in the
+BR2_DEBUG_WRAPPER dump.
 
-Third, docker-engine has an invalid vendor/modules.txt file that we need
-to remove or go would fail to build. Since our go-post-process exits
-early, there is no vendoring, and thus it does not break at download,
-which once more is exactly what we need.
+To help a little bit with this, a ccache_enabled boolean is introduced
+to indicate when ccache is being used.
 
-However, the missing go.mod and the problematic vendor/modules.txt cause
-go to fail at build time, which this time is not really, even really not,
-what we want...
+There is still quite a bit of #ifdef-ery involved, but it's not easy
+to find a simpler way to organize the code.
 
-So, we fix it up in two ways.
-
-First, the easy part: we just remove the problematic vendor/modules.txt
-file.
-
-Second, we create a go.mod to tell the Go compiler the root import path
-prefix for the module and the language version. Note that the language
-version in go.mod is not required to be equal the version of the Go
-compiler.
-
-Reference: https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-
-Note that as of v23.0.0 docker-engine expects containerd to be started
-by systemd if --containerd= flag is set in dockerd.service, whereas in
-previous versions containerd was started by the docker daemon as a
-sub-process.
-
-There is no sysv unit for containerd, but this is OK: in the Docker sysv
-init file S60dockerd, we do not set the --containerd flag. The docker
-daemon will start containerd as a sub-process automatically due to the
-absence of this flag.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-[yann.morin.1998@free.fr:
-  - run fixups in post-extract hook
-  - rework commit log for (hopefully) better explanations
-]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-By: Vincent Fazio <vfazio@xes-inc.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/docker-engine/docker-engine.hash |  2 +-
- package/docker-engine/docker-engine.mk   | 11 ++++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ toolchain/toolchain-wrapper.c | 49 ++++++++++++++++++++++++-------------------
+ 1 file changed, 27 insertions(+), 22 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index d15b1359cb..670cbd414b 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ee0e2168e27ec87f1b0650e86af5d3e167a07fd2ff8c1ce3bb588f0b4f9a4658  docker-engine-20.10.22.tar.gz
-+sha256  94492508260e57eb93399257d53435cd5308ca6330e173ca6e6f3dbf4c6e12f3  docker-engine-23.0.0.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 2a9b72ca78..c50f08245d 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 4c08e97237..f66e588bfd 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -494,10 +494,28 @@ int main(int argc, char **argv)
  
--DOCKER_ENGINE_VERSION = 20.10.22
-+DOCKER_ENGINE_VERSION = 23.0.0
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
-@@ -62,6 +62,15 @@ else
- DOCKER_ENGINE_TAGS += exclude_graphdriver_vfs
- endif
- 
-+# create the go.mod file with language version go1.19
-+# remove the conflicting vendor/modules.txt
-+# https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-+define DOCKER_ENGINE_FIX_VENDORING
-+	printf "module $(DOCKER_ENGINE_GOMOD)\n\ngo 1.19\n" > $(@D)/go.mod
-+	rm -f $(@D)/vendor/modules.txt
-+endef
-+DOCKER_ENGINE_POST_EXTRACT_HOOKS += DOCKER_ENGINE_FIX_VENDORING
+ 	exec_args = args;
+ #ifdef BR_CCACHE
+-	/* If BR2_USE_CCACHE is not defined, or its value is not 1,
+-	 * skip the ccache call */
++	/* If BR2_USE_CCACHE is set and its value is 1, enable ccache
++	 * usage */
+ 	char *br_use_ccache = getenv("BR2_USE_CCACHE");
+-	if (!br_use_ccache || strncmp(br_use_ccache, "1", strlen("1")))
++	bool ccache_enabled = br_use_ccache && !strncmp(br_use_ccache, "1", strlen("1"));
 +
- DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
++	if (ccache_enabled) {
++#ifdef BR_CCACHE_HASH
++		/* Allow compilercheck to be overridden through the environment */
++		if (setenv("CCACHE_COMPILERCHECK", "string:" BR_CCACHE_HASH, 0)) {
++			perror(__FILE__ ": Failed to set CCACHE_COMPILERCHECK");
++			return 3;
++		}
++#endif
++#ifdef BR_CCACHE_BASEDIR
++		/* Allow compilercheck to be overridden through the environment */
++		if (setenv("CCACHE_BASEDIR", BR_CCACHE_BASEDIR, 0)) {
++			perror(__FILE__ ": Failed to set CCACHE_BASEDIR");
++			return 3;
++		}
++#endif
++	} else
++		/* ccache is disabled, skip it */
+ 		exec_args++;
+ #endif
  
- define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+@@ -505,12 +523,14 @@ int main(int argc, char **argv)
+ 	if (debug > 0) {
+ 		fprintf(stderr, "Toolchain wrapper executing:");
+ #ifdef BR_CCACHE_HASH
+-		fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
+-			(debug == 2) ? "\n    " : " ");
++		if (ccache_enabled)
++			fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
++				(debug == 2) ? "\n    " : " ");
+ #endif
+ #ifdef BR_CCACHE_BASEDIR
+-		fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
+-			(debug == 2) ? "\n    " : " ");
++		if (ccache_enabled)
++			fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
++				(debug == 2) ? "\n    " : " ");
+ #endif
+ 		for (i = 0; exec_args[i]; i++)
+ 			fprintf(stderr, "%s'%s'",
+@@ -518,21 +538,6 @@ int main(int argc, char **argv)
+ 		fprintf(stderr, "\n");
+ 	}
+ 
+-#ifdef BR_CCACHE_HASH
+-	/* Allow compilercheck to be overridden through the environment */
+-	if (setenv("CCACHE_COMPILERCHECK", "string:" BR_CCACHE_HASH, 0)) {
+-		perror(__FILE__ ": Failed to set CCACHE_COMPILERCHECK");
+-		return 3;
+-	}
+-#endif
+-#ifdef BR_CCACHE_BASEDIR
+-	/* Allow compilercheck to be overridden through the environment */
+-	if (setenv("CCACHE_BASEDIR", BR_CCACHE_BASEDIR, 0)) {
+-		perror(__FILE__ ": Failed to set CCACHE_BASEDIR");
+-		return 3;
+-	}
+-#endif
+-
+ 	if (execv(exec_args[0], exec_args))
+ 		perror(path);
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
