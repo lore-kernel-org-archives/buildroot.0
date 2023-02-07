@@ -1,95 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A580C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 16:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74740C636D4
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 16:26:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB73081852;
-	Tue,  7 Feb 2023 16:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB73081852
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4NoCTW2HekqU; Tue,  7 Feb 2023 16:26:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 115FB813B2;
-	Tue,  7 Feb 2023 16:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 115FB813B2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6782B1BF5F8
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 16:26:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F60340168
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 16:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F60340168
+	by smtp2.osuosl.org (Postfix) with ESMTP id D59DE40120;
+	Tue,  7 Feb 2023 16:26:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D59DE40120
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aOoKltwfbcOk for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 16:26:09 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD93B40120
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD93B40120
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 16:26:08 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id bk16so14095690wrb.11
- for <buildroot@buildroot.org>; Tue, 07 Feb 2023 08:26:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=8jhtzECDgxt4w175HNF7BUyOWOY7sgd92HW8BAw+LRY=;
- b=QZPxSYKQG6YtgWL1N1OVDgRbqYkY9Dq8iQlR889I7vHjIUDUNiBr5NXSElbkzqfDPH
- 5ZrfCu62XUwDpetHZOXJc8cQaw1JkwXatjUjgxloK0t7Z8hg+jJ9WO8j1ATev5R838j+
- FK+aZBxQ1blP94B+quObXIZ2Uh0s94lXqQXHCEL7t6xwpjLHjIBpiZjSXt5hEencmKUK
- 7LFHQBevprBKQ1zW5WKtbtM1ZHo4b7DRy+YHz34aKyzJCR+sJFMBHB8fKQ0gl8ruQStp
- 7iM5dUa4u+bkCkLVBSEzJUwAB7eJvmNHMOLZwlWdaqMNjvOSk7IqyLVA2tIjY6bk+qcx
- /JCw==
-X-Gm-Message-State: AO0yUKXB0ErYPa2bKoYElAplDj2mV2iaX4GNDGKHDz2SiSNe6ZEMAAa6
- VJsaXsoTw3Gy/q4etS9blPL6iw==
-X-Google-Smtp-Source: AK7set/qqtwFElnUwnoUf9qqgBH3e0VymEBMQfmHrJNIvq6YHXdTIcRvCtbXS6NuUg8OpTCmyK1hww==
-X-Received: by 2002:a5d:46d1:0:b0:2c3:f6d0:7012 with SMTP id
- g17-20020a5d46d1000000b002c3f6d07012mr2558810wrs.18.1675787166914; 
- Tue, 07 Feb 2023 08:26:06 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- p12-20020a5d48cc000000b00241fab5a296sm11478710wrs.40.2023.02.07.08.26.06
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 07 Feb 2023 08:26:06 -0800 (PST)
-Message-ID: <e4b244f1-6f5c-7fac-7469-6a4f86b0dfdc@smile.fr>
-Date: Tue, 7 Feb 2023 17:26:05 +0100
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NRj6JT-aodiZ; Tue,  7 Feb 2023 16:26:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2BBA40168;
+	Tue,  7 Feb 2023 16:26:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2BBA40168
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2274A1BF5F8
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 16:26:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE08681DCB
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 16:26:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE08681DCB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oGUt4wZ4Gvfs for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 16:26:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E30181D70
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6E30181D70
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 16:26:18 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2D1C82000B;
+ Tue,  7 Feb 2023 16:26:16 +0000 (UTC)
+Date: Tue, 7 Feb 2023 17:26:15 +0100
+To: TIAN Yuanhao <tianyuanhao3@163.com>
+Message-ID: <20230207172615.48ac9871@windsurf>
+In-Reply-To: <20221128123418.2197-6-tianyuanhao3@163.com>
+References: <20221128123418.2197-1-tianyuanhao3@163.com>
+ <20221128123418.2197-6-tianyuanhao3@163.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: AndreiCherniaev <cherniaev.andrei@kairo.space>, buildroot@buildroot.org
-References: <20230122123645.2903470-1-cherniaev.andrei@kairo.space>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20230122123645.2903470-1-cherniaev.andrei@kairo.space>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=8jhtzECDgxt4w175HNF7BUyOWOY7sgd92HW8BAw+LRY=;
- b=NnjLf3Kw4HyL7fd3ruZ6HjJ8oTkN9Oy44b4PVcNaoUCrlcgcIXUN/4hgbdAyoouahE
- LzOTN93Ov4FQZYg6NYzVonzJUmyM/ibimLuIYY2AeAayYsKHu0k9y/VOQIkR0NFD1MQL
- 6hvlWdlAXqoZWj+0PTEAZHgjGA40M/Nu96oFOpBverLeGk8g2F+jC022yZElz3wOITPD
- qcLfzEF4FaiWvgxPF5pfCWLrxV6M77Ml42YsU16k9bppgHyfBqB/LqreHxssnx5ETMg5
- 3Gd3ufSTPjijrPjD42a6MjldlVbNys9sVUYkipUtZo858IEwMnTOgvcy1hlFreZ5qdxy
- abVQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=NnjLf3Kw
-Subject: Re: [Buildroot] [PATCH] board/qemu: add echo for errors
+ d=bootlin.com; s=gm1; t=1675787176;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uG/37oi5REsagEkAdwIcJilm+xBTol/gDEESkp6gs9c=;
+ b=R84m6nM8fb5JYA5N6PfVfv1csSVUAdHya97OaJ9krd2hHfAVXjbm7QjdyIEnjVxKj/fKZn
+ OIgHGXs1oNXgbqZ9QdUwa3arv0Z/ABlVUzJD5dvVaNAVcIM0TmdrjeFb/RzvlQPkD1QG4y
+ roG2n9npJThOs/93VSrskthJ4JSPL5yRY5llBAhG79+IHthHrjGmxZGf6HPimzvtLPUon3
+ pJKi0QsTihCnG++p1+FgcoK9YUProl9UU87znYWvvrIFI0JBbITZwQeT+gdjtd+ABgNUzl
+ uM0nhBAy9PQXBtM9kytQjiRkOMtRIH/Ri6ZQfx9fqcqUhN2nTVj30ldbGNFiGA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=R84m6nM8
+Subject: Re: [Buildroot] [PATCH/next 6/6] package/micromamba: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,45 +76,180 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: AndreiCherniaev <glscene2010@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQW5kcmVpLAoKTGUgMjIvMDEvMjAyMyDDoCAxMzozNiwgQW5kcmVpQ2hlcm5pYWV2IGEg
-w6ljcml0wqA6Cj4gRnJvbTogQW5kcmVpQ2hlcm5pYWV2IDxnbHNjZW5lMjAxMEBnbWFpbC5jb20+
-Cj4gCgpZb3VyIFNpZ25lZC1vZmYtYnkgaXMgbWlzc2luZywgc28gd2UgY2FuJ3QgYXBwbHkgdGhl
-IHBhdGNoIGFzIGlzIFsxXS4KCkknbSBtYWtpbmcgaXQgYXMgIkNoYW5nZXMgcmVxdWVzdGVkIi4K
-Ck1heWJlIGEgc21hbGwgY29tbWVudCBleHBsYWluaW5nIHdoeSB5b3Ugd2FudCB0byBjaGFuZ2Ug
-dGhlIHNjcmlwdCB3b3VsZCBiZSBncmVhdC4KClsxXSBodHRwczovL25pZ2h0bHkuYnVpbGRyb290
-Lm9yZy9tYW51YWwuaHRtbCNzdWJtaXR0aW5nLXBhdGNoZXMKCj4gLS0tCj4gIGJvYXJkL3FlbXUv
-cG9zdC1pbWFnZS5zaCB8IDggKysrKy0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9u
-cygrKSwgNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvcWVtdS9wb3N0LWlt
-YWdlLnNoIGIvYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoCj4gaW5kZXggODhmMDQxMzQ5Ni4uOTFk
-NWI4OGIwMyAxMDA3NTUKPiAtLS0gYS9ib2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2gKPiArKysgYi9i
-b2FyZC9xZW11L3Bvc3QtaW1hZ2Uuc2gKPiBAQCAtNiw4ICs2LDggQEAgUkVBRE1FX0ZJTEVTPSIk
-e1FFTVVfQk9BUkRfRElSfS8qL3JlYWRtZS50eHQiCj4gIFNUQVJUX1FFTVVfU0NSSVBUPSIke0JJ
-TkFSSUVTX0RJUn0vc3RhcnQtcWVtdS5zaCIKPiAgCj4gIGlmIFtbICIke0RFRkNPTkZJR19OQU1F
-fSIgPX4gXiJxZW11XyoiIF1dOyB0aGVuCj4gLSAgICAjIE5vdCBhIFFlbXUgZGVmY29uZmlnLCBj
-YW4ndCB0ZXN0Lgo+IC0gICAgZXhpdCAwCj4gKyAgICBlY2hvICJOb3QgYSBRZW11IGRlZmNvbmZp
-ZywgY2FuJ3QgdGVzdCIKPiArICAgIGV4aXQgMQoKSW5pdGlhbGx5IGV4aXQgMCB3YXMgaW50ZW5k
-ZWQgdG8gbm90IGZhaWwgdGhlIGJ1aWxkIGZvciBub24gcWVtdSBkZWZjb25maWcgaW4KZ2l0bGFi
-LWNpLiBCdXQgYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIGluIG9ubHkgdXNlZCBieSBxZW11IGRl
-ZmNvbmZpZyBzbyBldmVuCnRoZSB0ZXN0IGRvZXNuJ3Qgc2VlbXMgbm90IHJlcXVpcmVkIGFueW1v
-cmUuCgo+ICBmaQo+ICAKPiAgIyBTZWFyY2ggZm9yICIjIHFlbXVfKl9kZWZjb25maWciIHRhZyBp
-biBhbGwgcmVhZG1lLnR4dCBmaWxlcy4KPiBAQCAtMTUsOCArMTUsOCBAQCBmaQo+ICBRRU1VX0NN
-RF9MSU5FPSQoc2VkIC1yICc6YTsgL1xcJC9OOyBzL1xcXG4vLzsgcy9cdC8gLzsgdGE7IC8jICck
-e0RFRkNPTkZJR19OQU1FfSckLyFkOyBzLyMuKi8vJyAke1JFQURNRV9GSUxFU30pCj4gIAo+ICBp
-ZiBbIC16ICIke1FFTVVfQ01EX0xJTkV9IiBdOyB0aGVuCj4gLSAgICAjIE5vIFFlbXUgY21kIGxp
-bmUgZm91bmQsIGNhbid0IHRlc3QuCj4gLSAgICBleGl0IDAKPiArICAgIGVjaG8gIk5vIFFlbXUg
-Y21kIGxpbmUgZm91bmQsIGNhbid0IHRlc3QiCj4gKyAgICBleGl0IDEKPiAgZmkKCklJUkMsIHNv
-bWUgcWVtdSBkZWZjb25maWcgd2FzIG5vdCBnaXRsYWItcmVhZHkgc28gZXhpdCAwIHdhcyBoZXJl
-IHRvIG5vdCBmYWlsCnRoZSBnaXRsYWItY2kgam9iIGlmIG5vIHFlbXUgY29tbWFuZCBsaW5lIHdh
-cyBwcm92aWRlZC4gT25seSBhIGJ1aWxkIHRlc3QgaXMKZG9uZSBpbiB0aGlzIGNhc2UuCgpCZXN0
-IHJlZ2FyZHMsClJvbWFpbgoKCj4gIAo+ICAjIFJlbW92ZSBvdXRwdXQvaW1hZ2VzIHBhdGggc2lu
-Y2UgdGhlIHNjcmlwdCB3aWxsIGJlIGluCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+Hello,
+
+On Mon, 28 Nov 2022 12:34:18 +0000
+TIAN Yuanhao <tianyuanhao3@163.com> wrote:
+
+> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+
+Thanks for this submission. Could you clarify what is the motivation
+for this package? Indeed having a package manager on the target feels a
+bit strange in the context of Buildroot. Buildroot is normally there
+precisely to generate a ready-to-use rootfs, not a rootfs which then
+downloads random stuff from the Internet.
+
+Of course, we do have npm or pip, but really their usage is not
+recommended.
+
+
+> diff --git a/package/micromamba/Config.in b/package/micromamba/Config.in
+> new file mode 100644
+> index 0000000000..998809f452
+> --- /dev/null
+> +++ b/package/micromamba/Config.in
+> @@ -0,0 +1,43 @@
+> +config BR2_PACKAGE_MICROMAMBA_ARCH_SUPPORTS
+> +	bool
+> +	# See libmamba/include/mamba/core/context.hpp
+> +	default y if BR2_arm && (BR2_ARM_CPU_ARMV6 || BR2_ARM_CPU_ARMV7A)
+> +	default y if BR2_aarch64
+> +	default y if BR2_i386
+> +	default y if BR2_powerpc64
+> +	default y if BR2_powerpc64le
+> +	default y if BR2_s390x
+> +	default y if BR2_x86_64
+> +	depends on BR2_USE_MMU # fork()
+
+Always a bit annoying to have architecture-specific things in something
+that isn't hardware-related in the first place, but OK.
+
+> +config BR2_PACKAGE_MICROMAMBA
+> +	bool "micromamba"
+> +	depends on BR2_PACKAGE_MICROMAMBA_ARCH_SUPPORTS
+> +	depends on BR2_USE_WCHAR # fmt, reproc
+
+libarchive also needs wchar, spdlog as well (through fmt, admittedly)
+
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
+> +	select BR2_PACKAGE_LIBARCHIVE
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+> +	select BR2_PACKAGE_YAML_CPP
+> +	select BR2_PACKAGE_SPDLOG
+> +	select BR2_PACKAGE_LIBCURL
+> +	select BR2_PACKAGE_LIBSOLV
+> +	select BR2_PACKAGE_REPROC
+> +	select BR2_PACKAGE_TL_EXPECTED
+> +	select BR2_PACKAGE_CLI11
+> +	select BR2_PACKAGE_FMT
+> +	select BR2_PACKAGE_TERMCOLOR
+
+These select should be sorted alphabetically to look a bit nicer.
+
+> +	help
+> +	  micromamba is a small, pure-C++ reimplementation of
+> +	  mamba/conda. It strives to be a full replacement for mamba and
+> +	  conda.
+> +
+> +	  https://github.com/mamba-org/mamba
+> +
+> +comment "micromamba needs a toolchain w/ wchar, threads, C++, gcc >= 8"
+> +	depends on BR2_PACKAGE_MICROMAMBA_ARCH_SUPPORTS
+> +	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+> diff --git a/package/micromamba/micromamba.hash b/package/micromamba/micromamba.hash
+> new file mode 100644
+> index 0000000000..e584c3bd28
+> --- /dev/null
+> +++ b/package/micromamba/micromamba.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  7303d983b49a1a52b302ceae355af1c05afef3a07aa3ad6dd27c36d64c43f991  micromamba-1.0.0.tar.gz
+> +sha256  41fd98a468e39d319911bd94f4e65d6ad6a7ea66559dd5aa4112f138ff9b629a  LICENSE
+> diff --git a/package/micromamba/micromamba.mk b/package/micromamba/micromamba.mk
+> new file mode 100644
+> index 0000000000..188864444c
+> --- /dev/null
+> +++ b/package/micromamba/micromamba.mk
+> @@ -0,0 +1,43 @@
+> +################################################################################
+> +#
+> +# micromamba
+> +#
+> +################################################################################
+> +
+> +MICROMAMBA_VERSION = 1.0.0
+> +MICROMAMBA_SITE = $(call github,mamba-org,mamba,micromamba-$(MICROMAMBA_VERSION))
+> +MICROMAMBA_LICENSE = BSD-3-Clause
+> +MICROMAMBA_LICENSE_FILES = LICENSE
+> +MICROMAMBA_DEPENDENCIES = \
+> +	$(BR2_PYTHON3_HOST_DEPENDENCY) \
+> +	cli11 \
+> +	fmt \
+> +	json-for-modern-cpp \
+> +	libarchive \
+> +	libcurl \
+> +	libsolv \
+> +	openssl \
+> +	reproc \
+> +	spdlog \
+> +	termcolor \
+> +	tl-expected \
+> +	yaml-cpp
+> +
+> +MICROMAMBA_CONF_OPTS = -DBUILD_LIBMAMBA=ON -DBUILD_MICROMAMBA=ON
+> +
+> +# See libmamba/include/mamba/core/context.hpp
+> +ifeq ($(BR2_ARM_CPU_ARMV6),y)
+> +MICROMAMBA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -D___ARM_ARCH_6__"
+> +else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+> +MICROMAMBA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -D__ARM_ARCH_7__"
+> +endif
+
+This is really a bug in the mamba code, because these defines are
+normally provided by the compiler. For example, an ARMv7 compiler
+defines:
+
+#define __ARM_ARCH 7
+#define __ARM_ARCH_7A__ 1
+
+So mamba could use that instead.
+
+But one could even wonder why it really matters to define a different
+MAMBA_PLATFORM name:
+
+#ifdef ___ARM_ARCH_6__
+        static const char MAMBA_PLATFORM[] = "linux-armv6l";
+#elif __ARM_ARCH_7__
+        static const char MAMBA_PLATFORM[] = "linux-armv7l";
+#else
+
+It is really crazy that this is the *only* thing that causes mamba to
+have an architecture dependency. Why is that even needed in the first
+place?
+
+> +
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +MICROMAMBA_CONF_OPTS += -DBUILD_STATIC=ON -DMICROMAMBA_LINKAGE=FULL_STATIC
+> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+> +MICROMAMBA_CONF_OPTS += -DBUILD_SHARED=ON -DBUILD_STATIC=ON
+> +else # BR2_SHARED_LIBS
+> +MICROMAMBA_CONF_OPTS += -DBUILD_SHARED=ON
+> +endif
+
+Please pass BUILD_STATIC=OFF and BUILD_SHARED=OFF explicitly in the
+appropriate cases.
+
+Thanks a lot!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
