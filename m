@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE62AC636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 09:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7567C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 09:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BF93815CD;
-	Tue,  7 Feb 2023 09:23:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BF93815CD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MhEtGjlD7ezi; Tue,  7 Feb 2023 09:23:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8688181516;
-	Tue,  7 Feb 2023 09:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8688181516
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 72FF91BF2C2
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 09:23:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A5E141754
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 09:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A5E141754
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4ADC741756;
+	Tue,  7 Feb 2023 09:35:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4ADC741756
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XavCBjL_4YdU for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 09:23:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCBFA41751
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CCBFA41751
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 09:23:30 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8C85BFF814;
- Tue,  7 Feb 2023 09:23:27 +0000 (UTC)
-Date: Tue, 7 Feb 2023 10:23:26 +0100
-To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <20230207102326.6d541a84@windsurf>
-In-Reply-To: <a0e36432-a05a-6e7f-53c0-2d8f1055d26a@smile.fr>
-References: <20220624221901.514921-1-mmayer@broadcom.com>
- <a0e36432-a05a-6e7f-53c0-2d8f1055d26a@smile.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675761808;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XuO23K8BcBHmg+P+N5Tv+Xpn/Tiup+6RLhZG/7giDNA=;
- b=XrWsBASXui6Jgmac8wFNLePbxVaFpFczvsOO0VNgDv4ZUlHzO3rdfafwy5TMkNuJ1pSTpV
- STMq4LD9iaM2CD9izyCY1wcWcMJtkT4NzYXwFpGpinQRr8AXtSydOVkp66RwrwWmOzdHrL
- +VifI0+gmfQbkogkc5UK9qKZSAM0mm9ta3gSx+abLTy45j6TwbliZqOFxITtAz9ESO/QOn
- /uXnqSw/3QXvu5fQo5B5fsbeJbMvSlQNagGNh4oTPF+KnDyJ06/gdVm/bev8SUCsA0J/iV
- BO8P9jh58zzn3eyHhUcDNIEqiyMrluF2/OVcDIp/O98TTRUT69kDeymifO94xQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XrWsBASX
-Subject: Re: [Buildroot] [PATCH] toolchain-external: handle case of dangling
- symlink
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FBd3MF8_e1hS; Tue,  7 Feb 2023 09:35:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 212A640982;
+	Tue,  7 Feb 2023 09:35:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 212A640982
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4576E1BF2C2
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 09:35:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 206274059B
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 09:35:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 206274059B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C-wHckt0WP3a for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 09:35:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C14D401F1
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 09:35:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C14D401F1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1B15A83F98; Tue,  7 Feb 2023 09:35:48 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 7 Feb 2023 10:33:33 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 63da115085ca0cb369ab3c644200ba4b025da48b
+X-Git-Newrev: 4cdd99190e89d538c25a8fc701372775fbde3b97
+X-Patchwork-Hint: ignore
+Message-Id: <20230207093548.1B15A83F98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
+ require open perl package for libxcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,47 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Markus Mayer <mmayer@broadcom.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Romain,
+commit: https://git.buildroot.net/buildroot/commit/?id=4cdd99190e89d538c25a8fc701372775fbde3b97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 11 Jan 2023 15:47:50 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+Fixes:
+http://autobuild.buildroot.net/results/16c/16cba783be11cc5024f9c56bb0a7abb0acf13ef8/
 
-> > +				if [ "$${LIBPATH}" = "" ]; then \
-> > +					echo "LIBPATH empty after trying to resolve symlink $${OLD_LIBPATH}" 1>&2; \
-> > +					exit 1; \
-> > +				fi; \  
-> 
-> I'm not sure it's ok to fail here on a dangling symlink.
-> Maybe add a check and ignore such dangling symlink with a warning for the user.
-> 
-> It's unlikely that such dangling symlink provided by the toolchain will be useful.
+The configure script of libxcrypt needs the open perl module on the host:
 
-I hesitated a bit on this. But for now, I believe a toolchain with a
-dangling symlink is badly broken, and we should not work with it. A
-warning message with a build continuing will never be noticed by the
-user, so if we don't abort with hard error, nobody will notice. So I
-applied the patch of Markus as is for now.
+Can't locate open.pm in @INC (you may need to install the open module) (@INC
+contains: /home/buildroot/autobuild/instance-2/output-1/host/lib/perl
+/usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36
+/usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5
+/usr/share/perl5) at ./build-aux/scripts/expand-selected-hashes line 20.
 
-We will see if people complain that this breaks with their toolchain,
-and if it does, we will change the exit to a break to simply move on to
-handle the next library.
+So add a check for it in dependencies.sh similar to how it is done for mpv.
 
-Best regards,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/dependencies/dependencies.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index ea16a21e20..353817f8fb 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -271,6 +271,10 @@ required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by hos
+ required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
+ required_perl_modules="$required_perl_modules FindBin" # Used by (host-)libopenssl
+ 
++if grep -q ^BR2_PACKAGE_LIBXCRYPT=y $BR2_CONFIG ; then
++    required_perl_modules="$required_perl_modules open"
++fi
++
+ if grep -q ^BR2_PACKAGE_MPV=y $BR2_CONFIG ; then
+     required_perl_modules="$required_perl_modules Math::BigInt"
+     required_perl_modules="$required_perl_modules Math::BigRat"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
