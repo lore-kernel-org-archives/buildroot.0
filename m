@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB19BC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99ACC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:26:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6EF134F35E;
-	Tue, 21 Feb 2023 00:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EF134F35E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 515244F398;
+	Tue, 21 Feb 2023 00:26:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 515244F398
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cVnIjkwLYaiV; Tue, 21 Feb 2023 00:26:34 +0000 (UTC)
+	with ESMTP id 3WzmhA5KZ7vy; Tue, 21 Feb 2023 00:26:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FDFA4F0E4;
-	Tue, 21 Feb 2023 00:26:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FDFA4F0E4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DAA0F1BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2442C4F3A9;
+	Tue, 21 Feb 2023 00:26:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2442C4F3A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EC4321BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 743646FB08
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 743646FB08
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CA36417D9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CA36417D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WbOUPioVem5a for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ABW4wJy_jBDU for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5AB066FABC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AB066FABC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 122C74159A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 122C74159A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58775828C8; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0E9E2828C8; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 8 Jan 2023 16:48:40 +0100
+Date: Tue, 7 Feb 2023 12:32:35 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f37af1800c82ae255c202ea8cfc7e11a65d489f8
-X-Git-Newrev: a0e134a05342507bd9ac47da03abca4c9c113a64
+X-Git-Oldrev: 231d00e63ac08c98d7e823c3bd60a618ff322577
+X-Git-Newrev: 8a9da9a8cad5f77902547fab3b24d04175749a7c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205228.58775828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/crun: needs fexecve
+Message-Id: <20230220205252.0E9E2828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-idna: set
+ _SETUP_TYPE = flit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,56 +56,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0e134a05342507bd9ac47da03abca4c9c113a64
+commit: https://git.buildroot.net/buildroot/commit/?id=8a9da9a8cad5f77902547fab3b24d04175749a7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-crun unconditionally uses fexecve since its addition in commit
-530d6f661e506a4774b7236cb93d65f669adbc92 and
-https://github.com/containers/crun/commit/ce4dfbb97a8a05bef125030eaa6c46c07a5f9344:
-resulting in the following uclibc build failure:
+Python idna package switched to pyproject.toml in commit:
+https://github.com/kjd/idna/commit/2a00e518efe55d2eeb62cd3f88ace7db41338603
+which is included in idna v3.4.
 
-/tmp/instance-11/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arceb-snps-linux-uclibc/9.2.1/../../../../arceb-snps-linux-uclibc/bin/ld: src/libcrun/crun-cloned_binary.o: in function `ensure_cloned_binary':
-cloned_binary.c:(.text+0x1006): undefined reference to `fexecve'
+When using the old setuptools infra, the package is incorrectly
+installed as v0.0, which is then incorrectly detected by other
+packages when using setuptools pkg_resources.
 
-In 6e3f7fbc072c (package/runc: add upstream security fix for
-CVE-2019-5736), we made runc unavailable for uclibc toolchains, and crun
-uses fexecve for that same reason, to fix CVE-2019-5736.
+The issue can be reproduced with the command:
 
-So, also make crun unavailable for uclibc toolchains.
+    python3 <<EOF
+    __requires__ = ["idna >= 2.5"]
+    import pkg_resources
+    EOF
 
-Fixes:
- - http://autobuild.buildroot.org/results/e1f4ef2b392c0e7161390ba0f97d6eef3bd12e9c
+which will fail with output:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+    pkg_resources.ContextualVersionConflict: (idna 0.0.0 (/usr/lib/python3.11/site-packages), Requirement.parse('idna>=2.5'), {'hyperlink'})
+    pkg_resources.DistributionNotFound: The 'idna>=2.5' distribution was not found and is required by hyperlink
+
+This commit changes _SETUP_TYPE to "flit" to fix this issue.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/crun/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/python-idna/python-idna.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/crun/Config.in b/package/crun/Config.in
-index 5def7001c1..fa0894e126 100644
---- a/package/crun/Config.in
-+++ b/package/crun/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_CRUN
- 	bool "crun"
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_YAJL # libocispec
- 	help
- 	  crun is a fast and low-memory OCI Container Runtime in C.
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index 4d9994a9c7..3976cb1518 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
+@@ -9,7 +9,7 @@ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+ PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/8b/e1/43beb3d38dba6cb420cefa297822eac205a277ab43e5ba5d5c46faf96438
+ PYTHON_IDNA_LICENSE = BSD-3-Clause
+ PYTHON_IDNA_LICENSE_FILES = LICENSE.md
+-PYTHON_IDNA_SETUP_TYPE = setuptools
++PYTHON_IDNA_SETUP_TYPE = flit
  
- 	  https://github.com/containers/crun
-+
-+comment "crun needs a glibc or musl toolchain"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
