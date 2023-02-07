@@ -1,97 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B15A5C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 21:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F33E9C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 21:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62D2B61063;
-	Tue,  7 Feb 2023 21:57:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62D2B61063
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FF5E4091C;
+	Tue,  7 Feb 2023 21:57:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FF5E4091C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YPhYzGcCvDvO; Tue,  7 Feb 2023 21:57:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zMZ1NlavqxnD; Tue,  7 Feb 2023 21:57:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B5C26105A;
-	Tue,  7 Feb 2023 21:57:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B5C26105A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2985040994;
+	Tue,  7 Feb 2023 21:57:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2985040994
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ED7291BF377
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:57:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 597601BF377
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C668F4093F
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:57:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C668F4093F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4080040994
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:57:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4080040994
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NpKdKdZdLLN7 for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 21:57:06 +0000 (UTC)
+ with ESMTP id mGYhh247Irb4 for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 21:57:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 352204091C
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 352204091C
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 21:57:06 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- c4-20020a1c3504000000b003d9e2f72093so103894wma.1
- for <buildroot@buildroot.org>; Tue, 07 Feb 2023 13:57:06 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C066C4091C
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C066C4091C
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 21:57:15 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id l12so9139734edb.0
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 13:57:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=5nmYj//DbXx6YOD4wY+LLYd8wNPgyOrRd7L3EtuTV/c=;
- b=XEjkR87W81vzCU1kK28ZZwDL0RS9YQJAh6qvued7KUvqVcIVBo0rp7v6CLVpCcQNEl
- svxLNbkS1GexkbcSL0z5DBgwAZ96M9SldXgnq6pMqZjqB8O0QkPi0J6Fin4iYZGlWGno
- 39UAkCV1bJT4bnJvOkqAnpylvuOkNzM3+xts0yqIBhuf0mbyYeu9208T7cETQZmISLVN
- KMYUcYcud67nOan/BBnW4PGYw/i3Kk4YvoKz2cAn1rZla8XHHdb3Xdbwia8dd4mGdTyx
- ZB0dsnqzv0K6aI+0wlIcZEW8sbLsYJ65TGD00LyKPNqxmSJCuicAs+nfRFi7lLGWt5hs
- cM0g==
-X-Gm-Message-State: AO0yUKVg64pZdVrcblsoEwy9Xdmu4w825drHTAH3RgRrWYDDIIusSYrw
- pNwE460EHHgzepnMmJKMsWBlcQ==
-X-Google-Smtp-Source: AK7set/nD2emeiudhCjdihSZ1pfFK/L81ztI6kqXrjDVptRhbclVjb5a2HBR3bYqel6Mw8X5RAoytg==
-X-Received: by 2002:a05:600c:1714:b0:3dc:5a7c:f8ad with SMTP id
- c20-20020a05600c171400b003dc5a7cf8admr5739765wmn.21.1675807024355; 
- Tue, 07 Feb 2023 13:57:04 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ bh=Q0cVaUDQn7aUv/71Jxs4FmeflxvEW6Tmc2Apdnm5vvk=;
+ b=p6Jl/y3p8IMvuAFtNBkq1NNzoKDj8TuhOpJwnUEIEANDnfyXN9jiWhF2X8s6KnXpF5
+ sTAREWlFTae0//bj8wCfJ4rEFEWTMfKDE4nChbLxtYO/DkX9jRIekdJD5J+Ab8DHdnIp
+ UFcZV5V0ObPUnYWetgizXEgGHeDQtOndADA8lZlsvRlQ5bOPB0T0vTk6EnJYFV6jav0z
+ V0XOUGrtFWWHJKtIWWVIjsAhB5zEroZRteZOJBvHNelY2oG/6xO+aF29XBn5slsNwAzu
+ nqdjvaS9q9/p0tF6c7Ey4BlaS174paoSy5WFMv4i4Bd4J8ECy9N90hyVrRRGtO22ioJV
+ OdqQ==
+X-Gm-Message-State: AO0yUKWza1wU5EN41cc8mHyHRmzrKBp3rvmwtrPNPtH6lrA5MHLrnz/a
+ UdXLGPLGnw7bVKbN32i6AWepBAC7Aa1cT9CM
+X-Google-Smtp-Source: AK7set8xc+Z+dgx9dE4BTevsPC9g62bMGRFosJzha6mIbWi950GsWUO8uiFWw0im6JqJBzX1Ly0MYg==
+X-Received: by 2002:a50:d49e:0:b0:46d:35f6:5a9b with SMTP id
+ s30-20020a50d49e000000b0046d35f65a9bmr5267976edi.24.1675807033920; 
+ Tue, 07 Feb 2023 13:57:13 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- j40-20020a05600c1c2800b003dc4480df80sm38429wms.34.2023.02.07.13.57.03
+ fg10-20020a056402548a00b004a23558f01fsm6955344edb.43.2023.02.07.13.57.13
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 07 Feb 2023 13:57:03 -0800 (PST)
-Message-ID: <d171cfa3-b5ad-35d2-7a7e-016dc5f8513a@smile.fr>
-Date: Tue, 7 Feb 2023 22:57:03 +0100
+ Tue, 07 Feb 2023 13:57:13 -0800 (PST)
+Message-ID: <1fcf8ae7-38a5-a634-8354-cb11788de6ac@mind.be>
+Date: Tue, 7 Feb 2023 22:57:11 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1675805584.git.yann.morin.1998@free.fr>
- <393e263cc9e0f72b237b6bf5cda86101ded50101.1675805584.git.yann.morin.1998@free.fr>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <393e263cc9e0f72b237b6bf5cda86101ded50101.1675805584.git.yann.morin.1998@free.fr>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-GB
+To: Norbert Lange <nolange79@gmail.com>
+References: <20230115114840.9027-1-nolange79@gmail.com>
+ <6490dfd6-5f3b-3801-6955-7fa655f2a82b@mind.be>
+ <CADYdroPxYT4xvVpFcL=DUJx0Ks3ep6bdfRvZURb=ZDtjLFRi=w@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <CADYdroPxYT4xvVpFcL=DUJx0Ks3ep6bdfRvZURb=ZDtjLFRi=w@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=5nmYj//DbXx6YOD4wY+LLYd8wNPgyOrRd7L3EtuTV/c=;
- b=rqOu+eGDDnSp+mA4lWPtHQFjusjPpC1NVmCpHO3D5lsqDprNb8iFlQQHOPtBf5w1yT
- aVJJoSa3pqCjnAf1++LvTN1Y4Cn7VOvCKZBtIFgzBbDlMFU/Wu5rIR9WMDEZIDT4ySmn
- YNYlviwgz9R1PajzqTfyrg3XaR/0XxDlKKulZipp2hdNL3f3s+MVhVAmMJtNUVLZaPWA
- u3KWJkdc26gYZFQmZODjL18/AmlThS15UGaRAI1W1UoYLVRMef5F9iHUuJkCLvlbYtF7
- MSaEAPdFLal1MVKCS2aQuF1Y9alc7Tv6gw+XfjZlhOAkU0AApM5d1cg4ofFUSG1ycwBa
- s1ug==
+ bh=Q0cVaUDQn7aUv/71Jxs4FmeflxvEW6Tmc2Apdnm5vvk=;
+ b=A0hIUdw+demXzzliVmMQgP23jvNloZGBmJ/40Bivk+GvNCuM9jH5A+rqkdd/S7TVDw
+ C1kwDKQqfsOj2/vASnwjdCEBxVVNXEBgu8rC7SmMZ1s+LSLGIVw554QNDpN/x17dO4sm
+ VP602tHzcOMcTAzDRsXd0+XZYBZ0J056T7aFEQA/0OuUWDGM6Vgj+sGkeWl3Bug9KDnl
+ kd2b9q/kTsW1qW0Ahaotd6TqXUTLdslIZSHpBHO5d6ikD6Nix7KYUdjfpyuxVGuUSu/d
+ QBp7v5UxbSQxnynJDu+2YWqDHxKR7alsUSpsoptEXYTrNpb7vZWcsisBazsfb8h9gD5F
+ DI9A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=rqOu+eGD
-Subject: Re: [Buildroot] [PATCH 2/2] gitlab-ci: fix pipelines
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=A0hIUdw+
+Subject: Re: [Buildroot] [PATCH v8 1/4] package/systemd: bump to version
+ 252.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,63 +103,222 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@phobosdpl.com>,
+ buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gWWFubiwKCklzICJmaXggcGlwZWxpbmVzIiB5b3VyIFdJUCBwYXRjaCBzdWJqZWN0ID8K
-ImdpdGxhYi1jaTogaWdub3JlIG93bmVyc2hpcCBvZiB0aGUgZ2l0IHRyZWUiIHNlZW1zIGJldHRl
-cj8KCkxlIDA3LzAyLzIwMjMgw6AgMjI6MzMsIFlhbm4gRS4gTU9SSU4gYSDDqWNyaXTCoDoKPiBX
-aGVuIGdpdGxhYiBwcmVwYXJlcyBhIGpvYiB0byBydW4sIGl0IGNoZWNrcyBvdXQgdGhlIHJlcG9z
-aXRvcnkgd2l0aCBhCj4gbm9uLXJvb3QgdXNlciwgYW5kIHNwYXducyBhIGNvbnRhaW5lciB0aGF0
-IHJ1bnMgYXMgcm9vdCwgd2l0aCBzb21lIFVJRAo+IG1hcHBpbmcgdGhhdCBtYWtlcyB0aGUgZmls
-ZXMgYmUgb3duZWQgYnkgcm9vdCBpbiB0aGUgY29udGFpbmVyLiBIb3dldmVyLAo+IG91ciBwaXBl
-bGluZXMgcnVuIGFzIGEgbm9udC1yb290IHVzZXIuCj4gCj4gQ29tbWl0IGJkZTE2NWY3YWQgKC5n
-aXRsYWItY2kueW1sOiB1cGRhdGUgRG9ja2VyIGltYWdlIHRvIHVzZSkgdXBkYXRlZAo+IHRoZSBk
-b2NrZXIgaW1hZ2UgdGhhdCBpcyB1c2VkIHRvIHJ1biBpbiBvdXIgcGlwZWxpbmVzLgo+IAo+IFRo
-YXQgbmV3IGltYWdlIGluY2x1ZGVzIGEgZ2l0IHZlcnNpb24gdGhhdCBpcyBzdHJpY3RlciBhYm91
-dCB0aGUKPiBvd25lcnNoaXAgb2YgdGhlIGdpdCB0cmVlIGl0IGlzIGFjdGluZyBpbjogZ2l0IGFi
-b3J0cyBpbiBlcnJvciB3aGVuIHRoZQo+IHVzZXIgcnVubmluZyBpdCBkb2VzIG5vdCBvd24gdGhl
-IHJlcG9zaXRvcnkuCj4gCj4gV2UgdXNlIGBnaXQgbHMtdHJlZWAgcXVpdGUgYSBsb3QgaW4gb3Vy
-IGNoZWNrLXtmbGFrZTgscGFja2FnZSxzeW1ib2xzfQo+IHJ1bGVzLCBzbyB0aGV5IGFsbCBmYWls
-IChpbiB2YXJpb3VzIHdheXMpLgo+IAo+IFRvIGZpeCB0aGlzLCB3ZSBlaXRoZXIgbmVlZCB0byBm
-aXggdGhlIG93bmVyc2hpcCBvciB0ZWxsIGdpdCB0byBpZ25vcmUKPiB0aGUgc2l0dWF0aW9uLgo+
-IAo+IEl0IGlzIG1vc3QgcHJvYmFibHkgaW1wb3NzaWJsZSB0byBjaGFuZ2UgdGhlIG93bmVyc2hp
-cCBvZiB0aGUgZmlsZXM6IHdlCj4gcnVuIGFzIG5vbi1yb290LGFuZCB0aGUgZmlsZXMgYmVsb25n
-IHRvIHJvb3QgKGluIHRoZSBjb250YWluZXIpLiBTbwo+IHdlJ3JlIHN0dWNrLgo+IAo+IFRoZSBh
-bHRlcm5hdGl2ZSwgaXMgdG8gZG8gYXMgZ2l0IHN1Z2dlc3QsIGFuZCB0ZWxsIGl0IHRvIGlnbm9y
-ZSB0aGUKPiBzaXR1YXRpb24uIEluIGEgbG9jYWwgc2V0dXAsIHRoaXMgd291amxkIGJlIHZlcnkg
-aW5zZWN1cmUsIGJ1dCBpbiB0aGUKPiBwaXBlbGluZXMsIHRoaXMgaXMgaW4gYSB0aHJvdy1hd2F5
-IGNvbnRhaW5lciwgd2VocmUgYSBzaW5nbGUgdXNlciBleGlzdHMKPiBhbmQgaXMgcnVubmluZywg
-c28gd2UgZG9uJ3QgY2FyZSBtdWNoIChpZiBhdCBhbGwpLgo+IAo+IEFkZCBhIGdsb2JhbCBiZWZv
-cmVfc2NyaXB0IHRoYXQgcmVnaXN0ZXJzIHRoZSBnaXQgY29uZmlnIHRvIGlnbm9yZQo+IG93bmVy
-c2hpcCBpc3N1ZXMgaW4gdGhlIGJ1aWxkcm9vdCByZXBvc2l0b3J5OyBzZWUgWzBdIGZvciB0aGUg
-ZGVmaW5pdGlvbgo+IG9mIHRoZSBDSV9QUk9KRUNUX0RJUiB2YXJpYWJsZS4gTm90ZTogdW5saWtl
-IHdoYXQgaXMgc2FpZCBpbiB0aGVyZSwgYW5kCj4gaW4gWzFdLCB0aGUgdmFsdWUgYWN0dWFsbHkg
-c2VlbiBpbiBDSV9QUk9KRUNUX0RJUiBpcyBhbHJlYWR5IHByZWZpeGVkCj4gd2l0aCBDSV9CVUlM
-RFNfRElSICh0aGUgZG9jdW1lbnRhdGlvbiBpcyB1bmNsZWFyIGFib3V0IHRoYXQgcG9pbnQpLgo+
-IAo+IFswXSBodHRwczovL2RvY3MuZ2l0bGFiLmNvbS9lZS9jaS92YXJpYWJsZXMvcHJlZGVmaW5l
-ZF92YXJpYWJsZXMuaHRtbAo+IFsxXSBodHRwczovL2RvY3MuZ2l0bGFiLmNvbS9ydW5uZXIvY29u
-ZmlndXJhdGlvbi9hZHZhbmNlZC1jb25maWd1cmF0aW9uLmh0bWwjdGhlLXJ1bm5lcnMtc2VjdGlv
-bgoKUmV2aWV3ZWQtYnk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQHNtaWxlLmZyPgoKCj4g
-Cj4gU2lnbmVkLW9mZi1ieTogWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+
-Cj4gQ2M6IEFybm91dCBWYW5kZWNhcHBlbGxlIChFc3NlbnNpdW0vTWluZCkgPGFybm91dEBtaW5k
-LmJlPgo+IENjOiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+Cj4gQ2M6IFRo
-b21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gLS0tCj4gIHN1
-cHBvcnQvbWlzYy9naXRsYWItY2kueW1sLmluIHwgMyArKysKPiAgMSBmaWxlIGNoYW5nZWQsIDMg
-aW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9zdXBwb3J0L21pc2MvZ2l0bGFiLWNpLnlt
-bC5pbiBiL3N1cHBvcnQvbWlzYy9naXRsYWItY2kueW1sLmluCj4gaW5kZXggOWMxZmFmMGQ1Zi4u
-MzhhY2EzMWZiNSAxMDA2NDQKPiAtLS0gYS9zdXBwb3J0L21pc2MvZ2l0bGFiLWNpLnltbC5pbgo+
-ICsrKyBiL3N1cHBvcnQvbWlzYy9naXRsYWItY2kueW1sLmluCj4gQEAgLTEsMyArMSw2IEBACj4g
-K2JlZm9yZV9zY3JpcHQ6Cj4gKyAgLSBnaXQgY29uZmlnIC0tZ2xvYmFsIC0tYWRkIHNhZmUuZGly
-ZWN0b3J5ICR7Q0lfUFJPSkVDVF9ESVJ9CgpOb3RlOiBJIGNoZWNrZWQgaWYgd2UgaGF2ZSB0aGUg
-aXNzdWUgdXNpbmcgdGhlIHV0aWxzL2RvY2tlci1ydW4gZGlyZWN0bHksCmVuYWJsaW5nIHNhZmUu
-ZGlyZWN0b3J5IGlzIG5vdCBuZWNlc3NhcnkuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gKwo+
-ICAuY2hlY2stY2hlY2stcGFja2FnZV9iYXNlOgo+ICAgICAgc2NyaXB0Ogo+ICAgICAgICAgIC0g
-cHl0aG9uMyAtbSBweXRlc3QgLXYgdXRpbHMvY2hlY2twYWNrYWdlbGliLwoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 07/02/2023 19:38, Norbert Lange wrote:
+> Am Di., 7. Feb. 2023 um 17:41 Uhr schrieb Arnout Vandecappelle <arnout@mind.be>:
+>>
+>>
+>>
+>> On 15/01/2023 12:48, Norbert Lange wrote:
+
+[snip]
+>>    Applied to master, thanks. (Not pushed yet, I may make more changes while
+>> reviewing the rest of the series.)
+> 
+> Wouldnt mind if you do a stealthy bump to 254.5 before going through
+> all testing trouble ;)
+
+  I'm afraid I already pushed now...
+
+  Regards,
+  Arnout
+
+> 
+> Regards, Norbert
+>>
+>>    Regards,
+>>    Arnout
+>>
+>>>
+>>> package/systemd: 252.4
+>>> ---
+>>>    package/systemd/Config.in    | 12 +++++++++---
+>>>    package/systemd/systemd.hash |  5 +++--
+>>>    package/systemd/systemd.mk   | 16 ++++++++++++++--
+>>>    system/Config.in             |  6 +++---
+>>>    4 files changed, 29 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+>>> index 45a9e2d644..f35305c0be 100644
+>>> --- a/package/systemd/Config.in
+>>> +++ b/package/systemd/Config.in
+>>> @@ -22,7 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>>>        depends on !BR2_STATIC_LIBS # kmod
+>>>        depends on BR2_TOOLCHAIN_USES_GLIBC
+>>>        depends on BR2_TOOLCHAIN_HAS_SSP
+>>> -     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+>>> +     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+>>>        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+>>>        depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
+>>>        select BR2_PACKAGE_HAS_UDEV
+>>> @@ -51,7 +51,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>>>          an elaborate transactional dependency-based service control
+>>>          logic.  It can work as a drop-in replacement for sysvinit.
+>>>
+>>> -       Systemd requires a Linux kernel >= 3.13 with the following
+>>> +       Kernel versions below 4.15 ("recommended baseline") have
+>>> +       significant gaps in functionality and are not recommended
+>>> +       for use with this version of systemd.
+>>> +
+>>> +       Systemd requires a Linux kernel >= 3.15 with the following
+>>>          options enabled:
+>>>
+>>>          - CONFIG_DEVTMPFS
+>>> @@ -66,9 +70,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>>>          - CONFIG_PROC_FS
+>>>          - CONFIG_FHANDLE (libudev, mount and bind mount handling)
+>>>
+>>> -       - CONFIG_NET_NS (needed by PrivateNetwork=, used in some
+>>> +       - CONFIG_NET_NS (Required for PrivateNetwork=, used in some
+>>>            systemd units)
+>>>
+>>> +       - CONFIG_USER_NS (Required for PrivateUsers=)
+>>> +
+>>>          - CONFIG_AUTOFS_FS / CONFIG_AUTOFS4_FS
+>>>          - CONFIG_TMPFS_POSIX_ACL
+>>>          - CONFIG_TMPFS_XATTR
+>>> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+>>> index 3b98566f32..00c08edcd9 100644
+>>> --- a/package/systemd/systemd.hash
+>>> +++ b/package/systemd/systemd.hash
+>>> @@ -1,5 +1,5 @@
+>>>    # sha256 locally computed
+>>> -sha256  638a2fc78828765fc97bc73f428205b6dc1d359149b6c6bfe4d2a649cba2cca8  systemd-250.8.tar.gz
+>>> +sha256  cf2d27e67663d599a045101c7178cf0ec63d9df2962a54adf7de0d0357724f00  systemd-252.4.tar.gz
+>>>    sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+>>>    sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+>>>    sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
+>>> @@ -8,7 +8,8 @@ sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENS
+>>>    sha256  61778e80a2fd85955b626b29aa2bcf06144c714277bded65633e4a81479d9fb3  LICENSES/LGPL-2.0-or-later.txt
+>>>    sha256  5bcef4fedbfc08776630e65d5d0d074dd31208037eddb167ca46a9ec4f737764  LICENSES/Linux-syscall-note.txt
+>>>    sha256  790ac93fb2859097bdda4cf08b5a4feb5e479d0cb2c74f403248241bc3e7c216  LICENSES/lookup3-public-domain.txt
+>>> +sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENSES/MIT-0.txt
+>>>    sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
+>>>    sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
+>>>    sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
+>>> -sha256  11801e931f252252a16eac8299465510d0a82c36bfd9ac8aea9b202b76d2f82b  LICENSES/README.md
+>>> +sha256  da9b2c7b8cd10516fd2c4279b82496ea61787148f13e899c62fc8988c5fac34f  LICENSES/README.md
+>>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+>>> index b96873b73f..b0597f9bb4 100644
+>>> --- a/package/systemd/systemd.mk
+>>> +++ b/package/systemd/systemd.mk
+>>> @@ -19,7 +19,7 @@
+>>>    # - Diff sysusers.d with the previous version
+>>>    # - Diff factory/etc/nsswitch.conf with the previous version
+>>>    #   (details are often sprinkled around in README and manpages)
+>>> -SYSTEMD_VERSION = 250.8
+>>> +SYSTEMD_VERSION = 252.4
+>>>    SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+>>>    SYSTEMD_LICENSE = \
+>>>        LGPL-2.1+, \
+>>> @@ -29,6 +29,7 @@ SYSTEMD_LICENSE = \
+>>>        BSD-3-Clause (tools/chromiumos), \
+>>>        CC0-1.0 (few source files, see LICENSES/README.md), \
+>>>        GPL-2.0 with Linux-syscall-note (linux kernel headers), \
+>>> +     MIT-0 (few source files, see LICENSES/README.md), \
+>>>        MIT (few source files, see LICENSES/README.md), \
+>>>        OFL-1.1 (Heebo fonts)
+>>>    SYSTEMD_LICENSE_FILES = \
+>>> @@ -40,6 +41,7 @@ SYSTEMD_LICENSE_FILES = \
+>>>        LICENSES/LGPL-2.0-or-later.txt \
+>>>        LICENSES/Linux-syscall-note.txt \
+>>>        LICENSES/lookup3-public-domain.txt \
+>>> +     LICENSES/MIT-0.txt \
+>>>        LICENSES/MIT.txt \
+>>>        LICENSES/murmurhash2-public-domain.txt \
+>>>        LICENSES/OFL-1.1.txt \
+>>> @@ -61,7 +63,13 @@ SYSTEMD_SELINUX_MODULES = systemd udev xdg
+>>>    SYSTEMD_PROVIDES = udev
+>>>
+>>>    SYSTEMD_CONF_OPTS += \
+>>> +     -Ddbus=false \
+>>> +     -Ddbus-interfaces-dir=no \
+>>> +     -Ddefault-compression='auto' \
+>>>        -Ddefault-hierarchy=unified \
+>>> +     -Ddefault-locale='C.UTF-8' \
+>>> +     -Ddefault-user-shell=/bin/sh \
+>>> +     -Dfirst-boot-full-preset=false \
+>>>        -Didn=true \
+>>>        -Dima=false \
+>>>        -Dkexec-path=/usr/sbin/kexec \
+>>> @@ -72,6 +80,7 @@ SYSTEMD_CONF_OPTS += \
+>>>        -Dman=false \
+>>>        -Dmount-path=/usr/bin/mount \
+>>>        -Dmode=release \
+>>> +     -Dnspawn-locale='C.UTF-8' \
+>>>        -Dnss-systemd=true \
+>>>        -Dquotacheck-path=/usr/sbin/quotacheck \
+>>>        -Dquotaon-path=/usr/sbin/quotaon \
+>>> @@ -82,6 +91,7 @@ SYSTEMD_CONF_OPTS += \
+>>>        -Dsulogin-path=/usr/sbin/sulogin \
+>>>        -Dsystem-gid-max=999 \
+>>>        -Dsystem-uid-max=999 \
+>>> +     -Dsysupdate=false \
+>>>        -Dsysvinit-path= \
+>>>        -Dsysvrcnd-path= \
+>>>        -Dtelinit-path= \
+>>> @@ -553,7 +563,6 @@ SYSTEMD_DEPENDENCIES += gnu-efi
+>>>    SYSTEMD_CONF_OPTS += \
+>>>        -Defi=true \
+>>>        -Dgnu-efi=true \
+>>> -     -Defi-cc=$(TARGET_CC) \
+>>>        -Defi-ld=bfd \
+>>>        -Defi-libdir=$(STAGING_DIR)/usr/lib \
+>>>        -Defi-includedir=$(STAGING_DIR)/usr/include/efi
+>>> @@ -793,6 +802,8 @@ HOST_SYSTEMD_CONF_OPTS = \
+>>>        -Dbinfmt=false \
+>>>        -Drepart=false \
+>>>        -Dcoredump=false \
+>>> +     -Ddbus=false \
+>>> +     -Ddbus-interfaces-dir=no \
+>>>        -Dpstore=false \
+>>>        -Doomd=false \
+>>>        -Dlogind=false \
+>>> @@ -801,6 +812,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+>>>        -Dmachined=false \
+>>>        -Dportabled=false \
+>>>        -Dsysext=false \
+>>> +     -Dsysupdate=false \
+>>>        -Duserdb=false \
+>>>        -Dhomed=false \
+>>>        -Dnetworkd=false \
+>>> diff --git a/system/Config.in b/system/Config.in
+>>> index 806a747315..232bdfe763 100644
+>>> --- a/system/Config.in
+>>> +++ b/system/Config.in
+>>> @@ -125,19 +125,19 @@ config BR2_INIT_SYSTEMD
+>>>        depends on BR2_TOOLCHAIN_USES_GLIBC
+>>>        depends on BR2_TOOLCHAIN_HAS_SSP
+>>>        depends on BR2_TOOLCHAIN_HAS_THREADS
+>>> -     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+>>> +     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+>>>        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+>>>        depends on BR2_HOST_GCC_AT_LEAST_5
+>>>        select BR2_ROOTFS_MERGED_USR
+>>>        select BR2_PACKAGE_SYSTEMD
+>>>        select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
+>>>
+>>> -comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10, host and target gcc >= 5"
+>>> +comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.15, host and target gcc >= 5"
+>>>        depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+>>>        depends on BR2_USE_MMU
+>>>        depends on !BR2_TOOLCHAIN_USES_GLIBC || \
+>>>                !BR2_TOOLCHAIN_HAS_SSP || \
+>>> -             !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || \
+>>> +             !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 || \
+>>>                !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
+>>>                !BR2_HOST_GCC_AT_LEAST_5
+>>>
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
