@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4BD0C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14848C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:42:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14F227010F;
-	Tue, 21 Feb 2023 01:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14F227010F
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1BBF70015;
+	Tue, 21 Feb 2023 01:42:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1BBF70015
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1_1DGYyCFw7y; Tue, 21 Feb 2023 01:42:12 +0000 (UTC)
+	with ESMTP id OIuawvWqaSbC; Tue, 21 Feb 2023 01:42:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1ECC970003;
-	Tue, 21 Feb 2023 01:42:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ECC970003
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9687B700E2;
+	Tue, 21 Feb 2023 01:42:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9687B700E2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 897D01BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 906A01BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E71B86FFED
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA0BD6FFEF
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E71B86FFED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA0BD6FFEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B7_JFHZ7EUnM for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+ with ESMTP id 2aSOKgTbfBSF for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98C7D6FE5A
+ by smtp3.osuosl.org (Postfix) with ESMTP id D0B396FBE4
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98C7D6FE5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0B396FBE4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8491B828C8; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+ id C3366828C8; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 14:30:56 +0100
+Date: Tue, 7 Feb 2023 16:03:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4e23807372370974a307b3c70ef9d77964a149ce
-X-Git-Newrev: d68b617993bd2f5c82a4936ed1e24e4fec6b94a2
+X-Git-Oldrev: 7231701a290ba447fde9807ba9d260022ddfc8e4
+X-Git-Newrev: 4a6f9d2516820c296a8af788b259ca96926cd60d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205252.8491B828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/busybox: update to
- 1.36.0
+Message-Id: <20230220205252.C3366828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/urandom-scripts:
+ actually credit seed files via seedrng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,226 +63,197 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d68b617993bd2f5c82a4936ed1e24e4fec6b94a2
+commit: https://git.buildroot.net/buildroot/commit/?id=4a6f9d2516820c296a8af788b259ca96926cd60d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove upstream patch 0003-awk-fix-use-after-free-CVE-2022-30065.patch
-and update _IGNORE_CVES accordingly.
+The RNG can't actually be seeded from a shell script, due to the
+reliance on ioctls. For this reason, Busybox 1.36.0 contains SeedRNG, a
+tiny program meant to be called at startup and shutdown (and at
+arbitrary other points in between if desired). Note that initially,
+the way seedrng was included in busybox broke things quite severely, but
+now it's been reverted to a reasonably acceptable version.
 
-The two other CVE fixes are still not applied upstream. Renumber the
-patches and update the comment in the .mk file.
+This is a significant improvement over the current init script, which
+doesn't credit entropy and whose hashing in shell scripts is sort of
+fragile.
 
-Refresh busybox.config. All configs are set to the new defaults, except
-for CONFIG_UDHCPC_DEFAULT_SCRIPT: for this one, reuse the script we also
-use for DHCPv4. This is matches the behaviour previous to the bump,
-where we had a single script handling both.
+Because seedrng is part of busybox, urandom-scripts now depends on
+BR2_PACKAGE_BUSYBOX. This can be removed again if later we add a
+standalone seedrng package.
 
+Add a decent explanation to the init script about the need for a
+persistent directory to make this actually work.
+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+[Arnout:
+ - Remove busybox patch, it's now part of busybox 1.36.0.
+ - Depend on busybox.
+ - Fix shellcheck errors.
+ - Use DAEMON and SEEDRNG_ARGS.
+ - Don't bother with "seed_dir" and "skip_credit" variables.
+ - Rename to S20seedrng.
+]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...003-awk-fix-use-after-free-CVE-2022-30065.patch | 52 ----------------------
- ...dr2str-ensure-only-printable-characters-.patch} |  0
- ...itize-all-printed-strings-with-printable.patch} |  0
- package/busybox/busybox.config                     | 23 +++++++---
- package/busybox/busybox.hash                       |  2 +-
- package/busybox/busybox.mk                         |  8 ++--
- 6 files changed, 21 insertions(+), 64 deletions(-)
+ package/urandom-scripts/Config.in          |  5 +--
+ package/urandom-scripts/S20seedrng         | 40 +++++++++++++++++
+ package/urandom-scripts/S20urandom         | 70 ------------------------------
+ package/urandom-scripts/urandom-scripts.mk |  4 +-
+ 4 files changed, 43 insertions(+), 76 deletions(-)
 
-diff --git a/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch b/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch
+diff --git a/package/urandom-scripts/Config.in b/package/urandom-scripts/Config.in
+index 987e442e22..6b4a609f95 100644
+--- a/package/urandom-scripts/Config.in
++++ b/package/urandom-scripts/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_URANDOM_SCRIPTS
+ 	bool "urandom-initscripts"
+ 	default y if BR2_PACKAGE_INITSCRIPTS
++	depends on BR2_PACKAGE_BUSYBOX
+ 	depends on !BR2_PACKAGE_SYSTEMD
+ 	help
+ 	  Initscript to preserve the random seed between reboots.
+-
+-	  WARNING: this is a poor fit to try and get high-quality
+-	  entropy at boot. There are better ways, like haveged, or
+-	  rng-tools.
+diff --git a/package/urandom-scripts/S20seedrng b/package/urandom-scripts/S20seedrng
+new file mode 100644
+index 0000000000..0fea0bea83
+--- /dev/null
++++ b/package/urandom-scripts/S20seedrng
+@@ -0,0 +1,40 @@
++#! /bin/sh
++#
++# Preserve the random seed between reboots. See urandom(4).
++#
++# This script can be called multiple times during operation (e.g. with
++# "reload" argument) to refresh the seed.
++
++# The following arguments can be added to SEEDRNG_ARGS in
++# /etc/default/seedrng:
++#   --seed-dir=/path/to/seed/directory
++#     Path to the directory where the seed and the lock files are stored.
++#     for optimal operation, this should be a persistent, writeable
++#     location. Default is /var/lib/seedrng
++#
++#  --skip-credit
++#     Set this to true only if you do not want seed files to actually
++#     credit the RNG, for example if you plan to replicate this file
++#     system image and do not have the wherewithal to first delete the
++#     contents of /var/lib/seedrng.
++#
++# Example:
++# SEEDRNG_ARGS="--seed-dir=/data/seedrng --skip-credit"
++#
++
++DAEMON="seedrng"
++SEEDRNG_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++case "$1" in
++	start|stop|restart|reload)
++		# Never fail, as this isn't worth making a fuss
++		# over if it doesn't go as planned.
++		# shellcheck disable=SC2086 # we need the word splitting
++		seedrng $SEEDRNG_ARGS || true;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/urandom-scripts/S20urandom b/package/urandom-scripts/S20urandom
 deleted file mode 100644
-index f9bfee328e..0000000000
---- a/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch
+index 6c6aea9eee..0000000000
+--- a/package/urandom-scripts/S20urandom
 +++ /dev/null
-@@ -1,52 +0,0 @@
--From e06b1f0839972cc3f5b432849d574d14a8f17613 Mon Sep 17 00:00:00 2001
--From: Natanael Copa <ncopa@alpinelinux.org>
--Date: Fri, 17 Jun 2022 17:45:34 +0200
--Subject: [PATCH] awk: fix use after free (CVE-2022-30065)
+@@ -1,70 +0,0 @@
+-#! /bin/sh
+-#
+-# Preserve the random seed between reboots. See urandom(4).
+-#
 -
--fixes https://bugs.busybox.net/show_bug.cgi?id=14781
+-# Quietly do nothing if /dev/urandom does not exist
+-[ -c /dev/urandom ] || exit 0
 -
--function                                             old     new   delta
--evaluate                                            3343    3357     +14
+-URANDOM_SEED="/var/lib/random-seed"
 -
--Signed-off-by: Natanael Copa <ncopa@alpinelinux.org>
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
--Backport: https://git.busybox.net/busybox/commit/?id=e63d7cdfdac78c6fd27e9e63150335767592b85e
--[straightforward conflict resolution in testsuite/awk.tests]
--Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-----
-- editors/awk.c       | 3 +++
-- testsuite/awk.tests | 6 ++++++
-- 2 files changed, 9 insertions(+)
+-# shellcheck source=/dev/null
+-[ -r "/etc/default/urandom" ] && . "/etc/default/urandom"
 -
--diff --git a/editors/awk.c b/editors/awk.c
--index f6314ac72..654cbac33 100644
----- a/editors/awk.c
--+++ b/editors/awk.c
--@@ -3114,6 +3114,9 @@ static var *evaluate(node *op, var *res)
-- 
-- 		case XC( OC_MOVE ):
-- 			debug_printf_eval("MOVE\n");
--+			/* make sure that we never return a temp var */
--+			if (L.v == TMPVAR0)
--+				L.v = res;
-- 			/* if source is a temporary string, jusk relink it to dest */
-- 			if (R.v == TMPVAR1
-- 			 && !(R.v->type & VF_NUMBER)
--diff --git a/testsuite/awk.tests b/testsuite/awk.tests
--index bcaafe8fd..156aa65eb 100755
----- a/testsuite/awk.tests
--+++ b/testsuite/awk.tests
--@@ -469,4 +469,10 @@ testing 'awk printf %% prints one %' \
-- 	"%\n" \
-- 	'' ''
-- 
--+testing 'awk assign while test' \
--+	"awk '\$1==\$1=\"foo\" {print \$1}'" \
--+	"foo\n" \
--+	"" \
--+	"foo"
--+
-- exit $FAILCOUNT
---- 
--2.37.3
+-if pool_bits=$(cat /proc/sys/kernel/random/poolsize 2> /dev/null); then
+-	pool_size=$((pool_bits/8))
+-else
+-	pool_size=512
+-fi
 -
-diff --git a/package/busybox/0004-libbb-sockaddr2str-ensure-only-printable-characters-.patch b/package/busybox/0003-libbb-sockaddr2str-ensure-only-printable-characters-.patch
-similarity index 100%
-rename from package/busybox/0004-libbb-sockaddr2str-ensure-only-printable-characters-.patch
-rename to package/busybox/0003-libbb-sockaddr2str-ensure-only-printable-characters-.patch
-diff --git a/package/busybox/0005-nslookup-sanitize-all-printed-strings-with-printable.patch b/package/busybox/0004-nslookup-sanitize-all-printed-strings-with-printable.patch
-similarity index 100%
-rename from package/busybox/0005-nslookup-sanitize-all-printed-strings-with-printable.patch
-rename to package/busybox/0004-nslookup-sanitize-all-printed-strings-with-printable.patch
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index e7f628ca6d..4826fb8242 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -1,7 +1,7 @@
- #
- # Automatically generated make config: don't edit
--# Busybox version: 1.35.0
--# Thu Jan 27 10:16:54 2022
-+# Busybox version: 1.36.0
-+# Tue Feb  7 12:34:02 2023
- #
- CONFIG_HAVE_DOT_CONFIG=y
- 
-@@ -93,6 +93,9 @@ CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
- # CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
- CONFIG_PASSWORD_MINLEN=6
- CONFIG_MD5_SMALL=1
-+CONFIG_SHA1_SMALL=3
-+CONFIG_SHA1_HWACCEL=y
-+CONFIG_SHA256_HWACCEL=y
- CONFIG_SHA3_SMALL=1
- CONFIG_FEATURE_NON_POSIX_CP=y
- # CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
-@@ -123,6 +126,9 @@ CONFIG_LAST_SUPPORTED_WCHAR=0
- # CONFIG_UNICODE_BIDI_SUPPORT is not set
- # CONFIG_UNICODE_NEUTRAL_TABLE is not set
- # CONFIG_UNICODE_PRESERVE_BROKEN is not set
-+# CONFIG_LOOP_CONFIGURE is not set
-+# CONFIG_NO_LOOP_CONFIGURE is not set
-+CONFIG_TRY_LOOP_CONFIGURE=y
- 
- #
- # Applets
-@@ -338,6 +344,7 @@ CONFIG_FEATURE_TR_CLASSES=y
- CONFIG_FEATURE_TR_EQUIV=y
- CONFIG_TRUE=y
- CONFIG_TRUNCATE=y
-+CONFIG_TSORT=y
- CONFIG_TTY=y
- CONFIG_UNAME=y
- CONFIG_UNAME_OSNAME="GNU/Linux"
-@@ -520,7 +527,7 @@ CONFIG_FEATURE_SHADOWPASSWDS=y
- # CONFIG_USE_BB_PWD_GRP is not set
- # CONFIG_USE_BB_SHADOW is not set
- CONFIG_USE_BB_CRYPT=y
--# CONFIG_USE_BB_CRYPT_SHA is not set
-+CONFIG_USE_BB_CRYPT_SHA=y
- # CONFIG_ADD_SHELL is not set
- # CONFIG_REMOVE_SHELL is not set
- CONFIG_ADDGROUP=y
-@@ -811,10 +818,10 @@ CONFIG_FEATURE_LESS_TRUNCATE=y
- CONFIG_FEATURE_LESS_REGEXP=y
- # CONFIG_FEATURE_LESS_WINCH is not set
- # CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
--# CONFIG_FEATURE_LESS_DASHCMD is not set
-+CONFIG_FEATURE_LESS_DASHCMD=y
- # CONFIG_FEATURE_LESS_LINENUMS is not set
--# CONFIG_FEATURE_LESS_RAW is not set
--# CONFIG_FEATURE_LESS_ENV is not set
-+CONFIG_FEATURE_LESS_RAW=y
-+CONFIG_FEATURE_LESS_ENV=y
- CONFIG_LSSCSI=y
- CONFIG_MAKEDEVS=y
- # CONFIG_FEATURE_MAKEDEVS_LEAF is not set
-@@ -831,10 +838,12 @@ CONFIG_PARTPROBE=y
- # CONFIG_RFKILL is not set
- CONFIG_RUNLEVEL=y
- # CONFIG_RX is not set
-+CONFIG_SEEDRNG=y
- CONFIG_SETFATTR=y
- CONFIG_SETSERIAL=y
- CONFIG_STRINGS=y
- CONFIG_TIME=y
-+CONFIG_TREE=y
- CONFIG_TS=y
- # CONFIG_TTYSIZE is not set
- # CONFIG_UBIATTACH is not set
-@@ -1007,6 +1016,7 @@ CONFIG_UDHCPC=y
- CONFIG_FEATURE_UDHCPC_ARPING=y
- CONFIG_FEATURE_UDHCPC_SANITIZEOPT=y
- CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
-+CONFIG_UDHCPC6_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
- # CONFIG_UDHCPC6 is not set
- # CONFIG_FEATURE_UDHCPC6_RFC3646 is not set
- # CONFIG_FEATURE_UDHCPC6_RFC4704 is not set
-@@ -1141,6 +1151,7 @@ CONFIG_ASH_IDLE_TIMEOUT=y
- CONFIG_ASH_ECHO=y
- CONFIG_ASH_PRINTF=y
- CONFIG_ASH_TEST=y
-+CONFIG_ASH_SLEEP=y
- CONFIG_ASH_HELP=y
- CONFIG_ASH_GETOPTS=y
- CONFIG_ASH_CMDCMD=y
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 2091cdaf65..6d1c36906d 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,5 +1,5 @@
- # From https://busybox.net/downloads/busybox-1.35.0.tar.bz2.sha256
--sha256  faeeb244c35a348a334f4a59e44626ee870fb07b6884d68c10ae8bc19f83a694  busybox-1.35.0.tar.bz2
-+sha256  542750c8af7cb2630e201780b4f99f3dcceeb06f505b479ec68241c1e6af61a5  busybox-1.36.0.tar.bz2
- # Locally computed
- sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
- sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index f8f9cb5616..1633ca525d 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,17 +4,15 @@
- #
+-init_rng() {
+-	[ -f "$URANDOM_SEED" ] || return 0
+-	printf 'Initializing random number generator: '
+-	dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
+-	status=$?
+-	if [ "$status" -eq 0 ]; then
+-		echo "OK"
+-	else
+-		echo "FAIL"
+-	fi
+-	return "$status"
+-}
+-
+-save_random_seed() {
+-	printf 'Saving random seed: '
+-	status=1
+-	if touch "$URANDOM_SEED.new" 2> /dev/null; then
+-		old_umask=$(umask)
+-		umask 077
+-		dd if=/dev/urandom of="$URANDOM_SEED.tmp" bs="$pool_size" count=1 2> /dev/null
+-		cat "$URANDOM_SEED" "$URANDOM_SEED.tmp" 2>/dev/null \
+-			| sha256sum \
+-			| cut -d ' ' -f 1 > "$URANDOM_SEED.new" && \
+-		mv "$URANDOM_SEED.new" "$URANDOM_SEED" && status=0
+-		rm -f "$URANDOM_SEED.tmp"
+-		umask "$old_umask"
+-		if [ "$status" -eq 0 ]; then
+-			echo "OK"
+-		else
+-			echo "FAIL"
+-		fi
+-
+-	else
+-		echo "SKIP (read-only file system detected)"
+-	fi
+-	return "$status"
+-}
+-
+-case "$1" in
+-	start|restart|reload)
+-		# Carry a random seed from start-up to start-up
+-		# Load and then save the whole entropy pool
+-		init_rng && save_random_seed;;
+-	stop)
+-		# Carry a random seed from shut-down to start-up
+-		# Save the whole entropy pool
+-		save_random_seed;;
+-	*)
+-		echo "Usage: $0 {start|stop|restart|reload}"
+-		exit 1
+-esac
+diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
+index 2c09728c46..32f3e09343 100644
+--- a/package/urandom-scripts/urandom-scripts.mk
++++ b/package/urandom-scripts/urandom-scripts.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--BUSYBOX_VERSION = 1.35.0
-+BUSYBOX_VERSION = 1.36.0
- BUSYBOX_SITE = https://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
- BUSYBOX_LICENSE_FILES = LICENSE archival/libarchive/bz/LICENSE
- BUSYBOX_CPE_ID_VENDOR = busybox
+ define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20urandom \
+-		$(TARGET_DIR)/etc/init.d/S20urandom
++	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20seedrng \
++		$(TARGET_DIR)/etc/init.d/S20seedrng
+ endef
  
--# 0003-awk-fix-use-after-free-CVE-2022-30065.patch
--BUSYBOX_IGNORE_CVES += CVE-2022-30065
--# 0004-libbb-sockaddr2str-ensure-only-printable-characters-.patch
--# 0005-nslookup-sanitize-all-printed-strings-with-printable.patch
-+# 0003-libbb-sockaddr2str-ensure-only-printable-characters-.patch
-+# 0004-nslookup-sanitize-all-printed-strings-with-printable.patch
- BUSYBOX_IGNORE_CVES += CVE-2022-28391
- 
- BUSYBOX_CFLAGS = \
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
