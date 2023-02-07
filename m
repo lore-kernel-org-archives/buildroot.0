@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB273C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31171C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:21:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E2376100F;
-	Tue,  7 Feb 2023 17:20:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E2376100F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9820B61033;
+	Tue,  7 Feb 2023 17:21:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9820B61033
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wFLhbNWZPIFR; Tue,  7 Feb 2023 17:20:51 +0000 (UTC)
+	with ESMTP id IP1R7F8PSKok; Tue,  7 Feb 2023 17:21:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9BB76100C;
-	Tue,  7 Feb 2023 17:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9BB76100C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B2CD71BF95F
+	by smtp3.osuosl.org (Postfix) with ESMTP id C098C60BC8;
+	Tue,  7 Feb 2023 17:21:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C098C60BC8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B228D1BF95C
  for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:19:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D44B40A71
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C1016100C
  for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:19:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D44B40A71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C1016100C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y-3vyBJcZYb3 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4UoM_p5AE5gN for <buildroot@lists.busybox.net>;
  Tue,  7 Feb 2023 17:19:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CCBAA40A68
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB65360BB1
  for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCBAA40A68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB65360BB1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 920A58430C; Tue,  7 Feb 2023 17:19:38 +0000 (UTC)
+ id 7E5E48430A; Tue,  7 Feb 2023 17:19:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 18:15:00 +0100
+Date: Tue, 7 Feb 2023 18:14:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7a7c6725f6ca5c1108e6fb76fad414132555b373
-X-Git-Newrev: bde165f7ad4922e218cabdb6eb7c40e1661179f0
+X-Git-Oldrev: f9867a725c12975af52dda9dffbdc33c3b0312db
+X-Git-Newrev: d24c6f4b15f4794046e8e1ee220298c90ddecd19
 X-Patchwork-Hint: ignore
-Message-Id: <20230207171938.920A58430C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: update Docker image to use
+Message-Id: <20230207171938.7E5E48430A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/docker: update Debian distro to a
+ newer tag/date
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,33 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bde165f7ad4922e218cabdb6eb7c40e1661179f0
+commit: https://git.buildroot.net/buildroot/commit/?id=d24c6f4b15f4794046e8e1ee220298c90ddecd19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We have a new Docker image, updated with the new requirements from
-bcd15aa08aab1e8292b93995c44dc765a9801632 ("support/docker: add
-python3-magic"), but also with an updated Debian Bullseye
-installation. Let's use it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .gitlab-ci.yml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/docker/Dockerfile       | 2 +-
+ support/docker/apt-sources.list | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index cad35c96bc..ed17bb14b9 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -1,7 +1,7 @@
- # Configuration for Gitlab-CI.
- # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index d775ae23e1..de1534e77a 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -6,7 +6,7 @@
+ # We use a specific tag for the base image *and* the corresponding date
+ # for the repository., so do not forget to update the apt-sources.list
+ # file that is shipped next to this Dockerfile.
+-FROM debian:bullseye-20210902
++FROM debian:bullseye-20230202
  
--image: $CI_REGISTRY/buildroot.org/buildroot/base:20220206.1756
-+image: $CI_REGISTRY/buildroot.org/buildroot/base:20230207.1123
- 
- stages:
-   - generate-gitlab-ci
+ LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
+       vendor="Buildroot" \
+diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
+index 0f872fd398..849996d9f7 100644
+--- a/support/docker/apt-sources.list
++++ b/support/docker/apt-sources.list
+@@ -1,4 +1,4 @@
+-# Latest just before 20210817T000000Z:
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20210902T205533Z/ bullseye main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20210902T193650Z/ bullseye-security main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20210902T205533Z/ bullseye-updates main
++# Latest just before 20230207T102800Z:
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20230206T092119Z/ bullseye main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20230206T092119Z/ bullseye-security main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20230206T092119Z/ bullseye-updates main
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
