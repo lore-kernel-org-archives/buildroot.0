@@ -1,61 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1F7EC636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 10:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AA8CC636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 10:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C67140860;
-	Tue,  7 Feb 2023 10:03:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C67140860
+	by smtp3.osuosl.org (Postfix) with ESMTP id C65FE60E66;
+	Tue,  7 Feb 2023 10:20:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C65FE60E66
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pW_KrVsjzSaU; Tue,  7 Feb 2023 10:03:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8iz_5JbxRlIb; Tue,  7 Feb 2023 10:20:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 723134086F;
-	Tue,  7 Feb 2023 10:03:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 723134086F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB5301BF2C2
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:03:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E33B260BE3;
+	Tue,  7 Feb 2023 10:20:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E33B260BE3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BED931BF27A
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:20:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE65B40A21
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:03:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE65B40A21
+ by smtp1.osuosl.org (Postfix) with ESMTP id 985EE81350
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:20:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 985EE81350
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YFTi00Ep9KQk for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 10:03:41 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7635D40A07
-Received: from h7.fbrelay.privateemail.com (h7.fbrelay.privateemail.com
- [162.0.218.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7635D40A07
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 10:03:41 +0000 (UTC)
-Received: from MTA-05-3.privateemail.com (unknown [198.54.122.141])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by h7.fbrelay.privateemail.com (Postfix) with ESMTPS id 5052A6049B
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 05:03:38 -0500 (EST)
-Received: from mta-05.privateemail.com (localhost [127.0.0.1])
- by mta-05.privateemail.com (Postfix) with ESMTP id 87ECB18000BE;
- Tue,  7 Feb 2023 05:03:35 -0500 (EST)
-Received: from system76-pc.. (cpe1150018.bra.be.verixi.net [85.119.216.19])
- by mta-05.privateemail.com (Postfix) with ESMTPA id 9EA8518000BF;
- Tue,  7 Feb 2023 05:03:32 -0500 (EST)
-From: Jordan Speicher <jordan@jspeicher.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ck8-QyEgTGCE for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 10:20:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B98AB8134A
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 10:20:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B98AB8134A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A621783FFE; Tue,  7 Feb 2023 10:20:11 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue,  7 Feb 2023 11:02:15 +0100
-Message-Id: <20230207100216.889464-1-jordan@jspeicher.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Virus-Scanned: ClamAV using ClamSMTP
-Subject: [Buildroot] [PATCH] package/mcelog: bump to version 191
+Date: Tue, 7 Feb 2023 11:06:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 485b47e025541a58358d8852c600b8e7644b4ec6
+X-Git-Newrev: 9ae48b70aedf38bf6e90a7bbea5bf28a7c55bdbb
+X-Patchwork-Hint: ignore
+Message-Id: <20230207102011.A621783FFE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-proxy: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,57 +56,163 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jordan Speicher <jordan@jspeicher.com>,
- Romain Naour <romain.naour@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Create .os_version to specify the version since there is no git
-checkout available.
+commit: https://git.buildroot.net/buildroot/commit/?id=9ae48b70aedf38bf6e90a7bbea5bf28a7c55bdbb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/andikleen/mcelog/releases/tag/v191
-https://github.com/andikleen/mcelog/releases/tag/v190
+The docker-proxy binary (libnetwork) has been merged into the docker-engine
+source (moby). Drop the docker-proxy package and add cmd/docker-proxy as a build
+target of docker-engine instead.
 
-Signed-off-by: Jordan Speicher <jordan@jspeicher.com>
+https://github.com/moby/libnetwork/commit/563fe8e248f3afac75a270f693f38bdc3eea7bf3
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mcelog/mcelog.hash | 2 +-
- package/mcelog/mcelog.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ Config.in.legacy                       |  8 ++++++++
+ DEVELOPERS                             |  1 -
+ package/Config.in                      |  1 -
+ package/docker-engine/Config.in        |  1 -
+ package/docker-engine/docker-engine.mk |  2 +-
+ package/docker-proxy/Config.in         | 19 -------------------
+ package/docker-proxy/docker-proxy.hash |  3 ---
+ package/docker-proxy/docker-proxy.mk   | 21 ---------------------
+ 8 files changed, 9 insertions(+), 47 deletions(-)
 
-diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
-index e0350b085d..23fd4e50f3 100644
---- a/package/mcelog/mcelog.hash
-+++ b/package/mcelog/mcelog.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  30364d134ff416f3f9469720add84bdccea226268d334f06022110f484550cd9  mcelog-189.tar.gz
-+sha256  b3b2616acde7afba4752d4dc447a2c2ad5a75da65e7496e0da30f8f8d2015cfa  mcelog-191.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index 8b5876d32e..9f7194e376 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ad80522451..72deb03c35 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
  
--MCELOG_VERSION = 189
-+MCELOG_VERSION = 191
- MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
- MCELOG_LICENSE = GPL-2.0
- MCELOG_LICENSE_FILES = LICENSE
- MCELOG_SELINUX_MODULES = mcelog
+ comment "Legacy options removed in 2023.02"
  
- define MCELOG_BUILD_CMDS
-+	echo "$(MCELOG_VERSION)" > $(@D)/.os_version
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
- endef
++config BR2_PACKAGE_DOCKER_PROXY
++	bool "docker-proxy removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_DOCKER_ENGINE
++	help
++	  docker-proxy has been dropped by upstream since version
++	  563fe8. it has been merged into docker-engine (moby).
++
+ config BR2_PACKAGE_PYTHON_BUNCH
+ 	bool "python-bunch removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cad8d6affa..f10036f7f2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -545,7 +545,6 @@ F:	package/delve/
+ F:	package/docker-cli/
+ F:	package/docker-compose/
+ F:	package/docker-engine/
+-F:	package/docker-proxy/
+ F:	package/embiggen-disk/
+ F:	package/fuse-overlayfs/
+ F:	package/go/
+diff --git a/package/Config.in b/package/Config.in
+index 8b9570c447..aa87f1305d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2618,7 +2618,6 @@ menu "System tools"
+ 	source "package/docker-cli/Config.in"
+ 	source "package/docker-compose/Config.in"
+ 	source "package/docker-engine/Config.in"
+-	source "package/docker-proxy/Config.in"
+ 	source "package/earlyoom/Config.in"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 1f0efb8fcc..b5a356eab9 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -7,7 +7,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_USE_MMU # containerd
+ 	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
+ 	select BR2_PACKAGE_CONTAINERD # runtime dependency
+-	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
+ 	help
+ 	  Docker is a platform to build, ship,
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index c50f08245d..ca1aa27b0a 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -24,7 +24,7 @@ DOCKER_ENGINE_LDFLAGS = \
+ 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.Version="$(DOCKER_ENGINE_VERSION)"
  
--- 
-2.34.1
-
+ DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs
+-DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
++DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd cmd/docker-proxy
+ 
+ ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+ DOCKER_ENGINE_DEPENDENCIES += libapparmor
+diff --git a/package/docker-proxy/Config.in b/package/docker-proxy/Config.in
+deleted file mode 100644
+index 7e40536537..0000000000
+--- a/package/docker-proxy/Config.in
++++ /dev/null
+@@ -1,19 +0,0 @@
+-config BR2_PACKAGE_DOCKER_PROXY
+-	bool "docker-proxy"
+-	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	help
+-	  Libnetwork is a Container Network Model that provides a
+-	  consistent programming interface and the required network
+-	  abstractions for applications.
+-
+-	  This package provides docker-proxy, a run-time dependency of
+-	  Docker.
+-
+-	  https://github.com/docker/libnetwork
+-
+-comment "docker-proxy needs a toolchain w/ threads"
+-	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/docker-proxy/docker-proxy.hash b/package/docker-proxy/docker-proxy.hash
+deleted file mode 100644
+index 63296f14c1..0000000000
+--- a/package/docker-proxy/docker-proxy.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  05bf95637bae134d12d02bd7a7854cd0c768e6fccb662c2c64523f05b997b204  docker-proxy-f6ccccb1c082a432c2a5814aaedaca56af33d9ea.tar.gz
+-sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
+deleted file mode 100644
+index fe7982e8f6..0000000000
+--- a/package/docker-proxy/docker-proxy.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# docker-proxy
+-#
+-################################################################################
+-
+-DOCKER_PROXY_VERSION = f6ccccb1c082a432c2a5814aaedaca56af33d9ea
+-DOCKER_PROXY_SITE = $(call github,moby,libnetwork,$(DOCKER_PROXY_VERSION))
+-
+-DOCKER_PROXY_LICENSE = Apache-2.0
+-DOCKER_PROXY_LICENSE_FILES = LICENSE
+-
+-DOCKER_PROXY_DEPENDENCIES = host-pkgconf
+-
+-DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
+-
+-define DOCKER_PROXY_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/bin/proxy $(TARGET_DIR)/usr/bin/docker-proxy
+-endef
+-
+-$(eval $(golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
