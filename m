@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 467E9C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5ABAC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA0F370030;
-	Tue, 21 Feb 2023 01:44:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA0F370030
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72CE26FBB5;
+	Tue, 21 Feb 2023 01:44:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72CE26FBB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xKN3DV8jQ6WD; Tue, 21 Feb 2023 01:44:31 +0000 (UTC)
+	with ESMTP id bn4Lhj-k5L3A; Tue, 21 Feb 2023 01:44:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D15AE70104;
-	Tue, 21 Feb 2023 01:44:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D15AE70104
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79C867010A;
+	Tue, 21 Feb 2023 01:44:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79C867010A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D20BA1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D4AC21BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA3016FFF9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 002556FFFA
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA3016FFF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 002556FFFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7qM1tajS_gGw for <buildroot@lists.busybox.net>;
+ with ESMTP id dnN7bsQYJrDt for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A0D696FE60
+ by smtp3.osuosl.org (Postfix) with ESMTP id C34D26FC2E
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0D696FE60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C34D26FC2E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C2CB81979; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+ id B444B828C8; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 18:38:53 +0100
+Date: Tue, 7 Feb 2023 22:37:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4fbd2f6d2cf26225f73f584c3a0cacb1b2476f5f
-X-Git-Newrev: 700fc2d7bdb53d33368046840ea91c6c4e6b12b0
+X-Git-Oldrev: 40866ae0ce6e71d01a132dfb7694daa2ec559184
+X-Git-Newrev: 36b8c9494b56b877fea62f17926f747c7c7bfb8d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205253.9C2CB81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nfs-utils: handle
- pkg-config in the Autotools standard way for nfsrahead
+Message-Id: <20230220205253.B444B828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wolfssl: disable
+ broken asm implementations on 32-bit Arm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,202 +64,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=700fc2d7bdb53d33368046840ea91c6c4e6b12b0
+commit: https://git.buildroot.net/buildroot/commit/?id=36b8c9494b56b877fea62f17926f747c7c7bfb8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-While using the correct PKG_CHECK_MODULES() approach for libmount we
-end up having host-nfs-utils needing libmount. But libmount is only
-needed by nfsrahead that we don't need in host-nfs-utils. But we need
-host-nfs-utils itself(rpcgen tool specifically) to build nfs-utils. To
-solve this recursive situation:
+wolfSSL has ARMv8-A assembly implementations of some functions for
+both A64 and A32 ISAs.  However, some of the A32 versions use r11,
+which is usually not allowed:
 
-1) Update the first patch with the upstreamed one that handles
-   libmount using PKG_CHECK_MODULES().
+wolfcrypt/src/port/arm/armv8-aes.c: In function 'wc_AesCbcEncrypt':
+wolfcrypt/src/port/arm/armv8-aes.c:3303:5: error: fp cannot be used in 'asm' here
+ 3303 |     }
+      |     ^
 
-2) Add another patch to allow to disable nfsrahead during building for
-   host since this tool is not needed and requires libmount. This way
-   the first patch approach can be correctly used.
+That can be fixed by adding the compiler flag -fomit-frame-pointer,
+but then there is another failure:
 
-3) Add --disable-nfsrahead to HOST_NFS_UTILS_CONF_OPTS
+/tmp/ccV19DQV.s: Assembler messages:
+/tmp/ccV19DQV.s:248: Error: first transfer register must be even -- `ldrd r11,r10,[r14,#4*14]'
+make[3]: *** [Makefile:5858: wolfcrypt/src/port/arm/src_libwolfssl_la-armv8-chacha.lo] Error 1
 
-4) Remove en/disable-uuid since now it's required by default:
-   http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=c5528f40f9db5061e06dcf1f9b7fce5185b376c6
+This is definitely not a valid instruction in A32, which suggests that
+this code isn't being tested at all upstream.  So disable it here.
 
-Both patches have been committed:
-https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=627c95b2b853161b359095e7fdf05d3b07d51379
-https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=844d3ad5376603bc9c205a6084d38a2d25146179
+Fixes:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+  http://autobuild.buildroot.net/results/502/502a2b217845eb290c1961d4740b032462f8ae53/
+
+Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...fsrahead-fix-linking-while-static-linking.patch | 41 ++++++++-----
- ...figure.ac-allow-to-disable-nfsrahead-tool.patch | 68 ++++++++++++++++++++++
- package/nfs-utils/nfs-utils.mk                     |  7 +--
- 3 files changed, 97 insertions(+), 19 deletions(-)
+ package/wolfssl/wolfssl.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch b/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch
-index b8dcea63f7..e1d57f30cf 100644
---- a/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch
-+++ b/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch
-@@ -1,31 +1,46 @@
--From a69014a1b4e5b8068630abe3109f31eb64b6a076 Mon Sep 17 00:00:00 2001
-+From d9abb221cea81dee5956bd987c6efa680c03571a Mon Sep 17 00:00:00 2001
- From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 10 Aug 2022 00:10:51 +0200
-+Date: Wed, 10 Aug 2022 23:38:17 +0200
- Subject: [PATCH] nfsrahead: fix linking while static linking
- 
---lmount must preceed -lblkid and to obtain this let's add:
--`pkg-config --libs mount`
--in place of:
--`-lmount`
--This ways the library order will always be correct.
-+-lmount must preceed -lblkid and to obtain this let's add in configure.ac:
-+PKG_CHECK_MODULES([LIBMOUNT], [mount])
-+and in tools/nfsrahead/Makefile.am let's substitute explicit `-lmount`
-+with:
-+$(LIBMOUNT_LIBS)
-+This way all the required libraries will be present and in the right order
-+when static linking.
- 
- Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+[Upstream: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=627c95b2b853161b359095e7fdf05d3b07d51379]
- ---
--Pending Upstream:
--https://patchwork.kernel.org/project/linux-nfs/patch/20220809223308.1421081-1-giulio.benetti@benettiengineering.com/
-----
-+ configure.ac                | 3 +++
-  tools/nfsrahead/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+ 2 files changed, 4 insertions(+), 1 deletion(-)
- 
-+diff --git a/configure.ac b/configure.ac
-+index f1c46c5c..ff85200b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -273,6 +273,9 @@ AC_LIBCAP
-+ dnl Check for -lxml2
-+ AC_LIBXML2
-+ 
-++dnl Check for -lmount
-++PKG_CHECK_MODULES([LIBMOUNT], [mount])
-++
-+ # Check whether user wants TCP wrappers support
-+ AC_TCP_WRAPPERS
-+ 
- diff --git a/tools/nfsrahead/Makefile.am b/tools/nfsrahead/Makefile.am
--index 845ea0d5..280a2eb4 100644
-+index 845ea0d5..7e08233a 100644
- --- a/tools/nfsrahead/Makefile.am
- +++ b/tools/nfsrahead/Makefile.am
- @@ -1,6 +1,6 @@
-  libexec_PROGRAMS = nfsrahead
-  nfsrahead_SOURCES = main.c
- -nfsrahead_LDFLAGS= -lmount
--+nfsrahead_LDFLAGS= `pkg-config --libs mount`
-++nfsrahead_LDFLAGS= $(LIBMOUNT_LIBS)
-  nfsrahead_LDADD = ../../support/nfs/libnfsconf.la
-  
-  man5_MANS = nfsrahead.man
-diff --git a/package/nfs-utils/0002-configure.ac-allow-to-disable-nfsrahead-tool.patch b/package/nfs-utils/0002-configure.ac-allow-to-disable-nfsrahead-tool.patch
-new file mode 100644
-index 0000000000..ee5e3fa251
---- /dev/null
-+++ b/package/nfs-utils/0002-configure.ac-allow-to-disable-nfsrahead-tool.patch
-@@ -0,0 +1,68 @@
-+From 9a0002978eb32b78d22f053302e012a4255dc4ef Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 19 Sep 2022 23:43:28 +0200
-+Subject: [PATCH] configure.ac: allow to disable nfsrahead tool
-+
-+This allows to make libmount not mandatory but depending on nfsrahead
-+since it only requires it. This is useful when cross-compiling because
-+in that case we need rpcgen only built for host but not nfsrahead that
-+also require libmount. So this reduces the dependencies for host
-+building.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+[Upstream: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=844d3ad5376603bc9c205a6084d38a2d25146179]
-+---
-+ configure.ac      | 13 ++++++++++---
-+ tools/Makefile.am |  6 +++++-
-+ 2 files changed, 15 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ff85200b..5d9cbf31 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -249,6 +249,16 @@ AC_ARG_ENABLE(nfsdcld,
-+ 	enable_nfsdcld=$enableval,
-+ 	enable_nfsdcld="yes")
-+ 
-++AC_ARG_ENABLE(nfsrahead,
-++	[AS_HELP_STRING([--disable-nfsrahead],[disable nfsrahead command @<:@default=no@:>@])],
-++	enable_nfsrahead=$enableval,
-++	enable_nfsrahead="yes")
-++	AM_CONDITIONAL(CONFIG_NFSRAHEAD, [test "$enable_nfsrahead" = "yes" ])
-++	if test "$enable_nfsrahead" = yes; then
-++		dnl Check for -lmount
-++		PKG_CHECK_MODULES([LIBMOUNT], [mount])
-++	fi
-++
-+ AC_ARG_ENABLE(nfsdcltrack,
-+ 	[AS_HELP_STRING([--disable-nfsdcltrack],[disable NFSv4 clientid tracking programs @<:@default=no@:>@])],
-+ 	enable_nfsdcltrack=$enableval,
-+@@ -273,9 +283,6 @@ AC_LIBCAP
-+ dnl Check for -lxml2
-+ AC_LIBXML2
-+ 
-+-dnl Check for -lmount
-+-PKG_CHECK_MODULES([LIBMOUNT], [mount])
-+-
-+ # Check whether user wants TCP wrappers support
-+ AC_TCP_WRAPPERS
-+ 
-+diff --git a/tools/Makefile.am b/tools/Makefile.am
-+index 40c17c37..48fd0cdf 100644
-+--- a/tools/Makefile.am
-++++ b/tools/Makefile.am
-+@@ -12,6 +12,10 @@ if CONFIG_NFSDCLD
-+ OPTDIRS += nfsdclddb
-+ endif
-+ 
-+-SUBDIRS = locktest rpcdebug nlmtest mountstats nfs-iostat rpcctl nfsdclnts nfsrahead $(OPTDIRS)
-++if CONFIG_NFSRAHEAD
-++OPTDIRS += nfsrahead
-++endif
-++
-++SUBDIRS = locktest rpcdebug nlmtest mountstats nfs-iostat rpcctl nfsdclnts $(OPTDIRS)
-+ 
-+ MAINTAINERCLEANFILES = Makefile.in
-+-- 
-+2.34.1
-+
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index ed205a26b1..1a4a99f566 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -34,6 +34,7 @@ HOST_NFS_UTILS_CONF_OPTS = \
- 	--without-tcp-wrappers \
- 	--with-statedir=/run/nfs \
- 	--disable-caps \
-+	--disable-nfsrahead \
- 	--without-systemd \
- 	--with-rpcgen=internal \
- 	--with-tirpcinclude=$(HOST_DIR)/include/tirpc
-@@ -68,12 +69,6 @@ else
- NFS_UTILS_CONF_OPTS += --disable-caps
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index cd3acd9411..f415e11bb5 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -33,14 +33,12 @@ WOLFSSL_CONF_OPTS += --disable-sslv3
  endif
  
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
--NFS_UTILS_CONF_OPTS += --enable-uuid
--else
--NFS_UTILS_CONF_OPTS += --disable-uuid
+ # enable ARMv8 hardware acceleration
+-ifeq ($(BR2_ARM_CPU_ARMV8A),y)
++ifeq ($(BR2_aarch64),y)
+ WOLFSSL_CONF_OPTS += --enable-armasm
+ # the flag -mstrict-align is needed to prevent build errors caused by
+ # some inline assembly in parts of the AES structure using the "m"
+ # constraint
+-ifeq ($(BR2_aarch64),y)
+ WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
 -endif
--
- define NFS_UTILS_INSTALL_FIXUP
- 	cd $(TARGET_DIR) && rm -f $(NFS_UTILS_TARGETS_)
- 	touch $(TARGET_DIR)/etc/exports
+ else
+ WOLFSSL_CONF_OPTS += --disable-armasm
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
