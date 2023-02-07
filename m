@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79CB2C636D3
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:11:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC784C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0356D6100E;
-	Tue,  7 Feb 2023 17:11:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0356D6100E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8275461030;
+	Tue,  7 Feb 2023 17:11:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8275461030
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jg10vhjOXpGT; Tue,  7 Feb 2023 17:11:28 +0000 (UTC)
+	with ESMTP id flZREqqrBcAD; Tue,  7 Feb 2023 17:11:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 398A560BB1;
-	Tue,  7 Feb 2023 17:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 398A560BB1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 21D5F1BF5F6
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:11:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A733961016;
+	Tue,  7 Feb 2023 17:11:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A733961016
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 352851BF5F6
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55B7240A6D
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:11:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55B7240A6D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C4FF81242
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:11:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C4FF81242
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gbhw0-PjASWq for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 17:10:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CFD240120
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:10:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CFD240120
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29B82842D3; Tue,  7 Feb 2023 17:10:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GA5ixb89IxwR for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 17:11:37 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31AED80E55
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 31AED80E55
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:11:36 +0000 (UTC)
+Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 081BCCC4FA
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:00:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1F6DA240002;
+ Tue,  7 Feb 2023 17:00:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1pPRKl-00EhMd-H4; Tue, 07 Feb 2023 18:00:43 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 18:10:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 09ac5a9e18e96ba6d3cd13e5e8d34aeccfcb603d
-X-Git-Newrev: cf92dcfaa92f6564830d10d4e18ae00fd8102ab2
-X-Patchwork-Hint: ignore
-Message-Id: <20230207171058.29B82842D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: don't let uClibc build
- system strip uClibc
+Date: Tue,  7 Feb 2023 18:00:39 +0100
+Message-Id: <20230207170040.3503236-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/2] package/pkg-generic.mk: require git on the
+ host for packages using cargo/go vendoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,41 +63,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf92dcfaa92f6564830d10d4e18ae00fd8102ab2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The vendoring done for cargo / go packages (may) need git, so ensure we
+check for it in dependencies, similar to how it is done for packages
+directly using git.
 
-Let Buildroot handle this, so we can have an unstripped uClibc if
-needed.
-
-Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
-[Thomas: extracted from
-https://patchwork.ozlabs.org/project/buildroot/patch/20220803200629.3172370-1-Ben.Wolsieffer@hefring.com/
-and split into its own independent patch.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 125aa4cdcf..d2baffc95e 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -397,6 +397,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(call KCONFIG_SET_OPT,RUNTIME_PREFIX,"/")
- 	$(call KCONFIG_SET_OPT,DEVEL_PREFIX,"/usr")
- 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib")
-+	$(call KCONFIG_DISABLE_OPT,DOSTRIP)
- 	$(UCLIBC_MMU_CONFIG)
- 	$(UCLIBC_BINFMT_CONFIG)
- 	$(UCLIBC_AARCH64_PAGE_SIZE_CONFIG)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 5d618c6b39..82187d7db9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1250,6 +1250,13 @@ else ifeq ($$($(2)_SITE_METHOD),cvs)
+ DL_TOOLS_DEPENDENCIES += cvs
+ endif # SITE_METHOD
+ 
++# cargo/go vendoring (may) need git
++ifeq ($$($(2)_DOWNLOAD_POST_PROCESS),cargo)
++DL_TOOLS_DEPENDENCIES += git
++else ifeq ($$($(2)_DOWNLOAD_POST_PROCESS),go)
++DL_TOOLS_DEPENDENCIES += git
++endif
++
+ DL_TOOLS_DEPENDENCIES += $$(call extractor-system-dependency,$$($(2)_SOURCE))
+ 
+ # Ensure all virtual targets are PHONY. Listed alphabetically.
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
