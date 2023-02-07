@@ -1,84 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1E95C64EC4
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 20:51:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56145C636D3
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 21:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDF2881E80;
-	Tue,  7 Feb 2023 20:51:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDF2881E80
+	by smtp2.osuosl.org (Postfix) with ESMTP id DDACD40B15;
+	Tue,  7 Feb 2023 21:09:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDACD40B15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id imwyfMRtXu6G; Tue,  7 Feb 2023 20:51:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id daeuHCNzdsEb; Tue,  7 Feb 2023 21:09:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 054FE81E50;
-	Tue,  7 Feb 2023 20:51:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 054FE81E50
+	by smtp2.osuosl.org (Postfix) with ESMTP id F064F4057A;
+	Tue,  7 Feb 2023 21:09:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F064F4057A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A5C651BF470
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 20:51:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE77B1BF377
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C4E961050
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 20:51:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C4E961050
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9764761054
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9764761054
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2VGAXb9Cpri5 for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 20:51:19 +0000 (UTC)
+ with ESMTP id V0F0l1eX_4Fj for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 21:09:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8924C6104F
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com
- [IPv6:2607:f8b0:4864:20::32e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8924C6104F
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 20:51:19 +0000 (UTC)
-Received: by mail-ot1-x32e.google.com with SMTP id
- f5-20020a9d5f05000000b00684c0c2eb3fso4617726oti.10
- for <buildroot@buildroot.org>; Tue, 07 Feb 2023 12:51:19 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2375B61041
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2375B61041
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 21:09:40 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ l21-20020a05600c1d1500b003dfe462b7e4so1623437wms.0
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 13:09:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=QzjGoTPSnwf7P3wdRhw2G8mPoAE3KZkEk7wtuLDLJdo=;
- b=2FefOr1cgZtymhqQNVrkxAHYd2qjhjw5Xt0KWGK/XJhYYBk/Se3MDQ38g2SiYFfqqI
- ddB4XNyeC4ygcQ7sZwXA2nODeAB+TV/ZMUMURGra9/bSKFDC/6uVCjuTggk2JF/QeIhL
- qgR8Qor0+0PABzhYFECIXnwQZZbWt/9yYvf0V1ozXdjKVA9BrKKz5txpGLWTznWSfIgP
- QQCQNJBhowAUnL8C+0mVrc9JWKqf5idKSfeKgpnRaC0FSZ6J4GtnWEfAzRIvbudQUbmK
- aMxzZwkxCCwfAY6uAqL0NOE8zsOfs1eAZKlrqllw7/dj9WWORJEoGtcOs7weYcyqgXre
- aDTw==
-X-Gm-Message-State: AO0yUKXYMTtV0SPVVyDQr1WeaWsVtKP6UKBD05+Aongn6J23UvL4w+m4
- DddGQWPir8YQ+GVEWSNX8Z/KoFgLhhKllvFkmCnSNSypeSnG1QhiAn+vAw==
-X-Google-Smtp-Source: AK7set/JGUkCyonY8Z58TuqqpdR/lwHQwzzXzyHo06vIOTUabj08zsEGr9dw01xfLcJZdWFpdmaK9YwgqafqyFOuWmM=
-X-Received: by 2002:a05:6830:26f4:b0:68d:3e14:7516 with SMTP id
- m52-20020a05683026f400b0068d3e147516mr444670otu.72.1675803078395; Tue, 07 Feb
- 2023 12:51:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20230207175116.3043006-1-angelo@amarulasolutions.com>
- <51fbd11a-26ef-78fa-3ced-61648adc5a9f@smile.fr>
- <46eeb5ff-ea1e-acdd-3ab8-3dc945c9fa40@flatmax.com>
-In-Reply-To: <46eeb5ff-ea1e-acdd-3ab8-3dc945c9fa40@flatmax.com>
+ bh=2oGgSJN/w8TW+VFM84jqFnH6GtpbgJdMuh+wz6a9SmA=;
+ b=rQlVIdBrPLeWBR4QDDcPOveMss0toRPJHqL/zxkywCLvWsfxIhDjLuN1S+oRegYQjs
+ E3Q3ZdSqFQxtnouvmuZZdcd2Z/45kZSVjvmDvNUukKtHEmL/eEtDfy0KeR100XYsvGCl
+ TMwS8XxdoyV/yhPbkeRtywWxbHP75foGCWcMmjtWhI1wQEjSIlvQTZZDCkF1bsEDcghY
+ xT537eQLINTCgLl2U9Krp4gxbGN660zGskhiL9Z2q7wEThlPNpHesHVUIQPaFfurUho9
+ /3A8WuFlkfQ7unVpCfV9pyNvy3WS/2Ga5k0xq5TIdJXT3ZaP1YJvkpdWgMTi1MR9mNMW
+ gMZQ==
+X-Gm-Message-State: AO0yUKXwv6UN2eMg5wTPW98KbxvE+DFNaFKKUW+SsXPaYC88SqaICOjU
+ qCZIu5D0TPTBFjJ2gR3aaMGDargUyyr53ArV65pyNQ==
+X-Google-Smtp-Source: AK7set/sVqhMP6U4kPreVaNbeYHvznkeqiWQHznM1A0iwi8z1fZMuR635o0dsKDwLtBqMJV/G6D59g==
+X-Received: by 2002:a05:600c:4483:b0:3d3:49db:9b25 with SMTP id
+ e3-20020a05600c448300b003d349db9b25mr4354589wmo.26.1675804177558; 
+ Tue, 07 Feb 2023 13:09:37 -0800 (PST)
+Received: from angeloc.wifiguest.local
+ (220.211-78-194.adsl-static.isp.belgacom.be. [194.78.211.220])
+ by smtp.gmail.com with ESMTPSA id
+ f9-20020a05600c44c900b003dc4fd6e624sm8057955wmo.19.2023.02.07.13.09.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 07 Feb 2023 13:09:36 -0800 (PST)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue, 7 Feb 2023 21:50:41 +0100
-Message-ID: <CA+_SqVb0wRKk9zFsy0-z8TzooKG4dPzOLPt1AJ7KPoWHkeQyQg@mail.gmail.com>
-To: Matt Flax <flatmax@flatmax.com>
+To: buildroot@buildroot.org
+Date: Tue,  7 Feb 2023 22:09:34 +0100
+Message-Id: <20230207210934.3132539-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=QzjGoTPSnwf7P3wdRhw2G8mPoAE3KZkEk7wtuLDLJdo=;
- b=VqPKfkprvlpM6G2S8UNrI0SQssCcMSxpE8rl5RFg5NFMljpvutG628G/t6QZwWqY0q
- eheA//aCjuHoyDp6TmE9tF1R00+m5sd9OfAXwSA3F2CN8oEA9OF6/I0SoiLdZ7bUWKFz
- w5gKPADb20u+IID0VhsUvymwbpb1lAvwTgZp0=
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=2oGgSJN/w8TW+VFM84jqFnH6GtpbgJdMuh+wz6a9SmA=;
+ b=pmZkuPqbyH4t0pgerA2exzsvBZbXFXyhDXGBN8+56clscH+Z+hOd7z9oAQBJ1ZVvGw
+ L5MZbisEZX3aKEQtY7XBW8DVkED4huIFgHSxnX8WvEM1zwduQXMX46z5aXzm2OEMUJeJ
+ 5zYJxAqVt9xnS8lI4AVAWvurF5Zo9ZEN3glGw=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=VqPKfkpr
-Subject: Re: [Buildroot] [PATCH v4] package/gtkiostream: new package
+ header.b=pmZkuPqb
+Subject: [Buildroot] [PATCH v5] package/gtkiostream: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,179 +93,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2607952523725492394=="
+Cc: romain.naour@smile.fr, Matt Flax <flatmax@flatmax.com>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2607952523725492394==
-Content-Type: multipart/alternative; boundary="000000000000339f6b05f4224f44"
+From: Matt Flax <flatmax@flatmax.com>
 
---000000000000339f6b05f4224f44
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This package provides many useful software engineering and signal
+processing libraries.
+The package offer also a GUI written in GTK which requires several
+missing packages and therefore is left disabled.
 
-On Tue, Feb 7, 2023 at 9:47 PM Matt Flax <flatmax@flatmax.com> wrote:
+Signed-off-by: Matt Flax <flatmax@flatmax.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+v4:
+* Bumped to 1.8.0
+* Added myself to DEVELOPERS
+* Added dependency on octave when enable instead of use
+  --disable-octave configure option
+* Fixes from check-package
+v5:
+* Fixed wrong syntax (Romain)
+* Added optional dependency on sox (Matt)
 
->
-> On 8/2/23 05:04, Romain Naour wrote:
-> > Hello Angelo,
-> >
-> > Le 07/02/2023 =C3=A0 18:51, Angelo Compagnucci a =C3=A9crit :
-> > It always useful to use distribution packaging to find any missing
-> dependencies
-> > (mentatory or optional) like gtk2 (hence the package name :) )
-> >
-> > https://github.com/flatmax/gtkiostream/blob/master/debian/control#L14
-> >
-> > Can you double check ?
->
->
-> Hey all, great to see my original patch revitalised after many many
-> months - I am keen for gtkiostream to be absorbed into buildroot.
->
-> gtk2 and gtk3 are optional with this library - despite its name - it is
-> really now focused on signal processing, ALSA C++, neural networks,
-> software engineering, etc.. The gtk side of things works nicely with
-> gtk2 but requires attention for gtk3 - I originally opted to leave
-> gtk2/3 out entirely in buildroot - I think it is the best solution for no=
-w.
->
+ DEVELOPERS                           |  4 ++++
+ package/Config.in                    |  1 +
+ package/gtkiostream/Config.in        | 15 +++++++++++++++
+ package/gtkiostream/gtkiostream.hash |  3 +++
+ package/gtkiostream/gtkiostream.mk   | 25 +++++++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
+ create mode 100644 package/gtkiostream/Config.in
+ create mode 100644 package/gtkiostream/gtkiostream.hash
+ create mode 100644 package/gtkiostream/gtkiostream.mk
 
-Thanks Matt for the very clear explanation, I was about to reply gtk is
-optional.
-
-Even more because it requires the addition of libgtkdatabox which is
-actually not present in buildroot.
-
-Looking at the code, It's not clear if opencv or sox are really that
-necessary without a gui, but I think we could leave them out.
-
-
---=20
-
-Angelo Compagnucci
-
-Software Engineer
-
-angelo@amarulasolutions.com
-__________________________________
-Amarula Solutions SRL
-
-Via le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 (0)42 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
-[`as] https://www.amarulasolutions.com|
-
---000000000000339f6b05f4224f44
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Tue, Feb 7, 2023 at 9:47 PM Matt F=
-lax &lt;<a href=3D"mailto:flatmax@flatmax.com">flatmax@flatmax.com</a>&gt; =
-wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
-px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
-On 8/2/23 05:04, Romain Naour wrote:<br>
-&gt; Hello Angelo,<br>
-&gt;<br>
-&gt; Le 07/02/2023 =C3=A0 18:51, Angelo Compagnucci a =C3=A9crit=C2=A0:<br>
-&gt; It always useful to use distribution packaging to find any missing dep=
-endencies<br>
-&gt; (mentatory or optional) like gtk2 (hence the package name :) )<br>
-&gt;<br>
-&gt; <a href=3D"https://github.com/flatmax/gtkiostream/blob/master/debian/c=
-ontrol#L14" rel=3D"noreferrer" target=3D"_blank">https://github.com/flatmax=
-/gtkiostream/blob/master/debian/control#L14</a><br>
-&gt;<br>
-&gt; Can you double check ?<br>
-<br>
-<br>
-Hey all, great to see my original patch revitalised after many many <br>
-months - I am keen for gtkiostream to be absorbed into buildroot.<br>
-<br>
-gtk2 and gtk3 are optional with this library - despite its name - it is <br=
->
-really now focused on signal processing, ALSA C++, neural networks, <br>
-software engineering, etc.. The gtk side of things works nicely with <br>
-gtk2 but requires attention for gtk3 - I originally opted to leave <br>
-gtk2/3 out entirely in buildroot - I think it is the best solution for now.=
-<br></blockquote><div><br></div><div>Thanks Matt for the very clear explana=
-tion, I was about to reply gtk is optional.</div><div><br></div><div>Even m=
-ore because it requires the addition of libgtkdatabox which is actually not=
- present in buildroot.</div><div><br></div><div>Looking at the code, It&#39=
-;s not clear if opencv or sox are really that necessary without a gui, but =
-I think we could leave them out.<br></div></div><br clear=3D"all"><br>-- <b=
-r><div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><p dir=3D"ltr=
-" style=3D"line-height:1.38;margin-top:0pt;margin-bottom:0pt"><span style=
-=3D"font-size:11pt;font-family:Arial;color:rgb(0,0,0);background-color:tran=
-sparent;font-weight:400;font-style:normal;font-variant:normal;text-decorati=
-on:none;vertical-align:baseline;white-space:pre-wrap"></span><span style=3D=
-"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);background-c=
-olor:transparent;font-weight:500;font-style:normal;font-variant:normal;text=
--decoration:none;vertical-align:baseline;white-space:pre-wrap">Angelo Compa=
-gnucci</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;mar=
-gin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono=
-&quot;,monospace;color:rgb(0,0,0);background-color:transparent;font-weight:=
-400;font-style:normal;font-variant:normal;text-decoration:none;vertical-ali=
-gn:baseline;white-space:pre-wrap">Software Engineer</span></p><p dir=3D"ltr=
-" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=3D=
-"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0=
-,0);background-color:transparent;font-weight:400;font-style:normal;font-var=
-iant:normal;text-decoration:none;vertical-align:baseline;white-space:pre-wr=
-ap"><a href=3D"mailto:angelo@amarulasolutions.com" target=3D"_blank">angelo=
-@amarulasolutions.com</a>=C2=A0<br></span><span style=3D"font-size:10pt;fon=
-t-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(241,194,50);background=
--color:transparent;font-weight:400;font-style:normal;font-variant:normal;te=
-xt-decoration:none;vertical-align:baseline;white-space:pre-wrap">__________=
-________________________</span><span style=3D"font-size:10pt;font-family:&q=
-uot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transpare=
-nt;font-weight:400;font-style:normal;font-variant:normal;text-decoration:no=
-ne;vertical-align:baseline;white-space:pre-wrap"><br></span><span style=3D"=
-font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);background-co=
-lor:transparent;font-weight:500;font-style:normal;font-variant:normal;text-=
-decoration:none;vertical-align:baseline;white-space:pre-wrap">Amarula Solut=
-ions SRL</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;m=
-argin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mo=
-no&quot;,monospace;color:rgb(0,0,0);background-color:transparent;font-weigh=
-t:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-a=
-lign:baseline;white-space:pre-wrap">Via le Canevare 30, 31100 Treviso, Vene=
-to, IT</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;mar=
-gin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono=
-&quot;,monospace;color:rgb(0,0,0);background-color:transparent;font-weight:=
-400;font-style:normal;font-variant:normal;text-decoration:none;vertical-ali=
-gn:baseline;white-space:pre-wrap">T. +39 (0)42 243 5310</span><span style=
-=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
-0,0,0);background-color:transparent;font-weight:400;font-style:normal;font-=
-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre=
--wrap"><br></span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mo=
-no&quot;,monospace;color:rgb(0,0,0);background-color:transparent;font-weigh=
-t:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-a=
-lign:baseline;white-space:pre-wrap"><a href=3D"mailto:info@amarulasolutions=
-.com" target=3D"_blank">info@amarulasolutions.com</a></span></p><p dir=3D"l=
-tr" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><a href=3D"h=
-ttp://www.amarulasolutions.com/" style=3D"text-decoration:none" target=3D"_=
-blank"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,mo=
-nospace;color:rgb(0,0,0);background-color:transparent;font-weight:400;font-=
-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseli=
-ne;white-space:pre-wrap">www.amarulasolutions.com</span></a></p><div>[`as] =
-<a href=3D"https://www.amarulasolutions.com" target=3D"_blank">https://www.=
-amarulasolutions.com</a>|</div></div></div></div>
-
---000000000000339f6b05f4224f44--
-
---===============2607952523725492394==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d7c4d03c4c..5355d6d5ac 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -165,6 +165,7 @@ F:	package/cups/
+ F:	package/cups-filters/
+ F:	package/fail2ban/
+ F:	package/grep/
++F:	package/gtkiostream/
+ F:	package/htpdate/
+ F:	package/i2c-tools/
+ F:	package/jq/
+@@ -1978,6 +1979,9 @@ F:	board/technologic/ts4900/
+ F:	configs/ts4900_defconfig
+ F:	package/ts4900-fpga/
+ 
++N:	Matt Flax <flatmax@flatmax.org>
++F:	package/gtkiostream/
++
+ N:	Matt Weber <matthew.weber@collins.com>
+ F:	board/freescale/p*
+ F:	board/freescale/t*
+diff --git a/package/Config.in b/package/Config.in
+index 06d0a05854..70e446be47 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1389,6 +1389,7 @@ menu "Audio/Sound"
+ 	source "package/bcg729/Config.in"
+ 	source "package/caps/Config.in"
+ 	source "package/fdk-aac/Config.in"
++	source "package/gtkiostream/Config.in"
+ 	source "package/libao/Config.in"
+ 	source "package/libasplib/Config.in"
+ 	source "package/libbroadvoice/Config.in"
+diff --git a/package/gtkiostream/Config.in b/package/gtkiostream/Config.in
+new file mode 100644
+index 0000000000..bb97961587
+--- /dev/null
++++ b/package/gtkiostream/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_GTKIOSTREAM
++	bool "gtkiostream"
++	depends on BR2_INSTALL_LIBSTDCPP # eigen
++	select BR2_PACKAGE_EIGEN
++	select BR2_PACKAGE_FFTW
++	select BR2_PACKAGE_FFTW_DOUBLE
++	select BR2_PACKAGE_FFTW_SINGLE
++	help
++	  This package provides many useful software engineering and
++	  signal processing includes and linkable library.
++
++	  https://github.com/flatmax/gtkiostream
++
++comment "gtkiostream needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gtkiostream/gtkiostream.hash b/package/gtkiostream/gtkiostream.hash
+new file mode 100644
+index 0000000000..90c754f48c
+--- /dev/null
++++ b/package/gtkiostream/gtkiostream.hash
+@@ -0,0 +1,3 @@
++# locally computed hash
++sha256  44e8d921d462005cd330a1c24e5bd8061175b90ae53f537dbf73f59b74f6e01b  gtkiostream-v1.8.0.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  gpl.txt
+diff --git a/package/gtkiostream/gtkiostream.mk b/package/gtkiostream/gtkiostream.mk
+new file mode 100644
+index 0000000000..f110e6c149
+--- /dev/null
++++ b/package/gtkiostream/gtkiostream.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# GTKIOSTREAM
++#
++################################################################################
++
++GTKIOSTREAM_VERSION = v1.8.0
++GTKIOSTREAM_SITE = $(call github,flatmax,gtkiostream,$(GTKIOSTREAM_VERSION))
++GTKIOSTREAM_LICENSE = GPL-2.0+
++GTKIOSTREAM_LICENSE_FILES = gpl.txt
++GTKIOSTREAM_DEPENDENCIES = eigen fftw-double fftw-single host-pkgconf
++
++GTKIOSTREAM_DEPENDENCIES += $(if $(BR2_PACKAGE_SOX),sox)
++
++ifeq ($(BR2_PACKAGE_OCTAVE),y)
++GTKIOSTREAM_DEPENDENCIES += octave
++GTKIOSTREAM_CONF_OPTS += --enable-octave
++else
++GTKIOSTREAM_CONF_OPTS += --disable-octave
++endif
++
++# configure script not available
++GTKIOSTREAM_AUTORECONF = YES
++
++$(eval $(autotools-package))
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2607952523725492394==--
