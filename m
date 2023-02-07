@@ -1,54 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55B08C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 15:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39751C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 15:49:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4AB6404B0;
-	Tue,  7 Feb 2023 15:36:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4AB6404B0
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6000811F9;
+	Tue,  7 Feb 2023 15:49:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6000811F9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wP52DTTyeTf2; Tue,  7 Feb 2023 15:49:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1957812DB;
+	Tue,  7 Feb 2023 15:49:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1957812DB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CEE3F1BF2CA
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:49:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA300404B0
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:49:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA300404B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Q3HtTcLBNtr; Tue,  7 Feb 2023 15:36:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D147840448;
-	Tue,  7 Feb 2023 15:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D147840448
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BFA571BF2CA
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:36:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6E6C60FE6
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:36:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6E6C60FE6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GYHPWeLaSc_q for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 15:36:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B90560F93
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6B90560F93
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 15:36:50 +0000 (UTC)
-Received: (Authenticated sender: foss@0leil.net)
- by mail.gandi.net (Postfix) with ESMTPSA id 3B1FCFF812;
- Tue,  7 Feb 2023 15:36:44 +0000 (UTC)
-From: Quentin Schulz <foss+buildroot@0leil.net>
-To: buildroot@buildroot.org,
- Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Date: Tue,  7 Feb 2023 16:36:20 +0100
-Message-Id: <20230207-host-python-libuuid-v1-1-de34da87efd8@theobroma-systems.com>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-X-Mailer: b4 0.11.2
-Subject: [Buildroot] [PATCH] package/python3: use pure python UUID backend
- for host variant
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bK_dBqNW_tBZ for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 15:49:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4AC540232
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 15:49:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4AC540232
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D0ED584291; Tue,  7 Feb 2023 15:49:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 7 Feb 2023 16:48:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 26dd70e954a7c9142b078837ab1bbfad54d0e5cb
+X-Git-Newrev: b635bda5bc5ea9db15cb83390d8e3908b85c2629
+X-Patchwork-Hint: ignore
+Message-Id: <20230207154903.D0ED584291@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: use pure python UUID
+ backend for host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,78 +57,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Quentin Schulz <foss+buildroot@0leil.net>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8146396621312472039=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogUXVlbnRpbiBTY2h1bHogPHF1ZW50aW4uc2NodWx6QHRoZW9icm9tYS1zeXN0ZW1zLmNv
-bT4KCmhvc3QtcHl0aG9uMyBjdXJyZW50bHkgZG9lcyBub3QgYnVpbGQgaWYgdXRpbC1saW51eC11
-dWlkIG9wdGlvbiBpcyBub3QKZW5hYmxlZCwgZmFpbGluZyB3aXRoIHRoZSBmb2xsb3dpbmcgZXJy
-b3IgbWVzc2FnZXM6CiIiIgovdXNyL2xpYjY0L2NjYWNoZS9nY2MgLWZQSUMgLVdzaWduLWNvbXBh
-cmUgLUROREVCVUcgLWcgLWZ3cmFwdiAtTzMgLVdhbGwgLU8yIC1JL2hvbWUvcXNjaHVsei93b3Jr
-L3Vwc3RyZWFtL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9pbmNsdWRlIC1zdGQ9YzExIC1XZXh0cmEg
-LVduby11bnVzZWQtcGFyYW1ldGVyIC1Xbm8tbWlzc2luZy1maWVsZC1pbml0aWFsaXplcnMgLVdz
-dHJpY3QtcHJvdG90eXBlcyAtV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uIC1m
-dmlzaWJpbGl0eT1oaWRkZW4gLUkuL0luY2x1ZGUvaW50ZXJuYWwgLUkuL0luY2x1ZGUgLUkuIC1J
-L2hvbWUvcXNjaHVsei93b3JrL3Vwc3RyZWFtL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9pbmNsdWRl
-IC1JL3Vzci9sb2NhbC9pbmNsdWRlIC1JL2hvbWUvcXNjaHVsei93b3JrL3Vwc3RyZWFtL2J1aWxk
-cm9vdC9vdXRwdXQvYnVpbGQvaG9zdC1weXRob24zLTMuMTEuMS9JbmNsdWRlIC1JL2hvbWUvcXNj
-aHVsei93b3JrL3Vwc3RyZWFtL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvaG9zdC1weXRob24zLTMu
-MTEuMSAtYyAvaG9tZS9xc2NodWx6L3dvcmsvdXBzdHJlYW0vYnVpbGRyb290L291dHB1dC9idWls
-ZC9ob3N0LXB5dGhvbjMtMy4xMS4xL01vZHVsZXMvX3V1aWRtb2R1bGUuYyAtbyBidWlsZC90ZW1w
-LmxpbnV4LXg4Nl82NC0zLjExL2hvbWUvcXNjaHVsei93b3JrL3Vwc3RyZWFtL2J1aWxkcm9vdC9v
-dXRwdXQvYnVpbGQvaG9zdC1weXRob24zLTMuMTEuMS9Nb2R1bGVzL191dWlkbW9kdWxlLm8KL2hv
-bWUvcXNjaHVsei93b3JrL3Vwc3RyZWFtL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvaG9zdC1weXRo
-b24zLTMuMTEuMS9Nb2R1bGVzL191dWlkbW9kdWxlLmM6IEluIGZ1bmN0aW9uIOKAmHB5X3V1aWRf
-Z2VuZXJhdGVfdGltZV9zYWZl4oCZOgovaG9tZS9xc2NodWx6L3dvcmsvdXBzdHJlYW0vYnVpbGRy
-b290L291dHB1dC9idWlsZC9ob3N0LXB5dGhvbjMtMy4xMS4xL01vZHVsZXMvX3V1aWRtb2R1bGUu
-YzoyNzoxMjogZXJyb3I6IHN0b3JhZ2Ugc2l6ZSBvZiDigJh1dWkg4oCZIGlzbuKAmXQga25vd24K
-ICAgMjcgfCAgICAgdXVpZF90IHV1aWQ7CiAgICAgIHwgICAgICAgICAgICBefn5+Ci9ob21lL3Fz
-Y2h1bHovd29yay91cHN0cmVhbS9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL2hvc3QtcHl0aG9uMy0z
-LjExLjEvTW9kdWxlcy9fdXVpZG1vZHVsZS5jOjMxOjExOiBlcnJvcjogaW1wbGljaXQgZGVjbGFy
-YXRpb24gb2YgZnVuY3Rpb24g4oCYdXVpZF9nZW5lcmF0ZV90aW1lX3NhZmXigJk7IGRpZCB5b3Ug
-bWVhbiDigJhweV91dWlkX2dlbmVyYXRlX3RpbWVfc2FmZeKAmT8gWy1XZXJyb3I9aW1wbGljaXQt
-ZnVuY3Rpb24tZGVjbGFyYXRpb25dCiAgIDMxIHwgICAgIHJlcyA9IHV1aWRfZ2VuZXJhdGVfdGlt
-ZV9zYWZlKHV1aWQpOwogICAgICB8ICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fgog
-ICAgICB8ICAgICAgICAgICBweV91dWlkX2dlbmVyYXRlX3RpbWVfc2FmZQovaG9tZS9xc2NodWx6
-L3dvcmsvdXBzdHJlYW0vYnVpbGRyb290L291dHB1dC9idWlsZC9ob3N0LXB5dGhvbjMtMy4xMS4x
-L01vZHVsZXMvX3V1aWRtb2R1bGUuYzoyNzoxMjogd2FybmluZzogdW51c2VkIHZhcmlhYmxlIOKA
-mHV1aWTigJkgWy1XdW51c2VkLXZhcmlhYmxlXQogICAyNyB8ICAgICB1dWlkX3QgdXVpZDsKICAg
-ICAgfCAgICAgICAgICAgIF5+fn4KL2hvbWUvcXNjaHVsei93b3JrL3Vwc3RyZWFtL2J1aWxkcm9v
-dC9vdXRwdXQvYnVpbGQvaG9zdC1weXRob24zLTMuMTEuMS9Nb2R1bGVzL191dWlkbW9kdWxlLmM6
-NDc6MTogd2FybmluZzogY29udHJvbCByZWFjaGVzIGVuZCBvZiBub24tdm9pZCBmdW5jdGlvbiBb
-LVdyZXR1cm4tdHlwZV0KICAgNDcgfCB9CiAgICAgIHwgXgpjYzE6IHNvbWUgd2FybmluZ3MgYmVp
-bmcgdHJlYXRlZCBhcyBlcnJvcnMKClRoZSBuZWNlc3NhcnkgYml0cyB0byBidWlsZCB0aGVzZSBv
-cHRpb25hbCBtb2R1bGVzIHdlcmUgbm90IGZvdW5kOgpfZGJtICAgICAgICAgICAgICAgICBfZ2Ri
-bSAgICAgICAgICAgICAgICBfdGtpbnRlcgpuaXMgICAgICAgICAgICAgICAgICByZWFkbGluZQpU
-byBmaW5kIHRoZSBuZWNlc3NhcnkgYml0cywgbG9vayBpbiBzZXR1cC5weSBpbiBkZXRlY3RfbW9k
-dWxlcygpIGZvciB0aGUgbW9kdWxlJ3MgbmFtZS4KClRoZSBmb2xsb3dpbmcgbW9kdWxlcyBmb3Vu
-ZCBieSBkZXRlY3RfbW9kdWxlcygpIGluIHNldHVwLnB5IGhhdmUgbm90CmJlZW4gYnVpbHQsIHRo
-ZXkgYXJlICpkaXNhYmxlZCogYnkgY29uZmlndXJlOgpfY3R5cGVzX3Rlc3QgICAgICAgICBfc3Fs
-aXRlMyAgICAgICAgICAgICBfdGVzdGJ1ZmZlcgpfdGVzdGNhcGkgICAgICAgICAgICBfdGVzdGlt
-cG9ydG11bHRpcGxlICAgX3Rlc3RpbnRlcm5hbGNhcGkKX3Rlc3RtdWx0aXBoYXNlICAgICAgX3h4
-dGVzdGZ1enoKCkZhaWxlZCB0byBidWlsZCB0aGVzZSBtb2R1bGVzOgpfdXVpZAoiIiIKClRoZXJl
-Zm9yZSwgbGV0J3MgZGlzYWJsZSBidWlsZGluZyB0aGUgX3V1aWQgZXh0ZW5zaW9uIHRoZSBzYW1l
-IHdheSBpdCdzCmRvbmUgZm9yIHRoZSB0YXJnZXQgcGFja2FnZSBzaW5jZSBjb21taXQgMGI2ODcx
-M2FhZTI4ICgicHl0aG9uMzogdXNlCnB1cmUgcHl0aG9uIFVVSUQgYmFja2VuZCIpLgoKQ2M6IFF1
-ZW50aW4gU2NodWx6IDxmb3NzK2J1aWxkcm9vdEAwbGVpbC5uZXQ+ClNpZ25lZC1vZmYtYnk6IFF1
-ZW50aW4gU2NodWx6IDxxdWVudGluLnNjaHVsekB0aGVvYnJvbWEtc3lzdGVtcy5jb20+Ci0tLQpP
-bmx5IGJ1aWxkIHRlc3RlZCB3aXRoIG1ha2UgaG9zdC1weXRob24zIHdpdGggcmFzcGJlcnJ5cGk0
-X2RlZmNvbmZpZyBjb25maWd1cmF0aW9uLgotLS0KIHBhY2thZ2UvcHl0aG9uMy9weXRob24zLm1r
-IHwgMSArCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1naXQgYS9wYWNr
-YWdlL3B5dGhvbjMvcHl0aG9uMy5tayBiL3BhY2thZ2UvcHl0aG9uMy9weXRob24zLm1rCmluZGV4
-IDIxOWQxMzViM2YuLmZiNmRiZjJlNjQgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHl0aG9uMy9weXRo
-b24zLm1rCisrKyBiL3BhY2thZ2UvcHl0aG9uMy9weXRob24zLm1rCkBAIC0zMSw2ICszMSw3IEBA
-IEhPU1RfUFlUSE9OM19DT05GX09QVFMgKz0gXAogCS0tZW5hYmxlLXVuaWNvZGVkYXRhIFwKIAkt
-LWRpc2FibGUtdGVzdC1tb2R1bGVzIFwKIAktLWRpc2FibGUtaWRsZTMgXAorCS0tZGlzYWJsZS11
-dWlkIFwKIAktLWRpc2FibGUtb3NzYXVkaW9kZXYKIAogIyBNYWtlIHN1cmUgdGhhdCBMRF9MSUJS
-QVJZX1BBVEggb3ZlcnJpZGVzIC1ycGF0aC4KCi0tLQpiYXNlLWNvbW1pdDogMjZkZDcwZTk1NGE3
-YzkxNDJiMDc4ODM3YWIxYmJmYWQ1NGQwZTVjYgpjaGFuZ2UtaWQ6IDIwMjMwMjA3LWhvc3QtcHl0
-aG9uLWxpYnV1aWQtZDYwMGQzMmY3MGFlCgpCZXN0IHJlZ2FyZHMsCi0tIApRdWVudGluIFNjaHVs
-eiA8cXVlbnRpbi5zY2h1bHpAdGhlb2Jyb21hLXN5c3RlbXMuY29tPgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
-aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============8146396621312472039==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b635bda5bc5ea9db15cb83390d8e3908b85c2629
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+host-python3 currently does not build if util-linux-uuid option is not
+enabled, failing with the following error messages:
+"""
+/usr/lib64/ccache/gcc -fPIC -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -O2 -I/home/qschulz/work/upstream/buildroot/output/host/include -std=c11 -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wstrict-prototypes -Werror=implicit-function-declaration -fvisibility=hidden -I./Include/internal -I./Include -I. -I/home/qschulz/work/upstream/buildroot/output/host/include -I/usr/local/include -I/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Include -I/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1 -c /home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c -o build/temp.linux-x86_64-3.11/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.o
+/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c: In function ‘py_uuid_generate_time_safe’:
+/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c:27:12: error: storage size of ‘uui ’ isn’t known
+   27 |     uuid_t uuid;
+      |            ^~~~
+/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c:31:11: error: implicit declaration of function ‘uuid_generate_time_safe’; did you mean ‘py_uuid_generate_time_safe’? [-Werror=implicit-function-declaration]
+   31 |     res = uuid_generate_time_safe(uuid);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~
+      |           py_uuid_generate_time_safe
+/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c:27:12: warning: unused variable ‘uuid’ [-Wunused-variable]
+   27 |     uuid_t uuid;
+      |            ^~~~
+/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c:47:1: warning: control reaches end of non-void function [-Wreturn-type]
+   47 | }
+      | ^
+cc1: some warnings being treated as errors
+
+The necessary bits to build these optional modules were not found:
+_dbm                 _gdbm                _tkinter
+nis                  readline
+To find the necessary bits, look in setup.py in detect_modules() for the module's name.
+
+The following modules found by detect_modules() in setup.py have not
+been built, they are *disabled* by configure:
+_ctypes_test         _sqlite3             _testbuffer
+_testcapi            _testimportmultiple   _testinternalcapi
+_testmultiphase      _xxtestfuzz
+
+Failed to build these modules:
+_uuid
+"""
+
+Therefore, let's disable building the _uuid extension the same way it's
+done for the target package since commit 0b68713aae28 ("python3: use
+pure python UUID backend").
+
+Cc: Quentin Schulz <foss+buildroot@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python3/python3.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 219d135b3f..fb6dbf2e64 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -31,6 +31,7 @@ HOST_PYTHON3_CONF_OPTS += \
+ 	--enable-unicodedata \
+ 	--disable-test-modules \
+ 	--disable-idle3 \
++	--disable-uuid \
+ 	--disable-ossaudiodev
+ 
+ # Make sure that LD_LIBRARY_PATH overrides -rpath.
+
+--===============8146396621312472039==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8146396621312472039==--
