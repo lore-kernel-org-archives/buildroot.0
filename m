@@ -1,73 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66405C636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 04:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E18AEC636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 04:30:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE32F404AF;
-	Tue,  7 Feb 2023 04:30:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE32F404AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B1BA417A0;
+	Tue,  7 Feb 2023 04:30:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B1BA417A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MqC60YgJYLz6; Tue,  7 Feb 2023 04:30:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bL53nHaMvMZq; Tue,  7 Feb 2023 04:30:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E61D140477;
-	Tue,  7 Feb 2023 04:30:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E61D140477
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D0A3417A5;
+	Tue,  7 Feb 2023 04:30:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D0A3417A5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B34451BF2C8
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 04:30:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 972F11BF2C8
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 04:30:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CEDC60DFC
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 04:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CEDC60DFC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E02960DF4
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 04:30:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E02960DF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D52Ghe_FDhsD for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 04:30:15 +0000 (UTC)
+ with ESMTP id oVjz3x_o-1ai for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 04:30:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68A3360DF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D9DE60E03
 Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com
  [209.85.216.43])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 68A3360DF4
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 04:30:15 +0000 (UTC)
-Received: by mail-pj1-f43.google.com with SMTP id d2so10096248pjd.5
- for <buildroot@buildroot.org>; Mon, 06 Feb 2023 20:30:15 -0800 (PST)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9D9DE60E03
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 04:30:16 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id
+ v18-20020a17090ae99200b00230f079dcd9so207093pjy.1
+ for <buildroot@buildroot.org>; Mon, 06 Feb 2023 20:30:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EJi13E9/lANCztkv08e9fjj4QkvsiSpVZ1D+8MLeqyA=;
- b=MTtaOD3pbzjn+PTDp7d/IKO8rco2ZcgjBzHBsBqxjcMw9dkfHDqqV3APYJKy+ihQo2
- Bb2+2PQe05vr9sN8XDJdBU/1+MS6BaRj1QO54KMxKG61qlFTW1EmO7Q15oTOw4xba9mN
- tot+A9Zhc9Vbf1eKGsCc8/sNlozyFBAi/kJ0fa+wW9JoTfStRWhlqYn0okd+Dh6G4Rxy
- bpugNUhfTefLiWvOizI5vK4Qup0OvV+pcm10FLFaRb1WD2rQlLNOrjqdtq40uVz3G8r7
- 02PhAr+8Kca+jt6YNnc9c1pWNJ0hw9OfZfVG+ZZyAFC6hTFk3NSDjQNgIY3SJjY+5vCP
- iV8Q==
-X-Gm-Message-State: AO0yUKWgPRfCPKbIlSskKPZCr4do0w3iIiokQKzBVSTjnNe1kFGlRDaf
- RzaDNoq1roxb4fggl0Qm2wtV1if8PwZI6Q==
-X-Google-Smtp-Source: AK7set+q1BimBE2mxAsjjOshPwLt3DDHF64XvlE1hFvPE7kxF2f9NjMHeH7p5n4QDu1GLkWduhgVTg==
-X-Received: by 2002:a17:902:f0cb:b0:198:f574:3663 with SMTP id
- v11-20020a170902f0cb00b00198f5743663mr1233748pla.18.1675744214390; 
- Mon, 06 Feb 2023 20:30:14 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=ghgxVXiGZIz6PFUPejdw6g/1DkI63GU1E0USDaKpPA4=;
+ b=DSOTlFN3OWO3pz/o1k/Ik95AuPCU/UDrSbUrtkfjLYC0vSy3vmIThlgCZTah4JrkXU
+ ctO7ANFrE86bARIh4K0P6GmqvtataGhs56J4LAWdjhmP65yqGV0BoBHL/LFbucFSRtp8
+ LzIYVaUsGGlw7f2YnRUkdFpQ4JL6FwPqS3rdI9tXuaj6VbAbIoTyfkvl6UX8CZXRbc3E
+ mIOL2zkwubh4PM4Fen75mtp1uvEPTxMSxB/tHI9/f95iTnYs8HbmL+iRa4OWUGEtH8cg
+ W6GJCt/7BKXeVlGX+IkTMCLvve3etEinkjUHwSXyADL+Rgpl3Vhk3Eb4pnwiRCgwAZMW
+ K0rw==
+X-Gm-Message-State: AO0yUKVbOn7T5zNwQAUdgkIX5QRugT5+pQW/xzEBjbWdqSE346ocICmh
+ ueo/80c1SJAL5ESNgHCpNMdc6CA62kiUgg==
+X-Google-Smtp-Source: AK7set83Lwfw/f2wWB/FLcqbqlr7HaU81BYPYKbFk/3PVyJ/MkM7oQQOgG0+YKfkoX1LlVK4o2SkXw==
+X-Received: by 2002:a17:902:e1d4:b0:199:1458:6c61 with SMTP id
+ t20-20020a170902e1d400b0019914586c61mr1339989pla.13.1675744215630; 
+ Mon, 06 Feb 2023 20:30:15 -0800 (PST)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- y15-20020a17090264cf00b001967580f60fsm7695484pli.260.2023.02.06.20.30.13
+ y15-20020a17090264cf00b001967580f60fsm7695484pli.260.2023.02.06.20.30.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Feb 2023 20:30:13 -0800 (PST)
+ Mon, 06 Feb 2023 20:30:15 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Mon,  6 Feb 2023 20:30:08 -0800
-Message-Id: <20230207043010.85696-1-christian@paral.in>
+Date: Mon,  6 Feb 2023 20:30:09 -0800
+Message-Id: <20230207043010.85696-2-christian@paral.in>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230207043010.85696-1-christian@paral.in>
+References: <20230207043010.85696-1-christian@paral.in>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 1/3] package/docker-engine: bump version to
- v23.0.0
+Subject: [Buildroot] [PATCH v3 2/3] package/docker-proxy: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,83 +91,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-docker-engine does not ship a go.mod file in the tarball: create one to tell the
-Go compiler the root import path prefix for the module and the language version.
-Note that the language version in go.mod is not required to be equal the version
-of the Go compiler.
+The docker-proxy binary (libnetwork) has been merged into the docker-engine
+source (moby). Drop the docker-proxy package and add cmd/docker-proxy as a build
+target of docker-engine instead.
 
-This update requires a workaround for the non-standard vendor/ structure in the
-docker-engine repository, which has an invalid vendor/modules.txt file.
-
-Reference: https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-
-Note that as of v23.0.0 docker-engine expects containerd to be started by
-systemd if --containerd= flag is set in dockerd.service, whereas in previous
-versions containerd was started by the docker daemon as a sub-process.
-
-There is no sysv unit for containerd, but this is OK: in the Docker sysv init
-file S60dockerd, we do not set the --containerd flag. The docker daemon will
-start containerd as a sub-process automatically due to the absence of this flag.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-
----
-
-v1 -> v2:
-
- - clarify commit message about containerd.service and sysv compat
- - fix formatting in S60dockerd
- - bundle commit into a series with required containerd changes
-
-v2 -> v3:
-
- - remove whitespace changes (as per Yann review)
- - use rm -f instead of checking for file existence
- - add the go.mod file in the CONFIGURE step
+https://github.com/moby/libnetwork/commit/563fe8e248f3afac75a270f693f38bdc3eea7bf3
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/docker-engine.hash |  2 +-
- package/docker-engine/docker-engine.mk   | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ Config.in.legacy                       |  8 ++++++++
+ DEVELOPERS                             |  1 -
+ package/Config.in                      |  1 -
+ package/docker-engine/Config.in        |  1 -
+ package/docker-engine/docker-engine.mk |  2 +-
+ package/docker-proxy/Config.in         | 19 -------------------
+ package/docker-proxy/docker-proxy.hash |  3 ---
+ package/docker-proxy/docker-proxy.mk   | 21 ---------------------
+ 8 files changed, 9 insertions(+), 47 deletions(-)
+ delete mode 100644 package/docker-proxy/Config.in
+ delete mode 100644 package/docker-proxy/docker-proxy.hash
+ delete mode 100644 package/docker-proxy/docker-proxy.mk
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index d15b1359cb..670cbd414b 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ee0e2168e27ec87f1b0650e86af5d3e167a07fd2ff8c1ce3bb588f0b4f9a4658  docker-engine-20.10.22.tar.gz
-+sha256  94492508260e57eb93399257d53435cd5308ca6330e173ca6e6f3dbf4c6e12f3  docker-engine-23.0.0.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 61686fdd11..c9d5c635cd 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_DOCKER_PROXY
++	bool "docker-proxy removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_DOCKER_ENGINE
++	help
++	  docker-proxy has been dropped by upstream since version
++	  563fe8. it has been merged into docker-engine (moby).
++
+ config BR2_TARGET_GUMMIBOOT
+ 	bool "gummiboot removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f8acf8776c..2559b8c227 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -545,7 +545,6 @@ F:	package/delve/
+ F:	package/docker-cli/
+ F:	package/docker-compose/
+ F:	package/docker-engine/
+-F:	package/docker-proxy/
+ F:	package/embiggen-disk/
+ F:	package/fuse-overlayfs/
+ F:	package/go/
+diff --git a/package/Config.in b/package/Config.in
+index b6211f1102..45c803ea6c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2619,7 +2619,6 @@ menu "System tools"
+ 	source "package/docker-cli/Config.in"
+ 	source "package/docker-compose/Config.in"
+ 	source "package/docker-engine/Config.in"
+-	source "package/docker-proxy/Config.in"
+ 	source "package/earlyoom/Config.in"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 1f0efb8fcc..b5a356eab9 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -7,7 +7,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_USE_MMU # containerd
+ 	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
+ 	select BR2_PACKAGE_CONTAINERD # runtime dependency
+-	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
+ 	help
+ 	  Docker is a platform to build, ship,
 diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 2a9b72ca78..229e199aa2 100644
+index 229e199aa2..d769e367fa 100644
 --- a/package/docker-engine/docker-engine.mk
 +++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -24,7 +24,7 @@ DOCKER_ENGINE_LDFLAGS = \
+ 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.Version="$(DOCKER_ENGINE_VERSION)"
  
--DOCKER_ENGINE_VERSION = 20.10.22
-+DOCKER_ENGINE_VERSION = 23.0.0
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs
+-DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
++DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd cmd/docker-proxy
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
-@@ -62,6 +62,14 @@ else
- DOCKER_ENGINE_TAGS += exclude_graphdriver_vfs
- endif
- 
-+# create the go.mod file with language version go1.19
-+# remove the conflicting vendor/modules.txt
-+# https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-+define DOCKER_ENGINE_CONFIGURE_CMDS
-+	printf "module $(DOCKER_ENGINE_GOMOD)\n\ngo 1.19\n" > $(@D)/go.mod
-+	rm -f $(@D)/vendor/modules.txt
-+endef
-+
- DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
- 
- define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+ ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+ DOCKER_ENGINE_DEPENDENCIES += libapparmor
+diff --git a/package/docker-proxy/Config.in b/package/docker-proxy/Config.in
+deleted file mode 100644
+index 7e40536537..0000000000
+--- a/package/docker-proxy/Config.in
++++ /dev/null
+@@ -1,19 +0,0 @@
+-config BR2_PACKAGE_DOCKER_PROXY
+-	bool "docker-proxy"
+-	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	help
+-	  Libnetwork is a Container Network Model that provides a
+-	  consistent programming interface and the required network
+-	  abstractions for applications.
+-
+-	  This package provides docker-proxy, a run-time dependency of
+-	  Docker.
+-
+-	  https://github.com/docker/libnetwork
+-
+-comment "docker-proxy needs a toolchain w/ threads"
+-	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/docker-proxy/docker-proxy.hash b/package/docker-proxy/docker-proxy.hash
+deleted file mode 100644
+index 63296f14c1..0000000000
+--- a/package/docker-proxy/docker-proxy.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  05bf95637bae134d12d02bd7a7854cd0c768e6fccb662c2c64523f05b997b204  docker-proxy-f6ccccb1c082a432c2a5814aaedaca56af33d9ea.tar.gz
+-sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
+deleted file mode 100644
+index fe7982e8f6..0000000000
+--- a/package/docker-proxy/docker-proxy.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# docker-proxy
+-#
+-################################################################################
+-
+-DOCKER_PROXY_VERSION = f6ccccb1c082a432c2a5814aaedaca56af33d9ea
+-DOCKER_PROXY_SITE = $(call github,moby,libnetwork,$(DOCKER_PROXY_VERSION))
+-
+-DOCKER_PROXY_LICENSE = Apache-2.0
+-DOCKER_PROXY_LICENSE_FILES = LICENSE
+-
+-DOCKER_PROXY_DEPENDENCIES = host-pkgconf
+-
+-DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
+-
+-define DOCKER_PROXY_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/bin/proxy $(TARGET_DIR)/usr/bin/docker-proxy
+-endef
+-
+-$(eval $(golang-package))
 -- 
 2.39.1
 
