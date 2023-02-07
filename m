@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15160C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:34:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E99E4C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC5BE42A40;
-	Tue, 21 Feb 2023 00:34:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC5BE42A40
+	by smtp4.osuosl.org (Postfix) with ESMTP id 957CB4F466;
+	Tue, 21 Feb 2023 00:34:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 957CB4F466
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cw3rV0fEPUHs; Tue, 21 Feb 2023 00:34:20 +0000 (UTC)
+	with ESMTP id zbr6Dujhnf_T; Tue, 21 Feb 2023 00:34:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1371E4F448;
-	Tue, 21 Feb 2023 00:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1371E4F448
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AAFB41BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EA204F463;
+	Tue, 21 Feb 2023 00:34:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EA204F463
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E059B1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E2F386FB61
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2F386FB61
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C105417EE
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C105417EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1bJkbNMptYy3 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jQp03ujLVAcT for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E41A6FAA8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E41A6FAA8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 327AB4159A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 327AB4159A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 152128648F; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2CE348648F; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:17:09 +0100
+Date: Tue, 7 Feb 2023 22:57:06 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0d924b20fc4fc2c2dc5476d2e8975cb127e8868e
-X-Git-Newrev: 3c21710040224448d71d4417e166cdd2c7f6a06b
+X-Git-Oldrev: a016b693f7830f3c8ae815851d3204b8b6e99821
+X-Git-Newrev: bed21bb9b462bece7cd1b9741643aa553ced4d35
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205230.152128648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/iw: bump version to
- 5.19
+Message-Id: <20230220205254.2CE348648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xz: fix microblaze
+ compiles
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +56,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c21710040224448d71d4417e166cdd2c7f6a06b
+commit: https://git.buildroot.net/buildroot/commit/?id=bed21bb9b462bece7cd1b9741643aa553ced4d35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/iw/iw.hash | 2 +-
- package/iw/iw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Patch xz to check if __attribute__((symver ..)) is supported via a
+compile check during configure.
 
-diff --git a/package/iw/iw.hash b/package/iw/iw.hash
-index 33dd117368..376dc3b499 100644
---- a/package/iw/iw.hash
-+++ b/package/iw/iw.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
--sha256  4c44e42762f903f9094ba5a598998c800a97a62afd6fd31ec1e0a799e308659c  iw-5.16.tar.xz
-+sha256  f167bbe947dd53bb9ebc0c1dcef5db6ad73ac1d6084f2c6f9376c5c360cc4d4e  iw-5.19.tar.xz
- # Locally calculated
- sha256  5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af  COPYING
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index 9bf6ddbfc6..60ada9d57f 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IW_VERSION = 5.16
-+IW_VERSION = 5.19
- IW_SOURCE = iw-$(IW_VERSION).tar.xz
- IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
- IW_LICENSE = ISC
+Fixes:
+  http://autobuild.buildroot.org/results/c0d/c0de72e5a34b379e0c516ad08984bb2c4b0abb5c//
+
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../xz/0001-Detect-symver-attribute-support.patch  | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+
+diff --git a/package/xz/0001-Detect-symver-attribute-support.patch b/package/xz/0001-Detect-symver-attribute-support.patch
+new file mode 100644
+index 0000000000..9ec43ea7a0
+--- /dev/null
++++ b/package/xz/0001-Detect-symver-attribute-support.patch
+@@ -0,0 +1,61 @@
++From 231add523328ad9e021d8f2b02697b6a11719430 Mon Sep 17 00:00:00 2001
++From: Vincent Fazio <vfazio@gmail.com>
++Date: Tue, 7 Feb 2023 08:51:24 -0600
++Subject: [PATCH] Detect symver attribute support
++
++On non-ELF platforms, such as microblaze, builds will fail when trying
++to add symver information because  __attribute__((symver ..)) is not
++supported even though __has_attribute(__symver__) returns true.
++
++Support for symver needs to be detected via a compile test since
++__has_attribute can report false positives [0].
++
++Add a configure compile check for __attribute__((symver ..)) to ensure
++it is supported and define a variable to advertise support.
++
++[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766#c1
++
++Upstream: https://github.com/tukaani-project/xz/pull/32
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++---
++ configure.ac                | 9 +++++++++
++ src/liblzma/common/common.h | 2 +-
++ 2 files changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5ad5589..08c623a 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -791,6 +791,15 @@ else
++ 				time with Libtool if neither --with-pic nor
++ 				--without-pic is used). This define must be
++ 				used together with liblzma_linux.map.])
+++			OLD_CFLAGS="$CFLAGS"
+++			CFLAGS="$CFLAGS -Werror"  # we need -Werror to make sure the attribute is not ignored
+++			AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+++				[__attribute__ ((symver ("test@TEST"))) void foo(void) { }
+++				])],
+++				[AC_DEFINE([HAVE_SYMVER_ATTRIBUTE], [1],
+++					[Define to 1 if GCC supports the symver attribute])],
+++				[])
+++			CFLAGS="$OLD_CFLAGS"
++ 			;;
++ 		*)
++ 			enable_symbol_versions=generic
++diff --git a/src/liblzma/common/common.h b/src/liblzma/common/common.h
++index 11fec52..1d2ef9c 100644
++--- a/src/liblzma/common/common.h
+++++ b/src/liblzma/common/common.h
++@@ -76,7 +76,7 @@
++ // too (which doesn't support __symver__) so use it to detect if __symver__
++ // is available. This should be far more reliable than looking at compiler
++ // version macros as nowadays especially __GNUC__ is defined by many compilers.
++-#	if lzma_has_attribute(__symver__)
+++#	if defined(HAVE_SYMVER_ATTRIBUTE) 
++ #		define LZMA_SYMVER_API(extnamever, type, intname) \
++ 			extern __attribute__((__symver__(extnamever))) \
++ 					LZMA_API(type) intname
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
