@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D0C6C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A98AC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:16:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1679700EE;
-	Tue, 21 Feb 2023 02:15:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1679700EE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23FDF701EA;
+	Tue, 21 Feb 2023 02:16:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23FDF701EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t0_FFWYKvOXe; Tue, 21 Feb 2023 02:15:42 +0000 (UTC)
+	with ESMTP id KGdNmGeWsdLV; Tue, 21 Feb 2023 02:16:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2884A701F4;
-	Tue, 21 Feb 2023 02:15:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2884A701F4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3BE0E1BF310
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 22:48:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14E18702D9;
+	Tue, 21 Feb 2023 02:16:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E18702D9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 68EA01BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 163E081BF5
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 22:48:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 163E081BF5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A617417EC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A617417EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IQNOmYThEH-e for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 22:48:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CA1981341
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1CA1981341
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 22:48:30 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9E10BE0002;
- Mon, 20 Feb 2023 22:48:28 +0000 (UTC)
-Date: Mon, 20 Feb 2023 23:48:27 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230220234827.28c6b92f@windsurf>
-In-Reply-To: <20230215200902.538238-1-giulio.benetti@benettiengineering.com>
-References: <20230215200902.538238-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676933309;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=V5XM7BK0gRnnIEW4yOo4gI8drY6fqb7uLL4/wqSYdOc=;
- b=HbGxg3spkgdghCBqWpYwjmQsCjSacYuhPXTUPOSaNS0nDZsVGOFXHfP2mVCYa53hxyEJvx
- yjfpR0WdSuuvM6ftJ8wdj7F4HuVdMDyLc3/+ynfzhSfwz75UIlk15xod3Zzqj4lCihWlnC
- 25lV9AOtC3vXnIJ8RWkHdMQkI3zfoXcI1MN/kDfI3HgyFEBnS+7ERgilr5yJckckgFXAgz
- V39fUeJ9A9VQdLNoEAOmlY8klIKFKF1/XjNEbiJY444txIwy5aZo1n80z6fSJ3/Ae/lOiw
- wYJcKCu/70hJyBx0fWbsScJ8Y/+XimxU+HUjOcMPc5j6XtPIczWP8SROKGXODQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HbGxg3sp
-Subject: Re: [Buildroot] [PATCH 1/2] configs/bananapi_m2_ultra_defconfig:
- bump Linux to 6.1 and U-Boot to 2023.01
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T5BSers5HqDa for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0559417DA
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0559417DA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CD9DF86496; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 7 Feb 2023 22:37:15 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: f79a9c775ff0a59027f274a237d98b5f8d31c022
+X-Git-Newrev: d8dc5315eb712eca0a5cbf793a6714a47ab6e57e
+X-Patchwork-Hint: ignore
+Message-Id: <20230220205253.CD9DF86496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wolfssl: disable
+ assembly when not supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,27 +58,88 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 15 Feb 2023 21:09:01 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d8dc5315eb712eca0a5cbf793a6714a47ab6e57e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  configs/bananapi_m2_ultra_defconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+wolfssl contains some assembly code and its configure.ac script
+enables the assembly code depending on the CPU architecture. However,
+the detection logic is not sufficient and leads to using the assembly
+code in situation where it should not.
 
-Both applied to next, thanks!
+Here are two examples:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ - As soon as the architecture is mips64/mips64el, it uses assembly
+   code, but that assembly code is not mips64r6 compatible.
+
+ - As soon as the architecture is RISC-V, it uses assembly code, but
+   that assembly code uses multiplication instructions, without paying
+   attention that the "M" extension may not be available in the RISC-V
+   CPU instruction set.
+
+In order to avoid this, we introduce a
+BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS hidden boolean to decide when to
+enable/disable assembly code. We set an initial value with the
+supported CPU architectures, with the exclusion of the problematic
+cases described above.
+
+It is pretty likely that this variable will need tuning progressively,
+as it is difficult to determine which CPU variants exactly are
+supported by the assembly code in wolfssl.
+
+Fixes:
+
+ - MIPS64 case: http://autobuild.buildroot.net/results/43e/43ee1a457cbeb986d958c9a70cac0676377661c0/
+ - RISC-V case: http://autobuild.buildroot.net/results/f05/f056ebe7749a69994afba39a9d4967e2774c45ea/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wolfssl/Config.in  | 12 ++++++++++++
+ package/wolfssl/wolfssl.mk |  6 ++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
+index 3a97125e8d..c41bdb6888 100644
+--- a/package/wolfssl/Config.in
++++ b/package/wolfssl/Config.in
+@@ -1,3 +1,15 @@
++config BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS
++	bool
++	default y if BR2_aarch64
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_powerpc
++	default y if BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_mips64 && !BR2_MIPS_CPU_MIPS32R6
++	default y if BR2_mips64el && !BR2_MIPS_CPU_MIPS32R6
++	default y if BR2_mips || BR2_mipsel
++	default y if BR2_riscv && BR2_RISCV_ISA_RVM
++	default y if BR2_s390x
++
+ config BR2_PACKAGE_WOLFSSL
+ 	bool "wolfssl"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 8f6cba56ec..9f06bb1b4b 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -32,6 +32,12 @@ else
+ WOLFSSL_CONF_OPTS += --disable-sslv3
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS),y)
++WOLFSSL_CONF_OPTS += --enable-asm
++else
++WOLFSSL_CONF_OPTS += --disable-asm
++endif
++
+ # enable ARMv8 hardware acceleration
+ ifeq ($(BR2_aarch64),y)
+ WOLFSSL_CONF_OPTS += --enable-armasm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
