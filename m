@@ -1,50 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FE19C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 09:51:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1F7EC636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 10:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1822260E61;
-	Tue,  7 Feb 2023 09:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1822260E61
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C67140860;
+	Tue,  7 Feb 2023 10:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C67140860
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lspfx7QNLWZK; Tue,  7 Feb 2023 09:51:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pW_KrVsjzSaU; Tue,  7 Feb 2023 10:03:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3763F60E5C;
-	Tue,  7 Feb 2023 09:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3763F60E5C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 723134086F;
+	Tue,  7 Feb 2023 10:03:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 723134086F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CBDAF1BF2C2
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 09:51:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DB5301BF2C2
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:03:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B3D70405C4
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 09:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3D70405C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE65B40A21
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:03:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE65B40A21
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kBx850mRjL2S for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 09:51:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B41034059B
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 09:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B41034059B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98DB483FBA; Tue,  7 Feb 2023 09:51:48 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id YFTi00Ep9KQk for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 10:03:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7635D40A07
+Received: from h7.fbrelay.privateemail.com (h7.fbrelay.privateemail.com
+ [162.0.218.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7635D40A07
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 10:03:41 +0000 (UTC)
+Received: from MTA-05-3.privateemail.com (unknown [198.54.122.141])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by h7.fbrelay.privateemail.com (Postfix) with ESMTPS id 5052A6049B
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 05:03:38 -0500 (EST)
+Received: from mta-05.privateemail.com (localhost [127.0.0.1])
+ by mta-05.privateemail.com (Postfix) with ESMTP id 87ECB18000BE;
+ Tue,  7 Feb 2023 05:03:35 -0500 (EST)
+Received: from system76-pc.. (cpe1150018.bra.be.verixi.net [85.119.216.19])
+ by mta-05.privateemail.com (Postfix) with ESMTPA id 9EA8518000BF;
+ Tue,  7 Feb 2023 05:03:32 -0500 (EST)
+From: Jordan Speicher <jordan@jspeicher.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 10:50:36 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4cdd99190e89d538c25a8fc701372775fbde3b97
-X-Git-Newrev: 29fd8481e22fd7e8ac00e0bc47614ff06be33706
-X-Patchwork-Hint: ignore
-Message-Id: <20230207095148.98DB483FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-bunch: remove package
+Date: Tue,  7 Feb 2023 11:02:15 +0100
+Message-Id: <20230207100216.889464-1-jordan@jspeicher.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Virus-Scanned: ClamAV using ClamSMTP
+Subject: [Buildroot] [PATCH] package/mcelog: bump to version 191
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,140 +67,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8936165588519075994=="
+Cc: Jordan Speicher <jordan@jspeicher.com>,
+ Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8936165588519075994==
-Content-Type: text/plain
+Create .os_version to specify the version since there is no git
+checkout available.
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29fd8481e22fd7e8ac00e0bc47614ff06be33706
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://github.com/andikleen/mcelog/releases/tag/v191
+https://github.com/andikleen/mcelog/releases/tag/v190
 
-Since the python3 bump to version 3.11 in commit
-738500c296c8b1206f20e94ca3e7c5932a6a0486 python-bunch has failed
-to build.
-
-This is due to open() which no longer accepts 'U' (“universal
-newline”) in the file mode.
-
-Remove this package as it has not had a release since 2011 and
-is unmaintained upstream.
-
-Details:
-https://docs.python.org/3.11/whatsnew/3.11.html#porting-to-python-3-11
-
-Fixes:
- - http://autobuild.buildroot.net/results/2ba/2ba72fc9837605a36ea63bbd3e6e181a40cdf360
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jordan Speicher <jordan@jspeicher.com>
 ---
- Config.in.legacy                       |  7 +++++++
- DEVELOPERS                             |  1 -
- package/Config.in                      |  1 -
- package/python-bunch/Config.in         |  6 ------
- package/python-bunch/python-bunch.hash |  5 -----
- package/python-bunch/python-bunch.mk   | 14 --------------
- 6 files changed, 7 insertions(+), 27 deletions(-)
+ package/mcelog/mcelog.hash | 2 +-
+ package/mcelog/mcelog.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 61686fdd11..ad80522451 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
+index e0350b085d..23fd4e50f3 100644
+--- a/package/mcelog/mcelog.hash
++++ b/package/mcelog/mcelog.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  30364d134ff416f3f9469720add84bdccea226268d334f06022110f484550cd9  mcelog-189.tar.gz
++sha256  b3b2616acde7afba4752d4dc447a2c2ad5a75da65e7496e0da30f8f8d2015cfa  mcelog-191.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index 8b5876d32e..9f7194e376 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2023.02"
+-MCELOG_VERSION = 189
++MCELOG_VERSION = 191
+ MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
+ MCELOG_LICENSE = GPL-2.0
+ MCELOG_LICENSE_FILES = LICENSE
+ MCELOG_SELINUX_MODULES = mcelog
  
-+config BR2_PACKAGE_PYTHON_BUNCH
-+	bool "python-bunch removed"
-+	select BR2_LEGACY
-+	help
-+	  The python-bunch package is unmaintained and is replaced
-+	  by the python-munch package.
-+
- config BR2_TARGET_GUMMIBOOT
- 	bool "gummiboot removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f8acf8776c..cad8d6affa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2040,7 +2040,6 @@ F:	package/policycoreutils/
- F:	package/proftpd/
- F:	package/protobuf-c/
- F:	package/protobuf/
--F:	package/python-bunch/
- F:	package/python-colorama/
- F:	package/python-filelock/
- F:	package/python-flask-cors/
-diff --git a/package/Config.in b/package/Config.in
-index b6211f1102..8b9570c447 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -985,7 +985,6 @@ menu "External python modules"
- 	source "package/python-bottle/Config.in"
- 	source "package/python-brotli/Config.in"
- 	source "package/python-bsdiff4/Config.in"
--	source "package/python-bunch/Config.in"
- 	source "package/python-cached-property/Config.in"
- 	source "package/python-can/Config.in"
- 	source "package/python-canopen/Config.in"
-diff --git a/package/python-bunch/Config.in b/package/python-bunch/Config.in
-deleted file mode 100644
-index 89eae742b8..0000000000
---- a/package/python-bunch/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_PYTHON_BUNCH
--	bool "python-bunch"
--	help
--	  A dot-accessible dictionary (a la JavaScript objects).
--
--	  http://github.com/dsc/bunch
-diff --git a/package/python-bunch/python-bunch.hash b/package/python-bunch/python-bunch.hash
-deleted file mode 100644
-index cfde2db603..0000000000
---- a/package/python-bunch/python-bunch.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/bunch/json
--md5  0a829d64e95ed96defbcae2bf9061bb0  bunch-1.0.1.tar.gz
--sha256  50c77a0fc0cb372dfe48b5e11937d5f70e743adbf42683f3a6d2857645a76aaa  bunch-1.0.1.tar.gz
--# Locally computed sha256 checksums
--sha256  57ca95c92059c8380625192462979bd32994aae3fcdf902ff6eb1e467eeb0469  LICENSE.txt
-diff --git a/package/python-bunch/python-bunch.mk b/package/python-bunch/python-bunch.mk
-deleted file mode 100644
-index 18fdc223bb..0000000000
---- a/package/python-bunch/python-bunch.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# python-bunch
--#
--################################################################################
--
--PYTHON_BUNCH_VERSION = 1.0.1
--PYTHON_BUNCH_SOURCE = bunch-$(PYTHON_BUNCH_VERSION).tar.gz
--PYTHON_BUNCH_SITE = https://files.pythonhosted.org/packages/ef/bf/a4cf1779a4ffb4f610903fa08e15d1f4a8a2f4e3353a02afbe097c5bf4a8
--PYTHON_BUNCH_SETUP_TYPE = setuptools
--PYTHON_BUNCH_LICENSE = MIT
--PYTHON_BUNCH_LICENSE_FILES = LICENSE.txt
--
--$(eval $(python-package))
-
---===============8936165588519075994==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ define MCELOG_BUILD_CMDS
++	echo "$(MCELOG_VERSION)" > $(@D)/.os_version
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+ endef
+ 
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8936165588519075994==--
