@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCFD5C636D3
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 21:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95372C636D3
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 21:39:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D5D640B2E;
-	Tue,  7 Feb 2023 21:39:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D5D640B2E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EE8D40186;
+	Tue,  7 Feb 2023 21:39:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EE8D40186
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qnlNIG5Ts6BQ; Tue,  7 Feb 2023 21:39:02 +0000 (UTC)
+	with ESMTP id IPu5AA3OE8hJ; Tue,  7 Feb 2023 21:39:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C46540B24;
-	Tue,  7 Feb 2023 21:39:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C46540B24
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE44F1BF377
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:38:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A58A40B34;
+	Tue,  7 Feb 2023 21:39:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A58A40B34
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 490B11BF377
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:38:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B5A3E812D3
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:38:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5A3E812D3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3082E60B65
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:38:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3082E60B65
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5GHcCbTgIjpb for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 21:38:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yXl5seOjgfmo for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 21:38:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D948B81251
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF3EB60C05
  for <buildroot@buildroot.org>; Tue,  7 Feb 2023 21:38:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D948B81251
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF3EB60C05
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C537584375; Tue,  7 Feb 2023 21:38:44 +0000 (UTC)
+ id DCD8484378; Tue,  7 Feb 2023 21:38:44 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 7 Feb 2023 22:37:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 40866ae0ce6e71d01a132dfb7694daa2ec559184
-X-Git-Newrev: 36b8c9494b56b877fea62f17926f747c7c7bfb8d
+X-Git-Oldrev: f79a9c775ff0a59027f274a237d98b5f8d31c022
+X-Git-Newrev: d8dc5315eb712eca0a5cbf793a6714a47ab6e57e
 X-Patchwork-Hint: ignore
-Message-Id: <20230207213844.C537584375@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wolfssl: disable broken asm
- implementations on 32-bit Arm
+Message-Id: <20230207213844.DCD8484378@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wolfssl: disable assembly when not
+ supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,58 +64,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36b8c9494b56b877fea62f17926f747c7c7bfb8d
+commit: https://git.buildroot.net/buildroot/commit/?id=d8dc5315eb712eca0a5cbf793a6714a47ab6e57e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wolfSSL has ARMv8-A assembly implementations of some functions for
-both A64 and A32 ISAs.  However, some of the A32 versions use r11,
-which is usually not allowed:
+wolfssl contains some assembly code and its configure.ac script
+enables the assembly code depending on the CPU architecture. However,
+the detection logic is not sufficient and leads to using the assembly
+code in situation where it should not.
 
-wolfcrypt/src/port/arm/armv8-aes.c: In function 'wc_AesCbcEncrypt':
-wolfcrypt/src/port/arm/armv8-aes.c:3303:5: error: fp cannot be used in 'asm' here
- 3303 |     }
-      |     ^
+Here are two examples:
 
-That can be fixed by adding the compiler flag -fomit-frame-pointer,
-but then there is another failure:
+ - As soon as the architecture is mips64/mips64el, it uses assembly
+   code, but that assembly code is not mips64r6 compatible.
 
-/tmp/ccV19DQV.s: Assembler messages:
-/tmp/ccV19DQV.s:248: Error: first transfer register must be even -- `ldrd r11,r10,[r14,#4*14]'
-make[3]: *** [Makefile:5858: wolfcrypt/src/port/arm/src_libwolfssl_la-armv8-chacha.lo] Error 1
+ - As soon as the architecture is RISC-V, it uses assembly code, but
+   that assembly code uses multiplication instructions, without paying
+   attention that the "M" extension may not be available in the RISC-V
+   CPU instruction set.
 
-This is definitely not a valid instruction in A32, which suggests that
-this code isn't being tested at all upstream.  So disable it here.
+In order to avoid this, we introduce a
+BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS hidden boolean to decide when to
+enable/disable assembly code. We set an initial value with the
+supported CPU architectures, with the exclusion of the problematic
+cases described above.
+
+It is pretty likely that this variable will need tuning progressively,
+as it is difficult to determine which CPU variants exactly are
+supported by the assembly code in wolfssl.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/502/502a2b217845eb290c1961d4740b032462f8ae53/
+ - MIPS64 case: http://autobuild.buildroot.net/results/43e/43ee1a457cbeb986d958c9a70cac0676377661c0/
+ - RISC-V case: http://autobuild.buildroot.net/results/f05/f056ebe7749a69994afba39a9d4967e2774c45ea/
 
-Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wolfssl/wolfssl.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/wolfssl/Config.in  | 12 ++++++++++++
+ package/wolfssl/wolfssl.mk |  6 ++++++
+ 2 files changed, 18 insertions(+)
 
+diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
+index 3a97125e8d..c41bdb6888 100644
+--- a/package/wolfssl/Config.in
++++ b/package/wolfssl/Config.in
+@@ -1,3 +1,15 @@
++config BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS
++	bool
++	default y if BR2_aarch64
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_powerpc
++	default y if BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_mips64 && !BR2_MIPS_CPU_MIPS32R6
++	default y if BR2_mips64el && !BR2_MIPS_CPU_MIPS32R6
++	default y if BR2_mips || BR2_mipsel
++	default y if BR2_riscv && BR2_RISCV_ISA_RVM
++	default y if BR2_s390x
++
+ config BR2_PACKAGE_WOLFSSL
+ 	bool "wolfssl"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index cd3acd9411..f415e11bb5 100644
+index 8f6cba56ec..9f06bb1b4b 100644
 --- a/package/wolfssl/wolfssl.mk
 +++ b/package/wolfssl/wolfssl.mk
-@@ -33,14 +33,12 @@ WOLFSSL_CONF_OPTS += --disable-sslv3
+@@ -32,6 +32,12 @@ else
+ WOLFSSL_CONF_OPTS += --disable-sslv3
  endif
  
++ifeq ($(BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS),y)
++WOLFSSL_CONF_OPTS += --enable-asm
++else
++WOLFSSL_CONF_OPTS += --disable-asm
++endif
++
  # enable ARMv8 hardware acceleration
--ifeq ($(BR2_ARM_CPU_ARMV8A),y)
-+ifeq ($(BR2_aarch64),y)
+ ifeq ($(BR2_aarch64),y)
  WOLFSSL_CONF_OPTS += --enable-armasm
- # the flag -mstrict-align is needed to prevent build errors caused by
- # some inline assembly in parts of the AES structure using the "m"
- # constraint
--ifeq ($(BR2_aarch64),y)
- WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
--endif
- else
- WOLFSSL_CONF_OPTS += --disable-armasm
- endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
