@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70E48C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFCE8C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:43:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2168E700DA;
-	Tue, 21 Feb 2023 01:43:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2168E700DA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D367607B0;
+	Tue, 21 Feb 2023 01:43:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D367607B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xAg7LugwOILb; Tue, 21 Feb 2023 01:43:17 +0000 (UTC)
+	with ESMTP id Nw0TF3DUwS8D; Tue, 21 Feb 2023 01:43:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25443700D5;
-	Tue, 21 Feb 2023 01:43:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25443700D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC6B4700BB;
+	Tue, 21 Feb 2023 01:43:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC6B4700BB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D2E271BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E2F581BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 457FA6106E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6160C6FFE7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 457FA6106E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6160C6FFE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rMbbSKwGp9kb for <buildroot@lists.busybox.net>;
+ with ESMTP id CIQ0wcUtOh_M for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42E496FC18
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7DE036FFEB
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42E496FC18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DE036FFEB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 314C086495; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+ id 791FD81979; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 16:48:49 +0100
+Date: Tue, 7 Feb 2023 18:14:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 26dd70e954a7c9142b078837ab1bbfad54d0e5cb
-X-Git-Newrev: b635bda5bc5ea9db15cb83390d8e3908b85c2629
+X-Git-Oldrev: d24c6f4b15f4794046e8e1ee220298c90ddecd19
+X-Git-Newrev: 7a7c6725f6ca5c1108e6fb76fad414132555b373
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205253.314C086495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python3: use pure
- python UUID backend for host variant
+Message-Id: <20230220205253.791FD81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/docker: use
+ APT::Retries in apt-get calls to retry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,84 +58,40 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3281274144038981459=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3281274144038981459==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b635bda5bc5ea9db15cb83390d8e3908b85c2629
+commit: https://git.buildroot.net/buildroot/commit/?id=7a7c6725f6ca5c1108e6fb76fad414132555b373
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-host-python3 currently does not build if util-linux-uuid option is not
-enabled, failing with the following error messages:
-"""
-/usr/lib64/ccache/gcc -fPIC -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -O2 -I/home/qschulz/work/upstream/buildroot/output/host/include -std=c11 -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wstrict-prototypes -Werror=implicit-function-declaration -fvisibility=hidden -I./Include/internal -I./Include -I. -I/home/qschulz/work/upstream/buildroot/output/host/include -I/usr/local/include -I/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Include -I/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1 -c /home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c -o build/temp.linux-x86_64-3.11/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.o
-/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c: In function ‘py_uuid_generate_time_safe’:
-/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c:27:12: error: storage size of ‘uui ’ isn’t known
-   27 |     uuid_t uuid;
-      |            ^~~~
-/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c:31:11: error: implicit declaration of function ‘uuid_generate_time_safe’; did you mean ‘py_uuid_generate_time_safe’? [-Werror=implicit-function-declaration]
-   31 |     res = uuid_generate_time_safe(uuid);
-      |           ^~~~~~~~~~~~~~~~~~~~~~~
-      |           py_uuid_generate_time_safe
-/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c:27:12: warning: unused variable ‘uuid’ [-Wunused-variable]
-   27 |     uuid_t uuid;
-      |            ^~~~
-/home/qschulz/work/upstream/buildroot/output/build/host-python3-3.11.1/Modules/_uuidmodule.c:47:1: warning: control reaches end of non-void function [-Wreturn-type]
-   47 | }
-      | ^
-cc1: some warnings being treated as errors
+snapshot.debian.org is notoriously slow, and quite often leads to
+timeouts when downloading packages. To give us a better chance of
+succeeding, let's retry 3 times before failing.
 
-The necessary bits to build these optional modules were not found:
-_dbm                 _gdbm                _tkinter
-nis                  readline
-To find the necessary bits, look in setup.py in detect_modules() for the module's name.
-
-The following modules found by detect_modules() in setup.py have not
-been built, they are *disabled* by configure:
-_ctypes_test         _sqlite3             _testbuffer
-_testcapi            _testimportmultiple   _testinternalcapi
-_testmultiphase      _xxtestfuzz
-
-Failed to build these modules:
-_uuid
-"""
-
-Therefore, let's disable building the _uuid extension the same way it's
-done for the target package since commit 0b68713aae28 ("python3: use
-pure python UUID backend").
-
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python3/python3.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/docker/Dockerfile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 219d135b3f..fb6dbf2e64 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -31,6 +31,7 @@ HOST_PYTHON3_CONF_OPTS += \
- 	--enable-unicodedata \
- 	--disable-test-modules \
- 	--disable-idle3 \
-+	--disable-uuid \
- 	--disable-ossaudiodev
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index de1534e77a..a16c1e3849 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -20,8 +20,8 @@ COPY apt-sources.list /etc/apt/sources.list
  
- # Make sure that LD_LIBRARY_PATH overrides -rpath.
-
---===============3281274144038981459==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # The container has no package lists, so need to update first
+ RUN dpkg --add-architecture i386 && \
+-    apt-get update -y
+-RUN apt-get install -y --no-install-recommends \
++    apt-get -o APT::Retries=3 update -y
++RUN apt-get -o APT::Retries=3 install -y --no-install-recommends \
+         bc \
+         build-essential \
+         bzr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3281274144038981459==--
