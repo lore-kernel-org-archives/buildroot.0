@@ -1,94 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26530C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29CF3C636D3
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:17:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C211740120;
-	Tue,  7 Feb 2023 17:16:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C211740120
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9eqjMxrUw3gc; Tue,  7 Feb 2023 17:16:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7CB040A68;
-	Tue,  7 Feb 2023 17:16:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7CB040A68
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B8011BF5F6
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:16:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 315D581323
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:16:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 315D581323
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD2C2813A2;
+	Tue,  7 Feb 2023 17:17:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD2C2813A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g2nrEQAFZFjh for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 17:16:47 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pZb7J4IzqR7x; Tue,  7 Feb 2023 17:17:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17E538138C;
+	Tue,  7 Feb 2023 17:17:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17E538138C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DBCE61BF95C
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:17:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B607340A68
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:17:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B607340A68
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T4QI_BJuu9kg for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 17:17:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23CFF80FB0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 23CFF80FB0
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:16:47 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id d14so14256704wrr.9
- for <buildroot@buildroot.org>; Tue, 07 Feb 2023 09:16:46 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E146E40120
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E146E40120
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:17:30 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id j25so10738345wrc.4
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 09:17:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=lhUNms1XAptgg5eE9w2X4fYUhOk6IM6aoM3QxMisRzU=;
- b=mlzSZ1/EdVEl5uY9wjnS6YFmXJlMi2IyeB3Jkmdh3W/XCmQyj+DFoO2P37qDAlo7P2
- rDZ8uGBIXoq/nw4MCYluYCozlzNMdfhT0/vZwBpzkQKFhUa6+hnroU7ldS5fF1d5aUIR
- OfjwozFV3NJFlkfuCXiWfh2mkLCFUHV1NXbF+F8NTKHsPALjwov1wBT+/zLpL38HeV+6
- XtETrlH/lpklxchnUU0chn4hvLQvQXPHC83JlU+r4DHG4wEYV/2YfwV8zyT7Eg3YdJua
- 1V2ugKEbcfCvgLGTk+QivPGMJ5A8BRwxbLjOLXmJWTCcnmjUlZOBELvqUPVEockuywIa
- v1ww==
-X-Gm-Message-State: AO0yUKWZmg50vFvoobHaUdSxgEFSmf5sHWC/pRCAnnKclGWB4G4+Ao4j
- 15yS9G9ITxp3CYGMQ/pXdvjpjACDUpSwtgKE
-X-Google-Smtp-Source: AK7set8bxD/LVqajjGIKBc5titrKvFE0wR8DMhf06YWn2ZTBF/SWvOCjiYhA5XaPAkZ24D58vF8VsQ==
-X-Received: by 2002:adf:dd44:0:b0:242:1b0d:9c58 with SMTP id
- u4-20020adfdd44000000b002421b0d9c58mr3538552wrm.69.1675790205396; 
- Tue, 07 Feb 2023 09:16:45 -0800 (PST)
-Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
- by smtp.gmail.com with ESMTPSA id
- k12-20020adff5cc000000b002c3db5057b6sm9893295wrp.22.2023.02.07.09.16.44
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 07 Feb 2023 09:16:44 -0800 (PST)
-Message-ID: <65c21c58-0a25-50b0-0e35-f8b4da7abac3@mind.be>
-Date: Tue, 7 Feb 2023 18:16:42 +0100
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=NfoQ1rXiMwWtdbbf89KSpfHtCA9Voc3QYfVbHYab0dg=;
+ b=iTbGGe2+l60KlQqesa89kAz5oJC5uivk7FbgmosvHq4sKt4Ctbtv//ZwQk6m0o74nG
+ 0BtxC/5Z5SIzeJyrLUKpUVPCcE9xLLaePHfbNp+oV4/J78qyvg/NNevL7fs8SMVJfrqS
+ jHc++542811l0wN8/wyNuYt3yLZ51mzhoqwDUV7dTpM8Q0qC0pW+u85pXviZo/WMUd+F
+ AO5Rdmc6/CCuzyUNxF8NeyDIgJGdQMOjka/T1PIHP4o8hIiPh5UxDGFnIWr692A2qKe8
+ 2FZUTBfhb91vdc/rP9BIAMfMuHoSVp3o2iqhdnqcumgiRzxC8qFqDi5u9vay58YKVhe6
+ M6qw==
+X-Gm-Message-State: AO0yUKXx4SdpndbfTcYiGEl/hyg6Y0DrI/H/QWrH3Se9NHsnKhbHzcNh
+ kOifZuNevAVnSAP0J3aGh+OLkkGOXNypWPfxpC1Hmg==
+X-Google-Smtp-Source: AK7set/FXgR6N1tWcH+BY50MTKE6AnI2QHPjRWwGGStkVw74FUJmM9JJWiq0a4IdFnUKSsSyAShb+w==
+X-Received: by 2002:a5d:6046:0:b0:2be:5ca0:a7f9 with SMTP id
+ j6-20020a5d6046000000b002be5ca0a7f9mr3552793wrt.33.1675790248775; 
+ Tue, 07 Feb 2023 09:17:28 -0800 (PST)
+Received: from angeloc.wifiguest.local (cpe1150018.bra.be.verixi.net.
+ [85.119.216.19]) by smtp.gmail.com with ESMTPSA id
+ q16-20020adff950000000b002bff574a250sm11708801wrr.2.2023.02.07.09.17.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 07 Feb 2023 09:17:28 -0800 (PST)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Tue,  7 Feb 2023 18:17:08 +0100
+Message-Id: <20230207171721.2973997-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-GB
-To: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
-References: <20230115114840.9027-1-nolange79@gmail.com>
- <20230115114840.9027-2-nolange79@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230115114840.9027-2-nolange79@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=lhUNms1XAptgg5eE9w2X4fYUhOk6IM6aoM3QxMisRzU=;
- b=XCds/dn0CDzrxcusfxd9Zg2z6RLlMWyoh9bDTgFOVviVGWOf8+ubdnVR0mKUk5rB48
- 4ySNY3Dg8at36ZLml6ByWByKOcK2gdfLBRcuLUM8KRZ3cjfay/qTIF+LDXqIm0aquH40
- FgSWcZo0wfkRaOBt4AoMrsjrcHQ36cDiVYUZ7yL315VjGYvPmcbqxKIwKLol3JWX8IZu
- 9KxofeGiJPN7ivE1vuppxmLReApe8qzHNNTcepALM+OqVL1PG5ZyhI6DgZSuygK/CP3Z
- Yu0rKdgrWle7c97iqQKWtMKjIKrZbQzvomTTIT+TfeM7P8HcCzpGfpX9UReZ1hZfzGXP
- z6hA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=XCds/dn0
-Subject: Re: [Buildroot] [PATCH v8 2/4] package/systemd: Add config option
- for sysupdate feature
+ d=amarulasolutions.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=NfoQ1rXiMwWtdbbf89KSpfHtCA9Voc3QYfVbHYab0dg=;
+ b=gYTwVPfOvrHLC3iDzzO1pv3tHWnJcMXinVXcoD4sONVz2Ua8vqnP8FWSQs0AH6BcWw
+ 8Kr8fkxdTmFxQa4cij65C/nE0+FHg0LYmPfFfj9456ZUgyMxM9/wMZKt6lT0BQxCgLFU
+ b2Dxeamsqu88+W/FtSAUhYJL97prvAEbQrjKc=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=gYTwVPfO
+Subject: [Buildroot] [PATCH v6 00/13] Extend Qt6 configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,87 +91,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@phobosdpl.com>
+Cc: jesseevg@gmail.com, Angelo Compagnucci <angelo@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This series is an attempt to revamp the QT6 series from Jesse Van Gavere
+to be included mainline. It reworks a bit of things we discussed during
+the developer days in Bruxelles.
 
+Angelo Compagnucci (4):
+  package/qt6/qt6base: add support for widgets
+  package/qt6/qt6base: add support for widgets gtk backend
+  package/qt6/qt6base: add opengl support
+  package/qt6/qt6base: add QPA backend selection
 
-On 15/01/2023 12:48, Norbert Lange wrote:
-> Support the new feature added with v251,
-> requires openssl.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->   package/systemd/Config.in  | 12 ++++++++++++
->   package/systemd/systemd.mk |  7 ++++++-
->   2 files changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index f35305c0be..9278772951 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -481,6 +481,18 @@ config BR2_PACKAGE_SYSTEMD_SYSEXT
->   
->   	  https://www.freedesktop.org/software/systemd/man/systemd-sysext.html
->   
-> +config BR2_PACKAGE_SYSTEMD_SYSUPDATE
-> +	bool "enable sysupdate support"
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
+Jesse Van Gavere (9):
+  package/qt6/qt6base: add support for gui module
+  package/qt6/qt6base: add support for fontconfig/harfbuzz
+  package/qt6/qt6base: Add support for jpeg/png/gif image format
+  package/qt6/qt6base: add support for tslib
+  package/qt6/qt6base: add support for libinput
+  package/qt6/qt6base: add support for kms
+  package/qt6/qt6base: add support for printsupport/cups
+  package/qt6/qt6base: add support for building examples
+  package/qt6: Add qmake functionality
 
-  AFAIU, sysupdate uses its own particular way of doing A/B updates (by updating 
-the GPT partition table) which is only supported by systemd-boot. Although I 
-suppose it's possible to write a U-Boot script that does the same thing... So I 
-added a note here to that effect. I don't suppose you actually used this option?
+ package/qt6/Config.in               |   5 +
+ package/qt6/qt6.mk                  |  12 ++
+ package/qt6/qt6base/Config.in       | 161 +++++++++++++++++++++++++++
+ package/qt6/qt6base/qmake.conf.in   |  34 ++++++
+ package/qt6/qt6base/qplatformdefs.h |   1 +
+ package/qt6/qt6base/qt.conf.in      |   7 ++
+ package/qt6/qt6base/qt6base.hash    |   1 +
+ package/qt6/qt6base/qt6base.mk      | 166 ++++++++++++++++++++++++++++
+ 8 files changed, 387 insertions(+)
+ create mode 100644 package/qt6/qt6base/qmake.conf.in
+ create mode 100644 package/qt6/qt6base/qplatformdefs.h
+ create mode 100644 package/qt6/qt6base/qt.conf.in
 
+-- 
+2.25.1
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-
-> +	help
-> +	  systemd-sysupdate atomically updates the host OS, container
-> +	  images, portable service images or other sources, based on
-> +	  the transfer configuration files described in sysupdate.d.
-> +
-> +	  https://www.freedesktop.org/software/systemd/man/systemd-sysupdate.html
-> +
->   config BR2_PACKAGE_SYSTEMD_SYSUSERS
->   	bool "enable sysusers support"
->   	help
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index b0597f9bb4..f49d34d32f 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -91,7 +91,6 @@ SYSTEMD_CONF_OPTS += \
->   	-Dsulogin-path=/usr/sbin/sulogin \
->   	-Dsystem-gid-max=999 \
->   	-Dsystem-uid-max=999 \
-> -	-Dsysupdate=false \
->   	-Dsysvinit-path= \
->   	-Dsysvrcnd-path= \
->   	-Dtelinit-path= \
-> @@ -489,6 +488,12 @@ else
->   SYSTEMD_CONF_OPTS += -Dsysext=false
->   endif
->   
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUPDATE),y)
-> +SYSTEMD_CONF_OPTS += -Dsysupdate=true
-> +else
-> +SYSTEMD_CONF_OPTS += -Dsysupdate=false
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
->   SYSTEMD_CONF_OPTS += -Dnetworkd=true
->   SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
