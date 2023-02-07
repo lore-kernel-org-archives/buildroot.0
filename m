@@ -1,139 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCCD5C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 10:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74881C636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 10:55:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C8E241721;
-	Tue,  7 Feb 2023 10:49:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C8E241721
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED89B4026F;
+	Tue,  7 Feb 2023 10:55:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED89B4026F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4EPAGmczteWT; Tue,  7 Feb 2023 10:49:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tNY6yOhQwbGb; Tue,  7 Feb 2023 10:55:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61FB441748;
-	Tue,  7 Feb 2023 10:49:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61FB441748
+	by smtp2.osuosl.org (Postfix) with ESMTP id EFB8740273;
+	Tue,  7 Feb 2023 10:55:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFB8740273
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A4DFE1BF27A
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:48:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4F1E91BF27A
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E34768176D
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:48:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E34768176D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 27A8A818E8
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 10:55:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27A8A818E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lxcLZsQhjUYt for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 10:48:58 +0000 (UTC)
+ with ESMTP id PceYLQJ3UMpM for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 10:55:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CD568175D
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam04on2062b.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e8c::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9CD568175D
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 10:48:57 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UVQf+GQQF2vzwNM/7vE4Qf7Yply4TDeoJZ5BJcKNSm/Nnv5mrIgk+/mi90Ehepk3NsZr7lTIT008XuYWdG+YXKuGqzcFqvOw+WTpcTEwTYSkAXMTi71ORWyGpMWdF0T3bqCTwrWBUPba+/0AuWJp+Uxzafss8QZ0+7721DnvTITC840nzZdeZO7lKrx1vaN3G8qMkx+Spf6UMgVj93aUPY7XHQIZVjeavtiuLp/L8IDH+VfWG2/MmTmVzVfBkgFRRYX6TP8aqQhhhghqXbp8ar1gWrMcoWAjyVHd5v2h52IZgzbvrzDm0S1WauWolrvFL7cdY2y9SdEVhimuL047zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lGIhgfr5i8NWhgjHZgVY+eQCsLDItm6DpRK1KMBv34I=;
- b=Jx8GrGqNAsF8iVqumna/Tj66sDKhj+yiV8+1oVqzbWr/dMGfkOc0XWUXVWOHoOmgifL23JuZAK5S80MfoypbvEBdMAJpIvQW6NQ1nVgT0QIlbPdCytUCCxg5XdFXvhiRShUzf5tU2+XJF448eurz4UAftNBlUuiu4bzGOLrs9kHtj16YpLCTZsBHgzSUjyg6t4kN4TVz7+PdYBiw5g0vp9vwF2L9O8/bjXOj9sYWZrh9sRbvY+gPj2hkpp3iQy/ZCt0a6yTKwxmuKpdwdCproHCUfCmjVmZ0Q1fGFhXotiQdhgRT66ZKICLRRLrpsV5kdGtU3LfRKePWduZ0qm/4dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by SN7PR12MB7322.namprd12.prod.outlook.com (2603:10b6:806:299::6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Tue, 7 Feb
- 2023 10:48:54 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::2028:6128:1d9c:22ba]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::2028:6128:1d9c:22ba%7]) with mapi id 15.20.6064.036; Tue, 7 Feb 2023
- 10:48:54 +0000
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Neal Frager via buildroot
- <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH v1 1/1] configs/versal_vck190_defconfig: use
- Xilinx github for versal-firmware
-Thread-Index: AQHZMj2MMC/1RhENFE6QeM0A6ggGo67DXYKAgAAASiA=
-Date: Tue, 7 Feb 2023 10:48:53 +0000
-Message-ID: <CH2PR12MB50049CCA64BBFA96DE2553F9F0DB9@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20230127105305.25877-1-neal.frager@amd.com>
- <20230207114321.2b5c2df6@windsurf>
-In-Reply-To: <20230207114321.2b5c2df6@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SN7PR12MB7322:EE_
-x-ms-office365-filtering-correlation-id: 91c60c68-41af-4a3d-5894-08db08f8e7fa
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mw0haWmKRMRB4qFEIrFuAfiwcw/hN2lljxKYEohRYsX9gi9k6deQYeTUoQD7TRjzhHx08WqEr9Jrmw6Zi+SZJMOZ8cBJMX7/+PrO3zvxCdfjWSOYiqyozXJdA3n8/uLMoKXiiyAZaH57n+RlkozTIptz5irRIDkI7Qn/zrjeMoIuuu9bimujI8RONPK87HvlAQwvQAkL20u77Tj2qaT/66FBVsMf7avOix1fI3FNzV3l2xohcFyp5F1QeFXpIVEHD2BJ0Ta7AmnYPow5y/wHY9msjzT77BDzAAxgwSfhUH/6YfMgqksDE1k0n+pgSiK2FVz9P/RBE0ighnl1afCVPu1prHulU8njSTyHtjAW7s5wEFfzNK96o50Z3838pFVJiRQL7OkpiVpXpSuKf3oHbV0NCRK1+8UJdT1fPBjUsvNEqIhoxKN5IOohjXT8uLwrIl/k9quhqFxyeikOrIyG3fiS9Y1cgzkTxCXjKEvjfvtY88WuZxfafYf5LujGvb51LDAWM+0l6RV+4P/7X40Iw2+GDjfKMaxkUkO1JB2N9ktjxhb3UD/mW1oZ+tZPlIySfJLmfp4nqcRwnC7Yl7y8ONXsnJeEC7JNzLKvNLiw/FGIiz+p+ZCT5uN8A/Ig/vLZOwH8IvOe4M/CG+wz9/QTsmMT/rK9NkL7uOVpucV0w1XAGMxgoKqM6ba2RVmZBHdqSbI350lkZULRz638EviVQA==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230025)(4636009)(346002)(39860400002)(376002)(136003)(366004)(396003)(451199018)(38100700002)(54906003)(110136005)(5660300002)(52536014)(8936002)(38070700005)(83380400001)(122000001)(86362001)(33656002)(55016003)(71200400001)(2906002)(9686003)(186003)(7696005)(478600001)(66556008)(66476007)(66446008)(64756008)(76116006)(66946007)(8676002)(4326008)(316002)(6506007)(41300700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iYAaT/2G8EeTdGYJZa+MGp4MY9OsYlP2g3sr2tc/PdD8p3/hUyUEi9Q1ra3z?=
- =?us-ascii?Q?EM8kjjjweHzSvMFkUdQLfjIvjvU/f3ka4Ad2CP4UbZQDvMp+DLNvRPwMqrI5?=
- =?us-ascii?Q?E63uhKRG0ng5K34/sNIqQ4ipZkvytds8CJJzNczMswVF6Qn+5ZKOwP0gZL2F?=
- =?us-ascii?Q?b3CW5JsqZfrfaiGdE1nPRgbevWHLCCYcIU8QULTUTCf9/JOR3sb6TTrPywNl?=
- =?us-ascii?Q?5lzJK8umHbE3GWxJI/yI2sWnf9t9f/bh8envKV9DYP8qc0iWyi95fDH1Q6fB?=
- =?us-ascii?Q?s9PAtmN5W6NkdZ7cWbFHeqtFkPKWrldAtPyKxBw9l64W6MD37GOLGmN3hQX4?=
- =?us-ascii?Q?VQLuP02pN1hS2oC2+AUw1aWB8Bg79C99OD3kJjsPKYPKh0PArb9/2F4KHrOG?=
- =?us-ascii?Q?9L5AE2YGJuZ2IbPsJL6loKyXFpif5P7P8PHjCPhAqvUVQGE3QDqXPrt1znJR?=
- =?us-ascii?Q?UJZMIuaD5tqnmLlaGWLAb0jDFJGACoRwkNXngoDhDlho1o6Etwmd+XgLVPPg?=
- =?us-ascii?Q?w8O/yRa2lxcdpk4fNvmUm7cL4npQHVImMDjGIofvrZN5CbRNot6DBHdwHZ1m?=
- =?us-ascii?Q?yDk/CP6vqzMFsBlEINsjpOskiXSSerWiP7Hnjdj57kiqxmghNfj6ZbgUA5+G?=
- =?us-ascii?Q?G30NWm5yyLr4wa/3BuJa4bwFwaeYZKnCiJewn8xxfXBHyMXpSmeBqPgVgLF4?=
- =?us-ascii?Q?vva5MRi2dO0u93E23J8PJOcuipdvAJCkSIcqWmnBSocSd47BAGWrbKEg4xCj?=
- =?us-ascii?Q?ufE8nn/7rhf7tGNSd/JcABl6h2tLS0g7FrhQfiGvAjfJwP1orj4UMyp7uiqG?=
- =?us-ascii?Q?mlZ121e0bUwQUSvHn6SJiw0BWnYLFvLcjhgzBBscu6gBXaNS4xjxFJWsNMsN?=
- =?us-ascii?Q?Y2nJuHjcqWjQuTO41naxf6w6k9egMPRXC0+Obw73FTslLrmCmafz/dt1oKX2?=
- =?us-ascii?Q?YiWqrf2Lm2haHo2LXF8qyRnx6QHb7Am2tPE+ryxpQGjbcx3Y6/EGN5oOvt0s?=
- =?us-ascii?Q?Jg3jpqnGTP7bqqRb0ljzzSxDOZTgYBFPYvqGGftQtjPE1Z398vJcEbYt8CK/?=
- =?us-ascii?Q?b2zQtJdP8um556SONIAYfNo11yuHzt7KwBEbjXKTHtl04JFg8I8OwVpGtqPL?=
- =?us-ascii?Q?uKb1v4pwEeZhIdZcOlQs6p3u72n7V5J+RWjNhaa9Dboxnrueh1ApFw+WmuJH?=
- =?us-ascii?Q?oXBSHt5uQFcn6mFCBT9ffwdOkMLEzDxW7/tAXsUfjNob1T9y4Gx33SAgCXzv?=
- =?us-ascii?Q?aWFgkR2gxmCWFyxbClTtSKetk1qnF+Iz1FOBR1iqX/y27zLkpQmrc5dk3Bm9?=
- =?us-ascii?Q?oib/LeqFL5oGL263AwfOAXjGUntUNRqePvy88ugok40vC2dfOvNnYlS3ar9Z?=
- =?us-ascii?Q?T4zcjMpiGGg/W6eb4C7LrsQzJb1zKK3JYLHOYlW5QsyQtRqCBMXgnzLRJ2jU?=
- =?us-ascii?Q?rrQWW4A7kkhw3z6GhyWH4fsQstO5q96+KVe/jpRjZ7YTSntC0u1ldkxwgb3h?=
- =?us-ascii?Q?aATOe36KOzyDjy5AHAF71wbjr392L0Ta69oo7tslh5d/50PBaxciZO7D/Tda?=
- =?us-ascii?Q?cYKdmoQrCy1ZFUiNnoFuzrwfc0qvfIo6OMWBHR3RChs1e7KSaB3Ln/tZAOjq?=
- =?us-ascii?Q?675F4UWECLKYNIWzfnrUBWQ=3D?=
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC66C818DC
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AC66C818DC
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 10:55:32 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ bg13-20020a05600c3c8d00b003d9712b29d2so12864282wmb.2
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 02:55:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=/lbPXeAHijizKTCK0iUP80YSRhyhBql2CrNg85YCzes=;
+ b=md3K/yhcb3rJK6pZu/BoriGl5gWLk/ZbGv2ZPF2xYl7wmd56uLE9eM9fkicdqkSeQe
+ 9Yqy7k6bZ48WqY0qRQScwocxymSuvbjfYTRDcVu6GNEnkuBPp6jq4DBHhf3kb2IoGTIB
+ 4uX1dyrEy+jfe6TMGac9+v4gzUzISn4n5uxUG1bLWAkY2KMe3pVMOWKQo23C7fRpjFS3
+ gX6wkoxFONQoREOFz08RjjxyGKcdpeUkBPc4y2Y2gINcPtzXoiluLqPKn5lYtir2cyBo
+ ebA0Uw9NeJ28hh5SoGE/HoibOKl8cEVhNzyCad93OcXz30aaG1z7z9fKoRYfwstb/fkL
+ LasA==
+X-Gm-Message-State: AO0yUKVz1Oz6fYqxMPyD4pI5G1+oA6NzVa893raWZFlmXovcuYdP+iOP
+ Es/qUkHsGMyA1rgypRpFnQqvtQ==
+X-Google-Smtp-Source: AK7set8fFU6H/7qvfnoP05MvwNmIpOVGWvRMI6+TiagffqffIaSDQi2Yu24O2dkBKB40ZPkDrvuEOA==
+X-Received: by 2002:a05:600c:4496:b0:3dc:de85:5007 with SMTP id
+ e22-20020a05600c449600b003dcde855007mr2596688wmo.21.1675767330813; 
+ Tue, 07 Feb 2023 02:55:30 -0800 (PST)
+Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ o37-20020a05600c512500b003c6bbe910fdsm20460321wms.9.2023.02.07.02.55.29
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 07 Feb 2023 02:55:29 -0800 (PST)
+Message-ID: <11b5699c-ebc7-7a6c-e8f8-c3824fe166d3@mind.be>
+Date: Tue, 7 Feb 2023 11:55:28 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91c60c68-41af-4a3d-5894-08db08f8e7fa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2023 10:48:53.9756 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /PTET6x/PtrvH7yCCOqT1rqlwkc/sK9+u806hOMrhs3/Tfzdw8VFX5AJ43oE8afv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7322
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-GB
+To: Adam Gausmann <adamg@esdemc.com>, buildroot@buildroot.org
+References: <20220518213933.2475-1-adamg@esdemc.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20220518213933.2475-1-adamg@esdemc.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lGIhgfr5i8NWhgjHZgVY+eQCsLDItm6DpRK1KMBv34I=;
- b=0zj14KQ+RchNHA1UVVX0uNvlZN1UqkxBxGHoOc/zkh4WodnxnIUXAgzCeVQTrsOE9FR/T7Sr1yNqnRveDbBGylxJb/SRFutx3HeUDh1zHBOhC/LSIxqOoLchPjDxYn2BzCwUdtrAGSDI3M2xpyV+Y2Tx01Hx3rQeGKTTVN9Zl64=
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=/lbPXeAHijizKTCK0iUP80YSRhyhBql2CrNg85YCzes=;
+ b=b/n1UBjDkUi9S/GtYie+KWvHMvEvQKvI+AOt9UyRA2qGQ9h6AmLNFVUXKrmcE3IhH6
+ mdpGBJvRtaeuAnSW5wkKZM/KNRG5toIzM3kfq2lP/h+WgEhSfK6OTK4tAorprUlhR/5c
+ v6Fxv/N7OoTqX08BmNdVtiQexJI6cq1Nm9tsMxvV9VL86RCAA9GzQgz5lh/SQDrkJFX4
+ ewWXaP+eSWGsju/9S24wbIbPxI7PmKqPAaMUmxBQP0bLJpknqbnW9fAKqM3Ro0B3IGub
+ FvSqIlFGN9JAemXmweECcc8mT5pzspy8J2wtdyiSlg62uWsjYj/Z7kdAIvJ4f9yyIMMk
+ kCSQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=0zj14KQ+
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/1] configs/versal_vck190_defconfig: use
- Xilinx github for versal-firmware
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=b/n1UBjD
+Subject: Re: [Buildroot] [PATCH v2 1/1] add package/python-pyqtchart
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -145,41 +99,195 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Simek,
- Michal" <michal.simek@amd.com>, "Chaplin, Kris" <Kris.Chaplin@amd.com>, "O'Neal,
- Terry" <terry.oneal@amd.com>,
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>,
+ =?UTF-8?Q?Manuel_V=c3=b6gele?= <develop@manuel-voegele.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+  Hi Adam,
 
-> Migrate versal-firmware package from nealfrager github to Xilinx github.
-> The images are identical, so this patch has zero impact on functionality.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
->  configs/versal_vck190_defconfig            | 2 +-
->  package/versal-firmware/Config.in          | 2 +-
->  package/versal-firmware/versal-firmware.mk | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+  Sorry for the very late reply to your contribution. Unfortunately, there are 
+some issues still that I can't easily resolve by myself, see below. Therefore, 
+the patch has been marked as Changes Requested in patchwork.
 
-> I've applied, but to be honest, it still looks a bit weird. The branch on the repo is special for Buildroot, and its contents are completely different than the master branch of the ubuntu-firmware repository. Why are those firmware files specific to Ubuntu, or specific to Buildroot?
-> They should normally be distro/build-system agnostic.
+  Small nitpick: the subject line should be
+package/python-pyqtchart: new package
 
-Yes, I fully agree with you.  We will have a proper firmware repo agnostic to ubuntu starting with our 2023.1 release.
+On 18/05/2022 23:39, Adam Gausmann via buildroot wrote:
+> Signed-off-by: Adam Gausmann <adamg@esdemc.com>
 
-In the meantime, Terry O'Neal implemented this solution as a temporary one for 2022.2, so that we could get off of using my private github.
+[snip]
 
-I am confident that our 2023.1 solution will clean this up.
+> diff --git a/package/python-pyqt5/0005-configure-emit-sip-flags.patch b/package/python-pyqt5/0005-configure-emit-sip-flags.patch
+> new file mode 100644
+> index 0000000000..ad524f1e53
+> --- /dev/null
+> +++ b/package/python-pyqt5/0005-configure-emit-sip-flags.patch
+> @@ -0,0 +1,25 @@
+> +configure.py: emit sip_flags
+> +
+> +Other PyQt packages (e.g. PyQtChart) obtain their sip_flags from PyQt5. The
+> +default mechanism is for PyQt5 to embed it in the QtCore package and the other
+> +packages will try to import PyQt5.QtCore and read it; however, because this is
+> +not a host package, it cannot be imported during configuration.
+> +
+> +Another option is to provide those flags as a command-line option to the other
+> +packages' configure.py scripts. So, this patch emits the sip_flags generated by
+> +PyQt5 to a file which will be installed in staging dir for the other packages
+> +to read.
+> +
+> +Signed-off-by: Adam Gausmann <adamg@esdemc.com>
 
-Best regards,
-Neal Frager
-AMD
+  Please also send this patch upstream (to the PyQt5 mailing list), and add a 
+reference to the upstream submission here:
+
+Upstream: https://www.riverbankcomputing.com/pipermail/pyqt/...
+
+
+  Also, this should probably be  added to Buildroot as a separate commit, 
+because it affects python-pyqt, not python-pyqtchart.
+
+> +
+> +--- a/configure.py	2022-05-12 14:45:48.624851781 -0500
+> ++++ b/configure.py	2022-05-12 14:44:24.704852510 -0500
+> +@@ -1450,6 +1450,8 @@ def generate_makefiles(target_config, ve
+> +
+> +     # Set the SIP platform, version and feature flags.
+> +     sip_flags = get_sip_flags(target_config)
+> ++    with open('sip_flags', 'w+') as f:
+> ++        f.write(sip_flags)
+> +
+> +     # Go through the modules.
+> +     pyqt_modules = list(target_config.pyqt_modules)
+> diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+> index af32f63796..2698a1e0ad 100644
+> --- a/package/python-pyqt5/python-pyqt5.mk
+> +++ b/package/python-pyqt5/python-pyqt5.mk
+> @@ -157,7 +157,6 @@ PYTHON_PYQT5_CONF_OPTS = \
+>   	-w --confirm-license \
+>   	--no-designer-plugin \
+>   	--no-docstrings \
+> -	--no-sip-files \
+>   	$(foreach module,$(PYTHON_PYQT5_MODULES),--enable=$(module))
+>   
+>   define PYTHON_PYQT5_CONFIGURE_CMDS
+> @@ -180,6 +179,7 @@ define PYTHON_PYQT5_INSTALL_TARGET_CMDS
+>   	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
+>   	touch $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/PyQt5/__init__.py
+>   	$(RM) -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/PyQt5/uic/port_v2
+> +	install -D $(@D)/sip_flags $(STAGING_DIR)/usr/share/PyQt5/sip_flags
+>   endef
+>   
+>   $(eval $(generic-package))
+> diff --git a/package/python-pyqtchart/Config.in b/package/python-pyqtchart/Config.in
+> new file mode 100644
+> index 0000000000..a985927db7
+> --- /dev/null
+> +++ b/package/python-pyqtchart/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_PYQTCHART
+> +	bool "python-pyqtchart"
+> +	depends on BR2_PACKAGE_PYTHON_PYQT5
+
+  Instead of depending on pyqt5, it would be beter to depend on qt5 and select 
+pyqt5.
+
+> +	select BR2_PACKAGE_QT5CHARTS
+> +	help
+> +	  Python bindings for Qt Charts.
+> +
+> +	  http://www.riverbankcomputing.com/software/pyqt/
+
+  The actual upstream is
+
+https://www.riverbankcomputing.com/software/pyqtchart/
+
+
+> diff --git a/package/python-pyqtchart/python-pyqtchart.hash b/package/python-pyqtchart/python-pyqtchart.hash
+> new file mode 100644
+> index 0000000000..79852741da
+> --- /dev/null
+> +++ b/package/python-pyqtchart/python-pyqtchart.hash
+> @@ -0,0 +1,5 @@
+> +# Locally-computed:
+
+  You should probably download from pypi and get the hash from there:
+
+https://pypi.org/project/PyQtChart/#copy-hash-modal-8c261058-8981-4409-8b07-6610f35ddd52
+
+
+> +sha256	91c9c6857e8c8891faa3875e3714392150016f365a63cdff8bfd40b6c33ea277  PyQtChart_gpl-5.7.tar.gz
+> +
+> +# Hash for license file
+> +sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+> diff --git a/package/python-pyqtchart/python-pyqtchart.mk b/package/python-pyqtchart/python-pyqtchart.mk
+> new file mode 100644
+> index 0000000000..56bbc5d643
+> --- /dev/null
+> +++ b/package/python-pyqtchart/python-pyqtchart.mk
+> @@ -0,0 +1,40 @@
+> +################################################################################
+> +#
+> +# python-pyqtchart
+
+  Wouldn't it make more sense to call this python-pyqt5chart, given that there's 
+python-pyqt5, and that there's PyQt6-Charts? Normally we prefer to use the 
+upstream name, which is pyqtchart (or PyQt-Charts or PyQtChart, depending on 
+where you look), but in this case I feel OK calling it python-pyqt5chart.
+
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYQTCHART_VERSION = 5.7
+
+  Why this ancient version released 7 years ago? There's a 5.15.6... I'm 
+surprised this ancient version even works with our current Qt version!
+
+> +PYTHON_PYQTCHART_SOURCE = PyQtChart_gpl-$(PYTHON_PYQTCHART_VERSION).tar.gz
+> +PYTHON_PYQTCHART_SITE = http://downloads.sourceforge.net/project/pyqt/PyQtChart/PyQtChart-$(PYTHON_PYQTCHART_VERSION)
+
+  As mentioned earlier, better download from pypi
+
+> +PYTHON_PYQTCHART_LICENSE = GPL-3.0
+> +
+> +PYTHON_PYQTCHART_DEPENDENCIES = python-pyqt5 qt5charts
+> +
+> +PYTHON_PYQTCHART_CONF_OPTS = \
+> +	--destdir $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/PyQt5 \
+> +	--qmake $(HOST_DIR)/bin/qmake \
+> +	--sysroot $(STAGING_DIR)/usr \
+> +	--no-docstrings \
+> +	--no-sip-files \
+> +	--pyqt-sip-flags "$(file <$(STAGING_DIR)/usr/share/PyQt5/sip_flags)" \
+> +	--qtchart-version=2.0.1 \
+
+  Where does this version number come from? Please explain in the commit message.
+
+  Regards,
+  Arnout
+
+> +
+> +define PYTHON_PYQTCHART_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		$(TARGET_MAKE_ENV) \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		$(HOST_DIR)/bin/python configure.py \
+> +			$(PYTHON_PYQTCHART_CONF_OPTS) \
+> +	)
+> +endef
+> +
+> +define PYTHON_PYQTCHART_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define PYTHON_PYQTCHART_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
