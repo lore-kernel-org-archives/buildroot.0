@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13A83C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 11:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B20EC636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 11:47:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B525860B95;
-	Tue,  7 Feb 2023 11:36:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B525860B95
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E10E813EB;
+	Tue,  7 Feb 2023 11:47:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E10E813EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id luN4l9pQXq8s; Tue,  7 Feb 2023 11:36:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wjK-mRd1bXJr; Tue,  7 Feb 2023 11:47:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA0E260A7A;
-	Tue,  7 Feb 2023 11:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA0E260A7A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FAD31BF2AF
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 11:36:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75302813C4;
+	Tue,  7 Feb 2023 11:47:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75302813C4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 318C61BF2AF
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 11:47:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06C7160A7A
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 11:36:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06C7160A7A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14193813B9
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 11:47:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14193813B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BIFU3rBgO8r7 for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 11:36:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id utjF3ymY7k3h for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 11:47:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 121A1605AB
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 11:36:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 121A1605AB
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEF04813EB
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 11:47:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEF04813EB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F360184086; Tue,  7 Feb 2023 11:36:47 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id BF4E18408C; Tue,  7 Feb 2023 11:47:25 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 12:35:46 +0100
+Date: Tue, 7 Feb 2023 12:47:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8a9da9a8cad5f77902547fab3b24d04175749a7c
-X-Git-Newrev: b63e155e5fb7104e6660aa0570befa9498259cd7
+X-Git-Oldrev: b63e155e5fb7104e6660aa0570befa9498259cd7
+X-Git-Newrev: 12d85e9646ed89552c732775de000ad0b436a139
 X-Patchwork-Hint: ignore
-Message-Id: <20230207113647.F360184086@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
- correct check for open perl module
+Message-Id: <20230207114725.BF4E18408C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bash: fix strtoimax builtin
+ inclusion logic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b63e155e5fb7104e6660aa0570befa9498259cd7
+commit: https://git.buildroot.net/buildroot/commit/?id=12d85e9646ed89552c732775de000ad0b436a139
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 4cdd99190e89 (support/dependencies/dependencies.sh: require open perl
-package for libxcrypt) added a check for the "open" perl module for
-libxcrypt, but it does not work as "open" cannot be directly used with
-"require" as an argument is needed:
+Backport fixes from upstream to fix an issue where the strtoimax builtin
+got built when not necessary.
 
-perl -e "require open"
-Not enough arguments for open at -e line 1, at EOF
-Execution of -e aborted due to compilation errors.
+This resolves bash static builds issues when using musl and uClibc.
 
-So special case the check to instead check with "use open ':std'".
+We fix both the m4 file and configure in that order, to be safe andnot
+trigger an automatic autoreconf (even though bash does not have a rule
+to automatically regenerate configure if an m4 file changes).
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ http://autobuild.buildroot.org/results/f8c/f8cb91f7f9ac6a46bb2ecfc22c1e42cf699f28d3//
+ http://autobuild.buildroot.org/results/b0e/b0e5fcab9eeb799e31bca27fcb7280b728349bc6//
+
+Upstream:
+  https://git.savannah.gnu.org/cgit/bash.git/commit/?h=devel&id=43e861c2cd840946a81dfd0386966eb4f3a17ce9
+
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+[yann.morin.1998@free.fr:
+  - patch configure after the m4 file
+  - add blurb in commit log to explain that
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/dependencies/dependencies.sh | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ ...re-invert-condition-for-strtoimax-builtin.patch | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 353817f8fb..88eabe921d 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -271,10 +271,6 @@ required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by hos
- required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
- required_perl_modules="$required_perl_modules FindBin" # Used by (host-)libopenssl
- 
--if grep -q ^BR2_PACKAGE_LIBXCRYPT=y $BR2_CONFIG ; then
--    required_perl_modules="$required_perl_modules open"
--fi
--
- if grep -q ^BR2_PACKAGE_MPV=y $BR2_CONFIG ; then
-     required_perl_modules="$required_perl_modules Math::BigInt"
-     required_perl_modules="$required_perl_modules Math::BigRat"
-@@ -291,6 +287,13 @@ fi
- # This variable will keep the modules that are missing in your system.
- missing_perl_modules=""
- 
-+if grep -q ^BR2_PACKAGE_LIBXCRYPT=y $BR2_CONFIG ; then
-+	# open cannot be used with require
-+	if ! perl -e "use open ':std'" > /dev/null 2>&1 ; then
-+		missing_perl_modules="$missing_perl_modules open"
-+	fi
-+fi
+diff --git a/package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch b/package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch
+new file mode 100644
+index 0000000000..c412dcfce2
+--- /dev/null
++++ b/package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch
+@@ -0,0 +1,62 @@
++From 754e0d1edc1c01b18f4890de7c58f7610e589d76 Mon Sep 17 00:00:00 2001
++From: Vincent Fazio <vfazio@gmail.com>
++Date: Tue, 7 Feb 2023 03:55:28 -0600
++Subject: [PATCH] configure: invert condition for strtoimax builtin
 +
- for pm in $required_perl_modules ; do
- 	if ! perl  -e "require $pm" > /dev/null 2>&1 ; then
- 		missing_perl_modules="$missing_perl_modules $pm"
++Previously, bash would attempt to build a replacement for strtoimax if
++it found that the C library had the function already declared.
++
++This caused build errors when linking against static libraries that did
++not define the function as a weak alias but, in reality, was a logic
++error since bash should only provide it's own implementation if one is
++not provided by the C library.
++
++Now, fix this by inverting the logic.
++
++Upstream:
++  https://git.savannah.gnu.org/cgit/bash.git/commit/?h=devel&id=43e861c2cd840946a81dfd0386966eb4f3a17ce9
++
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[yann.morin.1998@free.fr: patch configure after the m file]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ configure       | 6 +++++-
++ m4/strtoimax.m4 | 5 ++++-
++ 2 files changed, 9 insertions(+), 2 deletions(-)
++
++diff --git a/m4/strtoimax.m4 b/m4/strtoimax.m4
++index 30985723..fa43ac7b 100644
++--- a/m4/strtoimax.m4
+++++ b/m4/strtoimax.m4
++@@ -29,7 +29,10 @@ AC_CACHE_VAL(bash_cv_func_strtoimax,
++   fi
++ ])
++ AC_MSG_RESULT($bash_cv_func_strtoimax)
++-if test $bash_cv_func_strtoimax = yes; then
+++if test "$ac_cv_have_decl_strtoimax" = "yes" ; then
+++AC_DEFINE([HAVE_DECL_STRTOIMAX], [1])
+++fi
+++if test $bash_cv_func_strtoimax = no; then
++ AC_LIBOBJ(strtoimax)
++ fi
++ ])
++diff --git a/configure b/configure
++index 47313753..6039cee7 100755
++--- a/configure
+++++ b/configure
++@@ -20443,7 +20443,11 @@ fi
++ 
++ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $bash_cv_func_strtoimax" >&5
++ printf "%s\n" "$bash_cv_func_strtoimax" >&6; }
++-if test $bash_cv_func_strtoimax = yes; then
+++if test "$ac_cv_have_decl_strtoimax" = "yes" ; then
+++printf "%s\n" "#define HAVE_DECL_STRTOIMAX 1" >>confdefs.h
+++
+++fi
+++if test $bash_cv_func_strtoimax = no; then
++ case " $LIBOBJS " in
++   *" strtoimax.$ac_objext "* ) ;;
++   *) LIBOBJS="$LIBOBJS strtoimax.$ac_objext"
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
