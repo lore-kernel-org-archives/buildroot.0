@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5ABAC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:44:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5157DC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72CE26FBB5;
-	Tue, 21 Feb 2023 01:44:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72CE26FBB5
+	by smtp3.osuosl.org (Postfix) with ESMTP id F404770112;
+	Tue, 21 Feb 2023 01:44:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F404770112
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bn4Lhj-k5L3A; Tue, 21 Feb 2023 01:44:44 +0000 (UTC)
+	with ESMTP id I8Hf05RqNIo4; Tue, 21 Feb 2023 01:44:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79C867010A;
-	Tue, 21 Feb 2023 01:44:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79C867010A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F261700D9;
+	Tue, 21 Feb 2023 01:44:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F261700D9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D4AC21BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E495A1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 002556FFFA
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 002556FFFA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 168CC6FFFC
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 168CC6FFFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dnN7bsQYJrDt for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+ with ESMTP id mfCBXeWy3wef for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C34D26FC2E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C34D26FC2E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 157806FBE4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 157806FBE4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B444B828C8; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+ id 13F4A828C8; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 22:37:15 +0100
+Date: Tue, 7 Feb 2023 22:55:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 40866ae0ce6e71d01a132dfb7694daa2ec559184
-X-Git-Newrev: 36b8c9494b56b877fea62f17926f747c7c7bfb8d
+X-Git-Oldrev: 9a095643b4dd34eb7acb69662aa64fa945f4b542
+X-Git-Newrev: e92bb8f1c9523227413500380df16bfc64053fad
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205253.B444B828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wolfssl: disable
- broken asm implementations on 32-bit Arm
+Message-Id: <20230220205254.13F4A828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gitlab-ci: don't use
+ before_script in job templates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,58 +64,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36b8c9494b56b877fea62f17926f747c7c7bfb8d
+commit: https://git.buildroot.net/buildroot/commit/?id=e92bb8f1c9523227413500380df16bfc64053fad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-wolfSSL has ARMv8-A assembly implementations of some functions for
-both A64 and A32 ISAs.  However, some of the A32 versions use r11,
-which is usually not allowed:
+When gitlab prepares a job to run, it checks out the repository with a
+non-root user, and spawns a container that runs as root, with some UID
+mapping that makes the files be owned by root in the
+container. However, our pipelines run as a nont-root user.
 
-wolfcrypt/src/port/arm/armv8-aes.c: In function 'wc_AesCbcEncrypt':
-wolfcrypt/src/port/arm/armv8-aes.c:3303:5: error: fp cannot be used in 'asm' here
- 3303 |     }
-      |     ^
+Commit bde165f7ad (.gitlab-ci.yml: update Docker image to use) updated
+the docker image that is used to run in our pipelines.
 
-That can be fixed by adding the compiler flag -fomit-frame-pointer,
-but then there is another failure:
+That new image includes a git version that is stricter about the
+ownership of the git tree it is acting in: git aborts in error when the
+user running it does not own the repository.
 
-/tmp/ccV19DQV.s: Assembler messages:
-/tmp/ccV19DQV.s:248: Error: first transfer register must be even -- `ldrd r11,r10,[r14,#4*14]'
-make[3]: *** [Makefile:5858: wolfcrypt/src/port/arm/src_libwolfssl_la-armv8-chacha.lo] Error 1
+We use `git ls-tree` quite a lot in our check-{flake8,package,symbols}
+rules, so they all fail (in various ways).
 
-This is definitely not a valid instruction in A32, which suggests that
-this code isn't being tested at all upstream.  So disable it here.
+To fix this, we either need to fix the ownership or tell git to ignore
+the situation. In either case, we'll need to run a scriptlet before all
+our jobs.
 
-Fixes:
+Gitlab-ci allows to provide a global before_script, that is inherited by
+all jobs. However, some of our jobs already declare a before_script, and
+that would shadow the global before_script.
 
-  http://autobuild.buildroot.net/results/502/502a2b217845eb290c1961d4740b032462f8ae53/
+There is no technical reason to do our before_script separately from
+the actual script, so we move the code from the before_scripts to the
+corresponding scripts.
 
-Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wolfssl/wolfssl.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ support/misc/gitlab-ci.yml.in | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index cd3acd9411..f415e11bb5 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -33,14 +33,12 @@ WOLFSSL_CONF_OPTS += --disable-sslv3
- endif
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index 0ccf36665e..9c1faf0d5f 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -23,9 +23,8 @@
+         - utils/check-symbols
  
- # enable ARMv8 hardware acceleration
--ifeq ($(BR2_ARM_CPU_ARMV8A),y)
-+ifeq ($(BR2_aarch64),y)
- WOLFSSL_CONF_OPTS += --enable-armasm
- # the flag -mstrict-align is needed to prevent build errors caused by
- # some inline assembly in parts of the AES structure using the "m"
- # constraint
--ifeq ($(BR2_aarch64),y)
- WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
--endif
- else
- WOLFSSL_CONF_OPTS += --disable-armasm
- endif
+ .defconfig_check:
+-    before_script:
+-        - DEFCONFIG_NAME=$(echo ${CI_JOB_NAME} | sed -e 's,_check$,,g')
+     script:
++        - DEFCONFIG_NAME=$(echo ${CI_JOB_NAME} | sed -e 's,_check$,,g')
+         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+         - make ${DEFCONFIG_NAME}
+         - support/scripts/check-dotconfig.py .config configs/${DEFCONFIG_NAME}
+@@ -44,10 +43,9 @@
+       }
+ 
+ .defconfig_base:
+-    before_script:
++    script:
+         - DEFCONFIG_NAME=${CI_JOB_NAME}
+         - OUTPUT_DIR=output
+-    script:
+         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+         - make ${DEFCONFIG_NAME}
+         - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
+@@ -72,13 +70,12 @@
+             - runtime-test.log
+ 
+ .runtime_test_base:
+-    before_script:
+-        - TEST_CASE_NAME=${CI_JOB_NAME}
+     # Keep build directories so the rootfs can be an artifact of the job. The
+     # runner will clean up those files for us.
+     # Multiply every emulator timeout by 10 to avoid sporadic failures in
+     # elastic runners.
+     script:
++        - TEST_CASE_NAME=${CI_JOB_NAME}
+         - echo "Starting runtime test ${TEST_CASE_NAME}"
+         - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
+     artifacts:
+@@ -91,9 +88,8 @@
+ 
+ .test_pkg:
+     stage: build
+-    before_script:
+-        - OUTPUT_DIR=${CI_JOB_NAME}
+     script:
++        - OUTPUT_DIR=${CI_JOB_NAME}
+         - echo "Configure Buildroot for ${OUTPUT_DIR}"
+         - make O=${OUTPUT_DIR} syncconfig
+         - make O=${OUTPUT_DIR} savedefconfig
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
