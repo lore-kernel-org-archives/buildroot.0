@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCFD3C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 08:24:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4679DC636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 08:24:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A98F410BE;
-	Tue,  7 Feb 2023 08:24:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A98F410BE
+	by smtp1.osuosl.org (Postfix) with ESMTP id E23B381BCB;
+	Tue,  7 Feb 2023 08:24:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E23B381BCB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YKdFGP26j_GX; Tue,  7 Feb 2023 08:24:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05E6C81BD4;
+	Tue,  7 Feb 2023 08:24:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05E6C81BD4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E24831BF30B
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 08:24:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC49F410E8
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 08:24:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC49F410E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y1j3Nz9Oe99L; Tue,  7 Feb 2023 08:24:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD99C410E8;
-	Tue,  7 Feb 2023 08:24:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD99C410E8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5754F1BF30B
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 08:24:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 313DE60E17
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 08:24:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 313DE60E17
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eMFKWoHIyRcm for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wQwESo2BMmJu for <buildroot@lists.busybox.net>;
  Tue,  7 Feb 2023 08:24:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 632B960E0A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71327410BE
  for <buildroot@buildroot.org>; Tue,  7 Feb 2023 08:24:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 632B960E0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71327410BE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F2D983EAF; Tue,  7 Feb 2023 08:24:27 +0000 (UTC)
+ id 5C7BB83EB2; Tue,  7 Feb 2023 08:24:27 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 7 Feb 2023 09:24:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ce3d349384f4d80ed8fc50a82ff864bd5bcf6375
-X-Git-Newrev: 5ee1dd85a34b6228c634a66450deefadbb2c9b50
+X-Git-Oldrev: 5ee1dd85a34b6228c634a66450deefadbb2c9b50
+X-Git-Newrev: de03312db0190adc5b7dfa5b7658b2275801c933
 X-Patchwork-Hint: ignore
-Message-Id: <20230207082427.4F2D983EAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/get-developers: bail out on parsing
- errors
+Message-Id: <20230207082427.5C7BB83EB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/get-developers: print error for
+ correct line
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,73 +64,130 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ee1dd85a34b6228c634a66450deefadbb2c9b50
+commit: https://git.buildroot.net/buildroot/commit/?id=de03312db0190adc5b7dfa5b7658b2275801c933
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently 4 types of parsing errors/warnings can be found:
-- entry for a file that is not in the tree anymore (warning)
-- developer entry with no file entry (error)
-- file entry with no developer (error)
-- entry that is not a developer, a file or a comment (hard error)
+Start counting the line numbers in 1 instead of 0, in case an error
+must be printed.
 
-Currently only the last one ends the script with -v with error code.
+Both the error about a developer entry with no file entry and the error
+about a file entry with no developer entry actually belong to the
+non-empty line previous the one being analysed, so in these cases print
+the line number from the line before.
 
-Make all 3 error types into hard errors and bail out at the first error
-found, because the rest of the state machine is not designed to handle
-malformed input.
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Also count empty and comment lines, so a developer fixing the file can
+jump to the correct line (or the nearest one).
+
+At same time standardize the messages, printing the line number
+also in the case of a warning for a file that is not in the tree
+anymore.
 
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/utils/test_get_developers.py | 9 ++++-----
- utils/getdeveloperlib.py                           | 1 +
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ support/testing/tests/utils/test_get_developers.py | 16 ++++++++--------
+ utils/getdeveloperlib.py                           |  6 +++---
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/support/testing/tests/utils/test_get_developers.py b/support/testing/tests/utils/test_get_developers.py
-index 12710fe8d3..0b313c7c59 100644
+index 0b313c7c59..ffc01f6ce7 100644
 --- a/support/testing/tests/utils/test_get_developers.py
 +++ b/support/testing/tests/utils/test_get_developers.py
-@@ -70,11 +70,11 @@ class TestGetDevelopers(unittest.TestCase):
-                      b'F:\tutils/get-developers\n'
-         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
-         self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
--        self.assertEqual(rc, 0)
-+        self.assertEqual(rc, 1)
+@@ -48,7 +48,7 @@ class TestGetDevelopers(unittest.TestCase):
+         # -v generating error, called from the main dir
+         developers = b'text1\n'
+         out, err, rc = call_get_developers("./utils/get-developers", ["-v"], self.WITH_EMPTY_PATH, topdir, developers)
+-        self.assertIn("Syntax error in DEVELOPERS file, line 0: 'text1'", err)
++        self.assertIn("Syntax error in DEVELOPERS file, line 1: 'text1'", err)
+         self.assertEqual(rc, 1)
          self.assertEqual(len(out), 0)
          self.assertEqual(len(err), 1)
- 
--        # -v generating error for developer entry with no file entries
-+        # -v generating error for developer entry with no file entries, stopping on first error
-         developers = b'# comment\n' \
-                      b'# comment\n' \
-                      b'\n' \
-@@ -84,10 +84,9 @@ class TestGetDevelopers(unittest.TestCase):
+@@ -56,7 +56,7 @@ class TestGetDevelopers(unittest.TestCase):
+         # -v generating error, called from path
+         developers = b'text2\n'
+         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
+-        self.assertIn("Syntax error in DEVELOPERS file, line 0: 'text2'", err)
++        self.assertIn("Syntax error in DEVELOPERS file, line 1: 'text2'", err)
+         self.assertEqual(rc, 1)
+         self.assertEqual(len(out), 0)
+         self.assertEqual(len(err), 1)
+@@ -69,7 +69,7 @@ class TestGetDevelopers(unittest.TestCase):
+                      b'N:\tAuthor2 <email>\n' \
                       b'F:\tutils/get-developers\n'
          out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
-         self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
--        self.assertIn("Syntax error in DEVELOPERS file, line 2", err)
--        self.assertEqual(rc, 0)
-+        self.assertEqual(rc, 1)
+-        self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
++        self.assertIn("Syntax error in DEVELOPERS file, line 4", err)
+         self.assertEqual(rc, 1)
          self.assertEqual(len(out), 0)
--        self.assertEqual(len(err), 2)
-+        self.assertEqual(len(err), 1)
- 
-         # -v not generating error for developer entry with empty list of file entries
-         developers = b'# comment\n' \
+         self.assertEqual(len(err), 1)
+@@ -83,7 +83,7 @@ class TestGetDevelopers(unittest.TestCase):
+                      b'N:\tAuthor3 <email>\n' \
+                      b'F:\tutils/get-developers\n'
+         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
+-        self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
++        self.assertIn("Syntax error in DEVELOPERS file, line 4", err)
+         self.assertEqual(rc, 1)
+         self.assertEqual(len(out), 0)
+         self.assertEqual(len(err), 1)
+@@ -108,8 +108,8 @@ class TestGetDevelopers(unittest.TestCase):
+                      b'F:\tpath/that/does/not/exists/1\n' \
+                      b'F:\tpath/that/does/not/exists/2\n'
+         out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
+-        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file", err)
+-        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file", err)
++        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file, line 2", err)
++        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file, line 3", err)
+         self.assertEqual(rc, 0)
+         self.assertEqual(len(out), 0)
+         self.assertEqual(len(err), 2)
+@@ -119,8 +119,8 @@ class TestGetDevelopers(unittest.TestCase):
+                      b'F:\tpath/that/does/not/exists/1\n' \
+                      b'F:\tpath/that/does/not/exists/2\n'
+         out, err, rc = call_get_developers("./utils/get-developers", ["-c"], self.WITH_EMPTY_PATH, topdir, developers)
+-        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file", err)
+-        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file", err)
++        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file, line 2", err)
++        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file, line 3", err)
+         self.assertEqual(rc, 0)
+         self.assertGreater(len(out), 1000)
+         self.assertEqual(len(err), 2)
 diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 2a8d5c213c..dbd21af443 100644
+index dbd21af443..e7d0d23e49 100644
 --- a/utils/getdeveloperlib.py
 +++ b/utils/getdeveloperlib.py
-@@ -243,6 +243,7 @@ def parse_developers(filename=None):
+@@ -236,12 +236,13 @@ def parse_developers(filename=None):
+         files = []
+         name = None
+         for line in f:
++            linen += 1
+             line = line.strip()
+             if line.startswith("#"):
+                 continue
+             elif line.startswith("N:"):
                  if name is not None or len(files) != 0:
-                     print("Syntax error in DEVELOPERS file, line %d" % linen,
+-                    print("Syntax error in DEVELOPERS file, line %d" % linen,
++                    print("Syntax error in DEVELOPERS file, line %d" % (linen - 1),
                            file=sys.stderr)
-+                    return None
+                     return None
                  name = line[2:].strip()
-             elif line.startswith("F:"):
+@@ -249,7 +250,7 @@ def parse_developers(filename=None):
                  fname = line[2:].strip()
+                 dev_files = glob.glob(os.path.join(brpath, fname))
+                 if len(dev_files) == 0:
+-                    print("WARNING: '%s' doesn't match any file" % fname,
++                    print("WARNING: '%s' doesn't match any file, line %d" % (fname, linen),
+                           file=sys.stderr)
+                 for f in dev_files:
+                     dev_file = os.path.relpath(f, brpath)
+@@ -267,7 +268,6 @@ def parse_developers(filename=None):
+                 print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line),
+                       file=sys.stderr)
+                 return None
+-            linen += 1
+     # handle last developer
+     if name is not None:
+         developers.append(Developer(name, files))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
