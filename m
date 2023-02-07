@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1F88C64ED9
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53389C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85C81700B7;
-	Tue, 21 Feb 2023 01:40:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85C81700B7
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFEB7700B8;
+	Tue, 21 Feb 2023 01:40:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFEB7700B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ADSsZdaxjG4L; Tue, 21 Feb 2023 01:40:17 +0000 (UTC)
+	with ESMTP id 3qBpyl6Vun_J; Tue, 21 Feb 2023 01:40:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8C7F700A3;
-	Tue, 21 Feb 2023 01:40:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8C7F700A3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 476A2700AF;
+	Tue, 21 Feb 2023 01:40:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 476A2700AF
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A5B911BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A81731BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D299B6FBEF
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB3416FE67
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D299B6FBEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB3416FE67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mJysS9JUZzM4 for <buildroot@lists.busybox.net>;
+ with ESMTP id gqgi4Gvez1kl for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7F276FC18
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AAC36FC27
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7F276FC18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AAC36FC27
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D516D828C8; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
+ id EDBDB81979; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 11:39:41 +0100
+Date: Tue, 7 Feb 2023 12:10:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7ff52ac09b1c21fdce65deae39127b31d47858e9
-X-Git-Newrev: 537daa143b237e88f2e272056bb05771db7f48d1
+X-Git-Oldrev: 0781f44c0a9b46d9119557708918948a769e6881
+X-Git-Newrev: 1a1081dcbf8d706b08df53fe2ff2d652caf889ae
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205251.D516D828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mcelog: bump to
- version 191
+Message-Id: <20230220205251.EDBDB81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/balena-engine: bump to
+ version 20.10.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,59 +57,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=537daa143b237e88f2e272056bb05771db7f48d1
+commit: https://git.buildroot.net/buildroot/commit/?id=1a1081dcbf8d706b08df53fe2ff2d652caf889ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Create .os_version to specify the version since there is no git
-checkout available.
+Like docker-engine and docker-cli, balena-engine uses a non-standard
+vendor/ directory structure, so we use the same fixes as we introduced
+for docker-engine ((see commit: package/docker-engine: bump version to
+v23.0.0):
 
-https://github.com/andikleen/mcelog/releases/tag/v191
-https://github.com/andikleen/mcelog/releases/tag/v190
+  - remove the problematic vendor/modules.txt
+  - create a go.mod
 
-Signed-off-by: Jordan Speicher <jordan@jspeicher.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Also remove the vendor/archive/ sub-tree (fixes a build error) because
+Go no longer allows having duplicate packages in GOPATH and GOROOT.
+
+vendor/archive/tar cannot be in vendor/ because it exists in the
+standard library.  Since we remove the full vendor/archive/, that is
+also fixed.
+
+https://github.com/balena-os/balena-engine/releases/tag/v20.10.26
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mcelog/mcelog.hash | 2 +-
- package/mcelog/mcelog.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/balena-engine/balena-engine.hash |  2 +-
+ package/balena-engine/balena-engine.mk   | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
-index e0350b085d..23fd4e50f3 100644
---- a/package/mcelog/mcelog.hash
-+++ b/package/mcelog/mcelog.hash
+diff --git a/package/balena-engine/balena-engine.hash b/package/balena-engine/balena-engine.hash
+index 4adb8ce561..6a92a40cc8 100644
+--- a/package/balena-engine/balena-engine.hash
++++ b/package/balena-engine/balena-engine.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  30364d134ff416f3f9469720add84bdccea226268d334f06022110f484550cd9  mcelog-189.tar.gz
-+sha256  b3b2616acde7afba4752d4dc447a2c2ad5a75da65e7496e0da30f8f8d2015cfa  mcelog-191.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index 8b5876d32e..9f7194e376 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
-@@ -4,13 +4,14 @@
+-sha256  4fb38109d133d499de366466a612fb6f523ea99d56fcd69b45dc494a75fbce0f  balena-engine-20.10.21.tar.gz
++sha256  1482b64e35d5406be719e362647ed7d0599cf4eead7770247ebd972c4c85ede5  balena-engine-20.10.26.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/balena-engine/balena-engine.mk b/package/balena-engine/balena-engine.mk
+index ecfb62bfbf..49d526a465 100644
+--- a/package/balena-engine/balena-engine.mk
++++ b/package/balena-engine/balena-engine.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MCELOG_VERSION = 189
-+MCELOG_VERSION = 191
- MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
- MCELOG_LICENSE = GPL-2.0
- MCELOG_LICENSE_FILES = LICENSE
- MCELOG_SELINUX_MODULES = mcelog
+-BALENA_ENGINE_VERSION = 20.10.21
++BALENA_ENGINE_VERSION = 20.10.26
+ BALENA_ENGINE_SITE = $(call github,balena-os,balena-engine,v$(BALENA_ENGINE_VERSION))
  
- define MCELOG_BUILD_CMDS
-+	echo "$(MCELOG_VERSION)" > $(@D)/.os_version
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
- endef
+ BALENA_ENGINE_LICENSE = Apache-2.0
+@@ -34,6 +34,17 @@ BALENA_ENGINE_TAGS = \
  
+ BALENA_ENGINE_BUILD_TARGETS = cmd/balena-engine
+ 
++# create the go.mod file with language version go1.19
++# remove the conflicting vendor/modules.txt
++# remove the conflicting vendor/archive (not allowed in go1.20)
++# https://github.com/moby/moby/issues/44618#issuecomment-1343565705
++define BALENA_ENGINE_FIX_VENDORING
++	printf "module $(BALENA_ENGINE_GOMOD)\n\ngo 1.19\n" > $(@D)/go.mod
++	rm -f $(@D)/vendor/modules.txt
++	rm -rf $(@D)/vendor/archive
++endef
++BALENA_ENGINE_POST_EXTRACT_HOOKS += BALENA_ENGINE_FIX_VENDORING
++
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ BALENA_ENGINE_DEPENDENCIES += systemd
+ BALENA_ENGINE_TAGS += journald
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
