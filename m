@@ -4,90 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 871B4C636D4
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 16:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98723C636D4
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 16:31:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 322E340A59;
-	Tue,  7 Feb 2023 16:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 322E340A59
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48FFF40A82;
+	Tue,  7 Feb 2023 16:31:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48FFF40A82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uls1RuIHA0YU; Tue,  7 Feb 2023 16:27:43 +0000 (UTC)
+	with ESMTP id wKga_gV4OCwt; Tue,  7 Feb 2023 16:31:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DD2340168;
-	Tue,  7 Feb 2023 16:27:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DD2340168
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7CFDB1BF5F8
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 16:27:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98E4540168;
+	Tue,  7 Feb 2023 16:31:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98E4540168
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B9ED71BF5F8
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 16:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 575F440168
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 16:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 575F440168
+ by smtp4.osuosl.org (Postfix) with ESMTP id A13C0402AF
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 16:31:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A13C0402AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D6l96IWLWg5X for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 16:27:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CE8340120
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3CE8340120
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 16:27:40 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id z11so119277wrl.8
- for <buildroot@buildroot.org>; Tue, 07 Feb 2023 08:27:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=cf/yl1UBTWBoWA4mPAF6bBSgkTvFM3MLfjWk1xUhmIk=;
- b=CXTmVH9ThEGtCeyc1ghMct7vf2ANPOyBq2qXvFPhaRSlBFrpaYYUiClqwBpnapJvri
- idNThI7vSxBYbiDT7/qQ+I1GuW57GcsbNFrCBeIqKexKO0qUkVavs2HJ0chpPTIjGBbO
- i/59y+Taq7wQe/drA+3kDzwkDBqYavclHToBpmSqR06q8HU8aqlMa98krVBDBFYt7xEk
- HshXdyZcETQ45oCQHmyHFSoN7974HStomsdXF0tBZxBeyWP4mT/EMNNyHBDdOf8J4u5d
- ickWuitgAUC9jxrma+WIP49RTParVAp7RcPoY9ICiyJfgk60AAl3dWT0kOKqHQDps5Aa
- Znnw==
-X-Gm-Message-State: AO0yUKXAcbaiLS8OTRYvV1laR1OGpEKgL1iu881QUn52wXicUQ5/bu29
- cPhPR3TYXEjob+qypzxaJ5Lx98pq8Sw+COfS
-X-Google-Smtp-Source: AK7set8CYEbUbVKPcMPNbf7e5hmqPHSvYDiucIVA9J6eohRVLU/xjOJQA4y6e9p0Vm2uTSRhJqgd9w==
-X-Received: by 2002:adf:e749:0:b0:2c3:e5f5:9faa with SMTP id
- c9-20020adfe749000000b002c3e5f59faamr3440190wrn.58.1675787257852; 
- Tue, 07 Feb 2023 08:27:37 -0800 (PST)
-Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
- by smtp.gmail.com with ESMTPSA id
- e2-20020a5d5002000000b002c3be6ae0b1sm11562788wrt.65.2023.02.07.08.27.36
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 07 Feb 2023 08:27:37 -0800 (PST)
-Message-ID: <2d7b1709-7fd8-292d-8fc8-871bcb3c2047@mind.be>
-Date: Tue, 7 Feb 2023 17:27:35 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xTppg2TNH8rz for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 16:31:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 986A940287
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 986A940287
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 16:31:26 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id B84004000E;
+ Tue,  7 Feb 2023 16:31:24 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Tue,  7 Feb 2023 17:31:17 +0100
+Message-Id: <20230207163119.292389-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230207163119.292389-1-thomas.petazzoni@bootlin.com>
+References: <20230207163119.292389-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20230131050319.2821287-1-james.hilliard1@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230131050319.2821287-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=cf/yl1UBTWBoWA4mPAF6bBSgkTvFM3MLfjWk1xUhmIk=;
- b=PEI9nT1omA+sE4Hr5JQq2c+MhkVjuBpQsQHJcUyP3d1qBtKQOLKv2UGAmcxod9qPzp
- Ea80iBljSAEngPSPmuDFfQiWwkc9ZEMZNWmlBi3SNeue5T1dEk/Cpx74tnqhHnAKOzvF
- eOidUgGERP0yjNg1J9hZEndgM7I2VqFTPeyhUtw/SMh1IzdLrNeJ9CZhlrZL12pnjewL
- zqwhPbqnQi02KeZEQCGHSmqN/D4KvAZR51jAqebSIsgnqh+XllBzoI/ur+jOUQOrTr93
- QiOZB8U+daCINr/JbXTR9mg3yM+tTcPaJI6xsn5wZkXM8dXuYBCZMRLBh0tqvmDxv5SW
- oHQw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=PEI9nT1o
-Subject: Re: [Buildroot] [PATCH 1/1] package/{rust,
- rust-bin}: bump to version 1.67.0
+ d=bootlin.com; s=gm1; t=1675787485;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ihpeHPSRos/DpC3HNfq/RoaKVcxxKmkgt8ggss4H3lo=;
+ b=JQUev8QGzQ7rwe+dXCFTHpx3210LB4ZG9sUTUjvhp5L/ryiEKEMWM7O2Xw7VCg46ArNjRX
+ FDSdbLRo+CnWO4ITV871dOSdWAriEZZp6TAnaJw+Lt9coPTyLyl+bU7590sYwakQ77JUwa
+ A9b+llKWdU9aVs6y/rsaOrK+GiY2zF/4ZkBpj0awSsr9llXkNrBKySUqGEEeH6B83Lft53
+ KXc9w5GPqVyjMvJNv1NMvb7d6gVvxl7SQsO0ZWhjgSMvsuUVfW6mdYBy597ZUQkaHygYyB
+ sLE3He1fXPgWGkJTmFmrSMPNzhE1DF9utHJw60OVf4/+s3rpsMHU+YW0iHe7ZA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JQUev8QG
+Subject: [Buildroot] [PATCH 2/3] support/docker: use APT::Retries in apt-get
+ calls to retry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,33 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Sebastian WEYER <sebastian.weyer@smile.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+snapshot.debian.org is notoriously slow, and quite often leads to
+timeouts when downloading packages. To give us a better chance of
+succeeding, let's retry 3 times before failing.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/docker/Dockerfile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 31/01/2023 06:03, James Hilliard wrote:
-> Link to Rust 1.67.0 announcement: https://blog.rust-lang.org/2023/01/26/Rust-1.67.0.html
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index de1534e77a..a16c1e3849 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -20,8 +20,8 @@ COPY apt-sources.list /etc/apt/sources.list
+ 
+ # The container has no package lists, so need to update first
+ RUN dpkg --add-architecture i386 && \
+-    apt-get update -y
+-RUN apt-get install -y --no-install-recommends \
++    apt-get -o APT::Retries=3 update -y
++RUN apt-get -o APT::Retries=3 install -y --no-install-recommends \
+         bc \
+         build-essential \
+         bzr \
+-- 
+2.38.1
 
-  Applied to master, thanks. Thank you Sebastian for testing!
-
-  Regards,
-  Arnout
-
-> ---
->   package/rust-bin/rust-bin.hash | 252 ++++++++++++++++-----------------
->   package/rust-bin/rust-bin.mk   |   2 +-
->   package/rust/rust.hash         |   6 +-
->   package/rust/rust.mk           |   2 +-
->   4 files changed, 131 insertions(+), 131 deletions(-)
-> 
-[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
