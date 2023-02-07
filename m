@@ -4,46 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC033C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 11:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7E78C636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 11:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62D284012D;
-	Tue,  7 Feb 2023 11:50:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62D284012D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64EFD4148D;
+	Tue,  7 Feb 2023 11:53:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64EFD4148D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k0dF00h_FgED; Tue,  7 Feb 2023 11:50:49 +0000 (UTC)
+	with ESMTP id EXOH8GaTIa1B; Tue,  7 Feb 2023 11:53:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10900402AF;
-	Tue,  7 Feb 2023 11:50:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10900402AF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 37C3D1BF2AF
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 11:50:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9085414BF;
+	Tue,  7 Feb 2023 11:53:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9085414BF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 726B51BF2AF
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 11:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F40660B9A
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 11:50:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F40660B9A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 545FE414BF
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 11:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 545FE414BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uH9d3h_WZS1P for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 11:50:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C01C60B6C
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 11:50:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C01C60B6C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C17C840AE; Tue,  7 Feb 2023 11:50:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h4FWGkoJjQlX for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 11:53:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9417C4148D
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9417C4148D
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 11:53:47 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ az4-20020a05600c600400b003dff767a1f1so5970409wmb.2
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 03:53:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=e9K0oBBDThszwyDYKIX9VimnbH7TnYd26TnWqkao8G0=;
+ b=RVLagtvUJPNmCppzU7oCBQqqiMmTXMQb+dj2n9rqkaTahIzMIUTTXmulOER8nqiCCB
+ YPyMkwysIrBDkc66tvf4skYfNZDKCKZ2UvpVHVta+Zfm+uzV/mx2c5gwDE+wX5ICf6N8
+ I2iQqIb9BTooINs8iioJudBzvyUgZCu2YSx3DwGaYszYVJT4JS0Q+jiwh2V14ryw3kaO
+ Z1YwC0Wtc3l8tZGmfN3rVBbwpymcZL0k0cVBdrc5woKOW8znzYcM43O1b2mklTtXCcaN
+ oG6/XQ/Ghg5s8FpQ/Z6aXw+9wEbbKd1Tpt46ASqQTBXAdvVT1fAX7Aw085nR00fqLhHU
+ uMig==
+X-Gm-Message-State: AO0yUKVO+4PNpkYYrRFldtnRnSuZd9QLlxqLtTZGJuRhPkdXW1CYn78g
+ P6/eA6y3/qNeEDx0coMZngXtEa8tA2uCcJlG
+X-Google-Smtp-Source: AK7set/ITGsphiSYt7lfM8hFkjTHhO/3MrCsoLoJnbOsQUXjBESGqmppYnlctf10M1vCZNnJK6sYGg==
+X-Received: by 2002:a05:600c:319d:b0:3df:e1cc:94ff with SMTP id
+ s29-20020a05600c319d00b003dfe1cc94ffmr2850097wmp.28.1675770825735; 
+ Tue, 07 Feb 2023 03:53:45 -0800 (PST)
+Received: from arnoutx1.. (cpe1150018.bra.be.verixi.net. [85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ p10-20020a05600c358a00b003db1d9553e7sm20272986wmq.32.2023.02.07.03.53.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 07 Feb 2023 03:53:45 -0800 (PST)
+From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 12:50:27 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 12d85e9646ed89552c732775de000ad0b436a139
-X-Git-Newrev: 433ce2966f787248d5b8a62c46634e2f86250f8e
-X-Patchwork-Hint: ignore
-Message-Id: <20230207115045.1C17C840AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-hkdf: new package
+Date: Tue,  7 Feb 2023 12:53:44 +0100
+Message-Id: <20230207115344.440172-1-arnout@mind.be>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=e9K0oBBDThszwyDYKIX9VimnbH7TnYd26TnWqkao8G0=;
+ b=XnIxkHLx81bUxfBznBBHysJj7WzPRVd5Z372KkY5b1/PSfad/Az3jm4WkQ+5Gmsaxp
+ olmHEXadJvdlRbcTUone7gpTnyPnfpEsRGot2v3p4QNB8/U3vdr9FuiUS9W0xAOCqzRh
+ U54cMKwWn4HP4mAyAso7rEIjTQ8xoumTZRydR71CvOhXX2QHWu9sDlqksw5zs5qiD3wI
+ HecK2iMRDt4u8rywIF9VPr8tH+yhO0pd0tWC8xx9m2S3jXdvsDS09zdeTSpK/WdNbJna
+ 5/10mSl2V3v1cHN5jz2I97sCqfcc+6HFPUiWXu5tbtiRZkBgnZsNiiiw+OzVCd2AK/2P
+ jmMg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=XnIxkHLx
+Subject: [Buildroot] [PATCH] package/busybox: update to 1.36.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,156 +94,217 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=433ce2966f787248d5b8a62c46634e2f86250f8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Remove upstream patch 0003-awk-fix-use-after-free-CVE-2022-30065.patch
+and update _IGNORE_CVES accordingly.
 
-HMAC-based Extract-and-Expand Key Derivation Function (HKDF).
+The two other CVE fixes are still needed.
 
-https://github.com/casebeer/python-hkdf
+Refresh busybox.config. All configs are set to the new defaults, except
+for CONFIG_UDHCPC_DEFAULT_SCRIPT: for this one, reuse the script we also
+use for DHCPv4. This is matches the behaviour previous to the bump,
+where we had a single script handling both.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-[Thomas: justify the license.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- DEVELOPERS                                         |  2 ++
- package/Config.in                                  |  1 +
- package/python-hkdf/Config.in                      |  7 +++++++
- package/python-hkdf/python-hkdf.hash               |  3 +++
- package/python-hkdf/python-hkdf.mk                 | 17 +++++++++++++++++
- .../testing/tests/package/sample_python_hkdf.py    | 22 ++++++++++++++++++++++
- support/testing/tests/package/test_python_hkdf.py  | 11 +++++++++++
- 7 files changed, 63 insertions(+)
+ ...wk-fix-use-after-free-CVE-2022-30065.patch | 52 -------------------
+ package/busybox/busybox.config                | 23 +++++---
+ package/busybox/busybox.hash                  |  2 +-
+ package/busybox/busybox.mk                    |  4 +-
+ 4 files changed, 19 insertions(+), 62 deletions(-)
+ delete mode 100644 package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f10036f7f2..69e73636be 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1693,6 +1693,7 @@ F:	package/perftest/
- F:	package/ptm2human/
- F:	package/python-distro/
- F:	package/python-gnupg/
-+F:	package/python-hkdf/
- F:	package/python-pyalsa/
- F:	package/rdma-core/
- F:	package/riscv-isa-sim/
-@@ -1709,6 +1710,7 @@ F:	support/testing/tests/package/test_ola.py
- F:	support/testing/tests/package/test_ola/
- F:	support/testing/tests/package/test_perftest.py
- F:	support/testing/tests/package/test_python_distro.py
-+F:	support/testing/tests/package/test_python_hkdf.py
- F:	support/testing/tests/package/test_python_gnupg.py
- F:	support/testing/tests/package/test_python_pyalsa.py
- F:	support/testing/tests/package/test_rdma_core.py
-diff --git a/package/Config.in b/package/Config.in
-index aa87f1305d..b28949500e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1073,6 +1073,7 @@ menu "External python modules"
- 	source "package/python-h11/Config.in"
- 	source "package/python-h2/Config.in"
- 	source "package/python-hiredis/Config.in"
-+	source "package/python-hkdf/Config.in"
- 	source "package/python-hpack/Config.in"
- 	source "package/python-html5lib/Config.in"
- 	source "package/python-httplib2/Config.in"
-diff --git a/package/python-hkdf/Config.in b/package/python-hkdf/Config.in
-new file mode 100644
-index 0000000000..2add348ca2
---- /dev/null
-+++ b/package/python-hkdf/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_HKDF
-+	bool "python-hkdf"
-+	help
-+	  HMAC-based Extract-and-Expand Key Derivation Function
-+	  (HKDF).
-+
-+	  https://github.com/casebeer/python-hkdf
-diff --git a/package/python-hkdf/python-hkdf.hash b/package/python-hkdf/python-hkdf.hash
-new file mode 100644
-index 0000000000..87702b4582
---- /dev/null
-+++ b/package/python-hkdf/python-hkdf.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/hkdf/json
-+md5  d10471ad0ec891cdbe165d78282c943e  hkdf-0.0.3.tar.gz
-+sha256  622a31c634bc185581530a4b44ffb731ed208acf4614f9c795bdd70e77991dca  hkdf-0.0.3.tar.gz
-diff --git a/package/python-hkdf/python-hkdf.mk b/package/python-hkdf/python-hkdf.mk
-new file mode 100644
-index 0000000000..8b68c5cc9f
---- /dev/null
-+++ b/package/python-hkdf/python-hkdf.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# python-hkdf
-+#
-+################################################################################
-+
-+PYTHON_HKDF_VERSION = 0.0.3
-+PYTHON_HKDF_SOURCE = hkdf-$(PYTHON_HKDF_VERSION).tar.gz
-+PYTHON_HKDF_SITE = https://files.pythonhosted.org/packages/c3/be/327e072850db181ce56afd51e26ec7aa5659b18466c709fa5ea2548c935f
-+PYTHON_HKDF_SETUP_TYPE = setuptools
-+# No license file in the tree, but
-+# https://github.com/casebeer/python-hkdf/blob/master/LICENSE shows
-+# it's BSD-2-Clause. Issue already reported upstream:
-+# https://github.com/casebeer/python-hkdf/issues/6
-+PYTHON_HKDF_LICENSE = BSD-2-Clause
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_hkdf.py b/support/testing/tests/package/sample_python_hkdf.py
-new file mode 100644
-index 0000000000..a730c633e1
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_hkdf.py
-@@ -0,0 +1,22 @@
-+import hashlib
-+from binascii import hexlify, unhexlify
-+
-+from hkdf import Hkdf, hkdf_expand, hkdf_extract
-+
-+salt = b"ThisIsTheSalt."
-+key_in = b"ThisIsTheSecretKey"
-+key_info = b"KeyInfo1"
-+key_len = 16
-+expected_key = unhexlify(b"b49d6cc9065b72f3a0859377d8bb7299")
-+
-+prk = hkdf_extract(salt, input_key_material=key_in, hash=hashlib.sha512)
-+key1 = hkdf_expand(prk, info=key_info, length=key_len)
-+
-+print("key1:", hexlify(key1))
-+assert key1 == expected_key
-+
-+kdf = Hkdf(salt, input_key_material=key_in, hash=hashlib.sha512)
-+key2 = kdf.expand(info=key_info, length=key_len)
-+
-+print("key2:", hexlify(key2))
-+assert key2 == expected_key
-diff --git a/support/testing/tests/package/test_python_hkdf.py b/support/testing/tests/package/test_python_hkdf.py
-new file mode 100644
-index 0000000000..e93c24ff60
---- /dev/null
-+++ b/support/testing/tests/package/test_python_hkdf.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Hkdf(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_HKDF=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_hkdf.py"]
+diff --git a/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch b/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch
+deleted file mode 100644
+index f9bfee328e..0000000000
+--- a/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From e06b1f0839972cc3f5b432849d574d14a8f17613 Mon Sep 17 00:00:00 2001
+-From: Natanael Copa <ncopa@alpinelinux.org>
+-Date: Fri, 17 Jun 2022 17:45:34 +0200
+-Subject: [PATCH] awk: fix use after free (CVE-2022-30065)
+-
+-fixes https://bugs.busybox.net/show_bug.cgi?id=14781
+-
+-function                                             old     new   delta
+-evaluate                                            3343    3357     +14
+-
+-Signed-off-by: Natanael Copa <ncopa@alpinelinux.org>
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-Backport: https://git.busybox.net/busybox/commit/?id=e63d7cdfdac78c6fd27e9e63150335767592b85e
+-[straightforward conflict resolution in testsuite/awk.tests]
+-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+----
+- editors/awk.c       | 3 +++
+- testsuite/awk.tests | 6 ++++++
+- 2 files changed, 9 insertions(+)
+-
+-diff --git a/editors/awk.c b/editors/awk.c
+-index f6314ac72..654cbac33 100644
+---- a/editors/awk.c
+-+++ b/editors/awk.c
+-@@ -3114,6 +3114,9 @@ static var *evaluate(node *op, var *res)
+- 
+- 		case XC( OC_MOVE ):
+- 			debug_printf_eval("MOVE\n");
+-+			/* make sure that we never return a temp var */
+-+			if (L.v == TMPVAR0)
+-+				L.v = res;
+- 			/* if source is a temporary string, jusk relink it to dest */
+- 			if (R.v == TMPVAR1
+- 			 && !(R.v->type & VF_NUMBER)
+-diff --git a/testsuite/awk.tests b/testsuite/awk.tests
+-index bcaafe8fd..156aa65eb 100755
+---- a/testsuite/awk.tests
+-+++ b/testsuite/awk.tests
+-@@ -469,4 +469,10 @@ testing 'awk printf %% prints one %' \
+- 	"%\n" \
+- 	'' ''
+- 
+-+testing 'awk assign while test' \
+-+	"awk '\$1==\$1=\"foo\" {print \$1}'" \
+-+	"foo\n" \
+-+	"" \
+-+	"foo"
+-+
+- exit $FAILCOUNT
+--- 
+-2.37.3
+-
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index e7f628ca6d..4826fb8242 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -1,7 +1,7 @@
+ #
+ # Automatically generated make config: don't edit
+-# Busybox version: 1.35.0
+-# Thu Jan 27 10:16:54 2022
++# Busybox version: 1.36.0
++# Tue Feb  7 12:34:02 2023
+ #
+ CONFIG_HAVE_DOT_CONFIG=y
+ 
+@@ -93,6 +93,9 @@ CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
+ # CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
+ CONFIG_PASSWORD_MINLEN=6
+ CONFIG_MD5_SMALL=1
++CONFIG_SHA1_SMALL=3
++CONFIG_SHA1_HWACCEL=y
++CONFIG_SHA256_HWACCEL=y
+ CONFIG_SHA3_SMALL=1
+ CONFIG_FEATURE_NON_POSIX_CP=y
+ # CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
+@@ -123,6 +126,9 @@ CONFIG_LAST_SUPPORTED_WCHAR=0
+ # CONFIG_UNICODE_BIDI_SUPPORT is not set
+ # CONFIG_UNICODE_NEUTRAL_TABLE is not set
+ # CONFIG_UNICODE_PRESERVE_BROKEN is not set
++# CONFIG_LOOP_CONFIGURE is not set
++# CONFIG_NO_LOOP_CONFIGURE is not set
++CONFIG_TRY_LOOP_CONFIGURE=y
+ 
+ #
+ # Applets
+@@ -338,6 +344,7 @@ CONFIG_FEATURE_TR_CLASSES=y
+ CONFIG_FEATURE_TR_EQUIV=y
+ CONFIG_TRUE=y
+ CONFIG_TRUNCATE=y
++CONFIG_TSORT=y
+ CONFIG_TTY=y
+ CONFIG_UNAME=y
+ CONFIG_UNAME_OSNAME="GNU/Linux"
+@@ -520,7 +527,7 @@ CONFIG_FEATURE_SHADOWPASSWDS=y
+ # CONFIG_USE_BB_PWD_GRP is not set
+ # CONFIG_USE_BB_SHADOW is not set
+ CONFIG_USE_BB_CRYPT=y
+-# CONFIG_USE_BB_CRYPT_SHA is not set
++CONFIG_USE_BB_CRYPT_SHA=y
+ # CONFIG_ADD_SHELL is not set
+ # CONFIG_REMOVE_SHELL is not set
+ CONFIG_ADDGROUP=y
+@@ -811,10 +818,10 @@ CONFIG_FEATURE_LESS_TRUNCATE=y
+ CONFIG_FEATURE_LESS_REGEXP=y
+ # CONFIG_FEATURE_LESS_WINCH is not set
+ # CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
+-# CONFIG_FEATURE_LESS_DASHCMD is not set
++CONFIG_FEATURE_LESS_DASHCMD=y
+ # CONFIG_FEATURE_LESS_LINENUMS is not set
+-# CONFIG_FEATURE_LESS_RAW is not set
+-# CONFIG_FEATURE_LESS_ENV is not set
++CONFIG_FEATURE_LESS_RAW=y
++CONFIG_FEATURE_LESS_ENV=y
+ CONFIG_LSSCSI=y
+ CONFIG_MAKEDEVS=y
+ # CONFIG_FEATURE_MAKEDEVS_LEAF is not set
+@@ -831,10 +838,12 @@ CONFIG_PARTPROBE=y
+ # CONFIG_RFKILL is not set
+ CONFIG_RUNLEVEL=y
+ # CONFIG_RX is not set
++CONFIG_SEEDRNG=y
+ CONFIG_SETFATTR=y
+ CONFIG_SETSERIAL=y
+ CONFIG_STRINGS=y
+ CONFIG_TIME=y
++CONFIG_TREE=y
+ CONFIG_TS=y
+ # CONFIG_TTYSIZE is not set
+ # CONFIG_UBIATTACH is not set
+@@ -1007,6 +1016,7 @@ CONFIG_UDHCPC=y
+ CONFIG_FEATURE_UDHCPC_ARPING=y
+ CONFIG_FEATURE_UDHCPC_SANITIZEOPT=y
+ CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
++CONFIG_UDHCPC6_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
+ # CONFIG_UDHCPC6 is not set
+ # CONFIG_FEATURE_UDHCPC6_RFC3646 is not set
+ # CONFIG_FEATURE_UDHCPC6_RFC4704 is not set
+@@ -1141,6 +1151,7 @@ CONFIG_ASH_IDLE_TIMEOUT=y
+ CONFIG_ASH_ECHO=y
+ CONFIG_ASH_PRINTF=y
+ CONFIG_ASH_TEST=y
++CONFIG_ASH_SLEEP=y
+ CONFIG_ASH_HELP=y
+ CONFIG_ASH_GETOPTS=y
+ CONFIG_ASH_CMDCMD=y
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 2091cdaf65..6d1c36906d 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,5 +1,5 @@
+ # From https://busybox.net/downloads/busybox-1.35.0.tar.bz2.sha256
+-sha256  faeeb244c35a348a334f4a59e44626ee870fb07b6884d68c10ae8bc19f83a694  busybox-1.35.0.tar.bz2
++sha256  542750c8af7cb2630e201780b4f99f3dcceeb06f505b479ec68241c1e6af61a5  busybox-1.36.0.tar.bz2
+ # Locally computed
+ sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
+ sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index f8f9cb5616..3026823063 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
+ 
+-BUSYBOX_VERSION = 1.35.0
++BUSYBOX_VERSION = 1.36.0
+ BUSYBOX_SITE = https://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+ BUSYBOX_LICENSE_FILES = LICENSE archival/libarchive/bz/LICENSE
+ BUSYBOX_CPE_ID_VENDOR = busybox
+ 
+-# 0003-awk-fix-use-after-free-CVE-2022-30065.patch
+-BUSYBOX_IGNORE_CVES += CVE-2022-30065
+ # 0004-libbb-sockaddr2str-ensure-only-printable-characters-.patch
+ # 0005-nslookup-sanitize-all-printed-strings-with-printable.patch
+ BUSYBOX_IGNORE_CVES += CVE-2022-28391
+-- 
+2.39.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
