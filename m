@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB8B0C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 001FBC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:46:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A3D370130;
-	Tue, 21 Feb 2023 01:46:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A3D370130
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC5E56FBC0;
+	Tue, 21 Feb 2023 01:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC5E56FBC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5H0jxekN1QfD; Tue, 21 Feb 2023 01:46:00 +0000 (UTC)
+	with ESMTP id IKJj-GgPTF7c; Tue, 21 Feb 2023 01:46:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5C0070011;
-	Tue, 21 Feb 2023 01:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5C0070011
+	by smtp3.osuosl.org (Postfix) with ESMTP id D518870078;
+	Tue, 21 Feb 2023 01:46:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D518870078
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 673011BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6EB5E1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65BEE6FFFE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C44B6FFFF
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65BEE6FFFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C44B6FFFF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gMPBnU2ThqHV for <buildroot@lists.busybox.net>;
+ with ESMTP id 9TwB6RLZbRCd for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F9D76FE5F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 829D86FFF4
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F9D76FE5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 829D86FFF4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7463D81979; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+ id 8040F828C8; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 23:17:46 +0100
+Date: Tue, 7 Feb 2023 23:23:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 57a64a702a1c162a33097db7ee7e069fb64b39df
-X-Git-Newrev: 90ab065162a35b8aa2c429903e3d59d4ad2c0d7f
+X-Git-Oldrev: 90ab065162a35b8aa2c429903e3d59d4ad2c0d7f
+X-Git-Newrev: f9a92ea1cb1dd2aa9b3f9c83c04d7d01c1f6e148
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205254.7463D81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/php: bump version to
- 8.2.1
+Message-Id: <20230220205254.8040F828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gcc: map debug prefix
+ when reproducible
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,55 +57,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90ab065162a35b8aa2c429903e3d59d4ad2c0d7f
+commit: https://git.buildroot.net/buildroot/commit/?id=f9a92ea1cb1dd2aa9b3f9c83c04d7d01c1f6e148
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog:
-https://www.php.net/ChangeLog-8.php#PHP_8_2
+When building with BR2_REPRODUCIBLE the toolchain wrapper passes
+-fdebug-prefix-map for all packages that are built.  But this doesn't
+affect the target libraries (like libgcc) built by GCC's build system.
 
-Updated license hash due to copyright year bump:
-https://github.com/php/php-src/commit/bf2867bc7235dfb65675ff4e9c21c8bc537726e2
+GCC 4.3 added a configure option to set the debug prefix map for these
+libraries, which is used here to avoid encoding potentially
+non-reproducible build paths into the debug data.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/php/php.hash | 4 ++--
- package/php/php.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gcc/gcc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 23ec84f19f..a9c3b7640b 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  e16e47a872d58685913ac848ce92ec49f42c1828110c98c65fb6265a08724a1a  php-8.1.14.tar.xz
-+sha256  650d3bd7a056cabf07f6a0f6f1dd8ba45cd369574bbeaa36de7d1ece212c17af  php-8.2.1.tar.xz
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index ec6f3b550a..6dfd93f2a4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -84,6 +84,10 @@ HOST_GCC_COMMON_CONF_OPTS = \
+ 	--with-bugurl="http://bugs.buildroot.net/" \
+ 	--without-zstd
  
- # License file
--sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-+sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 23dd4ba96f..372d55f68a 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.1.14
-+PHP_VERSION = 8.2.1
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
++ifeq ($(BR2_REPRODUCIBLE),y)
++HOST_GCC_COMMON_CONF_OPTS += --with-debug-prefix-map=$(BASE_DIR)=buildroot
++endif
++
+ # Don't build documentation. It takes up extra space / build time,
+ # and sometimes needs specific makeinfo versions to work
+ HOST_GCC_COMMON_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
