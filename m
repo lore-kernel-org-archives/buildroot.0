@@ -4,48 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14848C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:42:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C309C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1BBF70015;
-	Tue, 21 Feb 2023 01:42:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1BBF70015
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB662700C9;
+	Tue, 21 Feb 2023 01:42:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB662700C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OIuawvWqaSbC; Tue, 21 Feb 2023 01:42:26 +0000 (UTC)
+	with ESMTP id uS7kp8ffjEaT; Tue, 21 Feb 2023 01:42:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9687B700E2;
-	Tue, 21 Feb 2023 01:42:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9687B700E2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9747F6FFEF;
+	Tue, 21 Feb 2023 01:42:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9747F6FFEF
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 906A01BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9FCF31BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA0BD6FFEF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA0BD6FFEF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E52D6FFF0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E52D6FFF0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2aSOKgTbfBSF for <buildroot@lists.busybox.net>;
+ with ESMTP id 6ohpPoajnwwh for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D0B396FBE4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0B396FBE4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26C9D6106E
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26C9D6106E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3366828C8; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-From: Arnout Vandecappelle <arnout@mind.be>
+ id 13AC481979; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 16:03:27 +0100
+Date: Tue, 7 Feb 2023 16:18:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7231701a290ba447fde9807ba9d260022ddfc8e4
-X-Git-Newrev: 4a6f9d2516820c296a8af788b259ca96926cd60d
+X-Git-Oldrev: 1ffbc3a9cb9d4386f6ae171207f7b85ef182e8a2
+X-Git-Newrev: 93ce3c1be0753189d6af3ee9968b935037519c25
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205252.C3366828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/urandom-scripts:
- actually credit seed files via seedrng
+Message-Id: <20230220205253.13AC481979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsolv: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,203 +55,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a6f9d2516820c296a8af788b259ca96926cd60d
+commit: https://git.buildroot.net/buildroot/commit/?id=93ce3c1be0753189d6af3ee9968b935037519c25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The RNG can't actually be seeded from a shell script, due to the
-reliance on ioctls. For this reason, Busybox 1.36.0 contains SeedRNG, a
-tiny program meant to be called at startup and shutdown (and at
-arbitrary other points in between if desired). Note that initially,
-the way seedrng was included in busybox broke things quite severely, but
-now it's been reverted to a reasonably acceptable version.
+Required by micromamba.
 
-This is a significant improvement over the current init script, which
-doesn't credit entropy and whose hashing in shell scripts is sort of
-fragile.
-
-Because seedrng is part of busybox, urandom-scripts now depends on
-BR2_PACKAGE_BUSYBOX. This can be removed again if later we add a
-standalone seedrng package.
-
-Add a decent explanation to the init script about the need for a
-persistent directory to make this actually work.
-
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-[Arnout:
- - Remove busybox patch, it's now part of busybox 1.36.0.
- - Depend on busybox.
- - Fix shellcheck errors.
- - Use DAEMON and SEEDRNG_ARGS.
- - Don't bother with "seed_dir" and "skip_credit" variables.
- - Rename to S20seedrng.
-]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+[Thomas:
+ - rework shared/static lib handling
+ - don't pass ENABLE_CONDA=ON based on BR2_PACKAGE_MICROMAMBA=y as
+   it's weird that a dependency does something different depending on
+   which of its reverse dependencies is enabled]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/urandom-scripts/Config.in          |  5 +--
- package/urandom-scripts/S20seedrng         | 40 +++++++++++++++++
- package/urandom-scripts/S20urandom         | 70 ------------------------------
- package/urandom-scripts/urandom-scripts.mk |  4 +-
- 4 files changed, 43 insertions(+), 76 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/libsolv/Config.in    |  9 +++++++++
+ package/libsolv/libsolv.hash |  3 +++
+ package/libsolv/libsolv.mk   | 27 +++++++++++++++++++++++++++
+ 5 files changed, 41 insertions(+)
 
-diff --git a/package/urandom-scripts/Config.in b/package/urandom-scripts/Config.in
-index 987e442e22..6b4a609f95 100644
---- a/package/urandom-scripts/Config.in
-+++ b/package/urandom-scripts/Config.in
-@@ -1,10 +1,7 @@
- config BR2_PACKAGE_URANDOM_SCRIPTS
- 	bool "urandom-initscripts"
- 	default y if BR2_PACKAGE_INITSCRIPTS
-+	depends on BR2_PACKAGE_BUSYBOX
- 	depends on !BR2_PACKAGE_SYSTEMD
- 	help
- 	  Initscript to preserve the random seed between reboots.
--
--	  WARNING: this is a poor fit to try and get high-quality
--	  entropy at boot. There are better ways, like haveged, or
--	  rng-tools.
-diff --git a/package/urandom-scripts/S20seedrng b/package/urandom-scripts/S20seedrng
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 220a326adc..e8ddad71cd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2788,6 +2788,7 @@ F:	package/most/
+ 
+ N:	TIAN Yuanhao <tianyuanhao3@163.com>
+ F:	package/cli11/
++F:	package/libsolv/
+ F:	package/open-isns/
+ F:	package/termcolor/
+ F:	package/tl-expected/
+diff --git a/package/Config.in b/package/Config.in
+index fa0713c311..6ca4c61959 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2085,6 +2085,7 @@ menu "Other"
+ 	source "package/libshdata/Config.in"
+ 	source "package/libsigc/Config.in"
+ 	source "package/libsigsegv/Config.in"
++	source "package/libsolv/Config.in"
+ 	source "package/libspatialindex/Config.in"
+ 	source "package/libtalloc/Config.in"
+ 	source "package/libtasn1/Config.in"
+diff --git a/package/libsolv/Config.in b/package/libsolv/Config.in
 new file mode 100644
-index 0000000000..0fea0bea83
+index 0000000000..1415d2bc2b
 --- /dev/null
-+++ b/package/urandom-scripts/S20seedrng
-@@ -0,0 +1,40 @@
-+#! /bin/sh
-+#
-+# Preserve the random seed between reboots. See urandom(4).
-+#
-+# This script can be called multiple times during operation (e.g. with
-+# "reload" argument) to refresh the seed.
++++ b/package/libsolv/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBSOLV
++	bool "libsolv"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_ZLIB
++	help
++	  A free package dependency solver using a satisfiability
++	  algorithm.
 +
-+# The following arguments can be added to SEEDRNG_ARGS in
-+# /etc/default/seedrng:
-+#   --seed-dir=/path/to/seed/directory
-+#     Path to the directory where the seed and the lock files are stored.
-+#     for optimal operation, this should be a persistent, writeable
-+#     location. Default is /var/lib/seedrng
++	  https://github.com/openSUSE/libsolv
+diff --git a/package/libsolv/libsolv.hash b/package/libsolv/libsolv.hash
+new file mode 100644
+index 0000000000..162e46e54d
+--- /dev/null
++++ b/package/libsolv/libsolv.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  968aef452b5493751fa0168cd58745a77c755e202a43fe8d549d791eb16034d5  libsolv-0.7.22.tar.gz
++sha256  57f15acfb29fbef7749779e096a5885c60b716633e34484a21bb717554c0198f  LICENSE.BSD
+diff --git a/package/libsolv/libsolv.mk b/package/libsolv/libsolv.mk
+new file mode 100644
+index 0000000000..144ce68a83
+--- /dev/null
++++ b/package/libsolv/libsolv.mk
+@@ -0,0 +1,27 @@
++################################################################################
 +#
-+#  --skip-credit
-+#     Set this to true only if you do not want seed files to actually
-+#     credit the RNG, for example if you plan to replicate this file
-+#     system image and do not have the wherewithal to first delete the
-+#     contents of /var/lib/seedrng.
++# libsolv
 +#
-+# Example:
-+# SEEDRNG_ARGS="--seed-dir=/data/seedrng --skip-credit"
-+#
++################################################################################
 +
-+DAEMON="seedrng"
-+SEEDRNG_ARGS=""
++LIBSOLV_VERSION = 0.7.22
++LIBSOLV_SITE = $(call github,openSUSE,libsolv,$(LIBSOLV_VERSION))
++LIBSOLV_LICENSE = BSD-3-Clause
++LIBSOLV_LICENSE_FILES = LICENSE.BSD
++LIBSOLV_INSTALL_STAGING = YES
++LIBSOLV_DEPENDENCIES = zlib
++LIBSOLV_CONF_OPTS = -DCMAKE_CXX_COMPILER_FORCED=ON
 +
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++LIBSOLV_CONF_OPTS += -DENABLE_STATIC=ON
++else
++LIBSOLV_CONF_OPTS += -DDISABLE_STATIC=ON
++endif
 +
-+case "$1" in
-+	start|stop|restart|reload)
-+		# Never fail, as this isn't worth making a fuss
-+		# over if it doesn't go as planned.
-+		# shellcheck disable=SC2086 # we need the word splitting
-+		seedrng $SEEDRNG_ARGS || true;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/urandom-scripts/S20urandom b/package/urandom-scripts/S20urandom
-deleted file mode 100644
-index 6c6aea9eee..0000000000
---- a/package/urandom-scripts/S20urandom
-+++ /dev/null
-@@ -1,70 +0,0 @@
--#! /bin/sh
--#
--# Preserve the random seed between reboots. See urandom(4).
--#
--
--# Quietly do nothing if /dev/urandom does not exist
--[ -c /dev/urandom ] || exit 0
--
--URANDOM_SEED="/var/lib/random-seed"
--
--# shellcheck source=/dev/null
--[ -r "/etc/default/urandom" ] && . "/etc/default/urandom"
--
--if pool_bits=$(cat /proc/sys/kernel/random/poolsize 2> /dev/null); then
--	pool_size=$((pool_bits/8))
--else
--	pool_size=512
--fi
--
--init_rng() {
--	[ -f "$URANDOM_SEED" ] || return 0
--	printf 'Initializing random number generator: '
--	dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
--	status=$?
--	if [ "$status" -eq 0 ]; then
--		echo "OK"
--	else
--		echo "FAIL"
--	fi
--	return "$status"
--}
--
--save_random_seed() {
--	printf 'Saving random seed: '
--	status=1
--	if touch "$URANDOM_SEED.new" 2> /dev/null; then
--		old_umask=$(umask)
--		umask 077
--		dd if=/dev/urandom of="$URANDOM_SEED.tmp" bs="$pool_size" count=1 2> /dev/null
--		cat "$URANDOM_SEED" "$URANDOM_SEED.tmp" 2>/dev/null \
--			| sha256sum \
--			| cut -d ' ' -f 1 > "$URANDOM_SEED.new" && \
--		mv "$URANDOM_SEED.new" "$URANDOM_SEED" && status=0
--		rm -f "$URANDOM_SEED.tmp"
--		umask "$old_umask"
--		if [ "$status" -eq 0 ]; then
--			echo "OK"
--		else
--			echo "FAIL"
--		fi
--
--	else
--		echo "SKIP (read-only file system detected)"
--	fi
--	return "$status"
--}
--
--case "$1" in
--	start|restart|reload)
--		# Carry a random seed from start-up to start-up
--		# Load and then save the whole entropy pool
--		init_rng && save_random_seed;;
--	stop)
--		# Carry a random seed from shut-down to start-up
--		# Save the whole entropy pool
--		save_random_seed;;
--	*)
--		echo "Usage: $0 {start|stop|restart|reload}"
--		exit 1
--esac
-diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
-index 2c09728c46..32f3e09343 100644
---- a/package/urandom-scripts/urandom-scripts.mk
-+++ b/package/urandom-scripts/urandom-scripts.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20urandom \
--		$(TARGET_DIR)/etc/init.d/S20urandom
-+	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20seedrng \
-+		$(TARGET_DIR)/etc/init.d/S20seedrng
- endef
- 
- $(eval $(generic-package))
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++LIBSOLV_CONF_OPTS += -DENABLE_SHARED=ON
++else
++LIBSOLV_CONF_OPTS += -DDISABLE_SHARED=ON
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
