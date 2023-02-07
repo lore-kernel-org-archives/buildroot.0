@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75050C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B9DFC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:32:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16B344F09C;
-	Tue, 21 Feb 2023 00:32:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16B344F09C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AB834F11C;
+	Tue, 21 Feb 2023 00:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AB834F11C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TmlvS0UsTs4Z; Tue, 21 Feb 2023 00:32:16 +0000 (UTC)
+	with ESMTP id gg8VLXa9F_-A; Tue, 21 Feb 2023 00:32:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE0B44F426;
-	Tue, 21 Feb 2023 00:32:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE0B44F426
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9861A4F42D;
+	Tue, 21 Feb 2023 00:32:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9861A4F42D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 970D91BF94D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 56A8D1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93891417EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5F334179B
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93891417EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5F334179B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yqW1Usn429kk for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+ with ESMTP id Fz7WEJnoZkPv for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D6EB4179B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D6EB4179B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B7E240C1A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B7E240C1A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D2B786495; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 095CC86495; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 18:24:10 +0100
+Date: Tue, 7 Feb 2023 22:51:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bde165f7ad4922e218cabdb6eb7c40e1661179f0
-X-Git-Newrev: 4fbd2f6d2cf26225f73f584c3a0cacb1b2476f5f
+X-Git-Oldrev: b16ae93c85355aad3440737bc4ef7c3ec2d534f3
+X-Git-Newrev: 9a095643b4dd34eb7acb69662aa64fa945f4b542
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205253.8D2B786495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/dependencies/dependencies.sh: silence gcc plugin test
+Message-Id: <20230220205254.095CC86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] system: Warn if systemd is
+ used with kernel < 4.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fbd2f6d2cf26225f73f584c3a0cacb1b2476f5f
+commit: https://git.buildroot.net/buildroot/commit/?id=9a095643b4dd34eb7acb69662aa64fa945f4b542
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The gcc plugin test was not using the -q option to grep causing it to print
-the line to stdout, so fix that.
+To quote the README:
 
-While we're at it, adjust the locale check to use grep -q instead of
-redirecting to /dev/null for consistency with the other checks.
+> Kernel versions below 4.15 have significant gaps in functionality and
+> are not recommended for use with this version of systemd. Taint flag
+> 'old-kernel' will be set. Systemd will most likely still function, but
+> upstream support and testing are limited.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/dependencies/dependencies.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ system/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 88eabe921d..0aa5e59274 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -194,7 +194,7 @@ if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -l
- 	exit 1;
- fi
+diff --git a/system/Config.in b/system/Config.in
+index 6100d965e7..1ca7690ea3 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -140,6 +140,10 @@ comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.15, host and targe
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
+ 		!BR2_HOST_GCC_AT_LEAST_5
  
--if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
-+if grep -q ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG ; then
- 	if ! which locale > /dev/null ; then
- 		echo
- 		echo "You need locale support on your build machine to build a toolchain supporting locales"
-@@ -254,7 +254,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
- 	fi
- fi
- 
--if grep ^BR2_NEEDS_HOST_GCC_PLUGIN_SUPPORT=y $BR2_CONFIG ; then
-+if grep -q ^BR2_NEEDS_HOST_GCC_PLUGIN_SUPPORT=y $BR2_CONFIG ; then
- 	if ! echo "#include <gcc-plugin.h>" | $HOSTCXX_NOCCACHE -I$($HOSTCXX_NOCCACHE -print-file-name=plugin)/include -x c++ -c - -o /dev/null ; then
- 		echo
- 		echo "Your Buildroot configuration needs a host compiler capable of building gcc plugins."
++comment "systemd highly recommends Linux >= 4.15"
++	depends on BR2_INIT_SYSTEMD
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
++
+ config BR2_INIT_NONE
+ 	bool "None"
+ 	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_ROOTFS_SKELETON_DEFAULT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
