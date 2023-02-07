@@ -1,70 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0038C636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 15:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BCEEC636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 15:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B4CB40F4E;
-	Tue,  7 Feb 2023 15:22:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B4CB40F4E
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4AB981E2D;
+	Tue,  7 Feb 2023 15:24:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4AB981E2D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S4rJFmrI8pAa; Tue,  7 Feb 2023 15:22:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CEF8GD1YhfhX; Tue,  7 Feb 2023 15:24:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D996417E1;
-	Tue,  7 Feb 2023 15:22:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D996417E1
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4D6A81E90;
+	Tue,  7 Feb 2023 15:24:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4D6A81E90
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 879191BF275
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:22:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 66C2F1BF275
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D033417F7
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:22:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D033417F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4095C417E1
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:24:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4095C417E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 46wy7MzQXZFh for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 15:22:52 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2484240F4E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2484240F4E
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 15:22:52 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 01BFA13F84C;
- Tue,  7 Feb 2023 16:22:46 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 07 Feb 2023 16:22:46 +0100
-Date: Tue, 7 Feb 2023 16:22:46 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Marcus Folkesson <marcus.folkesson@gmail.com>
-Message-ID: <20230207152246.GG4124@scaer>
-References: <20230207085445.1651226-1-marcus.folkesson@gmail.com>
+ with ESMTP id NeZ8GAhdOF7t for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 15:24:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E6BA40F4E
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E6BA40F4E
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 15:24:34 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id a2so13641866wrd.6
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 07:24:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=+cE3OYOYNAK4MI2uA9Ba9VyyxLhrdjXCm0Ln0GXP+yM=;
+ b=OGf4O7GG3wRhYcD2FCvyVF3SpkShjCuNRfI5psVJgFAepgVakq/GKm2q9FqYNpi19R
+ ow5cYJnhwwhealilYCQptJYg080gCA+WJUS1hQx/oJHdMSBwwRTr5VSvaKvmUjXYyvOY
+ cb2nPEjSgYbP8Mz3bSQpV/mlkg8wTpMzhaGsvAH1sUlDsZ0On8zvFUhqfn8smeRkJ4dp
+ gm/24sXbXr93pvw3YwB0So4MDha9n/CJ+VNkby2YYLLrRKaM6JA3et2fAhT+vuozF0OB
+ +El9rpqcHxWt9QzvPKRjid+2hQBsAGp/UwxA7epLZcnCdxm/wVRc1KyrLaI11e6f5Q9v
+ Kigw==
+X-Gm-Message-State: AO0yUKUzRde53H5fB22VFYa05mPeps5hy41FTprJv91hmwmqFwZkcmt9
+ EHCpHj8MOHbiaKOG5Sil97NK/+MCn8mOMVQy
+X-Google-Smtp-Source: AK7set9o285H7s8Fq1fURgI2IQG05ht9sCctJ6mXfmiobO4sWiwZc16oUK/6hiF13QTrH4//vX2HZw==
+X-Received: by 2002:a05:6000:1d2:b0:2bf:b661:87d9 with SMTP id
+ t18-20020a05600001d200b002bfb66187d9mr3159465wrx.50.1675783473130; 
+ Tue, 07 Feb 2023 07:24:33 -0800 (PST)
+Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ a18-20020adffad2000000b002c3f280bdc7sm2053523wrs.96.2023.02.07.07.24.32
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 07 Feb 2023 07:24:32 -0800 (PST)
+Message-ID: <9a3a9627-d917-1e31-9ad0-f56487187865@mind.be>
+Date: Tue, 7 Feb 2023 16:24:31 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230207085445.1651226-1-marcus.folkesson@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675783369;
- bh=QwUAP9AjVjmc8YGV3ejKPbnYX7rA2Sv1QxUL8ij4ON8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ueOpUYv1KA3FoV5wBzdR87TV9kq19gaeIUSBTChKmykkMsoqWpLeGjvyP3hS02I6O
- agmePvZj66iogm7MJPD2AOd+zCIjDw3Xa2r64cxF2ajCb/dHM3VAp12b7jlVr2WleU
- kTUjNLqCDWAYN3KF+cOTWOUOnZKmOu7n7GKisUeG+sB6JC3WjSq9F9pj94aVPBI+kM
- c47YQjV4Prj2XajDF9JH4BRs1A0R1T+qXg8nqcIXQXVVy/yl3C0LoRp+ybaAZv+Zqe
- Q5K/StryI1TshReRGHB1wpwHantH8qrQJdPG/PcS/VdvKEe+lapWgRn744V7GCYChT
- Ov4YZJZ9+/pWA==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220621225209.2899559-1-james.hilliard1@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20220621225209.2899559-1-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=+cE3OYOYNAK4MI2uA9Ba9VyyxLhrdjXCm0Ln0GXP+yM=;
+ b=fgUHwsB7Ydj1lE1759pxZeKYwy5b5Qhnq/vKTogcsmGA/Q9AB26NN1WyFZ0i9Fx+Ht
+ v9wpwNyvwvUesL3Vhj6PUnak9fkK2BDS2Q5EE9vVhGTcCVYkdgy2mBB9oL5KY024AfiH
+ VTaiT85dKM5s7JYvLoDO9ybaFqReQGnl/q28eP8RpQ51Qs0Sj84KMK6T0zz86ZCUT368
+ sEkSdXyKuA01DhRwscSIomUFCWD/n5xtvl4fja8L2JEXeyEYDNLWDzyrevbM1lLTux4n
+ p3qpBGLuuEunDjKu66sPZKaMInsoBU1z6zxhsd7WGaRlpRT0j1vsR+7WkvGy0oFfL+LQ
+ /aJg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ueOpUYv1
-Subject: Re: [Buildroot] [PATCH] package/libcamera-apps: enable LIBAV only
- if libdrm is present
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=fgUHwsB7
+Subject: Re: [Buildroot] [PATCH 1/1] package/spirv-llvm-translator: set
+ CMP0077 policy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,101 +99,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Marcus, All,
 
-On 2023-02-07 09:54 +0100, Marcus Folkesson spake thusly:
-> Since commit 35266e84043f880d7591e52b71a8c5b8d0e4717d, libcamera-apps
-> does enable LIBAV by default which depends on libdrm.
+
+On 22/06/2022 00:52, James Hilliard wrote:
+> Set this to the new behavior for consistency.
 > 
 > Fixes:
-> - http://autobuild.buildroot.net/results/548f2a3b353ce4693fb60d7fb1e06e02af22991c/
+> CMake Warning (dev) at /home/buildroot/buildroot/output/per-package/host-spirv-llvm-translator/host/lib/cmake/llvm/HandleLLVMOptions.cmake:852 (option):
+>    Policy CMP0077 is not set: option() honors normal variables.  Run "cmake
+>    --help-policy CMP0077" for policy details.  Use the cmake_policy command to
+>    set the policy and suppress this warning.
 > 
-> /home/buildroot/autobuild/run/instance-1/output-1/build/libcamera-apps-1.1.1/encoder/libav_encoder.cpp:13:10: fatal error: libdrm/drm_fourcc.h: No such file or directory
->    13 | #include <libdrm/drm_fourcc.h>
->       |          ^~~~~~~~~~~~~~~~~~~~~
+>    For compatibility with older versions of CMake, option is clearing the
+>    normal variable 'LLVM_ENABLE_EH'.
+> Call Stack (most recent call first):
+>    CMakeLists.txt:53 (include)
 > 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+  AFAIU, this change has become irrelevant with one of the two updates to 
+spirv-llvm-translator that have been committed since this patch was sent. 
+Therefore, I marked it as Superseded.
+
+  Regards,
+  Arnout
+
 > ---
->  package/libcamera-apps/libcamera-apps.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>   package/spirv-llvm-translator/spirv-llvm-translator.mk | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-> index 290ee9a026..385c65136e 100644
-> --- a/package/libcamera-apps/libcamera-apps.mk
-> +++ b/package/libcamera-apps/libcamera-apps.mk
-> @@ -25,8 +25,10 @@ LIBCAMERA_APPS_CONF_OPTS = \
->  ifeq ($(BR2_PACKAGE_LIBDRM),y)
->  LIBCAMERA_APPS_DEPENDENCIES += libdrm
->  LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=1
-> +LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=1
-
-But doesn't ENABLE_LIBAV also need a few libraries? From libcamera-apps'
-encoder/CMakeLists.txt:
-
-   13 if (ENABLE_LIBAV)
-   14     message(STATUS "Checking for libavcodec")
-   15     pkg_check_modules(LIBAV QUIET IMPORTED_TARGET
-   16         libavcodec
-   17         libavdevice
-   18         libavformat
-   19         libswresample
-   20     )
-
-libavcodec, libavdevice, libavformat, and libswresample come with
-ffmpeg, so this should be added to dependencies too.
-
-Note: in fact, if the libs are not found, the feature will be silently
-disabled:
-
-   21     if (LIBAV_FOUND)
-   22         include_directories(${LIBAV_INCLUDE_DIRS})
-   23         set(SRC ${SRC} libav_encoder.cpp)
-   24         set(TARGET_LIBS ${TARGET_LIBS} ${LIBAV_LIBRARIES})
-   25         set(LIBAV_PRESENT 1)
-   26         message(STATUS "libavcodec found:")
-   27         message(STATUS "    libraries: ${LIBAV_LIBRARIES}")
-   28     endif()
-   29 else()
-   30     message(STATUS "Omitting libavcodec")
-   31 endif()
-
-However, this is not clean, because we explicitly asked for a feature
-(enable libav suport) but it gets disabled because of missing
-dependencies.
-
-So, either we explicitly and unconditionally disable it, or we add the
-necessary dependencies.
-
-Regards,
-Yann E. MORIN.
-
->  else
->  LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=0
-> +LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=0
->  endif
->  
->  ifeq ($(BR2_PACKAGE_XORG7),y)
-> -- 
-> 2.38.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+> index 22f8765582..46704b3f8d 100644
+> --- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
+> +++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+> @@ -10,6 +10,7 @@ SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
+>   SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
+>   HOST_SPIRV_LLVM_TRANSLATOR_DEPENDENCIES = host-clang host-llvm
+>   HOST_SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
+> +	-DCMAKE_POLICY_DEFAULT_CMP0077=NEW \
+>   	-DLLVM_BUILD_TOOLS=ON \
+>   	-DLLVM_DIR=$(HOST_DIR)/lib/cmake/llvm \
+>   	-DLLVM_SPIRV_BUILD_EXTERNAL=YES \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
