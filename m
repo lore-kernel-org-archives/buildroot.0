@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C42BC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 790F3C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:29:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F1DF41D85;
-	Tue, 21 Feb 2023 00:29:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F1DF41D85
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B5114F232;
+	Tue, 21 Feb 2023 00:29:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B5114F232
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0gx07-mViLFc; Tue, 21 Feb 2023 00:29:33 +0000 (UTC)
+	with ESMTP id b3a2pkzxY15L; Tue, 21 Feb 2023 00:29:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EABE94F1CB;
-	Tue, 21 Feb 2023 00:29:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EABE94F1CB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 03A4A1BF27E
+	by smtp4.osuosl.org (Postfix) with ESMTP id D947D4F3DC;
+	Tue, 21 Feb 2023 00:29:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D947D4F3DC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C1B01BF27E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01DBD6FB28
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01DBD6FB28
+ by smtp2.osuosl.org (Postfix) with ESMTP id D745D417A0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D745D417A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nBxLojig731a for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8i0tcXNYTBuW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0E626FAA8
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0E626FAA8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 03206417D0
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03206417D0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC10E828C8; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+ id E80238648F; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Jan 2023 22:21:11 +0100
+Date: Tue, 7 Feb 2023 16:18:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ac2b26fba2ad06fadf14244505319dc5c272906c
-X-Git-Newrev: fce9f0eea00ed9aaeca12c1529ea380617baa477
+X-Git-Oldrev: f25b760186b72d2224d7087324ca5f2baeafb8b3
+X-Git-Newrev: 4e4402d4efb86256a3cff9c17c03f7300e427e1a
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205228.EC10E828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/website: update
- sponsors.html page
+Message-Id: <20230220205252.E80238648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/termcolor: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,137 +63,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fce9f0eea00ed9aaeca12c1529ea380617baa477
+commit: https://git.buildroot.net/buildroot/commit/?id=4e4402d4efb86256a3cff9c17c03f7300e427e1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Thank Smile for sponsoring the Buildroot Developers Meeting of
-  February 2023 by providing the meeting room
+Required by micromamba.
 
-- Thank Armadeus and Logilin for their financial sponsoring in 2022
-
-- Move older sponsors to the "Past sponsors" section
-
-- Remove section about the Buildroot.org domain sponsor, as that
-  sponsoring ended in 2019.
-
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/images/armadeus-systems-logo.png | Bin 0 -> 43363 bytes
- docs/website/sponsors.html                    |  69 +++++++++++++++++---------
- 2 files changed, 46 insertions(+), 23 deletions(-)
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/termcolor/Config.in      | 12 ++++++++++++
+ package/termcolor/termcolor.hash |  3 +++
+ package/termcolor/termcolor.mk   | 14 ++++++++++++++
+ 5 files changed, 31 insertions(+)
 
-diff --git a/docs/website/images/armadeus-systems-logo.png b/docs/website/images/armadeus-systems-logo.png
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 830dab56f0..9cc080f7a4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2789,6 +2789,7 @@ F:	package/most/
+ N:	TIAN Yuanhao <tianyuanhao3@163.com>
+ F:	package/cli11/
+ F:	package/open-isns/
++F:	package/termcolor/
+ 
+ N:	Tan En De <ende.tan@starfivetech.com>
+ F:	package/libkcapi/
+diff --git a/package/Config.in b/package/Config.in
+index 3773901552..e1a1b153b1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2176,6 +2176,7 @@ menu "Text and terminal handling"
+ 	source "package/readline/Config.in"
+ 	source "package/slang/Config.in"
+ 	source "package/tclap/Config.in"
++	source "package/termcolor/Config.in"
+ 	source "package/utf8proc/Config.in"
+ endmenu
+ 
+diff --git a/package/termcolor/Config.in b/package/termcolor/Config.in
 new file mode 100644
-index 0000000000..9b6080fb13
-Binary files /dev/null and b/docs/website/images/armadeus-systems-logo.png differ
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index 2f3f6309ae..9c17bed0c7 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -9,18 +9,40 @@
-     <div class="panel-body">
- 
-       <div class="row">
+index 0000000000..979ad61d81
+--- /dev/null
++++ b/package/termcolor/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_TERMCOLOR
++	bool "termcolor"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	help
++	  Termcolor is a header-only C++ library for printing colored
++	  messages to the terminal.
 +
- 	<div class="col-sm-4">
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
- 	      <div class="col-sm-12" style="height: 150px;">
--		<a href="https://www.tap2open.com">
--		  <img class="img-responsive center-block" src="images/tap2open-logo.png"/>
-+		<a href="https://www.smile.eu">
-+		  <img class="img-responsive center-block" src="images/smile-logo.png"/>
- 		</a>
- 	      </div>
- 	      <div class="col-sm-12" style="height: 150px;">
--	        <a href="https://www.tap2open.com">Tap2Open</a>
--	        financially sponsored the <a href="/association.html">Buildroot Association</a>
--	        in 2020.</div>
-+		<a href="http://www.smile.eu">Smile</a> sponsored the
-+		Buildroot project by hosting
-+		the <a href="https://elinux.org/Buildroot:DeveloperDaysFOSDEM2023">Buildroot
-+		Developers Meeting of February 2023</a> in Brussels,
-+		after the FOSDEM
-+		<a href="https://www.fosdem.org">conference</a>.
-+	      </div>
-+	    </div>
-+	  </div>
-+	</div>
++	  https://github.com/ikalnytskyi/termcolor
 +
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 180px;">
-+		<a href="http://www.opossom.com/english/index.html">
-+		  <img class="img-responsive center-block" src="images/armadeus-systems-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="http://www.opossom.com/english/index.html">Armadeus
-+		Systems</a> financially sponsored
-+		the <a href="/association.html">Buildroot
-+		Association</a> in 2022.</div>
- 	    </div>
- 	  </div>
- 	</div>
-@@ -36,7 +58,7 @@
- 	      <div class="col-sm-12" style="height: 150px;">
- 		<a href="http://www.logilin.fr">Logilin</a>
- 		financially sponsored the <a href="/association.html">Buildroot Association</a>
--		in 2020.</div>
-+		in 2022.</div>
- 	    </div>
- 	  </div>
- 	</div>
-@@ -44,23 +66,6 @@
-     </div>
-     </div>
- 
--  <div class="panel panel-primary">
--    <div class="panel-heading">Sponsor of the Buildroot.org domain</div>
--    <div class="panel-body">
--      <div class="col-sm-6">
--	<p>The Buildroot community would like to thank
--          <a href="http://www.zillabit.com/">Zillabit</a> for
--	  donating the <b>buildroot.org</b> domain name and sponsoring
--	  the registration fees 2009 - 2019.</p>
--       </div>
--      <div class="col-sm-6">
--	<a href="http://www.zillabit.com">
--	  <img class="img-responsive center-block" src="images/zillabit-logo.png"/>
--	</a>
--      </div>
--    </div>
--  </div>
--
-   <div class="panel panel-primary">
-     <div class="panel-heading">Past sponsors</div>
-     <div class="panel-body">
-@@ -343,6 +348,24 @@
- 	</div>
-       </div>
- 
-+      <div class="row">
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="https://www.tap2open.com">
-+		  <img class="img-responsive center-block" src="images/tap2open-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12" style="height: 150px;">
-+	        <a href="https://www.tap2open.com">Tap2Open</a>
-+	        financially sponsored the <a href="/association.html">Buildroot Association</a>
-+	        in 2020.</div>
-+	    </div>
-+	  </div>
-+	</div>
-+      </div>
++comment "termcolor needs a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/termcolor/termcolor.hash b/package/termcolor/termcolor.hash
+new file mode 100644
+index 0000000000..dede06c9b0
+--- /dev/null
++++ b/package/termcolor/termcolor.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  435994c32557674469404cb1527c283fdcf45746f7df75fd2996bb200d6a759f  termcolor-2.1.0.tar.gz
++sha256  bab0f53c36b248df22e2298ddf9eeea14b28783f187fcbff6a38f2c47b3a3a7d  LICENSE
+diff --git a/package/termcolor/termcolor.mk b/package/termcolor/termcolor.mk
+new file mode 100644
+index 0000000000..0374ce8b73
+--- /dev/null
++++ b/package/termcolor/termcolor.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# termcolor
++#
++################################################################################
 +
-     </div>
-   </div>
- </div>
++TERMCOLOR_VERSION = 2.1.0
++TERMCOLOR_SITE = $(call github,ikalnytskyi,termcolor,v$(TERMCOLOR_VERSION))
++TERMCOLOR_LICENSE = BSD-3-Clause
++TERMCOLOR_LICENSE_FILES = LICENSE
++TERMCOLOR_INSTALL_STAGING = YES
++TERMCOLOR_INSTALL_TARGET = NO
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
