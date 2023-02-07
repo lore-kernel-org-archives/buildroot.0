@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA4E4C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EC13C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D1E26FB76;
-	Tue, 21 Feb 2023 01:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D1E26FB76
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D046700AF;
+	Tue, 21 Feb 2023 01:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D046700AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IAzJFQwiMi4Q; Tue, 21 Feb 2023 01:40:55 +0000 (UTC)
+	with ESMTP id mtIZYvrwqjnb; Tue, 21 Feb 2023 01:41:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78FDE700C3;
-	Tue, 21 Feb 2023 01:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78FDE700C3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EAB3700C6;
+	Tue, 21 Feb 2023 01:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EAB3700C6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 375251BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4826F1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DB536FFE9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53E9D6FC28
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DB536FFE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53E9D6FC28
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nmvmUYJdjss7 for <buildroot@lists.busybox.net>;
+ with ESMTP id oTc4_xInhvBF for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 441566FE5F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 52FE36FE60
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 441566FE5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52FE36FE60
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 428C5828C8; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+ id 5083581979; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 13:41:48 +0100
+Date: Tue, 7 Feb 2023 13:47:55 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 433ce2966f787248d5b8a62c46634e2f86250f8e
-X-Git-Newrev: 9aaef2a07780a200512ccadb2381c559c4ffd8e6
+X-Git-Oldrev: 9aaef2a07780a200512ccadb2381c559c4ffd8e6
+X-Git-Newrev: eb013c3757548f3153a9da59906c388d32a376fa
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205252.428C5828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-spake2: new
- package
+Message-Id: <20230220205252.5083581979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-magic-wormhole:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,165 +64,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aaef2a07780a200512ccadb2381c559c4ffd8e6
+commit: https://git.buildroot.net/buildroot/commit/?id=eb013c3757548f3153a9da59906c388d32a376fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-SPAKE2 password-authenticated key exchange (in pure python).
+Securely transfer data between computers.
 
-This library implements the SPAKE2 password-authenticated key
-exchange ("PAKE") algorithm. This allows two parties, who share a
-weak password, to safely derive a strong shared secret (and
-therefore build an encrypted+authenticated channel).
+This package provides a library and a command-line tool named
+"wormhole", which makes it possible to get arbitrary-sized files
+and directories (or short pieces of text) from one computer to
+another. The two endpoints are identified by using identical
+"wormhole codes": in general, the sending machine generates and
+displays the code, which must then be typed into the receiving
+machine.
 
-https://github.com/warner/python-spake2
+https://github.com/magic-wormhole/magic-wormhole
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  3 +++
+ DEVELOPERS                                         |  1 +
  package/Config.in                                  |  1 +
- package/python-spake2/Config.in                    | 13 +++++++++++++
- package/python-spake2/python-spake2.hash           |  5 +++++
- package/python-spake2/python-spake2.mk             | 14 ++++++++++++++
- .../testing/tests/package/sample_python_spake2.py  | 22 ++++++++++++++++++++++
- .../testing/tests/package/test_python_spake2.py    | 11 +++++++++++
- 7 files changed, 69 insertions(+)
+ package/python-magic-wormhole/Config.in            | 27 ++++++++++++++++++++++
+ .../python-magic-wormhole.hash                     |  5 ++++
+ .../python-magic-wormhole/python-magic-wormhole.mk | 14 +++++++++++
+ 5 files changed, 48 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 69e73636be..a631c32405 100644
+index a631c32405..8d1d9340bb 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1695,6 +1695,7 @@ F:	package/python-distro/
+@@ -1694,6 +1694,7 @@ F:	package/ptm2human/
+ F:	package/python-distro/
  F:	package/python-gnupg/
  F:	package/python-hkdf/
++F:	package/python-magic-wormhole/
  F:	package/python-pyalsa/
-+F:	package/python-spake2/
+ F:	package/python-spake2/
  F:	package/rdma-core/
- F:	package/riscv-isa-sim/
- F:	package/tinycompress/
-@@ -1703,6 +1704,7 @@ F:	package/zynaddsubfx/
- F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
- F:	support/testing/tests/package/sample_python_pyalsa.py
-+F:	support/testing/tests/package/sample_python_spake2.py
- F:	support/testing/tests/package/test_hwloc.py
- F:	support/testing/tests/package/test_ncdu.py
- F:	support/testing/tests/package/test_octave.py
-@@ -1713,6 +1715,7 @@ F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_hkdf.py
- F:	support/testing/tests/package/test_python_gnupg.py
- F:	support/testing/tests/package/test_python_pyalsa.py
-+F:	support/testing/tests/package/test_python_spake2.py
- F:	support/testing/tests/package/test_rdma_core.py
- F:	support/testing/tests/package/test_rdma_core/
- F:	support/testing/tests/package/test_z3.py
 diff --git a/package/Config.in b/package/Config.in
-index b28949500e..ec7a6483f6 100644
+index ec7a6483f6..cb9a2b829f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1290,6 +1290,7 @@ menu "External python modules"
- 	source "package/python-sockjs/Config.in"
- 	source "package/python-sortedcontainers/Config.in"
- 	source "package/python-soupsieve/Config.in"
-+	source "package/python-spake2/Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-sqlalchemy/Config.in"
- 	source "package/python-sqliteschema/Config.in"
-diff --git a/package/python-spake2/Config.in b/package/python-spake2/Config.in
+@@ -1120,6 +1120,7 @@ menu "External python modules"
+ 	source "package/python-logstash/Config.in"
+ 	source "package/python-lxml/Config.in"
+ 	source "package/python-m2crypto/Config.in"
++	source "package/python-magic-wormhole/Config.in"
+ 	source "package/python-mako/Config.in"
+ 	source "package/python-markdown/Config.in"
+ 	source "package/python-markdown2/Config.in"
+diff --git a/package/python-magic-wormhole/Config.in b/package/python-magic-wormhole/Config.in
 new file mode 100644
-index 0000000000..1c2e3a49af
+index 0000000000..e8429d203b
 --- /dev/null
-+++ b/package/python-spake2/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_SPAKE2
-+	bool "python-spake2"
++++ b/package/python-magic-wormhole/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE
++	bool "python-magic-wormhole"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-autobahn -> python-cryptography
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
++	select BR2_PACKAGE_PYTHON_AUTOMAT # runtime
++	select BR2_PACKAGE_PYTHON_CLICK # runtime
 +	select BR2_PACKAGE_PYTHON_HKDF # runtime
++	select BR2_PACKAGE_PYTHON_HUMANIZE # runtime
++	select BR2_PACKAGE_PYTHON_PYNACL # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_SPAKE2 # runtime
++	select BR2_PACKAGE_PYTHON_TQDM # runtime
++	select BR2_PACKAGE_PYTHON_TWISTED # runtime
++	select BR2_PACKAGE_PYTHON_TXTORCON # runtime
 +	help
-+	  SPAKE2 password-authenticated key exchange (in pure python).
++	  Securely transfer data between computers.
 +
-+	  This library implements the SPAKE2 password-authenticated
-+	  key exchange ("PAKE") algorithm. This allows two parties,
-+	  who share a weak password, to safely derive a strong shared
-+	  secret (and therefore build an encrypted+authenticated
-+	  channel).
++	  This package provides a library and a command-line tool
++	  named "wormhole", which makes it possible to get
++	  arbitrary-sized files and directories (or short pieces of
++	  text) from one computer to another. The two endpoints are
++	  identified by using identical "wormhole codes": in general,
++	  the sending machine generates and displays the code, which
++	  must then be typed into the receiving machine.
 +
-+	  https://github.com/warner/python-spake2
-diff --git a/package/python-spake2/python-spake2.hash b/package/python-spake2/python-spake2.hash
++	  https://github.com/magic-wormhole/magic-wormhole
+diff --git a/package/python-magic-wormhole/python-magic-wormhole.hash b/package/python-magic-wormhole/python-magic-wormhole.hash
 new file mode 100644
-index 0000000000..30052b1b36
+index 0000000000..5e880d5427
 --- /dev/null
-+++ b/package/python-spake2/python-spake2.hash
++++ b/package/python-magic-wormhole/python-magic-wormhole.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/spake2/json
-+md5  0155bad518bb49c39994fe0b7d9fb32c  spake2-0.8.tar.gz
-+sha256  c17a614b29ee4126206e22181f70a406c618d3c6c62ca6d6779bce95e9c926f4  spake2-0.8.tar.gz
++# md5, sha256 from https://pypi.org/pypi/magic-wormhole/json
++md5  ca190d92f56fe32ec8dfd4fc5aab8337  magic-wormhole-0.12.0.tar.gz
++sha256  1b0fd8a334da978f3dd96b620fa9b9348cabedf26a87f74baac7a37052928160  magic-wormhole-0.12.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  2a8a1200c3a2769d1815727f3b4439bd800f3bc88163118a36ff30b007d30031  LICENSE
-diff --git a/package/python-spake2/python-spake2.mk b/package/python-spake2/python-spake2.mk
++sha256  4a9cc2415c52cef591b6822eee68fed36d7e6d80284b09638cff61d762d99060  LICENSE
+diff --git a/package/python-magic-wormhole/python-magic-wormhole.mk b/package/python-magic-wormhole/python-magic-wormhole.mk
 new file mode 100644
-index 0000000000..99ce7dae13
+index 0000000000..91f0f826d5
 --- /dev/null
-+++ b/package/python-spake2/python-spake2.mk
++++ b/package/python-magic-wormhole/python-magic-wormhole.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-spake2
++# python-magic-wormhole
 +#
 +################################################################################
 +
-+PYTHON_SPAKE2_VERSION = 0.8
-+PYTHON_SPAKE2_SOURCE = spake2-$(PYTHON_SPAKE2_VERSION).tar.gz
-+PYTHON_SPAKE2_SITE = https://files.pythonhosted.org/packages/60/0b/bb5eca8e18c38a10b1c207bbe6103df091e5cf7b3e5fdc0efbcad7b85b60
-+PYTHON_SPAKE2_SETUP_TYPE = setuptools
-+PYTHON_SPAKE2_LICENSE = MIT
-+PYTHON_SPAKE2_LICENSE_FILES = LICENSE
++PYTHON_MAGIC_WORMHOLE_VERSION = 0.12.0
++PYTHON_MAGIC_WORMHOLE_SOURCE = magic-wormhole-$(PYTHON_MAGIC_WORMHOLE_VERSION).tar.gz
++PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/d4/62/5e4a86f7c4b111e016577f1b304063ebe604f430db15465ac58b13993608
++PYTHON_MAGIC_WORMHOLE_SETUP_TYPE = setuptools
++PYTHON_MAGIC_WORMHOLE_LICENSE = MIT
++PYTHON_MAGIC_WORMHOLE_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_spake2.py b/support/testing/tests/package/sample_python_spake2.py
-new file mode 100644
-index 0000000000..49dd914ca8
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_spake2.py
-@@ -0,0 +1,22 @@
-+from binascii import hexlify
-+
-+from spake2 import SPAKE2_A, SPAKE2_B
-+
-+
-+shared_password = b"This Is The Password!"
-+
-+alice = SPAKE2_A(shared_password)
-+alice_msg = alice.start()
-+
-+bob = SPAKE2_B(shared_password)
-+bob_msg = bob.start()
-+
-+# Alice and Bob exchange their messages...
-+
-+alice_key = alice.finish(bob_msg)
-+bob_key = bob.finish(alice_msg)
-+
-+print("alice_key:", hexlify(alice_key))
-+print("  bob_key:", hexlify(bob_key))
-+
-+assert alice_key == bob_key
-diff --git a/support/testing/tests/package/test_python_spake2.py b/support/testing/tests/package/test_python_spake2.py
-new file mode 100644
-index 0000000000..fb47a0802c
---- /dev/null
-+++ b/support/testing/tests/package/test_python_spake2.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Spake2(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_SPAKE2=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_spake2.py"]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
