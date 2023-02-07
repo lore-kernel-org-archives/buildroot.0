@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 426AFC636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 13:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB49FC636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 13:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAEAF40255;
-	Tue,  7 Feb 2023 13:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAEAF40255
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C9B5408DB;
+	Tue,  7 Feb 2023 13:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C9B5408DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nQyayKVyG0i5; Tue,  7 Feb 2023 13:26:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ef5QqSPFfXIu; Tue,  7 Feb 2023 13:31:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59BBC40908;
-	Tue,  7 Feb 2023 13:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59BBC40908
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 852331BF376
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 13:26:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF9D7408CA;
+	Tue,  7 Feb 2023 13:31:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF9D7408CA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B85FB1BF376
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 13:31:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C50B414C8
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 13:26:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C50B414C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FF58408CA
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 13:31:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FF58408CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iYla5CY4XzaQ for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 13:25:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CF02041523
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 13:25:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF02041523
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF82B84153; Tue,  7 Feb 2023 13:25:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 13:54:07 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eb013c3757548f3153a9da59906c388d32a376fa
-X-Git-Newrev: 9244052f28d87d6d85b73402e7d15f730eb66c4b
-X-Patchwork-Hint: ignore
-Message-Id: <20230207132558.AF82B84153@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/python-magic-wormhole-mailbox-server: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 27ziAT_rnAIm for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 13:31:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FD7F4061D
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4FD7F4061D
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 13:31:19 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6B5271BF203;
+ Tue,  7 Feb 2023 13:31:17 +0000 (UTC)
+Date: Tue, 7 Feb 2023 14:31:16 +0100
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230207143116.40b1f42b@windsurf>
+In-Reply-To: <20221122203130.184496-1-ju.o@free.fr>
+References: <20221122203130.184496-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1675776677;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=aYpH2sT54URZP+Sic1l1iMgAQ8ah74UdibYk2TwVFbI=;
+ b=FAhA71nLpef+UGbnh92N8XqkWpeHOofHM6mt9J7RvDq/mZM9ENnJoDcFJH80nbZFgG4siU
+ XGzDTVKRPz9g++M9ObwnCwV/8WeYewQXpBReHJ9FDd5OUNwejm1UpMUpXrnKilt0MQL01X
+ xhQ9pqSb4RgbZRWcizROeQ0gcc1pnFwuq29AX0Y5z3ZFZo1zEprIutrxgcNBz8Ge/MCxM9
+ wH2QCtGyTPJzrBu/7/MuVVNKgMGcgQm8t+b+sMMLTgOgUnO7LmYnXAmb07pq3bqgqxShz4
+ 6mbHGUYPIAhWHkccwC1P80yrD49E/bsojBJQGcKTXm3csqkbTBq2R05DxhMDqw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=FAhA71nL
+Subject: Re: [Buildroot] [PATCH next v2 1/7] package/python-idna: set
+ _SETUP_TYPE = flit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,154 +78,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9244052f28d87d6d85b73402e7d15f730eb66c4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 22 Nov 2022 21:31:24 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-This package is the main server that Magic-Wormhole clients connect to.
-The server performs store-and-forward delivery for small key-exchange
-and control messages. Bulk data is sent over a direct TCP connection,
-or through a transit-relay.
+> Python idna package switched to pyproject.toml in commit:
+> https://github.com/kjd/idna/commit/2a00e518efe55d2eeb62cd3f88ace7db41338603
+> which is included in idna v3.4.
+> 
+> When using the old setuptools infra, the package is incorrectly
+> installed as v0.0, which is then incorrectly detected by other
+> packages when using setuptools pkg_resources.
+> 
+> The issue can be reproduced with the command:
+> 
+>     python3 <<EOF
+>     __requires__ = ["idna >= 2.5"]
+>     import pkg_resources
+>     EOF
+> 
+> which will fail with output:
+> 
+>     pkg_resources.ContextualVersionConflict: (idna 0.0.0 (/usr/lib/python3.11/site-packages), Requirement.parse('idna>=2.5'), {'hyperlink'})
+>     pkg_resources.DistributionNotFound: The 'idna>=2.5' distribution was not found and is required by hyperlink
+> 
+> This commit changes _SETUP_TYPE to "flit" to fix this issue.
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Changes v1 -> v2:
+> - Included James' review comment:
+>   - _SETUP_TYPE changed from pep517 to flit
+> ---
+>  package/python-idna/python-idna.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://github.com/magic-wormhole/magic-wormhole-mailbox-server
+Thanks, entire series applied! There was really not much to fix. In one
+commit, the runtime test file was forgotten in DEVELOPERS, and in
+another, I've added a reference to the upstream commit for the
+open(..., "rU") thing.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- ...move-the-U-open-mode-removed-in-Python-3..patch | 39 ++++++++++++++++++++++
- .../python-magic-wormhole-mailbox-server/Config.in | 15 +++++++++
- .../python-magic-wormhole-mailbox-server.hash      |  5 +++
- .../python-magic-wormhole-mailbox-server.mk        | 14 ++++++++
- 6 files changed, 75 insertions(+)
+Thanks a lot for having added relevant runtime tests for all of this,
+this is really good!
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8d1d9340bb..afc079a609 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1695,6 +1695,7 @@ F:	package/python-distro/
- F:	package/python-gnupg/
- F:	package/python-hkdf/
- F:	package/python-magic-wormhole/
-+F:	package/python-magic-wormhole-mailbox-server/
- F:	package/python-pyalsa/
- F:	package/python-spake2/
- F:	package/rdma-core/
-diff --git a/package/Config.in b/package/Config.in
-index cb9a2b829f..2ef403168a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1121,6 +1121,7 @@ menu "External python modules"
- 	source "package/python-lxml/Config.in"
- 	source "package/python-m2crypto/Config.in"
- 	source "package/python-magic-wormhole/Config.in"
-+	source "package/python-magic-wormhole-mailbox-server/Config.in"
- 	source "package/python-mako/Config.in"
- 	source "package/python-markdown/Config.in"
- 	source "package/python-markdown2/Config.in"
-diff --git a/package/python-magic-wormhole-mailbox-server/0001-setup.py-remove-the-U-open-mode-removed-in-Python-3..patch b/package/python-magic-wormhole-mailbox-server/0001-setup.py-remove-the-U-open-mode-removed-in-Python-3..patch
-new file mode 100644
-index 0000000000..8afe7c9546
---- /dev/null
-+++ b/package/python-magic-wormhole-mailbox-server/0001-setup.py-remove-the-U-open-mode-removed-in-Python-3..patch
-@@ -0,0 +1,39 @@
-+From df6126ee86c1f84c7e0c25fcf69543b83b1b32c6 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Sat, 5 Nov 2022 13:06:07 +0100
-+Subject: [PATCH] setup.py: remove the 'U' open mode removed in Python 3.11
-+
-+The 'U' open mode was removed in Python 3.11. See:
-+https://docs.python.org/3.11/library/functions.html#open
-+
-+Installing with Python 3.11 fails with:
-+
-+    /path/to/python-magic-wormhole-mailbox-server-0.4.1/setup.py", line 20, in <module>
-+        long_description=open('README.md', 'rU').read(),
-+                         ^^^^^^^^^^^^^^^^^^^^^^^
-+    ValueError: invalid mode: 'rU'
-+
-+This patch removes the 'U' open mode.
-+
-+Upstream: https://github.com/magic-wormhole/magic-wormhole-mailbox-server/commit/df6126ee86c1f84c7e0c25fcf69543b83b1b32c6
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ setup.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 6ef292f..ad9ff5a 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -17,7 +17,7 @@ trove_classifiers = [
-+ setup(name="magic-wormhole-mailbox-server",
-+       version=versioneer.get_version(),
-+       description="Securely transfer data between computers",
-+-      long_description=open('README.md', 'rU').read(),
-++      long_description=open('README.md', 'r').read(),
-+       long_description_content_type='text/markdown',
-+       author="Brian Warner",
-+       author_email="warner-magic-wormhole@lothar.com",
-+-- 
-+2.38.1
-+
-diff --git a/package/python-magic-wormhole-mailbox-server/Config.in b/package/python-magic-wormhole-mailbox-server/Config.in
-new file mode 100644
-index 0000000000..db20d3e7b6
---- /dev/null
-+++ b/package/python-magic-wormhole-mailbox-server/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER
-+	bool "python-magic-wormhole-mailbox-server"
-+	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TWISTED # runtime
-+	help
-+	  This package is the main server that Magic-Wormhole clients
-+	  connect to. The server performs store-and-forward delivery
-+	  for small key-exchange and control messages. Bulk data is
-+	  sent over a direct TCP connection, or through a
-+	  transit-relay.
-+
-+	  https://github.com/magic-wormhole/magic-wormhole-mailbox-server
-diff --git a/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash
-new file mode 100644
-index 0000000000..c714712641
---- /dev/null
-+++ b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/magic-wormhole-mailbox-server/json
-+md5  3da441df1f354a8399a728da3421ac8f  magic-wormhole-mailbox-server-0.4.1.tar.gz
-+sha256  1af10592909caaf519c00e706eac842c5e77f8d4356215fe9c61c7b2258a88fb  magic-wormhole-mailbox-server-0.4.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  4a9cc2415c52cef591b6822eee68fed36d7e6d80284b09638cff61d762d99060  LICENSE
-diff --git a/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk
-new file mode 100644
-index 0000000000..a3394c7dcd
---- /dev/null
-+++ b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-magic-wormhole-mailbox-server
-+#
-+################################################################################
-+
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_VERSION = 0.4.1
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SOURCE = magic-wormhole-mailbox-server-$(PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_VERSION).tar.gz
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SITE = https://files.pythonhosted.org/packages/5b/ba/cbb211bc8f8bfdf7fb620d33331f07bcd889c7a28e7fd8a0de9029bb5a2f
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SETUP_TYPE = setuptools
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_LICENSE = MIT
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
