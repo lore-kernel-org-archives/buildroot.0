@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 968B4C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBFE5C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:24:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F71681E8A;
-	Tue,  7 Feb 2023 17:24:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F71681E8A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8750C40A80;
+	Tue,  7 Feb 2023 17:24:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8750C40A80
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FvimEIniW8QK; Tue,  7 Feb 2023 17:24:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u9YQo60T3VMG; Tue,  7 Feb 2023 17:24:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D35E81E2D;
-	Tue,  7 Feb 2023 17:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D35E81E2D
+	by smtp2.osuosl.org (Postfix) with ESMTP id C787B40A8E;
+	Tue,  7 Feb 2023 17:24:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C787B40A8E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 23D7F1BF5F6
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:23:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E21F11BF5F6
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0A7544085D
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:23:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A7544085D
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC543402F0
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:24:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC543402F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mEChPrE5DTnZ for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 17:23:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6C0E40342
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B6C0E40342
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:23:54 +0000 (UTC)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by dfw.source.kernel.org (Postfix) with ESMTPS id 51E9560F6F;
- Tue,  7 Feb 2023 17:23:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4AB6C4339B;
- Tue,  7 Feb 2023 17:23:51 +0000 (UTC)
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4894314a
- (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO); 
- Tue, 7 Feb 2023 17:23:48 +0000 (UTC)
-Date: Tue, 7 Feb 2023 18:23:45 +0100
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <Y+KJIYsO+RuI7Qp2@zx2c4.com>
-References: <20220420170326.1901572-1-Jason@zx2c4.com>
- <f365639e-6baf-a8f9-5e89-4d02de2843ed@mind.be>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <f365639e-6baf-a8f9-5e89-4d02de2843ed@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zx2c4.com; s=20210105; t=1675790628;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=3RnhHjZc0Tu0xvzM+v6rb5zdi+FMBU23zZDtT1RdCyU=;
- b=YhQufJ6F5xjzXt4xCcvi6smB3cR/9kODqKooXMoVJEDBf0XjoGt4W+30m7LUOrZu9SsDoa
- ykdsRAVekPNagMKqEEdHL2K1gQc9/G6SAR+9HsYzDe4jpUhTpwCqCFEyOCItFsPu7K1ahy
- Ty960OdWXflgR3eQXa0FDxtQm9HJILI=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com
- header.a=rsa-sha256 header.s=20210105 header.b=YhQufJ6F
-X-Mailman-Original-Authentication-Results: smtp.kernel.org;
- dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com
- header.b="YhQufJ6F"
-Subject: Re: [Buildroot] [PATCH v5] package/urandom-scripts: actually credit
- seed files via seedrng
+ with ESMTP id bizvQp54vB3G for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 17:24:50 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACA5240291
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:24:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACA5240291
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 921B78430F; Tue,  7 Feb 2023 17:24:50 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 7 Feb 2023 18:24:10 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bde165f7ad4922e218cabdb6eb7c40e1661179f0
+X-Git-Newrev: 4fbd2f6d2cf26225f73f584c3a0cacb1b2476f5f
+X-Patchwork-Hint: ignore
+Message-Id: <20230207172450.921B78430F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
+ silence gcc plugin test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,80 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Jason A. Donenfeld via buildroot" <buildroot@buildroot.org>
-Reply-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Michael Fischer <mf@go-sys.de>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Feb 07, 2023 at 04:06:16PM +0100, Arnout Vandecappelle wrote:
-> 
-> 
-> On 20/04/2022 19:03, Jason A. Donenfeld wrote:
-> > The RNG can't actually be seeded from a shell script, due to the
-> > reliance on ioctls. For this reason, Busybox now contains SeedRNG, a
-> > tiny program meant to be called at startup and shutdown (and at
-> > arbitrary other points in between if desired).
-> > 
-> > Since this is currently in Busybox's git tree, this commit adds it as a
-> > patch to the Busybox package. Then, it wires the init script up to call
-> > it.
-> > 
-> > This is a significant improvement over the current init script, which
-> > doesn't credit entropy and whose hashing in shell scripts is sort of
-> > fragile.
-> > 
-> > NOTE NOTE NOTE: While I've added the patch to the Busybox package
-> > directory, I don't really know how to wire this up and what to do about
-> > the various config entries. I was hoping that a Buildroot maintainer
-> > might have a better idea of the best way to do this, and could just take
-> > this patch as a starting point for whatever the real commit winds up
-> > being.
-> > 
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> 
->   Applied to master, after some reworking and heavily rewriting the commit 
-> message, thanks.
-> 
->      package/urandom-scripts: actually credit seed files via seedrng
-> 
->      The RNG can't actually be seeded from a shell script, due to the
->      reliance on ioctls. For this reason, Busybox 1.36.0 contains SeedRNG, a
->      tiny program meant to be called at startup and shutdown (and at
->      arbitrary other points in between if desired). Note that initially,
->      the way seedrng was included in busybox broke things quite severely, but
->      now it's been reverted to a reasonably acceptable version.
-> 
->      This is a significant improvement over the current init script, which
->      doesn't credit entropy and whose hashing in shell scripts is sort of
->      fragile.
-> 
->      Because seedrng is part of busybox, urandom-scripts now depends on
->      BR2_PACKAGE_BUSYBOX. This can be removed again if later we add a
->      standalone seedrng package.
-> 
->      Add a decent explanation to the init script about the need for a
->      persistent directory to make this actually work.
-> 
->      Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->      [Arnout:
->       - Remove busybox patch, it's now part of busybox 1.36.0.
->       - Depend on busybox.
->       - Fix shellcheck errors.
->       - Use DAEMON and SEEDRNG_ARGS.
->       - Don't bother with "seed_dir" and "skip_credit" variables.
->       - Rename to S20seedrng.
->      ]
->      Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=4fbd2f6d2cf26225f73f584c3a0cacb1b2476f5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Looks good. Thank you very much for following up and bringing this
-across the finish line!
+The gcc plugin test was not using the -q option to grep causing it to print
+the line to stdout, so fix that.
 
-Jason
+While we're at it, adjust the locale check to use grep -q instead of
+redirecting to /dev/null for consistency with the other checks.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/dependencies/dependencies.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 88eabe921d..0aa5e59274 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -194,7 +194,7 @@ if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -l
+ 	exit 1;
+ fi
+ 
+-if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
++if grep -q ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG ; then
+ 	if ! which locale > /dev/null ; then
+ 		echo
+ 		echo "You need locale support on your build machine to build a toolchain supporting locales"
+@@ -254,7 +254,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
+ 	fi
+ fi
+ 
+-if grep ^BR2_NEEDS_HOST_GCC_PLUGIN_SUPPORT=y $BR2_CONFIG ; then
++if grep -q ^BR2_NEEDS_HOST_GCC_PLUGIN_SUPPORT=y $BR2_CONFIG ; then
+ 	if ! echo "#include <gcc-plugin.h>" | $HOSTCXX_NOCCACHE -I$($HOSTCXX_NOCCACHE -print-file-name=plugin)/include -x c++ -c - -o /dev/null ; then
+ 		echo
+ 		echo "Your Buildroot configuration needs a host compiler capable of building gcc plugins."
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
