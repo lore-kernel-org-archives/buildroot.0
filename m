@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B7DAC6379F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 21:51:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B161C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 21:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34FE961062;
-	Tue,  7 Feb 2023 21:51:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34FE961062
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA0534179B;
+	Tue,  7 Feb 2023 21:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA0534179B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t0IqAympTPK1; Tue,  7 Feb 2023 21:51:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id F78OGuvX2pL4; Tue,  7 Feb 2023 21:51:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DD806105A;
-	Tue,  7 Feb 2023 21:51:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DD806105A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6E3A1BF377
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:51:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB3A3416ED;
+	Tue,  7 Feb 2023 21:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB3A3416ED
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EB661BF377
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:51:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF92E40B24
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:51:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF92E40B24
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B21281EBC
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 21:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B21281EBC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CiCrTvWQA2Ky for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 21:50:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jafXUmgnKVFs for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 21:51:48 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E49834057A
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E49834057A
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 21:50:58 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.112.98])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 37690B0051B;
- Tue,  7 Feb 2023 22:50:53 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 07 Feb 2023 22:50:52 +0100
-Date: Tue, 7 Feb 2023 22:50:52 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Kent <james.kent@orchestrated-technology.com>
-Message-ID: <20230207215052.GA2817@scaer>
-References: <20230207171020.20194-1-james.kent@orchestrated-technology.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C42681E2F
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8C42681E2F
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 21:51:48 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 953CFC0003;
+ Tue,  7 Feb 2023 21:51:45 +0000 (UTC)
+Date: Tue, 7 Feb 2023 22:51:44 +0100
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+Message-ID: <20230207225144.16424f58@windsurf>
+In-Reply-To: <20230207210934.3132539-1-angelo@amarulasolutions.com>
+References: <20230207210934.3132539-1-angelo@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230207171020.20194-1-james.kent@orchestrated-technology.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675806655;
- bh=xE1iBVgyyQHwugFpQV5Vj/nChxXdx813W/FCX6+YnXo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uSa9Vr+vf8XcGGw2C4Fepxl86Vr3+zhDMSfheTbM3+IFOw79txd5vGI6Po36QvG4g
- NL4ld/Vr4VkcUTOkl0yu5lEgfv1Lj4mQfSkK/kXBvrzn3H+28YFYvpJ5Ck/WitQ+x+
- ++fKED3HvPuAXZwfTELGHeBQMlVVn7lulOMQPzY85mawkoVOAX47DVdAE5WWGVq3Ba
- h598Ev8cWVzcOkp/c/2shkg9QcyNja8lkQnERsBRpxa+FTgPiJ1V3LDewrhXdqzYZy
- qNqK+qwcV1zl2r/Y/p5kkdGzoOBys1san2wGuUg13ISbp1nlVhk20q6ynxH1UrFBMl
- Adii0WlX8SQYA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uSa9Vr+v
-Subject: Re: [Buildroot] [PATCH] package/chrony: add default unprivileged
- user option
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1675806706;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+TFCGY06xB+aup3/QGDl0v5oc3mRtaknVFJe6HguqY4=;
+ b=SFnny/wzvgwH7XwiijKML8Y6XFseb4S9JbWpNfqCERBGasrnBqrplwOd5buQpnkoSgD4WN
+ ZtN2RDFxQ1hKEG/qVdsAL07Tjk6/NIEwGgojkxxdwGWJefa0zbszIugXFzB9zKPDEnb286
+ ndI91t8eF6mZ4MFluq7yM6i3R8n4TXTeUJyhqwnBFTWOROGMZo0WBnmtpkjGtiquMVfcZO
+ Fh64/ehx87z2rmOfHl7KFExR49i1cHO4CyyIZePSaiwMdtt0057IpeA8SUO5Lk3XCLlE08
+ GhG9ZWAHY3WCDKKY9YqVquRmj9jOhk7ObdV4B/8pMp3gxzKMaDGGnQz1eBXodw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SFnny/wz
+Subject: Re: [Buildroot] [PATCH v5] package/gtkiostream: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,116 +75,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: romain.naour@smile.fr, Matt Flax <flatmax@flatmax.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+On Tue,  7 Feb 2023 22:09:34 +0100
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-On 2023-02-07 17:10 +0000, James Kent spake thusly:
-> Configurable option to define and enable by default an unprivileged
-> user which the Chrony daemon will assume once initialised. Where libcap
-> is not enabled a comment indicates the dependency requirement to make
-> the option available.
-> 
-> This option supports the good security practice of dropping elevated
-> privileges for daemon runtime.
-
-Thanks, thjis is=ndeed makes sense. See below for some comments...
-
-> Signed-off-by: James Kent <james.kent@orchestrated-technology.com>
-> ---
->  package/chrony/Config.in | 10 ++++++++++
->  package/chrony/chrony.mk |  8 ++++++++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/package/chrony/Config.in b/package/chrony/Config.in
-> index 158dc20530..8b053ed7e2 100644
-> --- a/package/chrony/Config.in
-> +++ b/package/chrony/Config.in
-> @@ -14,3 +14,13 @@ config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
->  	  Enable support for debug logging output from Chrony when
->  	  enabled at runtime. If disabled, code for debug logging will
->  	  not be compiled in.
+> +GTKIOSTREAM_VERSION = v1.8.0
+> +GTKIOSTREAM_SITE = $(call github,flatmax,gtkiostream,$(GTKIOSTREAM_VERSION))
+> +GTKIOSTREAM_LICENSE = GPL-2.0+
+> +GTKIOSTREAM_LICENSE_FILES = gpl.txt
+> +GTKIOSTREAM_DEPENDENCIES = eigen fftw-double fftw-single host-pkgconf
 > +
-> +config BR2_PACKAGE_CHRONY_USER
-> +	bool "chrony default unprivileged user"
-> +	depends on BR2_PACKAGE_CHRONY && BR2_PACKAGE_LIBCAP
+> +GTKIOSTREAM_DEPENDENCIES += $(if $(BR2_PACKAGE_SOX),sox)
 
-First, we now try to enclose package sub-options in an if-endif block,
-rather than have each option depend on the package. I.e.:
+Better written as:
 
-    config BR2_PACKAGE_CHRONY
-        bool "chrony"
+GTKIOSTREAM_DEPENDENCIES = \
+	eigen \
+	fftw-double \
+	...
+	host-pkgconf \
+	$(if $(BR2_PACKAGE_SOX),sox)
 
-    if BR2_PACKAGE_CHRONY
-
-    config BR2_PACKAGE_CHRONY_FOO
-        bool "foo"
-
-    config BR2_PACKAGE_CHRONY_BAR
-        bool "bar"
-
-    endif
-
-Yes, the existing option doesnot follow that coding style, so just fix
-it up while at it.
-
-Second, chrony and libcap both need an MMU, so jut select libcap when
-BR2_PACKAGE_CHRONY_USER is enabled.
-
-> +	help
-> +	  Define and enable default unprivileged user for the Chrony
-> +	  daemon to run as.
 > +
-> +comment "chrony default unprivileged user requires libcap"
-> +	depends on BR2_PACKAGE_CHRONY && !BR2_PACKAGE_LIBCAP
-
-And thus, that comment is no longer needed.
-
-> diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-> index 379e95a778..16f8f082a3 100644
-> --- a/package/chrony/chrony.mk
-> +++ b/package/chrony/chrony.mk
-> @@ -21,6 +21,14 @@ CHRONY_CONF_OPTS = \
->  
->  ifeq ($(BR2_PACKAGE_LIBCAP),y)
->  CHRONY_DEPENDENCIES += libcap
-> +
-> +ifeq ($(BR2_PACKAGE_CHRONY_USER),y)
-> +CHRONY_CONF_OPTS += --with-user=chrony
-> +define CHRONY_USERS
-> +	chrony -1 chrony -1 * /run/chrony - - Time daemon
-> +endef
+> +ifeq ($(BR2_PACKAGE_OCTAVE),y)
+> +GTKIOSTREAM_DEPENDENCIES += octave
+> +GTKIOSTREAM_CONF_OPTS += --enable-octave
+> +else
+> +GTKIOSTREAM_CONF_OPTS += --disable-octave
 > +endif
+> +
+> +# configure script not available
+> +GTKIOSTREAM_AUTORECONF = YES
 
-This part is correct.
+This normally goes earlier in the makefile, like before the
+dependencies/conf_opts.
 
-Can you fix and respin, please?
+Thanks!
 
-Regards,
-Yann E. MORIN.
-
->  else
->  CHRONY_CONF_OPTS += --without-libcap
->  endif
-> -- 
-> 2.35.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
