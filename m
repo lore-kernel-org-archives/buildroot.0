@@ -1,97 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40FC3C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:14:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26530C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 17:16:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA6A7418CF;
-	Tue,  7 Feb 2023 17:14:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA6A7418CF
+	by smtp2.osuosl.org (Postfix) with ESMTP id C211740120;
+	Tue,  7 Feb 2023 17:16:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C211740120
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PlsA2yDxh4B2; Tue,  7 Feb 2023 17:14:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9eqjMxrUw3gc; Tue,  7 Feb 2023 17:16:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85945418CB;
-	Tue,  7 Feb 2023 17:14:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85945418CB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 40F1E1BF976
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:14:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E7CB040A68;
+	Tue,  7 Feb 2023 17:16:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7CB040A68
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B8011BF5F6
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17ADF418C5
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:14:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17ADF418C5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 315D581323
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 17:16:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 315D581323
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sf0QjR0Oey43 for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 17:14:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g2nrEQAFZFjh for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 17:16:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78A97418BD
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 78A97418BD
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:14:02 +0000 (UTC)
-Received: by mail-pj1-x1036.google.com with SMTP id
- bg10-20020a17090b0d8a00b00230c7f312d4so6309682pjb.3
- for <buildroot@buildroot.org>; Tue, 07 Feb 2023 09:14:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23CFF80FB0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 23CFF80FB0
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 17:16:47 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id d14so14256704wrr.9
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 09:16:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=iIqFn/p++pkTFoH7wlKnkTppeec20uFqxYSekJMF1Ak=;
- b=UOcm+aoA7asbN/2NvASM5Elcpuzyf/qFs6KVhLBmB4AUcPlsuc0aJU8w4lq084hPlz
- cCisnnOW3p5QUMbypPACVA9iLMFZZ/uCTjDJbUAsPaa07aSCknuPXB2stnmK8WYQhvbm
- QX0HoW37iMsv227CWd3tj4CWBCgrn9fcSHZySf5AZe7MIUoHi5pF7alPHpqowvJDdqUE
- FxTai2lyt2IB3DBSHAdOo0nizj8tFk/eailkHIoFmg4zHXSg6Cm+E7RdWNKXJYKahCXJ
- DViQRcvp+jkjQJ2w2AEH+clefmHRsF4TyfxNyQSNA//W4fr43vTmNb7oH0i+e6E8RFWR
- OEUQ==
-X-Gm-Message-State: AO0yUKWw2jiEn+lGU+Dz6WviSJdUAi5l4K7GxyHs87iLSBFFVcWGmPDn
- PsBKoeYL+wqLoEm8J7C1RT2oLvEg0ANjjQDt
-X-Google-Smtp-Source: AK7set8KcwhkdbiQpyaqBpBwkjJtqt19V1DXpn8Ch+P3XdFnwQMDqGl2S0GeNhGdbifHonDSeMZ6HA==
-X-Received: by 2002:a05:6a20:54a0:b0:bc:6df2:70b5 with SMTP id
- i32-20020a056a2054a000b000bc6df270b5mr4205268pzk.27.1675790041739; 
- Tue, 07 Feb 2023 09:14:01 -0800 (PST)
-Received: from [192.168.0.164] (S0106f875a4344b41.gv.shawcable.net.
- [70.67.112.211]) by smtp.gmail.com with ESMTPSA id
- b25-20020a63a119000000b0045ff216a0casm1836738pgf.3.2023.02.07.09.14.01
+ bh=lhUNms1XAptgg5eE9w2X4fYUhOk6IM6aoM3QxMisRzU=;
+ b=mlzSZ1/EdVEl5uY9wjnS6YFmXJlMi2IyeB3Jkmdh3W/XCmQyj+DFoO2P37qDAlo7P2
+ rDZ8uGBIXoq/nw4MCYluYCozlzNMdfhT0/vZwBpzkQKFhUa6+hnroU7ldS5fF1d5aUIR
+ OfjwozFV3NJFlkfuCXiWfh2mkLCFUHV1NXbF+F8NTKHsPALjwov1wBT+/zLpL38HeV+6
+ XtETrlH/lpklxchnUU0chn4hvLQvQXPHC83JlU+r4DHG4wEYV/2YfwV8zyT7Eg3YdJua
+ 1V2ugKEbcfCvgLGTk+QivPGMJ5A8BRwxbLjOLXmJWTCcnmjUlZOBELvqUPVEockuywIa
+ v1ww==
+X-Gm-Message-State: AO0yUKWZmg50vFvoobHaUdSxgEFSmf5sHWC/pRCAnnKclGWB4G4+Ao4j
+ 15yS9G9ITxp3CYGMQ/pXdvjpjACDUpSwtgKE
+X-Google-Smtp-Source: AK7set8bxD/LVqajjGIKBc5titrKvFE0wR8DMhf06YWn2ZTBF/SWvOCjiYhA5XaPAkZ24D58vF8VsQ==
+X-Received: by 2002:adf:dd44:0:b0:242:1b0d:9c58 with SMTP id
+ u4-20020adfdd44000000b002421b0d9c58mr3538552wrm.69.1675790205396; 
+ Tue, 07 Feb 2023 09:16:45 -0800 (PST)
+Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ k12-20020adff5cc000000b002c3db5057b6sm9893295wrp.22.2023.02.07.09.16.44
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 07 Feb 2023 09:14:01 -0800 (PST)
-Message-ID: <aa2d5bd6-f826-1dec-2286-d66838419690@threespeedlogic.com>
-Date: Tue, 7 Feb 2023 09:14:00 -0800
+ Tue, 07 Feb 2023 09:16:44 -0800 (PST)
+Message-ID: <65c21c58-0a25-50b0-0e35-f8b4da7abac3@mind.be>
+Date: Tue, 7 Feb 2023 18:16:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220509190650.1348657-2-gsmecher@threespeedlogic.com>
- <20220519160214.214701-1-gsmecher@threespeedlogic.com>
- <20230207163803.GI4124@scaer>
-From: Graeme Smecher <gsmecher@threespeedlogic.com>
-In-Reply-To: <20230207163803.GI4124@scaer>
+ Thunderbird/102.6.0
+Content-Language: en-GB
+To: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
+References: <20230115114840.9027-1-nolange79@gmail.com>
+ <20230115114840.9027-2-nolange79@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20230115114840.9027-2-nolange79@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=threespeedlogic-com.20210112.gappssmtp.com; s=20210112;
+ d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=iIqFn/p++pkTFoH7wlKnkTppeec20uFqxYSekJMF1Ak=;
- b=QoxzQ2OlrntiuKhCOvTTkEAZmxdy+1CWvW+Ch5/RhE7m5goNBMKlSuCuYhca1TQRE+
- zJzNAlvP454ogTFgvBw9fsdovE55Rh2rGcT0yx+ROwlj1jk6xthfg5VcK7d9N/gC5uRq
- rVeF5JBVOgNlLcw6RfAGoRYsyHjbSvRbEciqQuAs9WAe2sKV7YABKCgxHcbEFTYhIHjV
- gweeP3TQy5rD6+WtxhJNGKbdYc6jdry/+0tpWZmWJ48KVE0s+xtWQkG0uBzFPfZr8ShS
- k/0mIzUGMfLZLrCYkulNj1VhNPa+iugsTht2ngpqjVZfhx1+wV1zWIClL7qWmESSxWuI
- iV4A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=threespeedlogic-com.20210112.gappssmtp.com
- header.i=@threespeedlogic-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=QoxzQ2Ol
-Subject: Re: [Buildroot] [PATCH v2] package/python-orjson: disallow build
- when using musl.
+ bh=lhUNms1XAptgg5eE9w2X4fYUhOk6IM6aoM3QxMisRzU=;
+ b=XCds/dn0CDzrxcusfxd9Zg2z6RLlMWyoh9bDTgFOVviVGWOf8+ubdnVR0mKUk5rB48
+ 4ySNY3Dg8at36ZLml6ByWByKOcK2gdfLBRcuLUM8KRZ3cjfay/qTIF+LDXqIm0aquH40
+ FgSWcZo0wfkRaOBt4AoMrsjrcHQ36cDiVYUZ7yL315VjGYvPmcbqxKIwKLol3JWX8IZu
+ 9KxofeGiJPN7ivE1vuppxmLReApe8qzHNNTcepALM+OqVL1PG5ZyhI6DgZSuygK/CP3Z
+ Yu0rKdgrWle7c97iqQKWtMKjIKrZbQzvomTTIT+TfeM7P8HcCzpGfpX9UReZ1hZfzGXP
+ z6hA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=XCds/dn0
+Subject: Re: [Buildroot] [PATCH v8 2/4] package/systemd: Add config option
+ for sysupdate feature
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,95 +100,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@phobosdpl.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
-On 2023-02-07 08:38, Yann E. MORIN wrote:
-> Graeme, All,
-> 
-> On 2022-05-19 09:02 -0700, Graeme Smecher spake thusly:
->> The python-orjson build bails as follows when using musl libc:
->>
->> 	error: cannot produce cdylib for `orjson v3.6.7 (...)` as the
->> 	target `i586-unknown-linux-musl` does not support these crate types
-> 
-> I could not reproduce such an error wit the following defconfig:
-> 
->      BR2_TOOLCHAIN_BUILDROOT_MUSL=y
->      BR2_TOOLCHAIN_BUILDROOT_CXX=y
->      BR2_PER_PACKAGE_DIRECTORIES=y
->      BR2_PACKAGE_PYTHON3=y
->      BR2_PACKAGE_PYTHON_ORJSON=y
-> 
-> Since you submitted this patch, pythn-orjson was bumped multiple times,
-> and we've also bumped rust to 1.66.1, so maybe that was fixed now.
-> 
-> Could you have a further look into this, please?
 
-This patch is obsolete. I used to receive orjson build failures associated with musl on a regular basis - they have tapered off since mid-2022.
 
-Over the past ~6 months or so, only the mips autobuilds have failed with the following message:
-
-- maturin failed
-   Caused by: The architecture mips is not supported
-
-http://autobuild.buildroot.net/results/7291d123479411e632b8380f0045a18814dc23ae
-
-I am happy to drop the patch.
-
-best,
-Graeme
-
+On 15/01/2023 12:48, Norbert Lange wrote:
+> Support the new feature added with v251,
+> requires openssl.
 > 
-> Regards,
-> Yann E. MORIN.
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   package/systemd/Config.in  | 12 ++++++++++++
+>   package/systemd/systemd.mk |  7 ++++++-
+>   2 files changed, 18 insertions(+), 1 deletion(-)
 > 
->> It's not machine-specific (it occurs on i586, s389x, and arm platforms),
->> and is tied to what appears to be relatively arcane details for
->> rust/musl:
->>
->> 	https://github.com/rust-lang/rust/issues/59302
->>
->> At some point, it will be possible to remove this restriction - but not
->> yet.
->>
->> Signed-off-by: Graeme Smecher <gsmecher@threespeedlogic.com>
->> ---
->>   package/python-orjson/Config.in | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/package/python-orjson/Config.in b/package/python-orjson/Config.in
->> index 420e023b0a..b2ad9062cc 100644
->> --- a/package/python-orjson/Config.in
->> +++ b/package/python-orjson/Config.in
->> @@ -1,6 +1,8 @@
->>   config BR2_PACKAGE_PYTHON_ORJSON
->>   	bool "python-orjson"
->>   	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
->> +	# doesn't build with musl until rust's cdylib targets work with it
->> +	depends on !BR2_TOOLCHAIN_USES_MUSL
->>   	select BR2_PACKAGE_PYTHON_CFFI # runtime
->>   	help
->>   	  orjson is a fast, correct JSON library for Python. It
->> @@ -10,3 +12,6 @@ config BR2_PACKAGE_PYTHON_ORJSON
->>   	  instances natively.
->>   
->>   	  https://github.com/ijl/orjson
->> +
->> +comment "python-orjson requires rust cdylib support, which musl doesn't have yet"
->> +	depends on BR2_TOOLCHAIN_USES_MUSL
->> -- 
->> 2.35.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index f35305c0be..9278772951 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -481,6 +481,18 @@ config BR2_PACKAGE_SYSTEMD_SYSEXT
+>   
+>   	  https://www.freedesktop.org/software/systemd/man/systemd-sysext.html
+>   
+> +config BR2_PACKAGE_SYSTEMD_SYSUPDATE
+> +	bool "enable sysupdate support"
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
+
+  AFAIU, sysupdate uses its own particular way of doing A/B updates (by updating 
+the GPT partition table) which is only supported by systemd-boot. Although I 
+suppose it's possible to write a U-Boot script that does the same thing... So I 
+added a note here to that effect. I don't suppose you actually used this option?
+
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+
+> +	help
+> +	  systemd-sysupdate atomically updates the host OS, container
+> +	  images, portable service images or other sources, based on
+> +	  the transfer configuration files described in sysupdate.d.
+> +
+> +	  https://www.freedesktop.org/software/systemd/man/systemd-sysupdate.html
+> +
+>   config BR2_PACKAGE_SYSTEMD_SYSUSERS
+>   	bool "enable sysusers support"
+>   	help
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index b0597f9bb4..f49d34d32f 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -91,7 +91,6 @@ SYSTEMD_CONF_OPTS += \
+>   	-Dsulogin-path=/usr/sbin/sulogin \
+>   	-Dsystem-gid-max=999 \
+>   	-Dsystem-uid-max=999 \
+> -	-Dsysupdate=false \
+>   	-Dsysvinit-path= \
+>   	-Dsysvrcnd-path= \
+>   	-Dtelinit-path= \
+> @@ -489,6 +488,12 @@ else
+>   SYSTEMD_CONF_OPTS += -Dsysext=false
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUPDATE),y)
+> +SYSTEMD_CONF_OPTS += -Dsysupdate=true
+> +else
+> +SYSTEMD_CONF_OPTS += -Dsysupdate=false
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+>   SYSTEMD_CONF_OPTS += -Dnetworkd=true
+>   SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
