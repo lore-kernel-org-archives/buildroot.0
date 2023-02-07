@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F05AC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1D4CC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:41:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B072C70008;
-	Tue, 21 Feb 2023 01:41:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B072C70008
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D2BA700D6;
+	Tue, 21 Feb 2023 01:41:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D2BA700D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6H2uf_H_e0nG; Tue, 21 Feb 2023 01:41:45 +0000 (UTC)
+	with ESMTP id IqcID9yPNH1p; Tue, 21 Feb 2023 01:41:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5EE4700C9;
-	Tue, 21 Feb 2023 01:41:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5EE4700C9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 608FB700D0;
+	Tue, 21 Feb 2023 01:41:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 608FB700D0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 772271BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 873B51BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A12286FFEC
+ by smtp3.osuosl.org (Postfix) with ESMTP id D58806FE64
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A12286FFEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D58806FE64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RZGI3IKXN_zj for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+ with ESMTP id JVWSmrngSqIR for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63BCD6FC1E
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3EB46FE5C
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63BCD6FC1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3EB46FE5C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E55C828C8; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+ id D640781979; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 13:54:07 +0100
+Date: Tue, 7 Feb 2023 16:18:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: eb013c3757548f3153a9da59906c388d32a376fa
-X-Git-Newrev: 9244052f28d87d6d85b73402e7d15f730eb66c4b
+X-Git-Oldrev: 4a6f9d2516820c296a8af788b259ca96926cd60d
+X-Git-Newrev: f25b760186b72d2224d7087324ca5f2baeafb8b3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205252.5E55C828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-magic-wormhole-mailbox-server: new package
+Message-Id: <20230220205252.D640781979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/cli11: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,148 +63,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9244052f28d87d6d85b73402e7d15f730eb66c4b
+commit: https://git.buildroot.net/buildroot/commit/?id=f25b760186b72d2224d7087324ca5f2baeafb8b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package is the main server that Magic-Wormhole clients connect to.
-The server performs store-and-forward delivery for small key-exchange
-and control messages. Bulk data is sent over a direct TCP connection,
-or through a transit-relay.
+Required by micromamba.
 
-https://github.com/magic-wormhole/magic-wormhole-mailbox-server
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- ...move-the-U-open-mode-removed-in-Python-3..patch | 39 ++++++++++++++++++++++
- .../python-magic-wormhole-mailbox-server/Config.in | 15 +++++++++
- .../python-magic-wormhole-mailbox-server.hash      |  5 +++
- .../python-magic-wormhole-mailbox-server.mk        | 14 ++++++++
- 6 files changed, 75 insertions(+)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/cli11/Config.in  | 13 +++++++++++++
+ package/cli11/cli11.hash |  3 +++
+ package/cli11/cli11.mk   | 15 +++++++++++++++
+ 5 files changed, 33 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8d1d9340bb..afc079a609 100644
+index 8dde37bd67..830dab56f0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1695,6 +1695,7 @@ F:	package/python-distro/
- F:	package/python-gnupg/
- F:	package/python-hkdf/
- F:	package/python-magic-wormhole/
-+F:	package/python-magic-wormhole-mailbox-server/
- F:	package/python-pyalsa/
- F:	package/python-spake2/
- F:	package/rdma-core/
+@@ -2787,6 +2787,7 @@ N:	Sven Oliver Moll <svolli@svolli.de>
+ F:	package/most/
+ 
+ N:	TIAN Yuanhao <tianyuanhao3@163.com>
++F:	package/cli11/
+ F:	package/open-isns/
+ 
+ N:	Tan En De <ende.tan@starfivetech.com>
 diff --git a/package/Config.in b/package/Config.in
-index cb9a2b829f..2ef403168a 100644
+index b5418c56f6..3773901552 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1121,6 +1121,7 @@ menu "External python modules"
- 	source "package/python-lxml/Config.in"
- 	source "package/python-m2crypto/Config.in"
- 	source "package/python-magic-wormhole/Config.in"
-+	source "package/python-magic-wormhole-mailbox-server/Config.in"
- 	source "package/python-mako/Config.in"
- 	source "package/python-markdown/Config.in"
- 	source "package/python-markdown2/Config.in"
-diff --git a/package/python-magic-wormhole-mailbox-server/0001-setup.py-remove-the-U-open-mode-removed-in-Python-3..patch b/package/python-magic-wormhole-mailbox-server/0001-setup.py-remove-the-U-open-mode-removed-in-Python-3..patch
+@@ -2150,6 +2150,7 @@ endmenu
+ 
+ menu "Text and terminal handling"
+ 	source "package/augeas/Config.in"
++	source "package/cli11/Config.in"
+ 	source "package/docopt-cpp/Config.in"
+ 	source "package/enchant/Config.in"
+ 	source "package/fmt/Config.in"
+diff --git a/package/cli11/Config.in b/package/cli11/Config.in
 new file mode 100644
-index 0000000000..8afe7c9546
+index 0000000000..87db9ac8f7
 --- /dev/null
-+++ b/package/python-magic-wormhole-mailbox-server/0001-setup.py-remove-the-U-open-mode-removed-in-Python-3..patch
-@@ -0,0 +1,39 @@
-+From df6126ee86c1f84c7e0c25fcf69543b83b1b32c6 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Sat, 5 Nov 2022 13:06:07 +0100
-+Subject: [PATCH] setup.py: remove the 'U' open mode removed in Python 3.11
-+
-+The 'U' open mode was removed in Python 3.11. See:
-+https://docs.python.org/3.11/library/functions.html#open
-+
-+Installing with Python 3.11 fails with:
-+
-+    /path/to/python-magic-wormhole-mailbox-server-0.4.1/setup.py", line 20, in <module>
-+        long_description=open('README.md', 'rU').read(),
-+                         ^^^^^^^^^^^^^^^^^^^^^^^
-+    ValueError: invalid mode: 'rU'
-+
-+This patch removes the 'U' open mode.
-+
-+Upstream: https://github.com/magic-wormhole/magic-wormhole-mailbox-server/commit/df6126ee86c1f84c7e0c25fcf69543b83b1b32c6
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ setup.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 6ef292f..ad9ff5a 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -17,7 +17,7 @@ trove_classifiers = [
-+ setup(name="magic-wormhole-mailbox-server",
-+       version=versioneer.get_version(),
-+       description="Securely transfer data between computers",
-+-      long_description=open('README.md', 'rU').read(),
-++      long_description=open('README.md', 'r').read(),
-+       long_description_content_type='text/markdown',
-+       author="Brian Warner",
-+       author_email="warner-magic-wormhole@lothar.com",
-+-- 
-+2.38.1
-+
-diff --git a/package/python-magic-wormhole-mailbox-server/Config.in b/package/python-magic-wormhole-mailbox-server/Config.in
-new file mode 100644
-index 0000000000..db20d3e7b6
---- /dev/null
-+++ b/package/python-magic-wormhole-mailbox-server/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER
-+	bool "python-magic-wormhole-mailbox-server"
-+	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TWISTED # runtime
++++ b/package/cli11/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_CLI11
++	bool "cli11"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
 +	help
-+	  This package is the main server that Magic-Wormhole clients
-+	  connect to. The server performs store-and-forward delivery
-+	  for small key-exchange and control messages. Bulk data is
-+	  sent over a direct TCP connection, or through a
-+	  transit-relay.
++	  CLI11 is a command line parser for C++11 and beyond that
++	  provides a rich feature set with a simple and intuitive
++	  interface.
 +
-+	  https://github.com/magic-wormhole/magic-wormhole-mailbox-server
-diff --git a/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash
++	  https://github.com/CLIUtils/CLI11
++
++comment "cli11 needs a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/cli11/cli11.hash b/package/cli11/cli11.hash
 new file mode 100644
-index 0000000000..c714712641
+index 0000000000..12e5b4fb55
 --- /dev/null
-+++ b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/magic-wormhole-mailbox-server/json
-+md5  3da441df1f354a8399a728da3421ac8f  magic-wormhole-mailbox-server-0.4.1.tar.gz
-+sha256  1af10592909caaf519c00e706eac842c5e77f8d4356215fe9c61c7b2258a88fb  magic-wormhole-mailbox-server-0.4.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  4a9cc2415c52cef591b6822eee68fed36d7e6d80284b09638cff61d762d99060  LICENSE
-diff --git a/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk
++++ b/package/cli11/cli11.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  378da73d2d1d9a7b82ad6ed2b5bda3e7bc7093c4034a1d680a2e009eb067e7b2  cli11-2.3.1.tar.gz
++sha256  89022151dbf5827a22430557ef2f8a75808dd25fa1e9a12709ef5421d363e66d  LICENSE
+diff --git a/package/cli11/cli11.mk b/package/cli11/cli11.mk
 new file mode 100644
-index 0000000000..a3394c7dcd
+index 0000000000..b02bd4478f
 --- /dev/null
-+++ b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk
-@@ -0,0 +1,14 @@
++++ b/package/cli11/cli11.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-magic-wormhole-mailbox-server
++# cli11
 +#
 +################################################################################
 +
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_VERSION = 0.4.1
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SOURCE = magic-wormhole-mailbox-server-$(PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_VERSION).tar.gz
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SITE = https://files.pythonhosted.org/packages/5b/ba/cbb211bc8f8bfdf7fb620d33331f07bcd889c7a28e7fd8a0de9029bb5a2f
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SETUP_TYPE = setuptools
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_LICENSE = MIT
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_LICENSE_FILES = LICENSE
++CLI11_VERSION = 2.3.1
++CLI11_SITE = $(call github,CLIUtils,CLI11,v$(CLI11_VERSION))
++CLI11_LICENSE = BSD-3-Clause
++CLI11_LICENSE_FILES = LICENSE
++CLI11_INSTALL_STAGING = YES
++CLI11_INSTALL_TARGET = NO
++CLI11_CONF_OPTS = -DCLI11_BUILD_DOCS=OFF -DCLI11_BUILD_EXAMPLES=OFF
 +
-+$(eval $(python-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
