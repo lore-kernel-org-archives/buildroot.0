@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05A7CC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A699EC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE8EA4F3CF;
-	Tue, 21 Feb 2023 00:27:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE8EA4F3CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 44B5A4F3C7;
+	Tue, 21 Feb 2023 00:27:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44B5A4F3C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bBTwN-eyV53W; Tue, 21 Feb 2023 00:27:42 +0000 (UTC)
+	with ESMTP id LhKen136TB4S; Tue, 21 Feb 2023 00:27:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98E554F3BA;
-	Tue, 21 Feb 2023 00:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98E554F3BA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DBD041BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 382494F3B3;
+	Tue, 21 Feb 2023 00:27:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 382494F3B3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AB1E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:59:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 948026FB44
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 948026FB44
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C19F417D2
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C19F417D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id joTIUkLrhQDb for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3hZsgc6-47yQ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C50216F9F4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C50216F9F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id A004E4179B
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A004E4179B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AEFD2828C8; Mon, 20 Feb 2023 20:52:28 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 9DC7C8648F; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 8 Jan 2023 22:39:42 +0100
+Date: Tue, 7 Feb 2023 14:44:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 359205b4f5b151a6ddff93cd75fd569a6f5c54b4
-X-Git-Newrev: 9fba87b8d708caa51ac674a56b9f2a50ed5fdc36
+X-Git-Oldrev: 33bdf7bb037c05863aa69bbe219e1cb78d596a3a
+X-Git-Newrev: e06975b38047fe1ef47650248f154ecf88fe09b5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205228.AEFD2828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/zstd: disable ccache
- for host package
+Message-Id: <20230220205252.9DC7C8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dahdi-linux: update
+ URL in Config.in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +56,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fba87b8d708caa51ac674a56b9f2a50ed5fdc36
+commit: https://git.buildroot.net/buildroot/commit/?id=e06975b38047fe1ef47650248f154ecf88fe09b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We need to disable ccache when building host-zstd as the upcoming
-ccache update depends on host-zstd.
+http://www.asterisk.org/downloads/dahdi no longer works, use the
+Github page instead.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998@free.fr: introduce HOST_ZSTD_ENV]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zstd/zstd.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/dahdi-linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index e8f6315222..73bb97a793 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -96,14 +96,18 @@ define ZSTD_INSTALL_TARGET_CMDS
- endef
+diff --git a/package/dahdi-linux/Config.in b/package/dahdi-linux/Config.in
+index 7b6ce79422..b6086fdc6c 100644
+--- a/package/dahdi-linux/Config.in
++++ b/package/dahdi-linux/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_DAHDI_LINUX
+ 	  DAHDI Linux is the open source device driver framework used to
+ 	  interface Asterisk with telephony hardware.
  
- HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
-+HOST_ZSTD_ENV = $(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS)
-+
-+# We are a ccache dependency, so we can't use ccache
-+HOST_ZSTD_ENV += CC="$(HOSTCC_NOCCACHE)" CXX="$(HOSTCXX_NOCCACHE)"
+-	  http://www.asterisk.org/downloads/dahdi
++	  https://github.com/asterisk/dahdi-linux
  
- define HOST_ZSTD_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
-+	$(HOST_ZSTD_ENV) $(MAKE) $(HOST_ZSTD_OPTS) \
- 		-C $(@D) zstd-release lib-release
- endef
- 
- define HOST_ZSTD_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
-+	$(HOST_ZSTD_ENV) $(MAKE) $(HOST_ZSTD_OPTS) \
- 		-C $(@D) install
- endef
- 
+ comment "dahdi-linux needs a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
