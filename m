@@ -1,50 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC2C5C636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 15:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55C26C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 15:06:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6840040A6A;
-	Tue,  7 Feb 2023 15:03:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6840040A6A
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2DD581318;
+	Tue,  7 Feb 2023 15:06:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2DD581318
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZOoEGGsjoqjS; Tue,  7 Feb 2023 15:03:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hNDvJ43m41WB; Tue,  7 Feb 2023 15:06:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48C8740A64;
-	Tue,  7 Feb 2023 15:03:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48C8740A64
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E54F1BF2CA
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:03:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EAA681306;
+	Tue,  7 Feb 2023 15:06:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EAA681306
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 96B2C1BF275
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35C6D40A64
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:03:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35C6D40A64
+ by smtp3.osuosl.org (Postfix) with ESMTP id 701F560B8B
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 15:06:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 701F560B8B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e3-tKpIloD5l for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 15:03:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FBAB40A59
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 15:03:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FBAB40A59
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 493D3841CE; Tue,  7 Feb 2023 15:03:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 67ZrQRlSYG6G for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 15:06:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D4B660AE9
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6D4B660AE9
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 15:06:20 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id h16so13830921wrz.12
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 07:06:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=PDaZXQYGGfABleIoBjn5AJqYCMmMKPezxoasKjlhUwU=;
+ b=jGdE2emquk0B65zWnvNQoeP6MEbVMDfaPy/+mLaHkMp35UdEvfvQ5jsgH8j6TY10RU
+ EeDTPcje+lmnSSz8ZFSluowf1+xMakLeALqRCl1soD8VpR0CYcSEbMBZlq+BfKM7xIo7
+ Z/fMwN8tRLE37oNdXiSut2C5MNhNUN9tZy9wl/d/XCDM9YSK8ZjvJrewOoiLaeELLL4a
+ xC0FdykYDocWRcpcfesgQqmsMWwE0BgaB6HXEdAbiBglaEmalOHhfRROumokGYt+WJcW
+ zbQnE7DJG6GoFHM5+M+Q8WSqEQasazgmpWc3Nto28yTWPmmvJqcyh35Eox2PoaIL2405
+ 7oUw==
+X-Gm-Message-State: AO0yUKW+x3LllT1bpXA+z2Y+g7z9cLNiVAbiykFHuC6oT0s0WBEh0XLE
+ UvtxY6Pk+o3s2XAA3dsD6TN5yvSR8XAriLDy
+X-Google-Smtp-Source: AK7set/Qqe2o0i/CWR07usdmkjyhJQs0gdqnhfBYHPGXjH060zU2m9VxHSCIDNvBt2iJO9DXUETsXg==
+X-Received: by 2002:a5d:4149:0:b0:2bf:dd84:adf6 with SMTP id
+ c9-20020a5d4149000000b002bfdd84adf6mr2943259wrq.60.1675782378433; 
+ Tue, 07 Feb 2023 07:06:18 -0800 (PST)
+Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ w5-20020a5d6085000000b0029100e8dedasm11321510wrt.28.2023.02.07.07.06.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 07 Feb 2023 07:06:17 -0800 (PST)
+Message-ID: <f365639e-6baf-a8f9-5e89-4d02de2843ed@mind.be>
+Date: Tue, 7 Feb 2023 16:06:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-GB
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ buildroot <buildroot@buildroot.org>, Peter Korsgaard <peter@korsgaard.com>,
+ Michael Fischer <mf@go-sys.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220420170326.1901572-1-Jason@zx2c4.com>
 From: Arnout Vandecappelle <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 16:03:27 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7231701a290ba447fde9807ba9d260022ddfc8e4
-X-Git-Newrev: 4a6f9d2516820c296a8af788b259ca96926cd60d
-X-Patchwork-Hint: ignore
-Message-Id: <20230207150345.493D3841CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/urandom-scripts: actually credit
+In-Reply-To: <20220420170326.1901572-1-Jason@zx2c4.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=PDaZXQYGGfABleIoBjn5AJqYCMmMKPezxoasKjlhUwU=;
+ b=HiPQ/t6M/i40IKbywmLZCNAjV57MsFdgUyJNzZxHT9iguX/Zn7QtfsxXhwi6Zmcv9h
+ bmbRB1hESgG2lc7fK8TS1yUW03vJUww38F3Olt0URp9diWaT0o9IKznfumEfMbm6xwLZ
+ CpcZsPo+jgSG8V2+ZR13rxta7QiHkA++XDU0J5nJU+RIcJJ97AlNOBOX7rfbCghyqDuz
+ nj2Ryck27Idu9a2UU0scBr44434tMmKtlymSlc/zPaBURZ9UaTLhiUO+kRzVNf9R/gAO
+ LHvpXhLuLvuuQeV+ewGiqwODcPDeccz+IbHye2IoUCWbnRkEndOioTp1k+tGgvTm5bqP
+ Whow==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=HiPQ/t6M
+Subject: Re: [Buildroot] [PATCH v5] package/urandom-scripts: actually credit
  seed files via seedrng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,203 +103,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a6f9d2516820c296a8af788b259ca96926cd60d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The RNG can't actually be seeded from a shell script, due to the
-reliance on ioctls. For this reason, Busybox 1.36.0 contains SeedRNG, a
-tiny program meant to be called at startup and shutdown (and at
-arbitrary other points in between if desired). Note that initially,
-the way seedrng was included in busybox broke things quite severely, but
-now it's been reverted to a reasonably acceptable version.
 
-This is a significant improvement over the current init script, which
-doesn't credit entropy and whose hashing in shell scripts is sort of
-fragile.
+On 20/04/2022 19:03, Jason A. Donenfeld wrote:
+> The RNG can't actually be seeded from a shell script, due to the
+> reliance on ioctls. For this reason, Busybox now contains SeedRNG, a
+> tiny program meant to be called at startup and shutdown (and at
+> arbitrary other points in between if desired).
+> 
+> Since this is currently in Busybox's git tree, this commit adds it as a
+> patch to the Busybox package. Then, it wires the init script up to call
+> it.
+> 
+> This is a significant improvement over the current init script, which
+> doesn't credit entropy and whose hashing in shell scripts is sort of
+> fragile.
+> 
+> NOTE NOTE NOTE: While I've added the patch to the Busybox package
+> directory, I don't really know how to wire this up and what to do about
+> the various config entries. I was hoping that a Buildroot maintainer
+> might have a better idea of the best way to do this, and could just take
+> this patch as a starting point for whatever the real commit winds up
+> being.
+> 
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Because seedrng is part of busybox, urandom-scripts now depends on
-BR2_PACKAGE_BUSYBOX. This can be removed again if later we add a
-standalone seedrng package.
+  Applied to master, after some reworking and heavily rewriting the commit 
+message, thanks.
 
-Add a decent explanation to the init script about the need for a
-persistent directory to make this actually work.
+     package/urandom-scripts: actually credit seed files via seedrng
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-[Arnout:
- - Remove busybox patch, it's now part of busybox 1.36.0.
- - Depend on busybox.
- - Fix shellcheck errors.
- - Use DAEMON and SEEDRNG_ARGS.
- - Don't bother with "seed_dir" and "skip_credit" variables.
- - Rename to S20seedrng.
-]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/urandom-scripts/Config.in          |  5 +--
- package/urandom-scripts/S20seedrng         | 40 +++++++++++++++++
- package/urandom-scripts/S20urandom         | 70 ------------------------------
- package/urandom-scripts/urandom-scripts.mk |  4 +-
- 4 files changed, 43 insertions(+), 76 deletions(-)
+     The RNG can't actually be seeded from a shell script, due to the
+     reliance on ioctls. For this reason, Busybox 1.36.0 contains SeedRNG, a
+     tiny program meant to be called at startup and shutdown (and at
+     arbitrary other points in between if desired). Note that initially,
+     the way seedrng was included in busybox broke things quite severely, but
+     now it's been reverted to a reasonably acceptable version.
 
-diff --git a/package/urandom-scripts/Config.in b/package/urandom-scripts/Config.in
-index 987e442e22..6b4a609f95 100644
---- a/package/urandom-scripts/Config.in
-+++ b/package/urandom-scripts/Config.in
-@@ -1,10 +1,7 @@
- config BR2_PACKAGE_URANDOM_SCRIPTS
- 	bool "urandom-initscripts"
- 	default y if BR2_PACKAGE_INITSCRIPTS
-+	depends on BR2_PACKAGE_BUSYBOX
- 	depends on !BR2_PACKAGE_SYSTEMD
- 	help
- 	  Initscript to preserve the random seed between reboots.
--
--	  WARNING: this is a poor fit to try and get high-quality
--	  entropy at boot. There are better ways, like haveged, or
--	  rng-tools.
-diff --git a/package/urandom-scripts/S20seedrng b/package/urandom-scripts/S20seedrng
-new file mode 100644
-index 0000000000..0fea0bea83
---- /dev/null
-+++ b/package/urandom-scripts/S20seedrng
-@@ -0,0 +1,40 @@
-+#! /bin/sh
-+#
-+# Preserve the random seed between reboots. See urandom(4).
-+#
-+# This script can be called multiple times during operation (e.g. with
-+# "reload" argument) to refresh the seed.
-+
-+# The following arguments can be added to SEEDRNG_ARGS in
-+# /etc/default/seedrng:
-+#   --seed-dir=/path/to/seed/directory
-+#     Path to the directory where the seed and the lock files are stored.
-+#     for optimal operation, this should be a persistent, writeable
-+#     location. Default is /var/lib/seedrng
-+#
-+#  --skip-credit
-+#     Set this to true only if you do not want seed files to actually
-+#     credit the RNG, for example if you plan to replicate this file
-+#     system image and do not have the wherewithal to first delete the
-+#     contents of /var/lib/seedrng.
-+#
-+# Example:
-+# SEEDRNG_ARGS="--seed-dir=/data/seedrng --skip-credit"
-+#
-+
-+DAEMON="seedrng"
-+SEEDRNG_ARGS=""
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+case "$1" in
-+	start|stop|restart|reload)
-+		# Never fail, as this isn't worth making a fuss
-+		# over if it doesn't go as planned.
-+		# shellcheck disable=SC2086 # we need the word splitting
-+		seedrng $SEEDRNG_ARGS || true;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/urandom-scripts/S20urandom b/package/urandom-scripts/S20urandom
-deleted file mode 100644
-index 6c6aea9eee..0000000000
---- a/package/urandom-scripts/S20urandom
-+++ /dev/null
-@@ -1,70 +0,0 @@
--#! /bin/sh
--#
--# Preserve the random seed between reboots. See urandom(4).
--#
--
--# Quietly do nothing if /dev/urandom does not exist
--[ -c /dev/urandom ] || exit 0
--
--URANDOM_SEED="/var/lib/random-seed"
--
--# shellcheck source=/dev/null
--[ -r "/etc/default/urandom" ] && . "/etc/default/urandom"
--
--if pool_bits=$(cat /proc/sys/kernel/random/poolsize 2> /dev/null); then
--	pool_size=$((pool_bits/8))
--else
--	pool_size=512
--fi
--
--init_rng() {
--	[ -f "$URANDOM_SEED" ] || return 0
--	printf 'Initializing random number generator: '
--	dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
--	status=$?
--	if [ "$status" -eq 0 ]; then
--		echo "OK"
--	else
--		echo "FAIL"
--	fi
--	return "$status"
--}
--
--save_random_seed() {
--	printf 'Saving random seed: '
--	status=1
--	if touch "$URANDOM_SEED.new" 2> /dev/null; then
--		old_umask=$(umask)
--		umask 077
--		dd if=/dev/urandom of="$URANDOM_SEED.tmp" bs="$pool_size" count=1 2> /dev/null
--		cat "$URANDOM_SEED" "$URANDOM_SEED.tmp" 2>/dev/null \
--			| sha256sum \
--			| cut -d ' ' -f 1 > "$URANDOM_SEED.new" && \
--		mv "$URANDOM_SEED.new" "$URANDOM_SEED" && status=0
--		rm -f "$URANDOM_SEED.tmp"
--		umask "$old_umask"
--		if [ "$status" -eq 0 ]; then
--			echo "OK"
--		else
--			echo "FAIL"
--		fi
--
--	else
--		echo "SKIP (read-only file system detected)"
--	fi
--	return "$status"
--}
--
--case "$1" in
--	start|restart|reload)
--		# Carry a random seed from start-up to start-up
--		# Load and then save the whole entropy pool
--		init_rng && save_random_seed;;
--	stop)
--		# Carry a random seed from shut-down to start-up
--		# Save the whole entropy pool
--		save_random_seed;;
--	*)
--		echo "Usage: $0 {start|stop|restart|reload}"
--		exit 1
--esac
-diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
-index 2c09728c46..32f3e09343 100644
---- a/package/urandom-scripts/urandom-scripts.mk
-+++ b/package/urandom-scripts/urandom-scripts.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20urandom \
--		$(TARGET_DIR)/etc/init.d/S20urandom
-+	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20seedrng \
-+		$(TARGET_DIR)/etc/init.d/S20seedrng
- endef
- 
- $(eval $(generic-package))
+     This is a significant improvement over the current init script, which
+     doesn't credit entropy and whose hashing in shell scripts is sort of
+     fragile.
+
+     Because seedrng is part of busybox, urandom-scripts now depends on
+     BR2_PACKAGE_BUSYBOX. This can be removed again if later we add a
+     standalone seedrng package.
+
+     Add a decent explanation to the init script about the need for a
+     persistent directory to make this actually work.
+
+     Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+     [Arnout:
+      - Remove busybox patch, it's now part of busybox 1.36.0.
+      - Depend on busybox.
+      - Fix shellcheck errors.
+      - Use DAEMON and SEEDRNG_ARGS.
+      - Don't bother with "seed_dir" and "skip_credit" variables.
+      - Rename to S20seedrng.
+     ]
+     Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+
+
+  Regards,
+  Arnout
+
+> ---
+> Changes v4->v5:
+> - SeedRNG is now part of Busybox, so we don't need to carry the source
+>    in-tree here, which was the primary objection to earlier versions.
+> 
+>   ...eedRNG-utility-for-kernel-RNG-seed-f.patch | 309 ++++++++++++++++++
+>   package/urandom-scripts/Config.in             |   4 -
+>   package/urandom-scripts/S20urandom            |  78 ++---
+>   3 files changed, 330 insertions(+), 61 deletions(-)
+>   create mode 100644 package/busybox/0003-seedrng-import-SeedRNG-utility-for-kernel-RNG-seed-f.patch
+> 
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
