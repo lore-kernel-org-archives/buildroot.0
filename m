@@ -1,51 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10442C636CC
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 08:40:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 076C3C636CD
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 08:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADDAC4053F;
-	Tue,  7 Feb 2023 08:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADDAC4053F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8846441721;
+	Tue,  7 Feb 2023 08:55:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8846441721
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bntZfNbJvy5P; Tue,  7 Feb 2023 08:39:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wBSzCUNuk0vP; Tue,  7 Feb 2023 08:55:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CE9A4057C;
-	Tue,  7 Feb 2023 08:39:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CE9A4057C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A25661BF30B
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 08:39:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D9BE41776;
+	Tue,  7 Feb 2023 08:55:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D9BE41776
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 051A91BF30B
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 08:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A129405D7
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 08:39:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A129405D7
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6E9B8195C
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 08:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6E9B8195C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 04LzoPv6y6it for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 08:39:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E4014059B
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 08:39:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E4014059B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 455AD83F4E; Tue,  7 Feb 2023 08:39:51 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XPYm8IxMoI7S for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 08:55:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61738818C9
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 61738818C9
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 08:55:01 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id jg8so1697537ejc.6
+ for <buildroot@buildroot.org>; Tue, 07 Feb 2023 00:55:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=dabsEFcwlDlOuZ0WHleCOlhMctgASHzGs51fgyomxdw=;
+ b=eD7vZ8iPr6bkWpbGGtoixb1AOOfeEED/0Z0W671SF+oj18VwOheL5rFPuZNxQ5OptZ
+ 3c+7Mt8KZcB0ZzGj6DoIgB+uTOTURnK/13IyDY6NzkwApEqL5Pu+fV0sqrCV9Pc1lNg9
+ 4jzeoi+H5i3Xdc041oJd7jYUKWUA4+JXUSFeUlaCSlpRBixTt/oKNxT1DOlqs6VWFIBK
+ ClGqDHoRmAgcDo57kBnjn0XASMhawTffp0svN4SXRWtbWXpNuuaOtp+cEE0170eij7sQ
+ r4d0zXyix2FQ4y4oDaizQJO4xzG8eLRGMR0cdxvI2ifz6R/DawcdKCcptS/VzJbQi31a
+ gdzw==
+X-Gm-Message-State: AO0yUKUq3b25SAW93nmPqljYxB7GsitZiTHqKH3b5apa10Pvhh0Ovhvq
+ SHugVU8BndHCi06h2WwIE1rpp3PlSs/D7w==
+X-Google-Smtp-Source: AK7set9v0WvNrapJ3Leht/ChuOMKQrMeV1ZuK3QdHWsPsQG6Yg2WobCLLxwU9CsZlnDhbhYmCMRgIg==
+X-Received: by 2002:a17:906:124f:b0:88a:a27c:c282 with SMTP id
+ u15-20020a170906124f00b0088aa27cc282mr2502220eja.47.1675760098861; 
+ Tue, 07 Feb 2023 00:54:58 -0800 (PST)
+Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
+ [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
+ g21-20020a1709061e1500b0087bd629e9e4sm6683815ejj.179.2023.02.07.00.54.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 07 Feb 2023 00:54:58 -0800 (PST)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 09:39:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 82f84b4cfbe7d7631b34b67f10e9709772dd1165
-X-Git-Newrev: 8f8085e63a4a755d587a25a73dbaafe33b23f867
-X-Patchwork-Hint: ignore
-Message-Id: <20230207083951.455AD83F4E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
- require English perl package for host-libxml-parser-perl
+Date: Tue,  7 Feb 2023 09:54:45 +0100
+Message-Id: <20230207085445.1651226-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=dabsEFcwlDlOuZ0WHleCOlhMctgASHzGs51fgyomxdw=;
+ b=S1QWYWG7pMAg7Car4Pwo86c8NKrYPKMSgTHhWftvm0vfVnbiRRVyemO4x0Xm0uhY7C
+ B3RJ/FjgooLEHm/3xjovJPUdZuQiF5rCWC6fDjDOf2MIXtgH3kCXLXM48nkcoy9pvebI
+ szC8x7AkiEQfN0pF6iAZRZqALH9wKBwIjIX5KPqnCsrSFyANQGu1hjKiLzuTJR9hUqoX
+ iyKjK0gUQzb/g4pCLenwT5c92EEVTVXewtiD/PJ76SRpHCwQVtt5B9ldP4rrFDmoVWIf
+ A1KT+LlzMF3QEOXKzOAParUeQe+C5v7Zb6Zpv9gpBTRbM9JtlIyxU/ctAxFM5xP7uvyC
+ MZrg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=S1QWYWG7
+Subject: [Buildroot] [PATCH] package/libcamera-apps: enable LIBAV only if
+ libdrm is present
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +94,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f8085e63a4a755d587a25a73dbaafe33b23f867
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since commit 35266e84043f880d7591e52b71a8c5b8d0e4717d, libcamera-apps
+does enable LIBAV by default which depends on libdrm.
 
-Fixes http://autobuild.buildroot.net/results/166/1667b4ebd8e16e7d8b47bc3ca128a76daf27b4d9/
+Fixes:
+- http://autobuild.buildroot.net/results/548f2a3b353ce4693fb60d7fb1e06e02af22991c/
 
-The configure script of host-libxml-parser-perl needs the English perl
-module on the host:
+/home/buildroot/autobuild/run/instance-1/output-1/build/libcamera-apps-1.1.1/encoder/libav_encoder.cpp:13:10: fatal error: libdrm/drm_fourcc.h: No such file or directory
+   13 | #include <libdrm/drm_fourcc.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~
 
-ERROR from evaluation of
-/home/buildroot/autobuild/instance-1/output-1/build/host-libxml-parser-perl-2.46/Expat/Makefile.PL:
-Can't locate English.pm in @INC (you may need to install the English module)
-(@INC contains:
-/home/buildroot/autobuild/instance-1/output-1/build/host-libxml-parser-perl-2.46/inc
-/home/buildroot/autobuild/instance-1/output-1/host/lib/perl
-/usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36
-/usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5
-/usr/share/perl5 .) at ./Makefile.PL line 3.
-
-So add a check for it in dependencies.sh similar to the existing check for
-ExtUtils::MakeMaker.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- support/dependencies/dependencies.sh | 1 +
- 1 file changed, 1 insertion(+)
+ package/libcamera-apps/libcamera-apps.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index afd30008e8..ea16a21e20 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -266,6 +266,7 @@ fi
+diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
+index 290ee9a026..385c65136e 100644
+--- a/package/libcamera-apps/libcamera-apps.mk
++++ b/package/libcamera-apps/libcamera-apps.mk
+@@ -25,8 +25,10 @@ LIBCAMERA_APPS_CONF_OPTS = \
+ ifeq ($(BR2_PACKAGE_LIBDRM),y)
+ LIBCAMERA_APPS_DEPENDENCIES += libdrm
+ LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=1
++LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=1
+ else
+ LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=0
++LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=0
+ endif
  
- # Check that the Perl installation is complete enough for Buildroot.
- required_perl_modules="Data::Dumper" # Needed to build host-autoconf
-+required_perl_modules="$required_perl_modules English" # Used by host-libxml-parser-perl
- required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by host-libxml-parser-perl
- required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
- required_perl_modules="$required_perl_modules FindBin" # Used by (host-)libopenssl
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+-- 
+2.38.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
