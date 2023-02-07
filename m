@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28E35C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:41:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 675DFC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:41:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9DE6700BD;
-	Tue, 21 Feb 2023 01:41:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9DE6700BD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20D7E6FBC8;
+	Tue, 21 Feb 2023 01:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20D7E6FBC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eU7NiquhVC_R; Tue, 21 Feb 2023 01:41:21 +0000 (UTC)
+	with ESMTP id Zi370BzGHrJf; Tue, 21 Feb 2023 01:41:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A2D8700C6;
-	Tue, 21 Feb 2023 01:41:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A2D8700C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F97070008;
+	Tue, 21 Feb 2023 01:41:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F97070008
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 57E861BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 679021BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7073A6FFEA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 861926FE5D
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7073A6FFEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 861926FE5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ClLio5R_vQxs for <buildroot@lists.busybox.net>;
+ with ESMTP id Vi_tnybeJB0I for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A5556FC2E
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAC076FE64
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A5556FC2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAC076FE64
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7859481979; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+ id A962981979; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 14:01:05 +0100
+Date: Tue, 7 Feb 2023 14:52:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 037dbe64d861e3d5580ecac608bd278afc9bbcc6
-X-Git-Newrev: 4e23807372370974a307b3c70ef9d77964a149ce
+X-Git-Oldrev: e06975b38047fe1ef47650248f154ecf88fe09b5
+X-Git-Newrev: 509956da4cdba6a76214322b1ace979bbe6cd6a8
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205252.7859481979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/testing/tests/package/test_python_magic_wormhole.py: new runtime
- test
+Message-Id: <20230220205252.A962981979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mesa3d-headers: only
+ check for conflicts when building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,104 +57,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e23807372370974a307b3c70ef9d77964a149ce
+commit: https://git.buildroot.net/buildroot/commit/?id=509956da4cdba6a76214322b1ace979bbe6cd6a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  1 +
- .../tests/package/test_python_magic_wormhole.py    | 62 ++++++++++++++++++++++
- 2 files changed, 63 insertions(+)
+The configuration checks should only be done when building so that
+make allyespackageconfig && make source works.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5776d6d7a5..8dde37bd67 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1717,6 +1717,7 @@ F:	support/testing/tests/package/test_perftest.py
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_hkdf.py
- F:	support/testing/tests/package/test_python_gnupg.py
-+F:	support/testing/tests/package/test_python_magic_wormhole.py
- F:	support/testing/tests/package/test_python_pyalsa.py
- F:	support/testing/tests/package/test_python_spake2.py
- F:	support/testing/tests/package/test_rdma_core.py
-diff --git a/support/testing/tests/package/test_python_magic_wormhole.py b/support/testing/tests/package/test_python_magic_wormhole.py
-new file mode 100644
-index 0000000000..d6541a2480
---- /dev/null
-+++ b/support/testing/tests/package/test_python_magic_wormhole.py
-@@ -0,0 +1,62 @@
-+import os
-+
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3MagicWormhole(TestPythonPackageBase):
-+    __test__ = True
-+    # Need to use a different toolchain than the default due to
-+    # python-cryptography using Rust (not available with uclibc)
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE=y
-+        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER=y
-+        BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_TRANSIT_RELAY=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    timeout = 60
-+
-+    def twistd_cmd(self, command):
-+        s = "twistd"
-+        s += " --pidfile=/tmp/{}.pid".format(command)
-+        s += " --logfile=/tmp/{}.log".format(command)
-+        s += " {}".format(command)
-+
-+        return s
-+
-+    def test_run(self):
-+        code = "123-hello-buildroot"
-+        text = "Hello Buildroot!"
-+
-+        relay_url = "ws://localhost:4000/v1"
-+        transit_helper = "tcp:localhost:4001"
-+
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5", kernel="builtin",
-+                           options=["-initrd", img])
-+
-+        self.emulator.login()
-+
-+        cmd = self.twistd_cmd("wormhole-mailbox")
-+        self.assertRunOk(cmd, timeout=30)
-+
-+        cmd = self.twistd_cmd("transitrelay")
-+        self.assertRunOk(cmd, timeout=30)
-+
-+        wormhole_cmd = "wormhole --relay-url={} --transit-helper={}".format(
-+            relay_url, transit_helper)
-+
-+        cmd = wormhole_cmd + " send --code={} --text=\"{}\" & ".format(code, text)
-+        cmd += "sleep 25"
-+        self.assertRunOk(cmd, timeout=30)
-+
-+        cmd = wormhole_cmd + " receive {}".format(code)
-+        output, exit_code = self.emulator.run(cmd, timeout=35)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], text)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 03bf635816..9177adceda 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -6,7 +6,7 @@
+ 
+ # mesa3d-headers is inherently incompatible with mesa3d, so error out
+ # if both are enabled.
+-ifeq ($(BR2_PACKAGE_MESA3D)$(BR2_PACKAGE_MESA3D_HEADERS),yy)
++ifeq ($(BR_BUILDING)$(BR2_PACKAGE_MESA3D)$(BR2_PACKAGE_MESA3D_HEADERS),yyy)
+ $(error mesa3d-headers enabled, but mesa3d enabled too)
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
