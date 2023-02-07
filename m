@@ -4,93 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A49CFC636CD
-	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 13:40:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86B04C636CC
+	for <buildroot@archiver.kernel.org>; Tue,  7 Feb 2023 13:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 387B640894;
-	Tue,  7 Feb 2023 13:40:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 387B640894
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10ED641770;
+	Tue,  7 Feb 2023 13:44:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10ED641770
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0SDO_iiM92Um; Tue,  7 Feb 2023 13:40:08 +0000 (UTC)
+	with ESMTP id bbAN5pB5ayeg; Tue,  7 Feb 2023 13:44:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1611641740;
-	Tue,  7 Feb 2023 13:40:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1611641740
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF88141780;
+	Tue,  7 Feb 2023 13:44:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF88141780
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4B0301BF376
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 13:40:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5C93D1BF376
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 13:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2048960E22
- for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 13:40:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2048960E22
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43EDD60F4C
+ for <buildroot@lists.busybox.net>; Tue,  7 Feb 2023 13:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43EDD60F4C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jf46_pdrBq-Z for <buildroot@lists.busybox.net>;
- Tue,  7 Feb 2023 13:40:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1CB560E8B
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A1CB560E8B
- for <buildroot@buildroot.org>; Tue,  7 Feb 2023 13:40:03 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id g6so5599323wrv.1
- for <buildroot@buildroot.org>; Tue, 07 Feb 2023 05:40:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=AiBbgZWwf+xvxlFmQ1vOynfL0GLMCFlvgmLIkn1azbs=;
- b=LpiUX9hGZYDIbN1pDcqhKTK7fHAl+45FmphRUudn1MYDxOmskDk/KoNUJbpB2jHI+B
- X3Kv1ZmMGK4BYHQUOL/BiWKpGJWgzjFq2/PQXUKcIyxW/aQoRaQ+2vbyWKH+8Uh3GVaw
- cCr1Q9wJUxN/e/Ks3clhTUvwkraEfcigXrHQWLvM5oQjQ6X/on7I+LOzGUjc6ONOhf3l
- gvjcRRQ9QmUjxkgnEKubCwPvt7Kqp69H0W4kLrzOEH3XljMfUvTT5HPP25NTiN21bPoF
- lsc636qWN3j46hG2LDHBiTNtUX6XBy9s7/og51M57WokIva7SHBW7vQm3YCXNs8cm5T/
- QPGw==
-X-Gm-Message-State: AO0yUKUKpr0LQrSxbrYknq8ctaliZye5QBm4rrLwh4lw03ifGJCrT5Bz
- /DfWVdi7U6eMykJGKCslEwJOflhLfCJItUju
-X-Google-Smtp-Source: AK7set9hZGBft7t271/pGcS5RUbP57M4ifeJcnwdUyv7m2MPoqq4fBajkK8iHkoxH+MlV36Uq7czbw==
-X-Received: by 2002:adf:d08a:0:b0:2bf:95d0:fa5d with SMTP id
- y10-20020adfd08a000000b002bf95d0fa5dmr2812154wrh.9.1675777201719; 
- Tue, 07 Feb 2023 05:40:01 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- d3-20020a056000114300b002c3f9404c45sm132852wrx.7.2023.02.07.05.40.01
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 07 Feb 2023 05:40:01 -0800 (PST)
-Message-ID: <bb350139-b94d-dde4-dfd1-911b1df61a5e@smile.fr>
-Date: Tue, 7 Feb 2023 14:40:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: Sagi Mor <sagimor6@gmail.com>, buildroot@buildroot.org
-References: <5DD722F6-F9EE-4517-9E55-5A61BB01F196@gmail.com>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <5DD722F6-F9EE-4517-9E55-5A61BB01F196@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=AiBbgZWwf+xvxlFmQ1vOynfL0GLMCFlvgmLIkn1azbs=;
- b=RILuOnwsmUovtYZOFsF6TK1S2/MO4MasLh3s80tdMRGU7micf3KNk1E4KQ3vft1buQ
- XvjFtVLbYlQsy5sIb3fIFLMqcZHb2mkeitjNq5zIS3ov5G7CFeVwQeopR0Gs6NMD/zRU
- hNC0wRoua0+4+Ie2Q7uYVVmyP4hz5o0o9LiKuAennR1zS+9tzolmRyrK1cWnofXUftiL
- UADbVTosbiSn8OTvRp+9V8SJSKnWzQFnM9pwytADXrWap9KveZsAOdi3dXAo673Ip6FY
- mu0VQEw8Sm18lDELeCNlRplAJI0VYiedmP8tN2bDz74W7nFdVTAnJCcPlTwI5ABVdIhb
- JeuQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=RILuOnws
-Subject: Re: [Buildroot] [PATCH] toolchain/toolchain-wrapper: make gcc
- --help -v work correctly
+ with ESMTP id 6tmX1lN3O8mf for <buildroot@lists.busybox.net>;
+ Tue,  7 Feb 2023 13:44:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77EC060E76
+ for <buildroot@buildroot.org>; Tue,  7 Feb 2023 13:44:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77EC060E76
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6378E8418E; Tue,  7 Feb 2023 13:44:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 7 Feb 2023 14:44:02 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d68b617993bd2f5c82a4936ed1e24e4fec6b94a2
+X-Git-Newrev: 33bdf7bb037c05863aa69bbe219e1cb78d596a3a
+X-Patchwork-Hint: ignore
+Message-Id: <20230207134415.6378E8418E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dahdi-linux: fix build with kernel
+ >= 6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,41 +56,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1099072138559779076=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gU2FnaSwKCkxlIDA3LzAxLzIwMjMgw6AgMTk6MDksIFNhZ2kgTW9yIGEgw6ljcml0wqA6
-Cj4gbWFrZSAiZ2NjIC0taGVscCAtdiIgZGlzcGxheSBhbGwgdGhlIG9wdGlvbnMsIHNvbWUgcGFj
-a2FnZXMgZGVwZW5kIG9uIHRoaXMKPiBodHRwczovL2J1Z3MuYnVzeWJveC5uZXQvc2hvd19idWcu
-Y2dpP2lkPTE1MjMxCj4gPGh0dHBzOi8vYnVncy5idXN5Ym94Lm5ldC9zaG93X2J1Zy5jZ2k/aWQ9
-MTUyMzE+CgpUaGFua3MgZm9yIHRoZSByZXBvcnQuCgpBY3R1YWxseSBpdCdzIHN1cnByaXNpbmcg
-dGhhdCAtLWhlbHAgLXYgb3B0aW9ucyBhcmUgcmVhbGx5IHVzZWQgdG9nZXRoZXIgYnkgYQpidWls
-ZCBzeXN0ZW0gdG8gY2hlY2sgZ2NjIHN1cHBvcnQuCgpJcyBzb21ldGhpbmcgdG8gZml4IGluIHRo
-ZSBweXRob24gYnVpbGQgc3lzdGVtIGluc3RlYWQgWzFdPwoKQXMgbm90aWNlZCBieSB0aGUgR0ND
-IG1haW50YWluZXIsIHRoZSAtZndyYXB2IG9wdGlvbiBpcyBhdmFpbGFibGUgc2luY2UKZ2NjLTMu
-NC41IFsyXSwgc28gaXQncyB1bmxpa2VseSBzb21lb25lIHN0aWxsIHRyeWluZyB0byBidWlsZCBw
-eXRob24gd2l0aCBnY2MgMy4KCklzIGFueSBvdGhlciBwYWNrYWdlIHVzaW5nICJnY2MgLS1oZWxw
-IC12Ij8KClsxXSBodHRwczovL2dpdGh1Yi5jb20vcHl0aG9uL2NweXRob24vYmxvYi92My4xMS4x
-L2NvbmZpZ3VyZS5hYyNMMjA2MgpbMl0KaHR0cHM6Ly9nY2MuZ251Lm9yZy9naXQvP3A9Z2NjLmdp
-dDthPXBhdGNoO2g9NGZhMjZhNjA3OTFlYzMxNDEyOGE5NjgzZmQ0ZDY1N2IyNTFkMDI2OAoKQmVz
-dCByZWdhcmRzLApSb21haW4KCgo+IAo+IFNpZ25lZC1vZmYtYnk6IFNhZ2kgTW9yIDxzYWdpbW9y
-NkBnbWFpbC5jb20+Cj4gLS0tCj4gwqB0b29sY2hhaW4vdG9vbGNoYWluLXdyYXBwZXIuYyB8IDEx
-ICsrKysrKysrKysrCj4gwqAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKQo+IAo+IGRp
-ZmYgLS1naXQgYS90b29sY2hhaW4vdG9vbGNoYWluLXdyYXBwZXIuYyBiL3Rvb2xjaGFpbi90b29s
-Y2hhaW4td3JhcHBlci5jCj4gaW5kZXggMzdiMjRkZDI0YS4uODVkNTkyYWQyZCAxMDA2NDQKPiAt
-LS0gYS90b29sY2hhaW4vdG9vbGNoYWluLXdyYXBwZXIuYwo+ICsrKyBiL3Rvb2xjaGFpbi90b29s
-Y2hhaW4td3JhcHBlci5jCj4gQEAgLTQ5OCw2ICs0OTgsMTcgQEAgaW50IG1haW4oaW50IGFyZ2Ms
-IGNoYXIgKiphcmd2KQo+IMKgfQo+IMKgfQo+IMKgCj4gKy8qIGRyb3AgYWxsIG5vbiBmb3J3YXJk
-cyBhcmdzIGlmIC0taGVscCBpcyBzcGVjaWZpZWQgKi8KPiArZm9yIChpID0gMTsgaSA8IGFyZ2M7
-IGkrKykgewo+ICtpZiAoIXN0cmNtcChhcmd2W2ldLCAiLS1oZWxwIikpIHsKPiArY3VyID0gYXJn
-cyArIDE7Cj4gKyNpZmRlZiBCUl9DQ0FDSEUKPiArY3VyKys7Cj4gKyNlbmRpZgo+ICticmVhazsK
-PiArfQo+ICt9Cj4gKwo+IMKgLyogYXBwZW5kIGZvcndhcmQgYXJncyAqLwo+IMKgbWVtY3B5KGN1
-ciwgJmFyZ3ZbMV0sIHNpemVvZihjaGFyICopICogKGFyZ2MgLSAxKSk7Cj4gwqBjdXIgKz0gYXJn
-YyAtIDE7Cj4gLS3CoAo+IDIuMzQuMQo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============1099072138559779076==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=33bdf7bb037c05863aa69bbe219e1cb78d596a3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix the following build failure with kernel >= 6.1
+
+In file included from ./include/linux/string.h:20,
+                 from ./include/linux/bitmap.h:11,
+                 from ./include/linux/cpumask.h:12,
+                 from ./include/linux/mm_types_task.h:14,
+                 from ./include/linux/mm_types.h:5,
+                 from ./include/linux/buildid.h:5,
+                 from ./include/linux/module.h:14,
+                 from /home/autobuild/autobuild/instance-11/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wctc4xxp/base.c:24:
+./arch/powerpc/include/asm/string.h:27:22: note: expected ‘void *’ but argument is of type ‘const unsigned char *’
+   27 | extern void * memcpy(void *,const void *,__kernel_size_t);
+      |                      ^~~~~~
+/home/autobuild/autobuild/instance-11/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wctc4xxp/base.c:661:9: error: too many arguments to function ‘netif_napi_add’
+  661 |         netif_napi_add(netdev, &wc->napi, &wctc4xxp_poll, 64);
+      |         ^~~~~~~~~~~~~~
+In file included from ./include/net/inet_sock.h:19,
+                 from ./include/linux/udp.h:16,
+                 from /home/autobuild/autobuild/instance-11/output-1/build/dahdi-linux-3.2.0/drivers/dahdi/wctc4xxp/base.c:38:
+./include/linux/netdevice.h:2562:1: note: declared here
+ 2562 | netif_napi_add(struct net_device *dev, struct napi_struct *napi,
+      | ^~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d7ce103a886329c68c04ebe05571be8f95a873ce
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0004-next-fix-kernel-6-1-build.patch           | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch b/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch
+new file mode 100644
+index 0000000000..b910c4b775
+--- /dev/null
++++ b/package/dahdi-linux/0004-next-fix-kernel-6-1-build.patch
+@@ -0,0 +1,32 @@
++From a759a578277bde98eba7ef4bf86bdf819a900de9 Mon Sep 17 00:00:00 2001
++From: John Thomson <git@johnthomson.fastmail.com.au>
++Date: Sun, 23 Oct 2022 13:42:52 +1000
++Subject: [PATCH] fix kernel 6.1 build
++
++kernel 6.1 includes b48b89f9c189 ("net: drop the weight argument from netif_napi_add") [0]
++
++[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b48b89f9c189d24eb5e2b4a0ac067da5a24ee86d
++
++Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
++[Retrieved from:
++https://github.com/asterisk/dahdi-linux/pull/14/commits/a759a578277bde98eba7ef4bf86bdf819a900de9]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/dahdi/kernel.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/include/dahdi/kernel.h b/include/dahdi/kernel.h
++index 35e93bc4..fd64a15e 100644
++--- a/include/dahdi/kernel.h
+++++ b/include/dahdi/kernel.h
++@@ -58,6 +58,10 @@
++ 
++ #include <linux/poll.h>
++ 
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
+++#define netif_napi_add netif_napi_add_weight
+++#endif
+++
++ #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
++ #include <linux/pci.h>
++ #include <linux/dma-mapping.h>
+
+--===============1099072138559779076==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1099072138559779076==--
