@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53389C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:40:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A7EC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFEB7700B8;
-	Tue, 21 Feb 2023 01:40:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFEB7700B8
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3D056FC25;
+	Tue, 21 Feb 2023 01:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3D056FC25
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3qBpyl6Vun_J; Tue, 21 Feb 2023 01:40:30 +0000 (UTC)
+	with ESMTP id GiX2vftarqpa; Tue, 21 Feb 2023 01:40:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 476A2700AF;
-	Tue, 21 Feb 2023 01:40:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 476A2700AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6FCB6FFF9;
+	Tue, 21 Feb 2023 01:40:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6FCB6FFF9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A81731BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 279C01BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EB3416FE67
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB3416FE67
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DA926FFE8
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DA926FFE8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gqgi4Gvez1kl for <buildroot@lists.busybox.net>;
+ with ESMTP id n71YRpOLHOWE for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0AAC36FC27
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AAC36FC27
+ by smtp3.osuosl.org (Postfix) with ESMTP id 357586FE5D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 357586FE5D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDBDB81979; Mon, 20 Feb 2023 20:52:51 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 3387B81979; Mon, 20 Feb 2023 20:52:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 12:10:46 +0100
+Date: Tue, 7 Feb 2023 12:50:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0781f44c0a9b46d9119557708918948a769e6881
-X-Git-Newrev: 1a1081dcbf8d706b08df53fe2ff2d652caf889ae
+X-Git-Oldrev: 12d85e9646ed89552c732775de000ad0b436a139
+X-Git-Newrev: 433ce2966f787248d5b8a62c46634e2f86250f8e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205251.EDBDB81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/balena-engine: bump to
- version 20.10.26
+Message-Id: <20230220205252.3387B81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-hkdf: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,79 +56,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a1081dcbf8d706b08df53fe2ff2d652caf889ae
+commit: https://git.buildroot.net/buildroot/commit/?id=433ce2966f787248d5b8a62c46634e2f86250f8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Like docker-engine and docker-cli, balena-engine uses a non-standard
-vendor/ directory structure, so we use the same fixes as we introduced
-for docker-engine ((see commit: package/docker-engine: bump version to
-v23.0.0):
+HMAC-based Extract-and-Expand Key Derivation Function (HKDF).
 
-  - remove the problematic vendor/modules.txt
-  - create a go.mod
+https://github.com/casebeer/python-hkdf
 
-Also remove the vendor/archive/ sub-tree (fixes a build error) because
-Go no longer allows having duplicate packages in GOPATH and GOROOT.
-
-vendor/archive/tar cannot be in vendor/ because it exists in the
-standard library.  Since we remove the full vendor/archive/, that is
-also fixed.
-
-https://github.com/balena-os/balena-engine/releases/tag/v20.10.26
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+[Thomas: justify the license.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/balena-engine/balena-engine.hash |  2 +-
- package/balena-engine/balena-engine.mk   | 13 ++++++++++++-
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ DEVELOPERS                                         |  2 ++
+ package/Config.in                                  |  1 +
+ package/python-hkdf/Config.in                      |  7 +++++++
+ package/python-hkdf/python-hkdf.hash               |  3 +++
+ package/python-hkdf/python-hkdf.mk                 | 17 +++++++++++++++++
+ .../testing/tests/package/sample_python_hkdf.py    | 22 ++++++++++++++++++++++
+ support/testing/tests/package/test_python_hkdf.py  | 11 +++++++++++
+ 7 files changed, 63 insertions(+)
 
-diff --git a/package/balena-engine/balena-engine.hash b/package/balena-engine/balena-engine.hash
-index 4adb8ce561..6a92a40cc8 100644
---- a/package/balena-engine/balena-engine.hash
-+++ b/package/balena-engine/balena-engine.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4fb38109d133d499de366466a612fb6f523ea99d56fcd69b45dc494a75fbce0f  balena-engine-20.10.21.tar.gz
-+sha256  1482b64e35d5406be719e362647ed7d0599cf4eead7770247ebd972c4c85ede5  balena-engine-20.10.26.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/balena-engine/balena-engine.mk b/package/balena-engine/balena-engine.mk
-index ecfb62bfbf..49d526a465 100644
---- a/package/balena-engine/balena-engine.mk
-+++ b/package/balena-engine/balena-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BALENA_ENGINE_VERSION = 20.10.21
-+BALENA_ENGINE_VERSION = 20.10.26
- BALENA_ENGINE_SITE = $(call github,balena-os,balena-engine,v$(BALENA_ENGINE_VERSION))
- 
- BALENA_ENGINE_LICENSE = Apache-2.0
-@@ -34,6 +34,17 @@ BALENA_ENGINE_TAGS = \
- 
- BALENA_ENGINE_BUILD_TARGETS = cmd/balena-engine
- 
-+# create the go.mod file with language version go1.19
-+# remove the conflicting vendor/modules.txt
-+# remove the conflicting vendor/archive (not allowed in go1.20)
-+# https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-+define BALENA_ENGINE_FIX_VENDORING
-+	printf "module $(BALENA_ENGINE_GOMOD)\n\ngo 1.19\n" > $(@D)/go.mod
-+	rm -f $(@D)/vendor/modules.txt
-+	rm -rf $(@D)/vendor/archive
-+endef
-+BALENA_ENGINE_POST_EXTRACT_HOOKS += BALENA_ENGINE_FIX_VENDORING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f10036f7f2..69e73636be 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1693,6 +1693,7 @@ F:	package/perftest/
+ F:	package/ptm2human/
+ F:	package/python-distro/
+ F:	package/python-gnupg/
++F:	package/python-hkdf/
+ F:	package/python-pyalsa/
+ F:	package/rdma-core/
+ F:	package/riscv-isa-sim/
+@@ -1709,6 +1710,7 @@ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_python_distro.py
++F:	support/testing/tests/package/test_python_hkdf.py
+ F:	support/testing/tests/package/test_python_gnupg.py
+ F:	support/testing/tests/package/test_python_pyalsa.py
+ F:	support/testing/tests/package/test_rdma_core.py
+diff --git a/package/Config.in b/package/Config.in
+index aa87f1305d..b28949500e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1073,6 +1073,7 @@ menu "External python modules"
+ 	source "package/python-h11/Config.in"
+ 	source "package/python-h2/Config.in"
+ 	source "package/python-hiredis/Config.in"
++	source "package/python-hkdf/Config.in"
+ 	source "package/python-hpack/Config.in"
+ 	source "package/python-html5lib/Config.in"
+ 	source "package/python-httplib2/Config.in"
+diff --git a/package/python-hkdf/Config.in b/package/python-hkdf/Config.in
+new file mode 100644
+index 0000000000..2add348ca2
+--- /dev/null
++++ b/package/python-hkdf/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_HKDF
++	bool "python-hkdf"
++	help
++	  HMAC-based Extract-and-Expand Key Derivation Function
++	  (HKDF).
 +
- ifeq ($(BR2_INIT_SYSTEMD),y)
- BALENA_ENGINE_DEPENDENCIES += systemd
- BALENA_ENGINE_TAGS += journald
++	  https://github.com/casebeer/python-hkdf
+diff --git a/package/python-hkdf/python-hkdf.hash b/package/python-hkdf/python-hkdf.hash
+new file mode 100644
+index 0000000000..87702b4582
+--- /dev/null
++++ b/package/python-hkdf/python-hkdf.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/hkdf/json
++md5  d10471ad0ec891cdbe165d78282c943e  hkdf-0.0.3.tar.gz
++sha256  622a31c634bc185581530a4b44ffb731ed208acf4614f9c795bdd70e77991dca  hkdf-0.0.3.tar.gz
+diff --git a/package/python-hkdf/python-hkdf.mk b/package/python-hkdf/python-hkdf.mk
+new file mode 100644
+index 0000000000..8b68c5cc9f
+--- /dev/null
++++ b/package/python-hkdf/python-hkdf.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-hkdf
++#
++################################################################################
++
++PYTHON_HKDF_VERSION = 0.0.3
++PYTHON_HKDF_SOURCE = hkdf-$(PYTHON_HKDF_VERSION).tar.gz
++PYTHON_HKDF_SITE = https://files.pythonhosted.org/packages/c3/be/327e072850db181ce56afd51e26ec7aa5659b18466c709fa5ea2548c935f
++PYTHON_HKDF_SETUP_TYPE = setuptools
++# No license file in the tree, but
++# https://github.com/casebeer/python-hkdf/blob/master/LICENSE shows
++# it's BSD-2-Clause. Issue already reported upstream:
++# https://github.com/casebeer/python-hkdf/issues/6
++PYTHON_HKDF_LICENSE = BSD-2-Clause
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_hkdf.py b/support/testing/tests/package/sample_python_hkdf.py
+new file mode 100644
+index 0000000000..a730c633e1
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_hkdf.py
+@@ -0,0 +1,22 @@
++import hashlib
++from binascii import hexlify, unhexlify
++
++from hkdf import Hkdf, hkdf_expand, hkdf_extract
++
++salt = b"ThisIsTheSalt."
++key_in = b"ThisIsTheSecretKey"
++key_info = b"KeyInfo1"
++key_len = 16
++expected_key = unhexlify(b"b49d6cc9065b72f3a0859377d8bb7299")
++
++prk = hkdf_extract(salt, input_key_material=key_in, hash=hashlib.sha512)
++key1 = hkdf_expand(prk, info=key_info, length=key_len)
++
++print("key1:", hexlify(key1))
++assert key1 == expected_key
++
++kdf = Hkdf(salt, input_key_material=key_in, hash=hashlib.sha512)
++key2 = kdf.expand(info=key_info, length=key_len)
++
++print("key2:", hexlify(key2))
++assert key2 == expected_key
+diff --git a/support/testing/tests/package/test_python_hkdf.py b/support/testing/tests/package/test_python_hkdf.py
+new file mode 100644
+index 0000000000..e93c24ff60
+--- /dev/null
++++ b/support/testing/tests/package/test_python_hkdf.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Hkdf(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_HKDF=y
++        """
++    sample_scripts = ["tests/package/sample_python_hkdf.py"]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
