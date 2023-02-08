@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 038FFC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3BDEC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:41:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A171D4F1D5;
-	Tue, 21 Feb 2023 00:41:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A171D4F1D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AB334F3BC;
+	Tue, 21 Feb 2023 00:41:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AB334F3BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7rCl-T0Q1p4g; Tue, 21 Feb 2023 00:41:25 +0000 (UTC)
+	with ESMTP id h4nD4W6xzP6H; Tue, 21 Feb 2023 00:41:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 724274F512;
-	Tue, 21 Feb 2023 00:41:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 724274F512
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F3431BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05A214F51A;
+	Tue, 21 Feb 2023 00:41:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05A214F51A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D92B1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AF7A6FB6D
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AF7A6FB6D
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2D27417DD
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2D27417DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3MSKb1VMEvCL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OcGTuSO9Nnhq for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 949EA6FB48
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 949EA6FB48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E16D417EB
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E16D417EB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 921D486495; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 0B3C986495; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 11:47:34 +0100
+Date: Wed, 8 Feb 2023 14:35:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0da2742abbe2123d8bafe30e307b94c2b72f94cd
-X-Git-Newrev: de51efc543775cf32456c1090d1b396d0b67f9bc
+X-Git-Oldrev: e447f56408f9308cc0e527f97dcc1844f2d6c850
+X-Git-Newrev: 9d8e207e7aaf035f48252e19013b610893d2fce0
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205231.921D486495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/docker-engine: bump
- version to 20.10.22
+Message-Id: <20230220205256.0B3C986495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6serialport: use
+ DESTDIR instead of --prefix for installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de51efc543775cf32456c1090d1b396d0b67f9bc
+commit: https://git.buildroot.net/buildroot/commit/?id=9d8e207e7aaf035f48252e19013b610893d2fce0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bug fixes and enhancements
+Even though it works, overriding --prefix at installation time is a
+bit weird. In order to be more consistent with what is done with other
+build systems, use DESTDIR instead at installation time.
 
- - Improve error message when attempting to pull an unsupported image format or OCI artifact (moby/moby#44413, moby/moby#44569)
- - Fix an issue where the host's ephemeral port-range was ignored when selecting random ports for containers (moby/moby#44476).
- - Fix ssh: parse error in message type 27 errors during docker build on hosts using OpenSSH 8.9 or above (moby/moby#3862).
- - seccomp: block socket calls to AF_VSOCK in default profile (moby/moby#44564).
+Note that $(DESTDIR) comes in addition to the
+-DCMAKE_INSTALL_PREFIX=/usr that is passed at configure time, so with
+this commit, the files continue to be installed in $(STAGING_DIR)/usr
+and $(TARGET_DIR)/usr as they should be.
 
-https://github.com/moby/moby/releases/tag/v20.10.22
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt6/qt6serialport/qt6serialport.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 10e9727a08..d15b1359cb 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  61f4c3a2d0426e1bbbda1b0e5dd33ec203776f7d99d1a61522c77c04c4ed09fe  docker-engine-20.10.21.tar.gz
-+sha256  ee0e2168e27ec87f1b0650e86af5d3e167a07fd2ff8c1ce3bb588f0b4f9a4658  docker-engine-20.10.22.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 36c66485ba..2a9b72ca78 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt6/qt6serialport/qt6serialport.mk b/package/qt6/qt6serialport/qt6serialport.mk
+index 9656e97c96..497719d4ec 100644
+--- a/package/qt6/qt6serialport/qt6serialport.mk
++++ b/package/qt6/qt6serialport/qt6serialport.mk
+@@ -41,11 +41,11 @@ define QT6SERIALPORT_BUILD_CMDS
+ endef
  
--DOCKER_ENGINE_VERSION = 20.10.21
-+DOCKER_ENGINE_VERSION = 20.10.22
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ define QT6SERIALPORT_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR) --prefix $(STAGING_DIR)/usr
++	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
+ endef
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ define QT6SERIALPORT_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR) --prefix $(TARGET_DIR)/usr
++	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
+ endef
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
