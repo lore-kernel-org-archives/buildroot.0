@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD8B4C636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 08:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88BBEC636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 08:57:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70D5B60EC6;
-	Wed,  8 Feb 2023 08:57:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70D5B60EC6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 348A7610B6;
+	Wed,  8 Feb 2023 08:57:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 348A7610B6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XDUAzOGBF7Zs; Wed,  8 Feb 2023 08:57:11 +0000 (UTC)
+	with ESMTP id C_E-es2gTHrn; Wed,  8 Feb 2023 08:57:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D3EF6109F;
-	Wed,  8 Feb 2023 08:57:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D3EF6109F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 242881BF8B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CE27610BC;
+	Wed,  8 Feb 2023 08:57:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CE27610BC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 44AB31BF95C
  for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 08:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F01BE405FA
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 08:56:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F01BE405FA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1EB87408B4
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 08:56:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EB87408B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ebjJ9i_RVGu9 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E2UJMCLRTsGD for <buildroot@lists.busybox.net>;
  Wed,  8 Feb 2023 08:56:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A691405B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 169F4408A9
  for <buildroot@buildroot.org>; Wed,  8 Feb 2023 08:56:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A691405B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 169F4408A9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 16E75844B6; Wed,  8 Feb 2023 08:56:54 +0000 (UTC)
+ id 005D7844B3; Wed,  8 Feb 2023 08:56:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 09:54:49 +0100
+Date: Wed, 8 Feb 2023 09:54:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9231fe0d6eeb6cdf373715d35b2203d34fd9e859
-X-Git-Newrev: 19447f02f729ff373e138a74f3c2477739f425df
+X-Git-Oldrev: f9a92ea1cb1dd2aa9b3f9c83c04d7d01c1f6e148
+X-Git-Newrev: 17be7d028c193dc1160a4cb9313efe37326e7aa9
 X-Patchwork-Hint: ignore
-Message-Id: <20230208085654.16E75844B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 23.1.0
+Message-Id: <20230208085654.005D7844B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libva: switch to meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19447f02f729ff373e138a74f3c2477739f425df
+commit: https://git.buildroot.net/buildroot/commit/?id=17be7d028c193dc1160a4cb9313efe37326e7aa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The time between version 2.17.0 being tagged and the release of its
+tarball version containing autoconf scripts was three weeks now.
+With the switch to meson we can directly use the github-generated
+tarball while not needing to run autoreconf.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libva/libva.hash |  4 +---
+ package/libva/libva.mk   | 19 +++++++++----------
+ 2 files changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index a5e9c64e97..e4e41e4ad3 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 700ace0378..780c186069 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,3 @@
+-# From https://github.com/intel/libva/releases/download/2.17.0/libva-2.17.0.tar.bz2.sha1sum
+-sha1  997f7b3111bc5a4d32ec72e9d7f9fcfca41e4923  libva-2.17.0.tar.bz2
  # Locally computed
--sha256  b553290e829dfd824eb62295c9f07dbe8062ce7998f7c527cc92856d0792562d  intel-media-22.6.6.tar.gz
-+sha256  edae1bdc07b694bd6e42099feddcf875e3b5d7254894f4b3fb292128577baf82  intel-media-23.1.0.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 8fa93218fa..6cc862dce4 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+-sha256  f3e5eb27c305e05a9bb62703d1915a127301cc0c4f9f209025767432230c4eac  libva-2.17.0.tar.bz2
++sha256  8940541980ef998a36cd8f6ad905e81838ea4ddf56dc479ed2bebd12711e6001  libva-2.17.0.tar.gz
+ sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index c6b9f63b10..f50010d9fc 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ LIBVA_VERSION = 2.17.0
+-LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+-LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
++LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
+ LIBVA_LICENSE = MIT
+ LIBVA_LICENSE_FILES = COPYING
+ LIBVA_INSTALL_STAGING = YES
+@@ -14,25 +13,25 @@ LIBVA_DEPENDENCIES = host-pkgconf libdrm
  
--INTEL_MEDIADRIVER_VERSION = 22.6.6
-+INTEL_MEDIADRIVER_VERSION = 23.1.0
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+ # libdrm is a hard-dependency
+ LIBVA_CONF_OPTS = \
+-	--enable-drm \
+-	--with-drivers-path="/usr/lib/va"
++	-Ddisable_drm=false \
++	-Ddriverdir="/usr/lib/va"
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
+-LIBVA_CONF_OPTS += --enable-x11
++LIBVA_CONF_OPTS += -Dwith_x11=yes
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ LIBVA_DEPENDENCIES += libgl
+-LIBVA_CONF_OPTS += --enable-glx
++LIBVA_CONF_OPTS += -Dwith_glx=yes
+ endif
+ else
+-LIBVA_CONF_OPTS += --disable-glx --disable-x11
++LIBVA_CONF_OPTS += -Dwith_glx=no -Dwith_x11=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ LIBVA_DEPENDENCIES += wayland
+-LIBVA_CONF_OPTS += --enable-wayland
++LIBVA_CONF_OPTS += -Dwith_wayland=yes
+ else
+-LIBVA_CONF_OPTS += --disable-wayland
++LIBVA_CONF_OPTS += -Dwith_wayland=no
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
