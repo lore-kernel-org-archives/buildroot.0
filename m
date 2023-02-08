@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 893D1C636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 12:45:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9393C636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 12:53:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12CF140B3B;
-	Wed,  8 Feb 2023 12:45:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12CF140B3B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3348540BB8;
+	Wed,  8 Feb 2023 12:53:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3348540BB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P1W5LWi2wwZa; Wed,  8 Feb 2023 12:45:02 +0000 (UTC)
+	with ESMTP id 3hWuZQF4HXu0; Wed,  8 Feb 2023 12:53:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 187BC40B3A;
-	Wed,  8 Feb 2023 12:45:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 187BC40B3A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CF08F1BF5E9
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 12:44:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60B3B40BC8;
+	Wed,  8 Feb 2023 12:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60B3B40BC8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B5A51BF5E9
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 12:53:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A650281F48
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 12:44:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A650281F48
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DABF40912
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 12:53:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DABF40912
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2PoYxd3KBDdm for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 12:44:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gINzIx70rR7x for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 12:53:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C048A81F47
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 12:44:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C048A81F47
+ by smtp4.osuosl.org (Postfix) with ESMTP id 499F34091B
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 12:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 499F34091B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD52884680; Wed,  8 Feb 2023 12:44:58 +0000 (UTC)
+ id 33FBA84689; Wed,  8 Feb 2023 12:53:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 13:43:19 +0100
+Date: Wed, 8 Feb 2023 13:52:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c5a3dfb9a4a6550b9097b22b1c96a99f90880a64
-X-Git-Newrev: bfb5035c6fae1285ff0100275083fabc2b9816c1
+X-Git-Oldrev: bfb5035c6fae1285ff0100275083fabc2b9816c1
+X-Git-Newrev: 74686296a4a20438f1e94e22a5a3372df2e830cc
 X-Patchwork-Hint: ignore
-Message-Id: <20230208124458.AD52884680@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6/qt6base: use DESTDIR instead
- of --prefix for installation
+Message-Id: <20230208125347.33FBA84689@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6: bump version to 6.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfb5035c6fae1285ff0100275083fabc2b9816c1
+commit: https://git.buildroot.net/buildroot/commit/?id=74686296a4a20438f1e94e22a5a3372df2e830cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though it works, overriding --prefix at installation time is a
-bit weird. In order to be more consistent with what is done with other
-build systems, use DESTDIR instead at installation time.
+For details see [1] and [2].
 
-Note that $(DESTDIR) comes in addition to the
--DCMAKE_INSTALL_PREFIX=/usr that is passed at configure time, so with
-this commit, the files continue to be installed in $(STAGING_DIR)/usr
-and $(TARGET_DIR)/usr as they should be.
+[1] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.4.1/release-note.md
+[2] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.4.2/release-note.md
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/qt6base/qt6base.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/qt6/qt6.mk                           | 2 +-
+ package/qt6/qt6base/qt6base.hash             | 4 ++--
+ package/qt6/qt6serialport/qt6serialport.hash | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 7b57eba4ab..212b2d689e 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -79,11 +79,11 @@ define QT6BASE_BUILD_CMDS
- endef
+diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
+index 575b2f826c..431bb8c9d3 100644
+--- a/package/qt6/qt6.mk
++++ b/package/qt6/qt6.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- define QT6BASE_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6BASE_BUILDDIR) --prefix $(STAGING_DIR)/usr
-+	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(QT6BASE_BUILDDIR)
- endef
+ QT6_VERSION_MAJOR = 6.4
+-QT6_VERSION = $(QT6_VERSION_MAJOR).0
++QT6_VERSION = $(QT6_VERSION_MAJOR).2
+ QT6_SOURCE_TARBALL_PREFIX = everywhere-src
+ QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
  
- define QT6BASE_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6BASE_BUILDDIR) --prefix $(TARGET_DIR)/usr
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(QT6BASE_BUILDDIR)
- endef
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+index fedbbba79f..63af373836 100644
+--- a/package/qt6/qt6base/qt6base.hash
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.0/submodules/qtbase-everywhere-src-6.4.0.tar.xz.sha256
+-sha256  cb6475a0bd8567c49f7ffbb072a05516ee6671171bed55db75b22b94ead9b37d  qtbase-everywhere-src-6.4.0.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.2/submodules/qtbase-everywhere-src-6.4.2.tar.xz.sha256
++sha256  a88bc6cedbb34878a49a622baa79cace78cfbad4f95fdbd3656ddb21c705525d  qtbase-everywhere-src-6.4.2.tar.xz
  
- HOST_QT6BASE_DEPENDENCIES = \
+ # Hashes for license files
+ sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
+diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
+index 54a45681fa..1eaa3d6150 100644
+--- a/package/qt6/qt6serialport/qt6serialport.hash
++++ b/package/qt6/qt6serialport/qt6serialport.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.0/submodules/qtserialport-everywhere-src-6.4.0.tar.xz.sha256
+-sha256  f148cc9e87ce2228e82bff7a64d9521339ece66c4c66aa43b91bac614f4a4483  qtserialport-everywhere-src-6.4.0.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.2/submodules/qtserialport-everywhere-src-6.4.2.tar.xz.sha256
++sha256  336d95919037800184b3c3de8ccb6f62954b20f3756c05adce8d5010504340fa  qtserialport-everywhere-src-6.4.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
