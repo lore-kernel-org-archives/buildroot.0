@@ -1,92 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F271C636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 16:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C90BCC05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 16:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 37C8640C2B;
-	Wed,  8 Feb 2023 16:21:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37C8640C2B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6328560FD3;
+	Wed,  8 Feb 2023 16:25:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6328560FD3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ggz58U7y8Qr4; Wed,  8 Feb 2023 16:21:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s0tFQX0VppSF; Wed,  8 Feb 2023 16:25:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 37CE940C29;
-	Wed,  8 Feb 2023 16:21:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37CE940C29
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 003F61BF8A8
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:20:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7365D61019;
+	Wed,  8 Feb 2023 16:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7365D61019
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 29FC81BF286
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:25:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1941140C22
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:20:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1941140C22
+ by smtp1.osuosl.org (Postfix) with ESMTP id 039BD81FF7
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:25:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 039BD81FF7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aJUbM_MX1_Bn for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 16:20:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 166994014B
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 166994014B
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 16:20:18 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- bg5-20020a05600c3c8500b003e00c739ce4so1889102wmb.5
- for <buildroot@buildroot.org>; Wed, 08 Feb 2023 08:20:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=QtYf3Wsm75Gzx8iuB1x5SPrCWv/NNnmeENpVpyvIEOA=;
- b=eKHDz7ZSKpUip6eDAdjZDks8OlCz0j+gIWrnIMzE+qch4dAFPmZFxbaXY43tPRtZJX
- nLpnBdKiFbg6wOg4REocdDwq1HeDQYuC6vDC7jHs8PZwlcHwtBK1WNHmk4heLiuhjg4z
- hIrCmAPAd0GHdofniIl7SpYPPrhyC2WLrV9CLVyveRV8ok/XvCVi7ZnpC8E3p4LSDg75
- tlgyz1lyC+o5yh9YvhrRl1qx+Ifj05PWf/sltN5dexJXS4GrnztX4qGgR+xVWWR3RUiA
- lsDt9BOoAhPSzylntgyRuP+ASOZvDiGinceciN4PDOarAULdauC4LGDet3U+mPA+k66Y
- tGsQ==
-X-Gm-Message-State: AO0yUKWE88hnjB6zgURYRbBEJmBfNKiJf3sDjI3m2G/M1O1n//fOFo6Q
- SnnMFg2PbeEr10KQOXueNJckNf1PWvyLxg==
-X-Google-Smtp-Source: AK7set+6+V+8r1DETBi6EUks7PM+6bfjD96G0CALKRdSaJ/mFvJS2IgurlZBKw5dgOCqVjc/xgWOBA==
-X-Received: by 2002:a05:600c:3ba9:b0:3df:ea09:fcc9 with SMTP id
- n41-20020a05600c3ba900b003dfea09fcc9mr2035914wms.7.1675873217363; 
- Wed, 08 Feb 2023 08:20:17 -0800 (PST)
-Received: from localhost.localdomain (cpe1150018.bra.be.verixi.net.
- [85.119.216.19]) by smtp.gmail.com with ESMTPSA id
- k20-20020a05600c169400b003dc54eef495sm2167672wmn.24.2023.02.08.08.20.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Feb 2023 08:20:17 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jd2uKCtx1b-Y for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 16:25:41 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2287081FED
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2287081FED
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 16:25:40 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([62.216.208.170]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MqJqN-1olHtl3JUx-00nQhL; Wed, 08 Feb 2023 17:25:34 +0100
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Wed,  8 Feb 2023 17:20:14 +0100
-Message-Id: <a05fdd9655c1a39952ccdb45c057b4468bdcf8f6.1675873210.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1675873210.git.yann.morin.1998@free.fr>
-References: <cover.1675873210.git.yann.morin.1998@free.fr>
+Date: Wed,  8 Feb 2023 17:25:34 +0100
+Message-Id: <20230208162534.28581-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=QtYf3Wsm75Gzx8iuB1x5SPrCWv/NNnmeENpVpyvIEOA=;
- b=J98DLR1EdqawdhqjRKmKsK+qgeJcNp1M2COdVYd48CmuQ/DbygFj9G2tHAZYyR82wD
- wX0ik20yccBup/0CYJySMouCJoEkVAGT96mGxTu7Mh5k/IX1+dvM6kHsemzk0wtDAZ1B
- M3Wkmn82KXJ2y8O6jj2E0KRSatAPX9cAjroyeu4YTmyeqcBFq/HnrD5ZT09ZN7/HuTqG
- WUEism36ryVpzQtC2rkSdpx3uVzEPx/R0xCXlO8E5UzA/BkXs18DW4vZA3hWAX2V/QLG
- t6LRUOMW+Roh3RDaKgT6rfrFEqxpF5aTNvYuWzBODHM7FDbNxmLU0nbAxqDv6BQiAHLr
- uNjQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=J98DLR1E
-Subject: [Buildroot] [PATCH 1/3] package/dmalloc: convert existing patch to
- git format
+X-Provags-ID: V03:K1:QeTtucjfUiuzGXRHU8ZB38nyctero0dw9br4Ch2Q/qOaBnZHfsh
+ Rb50Sd5L4lYWGFTjeALFgRNxfTg9DrGGjoVyiMr2K8bHGCdVvIPNjUmIq0PN7aGtRzVH5Ec
+ j6p8R0vfA+8jg7s44E9taYeCxV5KvDQJ0NFbhxzldNInQtntBM7w1R7YCZcLmBSf2rU2nSO
+ Ud6t1PIBxFfbbVhRikfaw==
+UI-OutboundReport: notjunk:1;M01:P0:ShFm0uhNB38=;wvdeVXdyG7tmRxrXwYvDnN7d+sH
+ 0eHKRns5WeN9UMIvT14M65iZwOy/CR3zdtY38zYuF5wWt2tD5n42xhdmJn5tpFF6krFpOTzbE
+ 5erkb/HYCEHGjUp+VmIoxVV5VilBVAPk0mB56GTLdzqsXisfOyk8t083T9nGZvYaRuWKiBGYG
+ +ZxMzzEpAqndRI2LDIngrPRMD9koRMNtH/KoUTLtPd0VuUzX/zkEp7Icg230GUCXtsGBEhhWH
+ R3Nvr9QrpK03CX2euBy0/Bdk6zYfm0XIasaTuHNJCefiSdkOw3lV2nkIJEEs6OTK8GlRgRtfd
+ GlBXfT6WII1OvfLxrl0B17tRCgBehfAhREpW98c5XocCOb97HOTy5es1D2Wz4No0WkQkmtKQe
+ vi/x6LFI0Nz39meN39mQy/yxrIchoxyJabrKciY55TW6iFe4bRhswu01hf61EoZD3R6ZzMtsU
+ 9UCo+xDhBKEnKaLPhVWyq+vnq6x436rttJ6RGQm++23grC/KT3mZ5iVDIRJv2LUrHOqJNQFrT
+ oBkzw/yAVFNenddIW7grvOHBIgTL/gOOBpwBu454NcqIiD4wGJteVrdnpR9ekr1HNswbhfn2D
+ ZlcQiWnQPu2acxmpuoPn189u9Olw2sjJ4qNWsipxwtzSyttGxFw2JyMDTMCuHmJFrLD/GyfYN
+ M+Mz4BRZFfvL01sqwN/u07Yvy85G5RwbOwIESN/RX2U1GgLglk39gDz/tHGUqG3j+A1Eyo5SL
+ 4VxJED2Vbm9VQKq7V7ascytr+D11fnbyZXfeXfDeENUAuiCRq/gzEnDC6okg+JfIbhtYkzVB/
+ 1hbswqsC+Kf2y0J9bJXyxmLmjcIf7jf4VGbqj+LD82AUC3HVXZ5jgZCsKtD5f5VinuwIzVGsM
+ G+ufcV9EQ74PUjJeoko4Qg/ZmAX0+N42nHgZ8Wc05StUV69xqccRDTS9Di6Lgw2uBNwDz4xIa
+ PgE2F3DikBa9yeY/NJcT4O8P608=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; s=s31663417; 
+ t=1675873535; bh=gF8hgjeVLHyKkkXE2+HZZ+rQoBjLJ9YdrIl2LsDreSA=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=EXk/v6xg7SANExs8YTlRVq9Ft93V8mgmAWJvs0FpLlCd1txyRdkfl1uvB8vZWjJEX
+ 574W2DmclmL0dudxIhqFvhORkXS5i22qc6TSjk/DPI3F31XNIESgErp0bkdGsEXP0a
+ JRxYy42dHrMyV+V4I/2Gr0jrqovfem5G8swG5+LL/S4+ImnKA2VUU4YvryCVCQKlRr
+ 1n0as9PNHK6IcTIzy6jHu3n5hXtqRTLu8vDnLVEDU3peGPCR8y04xwtg2bSuAiaA9A
+ z1AwGk8Yxf5SIGcmPvgGgpylgxEGmtWUJDiekIicD5OMQ95zDQBJmVP5DcvDAXYllv
+ YN4qMBqs/80aQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=EXk/v6xg
+Subject: [Buildroot] [PATCH v1] package/libopenssl: security bump to version
+ 1.1.1t
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,171 +90,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We're going to add more patches, so let's cleanup our historical
-baggage...
+Changelog (for details see [1] and [2]):
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Changes between 1.1.1s and 1.1.1t [7 Feb 2023]
+
+  *) Fixed X.400 address type confusion in X.509 GeneralName.
+
+     There is a type confusion vulnerability relating to X.400 address processing
+     inside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING
+     but subsequently interpreted by GENERAL_NAME_cmp as an ASN1_TYPE. This
+     vulnerability may allow an attacker who can provide a certificate chain and
+     CRL (neither of which need have a valid signature) to pass arbitrary
+     pointers to a memcmp call, creating a possible read primitive, subject to
+     some constraints. Refer to the advisory for more information. Thanks to
+     David Benjamin for discovering this issue. (CVE-2023-0286)
+
+     This issue has been fixed by changing the public header file definition of
+     GENERAL_NAME so that x400Address reflects the implementation. It was not
+     possible for any existing application to successfully use the existing
+     definition; however, if any application references the x400Address field
+     (e.g. in dead code), note that the type of this field has changed. There is
+     no ABI change.
+     [Hugo Landau]
+
+  *) Fixed Use-after-free following BIO_new_NDEF.
+
+     The public API function BIO_new_NDEF is a helper function used for
+     streaming ASN.1 data via a BIO. It is primarily used internally to OpenSSL
+     to support the SMIME, CMS and PKCS7 streaming capabilities, but may also
+     be called directly by end user applications.
+
+     The function receives a BIO from the caller, prepends a new BIO_f_asn1
+     filter BIO onto the front of it to form a BIO chain, and then returns
+     the new head of the BIO chain to the caller. Under certain conditions,
+     for example if a CMS recipient public key is invalid, the new filter BIO
+     is freed and the function returns a NULL result indicating a failure.
+     However, in this case, the BIO chain is not properly cleaned up and the
+     BIO passed by the caller still retains internal pointers to the previously
+     freed filter BIO. If the caller then goes on to call BIO_pop() on the BIO
+     then a use-after-free will occur. This will most likely result in a crash.
+     (CVE-2023-0215)
+     [Viktor Dukhovni, Matt Caswell]
+
+  *) Fixed Double free after calling PEM_read_bio_ex.
+
+     The function PEM_read_bio_ex() reads a PEM file from a BIO and parses and
+     decodes the "name" (e.g. "CERTIFICATE"), any header data and the payload
+     data. If the function succeeds then the "name_out", "header" and "data"
+     arguments are populated with pointers to buffers containing the relevant
+     decoded data. The caller is responsible for freeing those buffers. It is
+     possible to construct a PEM file that results in 0 bytes of payload data.
+     In this case PEM_read_bio_ex() will return a failure code but will populate
+     the header argument with a pointer to a buffer that has already been freed.
+     If the caller also frees this buffer then a double free will occur. This
+     will most likely lead to a crash.
+
+     The functions PEM_read_bio() and PEM_read() are simple wrappers around
+     PEM_read_bio_ex() and therefore these functions are also directly affected.
+
+     These functions are also called indirectly by a number of other OpenSSL
+     functions including PEM_X509_INFO_read_bio_ex() and
+     SSL_CTX_use_serverinfo_file() which are also vulnerable. Some OpenSSL
+     internal uses of these functions are not vulnerable because the caller does
+     not free the header argument if PEM_read_bio_ex() returns a failure code.
+     (CVE-2022-4450)
+     [Kurt Roeckx, Matt Caswell]
+
+  *) Fixed Timing Oracle in RSA Decryption.
+
+     A timing based side channel exists in the OpenSSL RSA Decryption
+     implementation which could be sufficient to recover a plaintext across
+     a network in a Bleichenbacher style attack. To achieve a successful
+     decryption an attacker would have to be able to send a very large number
+     of trial messages for decryption. The vulnerability affects all RSA padding
+     modes: PKCS#1 v1.5, RSA-OEAP and RSASVE.
+     (CVE-2022-4304)
+     [Dmitry Belyavsky, Hubert Kario]
+
+ Changes between 1.1.1r and 1.1.1s [1 Nov 2022]
+
+  *) Fixed a regression introduced in 1.1.1r version not refreshing the
+     certificate data to be signed before signing the certificate.
+     [Gibeom Gwon]
+
+ Changes between 1.1.1q and 1.1.1r [11 Oct 2022]
+
+  *) Fixed the linux-mips64 Configure target which was missing the
+     SIXTY_FOUR_BIT bn_ops flag. This was causing heap corruption on that
+     platform.
+     [Adam Joseph]
+
+  *) Fixed a strict aliasing problem in bn_nist. Clang-14 optimisation was
+     causing incorrect results in some cases as a result.
+     [Paul Dale]
+
+  *) Fixed SSL_pending() and SSL_has_pending() with DTLS which were failing to
+     report correct results in some cases
+     [Matt Caswell]
+
+  *) Fixed a regression introduced in 1.1.1o for re-signing certificates with
+     different key sizes
+     [Todd Short]
+
+  *) Added the loongarch64 target
+     [Shi Pujin]
+
+  *) Fixed a DRBG seed propagation thread safety issue
+     [Bernd Edlinger]
+
+  *) Fixed a memory leak in tls13_generate_secret
+     [Bernd Edlinger]
+
+  *) Fixed reported performance degradation on aarch64. Restored the
+     implementation prior to commit 2621751 ("aes/asm/aesv8-armx.pl: avoid
+     32-bit lane assignment in CTR mode") for 64bit targets only, since it is
+     reportedly 2-17% slower and the silicon errata only affects 32bit targets.
+     The new algorithm is still used for 32 bit targets.
+     [Bernd Edlinger]
+
+  *) Added a missing header for memcmp that caused compilation failure on some
+     platforms
+     [Gregor Jasny]
+
+[1] https://www.openssl.org/news/cl111.txt
+[2] https://www.openssl.org/news/vulnerabilities.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../0001-configure-fix-build-on-mips.patch    | 87 +++++++++++++++++++
- package/dmalloc/0001-mips.patch               | 45 ----------
- 2 files changed, 87 insertions(+), 45 deletions(-)
- create mode 100644 package/dmalloc/0001-configure-fix-build-on-mips.patch
- delete mode 100644 package/dmalloc/0001-mips.patch
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dmalloc/0001-configure-fix-build-on-mips.patch b/package/dmalloc/0001-configure-fix-build-on-mips.patch
-new file mode 100644
-index 0000000000..90a6ad7f54
---- /dev/null
-+++ b/package/dmalloc/0001-configure-fix-build-on-mips.patch
-@@ -0,0 +1,87 @@
-+From af6adb3f5f05be4faa88a5aa83296c388c8085e7 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 12:30:10 +0100
-+Subject: [PATCH] configure: fix build on mips
-+
-+This patch is a historical baggage that Buildroot has carried for ages
-+(since 2006), and the reason for it are notentirely clear.
-+
-+Since dmalloc is pretty tricky, and as this patch has not been
-+identified as causing issues, we keep it; we just add the configure.ac
-+patchlet to match the one in configure.
-+
-+As for the title, the original patch was named dmalloc-mips.patch, so
-+presumably it fixes some mips issue; let's title the commit that way.
-+
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ configure    |  4 ++--
-+ configure.ac |  2 +-
-+ return.h     | 16 +++-------------
-+ 3 files changed, 6 insertions(+), 16 deletions(-)
-+
-+diff --git a/configure b/configure
-+index d52a1e8..c18dfb2 100755
-+--- a/configure
-++++ b/configure
-+@@ -5413,8 +5413,8 @@ fi
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking return.h macros work" >&5
-+ $as_echo_n "checking return.h macros work... " >&6; }
-+ if test "$cross_compiling" = yes; then :
-+-   $as_echo "#define RETURN_MACROS_WORK 0" >>confdefs.h
-+- { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-++   $as_echo "#define RETURN_MACROS_WORK 1" >>confdefs.h
-++ { $as_echo "$as_me:${as_lineno-$LINENO}: result: assume yes (cross-compiling)" >&5
-+ $as_echo "no" >&6; }
-+ 
-+ else
-+diff --git a/configure.ac b/configure.ac
-+index a5295f1..9740fdc 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -705,7 +705,7 @@ int main()
-+ ])],
-+ [ AC_DEFINE(RETURN_MACROS_WORK, 1) AC_MSG_RESULT([yes]) ],
-+ [ AC_DEFINE(RETURN_MACROS_WORK, 0) AC_MSG_RESULT([no]) ],
-+-[ AC_DEFINE(RETURN_MACROS_WORK, 0) AC_MSG_RESULT([no]) ]
-++[ AC_DEFINE(RETURN_MACROS_WORK, 1) AC_MSG_RESULT([assume yes (cross-compiling)]) ]
-+ )
-+ 
-+ ##############################################################################
-+diff --git a/return.h b/return.h
-+index 9d3f5f1..d916c7a 100644
-+--- a/return.h
-++++ b/return.h
-+@@ -117,26 +117,16 @@
-+ /*************************************/
-+ 
-+ /*
-+- * For DEC Mips machines running Ultrix
-++ * For Mips machines running Linux
-+  */
-+ #if __mips
-+ 
-+-/*
-+- * I have no idea how to get inline assembly with the default cc.
-+- * Anyone know how?
-+- */
-+-
-+-#if 0
-+-
-+ /*
-+  * NOTE: we assume here that file is global.
-+  *
-+- * $31 is the frame pointer.  $2 looks to be the return address but maybe
-+- * not consistently.
-++ * $31 is the return address.
-+  */
-+-#define GET_RET_ADDR(file)	asm("sw $2, file")
-+-
-+-#endif
-++#define GET_RET_ADDR(file)	asm("sw $31, %0" : "=m" (file))
-+ 
-+ #endif /* __mips */
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/0001-mips.patch b/package/dmalloc/0001-mips.patch
-deleted file mode 100644
-index 3150d030ec..0000000000
---- a/package/dmalloc/0001-mips.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--[Fabrice: Updated for 5.6.5]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----- a/configure
--+++ b/configure
--@@ -7107,7 +7107,7 @@
-- { $as_echo "$as_me:${as_lineno-$LINENO}: checking return.h macros work" >&5
-- $as_echo_n "checking return.h macros work... " >&6; }
-- if test "$cross_compiling" = yes; then :
---   $as_echo "#define RETURN_MACROS_WORK 0" >>confdefs.h
--+   $as_echo "#define RETURN_MACROS_WORK 1" >>confdefs.h
--  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-- $as_echo "no" >&6; }
-- 
----- a/return.h
--+++ b/return.h
--@@ -106,26 +106,16 @@
-- /*************************************/
-- 
-- /*
--- * For DEC Mips machines running Ultrix
--+ * For Mips machines running Linux
--  */
-- #if __mips
-- 
-- /*
--- * I have no idea how to get inline assembly with the default cc.
--- * Anyone know how?
--- */
---
---#if 0
---
---/*
--  * NOTE: we assume here that file is global.
--  *
--- * $31 is the frame pointer.  $2 looks to be the return address but maybe
--- * not consistently.
--+ * $31 is the return address.
--  */
---#define GET_RET_ADDR(file)	asm("sw $2, file")
---
---#endif
--+#define GET_RET_ADDR(file)	asm("sw $31, %0" : "=m" (file))
-- 
-- #endif /* __mips */
-- 
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 8457df6c0a..ebc56b11dd 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1q.tar.gz.sha256
+-sha256  d7939ce614029cdff0b6c20f0e2e5703158a489a72b2507b8bd51bf8c8fd10ca  openssl-1.1.1q.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1t.tar.gz.sha256
++sha256  8dee9b24bdb1dcbf0c3d1e9b02fb8f6bf22165e807f45adeb7c9677536859d3b  openssl-1.1.1t.tar.gz
+ 
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index fc22c20467..6e84f06175 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1q
++LIBOPENSSL_VERSION = 1.1.1t
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 -- 
-2.25.1
+2.39.1
 
 _______________________________________________
 buildroot mailing list
