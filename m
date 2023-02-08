@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B575CC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EF6EC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:18:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6021960A7D;
-	Tue, 21 Feb 2023 02:18:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6021960A7D
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7151702CF;
+	Tue, 21 Feb 2023 02:18:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7151702CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OTSvUOvlwHiU; Tue, 21 Feb 2023 02:18:11 +0000 (UTC)
+	with ESMTP id Uk8p3TrLeKL6; Tue, 21 Feb 2023 02:18:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 809DA70346;
-	Tue, 21 Feb 2023 02:18:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 809DA70346
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C43051BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 021987033C;
+	Tue, 21 Feb 2023 02:18:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 021987033C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 42F021BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 435D5610A3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 435D5610A3
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5C1B4156D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5C1B4156D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id knBP27axxxp7 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d_JkPXzl9q3Z for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E57E6FB5A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E57E6FB5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F1B0417DA
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F1B0417DA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C2258648F; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+ id 6F9EE86495; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 21:07:03 +0100
+Date: Wed, 8 Feb 2023 16:34:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 60cf07079b78d4c4bb495fd18cb2a145a4cb3635
-X-Git-Newrev: 664897295a3667db2ff95c5c1b458b16c1192a47
+X-Git-Oldrev: e5a83df8da04f5854c2e248e23dea3af620954cd
+X-Git-Newrev: 2a571acddd0badaf9636649d98fd095757878348
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205232.6C2258648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/janus-gateway: fix
- libcurl build
+Message-Id: <20230220205256.6F9EE86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/open-iscsi: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,61 +63,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=664897295a3667db2ff95c5c1b458b16c1192a47
+commit: https://git.buildroot.net/buildroot/commit/?id=2a571acddd0badaf9636649d98fd095757878348
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following libcurl build failure raised since bump to version
-1.1.1 in commit 01518e5660366be41e6a8e0a0f2b487d7cdf48a2:
-
-In file included from /home/autobuild/autobuild/instance-11/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/curl/curl.h:3195,
-                 from turnrest.c:21:
-turnrest.c: In function 'janus_turnrest_request':
-turnrest.c:168:2: error: void value not ignored as it ought to be
-  168 |  curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
-      |  ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/11bb0079f5a7d06d3494a61b411f0af2e8c4d342
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...003-Use-parentheses-to-ensure-compilation.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/open-iscsi/Config.in       | 18 ++++++++++++++++++
+ package/open-iscsi/open-iscsi.hash |  3 +++
+ package/open-iscsi/open-iscsi.mk   | 29 +++++++++++++++++++++++++++++
+ 5 files changed, 52 insertions(+)
 
-diff --git a/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0bb4db81bb..0e116e92a3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2791,6 +2791,7 @@ F:	package/most/
+ N:	TIAN Yuanhao <tianyuanhao3@163.com>
+ F:	package/cli11/
+ F:	package/libsolv/
++F:	package/open-iscsi/
+ F:	package/open-isns/
+ F:	package/reproc/
+ F:	package/termcolor/
+diff --git a/package/Config.in b/package/Config.in
+index 2adfcdbb1d..511e691ed3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2408,6 +2408,7 @@ endif
+ 	source "package/odhcp6c/Config.in"
+ 	source "package/odhcploc/Config.in"
+ 	source "package/olsr/Config.in"
++	source "package/open-iscsi/Config.in"
+ 	source "package/open-lldp/Config.in"
+ 	source "package/open-plc-utils/Config.in"
+ 	source "package/openntpd/Config.in"
+diff --git a/package/open-iscsi/Config.in b/package/open-iscsi/Config.in
 new file mode 100644
-index 0000000000..f91c13d1f6
+index 0000000000..e55bbfd867
 --- /dev/null
-+++ b/package/janus-gateway/0003-Use-parentheses-to-ensure-compilation.patch
-@@ -0,0 +1,27 @@
-+From 51431c36cd5f2997c0f7723909195b9883ae0486 Mon Sep 17 00:00:00 2001
-+From: Benson Muite <bkmgit@users.noreply.github.com>
-+Date: Wed, 4 Jan 2023 13:33:36 +0300
-+Subject: [PATCH] Use parentheses to ensure compilation (#3138)
++++ b/package/open-iscsi/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_OPEN_ISCSI
++	bool "open-iscsi"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
++	depends on !BR2_STATIC_LIBS # kmod
++	select BR2_PACKAGE_KMOD
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPEN_ISNS
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	help
++	  iSCSI tools for Linux.
 +
-+Compiler fails with latest Curl release. Use parenthesis to ensure compiler evaluates expression correctly.
++	  https://www.open-iscsi.com
 +
-+[Retrieved from:
-+https://github.com/meetecho/janus-gateway/commit/51431c36cd5f2997c0f7723909195b9883ae0486]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/turnrest.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++comment "open-iscsi needs a toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/open-iscsi/open-iscsi.hash b/package/open-iscsi/open-iscsi.hash
+new file mode 100644
+index 0000000000..9fd651cae8
+--- /dev/null
++++ b/package/open-iscsi/open-iscsi.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  9565bdf6b68b223e1e0d455d9a04d7536724a3f5b5a254e9398d06b2a0c6b6d2  open-iscsi-2.1.8.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/open-iscsi/open-iscsi.mk b/package/open-iscsi/open-iscsi.mk
+new file mode 100644
+index 0000000000..249253c64f
+--- /dev/null
++++ b/package/open-iscsi/open-iscsi.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# open-iscsi
++#
++################################################################################
 +
-+diff --git a/src/turnrest.c b/src/turnrest.c
-+index b8560d22f2..42e6114de8 100644
-+--- a/src/turnrest.c
-++++ b/src/turnrest.c
-+@@ -165,7 +165,7 @@ janus_turnrest_response *janus_turnrest_request(const char *user) {
-+ 	JANUS_LOG(LOG_VERB, "Sending request: %s\n", request_uri);
-+ 	janus_mutex_unlock(&api_mutex);
-+ 	curl_easy_setopt(curl, CURLOPT_URL, request_uri);
-+-	curl_easy_setopt(curl, api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST, 1);
-++	curl_easy_setopt(curl, (api_http_get ? CURLOPT_HTTPGET : CURLOPT_POST), 1);
-+ 	if(!api_http_get) {
-+ 		/* FIXME Some servers don't like a POST with no data */
-+ 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query_string);
++OPEN_ISCSI_VERSION = 2.1.8
++OPEN_ISCSI_SITE = $(call github,open-iscsi,open-iscsi,$(OPEN_ISCSI_VERSION))
++# The COPYING file says GPL-2.0, but there is some GPL-3.0+ code as
++# well. See https://github.com/open-iscsi/open-iscsi/issues/379
++OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+
++OPEN_ISCSI_LICENSE_FILES = COPYING
++OPEN_ISCSI_DEPENDENCIES = kmod open-isns openssl util-linux
++
++OPEN_ISCSI_CONF_OPTS = -Ddbroot=/var/lib/iscsi
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++OPEN_ISCSI_DEPENDENCIES += systemd
++OPEN_ISCSI_CONF_OPTS += -Dno_systemd=false
++else
++OPEN_ISCSI_CONF_OPTS += -Dno_systemd=true
++endif
++
++define OPEN_ISCSI_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SCSI_LOWLEVEL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_ISCSI_TCP)
++endef
++
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
