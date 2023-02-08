@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BC71C05027
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 10:53:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A463C05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 10:53:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0BAA81244;
-	Wed,  8 Feb 2023 10:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0BAA81244
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DED781D65;
+	Wed,  8 Feb 2023 10:53:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DED781D65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q7kSwAjiziSp; Wed,  8 Feb 2023 10:53:38 +0000 (UTC)
+	with ESMTP id WMzYywbNIrpR; Wed,  8 Feb 2023 10:53:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F010580FA2;
-	Wed,  8 Feb 2023 10:53:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F010580FA2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C91F81B14;
+	Wed,  8 Feb 2023 10:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C91F81B14
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F36B71BF38B
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:51:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0390C1BF95C
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:51:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20772610CD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DBE2610C4
  for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20772610CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DBE2610C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2uWaQk0yDStN for <buildroot@lists.busybox.net>;
+ with ESMTP id a87miayP1yx1 for <buildroot@lists.busybox.net>;
  Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58BE5610C4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A09261059
  for <buildroot@buildroot.org>; Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58BE5610C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A09261059
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 475CF845A6; Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
+ id 18597844D4; Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 11:51:20 +0100
+Date: Wed, 8 Feb 2023 11:50:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 889f451caf22f5b36ff8430d7927e8cb3a56681e
-X-Git-Newrev: beeae174f9fffe6ea9c50a717a9b45c71ed45ea9
+X-Git-Oldrev: 0c189e7462103591eb17d34a6e33430ddc636c84
+X-Git-Newrev: bf5c0db35a06455182f6568ab2cfa69346f8b3a1
 X-Patchwork-Hint: ignore
-Message-Id: <20230208105136.475CF845A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6/qt6base: add opengl support
+Message-Id: <20230208105136.18597844D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/qt6base: add support for
+ fontconfig/harfbuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,124 +64,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beeae174f9fffe6ea9c50a717a9b45c71ed45ea9
+commit: https://git.buildroot.net/buildroot/commit/?id=bf5c0db35a06455182f6568ab2cfa69346f8b3a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Additionally the harfbuzz license file is added and the hash for this is
+also added to the hash file
+
+Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/Config.in          |  5 +++++
- package/qt6/qt6base/Config.in  | 42 +++++++++++++++++++++++++++++++++++++++++-
- package/qt6/qt6base/qt6base.mk | 18 +++++++++++++++++-
- 3 files changed, 63 insertions(+), 2 deletions(-)
+ package/qt6/qt6base/Config.in    | 17 +++++++++++++++++
+ package/qt6/qt6base/qt6base.hash |  1 +
+ package/qt6/qt6base/qt6base.mk   | 23 +++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
 
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 4b2b9a1174..831ae72c3c 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -12,6 +12,11 @@ config BR2_PACKAGE_QT6_ARCH_SUPPORTS
- 	default y if BR2_sparc64
- 	depends on BR2_USE_MMU
- 
-+config BR2_PACKAGE_QT6_GL_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
-+
- comment "qt6 needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8, host gcc >= 8"
- 	depends on !BR2_PACKAGE_QT5
- 	depends on BR2_PACKAGE_QT6_ARCH_SUPPORTS
 diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 973fb2f11c..131dfadc1b 100644
+index 1810b1586d..ac2058c901 100644
 --- a/package/qt6/qt6base/Config.in
 +++ b/package/qt6/qt6base/Config.in
-@@ -36,7 +36,8 @@ config BR2_PACKAGE_QT6BASE_GUI
- 	# At least one graphic backend must be enabled, so enable
- 	# linuxfb if nothing is enabled.
- 	select BR2_PACKAGE_QT6BASE_LINUXFB if \
--	       !BR2_PACKAGE_QT6BASE_XCB
-+	       !BR2_PACKAGE_QT6BASE_XCB && \
-+	       !BR2_PACKAGE_QT6BASE_EGLFS
- 	help
- 	  This option enables the Qt6Gui library.
- 
-@@ -59,6 +60,45 @@ config BR2_PACKAGE_QT6BASE_XCB
+@@ -59,6 +59,23 @@ config BR2_PACKAGE_QT6BASE_XCB
  comment "X.org XCB backend available if X.org is enabled"
  	depends on !BR2_PACKAGE_XORG7
  
-+config BR2_PACKAGE_QT6BASE_EGLFS
-+	bool "eglfs support"
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBGBM
-+	depends on BR2_PACKAGE_QT6_GL_SUPPORTS
-+	select BR2_PACKAGE_QT6BASE_OPENGL
-+
-+config BR2_PACKAGE_QT6BASE_OPENGL
-+	bool "OpenGL support"
-+	depends on BR2_PACKAGE_QT6_GL_SUPPORTS
++config BR2_PACKAGE_QT6BASE_FONTCONFIG
++	bool "fontconfig support"
++	select BR2_PACKAGE_FONTCONFIG
 +	help
-+	  This option enables OpenGL support.
++	  This option enables Fontconfig support using the system
++	  fontconfig library.
 +
-+comment "OpenGL support needs an OpenGL-capable backend"
-+	depends on !BR2_PACKAGE_QT6_GL_SUPPORTS
-+
-+if BR2_PACKAGE_QT6BASE_OPENGL
-+
-+choice
-+	prompt "OpenGL API"
++config BR2_PACKAGE_QT6BASE_HARFBUZZ
++	bool "harfbuzz support"
++	select BR2_PACKAGE_HARFBUZZ if \
++		BR2_TOOLCHAIN_HAS_SYNC_4 && \
++		BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 +	help
-+	  Select OpenGL API.
++	  This option enables HarfBuzz support (either system harfbuzz
++	  if the toolchain supports __sync for 4 bytes, or the qt
++	  provided one which avoids this dependency by using QAtomic).
 +
-+config BR2_PACKAGE_QT6BASE_OPENGL_DESKTOP
-+	bool "Desktop OpenGL"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	help
-+	  Use desktop OpenGL.
-+
-+config BR2_PACKAGE_QT6BASE_OPENGL_ES2
-+	bool "OpenGL ES 2.0+"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	help
-+	  Use OpenGL ES 2.0 and later versions.
-+
-+endchoice
-+
-+endif
-+
- config BR2_PACKAGE_QT6BASE_FONTCONFIG
- 	bool "fontconfig support"
- 	select BR2_PACKAGE_FONTCONFIG
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 911375aa6d..2540fbb59c 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -144,7 +144,6 @@ ifeq ($(BR2_PACKAGE_QT6BASE_GUI),y)
- QT6BASE_CONF_OPTS += \
- 	-DFEATURE_gui=ON \
- 	-DFEATURE_freetype=ON \
--	-DINPUT_opengl=no \
- 	-DFEATURE_vulkan=OFF
- QT6BASE_DEPENDENCIES += freetype
- 
-@@ -230,6 +229,23 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_widgets=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_QT6BASE_EGLFS),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_egl=ON -DFEATURE_eglfs=ON
-+QT6BASE_DEPENDENCIES += libegl libgbm
+ config BR2_PACKAGE_QT6BASE_NETWORK
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+index 6544a371c6..fedbbba79f 100644
+--- a/package/qt6/qt6base/qt6base.hash
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -11,3 +11,4 @@ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENS
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
+ sha256  d040359701c01996a017d5c515678929cd1b0625e64cb86db44025fbb6cdf1fc  LICENSES/MIT.txt
+ sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
++sha256  2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216  src/3rdparty/harfbuzz-ng/COPYING
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index bcf2464590..6c155a4abb 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -172,6 +172,29 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_xcb=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT6BASE_HARFBUZZ),y)
++QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=ON
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),y)
++# system harfbuzz in case __sync for 4 bytes is supported
++QT6BASE_CONF_OPTS += -DQT_USE_BUNDLED_BundledHarfbuzz=OFF
++QT6BASE_DEPENDENCIES += harfbuzz
++else #BR2_TOOLCHAIN_HAS_SYNC_4
++# qt harfbuzz otherwise (using QAtomic instead)
++QT6BASE_CONF_OPTS += -DQT_USE_BUNDLED_BundledHarfbuzz=ON
++QT6BASE_LICENSE += , MIT (harfbuzz)
++QT6BASE_LICENSE_FILES += src/3rdparty/harfbuzz-ng/COPYING
++endif
 +else
-+QT6BASE_CONF_OPTS += -DFEATURE_eglfs=OFF
++QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=OFF
 +endif
 +
-+ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_DESKTOP),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengl_desktop=ON
-+QT6BASE_DEPENDENCIES += libgl
-+else ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_ES2),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengles2=ON
-+QT6BASE_DEPENDENCIES += libgles
++ifeq ($(BR2_PACKAGE_QT6BASE_FONTCONFIG),y)
++QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=ON
++QT6BASE_DEPENDENCIES += fontconfig
 +else
-+QT6BASE_CONF_OPTS += -DFEATURE_opengl=OFF -DINPUT_opengl=no
++QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=OFF
 +endif
 +
  else
