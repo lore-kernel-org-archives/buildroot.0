@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DC3DC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC8F1C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:49:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 038897000D;
-	Tue, 21 Feb 2023 01:49:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 038897000D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AC8570173;
+	Tue, 21 Feb 2023 01:49:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AC8570173
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H9hX7e9XmGPM; Tue, 21 Feb 2023 01:49:46 +0000 (UTC)
+	with ESMTP id GTFfRqapDF08; Tue, 21 Feb 2023 01:49:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C69B7006D;
-	Tue, 21 Feb 2023 01:49:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C69B7006D
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7AA57016D;
+	Tue, 21 Feb 2023 01:49:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7AA57016D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0DE3A1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F05E71BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20DD56106F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26C7C6FFF4
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20DD56106F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26C7C6FFF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GmmSAM78FmUz for <buildroot@lists.busybox.net>;
+ with ESMTP id qSco71XRCqyH for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6021270008
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B73D6FFEE
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6021270008
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B73D6FFEE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4C34D828C8; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+ id 23DEA81979; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 15:28:33 +0100
+Date: Wed, 8 Feb 2023 15:28:28 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: dab7a877148adad499a07c5ed785c42707593175
-X-Git-Newrev: 2b021bc1d77ce485ac46114482024d12339d6b5b
+X-Git-Oldrev: b739d6bd98e8ee12ec2150563ef9cdef35d2ea35
+X-Git-Newrev: dc364c6ae65d3167409380b8883123a55270b18d
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205256.4C34D828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/check-package: check
- files in utils/
+Message-Id: <20230220205256.23DEA81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/brmake: fix shellcheck
+ errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b021bc1d77ce485ac46114482024d12339d6b5b
+commit: https://git.buildroot.net/buildroot/commit/?id=dc364c6ae65d3167409380b8883123a55270b18d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-All the errors in existing scripts in utils/ have been fixed, so nothing
-needs to be added to .checkpackageignore.
+In utils/brmake line 6:
+    local found ret start d h m mf
+          ^---^ SC2034: found appears unused. Verify use (or export if used externally).
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+In utils/brmake line 16:
+    > >( while read line; do
+               ^--^ SC2162: read without -r will mangle backslashes.
+
+For both, the suggestions from shellcheck can be applied.
+
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- utils/check-package | 1 +
- 1 file changed, 1 insertion(+)
+ utils/brmake | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 12009b2476..98a25bd0b2 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -113,6 +113,7 @@ DO_CHECK_INTREE = re.compile(r"|".join([
-     r"package/",
-     r"system/",
-     r"toolchain/",
-+    r"utils/",
-     ]))
- DO_NOT_CHECK_INTREE = re.compile(r"|".join([
-     r"boot/barebox/barebox\.mk$",
+diff --git a/utils/brmake b/utils/brmake
+index e30119dd10..70dfb6cdc8 100755
+--- a/utils/brmake
++++ b/utils/brmake
+@@ -3,7 +3,7 @@
+ # License: WTFPL, https://spdx.org/licenses/WTFPL.html
+ 
+ main() {
+-    local found ret start d h m mf
++    local ret start d h m mf
+ 
+     if ! which unbuffer >/dev/null 2>&1; then
+         printf "you need to install 'unbuffer' (from package expect or expect-dev)\n" >&2
+@@ -13,7 +13,7 @@ main() {
+     start=${SECONDS}
+ 
+     ( exec 2>&1; unbuffer make "${@}"; ) \
+-    > >( while read line; do
++    > >( while read -r line; do
+              printf "%(%Y-%m-%dT%H:%M:%S)T %s\n" -1 "${line}"
+          done \
+          |tee -a br.log \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
