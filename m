@@ -1,70 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2809C05027
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 13:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC97AC05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 13:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26BEC610DA;
-	Wed,  8 Feb 2023 13:46:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26BEC610DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 714DF40BE8;
+	Wed,  8 Feb 2023 13:51:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 714DF40BE8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mIctpf_QjDms; Wed,  8 Feb 2023 13:46:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dHXBjnrVopYK; Wed,  8 Feb 2023 13:51:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7454E610E4;
-	Wed,  8 Feb 2023 13:46:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7454E610E4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 538271BF3FD
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 13:46:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C46E40BE7;
+	Wed,  8 Feb 2023 13:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C46E40BE7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DC07B1BF3FD
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 13:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 29A6181FAB
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 13:46:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29A6181FAB
+ by smtp2.osuosl.org (Postfix) with ESMTP id C30C040BE4
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 13:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C30C040BE4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id apaHZLBzHBOc for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 13:46:45 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CD6381FA7
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9CD6381FA7
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 13:46:44 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 32CB36000C;
- Wed,  8 Feb 2023 13:46:40 +0000 (UTC)
-Date: Wed, 8 Feb 2023 14:46:39 +0100
-To: Athaariq Ardhiansyah <buildroot@athaariq.my.id>
-Message-ID: <20230208144639.764af681@windsurf>
-In-Reply-To: <20220926051956.3272067-1-buildroot@athaariq.my.id>
-References: <20220926051956.3272067-1-buildroot@athaariq.my.id>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b0S6Ckb21m1P for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 13:51:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9849D40B48
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9849D40B48
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 13:51:23 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id bu23so969615wrb.8
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 05:51:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=MuttMTF+H8STMh19Np/kG6QRqGQAKE9otZh2pH/1+P8=;
+ b=di46aPDq/4Zp8Dc0GBS84gNUx+Hmh1dgyqrsARjJObk6aPFHSOssrQFApVb3calTqk
+ Zh/itEyKKDOekzjbf1+z2oFfphqzehDCsXx6Q14z+9WMoefi6j0S+FactXezuYuMdTJI
+ Oo5hc7zv8zyWXFOZOIDVtBwSnbTkuHZ+hYiaOdQd5FHWVLUIv3pPiFfY7anGHlX5qqzm
+ jFl/J5/bpJWvW+N4W4qojkVOKbmtjW5HRJplQSuFe+B7WN1CrWiqSIxVrNjjhVtWjJKh
+ xswMilC7zIYLXmhxV60QGy/HqtYKcuI5hEc5ywvXXVYTiBp9jWtjBUEPbjs362JnQH4b
+ eTLQ==
+X-Gm-Message-State: AO0yUKWw/IOoH44GTa4XJE2rYhKau+vyKl4qaW5mv5Olg2xHA3TEHkbC
+ HgFmjmMxoa6/APr2rqedINc+Yw==
+X-Google-Smtp-Source: AK7set+JoAOnktmCOvKQji32rySeA9aFqMY8Qc/sFlSbSaP8382S3dI69we2vtb6+wW3tpRviSgpqw==
+X-Received: by 2002:adf:eac4:0:b0:2c3:f472:84ad with SMTP id
+ o4-20020adfeac4000000b002c3f47284admr1864982wrn.65.1675864281669; 
+ Wed, 08 Feb 2023 05:51:21 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ s2-20020a5d69c2000000b002c3de83be0csm11046877wrw.87.2023.02.08.05.51.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 08 Feb 2023 05:51:21 -0800 (PST)
+Message-ID: <eaaa6d53-ad35-8cf8-7823-0874b268fa88@smile.fr>
+Date: Wed, 8 Feb 2023 14:51:20 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+References: <20220925192030.1648496-1-thomas.petazzoni@bootlin.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20220925192030.1648496-1-thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675864001;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=1hIOU6Q7qR52exTeZ/y/3gTP6BaxXsASPebqw+cV6ew=;
- b=Pe+FcgArNLxmhTv7YsT0P6DcXjjCKKuV/axN6/6/WVjABaRBhng+1HWHgyyKWnSHVONPP+
- gQvM6BK3Lt9jssjcZ0PNlTG0D1yuP2GvEn6RlPjdakqwWGE8ihO1sUwZttSOVFDz1JZJQg
- AUi8NOG2tMmDzFgNbQN9dZawFftjdbqOuKrQnuCKr2zrZfbVb/74I/WBc15baCc1VHrOCL
- +EUbhNXWmpYwQwcu50cec+Kf6ETzyZLtS9FCJCQ6MkDps1mVKGL1hnYw+4wi0SCWXAzabf
- qmQIOzRlkjAXl1eqHGyHg7ZSxb19xFka76snhdM1IehvrzwWCjH2ouVZvnJnDg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Pe+FcgAr
-Subject: Re: [Buildroot] [PATCH 1/1] board/raspberrypi4: bump kernel version
- to 5.15.68
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=MuttMTF+H8STMh19Np/kG6QRqGQAKE9otZh2pH/1+P8=;
+ b=AhefSPOsZATqxuq6NgQ/bbQuMCZsSQihdhS1mBL9T4u34p0gl6H1yfMsQrhmqQ03/c
+ 5BaM3RMfd+Y1swYQzHnAcg8rCvNCv4XOC86cB9NG3sdj8zw4CuEn6hVz8SyRy65if51/
+ v4ietkA0hfAMxxyNACvIzNSoQ1qZnNHctqvuYRUhGaTnzFu5SEMu+HS8pL0T5tTzdbiL
+ +4tA7ZWoPk4F5i4T09vnaJZcoPQv/072PNOCjFgLLQQa23IQD2YTms3iFIXIcLrGsvhZ
+ MxI+CNBgl6p3GSPc++w2XWo+vv4F15IH5PjMT/JQep3k0oC6y0geRI+QsbcukIcXS2j1
+ +tvQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=AhefSPOs
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/nodejs: add patch to adjust
+ default NodeJS search path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,132 +102,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Daniel Price <daniel.price@gmail.com>, Martin Bark <martin@barkynet.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Athaariq,
-
-On Mon, 26 Sep 2022 05:20:15 +0000 (UTC)
-Athaariq Ardhiansyah <buildroot@athaariq.my.id> wrote:
-
-> First of all, kernel support for Raspberry Pi is way too old relative to stable version. Second, we actually have several bug fixes regarding the kernel including HDMI hotplug and more problems on graphic stacks. However, I only have Raspberry Pi 4B so I cannot test the changes for other Raspberry Pi models. For anyone who has those boards, please help us to bump and test the kernel.
-> 
-> Signed-off-by: Athaariq Ardhiansyah <buildroot@athaariq.my.id>
-
-Thanks for your patch. It would indeed be nice to update our
-RaspberryPi defconfigs, but there are a number of questions which need
-to be answered before we can apply your patch.
-
-First of all, a small detail: your commit log must be wrapped at ~80
-columns. Also, it shouldn't use 1st person sentence "I only have".
-
-> diff --git a/board/raspberrypi/linux.fragment b/board/raspberrypi/linux.fragment
-> new file mode 100644
-> index 0000000000..798b2e91da
-> --- /dev/null
-> +++ b/board/raspberrypi/linux.fragment
-> @@ -0,0 +1,7 @@
-> +# Dynamic CPU Clock
-> +CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE=n
-> +CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
-> +
-> +# Fix Kernel Module won't Load
-> +CONFIG_MODULE_COMPRESS_XZ=n
-> +CONFIG_MODULE_COMPRESS_NONE=y
-
-Why is this Linux kernel configuration fragment needed? There is no
-explanation in your commit log. Changing the default CPU governor
-should not be needed, and the second chunk about kernel module
-compression is a bit strange and deserves some explanation.
-
-> diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-> index 5942f7c4e1..6d90a8f004 100644
-> --- a/configs/raspberrypi4_64_defconfig
-> +++ b/configs/raspberrypi4_64_defconfig
-> @@ -6,13 +6,14 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->  
->  BR2_SYSTEM_DHCP="eth0"
->  
-> -# Linux headers same as kernel, a 5.10 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-> +# Linux headers same as kernel, a 5.15 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,155b736f0ff883415d374ba743473f5ef146814b)/linux-155b736f0ff883415d374ba743473f5ef146814b.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi4-64/linux.fragment"
->  
->  # Build the DTB from the kernel sources
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> @@ -23,6 +24,9 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_PACKAGE_RPI_FIRMWARE=y
->  BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
->  BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi4-64/config_4_64bit.txt"
-> +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI=y
-> +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT=y
-> +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI=y
-
-Why is this being added?
-
->  # Required tools to create the SD image
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-> index 4e5580c140..f0947c329c 100644
-> --- a/configs/raspberrypi4_defconfig
-> +++ b/configs/raspberrypi4_defconfig
-> @@ -6,13 +6,14 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->  
->  BR2_SYSTEM_DHCP="eth0"
->  
-> -# Linux headers same as kernel, a 5.10 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-> +# Linux headers same as kernel, a 5.15 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,155b736f0ff883415d374ba743473f5ef146814b)/linux-155b736f0ff883415d374ba743473f5ef146814b.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi4/linux.fragment"
->  
->  # Build the DTB from the kernel sources
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> @@ -23,6 +24,10 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_PACKAGE_RPI_FIRMWARE=y
->  BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
->  BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi4/config_4.txt"
-> +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI=y
-> +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT=y
-> +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI=y
-> +BR2_PACKAGE_RPI_USERLAND=y
-
-Why is rpi-userland being added here, and not to the other defconfig above?
-
-Also, you're updating rpi-firmware, rpi-userland and RaspberryPi
-defconfigs in the same commit. Is this because they need to be updated
-in sync? If that's the case, is there a potential problem if we update
-rpi-firmware/rpi-userland, but not the defconfigs for RaspberryPi 1/2/3 ?
-
-Thanks a lot for your feedback!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKTGUgMjUvMDkvMjAyMiDDoCAyMToyMCwgVGhvbWFzIFBldGF6em9uaSBh
+IMOpY3JpdMKgOgo+IEJ5IGRlZmF1bHQsIE5vZGVKUyBzZWFyY2hlcyBnbG9iYWwgbW9kdWxlcyBp
+biAvdXNyL2xpYi9ub2RlLCBidXQgTlBNCj4gaW5zdGFsbHMgdGhlbSBpbiAvdXNyL2xpYi9ub2Rl
+X21vZHVsZXMvLiBUaGVyZWZvcmUgYnkgZGVmYXVsdCwgaWYgb25lCj4gaW5zdGFsbHMgbW9kdWxl
+cyB3aXRoIEJSMl9QQUNLQUdFX05PREVKU19NT0RVTEVTX0FERElUSU9OQUwsIHRoZXkgYXJlCj4g
+bm90IGFjY2Vzc2libGUgYnkgTm9kZUpTLCB1bmxlc3MgYnkgcGFzc2luZyBhCj4gTk9ERV9QQVRI
+PS91c3IvbGliL25vZGVfbW9kdWxlcy8gdmFyaWFibGUuIFNpbmNlIHRoaXMgaXMgbm90IG9idmlv
+dXMsCj4gYW5kIGl0J3MgbmljZXIgd2hlbiB0aGluZ3Mgd29yayBvdXQgb2YgdGhlIGJveCwgd2Ug
+c2ltcGx5IHBhdGNoIE5vZGVKUwo+IHRvIGxvb2sgZm9yIG1vZHVsZXMgYXQgdGhlIHJpZ2h0IHBs
+YWNlLgo+IAo+IFNlZQo+IGh0dHBzOi8vc3RhY2tvdmVyZmxvdy5jb20vcXVlc3Rpb25zLzE1NjM2
+MzY3L25vZGVqcy1yZXF1aXJlLWEtZ2xvYmFsLW1vZHVsZS1wYWNrYWdlCj4gZm9yIHNvbWUgZGlz
+Y3Vzc2lvbnMgb24gdGhpcyB0b3BpYy4KCk5vdGU6IFRoZSBub2RlanMgcGFja2FnZSBoYXMgYmVl
+biB1cGRhdGUgdG8gMTYuMTguMSBzaW5jZSB5b3VyIHYyIG9mIG5vZGVqcyBzZXJpZXMuCgpSZXZp
+ZXdlZC1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+CgpCZXN0IHJlZ2Fy
+ZHMsClJvbWFpbgoKCj4gCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFz
+LnBldGF6em9uaUBib290bGluLmNvbT4KPiAtLS0KPiBDaGFuZ2VzIHNpbmNlIHYxOgo+IC0gU2Vh
+cmNoIGZvciBib3RoIC91c3IvbGliL25vZGUgYW5kIC91c3IvbGliL25vZGVfbW9kdWxlcyBhcyBz
+dWdnZXN0ZWQKPiAgIGJ5IFlhbm4KPiAtLS0KPiAgLi4udWxlcy1janMtbG9hZGVyLmpzLWFkanVz
+dC1kZWZhdWx0LXBhLnBhdGNoIHwgMzYgKysrKysrKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hh
+bmdlZCwgMzYgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9ub2Rl
+anMvMDAwNC1saWItaW50ZXJuYWwtbW9kdWxlcy1janMtbG9hZGVyLmpzLWFkanVzdC1kZWZhdWx0
+LXBhLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvbm9kZWpzLzAwMDQtbGliLWludGVy
+bmFsLW1vZHVsZXMtY2pzLWxvYWRlci5qcy1hZGp1c3QtZGVmYXVsdC1wYS5wYXRjaCBiL3BhY2th
+Z2Uvbm9kZWpzLzAwMDQtbGliLWludGVybmFsLW1vZHVsZXMtY2pzLWxvYWRlci5qcy1hZGp1c3Qt
+ZGVmYXVsdC1wYS5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAw
+MC4uNWI5Mzk5OGU1ZQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL25vZGVqcy8wMDA0
+LWxpYi1pbnRlcm5hbC1tb2R1bGVzLWNqcy1sb2FkZXIuanMtYWRqdXN0LWRlZmF1bHQtcGEucGF0
+Y2gKPiBAQCAtMCwwICsxLDM2IEBACj4gK0Zyb20gYTMxNDI1YmRmY2I1ZDY5NWFiMjVjM2QyOTU4
+OTgzMjY3ODRjZmZlYyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogVGhvbWFzIFBl
+dGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KPiArRGF0ZTogU3VuLCAyNSBT
+ZXAgMjAyMiAxMToxMDowNiArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIGxpYi9pbnRlcm5hbC9t
+b2R1bGVzL2Nqcy9sb2FkZXIuanM6IGFkanVzdCBkZWZhdWx0IHBhdGggdG8KPiArIHNlYXJjaCBt
+b2R1bGVzCj4gKwo+ICtOUE0gaW5zdGFsbHMgbW9kdWxlcyBpbiAvdXNyL2xpYi9ub2RlX21vZHVs
+ZXMvLCBidXQgYnkgZGVmYXVsdCBOb2RlSlMKPiArc2VhcmNoZXMgZm9yIHRoZW0gb25seSBpbiAv
+dXNyL2xpYi9ub2RlLy4gV2UgY291bGQgYWxzbyBzZXQgdGhlCj4gK05PREVfUEFUSCBlbnZpcm9u
+bWVudCB2YXJpYWJsZSwgYnV0IGl0IGlzIG1vcmUgY29udmllbmllbnQgdG8gaGF2ZQo+ICtOb2Rl
+SlMgY29uZmlndXJlZCBieSBkZWZhdWx0IHRvIGZpbmQgbW9kdWxlcyB3aGVyZSB0aGV5IGFyZSBp
+bnN0YWxsZWQuCj4gKwo+ICtUaGlzIGlzc3VlIGlzIGRpc2N1c3NlZCBhdAo+ICtodHRwczovL3N0
+YWNrb3ZlcmZsb3cuY29tL3F1ZXN0aW9ucy8xNTYzNjM2Ny9ub2RlanMtcmVxdWlyZS1hLWdsb2Jh
+bC1tb2R1bGUtcGFja2FnZS4KPiArCj4gK1NpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkg
+PHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gKy0tLQo+ICsgbGliL2ludGVybmFsL21v
+ZHVsZXMvY2pzL2xvYWRlci5qcyB8IDMgKystCj4gKyAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRp
+b25zKCspLCAxIGRlbGV0aW9uKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvbGliL2ludGVybmFsL21v
+ZHVsZXMvY2pzL2xvYWRlci5qcyBiL2xpYi9pbnRlcm5hbC9tb2R1bGVzL2Nqcy9sb2FkZXIuanMK
+PiAraW5kZXggZjE5NzFjNDBhNC4uNWZlMzg4NDE1NiAxMDA2NDQKPiArLS0tIGEvbGliL2ludGVy
+bmFsL21vZHVsZXMvY2pzL2xvYWRlci5qcwo+ICsrKysgYi9saWIvaW50ZXJuYWwvbW9kdWxlcy9j
+anMvbG9hZGVyLmpzCj4gK0BAIC0xMjYxLDcgKzEyNjEsOCBAQCBNb2R1bGUuX2luaXRQYXRocyA9
+IGZ1bmN0aW9uKCkgewo+ICsgICAgIHBhdGgucmVzb2x2ZShwcm9jZXNzLmV4ZWNQYXRoLCAnLi4n
+KSA6Cj4gKyAgICAgcGF0aC5yZXNvbHZlKHByb2Nlc3MuZXhlY1BhdGgsICcuLicsICcuLicpOwo+
+ICsgCj4gKy0gIGNvbnN0IHBhdGhzID0gW3BhdGgucmVzb2x2ZShwcmVmaXhEaXIsICdsaWInLCAn
+bm9kZScpXTsKPiArKyAgY29uc3QgcGF0aHMgPSBbcGF0aC5yZXNvbHZlKHByZWZpeERpciwgJ2xp
+YicsICdub2RlJyksCj4gKysgICAgICAgICAgICAgICAgIHBhdGgucmVzb2x2ZShwcmVmaXhEaXIs
+ICdsaWInLCAnbm9kZV9tb2R1bGVzJyldOwo+ICsgCj4gKyAgIGlmIChob21lRGlyKSB7Cj4gKyAg
+ICAgQXJyYXlQcm90b3R5cGVVbnNoaWZ0KHBhdGhzLCBwYXRoLnJlc29sdmUoaG9tZURpciwgJy5u
+b2RlX2xpYnJhcmllcycpKTsKPiArLS0gCj4gKzIuMzcuMwo+ICsKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
