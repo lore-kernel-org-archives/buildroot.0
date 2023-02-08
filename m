@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04204C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:42:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0B2CC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 992434F51B;
-	Tue, 21 Feb 2023 00:42:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 992434F51B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 896314F3E3;
+	Tue, 21 Feb 2023 00:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 896314F3E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fSUe0r7PWrA5; Tue, 21 Feb 2023 00:42:20 +0000 (UTC)
+	with ESMTP id w5jC50ZAZz5t; Tue, 21 Feb 2023 00:42:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E4334F366;
-	Tue, 21 Feb 2023 00:42:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E4334F366
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7E4B11BF8C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15C0B4F52C;
+	Tue, 21 Feb 2023 00:42:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15C0B4F52C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F86E1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BAB036F9F4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAB036F9F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2141941801
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2141941801
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nNiUhjk6P5rD for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1hh3YIkPxj7K for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00CDE6FAEC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00CDE6FAEC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 090C7417F7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 090C7417F7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE1698648F; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 005E48648F; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 11:51:13 +0100
+Date: Wed, 8 Feb 2023 14:00:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3587c27c8ef0a24507fa0eaa5602fae80aae45ef
-X-Git-Newrev: 346bd6a20c22fc3b95f2e27030289de726fcfdf0
+X-Git-Oldrev: 74686296a4a20438f1e94e22a5a3372df2e830cc
+X-Git-Newrev: e447f56408f9308cc0e527f97dcc1844f2d6c850
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205231.DE1698648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/network-manager-openvpn: bump to version 1.10.2
+Message-Id: <20230220205256.005E48648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6serialbus: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,48 +56,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=346bd6a20c22fc3b95f2e27030289de726fcfdf0
+commit: https://git.buildroot.net/buildroot/commit/?id=e447f56408f9308cc0e527f97dcc1844f2d6c850
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/network-manager-openvpn/network-manager-openvpn.hash | 4 ++--
- package/network-manager-openvpn/network-manager-openvpn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/qt6/Config.in                      |  1 +
+ package/qt6/qt6serialbus/Config.in         | 15 ++++++++++
+ package/qt6/qt6serialbus/qt6serialbus.hash | 11 ++++++++
+ package/qt6/qt6serialbus/qt6serialbus.mk   | 45 ++++++++++++++++++++++++++++++
+ 4 files changed, 72 insertions(+)
 
-diff --git a/package/network-manager-openvpn/network-manager-openvpn.hash b/package/network-manager-openvpn/network-manager-openvpn.hash
-index d0cbc7ca87..11fb28f8c8 100644
---- a/package/network-manager-openvpn/network-manager-openvpn.hash
-+++ b/package/network-manager-openvpn/network-manager-openvpn.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/NetworkManager-openvpn/1.8/NetworkManager-openvpn-1.8.14.sha256sum
--sha256  e7419053fc3b5a7e25f1a7517c313ad4531b6ea280255524ebb85a70c76fdbeb  NetworkManager-openvpn-1.8.14.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager-openvpn/1.10/NetworkManager-openvpn-1.10.2.sha256sum
-+sha256  62f0f2a8782221b923f212ac2a8ebbc1002efd6a90ee945dad4adfb56d076d21  NetworkManager-openvpn-1.10.2.tar.xz
- # Locally computed
- sha256  c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
-diff --git a/package/network-manager-openvpn/network-manager-openvpn.mk b/package/network-manager-openvpn/network-manager-openvpn.mk
-index d5d4c5da42..ccc86e45f7 100644
---- a/package/network-manager-openvpn/network-manager-openvpn.mk
-+++ b/package/network-manager-openvpn/network-manager-openvpn.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 831ae72c3c..655fa8392a 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -44,6 +44,7 @@ menuconfig BR2_PACKAGE_QT6
+ if BR2_PACKAGE_QT6
  
--NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.8
--NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).14
-+NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.10
-+NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).2
- NETWORK_MANAGER_OPENVPN_SOURCE = NetworkManager-openvpn-$(NETWORK_MANAGER_OPENVPN_VERSION).tar.xz
- NETWORK_MANAGER_OPENVPN_SITE = https://download.gnome.org/sources/NetworkManager-openvpn/$(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR)
- NETWORK_MANAGER_OPENVPN_DEPENDENCIES = network-manager openvpn
+ source "package/qt6/qt6base/Config.in"
++source "package/qt6/qt6serialbus/Config.in"
+ source "package/qt6/qt6serialport/Config.in"
+ 
+ endif
+diff --git a/package/qt6/qt6serialbus/Config.in b/package/qt6/qt6serialbus/Config.in
+new file mode 100644
+index 0000000000..1f24310e61
+--- /dev/null
++++ b/package/qt6/qt6serialbus/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_QT6SERIALBUS
++	bool "qt6serialbus"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6 # CAN FD
++	select BR2_PACKAGE_QT6SERIALPORT
++	select BR2_PACKAGE_QT6BASE_NETWORK
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt6serialbus module.
++
++	  https://doc.qt.io/qt-6/qtserialbus-index.html
++
++comment "qt6serialbus needs headers >= 3.6"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.hash b/package/qt6/qt6serialbus/qt6serialbus.hash
+new file mode 100644
+index 0000000000..be01f13363
+--- /dev/null
++++ b/package/qt6/qt6serialbus/qt6serialbus.hash
+@@ -0,0 +1,11 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.2/submodules/qtserialbus-everywhere-src-6.4.2.tar.xz.sha256
++sha256  604013657c7327899aa50748deb4bcb5e545ab37ff4964795b9e6f617d48bf1b  qtserialbus-everywhere-src-6.4.2.tar.xz
++
++# Hashes for license files:
++sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
++sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
++sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
++sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.mk b/package/qt6/qt6serialbus/qt6serialbus.mk
+new file mode 100644
+index 0000000000..0717736387
+--- /dev/null
++++ b/package/qt6/qt6serialbus/qt6serialbus.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# qt6serialbus
++#
++################################################################################
++
++QT6SERIALBUS_VERSION = $(QT6_VERSION)
++QT6SERIALBUS_SITE = $(QT6_SITE)
++QT6SERIALBUS_SOURCE = qtserialbus-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALBUS_VERSION).tar.xz
++QT6SERIALBUS_INSTALL_STAGING = YES
++QT6SERIALBUS_SUPPORTS_IN_SOURCE_BUILD = NO
++
++QT6SERIALBUS_LICENSE = \
++	GPL-2.0+ or LGPL-3.0, \
++	GPL-3.0, GFDL-1.3 no invariants (docs)
++
++QT6SERIALBUS_LICENSE_FILES = \
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/GPL-3.0-only.txt \
++	LICENSES/LGPL-3.0-only.txt \
++	LICENSES/GFDL-1.3-no-invariants-only.txt
++
++QT6SERIALBUS_CONF_OPTS = \
++	-GNinja \
++	-DQT_HOST_PATH=$(HOST_DIR) \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF
++
++QT6SERIALBUS_DEPENDENCIES = \
++	qt6serialport
++
++define QT6SERIALBUS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERIALBUS_BUILDDIR)
++endef
++
++define QT6SERIALBUS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(QT6SERIALBUS_BUILDDIR)
++endef
++
++define QT6SERIALBUS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(QT6SERIALBUS_BUILDDIR)
++endef
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
