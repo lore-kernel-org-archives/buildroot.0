@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 001FBC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:46:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55AF8C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC5E56FBC0;
-	Tue, 21 Feb 2023 01:46:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC5E56FBC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DB42700BE;
+	Tue, 21 Feb 2023 01:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DB42700BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IKJj-GgPTF7c; Tue, 21 Feb 2023 01:46:12 +0000 (UTC)
+	with ESMTP id LOmycm5gWTvy; Tue, 21 Feb 2023 01:46:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D518870078;
-	Tue, 21 Feb 2023 01:46:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D518870078
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39E8F70129;
+	Tue, 21 Feb 2023 01:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39E8F70129
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6EB5E1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8CDC01BF94D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:04:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C44B6FFFF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 768456FC18
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C44B6FFFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 768456FC18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9TwB6RLZbRCd for <buildroot@lists.busybox.net>;
+ with ESMTP id NK6BshkDKfP0 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 829D86FFF4
+ by smtp3.osuosl.org (Postfix) with ESMTP id A662C6FFEB
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 829D86FFF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A662C6FFEB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8040F828C8; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id A434381979; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 23:23:19 +0100
+Date: Wed, 8 Feb 2023 09:54:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 90ab065162a35b8aa2c429903e3d59d4ad2c0d7f
-X-Git-Newrev: f9a92ea1cb1dd2aa9b3f9c83c04d7d01c1f6e148
+X-Git-Oldrev: 9231fe0d6eeb6cdf373715d35b2203d34fd9e859
+X-Git-Newrev: 19447f02f729ff373e138a74f3c2477739f425df
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205254.8040F828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gcc: map debug prefix
- when reproducible
+Message-Id: <20230220205254.A434381979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-mediadriver:
+ bump version to 23.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,44 +56,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9a92ea1cb1dd2aa9b3f9c83c04d7d01c1f6e148
+commit: https://git.buildroot.net/buildroot/commit/?id=19447f02f729ff373e138a74f3c2477739f425df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When building with BR2_REPRODUCIBLE the toolchain wrapper passes
--fdebug-prefix-map for all packages that are built.  But this doesn't
-affect the target libraries (like libgcc) built by GCC's build system.
-
-GCC 4.3 added a configure option to set the debug prefix map for these
-libraries, which is used here to avoid encoding potentially
-non-reproducible build paths into the debug data.
-
-Signed-off-by: John Keeping <john@metanate.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/gcc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index ec6f3b550a..6dfd93f2a4 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -84,6 +84,10 @@ HOST_GCC_COMMON_CONF_OPTS = \
- 	--with-bugurl="http://bugs.buildroot.net/" \
- 	--without-zstd
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index a5e9c64e97..e4e41e4ad3 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b553290e829dfd824eb62295c9f07dbe8062ce7998f7c527cc92856d0792562d  intel-media-22.6.6.tar.gz
++sha256  edae1bdc07b694bd6e42099feddcf875e3b5d7254894f4b3fb292128577baf82  intel-media-23.1.0.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 8fa93218fa..6cc862dce4 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+HOST_GCC_COMMON_CONF_OPTS += --with-debug-prefix-map=$(BASE_DIR)=buildroot
-+endif
-+
- # Don't build documentation. It takes up extra space / build time,
- # and sometimes needs specific makeinfo versions to work
- HOST_GCC_COMMON_CONF_ENV = \
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 22.6.6
++INTEL_MEDIADRIVER_VERSION = 23.1.0
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
