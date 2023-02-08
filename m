@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1B61C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74A09C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:41:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5331A4F4FF;
-	Tue, 21 Feb 2023 00:40:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5331A4F4FF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17D294F4FD;
+	Tue, 21 Feb 2023 00:41:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17D294F4FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JhBVGVSglLuy; Tue, 21 Feb 2023 00:40:58 +0000 (UTC)
+	with ESMTP id NqHWWg8m1GtZ; Tue, 21 Feb 2023 00:41:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04E754F503;
-	Tue, 21 Feb 2023 00:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E754F503
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F04B1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4EC64F50F;
+	Tue, 21 Feb 2023 00:41:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4EC64F50F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6ABA61BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58C896FB6C
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58C896FB6C
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1915417C3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1915417C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mmkxSnW74I7k for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qZIA4UQyQ_te for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E5796FAD4
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E5796FAD4
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBAEA417DD
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBAEA417DD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6DBE7828C8; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id BBDCD8648F; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 13 Jan 2023 11:21:15 +0100
+Date: Wed, 8 Feb 2023 13:24:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 479b042433447214cf318964cc7557b6b5f5d05f
-X-Git-Newrev: d6469c513d5ee9b46c1a7484b93f1c50162aa359
+X-Git-Oldrev: 456a7398316655ad0b669635f580e4887c24a700
+X-Git-Newrev: 11b2ab5ee261e8af1065f15e2e69290e15e9e4ea
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205231.6DBE7828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
- mesa3d-headers}: bump version to 22.3.3
+Message-Id: <20230220205255.BBDCD8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/gstreamer1/gst1-plugins-bad: add zxing plugin support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,65 +56,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6469c513d5ee9b46c1a7484b93f1c50162aa359
+commit: https://git.buildroot.net/buildroot/commit/?id=11b2ab5ee261e8af1065f15e2e69290e15e9e4ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2023-January/000699.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 9 +++++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index f6b3ade3ea..c1765c3eaa 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 1e89cd124f..d477924eec 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -738,6 +738,15 @@ comment "zbar plugin needs a toolchain w/ threads, C++ and headers >= 3.0"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 22.3.2
-+MESA3D_HEADERS_VERSION = 22.3.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index e902e6b828..c2ceaa6ead 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-dev/2022-December/225903.html
--sha256  c15df758a8795f53e57f2a228eb4593c22b16dffd9b38f83901f76cd9533140b  mesa-22.3.2.tar.xz
--sha512  32934dd23cfcd6165c365597d9a469da0b806b72ea98a200f499344c3b47815db3bf78875b4ea766d2d28d9c70b50c1615d2d3fcbfd4769447fe0a9d3b32951f  mesa-22.3.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2023-January/000699.html
-+sha256  bed799788bf2bd9ef079d97cd8e09348bf53cb086818578e40773b2b17812922  mesa-22.3.3.tar.xz
-+sha512  dcf166bc7c80e6ad09337e0188219e5ea4bdc558bc4b4ca35ce30d5421568f6b5328e5508b3175a2696521214e466354d8652ade22468ce448d9f61d5709c8a1  mesa-22.3.3.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 523b642d0c..9fa2c05230 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
++config BR2_PACKAGE_GST1_PLUGINS_BAD_ZXING
++	bool "zxing"
++	depends on !BR2_STATIC_LIBS # zxing-cpp
++	depends on BR2_INSTALL_LIBSTDCPP # zxing-cpp
++	select BR2_PACKAGE_ZXING_CPP
++
++comment "zxing plugin needs a toolchain w/ C++, dynamic library"
++	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
++
+ endif
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 22.3.2
-+MESA3D_VERSION = 22.3.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+ comment "gst1-plugins-bad needs a toolchain w/ C++"
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index dfe1f1c9eb..edac818985 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -70,7 +70,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	-Dsvthevcenc=disabled \
+ 	-Dtranscode=disabled \
+ 	-Dwasapi2=disabled \
+-	-Dzxing=disabled \
+ 	-Dmagicleap=disabled \
+ 	-Disac=disabled \
+ 	-Diqa=disabled \
+@@ -812,6 +811,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dzbar=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_ZXING),y)
++GST1_PLUGINS_BAD_CONF_OPTS += -Dzxing=enabled
++GST1_PLUGINS_BAD_DEPENDENCIES += zxing-cpp
++else
++GST1_PLUGINS_BAD_CONF_OPTS += -Dzxing=disabled
++endif
++
+ # Add GPL license if GPL licensed plugins enabled.
+ ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dgpl=enabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
