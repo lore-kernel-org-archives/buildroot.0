@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 456A1C05027
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 10:52:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E4F1C636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 10:52:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3404410DB;
-	Wed,  8 Feb 2023 10:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3404410DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id C710D40BCF;
+	Wed,  8 Feb 2023 10:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C710D40BCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aEg8KadpVs2b; Wed,  8 Feb 2023 10:52:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GiImJnzDk8ZG; Wed,  8 Feb 2023 10:52:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4D3F410E3;
-	Wed,  8 Feb 2023 10:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4D3F410E3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 743AB1BF38B
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:51:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03CD340BCC;
+	Wed,  8 Feb 2023 10:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03CD340BCC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 181CC1BF38B
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B3564099E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 389A14012D
  for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B3564099E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 389A14012D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I1Dpbnlz9RAD for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K3S6-wdQpheQ for <buildroot@lists.busybox.net>;
  Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 393834098F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64AC240BCC
  for <buildroot@buildroot.org>; Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 393834098F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64AC240BCC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 24C38845CE; Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
+ id 547DE845CE; Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 11:51:17 +0100
+Date: Wed, 8 Feb 2023 11:51:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bf5c0db35a06455182f6568ab2cfa69346f8b3a1
-X-Git-Newrev: 6d91bc90afab2d601f55990e94c4cef9f0317ce6
+X-Git-Oldrev: beeae174f9fffe6ea9c50a717a9b45c71ed45ea9
+X-Git-Newrev: 1bd9a456b2e2c818f35d22a212812087c3f28e4a
 X-Patchwork-Hint: ignore
-Message-Id: <20230208105136.24C38845CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6/qt6base: add support for
- jpeg/png/gif image format
+Message-Id: <20230208105136.547DE845CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/qt6base: add QPA backend
+ selection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,78 +64,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d91bc90afab2d601f55990e94c4cef9f0317ce6
+commit: https://git.buildroot.net/buildroot/commit/?id=1bd9a456b2e2c818f35d22a212812087c3f28e4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/qt6base/Config.in  | 19 +++++++++++++++++++
- package/qt6/qt6base/qt6base.mk | 20 ++++++++++++++++++++
- 2 files changed, 39 insertions(+)
+ package/qt6/qt6base/Config.in  | 13 +++++++++++++
+ package/qt6/qt6base/qt6base.mk |  3 +++
+ 2 files changed, 16 insertions(+)
 
 diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index ac2058c901..394b2d8745 100644
+index 131dfadc1b..3af6fd9f72 100644
 --- a/package/qt6/qt6base/Config.in
 +++ b/package/qt6/qt6base/Config.in
-@@ -76,6 +76,25 @@ config BR2_PACKAGE_QT6BASE_HARFBUZZ
- 	  if the toolchain supports __sync for 4 bytes, or the qt
- 	  provided one which avoids this dependency by using QAtomic).
+@@ -67,6 +67,19 @@ config BR2_PACKAGE_QT6BASE_EGLFS
+ 	depends on BR2_PACKAGE_QT6_GL_SUPPORTS
+ 	select BR2_PACKAGE_QT6BASE_OPENGL
  
-+config BR2_PACKAGE_QT6BASE_GIF
-+	bool "GIF support"
++config BR2_PACKAGE_QT6BASE_DEFAULT_QPA
++	string "Default graphical platform"
 +	help
-+	  This compiles and installs the plugin for GIF reading support.
++	  Choose the default platform abstraction to use for graphical
++	  applications (e.g xcb, linuxfb, eglfs, ...). If this is
++	  empty, the default for your architecture will be used
++	  (usually this is eglfs).
 +
-+config BR2_PACKAGE_QT6BASE_JPEG
-+	bool "JPEG support"
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  This option enables JPEG support using the system libjpeg
-+	  library.
++	  You can get a list of supported platforms by running a Qt
++	  application with the option "-platform help" on your
++	  target. You can choose a different platform at runtime with
++	  the -platform option.
 +
-+config BR2_PACKAGE_QT6BASE_PNG
-+	bool "PNG support"
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  This option enables PNG support using the system libpng
-+	  library.
-+
- endif
- 
- config BR2_PACKAGE_QT6BASE_NETWORK
+ config BR2_PACKAGE_QT6BASE_OPENGL
+ 	bool "OpenGL support"
+ 	depends on BR2_PACKAGE_QT6_GL_SUPPORTS
 diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 6c155a4abb..b368cd6dca 100644
+index 2540fbb59c..828fe57d0b 100644
 --- a/package/qt6/qt6base/qt6base.mk
 +++ b/package/qt6/qt6base/qt6base.mk
-@@ -188,6 +188,26 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=OFF
+@@ -250,6 +250,9 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_gui=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_QT6BASE_PNG),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_png=ON -DFEATURE_system_png=ON
-+QT6BASE_DEPENDENCIES += libpng
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_png=OFF
-+endif
++QT6BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT6BASE_DEFAULT_QPA))
++QT6BASE_CONF_OPTS += $(if $(QT6BASE_DEFAULT_QPA),-DQT_QPA_DEFAULT_PLATFORM=$(QT6BASE_DEFAULT_QPA))
 +
-+ifeq ($(BR2_PACKAGE_QT6BASE_GIF),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_gif=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_gif=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_JPEG),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_jpeg=ON
-+QT6BASE_DEPENDENCIES += jpeg
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_jpeg=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT6BASE_FONTCONFIG),y)
- QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=ON
- QT6BASE_DEPENDENCIES += fontconfig
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ QT6BASE_CONF_OPTS += -DINPUT_openssl=yes
+ QT6BASE_DEPENDENCIES += openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
