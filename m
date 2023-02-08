@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CA61C636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 10:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35AE9C05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 10:51:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 194CA401D5;
-	Wed,  8 Feb 2023 10:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 194CA401D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id C60FB610CB;
+	Wed,  8 Feb 2023 10:51:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C60FB610CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4nndejGq0CFY; Wed,  8 Feb 2023 10:49:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2q8dHdvI168F; Wed,  8 Feb 2023 10:51:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 502E240BD6;
-	Wed,  8 Feb 2023 10:49:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 502E240BD6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 300851BF38B
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:49:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1CA0610C3;
+	Wed,  8 Feb 2023 10:51:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1CA0610C3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C3171BF8B4
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A8AD81E27
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:49:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A8AD81E27
+ by smtp3.osuosl.org (Postfix) with ESMTP id 121EF610CD
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 121EF610CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vttSXqwmG7q9 for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 10:49:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xbrxNKSn8Q51 for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B4E9812A5
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 10:49:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B4E9812A5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 44580610C3
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44580610C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B760844D7; Wed,  8 Feb 2023 10:49:19 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 3124C845D0; Wed,  8 Feb 2023 10:51:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 11:48:59 +0100
+Date: Wed, 8 Feb 2023 11:51:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 02f80f5c224a1d8830fab48ae0c19a9e28f2c082
-X-Git-Newrev: d27f4c311c19f5ae130ec1941e964976d3a4f2b0
+X-Git-Oldrev: 6d91bc90afab2d601f55990e94c4cef9f0317ce6
+X-Git-Newrev: 05e4ad9c7e64e85d56126db8396dcf98138e84ad
 X-Patchwork-Hint: ignore
-Message-Id: <20230208104919.2B760844D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/osm2pgsql: bump version to 1.8.0
+Message-Id: <20230208105136.3124C845D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/qt6base: add support for
+ widgets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +56,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d27f4c311c19f5ae130ec1941e964976d3a4f2b0
+commit: https://git.buildroot.net/buildroot/commit/?id=05e4ad9c7e64e85d56126db8396dcf98138e84ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release-notes: https://github.com/openstreetmap/osm2pgsql/releases/tag/1.8.0
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/osm2pgsql/osm2pgsql.hash | 2 +-
- package/osm2pgsql/osm2pgsql.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt6/qt6base/Config.in  | 5 +++++
+ package/qt6/qt6base/qt6base.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
-index 505a4496c8..b5b76c15c6 100644
---- a/package/osm2pgsql/osm2pgsql.hash
-+++ b/package/osm2pgsql/osm2pgsql.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  94c72ceb3c401c816499339f8765c62efbf40685a798dcdf9a4bf7dbedf6c7a5  osm2pgsql-1.7.2.tar.gz
-+sha256  b266b50f46fe4d1caddab61d26b39f10ea33b896ec23b8b3e294be4666e7b927  osm2pgsql-1.8.0.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
-index 2bc8d41e6e..9cdfb44ce0 100644
---- a/package/osm2pgsql/osm2pgsql.mk
-+++ b/package/osm2pgsql/osm2pgsql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index 394b2d8745..973fb2f11c 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -95,6 +95,11 @@ config BR2_PACKAGE_QT6BASE_PNG
+ 	  This option enables PNG support using the system libpng
+ 	  library.
  
--OSM2PGSQL_VERSION = 1.7.2
-+OSM2PGSQL_VERSION = 1.8.0
- OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
- OSM2PGSQL_LICENSE = GPL-2.0+
- OSM2PGSQL_LICENSE_FILES = COPYING
++config BR2_PACKAGE_QT6BASE_WIDGETS
++	bool "widgets module"
++	help
++	  This option enables the Qt6Widgets library.
++
+ endif
+ 
+ config BR2_PACKAGE_QT6BASE_NETWORK
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index b368cd6dca..2a0afa6d27 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -215,6 +215,12 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT6BASE_WIDGETS),y)
++QT6BASE_CONF_OPTS += -DFEATURE_widgets=ON
++else
++QT6BASE_CONF_OPTS += -DFEATURE_widgets=OFF
++endif
++
+ else
+ QT6BASE_CONF_OPTS += -DFEATURE_gui=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
