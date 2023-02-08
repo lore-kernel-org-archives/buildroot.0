@@ -1,91 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 350D2C636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 15:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E571C636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 16:07:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE33680BF0;
-	Wed,  8 Feb 2023 15:58:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE33680BF0
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD4C440C28;
+	Wed,  8 Feb 2023 16:07:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD4C440C28
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mja9O3lxiCkG; Wed,  8 Feb 2023 15:58:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PZEYhw26SdMk; Wed,  8 Feb 2023 16:07:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AC828201F;
-	Wed,  8 Feb 2023 15:58:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AC828201F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C5381BF36C
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:58:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DADE40C22;
+	Wed,  8 Feb 2023 16:07:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DADE40C22
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DB641BF286
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5463D61119
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:58:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5463D61119
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28D2540C22
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:07:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28D2540C22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id shChwclwnRJH for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 15:58:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1gjHpj5K7Evo for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 16:07:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE98C610C9
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AE98C610C9
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 15:58:06 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- j32-20020a05600c1c2000b003dc4fd6e61dso1797027wms.5
- for <buildroot@buildroot.org>; Wed, 08 Feb 2023 07:58:06 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55CFD4014B
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
+ [IPv6:2607:f8b0:4864:20::1036])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 55CFD4014B
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 16:07:29 +0000 (UTC)
+Received: by mail-pj1-x1036.google.com with SMTP id
+ d13-20020a17090ad3cd00b0023127b2d602so106649pjw.2
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 08:07:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=PyF93w18kCy+5hKuY1NJVRZayN3Lmq+tNuo1Adk2SRM=;
- b=RiSGjiHO9yEsfcCZalPHHEE553Utrv1f6DsmoL8eGtOHTOpY5NOf6bMHQnBnUuoEdM
- a5pDHUKtDqtCRKMtGbYN/oNL5fuQmuQmrlkRRwnwbmC003gj9RNqRD/KK3RIhAkR9a/A
- BhABzvv+b/UPW9n6Xe6+aWcC2u/nGixjvx7DGsLlZvVVFTz64tnhJ1K0iRGt2p7Njr0R
- Z5YPZ99Fo61lZhEUK3w4CIj3m2kFe/gRNRRSLr0iF0PiCexHSR7qo3O/txlxPmr0TrTM
- TSO1ZknpQ7eoZFEeIKqE1XAkL7b/E5M1UoEloVdWHYKDMOpMQptG/OSNI84RP6Fur3d6
- kHYQ==
-X-Gm-Message-State: AO0yUKX/iChgPNmeLysoTx1Z0GB1du4EtpJmcgzfu81ZO+3jCkaqHLDM
- aXtY+eV6wl7wpTmKDtHK+ZhVrWknMgZw8/f84P+ZSQ==
-X-Google-Smtp-Source: AK7set9XEuGuRZ94rpCHa0Um7J/L5htYEdBgQQ3nfWHBLmxEEjoHNDvf7GHiq8PVA5YcujLzqClQGA==
-X-Received: by 2002:a05:600c:4918:b0:3dc:d5c:76d9 with SMTP id
- f24-20020a05600c491800b003dc0d5c76d9mr7890226wmp.0.1675871884710; 
- Wed, 08 Feb 2023 07:58:04 -0800 (PST)
-Received: from wintermute.. (77.109.114.132.adsl.dyn.edpnet.net.
- [77.109.114.132]) by smtp.gmail.com with ESMTPSA id
- p27-20020a1c545b000000b003daf681d05dsm2469043wmi.26.2023.02.08.07.58.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Feb 2023 07:58:04 -0800 (PST)
-From: Frank Vanbever <frank.vanbever@mind.be>
-To: buildroot@buildroot.org
-Date: Wed,  8 Feb 2023 16:57:52 +0100
-Message-Id: <20230208155752.73981-2-frank.vanbever@mind.be>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230208155752.73981-1-frank.vanbever@mind.be>
-References: <20230208155752.73981-1-frank.vanbever@mind.be>
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=PX3dtmc0Ln4C+PUvo97wqcHkJsY42Z4hYrA8XOczE8Y=;
+ b=Jocvi6iREVrlHvEN0TB2vfWx5jgaT4nz7z+hGjPNpfc3AJNad2iQUmt6kZLmfa4uMi
+ yq9L64RbQg+IX4ANxev6AA+71llJG4vNgXL3VqOUk1Z2hAxpVaSbuKJ+gsHoVhmsKSZW
+ WvnvwjvL1M7rx29xkP8kk5/hiQe+N9KaIiPJvCykrvLYa4+tA3kQbhH/xEw3NTgpph2X
+ OIR9fbZSP6goWtGby3WOvv+GIVx5O9/YCNx17cxtEZYINIU3s/U4WSjQ/XtCRJWyPDhN
+ umMbLkf6u8qlrEHRAhxfO/Q5MqVsfvLjdZiaWbGrqJZw/dtuhcR9vBdW9/iVJb0JmCvJ
+ MbKg==
+X-Gm-Message-State: AO0yUKUy3Y/YgJtL5wBBCZUsbE78nSABp0A10dd7h6xqfcWmTe85JL+B
+ o1KHxa7yTLE7o83iSd7xoao7kkZ78QLS+Mkrua6WODcR
+X-Google-Smtp-Source: AK7set/MxQyZ0L/koCHHdR98QKMNZyoWZO8oiqSMQJbw6si7rsTmPagtkQLWNMY3ZqQw7bhcH5PvvnFoO7fzNkPlFzU=
+X-Received: by 2002:a17:903:3249:b0:199:5262:f127 with SMTP id
+ ji9-20020a170903324900b001995262f127mr326038plb.32.1675872447883; Wed, 08 Feb
+ 2023 08:07:27 -0800 (PST)
 MIME-Version: 1.0
+From: Sourabh Hegde <hrsourabh011@gmail.com>
+Date: Wed, 8 Feb 2023 17:07:17 +0100
+Message-ID: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=PyF93w18kCy+5hKuY1NJVRZayN3Lmq+tNuo1Adk2SRM=;
- b=iLT57vOiYMlZqFKivvuXnWVG7AF0zzFGt3/m1Vq27A0YN4F64XusaCTTctWSS7Wc74
- OpM9L6iAJ1QDGfBXEf0MSBrQuOaMv8BeW594HxSst2B7a7k+TtDxg3DEd7Wspw+WCMgU
- xUzsZyLQdS1hE385GdYFxz633NcSGhB4THPEhmjC/YZqX4XDixdP1crdPFXBpyzlqeUV
- Ye9oKtDKP10wDP2W7tTbypCIDNTLPa1mbxE/xQcJZPx+pmDUGMYXR1S6XjKfTsQan/WH
- 4/K5XS9faNZqte1MG82+ISgqzaVzCD+Emz9PdQEPPCndwhF762LhZTeEnafY/bZhve1V
- fXIA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=iLT57vOi
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: update e-mail for Frank Vanbever
+ d=gmail.com; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=PX3dtmc0Ln4C+PUvo97wqcHkJsY42Z4hYrA8XOczE8Y=;
+ b=SJxL5+VNWAcnSdw9YOQw53Oc8eGsdvXh/Fl09xMBd9AdpToQLELCjnxE9upZ8xaq5Q
+ xXlUhUyaPuJwndt8sBtzThWh1+B0+bek4u9d65ieH+RQl5cwwrwFLik4J6r4btO16l8y
+ pG/jTg0dNR+/dmV+WmNWa1q1UiANA+GfM+tkY4IM+UXACffCFmM5rDNcauw1C78KUS2/
+ P2w2sULAKV6Wu5a3EUOHtMkvO8z07S2nRPxIEgpeyu8mNd7uyOW0EY1IjJJYOJW/zZJO
+ Ak+NB26Fgc7JDNi5OGb9bsTMe3PFnj1BG0+kCX4cRHoL5e4+X9/26dFtuqZX19t0jSC0
+ 1OUg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=SJxL5+VN
+Subject: [Buildroot] How to install custom sdk in buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,34 +87,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Frank Vanbever <frank.vanbever@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5554186634401154380=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--===============5554186634401154380==
+Content-Type: multipart/alternative; boundary="000000000000f1edd905f43275b0"
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0e116e92a3..32c6e54919 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1088,7 +1088,7 @@ F:	package/sane-backends/
- F:	package/upx/
- F:	package/zxing-cpp/
- 
--N:	Frank Vanbever <frank.vanbever@essensium.com>
-+N:	Frank Vanbever <frank.vanbever@mind.be>
- F: 	package/elixir/
- F:	package/libmodsecurity/
- F:	package/nginx-modsecurity/
--- 
-2.37.2
+--000000000000f1edd905f43275b0
+Content-Type: text/plain; charset="UTF-8"
+
+Hello All,
+
+I want to install a sdk on my Buildroot based Linux machine. SDK location
+https://github.com/aws/aws-iot-device-sdk-python-v2 . They don't have any
+packages which I can add in Buildroot.
+
+On a native Linux machine, it can be done via pip. But how to do this in
+Buildroot?
+
+Thanks in advance
+
+--000000000000f1edd905f43275b0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello=C2=A0All,<br><div><br></div><div>I want to install a=
+ sdk on my Buildroot based Linux machine. SDK location=C2=A0<a href=3D"http=
+s://github.com/aws/aws-iot-device-sdk-python-v2" target=3D"_blank">https://=
+github.com/aws/aws-iot-device-sdk-python-v2</a>=C2=A0. They don&#39;t have =
+any packages which=C2=A0I can add in Buildroot.</div><div><br></div><div>On=
+ a native Linux machine, it can be done via pip. But how to do this in Buil=
+droot?</div><div><br></div><div>Thanks in advance</div></div>
+
+--000000000000f1edd905f43275b0--
+
+--===============5554186634401154380==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5554186634401154380==--
