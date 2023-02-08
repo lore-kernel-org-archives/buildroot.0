@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAB46C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:38:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D2DC678D5
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9379A4F4B2;
-	Tue, 21 Feb 2023 00:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9379A4F4B2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B6104F327;
+	Tue, 21 Feb 2023 00:38:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B6104F327
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Nb_r02RIwGz; Tue, 21 Feb 2023 00:38:00 +0000 (UTC)
+	with ESMTP id 63kwOGMYFASO; Tue, 21 Feb 2023 00:38:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4388E4F4B7;
-	Tue, 21 Feb 2023 00:37:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4388E4F4B7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FDFE1BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBDDE4F4BA;
+	Tue, 21 Feb 2023 00:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBDDE4F4BA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 37A3A1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5FAC6FB67
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5FAC6FB67
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B171417F9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B171417F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OFPMmfrCwotz for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RvfoBDufmnSM for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D91AB6FB24
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D91AB6FB24
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A9C740C1A
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A9C740C1A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D32128648F; Mon, 20 Feb 2023 20:52:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id E9C908648F; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:27:29 +0100
+Date: Wed, 8 Feb 2023 11:50:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6abb8721dbf0987ec43f248c84ce4f0f4d11b697
-X-Git-Newrev: fbdc0f8ef8bdbe919925e281b2d5ce1583fd1aab
+X-Git-Oldrev: 0c189e7462103591eb17d34a6e33430ddc636c84
+X-Git-Newrev: bf5c0db35a06455182f6568ab2cfa69346f8b3a1
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205230.D32128648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/redis: bump to v7.0.7
+Message-Id: <20230220205254.E9C908648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6base: add
+ support for fontconfig/harfbuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,62 +56,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbdc0f8ef8bdbe919925e281b2d5ce1583fd1aab
+commit: https://git.buildroot.net/buildroot/commit/?id=bf5c0db35a06455182f6568ab2cfa69346f8b3a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-From the release notes
-(https://github.com/redis/redis/blob/7.0.7/00-RELEASENOTES)
+Additionally the harfbuzz license file is added and the hash for this is
+also added to the hash file
 
-================================================================================
-Redis 7.0.7 Released Fri Dec 16 12:00:00 IST 2022
-================================================================================
-
-Upgrade urgency: MODERATE, Contains fix for a regression in Geo commands.
-
-================================================================================
-Redis 7.0.6 Released Mon Dec 12 12:00:00 IST 2022
-================================================================================
-
-Upgrade urgency: MODERATE, Contains fixes for a few non-critical or unlikely bugs,
-and some dramatic optimizations to Geo, EVAL, and Sorted sets commands.
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt6/qt6base/Config.in    | 17 +++++++++++++++++
+ package/qt6/qt6base/qt6base.hash |  1 +
+ package/qt6/qt6base/qt6base.mk   | 23 +++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index a10df46031..eb8c21be98 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  67054cc37b58c125df93bd78000261ec0ef4436a26b40f38262c780e56315cc3  redis-7.0.5.tar.gz
-+sha256  8d327d7e887d1bb308fc37aaf717a0bf79f58129e3739069aaeeae88955ac586  redis-7.0.7.tar.gz
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index 1810b1586d..ac2058c901 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -59,6 +59,23 @@ config BR2_PACKAGE_QT6BASE_XCB
+ comment "X.org XCB backend available if X.org is enabled"
+ 	depends on !BR2_PACKAGE_XORG7
  
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 7a637c106c..b08be11538 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++config BR2_PACKAGE_QT6BASE_FONTCONFIG
++	bool "fontconfig support"
++	select BR2_PACKAGE_FONTCONFIG
++	help
++	  This option enables Fontconfig support using the system
++	  fontconfig library.
++
++config BR2_PACKAGE_QT6BASE_HARFBUZZ
++	bool "harfbuzz support"
++	select BR2_PACKAGE_HARFBUZZ if \
++		BR2_TOOLCHAIN_HAS_SYNC_4 && \
++		BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	help
++	  This option enables HarfBuzz support (either system harfbuzz
++	  if the toolchain supports __sync for 4 bytes, or the qt
++	  provided one which avoids this dependency by using QAtomic).
++
+ endif
  
--REDIS_VERSION = 7.0.5
-+REDIS_VERSION = 7.0.7
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ config BR2_PACKAGE_QT6BASE_NETWORK
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+index 6544a371c6..fedbbba79f 100644
+--- a/package/qt6/qt6base/qt6base.hash
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -11,3 +11,4 @@ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENS
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
+ sha256  d040359701c01996a017d5c515678929cd1b0625e64cb86db44025fbb6cdf1fc  LICENSES/MIT.txt
+ sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
++sha256  2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216  src/3rdparty/harfbuzz-ng/COPYING
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index bcf2464590..6c155a4abb 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -172,6 +172,29 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_xcb=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT6BASE_HARFBUZZ),y)
++QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=ON
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),y)
++# system harfbuzz in case __sync for 4 bytes is supported
++QT6BASE_CONF_OPTS += -DQT_USE_BUNDLED_BundledHarfbuzz=OFF
++QT6BASE_DEPENDENCIES += harfbuzz
++else #BR2_TOOLCHAIN_HAS_SYNC_4
++# qt harfbuzz otherwise (using QAtomic instead)
++QT6BASE_CONF_OPTS += -DQT_USE_BUNDLED_BundledHarfbuzz=ON
++QT6BASE_LICENSE += , MIT (harfbuzz)
++QT6BASE_LICENSE_FILES += src/3rdparty/harfbuzz-ng/COPYING
++endif
++else
++QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_QT6BASE_FONTCONFIG),y)
++QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=ON
++QT6BASE_DEPENDENCIES += fontconfig
++else
++QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=OFF
++endif
++
+ else
+ QT6BASE_CONF_OPTS += -DFEATURE_gui=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
