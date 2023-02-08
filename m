@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09769C05027
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 08:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B74F3C636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 08:57:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D3A981F54;
-	Wed,  8 Feb 2023 08:57:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D3A981F54
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43ED340608;
+	Wed,  8 Feb 2023 08:57:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43ED340608
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D_Z1FN595eY6; Wed,  8 Feb 2023 08:57:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 43kSJO1yJYqG; Wed,  8 Feb 2023 08:57:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4520181F53;
-	Wed,  8 Feb 2023 08:57:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4520181F53
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 621EC1BF5EA
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 08:56:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90CF2405FA;
+	Wed,  8 Feb 2023 08:57:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90CF2405FA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BC48C1BF5EA
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 08:57:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39E50408A9
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 08:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E50408A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B028610BD
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 08:57:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B028610BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ms4u9PkMne8x for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 08:56:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D5FE408B3
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 08:56:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D5FE408B3
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 255FB844B7; Wed,  8 Feb 2023 08:56:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 09:55:42 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 19447f02f729ff373e138a74f3c2477739f425df
-X-Git-Newrev: 5997d0d63557488f2cbd06d4425fa3410adf336b
-X-Patchwork-Hint: ignore
-Message-Id: <20230208085654.255FB844B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediasdk: bump version to
- 23.1.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RjP5ApXnqmCc for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 08:57:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62A1861059
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 62A1861059
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 08:57:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1D6861BF209;
+ Wed,  8 Feb 2023 08:57:18 +0000 (UTC)
+Date: Wed, 8 Feb 2023 09:57:17 +0100
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230208095717.66678de3@windsurf>
+In-Reply-To: <20230130174339.36794-2-bernd.kuhls@t-online.de>
+References: <20230130174339.36794-1-bernd.kuhls@t-online.de>
+ <20230130174339.36794-2-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1675846639;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=MM2L8Dgm2sikG2mjxlK8PB8eN9D5gv6IiNwgJhhHDbo=;
+ b=hXme/WzH7qpvZHBdd4YEaFyparfA2adAW5B2/PJmTnoGyW8YpKKfABcPwRtz3ZbHqi2UvY
+ MadqlKOCnFhtXMUQLxUJwJRpS3rCPXluz1Hg8KYEzLh2DgAs7F5PWPaJaPePq44dOh453i
+ ZsoFKnZDwt+i6RD+KGLCLkU1ENNqXacbOGGbs1SzP8vji9dELKNoRM3tNb5cqAe6S5M/RF
+ 0D+frwxuomWhtolSn2vczMQH/1tS+REBCx2PvQIyB+gQlGaXoIt/fH9FwR0HrRWe3dFa/C
+ 0BJwi0KAzv9wrhmBYU6a5JzZI3sD5KZsCHPjf22EA/AV5UBcWIYXW8F4l386Qg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hXme/WzH
+Subject: Re: [Buildroot] [PATCH 2/5] package/libva: switch to meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +78,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5997d0d63557488f2cbd06d4425fa3410adf336b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 30 Jan 2023 18:43:36 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/intel-mediasdk/intel-mediasdk.hash | 2 +-
- package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> The time between version 2.17.0 being tagged and the release of its
+> tarball version containing autoconf scripts was three weeks now.
+> With the switch to meson we can directly use the github-generated
+> tarball while not needing to run autoreconf.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libva/libva.hash |  4 +---
+>  package/libva/libva.mk   | 19 +++++++++----------
+>  2 files changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
-index 903b6f3394..a2c4243790 100644
---- a/package/intel-mediasdk/intel-mediasdk.hash
-+++ b/package/intel-mediasdk/intel-mediasdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  3a671cc692da5111c041088f5e32528b4346e122e8a134fad71310c572705106  intel-mediasdk-22.6.5.tar.gz
-+sha256  9208c35641ba995760d662689426a6c433973cf5283b8510f9cfb774e4b9cb38  intel-mediasdk-23.1.0.tar.gz
- sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index f7bce30c74..462d487ebe 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_MEDIASDK_VERSION = 22.6.5
-+INTEL_MEDIASDK_VERSION = 23.1.0
- INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
- INTEL_MEDIASDK_LICENSE = MIT
- INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+Github has fixed their tarball generation logic so that the hashes are
+now correct again, so I've applied!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
