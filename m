@@ -1,71 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05CAAC05027
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 16:28:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99048C05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 16:31:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96E8882026;
-	Wed,  8 Feb 2023 16:28:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96E8882026
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DF2240C34;
+	Wed,  8 Feb 2023 16:31:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DF2240C34
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7sodGSyUOHu8; Wed,  8 Feb 2023 16:28:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3isAmuwE3BHY; Wed,  8 Feb 2023 16:31:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FC5582018;
-	Wed,  8 Feb 2023 16:28:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FC5582018
+	by smtp2.osuosl.org (Postfix) with ESMTP id 71B3440C2C;
+	Wed,  8 Feb 2023 16:31:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71B3440C2C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E032C1BF286
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:28:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 40A0C1BF286
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:31:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9DB340190
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9DB340190
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16F8D402DC
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:31:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16F8D402DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jr17PQtMN4eU for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 16:28:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3537D4015F
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3537D4015F
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 16:28:25 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [85.119.216.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0965713F89D;
- Wed,  8 Feb 2023 17:28:20 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 08 Feb 2023 17:28:19 +0100
-Date: Wed, 8 Feb 2023 17:28:19 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230208162819.GA3386@scaer>
-References: <20220610210541.3643416-1-fontaine.fabrice@gmail.com>
- <20220610210541.3643416-2-fontaine.fabrice@gmail.com>
- <20220612203729.GM427639@scaer>
+ with ESMTP id 4BVBpkzkL6rX for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 16:31:05 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCECD40334
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
+ [IPv6:2607:f8b0:4864:20::536])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CCECD40334
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 16:31:05 +0000 (UTC)
+Received: by mail-pg1-x536.google.com with SMTP id s8so10904123pgg.11
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 08:31:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=fTw1LmOvQPlCBHUIzXWIRcsJO/652Kn8nYCCFIf80Dk=;
+ b=UwmaCsjXauyTK1dRcncn5SMct2xZ+bk0hwETdfbIV7+9vbAk5BH/m+H/p7KeRYH4qC
+ 0fkTHZhHhAZhP9C0NDa+8sEqjs6K3srxRemDahYzV+6KikwEvuPcdRBcEreQ+kXbYk0X
+ PS5JavljUrWJrjbJsu+YQVyL9fGsbdA02JEa8+3XaLXgbj2zQW+w3RvpjZe2YwRduUd1
+ 7TUJ9o7oZLT75kvNjX7s3ySTtQdf0KkjfzvYKX0cxEVbFU7jNXSsCgi4NY+gJaxpRY+1
+ mdUAhuxN2qaOy7TQWMqWgW15YPw9bpPDGfy+aumobaSruCnJcEDvZEld35/LKl7lsEZF
+ 8E7Q==
+X-Gm-Message-State: AO0yUKVkQGX/C/YtknShmIzVnFDZhoK7UhaUpS4DFTlq1bwLNjQ6aAka
+ ohbSF2WoNgr2D07IeOp1vgsHSzsjYMZTyQRuadiFoq7S9s0=
+X-Google-Smtp-Source: AK7set+sMM5LgIal1OIDd4IWSBgtc/nl+1QaaEmqLNor9n1LTh/Qxcm/DisO4NZNOQndZRFjyJqkPqker1Ik11ksJsc=
+X-Received: by 2002:a63:af44:0:b0:4ad:30aa:8e6a with SMTP id
+ s4-20020a63af44000000b004ad30aa8e6amr1705790pgo.40.1675873864985; Wed, 08 Feb
+ 2023 08:31:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220612203729.GM427639@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1675873702;
- bh=JPnlNgu8xWD21xjpMCBmglF2rmcx88RzPANQ+zkNE2g=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=X42X8Cvjir4lFmg56ONj2g6dwugEjkW10TrlK8/regrSpUV3xJSV5prNMmav+oozx
- EIR7nGFPh/Zb5WKbWsbV+TmVzguU/RP89xCSM8/GVRdPYfmG+DcautDpwsIbZFpQYP
- dv6SFOnkYikpjyBZc/8DuwkxV/9qUpJtwbgDINgxj9QAFZsDST0Po1cLp1ujtpy27w
- jtj/jPL7idndrbmPIXES2PBdMgjaJUAV36n6FHmfeKqbyXmoNYDWNeAgdyyoEILbVn
- YoxgrnTVh0cNihalo8slPv6p092VWMhSoWgZeVq9c0v4jik665y7rnO8/28WFbXL03
- gd/3KRMhMiBgg==
+References: <CACHw65JhmQX27SkN0jSMAD-P=UuwOizZc+sG+WatprbH_PFFyQ@mail.gmail.com>
+ <1349e0d6ec9b6276a76371b29260432890ad680e.camel@dopsi.ch>
+In-Reply-To: <1349e0d6ec9b6276a76371b29260432890ad680e.camel@dopsi.ch>
+From: Ramon Crichlow <rcrichlow9000@gmail.com>
+Date: Wed, 8 Feb 2023 10:30:53 -0600
+Message-ID: <CACHw65JiUCgar+twWeUDOEEUw-emA6Kfk291kOD8yzakx0LQSA@mail.gmail.com>
+To: Simon Doppler <dopsi@dopsi.ch>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=fTw1LmOvQPlCBHUIzXWIRcsJO/652Kn8nYCCFIf80Dk=;
+ b=dn6+2R6ezlvQco9iiUKMlpbolm/ESBxxAhAZKCkr84eCN+OshWnFN9B4Yj2BCCDh7o
+ tPFpjRhYFljvSrJOmVgF6WH07LlRhStUy1Y+4cQMuSVwijnbMRzj7SyC+L4yeJrRql6m
+ WMCWyHMWaPmzpsvLKkrfPgpPMUPlR7OXs8qn5BnsSqZfezo9MbuB4lavpp6wbWswY2q3
+ nx3EEEp3emm8IFqS6KH8a11LkQG6XykSQ/2oQn3Q1v4odYMDeB4Zktze6t6gtK4ldmnp
+ AUXfGJmfUpEXdpONrzW3V4ZanlT5IZmyzqQuAqyUWmiml90u/YMZghnkqkEVee/vL16S
+ fYeg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=X42X8Cvj
-Subject: Re: [Buildroot] [PATCH 2/2] package/dmalloc: disable stack-protector
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=dn6+2R6e
+Subject: Re: [Buildroot] stm32mp1 kernel won't boot on custom board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,46 +91,127 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6695855367644771136=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+--===============6695855367644771136==
+Content-Type: multipart/alternative; boundary="00000000000069324a05f432ca8d"
 
-On 2022-06-12 22:37 +0200, Yann E. MORIN spake thusly:
-> On 2022-06-10 23:05 +0200, Fabrice Fontaine spake thusly:
-> > Fix the following build failure with stack-protector:
-> > /home/autobuild/autobuild/instance-1/output-1/per-package/dmalloc/host/bin/i686-buildroot-linux-gnu-ld -shared --whole-archive -soname libdmallocth.so -o libdmallocth.so.t libdmallocth.a
-> > /home/autobuild/autobuild/instance-1/output-1/per-package/dmalloc/host/bin/i686-buildroot-linux-gnu-ld: libdmallocth.a(append.o): in function `append_long':
-> > append.c:(.text+0x115): undefined reference to `__stack_chk_fail_local'
-[--SNIP--]
-> > +DMALLOC_CFLAGS = $(TARGET_CFLAGS) -fno-stack-protector
-> 
-> At the risk of more goofiness, but the reference build issue had me
-> notice that dmalloc uses ld to do the link phase, while it should really
-> call gcc.
-[--SNIP--]
-> So, thisis a bit of a bigger change, but I otherwise fdo not think that
-> disabling SSP is a good idea, especially for a library that deals with
-> allocating memory...
+--00000000000069324a05f432ca8d
+Content-Type: text/plain; charset="UTF-8"
 
-So, I eventually took the day to look at this during the dev-days.
-
-I've sent an updated series now:
-    https://patchwork.ozlabs.org/project/buildroot/list/?series=340858
+The cd-gpios property of sdmmc@58005000  was different in the custom board
+dts and the dk1 dts.
+Modifying the dk1  uboot dts and the kernel dts (stm32mp15xx-dkx.dtsi)
+allowed me to boot the custom board with the latest kernel.
+The kernel wasn't getting the card detect signal so wasn't able to mount
+the sd card.
 
 Regards,
-Yann E. MORIN.
+Ramon
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On Mon, Jan 30, 2023 at 8:54 AM Simon Doppler <dopsi@dopsi.ch> wrote:
+
+> Hello Ramon,
+>
+> On Sat, 2023-01-28 at 14:52 -0600, Ra C wrote:
+> > I have a custom stm32mp157a board which runs OK with a modified 5.4
+> kernel.
+> > I want to migrate to the latest stm supported kernel.
+> > I built a stm32mp157a_dk1 target using the BR2_EXTERNAL feature
+> described here:
+> > https://github.com/bootlin/buildroot-external-st which builds a 5.15
+> kernel.
+> >
+> > Using the same dtb , the 5.15 kernel fails to mount the root device (a
+> micro sd card on SDMMC1)
+> > and gets stuck in a loop looking for a device matching the PARTUUID
+> in class_find_device().  The
+> > only devices listed are loop and ram.
+> >
+> > The probe function in drivers/mmc/host/mmci.c, which gets called in the
+> working kernel prior to
+> > mounting the root device does not get called with the 5.15 kernel.
+> >
+> > I don't understand why this is happening given that the same device tree
+> is used in both cases and
+> > not sure where next to look.
+>
+> Since the DTB is the same, are all the required drivers present (not as
+> modules)? I didn't check
+> which drivers exactly are built in with the configs ST provides. I would
+> especially check for the
+> CONFIG_MMC* values and whether the required filesystem support is built in.
+>
+> Best,
+>
+> Simon
+>
+
+--00000000000069324a05f432ca8d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">The cd-gpios property of=C2=A0sdmmc@58005000=C2=A0 was dif=
+ferent in the custom board dts and the dk1 dts.=C2=A0=C2=A0<div>Modifying t=
+he dk1=C2=A0=C2=A0uboot dts and the kernel dts (stm32mp15xx-dkx.dtsi) allow=
+ed me to boot the custom board with the latest kernel.=C2=A0=C2=A0<div>The =
+kernel wasn&#39;t getting the card detect signal so wasn&#39;t able to moun=
+t the sd card.</div><div><br></div><div>Regards,=C2=A0</div><div>Ramon</div=
+></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail=
+_attr">On Mon, Jan 30, 2023 at 8:54 AM Simon Doppler &lt;<a href=3D"mailto:=
+dopsi@dopsi.ch">dopsi@dopsi.ch</a>&gt; wrote:<br></div><blockquote class=3D=
+"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(2=
+04,204,204);padding-left:1ex">Hello Ramon,<br>
+<br>
+On Sat, 2023-01-28 at 14:52 -0600, Ra C wrote:<br>
+&gt; I have a custom stm32mp157a board which runs OK with a modified 5.4 ke=
+rnel.<br>
+&gt; I want to migrate to the latest stm supported kernel.<br>
+&gt; I built a stm32mp157a_dk1 target using the BR2_EXTERNAL feature descri=
+bed here:<br>
+&gt; <a href=3D"https://github.com/bootlin/buildroot-external-st" rel=3D"no=
+referrer" target=3D"_blank">https://github.com/bootlin/buildroot-external-s=
+t</a> which builds a 5.15 kernel.<br>
+&gt; <br>
+&gt; Using the same dtb , the 5.15 kernel fails to mount the root device (a=
+ micro sd card on SDMMC1)<br>
+&gt; and gets stuck in a loop looking for a device matching the PARTUUID in=
+=C2=A0class_find_device().=C2=A0 The<br>
+&gt; only devices listed are loop and ram.<br>
+&gt; <br>
+&gt; The probe function in drivers/mmc/host/mmci.c, which gets called in th=
+e working kernel prior to<br>
+&gt; mounting the root device does not get called with the 5.15 kernel.<br>
+&gt; <br>
+&gt; I don&#39;t understand why this is happening given that the same devic=
+e tree is used in both cases and<br>
+&gt; not sure where next to look.<br>
+<br>
+Since the DTB is the same, are all the required drivers present (not as mod=
+ules)? I didn&#39;t check<br>
+which drivers exactly are built in with the configs ST provides. I would es=
+pecially check for the<br>
+CONFIG_MMC* values and whether the required filesystem support is built in.=
+<br>
+<br>
+Best,<br>
+<br>
+Simon<br>
+</blockquote></div>
+
+--00000000000069324a05f432ca8d--
+
+--===============6695855367644771136==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6695855367644771136==--
