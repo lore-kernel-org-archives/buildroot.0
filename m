@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1694C636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 17:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2504DC636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 17:44:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 35E1040C37;
-	Wed,  8 Feb 2023 17:43:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35E1040C37
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE96C61163;
+	Wed,  8 Feb 2023 17:44:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE96C61163
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ME0Z24P6mIZo; Wed,  8 Feb 2023 17:43:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7jrsPrrn_kZn; Wed,  8 Feb 2023 17:44:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A9F2640C70;
-	Wed,  8 Feb 2023 17:43:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9F2640C70
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 545D81BF275
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 17:43:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0143C6116B;
+	Wed,  8 Feb 2023 17:44:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0143C6116B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A1EC1BF275
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 17:44:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37DF340C46
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 17:43:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37DF340C46
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03BC082051
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 17:44:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03BC082051
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S95sbqgtjBJt for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 17:43:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7EB240C37
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D7EB240C37
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 17:43:32 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.208.170]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGz1f-1pKbOx2I8B-00E7HY; Wed, 08
- Feb 2023 18:43:24 +0100
-Date: Wed, 8 Feb 2023 18:43:23 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Message-ID: <20230208184323.34219f84@gmx.net>
-In-Reply-To: <20230208144639.764af681@windsurf>
-References: <20220926051956.3272067-1-buildroot@athaariq.my.id>
- <20230208144639.764af681@windsurf>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jn5ho6UzuCH4 for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 17:44:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAEB58204D
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DAEB58204D
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 17:44:38 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ bg5-20020a05600c3c8500b003e00c739ce4so2077673wmb.5
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 09:44:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Ej+HDgai9mtR9xSLWoXzcCnCPP/m+fTFf/5AH2/mlGk=;
+ b=h0nFsqjLpi4Iu5lmmBn4pND9IVt30LLkSeVnPwooaUPxNxbzJMTtVR/DKMEWJeiijh
+ lJZQ5XrItzHxtTKTlOdpooMJpAhVcDqnyyNqY3UszKtHHI5p702pYAE0jlvQ0H8w2ipo
+ YDBBkDyY4UXykrNcyRXHz/tvx/hTg7wCwYEq0lz8Aendxh5ZPw30HUphyPnHPPw33N/b
+ JOrXUliujSYas+LQ8uPGfgdGZRh7XJk3R8dpLwVQZG2d6hKXhFE5JwznGlzdu1kEsQiK
+ f91Z+RX4XoVTp5tO19JvGrMrQ1LIN9p6MxLRddH1OGVG73TuNW4AlNFowPx/wL3uJPpi
+ uy+Q==
+X-Gm-Message-State: AO0yUKWBM7L/8lvLWY7hQAHHCCyEvQFGVZVI+Y+kB6QqHL+pHgrlmcc9
+ AQNJwJkcIJtNottnnSEpyTzS4NQoL/I=
+X-Google-Smtp-Source: AK7set+xFNYDQ6y8c4xSHiMalaBeakq9bM7bu3OeuhPJU5tkm6St4NRiZFKgwNKG/9u9VzZ7t+/UzA==
+X-Received: by 2002:a05:600c:807:b0:3e0:47:66cc with SMTP id
+ k7-20020a05600c080700b003e0004766ccmr7434055wmp.23.1675878276489; 
+ Wed, 08 Feb 2023 09:44:36 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ o41-20020a05600c512900b003dc4aae4739sm3027653wms.27.2023.02.08.09.44.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 08 Feb 2023 09:44:35 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  8 Feb 2023 18:44:31 +0100
+Message-Id: <20230208174431.85800-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:sVoFEYH/yXBLtuWFFhCW6FmasW09RrLtGsw4lGnoXIgU2ky2MJU
- 1xYJ+Cb4ouY5kcaJeu6PU6OGSK6aQofFqtBvPK/bAymvXDLNP8yRkepHEdJ1yNtHur7sz7T
- j7Ia2pCWqL0fhOaJ0vb/sV/7Wqzgjf6gIY/NbItfdKNPoyFhTJJE8+hKKO6azZ03c0E5pS9
- 8pDBVzT7G7gEDITHObyRQ==
-UI-OutboundReport: notjunk:1;M01:P0:s3irNA19tu4=;owWrXOVQ6fyWj8TSXW38YFwUICT
- HItgh4v/XurH2SEsJYO9RaorhnEGLu0b8z1kvQOfwkvW/2Rl8trJ36GOJwPM9vmcRiUU09FmF
- NPzmD+8+ENRu4nKHInrjxTiYY4hJAM/KViVatRVioeOkyTjAhbA9SsjUm5qF2U1WsGRlHfCnf
- Mt5xAsZBqK3oP9y/QIy+C+JLr0kwui/Fx4P4D2vxOjAC/IiCtEnmfQ/9xDFM9so8AsTLE8ts/
- Ok8hNzZ0kAwz2bkKWEFHs0sW35rMkj2l0oQr9KVgrPoOgEgr0feHjAOoa2KtMzEfitTjv4OVN
- G7q5U7ADifK8RwfNETdO2LxpGE7WVK9IIdYXW+JcDdyb/SkBVs0a9NwYNu8jzKH1uD4gHRsNG
- u9sZsRgHVEAxKQFVFk3sEZ07yWIeskYXOTLguqrcdG7q0AcZy+hKfH8OQ3UHDbUx5f2b6cYE3
- jsGh1x+3SC46106wvQ1/1Haqj7RcOYOGa6rtEfDgRu3yOEO6m663q2WErCN9KFfkpJQIHqnJ+
- 2BgoLqJg241VEVGrjuiJL5Eb+I4JHuqXafADrbGWt2v07bAwOvwkCKR7gLtQpeTlwR2gLkqLJ
- KQu0MpHl992njbZ6AmpOn8tw0F7yr2YN+mPgO3bIGKwshX2YWirL1w8CXl9unHxYCwBUK9lhc
- vHUIhR/Dla1MfNnyAsMyVqSPycD/R2sBs55J6wFILp1wpURd7lA8jWDHlwS19+LwicUsJSHNP
- wulqwQLnMdayI38AM3f4Wxzv+/JIF1srcszrQOTL+1p6AIsmeEmp7HjfMf1MNf7oMjiAwhfyZ
- FUGkvyazSJ49asqM//2w2CxvDqX90Vfz7cr/tq6g3hZ2cLqz8xOcMPfVpfXWOESLT1/1EJRUq
- 3D9FkZ42lB9kJe2TNJ0dqBO1d321BbGzxidAHM/cz50IkQuctX7zAl/+37QiPf1Pb+kGmWIaq
- wZe0ey5yLHYwBj91lvFmYiHzBHM=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; s=s31663417; 
- t=1675878204; bh=4nAftOHtD6IXujIiAc52Vwf572hY+IwNHqwtJs4QOkQ=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=KPut/MgTNdhCdqxMuwk9OsNV/G/2TjtAImtAIdCel62bAyWuLbDhblzenvjIx62xx
- AjM+yh2LEnegvVF2fOEC0e5QPAH1cRxHiCwvc0/xJj766JuyA3eXeI76CRa9NYQGcU
- 65nLLivxPBO0jTm0YVqexOWnorbbxSabUcFR0Tv4GlEy977GeOXjicxjbl29/OITnX
- UoGN2Edpg321uzJVeFqVWfZN5RA2o+cS4EuDmZkLrnIB3UzhV/Y472S1u+TMCRZLSD
- yKkkMrH8KkA9leIbGAFwFSPZYzkuZCVVzGO7WerYH+trsVstnKpq3HSSvzyk3YBXbG
- Ps78VgEXLR6Sw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=KPut/MgT
-Subject: Re: [Buildroot] [PATCH 1/1] board/raspberrypi4: bump kernel version
- to 5.15.68
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Ej+HDgai9mtR9xSLWoXzcCnCPP/m+fTFf/5AH2/mlGk=;
+ b=kkcaHat8VIqr9XkL4YmNe7TfwoQGcYwip5ZFUwwi5AP8PpZJR524RbVlaqnd+LLpdI
+ GnZk2/ur0lvbFt6SpYJkqueP9YelU54ju83HSBp7z5WsRJ3JYHfH9dVsPvCrTNlfiPTv
+ XLo3hRATFRT0iPI9n1s8oo6TDnAJTdQskY2r8deW6DaKHWuyjrhCZ8AkEO+plnIHcgJz
+ U2AU8Oswd1WESJ5xxL2mfkccq6WMwSjhoEdFjnlC0RnyfMzMHEKeXDJNsew/wUgDN7fd
+ z9kyE9RHWheBkYeNbxoLF4ojN8Sjevv0tjwrODVwJtGTyrTnU9nL5eXKOMp+bDP21PMq
+ ie4w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kkcaHat8
+Subject: [Buildroot] [PATCH 1/1] package/open-iscsi: add
+ OPEN_ISCSI_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,143 +95,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Martin Bark <martin@barkynet.com>
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 8 Feb 2023 14:46:39 +0100, Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+cpe:2.3:a:open-iscsi_project:open-iscsi is a valid CPE identifier for
+this package:
 
-> Hello Athaariq,
->
-> On Mon, 26 Sep 2022 05:20:15 +0000 (UTC)
-> Athaariq Ardhiansyah <buildroot@athaariq.my.id> wrote:
->
-> > First of all, kernel support for Raspberry Pi is way too old relative to stable version. Second, we actually have several bug fixes regarding the kernel including HDMI hotplug and more problems on graphic stacks. However, I only have Raspberry Pi 4B so I cannot test the changes for other Raspberry Pi models. For anyone who has those boards, please help us to bump and test the kernel.
-> >
-> > Signed-off-by: Athaariq Ardhiansyah <buildroot@athaariq.my.id>
->
-> Thanks for your patch. It would indeed be nice to update our
-> RaspberryPi defconfigs, but there are a number of questions which need
-> to be answered before we can apply your patch.
->
-> First of all, a small detail: your commit log must be wrapped at ~80
-> columns. Also, it shouldn't use 1st person sentence "I only have".
->
-> > diff --git a/board/raspberrypi/linux.fragment b/board/raspberrypi/linux.fragment
-> > new file mode 100644
-> > index 0000000000..798b2e91da
-> > --- /dev/null
-> > +++ b/board/raspberrypi/linux.fragment
-> > @@ -0,0 +1,7 @@
-> > +# Dynamic CPU Clock
-> > +CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE=n
-> > +CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
-> > +
-> > +# Fix Kernel Module won't Load
-> > +CONFIG_MODULE_COMPRESS_XZ=n
-> > +CONFIG_MODULE_COMPRESS_NONE=y
->
-> Why is this Linux kernel configuration fragment needed? There is no
-> explanation in your commit log. Changing the default CPU governor
-> should not be needed, and the second chunk about kernel module
-> compression is a bit strange and deserves some explanation.
->
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopen-iscsi_project%3Aopen-iscsi
 
-Upstream defconfigs changed to CONFIG_MODULE_COMPRESS_XZ (see [1] and [2]),
-alternative would be to enable the following in the buildroot
-raspberry*_defconfigs:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/open-iscsi/open-iscsi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-	BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-	BR2_PACKAGE_XZ
-	BR2_PACKAGE_KMOD
-	BR2_PACKAGE_KMOD_TOOLS
-	BR2_PACKAGE_HOST_KMOD_XZ
-
-Regards,
-Peter
-
-
-> > diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-> > index 5942f7c4e1..6d90a8f004 100644
-> > --- a/configs/raspberrypi4_64_defconfig
-> > +++ b/configs/raspberrypi4_64_defconfig
-> > @@ -6,13 +6,14 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> >
-> >  BR2_SYSTEM_DHCP="eth0"
-> >
-> > -# Linux headers same as kernel, a 5.10 series
-> > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-> > +# Linux headers same as kernel, a 5.15 series
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,155b736f0ff883415d374ba743473f5ef146814b)/linux-155b736f0ff883415d374ba743473f5ef146814b.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-> > +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi4-64/linux.fragment"
-> >
-> >  # Build the DTB from the kernel sources
-> >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > @@ -23,6 +24,9 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> >  BR2_PACKAGE_RPI_FIRMWARE=y
-> >  BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
-> >  BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi4-64/config_4_64bit.txt"
-> > +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI=y
-> > +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT=y
-> > +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI=y
->
-> Why is this being added?
->
-> >  # Required tools to create the SD image
-> >  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> > diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-> > index 4e5580c140..f0947c329c 100644
-> > --- a/configs/raspberrypi4_defconfig
-> > +++ b/configs/raspberrypi4_defconfig
-> > @@ -6,13 +6,14 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> >
-> >  BR2_SYSTEM_DHCP="eth0"
-> >
-> > -# Linux headers same as kernel, a 5.10 series
-> > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-> > +# Linux headers same as kernel, a 5.15 series
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-> >
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,155b736f0ff883415d374ba743473f5ef146814b)/linux-155b736f0ff883415d374ba743473f5ef146814b.tar.gz"
-> >  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-> > +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi4/linux.fragment"
-> >
-> >  # Build the DTB from the kernel sources
-> >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > @@ -23,6 +24,10 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> >  BR2_PACKAGE_RPI_FIRMWARE=y
-> >  BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
-> >  BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi4/config_4.txt"
-> > +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI=y
-> > +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT=y
-> > +BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI=y
-> > +BR2_PACKAGE_RPI_USERLAND=y
->
-> Why is rpi-userland being added here, and not to the other defconfig above?
->
-> Also, you're updating rpi-firmware, rpi-userland and RaspberryPi
-> defconfigs in the same commit. Is this because they need to be updated
-> in sync? If that's the case, is there a potential problem if we update
-> rpi-firmware/rpi-userland, but not the defconfigs for RaspberryPi 1/2/3 ?
->
-> Thanks a lot for your feedback!
->
-> Thomas
+diff --git a/package/open-iscsi/open-iscsi.mk b/package/open-iscsi/open-iscsi.mk
+index 249253c64f..e5b965b80d 100644
+--- a/package/open-iscsi/open-iscsi.mk
++++ b/package/open-iscsi/open-iscsi.mk
+@@ -10,6 +10,7 @@ OPEN_ISCSI_SITE = $(call github,open-iscsi,open-iscsi,$(OPEN_ISCSI_VERSION))
+ # well. See https://github.com/open-iscsi/open-iscsi/issues/379
+ OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+
+ OPEN_ISCSI_LICENSE_FILES = COPYING
++OPEN_ISCSI_CPE_ID_VENDOR = open-iscsi_project
+ OPEN_ISCSI_DEPENDENCIES = kmod open-isns openssl util-linux
+ 
+ OPEN_ISCSI_CONF_OPTS = -Ddbroot=/var/lib/iscsi
+-- 
+2.39.0
 
 _______________________________________________
 buildroot mailing list
