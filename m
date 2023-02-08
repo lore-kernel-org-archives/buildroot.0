@@ -4,94 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F135C636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 14:46:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EA6DC636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 14:47:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C58C661107;
-	Wed,  8 Feb 2023 14:46:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C58C661107
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3E776110F;
+	Wed,  8 Feb 2023 14:47:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3E776110F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cTrVFAXvhEzw; Wed,  8 Feb 2023 14:46:28 +0000 (UTC)
+	with ESMTP id pYjEZFSiBTEY; Wed,  8 Feb 2023 14:47:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D6E760E77;
-	Wed,  8 Feb 2023 14:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D6E760E77
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E97AB1BF2C7
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 14:46:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36E0C61119;
+	Wed,  8 Feb 2023 14:47:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E0C61119
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A40D21BF2C7
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 14:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C2F0281FDB
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 14:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2F0281FDB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B54061119
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 14:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B54061119
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zc_Pidj-xL9G for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 14:46:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90E9981FD8
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 90E9981FD8
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 14:46:23 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id j23so1809536wra.0
- for <buildroot@buildroot.org>; Wed, 08 Feb 2023 06:46:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=K93KyAwo0VZsI0L+CIP8U28q0N8MeBxyCGHgOaq/ypU=;
- b=xY+lz4U2aIOAIbf+uIm9IyPfgwDPziAuOd52DFGeG1MsYleytL+jzUukVs5JkFayA5
- K+55V1AySxVIve1JQcrT3X3O/IOxDm5v0a6O1tqTgXiyj41fyClxd3ZOojSB9y6iPi1D
- F7CLlxVutuzGYUwx/3j/aLTXZPAHdg/FAJdGI1VYInUq0fFXjjm4uK78R7PDegoPZbTc
- LA8pKo2iVwgod6BhwnedUqJhWmL4hEiUI4faBAkPd4/cvkBvJ5/8LLMuHZQMv7EwmhCR
- nFSBqSfrQ6jaqjlqd5E2GVGcosPORDSRzH84siKRKoAwrVHDeJKFIrQwgHRrRyVtKlPh
- FpUw==
-X-Gm-Message-State: AO0yUKW2gTf0Htnh4zAAkA7krzFGgj+vP1jNCbalu3hEr0CZIZvgw3hZ
- VRngGwrCwj1nZeCO8JVajmVK0w==
-X-Google-Smtp-Source: AK7set9uImRPxQpwOO30VWMz42nlSdPWroRTkgBRKPuG7u+V3Is9Jvv+SGyn5a9q44krpVD5015lgg==
-X-Received: by 2002:a5d:58c3:0:b0:2c4:1ea:4b94 with SMTP id
- o3-20020a5d58c3000000b002c401ea4b94mr2415181wrf.69.1675867581627; 
- Wed, 08 Feb 2023 06:46:21 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- d13-20020adffbcd000000b002c3f6cd1f0fsm3666338wrs.83.2023.02.08.06.46.20
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 08 Feb 2023 06:46:21 -0800 (PST)
-Message-ID: <0b07f7e5-f76c-bbdb-ec81-703dd7fbb273@smile.fr>
-Date: Wed, 8 Feb 2023 15:46:20 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kxrx-xPhpiNm for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 14:47:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 385FD6110F
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 385FD6110F
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 14:47:46 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B0AF4E000F;
+ Wed,  8 Feb 2023 14:47:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pPljb-00GGGq-Ua; Wed, 08 Feb 2023 15:47:43 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Sebastian Weyer <sebastian.weyer@smile.fr>
+References: <20230208110551.187828-1-sebastian.weyer@smile.fr>
+Date: Wed, 08 Feb 2023 15:47:43 +0100
+In-Reply-To: <20230208110551.187828-1-sebastian.weyer@smile.fr> (Sebastian
+ Weyer's message of "Wed, 8 Feb 2023 12:05:51 +0100")
+Message-ID: <871qn05i40.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To: Lang Daniel <d.lang@abatec.at>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <VI1P190MB0493D3E3ADB83361E32EBFD79F319@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <VI1P190MB0493D3E3ADB83361E32EBFD79F319@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=K93KyAwo0VZsI0L+CIP8U28q0N8MeBxyCGHgOaq/ypU=;
- b=5HSwVJWt28hGvjVXxSD+2DFnDLSgZrW25C9lvujlpP0Jp1n0CNQbcXDtby9cpOWPTJ
- NbV8HIoOCQ1aj1uzpH9UWfupWw4jq+0BqKSBzU3+5qs6KnZ4uX8my8sYD5qi1foSStDe
- poCeZr0YB6H/vjZqZxUTpYAiK0dQ74LZBVDIm7DjRXfVcr7ScKEwwBDgjLbJuhg5/Ijj
- BRQpnJiyHS4/K5ptxiXaHtVo/1LPNGtNgXsTQgZ3rLHWx85FwL3qpF9/njYcYDJ7I+Lw
- 8hV3/+vqkdiA9yNF1aVQh/q51flLTR66E3ZPAY1k81SLB6qQkQJf2meS81BJtxQcTFKR
- 3DWw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=5HSwVJWt
-Subject: Re: [Buildroot] [PATCH v2 01/11] package/llvm-project: new group
- for llvm packages
+Subject: Re: [Buildroot] [PATCH 1/1] package/rust: fix boostrap build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,37 +63,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpMZSAyNS8xMC8yMDIyIMOgIDA4OjAyLCBMYW5nIERhbmllbCB2aWEgYnVpbGRyb290
-IGEgw6ljcml0wqA6Cj4gVG8gbWFrZSB1cGRhdGluZyBlYXNpZXIgaW4gdGhlIGZ1dHVyZSwgZ3Jv
-dXAgYWxsIGxsdm0gcHJvamVjdHMgaW4KPiBvbmUgc3ViZm9sZGVyIGFuZCBkZWZpbmUgc29tZSB2
-YXJpYWJsZXMgZm9yIGFsbCBvZiB0aGVtLgoKQWdyZWUsIGVzcGVjaWFsbHkgc2luY2UgaXQncyBu
-b3dhZGF5IHJlbGVhc2VkIGZyb20gdGhlIHNhbWUgZ2l0IHJlcG9zaXRvcnkKKGxsdm0tcHJvamVj
-dCkuCgpSZXZpZXdlZC1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+CgpC
-ZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gCj4gU2lnbmVkLW9mZi1ieTogRGFuaWVsIExhbmcgPGQu
-bGFuZ0BhYmF0ZWMuYXQ+Cj4gLS0tCj4gQ2hhbmdlcyB2MSAtPiB2MjoKPiAtIE5vIGNoYW5nZXMK
-PiAtLS0KPiAgcGFja2FnZS9sbHZtLXByb2plY3QvbGx2bS1wcm9qZWN0Lm1rIHwgMTAgKysrKysr
-KysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAx
-MDA2NDQgcGFja2FnZS9sbHZtLXByb2plY3QvbGx2bS1wcm9qZWN0Lm1rCj4gCj4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2xsdm0tcHJvamVjdC5tayBiL3BhY2thZ2UvbGx2bS1w
-cm9qZWN0L2xsdm0tcHJvamVjdC5tawo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAw
-MDAwMDAwMC4uN2JhODliYjYwNQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2xsdm0t
-cHJvamVjdC9sbHZtLXByb2plY3QubWsKPiBAQCAtMCwwICsxLDEwIEBACj4gKyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjCj4gKyMKPiArIyBsbHZtLXByb2plY3QKPiArIwo+ICsjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIwo+ICsKPiArTExWTV9QUk9KRUNUX1ZFUlNJT04gPSAxMS4xLjAKPiArTExWTV9Q
-Uk9KRUNUX1NJVEUgPSBodHRwczovL2dpdGh1Yi5jb20vbGx2bS9sbHZtLXByb2plY3QvcmVsZWFz
-ZXMvZG93bmxvYWQvbGx2bW9yZy0kKExMVk1fUFJPSkVDVF9WRVJTSU9OKQo+ICsKPiAraW5jbHVk
-ZSAkKHNvcnQgJCh3aWxkY2FyZCBwYWNrYWdlL2xsdm0tcHJvamVjdC8qLyoubWspKQoKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+>>>>> "Sebastian" == Sebastian Weyer <sebastian.weyer@smile.fr> writes:
+
+ > The update to v1.67.0 of rust broke the boostrap build. This patch
+
+s/boostrap/bootstrap/ ;)
+
+ > applies an upstream patch to fix this:
+ > https://github.com/rust-lang/rust/commit/3fe64ebbce21e79adb64099984e96dfb79bdd0f9
+
+ > Fixes:
+ > http://autobuild.buildroot.org/results/214/214fcbb3458893784b7f85b60f7ee1edb428c77f/build-end.log
+
+ > Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+ > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ > Cc: James Hilliard <james.hilliard1@gmail.com>
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
