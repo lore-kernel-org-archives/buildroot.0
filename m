@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D79BC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:35:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 597E2C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DCA8414CE;
-	Tue, 21 Feb 2023 00:35:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DCA8414CE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 070354F457;
+	Tue, 21 Feb 2023 00:35:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 070354F457
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hcZZmIhzUav1; Tue, 21 Feb 2023 00:35:02 +0000 (UTC)
+	with ESMTP id OIL_xRLLYV0g; Tue, 21 Feb 2023 00:35:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C0964F478;
-	Tue, 21 Feb 2023 00:35:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C0964F478
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8C834F446;
+	Tue, 21 Feb 2023 00:35:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8C834F446
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BFCD71BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 97BF81BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78E824159A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7862B417CB
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78E824159A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7862B417CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V596gKK6A2Rp for <buildroot@lists.busybox.net>;
+ with ESMTP id dlX1hsBVahba for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7211E417E9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 937BD417C3
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7211E417E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 937BD417C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C7B28648F; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
+ id 8C23A86495; Mon, 20 Feb 2023 20:52:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Feb 2023 23:13:33 +0100
+Date: Wed, 8 Feb 2023 09:54:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 737964e2f12057a0d968a2f10197e80e91ba65eb
-X-Git-Newrev: bfad9bef35e984f00ae70f1cd51cc75b89ff5efc
+X-Git-Oldrev: f9a92ea1cb1dd2aa9b3f9c83c04d7d01c1f6e148
+X-Git-Newrev: 17be7d028c193dc1160a4cb9313efe37326e7aa9
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205254.5C7B28648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: add Giulio Benetti
- to package rtl8821cu
+Message-Id: <20230220205254.8C23A86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libva: switch to meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfad9bef35e984f00ae70f1cd51cc75b89ff5efc
+commit: https://git.buildroot.net/buildroot/commit/?id=17be7d028c193dc1160a4cb9313efe37326e7aa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+The time between version 2.17.0 being tagged and the release of its
+tarball version containing autoconf scripts was three weeks now.
+With the switch to meson we can directly use the github-generated
+tarball while not needing to run autoreconf.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/libva/libva.hash |  4 +---
+ package/libva/libva.mk   | 19 +++++++++----------
+ 2 files changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d7c4d03c4c..2cb3361c83 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1163,6 +1163,7 @@ F:	package/rtl8723bu/
- F:	package/rtl8723ds/
- F:	package/rtl8812au-aircrack-ng/
- F:	package/rtl8821au/
-+F:	package/rtl8821cu/
- F:	package/sunxi-mali-utgard/
- F:	package/sunxi-mali-utgard-driver/
- F:	package/sunxi-tools/
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 700ace0378..780c186069 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,3 @@
+-# From https://github.com/intel/libva/releases/download/2.17.0/libva-2.17.0.tar.bz2.sha1sum
+-sha1  997f7b3111bc5a4d32ec72e9d7f9fcfca41e4923  libva-2.17.0.tar.bz2
+ # Locally computed
+-sha256  f3e5eb27c305e05a9bb62703d1915a127301cc0c4f9f209025767432230c4eac  libva-2.17.0.tar.bz2
++sha256  8940541980ef998a36cd8f6ad905e81838ea4ddf56dc479ed2bebd12711e6001  libva-2.17.0.tar.gz
+ sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index c6b9f63b10..f50010d9fc 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBVA_VERSION = 2.17.0
+-LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+-LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
++LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
+ LIBVA_LICENSE = MIT
+ LIBVA_LICENSE_FILES = COPYING
+ LIBVA_INSTALL_STAGING = YES
+@@ -14,25 +13,25 @@ LIBVA_DEPENDENCIES = host-pkgconf libdrm
+ 
+ # libdrm is a hard-dependency
+ LIBVA_CONF_OPTS = \
+-	--enable-drm \
+-	--with-drivers-path="/usr/lib/va"
++	-Ddisable_drm=false \
++	-Ddriverdir="/usr/lib/va"
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
+-LIBVA_CONF_OPTS += --enable-x11
++LIBVA_CONF_OPTS += -Dwith_x11=yes
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ LIBVA_DEPENDENCIES += libgl
+-LIBVA_CONF_OPTS += --enable-glx
++LIBVA_CONF_OPTS += -Dwith_glx=yes
+ endif
+ else
+-LIBVA_CONF_OPTS += --disable-glx --disable-x11
++LIBVA_CONF_OPTS += -Dwith_glx=no -Dwith_x11=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ LIBVA_DEPENDENCIES += wayland
+-LIBVA_CONF_OPTS += --enable-wayland
++LIBVA_CONF_OPTS += -Dwith_wayland=yes
+ else
+-LIBVA_CONF_OPTS += --disable-wayland
++LIBVA_CONF_OPTS += -Dwith_wayland=no
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
