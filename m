@@ -1,50 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01F4FC636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 13:35:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96E26C05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 13:43:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8EA9540BD9;
-	Wed,  8 Feb 2023 13:35:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EA9540BD9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2384040292;
+	Wed,  8 Feb 2023 13:43:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2384040292
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m03OdMTFTR6E; Wed,  8 Feb 2023 13:35:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BB-wsVUbo8m8; Wed,  8 Feb 2023 13:43:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D76CD40BB5;
-	Wed,  8 Feb 2023 13:35:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D76CD40BB5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 279CE1BF3FD
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 13:35:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA7B040890;
+	Wed,  8 Feb 2023 13:43:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA7B040890
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A3D781BF3FD
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 13:43:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 021F840BB5
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 13:35:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 021F840BB5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B590610B0
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 13:43:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B590610B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id icYdyZcWn5xx for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 13:35:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E22440B5A
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 13:35:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E22440B5A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DABF846A1; Wed,  8 Feb 2023 13:35:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 14:35:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e447f56408f9308cc0e527f97dcc1844f2d6c850
-X-Git-Newrev: 9d8e207e7aaf035f48252e19013b610893d2fce0
-X-Patchwork-Hint: ignore
-Message-Id: <20230208133555.1DABF846A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6/qt6serialport: use DESTDIR
- instead of --prefix for installation
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J6u2zvUulowP for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 13:43:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEC9F60EC6
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EEC9F60EC6
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 13:43:43 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BC5FC1C0005;
+ Wed,  8 Feb 2023 13:43:41 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pPkjc-00GE1w-Vh; Wed, 08 Feb 2023 14:43:41 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+References: <20221031124625.21172-1-raphael.pavlidis@gmail.com>
+Date: Wed, 08 Feb 2023 14:43:40 +0100
+In-Reply-To: <20221031124625.21172-1-raphael.pavlidis@gmail.com> (Raphael
+ Pavlidis's message of "Mon, 31 Oct 2022 13:46:25 +0100")
+Message-ID: <87h6vw5l2r.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/sway: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,49 +63,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d8e207e7aaf035f48252e19013b610893d2fce0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Raphael" == Raphael Pavlidis <raphael.pavlidis@gmail.com> writes:
 
-Even though it works, overriding --prefix at installation time is a
-bit weird. In order to be more consistent with what is done with other
-build systems, use DESTDIR instead at installation time.
+ > i3-compatible Wayland compositor
+ > This Wayland compositor can be used as a kiosk compositor like cage, but
+ > with the advantage of better configuration of multiple monitor and
+ > windows. For example, move a window by title to the output X or set the
+ > resolution of Y to Z.
 
-Note that $(DESTDIR) comes in addition to the
--DCMAKE_INSTALL_PREFIX=/usr that is passed at configure time, so with
-this commit, the files continue to be installed in $(STAGING_DIR)/usr
-and $(TARGET_DIR)/usr as they should be.
+ > Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+ > ---
+ >  DEVELOPERS             |  3 ++-
+ >  package/Config.in      |  1 +
+ >  package/sway/Config.in | 42 ++++++++++++++++++++++++++++++++++++++++++
+ >  package/sway/sway.hash |  3 +++
+ >  package/sway/sway.mk   | 36 ++++++++++++++++++++++++++++++++++++
+ >  5 files changed, 84 insertions(+), 1 deletion(-)
+ >  create mode 100644 package/sway/Config.in
+ >  create mode 100644 package/sway/sway.hash
+ >  create mode 100644 package/sway/sway.mk
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt6/qt6serialport/qt6serialport.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > +++ b/package/sway/Config.in
+ > @@ -0,0 +1,42 @@
+ > +config BR2_PACKAGE_SWAY
+ > +	bool "sway"
+ > +	depends on BR2_PACKAGE_SYSTEMD # is required by the sd-bus provider
+ > +	depends on !BR2_STATIC_LIBS # wlroots
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
+ > +	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
+ > +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
+ > +	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
+ > +	depends on BR2_PACKAGE_HAS_UDEV # wlroots
+ > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+ > +	depends on BR2_USE_WCHAR # pango
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
+ > +	depends on BR2_USE_MMU # pango
+ > +	depends on BR2_INSTALL_LIBSTDCPP # pango
+ > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
+ > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
+ > +	select BR2_PACKAGE_WLROOTS
+ > +	select BR2_PACKAGE_JSON_C
+ > +	select BR2_PACKAGE_PCRE
+ > +	select BR2_PACKAGE_CAIRO
+ > +	select BR2_PACKAGE_CAIRO_PNG
+ > +	select BR2_PACKAGE_PANGO
+ > +	help
+ > +	  i3-compatible Wayland compositor 
+ > +
+ > +	  https://github.com/swaywm/sway
+ > +
+ > +comment "sway needs systemd, udev, EGL w/ Wayland backend and OpenGL ES support"
+ > +	depends on !BR2_PACKAGE_SYSTEMD || \
+ > +		!BR2_PACKAGE_HAS_UDEV || \
+ > + 		!BR2_PACKAGE_HAS_LIBEGL || \
+ > +		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ > +		!BR2_PACKAGE_HAS_LIBGLES 
 
-diff --git a/package/qt6/qt6serialport/qt6serialport.mk b/package/qt6/qt6serialport/qt6serialport.mk
-index 9656e97c96..497719d4ec 100644
---- a/package/qt6/qt6serialport/qt6serialport.mk
-+++ b/package/qt6/qt6serialport/qt6serialport.mk
-@@ -41,11 +41,11 @@ define QT6SERIALPORT_BUILD_CMDS
- endef
- 
- define QT6SERIALPORT_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR) --prefix $(STAGING_DIR)/usr
-+	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
- endef
- 
- define QT6SERIALPORT_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR) --prefix $(TARGET_DIR)/usr
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
- endef
- 
- $(eval $(cmake-package))
+NIT: You have a number of trailing spaces here.
+
+ > +++ b/package/sway/sway.mk
+ > @@ -0,0 +1,36 @@
+ > +################################################################################
+ > +#
+ > +# sway
+ > +#
+ > +################################################################################
+ > +
+ > +SWAY_VERSION = 1.7
+ > +SWAY_SITE = $(call github,swaywm,sway,v$(SWAY_VERSION))
+ > +SWAY_LICENSE = MIT
+ > +SWAY_LICENSE_FILES = LICENSE
+ > +SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
+ > +SWAY_CONF_OPTS = \
+ > +	-Dwerror=false \
+ > +	-Ddefault-wallpaper=false \
+ > +	-Dzsh-completions=false \
+ > +	-Dbash-completions=false \
+ > +	-Dfish-completions=false \
+ > +	-Dswaybar=false \
+ > +	-Dswaynag=false \
+ > +	-Dtray=disabled \
+ > +	-Dman-pages=disabled \
+ > +	-Dsd-bus-provider=libsystemd
+ > +
+ > +ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+ > +SWAY_CONF_OPTS += -Dxwayland=enabled
+
+How did you test this? Here wlroots with x11 support doesn't build as we
+don't have an Xwayland .pc file or binary in Buildroot.
+
+> +else
+ > +SWAY_CONF_OPTS += -Dxwayland=disabled
+ > +endif
+ > +
+ > +ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
+ > +SWAY_CONF_OPTS += -Dgdk-pixbuf=enabled
+
+You also need to ensure that sway is built after gdk-pixbuf with:
+
+SWAY_DEPENDENCIES += gdk-pixbuf
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
