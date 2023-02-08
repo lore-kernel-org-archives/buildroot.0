@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68EDFC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BE34C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:50:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21D6270080;
-	Tue, 21 Feb 2023 01:50:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21D6270080
+	by smtp3.osuosl.org (Postfix) with ESMTP id C68F46FC06;
+	Tue, 21 Feb 2023 01:50:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C68F46FC06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k0ZYRsrZ4k-9; Tue, 21 Feb 2023 01:50:11 +0000 (UTC)
+	with ESMTP id ZPnNJhq2Su1Z; Tue, 21 Feb 2023 01:50:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44E1C7007A;
-	Tue, 21 Feb 2023 01:50:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44E1C7007A
+	by smtp3.osuosl.org (Postfix) with ESMTP id C613370063;
+	Tue, 21 Feb 2023 01:50:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C613370063
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2CB2B1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7BF6A1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B84270004
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F7946FFEE
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B84270004
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F7946FFEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oSJjk3i8M0Jw for <buildroot@lists.busybox.net>;
+ with ESMTP id ToE7OCbqUW8n for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F79270007
+ by smtp3.osuosl.org (Postfix) with ESMTP id 20DBE6FE60
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F79270007
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20DBE6FE60
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56E2781979; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+ id 19703828C8; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 15:34:42 +0100
+Date: Wed, 8 Feb 2023 14:55:31 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2b021bc1d77ce485ac46114482024d12339d6b5b
-X-Git-Newrev: 7df32882203fdd525156ddb785d171b193e5b282
+X-Git-Oldrev: 9d8e207e7aaf035f48252e19013b610893d2fce0
+X-Git-Newrev: b739d6bd98e8ee12ec2150563ef9cdef35d2ea35
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205256.56E2781979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rust: fix bootstrap
- build
+Message-Id: <20230220205256.19703828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sway: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,74 +62,154 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7df32882203fdd525156ddb785d171b193e5b282
+commit: https://git.buildroot.net/buildroot/commit/?id=b739d6bd98e8ee12ec2150563ef9cdef35d2ea35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The update to v1.67.0 of rust broke the bootstrap build. This patch
-applies an upstream patch to fix this:
-https://github.com/rust-lang/rust/commit/3fe64ebbce21e79adb64099984e96dfb79bdd0f9
+i3-compatible Wayland compositor
 
-Fixes:
-http://autobuild.buildroot.org/results/214/214fcbb3458893784b7f85b60f7ee1edb428c77f/build-end.log
+This Wayland compositor can be used as a kiosk compositor like cage, but
+with the advantage of better configuration of multiple monitor and
+windows. For example, move a window by title to the output X or set the
+resolution of Y to Z.
 
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+[Peter: Fix white space, add gdk-pixbuf to _DEPENDENCIES]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-fix-unsoundness-in-bootstrap-cache-code.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ DEVELOPERS             |  3 ++-
+ package/Config.in      |  1 +
+ package/sway/Config.in | 42 ++++++++++++++++++++++++++++++++++++++++++
+ package/sway/sway.hash |  3 +++
+ package/sway/sway.mk   | 37 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 85 insertions(+), 1 deletion(-)
 
-diff --git a/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch b/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2cb3361c83..0bb4db81bb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2507,8 +2507,9 @@ F:	support/testing/tests/package/test_python_jmespath.py
+ F:	support/testing/tests/package/test_python_rsa.py
+ F:	support/testing/tests/package/test_python_s3transfer.py
+ 
+-N:	Raphael Pavlidis <raphael.pavlidis@googlemail.com>
++N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
+ F:	package/slirp4netns/
++F:	package/sway/
+ 
+ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/freescale-imx/
+diff --git a/package/Config.in b/package/Config.in
+index 06d0a05854..2adfcdbb1d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -327,6 +327,7 @@ comment "Graphic applications"
+ 	source "package/qt5cinex/Config.in"
+ 	source "package/rrdtool/Config.in"
+ 	source "package/stellarium/Config.in"
++	source "package/sway/Config.in"
+ 	source "package/tesseract-ocr/Config.in"
+ 	source "package/tinifier/Config.in"
+ 
+diff --git a/package/sway/Config.in b/package/sway/Config.in
 new file mode 100644
-index 0000000000..3eae34642f
+index 0000000000..f8d073520f
 --- /dev/null
-+++ b/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
-@@ -0,0 +1,43 @@
-+From 6bf37780ed49846c78d6707355f1cf44790c4301 Mon Sep 17 00:00:00 2001
-+From: Michael Goulet <michael@errs.io>
-+Date: Mon, 12 Dec 2022 18:29:33 +0000
-+Subject: [PATCH] =?UTF-8?q?=F0=9F=9A=A8=20fix=20unsoundness=20in=20bootstr?=
-+ =?UTF-8?q?ap=20cache=20code?=
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/sway/Config.in
+@@ -0,0 +1,42 @@
++config BR2_PACKAGE_SWAY
++	bool "sway"
++	depends on BR2_PACKAGE_SYSTEMD # is required by the sd-bus provider
++	depends on !BR2_STATIC_LIBS # wlroots
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
++	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
++	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
++	depends on BR2_PACKAGE_HAS_UDEV # wlroots
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
++	depends on BR2_USE_WCHAR # pango
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
++	depends on BR2_USE_MMU # pango
++	depends on BR2_INSTALL_LIBSTDCPP # pango
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
++	select BR2_PACKAGE_WLROOTS
++	select BR2_PACKAGE_JSON_C
++	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_CAIRO_PNG
++	select BR2_PACKAGE_PANGO
++	help
++	  i3-compatible Wayland compositor
 +
-+(cherry picked from commit 3fe64ebbce21e79adb64099984e96dfb79bdd0f9)
-+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
-+---
-+ src/bootstrap/cache.rs | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++	  https://github.com/swaywm/sway
 +
-+diff --git a/src/bootstrap/cache.rs b/src/bootstrap/cache.rs
-+index be5c9bb0788..05f25af68ea 100644
-+--- a/src/bootstrap/cache.rs
-++++ b/src/bootstrap/cache.rs
-+@@ -89,16 +89,16 @@ fn hash<H: Hasher>(&self, state: &mut H) {
-+ 
-+ impl<T: Internable + Deref> Deref for Interned<T> {
-+     type Target = T::Target;
-+-    fn deref(&self) -> &'static Self::Target {
-++    fn deref(&self) -> &Self::Target {
-+         let l = T::intern_cache().lock().unwrap();
-+-        unsafe { mem::transmute::<&Self::Target, &'static Self::Target>(l.get(*self)) }
-++        unsafe { mem::transmute::<&Self::Target, &Self::Target>(l.get(*self)) }
-+     }
-+ }
-+ 
-+ impl<T: Internable + AsRef<U>, U: ?Sized> AsRef<U> for Interned<T> {
-+-    fn as_ref(&self) -> &'static U {
-++    fn as_ref(&self) -> &U {
-+         let l = T::intern_cache().lock().unwrap();
-+-        unsafe { mem::transmute::<&U, &'static U>(l.get(*self).as_ref()) }
-++        unsafe { mem::transmute::<&U, &U>(l.get(*self).as_ref()) }
-+     }
-+ }
-+ 
-+-- 
-+2.25.1
++comment "sway needs systemd, udev, EGL w/ Wayland backend and OpenGL ES support"
++	depends on !BR2_PACKAGE_SYSTEMD || \
++		!BR2_PACKAGE_HAS_UDEV || \
++		!BR2_PACKAGE_HAS_LIBEGL || \
++		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
++		!BR2_PACKAGE_HAS_LIBGLES
 +
++comment "sway needs a toolchain w/ wchar, threads, C++, dynamic library, gcc >= 4.9"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_INSTALL_LIBSTDCPP || \
++		BR2_STATIC_LIBS
+diff --git a/package/sway/sway.hash b/package/sway/sway.hash
+new file mode 100644
+index 0000000000..6dfa71730f
+--- /dev/null
++++ b/package/sway/sway.hash
+@@ -0,0 +1,3 @@
++# Locally computed, tarball verified with GPG signature
++sha256  0c64536fb2883ec518e75cfb119f9300115fb49b084e3fde62b794fe2c6c8d84  sway-1.7.tar.gz
++sha256  bd35722bff46327f5eded1d211207277bbe043d2a22048b282c42ef801593b8b  LICENSE
+diff --git a/package/sway/sway.mk b/package/sway/sway.mk
+new file mode 100644
+index 0000000000..802371c827
+--- /dev/null
++++ b/package/sway/sway.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# sway
++#
++################################################################################
++
++SWAY_VERSION = 1.7
++SWAY_SITE = $(call github,swaywm,sway,v$(SWAY_VERSION))
++SWAY_LICENSE = MIT
++SWAY_LICENSE_FILES = LICENSE
++SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
++SWAY_CONF_OPTS = \
++	-Dwerror=false \
++	-Ddefault-wallpaper=false \
++	-Dzsh-completions=false \
++	-Dbash-completions=false \
++	-Dfish-completions=false \
++	-Dswaybar=false \
++	-Dswaynag=false \
++	-Dtray=disabled \
++	-Dman-pages=disabled \
++	-Dsd-bus-provider=libsystemd
++
++ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
++SWAY_CONF_OPTS += -Dxwayland=enabled
++else
++SWAY_CONF_OPTS += -Dxwayland=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
++SWAY_CONF_OPTS += -Dgdk-pixbuf=enabled
++SWAY_DEPENDENCIES += gdk-pixbuf
++else
++SWAY_CONF_OPTS += -Dgdk-pixbuf=disabled
++endif
++
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
