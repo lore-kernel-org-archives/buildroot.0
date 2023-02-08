@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EADA9C636D3
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 07:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1B72C636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 07:18:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70B126108B;
-	Wed,  8 Feb 2023 07:12:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70B126108B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8vAIZtIbe7dw; Wed,  8 Feb 2023 07:12:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC7DC61059;
-	Wed,  8 Feb 2023 07:12:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC7DC61059
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9C8071BF8B4
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 07:12:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75D9381EBE
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 07:12:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75D9381EBE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CDEA81F1C;
+	Wed,  8 Feb 2023 07:18:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CDEA81F1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LzNVfxvb5OAl for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 07:12:32 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1Oc3TsEh6w7f; Wed,  8 Feb 2023 07:18:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A14781F19;
+	Wed,  8 Feb 2023 07:18:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A14781F19
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 80EDF1BF3BB
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 07:18:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B45A40B88
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 07:18:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B45A40B88
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tJtXptnARz-5 for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 07:18:21 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A73B581E7D
-Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A73B581E7D
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 07:12:31 +0000 (UTC)
-Received: by smtpng3.m.smailru.net with esmtpa (envelope-from
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E831D401F8
+Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E831D401F8
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 07:18:20 +0000 (UTC)
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
  <fido_max@inbox.ru>)
- id 1pPed2-0006Kn-Pw; Wed, 08 Feb 2023 10:12:29 +0300
+ id 1pPeif-0008Ey-DR; Wed, 08 Feb 2023 10:18:17 +0300
+From: Maxim Kochetkov <fido_max@inbox.ru>
 To: buildroot@buildroot.org
-Date: Wed,  8 Feb 2023 10:12:26 +0300
-Message-Id: <20230208071226.33697-1-fido_max@inbox.ru>
+Date: Wed,  8 Feb 2023 10:18:15 +0300
+Message-Id: <20230208071815.36221-1-fido_max@inbox.ru>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 X-Mailru-Src: smtp
 X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD9D919194CF4FC66046397AEC088A59FC2E4C3B8ABD5857F3D182A05F538085040EA6800D8B305A85EF6E7206890E7A0028CEF05C88CC39D864F3F5B8F0ED0FC24
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7F544D30F1A6FA191EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006373745FD4183B699148638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8F7FE4705C18DC1EEFE76B5AC5579EB5D6F9789CCF6C18C3F8528715B7D10C86859CC434672EE6371117882F4460429724CE54428C33FAD305F5C1EE8F4F765FC5FC25ED3FCEC3375A471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F446042972877693876707352091ADC097FE2C3A08F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA7E827F84554CEF5019E625A9149C048EE33AC447995A7AD182BEBFE083D3B9BA73A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E735F43AACC0BCEB2632C4224003CC83647689D4C264860C145E
-X-C1DE0DAB: 0D63561A33F958A5EEA3B29BE358BC51D86F4FEAAF495B625C22B25CCBB3C6D74EAF44D9B582CE87C8A4C02DF684249CC203C45FEA855C8F
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34951738D4D62E58A4A9453F22313106D73B751738F9CB936FD736C5D1EC13D2487D2A03B97AF02FD71D7E09C32AA3244C65B389FB58B42AF0C05744D1ED1243FFE8FBBEFAE1C4874C729B2BEF169E0186
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojDL2JcYrVG/9hj6eAEq+nfg==
-X-Mailru-Sender: 689FA8AB762F73933AF1F914F131DBF502716657FC8BF4EE5ECEBFCBD80713F998CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-77F55803: 4F1203BC0FB41BD9D919194CF4FC66046397AEC088A59FC2E4C3B8ABD5857F3D182A05F53808504030BB733452FDEDFAAB943C09A39EA4A4D8F65EB5C5A7C773E6C6E5F6ACBD9482
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7A1DB0B089319D380EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006370BACBAB4C30C4AEB8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D88E4D347E51F6267EAA019325F788AFF06F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE74A95F4E53E8DCE969FA2833FD35BB23D9E625A9149C048EE26055571C92BF10F618001F51B5FD3F9D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8BC2ED6D5310B1F811A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7CE31A2885C41F97C443847C11F186F3C59DAA53EE0834AAEE
+X-C1DE0DAB: 0D63561A33F958A50FEE0E7FEC5A0793813024E2F93FE96454398D217D0385B64EAF44D9B582CE87C8A4C02DF684249CC203C45FEA855C8F
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D346B222596F62B8FA94D9A6B347F051388F082392F12001B5CA77E6AAA41502426C21A6F621DF0328C1D7E09C32AA3244C21EA1F8FBA41ECDBFCD7C5FF9C444843A95CA90A1D8AC565729B2BEF169E0186
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojDL2JcYrVG/9w9urjJHkpTg==
+X-Mailru-Sender: 689FA8AB762F73933AF1F914F131DBF5EF004F757DD1C58226B61750F370820A98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
 X-Mras: Ok
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  c=relaxed/relaxed; d=inbox.ru; s=mail4; 
  h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=ipyzjUQxTNWEmrS9Kjft36qWdykF75/G+yrmYl1uh3Y=; 
- t=1675840351;x=1675930351; 
- b=enYtYLAsEcQXArPm2g5n7jXxL6M6uAXYPaD2E+NotvgTN837nWV86dwSdl84fb0aB4NzYWI/vLyHPzkHKVxkOgCZ7Lp5uM2owr1vTauZUlkln0IJnew49BVgzwtAyhfWEdQzS2FT6mPkh6ugvoM+csNJx8YPmoq0RhxsloqEO7RlryRsc3DHcCe18YvATKSJqzh/nhxSXXnqXO3zBYN4bc79F6Qj912XRPft7wuqduBAUcBqAJS7ywq+kfFEdeNxCM/3XPNbcFO4pbTKv/rzkXuOwukG/ssm9ZIAy4SxfT99PVHhLsKo561oRuWpURItx+xu/QTsD/w7Zy6myKkg4Q==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=h75m5HxQt91aUZe/z3KTW0ZAMfw9HQo8Ougd3wqvez4=; 
+ t=1675840701;x=1675930701; 
+ b=Uk+a2tgF3S/vNPXu86pdBwdMxSNQg4r5kmL7Vcb45vwAIc0Rio5YI5H6FDuSIWbyeV36U25JWXCti3rj2E/RowtIPmu6EpqvJg6Ei/kugs9rcbgsrodBeomz8YQi/v5IsfnOcTPrC9LMr+s5QyaPL03v5hllenNB+CSz7Ef5zkEaKY95E0yUlzk8UDHl6QLZLr8c+fsIgoytueqd23SKFeWb5Eh7prksPYOCkqU0Y6Aqu/urdk4BcvhUlTgAP8anUTz0LjrRTFpEIug+bAtfssK3VneLRpmgcK8nihhKXneCES7msOhC6o1GhFiTe8cfCNeZp1qkRDwKu0O+Klbevg==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
- header.a=rsa-sha256 header.s=mail4 header.b=enYtYLAs
-X-Mailman-Original-Authentication-Results: smtpng3.m.smailru.net; auth=pass
+ header.a=rsa-sha256 header.s=mail4 header.b=Uk+a2tgF
+X-Mailman-Original-Authentication-Results: smtpng1.m.smailru.net; auth=pass
  smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH v2 1/1] package/postgresql: add lz4 and zstd
- support
+Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 1.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,47 +76,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-PostgreSQL has optional compression support (LZ4 and Zstandard).
-So enable it if libraries are available.
+Release-notes: https://github.com/openstreetmap/osm2pgsql/releases/tag/1.8.0
 
 Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- package/postgresql/postgresql.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/osm2pgsql/osm2pgsql.hash | 2 +-
+ package/osm2pgsql/osm2pgsql.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 2ffcac6595..0fb0e01153 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -91,6 +91,20 @@ else
- POSTGRESQL_CONF_OPTS += --without-libxml
- endif
+diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
+index 505a4496c8..b5b76c15c6 100644
+--- a/package/osm2pgsql/osm2pgsql.hash
++++ b/package/osm2pgsql/osm2pgsql.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  94c72ceb3c401c816499339f8765c62efbf40685a798dcdf9a4bf7dbedf6c7a5  osm2pgsql-1.7.2.tar.gz
++sha256  b266b50f46fe4d1caddab61d26b39f10ea33b896ec23b8b3e294be4666e7b927  osm2pgsql-1.8.0.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
+index 2bc8d41e6e..9cdfb44ce0 100644
+--- a/package/osm2pgsql/osm2pgsql.mk
++++ b/package/osm2pgsql/osm2pgsql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+POSTGRESQL_DEPENDENCIES += zstd
-+POSTGRESQL_CONF_OPTS += --with-zstd
-+else
-+POSTGRESQL_CONF_OPTS += --without-zstd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+POSTGRESQL_DEPENDENCIES += lz4
-+POSTGRESQL_CONF_OPTS += --with-lz4
-+else
-+POSTGRESQL_CONF_OPTS += --without-lz4
-+endif
-+
- # required for postgresql.service Type=notify
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- POSTGRESQL_DEPENDENCIES += systemd
+-OSM2PGSQL_VERSION = 1.7.2
++OSM2PGSQL_VERSION = 1.8.0
+ OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
+ OSM2PGSQL_LICENSE = GPL-2.0+
+ OSM2PGSQL_LICENSE_FILES = COPYING
 -- 
 2.38.1
 
