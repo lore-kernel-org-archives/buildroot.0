@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B104DC636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 10:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46E86C05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 10:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 597A0610D1;
-	Wed,  8 Feb 2023 10:48:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 597A0610D1
+	by smtp2.osuosl.org (Postfix) with ESMTP id D023340BC8;
+	Wed,  8 Feb 2023 10:49:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D023340BC8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4dZlPsfN6bwe; Wed,  8 Feb 2023 10:48:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dpgdg-7ZlMca; Wed,  8 Feb 2023 10:49:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01739610C3;
-	Wed,  8 Feb 2023 10:48:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01739610C3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 419B3401D5;
+	Wed,  8 Feb 2023 10:49:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 419B3401D5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8CF601BF38B
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:47:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 058381BF38B
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:49:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67306610C3
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67306610C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id D352261059
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 10:49:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D352261059
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2x30THTC4N77 for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 10:47:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E90061059
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 10:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E90061059
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 781FE844CE; Wed,  8 Feb 2023 10:47:48 +0000 (UTC)
+ with ESMTP id 4nBIEAB-J08J for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 10:49:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F23D260BD9
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F23D260BD9
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 10:49:14 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 48AE0FF805;
+ Wed,  8 Feb 2023 10:49:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pPi0m-00EsmT-60; Wed, 08 Feb 2023 11:49:12 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 11:47:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 35423540c4eb0155f73b898539e00b72ed5f2b32
-X-Git-Newrev: 02f80f5c224a1d8830fab48ae0c19a9e28f2c082
-X-Patchwork-Hint: ignore
-Message-Id: <20230208104748.781FE844CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libressl: security bump to version
- 3.6.2
+To: Maxim Kochetkov <fido_max@inbox.ru>
+References: <20230208071815.36221-1-fido_max@inbox.ru>
+Date: Wed, 08 Feb 2023 11:49:12 +0100
+In-Reply-To: <20230208071815.36221-1-fido_max@inbox.ru> (Maxim Kochetkov's
+ message of "Wed, 8 Feb 2023 10:18:15 +0300")
+Message-ID: <874jrw77pz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 1.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +63,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02f80f5c224a1d8830fab48ae0c19a9e28f2c082
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxim" == Maxim Kochetkov <fido_max@inbox.ru> writes:
 
-security fix:
-    A malicious certificate revocation list or timestamp response token
-    would allow an attacker to read arbitrary memory.
+ > Release-notes: https://github.com/openstreetmap/osm2pgsql/releases/tag/1.8.0
+ > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 0988e6a36d..907b9cdd06 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256  acfac61316e93b919c28d62d53037ca734de85c46b4d703f19fd8395cf006774  libressl-3.6.1.tar.gz
-+sha256  4be80fff073746cf50b4a8e5babe2795acae98c6b132a9e02519b445dfbfd033  libressl-3.6.2.tar.gz
- # Locally computed
- sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 8fd7bccbc4..b5fae7e26e 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 3.6.1
-+LIBRESSL_VERSION = 3.6.2
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
