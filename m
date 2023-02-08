@@ -1,95 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F86CC636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 15:48:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD00C05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 15:53:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E37A407D7;
-	Wed,  8 Feb 2023 15:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E37A407D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC90840C22;
+	Wed,  8 Feb 2023 15:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC90840C22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1WiX-gQDZONH; Wed,  8 Feb 2023 15:48:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1m_gigp94pMS; Wed,  8 Feb 2023 15:53:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2075E4086E;
-	Wed,  8 Feb 2023 15:48:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2075E4086E
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7A1F40BAA;
+	Wed,  8 Feb 2023 15:53:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7A1F40BAA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B08F21BF36C
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:48:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A820A1BF36C
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:53:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A1EF610FE
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:48:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A1EF610FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CCFE610C9
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CCFE610C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kLDACoLkgUAT for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 15:48:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DCF6610C9
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3DCF6610C9
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 15:48:02 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id r18so66029wmq.5
- for <buildroot@buildroot.org>; Wed, 08 Feb 2023 07:48:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=1l6kcAPeeSmeoYkvfvsMTi5qBaVaYypmA6dzC5uzkd8=;
- b=npgDUC4qql44jJZocROKZUMvwaaTB7alNdg+wlhceFVu2QvsJgNcCXlTJSAq9/Y2Ps
- h+2eNAbBRsKXKJPaP0S8QS/rskW8MfK6IJTOTBw/rOnZXbSzRkjdxKRKIkq9ghg+i2xb
- MzjCM4X4eKCRtOaeareU0Zm1wznQHt01vCGcEnod5zdRiz+duTlL9N5vfpGO3cpnnORv
- V7rHPiXhMN+Rs8NhGnz1iqdfHmbAwDqgAE8XbXQJKc7XKZCrKF/AhjWO30bWo2QdIqCb
- +CxGa0LOqubVPIe/fhD2Lq5FaeaJRuOpNvGxZHU7Cta5VyoMuzcUATwAhB6rc+pAp1Ji
- MR0g==
-X-Gm-Message-State: AO0yUKUiHdzcr0AGSwrH10NQJ2Y0vmNcDQj5BSUNOUHx8uxjZSaa/uH0
- kvDSJOUCaVwXnBkZD/WH0n2YPA==
-X-Google-Smtp-Source: AK7set9WKIVUuJ5SZ/+pNKSEZSVx23XUlIraIyv+nHFUOf4XxvIDeD/HBa6f6jONiwaxzXdugFGrsw==
-X-Received: by 2002:a05:600c:4b0a:b0:3df:e69a:2175 with SMTP id
- i10-20020a05600c4b0a00b003dfe69a2175mr1885911wmp.35.1675871280428; 
- Wed, 08 Feb 2023 07:48:00 -0800 (PST)
-Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
- by smtp.gmail.com with ESMTPSA id
- l8-20020a05600c2cc800b003dfefe115b9sm2529254wmc.0.2023.02.08.07.47.59
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 08 Feb 2023 07:47:59 -0800 (PST)
-Message-ID: <17501a13-8018-656f-5f4d-b1cf6c1ecd5c@mind.be>
-Date: Wed, 8 Feb 2023 16:47:58 +0100
+ with ESMTP id LziplR_NusLG for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 15:53:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F336F60AC6
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F336F60AC6
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 15:53:34 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id CBD4640007;
+ Wed,  8 Feb 2023 15:53:31 +0000 (UTC)
+Date: Wed, 8 Feb 2023 16:53:30 +0100
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <20230208165330.43c145f3@windsurf>
+In-Reply-To: <3f3d266c-2f21-197c-29b7-fff3e230e97a@smile.fr>
+References: <3f3d266c-2f21-197c-29b7-fff3e230e97a@smile.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-GB
-To: Francis Laniel <flaniel@linux.microsoft.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Lang Daniel <d.lang@abatec.at>
-References: <VI1P190MB04936E3BDB708B8974C8287B9F139@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
- <12146851.O9o76ZdvQC@pwmachine>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <12146851.O9o76ZdvQC@pwmachine>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=1l6kcAPeeSmeoYkvfvsMTi5qBaVaYypmA6dzC5uzkd8=;
- b=gIO2SOTFBOMComuv2/QtSdxE2JGjGy/cMgorVzJPAoFiMraGfn0uu7Yd4actGQNJfi
- VnqLQ57Y4kCOIUu6WFutI+fKrEsHsO05GWHXOZhhkDHTj4FegPAXppIKg7aTA112+ehI
- zRN1eZOhp6ihzM/e+OyHMwtSEaFIMcrNTsl5srqeHeBJ/Mrw4vg1yg8aE1WuAcFK1TRu
- t6IuLvcg1XsWSucMQdv9qiuAMbCP6G7uYA15WViSu4/suwOUPywqhvDpFO9A7tGlCO1b
- X0q9K+zsNdBIC6Rs5FEfFUXN0vGrjH2v/4SU7HEJDHDLYPDOd/Vo6Wd7LZZL/25bzEca
- rsHA==
+ d=bootlin.com; s=gm1; t=1675871612;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/4MvzMKTSEID8ERrb9P0XfW8gs03wTTK4SyGRsGrhIw=;
+ b=SWhuVfFVDNXFZQKrOIYgXagqtVZ4GYUnpkdJW86GPzm4lk5qnZTioC4dgq26qa3JiBP2Nx
+ BBpZ5cVRW74kx8pZbGj//Oetu7KF1r2vYMAX8WBwFynPgucBScfPTk7vjVhqyamAYTS2JH
+ /teqWNTM/DDYMEsvIbjg5lLNT/nCg7GCQDitUgK0eLQEMCCGvNzcpG/PLHnZv5X4C0RBBm
+ cm5SPu21Ky0c53JZwclG4kn8ZiOisI1eSp0NUicb0j0G2QZjraEeO0bf/TSbqAjgWEC34V
+ XujFKCzWTC9uWBZ4RYhepwC+xAXp2tUbh6C6wq+xJB0HsP70GGBURBdSM2fPBA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=gIO2SOTF
-Subject: Re: [Buildroot] [PATCH] package/libbpf: Don't remove bpf.h on host
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SWhuVfFV
+Subject: Re: [Buildroot] outdated libiberty and prelink-cross support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,113 +75,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Adam Duskett <aduskett@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSBEYW5pZWwsIEZyYW5jaXMsCgpPbiAwNy8wMi8yMDIzIDIxOjEwLCBGcmFuY2lzIExhbmll
-bCB3cm90ZToKPiBIaS4KPiAKPiBMZSBsdW5kaSAyOCBub3ZlbWJyZSAyMDIyLCAxNjowNjoyMCBD
-RVQgTGFuZyBEYW5pZWwgYSDDqWNyaXQgOgo+PiBsaWJicGYgPjEuMC4wIGRlZmluZXMgbGliYnBm
-X2JwZl9saW5rX3R5cGVfc3RyKGVudW0gYnBmX2xpbmtfdHlwZSkgaW4KPj4gc3JjL2xpYmJwZi5o
-LCB3aGljaCBpcyBpbmNsdWRlZCBieSBob3N0LXBhaG9sZS4KPj4gYnBmX2xpbmtfdHlwZSBpcyBk
-ZWZpbmVkIGluIGxpbnV4L2JwZi5oLCB0aGVyZWZvcmUgdGhlIGNvbW1lbnQgc3RhdGluZwo+PiB0
-aGF0IHBhaG9sZSBkb2Vzbid0IG5lZWQgYnBmLmggaXMgbm8gbG9uZ2VyIHZhbGlkLgo+Pgo+PiBG
-aXhlczoKPj4gLQo+PiBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9kMTI2
-YTRiNmVjYTc4NjQwMmRjMzYyYzg2ZjhkZjNhZGRlYzMKPj4gZDIxNy8KPj4KPj4gU2lnbmVkLW9m
-Zi1ieTogRGFuaWVsIExhbmcgPGQubGFuZ0BhYmF0ZWMuYXQ+Cj4+IC0tLQo+PiBJIHdhc24ndCBh
-YmxlIHRvIHJlcHJvZHVjZSB0aGUgbWVudGlvbmVkIGNvbXBpbGUgZXJyb3IgaW4gdGhlIGtlcm5l
-bC4KPj4gVGhlIG1lbnRpb25lZCBmaWxlICh0b29scy9saWIvYnBmL3N0cnNldC5jKSBzaG91bGRu
-J3QgYmUgY29tcGlsZWQgd2hlbgo+PiBjb21waWxpbmcgdGhlIGtlcm5lbCBhcyBpdCB3b3VsZCBy
-ZWNvbXBpbGUgbGliYnBmLgo+PiAtLS0KPj4gICBwYWNrYWdlL2xpYmJwZi9saWJicGYubWsgfCAx
-NyArLS0tLS0tLS0tLS0tLS0tLQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
-MTYgZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmJwZi9saWJicGYu
-bWsgYi9wYWNrYWdlL2xpYmJwZi9saWJicGYubWsKPj4gaW5kZXggODIwZjFkYzRiZi4uMDM4MWZk
-ODMzYSAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9saWJicGYvbGliYnBmLm1rCj4+ICsrKyBiL3Bh
-Y2thZ2UvbGliYnBmL2xpYmJwZi5tawo+PiBAQCAtMzksMjYgKzM5LDExIEBAIGRlZmluZSBMSUJC
-UEZfSU5TVEFMTF9UQVJHRVRfQ01EUwo+PiAgIAkJLUMgJChARCkvc3JjIGluc3RhbGwgREVTVERJ
-Uj0kKFRBUkdFVF9ESVIpCj4+ICAgZW5kZWYKPj4KPj4gLSMgV2UgbmVlZCB0byBpbnN0YWxsX3Vh
-cGlfaGVhZGVycyBzbyB3ZSBoYXZlIGJ0Zi5oIHRvIGNvbXBpbGUKPj4gLSMgaG9zdC1wYWhvbGUu
-Cj4+IC0jIE5vbmV0aGVsZXNzLCB0aGlzIHRhcmdldCBhZGRzIGJwZi5oIHdoaWNoIGdlbmVyYXRl
-cyBhIGNvbmZsaWN0IHdoZW4KPj4gLSMgYnVpbGRpbmcgdGhlIGtlcm5lbDoKPj4gLSMgSW4gZmls
-ZSBpbmNsdWRlZCBmcm9tIGxpYmJwZl9pbnRlcm5hbC5oOjE3OjAsIGZyb20gc3Ryc2V0LmM6OToK
-Pj4gLSMgcmVsb19jb3JlLmg6MTA6NjogZXJyb3I6IG5lc3RlZCByZWRlZmluaXRpb24gb2YgJ2Vu
-dW0gYnBmX2NvcmVfcmVsb19raW5kJwo+PiAtIyBlbnVtIGJwZl9jb3JlX3JlbG9fa2luZCB7Cj4+
-IC0jIF5+fn5+fn5+fn5+fn5+fn5+fgo+PiAtIyByZWxvX2NvcmUuaDoxMDo2OiBlcnJvcjogcmVk
-ZWNsYXJhdGlvbiBvZiAnZW51bSBicGZfY29yZV9yZWxvX2tpbmQnCj4+IC0jIEluIGZpbGUgaW5j
-bHVkZWQgZnJvbSBsaWJicGZfbGVnYWN5Lmg6MTM6MCwKPj4gLSMgCQlmcm9tIGxpYmJwZl9pbnRl
-cm5hbC5oOjE2LAo+PiAtIyAJCWZyb20gc3Ryc2V0LmM6OToKPj4gLSMgL2hvbWUvZnJhbmNpcy9i
-dWlsZHJvb3Qvb3V0cHV0L2hvc3QvaW5jbHVkZS9saW51eC9icGYuaDo2NDk3OjY6IG5vdGU6Cj4+
-IG9yaWdpbmFsbHkgZGVmaW5lZCBoZXJlIC0jIGVudW0gYnBmX2NvcmVfcmVsb19raW5kIHsKPj4g
-LSMgU28sIGJldHRlciB0byByZW1vdmUgcmVtb3ZlIGl0IG5vdyBzaW5jZSB3ZSBkbyBub3QgbmVl
-ZCBpdCB0byBidWlsZAo+PiArIyBXZSBuZWVkIHRvIGluc3RhbGxfdWFwaV9oZWFkZXJzIHNvIHdl
-IGhhdmUgYnBmLmggYW5kIGJ0Zi5oIHRvIGNvbXBpbGUKPj4gICAjIGhvc3QtcGFob2xlLCB0aGUg
-b25seSB1c2VyIG9mIGhvc3QtbGliYnBmLgo+PiAgIGRlZmluZSBIT1NUX0xJQkJQRl9JTlNUQUxM
-X0NNRFMKPj4gICAJJChIT1NUX01BS0VfRU5WKSAkKEhPU1RfQ09ORklHVVJFX09QVFMpICQoTUFL
-RSkgXAo+PiAgIAkJLUMgJChARCkvc3JjIGluc3RhbGwgaW5zdGFsbF91YXBpX2hlYWRlcnMgREVT
-VERJUj0kKEhPU1RfRElSKQo+PiAtCXJtICQoSE9TVF9ESVIpL2luY2x1ZGUvbGludXgvYnBmLmgK
-Pj4gICBlbmRlZgo+Pgo+PiAgICQoZXZhbCAkKGdlbmVyaWMtcGFja2FnZSkpCj4gCj4gVGhhbmsg
-eW91IGZvciB0aGlzIHBhdGNoIGFuZCBzb3JyeSBmb3IgbXkgdmVyeSBsYXRlIHJlcGx5Lgo+IFNh
-ZGx5LCBJIGRvIG5vdCB0aGluayB0aGUgcGF0Y2ggYWRkcmVzc2VzIHRoZSB1bmRlcmx5aW5nIGlz
-c3VlLgo+IEluZGVlZCwgdGhpcyBpcyBub3QgcGFob2xlIHdoaWNoIGRvZXMgbm90IG5lZWQgdGhp
-cyBmaWxlLCBhcyBwYWhvbGUgcmVsaWVzIG9uCj4gPGxpbnV4L2JwZi5oPiB0byBiZSBidWlsdC4K
-PiBTbywgdGhlIHdob2xlIHBvaW50IG9mIHRoaXMgY29tbWVudCBhbmQgdGhlIHJtIGlzIHRvIGF2
-b2lkIGEgcHJvYmxlbSB3aGVuCj4gYnVpbGRpbmcgdGhlIGtlcm5lbCB3aGVuIHBhaG9sZSB3YXMg
-YnVpbHQgYmVmb3JlLgoKICBUaGUgY3VycmVudCBzb2x1dGlvbiwgaG93ZXZlciwgYWxzbyBkb2Vz
-bid0IHdvcmssIHdoaWNoIGlzIHdoeSBGcmFuY2kncyBwYXRjaCAKWzFdIGlzIG5lZWRlZCB0byBm
-aXggaXQgYWdhaW4uCgogIEhvd2V2ZXIsIHdlIGJlbGlldmUgdGhpcyBpcyBub3QgdGhlIHByb3Bl
-ciBmaXguIFRoZSByZWFsIGlzc3VlIGlzIHRoZSBmb2xsb3dpbmc6CgotIGxpYmJwZiBpbnN0YWxs
-cyBoZWFkZXJzIHdoaWNoIGFyZSBwb3NzaWJseSBpbmNvbXBhdGlibGUgd2l0aCB0aGUga2VybmVs
-J3MgCmhlYWRlcnMuIE5vcm1hbGx5IHRoaXMgaXMgbm90IGEgcHJvYmxlbSwgYmVjYXVzZSB5b3Ug
-aGF2ZSBlaXRoZXIgdGhlIGtlcm5lbCdzIG9yIApsaWJicGYncyBoZWFkZXJzIGluc3RhbGxlZCwg
-bm90IGJvdGguCgotIEhvd2V2ZXIsIHdoZW4gd2UgaW5zdGFsbCBsaWJicGYgaGVhZGVycyBpbiAk
-KEhPU1RfRElSKS9pbmNsdWRlLCB0aGUga2VybmVsIApidWlsZCBpdHNlbGYgcGlja3MgdXAgdGhv
-c2UgaGVhZGVycyBpbnN0ZWFkIG9mIGl0cyBvd24gaW50ZXJuYWwgaGVhZGVycy4gVGhhdCBpcyAK
-d2h5IGJwZi5oIGlzIHJlbW92ZWQgaGVyZSB0byBiZWdpbiB3aXRoLiBJZiBicGYuaCBpcyBub3Qg
-cmVtb3ZlZCAoYW5kIHRoZSBrZXJuZWwgCmhlYWRlcnMgYXJlIGluZGVlZCBpbmNvbXBhdGlibGUg
-d2l0aCB0aGUgbGliYnBmIG9uZXMpLCB0aGVuIHRoZSBrZXJuZWwgYnVpbGQgCndpbGwgZmFpbC4K
-Ci0gVGhlcmUgaXMgaG93ZXZlciBubyByZWFzb24gd2h5IHRoZSBrZXJuZWwgc2hvdWxkIHBpY2sg
-dXAgJChIT1NUX0RJUikvaW5jbHVkZSAKaW5zdGVhZCBvZiBpdHMgb3duIGludGVybmFsIGhlYWRl
-cnMuIE5vcm1hbGx5IGl0IGRvZXNuJ3QgZG8gdGhhdCwgYmVjYXVzZSBpdCAKc3VwcGxpZXMgLUkg
-b3B0aW9ucyB0byBpdHMgb3duIGhlYWRlcnMsIGFuZCB0aGVzZSBoYXZlIHByZWNlZGVuY2Ugb3Zl
-ciB0aGUgCnN5c3RlbSBpbmNsdWRlZCAvdXNyL2luY2x1ZGUgZXRjLiBIb3dldmVyLCB3ZSBmb3Jj
-ZSBIT1NUQ0M9IiQoSE9TVENDKSAKJChIT1NUX0NGTEFHUykiIGFuZCBIT1NUX0NGTEFHUyBoYXMg
-LUkkKEhPU1RfRElSKS9pbmNsdWRlLiBUaGlzIG9uZSB3aWxsIGNvbWUgCmJlZm9yZSBhbGwgb2Yg
-dGhlIG9uZXMgdGhhdCB0aGUga2VybmVsIGFkZHMgYW5kIHdpbGwgaGF2ZSBwcmVjZWRlbmNlLgoK
-VGhlcmVmb3JlLCB3ZSBiZWxpZXZlIHRoYXQgdGhlIHNvbHV0aW9uIGlzIHRvIHVzZSAtaXN5c3Rl
-bSBpbnN0ZWFkIG9mIC1JIGluIHRoZSAKSE9TVENDIHNldHRpbmcgb2YgdGhlIGtlcm5lbC4gVGhp
-cyBpcyBpbmRlZWQgd2hhdCBpcyBhbHJlYWR5IGRvbmUgZm9yIHVib290OgoKCUhPU1RDQz0iJChI
-T1NUQ0MpICQoc3Vic3QgLUkvLC1pc3lzdGVtIC8sJChzdWJzdCAtSSAvLC1pc3lzdGVtIAovLCQo
-SE9TVF9DRkxBR1MpKSkiIFwKCk5vdGUgdGhhdCB0aGVyZSBpcyBhIHJpc2sgdGhhdCB0aGlzIGJ5
-IGl0c2VsZiBnb2VzIHdyb25nIGFzIHdlbGwuIFdlIHRyaWVkIGF0IApzb21lIHBvaW50IHRvIHVz
-ZSAtaXN5c3RlbSBpbnN0ZWFkIG9mIC1JIGluIEhPU1RfQ0ZMQUdTOgoKY29tbWl0IDZmODE2MmNm
-OGMxYWJlZjdlMGE0NzcxZmUwZDZiMjZhMjhmNWMyYjYKQXV0aG9yOiBEYXZpZCBSYWVtYW4gPGRy
-YWVtYW5AYmJuLmNvbT4KRGF0ZTogICBNb24gSnVsIDI1IDIxOjUyOjI2IDIwMTYKCiAgICAgcGFj
-a2FnZS9NYWtlZmlsZS5pbiBzaG91bGQgZ3JhYiBIT1NUX0RJUiBoZWFkZXJzIHVzaW5nIC1pc3lz
-dGVtIGluc3RlYWQgb2YgLUkuCgoKYnV0IHRoaXMgd2FzIHJldmVydGVkIGEgY29wdWxlIG9mIGRh
-eXMgbGF0ZXI6Cgpjb21taXQgMjU1YjZmODBkMzk1ZWYwNDhmNDZjZmNmNzVkYmE2OTBjNTZhZjY1
-NwpBdXRob3I6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAZnJlZS1lbGVjdHJv
-bnMuY29tPgpEYXRlOiAgIFNhdCBKdWwgMzAgMTg6MTA6MTggMjAxNgoKICAgICBSZXZlcnQgInBh
-Y2thZ2UvTWFrZWZpbGUuaW4gc2hvdWxkIGdyYWIgSE9TVF9ESVIgaGVhZGVycyB1c2luZyAtaXN5
-c3RlbSAKaW5zdGVhZCBvZiAtSS4iCgooVW5mb3J0dW5hdGVseSwgdGhlIGNvbW1pdCBoYXMgbm8g
-ZnVydGhlciBleHBsYW5hdGlvbiBvZiB3aGF0IHdlbnQgd3JvbmcpLgoKICBTbywgY291bGQgeW91
-IChEYW5pZWwgYW5kIEZyYW5jaXMpIHRyeSB0byBhcHBseSB0aGlzIHBhdGNoIGFuZCByZXBsYWNl
-IC1JIHdpdGggCi1pc3lzdGVtIGxpa2UgaXMgZG9uZSBmb3IgVS1Cb290LCBhbmQgZG8gYSBidW5j
-aCBvZiBrZXJuZWwgYnVpbGRzIHRvIHNlZSBpZiBpdCAKYnJlYWtzIGFueXRoaW5nPwoKICBGb3Ig
-bm93LCBJJ3ZlIG1hcmtlZCB0aGlzIHBhdGNoIGFzIENoYW5nZXMgUmVxdWVzdGVkIChpdCBjYW4g
-b25seSBiZSBhcHBsaWVkIAppZiB0aGUgYnBmLmggcHJvYmxlbSBpcyBzb2x2ZWQgaW4gc29tZSBv
-dGhlciB3YXkpLCBhbmQgbWFya2VkIEZyYW5jaXMncyBwYXRjaCAKWzFdIGFzIFN1cGVyc2VkZWQu
-CgogIFJlZ2FyZHMsCiAgQXJub3V0CgoKWzFdIApodHRwczovL3BhdGNod29yay5vemxhYnMub3Jn
-L3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjIwNjEwMTY1NDQxLjg0ODEyLTItZmxhbmllbEBs
-aW51eC5taWNyb3NvZnQuY29tLwoKCj4gCj4gU2FkbHksIEkgdGVzdGVkIHlvdXIgcGF0Y2ggYW5k
-IEkgaGl0IHRoZSBwcm9ibGVtIGRlc2NyaWJlZCBpbiB0aGUgY29tbWVudAo+IHJlZ2FyZGluZyBy
-ZWRlZmluaXRpb24gb2YgYnBmX2NvcmVfcmVsb19raW5kLgo+IAo+IERpZCB5b3UgYWxzbyBoaXQg
-aXQgb3IgeW91IHdlcmUgYWJsZSB0byBidWlsZCB0aGUga2VybmVsIHdpdGgKPiBCUjJfTElOVVhf
-S0VSTkVMX05FRURTX0hPU1RfUEFIT0xFPwo+IAo+IAo+IEJlc3QgcmVnYXJkcyBhbmQgdGhhbmsg
-eW91IGluIGFkdmFuY2UuCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello,
+
++Yann and Adam, with questions/help needed below :)
+
+On Wed, 2 Nov 2022 14:05:26 +0100
+Romain Naour <romain.naour@smile.fr> wrote:
+
+> I was looking at host-binutils-2.38 issue in the autobuilder [1].
+> The issue appear only when host-libiberty is built before host-binutils
+> (Binutils 2.38 only).
+> 
+> It seems that libiberty package is still based on binutils 2.32 release and
+> seems to be updated.
+> 
+> host-libiberty is currently used by host-gdb and host-prelink-cross packages.
+> 
+> About the prelink-cross package, it come from the Yocto project [2] but the
+> support seems halted. Also the Glibc project will remove prelink support for the
+> upcoming 2.37 release [3].
+> 
+> The annoying part is "Prelink-cross emulates a runtime linker for a given
+> sysroot. This is necessary to allow gobject-introspection to build its typelib
+> files during cross-compiling." [4]
+> 
+> host-prelink-cross is currently used by dracut and gobject-introspection packages.
+
+I had a look, and there are things at two different levels that can be
+done.
+
+First, we need to remove the package/libiberty/ package. libiberty is
+currently used by host-gdb and host-prelink-cross:
+
+* For host-gdb, the commit log says that the host libiberty might be
+  picked up so we need to build our own. This is weird because
+  libiberty is shipped in the gdb tarball. Yann, when you applied
+  f0a583ddc4c2cab121330284e316f54229dee492, do you remember if you
+  looked at why GDB wasn't picking up its own libiberty? Also, there is
+  no autobuilder failure, so we don't really know under what conditions
+  the problem can be reproduced.
+
+* For host-prelink-cross, it in fact doesn't need host-libiberty. It
+  links against it, but apparently, the only functions it uses from
+  libiberty are htab_find_slot() and htab_try_create(), and both are
+  provided by src/hashtab.c in prelink-cross, which was copy/pasted
+  from libiberty, most likely to avoid the dependency. So with a bit of
+  effort in host-prelink-cross, the dependency on host-libiberty could
+  be removed.
+
+Then, the second level is about host-prelink-cross itself. It is used
+by only two packages, so let's have a look:
+
+* For gobject-instrospection, it is no longer needed: openembedded-core
+  stopped using it in
+  https://github.com/openembedded/openembedded-core/commit/767e0880d4d729e659e859dd99c1cdb084b8ba51.
+  It simply uses "objdump -p" instead. It also allows to remove a patch
+  from gobject-introspection, so overall it seems like a good thing.
+
+* For dracut, the usage is pretty much the same, and a small wrapper
+  around objdump -p would most likely be able to emulate the behavior
+  lf prelink-rtld to list the libraries that a binary depends on.
+
+So there's a bit of work for sure, but this work would allow to remove
+both host-libiberty and host-prelink-cross, which are both weird
+packages that will inevitably cause problems.
+
+My main concerns are:
+
+(1) How to reproduce the host-gdb issue that caused the addition of the
+    host-liberty dependency
+
+(2) How to test gobject-introspection in a simple way. There is no
+    runtime test for it, I have no idea what is the simplest test that one
+    can do to verify the proper functionality of gobject-introspection
+    after we do the above changes.
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
