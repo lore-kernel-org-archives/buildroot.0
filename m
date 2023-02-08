@@ -1,88 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB587C636CC
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 15:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 828FEC05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 15:58:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A691410D5;
-	Wed,  8 Feb 2023 15:58:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A691410D5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F24782020;
+	Wed,  8 Feb 2023 15:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F24782020
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qWYbfH7VrFtQ; Wed,  8 Feb 2023 15:58:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id h8NSwji1u_Gu; Wed,  8 Feb 2023 15:58:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37F11409A7;
-	Wed,  8 Feb 2023 15:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37F11409A7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6837282018;
+	Wed,  8 Feb 2023 15:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6837282018
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D03611BF36C
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:58:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 408351BF36C
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:58:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB43C40C20
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:58:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB43C40C20
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B89B40BAA
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 15:58:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B89B40BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J3oPlrXD0gns for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 15:57:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C6EF40BAA
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com
- [IPv6:2a00:1450:4864:20::441])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C6EF40BAA
+ with ESMTP id 3rsTDfLZ79EM for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 15:58:00 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3E0040C1F
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E3E0040C1F
  for <buildroot@buildroot.org>; Wed,  8 Feb 2023 15:57:59 +0000 (UTC)
-Received: by mail-wr1-x441.google.com with SMTP id r2so17240494wrv.7
- for <buildroot@buildroot.org>; Wed, 08 Feb 2023 07:57:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EIlgBZcnSFohOe2GNQZaZheSGlMIroMbJjJRVrIZun8=;
- b=pO3C6H5KqFQvT5hemooZJ7aexN3wvYchaxJ+6j7fxNGd1T65uXalI1Pv+q/IW/7Cel
- FaCbJXEnsbzTct5ZW7WooNY+5dYo4U9Gw0l1USkR24PFFjOgeb8Qboko4ERlHZob7EUz
- UTl+sJLOeYtsd+MzAqUcY6YucVBHzEGSVmjMXbzbpzk01inNsgkhIzJ+UOWlRSNY67lQ
- spOwYPTiuyiLwOIewSlf1TOJE/Wzz+KIzU4iIFrSFSmx+YIygmQc3R0sxfrtYsucYpuT
- b2g+jNHNJiEQZ7+T9VbccjbM/OKESqg/h1padFMT1ypCUsiMXkjFKNERP05JD9ZNI8/I
- pixg==
-X-Gm-Message-State: AO0yUKUTgA0+RS7S7wo6D6w3hC/n4psePC0cIiwi2U3tJXD50pLav2sm
- TAfAMqj0ZLBtGoUxtWCYy0zDUs0jSzWMMhbxYP2C6wC0
-X-Google-Smtp-Source: AK7set+xi0Rcrw0bwj930wlvBLlJ7jTmOrP5V//cIh6QOVQgoWZ3/R1faWfytjo02GtlnGkZdfGuVw==
-X-Received: by 2002:a5d:4a4e:0:b0:2c3:dbb0:7260 with SMTP id
- v14-20020a5d4a4e000000b002c3dbb07260mr8516858wrs.71.1675871877158; 
- Wed, 08 Feb 2023 07:57:57 -0800 (PST)
-Received: from wintermute.. (77.109.114.132.adsl.dyn.edpnet.net.
- [77.109.114.132]) by smtp.gmail.com with ESMTPSA id
- p27-20020a1c545b000000b003daf681d05dsm2469043wmi.26.2023.02.08.07.57.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Feb 2023 07:57:56 -0800 (PST)
-From: Frank Vanbever <frank.vanbever@mind.be>
-To: buildroot@buildroot.org
-Date: Wed,  8 Feb 2023 16:57:51 +0100
-Message-Id: <20230208155752.73981-1-frank.vanbever@mind.be>
-X-Mailer: git-send-email 2.37.2
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1ADDE2001D;
+ Wed,  8 Feb 2023 15:57:56 +0000 (UTC)
+Date: Wed, 8 Feb 2023 16:57:56 +0100
+To: Peter Thompson <peter.macleod.thompson@gmail.com>
+Message-ID: <20230208165756.5d8dd14f@windsurf>
+In-Reply-To: <20221127002135.12134-1-peter.macleod.thompson@gmail.com>
+References: <20221127002135.12134-1-peter.macleod.thompson@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=EIlgBZcnSFohOe2GNQZaZheSGlMIroMbJjJRVrIZun8=;
- b=gsdzBAd8NdTvSTJNcL0ApL17v324C76/uF3DvZ/CZYr16ViewFrkSrt3o+txbdMk3B
- bihiHQNSXskNACI1FndGzT0o2Mvqp+wy7ZyZuwU5U+sZ/qkDb1f5/9q1FymH6kZfx7Yk
- MJjJDI3L0rkGBupHqr1zqVi37Nw9KqXmqp2TUYBdBgYDZ2koWxAa+8SSMAo97pOGIzw+
- E8GaUCJ4zdWpBj072X4AbvVE5XD5ZwSYnLxxdpPwQuo8rPGYc6cRWent0b1s79zD6J0v
- WN+97uGKDEdd8eZjcfIyGorIFYOBpii0BAXEk8apf4MJ26fPzzxHiaMTptuZceNTzIq5
- 3XkA==
+ d=bootlin.com; s=gm1; t=1675871877;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FqkMhS5h/CZQAri8m0WG6zEsfwJMFnGEtKcMWV756zI=;
+ b=Yx4BygcqNI8fQ83BIFDTsskRZREZui1J7prMoAx0oLaKVSYFAug+vJd7chYLJYr6woeBRv
+ t+LdFTKGAW0nCrZUrUCvTcka4XqcaJfqwFnNHu/nSzHA7txh2lKXFivOQECCoBVZkOAEQx
+ bsD1SfvYVopwwt6WqDzp68a3vh+1NLuzOcYIHMnmFmbM3lISaLMLLM2UBcW8l1La3fCCWJ
+ +4U3KprslcoKggulUX3ReFPddfF+wCel0eByyS7Yl4Oa74YoK42sRF1o6wMzqiLCxm/lQK
+ 0U7pJNWfzV0PhtSFlv7WMXlIEI7YYViOdrh+cz4ksqmCD63+WCFHRvkzlYq5Kw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=gsdzBAd8
-Subject: [Buildroot] [PATCH 1/2] package/nginx-modsecurity: bump to version
- 1.0.3
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Yx4Bygcq
+Subject: Re: [Buildroot] [PATCH 1/1] package/sdl2_ttf: bump version to 2.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,45 +75,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Frank Vanbever <frank.vanbever@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
----
- package/nginx-modsecurity/nginx-modsecurity.hash | 4 ++--
- package/nginx-modsecurity/nginx-modsecurity.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello Peter
 
-diff --git a/package/nginx-modsecurity/nginx-modsecurity.hash b/package/nginx-modsecurity/nginx-modsecurity.hash
-index fbaf1ca239..0cd2ee07cd 100644
---- a/package/nginx-modsecurity/nginx-modsecurity.hash
-+++ b/package/nginx-modsecurity/nginx-modsecurity.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.2/modsecurity-nginx-v1.0.2.tar.gz.sha256
--sha256  41a6660c50508c60df59f8f09c444d18ef8112a4c118cdc791a3992390b78c32  modsecurity-nginx-v1.0.2.tar.gz
-+# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.3/modsecurity-nginx-v1.0.3.tar.gz.sha256
-+sha256  ae811c7208ac029cb7a99d6f63e03d3971797607517187f47620df39c1f78add  modsecurity-nginx-v1.0.3.tar.gz
- # Localy calculated
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/nginx-modsecurity/nginx-modsecurity.mk b/package/nginx-modsecurity/nginx-modsecurity.mk
-index 90ef8ecd51..a00c200469 100644
---- a/package/nginx-modsecurity/nginx-modsecurity.mk
-+++ b/package/nginx-modsecurity/nginx-modsecurity.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_MODSECURITY_VERSION = 1.0.2
-+NGINX_MODSECURITY_VERSION = 1.0.3
- NGINX_MODSECURITY_SOURCE = modsecurity-nginx-v$(NGINX_MODSECURITY_VERSION).tar.gz
- NGINX_MODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v$(NGINX_MODSECURITY_VERSION)
- NGINX_MODSECURITY_LICENSE = Apache-2.0
+On Sat, 26 Nov 2022 17:21:35 -0700
+Peter Thompson <peter.macleod.thompson@gmail.com> wrote:
+
+> LICENSE_FILES changed to LICENSE.txt for version 2.20.1.
+> Previous versions used COPYING.txt.
+> 
+> Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
+> ---
+>  package/sdl2_ttf/sdl2_ttf.hash | 4 ++--
+>  package/sdl2_ttf/sdl2_ttf.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+
+Sorry for the long delay, but you had already sent this patch on
+November 19, 2022 and it was applied on November 21, 2022, so it was
+too late for a new version.
+
+Best regards,
+
+Thomas
 -- 
-2.37.2
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
