@@ -1,51 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27FD0C05027
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 11:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B211C636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 11:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE235409D0;
-	Wed,  8 Feb 2023 11:01:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE235409D0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ge59nGk5FHpg; Wed,  8 Feb 2023 11:01:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 857C5409E3;
-	Wed,  8 Feb 2023 11:01:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 857C5409E3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A76151BF38B
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 11:00:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 81D6A40BD2
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 11:00:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81D6A40BD2
+	by smtp2.osuosl.org (Postfix) with ESMTP id E569140BE1;
+	Wed,  8 Feb 2023 11:06:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E569140BE1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wTzvKRj1Zw1B for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 11:00:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9922340127
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 11:00:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9922340127
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8620F845F9; Wed,  8 Feb 2023 11:00:47 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id haHrLYgtgWrQ; Wed,  8 Feb 2023 11:06:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 285EA40BD2;
+	Wed,  8 Feb 2023 11:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 285EA40BD2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 419151BF3A4
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 11:06:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B706410DE
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 11:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B706410DE
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FFw2Fj12NmDg for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 11:06:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83B8D409E7
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 83B8D409E7
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 11:06:15 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id fj20so1395152edb.1
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 03:06:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=cHtsT5YchId3Q2OPWdwGlmcO/gAmRaAPGrz7ctNiaLY=;
+ b=mRzkxRuhbC8vqKIcgkE+HPJpgZ7fwAWqUMxFZ3YD63ExDIOPu2rosoOHdXRCYygdni
+ o+U61WASUbTq2F1M+q7G4wVufyZMFNahjhZG/RXqWjqnTCeZGxWKV2etGttWXjzjm+l1
+ 4Psotbtm/9u4kQVyUomScIvpkDMp9Qgw29UljpT45/3l9wLiylsdZMCyTxlqCraxacxF
+ oWH1yXR8wyIvnrYnAH41KHSpHV4BRbt+O/0HXoAvvYZ+92NhGrcHlzO6q68ZWrTkJ/70
+ Eo782feUbMCecIartODYtSwXCJ1hDGdMufjQbIqTMSBBc+/0I9FiFEadlIfLKJGuEZ8l
+ KHiA==
+X-Gm-Message-State: AO0yUKXaauBqrO9fEScQAfh5UA539AhPw3cQHF9vHDioAQNLpJvBbR13
+ 1uX0KHYab0STimRYdOJv4l2BVIR/GtqSU73LKi4=
+X-Google-Smtp-Source: AK7set8r+R0dVoFNOj4sW3zAy7Ms5yXCcJLFsn9d8vcocYgYVUtMvVf9dOWoZE1ignUz1xyzxLHPVw==
+X-Received: by 2002:a50:d6de:0:b0:4aa:b2d3:fa45 with SMTP id
+ l30-20020a50d6de000000b004aab2d3fa45mr7282749edj.25.1675854373558; 
+ Wed, 08 Feb 2023 03:06:13 -0800 (PST)
+Received: from localhost.localdomain (cpe1150018.bra.be.verixi.net.
+ [85.119.216.19]) by smtp.gmail.com with ESMTPSA id
+ i3-20020aa7c9c3000000b004a087d1d313sm7577078edt.64.2023.02.08.03.06.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 08 Feb 2023 03:06:13 -0800 (PST)
+From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Wed, 8 Feb 2023 11:57:26 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 247e2d0eb1e60f483044d58bed58c5ed321528f7
-X-Git-Newrev: c419ef62d84b5be65599452ab84f7ed719bbe470
-X-Patchwork-Hint: ignore
-Message-Id: <20230208110047.8620F845F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/neon-2-sse: bump to version
- 097a5ecacd527d5b5c3006e360fb9cb1c1c48a1f
+Date: Wed,  8 Feb 2023 12:05:51 +0100
+Message-Id: <20230208110551.187828-1-sebastian.weyer@smile.fr>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=cHtsT5YchId3Q2OPWdwGlmcO/gAmRaAPGrz7ctNiaLY=;
+ b=OEoeFpdzkwwUHxkHcg4o6lGGSjxoy148HO3/9OzJN7tXgZKMScZ/V05av2e3q/Rg+O
+ XJtvAAzAeFvTsjKtvhAni64+INY+ZNvrxLjpBxLzpvEFDeQuJyjMd/H+XjqVx+FhlBjg
+ Im06S41ClLGLMugwFck5CbhZWEAX+C5NLh5jXkYHJwMAcl2k5FXI03pxMcjw4qHTWWRl
+ wSx/KwFXxWIrBzZvJ8B0zLR7utoMU9g1OvWpItQHdttlbGLC22XBdqdOQ1B7kD9btWtB
+ f/pHP82fxQPVVZf3IeBV+v97oqIhK8S71NyAitdlFSJlNS/6oCgiyWDFyhooL9pxs/Wo
+ 5zlw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=OEoeFpdz
+Subject: [Buildroot] [PATCH 1/1] package/rust: fix boostrap build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,94 +94,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Sebastian Weyer <sebastian.weyer@smile.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c419ef62d84b5be65599452ab84f7ed719bbe470
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The update to v1.67.0 of rust broke the boostrap build. This patch
+applies an upstream patch to fix this:
+https://github.com/rust-lang/rust/commit/3fe64ebbce21e79adb64099984e96dfb79bdd0f9
 
-Drop patch which is now upstream.
+Fixes:
+http://autobuild.buildroot.org/results/214/214fcbb3458893784b7f85b60f7ee1edb428c77f/build-end.log
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/neon-2-sse/0001-Fix-cmake-languages.patch | 40 -----------------------
- package/neon-2-sse/neon-2-sse.hash                |  2 +-
- package/neon-2-sse/neon-2-sse.mk                  |  2 +-
- 3 files changed, 2 insertions(+), 42 deletions(-)
+I previously just tested TestRustBin since TestRust takes forever. This
+time I ran TestRust and it builds fine :)
+---
+ ...-unsoundness-in-bootstrap-cache-code.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
 
-diff --git a/package/neon-2-sse/0001-Fix-cmake-languages.patch b/package/neon-2-sse/0001-Fix-cmake-languages.patch
-deleted file mode 100644
-index e0becb1ffa..0000000000
---- a/package/neon-2-sse/0001-Fix-cmake-languages.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 186ec82e033d8c718d760d14945535a9d7e160fd Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Sun, 29 Jan 2023 21:00:27 -0700
--Subject: [PATCH] Fix cmake languages
--
--When no language is set cmake defaults to C and CXX, since we support
--C by itself we should set the project language to C so that we don't
--get a compiler error when building without a CXX toolchain.
--
--Fixes:
--CMake Error at CMakeLists.txt:5 (project):
--  No CMAKE_CXX_COMPILER could be found.
--
--  Tell CMake where to find the compiler by setting either the environment
--  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
--  to the compiler, or to the compiler name if it is in the PATH.
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://github.com/intel/ARM_NEON_2_x86_SSE/pull/62]
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index e4b8980..8f58e79 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -2,7 +2,7 @@
-- # Modification: Copyright (C) 2017 David Hirvonen
-- 
-- cmake_minimum_required(VERSION 3.0)
---project(NEON_2_SSE VERSION 1.0.0)
--+project(NEON_2_SSE VERSION 1.0.0 LANGUAGES C)
-- 
-- add_library(${PROJECT_NAME} INTERFACE)
-- 
---- 
--2.34.1
--
-diff --git a/package/neon-2-sse/neon-2-sse.hash b/package/neon-2-sse/neon-2-sse.hash
-index ded20d58f5..f964d2fa61 100644
---- a/package/neon-2-sse/neon-2-sse.hash
-+++ b/package/neon-2-sse/neon-2-sse.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  019fbc7ec25860070a1d90e12686fc160cfb33e22aa063c80f52b363f1361e9d  neon-2-sse-a15b489e1222b2087007546b4912e21293ea86ff.tar.gz
-+sha256  4567ca8c8cbc8ce0ea3ddb9dc0f158707eb85c631cb400fd7010cd299cdc5377  neon-2-sse-097a5ecacd527d5b5c3006e360fb9cb1c1c48a1f.tar.gz
- # License files, locally calculated
- sha256  7022f51b439a5915e933ecc270c83e24ca0cb2cceeb08b0132dcd4dbb03ed2dc  LICENSE
-diff --git a/package/neon-2-sse/neon-2-sse.mk b/package/neon-2-sse/neon-2-sse.mk
-index 3e87c62e21..ee6f5446b6 100644
---- a/package/neon-2-sse/neon-2-sse.mk
-+++ b/package/neon-2-sse/neon-2-sse.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NEON_2_SSE_VERSION = a15b489e1222b2087007546b4912e21293ea86ff
-+NEON_2_SSE_VERSION = 097a5ecacd527d5b5c3006e360fb9cb1c1c48a1f
- NEON_2_SSE_SITE = $(call github,intel,ARM_NEON_2_x86_SSE,$(NEON_2_SSE_VERSION))
- NEON_2_SSE_LICENSE = BSD-2-Clause
- NEON_2_SSE_LICENSE_FILES = LICENSE
+diff --git a/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch b/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
+new file mode 100644
+index 0000000000..3eae34642f
+--- /dev/null
++++ b/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
+@@ -0,0 +1,43 @@
++From 6bf37780ed49846c78d6707355f1cf44790c4301 Mon Sep 17 00:00:00 2001
++From: Michael Goulet <michael@errs.io>
++Date: Mon, 12 Dec 2022 18:29:33 +0000
++Subject: [PATCH] =?UTF-8?q?=F0=9F=9A=A8=20fix=20unsoundness=20in=20bootstr?=
++ =?UTF-8?q?ap=20cache=20code?=
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++(cherry picked from commit 3fe64ebbce21e79adb64099984e96dfb79bdd0f9)
++Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
++---
++ src/bootstrap/cache.rs | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/bootstrap/cache.rs b/src/bootstrap/cache.rs
++index be5c9bb0788..05f25af68ea 100644
++--- a/src/bootstrap/cache.rs
+++++ b/src/bootstrap/cache.rs
++@@ -89,16 +89,16 @@ fn hash<H: Hasher>(&self, state: &mut H) {
++ 
++ impl<T: Internable + Deref> Deref for Interned<T> {
++     type Target = T::Target;
++-    fn deref(&self) -> &'static Self::Target {
+++    fn deref(&self) -> &Self::Target {
++         let l = T::intern_cache().lock().unwrap();
++-        unsafe { mem::transmute::<&Self::Target, &'static Self::Target>(l.get(*self)) }
+++        unsafe { mem::transmute::<&Self::Target, &Self::Target>(l.get(*self)) }
++     }
++ }
++ 
++ impl<T: Internable + AsRef<U>, U: ?Sized> AsRef<U> for Interned<T> {
++-    fn as_ref(&self) -> &'static U {
+++    fn as_ref(&self) -> &U {
++         let l = T::intern_cache().lock().unwrap();
++-        unsafe { mem::transmute::<&U, &'static U>(l.get(*self).as_ref()) }
+++        unsafe { mem::transmute::<&U, &U>(l.get(*self).as_ref()) }
++     }
++ }
++ 
++-- 
++2.25.1
++
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
