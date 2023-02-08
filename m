@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F1DC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F0B6C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:19:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3DB47034C;
-	Tue, 21 Feb 2023 02:18:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3DB47034C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BEA7702D9;
+	Tue, 21 Feb 2023 02:19:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BEA7702D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nwxwS7XiQdOF; Tue, 21 Feb 2023 02:18:49 +0000 (UTC)
+	with ESMTP id GkvpdPz4ue3C; Tue, 21 Feb 2023 02:19:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF2D170206;
-	Tue, 21 Feb 2023 02:18:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF2D170206
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8511D7019D;
+	Tue, 21 Feb 2023 02:19:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8511D7019D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 457C31BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4818D1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0745417CD
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3C11417F8
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0745417CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3C11417F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id thHPitFJOboX for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+ with ESMTP id mG9rVLUmfzfa for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1230F417FF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1230F417FF
+ by smtp2.osuosl.org (Postfix) with ESMTP id B6E07417FE
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6E07417FE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F05286495; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-From: Arnout Vandecappelle <arnout@mind.be>
+ id A40638648F; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Feb 2023 21:51:47 +0100
+Date: Wed, 8 Feb 2023 17:43:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8cee8fb37c6ad0164d3f7bad8cfd0f812592ad6c
-X-Git-Newrev: e2fd606b91784ced64c7312e02fcbf95f3e736d6
+X-Git-Oldrev: 040896bd4338f7ca419766578db49af154b762c7
+X-Git-Newrev: 41671deec7b00de10dcc372cdeee4400df1d76ee
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205257.0F05286495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ply: add dependency on
- Linux headers >= 5.5
+Message-Id: <20230220205256.A40638648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nginx-modsecurity:
+ bump to version 1.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,56 +56,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2fd606b91784ced64c7312e02fcbf95f3e736d6
+commit: https://git.buildroot.net/buildroot/commit/?id=41671deec7b00de10dcc372cdeee4400df1d76ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Version 2.3.0 of ply now requires Linux headers >= 5.5
-
-This was missing in commit b9612601b037e6deb79af300e64e0557dda1be5c
-("package/ply: bump to version 2.3.0")
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ce37039991cb0fb02b97d341d78327e54d0e1d26
-  http://autobuild.buildroot.net/results/c00714847ae92dd609bc8990df318bee58be38b8
-  http://autobuild.buildroot.net/results/8210bd2b9c67d6d7616ada525019b2658195416a
-
-Signed-off-by: Andreas Klinger <ak@it-klinger.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ply/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/nginx-modsecurity/nginx-modsecurity.hash | 4 ++--
+ package/nginx-modsecurity/nginx-modsecurity.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ply/Config.in b/package/ply/Config.in
-index 0500e7883f..f7507095c1 100644
---- a/package/ply/Config.in
-+++ b/package/ply/Config.in
-@@ -5,16 +5,16 @@ config BR2_PACKAGE_PLY_ARCH_SUPPORTS
- 	default y if BR2_powerpc
- 	default y if BR2_x86_64
+diff --git a/package/nginx-modsecurity/nginx-modsecurity.hash b/package/nginx-modsecurity/nginx-modsecurity.hash
+index fbaf1ca239..0cd2ee07cd 100644
+--- a/package/nginx-modsecurity/nginx-modsecurity.hash
++++ b/package/nginx-modsecurity/nginx-modsecurity.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.2/modsecurity-nginx-v1.0.2.tar.gz.sha256
+-sha256  41a6660c50508c60df59f8f09c444d18ef8112a4c118cdc791a3992390b78c32  modsecurity-nginx-v1.0.2.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.3/modsecurity-nginx-v1.0.3.tar.gz.sha256
++sha256  ae811c7208ac029cb7a99d6f63e03d3971797607517187f47620df39c1f78add  modsecurity-nginx-v1.0.3.tar.gz
+ # Localy calculated
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/nginx-modsecurity/nginx-modsecurity.mk b/package/nginx-modsecurity/nginx-modsecurity.mk
+index 90ef8ecd51..a00c200469 100644
+--- a/package/nginx-modsecurity/nginx-modsecurity.mk
++++ b/package/nginx-modsecurity/nginx-modsecurity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "ply needs a toolchain w/ dynamic library, headers >= 4.14"
-+comment "ply needs a toolchain w/ dynamic library, headers >= 5.5"
- 	depends on BR2_PACKAGE_PLY_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5 || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_PLY
- 	bool "ply"
- 	depends on BR2_PACKAGE_PLY_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 # BPF_JLT
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5 # BPF_JLT
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  ply is a light-weight dynamic tracer for Linux. By means of
+-NGINX_MODSECURITY_VERSION = 1.0.2
++NGINX_MODSECURITY_VERSION = 1.0.3
+ NGINX_MODSECURITY_SOURCE = modsecurity-nginx-v$(NGINX_MODSECURITY_VERSION).tar.gz
+ NGINX_MODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v$(NGINX_MODSECURITY_VERSION)
+ NGINX_MODSECURITY_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
