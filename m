@@ -4,67 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B62DDC05027
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 12:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43B10C05027
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 12:31:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A6046105E;
-	Wed,  8 Feb 2023 12:28:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A6046105E
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE9E06105E;
+	Wed,  8 Feb 2023 12:31:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE9E06105E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CgI8ZxxkB7ap; Wed,  8 Feb 2023 12:28:02 +0000 (UTC)
+	with ESMTP id PVU6yT6coi-C; Wed,  8 Feb 2023 12:31:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CED16104D;
-	Wed,  8 Feb 2023 12:28:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CED16104D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6F3DE1BF5E9
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 12:27:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 978A261060;
+	Wed,  8 Feb 2023 12:31:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 978A261060
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CFB4C1BF5E9
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 12:31:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 48C6C8148A
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 12:27:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48C6C8148A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 361BA61060
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 12:31:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 361BA61060
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t9h9H5_P9n2t for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 12:27:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C74F9812C8
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C74F9812C8
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 12:27:57 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F115920007;
- Wed,  8 Feb 2023 12:27:54 +0000 (UTC)
-Date: Wed, 8 Feb 2023 13:27:53 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230208132753.7895f68f@windsurf>
-In-Reply-To: <20221114232254.3970611-1-james.hilliard1@gmail.com>
-References: <20221114232254.3970611-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h_op5xziMRs4 for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 12:31:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B036E6105E
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B036E6105E
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 12:31:03 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ bg5-20020a05600c3c8500b003e00c739ce4so1344699wmb.5
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 04:31:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=7XtcoiRwaP7KM/eRM3lpo1nLrsIFdVs/+BGaVISdurs=;
+ b=3TV7YfgJye9ndzjG6GggdfFOYDHSkAGAAPmbXUUCSrX6xMvv/I8xqmBqiHwIzNImUV
+ DYSb2AbpWJJDHtsoplBB43RBV8pActaVb4uCjyUftA+gX4AcB8/3BCWP4E7SlacEcZ/X
+ CI/dYmvyjVk3sqHoBUVEiB9JtQ+7RNDL3dRoi4R708qTNaKZlpnZV4RQKgJbG2/jUOz6
+ 2XsF92ijwgLmGD9O7DVPCWvpyx8iNgj8hcsB20NVGNdnJPFwTx+sd3maSjevvRh3w/v9
+ sghTKH7lq4pR5mF5XAPB3VX8kaoegZ1hVXRpfK5UYngTI55MYHOfzZty3EgXOU1z1Mm4
+ zC3w==
+X-Gm-Message-State: AO0yUKXUIv5aJEgKIk38xjcfsPltoW1vulsMmrzaKnRVk0nVGypMh0pK
+ G9XomxptOcKKJ84O5l0HDyL7jtdsYP7vr200
+X-Google-Smtp-Source: AK7set/jeijcpoe6qu9IK+SCCHsJfhB/lkTv4usQptfxQE0yf6r/S2U5btMxC/ov9x0eYy2uZBSSng==
+X-Received: by 2002:a05:600c:130f:b0:3df:578c:50d4 with SMTP id
+ j15-20020a05600c130f00b003df578c50d4mr6347865wmf.21.1675859461867; 
+ Wed, 08 Feb 2023 04:31:01 -0800 (PST)
+Received: from [192.168.16.188] (cpe1150018.bra.be.verixi.net. [85.119.216.19])
+ by smtp.gmail.com with ESMTPSA id
+ r3-20020a05600c424300b003dc492e4430sm1657377wmm.28.2023.02.08.04.31.00
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 08 Feb 2023 04:31:00 -0800 (PST)
+Message-ID: <76f90a9f-9899-fd78-3ae4-add859507b2c@mind.be>
+Date: Wed, 8 Feb 2023 13:30:59 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-GB
+To: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
+ buildroot@buildroot.org
+References: <20220731193521.1217825-1-ricardo.martincoski@gmail.com>
+ <20220731193521.1217825-8-ricardo.martincoski@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20220731193521.1217825-8-ricardo.martincoski@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1675859275;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=EaMQ2cx5nsOwEBiohVCIM1CNFRKhL1rz7fXBlG6o+X8=;
- b=SDp+JvIXl81w4omIg32uitA6KbUC5xZdwmCIFtJH80zslWTXkV3UVzr6VUd5mYGYuKZEsC
- d9KTzFQMO9bySTgBFPB9SUVmxH1rOdWrUhvC6RVBx5/b04klAAMf8sQFuM70+bIiaF+18T
- 5G7Rqw6bttYv+rF0BKzYUmp1s2aR887fxmWHL72756aIW6lCV8SDwXOy6cIwbYSGIdNkL+
- 9FXXmt9xr28am332flrw1hObX0mIDz+5Zo+HApD/Q83jrTG2M7jXf9eHVCW6GAnxjqehOc
- 8qqO+pVucZZgDeR+wfj6ZaO4asIDhFN/rY07FLfBN82KVyJ2uKAFJ8sG0dwwpw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SDp+JvIX
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/zxing-cpp: bump to version
- 1.4.0
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=7XtcoiRwaP7KM/eRM3lpo1nLrsIFdVs/+BGaVISdurs=;
+ b=GI5NVleDz+pkpv/5euwVMuW+QQoL58cJJFGATYz/uKqarl1em2uLOspTeh5frq62Uy
+ rr/7DP9FCkGWB303YmgXniitKmEgHHKvhLNYtDfBGLXnmiOAV+BF1jSCRaj10p8gzG5i
+ m0isTy5CSGjwIeexW69Nzogvs2CHhWSNDHvAEO8POLdpLzDQumrAH3yJwbBof+HwAk4W
+ HBU37tDHa3NiP0VEqRmcg8ryIVQiwrlQIShz6X8skUgfHoAyNHhcRdbxpm1sBHB6vDRA
+ dBwLO90LqmbyJTcq2IowVD4LNpDyWC6NRfg91oZuOSTkpfCa4iiapHX/hp0X28paZ2S2
+ TEig==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=GI5NVleD
+Subject: Re: [Buildroot] [PATCH v2 07/14] utils/check-package: check all
+ shell scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,59 +102,279 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 14 Nov 2022 16:22:53 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Drop patches which are no longer required.
+
+On 31/07/2022 21:35, Ricardo Martincoski wrote:
+> Currently only SysV init scripts are checked using shellcheck and a few
+> other rules (e.g. variable naming, file naming).
 > 
-> Verified license remains Apache-2.0 after hash change.
+> Extend the check using shellcheck to all shell scripts in the tree.
+> This is actually limited to the list of directories that check-package
+> knows that can check, but that list can be expanded later.
 > 
-> Rework config options for 1.4.0.
+> In order to apply the check to all shell scripts, use python3-magic to
+> determine the file type.
+
+  Turns out there are (at least) two Python modules called "magic", and I 
+happened to have the other one installed... So I adapted the code to support both.
+
+> Keep testing first for name pattern, and only in the case there is no
+> match, check the file type. This ensures, for instance, that SysV
+> init scripts follow specific rules.
 > 
-> Add new host-pkgconf and stb build dependency.
+> Apply these checks for shell scripts:
+>   - shellcheck;
+>   - trailing space;
+>   - consecutive empty lines;
+>   - empty last line on file;
+>   - newline at end of file.
 > 
-> Drop optional libiconv dependency which is no longer used.
+> Update the list of ignored warnings.
 > 
-> Add optional python module support.
+> Do not add unit tests since no function was added, they were just
+> reused.
+> But expand the runtime test for check-package using as fixture a file
+> that generates a shellcheck warning.
 > 
-> Add optional qt5 support.
-> 
-> Add optional opencv4 support.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > ---
 > Changes v1 -> v2:
->   - fix makefile pybind check
->   - add comment for qt5 required config
+>    - do not mention docker image in the commit message
+> 
+> NOTE to the maintainer applying this patch: please re-generate the list
+> of ignored warnings while applying:
+> $ utils/docker-run make .checkpackageignore
+
+  Only one exception more than originally, so that's good I guess.
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
 > ---
->  ...bs-private-not-exported-to-the-users.patch | 43 -----------------
->  ...akeLists-txt-add-BUILD_OPENCV-option.patch | 39 ---------------
->  package/zxing-cpp/Config.in                   |  2 +
->  package/zxing-cpp/zxing-cpp.hash              |  4 +-
->  package/zxing-cpp/zxing-cpp.mk                | 48 +++++++++++++++----
->  5 files changed, 42 insertions(+), 94 deletions(-)
->  delete mode 100644 package/zxing-cpp/0001-Link-library-with-OpenCV-make-libs-private-not-exported-to-the-users.patch
->  delete mode 100644 package/zxing-cpp/0002-CMakeLists-txt-add-BUILD_OPENCV-option.patch
-
-Both applied to master, thanks! On the first patch, I have changed to
-disable building the examples, it doesn't seem to make much sense to
-enable examples by default.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>   .checkpackageignore                           | 20 +++++++++++++++++++
+>   .../utils/br2-external/utils/x-shellscript    |  2 ++
+>   .../testing/tests/utils/test_check_package.py | 17 ++++++++++++++++
+>   utils/check-package                           | 13 +++++++++++-
+>   utils/checkpackagelib/lib_shellscript.py      |  5 +++++
+>   5 files changed, 56 insertions(+), 1 deletion(-)
+>   create mode 100755 support/testing/tests/utils/br2-external/utils/x-shellscript
+>   create mode 100644 utils/checkpackagelib/lib_shellscript.py
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index d8947e89fc..a527254464 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -16,11 +16,13 @@ package/busybox/S02sysctl Variables
+>   package/busybox/S10mdev ConsecutiveEmptyLines Indent Shellcheck
+>   package/busybox/S15watchdog Indent Variables
+>   package/busybox/S50telnet Indent Shellcheck Variables
+> +package/busybox/udhcpc.script Shellcheck
+>   package/c-icap/S96cicap Indent Shellcheck Variables
+>   package/cfm/S65cfm Indent Variables
+>   package/cgroupfs-mount/S30cgroupfs Indent Shellcheck Variables
+>   package/chrony/S49chrony Indent Shellcheck Variables
+>   package/connman/S45connman Variables
+> +package/coremark-pro/coremark-pro.sh.in Shellcheck
+>   package/curlftpfs/0001-fix-CURLOPT_INFILESIZE.patch Sob
+>   package/curlftpfs/0002-free_ftpfs_file-memleak-fix.patch Sob
+>   package/curlftpfs/0003-nocache-memleak-fix.patch Sob
+> @@ -30,6 +32,7 @@ package/dbus/S30dbus Indent Shellcheck TrailingSpace Variables
+>   package/dcron/S90dcron Variables
+>   package/dhcp/S80dhcp-relay Shellcheck Variables
+>   package/dhcp/S80dhcp-server Shellcheck Variables
+> +package/dhcp/dhclient-script Shellcheck TrailingSpace
+>   package/dhcpcd/S41dhcpcd Indent Variables
+>   package/dhrystone/0001-cmdline-nruns.patch Sob
+>   package/dhrystone/0002-HZ.patch Sob
+> @@ -44,9 +47,11 @@ package/domoticz/S99domoticz Shellcheck
+>   package/dropbear/S50dropbear Indent Shellcheck Variables
+>   package/earlyoom/S02earlyoom Indent Shellcheck
+>   package/ejabberd/S50ejabberd Indent Shellcheck Variables
+> +package/ejabberd/check-erlang-lib Shellcheck
+>   package/eudev/S10udev ConsecutiveEmptyLines Indent Shellcheck Variables
+>   package/exim/S86exim Indent Variables
+>   package/fail2ban/S60fail2ban Shellcheck Variables
+> +package/fakedate/fakedate Shellcheck
+>   package/fbv/0001-cross.patch Sob
+>   package/fbv/0002-fix-24bpp-support-on-big-endian.patch Sob
+>   package/fbv/0005-include.patch Sob
+> @@ -57,6 +62,7 @@ package/gcc/arc-2020.09-release/0002-libsanitizer-Remove-cyclades-from-libsaniti
+>   package/genromfs/0001-build-system.patch Sob
+>   package/gerbera/S99gerbera Indent
+>   package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch Sob
+> +package/google-breakpad/gen-syms.sh Shellcheck
+>   package/gpsd/S50gpsd Indent Shellcheck Variables
+>   package/haveged/S21haveged Shellcheck Variables
+>   package/htpdate/S43htpdate Shellcheck
+> @@ -64,8 +70,12 @@ package/i2pd/S99i2pd Indent Shellcheck Variables
+>   package/ifplugd/0001-cross.patch Sob
+>   package/ifplugd/0002-fix-headers.patch Sob
+>   package/ifupdown-scripts/S40network EmptyLastLine Indent Shellcheck Variables
+> +package/ifupdown-scripts/network/if-pre-up.d/wait_iface EmptyLastLine Shellcheck
+> +package/ifupdown-scripts/nfs_check Shellcheck
+>   package/igd2-for-linux/S99upnpd Indent Shellcheck Variables
+>   package/inadyn/S70inadyn Indent NotExecutable
+> +package/initscripts/init.d/rcK ConsecutiveEmptyLines EmptyLastLine Shellcheck
+> +package/initscripts/init.d/rcS ConsecutiveEmptyLines EmptyLastLine Shellcheck
+>   package/input-event-daemon/S99input-event-daemon ConsecutiveEmptyLines Indent Variables
+>   package/iptables/S35iptables Shellcheck
+>   package/irda-utils/0001-daemon.patch Sob
+> @@ -95,6 +105,7 @@ package/lldpd/S60lldpd Indent Shellcheck Variables
+>   package/lockfile-progs/0001-sus3v-legacy.patch Sob
+>   package/madplay/0001-switch-to-new-alsa-api.patch Sob
+>   package/mariadb/S97mysqld Indent Shellcheck Variables
+> +package/matchbox-keyboard/mb-applet-kbd-wrapper.sh Shellcheck TrailingSpace
+>   package/mender-connect/S43mender-connect Shellcheck
+>   package/mii-diag/0001-strchr.patch Sob
+>   package/minidlna/S60minidlnad Indent Shellcheck Variables
+> @@ -112,6 +123,7 @@ package/netcat/0001-signed-bit-counting.patch Sob
+>   package/netopeer2/S52netopeer2 Shellcheck Variables
+>   package/netplug/0001-makefile-flags.patch Sob
+>   package/netplug/S29netplug Indent Shellcheck Variables
+> +package/netplug/netplug-script ConsecutiveEmptyLines Shellcheck
+>   package/netsnmp/S59snmpd Indent Shellcheck Variables
+>   package/network-manager/S45network-manager ConsecutiveEmptyLines EmptyLastLine Shellcheck Variables
+>   package/nfs-utils/S60nfs ConsecutiveEmptyLines Shellcheck Variables
+> @@ -123,12 +135,14 @@ package/ofono/S46ofono Variables
+>   package/olsr/S50olsr Indent Shellcheck Variables
+>   package/openntpd/S49ntp Shellcheck Variables
+>   package/openssh/S50sshd EmptyLastLine Indent Variables
+> +package/openvmtools/shutdown Shellcheck
+>   package/openvpn/S60openvpn Indent Shellcheck Variables
+>   package/optee-client/S30optee Indent Shellcheck Variables
+>   package/oracle-mysql/S97mysqld Shellcheck Variables
+>   package/owfs/S55owserver Shellcheck Variables
+>   package/owfs/S60owfs Shellcheck Variables
+>   package/pigpio/S50pigpio Shellcheck Variables
+> +package/pkgconf/pkg-config.in Shellcheck
+>   package/polkit/S50polkit NotExecutable Shellcheck Variables
+>   package/postgresql/S50postgresql Variables
+>   package/procps-ng/S02sysctl Variables
+> @@ -161,11 +175,14 @@ package/sslh/S35sslh Indent Shellcheck Variables
+>   package/stunnel/S50stunnel Indent Shellcheck Variables
+>   package/supervisor/S99supervisord Variables
+>   package/suricata/S99suricata Shellcheck
+> +package/swupdate/swupdate.sh Shellcheck
+>   package/sysrepo/S51sysrepo-plugind Indent Shellcheck
+> +package/systemd/fakeroot_tmpfiles.sh Shellcheck
+>   package/targetcli-fb/S50target Shellcheck Variables
+>   package/tcf-agent/S55tcf-agent Shellcheck Variables
+>   package/tftpd/S80tftpd-hpa Indent Shellcheck Variables
+>   package/ti-gfx/S80ti-gfx Shellcheck Variables
+> +package/ti-gfx/esrev.sh Shellcheck
+>   package/ti-sgx-um/S80ti-sgx Variables
+>   package/tpm2-abrmd/S80tpm2-abrmd Indent Shellcheck Variables
+>   package/transmission/S92transmission ConsecutiveEmptyLines Indent Shellcheck Variables
+> @@ -176,10 +193,13 @@ package/unscd/S46unscd Indent Shellcheck Variables
+>   package/upmpdcli/S99upmpdcli Indent Shellcheck Variables
+>   package/urandom-scripts/S20urandom Variables
+>   package/usbguard/S20usbguard Indent Shellcheck Variables
+> +package/vala/vala-wrapper Shellcheck
+>   package/vsftpd/S70vsftpd Indent Shellcheck Variables
+>   package/watchdogd/S01watchdogd Indent NotExecutable
+> +package/wpa_supplicant/ifupdown.sh Shellcheck
+>   package/x11r7/xapp_xdm/S99xdm Indent Variables
+>   package/x11r7/xdriver_xf86-video-mach64/0001-cross-compile.patch Sob
+>   package/x11r7/xdriver_xf86-video-savage/0001-cross-compile.patch Sob
+>   package/x11r7/xdriver_xf86-video-tdfx/0001-cross.patch Sob
+>   package/x11r7/xserver_xorg-server/S40xorg Shellcheck Variables
+> +package/xl2tp/xl2tpd TrailingSpace
+> diff --git a/support/testing/tests/utils/br2-external/utils/x-shellscript b/support/testing/tests/utils/br2-external/utils/x-shellscript
+> new file mode 100755
+> index 0000000000..a7de4124bd
+> --- /dev/null
+> +++ b/support/testing/tests/utils/br2-external/utils/x-shellscript
+> @@ -0,0 +1,2 @@
+> +#!/bin/bash
+> +unused="text"
+> diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
+> index f21b9e939f..aeda0857e3 100644
+> --- a/support/testing/tests/utils/test_check_package.py
+> +++ b/support/testing/tests/utils/test_check_package.py
+> @@ -232,3 +232,20 @@ class TestCheckPackage(unittest.TestCase):
+>                         .format(subdir_file), w)
+>           self.assertIn("{}:0: NewlineAtEof was expected to fail, did you fixed the file and forgot to update .checkpackageignore?"
+>                         .format(subdir_file), w)
+> +
+> +        # shell scripts are tested using shellcheck
+> +        rel_file = "utils/x-shellscript"
+> +        abs_path = infra.filepath("tests/utils/br2-external")
+> +        abs_file = os.path.join(abs_path, rel_file)
+> +
+> +        w, m = call_script(["check-package", "-b", rel_file],
+> +                           self.WITH_UTILS_IN_PATH, abs_path)
+> +        self.assert_file_was_processed(m)
+> +        self.assert_warnings_generated_for_file(m)
+> +        self.assertIn("{}:0: run 'shellcheck' and fix the warnings".format(rel_file), w)
+> +
+> +        w, m = call_script(["check-package", "-b", abs_file],
+> +                           self.WITH_UTILS_IN_PATH, infra.basepath())
+> +        self.assert_file_was_processed(m)
+> +        self.assert_warnings_generated_for_file(m)
+> +        self.assertIn("{}:0: run 'shellcheck' and fix the warnings".format(abs_file), w)
+> diff --git a/utils/check-package b/utils/check-package
+> index d896e8b117..732f1cf112 100755
+> --- a/utils/check-package
+> +++ b/utils/check-package
+> @@ -3,6 +3,7 @@
+>   
+>   import argparse
+>   import inspect
+> +import magic
+>   import os
+>   import re
+>   import six
+> @@ -13,6 +14,7 @@ import checkpackagelib.lib_config
+>   import checkpackagelib.lib_hash
+>   import checkpackagelib.lib_mk
+>   import checkpackagelib.lib_patch
+> +import checkpackagelib.lib_shellscript
+>   import checkpackagelib.lib_sysv
+>   
+>   IGNORE_FILENAME = ".checkpackageignore"
+> @@ -86,6 +88,15 @@ def parse_args():
+>       return flags
+>   
+>   
+> +def get_lib_from_filetype(fname):
+> +    if not os.path.isfile(fname):
+> +        return None
+> +    filetype = magic.from_file(fname, mime=True)
+> +    if filetype == "text/x-shellscript":
+> +        return checkpackagelib.lib_shellscript
+> +    return None
+> +
+> +
+>   CONFIG_IN_FILENAME = re.compile(r"Config\.\S*$")
+>   DO_CHECK_INTREE = re.compile(r"|".join([
+>       r"Config.in",
+> @@ -129,7 +140,7 @@ def get_lib_from_filename(fname):
+>           return checkpackagelib.lib_patch
+>       if SYSV_INIT_SCRIPT_FILENAME.search(fname):
+>           return checkpackagelib.lib_sysv
+> -    return None
+> +    return get_lib_from_filetype(fname)
+>   
+>   
+>   def common_inspect_rules(m):
+> diff --git a/utils/checkpackagelib/lib_shellscript.py b/utils/checkpackagelib/lib_shellscript.py
+> new file mode 100644
+> index 0000000000..9b4f4aed58
+> --- /dev/null
+> +++ b/utils/checkpackagelib/lib_shellscript.py
+> @@ -0,0 +1,5 @@
+> +from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
+> +from checkpackagelib.lib import EmptyLastLine          # noqa: F401
+> +from checkpackagelib.lib import NewlineAtEof           # noqa: F401
+> +from checkpackagelib.lib import TrailingSpace          # noqa: F401
+> +from checkpackagelib.tool import Shellcheck            # noqa: F401
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
