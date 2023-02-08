@@ -4,93 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 016BDC05027
-	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 16:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FD6CC636CC
+	for <buildroot@archiver.kernel.org>; Wed,  8 Feb 2023 16:15:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97E6A40C29;
-	Wed,  8 Feb 2023 16:10:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97E6A40C29
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4355B40C2A;
+	Wed,  8 Feb 2023 16:15:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4355B40C2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dilMSxlRsMZW; Wed,  8 Feb 2023 16:10:58 +0000 (UTC)
+	with ESMTP id guL_BPpu0WxU; Wed,  8 Feb 2023 16:15:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99D8C4014B;
-	Wed,  8 Feb 2023 16:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99D8C4014B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC3601BF286
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:10:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6FF4240C25;
+	Wed,  8 Feb 2023 16:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FF4240C25
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F88D1BF286
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:15:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A25C681F05
- for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:10:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A25C681F05
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1950E408BC
+ for <buildroot@lists.busybox.net>; Wed,  8 Feb 2023 16:15:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1950E408BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fJXcpnkc2VpL for <buildroot@lists.busybox.net>;
- Wed,  8 Feb 2023 16:10:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RjY5ff7lX-Ys for <buildroot@lists.busybox.net>;
+ Wed,  8 Feb 2023 16:15:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48AAF81985
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 48AAF81985
- for <buildroot@buildroot.org>; Wed,  8 Feb 2023 16:10:54 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id bk16so17268540wrb.11
- for <buildroot@buildroot.org>; Wed, 08 Feb 2023 08:10:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF112408BA
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
+ [IPv6:2607:f8b0:4864:20::102d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CF112408BA
+ for <buildroot@buildroot.org>; Wed,  8 Feb 2023 16:15:08 +0000 (UTC)
+Received: by mail-pj1-x102d.google.com with SMTP id
+ c10-20020a17090a1d0a00b0022e63a94799so3026708pjd.2
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 08:15:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=BxntNBr1vAoudauwnkVQ8tSpS1GiEJw1JmVEk0PQY90=;
- b=wLlA6+J4gw/QptV2yeU6Y4z2I3wypE5AP8dn9w171zys3zHkLBtEcDimNZIeg7Oeca
- IvtSwRbHf0pIlpGWgZ+m3E5NITb/efdmxYJ+OEhAKT3f650S8eIVhvDk+DuOCk235O5R
- tUmPK68TvuNeQFza6BwSThGBv0bP3wLtHksCHAOJ592cClGtqsKAz1vIcgjIKGg4V1al
- wZzkg+ux7RPDYDrM9DIr9MqZf0diqGg60a4PZ5sATSbbP5zlwkyOzlYikr95pDVhh66U
- xn7iFLPbxmEHjudw4gxsN8k5aWLD9zrsNvCn7dIIcnSmaH/PUu5N14G+XIrIl0TIRQjU
- l+SQ==
-X-Gm-Message-State: AO0yUKWUo2bPc+sN5O8PeP5cN6rbbeeduSYO2XeR+cHrghP1Da1LhqWF
- IOLGF39xvqyHP7xaFT7vLlt9yQ==
-X-Google-Smtp-Source: AK7set/p2XhjtSQZr0WieNnQ5/g9TIFlsITMP+yAJs3jqeE5xUO/3PQAmNXEVz0a51yAtKCxtXhzPg==
-X-Received: by 2002:a5d:67c4:0:b0:2c3:efda:7194 with SMTP id
- n4-20020a5d67c4000000b002c3efda7194mr1770085wrw.20.1675872652494; 
- Wed, 08 Feb 2023 08:10:52 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- d13-20020adffbcd000000b002c3f6cd1f0fsm3820005wrs.83.2023.02.08.08.10.51
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 08 Feb 2023 08:10:52 -0800 (PST)
-Message-ID: <5d87a68a-3489-2848-a841-8690bd59c5b6@smile.fr>
-Date: Wed, 8 Feb 2023 17:10:51 +0100
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=dalqKFeLWGol9n5tJfLkLqeEWpfhSKgxCVQDUjSR+xc=;
+ b=hgiO02Mh4G4CJ5s42U34e3LTDja8XTatu18kSeU1nz5a0K81G87K/QMXd2E/WJRiQ6
+ o7B51HAS9SNkmDFs7AE1dzY6bKzHvXzJPMugHMUi9gDM9mw+X7fn0ENHST/bVZLP6bIF
+ BJlf1979tt0NYcKJKpMTpfFtctACX2z/KxZQ4aVSXNlk23EZdC7LdlB1jjOjD0Pmnj3i
+ /6pk6tVHZa/n+Oj2bo2cGnDFpziVQRe1LIyNZ97wwSWJUiRO+OwmPEV1I9tXMj12Vx4C
+ ROzVGTcNOSnqla/QhvKjOfRaHzwyk2aU8bsishUeuu4QKHKZTpAd6Is6ec2wTUFiJWi7
+ QKDw==
+X-Gm-Message-State: AO0yUKUWvkD+SzleKYxyKgaiBKz+16zH7Xj48/eHD66XA1QCq7yv3JIk
+ 33z2U5emxIC+31gnYbNi3KA/ezeoIbsGoinKRk6LlarB9JQ=
+X-Google-Smtp-Source: AK7set/fIVYcCSIg8JgJ7RmqiHJ9Qs9IRsb+7vkihGFVKzO5uNCfTHz3Mm5QsS0gzN4Spae7edt089TjtKb1I4RbMM0=
+X-Received: by 2002:a17:90a:7282:b0:230:cf7b:d850 with SMTP id
+ e2-20020a17090a728200b00230cf7bd850mr816736pjg.50.1675872907539; Wed, 08 Feb
+ 2023 08:15:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: fr
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <3f3d266c-2f21-197c-29b7-fff3e230e97a@smile.fr>
- <20230208165330.43c145f3@windsurf>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20230208165330.43c145f3@windsurf>
+References: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
+In-Reply-To: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
+From: Ramon Crichlow <rcrichlow9000@gmail.com>
+Date: Wed, 8 Feb 2023 10:14:56 -0600
+Message-ID: <CACHw65+r07g=hU4yv1Xhb3TFVmOVkYdSpRy3dZF9y+U44TK=Qw@mail.gmail.com>
+To: Sourabh Hegde <hrsourabh011@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=BxntNBr1vAoudauwnkVQ8tSpS1GiEJw1JmVEk0PQY90=;
- b=j5r0tFhbgA/+dXiTZdVWoleRagZfu8mPDmSzHVIbhKed53ASqWyinhct492xI7LHGM
- F5ZXutskgl04TrQbHI+NbVa0goexg+iQbw2SFy4Ps7Yi2AQFM8FLRT7BzJY8oHWRNRLL
- pR8j9xs6AqgPyw2Us350hgSRgEYtuVnUNbwKMflvSv6ilVerlp83ZVVEwpUrDu4kHg1a
- dvqx3zLKwasy3omvhcxDS/QU4c3F4t4YLRjX445DxQVfuBdTOCjDfjib3LjfYmTLtOc6
- 7O19naNgkf1kF7nE0Kb2xGiMkuDVtYV0g+lMgvFWzOzhDbne7pweOmA1azhNZOMHuYnL
- t5Lw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=j5r0tFhb
-Subject: Re: [Buildroot] outdated libiberty and prelink-cross support
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=dalqKFeLWGol9n5tJfLkLqeEWpfhSKgxCVQDUjSR+xc=;
+ b=H6SqL/4T6OFiwL6T2vfbmWl/GNV3Tg9rj8lvv00njW5QWpXCGhXocqhlAAuHxJrST4
+ 5+9roi/Oxxn4mn/waYsDmpZ/zLm3lqvQTULPzp7hzlhJOTeajHcOwoKlgwPSIzj8gdcG
+ exgBDASx9Ul9n+Bj+VjMKmZ2RWSS/pAwP2EkTKafSZw8eoLap5KEv1rrfCG1XWRZBr1k
+ JlSg8DS3t6tnwKfxYUGbyiabG/aW1I+xbSroO5b7HOSTwW8byWovgWpmWn85IvaAcbWK
+ JKDammRqwl0W2uF5vfvvk/oH5HKqTCMBxzBPmM9jFfK7CD1TY0NEs6QaFiC6X8SDnt0d
+ ocsQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=H6SqL/4T
+Subject: Re: [Buildroot] How to install custom sdk in buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,82 +90,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Adam Duskett <aduskett@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4967038517579027818=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpMZSAwOC8wMi8yMDIzIMOgIDE2OjUzLCBUaG9tYXMgUGV0YXp6b25pIGEgw6ljcml0
-wqA6Cj4gSGVsbG8sCj4gCj4gK1lhbm4gYW5kIEFkYW0sIHdpdGggcXVlc3Rpb25zL2hlbHAgbmVl
-ZGVkIGJlbG93IDopCj4gCj4gT24gV2VkLCAyIE5vdiAyMDIyIDE0OjA1OjI2ICswMTAwCj4gUm9t
-YWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+IHdyb3RlOgo+IAo+PiBJIHdhcyBsb29r
-aW5nIGF0IGhvc3QtYmludXRpbHMtMi4zOCBpc3N1ZSBpbiB0aGUgYXV0b2J1aWxkZXIgWzFdLgo+
-PiBUaGUgaXNzdWUgYXBwZWFyIG9ubHkgd2hlbiBob3N0LWxpYmliZXJ0eSBpcyBidWlsdCBiZWZv
-cmUgaG9zdC1iaW51dGlscwo+PiAoQmludXRpbHMgMi4zOCBvbmx5KS4KPj4KPj4gSXQgc2VlbXMg
-dGhhdCBsaWJpYmVydHkgcGFja2FnZSBpcyBzdGlsbCBiYXNlZCBvbiBiaW51dGlscyAyLjMyIHJl
-bGVhc2UgYW5kCj4+IHNlZW1zIHRvIGJlIHVwZGF0ZWQuCj4+Cj4+IGhvc3QtbGliaWJlcnR5IGlz
-IGN1cnJlbnRseSB1c2VkIGJ5IGhvc3QtZ2RiIGFuZCBob3N0LXByZWxpbmstY3Jvc3MgcGFja2Fn
-ZXMuCj4+Cj4+IEFib3V0IHRoZSBwcmVsaW5rLWNyb3NzIHBhY2thZ2UsIGl0IGNvbWUgZnJvbSB0
-aGUgWW9jdG8gcHJvamVjdCBbMl0gYnV0IHRoZQo+PiBzdXBwb3J0IHNlZW1zIGhhbHRlZC4gQWxz
-byB0aGUgR2xpYmMgcHJvamVjdCB3aWxsIHJlbW92ZSBwcmVsaW5rIHN1cHBvcnQgZm9yIHRoZQo+
-PiB1cGNvbWluZyAyLjM3IHJlbGVhc2UgWzNdLgo+Pgo+PiBUaGUgYW5ub3lpbmcgcGFydCBpcyAi
-UHJlbGluay1jcm9zcyBlbXVsYXRlcyBhIHJ1bnRpbWUgbGlua2VyIGZvciBhIGdpdmVuCj4+IHN5
-c3Jvb3QuIFRoaXMgaXMgbmVjZXNzYXJ5IHRvIGFsbG93IGdvYmplY3QtaW50cm9zcGVjdGlvbiB0
-byBidWlsZCBpdHMgdHlwZWxpYgo+PiBmaWxlcyBkdXJpbmcgY3Jvc3MtY29tcGlsaW5nLiIgWzRd
-Cj4+Cj4+IGhvc3QtcHJlbGluay1jcm9zcyBpcyBjdXJyZW50bHkgdXNlZCBieSBkcmFjdXQgYW5k
-IGdvYmplY3QtaW50cm9zcGVjdGlvbiBwYWNrYWdlcy4KPiAKPiBJIGhhZCBhIGxvb2ssIGFuZCB0
-aGVyZSBhcmUgdGhpbmdzIGF0IHR3byBkaWZmZXJlbnQgbGV2ZWxzIHRoYXQgY2FuIGJlCj4gZG9u
-ZS4KClRoYW5rcyEKCj4gCj4gRmlyc3QsIHdlIG5lZWQgdG8gcmVtb3ZlIHRoZSBwYWNrYWdlL2xp
-YmliZXJ0eS8gcGFja2FnZS4gbGliaWJlcnR5IGlzCj4gY3VycmVudGx5IHVzZWQgYnkgaG9zdC1n
-ZGIgYW5kIGhvc3QtcHJlbGluay1jcm9zczoKPiAKPiAqIEZvciBob3N0LWdkYiwgdGhlIGNvbW1p
-dCBsb2cgc2F5cyB0aGF0IHRoZSBob3N0IGxpYmliZXJ0eSBtaWdodCBiZQo+ICAgcGlja2VkIHVw
-IHNvIHdlIG5lZWQgdG8gYnVpbGQgb3VyIG93bi4gVGhpcyBpcyB3ZWlyZCBiZWNhdXNlCj4gICBs
-aWJpYmVydHkgaXMgc2hpcHBlZCBpbiB0aGUgZ2RiIHRhcmJhbGwuIFlhbm4sIHdoZW4geW91IGFw
-cGxpZWQKPiAgIGYwYTU4M2RkYzRjMmNhYjEyMTMzMDI4NGUzMTZmNTQyMjlkZWU0OTIsIGRvIHlv
-dSByZW1lbWJlciBpZiB5b3UKPiAgIGxvb2tlZCBhdCB3aHkgR0RCIHdhc24ndCBwaWNraW5nIHVw
-IGl0cyBvd24gbGliaWJlcnR5PyBBbHNvLCB0aGVyZSBpcwo+ICAgbm8gYXV0b2J1aWxkZXIgZmFp
-bHVyZSwgc28gd2UgZG9uJ3QgcmVhbGx5IGtub3cgdW5kZXIgd2hhdCBjb25kaXRpb25zCj4gICB0
-aGUgcHJvYmxlbSBjYW4gYmUgcmVwcm9kdWNlZC4KCkkgaGFkIGEgbG9vayBiZWZvcmUgd3JpdGlu
-ZyB0aGlzIGVtYWlsIGFuZCBJIHdhcyBub3Qgc3VyZSBhYm91dCBsaWJpYmVydHkKZGVwZW5kZW5j
-eS4gRm9yIG1lIGdkYiBidWlsZCBpdHMgb3duIHZlcnNpb24uIEkgd2Fzbid0IGFibGUgdG8gcHJv
-dmUgdGhhdCBpdCBjYW4KdXNlIGxpYmliZXJ0eSBmcm9tIHRoZSBob3N0IGlmIGF2YWlsYWJsZS4K
-Cj4gCj4gKiBGb3IgaG9zdC1wcmVsaW5rLWNyb3NzLCBpdCBpbiBmYWN0IGRvZXNuJ3QgbmVlZCBo
-b3N0LWxpYmliZXJ0eS4gSXQKPiAgIGxpbmtzIGFnYWluc3QgaXQsIGJ1dCBhcHBhcmVudGx5LCB0
-aGUgb25seSBmdW5jdGlvbnMgaXQgdXNlcyBmcm9tCj4gICBsaWJpYmVydHkgYXJlIGh0YWJfZmlu
-ZF9zbG90KCkgYW5kIGh0YWJfdHJ5X2NyZWF0ZSgpLCBhbmQgYm90aCBhcmUKPiAgIHByb3ZpZGVk
-IGJ5IHNyYy9oYXNodGFiLmMgaW4gcHJlbGluay1jcm9zcywgd2hpY2ggd2FzIGNvcHkvcGFzdGVk
-Cj4gICBmcm9tIGxpYmliZXJ0eSwgbW9zdCBsaWtlbHkgdG8gYXZvaWQgdGhlIGRlcGVuZGVuY3ku
-IFNvIHdpdGggYSBiaXQgb2YKPiAgIGVmZm9ydCBpbiBob3N0LXByZWxpbmstY3Jvc3MsIHRoZSBk
-ZXBlbmRlbmN5IG9uIGhvc3QtbGliaWJlcnR5IGNvdWxkCj4gICBiZSByZW1vdmVkLgo+IAo+IFRo
-ZW4sIHRoZSBzZWNvbmQgbGV2ZWwgaXMgYWJvdXQgaG9zdC1wcmVsaW5rLWNyb3NzIGl0c2VsZi4g
-SXQgaXMgdXNlZAo+IGJ5IG9ubHkgdHdvIHBhY2thZ2VzLCBzbyBsZXQncyBoYXZlIGEgbG9vazoK
-PiAKPiAqIEZvciBnb2JqZWN0LWluc3Ryb3NwZWN0aW9uLCBpdCBpcyBubyBsb25nZXIgbmVlZGVk
-OiBvcGVuZW1iZWRkZWQtY29yZQo+ICAgc3RvcHBlZCB1c2luZyBpdCBpbgo+ICAgaHR0cHM6Ly9n
-aXRodWIuY29tL29wZW5lbWJlZGRlZC9vcGVuZW1iZWRkZWQtY29yZS9jb21taXQvNzY3ZTA4ODBk
-NGQ3MjllNjU5ZTg1OWRkOTljMWNkYjA4NGI4YmE1MS4KPiAgIEl0IHNpbXBseSB1c2VzICJvYmpk
-dW1wIC1wIiBpbnN0ZWFkLiBJdCBhbHNvIGFsbG93cyB0byByZW1vdmUgYSBwYXRjaAo+ICAgZnJv
-bSBnb2JqZWN0LWludHJvc3BlY3Rpb24sIHNvIG92ZXJhbGwgaXQgc2VlbXMgbGlrZSBhIGdvb2Qg
-dGhpbmcuCj4gCj4gKiBGb3IgZHJhY3V0LCB0aGUgdXNhZ2UgaXMgcHJldHR5IG11Y2ggdGhlIHNh
-bWUsIGFuZCBhIHNtYWxsIHdyYXBwZXIKPiAgIGFyb3VuZCBvYmpkdW1wIC1wIHdvdWxkIG1vc3Qg
-bGlrZWx5IGJlIGFibGUgdG8gZW11bGF0ZSB0aGUgYmVoYXZpb3IKPiAgIGxmIHByZWxpbmstcnRs
-ZCB0byBsaXN0IHRoZSBsaWJyYXJpZXMgdGhhdCBhIGJpbmFyeSBkZXBlbmRzIG9uLgo+IAo+IFNv
-IHRoZXJlJ3MgYSBiaXQgb2Ygd29yayBmb3Igc3VyZSwgYnV0IHRoaXMgd29yayB3b3VsZCBhbGxv
-dyB0byByZW1vdmUKPiBib3RoIGhvc3QtbGliaWJlcnR5IGFuZCBob3N0LXByZWxpbmstY3Jvc3Ms
-IHdoaWNoIGFyZSBib3RoIHdlaXJkCj4gcGFja2FnZXMgdGhhdCB3aWxsIGluZXZpdGFibHkgY2F1
-c2UgcHJvYmxlbXMuCj4gCj4gTXkgbWFpbiBjb25jZXJucyBhcmU6Cj4gCj4gKDEpIEhvdyB0byBy
-ZXByb2R1Y2UgdGhlIGhvc3QtZ2RiIGlzc3VlIHRoYXQgY2F1c2VkIHRoZSBhZGRpdGlvbiBvZiB0
-aGUKPiAgICAgaG9zdC1saWJlcnR5IGRlcGVuZGVuY3kKCkxvb2tpbmcgYXQgZGlzdHJpYnV0aW9u
-IHBhY2thZ2luZywgdGhlIGdkYiBwYWNrYWdlIHVzZSBhIGJ1bmRsZWQgbGliaWJlcnR5IGxpYnJh
-cnk6CgpodHRwczovL3NyYy5mZWRvcmFwcm9qZWN0Lm9yZy9ycG1zL2dkYi9ibG9iL3Jhd2hpZGUv
-Zi9nZGIuc3BlYyNfMTIyCgo+IAo+ICgyKSBIb3cgdG8gdGVzdCBnb2JqZWN0LWludHJvc3BlY3Rp
-b24gaW4gYSBzaW1wbGUgd2F5LiBUaGVyZSBpcyBubwo+ICAgICBydW50aW1lIHRlc3QgZm9yIGl0
-LCBJIGhhdmUgbm8gaWRlYSB3aGF0IGlzIHRoZSBzaW1wbGVzdCB0ZXN0IHRoYXQgb25lCj4gICAg
-IGNhbiBkbyB0byB2ZXJpZnkgdGhlIHByb3BlciBmdW5jdGlvbmFsaXR5IG9mIGdvYmplY3QtaW50
-cm9zcGVjdGlvbgo+ICAgICBhZnRlciB3ZSBkbyB0aGUgYWJvdmUgY2hhbmdlcy4KClNvcnJ5IEkg
-ZG9uJ3Qga25vdy4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAKPiBCZXN0IHJlZ2FyZHMsCj4g
-Cj4gVGhvbWFzIFBldGF6em9uaQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============4967038517579027818==
+Content-Type: multipart/alternative; boundary="00000000000057bae505f4329165"
+
+--00000000000057bae505f4329165
+Content-Type: text/plain; charset="UTF-8"
+
+You can build an external toolchain with buildroot using make sdk (See
+Section 6.1.3 in buildroot manual
+<https://buildroot.org/downloads/manual/manual.html>)
+
+Also from the manual (Section 11.2)
+It has been decided that support for the native compiler on the target
+would be stopped from the Buildroot-2012.11 release because:
+
+this feature was neither maintained nor tested, and often broken;
+this feature was only available for Buildroot toolchains;
+Buildroot mostly targets small or very small target hardware with limited
+resource onboard (CPU, ram, mass-storage), for which compiling on the
+target does not make much sense;
+Buildroot aims at easing the cross-compilation, making native compilation
+on the target unnecessary.
+
+
+On Wed, Feb 8, 2023 at 10:07 AM Sourabh Hegde <hrsourabh011@gmail.com>
+wrote:
+
+> Hello All,
+>
+> I want to install a sdk on my Buildroot based Linux machine. SDK location
+> https://github.com/aws/aws-iot-device-sdk-python-v2 . They don't have any
+> packages which I can add in Buildroot.
+>
+> On a native Linux machine, it can be done via pip. But how to do this in
+> Buildroot?
+>
+> Thanks in advance
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+--00000000000057bae505f4329165
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">You can build an external toolchain with buildroot using m=
+ake sdk (See Section 6.1.3 in <a href=3D"https://buildroot.org/downloads/ma=
+nual/manual.html">buildroot manual</a>)<div><br></div><div>Also from the ma=
+nual (Section 11.2)</div><div>It has been decided that support for the nati=
+ve compiler on the target would be stopped from the Buildroot-2012.11 relea=
+se because:<br><br>this feature was neither maintained nor tested, and ofte=
+n broken;<br>this feature was only available for Buildroot toolchains;<br>B=
+uildroot mostly targets small or very small target hardware with limited re=
+source onboard (CPU, ram, mass-storage), for which compiling on the target =
+does not make much sense;<br>Buildroot aims at easing the cross-compilation=
+, making native compilation on the target unnecessary.<br></div><div><br></=
+div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_at=
+tr">On Wed, Feb 8, 2023 at 10:07 AM Sourabh Hegde &lt;<a href=3D"mailto:hrs=
+ourabh011@gmail.com">hrsourabh011@gmail.com</a>&gt; wrote:<br></div><blockq=
+uote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1p=
+x solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr">Hello=C2=A0All,=
+<br><div><br></div><div>I want to install a sdk on my Buildroot based Linux=
+ machine. SDK location=C2=A0<a href=3D"https://github.com/aws/aws-iot-devic=
+e-sdk-python-v2" target=3D"_blank">https://github.com/aws/aws-iot-device-sd=
+k-python-v2</a>=C2=A0. They don&#39;t have any packages which=C2=A0I can ad=
+d in Buildroot.</div><div><br></div><div>On a native Linux machine, it can =
+be done via pip. But how to do this in Buildroot?</div><div><br></div><div>=
+Thanks in advance</div></div>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div>
+
+--00000000000057bae505f4329165--
+
+--===============4967038517579027818==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4967038517579027818==--
