@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E713C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA469C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A36744F4E4;
-	Tue, 21 Feb 2023 00:40:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A36744F4E4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E1D14F3CC;
+	Tue, 21 Feb 2023 00:40:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E1D14F3CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SSY5YzAjeDh2; Tue, 21 Feb 2023 00:40:03 +0000 (UTC)
+	with ESMTP id yZo5s-Axdmpr; Tue, 21 Feb 2023 00:40:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37D564F290;
-	Tue, 21 Feb 2023 00:40:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37D564F290
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3C2571BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65B9B4F4D7;
+	Tue, 21 Feb 2023 00:40:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65B9B4F4D7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 780741BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CB7161020
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CB7161020
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AE68417F0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AE68417F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dI9YHoNk9XK6 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r-4Zm-E7JmCx for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FDE76FB58
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FDE76FB58
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0DAE417C3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0DAE417C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D7508648F; Mon, 20 Feb 2023 20:52:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 9A8268648F; Mon, 20 Feb 2023 20:52:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Jan 2023 20:32:00 +0100
+Date: Wed, 8 Feb 2023 12:19:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bb79d78554632e96df52f41333aa62f928b6817f
-X-Git-Newrev: 49ca11e339c41ea2dd0484556b7b5beacff9fee9
+X-Git-Oldrev: cbd06adac50e304f413689febf676911ae29d967
+X-Git-Newrev: 019bf138eaf634ba1781037755c6cc594371ada0
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205231.2D7508648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/trinity: fix build
- with kernel >= 6.1
+Message-Id: <20230220205255.9A8268648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/olimex_stmp157: bump
+ Linux and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,166 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49ca11e339c41ea2dd0484556b7b5beacff9fee9
+commit: https://git.buildroot.net/buildroot/commit/?id=019bf138eaf634ba1781037755c6cc594371ada0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure with kernel >= 6.1:
-
-net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
-    5 | #include <linux/dn.h>
-      |          ^~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/47e0a5e0b6fcf33ab4f9848d5d8c2be9e5283950
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/trinity/0004-drop-decnet.patch | 130 +++++++++++++++++++++++++++++++++
- 1 file changed, 130 insertions(+)
+ configs/olimex_stmp157_olinuxino_lime_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/trinity/0004-drop-decnet.patch b/package/trinity/0004-drop-decnet.patch
-new file mode 100644
-index 0000000000..15ba7f8e82
---- /dev/null
-+++ b/package/trinity/0004-drop-decnet.patch
-@@ -0,0 +1,130 @@
-+From ec8dcc7faf13c57f5f6d785e4429818f1239a058 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 8 Jan 2023 20:50:18 +0100
-+Subject: [PATCH] drop decnet
-+
-+Drop decnet as it has been removed since kernel 6.1 and
-+https://github.com/torvalds/linux/commit/1202cdd665315c525b5237e96e0bedc76d7e754f
-+resulting in the following build failure:
-+
-+net/proto-decnet.c:5:10: fatal error: linux/dn.h: No such file or directory
-+    5 | #include <linux/dn.h>
-+      |          ^~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/47e0a5e0b6fcf33ab4f9848d5d8c2be9e5283950
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/kernelslacker/trinity/pull/41]
-+---
-+ include/net.h      |  1 -
-+ net/proto-decnet.c | 59 ----------------------------------------------
-+ net/proto-unix.c   |  1 -
-+ net/protocols.c    |  1 -
-+ 4 files changed, 62 deletions(-)
-+ delete mode 100644 net/proto-decnet.c
-+
-+diff --git a/include/net.h b/include/net.h
-+index 99d55363..791e8090 100644
-+--- a/include/net.h
-++++ b/include/net.h
-+@@ -80,7 +80,6 @@ extern const struct netproto proto_atmpvc;
-+ extern const struct netproto proto_atmsvc;
-+ extern const struct netproto proto_x25;
-+ extern const struct netproto proto_rose;
-+-extern const struct netproto proto_decnet;
-+ extern const struct netproto proto_llc;
-+ extern const struct netproto proto_netlink;
-+ extern const struct netproto proto_packet;
-+diff --git a/net/proto-decnet.c b/net/proto-decnet.c
-+deleted file mode 100644
-+index 7711cf00..00000000
-+--- a/net/proto-decnet.c
-++++ /dev/null
-+@@ -1,59 +0,0 @@
-+-#include <sys/types.h>
-+-#include <sys/socket.h>
-+-#include <sys/un.h>
-+-#include <netinet/in.h>
-+-#include <linux/dn.h>
-+-#include <stdlib.h>
-+-#include "net.h"
-+-#include "random.h"
-+-#include "utils.h"	// RAND_ARRAY
-+-#include "compat.h"
-+-
-+-static void decnet_gen_sockaddr(struct sockaddr **addr, socklen_t *addrlen)
-+-{
-+-	struct sockaddr_dn *dn;
-+-	unsigned int i;
-+-
-+-	dn = zmalloc(sizeof(struct sockaddr_dn));
-+-
-+-	dn->sdn_family = PF_DECnet;
-+-	dn->sdn_flags = rnd();
-+-	dn->sdn_objnum = rnd();
-+-	dn->sdn_objnamel = rnd() % 16;
-+-	for (i = 0; i < dn->sdn_objnamel; i++)
-+-		dn->sdn_objname[i] = rnd();
-+-	dn->sdn_add.a_len = RAND_BOOL();
-+-	dn->sdn_add.a_addr[0] = rnd();
-+-	dn->sdn_add.a_addr[1] = rnd();
-+-	*addr = (struct sockaddr *) dn;
-+-	*addrlen = sizeof(struct sockaddr_dn);
-+-}
-+-
-+-static const unsigned int decnet_opts[] = {
-+-	SO_CONDATA, SO_CONACCESS, SO_PROXYUSR, SO_LINKINFO,
-+-	DSO_CONDATA, DSO_DISDATA, DSO_CONACCESS, DSO_ACCEPTMODE,
-+-	DSO_CONACCEPT, DSO_CONREJECT, DSO_LINKINFO, DSO_STREAM,
-+-	DSO_SEQPACKET, DSO_MAXWINDOW, DSO_NODELAY, DSO_CORK,
-+-	DSO_SERVICES, DSO_INFO
-+-};
-+-
-+-static void decnet_setsockopt(struct sockopt *so, __unused__ struct socket_triplet *triplet)
-+-{
-+-	so->level = SOL_DECNET;
-+-	so->optname = RAND_ARRAY(decnet_opts);
-+-
-+-	// TODO: set optlen correctly
-+-}
-+-
-+-static struct socket_triplet decnet_triplets[] = {
-+-	{ .family = PF_DECnet, .protocol = DNPROTO_NSP, .type = SOCK_SEQPACKET },
-+-	{ .family = PF_DECnet, .protocol = DNPROTO_NSP, .type = SOCK_STREAM },
-+-};
-+-
-+-const struct netproto proto_decnet = {
-+-	.name = "decnet",
-+-	.setsockopt = decnet_setsockopt,
-+-	.gen_sockaddr = decnet_gen_sockaddr,
-+-	.valid_triplets = decnet_triplets,
-+-	.nr_triplets = ARRAY_SIZE(decnet_triplets),
-+-};
-+diff --git a/net/proto-unix.c b/net/proto-unix.c
-+index f7427a22..119c1429 100644
-+--- a/net/proto-unix.c
-++++ b/net/proto-unix.c
-+@@ -2,7 +2,6 @@
-+ #include <sys/socket.h>
-+ #include <sys/un.h>
-+ #include <netinet/in.h>
-+-#include <linux/dn.h>
-+ #include <stdlib.h>
-+ #include "net.h"
-+ #include "random.h"
-+diff --git a/net/protocols.c b/net/protocols.c
-+index ea64d5f5..278f08b5 100644
-+--- a/net/protocols.c
-++++ b/net/protocols.c
-+@@ -18,7 +18,6 @@ const struct protoptr net_protocols[TRINITY_PF_MAX] = {
-+ #ifdef USE_IPV6
-+ 	[PF_INET6] = { .proto = &proto_inet6 },
-+ #endif
-+-	[PF_DECnet] = { .proto = &proto_decnet },
-+ 	[PF_PACKET] = { .proto = &proto_packet },
-+ #ifdef USE_NETECONET
-+ 	[PF_ECONET] = { .proto = &proto_econet },
-+-- 
-+2.39.0
-+
+diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
+index a63394fa0b..49670dbe4f 100644
+--- a/configs/olimex_stmp157_olinuxino_lime_defconfig
++++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
+@@ -16,8 +16,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/stmp1_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/OLIMEX/linux-olimex.git"
+-# branch release-20220413-v5.10.105
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d417808c240d55576ee76e5cbb40413ad444ecfd"
++# branch release-20221011-v5.10.105
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1b955f3ee7ef3234f290f65dbea108063996aea0"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/stmp1_olinuxino/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -34,8 +34,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/OLIMEX/u-boot-olinuxino.git"
+-# release-20220413, based on 2021.04
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="b39c5a7c93a2d8efaecc9cad4284378af857c3f7"
++# release-20220927, based on 2021.04
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="98ab5ecb0a16eeb426f34b2a1a28e56658c1a59c"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="STM32-OLinuXino-LIME"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
