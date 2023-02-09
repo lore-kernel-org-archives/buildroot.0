@@ -1,71 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC617C636CC
-	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 00:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A8C6C636CC
+	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 01:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 890BB410D5;
-	Thu,  9 Feb 2023 00:56:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 890BB410D5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8489D81242;
+	Thu,  9 Feb 2023 01:53:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8489D81242
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1sTAKSTnsrMr; Thu,  9 Feb 2023 00:56:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NohtLvmwkvzR; Thu,  9 Feb 2023 01:53:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37A4E414D1;
-	Thu,  9 Feb 2023 00:56:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37A4E414D1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 03AFD1BF318
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 00:56:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F87C811F8;
+	Thu,  9 Feb 2023 01:53:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F87C811F8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D03FC1BF963
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 01:53:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D266D40359
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 00:56:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D266D40359
+ by smtp3.osuosl.org (Postfix) with ESMTP id A32FC61033
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 01:53:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A32FC61033
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UvhiA8X5J_Mq for <buildroot@lists.busybox.net>;
- Thu,  9 Feb 2023 00:56:21 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 522F8400CE
-Received: from smtpdh18-1.aruba.it (smtpdh18-1.aruba.it [62.149.155.132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 522F8400CE
- for <buildroot@buildroot.org>; Thu,  9 Feb 2023 00:56:21 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.66.151])
- by Aruba Outgoing Smtp  with ESMTPSA
- id PvEYpK4PxpJHIPvEYpdUIv; Thu, 09 Feb 2023 01:56:18 +0100
-Message-ID: <d5496dd8-89ff-2d98-26e5-da2dd32f46fc@benettiengineering.com>
-Date: Thu, 9 Feb 2023 01:56:18 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r58pdIya2uee for <buildroot@lists.busybox.net>;
+ Thu,  9 Feb 2023 01:53:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5075760D79
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com
+ [IPv6:2607:f8b0:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5075760D79
+ for <buildroot@buildroot.org>; Thu,  9 Feb 2023 01:53:35 +0000 (UTC)
+Received: by mail-ot1-x331.google.com with SMTP id
+ x26-20020a056830115a00b0068bbc0ee3eeso159993otq.0
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 17:53:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=u9mhvRljObWln69Q44hkgUxxxAEVADd2VSOCTlFFsqI=;
+ b=0J9DyAO8bGBbJ3+miFVUw7JB7YXQJNESPhebMMgZe64E37EASmnu2bUBqTt4xhSq4o
+ 92Abs+Yn7zEQLhw+qY4ysmBPRUC52kclb/IbuazAyzwz+qqyWtaZCdKm+TeSvXVeh7b7
+ j3pG0G4hT0O3Uslq7SUCD4WqppATiRdl6Pk6rUoJvjw1P4LxdHnh3a12x7HpL5rM+ZOv
+ 6xObr8OPkf5u6/SILVhiBuDqRlWZqxXEYL5TGiti9Z+T23NRr2plWamo2jP0Ni8Q80vf
+ 3RyZiAnFp8480lqN9ZcOgxTAkWSqgJoA2JmaTPGGe9UqW/wkUCkcmV9rwH9VNCyxgteQ
+ yIWg==
+X-Gm-Message-State: AO0yUKX+KGuUqCy8cVGVj+cLIWoHUXIHnlaEo6wxZaEOjqFeoqyRdLkD
+ KgfqxPqBnpe3/zloZ8nmJZdI0lLaIxE=
+X-Google-Smtp-Source: AK7set+CxMM+b8nAZRDIMz2elw1/FO20x5kfHNSCrCdxESZV5y260nJPO6XX8WVhujjYFZv3pF4osA==
+X-Received: by 2002:a9d:4c6:0:b0:68d:5a31:af3b with SMTP id
+ 64-20020a9d04c6000000b0068d5a31af3bmr181564otm.14.1675907613991; 
+ Wed, 08 Feb 2023 17:53:33 -0800 (PST)
+Received: from nowhere.attlocal.net ([2600:1700:65a0:14f0:dce0:30dc:b696:f26])
+ by smtp.gmail.com with ESMTPSA id
+ d25-20020a9d5e19000000b00684e55f4541sm426oti.70.2023.02.08.17.53.32
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Wed, 08 Feb 2023 17:53:33 -0800 (PST)
+From: Charles Hardin <ckhardin@gmail.com>
+X-Google-Original-From: Charles Hardin <charles.hardin@chargepoint.com>
 To: buildroot@buildroot.org
-References: <20230209004823.3698203-1-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230209004823.3698203-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfBksvsfls1dap5xzuvGuodkWHA4ZNzwNYENnOVZm3utNq3B38/SuOdLk3VqvbU9+pYgwiY4g22U70Z2qcjrpVTftz+rr6MAaI5+Du5lCKWksor/8osIR
- JGMvLuQRi7epJbiC+xSSOvPB+V1AUzRJZ7rlMY5ZJNLX5z8blh/aqjPB48gz+rWji+Q2QLk43REwdnddGl4xdM8h+AVFPcpIKeT/lNaNMycqR55XtCUMcHgz
- zf90e3gROYn6T72Jk6K25A==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1675904178; bh=yAk6xoUgHAY1u6sHbyO5sHr8oq7uxRHeyE3JfXw4wtM=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=XqZpJNuYZVu6LOMGmeP7scefoUIWCAC2al0fXoO0WW9frLo+I7Bp/6qQcstwWhsan
- gEqbd6WC21AU8JJin1Ur7kihkf2eVUQfTMX+FKLv3rSQk3U2+OZFRIHOOab3Y7Ack+
- S3nmUtkpAKkBzBMrvjahpf0Zqfj/oQY2uFXfpKPbwexNKkpJ/e80TU1R8nmq0BZDm/
- Lbq8Ter01SzBfMCj9TKEoY7vnjHZNBrJZRmM3wGHih20CWTtGu8VGvh5D8WS364EUe
- VYkkzpaqmOkgpvkVGsLtj2dAT9KrgGxNVdvvSXnv08OPUwauIO5QopnWZTVXiNkyfB
- +JKxFjWmKU3pg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=XqZpJNuY
-Subject: Re: [Buildroot] [PATCH] arch: move global and rename variable
- BR2_PACKAGE_Z3_ARCH_SUPPORTS
+Date: Wed,  8 Feb 2023 17:53:18 -0800
+Message-Id: <20230209015319.28176-1-charles.hardin@chargepoint.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=u9mhvRljObWln69Q44hkgUxxxAEVADd2VSOCTlFFsqI=;
+ b=QDcJAZO7i4r6/k9L6u/Dz1XDRdHKnBryv2xNC2aKASVbUaDiFjsL9G6rD1OuPpRwQa
+ gSGcp8U1qjX4J2nHVnLNofmVd0Xf9jss9TduGkc83lypS9YFemtC6w+xvKvW5p/RWiVZ
+ QYxBflzvN5z9mILeI6ADpJzBK80Be5kxDAiVEH322k10169D5PZ2DDZ5GkOk13RXBz3B
+ 896GhFCQ2YkvOZZepE/qawR3Kxv+eeVf1mNLZunIZGHHkVz9lp+MDQK6zcY1ZO1xnDNm
+ zNfli+1X4sDFTor6RKNPyUJlY0w6dg3uCW3jd+sBnegTyJziq4rvUaX3wOnIMm9P4vnG
+ Q/1w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=QDcJAZO7
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: add a setlocalversion rsync
+ hook when overriding srcdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,140 +96,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Charles Hardin <ckhardin@gmail.com>,
+ Charles Hardin <charles.hardin@chargepoint.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pardon, this had to be a RFC, I've forgotten to add it.
+From: Charles Hardin <ckhardin@gmail.com>
 
-Some architecture still lacks some float rounding but is listed.
-Let me know if it's possible to apply this patch and catch the other
-architecture failures on Autobuilder rather than check all the
-architectures' FPU implementation by hand(I can do it anyway if
-requested).
+During development the override srcdir is often used with a local
+git repo and branch. To help track the builds used in those flows
+it is useful to have the scm version available as part of the info.
+With this hook, the auto generated version include will include the
+example.
 
-Best regards
+    #define PLAIN_VERSION "2018.03-01358-gbda75d6a8b"
+    #define U_BOOT_VERSION "U-Boot " PLAIN_VERSION
+
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+Signed-off-by: Charles Hardin <charles.hardin@chargepoint.com>
+---
+ boot/uboot/uboot.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 4eae8e95c3..e340d2cf11 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -40,6 +40,18 @@ UBOOT_SITE = https://ftp.denx.de/pub/u-boot
+ UBOOT_SOURCE = u-boot-$(UBOOT_VERSION).tar.bz2
+ endif
+ 
++ifneq ($(UBOOT_OVERRIDE_SRCDIR),)
++define UBOOT_OVERRIDE_SRCDIR_SETLOCALVERSION
++	(cd $(@D); \
++		if [ -x ./scripts/setlocalversion ]; then \
++			./scripts/setlocalversion --save-scmversion \
++				$(abspath $(UBOOT_OVERRIDE_SRCDIR)) ||:; \
++		fi)
++endef
++
++UBOOT_POST_RSYNC_HOOKS += UBOOT_OVERRIDE_SRCDIR_SETLOCALVERSION
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT)$(BR2_TARGET_UBOOT_LATEST_VERSION),y)
+ BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
+ endif
 -- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
-
-On 09/02/23 01:48, Giulio Benetti wrote:
-> Package quickjs fails to build on architectures that don't support full
-> float rounding. To support all kind of float rounding FE_DOWNWARD,
-> FE_TONEAREST, FE_TOWARDZERO, FE_UPWARD must be defined in fenv.h.
-> Since package z3 locally implements this check let's make it global,
-> rename it to be generic and use it for both package quickjs and z3.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0b6/0b67381e3643c134c92cbcd1c5dc258fd760cd7e/
-> http://autobuild.buildroot.net/results/cf2/cf249a82c83d3c8503205f4c3c5859dd9d52afdf/
-> http://autobuild.buildroot.net/results/9b3/9b37c6c55a5b468657af26ef9b57d4fe24d8fde2/
-> http://autobuild.buildroot.net/results/4f1/4f13cf7d353260c6b8934dbdcf267bea884b356b/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   arch/Config.in            | 24 ++++++++++++++++++++++++
->   package/quickjs/Config.in |  4 ++--
->   package/z3/Config.in      | 25 +------------------------
->   3 files changed, 27 insertions(+), 26 deletions(-)
-> 
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 1c0c400a98..90846861ca 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -253,6 +253,30 @@ config BR2_xtensa
->   
->   endchoice
->   
-> +# Not all architectures support float rounding. This can be found while
-> +# checking if fenv.h provides all four macros:
-> +# FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO, FE_UPWARD
-> +# See for example in glibc https://sourceware.org/git/glibc.git
-> +# git grep -E '^[[:space:]]*#[[:space:]]*define[[:space:]]+FE_(TONEAREST|UPWARD|DOWNWARD|TOWARDZERO)' sysdeps/
-> +config BR2_PACKAGE_ARCH_HAS_ALL_FLOAT_ROUNDING
-> +	bool
-> +	default y if BR2_aarch64 || BR2_aarch64_be
-> +	default y if BR2_arceb || BR2_arcle
-> +	default y if BR2_arm || BR2_armeb
-> +	default y if BR2_i386
-> +	default y if BR2_m68k
-> +	# BR2_microblaze has only FE_TONEAREST
-> +	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-> +	# BR2_nios2 has only FE_TONEAREST
-> +	default y if BR2_or1k
-> +	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-> +	default y if BR2_riscv
-> +	default y if BR2_s390x
-> +	# BR2_sh has only FE_{TONEAREST,TOWARDZERO}
-> +	default y if BR2_sparc || BR2_sparc64
-> +	default y if BR2_x86_64
-> +	# BR2_xtensa supports only uclibc which does not have fenv.h
-> +
->   # For some architectures or specific cores, our internal toolchain
->   # backend is not suitable (like, missing support in upstream gcc, or
->   # no ChipCo fork exists...)
-> diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
-> index dc466241ba..6f24787333 100644
-> --- a/package/quickjs/Config.in
-> +++ b/package/quickjs/Config.in
-> @@ -1,6 +1,6 @@
->   config BR2_PACKAGE_QUICKJS
->   	bool "quickjs"
-> -	depends on !BR2_nios2 # fenv.h lacks FE_{DOWN,UP}WARD on nios2
-> +	depends on BR2_PACKAGE_ARCH_HAS_ALL_FLOAT_ROUNDING # fenv.h lacks FE_{DOWN,UP}WARD
->   	depends on !BR2_STATIC_LIBS
->   	# No way to check for fenv support.
->   	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-> @@ -15,7 +15,7 @@ config BR2_PACKAGE_QUICKJS
->   	  https://bellard.org/quickjs/
->   
->   comment "quickjs needs a glibc or musl toolchain w/ gcc >= 4.9, host gcc >= 4.9, dynamic library"
-> -	depends on !BR2_nios2
-> +	depends on BR2_PACKAGE_ARCH_HAS_ALL_FLOAT_ROUNDING
->   	depends on BR2_USE_MMU
->   	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC || \
->   		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_HOST_GCC_AT_LEAST_4_9
-> diff --git a/package/z3/Config.in b/package/z3/Config.in
-> index 8cd3128687..5ceca5dbe2 100644
-> --- a/package/z3/Config.in
-> +++ b/package/z3/Config.in
-> @@ -1,33 +1,10 @@
-> -# z3 supports arch for which libc fenv.h provides all four macros:
-> -# FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO, FE_UPWARD
-> -# See for example in glibc https://sourceware.org/git/glibc.git
-> -# git grep -E '^[[:space:]]*#[[:space:]]*define[[:space:]]+FE_(TONEAREST|UPWARD|DOWNWARD|TOWARDZERO)' sysdeps/
-> -config BR2_PACKAGE_Z3_ARCH_SUPPORTS
-> -	bool
-> -	default y if BR2_aarch64 || BR2_aarch64_be
-> -	default y if BR2_arceb || BR2_arcle
-> -	default y if BR2_arm || BR2_armeb
-> -	default y if BR2_i386
-> -	default y if BR2_m68k
-> -	# BR2_microblaze has only FE_TONEAREST
-> -	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-> -	# BR2_nios2 has only FE_TONEAREST
-> -	default y if BR2_or1k
-> -	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-> -	default y if BR2_riscv
-> -	default y if BR2_s390x
-> -	# BR2_sh has only FE_{TONEAREST,TOWARDZERO}
-> -	default y if BR2_sparc || BR2_sparc64
-> -	default y if BR2_x86_64
-> -	# BR2_xtensa supports only uclibc which does not have fenv.h
-> -
->   config BR2_PACKAGE_Z3
->   	bool "z3"
->   	depends on BR2_INSTALL_LIBSTDCPP
->   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # c++17
->   	# z3 needs fenv.h which is not provided by uclibc
->   	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-> -	depends on BR2_PACKAGE_Z3_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_ARCH_HAS_ALL_FLOAT_ROUNDING
->   	help
->   	  Z3, also known as the Z3 Theorem Prover, is a cross-platform
->   	  satisfiability modulo theories (SMT) solver.
+2.37.1 (Apple Git-137.1)
 
 _______________________________________________
 buildroot mailing list
