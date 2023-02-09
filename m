@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 268FEC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:19:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0697C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:19:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBB437035A;
-	Tue, 21 Feb 2023 02:19:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBB437035A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ECA8610D9;
+	Tue, 21 Feb 2023 02:19:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ECA8610D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mT6XtxTLs46X; Tue, 21 Feb 2023 02:19:39 +0000 (UTC)
+	with ESMTP id Grbh1Ij5D1DY; Tue, 21 Feb 2023 02:19:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1AAC70358;
-	Tue, 21 Feb 2023 02:19:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1AAC70358
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 017BC1BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E15D70266;
+	Tue, 21 Feb 2023 02:19:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E15D70266
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A2B51BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A85D76FB6E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A85D76FB6E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E89A417FF
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E89A417FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TyHMpaiXUkM9 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id afbBIIDG2hUz for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D43006FAEC
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D43006FAEC
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC110417F4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC110417F4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEBBF8648F; Mon, 20 Feb 2023 20:52:32 +0000 (UTC)
+ id DC16581979; Mon, 20 Feb 2023 20:52:56 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 14 Jan 2023 22:19:57 +0100
+Date: Thu, 9 Feb 2023 21:32:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c9d6f0e1c8a99eec548b1690e1bb58d90189a44d
-X-Git-Newrev: 4db36b268d8978b65bb5ed46e8f7e57412f3097f
+X-Git-Oldrev: 554d79f5cc01c20d886cbe9c676195159947f066
+X-Git-Newrev: b1bceb4b51581e0c7b3953181ee3a2c31f0094f6
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205232.CEBBF8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bpftool: bump to
- version 7.1.0
+Message-Id: <20230220205256.DC16581979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/pipewire-media-session: bump to version 0.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,69 +57,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4db36b268d8978b65bb5ed46e8f7e57412f3097f
+commit: https://git.buildroot.net/buildroot/commit/?id=b1bceb4b51581e0c7b3953181ee3a2c31f0094f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use install-bin for installation instead of install as we don't
-want bash-completion files to be installed.
+Explicitly set installed_tests to disabled.
 
-Set empty host installation prefix so that we install to:
-$(HOST_DIR)/sbin/bpftool
+Drop patch which is now upstream.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/bpftool/bpftool.hash | 2 +-
- package/bpftool/bpftool.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...eson-remove-session-managers-option-check.patch | 36 ----------------------
+ .../pipewire-media-session.hash                    |  2 +-
+ .../pipewire-media-session.mk                      |  7 +++--
+ 3 files changed, 6 insertions(+), 39 deletions(-)
 
-diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
-index 92b9359fe3..cfd3c54515 100644
---- a/package/bpftool/bpftool.hash
-+++ b/package/bpftool/bpftool.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/pipewire-media-session/0001-meson-remove-session-managers-option-check.patch b/package/pipewire-media-session/0001-meson-remove-session-managers-option-check.patch
+deleted file mode 100644
+index fc1d25edb3..0000000000
+--- a/package/pipewire-media-session/0001-meson-remove-session-managers-option-check.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 1923c97fbd0b3d8cacdb72386886f860c818bccf Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Wed, 10 Nov 2021 08:54:06 -0700
+-Subject: [PATCH] meson: remove session-managers option check.
+-
+-This option no longer exists and causes a build failure if building
+-with the systemd system service enabled.
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/pipewire/media-session/-/merge_requests/24]
+----
+- systemd/system/meson.build | 10 ++++------
+- 1 file changed, 4 insertions(+), 6 deletions(-)
+-
+-diff --git a/systemd/system/meson.build b/systemd/system/meson.build
+-index ab0d49064..0e9885b0f 100644
+---- a/systemd/system/meson.build
+-+++ b/systemd/system/meson.build
+-@@ -4,9 +4,7 @@ systemd_system_services_dir = systemd.get_variable(pkgconfig: 'systemdsystemunit
+- systemd_config = configuration_data()
+- systemd_config.set('PW_MEDIA_SESSION_BINARY', media_session_bindir / 'pipewire-media-session')
+- 
+--if get_option('session-managers').contains('media-session')
+--  configure_file(input : 'pipewire-media-session.service.in',
+--               output : 'pipewire-media-session.service',
+--               configuration : systemd_config,
+--               install_dir : systemd_system_services_dir)
+--endif
+-+configure_file(input : 'pipewire-media-session.service.in',
+-+             output : 'pipewire-media-session.service',
+-+             configuration : systemd_config,
+-+             install_dir : systemd_system_services_dir)
+--- 
+-2.25.1
+-
+diff --git a/package/pipewire-media-session/pipewire-media-session.hash b/package/pipewire-media-session/pipewire-media-session.hash
+index e335fd8913..e6b176eea2 100644
+--- a/package/pipewire-media-session/pipewire-media-session.hash
++++ b/package/pipewire-media-session/pipewire-media-session.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  465a50fea4afbacd326f2209d81ae0dcff637fbb2c9d1a315e94f79a788ce960  bpftool-v7.0.0-br1.tar.gz
-+sha256  35ff149cab4a3ab209b0c04cab2707243ab7ee753de5f4b5678296c975cf7fe0  bpftool-v7.1.0-br1.tar.gz
- sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
- sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
-diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
-index 3b27698130..cd68d89799 100644
---- a/package/bpftool/bpftool.mk
-+++ b/package/bpftool/bpftool.mk
+-sha256  ebdf9f8e389896fdc4b58da5f909afce18441b4b53d5b4f2104dd53586ea8681  media-session-0.4.1.tar.bz2
++sha256  26e21852e0834a4418b40eae342ac5178dfe40342b9c5afe204d43ef8aafa14e  media-session-0.4.2.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  77b9c867237ef919e33c0fdbcf22ab84b1cf24a63f9431ec68759026b658c994  LICENSE
+diff --git a/package/pipewire-media-session/pipewire-media-session.mk b/package/pipewire-media-session/pipewire-media-session.mk
+index d349fd7454..cc7317f925 100644
+--- a/package/pipewire-media-session/pipewire-media-session.mk
++++ b/package/pipewire-media-session/pipewire-media-session.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BPFTOOL_VERSION = v7.0.0
-+BPFTOOL_VERSION = v7.1.0
- BPFTOOL_SITE = https://github.com/libbpf/bpftool
- BPFTOOL_SITE_METHOD = git
- BPFTOOL_GIT_SUBMODULES = YES
-@@ -33,12 +33,12 @@ endef
+-PIPEWIRE_MEDIA_SESSION_VERSION = 0.4.1
++PIPEWIRE_MEDIA_SESSION_VERSION = 0.4.2
+ PIPEWIRE_MEDIA_SESSION_SOURCE = media-session-$(PIPEWIRE_MEDIA_SESSION_VERSION).tar.bz2
+ PIPEWIRE_MEDIA_SESSION_SITE = https://gitlab.freedesktop.org/pipewire/media-session/-/archive/$(PIPEWIRE_MEDIA_SESSION_VERSION)
+ PIPEWIRE_MEDIA_SESSION_LICENSE = MIT
+@@ -17,7 +17,10 @@ PIPEWIRE_MEDIA_SESSION_DEPENDENCIES = \
+ 	pipewire \
+ 	$(TARGET_NLS_DEPENDENCIES)
  
- define BPFTOOL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
--		-C $(@D)/src install DESTDIR="$(TARGET_DIR)" prefix=/usr
-+		-C $(@D)/src install-bin DESTDIR="$(TARGET_DIR)" prefix=/usr
- endef
+-PIPEWIRE_MEDIA_SESSION_CONF_OPTS = -Ddocs=disabled -Dtests=disabled
++PIPEWIRE_MEDIA_SESSION_CONF_OPTS = \
++	-Ddocs=disabled \
++	-Dtests=disabled \
++	-Dinstalled_tests=disabled
  
- define HOST_BPFTOOL_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
--		-C $(@D)/src install DESTDIR="$(HOST_DIR)" prefix=/usr
-+		-C $(@D)/src install-bin DESTDIR="$(HOST_DIR)" prefix=
- endef
+ PIPEWIRE_MEDIA_SESSION_MODULE_SETS_LIST = alsa
  
- $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
