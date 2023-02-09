@@ -1,93 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3501C636CC
-	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 03:07:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1EC7C636CC
+	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 03:30:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35E85820D9;
-	Thu,  9 Feb 2023 03:07:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35E85820D9
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i_-L_XGXWkLT; Thu,  9 Feb 2023 03:07:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C63D820D6;
-	Thu,  9 Feb 2023 03:07:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C63D820D6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BA0F11BF4E5
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 03:07:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98CA040993
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 03:07:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98CA040993
+	by smtp4.osuosl.org (Postfix) with ESMTP id 577B040937;
+	Thu,  9 Feb 2023 03:30:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 577B040937
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wSKW_eQ-uDiP for <buildroot@lists.busybox.net>;
- Thu,  9 Feb 2023 03:07:16 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B1S1ztmRcvA3; Thu,  9 Feb 2023 03:30:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B5BD408F1;
+	Thu,  9 Feb 2023 03:30:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B5BD408F1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 246251BF3C5
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 03:30:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F018A61190
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 03:30:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F018A61190
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SPeJrUTz7eoS for <buildroot@lists.busybox.net>;
+ Thu,  9 Feb 2023 03:30:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A06114098F
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com
- [IPv6:2607:f8b0:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A06114098F
- for <buildroot@buildroot.org>; Thu,  9 Feb 2023 03:07:16 +0000 (UTC)
-Received: by mail-ot1-x333.google.com with SMTP id
- g15-20020a9d6b0f000000b0068db1940216so186338otp.5
- for <buildroot@buildroot.org>; Wed, 08 Feb 2023 19:07:16 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9828761183
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com
+ [IPv6:2607:f8b0:4864:20::b2e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9828761183
+ for <buildroot@buildroot.org>; Thu,  9 Feb 2023 03:30:51 +0000 (UTC)
+Received: by mail-yb1-xb2e.google.com with SMTP id 23so851971ybf.10
+ for <buildroot@buildroot.org>; Wed, 08 Feb 2023 19:30:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=BL5YFz9DprB50E8UJX6mqg6RwY569PvORv97tjz+6jE=;
- b=Pd1ilmbEsI/ckMvrJvmsbcIF6UhYhCpTY3UfW1f8XdLJ61IhvkcD797ofV871y23Rn
- A9+0ZCUMFwx0s+MExk5H5Pp/TjYJ/ZvNYLXV/ADJ0QXrtAcsqmH3Gl32lnFcCEL8IMjD
- 4R1JqZ3P4udhxyNR20c2Mo00Oq9LNduCziD0Uj5DFtm8ivy/Fj1ZYsu6AGApSGSxphXO
- K3EVcD4QDMOYI/xGyyCP4sekgnvENhOftJiGsPYzzPHLGCoNSPMEdLF0aUMlaVvBV79J
- +DlklVwPMMx+4h+3iaPZ6L1dm86hoOb1Gt19KqLneVQtaWgKtXYOwamuw4QQELehJszd
- Peew==
-X-Gm-Message-State: AO0yUKW9A4mM2vp7Esk8iGB0PI/zILCHSm1//VMLxaUKmU2CWneNgulE
- PjprqWIhlJDnM8bebRLbct3AZv66bXc=
-X-Google-Smtp-Source: AK7set9IODbMBMQRX6N5RA/KDt6nn3IdnLCBdXbtguw9VSbSQZEAkoHZgCyseirF4OfTCMX7Ast7Hg==
-X-Received: by 2002:a9d:84a:0:b0:68b:bb10:ce6d with SMTP id
- 68-20020a9d084a000000b0068bbb10ce6dmr4456769oty.23.1675912034946; 
- Wed, 08 Feb 2023 19:07:14 -0800 (PST)
-Received: from nowhere.attlocal.net ([2600:1700:65a0:14f0:dce0:30dc:b696:f26])
- by smtp.gmail.com with ESMTPSA id
- d8-20020a05683018e800b00670679748f9sm83631otf.49.2023.02.08.19.07.13
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Wed, 08 Feb 2023 19:07:13 -0800 (PST)
-From: Charles Hardin <ckhardin@gmail.com>
-X-Google-Original-From: Charles Hardin <charles.hardin@chargepoint.com>
-To: buildroot@buildroot.org
-Date: Wed,  8 Feb 2023 19:07:06 -0800
-Message-Id: <20230209030706.33870-2-charles.hardin@chargepoint.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230209030706.33870-1-charles.hardin@chargepoint.com>
-References: <20230209030706.33870-1-charles.hardin@chargepoint.com>
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0eqfBHYavYXFGbHEKRtU6ntEhxGwd3/0BWDFzQBahy0=;
+ b=mSx5bfbEGCVM1XltP2ustgwsMkLDkO9QCtCq7CO4fPkk793xebJJld1aT2RW0UsieP
+ dVlJwWBX1RES83L+u7mRW2I+e/CFv06dNf3JLgYaMM9m9D8Wj6ETy1sFS/lc2yQ+MeBg
+ Z3kzvxXyWl5RRMLZlAlNyWuxZCs+3QMuHy2Vjwmh2N21g7fx+5BA14mz/u1jHl1ZirRX
+ kLzhFOFdEXBZ2xxUb26S0ZZmRZBAggE4u4lXnFtRn7INOIcvYt5M+hVJKEI8emHM9ovt
+ L0TUM6Diix+9XEXlCuEdjGXcKAKsrUMMYdMtGym1Acf8dL0jP3bq8GI1aHzXz4bgAdKc
+ lwjg==
+X-Gm-Message-State: AO0yUKWVH/VL8hkiJvdV5No7VcouZqxUfbTBYjAx41ScbCMlf0jhI4Mu
+ X3i0VJ2blG7+BA8PBWGGkzL+ZzvlJUmIqcDnV2I=
+X-Google-Smtp-Source: AK7set9tzhhn9CtFyn3KEINhlx0DwVxQTCppLgAi5lemWI0Xv6lsXFJ29EbMLkrSoo662QIo8cwBXyNAdo1dLZv6ruE=
+X-Received: by 2002:a5b:748:0:b0:8b9:333b:479d with SMTP id
+ s8-20020a5b0748000000b008b9333b479dmr655556ybq.643.1675913450332; Wed, 08 Feb
+ 2023 19:30:50 -0800 (PST)
 MIME-Version: 1.0
+References: <20221127002135.12134-1-peter.macleod.thompson@gmail.com>
+ <20230208165756.5d8dd14f@windsurf>
+In-Reply-To: <20230208165756.5d8dd14f@windsurf>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Wed, 8 Feb 2023 20:30:38 -0700
+Message-ID: <CAGrGpJAnJh_gimfgG31PJBeXy-r8oZnpGe=nWUPTokw1j+TBiQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=BL5YFz9DprB50E8UJX6mqg6RwY569PvORv97tjz+6jE=;
- b=bshezAqbY6EYhetAGRnDY5pYV/G85o4r3xnv3RCXHVK/fro485shjhYspcxPs6/Ger
- yCj4WWrB5ry9cm8ZSQ7lRalnIjRkwym/XljLEeTvSpAnyvSOu3BhnMQOrs1YW1ETCmhe
- pT6VuYKb0KtDNgRm/DvO5w/SdgStPS0llSTgRglDxswhP1BYL1TMnlF28Zp3MV5U/TAD
- oUFkNZzJKfeIwhCCfi7aGS5Y5gHaydGqmKtpfNfh1weEW57LvAZiserlpbbn9taPYH0T
- CnAJCfkkuYnn4tJ/u0esuqCrqvVUYHuZaNIGJEOOAPrLUGysfA8gJF0aRJfhAU1R6RRu
- RXVQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=0eqfBHYavYXFGbHEKRtU6ntEhxGwd3/0BWDFzQBahy0=;
+ b=V5hp2OoqbVl4jpA2hYYNYsqgy0t7tXcG05wgDypeeuifKXKZVTmHhaYR73WiR8fsdc
+ prC1Hdpk4r5sgaPsnxlLDTT+RckdfnzTlnuDx6SPmGKhQ5uHHSW2unL7oyLSQb0jnQRp
+ 8XXQ5Ef6VbY5rqDYseKGVc7C0FutT5JOvNDXx7YP9rCwbqPUaMmbiDC4sQcZ3Vwh+z9Z
+ yh3P6m1NvR4b7vyR9KwEoa/b7T05ETdX7zfvOQ6UNBMX5P2T7atWVrD17qoLbt7r/LAH
+ CrunY+eUHhei67FrMm20Ou6OtzPMcOwGllOdYxN1Cprvt+dDc+guCAQBK3viR7ol8QVu
+ DfWw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bshezAqb
-Subject: [Buildroot] [PATCH 2/2] boot/uboot: create a scmversion file based
- on the custom repo variables
+ header.a=rsa-sha256 header.s=20210112 header.b=V5hp2Ooq
+Subject: Re: [Buildroot] [PATCH 1/1] package/sdl2_ttf: bump version to 2.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,69 +90,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Charles Hardin <ckhardin@gmail.com>,
- Charles Hardin <charles.hardin@chargepoint.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4836889521488410546=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Charles Hardin <ckhardin@gmail.com>
+--===============4836889521488410546==
+Content-Type: multipart/alternative; boundary="000000000000e1a87705f43c0136"
 
-When using the custom repositories, the archive creation will
-omit the source history to get reproducible hashes. This has
-the side effect of making the setlocalversion scripts within the
-builds to not create the tracking information as expected. So,
-just generate a .scmversion so that kernels will be labelled
-with where buildroot referenced them.
+--000000000000e1a87705f43c0136
+Content-Type: text/plain; charset="UTF-8"
 
-Example (line wrapped)
+Hi Thomas,
+Apologies.  I had thought there was a problem with the LICENSE_FILES in my
+update.  Hence my subsequent change.    Glad everything is now ok.
 
-    #define PLAIN_VERSION "2018.03-repo-version-" \
-                          "d72b9d0908364a64718b652b75e4cac9b85cf0c3"
+Peter
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
-Signed-off-by: Charles Hardin <charles.hardin@chargepoint.com>
----
- boot/uboot/uboot.mk | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+On Wed, Feb 8, 2023 at 8:57 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 4eae8e95c3..65bb7669c8 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -526,12 +526,25 @@ endif # BR2_TARGET_UBOOT_CUSTOM_TARBALL
- ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT)$(BR2_TARGET_UBOOT_CUSTOM_HG),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL)),)
- $(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_URL setting)
--endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_URL
-+endif # qstrip BR2_TARGET_UBOOT_CUSTOM_REPO_URL
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION)),)
- $(error No custom U-Boot repository version specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION setting)
--endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_VERSION
-+endif # qstrip BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
- endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
- 
-+# Create a custom scm version file to reflect the source version since the
-+# archive will omit source directories like .git to maintain reproducible
-+# hashes for the archives
-+UBOOT_CUSTOM_REPO_SCMVERSION = \
-+	"-repo-version-$(call qstrip,$(BR2_UBOOT_CUSTOM_REPO_VERSION))"
-+define UBOOT_CUSTOM_REPO_SCMVERSION_HOOK
-+	(cd $(@D); \
-+		if [ ! -f .scmversion ]; then \
-+			echo $(UBOOT_CUSTOM_REPO_SCMVERSION) > .scmversion; \
-+		fi)
-+endef
-+
-+UBOOT_POST_EXTRACT_HOOKS += UBOOT_CUSTOM_REPO_SCMVERSION_HOOK
- endif # BR2_TARGET_UBOOT && BR_BUILDING
- 
- ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
--- 
-2.37.1 (Apple Git-137.1)
+> Hello Peter
+>
+> On Sat, 26 Nov 2022 17:21:35 -0700
+> Peter Thompson <peter.macleod.thompson@gmail.com> wrote:
+>
+> > LICENSE_FILES changed to LICENSE.txt for version 2.20.1.
+> > Previous versions used COPYING.txt.
+> >
+> > Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
+> > ---
+> >  package/sdl2_ttf/sdl2_ttf.hash | 4 ++--
+> >  package/sdl2_ttf/sdl2_ttf.mk   | 4 ++--
+> >  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> Sorry for the long delay, but you had already sent this patch on
+> November 19, 2022 and it was applied on November 21, 2022, so it was
+> too late for a new version.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+
+--000000000000e1a87705f43c0136
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Thomas,</div><div>Apologies.=C2=A0 I had thought t=
+here was a problem with the LICENSE_FILES in my update.=C2=A0 Hence my subs=
+equent change.=C2=A0=C2=A0=C2=A0 Glad everything is now ok. <br></div><div>=
+<br></div><div>Peter<br></div></div><br><div class=3D"gmail_quote"><div dir=
+=3D"ltr" class=3D"gmail_attr">On Wed, Feb 8, 2023 at 8:57 AM Thomas Petazzo=
+ni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@boo=
+tlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-le=
+ft:1ex">Hello Peter<br>
+<br>
+On Sat, 26 Nov 2022 17:21:35 -0700<br>
+Peter Thompson &lt;<a href=3D"mailto:peter.macleod.thompson@gmail.com" targ=
+et=3D"_blank">peter.macleod.thompson@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; LICENSE_FILES changed to LICENSE.txt for version 2.20.1.<br>
+&gt; Previous versions used COPYING.txt.<br>
+&gt; <br>
+&gt; Signed-off-by: Peter Thompson &lt;<a href=3D"mailto:peter.macleod.thom=
+pson@gmail.com" target=3D"_blank">peter.macleod.thompson@gmail.com</a>&gt;<=
+br>
+&gt; ---<br>
+&gt;=C2=A0 package/sdl2_ttf/sdl2_ttf.hash | 4 ++--<br>
+&gt;=C2=A0 package/sdl2_ttf/<a href=3D"http://sdl2_ttf.mk" rel=3D"noreferre=
+r" target=3D"_blank">sdl2_ttf.mk</a>=C2=A0 =C2=A0| 4 ++--<br>
+&gt;=C2=A0 2 files changed, 4 insertions(+), 4 deletions(-)<br>
+<br>
+Sorry for the long delay, but you had already sent this patch on<br>
+November 19, 2022 and it was applied on November 21, 2022, so it was<br>
+too late for a new version.<br>
+<br>
+Best regards,<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, CTO, Bootlin<br>
+Embedded Linux and Kernel engineering<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div>
+
+--000000000000e1a87705f43c0136--
+
+--===============4836889521488410546==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4836889521488410546==--
