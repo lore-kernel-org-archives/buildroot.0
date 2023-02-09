@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCB2AC61DA4
-	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 09:29:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF928C05027
+	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 12:09:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55D0060D70;
-	Thu,  9 Feb 2023 09:29:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55D0060D70
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eqf2nN8lbgKS; Thu,  9 Feb 2023 09:29:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79E9E60BF3;
-	Thu,  9 Feb 2023 09:29:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79E9E60BF3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8658B1BF28D
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 09:28:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 601F0404AE
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 09:28:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 601F0404AE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8718A40116;
+	Thu,  9 Feb 2023 12:09:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8718A40116
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OSmgFYAZ5LBR for <buildroot@lists.busybox.net>;
- Thu,  9 Feb 2023 09:28:57 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9ew0Wh4M_wAA; Thu,  9 Feb 2023 12:09:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50C10404D1;
+	Thu,  9 Feb 2023 12:09:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50C10404D1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CF401BF5A9
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 12:09:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E7E8D820AF
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 12:09:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7E8D820AF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RsWZC5GM9DLn for <buildroot@lists.busybox.net>;
+ Thu,  9 Feb 2023 12:09:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 382454011B
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com
- [IPv6:2001:4860:4864:20::35])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 382454011B
- for <buildroot@buildroot.org>; Thu,  9 Feb 2023 09:28:57 +0000 (UTC)
-Received: by mail-oa1-x35.google.com with SMTP id
- 586e51a60fabf-1442977d77dso1793683fac.6
- for <buildroot@buildroot.org>; Thu, 09 Feb 2023 01:28:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F3DC81F7D
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
+ [IPv6:2607:f8b0:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8F3DC81F7D
+ for <buildroot@buildroot.org>; Thu,  9 Feb 2023 12:09:47 +0000 (UTC)
+Received: by mail-ot1-x32c.google.com with SMTP id
+ e12-20020a0568301e4c00b0068bc93e7e34so466324otj.4
+ for <buildroot@buildroot.org>; Thu, 09 Feb 2023 04:09:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=NQj5yzqmKSZzUSw46tG65K1KmC5ZjvhHMYzfqvG+TGw=;
- b=Tppfa7tE1nvxXONj3uHkU3xkqeuMRpXGxj8O4+ZEWwZwDLIkhziGt86XkT3h4qsOep
- +gF6OWRBs2Tb3cJjQnVOHwLt7dDf4t31eRXa2ZqtnTVX4oy03viIyr9zpSGuJ5P/+l19
- OBIBRddIBkUu14W7yiXtfuE6dI+Jvgsj/WgmeO/9/NAAQVAwrEZHpJicQYiNs+r0sHtC
- qakLJUdnv+Gw3EXFBh/mAo1QvUkd2mg5cmd5xUZipAPDp8VtCpSpJWmu/qCQYeHG7oCy
- OSHSBVR7cFHiw1kdJeme7DDwWRCMXWl1yqt3T7eZ9ytcgDAt47gwAPslpmTJjkv94oo2
- FtJg==
-X-Gm-Message-State: AO0yUKV759rX5Vl1GOedCFU3x2o8X4y6cZKhdhuEQAYaOvoIiccmUbo+
- FGjH1hflfG06CBf6dy5/iHuOQ+MX4AJQQ2YTiRc=
-X-Google-Smtp-Source: AK7set8FW6akXf1vJ8YAStYI3GDU/YbtnAtXH0VU8QVRC8nMqA/1qhi6eTp4ESXczfhIEei9YKBxzfnB4GMojOQtS2k=
-X-Received: by 2002:a05:6870:5691:b0:161:a7f6:af1 with SMTP id
- p17-20020a056870569100b00161a7f60af1mr733285oao.131.1675934936070; Thu, 09
- Feb 2023 01:28:56 -0800 (PST)
+ bh=U9OeABYRkFjfchCH4U1ohUoALnHDvUgbqrk3KNBgvW0=;
+ b=sF/o1ysOM/dTMlSo48pRLMAlvrT2TvBBXVgfMI6CAqe6zAg2fLMfvsGq0QquFRZwXv
+ PtjaM2sonRJ0U1URCFagxGjg91j4RdpOXmPsJsiQ8jaHCx0YFPVMWzmEgFd36EF25Q+3
+ Xs1SaeQ1ldt0jB33ndHg6Wwjr5ABvC7SqsGhAkzGYphbgPHTudrIomIAgJF3sLE7mfvY
+ 9gagtUPuXFQpY6GrLF5aNLPhHtoYTKCcjCWL16yOxAss7o72rdzmiKMVI9oz8Qctdi0P
+ buL3Ge6rNtLQAxGlEmIG771694jaIr0D5wZu+HBrmxp0Vy57xWAzBPVa4XuEkM7Td59l
+ bqPA==
+X-Gm-Message-State: AO0yUKUw8OJmM7n82WCj3b+kYfXuW4xaRJcRTOT6kvTobA6uHpOAqBT8
+ oJ42EAlbTCKnATQmv8vTCVKDJXzRI1v7MPdGfE8=
+X-Google-Smtp-Source: AK7set+pKaRLPbAVbpe6piLtzjxj85z3idHj29nPQ6WysK7ZDn3ZCP5HJ747LCZXDiIlquQ26jpDqiOjdYgenRDaVyU=
+X-Received: by 2002:a9d:4e8c:0:b0:68b:e002:bc65 with SMTP id
+ v12-20020a9d4e8c000000b0068be002bc65mr1002156otk.61.1675944586517; Thu, 09
+ Feb 2023 04:09:46 -0800 (PST)
 MIME-Version: 1.0
 References: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
  <CACHw65+r07g=hU4yv1Xhb3TFVmOVkYdSpRy3dZF9y+U44TK=Qw@mail.gmail.com>
@@ -68,25 +68,26 @@ References: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
  <a481ffb1-5c10-d913-0f8a-cbb5e11ff631@inbox.ru>
  <CADYjeStesndVUqdWqmPVP5=xfW1PFcwzNk=9o0TUM+tXBez8mA@mail.gmail.com>
  <eeb3b4bc-12fa-eea5-4ec0-89c90ac75394@inbox.ru>
-In-Reply-To: <eeb3b4bc-12fa-eea5-4ec0-89c90ac75394@inbox.ru>
+ <CADYjeStwFSJQDFvj2z5bAURD0eTLVgYrpEvdEdYMbbVkJmJupQ@mail.gmail.com>
+In-Reply-To: <CADYjeStwFSJQDFvj2z5bAURD0eTLVgYrpEvdEdYMbbVkJmJupQ@mail.gmail.com>
 From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Thu, 9 Feb 2023 10:28:47 +0100
-Message-ID: <CADYjeStwFSJQDFvj2z5bAURD0eTLVgYrpEvdEdYMbbVkJmJupQ@mail.gmail.com>
+Date: Thu, 9 Feb 2023 13:09:37 +0100
+Message-ID: <CADYjeSv1r61gQMoamBq2VUgSYwmyvvZ8BP2NGBZHNzF6vU7phg@mail.gmail.com>
 To: Maxim Kochetkov <fido_max@inbox.ru>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=NQj5yzqmKSZzUSw46tG65K1KmC5ZjvhHMYzfqvG+TGw=;
- b=GKXcuHLilSrGmja2/s+bzmvQkca9WE9p8cSGBbsiz7nRUqsOw4yhP5JqiRiSWL5xOM
- GR5sPwSY8bm8ZG32eSxmGLzgCkpazRfYyn4ZEOFsVwiIkJWV1qam+Ox3rjAalFUEiwP7
- qmKCA5IQUJWFrjzS/eDlOqynbvG93ad1YDMi4avy2eV+Eqz2bZJRtxhxpngqsy7NbXAK
- 8x542pkOmJBVpTzxCMGF+7Hly485AlzVVb5TSR6RTAhfALG66l4D8mOa9XDZuUaO/awq
- yuD0M1y9Tp8PqYRp6U8xeCT/lxm0WRNwGvlZRPnQoFwMRXUpCuJjXCu14O4DWNrrp//A
- qfWQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=U9OeABYRkFjfchCH4U1ohUoALnHDvUgbqrk3KNBgvW0=;
+ b=UMczBN+jQpZB7OdQm0xp2rWuVNFyebKRxCTj0xzMIxLOQlDT7j77QvPJAW5qjE6lm2
+ sjo41pJPU9m3IG32wugfwl55E2VnQAh4SnSB0VTeKsipUINN4HTsIfrxcpvCN8zRNSuu
+ ZaqWlGsQxArA+PyUJisou2Y4JpCM2gtt4Ca5alUZvDCoD3pr+O6DuLTZJqaOoRNNd01l
+ Gt0D55ywJKJFnM603Gi0opmIyfeV0ba4InMSWxSFAFrRTMOIKTJ5pWq1R8lIUxCzUgz8
+ 2Da77LGSvHEwpmNZwoYoNMZNupr5xRiQbpcdXLQC+JrsE34POiAkCkgXe+rrPdghIrCU
+ rZ8w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=GKXcuHLi
+ header.a=rsa-sha256 header.s=20210112 header.b=UMczBN+j
 Subject: Re: [Buildroot] How to install custom sdk in buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -100,86 +101,188 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Ramon Crichlow <rcrichlow9000@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0659444224464292659=="
+Content-Type: multipart/mixed; boundary="===============6176661164946128676=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0659444224464292659==
-Content-Type: multipart/alternative; boundary="00000000000087fd9b05f4410216"
+--===============6176661164946128676==
+Content-Type: multipart/alternative; boundary="000000000000be204805f4434101"
 
---00000000000087fd9b05f4410216
+--000000000000be204805f4434101
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Maxim,
+Hello Maxim,
 
-I was missing python setuptools on my host. After installing it, I can add
-the package. Also, the added package is available in menuconfig
+While doing make with new Buildroot-packages I getting:
 
-Thank you for the support!
+[ 51%] Building ASM object
+aws-lc/crypto/CMakeFiles/crypto_objects.dir/hrss/asm/poly_rq_mul.S.o
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:
+Assembler messages:
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:304:
+Error: unknown pseudo-op: `.att_syntax'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:307:
+Error: unknown mnemonic `push' -- `push %rbp'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:309:
+Error: bad register expression
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:310:
+Error: unknown mnemonic `movq' -- `movq %rsp,%rbp'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:311:
+Error: bad register expression
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:312:
+Error: unknown mnemonic `push' -- `push %r12'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:313:
+Error: bad register expression
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:321:
+Error: operand 1 must be an integer register -- `mov %rcx,%r8'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:322:
+Error: unknown mnemonic `addq' -- `addq $6144+12288+512+9408+32,%r8'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:323:
+Error: operand 1 must be an integer register -- `mov %r8,%rax'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:324:
+Error: unknown mnemonic `subq' -- `subq $6144,%r8'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:325:
+Error: operand 1 must be an integer register -- `mov %r8,%r11'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:326:
+Error: unknown mnemonic `subq' -- `subq $12288,%r8'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:327:
+Error: operand 1 must be an integer register -- `mov %r8,%r12'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:328:
+Error: unknown mnemonic `subq' -- `subq $512,%r8'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:329:
+Error: unknown mnemonic `vmovdqa' -- `vmovdqa const3(%rip),%ymm3'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:330:
+Error: unknown mnemonic `vmovdqu' -- `vmovdqu 0(%rsi),%ymm0'
+/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:331:
+Error: unknown mnemonic `vmovdqu' -- `vmovdqu 88(%rsi),%ymm1'
+.
+.
+.
+Any idea what it is complaining about?
 
-On Thu, 9 Feb 2023 at 10:10, Maxim Kochetkov <fido_max@inbox.ru> wrote:
+Thanks in advance
 
->
->
-> On 09.02.2023 12:03, Sourabh Hegde wrote:
-> > Hello Maxim,
-> >
-> > Update:
-> >
-> > The above issue resolved by itself!
-> >
-> > Now when I do: utils/scanpypi awscrt -o package , it says
-> >
-> > spdx_lookup module is not installed. This can lead to an inaccurate
-> > licence detection. Please install it via
-> > pip install spdx_lookup
-> > buildroot package name for awscrt: python-awscrt
-> > Package: python-awscrt
-> > Fetching package awscrt
-> > ERROR: Could not find package awscrt.
-> > Check syntax inside the python package index:
-> > https://pypi.python.org/pypi/ <https://pypi.python.org/pypi/>
-> >
-> > But the package is available at https://pypi.org/project/awscrt/
-> > <https://pypi.org/project/awscrt/>
->
-> It works fine for me:
->
-> buildroot package name for awscrt: python-awscrt
-> Package: python-awscrt
-> Fetching package awscrt
-> Downloading package awscrt from
->
-> https://files.pythonhosted.org/packages/ae/98/dda092078f2d47bad08e184ab9d364b8f89166497062bc1cf811c0bbbde2/awscrt-0.16.10.tar.gz.
-> ..
-> Checking if package package/python-awscrt already exists...
-> Creating package/python-awscrt/python-awscrt.mk...
-> More than one file found for license: LICENSE, crt/aws-c-common/LICENSE,
-> crt/aws-c-io/LICENSE, crt/aws-lc/LICENSE,
-> crt/aws-lc/third_party/fiat/LICENSE, crt/aws-c-mqtt/LICENSE,
-> crt/aws-checksums/LICENSE, crt/aws-c-s3/LICENSE,
-> crt/aws-c-compression/LICENSE, crt/aws-c-http/LICENSE,
-> crt/aws-c-sdkutils/LICENSE, crt/s2n/LICENSE, crt/aws-c-cal/LICENSE,
-> crt/aws-c-auth/LICENSE, crt/aws-c-event-stream/LICENSE
-> Creating package/python-awscrt/python-awscrt.hash...
-> Creating package/python-awscrt/Config.in...
-> NOTE: Remember to also make an update to the DEVELOPERS file
->        and include an entry for the pkg in packages/Config.in
->
->
+On Thu, 9 Feb 2023 at 10:28, Sourabh Hegde <hrsourabh011@gmail.com> wrote:
 
---00000000000087fd9b05f4410216
+> Hi Maxim,
+>
+> I was missing python setuptools on my host. After installing it, I can add
+> the package. Also, the added package is available in menuconfig
+>
+> Thank you for the support!
+>
+> On Thu, 9 Feb 2023 at 10:10, Maxim Kochetkov <fido_max@inbox.ru> wrote:
+>
+>>
+>>
+>> On 09.02.2023 12:03, Sourabh Hegde wrote:
+>> > Hello Maxim,
+>> >
+>> > Update:
+>> >
+>> > The above issue resolved by itself!
+>> >
+>> > Now when I do: utils/scanpypi awscrt -o package , it says
+>> >
+>> > spdx_lookup module is not installed. This can lead to an inaccurate
+>> > licence detection. Please install it via
+>> > pip install spdx_lookup
+>> > buildroot package name for awscrt: python-awscrt
+>> > Package: python-awscrt
+>> > Fetching package awscrt
+>> > ERROR: Could not find package awscrt.
+>> > Check syntax inside the python package index:
+>> > https://pypi.python.org/pypi/ <https://pypi.python.org/pypi/>
+>> >
+>> > But the package is available at https://pypi.org/project/awscrt/
+>> > <https://pypi.org/project/awscrt/>
+>>
+>> It works fine for me:
+>>
+>> buildroot package name for awscrt: python-awscrt
+>> Package: python-awscrt
+>> Fetching package awscrt
+>> Downloading package awscrt from
+>>
+>> https://files.pythonhosted.org/packages/ae/98/dda092078f2d47bad08e184ab9d364b8f89166497062bc1cf811c0bbbde2/awscrt-0.16.10.tar.gz.
+>> ..
+>> Checking if package package/python-awscrt already exists...
+>> Creating package/python-awscrt/python-awscrt.mk...
+>> More than one file found for license: LICENSE, crt/aws-c-common/LICENSE,
+>> crt/aws-c-io/LICENSE, crt/aws-lc/LICENSE,
+>> crt/aws-lc/third_party/fiat/LICENSE, crt/aws-c-mqtt/LICENSE,
+>> crt/aws-checksums/LICENSE, crt/aws-c-s3/LICENSE,
+>> crt/aws-c-compression/LICENSE, crt/aws-c-http/LICENSE,
+>> crt/aws-c-sdkutils/LICENSE, crt/s2n/LICENSE, crt/aws-c-cal/LICENSE,
+>> crt/aws-c-auth/LICENSE, crt/aws-c-event-stream/LICENSE
+>> Creating package/python-awscrt/python-awscrt.hash...
+>> Creating package/python-awscrt/Config.in...
+>> NOTE: Remember to also make an update to the DEVELOPERS file
+>>        and include an entry for the pkg in packages/Config.in
+>>
+>>
+
+--000000000000be204805f4434101
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi Maxim,<div><br></div><div>I was missing python setuptoo=
-ls on my host. After installing it, I can add the package. Also, the added =
-package is available in menuconfig</div><div><br></div><div>Thank you for t=
-he support!</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" clas=
-s=3D"gmail_attr">On Thu, 9 Feb 2023 at 10:10, Maxim Kochetkov &lt;<a href=
-=3D"mailto:fido_max@inbox.ru">fido_max@inbox.ru</a>&gt; wrote:<br></div><bl=
-ockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-lef=
-t:1px solid rgb(204,204,204);padding-left:1ex"><br>
+<div dir=3D"ltr">Hello Maxim,<div><br></div><div>While doing make with new =
+Buildroot-packages I getting:</div><div><br></div><div>[ 51%] Building ASM =
+object aws-lc/crypto/CMakeFiles/crypto_objects.dir/hrss/asm/poly_rq_mul.S.o=
+<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss=
+/asm/poly_rq_mul.S: Assembler messages:<br>/home/amazone/output/build/pytho=
+n-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:304: Error: unkno=
+wn pseudo-op: `.att_syntax&#39;<br>/home/amazone/output/build/python-awscrt=
+-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:307: Error: unknown mnemo=
+nic `push&#39; -- `push %rbp&#39;<br>/home/amazone/output/build/python-awsc=
+rt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:309: Error: bad registe=
+r expression<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc=
+/crypto/hrss/asm/poly_rq_mul.S:310: Error: unknown mnemonic `movq&#39; -- `=
+movq %rsp,%rbp&#39;<br>/home/amazone/output/build/python-awscrt-0.16.10/crt=
+/aws-lc/crypto/hrss/asm/poly_rq_mul.S:311: Error: bad register expression<b=
+r>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/a=
+sm/poly_rq_mul.S:312: Error: unknown mnemonic `push&#39; -- `push %r12&#39;=
+<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss=
+/asm/poly_rq_mul.S:313: Error: bad register expression<br>/home/amazone/out=
+put/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:32=
+1: Error: operand 1 must be an integer register -- `mov %rcx,%r8&#39;<br>/h=
+ome/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/p=
+oly_rq_mul.S:322: Error: unknown mnemonic `addq&#39; -- `addq $6144+12288+5=
+12+9408+32,%r8&#39;<br>/home/amazone/output/build/python-awscrt-0.16.10/crt=
+/aws-lc/crypto/hrss/asm/poly_rq_mul.S:323: Error: operand 1 must be an inte=
+ger register -- `mov %r8,%rax&#39;<br>/home/amazone/output/build/python-aws=
+crt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:324: Error: unknown mn=
+emonic `subq&#39; -- `subq $6144,%r8&#39;<br>/home/amazone/output/build/pyt=
+hon-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:325: Error: ope=
+rand 1 must be an integer register -- `mov %r8,%r11&#39;<br>/home/amazone/o=
+utput/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:=
+326: Error: unknown mnemonic `subq&#39; -- `subq $12288,%r8&#39;<br>/home/a=
+mazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_r=
+q_mul.S:327: Error: operand 1 must be an integer register -- `mov %r8,%r12&=
+#39;<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/=
+hrss/asm/poly_rq_mul.S:328: Error: unknown mnemonic `subq&#39; -- `subq $51=
+2,%r8&#39;<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/c=
+rypto/hrss/asm/poly_rq_mul.S:329: Error: unknown mnemonic `vmovdqa&#39; -- =
+`vmovdqa const3(%rip),%ymm3&#39;<br>/home/amazone/output/build/python-awscr=
+t-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:330: Error: unknown mnem=
+onic `vmovdqu&#39; -- `vmovdqu 0(%rsi),%ymm0&#39;<br>/home/amazone/output/b=
+uild/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:331: Er=
+ror: unknown mnemonic `vmovdqu&#39; -- `vmovdqu 88(%rsi),%ymm1&#39;<br></di=
+v><div>.</div><div>.</div><div>.=C2=A0</div><div>Any idea what it is compla=
+ining about?</div><div><br></div><div>Thanks in advance</div></div><br><div=
+ class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, 9 Feb =
+2023 at 10:28, Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail.com">=
+hrsourabh011@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_q=
+uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
+04);padding-left:1ex"><div dir=3D"ltr">Hi Maxim,<div><br></div><div>I was m=
+issing python setuptools on my host. After installing it, I can add the pac=
+kage. Also, the added package is available in menuconfig</div><div><br></di=
+v><div>Thank you for the support!</div></div><br><div class=3D"gmail_quote"=
+><div dir=3D"ltr" class=3D"gmail_attr">On Thu, 9 Feb 2023 at 10:10, Maxim K=
+ochetkov &lt;<a href=3D"mailto:fido_max@inbox.ru" target=3D"_blank">fido_ma=
+x@inbox.ru</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex"><br>
 <br>
 On 09.02.2023 12:03, Sourabh Hegde wrote:<br>
 &gt; Hello Maxim,<br>
@@ -238,10 +341,11 @@ NOTE: Remember to also make an update to the DEVELOPERS file<br>
 fig.in<br>
 <br>
 </blockquote></div>
+</blockquote></div>
 
---00000000000087fd9b05f4410216--
+--000000000000be204805f4434101--
 
---===============0659444224464292659==
+--===============6176661164946128676==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -252,4 +356,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0659444224464292659==--
+--===============6176661164946128676==--
