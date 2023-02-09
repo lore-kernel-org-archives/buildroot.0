@@ -1,87 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9194C05027
-	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 08:14:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83FC9C6379F
+	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 08:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55CDE60AC6;
-	Thu,  9 Feb 2023 08:14:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55CDE60AC6
+	by smtp2.osuosl.org (Postfix) with ESMTP id D644F40CE2;
+	Thu,  9 Feb 2023 08:59:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D644F40CE2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KRu1t1LHmQZV; Thu,  9 Feb 2023 08:14:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CtYB1KWFE8Y0; Thu,  9 Feb 2023 08:59:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E539A60C06;
-	Thu,  9 Feb 2023 08:14:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E539A60C06
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 67D201BF361
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 08:14:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B26A940CEB;
+	Thu,  9 Feb 2023 08:58:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B26A940CEB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A1171BF361
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 08:58:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E508817A4
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 08:14:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E508817A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BAEB40591
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 08:58:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BAEB40591
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7j8OscV0GQ9n for <buildroot@lists.busybox.net>;
- Thu,  9 Feb 2023 08:14:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66A228176B
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
- [IPv6:2607:f8b0:4864:20::22e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 66A228176B
- for <buildroot@buildroot.org>; Thu,  9 Feb 2023 08:14:19 +0000 (UTC)
-Received: by mail-oi1-x22e.google.com with SMTP id t5so1047249oiw.1
- for <buildroot@buildroot.org>; Thu, 09 Feb 2023 00:14:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=MAEGDq9atKnsjqsjik/oZvGwdv8c8dSvVnFyc4dTA10=;
- b=44I4O3cGcgtH7W2aZfUlQ0VdXCiAf3cn4vT7XrZK2N9HFe6ThGiyCK0q1gb+azdQ04
- yIqhkhwfIhA/rKftrq5/yodR9G6EPCKPvY9E7Rme+TEH6GEXJo246Lt0kxBLUWIT1uhQ
- oB6F+uvVGSsPJE8UyLYfFbANsekWeuYrgDKfNp7ptxqa1DCgZsdrDugu0zcPwgKI4E6J
- F/98ukQ8RSpvO/Yt1Rr5OT1Y8s200UULtrZDXnHrnR2AvCgnBBUknolcNrzfNvdSDHwL
- nGQKYzO0FPi9vkfOLnrh8iknhUVbbsxpMW+wQLpsJmFsAFrPTvuCOy91vD4oY++/ss/N
- fuhQ==
-X-Gm-Message-State: AO0yUKXSTlwNJ0KzssQkGp9G1qrKVRXyLvfXTvm0MsiycFtrFqRaoSjU
- sFrDls4/CbSJGgak5Q5xjC1XegiVsniqC4GV9Nc=
-X-Google-Smtp-Source: AK7set+J17quR8xX7yIHybzIwXMYYTQJ12+dFH09EIXEGR8wfjnrLpi02wdytf4BqvSai/s2i1qG/XeGrkkh+KgrbRs=
-X-Received: by 2002:aca:da42:0:b0:367:18a6:eb14 with SMTP id
- r63-20020acada42000000b0036718a6eb14mr582078oig.208.1675930458292; Thu, 09
- Feb 2023 00:14:18 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1_j7EgzXsfVj for <buildroot@lists.busybox.net>;
+ Thu,  9 Feb 2023 08:58:55 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9486B408B4
+Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9486B408B4
+ for <buildroot@buildroot.org>; Thu,  9 Feb 2023 08:58:53 +0000 (UTC)
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1pQ2lW-0000DJ-MI; Thu, 09 Feb 2023 11:58:51 +0300
+Message-ID: <a481ffb1-5c10-d913-0f8a-cbb5e11ff631@inbox.ru>
+Date: Thu, 9 Feb 2023 11:58:50 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To: Sourabh Hegde <hrsourabh011@gmail.com>
 References: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
  <CACHw65+r07g=hU4yv1Xhb3TFVmOVkYdSpRy3dZF9y+U44TK=Qw@mail.gmail.com>
  <CADYjeStPWnGcr23XOGnB+61eZ=iZKVj8YkhDKSaw0BUFT7WC-A@mail.gmail.com>
  <36be5bdc-591c-71cb-ea31-9e38ae8d643d@inbox.ru>
  <CADYjeSuvmoMXDGgN9rmv+RecroVxqj1_d9x3G4iakwkvLs+j9Q@mail.gmail.com>
  <22e489f3-cc1d-985d-cca6-18f4f6ddecfa@inbox.ru>
-In-Reply-To: <22e489f3-cc1d-985d-cca6-18f4f6ddecfa@inbox.ru>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Thu, 9 Feb 2023 09:14:09 +0100
-Message-ID: <CADYjeSuBvHsij7YTnyq5tW9jEv1JtV3u1WyYkX2cbffgkQ6_Kw@mail.gmail.com>
-To: Maxim Kochetkov <fido_max@inbox.ru>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=MAEGDq9atKnsjqsjik/oZvGwdv8c8dSvVnFyc4dTA10=;
- b=Zktl3rDk9/EugPbhXz7QeDi48SgwedRu/R+4xhsZfyVXUrpfQjl25Yrks+fjdYmv3b
- BCV4M3DMGpbeZxwPmnzuYdNUwaqZM+1l64UnRuoZTosIhrJNKaujkd6HEV9DG+DZCHEk
- zvB/UljMeobyLyJRKD83QO3pz3zRyxe9xQOAYWwHa/GgmbguGClVX5Lavmyh9GgoogZH
- aRuRsPn7ryb7M19jgzbuvFL9nFODPxrU9zzwKJlzgWZgJwQ4qQs1I/t3Jc6EPrxeuOPR
- AwB3h+EWkx4TQv1ZlUBt1y6sgRudgC6pJi4+KwS1BSOwfMGNHq6+IOvysUQVe2IX5o7l
- 0hzQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Zktl3rDk
+ <CADYjeSuBvHsij7YTnyq5tW9jEv1JtV3u1WyYkX2cbffgkQ6_Kw@mail.gmail.com>
+In-Reply-To: <CADYjeSuBvHsij7YTnyq5tW9jEv1JtV3u1WyYkX2cbffgkQ6_Kw@mail.gmail.com>
+X-Mailru-Src: smtp
+X-4EC0790: 10
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD9D919194CF4FC660488DBEAA600CFE3E7FC6ADC3ACCE4BA65182A05F538085040B7FC838A9E21AD4C43AD7AC9352FC77AF072EA6D21F4D9BA4C687525DA30DD39
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7DECE8D0A5E25C0FCEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F790063770519A3AF4A224F58638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8A7D0E29623D509708FB5DAACE19E545B6F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE78C592797616C97AB9FA2833FD35BB23D9E625A9149C048EE1E561CDFBCA1751FBDFBBEFFF4125B51D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8BCDDA9AEF61929F65A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7C565C1E6824D8037B43847C11F186F3C59DAA53EE0834AAEE
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D3433E9BC74ABA5769F9A2C6746E96A7393BFA919C0973A8F860682550805C51923F6F5E646749753C01D7E09C32AA3244C0751C53C1330008890DEF080ECE9944281560E2432555DBBFACE5A9C96DEB163
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojhUGBdNDf2gqHpnJrXN6Egw==
+X-Mailru-Sender: 689FA8AB762F73933AF1F914F131DBF546954AA22C7F5D17CCD0ADA8C937949A98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; s=mail4; 
+ h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=byyjuERDQB2AakyPJTLmJmL4BdOOmhfVvLVDxaIrfHQ=; 
+ t=1675933134;x=1676023134; 
+ b=bG4RfPoqHzslR38YO151BPoMl1H1HZtBYrlF8/fQix8IkoS3zKffwqdqvndeITrW0NoXYcBdDWjdy3yUNpzpVxJS8d7ZJDJYfWtyLWPHWjOBl0zP+SMXGvi6HXMfwNK26yzqcJsddntPtNkbJD+5rVOBE6PTf5ww8OYfQtjYUl45g/3xwav586bEdNcgOeyPuj1uZw8hCq33qlBFTzwLaIs8F2vexsSpDgjmlPnxoZswV8YYfaGJJzmvuuLCH8Qs3bPE9cfo2C0K8X+N2pZnGBGBz7VhFBBYB7d8mkWffyuEzYjT0Cl4Y9mfiXdAMJi0S+2LffgTslOy0LDpkhEtwg==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=bG4RfPoq
+X-Mailman-Original-Authentication-Results: smtpng1.m.smailru.net; auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
 Subject: Re: [Buildroot] How to install custom sdk in buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -94,179 +85,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Cc: Ramon Crichlow <rcrichlow9000@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8625157663788398307=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8625157663788398307==
-Content-Type: multipart/alternative; boundary="000000000000a2882505f43ff7aa"
-
---000000000000a2882505f43ff7aa
-Content-Type: text/plain; charset="UTF-8"
-
-Hello Maxim,
-
-Thanks for the explanation.
-
-When I tried this : utils/scanpypi awscrt awsiotsdk -o package ,  I am
-getting below error:
-
-utils/scanpypi:21: DeprecationWarning: the imp module is deprecated in
-favour of importlib; see the module's documentation for alternative uses
-  import imp
-Traceback (most recent call last):
-  File "utils/scanpypi", line 23, in <module>
-    import six.moves.urllib.request
-ModuleNotFoundError: No module named 'six'
-
-Any idea what this is about?
-
-On Thu, 9 Feb 2023 at 06:35, Maxim Kochetkov <fido_max@inbox.ru> wrote:
-
->
->
-> On 09.02.2023 00:28, Sourabh Hegde wrote:
-> > Hello Maxim,
-> >
-> > Thanks for the update.
-> >
-> > I think for me, the option "18.9.3. Generating a python-package from a
-> > PyPI repository"
-> >
-> https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_python_packages
-> <
-> https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_python_packages> is
-> suited.
-> > I want to install this package https://pypi.org/project/awsiotsdk/
-> > <https://pypi.org/project/awsiotsdk/>. And this package requires
-> > https://pypi.org/project/awscrt/ <https://pypi.org/project/awscrt/> as
-> > dependency. Should I create both Buildroot packages from python packages?
->
-> Sure.
->
-> > In the Buildroot manual, it's mentioned "Find the external python
-> > modules menu and insert your package inside.", what should I insert
-> > here? source code?
->
-> The output from scanpypi util. "This will generate packages python-foo
-> and python-bar in the package folder if they exist on
-> https://pypi.python.org."
->
-> "external python modules" is located at package/Config.in:
->
-> ...
-> if BR2_PACKAGE_PYTHON3
-> menu "External python modules"
->         source "package/python-aenum/Config.in"
->         source "package/python-aexpect/Config.in"
-> ...
->
-> Try this sequence:
->
-> utils/scanpypi awscrt awsiotsdk -o package
->
-> then add
->         source "package/python-awscrt/Config.in"
->         source "package/python-awsiotsdk/Config.in"
-> to the package/Config.in
->
-
---000000000000a2882505f43ff7aa
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello Maxim,<div><br></div><div>Thanks for the explanation=
-.</div><div><br></div><div>When I tried this :=C2=A0utils/scanpypi awscrt a=
-wsiotsdk -o package ,=C2=A0 I am getting below error:</div><div><br></div><=
-div>utils/scanpypi:21: DeprecationWarning: the imp module is deprecated in =
-favour of importlib; see the module&#39;s documentation for alternative use=
-s<br>=C2=A0 import imp<br>Traceback (most recent call last):<br>=C2=A0 File=
- &quot;utils/scanpypi&quot;, line 23, in &lt;module&gt;<br>=C2=A0 =C2=A0 im=
-port six.moves.urllib.request<br>ModuleNotFoundError: No module named &#39;=
-six&#39;<br></div><div><br></div><div>Any idea what this is about?</div></d=
-iv><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On =
-Thu, 9 Feb 2023 at 06:35, Maxim Kochetkov &lt;<a href=3D"mailto:fido_max@in=
-box.ru">fido_max@inbox.ru</a>&gt; wrote:<br></div><blockquote class=3D"gmai=
-l_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,20=
-4,204);padding-left:1ex"><br>
-<br>
-On 09.02.2023 00:28, Sourabh Hegde wrote:<br>
-&gt; Hello Maxim,<br>
-&gt; <br>
-&gt; Thanks for the update.<br>
-&gt; <br>
-&gt; I think for me, the option &quot;18.9.3. Generating a python-package f=
-rom a <br>
-&gt; PyPI repository&quot; <br>
-&gt; <a href=3D"https://buildroot.org/downloads/manual/manual.html#_infrast=
-ructure_for_python_packages" rel=3D"noreferrer" target=3D"_blank">https://b=
-uildroot.org/downloads/manual/manual.html#_infrastructure_for_python_packag=
-es</a> &lt;<a href=3D"https://buildroot.org/downloads/manual/manual.html#_i=
-nfrastructure_for_python_packages" rel=3D"noreferrer" target=3D"_blank">htt=
-ps://buildroot.org/downloads/manual/manual.html#_infrastructure_for_python_=
-packages</a>&gt;=C2=A0is suited.<br>
-&gt; I want to install this package <a href=3D"https://pypi.org/project/aws=
-iotsdk/" rel=3D"noreferrer" target=3D"_blank">https://pypi.org/project/awsi=
-otsdk/</a> <br>
-&gt; &lt;<a href=3D"https://pypi.org/project/awsiotsdk/" rel=3D"noreferrer"=
- target=3D"_blank">https://pypi.org/project/awsiotsdk/</a>&gt;. And this pa=
-ckage requires <br>
-&gt; <a href=3D"https://pypi.org/project/awscrt/" rel=3D"noreferrer" target=
-=3D"_blank">https://pypi.org/project/awscrt/</a> &lt;<a href=3D"https://pyp=
-i.org/project/awscrt/" rel=3D"noreferrer" target=3D"_blank">https://pypi.or=
-g/project/awscrt/</a>&gt;=C2=A0as <br>
-&gt; dependency. Should I create both Buildroot packages from python packag=
-es?<br>
-<br>
-Sure.<br>
-<br>
-&gt; In the Buildroot manual, it&#39;s mentioned &quot;Find the external py=
-thon <br>
-&gt; modules menu and insert your package inside.&quot;, what should I inse=
-rt <br>
-&gt; here? source code?<br>
-<br>
-The output from scanpypi util. &quot;This will generate packages python-foo=
- <br>
-and python-bar in the package folder if they exist on <br>
-<a href=3D"https://pypi.python.org" rel=3D"noreferrer" target=3D"_blank">ht=
-tps://pypi.python.org</a>.&quot;<br>
-<br>
-&quot;external python modules&quot; is located at package/Config.in:<br>
-<br>
-...<br>
-if BR2_PACKAGE_PYTHON3<br>
-menu &quot;External python modules&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/python-aenum/Config.in&quo=
-t;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/python-aexpect/Config.in&q=
-uot;<br>
-...<br>
-<br>
-Try this sequence:<br>
-<br>
-utils/scanpypi awscrt awsiotsdk -o package<br>
-<br>
-then add<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/python-awscrt/Config.in&qu=
-ot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/python-awsiotsdk/Config.in=
-&quot;<br>
-to the package/Config.in<br>
-</blockquote></div>
-
---000000000000a2882505f43ff7aa--
-
---===============8625157663788398307==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8625157663788398307==--
+CgpPbiAwOS4wMi4yMDIzIDExOjE0LCBTb3VyYWJoIEhlZ2RlIHdyb3RlOgo+IEhlbGxvIE1heGlt
+LAo+IAo+IFRoYW5rcyBmb3IgdGhlIGV4cGxhbmF0aW9uLgo+IAo+IFdoZW4gSSB0cmllZCB0aGlz
+IDrCoHV0aWxzL3NjYW5weXBpIGF3c2NydCBhd3Npb3RzZGsgLW8gcGFja2FnZSAswqAgSSBhbSAK
+PiBnZXR0aW5nIGJlbG93IGVycm9yOgo+IAo+IHV0aWxzL3NjYW5weXBpOjIxOiBEZXByZWNhdGlv
+bldhcm5pbmc6IHRoZSBpbXAgbW9kdWxlIGlzIGRlcHJlY2F0ZWQgaW4gCj4gZmF2b3VyIG9mIGlt
+cG9ydGxpYjsgc2VlIHRoZSBtb2R1bGUncyBkb2N1bWVudGF0aW9uIGZvciBhbHRlcm5hdGl2ZSB1
+c2VzCj4gIMKgIGltcG9ydCBpbXAKPiBUcmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCk6
+Cj4gIMKgIEZpbGUgInV0aWxzL3NjYW5weXBpIiwgbGluZSAyMywgaW4gPG1vZHVsZT4KPiAgwqAg
+wqAgaW1wb3J0IHNpeC5tb3Zlcy51cmxsaWIucmVxdWVzdAo+IE1vZHVsZU5vdEZvdW5kRXJyb3I6
+IE5vIG1vZHVsZSBuYW1lZCAnc2l4JwoKWW91IGhhdmUgbm8gInNpeCIgbW9kdWxlIGluc3RhbGxl
+ZCBmb3IgcHl0aG9uLiBJIGhhdmUgdG8gaW5zdGFsbCBpdCAKZmlyc3QuIEZvciB1YnVudHU6IHN1
+ZG8gYXB0IGluc3RhbGwgcHl0aG9uMy1zaXgKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
