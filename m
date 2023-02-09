@@ -1,94 +1,212 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF928C05027
-	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 12:09:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43605C05027
+	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 12:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8718A40116;
-	Thu,  9 Feb 2023 12:09:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8718A40116
+	by smtp4.osuosl.org (Postfix) with ESMTP id 979B6408E1;
+	Thu,  9 Feb 2023 12:48:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 979B6408E1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5FLiZjZ0bUdh; Thu,  9 Feb 2023 12:48:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 606704182E;
+	Thu,  9 Feb 2023 12:48:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 606704182E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 325281BF5A9
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 12:48:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC77C41009
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 12:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC77C41009
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9ew0Wh4M_wAA; Thu,  9 Feb 2023 12:09:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50C10404D1;
-	Thu,  9 Feb 2023 12:09:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50C10404D1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0CF401BF5A9
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 12:09:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7E8D820AF
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 12:09:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7E8D820AF
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RsWZC5GM9DLn for <buildroot@lists.busybox.net>;
- Thu,  9 Feb 2023 12:09:47 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F3DC81F7D
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
- [IPv6:2607:f8b0:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8F3DC81F7D
- for <buildroot@buildroot.org>; Thu,  9 Feb 2023 12:09:47 +0000 (UTC)
-Received: by mail-ot1-x32c.google.com with SMTP id
- e12-20020a0568301e4c00b0068bc93e7e34so466324otj.4
- for <buildroot@buildroot.org>; Thu, 09 Feb 2023 04:09:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=U9OeABYRkFjfchCH4U1ohUoALnHDvUgbqrk3KNBgvW0=;
- b=sF/o1ysOM/dTMlSo48pRLMAlvrT2TvBBXVgfMI6CAqe6zAg2fLMfvsGq0QquFRZwXv
- PtjaM2sonRJ0U1URCFagxGjg91j4RdpOXmPsJsiQ8jaHCx0YFPVMWzmEgFd36EF25Q+3
- Xs1SaeQ1ldt0jB33ndHg6Wwjr5ABvC7SqsGhAkzGYphbgPHTudrIomIAgJF3sLE7mfvY
- 9gagtUPuXFQpY6GrLF5aNLPhHtoYTKCcjCWL16yOxAss7o72rdzmiKMVI9oz8Qctdi0P
- buL3Ge6rNtLQAxGlEmIG771694jaIr0D5wZu+HBrmxp0Vy57xWAzBPVa4XuEkM7Td59l
- bqPA==
-X-Gm-Message-State: AO0yUKUw8OJmM7n82WCj3b+kYfXuW4xaRJcRTOT6kvTobA6uHpOAqBT8
- oJ42EAlbTCKnATQmv8vTCVKDJXzRI1v7MPdGfE8=
-X-Google-Smtp-Source: AK7set+pKaRLPbAVbpe6piLtzjxj85z3idHj29nPQ6WysK7ZDn3ZCP5HJ747LCZXDiIlquQ26jpDqiOjdYgenRDaVyU=
-X-Received: by 2002:a9d:4e8c:0:b0:68b:e002:bc65 with SMTP id
- v12-20020a9d4e8c000000b0068be002bc65mr1002156otk.61.1675944586517; Thu, 09
- Feb 2023 04:09:46 -0800 (PST)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pm-hXO-XeCwq for <buildroot@lists.busybox.net>;
+ Thu,  9 Feb 2023 12:48:05 +0000 (UTC)
+X-Greylist: delayed 00:23:56 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0856F404E9
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com
+ [148.163.156.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0856F404E9
+ for <buildroot@buildroot.org>; Thu,  9 Feb 2023 12:48:04 +0000 (UTC)
+Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
+ by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 3198IUJK005650; Thu, 9 Feb 2023 04:24:08 -0800
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
+ [149.117.73.133])
+ by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3nhqgcbjkp-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Thu, 09 Feb 2023 04:24:07 -0800
+Received: from mailhost.synopsys.com (badc-mailhost4.synopsys.com
+ [10.192.0.82])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CF769404E7;
+ Thu,  9 Feb 2023 12:24:05 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (sv2-o365relay7.synopsys.com
+ [10.202.1.143])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client CN "o365relay-in.synopsys.com",
+ Issuer "Entrust Certification Authority - L1K" (verified OK))
+ by mailhost.synopsys.com (Postfix) with ESMTPS id D450CA005E;
+ Thu,  9 Feb 2023 12:24:03 +0000 (UTC)
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10lp2104.outbound.protection.outlook.com [104.47.55.104])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (Client CN "mail.protection.outlook.com",
+ Issuer "DigiCert Cloud Services CA-1" (verified OK))
+ by o365relay-in.synopsys.com (Postfix) with ESMTPS id 73889A02B8;
+ Thu,  9 Feb 2023 12:24:00 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KWdwl8WOLLfAEvck9/NbznETOUzkD3fmn/WBAyBf1tnLnbQ63RN2EQBd1s7F8lgz/ZGtnbXFIIsFKz7KyEA4DnC7vimgsuDg5nXy7f9CFrEWdX+FMegNTLlWsKE9gXd1zSplTeYGYGJMeImgkV4hHa2aoyyUr+BbAYmOUpDLB8cLu/fwbXt/Ck8AzOqLsX4n1VLBM8EYWc9KeA/5S3/HnnpqiQEbJPai5i7rSZ6QTD89vLpqA042iocZ48cYMB7cbfHdSoeREFvZoaY/pSDScIMoAISZ6HXLm0Sfo71cnc1CqUjf8KKeX+eJSjqI2K89SPsEoQ3e6VU6CS31+UTIPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kCMxf10oa7GWsVjT4VmnF0f/sGkpVVhbY9vFh26CFt0=;
+ b=Xnr3MF+AFaQUsDOvzCXtlx5dJVJ3zp7fFlBSypZdA1u61dvmfR69qUpVEN9PCwjDjmTXAhGVAuq6harlS84HcI9EOPDgcPrxUkzJdhifDO//E2wnWnvGT8xLFwIDa8USWDciu7ztDz1zsz+f5/MaQTuDP22b+hLtMYPxzhuXrbg5CRvTDkBQZ7KjnE6vHoxPJ5/gTgubBE5jVut40Ln3beupjCoijJbGWBgLpjYz9tpsQpPxjj8d4Xy6nYU4zsBQj+sW7FdLvDdJyG03N76F6J7hNahKtyMjUKy5kgkUf/oHq9PeLcVw1RI1AT3oQX5JNqyJhBmVcztPElqZ9Iq1Dw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+Received: from SN6PR12MB2782.namprd12.prod.outlook.com (2603:10b6:805:73::19)
+ by MW3PR12MB4540.namprd12.prod.outlook.com (2603:10b6:303:52::12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
+ 2023 12:23:58 +0000
+Received: from SN6PR12MB2782.namprd12.prod.outlook.com
+ ([fe80::f311:9706:76be:bcf]) by SN6PR12MB2782.namprd12.prod.outlook.com
+ ([fe80::f311:9706:76be:bcf%7]) with mapi id 15.20.6064.036; Thu, 9 Feb 2023
+ 12:23:58 +0000
+X-SNPS-Relay: synopsys.com
+To: Arnout Vandecappelle <arnout@mind.be>
+Thread-Topic: [Buildroot] [PATCH v4 1/1] package/bpftool: revert bpf_cookie
+ patch to allow building
+Thread-Index: AQHYgKa1M48yKL+fGECWDKsB+ehK1K7Gtb2AgAFLvgA=
+Date: Thu, 9 Feb 2023 12:23:57 +0000
+Message-ID: <b98c7a16-ea21-c398-4045-0edbf46caa40@synopsys.com>
+References: <97ea44bb-58fe-d6cb-6c79-9be0b245f2c6@synopsys.com>
+ <29d2a8c7-44cd-da42-5fed-f17ec0f8ccf2@synopsys.com>
+ <fce2f167-bd7a-8b93-41ec-c7c339ec070f@mind.be>
+In-Reply-To: <fce2f167-bd7a-8b93-41ec-c7c339ec070f@mind.be>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR12MB2782:EE_|MW3PR12MB4540:EE_
+x-ms-office365-filtering-correlation-id: 233ec4b5-1b1c-49bc-ea85-08db0a9884a1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YPN30GjczeaGqxcElFwNjvtdzZVNEEd75mF5AiZ9SZFB3j3a61BArOP60D/Bm3ihq9WrC3TQQl/oHJ6k044ny6PD3UACh5InoqUNH24CTTw+K5BZO0fv5LOqiYZOugvGWD7hp34hytibc02Csw1C3Hmc5n7zSNqBS+WCRAORgKJDo6BjP5aTL8rXJHuRS4GGTArdd+qTf7bhf3mytAXTlqhfr1fxPFF4RS2/x7UU6x6dJC3ATpm+oAC7YorIQ6SxkoU+Andsyhl2bWVKXXtZ2jvSAYmwC1ISmK3jpMB1PYPSIF/3dAv2wiNpg3sjUuGQRvnY9TqKvH+YP6dF1SUIRUZeghxTj9wN02efvbB9QNvQFjWF0TKFhYy39GjB6D4/OxL/WRMVDOOvJl09I7RBJ1+PDYh/BS6ScYB0VVdfrhS7JyNomM7+Pqg/Qz1/dFe1HP+ztwbo2GsTecFcVnQWF89lfh5Ek0ApktBA2dixjOom3AgtC1KfOeeJDXmvdHgwDZzbp/XTHOaH5I8hoxCHmbgM5VsjLzELJXBUOZ2EdD3reLlWPDdbjW2ebsoA4oAzpIjbv64BH4k9J3o/PsLjF5SEj6qQurtnzQjhULR47Y+tBIzcaXtwbTYlA4Vpm0BihCqFlFtgYIyQ5Vzg98LSnRHD28xWP0m2THGYBTHbPkf/tXSHsfj/x7WGXoA5ABHpUW2aQl0No77FegaYof+kEwCqKZAIDrY+Xw9NqooifEeQao1Spq2jgg+F+TBMKkUl0QBGKhu8AogwMIhbRoMecA==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SN6PR12MB2782.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230025)(376002)(346002)(136003)(39860400002)(366004)(396003)(451199018)(53546011)(6506007)(107886003)(316002)(186003)(6512007)(8936002)(478600001)(38070700005)(2906002)(71200400001)(54906003)(83380400001)(5660300002)(36756003)(6486002)(966005)(31696002)(64756008)(66446008)(76116006)(66556008)(66946007)(66476007)(91956017)(6916009)(4326008)(31686004)(86362001)(66899018)(8676002)(41300700001)(38100700002)(2616005)(122000001)(45980500001);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SWVVT1pCQ2dFc29GNklITEZadkZ6QTIweFhvMzFlV0laNkk0R1pVQklQZGE3?=
+ =?utf-8?B?K2grRVJjWXBUNGhPRUF2NFU5SDloN0w4ajVEYkE3cDlncTF0UXlpZ3M0eDl5?=
+ =?utf-8?B?YnFrbFZPYURDSHlDQ3B6eGtpcVZkR1loVUhvOHZ1RVNzUlhnVmFsQjZxaGln?=
+ =?utf-8?B?djJUWUFNaUE5R3czZEhjY1I5T2JxenRsSHpFeHljeWZiY3I5UjhTRVdWTTJF?=
+ =?utf-8?B?Q2JKUVkxdVYvbkk0NWV6NXBCWlNRRTRJenovTWF5TmhHSlp1dENpUTVaZGZs?=
+ =?utf-8?B?dTdsMDI2cGdLWjF4TFdqSFFaK0xXcTczVnZEQmpkTWovR2s3bzAxYkJRUHEr?=
+ =?utf-8?B?S2VwdWZTdnBibXdIc3VSeDArdk1Kb0hBU2toYkFrNEV4MUV6emtuZTlvdWdD?=
+ =?utf-8?B?eFErcmlOOUJoV2hkeFlNZFZBdm4raVJaa0JZQkRlblA0SmtLUy9GbHFtSHkr?=
+ =?utf-8?B?aGRNTUhwSHQ4MTJka2VkbzJHVm1qSmsyUHhTZVE4RUVJZFRNejhuUVVSZlZP?=
+ =?utf-8?B?VUNUMkFxc0RhQXpta0RPZCtjSXp1VktQWjhCcW9VWlQ0TUF3VkxpdDdwNDY3?=
+ =?utf-8?B?QXZrQkJWUjR0RGJiQnhoMGRiNXp3MkFMMVpUL003bE40SEhReU1vU3V2QkxH?=
+ =?utf-8?B?cnJsZFVUU1JIVGJ2eDJNYkxHMm5BMjkrdjAwL0lVTTVCWmkzajY3RmJBenBQ?=
+ =?utf-8?B?Uit4NXk4NVRuV3lsc3Q1Q0VZSU1vVmdLc3B4MjhuQ0NyUnhWa1NCNHBWb2JD?=
+ =?utf-8?B?WEZybytqMzBFMk92c0l3c1ZBOGEvclNtNDV5UGp4TE94ZnpMYkZzcWd3T3ln?=
+ =?utf-8?B?TjNQMDJ0WE5WMVR5YlN6VXZtSlRlQVlNN1VSM0R5bitNK0xHTTN4djZSeVA3?=
+ =?utf-8?B?NWtjV2NDTE9uZGs2ZW5xckhKMWNuT0ZoZEZRYWFjQ09hc0lRVDh1OVhpYXdL?=
+ =?utf-8?B?ejgxdGJsM0I5MFpWd0ppd1BOYzFGN0tvWXRYWlRHV1FSamc3SXNKOU9lMDlw?=
+ =?utf-8?B?dlBSR1VRUlU3Tm5UM0Y4OHk3SEdOYS9qeWovdGsvVTh0ejgxQ0VuNkcvcXNM?=
+ =?utf-8?B?aEM2R01HRmVuRGtOME94S3o0eVBtK1ROcmsvZERJZVVkTXhXRWdsZlFkU3BN?=
+ =?utf-8?B?cWxURytwVlJkVkFPNWEvSUxrNFRwS21kcGJaS04vVGJpZmRXOXpDbkpVZ1kx?=
+ =?utf-8?B?bk5sNUpmN0o0cjlSazZGSWVIWE9sazhIemxVK2h3RTVoMkRCNVlxU20wU2FX?=
+ =?utf-8?B?SWRNZGdlU3R2MVlJMERpWnNoeUFMWkt4QWlUY0FNR0tJUlc5a09XcStnNmpz?=
+ =?utf-8?B?TFIwUURYdjNGMjRGZW93T3FNS1hpZXBQU0VuNm1IUXRLZ0xKL1Eza2tXNmlv?=
+ =?utf-8?B?bFZxZEVNRGNIeEtEZmFMcmtidmExM0RTblh1emZ1OXUrdlhPOXdaOU5NZitZ?=
+ =?utf-8?B?Nlo1VkI1VTMwN1lPNVZlSXEyYXd5RVBZSHQ1STZ2eHNrdnZWaE5WRWk0Mm1F?=
+ =?utf-8?B?KzcwMysxS1c0OHAzb3ByNUNkN3M4c3B5QXlNOE5ndUdhYXVaMnFudHhiN3Ja?=
+ =?utf-8?B?UUVhRzFNUXNGbC9OUzFoQlgwY2N6U1ljVS9BZENEQ08rbGRpZk1yOGNmQnhu?=
+ =?utf-8?B?UFVOalhhdUtrS0crQW9mZWlZUExIbWVGbUJYODY5T1ltdTU0cmdEUkxjcHF5?=
+ =?utf-8?B?SURUZ2NQdnplU2JSRUlPOE5xT2p4SVYwa0hQWlZFV3MwMzIycU50bXRWNGhu?=
+ =?utf-8?B?VVQyekZSQzJNQ1hXcDNWamtUdkFhQUhYQkZDeGVqNEVCeUZVZnp6ZnpoMjFm?=
+ =?utf-8?B?dDJ6bndZSGN3UjNvenpYMVQyWjZjSG1iUGFGVnRWVThRc2hNMzM4N25oL2xa?=
+ =?utf-8?B?TTFjTmVMMWRTb2FSYWdEaG92cTYyWnNTdTRxZzYvSGhjRjJrUEp2anR1VG5N?=
+ =?utf-8?B?OXEyUFJCaFcvTVlCSjQ0dGxmeHVrOEYvU2Rndyt5aHVTTDlqK255TzNVNlZ5?=
+ =?utf-8?B?cVFDRVVlVDRYS0U0Uk9FTzZVMzdwZUlxNzBpUXJUVy94ejFwNk1ETHUyZzBC?=
+ =?utf-8?B?QVVyb2pRdndDRmVZaitJWng5TVd4ajNWYXFrVjkwbkxNTDNvazNzT01RcnNS?=
+ =?utf-8?B?bmNuUXp6UDE2QVZxU0M4dXNKUDF0UnJ5U2d4QmJwTDE0dG9KZ3lEcG91d1kv?=
+ =?utf-8?B?SXc9PQ==?=
+Content-ID: <A6B1AD845B699749AF1C010272B51236@namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
- <CACHw65+r07g=hU4yv1Xhb3TFVmOVkYdSpRy3dZF9y+U44TK=Qw@mail.gmail.com>
- <CADYjeStPWnGcr23XOGnB+61eZ=iZKVj8YkhDKSaw0BUFT7WC-A@mail.gmail.com>
- <36be5bdc-591c-71cb-ea31-9e38ae8d643d@inbox.ru>
- <CADYjeSuvmoMXDGgN9rmv+RecroVxqj1_d9x3G4iakwkvLs+j9Q@mail.gmail.com>
- <22e489f3-cc1d-985d-cca6-18f4f6ddecfa@inbox.ru>
- <CADYjeSuBvHsij7YTnyq5tW9jEv1JtV3u1WyYkX2cbffgkQ6_Kw@mail.gmail.com>
- <a481ffb1-5c10-d913-0f8a-cbb5e11ff631@inbox.ru>
- <CADYjeStesndVUqdWqmPVP5=xfW1PFcwzNk=9o0TUM+tXBez8mA@mail.gmail.com>
- <eeb3b4bc-12fa-eea5-4ec0-89c90ac75394@inbox.ru>
- <CADYjeStwFSJQDFvj2z5bAURD0eTLVgYrpEvdEdYMbbVkJmJupQ@mail.gmail.com>
-In-Reply-To: <CADYjeStwFSJQDFvj2z5bAURD0eTLVgYrpEvdEdYMbbVkJmJupQ@mail.gmail.com>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Thu, 9 Feb 2023 13:09:37 +0100
-Message-ID: <CADYjeSv1r61gQMoamBq2VUgSYwmyvvZ8BP2NGBZHNzF6vU7phg@mail.gmail.com>
-To: Maxim Kochetkov <fido_max@inbox.ru>
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 1CB/WpWmRH8whpO97XFelzQ7I1JsyG9/yAmyDXfIyI72PBJPfmzp4QabMLOrx+nJX928BLkhpR0fior4yeoNUxgQ3d7kruKRqzVDhP1KvfnrwdtRZ7Fnyn2Z2dK98Cw+ExWC4DGZoNSu4Kb0yFrzmjTWYc2wOPVPCpxbpXlRuNGb1YWGn6XNTEXE9eZcrzVSi3APfSRLFrbYEqKsLchjHim8gvbPaWc0QozD9BijtGizKZTNNzZkKQ1wWNMqnfiBieUsyepr06JNRZzgcU8KyN4ARVJmsdKAM9CUw/2TygsXz0v3MBeQSz0Qlj/wGkDqkKgnrHqTSivHTO4xUiWBftwxlOd3HiqCujwMGd2v9840JWy5fxyHxWyT0rDnimHLWhGO2MYu3huK0jy1OTJmx4dV9bqSTGb8cVjaQtWNitkfkr+9h3xPYwi76Wpznqss++4UkSAHTSMVcmTTXL8Ly77Q6Di1zH2YbmnhclWEPO9ytuttT0Dsz1FW+av89pHGQVFOAAp4gewtQsB3FSaS/FSXSgrqWskbionLDHe4eON6lqlBL+8xpdfZkALDqUrXbRGJilpn6k5jiLtaBXo8RWBze4K9j3S3yYoN2474uO+w7gK4wYRqCCYkS4r62I4PAkVZMZUQv+bK+l629QlPn1C1/wWpG2SHDdkUNIw66i8huLxv/tjG8iPSAvMWSAXslSXvqT7+hTza1jrqNL8RdNhfWpae2Vrfxq9lNmPIbDL3TDO147vGZQCNu/EGozV+SDmdrZaX5d32dLwXcqnedVTI5SzJuocfoZooaN8gLDUwbGLMfCf4GO8DkUa300iOOgQoy3i4H4SWYfonoOngT0YkabGnyqDyFkSmvHoCdBDTtxoxBJ5w4/ZgzYVS+I7T
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2782.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 233ec4b5-1b1c-49bc-ea85-08db0a9884a1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 12:23:57.8942 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4G0VucZsPM3IgqFG6cmr/NiwNNDuHVpSd3Kgzylo5qAcaoIADZKtYHKtuNf17UoBKCib6pN4dATlbYfizvbpjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4540
+X-Proofpoint-ORIG-GUID: RKZ72zYw10c5BF7w4YnwXOaBVeQSCiTS
+X-Proofpoint-GUID: RKZ72zYw10c5BF7w4YnwXOaBVeQSCiTS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-09_10,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
+ policy=outbound_active_cloned score=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 bulkscore=0 spamscore=0
+ adultscore=0 impostorscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ suspectscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302090119
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=U9OeABYRkFjfchCH4U1ohUoALnHDvUgbqrk3KNBgvW0=;
- b=UMczBN+jQpZB7OdQm0xp2rWuVNFyebKRxCTj0xzMIxLOQlDT7j77QvPJAW5qjE6lm2
- sjo41pJPU9m3IG32wugfwl55E2VnQAh4SnSB0VTeKsipUINN4HTsIfrxcpvCN8zRNSuu
- ZaqWlGsQxArA+PyUJisou2Y4JpCM2gtt4Ca5alUZvDCoD3pr+O6DuLTZJqaOoRNNd01l
- Gt0D55ywJKJFnM603Gi0opmIyfeV0ba4InMSWxSFAFrRTMOIKTJ5pWq1R8lIUxCzUgz8
- 2Da77LGSvHEwpmNZwoYoNMZNupr5xRiQbpcdXLQC+JrsE34POiAkCkgXe+rrPdghIrCU
- rZ8w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UMczBN+j
-Subject: Re: [Buildroot] How to install custom sdk in buildroot?
+ d=synopsys.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
+ bh=kCMxf10oa7GWsVjT4VmnF0f/sGkpVVhbY9vFh26CFt0=;
+ b=sCSDddFybTL7kJU5hWaJ/4D0oiS0F7sGINOegAKTQuERJ0fo1X/lCejCi3UoF4vtj0Zx
+ xvFdnzCpTYkxvXHfBXgBxsgJMOZ0mFr+wfso3ijvNJB3zMpXq1zio7mFnu7J5uhoOKy+
+ i+hBlQd5kAt/ikten/gTZIoAtMNvUugH31ojl4MDsNg+YkH43SwPNGm7efQRp175m4na
+ hRKljJKsjHBhCI2jt0jpmko/RnSAKJbXPW0rpItFc3JTL+2uhbcBxZHMRUrTwGbB8ZSY
+ n5ek8dQe91q+rRZf+sOkRZJtaQkzhD3csJNEv+ugZW5Ri/wPhv0P2MoSrfvesoJzW07q aQ== 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=synopsys.com; s=mail; 
+ t=1675945447; bh=kCMxf10oa7GWsVjT4VmnF0f/sGkpVVhbY9vFh26CFt0=;
+ h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+ b=IIeba6MUtRZt0BUXhkds0qIFvGKQOH3Fw67zuvyxQR+ZZ6yl+0d/8liTfdu08gsh4
+ DVpwkPyJooHPeGgZjlG0RJZOZ1Uuct1h5nOSK9XQ/IrtrSLA2xsRIO4qJ4fZyo8EY7
+ JTbbWmaGKMHEK1soP4S2RF4+Iyrg8I7nQbv5FaKOUWw8eddDHjtlDAs4vBSaIpvBHO
+ GpUdAQC/mEIy/g9csLwu71dZpYzgVpSoRGcj2g67cNWeeLJBx1QYL5PJUt3WmZBrdn
+ EY5+4IhGQYAQUc4Pkebk6eSMsmgjcoDVUEV/I50C9+VwO/oCQsGVbM8drDCkDhxHz4
+ keB0OtefKcLlw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=synopsys.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kCMxf10oa7GWsVjT4VmnF0f/sGkpVVhbY9vFh26CFt0=;
+ b=UukdfP6xhd3XgLFbRT3V8xElVP4OLAxrImGRAAhhlrVxw+rw6xit5dXnkzAFynRWHi6mg3xjJG9FDmUIeCRijanIKM1+mxWfPa65OWoaQDms7t6enhqkbcUtMdiHBo+fcsWO34uf8PxKse7BkQzgj8JDzgzcp7CSd5um9EHFyws=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
+ header.a=rsa-sha256 header.s=pfptdkimsnps header.b=sCSDddFy; 
+ dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
+ header.a=rsa-sha256 header.s=mail header.b=IIeba6MU; 
+ dkim=fail reason="signature verification failed" (1024-bit key,
+ unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256
+ header.s=selector1 header.b=UukdfP6x
+Subject: Re: [Buildroot] [PATCH v4 1/1] package/bpftool: revert bpf_cookie
+ patch to allow building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,260 +218,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ramon Crichlow <rcrichlow9000@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============6176661164946128676=="
+From: Shahab Vahedi via buildroot <buildroot@buildroot.org>
+Reply-To: Shahab Vahedi <Shahab.Vahedi@synopsys.com>
+Cc: "linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
+ Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6176661164946128676==
-Content-Type: multipart/alternative; boundary="000000000000be204805f4434101"
+Hi Arnout,
 
---000000000000be204805f4434101
-Content-Type: text/plain; charset="UTF-8"
+On 2/8/23 17:36, Arnout Vandecappelle wrote:
+> 
+> It's not clear to me why you did a revert of the cookie feature rather than
+> using those patches. I think the first two or three should be sufficient to
+> fix your issue?
 
-Hello Maxim,
+Ideally, the correct way would be applying that pending series. But since
+there were comments that some of the patches might need reworking [1], I did
+not feel confident to add them. Therefore, I tried to keep my solution minimal
+and solve it by eliminating the problem. I know, it is not appealing.
 
-While doing make with new Buildroot-packages I getting:
+> For the time being, I marked this as Changes Requested. If the upstream
+> patches are not sufficient, please send a mail upstream (as a reply to that
+> series) explaining the problem (again), and re-send this patch to
+> Buildroot. If it does fix things, please send a mail upstream to ask to
+> move the series forward (explaining the issue you have), and send a patch
+> to Buildroot that adds the needed patches.
 
-[ 51%] Building ASM object
-aws-lc/crypto/CMakeFiles/crypto_objects.dir/hrss/asm/poly_rq_mul.S.o
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:
-Assembler messages:
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:304:
-Error: unknown pseudo-op: `.att_syntax'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:307:
-Error: unknown mnemonic `push' -- `push %rbp'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:309:
-Error: bad register expression
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:310:
-Error: unknown mnemonic `movq' -- `movq %rsp,%rbp'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:311:
-Error: bad register expression
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:312:
-Error: unknown mnemonic `push' -- `push %r12'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:313:
-Error: bad register expression
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:321:
-Error: operand 1 must be an integer register -- `mov %rcx,%r8'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:322:
-Error: unknown mnemonic `addq' -- `addq $6144+12288+512+9408+32,%r8'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:323:
-Error: operand 1 must be an integer register -- `mov %r8,%rax'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:324:
-Error: unknown mnemonic `subq' -- `subq $6144,%r8'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:325:
-Error: operand 1 must be an integer register -- `mov %r8,%r11'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:326:
-Error: unknown mnemonic `subq' -- `subq $12288,%r8'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:327:
-Error: operand 1 must be an integer register -- `mov %r8,%r12'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:328:
-Error: unknown mnemonic `subq' -- `subq $512,%r8'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:329:
-Error: unknown mnemonic `vmovdqa' -- `vmovdqa const3(%rip),%ymm3'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:330:
-Error: unknown mnemonic `vmovdqu' -- `vmovdqu 0(%rsi),%ymm0'
-/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:331:
-Error: unknown mnemonic `vmovdqu' -- `vmovdqu 88(%rsi),%ymm1'
-.
-.
-.
-Any idea what it is complaining about?
+They (re)confirmed the issue to me in the past [2] and are aware that its
+solution is missing from all the releases onward (see the first point of
+"Known bugs" in the release page [3]).
 
-Thanks in advance
+[1]
+https://lore.kernel.org/bpf/20220421003152.339542-3-alobakin@pm.me/T/#rb9ce86e9f25b2d097b88d87af8ffdfa401d63c68
 
-On Thu, 9 Feb 2023 at 10:28, Sourabh Hegde <hrsourabh011@gmail.com> wrote:
+[2]
+https://lore.kernel.org/bpf/b1a604e1-be09-ac0b-ff22-b194ae9ce886@isovalent.com/
 
-> Hi Maxim,
->
-> I was missing python setuptools on my host. After installing it, I can add
-> the package. Also, the added package is available in menuconfig
->
-> Thank you for the support!
->
-> On Thu, 9 Feb 2023 at 10:10, Maxim Kochetkov <fido_max@inbox.ru> wrote:
->
->>
->>
->> On 09.02.2023 12:03, Sourabh Hegde wrote:
->> > Hello Maxim,
->> >
->> > Update:
->> >
->> > The above issue resolved by itself!
->> >
->> > Now when I do: utils/scanpypi awscrt -o package , it says
->> >
->> > spdx_lookup module is not installed. This can lead to an inaccurate
->> > licence detection. Please install it via
->> > pip install spdx_lookup
->> > buildroot package name for awscrt: python-awscrt
->> > Package: python-awscrt
->> > Fetching package awscrt
->> > ERROR: Could not find package awscrt.
->> > Check syntax inside the python package index:
->> > https://pypi.python.org/pypi/ <https://pypi.python.org/pypi/>
->> >
->> > But the package is available at https://pypi.org/project/awscrt/
->> > <https://pypi.org/project/awscrt/>
->>
->> It works fine for me:
->>
->> buildroot package name for awscrt: python-awscrt
->> Package: python-awscrt
->> Fetching package awscrt
->> Downloading package awscrt from
->>
->> https://files.pythonhosted.org/packages/ae/98/dda092078f2d47bad08e184ab9d364b8f89166497062bc1cf811c0bbbde2/awscrt-0.16.10.tar.gz.
->> ..
->> Checking if package package/python-awscrt already exists...
->> Creating package/python-awscrt/python-awscrt.mk...
->> More than one file found for license: LICENSE, crt/aws-c-common/LICENSE,
->> crt/aws-c-io/LICENSE, crt/aws-lc/LICENSE,
->> crt/aws-lc/third_party/fiat/LICENSE, crt/aws-c-mqtt/LICENSE,
->> crt/aws-checksums/LICENSE, crt/aws-c-s3/LICENSE,
->> crt/aws-c-compression/LICENSE, crt/aws-c-http/LICENSE,
->> crt/aws-c-sdkutils/LICENSE, crt/s2n/LICENSE, crt/aws-c-cal/LICENSE,
->> crt/aws-c-auth/LICENSE, crt/aws-c-event-stream/LICENSE
->> Creating package/python-awscrt/python-awscrt.hash...
->> Creating package/python-awscrt/Config.in...
->> NOTE: Remember to also make an update to the DEVELOPERS file
->>        and include an entry for the pkg in packages/Config.in
->>
->>
+[3]
+https://github.com/libbpf/bpftool/releases
 
---000000000000be204805f4434101
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--
+Shahab
 
-<div dir=3D"ltr">Hello Maxim,<div><br></div><div>While doing make with new =
-Buildroot-packages I getting:</div><div><br></div><div>[ 51%] Building ASM =
-object aws-lc/crypto/CMakeFiles/crypto_objects.dir/hrss/asm/poly_rq_mul.S.o=
-<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss=
-/asm/poly_rq_mul.S: Assembler messages:<br>/home/amazone/output/build/pytho=
-n-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:304: Error: unkno=
-wn pseudo-op: `.att_syntax&#39;<br>/home/amazone/output/build/python-awscrt=
--0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:307: Error: unknown mnemo=
-nic `push&#39; -- `push %rbp&#39;<br>/home/amazone/output/build/python-awsc=
-rt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:309: Error: bad registe=
-r expression<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc=
-/crypto/hrss/asm/poly_rq_mul.S:310: Error: unknown mnemonic `movq&#39; -- `=
-movq %rsp,%rbp&#39;<br>/home/amazone/output/build/python-awscrt-0.16.10/crt=
-/aws-lc/crypto/hrss/asm/poly_rq_mul.S:311: Error: bad register expression<b=
-r>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/a=
-sm/poly_rq_mul.S:312: Error: unknown mnemonic `push&#39; -- `push %r12&#39;=
-<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss=
-/asm/poly_rq_mul.S:313: Error: bad register expression<br>/home/amazone/out=
-put/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:32=
-1: Error: operand 1 must be an integer register -- `mov %rcx,%r8&#39;<br>/h=
-ome/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/p=
-oly_rq_mul.S:322: Error: unknown mnemonic `addq&#39; -- `addq $6144+12288+5=
-12+9408+32,%r8&#39;<br>/home/amazone/output/build/python-awscrt-0.16.10/crt=
-/aws-lc/crypto/hrss/asm/poly_rq_mul.S:323: Error: operand 1 must be an inte=
-ger register -- `mov %r8,%rax&#39;<br>/home/amazone/output/build/python-aws=
-crt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:324: Error: unknown mn=
-emonic `subq&#39; -- `subq $6144,%r8&#39;<br>/home/amazone/output/build/pyt=
-hon-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:325: Error: ope=
-rand 1 must be an integer register -- `mov %r8,%r11&#39;<br>/home/amazone/o=
-utput/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:=
-326: Error: unknown mnemonic `subq&#39; -- `subq $12288,%r8&#39;<br>/home/a=
-mazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_r=
-q_mul.S:327: Error: operand 1 must be an integer register -- `mov %r8,%r12&=
-#39;<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/crypto/=
-hrss/asm/poly_rq_mul.S:328: Error: unknown mnemonic `subq&#39; -- `subq $51=
-2,%r8&#39;<br>/home/amazone/output/build/python-awscrt-0.16.10/crt/aws-lc/c=
-rypto/hrss/asm/poly_rq_mul.S:329: Error: unknown mnemonic `vmovdqa&#39; -- =
-`vmovdqa const3(%rip),%ymm3&#39;<br>/home/amazone/output/build/python-awscr=
-t-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:330: Error: unknown mnem=
-onic `vmovdqu&#39; -- `vmovdqu 0(%rsi),%ymm0&#39;<br>/home/amazone/output/b=
-uild/python-awscrt-0.16.10/crt/aws-lc/crypto/hrss/asm/poly_rq_mul.S:331: Er=
-ror: unknown mnemonic `vmovdqu&#39; -- `vmovdqu 88(%rsi),%ymm1&#39;<br></di=
-v><div>.</div><div>.</div><div>.=C2=A0</div><div>Any idea what it is compla=
-ining about?</div><div><br></div><div>Thanks in advance</div></div><br><div=
- class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, 9 Feb =
-2023 at 10:28, Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail.com">=
-hrsourabh011@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
-04);padding-left:1ex"><div dir=3D"ltr">Hi Maxim,<div><br></div><div>I was m=
-issing python setuptools on my host. After installing it, I can add the pac=
-kage. Also, the added package is available in menuconfig</div><div><br></di=
-v><div>Thank you for the support!</div></div><br><div class=3D"gmail_quote"=
-><div dir=3D"ltr" class=3D"gmail_attr">On Thu, 9 Feb 2023 at 10:10, Maxim K=
-ochetkov &lt;<a href=3D"mailto:fido_max@inbox.ru" target=3D"_blank">fido_ma=
-x@inbox.ru</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex"><br>
-<br>
-On 09.02.2023 12:03, Sourabh Hegde wrote:<br>
-&gt; Hello Maxim,<br>
-&gt; <br>
-&gt; Update:<br>
-&gt; <br>
-&gt; The above issue resolved by itself!<br>
-&gt; <br>
-&gt; Now when I do:=C2=A0utils/scanpypi awscrt -o package , it says<br>
-&gt; <br>
-&gt; spdx_lookup module is not installed. This can lead to an inaccurate <b=
-r>
-&gt; licence detection. Please install it via<br>
-&gt; pip install spdx_lookup<br>
-&gt; buildroot package name for awscrt: python-awscrt<br>
-&gt; Package: python-awscrt<br>
-&gt; Fetching package awscrt<br>
-&gt; ERROR: Could not find package awscrt.<br>
-&gt; Check syntax inside the python package index:<br>
-&gt; <a href=3D"https://pypi.python.org/pypi/" rel=3D"noreferrer" target=3D=
-"_blank">https://pypi.python.org/pypi/</a> &lt;<a href=3D"https://pypi.pyth=
-on.org/pypi/" rel=3D"noreferrer" target=3D"_blank">https://pypi.python.org/=
-pypi/</a>&gt;<br>
-&gt; <br>
-&gt; But the package is available=C2=A0at <a href=3D"https://pypi.org/proje=
-ct/awscrt/" rel=3D"noreferrer" target=3D"_blank">https://pypi.org/project/a=
-wscrt/</a> <br>
-&gt; &lt;<a href=3D"https://pypi.org/project/awscrt/" rel=3D"noreferrer" ta=
-rget=3D"_blank">https://pypi.org/project/awscrt/</a>&gt;<br>
-<br>
-It works fine for me:<br>
-<br>
-buildroot package name for awscrt: python-awscrt<br>
-Package: python-awscrt<br>
-Fetching package awscrt<br>
-Downloading package awscrt from <br>
-<a href=3D"https://files.pythonhosted.org/packages/ae/98/dda092078f2d47bad0=
-8e184ab9d364b8f89166497062bc1cf811c0bbbde2/awscrt-0.16.10.tar.gz." rel=3D"n=
-oreferrer" target=3D"_blank">https://files.pythonhosted.org/packages/ae/98/=
-dda092078f2d47bad08e184ab9d364b8f89166497062bc1cf811c0bbbde2/awscrt-0.16.10=
-.tar.gz.</a>..<br>
-Checking if package package/python-awscrt already exists...<br>
-Creating package/python-awscrt/python-awscrt.mk...<br>
-More than one file found for license: LICENSE, crt/aws-c-common/LICENSE, <b=
-r>
-crt/aws-c-io/LICENSE, crt/aws-lc/LICENSE, <br>
-crt/aws-lc/third_party/fiat/LICENSE, crt/aws-c-mqtt/LICENSE, <br>
-crt/aws-checksums/LICENSE, crt/aws-c-s3/LICENSE, <br>
-crt/aws-c-compression/LICENSE, crt/aws-c-http/LICENSE, <br>
-crt/aws-c-sdkutils/LICENSE, crt/s2n/LICENSE, crt/aws-c-cal/LICENSE, <br>
-crt/aws-c-auth/LICENSE, crt/aws-c-event-stream/LICENSE<br>
-Creating package/python-awscrt/python-awscrt.hash...<br>
-Creating package/python-awscrt/Config.in...<br>
-NOTE: Remember to also make an update to the DEVELOPERS file<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0and include an entry for the pkg in packages/Con=
-fig.in<br>
-<br>
-</blockquote></div>
-</blockquote></div>
-
---000000000000be204805f4434101--
-
---===============6176661164946128676==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6176661164946128676==--
