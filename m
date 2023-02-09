@@ -1,63 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFA05C61DA4
-	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 09:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 413B0C61DA4
+	for <buildroot@archiver.kernel.org>; Thu,  9 Feb 2023 09:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4360260AE9;
-	Thu,  9 Feb 2023 09:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4360260AE9
+	by smtp2.osuosl.org (Postfix) with ESMTP id B861240B57;
+	Thu,  9 Feb 2023 09:10:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B861240B57
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iuQnDsHfFr7E; Thu,  9 Feb 2023 09:03:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B31NYHart3_8; Thu,  9 Feb 2023 09:10:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C07660008;
-	Thu,  9 Feb 2023 09:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C07660008
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0F9D404AE;
+	Thu,  9 Feb 2023 09:10:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0F9D404AE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D1B9B1BF361
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 09:03:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 66B9A1BF28D
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 09:10:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9B3B402BD
- for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 09:03:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9B3B402BD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CFB7408B6
+ for <buildroot@lists.busybox.net>; Thu,  9 Feb 2023 09:10:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CFB7408B6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 57ap_8kuOKKY for <buildroot@lists.busybox.net>;
- Thu,  9 Feb 2023 09:03:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E6D2402B2
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com
- [IPv6:2001:4860:4864:20::2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E6D2402B2
- for <buildroot@buildroot.org>; Thu,  9 Feb 2023 09:03:19 +0000 (UTC)
-Received: by mail-oa1-x2f.google.com with SMTP id
- 586e51a60fabf-16aaa20f516so1770925fac.1
- for <buildroot@buildroot.org>; Thu, 09 Feb 2023 01:03:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=TkU43s4eR7uChhTakK3MBTHSx8H5+Oujx3GiXosfFD4=;
- b=r8bmI9FQnziZ+EHnlW6c7xmKQPZDNIuLKpKDNFa1ZUAQLqnxJCmTwtJ+d+6TwaS5c3
- QtabAlZ4AoBjHyMiT2Ifaz7AI9vrv3rHBCA2gibUJV8xWBAzPaFc/6WJmDTlEi/4CZRc
- K8OWM2pXdUxnHvEar3Khtm1UUp/KeDhwwzI2UfkpRQbqXxs+tW4BdVsbJw7AlJ3pygTD
- gPF0aTlrAfQThauSa0rTlaIrpwDENFXdtc7OAPAJGdH58r9nCPKF+TLHXp4399bBgGDt
- RsUFXWPcPNCQj8lltjUkYD0bonSd8sHkcrXyX4QH7v0Vbvaju9/7rAdwDeBNBDNveTAy
- tYyA==
-X-Gm-Message-State: AO0yUKWdnBZh29Jb+BOOtU0FIxfAp8qL6oQ6qMbOwKWTlzJOgcN31q9B
- +y8EYSNsKOFKkCARs1ItNmD/567ao5n1vqjc7BggjMIoy5U=
-X-Google-Smtp-Source: AK7set/ZaNsIx2sZ1pN7/O7qUyIHDx3REZ9tC54i8TyTNJbrjGmBygaqPBD2BTWhr3fm7ObkhI5xBYXfvo74u087MMc=
-X-Received: by 2002:a05:6870:4346:b0:163:42d7:fa0d with SMTP id
- x6-20020a056870434600b0016342d7fa0dmr938490oah.208.1675933398225; Thu, 09 Feb
- 2023 01:03:18 -0800 (PST)
+ with ESMTP id nWIVCxgI72FG for <buildroot@lists.busybox.net>;
+ Thu,  9 Feb 2023 09:10:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FB544089D
+Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3FB544089D
+ for <buildroot@buildroot.org>; Thu,  9 Feb 2023 09:10:40 +0000 (UTC)
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1pQ2wv-0004Yg-FE; Thu, 09 Feb 2023 12:10:37 +0300
+Message-ID: <eeb3b4bc-12fa-eea5-4ec0-89c90ac75394@inbox.ru>
+Date: Thu, 9 Feb 2023 12:10:37 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To: Sourabh Hegde <hrsourabh011@gmail.com>
 References: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
  <CACHw65+r07g=hU4yv1Xhb3TFVmOVkYdSpRy3dZF9y+U44TK=Qw@mail.gmail.com>
  <CADYjeStPWnGcr23XOGnB+61eZ=iZKVj8YkhDKSaw0BUFT7WC-A@mail.gmail.com>
@@ -66,25 +53,29 @@ References: <CADYjeSsqfaF0P7g_hxQ2EjSh=zDG9=FTnLrbq5g4+22UNJq-xw@mail.gmail.com>
  <22e489f3-cc1d-985d-cca6-18f4f6ddecfa@inbox.ru>
  <CADYjeSuBvHsij7YTnyq5tW9jEv1JtV3u1WyYkX2cbffgkQ6_Kw@mail.gmail.com>
  <a481ffb1-5c10-d913-0f8a-cbb5e11ff631@inbox.ru>
-In-Reply-To: <a481ffb1-5c10-d913-0f8a-cbb5e11ff631@inbox.ru>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Thu, 9 Feb 2023 10:03:09 +0100
-Message-ID: <CADYjeStesndVUqdWqmPVP5=xfW1PFcwzNk=9o0TUM+tXBez8mA@mail.gmail.com>
-To: Maxim Kochetkov <fido_max@inbox.ru>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=TkU43s4eR7uChhTakK3MBTHSx8H5+Oujx3GiXosfFD4=;
- b=BzO0wJ7bzRgm4QOl9zWm/iaDjnrlD2fktQUtNDO3kr1LhGO+fOsGmHpw9TmgO9YjeC
- qpkVF0N/CKxw4mBqOj6/cz40nwFiskGuhVFeburUhm6XbN2RQBJIfVo7axcOaO0RYk4D
- rAdEiP+2NXGySM9G9Ine8k7IribLAo5Q6hpT54DYhZOaD7v9tJxKULiGrINJ1K4/5YfJ
- 05czjPNDJVC+b+Hylc6HuPmOBivTSvKRyN83Juv+8q3k/bLwdDnlx8iGVXZnXeYpQAbK
- /dAZMJRUPOHFqvNqEpuzq9akYycmlAGRHD2+WH8dNYZzuTpbxVloD5heu7s/UyL9n406
- Gd1w==
+ <CADYjeStesndVUqdWqmPVP5=xfW1PFcwzNk=9o0TUM+tXBez8mA@mail.gmail.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+In-Reply-To: <CADYjeStesndVUqdWqmPVP5=xfW1PFcwzNk=9o0TUM+tXBez8mA@mail.gmail.com>
+X-Mailru-Src: smtp
+X-4EC0790: 10
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD9D919194CF4FC6604BDCFF1ECAF5FB1B4224B71692CFBE72C182A05F538085040962A76334E31A36BACCA77449444F564A19B1D17C6FFD8C6C48C09A8C4BBD105
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7AD2F2D6F6013FF7FC2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE7F544D30F1A6FA191EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B6F1F7B995052D5CEB8EE906D0D8175FC19B6FDCDE41C105920879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0C7E80E60854EA9278941B15DA834481FA18204E546F3947CB861051D4BA689FCF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006370A32D918A17158F1389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E735F43AACC0BCEB2632C4224003CC83647689D4C264860C145E
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34C264B329661203DA9792548BB64559FC0F55FC24C8258A0E180C630C56FDDCE2C20D0D922FC27F861D7E09C32AA3244C801A3F652F293A035FAD6E296E25ADB7F522A1CF68F4BE05FACE5A9C96DEB163
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojhUGBdNDf2gpRxCp8MjbQIw==
+X-Mailru-Sender: 689FA8AB762F73933AF1F914F131DBF5A9DADE5EF702F040D4F82808B92196FA98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; s=mail4; 
+ h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=B/pstJFQEHHMCwxcL6kYizG4PmXLwxni6k9QGU78+aU=; 
+ t=1675933840;x=1676023840; 
+ b=kvjjCqcCGRYohGHH3mjaAbE1U4sKS6lHto4D2Y+SRRb0uLPuCvUpnb1FPbHcHvOgFoaHYLTYTllZroIdPSJhXSWhibMJrr4i//3umh5TxOp1kFFD0miSPBamHyHcPZBK7A3ThteWvEFizM4tQdH2WPoO1K2IH0xD6gb+6t2sb5+cTx5TkB+5cAttsFRRQxSdTjopJ9WEaQDtQSYX0odr007hrIN8Fs6GAQmmX4mnoie4DehXobWphBHQEgnnOU2DmLJwaJwk64lK6l2Fic6s7Aram0AX9/hh7wfxuWs9pMkqWo2/7ByVL2e14V3VgVPekCwO8nbnDebP3cfVywAgpQ==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BzO0wJ7b
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=kvjjCqcC
+X-Mailman-Original-Authentication-Results: smtpng1.m.smailru.net; auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
 Subject: Re: [Buildroot] How to install custom sdk in buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -98,118 +89,41 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Ramon Crichlow <rcrichlow9000@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0792890857193396043=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0792890857193396043==
-Content-Type: multipart/alternative; boundary="000000000000de596c05f440a605"
-
---000000000000de596c05f440a605
-Content-Type: text/plain; charset="UTF-8"
-
-Hello Maxim,
-
-Update:
-
-The above issue resolved by itself!
-
-Now when I do: utils/scanpypi awscrt -o package , it says
-
-spdx_lookup module is not installed. This can lead to an inaccurate licence
-detection. Please install it via
-pip install spdx_lookup
-buildroot package name for awscrt: python-awscrt
-Package: python-awscrt
-Fetching package awscrt
-ERROR: Could not find package awscrt.
-Check syntax inside the python package index:
-https://pypi.python.org/pypi/
-
-But the package is available at https://pypi.org/project/awscrt/
-
-On Thu, 9 Feb 2023 at 09:58, Maxim Kochetkov <fido_max@inbox.ru> wrote:
-
->
->
-> On 09.02.2023 11:14, Sourabh Hegde wrote:
-> > Hello Maxim,
-> >
-> > Thanks for the explanation.
-> >
-> > When I tried this : utils/scanpypi awscrt awsiotsdk -o package ,  I am
-> > getting below error:
-> >
-> > utils/scanpypi:21: DeprecationWarning: the imp module is deprecated in
-> > favour of importlib; see the module's documentation for alternative uses
-> >    import imp
-> > Traceback (most recent call last):
-> >    File "utils/scanpypi", line 23, in <module>
-> >      import six.moves.urllib.request
-> > ModuleNotFoundError: No module named 'six'
->
-> You have no "six" module installed for python. I have to install it
-> first. For ubuntu: sudo apt install python3-six
->
->
-
---000000000000de596c05f440a605
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello Maxim,<div><br>Update:</div><div><br>The above issue=
- resolved by itself!</div><div><br>Now when I do:=C2=A0utils/scanpypi awscr=
-t -o package , it says</div><div><br>spdx_lookup module is not installed. T=
-his can lead to an inaccurate licence detection. Please install it via<br>p=
-ip install spdx_lookup<br>buildroot package name for awscrt: python-awscrt<=
-br>Package: python-awscrt<br>Fetching package awscrt<br>ERROR: Could not fi=
-nd package awscrt.<br>Check syntax inside the python package index:<br><a h=
-ref=3D"https://pypi.python.org/pypi/">https://pypi.python.org/pypi/</a><br>=
-<br>But the package is available=C2=A0at=C2=A0<a href=3D"https://pypi.org/p=
-roject/awscrt/">https://pypi.org/project/awscrt/</a><br></div></div><br><di=
-v class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, 9 Feb=
- 2023 at 09:58, Maxim Kochetkov &lt;<a href=3D"mailto:fido_max@inbox.ru">fi=
-do_max@inbox.ru</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" s=
-tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
-ding-left:1ex"><br>
-<br>
-On 09.02.2023 11:14, Sourabh Hegde wrote:<br>
-&gt; Hello Maxim,<br>
-&gt; <br>
-&gt; Thanks for the explanation.<br>
-&gt; <br>
-&gt; When I tried this :=C2=A0utils/scanpypi awscrt awsiotsdk -o package ,=
-=C2=A0 I am <br>
-&gt; getting below error:<br>
-&gt; <br>
-&gt; utils/scanpypi:21: DeprecationWarning: the imp module is deprecated in=
- <br>
-&gt; favour of importlib; see the module&#39;s documentation for alternativ=
-e uses<br>
-&gt;=C2=A0 =C2=A0 import imp<br>
-&gt; Traceback (most recent call last):<br>
-&gt;=C2=A0 =C2=A0 File &quot;utils/scanpypi&quot;, line 23, in &lt;module&g=
-t;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 import six.moves.urllib.request<br>
-&gt; ModuleNotFoundError: No module named &#39;six&#39;<br>
-<br>
-You have no &quot;six&quot; module installed for python. I have to install =
-it <br>
-first. For ubuntu: sudo apt install python3-six<br>
-<br>
-</blockquote></div>
-
---000000000000de596c05f440a605--
-
---===============0792890857193396043==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0792890857193396043==--
+CgpPbiAwOS4wMi4yMDIzIDEyOjAzLCBTb3VyYWJoIEhlZ2RlIHdyb3RlOgo+IEhlbGxvIE1heGlt
+LAo+IAo+IFVwZGF0ZToKPiAKPiBUaGUgYWJvdmUgaXNzdWUgcmVzb2x2ZWQgYnkgaXRzZWxmIQo+
+IAo+IE5vdyB3aGVuIEkgZG86wqB1dGlscy9zY2FucHlwaSBhd3NjcnQgLW8gcGFja2FnZSAsIGl0
+IHNheXMKPiAKPiBzcGR4X2xvb2t1cCBtb2R1bGUgaXMgbm90IGluc3RhbGxlZC4gVGhpcyBjYW4g
+bGVhZCB0byBhbiBpbmFjY3VyYXRlIAo+IGxpY2VuY2UgZGV0ZWN0aW9uLiBQbGVhc2UgaW5zdGFs
+bCBpdCB2aWEKPiBwaXAgaW5zdGFsbCBzcGR4X2xvb2t1cAo+IGJ1aWxkcm9vdCBwYWNrYWdlIG5h
+bWUgZm9yIGF3c2NydDogcHl0aG9uLWF3c2NydAo+IFBhY2thZ2U6IHB5dGhvbi1hd3NjcnQKPiBG
+ZXRjaGluZyBwYWNrYWdlIGF3c2NydAo+IEVSUk9SOiBDb3VsZCBub3QgZmluZCBwYWNrYWdlIGF3
+c2NydC4KPiBDaGVjayBzeW50YXggaW5zaWRlIHRoZSBweXRob24gcGFja2FnZSBpbmRleDoKPiBo
+dHRwczovL3B5cGkucHl0aG9uLm9yZy9weXBpLyA8aHR0cHM6Ly9weXBpLnB5dGhvbi5vcmcvcHlw
+aS8+Cj4gCj4gQnV0IHRoZSBwYWNrYWdlIGlzIGF2YWlsYWJsZcKgYXQgaHR0cHM6Ly9weXBpLm9y
+Zy9wcm9qZWN0L2F3c2NydC8gCj4gPGh0dHBzOi8vcHlwaS5vcmcvcHJvamVjdC9hd3NjcnQvPgoK
+SXQgd29ya3MgZmluZSBmb3IgbWU6CgpidWlsZHJvb3QgcGFja2FnZSBuYW1lIGZvciBhd3NjcnQ6
+IHB5dGhvbi1hd3NjcnQKUGFja2FnZTogcHl0aG9uLWF3c2NydApGZXRjaGluZyBwYWNrYWdlIGF3
+c2NydApEb3dubG9hZGluZyBwYWNrYWdlIGF3c2NydCBmcm9tIApodHRwczovL2ZpbGVzLnB5dGhv
+bmhvc3RlZC5vcmcvcGFja2FnZXMvYWUvOTgvZGRhMDkyMDc4ZjJkNDdiYWQwOGUxODRhYjlkMzY0
+YjhmODkxNjY0OTcwNjJiYzFjZjgxMWMwYmJiZGUyL2F3c2NydC0wLjE2LjEwLnRhci5nei4uLgpD
+aGVja2luZyBpZiBwYWNrYWdlIHBhY2thZ2UvcHl0aG9uLWF3c2NydCBhbHJlYWR5IGV4aXN0cy4u
+LgpDcmVhdGluZyBwYWNrYWdlL3B5dGhvbi1hd3NjcnQvcHl0aG9uLWF3c2NydC5tay4uLgpNb3Jl
+IHRoYW4gb25lIGZpbGUgZm91bmQgZm9yIGxpY2Vuc2U6IExJQ0VOU0UsIGNydC9hd3MtYy1jb21t
+b24vTElDRU5TRSwgCmNydC9hd3MtYy1pby9MSUNFTlNFLCBjcnQvYXdzLWxjL0xJQ0VOU0UsIApj
+cnQvYXdzLWxjL3RoaXJkX3BhcnR5L2ZpYXQvTElDRU5TRSwgY3J0L2F3cy1jLW1xdHQvTElDRU5T
+RSwgCmNydC9hd3MtY2hlY2tzdW1zL0xJQ0VOU0UsIGNydC9hd3MtYy1zMy9MSUNFTlNFLCAKY3J0
+L2F3cy1jLWNvbXByZXNzaW9uL0xJQ0VOU0UsIGNydC9hd3MtYy1odHRwL0xJQ0VOU0UsIApjcnQv
+YXdzLWMtc2RrdXRpbHMvTElDRU5TRSwgY3J0L3Mybi9MSUNFTlNFLCBjcnQvYXdzLWMtY2FsL0xJ
+Q0VOU0UsIApjcnQvYXdzLWMtYXV0aC9MSUNFTlNFLCBjcnQvYXdzLWMtZXZlbnQtc3RyZWFtL0xJ
+Q0VOU0UKQ3JlYXRpbmcgcGFja2FnZS9weXRob24tYXdzY3J0L3B5dGhvbi1hd3NjcnQuaGFzaC4u
+LgpDcmVhdGluZyBwYWNrYWdlL3B5dGhvbi1hd3NjcnQvQ29uZmlnLmluLi4uCk5PVEU6IFJlbWVt
+YmVyIHRvIGFsc28gbWFrZSBhbiB1cGRhdGUgdG8gdGhlIERFVkVMT1BFUlMgZmlsZQogICAgICAg
+YW5kIGluY2x1ZGUgYW4gZW50cnkgZm9yIHRoZSBwa2cgaW4gcGFja2FnZXMvQ29uZmlnLmluCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
