@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB023C05027
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:48:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C5F5C05027
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:48:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7169D61206;
-	Fri, 10 Feb 2023 22:48:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7169D61206
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D3F5611FF;
+	Fri, 10 Feb 2023 22:48:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D3F5611FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tqriAjRjg_hx; Fri, 10 Feb 2023 22:48:08 +0000 (UTC)
+	with ESMTP id pnodgnlWe_gF; Fri, 10 Feb 2023 22:48:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A296461141;
-	Fri, 10 Feb 2023 22:48:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A296461141
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 378731BF36F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4283C61212;
+	Fri, 10 Feb 2023 22:48:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4283C61212
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A7291BF36F
  for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0BD8061136
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6FBA941B4D
  for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BD8061136
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FBA941B4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w4w-y85LytCU for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 22:47:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TgHIuPo8sBLw for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 22:47:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAAAB6101A
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EAAAB6101A
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:47:29 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id ba1so6537926wrb.5
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 14:47:29 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AF8E41B4C
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4AF8E41B4C
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:47:28 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id r2so6528103wrv.7
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 14:47:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=wjbhXwJBJk+5etqLzYjbnu0JnZ80yKyhuWb9e08vuTA=;
- b=ahvaUGcSzXrC0rWsV+hCZQqMIopXbytO+WbbB5YuZxlM1BmW5VTTWkxHJX0afYouzb
- OWcuPWYxusmCbN3u57TEa8DeNV/KDczAx25AZ4GcYyvdSuO0k1J9aYek54+jgrWlskiS
- HZEWNe/lKNcWEaczzNvOINO8aDu1aw0uxyqmNx/uOBRlm4Z+9wnP3yvDDprzkzHK+Wzk
- bI7EDAJiMWsF73DBRxJqY9dy19R94kzdCgL/KVLa/o6l3ZSx6N8Pbff2X2hllF114gP/
- TGvsC0LXFtsEGPcGww7/eZOxRKskCdlWIWXjmOCw/sj6dBjg4GrZIvKuzWUnhgpqWc7J
- wK9Q==
-X-Gm-Message-State: AO0yUKVSd5XziFhlIEcnyamH9WLJs/Xm71EwotXTPuQvWb3VeB4Fn0kv
- mZXpTkf/PPPssfyDSdK5a7we+sDmEcSHaslp
-X-Google-Smtp-Source: AK7set9jLjniCO5RgKWs5TBIlRumoelEalKNAWyvifvqjILMFugJ9kQ/Gktddnh0dVLDtAMnBZz5bg==
-X-Received: by 2002:a5d:6e8a:0:b0:2bf:e39d:c8a7 with SMTP id
- k10-20020a5d6e8a000000b002bfe39dc8a7mr18132256wrz.44.1676069248141; 
- Fri, 10 Feb 2023 14:47:28 -0800 (PST)
+ bh=Mj1wZsehBD2kK4eEw4rjlKh7gpq8IOveuaGuVGCeRBc=;
+ b=nxwPfQRmpQr8HtboSAiuevXTXKoiZhXP2NXc/A3MMOjxYC3V1RxV5eUOhDyqjTSRRM
+ t8IO6Z585fAwELbs8Jf2YIQPbbEujKMBFusSgsBXtg8jQfuKSq4wVK0Y1jia7r9lTPK9
+ LczH9+rZKNZNgw1cErB/AuDKD+e6Wz58QyQ9FPGPn/kTP627lmSZ99fOzUnMPADret8I
+ Unc/l+yckeh2zJH2s6wywRejB2Uh/+znaeyaZBMdTiOpLWJDkhqVu/pHio8AInM5AICa
+ Nrp7Dm1B8ClVLk5Y3RtA8n6ua+HzIi6O8gfRQjEbS7dBsbKkNb/vuXmjiECyhsmNANbq
+ SW4Q==
+X-Gm-Message-State: AO0yUKUrMx5t+masnbRJuYEvbEtxpRlgnWdQqWjOVo/nPWb8kYnMs5iM
+ 9g0bwMB2JoeGcin3DgDbR+61mACmZU2rF4t4
+X-Google-Smtp-Source: AK7set+ck6tGKt+XTpoPhY5bcqwgAq8ZGkiGBQWYhsgQfWGuXIrRVvgNMjQfdT0hEsZQkAn4ZC32kg==
+X-Received: by 2002:a5d:62c3:0:b0:2c5:4c92:1385 with SMTP id
+ o3-20020a5d62c3000000b002c54c921385mr1978545wrv.24.1676069247291; 
+ Fri, 10 Feb 2023 14:47:27 -0800 (PST)
 Received: from localhost.localdomain
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- t9-20020adfeb89000000b002be0b1e556esm4576128wrn.59.2023.02.10.14.47.27
+ t9-20020adfeb89000000b002be0b1e556esm4576128wrn.59.2023.02.10.14.47.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Feb 2023 14:47:27 -0800 (PST)
+ Fri, 10 Feb 2023 14:47:26 -0800 (PST)
 From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:47:11 +0100
-Message-Id: <20230210224717.3293906-5-romain.naour@smile.fr>
+Date: Fri, 10 Feb 2023 23:47:10 +0100
+Message-Id: <20230210224717.3293906-4-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20230210224717.3293906-1-romain.naour@smile.fr>
 References: <20230210224717.3293906-1-romain.naour@smile.fr>
@@ -76,18 +76,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wjbhXwJBJk+5etqLzYjbnu0JnZ80yKyhuWb9e08vuTA=;
- b=R5X9xXM4x5aYC4wOKWJzAu4ttuA2N9RQLj9fuoghcQ4h5bI7V9ayNZX3I/NyioRAYS
- lorCi1sLanpeacnoF+rF4zGQRpPKaPfLxPTqGwlwRbm+RTz7DkrwD9ig8KUQPRNrKJoT
- uTq41dj3K1qSbwHFaOYAOaYmRIXNB7uug6kJ2K4fE+wpjof21T6XAZIn8g18ohMA0Wck
- iJjmCeVDezpq2RxLYnABXEZ7O8so43LMJhMxrzIwNv5G/U79MjXxVZvkRZscTaegXVDY
- l+MFyD0HlC1UZ0CGbq9QX8ErYVkBGzaUdYVjqz+5IR14oVZ4ihGPudVlTo3XFbBQcW/P
- jatA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Mj1wZsehBD2kK4eEw4rjlKh7gpq8IOveuaGuVGCeRBc=;
+ b=lR/+6pUtSxGJJoRqi0mwo57JtsE4fS2zo6ZF4SE3medOI2roTbOwmobl/2egqNs+Ca
+ vOB+xCpJC+QQaR8rxVoRTf4jFSnEUiaZJlHrACw0dfL+JUdCI3Xzzd0BHK15J+JYS5ZE
+ xVol3GjB5ekuAfPbvZlvJnX5JjdVT3WVeasCAXrYRJ8vnhrXfiNdIyI6YvZpOAfNdLLg
+ INL5Ud4wAuVzVP3l4YHy2qsnBLgyIfIsur35Cr2BIgOZvDz6ZdEQNFiuYK0qe2nQ/Fri
+ NH4sxP6XJc8r4RJaUiiJOnYI73eNR253huTy9NmxxPk/9ms2r993aay7XPdAPO9KAKQR
+ +Qag==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
  header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=R5X9xXM4
-Subject: [Buildroot] [PATCH v3 04/10] package/clang: move to llvm-project
+ header.s=20210112 header.b=lR/+6pUt
+Subject: [Buildroot] [PATCH v3 03/10] package/lld: move to llvm-project
  subfolder
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -112,118 +112,72 @@ To make version bumping easier, move llvm to a new llvm-project subfolder
 and specify site and version for the project.
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-v3: move "package/llvm-project/clang/Config.in" entry in package/Config.in
----
- DEVELOPERS                                                 | 6 +++---
- package/Config.in                                          | 2 +-
- ...-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch | 0
- package/{ => llvm-project}/clang/Config.in                 | 0
- package/{ => llvm-project}/clang/clang.hash                | 0
- package/{ => llvm-project}/clang/clang.mk                  | 7 +++----
- 6 files changed, 7 insertions(+), 8 deletions(-)
- rename package/{ => llvm-project}/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch (100%)
- rename package/{ => llvm-project}/clang/Config.in (100%)
- rename package/{ => llvm-project}/clang/clang.hash (100%)
- rename package/{ => llvm-project}/clang/clang.mk (96%)
+ DEVELOPERS                                    | 2 +-
+ package/Config.in.host                        | 2 +-
+ package/{ => llvm-project}/lld/Config.in.host | 0
+ package/{ => llvm-project}/lld/lld.hash       | 0
+ package/{ => llvm-project}/lld/lld.mk         | 5 ++---
+ 5 files changed, 4 insertions(+), 5 deletions(-)
+ rename package/{ => llvm-project}/lld/Config.in.host (100%)
+ rename package/{ => llvm-project}/lld/lld.hash (100%)
+ rename package/{ => llvm-project}/lld/lld.mk (87%)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index bbb7e2c2fe..b5494c7f95 100644
+index 6244b30d0b..bbb7e2c2fe 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1614,10 +1614,10 @@ F:	support/testing/tests/package/test_python_aexpect.py
- N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
--F:	package/clang/
+@@ -1618,7 +1618,7 @@ F:	package/clang/
  F:	package/earlyoom/
  F:	package/gconf/
  F:	package/libnss/
-+F:	package/llvm-project/clang/
- F:	package/llvm-project/lld/
+-F:	package/lld/
++F:	package/llvm-project/lld/
  F:	package/llvm-project/llvm/
  F:	package/python-cython/
-@@ -2561,7 +2561,6 @@ F:	package/alure/
- F:	package/aubio/
- F:	package/binutils/
- F:	package/bullet/
--F:	package/clang/
- F:	package/clinfo/
- F:	package/efl/
- F:	package/enet/
-@@ -2580,6 +2579,7 @@ F:	package/libgta/
- F:	package/libiec61850/
- F:	package/libspatialindex/
- F:	package/linux-syscall-support/
-+F:	package/llvm-project/clang/
- F:	package/llvm-project/llvm/
- F:	package/lugaru/
- F:	package/mcelog/
-@@ -2988,9 +2988,9 @@ F:	package/gettext-tiny/
- F:	package/tinyssh/
- 
- N:	Valentin Korenblit <valentinkorenblit@gmail.com>
--F:	package/clang/
- F:	package/clinfo/
- F:	package/libclc/
-+F:	package/llvm-project/clang/
- F:	package/llvm-project/llvm/
- 
- N:	Vanya Sergeev <vsergeev@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 629ee8329b..1065196c63 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2006,7 +2006,6 @@ menu "Other"
- 	source "package/capnproto/Config.in"
- 	source "package/cctz/Config.in"
- 	source "package/cereal/Config.in"
--	source "package/clang/Config.in"
- 	source "package/cmocka/Config.in"
- 	source "package/compiler-rt/Config.in"
- 	source "package/cppcms/Config.in"
-@@ -2107,6 +2106,7 @@ comment "linux-pam plugins"
- 	source "package/libpam-tacplus/Config.in"
- endif
- 	source "package/liquid-dsp/Config.in"
-+	source "package/llvm-project/clang/Config.in"
- 	source "package/llvm-project/llvm/Config.in"
- 	source "package/lttng-libust/Config.in"
- 	source "package/matio/Config.in"
-diff --git a/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch b/package/llvm-project/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
+ F:	package/python-pycups/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index dcadbfdfc1..9addc88522 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -51,7 +51,7 @@ menu "Host utilities"
+ 	source "package/jsmin/Config.in.host"
+ 	source "package/kmod/Config.in.host"
+ 	source "package/libp11/Config.in.host"
+-	source "package/lld/Config.in.host"
++	source "package/llvm-project/lld/Config.in.host"
+ 	source "package/lpc3250loader/Config.in.host"
+ 	source "package/lttng-babeltrace/Config.in.host"
+ 	source "package/lzma-alone/Config.in.host"
+diff --git a/package/lld/Config.in.host b/package/llvm-project/lld/Config.in.host
 similarity index 100%
-rename from package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
-rename to package/llvm-project/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
-diff --git a/package/clang/Config.in b/package/llvm-project/clang/Config.in
+rename from package/lld/Config.in.host
+rename to package/llvm-project/lld/Config.in.host
+diff --git a/package/lld/lld.hash b/package/llvm-project/lld/lld.hash
 similarity index 100%
-rename from package/clang/Config.in
-rename to package/llvm-project/clang/Config.in
-diff --git a/package/clang/clang.hash b/package/llvm-project/clang/clang.hash
-similarity index 100%
-rename from package/clang/clang.hash
-rename to package/llvm-project/clang/clang.hash
-diff --git a/package/clang/clang.mk b/package/llvm-project/clang/clang.mk
-similarity index 96%
-rename from package/clang/clang.mk
-rename to package/llvm-project/clang/clang.mk
-index 3c75f8d6b1..0943e21a8c 100644
---- a/package/clang/clang.mk
-+++ b/package/llvm-project/clang/clang.mk
-@@ -4,10 +4,9 @@
+rename from package/lld/lld.hash
+rename to package/llvm-project/lld/lld.hash
+diff --git a/package/lld/lld.mk b/package/llvm-project/lld/lld.mk
+similarity index 87%
+rename from package/lld/lld.mk
+rename to package/llvm-project/lld/lld.mk
+index 4bf903cda0..46ec3b13ff 100644
+--- a/package/lld/lld.mk
++++ b/package/llvm-project/lld/lld.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
 -# LLVM, Clang and lld should be version bumped together
--CLANG_VERSION_MAJOR = 11
--CLANG_VERSION = $(CLANG_VERSION_MAJOR).1.0
--CLANG_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(CLANG_VERSION)
-+CLANG_VERSION_MAJOR = $(LLVM_PROJECT_VERSION_MAJOR)
-+CLANG_VERSION = $(LLVM_PROJECT_VERSION)
-+CLANG_SITE = $(LLVM_PROJECT_SITE)
- CLANG_SOURCE = clang-$(CLANG_VERSION).src.tar.xz
- CLANG_LICENSE = Apache-2.0 with exceptions
- CLANG_LICENSE_FILES = LICENSE.TXT
+-LLD_VERSION = 11.1.0
+-LLD_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLD_VERSION)
++LLD_VERSION = $(LLVM_PROJECT_VERSION)
++LLD_SITE = $(LLVM_PROJECT_SITE)
+ LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
+ LLD_LICENSE = Apache-2.0 with exceptions
+ LLD_LICENSE_FILES = LICENSE.TXT
 -- 
 2.34.3
 
