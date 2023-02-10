@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11141C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:52:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEAC5C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F51E7009F;
-	Tue, 21 Feb 2023 01:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F51E7009F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 903DD701A5;
+	Tue, 21 Feb 2023 01:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 903DD701A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 73dKNOKotoWc; Tue, 21 Feb 2023 01:52:41 +0000 (UTC)
+	with ESMTP id IJmLzuniUQEl; Tue, 21 Feb 2023 01:52:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE1A070198;
-	Tue, 21 Feb 2023 01:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE1A070198
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB3FF701A3;
+	Tue, 21 Feb 2023 01:52:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB3FF701A3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ABFED1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BB9BB1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CB8F70010
+ by smtp3.osuosl.org (Postfix) with ESMTP id 41D1670005
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CB8F70010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41D1670005
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AXaUFtWQ2Ouk for <buildroot@lists.busybox.net>;
+ with ESMTP id u18bvwWgyJwS for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5FEB36FE60
+ by smtp3.osuosl.org (Postfix) with ESMTP id 810FA6FFF3
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FEB36FE60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 810FA6FFF3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59AF5828C8; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+ id 7198581979; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 15:14:10 +0100
+Date: Fri, 10 Feb 2023 16:26:54 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8012a86f5cf751f9c4d5d4a63f6502a6ac60d13a
-X-Git-Newrev: 57e297a215193c92f6a178139db53616f2ee23b5
+X-Git-Oldrev: 16e5c92ff5fd2b44a1126bd7d7538c68ce838213
+X-Git-Newrev: 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205257.59AF5828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/postgresql: bump
- version to 15.2
+Message-Id: <20230220205257.7198581979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: Build with
+ ninja
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57e297a215193c92f6a178139db53616f2ee23b5
+commit: https://git.buildroot.net/buildroot/commit/?id=78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://www.postgresql.org/docs/release/15.2/
+Wpewebkit needs cmake >= 3.20 when building with the make backend since
+wpewebkit 3.8.0.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Cmake 3.20 is above our minimal version in
+support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
+with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
+
+https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wpewebkit/wpewebkit.mk | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index ef2806c2dd..e6a9bd6658 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v14.6/postgresql-15.1.tar.bz2.sha256
--sha256  64fdf23d734afad0dfe4077daca96ac51dcd697e68ae2d3d4ca6c45cb14e21ae  postgresql-15.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v15.2/postgresql-15.2.tar.bz2.sha256
-+sha256  99a2171fc3d6b5b5f56b757a7a3cb85d509a38e4273805def23941ed2b8468c7  postgresql-15.2.tar.bz2
- # License file, Locally calculated
- sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 2ffcac6595..e90aa794b0 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 54f37fd702..b9c2fef395 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -103,4 +103,23 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
+ WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
+ endif
  
--POSTGRESQL_VERSION = 15.1
-+POSTGRESQL_VERSION = 15.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
++# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
++# above our minimal version in
++# support/dependencies/check-host-cmake.mk, so use the ninja backend:
++# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
++WPEWEBKIT_CONF_OPTS += -GNinja
++WPEWEBKIT_DEPENDENCIES += host-ninja
++
++define WPEWEBKIT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
++endef
++
++define WPEWEBKIT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
++endef
++
++define WPEWEBKIT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
++endef
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
