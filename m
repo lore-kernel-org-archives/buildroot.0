@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F1B0C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE1C5C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:53:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07699700A2;
-	Tue, 21 Feb 2023 01:53:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07699700A2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 977DF701A4;
+	Tue, 21 Feb 2023 01:53:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 977DF701A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Tgwbkr_XXhM; Tue, 21 Feb 2023 01:53:07 +0000 (UTC)
+	with ESMTP id Udsgat9vmAna; Tue, 21 Feb 2023 01:53:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B3FC701A4;
-	Tue, 21 Feb 2023 01:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B3FC701A4
+	by smtp3.osuosl.org (Postfix) with ESMTP id A711D701A8;
+	Tue, 21 Feb 2023 01:53:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A711D701A8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CC18D1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CF0621BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A54E7001B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C2887001E
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A54E7001B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C2887001E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XxSGjdAFK35m for <buildroot@lists.busybox.net>;
+ with ESMTP id AYzSwUeR2c33 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E61770012
+ by smtp3.osuosl.org (Postfix) with ESMTP id B73A57000A
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E61770012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B73A57000A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E86E828C8; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id B530A828C8; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 16:36:24 +0100
+Date: Fri, 10 Feb 2023 23:29:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
-X-Git-Newrev: 1613273542554776b089b3df2b6b71c1af2cc0da
+X-Git-Oldrev: f661c00342befb21c0032e593c758dfb2d336007
+X-Git-Newrev: e738d5b7251918a62922f3f3b6491b642f9ec182
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205257.7E86E828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-flit-core: set
- license path
+Message-Id: <20230220205257.B530A828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/asus_tinker_rk3288:
+ fix boot by prepending tpl to spl+u-boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,63 +56,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2122688638273657585=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2122688638273657585==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1613273542554776b089b3df2b6b71c1af2cc0da
+commit: https://git.buildroot.net/buildroot/commit/?id=e738d5b7251918a62922f3f3b6491b642f9ec182
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When generating legal info with a configuration enabling a package which uses
-flit as setup type, we get a warning about python-flit-core license:
-WARNING: python-flit-core-3.8.0: cannot save license (HOST_PYTHON_FLIT_CORE_LICENSE_FILES not defined)
+During the last U-boot version bump it's not been noted that the TPL
+was not prepended to SPL anymore preventing the board to boot, so
+let's copy TPL to the image folder, prepend it to u-boot-spl-dtb.bin
+and place it at offset 32KB, where RK3288 bootrom expects to find
+it. Let's also place u-boot-dtb separated from SPL at offset 8M, where
+the SPL expects it to find it.
 
-Add missing variable to point to python-flit-core license file
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-[Peter: add sha256sum to .hash file]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-flit-core/python-flit-core.hash | 2 ++
- package/python-flit-core/python-flit-core.mk   | 1 +
- 2 files changed, 3 insertions(+)
+ board/asus/tinker/genimage.cfg       | 11 +++++++++--
+ board/asus/tinker/post-build.sh      |  4 ++--
+ configs/asus_tinker_rk3288_defconfig |  3 +--
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-flit-core/python-flit-core.hash b/package/python-flit-core/python-flit-core.hash
-index 9281635f1a..f63a64ed1b 100644
---- a/package/python-flit-core/python-flit-core.hash
-+++ b/package/python-flit-core/python-flit-core.hash
-@@ -1,3 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/flit_core/json
- md5  7c41da13273f7787709a24f74e0f5a99  flit_core-3.8.0.tar.gz
- sha256  b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3  flit_core-3.8.0.tar.gz
-+# Locally computed
-+sha256  35b4f1dec512e617077fd6980dbb43ef8c2887adc5d0185edb4c04da175dd816  LICENSE
-diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
-index 4d7bee81da..f96191ade6 100644
---- a/package/python-flit-core/python-flit-core.mk
-+++ b/package/python-flit-core/python-flit-core.mk
-@@ -8,6 +8,7 @@ PYTHON_FLIT_CORE_VERSION = 3.8.0
- PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
- PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/10/e5/be08751d07b30889af130cec20955c987a74380a10058e6e8856e4010afc
- PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
-+PYTHON_FLIT_CORE_LICENSE_FILES = LICENSE
- PYTHON_FLIT_CORE_SETUP_TYPE = flit-bootstrap
+diff --git a/board/asus/tinker/genimage.cfg b/board/asus/tinker/genimage.cfg
+index a4b1e8d608..fa7fd734f2 100644
+--- a/board/asus/tinker/genimage.cfg
++++ b/board/asus/tinker/genimage.cfg
+@@ -2,12 +2,19 @@ image sdcard.img {
+ 	hdimage {
+ 	}
  
- # Use flit built in bootstrap_install for installing host-python-flit-core.
-
---===============2122688638273657585==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-	partition u-boot-spl-dtb {
++	partition u-boot-tpl-spl-dtb {
+ 		in-partition-table = "no"
+-		image = "u-boot-spl-dtb.img"
++		image = "u-boot-tpl-spl-dtb.img"
+ 		offset = 32K
+ 	}
+ 
++	partition u-boot-dtb {
++		in-partition-table = "no"
++		image = "u-boot-dtb.img"
++		offset = 8M
++		size = 30M
++	}
++
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
+diff --git a/board/asus/tinker/post-build.sh b/board/asus/tinker/post-build.sh
+index 8108ed83ff..ffbbcdeb58 100755
+--- a/board/asus/tinker/post-build.sh
++++ b/board/asus/tinker/post-build.sh
+@@ -3,7 +3,7 @@
+ MKIMAGE=$HOST_DIR/bin/mkimage
+ BOARD_DIR="$(dirname $0)"
+ 
+-$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
+-cat $BINARIES_DIR/u-boot-dtb.bin >> $BINARIES_DIR/u-boot-spl-dtb.img
++$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-tpl.bin $BINARIES_DIR/u-boot-tpl.img
++cat $BINARIES_DIR/u-boot-tpl.img $BINARIES_DIR/u-boot-spl-dtb.bin > $BINARIES_DIR/u-boot-tpl-spl-dtb.img
+ 
+ install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
+index 6963fa939f..02b340a7f1 100644
+--- a/configs/asus_tinker_rk3288_defconfig
++++ b/configs/asus_tinker_rk3288_defconfig
+@@ -17,9 +17,8 @@ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
++BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2122688638273657585==--
