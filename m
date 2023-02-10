@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FA81C636D4
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05CA9C636D4
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32DFB6105E;
-	Fri, 10 Feb 2023 22:31:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32DFB6105E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BB3460C12;
+	Fri, 10 Feb 2023 22:31:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BB3460C12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9SS8f6Qz1Dzp; Fri, 10 Feb 2023 22:31:46 +0000 (UTC)
+	with ESMTP id 6y7vDdrORUiQ; Fri, 10 Feb 2023 22:31:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6501260E39;
-	Fri, 10 Feb 2023 22:31:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6501260E39
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB2DA1BF973
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:31:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CECDC61058;
+	Fri, 10 Feb 2023 22:31:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CECDC61058
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AACF51BF36F
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:31:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C596160C12
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7EF1415AE
  for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C596160C12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7EF1415AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WXT88NFEteGy for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O6tmIVVFdsg6 for <buildroot@lists.busybox.net>;
  Fri, 10 Feb 2023 22:31:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EAD4B60BB8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 004FF415AC
  for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAD4B60BB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 004FF415AC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D905185179; Fri, 10 Feb 2023 22:31:29 +0000 (UTC)
+ id E363B851A2; Fri, 10 Feb 2023 22:31:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:30:30 +0100
+Date: Fri, 10 Feb 2023 23:31:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4b46bc3c6997e32050b332d7578f0cb289b57be
-X-Git-Newrev: 0fdf20249574b64285979f109bef74eb9cdbf0db
+X-Git-Oldrev: 0fdf20249574b64285979f109bef74eb9cdbf0db
+X-Git-Newrev: 2d87d6281869d4023e0ff888b99cdd5bdf2a0326
 X-Patchwork-Hint: ignore
-Message-Id: <20230210223129.D905185179@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/asus_tinker_rk3288: bump Linux to
- 6.1.2 and U-boot to 2022.10
+Message-Id: <20230210223129.E363B851A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/asus/tinker: add a note to
+ readme.txt for power supply
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +64,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fdf20249574b64285979f109bef74eb9cdbf0db
+commit: https://git.buildroot.net/buildroot/commit/?id=2d87d6281869d4023e0ff888b99cdd5bdf2a0326
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/asus_tinker_rk3288_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ board/asus/tinker/readme.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
-index 02b340a7f1..40f4125880 100644
---- a/configs/asus_tinker_rk3288_defconfig
-+++ b/configs/asus_tinker_rk3288_defconfig
-@@ -3,14 +3,14 @@ BR2_arm=y
- BR2_cortex_a17=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/board/asus/tinker/readme.txt b/board/asus/tinker/readme.txt
+index 7372d29520..110e2168c9 100644
+--- a/board/asus/tinker/readme.txt
++++ b/board/asus/tinker/readme.txt
+@@ -35,3 +35,9 @@ You can write this image directly to an SD card device (i.e. /dev/xxx):
+   $ sudo sync
  
--# Linux headers same as kernel, a 5.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
-+# Linux headers same as kernel, a 6.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- 
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.2"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+ Finally, you can insert the SD card to the Tinker RK3288 board and boot it.
++
++NOTE:
++USB power supply requires more than the standard 500mA USB current, so
++this board must be supplied from a capable port or from an external
++AC/DC adapter. Otherwise it will hang forever while loading the kernel
++image.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
