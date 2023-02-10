@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9787CC05027
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2734C05027
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDF0860E52;
-	Fri, 10 Feb 2023 22:10:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDF0860E52
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56A8E60AF1;
+	Fri, 10 Feb 2023 22:13:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56A8E60AF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t3d5xAtRJBpT; Fri, 10 Feb 2023 22:10:09 +0000 (UTC)
+	with ESMTP id uracfG-oQudN; Fri, 10 Feb 2023 22:13:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5ACF6077D;
-	Fri, 10 Feb 2023 22:10:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5ACF6077D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3D0841BF36F
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:10:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B2AF607F9;
+	Fri, 10 Feb 2023 22:13:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B2AF607F9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ED1B1BF36F
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:13:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22D8341B36
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:10:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22D8341B36
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7531D415AC
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:13:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7531D415AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DKWR8Q-6Fw0a for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 22:10:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F22A441A17
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:10:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F22A441A17
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E0E9D84FC8; Fri, 10 Feb 2023 22:10:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:05:38 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 406698de03a9c9e4ded5a50070de2249398380ff
-X-Git-Newrev: 0f868e97f6b42ccaa0844880775f86002656227d
-X-Patchwork-Hint: ignore
-Message-Id: <20230210221004.E0E9D84FC8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnupg2: bump to version 2.4.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ow5nrHvi4gke for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 22:13:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1934740AF7
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1934740AF7
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:13:19 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 78EF5240004;
+ Fri, 10 Feb 2023 22:13:16 +0000 (UTC)
+Date: Fri, 10 Feb 2023 23:13:15 +0100
+To: Akshay Bhat <nodeax@gmail.com>
+Message-ID: <20230210231315.17b367e6@windsurf>
+In-Reply-To: <20230210180222.88328-1-nodeax@gmail.com>
+References: <20230210180222.88328-1-nodeax@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676067197;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=SffaVLzTJ+QQfqVaHUGuNGePlEP57VDnBcIcmfVxW2Q=;
+ b=Zgfir5LliNiSwj5QKp6MjVFNxGvja7dXLM8W6oDMVqThw/7Hlldblf0n9bEGmyUA5Xb/y+
+ hdXMLWW46bLZjbe8QDTJqvCeiAn1/U5dB5MQwSuzT9r4kCISbJl69YGWFLQvefClLtnVo5
+ OqWx08FguYyzF37sq9ELpXYUDzw55KoT/JSoq0eaR3ZrCHSDnXtzyEbx/cW2DmayrsOyYJ
+ 0AN4JmVDtU5NJcwov6z57T5yswBag/Ujue0yNlxNK4rS0iUyJ8zE8W3/RtEWVwwsN/237K
+ bnESfPPHwqYX/9Yu/jpD2dOaOIdVGe+FpjzFpBjZx9bgSvhGNk48y2aAa8c1Fg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Zgfir5Ll
+Subject: Re: [Buildroot] [PATCH 1/1] package/libiberty: bump version to 2.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,87 +77,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f868e97f6b42ccaa0844880775f86002656227d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-See announce:
-https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000477.html
+On Fri, 10 Feb 2023 10:02:22 -0800
+Akshay Bhat <nodeax@gmail.com> wrote:
 
-This commit also drop a patch which is now included in the new version.
-See:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=commitdiff;h=7011286ce6e1fb56c2989fdafbd11b931c489faa
+> If the libiberty package is not the same version as the one packaged
+> with binutils AND if libiberty is installed before binutils, then the
+> below error is observed. Hence for now let us keep the versions in sync.
+> 
+> /usr/bin/ld: ../libiberty/libiberty.a(hashtab.o):(.data.rel.local+0x0): multiple definition of `htab_eq_pointer'
+> 
+> Signed-off-by: Akshay Bhat <nodeax@gmail.com>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gnupg2/0001-ks_ldap_free_state.patch | 21 ---------------------
- package/gnupg2/gnupg2.hash                   | 10 +++++-----
- package/gnupg2/gnupg2.mk                     |  2 +-
- 3 files changed, 6 insertions(+), 27 deletions(-)
+Thanks a lot for the fix. Is this fixing
+http://autobuild.buildroot.net/results/eaf/eaf23ea0c8d7803e3768da40b7070d04801cd36f/build-end.log
+perhaps?
 
-diff --git a/package/gnupg2/0001-ks_ldap_free_state.patch b/package/gnupg2/0001-ks_ldap_free_state.patch
-deleted file mode 100644
-index fa55d27c04..0000000000
---- a/package/gnupg2/0001-ks_ldap_free_state.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--
--Fix undefined reference to `ks_ldap_free_state' if OpenLDAP is not
--installed
--
--Backported from: 7011286ce6e1fb56c2989fdafbd11b931c489faa
--
--Signed-off-by: Michael Fischer <mf@go-sys.de>
--
----- a/dirmngr/server.c
--+++ b/dirmngr/server.c
--@@ -3137,8 +3137,10 @@ start_command_handler (assuan_fd_t fd, unsigned int session_id)
--                ctrl->refcount);
--   else
--     {
--+#if USE_LDAP
--       ks_ldap_free_state (ctrl->ks_get_state);
--       ctrl->ks_get_state = NULL;
--+#endif
--       release_ctrl_ocsp_certs (ctrl);
--       xfree (ctrl->server_local);
--       dirmngr_deinit_default_ctrl (ctrl);
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index f9c071ad45..c642862fe2 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000476.html
--sha1  1f31b7b4c9c9adad97f94ea3acf1aa64c0424bcc  gnupg-2.3.8.tar.bz2
-+# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000477.html
-+sha1  63dde155a8df0d5e1987efa5fc17438beca83ac1  gnupg-2.4.0.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.3.8.tar.bz2.sig
--# using key 6DAA6E64A76D2840571B4902528897B826403ADA and AC8E115BF73E2D8D47FA9908E98E9B2D19C6C8BD
--sha256  540b7a40e57da261fb10ef521a282e0021532a80fd023e75fb71757e8a4969ed  gnupg-2.3.8.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.0.tar.bz2.sig
-+# using key 6DAA6E64A76D2840571B4902528897B826403ADA
-+sha256  1d79158dd01d992431dd2e3facb89fdac97127f89784ea2cb610c600fb0c1483  gnupg-2.4.0.tar.bz2
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 9dc29ca99e..5935ce6939 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.3.8
-+GNUPG2_VERSION = 2.4.0
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+One issue that I see is that the binutils version is configurable: we
+support 2.37, 2.38, 2.39 and the special ARC version. Do we need to
+make the libiberty version match with that?
+
+Also, see the conversation starting at:
+
+  https://lore.kernel.org/buildroot/3f3d266c-2f21-197c-29b7-fff3e230e97a@smile.fr/
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
