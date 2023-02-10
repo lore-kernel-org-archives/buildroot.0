@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 356B8C636CD
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 10:13:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2D0EC636CD
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 10:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BE1D40247;
-	Fri, 10 Feb 2023 10:13:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BE1D40247
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F278402E5;
+	Fri, 10 Feb 2023 10:13:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F278402E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id duiULzXDw9oo; Fri, 10 Feb 2023 10:13:19 +0000 (UTC)
+	with ESMTP id v_ChYES9OVd3; Fri, 10 Feb 2023 10:13:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 933D14021B;
-	Fri, 10 Feb 2023 10:13:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 933D14021B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D87121BF383
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 10:13:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C1FE40286;
+	Fri, 10 Feb 2023 10:13:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C1FE40286
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 185C01BF383
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 10:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BEB2E82111
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 10:13:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEB2E82111
+ by smtp2.osuosl.org (Postfix) with ESMTP id 018CF40A31
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 10:13:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 018CF40A31
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 25GWcetRmCuF for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 10:13:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YV99fLbECoPQ for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 10:13:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A16D8820D7
- for <buildroot@uclibc.org>; Fri, 10 Feb 2023 10:13:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A16D8820D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 528D2400F3
+ for <buildroot@uclibc.org>; Fri, 10 Feb 2023 10:13:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 528D2400F3
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 8D56284251; Fri, 10 Feb 2023 10:13:15 +0000 (UTC)
+ id 41DA884251; Fri, 10 Feb 2023 10:13:39 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 10 Feb 2023 10:13:15 +0000
+Date: Fri, 10 Feb 2023 10:13:39 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
@@ -51,18 +51,18 @@ X-Bugzilla-Who: alexis.lothore@bootlin.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Assigned-To: alexis.lothore@bootlin.com
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone attachments.created
-Message-ID: <bug-15331-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: assigned_to
+Message-ID: <bug-15331-163-xzstZDRK7Z@https.bugs.busybox.net/>
+In-Reply-To: <bug-15331-163@https.bugs.busybox.net/>
+References: <bug-15331-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15331] New: Warning on python-flit-core license
- when generating legal info
+Subject: [Buildroot] [Bug 15331] Warning on python-flit-core license when
+ generating legal info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,52 +74,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15331
-
-            Bug ID: 15331
-           Summary: Warning on python-flit-core license when generating
-                    legal info
-           Product: buildroot
-           Version: unspecified
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: alexis.lothore@bootlin.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
-
-Created attachment 9506
-  --> https://bugs.busybox.net/attachment.cgi?id=9506&action=edit
-Modified defconfig to reproduce the issue
-
-The legal-info target emits a warning on python-flit-core: 
-WARNING: python-flit-core-3.8.0: cannot save license
-(HOST_PYTHON_FLIT_CORE_LICENSE_FILES not defined)
-
-Steps to reproduce:
-- clone buildroot
-- make qemu_x86_64_defconfig
-- in menuconfig, enable python3, a python package having flit as setup type
-(e.g.: argon2_cffi)
-- make legal-info 
-
-Host OS : Archlinux (Linux arch-bootlin-alexis 6.1.9-arch1-2 #1 SMP
-PREEMPT_DYNAMIC Fri, 03 Feb 2023 18:49:53 +0000 x86_64 GNU/Linux)
-Buildroot version : master (e2fd606b91784ced64c7312e02fcbf95f3e736d6)
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNTMzMQoKQWxleGlzIExv
+dGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4gY2hhbmdlZDoKCiAgICAgICAgICAg
+V2hhdCAgICB8UmVtb3ZlZCAgICAgICAgICAgICAgICAgICAgIHxBZGRlZAotLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tCiAgICAgICAgICAgQXNzaWduZWV8dW5hc3NpZ25lZEBidWlsZHJvb3QudWNsaWJjIHxh
+bGV4aXMubG90aG9yZUBib290bGluLmNvbQogICAgICAgICAgICAgICAgICAgfC5vcmcgICAgICAg
+ICAgICAgICAgICAgICAgICB8CgotLSAKWW91IGFyZSByZWNlaXZpbmcgdGhpcyBtYWlsIGJlY2F1
+c2U6CllvdSBhcmUgb24gdGhlIENDIGxpc3QgZm9yIHRoZSBidWcuCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
