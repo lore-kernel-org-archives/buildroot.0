@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEAC5C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F1B0C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 903DD701A5;
-	Tue, 21 Feb 2023 01:52:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 903DD701A5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07699700A2;
+	Tue, 21 Feb 2023 01:53:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07699700A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IJmLzuniUQEl; Tue, 21 Feb 2023 01:52:54 +0000 (UTC)
+	with ESMTP id 2Tgwbkr_XXhM; Tue, 21 Feb 2023 01:53:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB3FF701A3;
-	Tue, 21 Feb 2023 01:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB3FF701A3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B3FC701A4;
+	Tue, 21 Feb 2023 01:53:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B3FC701A4
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BB9BB1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CC18D1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 41D1670005
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A54E7001B
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41D1670005
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A54E7001B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u18bvwWgyJwS for <buildroot@lists.busybox.net>;
+ with ESMTP id XxSGjdAFK35m for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 810FA6FFF3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E61770012
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 810FA6FFF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E61770012
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7198581979; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
+ id 7E86E828C8; Mon, 20 Feb 2023 20:52:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 16:26:54 +0100
+Date: Fri, 10 Feb 2023 16:36:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 16e5c92ff5fd2b44a1126bd7d7538c68ce838213
-X-Git-Newrev: 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
+X-Git-Oldrev: 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
+X-Git-Newrev: 1613273542554776b089b3df2b6b71c1af2cc0da
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205257.7198581979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wpewebkit: Build with
- ninja
+Message-Id: <20230220205257.7E86E828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-flit-core: set
+ license path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,57 +58,62 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2122688638273657585=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
+--===============2122688638273657585==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=1613273542554776b089b3df2b6b71c1af2cc0da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Wpewebkit needs cmake >= 3.20 when building with the make backend since
-wpewebkit 3.8.0.
+When generating legal info with a configuration enabling a package which uses
+flit as setup type, we get a warning about python-flit-core license:
+WARNING: python-flit-core-3.8.0: cannot save license (HOST_PYTHON_FLIT_CORE_LICENSE_FILES not defined)
 
-Cmake 3.20 is above our minimal version in
-support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
-with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
+Add missing variable to point to python-flit-core license file
 
-https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+[Peter: add sha256sum to .hash file]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/python-flit-core/python-flit-core.hash | 2 ++
+ package/python-flit-core/python-flit-core.mk   | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 54f37fd702..b9c2fef395 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -103,4 +103,23 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+diff --git a/package/python-flit-core/python-flit-core.hash b/package/python-flit-core/python-flit-core.hash
+index 9281635f1a..f63a64ed1b 100644
+--- a/package/python-flit-core/python-flit-core.hash
++++ b/package/python-flit-core/python-flit-core.hash
+@@ -1,3 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/flit_core/json
+ md5  7c41da13273f7787709a24f74e0f5a99  flit_core-3.8.0.tar.gz
+ sha256  b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3  flit_core-3.8.0.tar.gz
++# Locally computed
++sha256  35b4f1dec512e617077fd6980dbb43ef8c2887adc5d0185edb4c04da175dd816  LICENSE
+diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
+index 4d7bee81da..f96191ade6 100644
+--- a/package/python-flit-core/python-flit-core.mk
++++ b/package/python-flit-core/python-flit-core.mk
+@@ -8,6 +8,7 @@ PYTHON_FLIT_CORE_VERSION = 3.8.0
+ PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
+ PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/10/e5/be08751d07b30889af130cec20955c987a74380a10058e6e8856e4010afc
+ PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
++PYTHON_FLIT_CORE_LICENSE_FILES = LICENSE
+ PYTHON_FLIT_CORE_SETUP_TYPE = flit-bootstrap
  
-+# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
-+# above our minimal version in
-+# support/dependencies/check-host-cmake.mk, so use the ninja backend:
-+# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-+WPEWEBKIT_CONF_OPTS += -GNinja
-+WPEWEBKIT_DEPENDENCIES += host-ninja
-+
-+define WPEWEBKIT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
-+endef
-+
-+define WPEWEBKIT_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
-+endef
-+
-+define WPEWEBKIT_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
-+endef
-+
- $(eval $(cmake-package))
+ # Use flit built in bootstrap_install for installing host-python-flit-core.
+
+--===============2122688638273657585==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2122688638273657585==--
