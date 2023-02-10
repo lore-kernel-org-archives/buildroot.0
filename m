@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C5F5C05027
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B81BC636D4
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D3F5611FF;
-	Fri, 10 Feb 2023 22:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D3F5611FF
+	by smtp3.osuosl.org (Postfix) with ESMTP id C980361141;
+	Fri, 10 Feb 2023 22:48:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C980361141
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pnodgnlWe_gF; Fri, 10 Feb 2023 22:48:21 +0000 (UTC)
+	with ESMTP id axHLdrKC6eYQ; Fri, 10 Feb 2023 22:48:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4283C61212;
-	Fri, 10 Feb 2023 22:48:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4283C61212
+	by smtp3.osuosl.org (Postfix) with ESMTP id F03646117E;
+	Fri, 10 Feb 2023 22:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F03646117E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A7291BF36F
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 622D61BF36F
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FBA941B4D
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FBA941B4D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 48B0341B4D
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48B0341B4D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TgHIuPo8sBLw for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 22:47:29 +0000 (UTC)
+ with ESMTP id rSmueYy42cf0 for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 22:47:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AF8E41B4C
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4AF8E41B4C
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:47:28 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id r2so6528103wrv.7
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 14:47:28 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C157641B4A
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C157641B4A
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:47:30 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id a2so6539382wrd.6
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 14:47:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Mj1wZsehBD2kK4eEw4rjlKh7gpq8IOveuaGuVGCeRBc=;
- b=nxwPfQRmpQr8HtboSAiuevXTXKoiZhXP2NXc/A3MMOjxYC3V1RxV5eUOhDyqjTSRRM
- t8IO6Z585fAwELbs8Jf2YIQPbbEujKMBFusSgsBXtg8jQfuKSq4wVK0Y1jia7r9lTPK9
- LczH9+rZKNZNgw1cErB/AuDKD+e6Wz58QyQ9FPGPn/kTP627lmSZ99fOzUnMPADret8I
- Unc/l+yckeh2zJH2s6wywRejB2Uh/+znaeyaZBMdTiOpLWJDkhqVu/pHio8AInM5AICa
- Nrp7Dm1B8ClVLk5Y3RtA8n6ua+HzIi6O8gfRQjEbS7dBsbKkNb/vuXmjiECyhsmNANbq
- SW4Q==
-X-Gm-Message-State: AO0yUKUrMx5t+masnbRJuYEvbEtxpRlgnWdQqWjOVo/nPWb8kYnMs5iM
- 9g0bwMB2JoeGcin3DgDbR+61mACmZU2rF4t4
-X-Google-Smtp-Source: AK7set+ck6tGKt+XTpoPhY5bcqwgAq8ZGkiGBQWYhsgQfWGuXIrRVvgNMjQfdT0hEsZQkAn4ZC32kg==
-X-Received: by 2002:a5d:62c3:0:b0:2c5:4c92:1385 with SMTP id
- o3-20020a5d62c3000000b002c54c921385mr1978545wrv.24.1676069247291; 
- Fri, 10 Feb 2023 14:47:27 -0800 (PST)
+ bh=xYPTErFgJ2PuhAJacfrfapUT0yN6tltB1FRtvAhSHQg=;
+ b=eww5Bq1D8deInoW+3g9e41MF0tPRKCUbQjpRDK5FbZltUdmtD2HtXSXYSh53+fERQV
+ OgdF6AmL58/RX82ODI48kJLG9BNj84WNP5W5WWY9LNo/nyloqx0twNHU7hz4XpiPDqan
+ rrU0S2W6xaGwyJBXgP68j/CvhVL0VtLFaRuEe/MyzOwBAf/rtFxZFh+WvlSQQRqdEV2F
+ 5Zfvn395tiFco03y6cUE7UGpEHAo0PTpif96qHsK2VXSSdwXNYFFQ1YDEopBPG5EV+h3
+ IhlLJszpYePewjeIo9wGwpknyqiDkdDm65pWhygudDXSwJ8mglVTZMc3TDrXOTrjsADT
+ 6hVw==
+X-Gm-Message-State: AO0yUKWgfLoASuRkwIQnIa7CrX2l+0mrnXo7zUPhrak7l7ea0quE98qv
+ W9QKFO00Z+q04VNsGt0KyXMa3Ip+JRdNlZBs
+X-Google-Smtp-Source: AK7set+v9BB4zCdOw+vXANEX1PIyfsWQhEH2L0r752aoz9YgSu6OWcf0Iz9oESpW/Eg2UQVFr7J2Cg==
+X-Received: by 2002:a5d:5002:0:b0:2c5:4e3c:d390 with SMTP id
+ e2-20020a5d5002000000b002c54e3cd390mr192620wrt.62.1676069249005; 
+ Fri, 10 Feb 2023 14:47:29 -0800 (PST)
 Received: from localhost.localdomain
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- t9-20020adfeb89000000b002be0b1e556esm4576128wrn.59.2023.02.10.14.47.26
+ t9-20020adfeb89000000b002be0b1e556esm4576128wrn.59.2023.02.10.14.47.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Feb 2023 14:47:26 -0800 (PST)
+ Fri, 10 Feb 2023 14:47:28 -0800 (PST)
 From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:47:10 +0100
-Message-Id: <20230210224717.3293906-4-romain.naour@smile.fr>
+Date: Fri, 10 Feb 2023 23:47:12 +0100
+Message-Id: <20230210224717.3293906-6-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20230210224717.3293906-1-romain.naour@smile.fr>
 References: <20230210224717.3293906-1-romain.naour@smile.fr>
@@ -76,19 +76,19 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Mj1wZsehBD2kK4eEw4rjlKh7gpq8IOveuaGuVGCeRBc=;
- b=lR/+6pUtSxGJJoRqi0mwo57JtsE4fS2zo6ZF4SE3medOI2roTbOwmobl/2egqNs+Ca
- vOB+xCpJC+QQaR8rxVoRTf4jFSnEUiaZJlHrACw0dfL+JUdCI3Xzzd0BHK15J+JYS5ZE
- xVol3GjB5ekuAfPbvZlvJnX5JjdVT3WVeasCAXrYRJ8vnhrXfiNdIyI6YvZpOAfNdLLg
- INL5Ud4wAuVzVP3l4YHy2qsnBLgyIfIsur35Cr2BIgOZvDz6ZdEQNFiuYK0qe2nQ/Fri
- NH4sxP6XJc8r4RJaUiiJOnYI73eNR253huTy9NmxxPk/9ms2r993aay7XPdAPO9KAKQR
- +Qag==
+ bh=xYPTErFgJ2PuhAJacfrfapUT0yN6tltB1FRtvAhSHQg=;
+ b=qDm1CEvMWuP2a90PBeLH3T7gO5rbyuxOGwGETyTULAIw6wSm1HJ8vUyuB0e82nBfpY
+ vkabG9g4r0FzU1S/z+fV5ipSuYrrSRA/0uxsyc8IyjXUg/LuiOEADP03ecgaSOh0lvo+
+ hr9Qj/buzc3HfjOFTqTBQS26S9Q0przlPHOAMU8W4KfVmbK03jYs03Yw/u6NkFrrqf9h
+ RIQ1MFBQlFk9leaDpGBdw9kuahSW8lfNRTaXoarcNMT8a7hLyHArAUDSIDMYJ4Kw5Pg4
+ ngNC55Qbb8RGm662yeZVnua4FIdmwVYk6L0w1jeNZRODNYTgjAOdFnFU11X3s7200WWD
+ PaZg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
  header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=lR/+6pUt
-Subject: [Buildroot] [PATCH v3 03/10] package/lld: move to llvm-project
- subfolder
+ header.s=20210112 header.b=qDm1CEvM
+Subject: [Buildroot] [PATCH v3 05/10] package/compiler-rt: move to
+ llvm-project subfolder
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,69 +115,87 @@ Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- DEVELOPERS                                    | 2 +-
- package/Config.in.host                        | 2 +-
- package/{ => llvm-project}/lld/Config.in.host | 0
- package/{ => llvm-project}/lld/lld.hash       | 0
- package/{ => llvm-project}/lld/lld.mk         | 5 ++---
- 5 files changed, 4 insertions(+), 5 deletions(-)
- rename package/{ => llvm-project}/lld/Config.in.host (100%)
- rename package/{ => llvm-project}/lld/lld.hash (100%)
- rename package/{ => llvm-project}/lld/lld.mk (87%)
+v3: move compiler-rt entry in package/Config.in
+---
+ DEVELOPERS                                              | 2 +-
+ package/Config.in                                       | 2 +-
+ package/{ => llvm-project}/compiler-rt/Config.in        | 0
+ package/{ => llvm-project}/compiler-rt/compiler-rt.hash | 0
+ package/{ => llvm-project}/compiler-rt/compiler-rt.mk   | 6 ++----
+ 5 files changed, 4 insertions(+), 6 deletions(-)
+ rename package/{ => llvm-project}/compiler-rt/Config.in (100%)
+ rename package/{ => llvm-project}/compiler-rt/compiler-rt.hash (100%)
+ rename package/{ => llvm-project}/compiler-rt/compiler-rt.mk (85%)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6244b30d0b..bbb7e2c2fe 100644
+index b5494c7f95..188a6b9427 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1618,7 +1618,7 @@ F:	package/clang/
- F:	package/earlyoom/
- F:	package/gconf/
- F:	package/libnss/
--F:	package/lld/
-+F:	package/llvm-project/lld/
- F:	package/llvm-project/llvm/
- F:	package/python-cython/
- F:	package/python-pycups/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index dcadbfdfc1..9addc88522 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -51,7 +51,7 @@ menu "Host utilities"
- 	source "package/jsmin/Config.in.host"
- 	source "package/kmod/Config.in.host"
- 	source "package/libp11/Config.in.host"
--	source "package/lld/Config.in.host"
-+	source "package/llvm-project/lld/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
- 	source "package/lzma-alone/Config.in.host"
-diff --git a/package/lld/Config.in.host b/package/llvm-project/lld/Config.in.host
+@@ -1995,7 +1995,6 @@ F:	package/bridge-utils/
+ F:	package/checkpolicy/
+ F:	package/checksec/
+ F:	package/cgroupfs-mount/
+-F:	package/compiler-rt/
+ F:	package/crda/
+ F:	package/cunit/
+ F:	package/dacapo/
+@@ -2033,6 +2032,7 @@ F:	package/libssh2/
+ F:	package/libtalloc/
+ F:	package/libqmi/
+ F:	package/lighttpd/
++F:	package/llvm-project/compiler-rt/
+ F:	package/logrotate/
+ F:	package/makedevs/
+ F:	package/memtester/
+diff --git a/package/Config.in b/package/Config.in
+index 1065196c63..61d85d60cb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2007,7 +2007,6 @@ menu "Other"
+ 	source "package/cctz/Config.in"
+ 	source "package/cereal/Config.in"
+ 	source "package/cmocka/Config.in"
+-	source "package/compiler-rt/Config.in"
+ 	source "package/cppcms/Config.in"
+ 	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
+@@ -2107,6 +2106,7 @@ comment "linux-pam plugins"
+ endif
+ 	source "package/liquid-dsp/Config.in"
+ 	source "package/llvm-project/clang/Config.in"
++	source "package/llvm-project/compiler-rt/Config.in"
+ 	source "package/llvm-project/llvm/Config.in"
+ 	source "package/lttng-libust/Config.in"
+ 	source "package/matio/Config.in"
+diff --git a/package/compiler-rt/Config.in b/package/llvm-project/compiler-rt/Config.in
 similarity index 100%
-rename from package/lld/Config.in.host
-rename to package/llvm-project/lld/Config.in.host
-diff --git a/package/lld/lld.hash b/package/llvm-project/lld/lld.hash
+rename from package/compiler-rt/Config.in
+rename to package/llvm-project/compiler-rt/Config.in
+diff --git a/package/compiler-rt/compiler-rt.hash b/package/llvm-project/compiler-rt/compiler-rt.hash
 similarity index 100%
-rename from package/lld/lld.hash
-rename to package/llvm-project/lld/lld.hash
-diff --git a/package/lld/lld.mk b/package/llvm-project/lld/lld.mk
-similarity index 87%
-rename from package/lld/lld.mk
-rename to package/llvm-project/lld/lld.mk
-index 4bf903cda0..46ec3b13ff 100644
---- a/package/lld/lld.mk
-+++ b/package/llvm-project/lld/lld.mk
-@@ -4,9 +4,8 @@
+rename from package/compiler-rt/compiler-rt.hash
+rename to package/llvm-project/compiler-rt/compiler-rt.hash
+diff --git a/package/compiler-rt/compiler-rt.mk b/package/llvm-project/compiler-rt/compiler-rt.mk
+similarity index 85%
+rename from package/compiler-rt/compiler-rt.mk
+rename to package/llvm-project/compiler-rt/compiler-rt.mk
+index c8ea86e899..84add60801 100644
+--- a/package/compiler-rt/compiler-rt.mk
++++ b/package/llvm-project/compiler-rt/compiler-rt.mk
+@@ -4,11 +4,9 @@
  #
  ################################################################################
  
--# LLVM, Clang and lld should be version bumped together
--LLD_VERSION = 11.1.0
--LLD_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLD_VERSION)
-+LLD_VERSION = $(LLVM_PROJECT_VERSION)
-+LLD_SITE = $(LLVM_PROJECT_SITE)
- LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
- LLD_LICENSE = Apache-2.0 with exceptions
- LLD_LICENSE_FILES = LICENSE.TXT
+-# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
+-# tied to the version of those tools
+-COMPILER_RT_VERSION = 11.1.0
++COMPILER_RT_VERSION = $(LLVM_PROJECT_VERSION)
+ COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
+-COMPILER_RT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(COMPILER_RT_VERSION)
++COMPILER_RT_SITE = $(LLVM_PROJECT_SITE)
+ COMPILER_RT_LICENSE = NCSA MIT
+ COMPILER_RT_LICENSE_FILES = LICENSE.TXT
+ COMPILER_RT_DEPENDENCIES = host-clang llvm
 -- 
 2.34.3
 
