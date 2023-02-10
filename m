@@ -1,65 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D043C636D3
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 10:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE41FC05027
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 11:07:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC75C41950;
-	Fri, 10 Feb 2023 10:27:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC75C41950
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D07160A99;
+	Fri, 10 Feb 2023 11:07:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D07160A99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5nzU-Y-dY92h; Fri, 10 Feb 2023 10:27:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ypyl4Dw52mXD; Fri, 10 Feb 2023 11:07:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7607141951;
-	Fri, 10 Feb 2023 10:26:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7607141951
+	by smtp3.osuosl.org (Postfix) with ESMTP id A140B60ABE;
+	Fri, 10 Feb 2023 11:07:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A140B60ABE
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 86C451BF31B
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 10:26:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 05E051BF2AA
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 11:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6985A410AE
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 10:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6985A410AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4A664107E
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 11:07:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4A664107E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1yQ-9zGvGUVn for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 10:26:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E21AB4107E
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E21AB4107E
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 10:26:55 +0000 (UTC)
-Received: (Authenticated sender: alexis.lothore@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AD142E0006;
- Fri, 10 Feb 2023 10:26:52 +0000 (UTC)
+ with ESMTP id yk5zYlIP5KXq for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 11:07:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55A354104D
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 55A354104D
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 11:07:12 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id fi26so4424341edb.7
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 03:07:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=88ee8j9xbIsC1gEugjHzCNXSa8mv/aVw8cgcd5CLq0U=;
+ b=uyIYlvCMU8JUt7ZPwDT/UhUeEJxn4TDYvc/HKybZk+F7JxJniBKhIxh7VPq5U3cP4d
+ HzMfDjtv6qWtdUZs2/Swit7oktuLt+5cD3IR99l0RAqKJgAkL8aVe9uMM62wtrdVli71
+ jceMTrdCQ/hAVSUC9sUwwuvXVXGtnS6DQtG/mLC7MpDV05ofK3mUX447ruQUoT4Uq6d3
+ Wow6qpX6B9XHxSP2e45k8vojVk7ZOfry3L1+mFxqFFiMpE7g1yPAFOYq8esoiR3nSthP
+ aajNmVmqU/nhB38fYAqhKb62P+DVQIo+7xsOrEw0JYimxYsa6upytAhrWw8lDkhaz7Ww
+ QWHQ==
+X-Gm-Message-State: AO0yUKXwlOcH55/mhK0Mu+u3jWsGBbleSWCLfC3gRAFFllgIe6Kem2af
+ RjF70wl2JQ9pOVF8IcBippwZDlm5W6Qn/OIm8MQ=
+X-Google-Smtp-Source: AK7set+xxmEniVaqrWKoxZrCHsUjMrSbPp0pWBe6c1Zx/pyFUFzfEO3q9WIQ7Lnoc+YHVFIOE5smDw==
+X-Received: by 2002:a50:954e:0:b0:4ab:f00:a with SMTP id
+ v14-20020a50954e000000b004ab0f00000amr9518238eda.2.1676027229925; 
+ Fri, 10 Feb 2023 03:07:09 -0800 (PST)
+Received: from wintermute.ecorp.int (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ y59-20020a50bb41000000b004ab17b9a92csm2060833ede.50.2023.02.10.03.07.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Feb 2023 03:07:09 -0800 (PST)
+From: Frank Vanbever <frank.vanbever@mind.be>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 11:26:55 +0100
-Message-Id: <20230210102655.94324-1-alexis.lothore@bootlin.com>
-X-Mailer: git-send-email 2.39.1
+Date: Fri, 10 Feb 2023 12:06:43 +0100
+Message-Id: <20230210110643.449927-1-frank.vanbever@mind.be>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676024813;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=paWOG+CkgKJLmtWNF2Pk49CYBvUFYClyHPvPuy3lFf0=;
- b=A95QtdsOsfoxxjIkOWzgkQ39f1wZIuU0GrGC0DHa70huiXm4QjWgi1cRV58Uq8pzttVYIf
- tKJwYWjNRAg+pLHLHWs6Yh/VYuwe9u1+1fygoDD44mnOjh9H4FSGc2Bw+TdH2OFD6K3pgQ
- IQ+JaW0FtPK+TB8U/9Pa09Z3GYwOUsD05oWzOg8Jj0o38p2NH1mNCACrXVVGfFkpiqq/3G
- AYgePdZWrGr8z1DfoOD0zNBI1YJ3F1//HzT/NN43Tl2RZNtZ3YrHodesQpv6B7oXELsEEI
- Sz8hJx2ObGbd0SEW5nVx+lOoOI2GYk98c23gSV+qgSo3Pug2bkMBaJQjzTwRkA==
+ d=mind.be; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=88ee8j9xbIsC1gEugjHzCNXSa8mv/aVw8cgcd5CLq0U=;
+ b=QMgDeF/VlH16BN2HNWyxWwtv76yThDQa7hy45nk9FiM8pJsPgs80gcweiflk97LeWK
+ Uf3QXSCSB5VRjvQz62tsC24mk4oHWLXxpUEeJKpdCn4IicD7tbvQUK3t6y/QESy5V3s7
+ TYsfMV4OVTs1JuyJP2pGQZkIJzNQt26fPGGXDSUEA3Ouqq04mnXKxLaRITSL45WiJdcI
+ WmbW2ufdb300y4yiw6XeZjbSpZUNf1DM+O7jhoiaDjEYvg+hs9lpYY5wUvZqXmCdJ0mn
+ XMfKFWPA6+nOPlcKSAI/rfEKCqf0GM8yY2HIHy83n5LUAeagssPcQt6ugLqaULBlOyZX
+ JQWg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=A95QtdsO
-Subject: [Buildroot] [PATCH 1/1] package/python-flit-core: set license path
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=QMgDeF/V
+Subject: [Buildroot] [PATCH 1/1] package/elixir: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,35 +93,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: thomas.petazzoni@bootlin.com, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Frank Vanbever <frank.vanbever@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hlbiBnZW5lcmF0aW5nIGxlZ2FsIGluZm8gd2l0aCBhIGNvbmZpZ3VyYXRpb24gZW5hYmxpbmcg
-YSBwYWNrYWdlIHdoaWNoIHVzZXMKZmxpdCBhcyBzZXR1cCB0eXBlLCB3ZSBnZXQgYSB3YXJuaW5n
-IGFib3V0IHB5dGhvbi1mbGl0LWNvcmUgbGljZW5zZToKV0FSTklORzogcHl0aG9uLWZsaXQtY29y
-ZS0zLjguMDogY2Fubm90IHNhdmUgbGljZW5zZSAoSE9TVF9QWVRIT05fRkxJVF9DT1JFX0xJQ0VO
-U0VfRklMRVMgbm90IGRlZmluZWQpCgpBZGQgbWlzc2luZyB2YXJpYWJsZSB0byBwb2ludCB0byBw
-eXRob24tZmxpdC1jb3JlIGxpY2Vuc2UgZmlsZQoKU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhv
-csOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KLS0tCiBwYWNrYWdlL3B5dGhvbi1mbGl0
-LWNvcmUvcHl0aG9uLWZsaXQtY29yZS5tayB8IDEgKwogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
-aW9uKCspCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tZmxpdC1jb3JlL3B5dGhvbi1mbGl0
-LWNvcmUubWsgYi9wYWNrYWdlL3B5dGhvbi1mbGl0LWNvcmUvcHl0aG9uLWZsaXQtY29yZS5tawpp
-bmRleCA0ZDdiZWU4MWRhLi5mOTYxOTFhZGU2IDEwMDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbi1m
-bGl0LWNvcmUvcHl0aG9uLWZsaXQtY29yZS5taworKysgYi9wYWNrYWdlL3B5dGhvbi1mbGl0LWNv
-cmUvcHl0aG9uLWZsaXQtY29yZS5tawpAQCAtOCw2ICs4LDcgQEAgUFlUSE9OX0ZMSVRfQ09SRV9W
-RVJTSU9OID0gMy44LjAKIFBZVEhPTl9GTElUX0NPUkVfU09VUkNFID0gZmxpdF9jb3JlLSQoUFlU
-SE9OX0ZMSVRfQ09SRV9WRVJTSU9OKS50YXIuZ3oKIFBZVEhPTl9GTElUX0NPUkVfU0lURSA9IGh0
-dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy8xMC9lNS9iZTA4NzUxZDA3YjMw
-ODg5YWYxMzBjZWMyMDk1NWM5ODdhNzQzODBhMTAwNThlNmU4ODU2ZTQwMTBhZmMKIFBZVEhPTl9G
-TElUX0NPUkVfTElDRU5TRSA9IEJTRC0zLUNsYXVzZQorUFlUSE9OX0ZMSVRfQ09SRV9MSUNFTlNF
-X0ZJTEVTID0gTElDRU5TRQogUFlUSE9OX0ZMSVRfQ09SRV9TRVRVUF9UWVBFID0gZmxpdC1ib290
-c3RyYXAKIAogIyBVc2UgZmxpdCBidWlsdCBpbiBib290c3RyYXBfaW5zdGFsbCBmb3IgaW5zdGFs
-bGluZyBob3N0LXB5dGhvbi1mbGl0LWNvcmUuCi0tIAoyLjM5LjEKCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Elixir was a dependency of rabbitmq-server which got dropped in
+89815bad0a531d01ee2733dd9c17576a7647e1d9. It is a host package with no other
+users, hence it is no longer required. Additionally, newer versions require
+Erlang 23+.
+
+Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
+---
+ DEVELOPERS                 |  1 -
+ package/elixir/elixir.hash |  3 ---
+ package/elixir/elixir.mk   | 21 ---------------------
+ 3 files changed, 25 deletions(-)
+ delete mode 100644 package/elixir/elixir.hash
+ delete mode 100644 package/elixir/elixir.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 32c6e54919..e8e0671709 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1089,7 +1089,6 @@ F:	package/upx/
+ F:	package/zxing-cpp/
+ 
+ N:	Frank Vanbever <frank.vanbever@mind.be>
+-F: 	package/elixir/
+ F:	package/libmodsecurity/
+ F:	package/nginx-modsecurity/
+ 
+diff --git a/package/elixir/elixir.hash b/package/elixir/elixir.hash
+deleted file mode 100644
+index 6d083e72de..0000000000
+--- a/package/elixir/elixir.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Computed locally
+-sha256  f3465d8a8e386f3e74831bf9594ee39e6dfde6aa430fe9260844cfe46aa10139  elixir-1.9.4.tar.gz
+-sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE
+diff --git a/package/elixir/elixir.mk b/package/elixir/elixir.mk
+deleted file mode 100644
+index 6d935516f4..0000000000
+--- a/package/elixir/elixir.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# elixir
+-#
+-################################################################################
+-
+-ELIXIR_VERSION = 1.9.4
+-ELIXIR_SITE = $(call github,elixir-lang,elixir,v$(ELIXIR_VERSION))
+-ELIXIR_LICENSE = Apache-2.0
+-ELIXIR_LICENSE_FILES = LICENSE
+-HOST_ELIXIR_DEPENDENCIES = host-erlang
+-
+-define HOST_ELIXIR_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) compile
+-endef
+-
+-define HOST_ELIXIR_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) PREFIX="$(HOST_DIR)" -C $(@D) install
+-endef
+-
+-$(eval $(host-generic-package))
+-- 
+2.37.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
