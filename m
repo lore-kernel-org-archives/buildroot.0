@@ -4,47 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 603A5C05027
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 15:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B94CC636CD
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 15:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE13F419C3;
-	Fri, 10 Feb 2023 15:37:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE13F419C3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1553841635;
+	Fri, 10 Feb 2023 15:53:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1553841635
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wbPC082WoGdt; Fri, 10 Feb 2023 15:37:20 +0000 (UTC)
+	with ESMTP id T6SErdHEn_dx; Fri, 10 Feb 2023 15:53:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0E17419CC;
-	Fri, 10 Feb 2023 15:37:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0E17419CC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 25D7D1BF2B0
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:37:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41C314161E;
+	Fri, 10 Feb 2023 15:53:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41C314161E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6554A1BF2B0
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F38E660B1B
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:37:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F38E660B1B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3FC1881327
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:53:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FC1881327
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yg7sNP5wcsil for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 15:37:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3163460777
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 15:37:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3163460777
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E25A84F54; Fri, 10 Feb 2023 15:37:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pOk06c5JSak9 for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 15:53:55 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37CDF8131B
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 37CDF8131B
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 15:53:55 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6AF8510000C;
+ Fri, 10 Feb 2023 15:53:53 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pQVii-00039y-N8; Fri, 10 Feb 2023 16:53:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 16:36:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
-X-Git-Newrev: 1613273542554776b089b3df2b6b71c1af2cc0da
-X-Patchwork-Hint: ignore
-Message-Id: <20230210153716.1E25A84F54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flit-core: set license path
+To: Frank Vanbever <frank.vanbever@mind.be>
+References: <20230210110643.449927-1-frank.vanbever@mind.be>
+Date: Fri, 10 Feb 2023 16:53:52 +0100
+In-Reply-To: <20230210110643.449927-1-frank.vanbever@mind.be> (Frank
+ Vanbever's message of "Fri, 10 Feb 2023 12:06:43 +0100")
+Message-ID: <87zg9lcy9b.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/elixir: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,63 +62,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2267922044296868088=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2267922044296868088==
-Content-Type: text/plain
+>>>>> "Frank" == Frank Vanbever <frank.vanbever@mind.be> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1613273542554776b089b3df2b6b71c1af2cc0da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Elixir was a dependency of rabbitmq-server which got dropped in
+ > 89815bad0a531d01ee2733dd9c17576a7647e1d9. It is a host package with no other
+ > users, hence it is no longer required. Additionally, newer versions require
+ > Erlang 23+.
 
-When generating legal info with a configuration enabling a package which uses
-flit as setup type, we get a warning about python-flit-core license:
-WARNING: python-flit-core-3.8.0: cannot save license (HOST_PYTHON_FLIT_CORE_LICENSE_FILES not defined)
+ > Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
 
-Add missing variable to point to python-flit-core license file
+Committed, thanks.
 
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-[Peter: add sha256sum to .hash file]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-flit-core/python-flit-core.hash | 2 ++
- package/python-flit-core/python-flit-core.mk   | 1 +
- 2 files changed, 3 insertions(+)
-
-diff --git a/package/python-flit-core/python-flit-core.hash b/package/python-flit-core/python-flit-core.hash
-index 9281635f1a..f63a64ed1b 100644
---- a/package/python-flit-core/python-flit-core.hash
-+++ b/package/python-flit-core/python-flit-core.hash
-@@ -1,3 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/flit_core/json
- md5  7c41da13273f7787709a24f74e0f5a99  flit_core-3.8.0.tar.gz
- sha256  b305b30c99526df5e63d6022dd2310a0a941a187bd3884f4c8ef0418df6c39f3  flit_core-3.8.0.tar.gz
-+# Locally computed
-+sha256  35b4f1dec512e617077fd6980dbb43ef8c2887adc5d0185edb4c04da175dd816  LICENSE
-diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
-index 4d7bee81da..f96191ade6 100644
---- a/package/python-flit-core/python-flit-core.mk
-+++ b/package/python-flit-core/python-flit-core.mk
-@@ -8,6 +8,7 @@ PYTHON_FLIT_CORE_VERSION = 3.8.0
- PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
- PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/10/e5/be08751d07b30889af130cec20955c987a74380a10058e6e8856e4010afc
- PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
-+PYTHON_FLIT_CORE_LICENSE_FILES = LICENSE
- PYTHON_FLIT_CORE_SETUP_TYPE = flit-bootstrap
- 
- # Use flit built in bootstrap_install for installing host-python-flit-core.
-
---===============2267922044296868088==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2267922044296868088==--
