@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6842C05027
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C442C636D7
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:49:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FB9961208;
-	Fri, 10 Feb 2023 22:49:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FB9961208
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCF3861221;
+	Fri, 10 Feb 2023 22:49:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCF3861221
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QYikDwwzPne9; Fri, 10 Feb 2023 22:49:11 +0000 (UTC)
+	with ESMTP id sMvvO6aflCh7; Fri, 10 Feb 2023 22:49:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8778F61221;
-	Fri, 10 Feb 2023 22:49:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8778F61221
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0470061219;
+	Fri, 10 Feb 2023 22:49:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0470061219
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1698B1BF973
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EBF921BF36F
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFEEC61136
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFEEC61136
+ by smtp3.osuosl.org (Postfix) with ESMTP id D3A9661066
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A9661066
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nPxR5jROdJFK for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 22:47:33 +0000 (UTC)
+ with ESMTP id z_IyWIhayKhs for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 22:47:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 034EF60C1C
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 034EF60C1C
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:47:32 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id bu23so6526050wrb.8
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 14:47:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1806E60C1C
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1806E60C1C
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:47:34 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id j25so6546881wrc.4
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 14:47:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=WU8B/yEBRuNms8mgZwvcqvmS5uBjE4mvv4Tha7+KvH0=;
- b=rStOXpQpO8ExlHcOOm5N0GxDE2x6fEx9HLEZtq9ZCENgW2LeuBed7HFi6POmKZ+F/b
- PcGCNT3tTiA9vAHE4+zotXYZI3IePZu4pgkrmOnK8Df2ot/yaLYmy3z+3cea8c/kesfw
- aR7RTx/qWanE2VBrExs1VNPVoRN3hLFCOmQHWKybODkdTD3GMVBoAkPJ8mMOYYM6mSpp
- FPBtPz8RI+7NRY7fyOj89lraIn5xodtZHApyZk4djDNXEe546N20LMHVN0tCeCE54BH0
- GBkHavZtviU+R4BqndFdgg816arDc04WsuCubz/kgHe78XJRHqEl0LUJ56e5pptU4rxn
- k7WA==
-X-Gm-Message-State: AO0yUKUmc8YGyOr70bSmywSZ9z+4760P6rMWnmAmKbDe3ORIqEfqqyEy
- /bIZe9M9cCL9hr6vvwFgYjLdupJXqdd/4aNv
-X-Google-Smtp-Source: AK7set+JC5J01MeHRJvYPCOfu4kQI7md9omLrKjl8DE8hC519Ozhv2WgB+/k/zrjtR21xPfMMfF/sw==
-X-Received: by 2002:adf:d4c7:0:b0:2c3:f8e8:e71e with SMTP id
- w7-20020adfd4c7000000b002c3f8e8e71emr12348865wrk.23.1676069251274; 
- Fri, 10 Feb 2023 14:47:31 -0800 (PST)
+ bh=5OWtn2fySgIjLBs3xveMIf7vO7qb/ZRxRBOvD4iK8xA=;
+ b=yCYUnzUGNjN2Roy9QFR2XaBclrjOuWj8M0Qy7BykFa/IIl2yabSkeBJi++GKF9s72f
+ gCacI94nQyfAM8NqQfF9RaT1guLrAy6lDuIOifKvBpwnbcfkGm+H5c9vNFyV5cYxdV87
+ PY7YywRkxU6e2M9GM8o6dlRr50O8Y9OOcxTlLw5EQLsPfBs/J+PzP1gGZOiaMFrnGxqR
+ wrWTMiSCipw5wxYTR2oAC4BMkJeaYmbTMJLh9ikkYJgHsZJvzXEg35Bb9xYX+LQm4sG+
+ 37vIqcTZQAjHQU5KHm9V9it9IZKYM0eiJZl6qX6RN/ptTx77NgDzCqIwYB2Y1Z2S0+3q
+ aXhg==
+X-Gm-Message-State: AO0yUKWJh8XUhOM0UFjmMLOFBWuvzp70cxnY1qI5cA7vl/abEb+FfnUH
+ i9IMaIy9gQXMsXUXqYquE6GbjLmZW4r9YuJQ
+X-Google-Smtp-Source: AK7set9xOAAIwxqHYN+81sh/0dU6Iwo8hh/mpm8yeih4shS5qg7dMu0YhjGbU3zlRzcRaL5w/cWEHg==
+X-Received: by 2002:adf:de01:0:b0:2c5:4c8c:b2fc with SMTP id
+ b1-20020adfde01000000b002c54c8cb2fcmr1598118wrm.11.1676069253329; 
+ Fri, 10 Feb 2023 14:47:33 -0800 (PST)
 Received: from localhost.localdomain
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- t9-20020adfeb89000000b002be0b1e556esm4576128wrn.59.2023.02.10.14.47.30
+ t9-20020adfeb89000000b002be0b1e556esm4576128wrn.59.2023.02.10.14.47.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Feb 2023 14:47:30 -0800 (PST)
+ Fri, 10 Feb 2023 14:47:32 -0800 (PST)
 From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:47:15 +0100
-Message-Id: <20230210224717.3293906-9-romain.naour@smile.fr>
+Date: Fri, 10 Feb 2023 23:47:17 +0100
+Message-Id: <20230210224717.3293906-11-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20230210224717.3293906-1-romain.naour@smile.fr>
 References: <20230210224717.3293906-1-romain.naour@smile.fr>
@@ -76,19 +76,19 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=WU8B/yEBRuNms8mgZwvcqvmS5uBjE4mvv4Tha7+KvH0=;
- b=CWR4UYG8YpgdINTlW8hC5ATrQ8dsSTrsEKgVtwKex9XbpqFE06fUdL29umfOt14mXV
- O63ALvoA4hePfHt2k7PsX19EN8Qsr8Jht1WF/UBsnxaafkVCqeSQfc2gnuCj3UsOM02r
- ds+ctEl+M0T/ayQPgHEH+KclSbeH1/WgayDml0P8W5wxT2i9SYpTqd8RrQtl9mucbGRE
- IB0AGnR9GiE+YZP83lKsoBxvl9EMjI8wI0rIrmrJaJe+WH4W0lMTbl7BIXPYO1/y8SyF
- boCjrC+xCeS0LmvT47M6fVnXMj8AKO4g1dAVxO+Yz4zwhburtNj4LYSBId+JqLH6mJ1M
- hcVw==
+ bh=5OWtn2fySgIjLBs3xveMIf7vO7qb/ZRxRBOvD4iK8xA=;
+ b=riq271TZaTlHcKbep63YeGLznVVeq0fOg6rkLmUsU4sZnEk4Rj9jiMh6MoLETaXiCu
+ efsz0utPjmFwSb9CA+2PSjV6JnQGk3xkiKTGDeX0hXEW+4RnGPygMjfYsM/TbKSDRYmX
+ Club4wRA8wrEIipYmYxT/1OTyM0vIgR4KZtUidV2Df2CcGNtWeJCbjWXzFN+PyL50dbb
+ bFSy+UJJ2GvLJOSCfinM0vPypUigiwo7IxLyPg6hw4sdFldwfdeP4XWmzZGa7V3x8oeO
+ btVwgya7AhYmKnyFn+lAzBVQIi7fvVnAx5PyH/nDkIAEbNWeLc2Jiq5a+kVtrtdKirSF
+ VtFg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
  header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=CWR4UYG8
-Subject: [Buildroot] [PATCH v3 08/10] package/llvm-project/llvm-libunwind:
- new package
+ header.s=20210112 header.b=riq271TZ
+Subject: [Buildroot] [PATCH v3 10/10] DEVELOPERS: add Daniel Lang for
+ llvm-project
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,54 +108,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Lang Daniel <d.lang@abatec.at>
 
-Starting with version 15, lld needs the llvm implementation
-of libunwind, therefore it is added as a host package.
-
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-v3: force llvm-libunwind version to 15.0.3 since LLVM_PROJECT_VERSION
-    is still at 11.1.0
----
- .../llvm-libunwind/llvm-libunwind.hash         |  3 +++
- .../llvm-libunwind/llvm-libunwind.mk           | 18 ++++++++++++++++++
- 2 files changed, 21 insertions(+)
- create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind.hash
- create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind.mk
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-new file mode 100644
-index 0000000000..86775f5dba
---- /dev/null
-+++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  0ab6e07bf05359e242e9ea80e4089b819914867fa997a715e324e584bcfdf114  libunwind-15.0.3.src.tar.xz
-+sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
-diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.mk b/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
-new file mode 100644
-index 0000000000..825e1beac0
---- /dev/null
-+++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# llvm-libunwind
-+#
-+################################################################################
-+
-+LLVM_LIBUNWIND_VERSION = 15.0.3
-+LLVM_LIBUNWIND_SITE = $(LLVM_PROJECT_SITE)
-+LLVM_LIBUNWIND_SOURCE = libunwind-$(LLVM_LIBUNWIND_VERSION).src.tar.xz
-+LLVM_LIBUNWIND_LICENSE = Apache-2.0 with exceptions
-+LLVM_LIBUNWIND_LICENSE_FILES = LICENSE.TXT
-+LLVM_LIBUNWIND_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+HOST_LLVM_LIBUNWIND_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH="$(HOST_DIR)/lib/cmake/llvm" \
-+	-DLIBUNWIND_INSTALL_HEADERS=ON
-+
-+$(eval $(host-cmake-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 203103e108..33a4c1758a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -642,6 +642,7 @@ F:	package/dacapo/
+ N:	Daniel Lang <d.lang@abatec.at>
+ F:	package/dbus-cxx/
+ F:	package/libsigc/
++F:	package/llvm-project/
+ F:	package/paho-mqtt-cpp/
+ 
+ N:	Damien Lanson <damien@kal-host.com>
 -- 
 2.34.3
 
