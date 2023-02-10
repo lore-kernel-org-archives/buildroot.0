@@ -4,47 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AE2AC05027
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:32:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F174CC636D7
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:32:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4125B61065;
-	Fri, 10 Feb 2023 22:32:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4125B61065
+	by smtp3.osuosl.org (Postfix) with ESMTP id A711960BEC;
+	Fri, 10 Feb 2023 22:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A711960BEC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2bWMeXQ5Cms2; Fri, 10 Feb 2023 22:32:11 +0000 (UTC)
+	with ESMTP id phf85xFjofaH; Fri, 10 Feb 2023 22:32:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7606B61058;
-	Fri, 10 Feb 2023 22:32:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7606B61058
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BACB31BF36F
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:31:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED05C61058;
+	Fri, 10 Feb 2023 22:32:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED05C61058
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6339B1BF973
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E8D940AF7
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:31:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E8D940AF7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BED241B4A
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:31:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BED241B4A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vLbdhLrt0aI2 for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 22:31:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4084401B2
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4084401B2
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C431885174; Fri, 10 Feb 2023 22:31:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AdjJKGyl4kvN for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 22:31:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D23341B49
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3D23341B49
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:31:46 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id ba1so6489641wrb.5
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 14:31:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=tu7XCIBETmKd3MB9i7ipWZvnH8uICBrVPOxis783emk=;
+ b=EVDd1RngBZgvLnc0BpDKp10Vt+KUixno3kUq1HH2aJwGCLjAMAkNEfG4KTmUOU1P68
+ emLFw43ELbPRFe+SgYKf7mIKeBiWiqn/YlT2oZCG5MEqidNiH/7+gG4KlmNbeKraQwxE
+ dIJDKEeM/O1X+1Pr5nLDxLsnsh3GGhmbX/X0GSP/hPvrF/8Y3DuTupDAOaNQW/oMYTWt
+ H6FzNnfE04bMM4z/cSwyZZXZLLl1xOWcPSS1SPxco/BKT0TnKJKUK3J/H2lfSpNJkTFH
+ TlO9Dq7J6xlu9h+vG8x0B83p4f8Cg7EabOS1USvk59JDHRTFnYJA01XEhlGojPhkuDHC
+ VBcg==
+X-Gm-Message-State: AO0yUKV5KfYYFIp5swhKkARcPaRXX30lF14bvtudWd3Otc/SrWDkKNJk
+ MSZtslK9Fg8LthBCeUvxY0m2seiD2P0=
+X-Google-Smtp-Source: AK7set+iZ/2KOrkwlSPUHzDUgKp4svF1yCCBYW61VgiNxG3erjTyBv6/y5Zy/TjpAUuwT0uNKXPn9g==
+X-Received: by 2002:adf:e852:0:b0:2c5:4680:7d17 with SMTP id
+ d18-20020adfe852000000b002c546807d17mr4060039wrn.17.1676068304472; 
+ Fri, 10 Feb 2023 14:31:44 -0800 (PST)
+Received: from localhost.localdomain (1-1-22-171.ftth.cust.kwaoo.net.
+ [171.22.1.1]) by smtp.gmail.com with ESMTPSA id
+ n15-20020a5d4c4f000000b002c54538c9bdsm3130221wrt.10.2023.02.10.14.31.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Feb 2023 14:31:44 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:29:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f661c00342befb21c0032e593c758dfb2d336007
-X-Git-Newrev: e738d5b7251918a62922f3f3b6491b642f9ec182
-X-Patchwork-Hint: ignore
-Message-Id: <20230210223129.C431885174@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/asus_tinker_rk3288: fix boot by
- prepending tpl to spl+u-boot
+Date: Fri, 10 Feb 2023 23:31:42 +0100
+Message-Id: <20230210223143.1060114-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=tu7XCIBETmKd3MB9i7ipWZvnH8uICBrVPOxis783emk=;
+ b=kXaIJWhyU6ZcdB3nO2schOE+3qSxWUnM5/5m2ByuyTQPrl4Xb+pIn3T4/fZEAeXAxQ
+ /K0UP67/TuBBE6ERIkoqEnNMYMjtgD0BqPGZLXaipE3RhEg+H/t1T59k977r2t34z7qt
+ lLgAz6cEb6lup5XXxIhpnB120gOE3XeI143J/DApXOWo25y8dWeOiStPXURw4k4Zxxla
+ MLLfgTyzw8nvg38+RcPVNyn0NzFSlxWnO7ETVAF+sSmzu/1Tv+fTpLUhm3UKsmxlFPYH
+ FPsUUsdMeKb2oSPa2Kl9axr1u0J21tpbF7g8/qUJ+V14TG9A5M7TpmPupz+oBsTGzM9Z
+ LyQg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kXaIJWhy
+Subject: [Buildroot] [PATCH 1/2] support/download: catch post-process errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,87 +93,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e738d5b7251918a62922f3f3b6491b642f9ec182
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Currently, when the post-process helper fails while downloading from
+upstream, there is no fallback to the backup mirror.
 
-During the last U-boot version bump it's not been noted that the TPL
-was not prepended to SPL anymore preventing the board to boot, so
-let's copy TPL to the image folder, prepend it to u-boot-spl-dtb.bin
-and place it at offset 32KB, where RK3288 bootrom expects to find
-it. Let's also place u-boot-dtb separated from SPL at offset 8M, where
-the SPL expects it to find it.
+In case the post-process helper fails, we mut consider that to be a
+download failure, so we must bail out as if the download backend itself
+did fail, but we fail to do so.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Duplicate the logic we have for the download helper: if the post-process
+helper fails, remove the downloaded stuff, and continue on to the next
+URI, which will ultimately hit the backup mirror (if one has been
+configured).
+
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/asus/tinker/genimage.cfg       | 11 +++++++++--
- board/asus/tinker/post-build.sh      |  4 ++--
- configs/asus_tinker_rk3288_defconfig |  3 +--
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ support/download/dl-wrapper | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/board/asus/tinker/genimage.cfg b/board/asus/tinker/genimage.cfg
-index a4b1e8d608..fa7fd734f2 100644
---- a/board/asus/tinker/genimage.cfg
-+++ b/board/asus/tinker/genimage.cfg
-@@ -2,12 +2,19 @@ image sdcard.img {
- 	hdimage {
- 	}
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 09a6ac1f1a..1e8d6058f6 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -138,9 +138,15 @@ main() {
+         fi
  
--	partition u-boot-spl-dtb {
-+	partition u-boot-tpl-spl-dtb {
- 		in-partition-table = "no"
--		image = "u-boot-spl-dtb.img"
-+		image = "u-boot-tpl-spl-dtb.img"
- 		offset = 32K
- 	}
+         if [ -n "${post_process}" ] ; then
+-            "${OLDPWD}/support/download/${post_process}-post-process" \
+-                -o "${tmpf}" \
+-                -n "${raw_base_name}"
++            if ! "${OLDPWD}/support/download/${post_process}-post-process" \
++                    -o "${tmpf}" \
++                    -n "${raw_base_name}"
++            then
++                # cd back to keep path coherence
++                cd "${OLDPWD}"
++                rm -rf "${tmpd}"
++                continue
++            fi
+         fi
  
-+	partition u-boot-dtb {
-+		in-partition-table = "no"
-+		image = "u-boot-dtb.img"
-+		offset = 8M
-+		size = 30M
-+	}
-+
- 	partition rootfs {
- 		partition-type = 0x83
- 		image = "rootfs.ext4"
-diff --git a/board/asus/tinker/post-build.sh b/board/asus/tinker/post-build.sh
-index 8108ed83ff..ffbbcdeb58 100755
---- a/board/asus/tinker/post-build.sh
-+++ b/board/asus/tinker/post-build.sh
-@@ -3,7 +3,7 @@
- MKIMAGE=$HOST_DIR/bin/mkimage
- BOARD_DIR="$(dirname $0)"
- 
--$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
--cat $BINARIES_DIR/u-boot-dtb.bin >> $BINARIES_DIR/u-boot-spl-dtb.img
-+$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-tpl.bin $BINARIES_DIR/u-boot-tpl.img
-+cat $BINARIES_DIR/u-boot-tpl.img $BINARIES_DIR/u-boot-spl-dtb.bin > $BINARIES_DIR/u-boot-tpl-spl-dtb.img
- 
- install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
-index 6963fa939f..02b340a7f1 100644
---- a/configs/asus_tinker_rk3288_defconfig
-+++ b/configs/asus_tinker_rk3288_defconfig
-@@ -17,9 +17,8 @@ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
--BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
- BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
-+BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
+         # cd back to free the temp-dir, so we can remove it later
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
