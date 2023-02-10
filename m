@@ -4,47 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AC6DC64ED8
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:39:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F37B9C05027
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 22:47:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1313260D50;
-	Fri, 10 Feb 2023 22:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1313260D50
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94E876101A;
+	Fri, 10 Feb 2023 22:47:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94E876101A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uh17qauf_Yzf; Fri, 10 Feb 2023 22:39:58 +0000 (UTC)
+	with ESMTP id uzd55dy3yAgi; Fri, 10 Feb 2023 22:47:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55F2A606FF;
-	Fri, 10 Feb 2023 22:39:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55F2A606FF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC0181BF36F
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:39:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCFD760C1C;
+	Fri, 10 Feb 2023 22:47:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCFD760C1C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A6021BF36F
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A42F0823A0
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:39:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A42F0823A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 738A560C1C
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 22:47:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 738A560C1C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w4AufAs80neD for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 22:39:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D2C468230B
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2C468230B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C181F85212; Fri, 10 Feb 2023 22:39:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UxbegEOL9Ibc for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 22:47:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66348606FF
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 66348606FF
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 22:47:27 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id j23so6583613wra.0
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 14:47:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=sE1SZjAjv0XToUymQqaCNOEBTwAqcyN5ADbKgkvoOwY=;
+ b=rPaLQnSeNaywbmHZ2BNaz3DA7IBZeGfI+Hf7JPBNrWHO64ttJXmsOBHEceG3XSRD92
+ NU0ibBuRZmHcowRQTUg77EnbzvvVQmjrRPQ9O6fH/ByTga6V8TdS18vpBh7Ta0oTS9+J
+ 4C2ZXeHb9uP3vivpomSXHmrLKF88cRP0J/lQyEVYWfR3BTrRXb0WYDjUSn8zaROp/fJa
+ K53JQjfJVGS5PM9TZS02vX99XJsLvmyzK2BRmpywlS61/EEUOxIh9/X4nDpwJZK16Axt
+ MkKZOTJzNaBW42DWiP4SO0eTDiXJdzQUN05uRBtUY/uNxfiA29IjDeL48nmouVFUkp5J
+ j97Q==
+X-Gm-Message-State: AO0yUKX+KYAEVaehNq+BMItDjHIWLS3KHc2SnvJgFNyDgrC9n4d6DbmV
+ GCFfGtwXNmg0IMOydc8T9WMqrtJp2tl3XEI1
+X-Google-Smtp-Source: AK7set+1GdmWr8/ZtEQ2ydRYMAJUES6nnt357xvXn4hvwSEYi/NSK8nCVXJvR3aPq3sa9GHQO5L/zQ==
+X-Received: by 2002:adf:f78d:0:b0:2bf:ac2c:4489 with SMTP id
+ q13-20020adff78d000000b002bfac2c4489mr18678368wrp.54.1676069245626; 
+ Fri, 10 Feb 2023 14:47:25 -0800 (PST)
+Received: from localhost.localdomain
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ t9-20020adfeb89000000b002be0b1e556esm4576128wrn.59.2023.02.10.14.47.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Feb 2023 14:47:25 -0800 (PST)
+From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 23:38:44 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a82eec628c25f96a15ed7f1443923ff625e0d2bc
-X-Git-Newrev: d6e3d36a85f19acedd2ed58f5b8616dbf24f57a4
-X-Patchwork-Hint: ignore
-Message-Id: <20230210223955.C181F85212@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ssdp-responder;
- drop systemd unit installation, not needed
+Date: Fri, 10 Feb 2023 23:47:08 +0100
+Message-Id: <20230210224717.3293906-2-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.34.3
+In-Reply-To: <20230210224717.3293906-1-romain.naour@smile.fr>
+References: <20230210224717.3293906-1-romain.naour@smile.fr>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=sE1SZjAjv0XToUymQqaCNOEBTwAqcyN5ADbKgkvoOwY=;
+ b=l4QI2OK7yF/udj4cHEn75GDeeKupL5z3w+TJRYAqXeKcmXHtQve6hvTIR2rDRxcfgh
+ n4x8Yp61rm9yIrJLkU9yfih9Q6BonhdkY10HeaHUPvNsYoMO+riG3UxqaxBTEC5UlLXO
+ SWfY4ctdqjlUfJMSKPxS6loote/TXiOMoMvr/mEA0nlwmGx6taiw8u4E2otmE+e/7ZV2
+ qZPmIpI7DpdhrM8VlSslyEVzLdAppZ7R9VqIpFVQX3NbMp41IBVNAgDL3DTNDdvacwbF
+ IyPCFI8f7kUOcvxK/oNoT1FuRuws9MU1M498iBsgaZ1TIcFE2EQle8is7LlVdFjgE7Vz
+ vONA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=l4QI2OK7
+Subject: [Buildroot] [PATCH v3 01/10] package/llvm-project: new group for
+ llvm packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,49 +100,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Lang Daniel <d.lang@abatec.at>, Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6e3d36a85f19acedd2ed58f5b8616dbf24f57a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Lang Daniel <d.lang@abatec.at>
 
-When systemd is enabled the ssdp-responder build system already installs
-the unit file, with the correct name, so we can safely drop this.
+To make updating easier in the future, group all llvm projects in
+one subfolder and define some variables for all of them.
 
-This fixes the recurring autobuilder problems that cropped up the last
-week+ or so after fixing the spelling error in 6e0ba6b.
+Introduce LLVM_PROJECT_VERSION_MAJOR to be used by the clang package
+in a followup change.
 
- - http://autobuild.buildroot.net/results/f6912d6f79155c5d12811beeb6cb43860e37e7e7
- - http://autobuild.buildroot.net/results/7ee4ed26de7e45b52a9f6f36b839e578d2319247
- - http://autobuild.buildroot.net/results/33d9c10ea58a7cd3b3e2ed75d586007a92ccdaf0
- - http://autobuild.buildroot.net/results/f1238081fc94e3004aebb8e849fdd567a92a2d39
- - http://autobuild.buildroot.net/results/f7f2cf790f51e6224dca258c52bd31d21d621074
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/ssdp-responder/ssdp-responder.mk | 5 -----
- 1 file changed, 5 deletions(-)
+v3: Add LLVM_PROJECT_VERSION_MAJOR
+---
+ package/llvm-project/llvm-project.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 package/llvm-project/llvm-project.mk
 
-diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
-index d40f6f8c57..5193966908 100644
---- a/package/ssdp-responder/ssdp-responder.mk
-+++ b/package/ssdp-responder/ssdp-responder.mk
-@@ -25,9 +25,4 @@ define SSDP_RESPONDER_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50ssdpd
- endef
- 
--define SSDP_RESPONDER_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 $(@D)/ssdp-responder.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/ssdp-responder.service
--endef
--
- $(eval $(autotools-package))
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+new file mode 100644
+index 0000000000..747a6f5647
+--- /dev/null
++++ b/package/llvm-project/llvm-project.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# llvm-project
++#
++################################################################################
++
++LLVM_PROJECT_VERSION_MAJOR = 11
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.0
++LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
++
++include $(sort $(wildcard package/llvm-project/*/*.mk))
+-- 
+2.34.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
