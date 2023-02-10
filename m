@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC49C636D4
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 23:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0574C05027
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 23:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BE0760F7E;
-	Fri, 10 Feb 2023 23:14:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BE0760F7E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ABF061207;
+	Fri, 10 Feb 2023 23:14:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ABF061207
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5PpMQ8qJdzkr; Fri, 10 Feb 2023 23:14:06 +0000 (UTC)
+	with ESMTP id aIwcP7QS95g5; Fri, 10 Feb 2023 23:14:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D877160E72;
-	Fri, 10 Feb 2023 23:14:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D877160E72
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59BEB611FA;
+	Fri, 10 Feb 2023 23:14:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59BEB611FA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C03E01BF473
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 23:14:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3353F1BF473
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 23:14:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A7BC182341
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2DBA82342
  for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 23:14:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7BC182341
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2DBA82342
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TNFOLmoY0uJe for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 23:14:02 +0000 (UTC)
+ with ESMTP id aTzbLbYoMJqG for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 23:14:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D228F8232E
+ by smtp1.osuosl.org (Postfix) with ESMTP id E478F82338
  for <buildroot@buildroot.org>; Fri, 10 Feb 2023 23:14:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D228F8232E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E478F82338
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA856852D1; Fri, 10 Feb 2023 23:14:02 +0000 (UTC)
+ id CC01A852E0; Fri, 10 Feb 2023 23:14:02 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 00:11:29 +0100
+Date: Sat, 11 Feb 2023 00:13:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d6e3d36a85f19acedd2ed58f5b8616dbf24f57a4
-X-Git-Newrev: 0de216f95fc28c57cc430f39f011d5f88ead083b
+X-Git-Oldrev: 0de216f95fc28c57cc430f39f011d5f88ead083b
+X-Git-Newrev: f25b0b6d1dcc8580f6b880eb57872b5c4064b89f
 X-Patchwork-Hint: ignore
-Message-Id: <20230210231402.BA856852D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: add patch to adjust
- default NodeJS search path
+Message-Id: <20230210231402.CC01A852E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/tests: add NodeJS tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,70 +62,133 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0de216f95fc28c57cc430f39f011d5f88ead083b
+commit: https://git.buildroot.net/buildroot/commit/?id=f25b0b6d1dcc8580f6b880eb57872b5c4064b89f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, NodeJS searches global modules in /usr/lib/node, but NPM
-installs them in /usr/lib/node_modules/. Therefore by default, if one
-installs modules with BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL, they are
-not accessible by NodeJS, unless by passing a
-NODE_PATH=/usr/lib/node_modules/ variable. Since this is not obvious,
-and it's nicer when things work out of the box, we simply patch NodeJS
-to look for modules at the right place.
+This commit adds two new test cases:
 
-See
-https://stackoverflow.com/questions/15636367/nodejs-require-a-global-module-package
-for some discussions on this topic.
+ - TestNodeJSBasic which builds a target configuration with just
+   NodeJS enabled, and which runs a very simple NodeJS script on the
+   target.
+
+ - TestNodeJSModule, which builds a target configuration with NodeJS
+   enabled + the installation of one extra module, which means npm on
+   the host (from host-nodejs) is used, and which runs a very simple
+   NodeJS script on the target that uses this extra module.
+
+Having both tests separately allows to validate that both nodejs-only
+and nodejs+host-nodejs configurations behave correctly, at least in
+minimal scenarios.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Tested-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...l-modules-cjs-loader.js-adjust-default-pa.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ DEVELOPERS                                         |  3 ++
+ .../testing/tests/package/sample_nodejs_basic.js   |  3 ++
+ .../testing/tests/package/sample_nodejs_module.js  |  7 +++
+ support/testing/tests/package/test_nodejs.py       | 52 ++++++++++++++++++++++
+ 4 files changed, 65 insertions(+)
 
-diff --git a/package/nodejs/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch b/package/nodejs/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0af1323340..ae698f87c5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2944,11 +2944,14 @@ F:	package/weston/
+ F:	support/testing/tests/boot/test_grub.py
+ F:	support/testing/tests/boot/test_grub/
+ F:	support/testing/tests/boot/test_syslinux.py
++F:	support/testing/tests/package/sample_nodejs_basic.js
++F:	support/testing/tests/package/sample_nodejs_module.js
+ F:	support/testing/tests/package/sample_python_augeas.py
+ F:	support/testing/tests/package/sample_python_flask.py
+ F:	support/testing/tests/package/sample_python_flask_expects_json.py
+ F:	support/testing/tests/package/sample_python_git.py
+ F:	support/testing/tests/package/sample_python_unittest_xml_reporting.py
++F:	support/testing/tests/package/test_nodejs.py
+ F:	support/testing/tests/package/test_python_augeas.py
+ F:	support/testing/tests/package/test_python_flask.py
+ F:	support/testing/tests/package/test_python_flask_expects_json.py
+diff --git a/support/testing/tests/package/sample_nodejs_basic.js b/support/testing/tests/package/sample_nodejs_basic.js
 new file mode 100644
-index 0000000000..5b93998e5e
+index 0000000000..7633173c64
 --- /dev/null
-+++ b/package/nodejs/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
-@@ -0,0 +1,36 @@
-+From a31425bdfcb5d695ab25c3d295898326784cffec Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 25 Sep 2022 11:10:06 +0200
-+Subject: [PATCH] lib/internal/modules/cjs/loader.js: adjust default path to
-+ search modules
++++ b/support/testing/tests/package/sample_nodejs_basic.js
+@@ -0,0 +1,3 @@
++var assert = require('assert');
++assert.strictEqual(1, 1);
++console.log("Hello World");
+diff --git a/support/testing/tests/package/sample_nodejs_module.js b/support/testing/tests/package/sample_nodejs_module.js
+new file mode 100644
+index 0000000000..57aee73408
+--- /dev/null
++++ b/support/testing/tests/package/sample_nodejs_module.js
+@@ -0,0 +1,7 @@
++var assert = require('assert');
++var lodash = require('lodash');
++result = lodash.chunk(['a', 'b', 'c', 'd'], 2);
++expected = [ [ 'a', 'b' ], [ 'c', 'd' ] ];
++assert.deepStrictEqual(result, expected)
 +
-+NPM installs modules in /usr/lib/node_modules/, but by default NodeJS
-+searches for them only in /usr/lib/node/. We could also set the
-+NODE_PATH environment variable, but it is more convienient to have
-+NodeJS configured by default to find modules where they are installed.
 +
-+This issue is discussed at
-+https://stackoverflow.com/questions/15636367/nodejs-require-a-global-module-package.
+diff --git a/support/testing/tests/package/test_nodejs.py b/support/testing/tests/package/test_nodejs.py
+new file mode 100644
+index 0000000000..9463c76b72
+--- /dev/null
++++ b/support/testing/tests/package/test_nodejs.py
+@@ -0,0 +1,52 @@
++import os
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ lib/internal/modules/cjs/loader.js | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++import infra.basetest
 +
-+diff --git a/lib/internal/modules/cjs/loader.js b/lib/internal/modules/cjs/loader.js
-+index f1971c40a4..5fe3884156 100644
-+--- a/lib/internal/modules/cjs/loader.js
-++++ b/lib/internal/modules/cjs/loader.js
-+@@ -1261,7 +1261,8 @@ Module._initPaths = function() {
-+     path.resolve(process.execPath, '..') :
-+     path.resolve(process.execPath, '..', '..');
-+ 
-+-  const paths = [path.resolve(prefixDir, 'lib', 'node')];
-++  const paths = [path.resolve(prefixDir, 'lib', 'node'),
-++                 path.resolve(prefixDir, 'lib', 'node_modules')];
-+ 
-+   if (homeDir) {
-+     ArrayPrototypeUnshift(paths, path.resolve(homeDir, '.node_libraries'));
-+-- 
-+2.37.3
 +
++class TestNodeJSBasic(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_PACKAGE_NODEJS=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
++        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
++                   infra.filepath("tests/package/sample_nodejs_basic.js"))
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++        self.assertRunOk("node sample_nodejs_basic.js")
++
++
++class TestNodeJSModule(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_PACKAGE_NODEJS=y
++        BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="lodash"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
++        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
++                   infra.filepath("tests/package/sample_nodejs_module.js"))
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++        self.assertRunOk("node sample_nodejs_module.js")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
