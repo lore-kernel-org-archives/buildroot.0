@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B60F1C636CD
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 10:40:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4AD9C636CD
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 15:52:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C87060E6F;
-	Fri, 10 Feb 2023 10:40:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C87060E6F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7711A419C3;
+	Fri, 10 Feb 2023 15:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7711A419C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6C2_t_sNAxhj; Fri, 10 Feb 2023 10:40:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i6ShWQZIRbyN; Fri, 10 Feb 2023 15:52:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0D3560E41;
-	Fri, 10 Feb 2023 10:40:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0D3560E41
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5FE831BF31B
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 10:40:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF053419CC;
+	Fri, 10 Feb 2023 15:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF053419CC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5467F1BF2B0
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 477CA60E41
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 10:40:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 477CA60E41
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33445822BB
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33445822BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BmqN2dsRnNvQ for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 10:40:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DN-pV7mZdAly for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 15:52:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 891AA60DFC
- for <buildroot@uclibc.org>; Fri, 10 Feb 2023 10:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 891AA60DFC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65DE6822A9
+ for <buildroot@uclibc.org>; Fri, 10 Feb 2023 15:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65DE6822A9
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 751D88430A; Fri, 10 Feb 2023 10:40:46 +0000 (UTC)
+ id 53F1284F5C; Fri, 10 Feb 2023 15:52:36 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 10 Feb 2023 10:40:46 +0000
+Date: Fri, 10 Feb 2023 15:52:36 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: trivial
-X-Bugzilla-Who: alexis.lothore@bootlin.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: jacmet@uclibc.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: alexis.lothore@bootlin.com
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15331-163-Kxe5EIIppE@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-15331-163-G1wiM2OmPk@https.bugs.busybox.net/>
 In-Reply-To: <bug-15331-163@https.bugs.busybox.net/>
 References: <bug-15331-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -74,16 +74,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNTMzMQoKLS0tIENvbW1l
-bnQgIzEgZnJvbSBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPiAt
-LS0KUHJvcG9zZWQgcGF0Y2g6Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9waXBlcm1haWwv
-YnVpbGRyb290LzIwMjMtRmVicnVhcnkvNjYxODAwLmh0bWwKCi0tIApZb3UgYXJlIHJlY2Vpdmlu
-ZyB0aGlzIG1haWwgYmVjYXVzZToKWW91IGFyZSBvbiB0aGUgQ0MgbGlzdCBmb3IgdGhlIGJ1Zy4K
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+https://bugs.busybox.net/show_bug.cgi?id=15331
+
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed by
+https://gitlab.com/buildroot.org/buildroot/-/commit/1613273542554776b089b3df2b6b71c1af2cc0da,
+thanks
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
