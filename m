@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B94CC636CD
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 15:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36F84C05027
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 15:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1553841635;
-	Fri, 10 Feb 2023 15:53:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1553841635
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0E094161E;
+	Fri, 10 Feb 2023 15:54:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0E094161E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T6SErdHEn_dx; Fri, 10 Feb 2023 15:53:58 +0000 (UTC)
+	with ESMTP id DEqNusnCkmJl; Fri, 10 Feb 2023 15:54:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41C314161E;
-	Fri, 10 Feb 2023 15:53:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41C314161E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E3DF41687;
+	Fri, 10 Feb 2023 15:54:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E3DF41687
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6554A1BF2B0
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:53:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5A9811BF2B0
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:54:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3FC1881327
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:53:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FC1881327
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4205981E49
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 15:54:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4205981E49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pOk06c5JSak9 for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 15:53:55 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37CDF8131B
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 37CDF8131B
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 15:53:55 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6AF8510000C;
- Fri, 10 Feb 2023 15:53:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pQVii-00039y-N8; Fri, 10 Feb 2023 16:53:52 +0100
+ with ESMTP id 7tXfdVXnP7e8 for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 15:54:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 020C081F8D
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 15:54:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 020C081F8D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E5F0A84F7B; Fri, 10 Feb 2023 15:54:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Frank Vanbever <frank.vanbever@mind.be>
-References: <20230210110643.449927-1-frank.vanbever@mind.be>
-Date: Fri, 10 Feb 2023 16:53:52 +0100
-In-Reply-To: <20230210110643.449927-1-frank.vanbever@mind.be> (Frank
- Vanbever's message of "Fri, 10 Feb 2023 12:06:43 +0100")
-Message-ID: <87zg9lcy9b.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/elixir: drop package
+To: buildroot@buildroot.org
+Date: Fri, 10 Feb 2023 16:53:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1613273542554776b089b3df2b6b71c1af2cc0da
+X-Git-Newrev: 406698de03a9c9e4ded5a50070de2249398380ff
+X-Patchwork-Hint: ignore
+Message-Id: <20230210155405.E5F0A84F7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elixir: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,25 +56,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Frank" == Frank Vanbever <frank.vanbever@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=406698de03a9c9e4ded5a50070de2249398380ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Elixir was a dependency of rabbitmq-server which got dropped in
- > 89815bad0a531d01ee2733dd9c17576a7647e1d9. It is a host package with no other
- > users, hence it is no longer required. Additionally, newer versions require
- > Erlang 23+.
+Elixir was a dependency of rabbitmq-server which got dropped in
+89815bad0a531d01ee2733dd9c17576a7647e1d9. It is a host package with no other
+users, hence it is no longer required. Additionally, newer versions require
+Erlang 23+.
 
- > Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
+Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS                 |  1 -
+ package/elixir/elixir.hash |  3 ---
+ package/elixir/elixir.mk   | 21 ---------------------
+ 3 files changed, 25 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 32c6e54919..e8e0671709 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1089,7 +1089,6 @@ F:	package/upx/
+ F:	package/zxing-cpp/
+ 
+ N:	Frank Vanbever <frank.vanbever@mind.be>
+-F: 	package/elixir/
+ F:	package/libmodsecurity/
+ F:	package/nginx-modsecurity/
+ 
+diff --git a/package/elixir/elixir.hash b/package/elixir/elixir.hash
+deleted file mode 100644
+index 6d083e72de..0000000000
+--- a/package/elixir/elixir.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Computed locally
+-sha256  f3465d8a8e386f3e74831bf9594ee39e6dfde6aa430fe9260844cfe46aa10139  elixir-1.9.4.tar.gz
+-sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE
+diff --git a/package/elixir/elixir.mk b/package/elixir/elixir.mk
+deleted file mode 100644
+index 6d935516f4..0000000000
+--- a/package/elixir/elixir.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# elixir
+-#
+-################################################################################
+-
+-ELIXIR_VERSION = 1.9.4
+-ELIXIR_SITE = $(call github,elixir-lang,elixir,v$(ELIXIR_VERSION))
+-ELIXIR_LICENSE = Apache-2.0
+-ELIXIR_LICENSE_FILES = LICENSE
+-HOST_ELIXIR_DEPENDENCIES = host-erlang
+-
+-define HOST_ELIXIR_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) compile
+-endef
+-
+-define HOST_ELIXIR_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) PREFIX="$(HOST_DIR)" -C $(@D) install
+-endef
+-
+-$(eval $(host-generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
