@@ -4,84 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 550D0C05027
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 18:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54BFFC636D4
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 18:47:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A87924115D;
-	Fri, 10 Feb 2023 18:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A87924115D
+	by smtp2.osuosl.org (Postfix) with ESMTP id DAA06400CC;
+	Fri, 10 Feb 2023 18:47:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAA06400CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tm0nDQleXI7A; Fri, 10 Feb 2023 18:02:45 +0000 (UTC)
+	with ESMTP id zkA_gGXxF6OV; Fri, 10 Feb 2023 18:47:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C96FD41164;
-	Fri, 10 Feb 2023 18:02:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C96FD41164
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AE1511BF479
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 18:02:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 246744018B;
+	Fri, 10 Feb 2023 18:47:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 246744018B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E5051BF2C5
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 18:47:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8866261042
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 18:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8866261042
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9C93822E7
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 18:47:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9C93822E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id juh6S5vYpHx2 for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 18:02:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BAF460A70
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com
- [IPv6:2607:f8b0:4864:20::1035])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6BAF460A70
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 18:02:41 +0000 (UTC)
-Received: by mail-pj1-x1035.google.com with SMTP id
- a8-20020a17090a6d8800b002336b48f653so4579731pjk.3
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 10:02:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=AnUmkZlf7MK5lhSMJySlvmuOJ4YW2tQ+fw5E3H2uI78=;
- b=m7iHBVKkOOkXtJWWa5IX1T5FXaMF6Y83CGBB5qgVtHlU+QJIEBoaDjA1/0aiT1hDQO
- lIhLnsGKgbKhl4s3JlmF7fk01PZEiySsddg5XuIj52NltC68jsR0oKiDk6z939NQG7uj
- CsXJR8+kyx+mJNuAihgxRdqHDMmwAspkFHckjYdd9qikXZsp6PGJpJ5uCBrRw6XADH0R
- /Dqaq05zutY4fHKlimccoGFFGLVaoHgDFLlWmmPK6E21SJ6GX0ZmeiWJrEcgqczpyo2k
- EJrgV+P1QESF5/UQkkyV+9WE9g+/9+9Cp47yi3AOGLXYU6WaklG0kU/4n5rAZ5UktFcF
- sLDw==
-X-Gm-Message-State: AO0yUKUQMSzEQ+cGE2oUzG1loh6qxUJXTVQ3Kof+Aa3W/nRTWcj5StyT
- tcfqIZPbBSA0jXJ6NaCli8dIanu8eFs=
-X-Google-Smtp-Source: AK7set+wfJSv69U9sIH0QXmFvGtcII8s5NXukvrSdq7rw2FAJzDOpa5XsnXHJ6rBnBV/Fwg5y5t9ow==
-X-Received: by 2002:a17:90b:1c0e:b0:22c:6d7c:c521 with SMTP id
- oc14-20020a17090b1c0e00b0022c6d7cc521mr17180995pjb.45.1676052160438; 
- Fri, 10 Feb 2023 10:02:40 -0800 (PST)
-Received: from ax.lan ([64.139.108.195]) by smtp.gmail.com with ESMTPSA id
- q32-20020a17090a4fa300b00230d7b6d162sm5386374pjh.37.2023.02.10.10.02.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Feb 2023 10:02:39 -0800 (PST)
-From: Akshay Bhat <nodeax@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 10:02:22 -0800
-Message-Id: <20230210180222.88328-1-nodeax@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tiax2viJonyG for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 18:47:03 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E86C822C4
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3E86C822C4
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 18:47:03 +0000 (UTC)
+Received: from [81.174.171.191] (helo=donbot)
+ by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+ (Exim 4.95) (envelope-from <john@metanate.com>) id 1pQYQF-0005p0-Ek;
+ Fri, 10 Feb 2023 18:46:59 +0000
+Date: Fri, 10 Feb 2023 18:46:58 +0000
+From: John Keeping <john@metanate.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <Y+aRIvtdL1ROUUQE@donbot>
+References: <20230209170707.4066903-1-peter@korsgaard.com>
+ <Y+YnzeeSbedxW3eK@donbot> <87fsbdg2wb.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AnUmkZlf7MK5lhSMJySlvmuOJ4YW2tQ+fw5E3H2uI78=;
- b=qHh/xXvr+Xgr4RL1WFwvuSG93yW6sO9xsYHnVhCZeBLK2iH+TLAnuduojvhT8dRIR1
- Kr44UgvXEZD9RD7AGfa+5wlvtvJdoAqqAiHcGTNDKyakdhQkeVlOkq+zS7e40cuYLtIv
- ahKMQfiI3+sp19Qa+RKoY5Pz0NuSp0+/JMbEjWRQ0MtFjS2u4KWAKhvkfO1cbJtfi6Mm
- MXUNLPeIoMPjbnCNRW/b+4VHz3GOh9EdQdovzGpNH80V1Uhy3iMOEe34djSyjd/mcZVQ
- dYPJ2Jx0DELthb7VWrgh7WfKjbYdYAQl/9TTvgFjxBPOOWxtwZxWDAyrt6e2FRjO2ZQF
- JA2A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=qHh/xXvr
-Subject: [Buildroot] [PATCH 1/1] package/libiberty: bump version to 2.38
+Content-Disposition: inline
+In-Reply-To: <87fsbdg2wb.fsf@dell.be.48ers.dk>
+X-Authenticated: YES
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+ Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description; bh=7Vi2Aeqf0fP5dOmVuz25elahG3SLdFWuxVem2UA0gS0=; b=hltIT
+ YPQjHHTDFGQqByR5X1E4xAO+kltUGI8D03rG4/bPCOk/7Jg5+tFoi3nx4ToO5RC3apTIIiZpUagTE
+ 8HivXpZUc+lJjFoKuyTaEeql3DyvnrpNg3RtTpv+WGPESGt+AsGYEXugMLAXmT0qNnGDPPpjJz60C
+ XuscIVD4A/BRg+U8NJRjBOnGZPatEjaazws7w6DbTDXY4TCErvoNONC2CnzaiKqFa5BXwVdWwMQM/
+ mr/jrDSerzN7gGq7QRWIFx4ZH6VlU3ZtoW51SHqiZeuY/mAdMwC/wWYldte9HxaBf5wuxrS4RZx5w
+ fbrYBYF2qf+sXa83P8pRFJjZswy1w==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=metanate.com header.i=@metanate.com
+ header.a=rsa-sha256 header.s=stronger header.b=hltITYPQ
+Subject: Re: [Buildroot] [PATCH 1/2] package/webkitgtk: Build with ninja
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,51 +74,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Akshay Bhat <nodeax@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If the libiberty package is not the same version as the one packaged
-with binutils AND if libiberty is installed before binutils, then the
-below error is observed. Hence for now let us keep the versions in sync.
+On Fri, Feb 10, 2023 at 12:45:24PM +0100, Peter Korsgaard wrote:
+> >>>>> "John" == John Keeping <john@metanate.com> writes:
+> 
+>  > Hi Peter,
+>  > On Thu, Feb 09, 2023 at 06:07:05PM +0100, Peter Korsgaard wrote:
+>  >> +define WEBKITGTK_BUILD_CMDS
+>  >> +	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WEBKITGTK_BUILDDIR)
+>  >> +endef
+>  >> +
+>  >> +define WEBKITGTK_INSTALL_STAGING_CMDS
+>  >> +	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+>  >> +endef
+>  >> +
+>  >> +define WEBKITGTK_INSTALL_TARGET_CMDS
+>  >> +	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+>  >> +endef
+>  >> +
+> 
+>  > Would it make sense to apply these changes in pkg-cmake.mk?
+> 
+>  > Using `cmake --build` and `cmake --install` works with all generators
+>  > and it would avoid needing to repeat this block for both of the packages
+>  > in this series.
+> 
+> Longer term that is indeed the direction we want to move to (and
+> generally build cmake packages with the ninja backend).
+> 
+> This is meant as a minimal patch that is easy to backport to the stable
+> branches.
 
-/usr/bin/ld: ../libiberty/libiberty.a(hashtab.o):(.data.rel.local+0x0): multiple definition of `htab_eq_pointer'
+Makes sense.
 
-Signed-off-by: Akshay Bhat <nodeax@gmail.com>
----
- package/libiberty/libiberty.hash | 2 +-
- package/libiberty/libiberty.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> We have a number of cmake packages that use custom FOO_MAKE_OPTS, how
+> are those passed to make when using cmake --build / --install?
 
-diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
-index 0dafcea520..74b2d89d31 100644
---- a/package/libiberty/libiberty.hash
-+++ b/package/libiberty/libiberty.hash
-@@ -1,5 +1,5 @@
- # From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
--sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
-+sha512  8bf0b0d193c9c010e0518ee2b2e5a830898af206510992483b427477ed178396cd210235e85fd7bd99a96fc6d5eedbeccbd48317a10f752b7336ada8b2bb826d  binutils-2.38.tar.xz
- 
- # Locally computed, same as binutils.hash
- sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
-diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
-index 6235a8b956..e0e6987ad7 100644
---- a/package/libiberty/libiberty.mk
-+++ b/package/libiberty/libiberty.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIBERTY_VERSION = 2.32
-+LIBIBERTY_VERSION = 2.38
- LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
- LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
- HOST_LIBIBERTY_DL_SUBDIR = binutils
--- 
-2.34.1
+For building, we have:
 
+	cmake --build <dir> [<options>] [-- <build-tool-options>]
+
+so it should be easy to pass _MAKE_OPTS through.
+
+But I can't see anything similar for --install, although I wonder if
+anything actually needs to pass _MAKE_OPTS for installation.
+
+From a quick look only 3 CMake packages use _MAKE_OPTS at all:
+
+	$ git grep -l cmake-package package/ | grep -vF pkg-cmake.mk | xargs grep MAKE_OPTS
+	package/gdal/gdal.mk:GDAL_MAKE_OPTS += -f Makefile
+	package/mariadb/mariadb.mk:HOST_MARIADB_MAKE_OPTS = import_executables
+	package/zeek/zeek.mk:HOST_ZEEK_MAKE_OPTS = binpac bifcl
+
+Of those, gdal's use is probably unnecessary when using `cmake --build`
+and the other two could us a more specific option to set targets and use
+the --targets option (but should also be okay with passing options after
+`--`).
+
+
+Regards,
+John
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
