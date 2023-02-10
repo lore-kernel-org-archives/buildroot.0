@@ -1,89 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A083C636D4
-	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 18:47:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9335C05027
+	for <buildroot@archiver.kernel.org>; Fri, 10 Feb 2023 21:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2DE564016C;
-	Fri, 10 Feb 2023 18:47:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DE564016C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D2BF60773;
+	Fri, 10 Feb 2023 21:55:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D2BF60773
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rL6kJcHqKnZa; Fri, 10 Feb 2023 18:47:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wz7CAALM5XjJ; Fri, 10 Feb 2023 21:55:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64AA54118A;
-	Fri, 10 Feb 2023 18:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64AA54118A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8CE0B1BF2C5
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 18:47:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D27060758;
+	Fri, 10 Feb 2023 21:55:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D27060758
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6EDA81BF276
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 21:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 667D34018B
- for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 18:47:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 667D34018B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 547D541B36
+ for <buildroot@lists.busybox.net>; Fri, 10 Feb 2023 21:55:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 547D541B36
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GOY__DflV2I1 for <buildroot@lists.busybox.net>;
- Fri, 10 Feb 2023 18:47:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y1fSePzcYdsD for <buildroot@lists.busybox.net>;
+ Fri, 10 Feb 2023 21:55:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D1784016C
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D1784016C
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 18:47:09 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id jg8so18308759ejc.6
- for <buildroot@buildroot.org>; Fri, 10 Feb 2023 10:47:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC9FA41A6B
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CC9FA41A6B
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 21:55:51 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ az4-20020a05600c600400b003dff767a1f1so5025657wmb.2
+ for <buildroot@buildroot.org>; Fri, 10 Feb 2023 13:55:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=LIMz32+IdHV+jCITE3W+bT73lOFXI/D0TeLcBuZZCl8=;
- b=Ajw8sR0V0XuIWqNDAIYV/WrM8TWZpAMoBCa2WcEbz3D3JdxlozsrNvehfnklzbfAg2
- teSjOso92qutfoU4ZJz6E1DBd/+R+JnPMuJu5y3KwdHnyAKHQ0mmrYbzdQ4QU9PgmCAH
- hKoG5fb6XmPulf81/rUYFLt/j+UNDjK3+cN3Bmx3xTydzYSbEvQai45IGLWJl+s9kthF
- vUxLSN/Ss/kluv6tGfEg4jYx/EFNOl9+nLyq/2iWj1As5Ks0Pr42dxP6TnmfcimDOa8J
- 9rlnW3OS7b+ITUM3wV6enT9JmPlULDtXPDrsYID5dBzIYnW8EDO8RUfDFozbCvKykErW
- dqLQ==
-X-Gm-Message-State: AO0yUKUqRrCiTmrBekYWdmylAgo/qBrHgkmgV2xGVSF37b2nFQrG4mle
- DWaSsENwn+fYrjT9DqFIIRZ9ZTuGbQJwkA==
-X-Google-Smtp-Source: AK7set8oJqKLDfGdL0gCLrmtzWljPRptVdmXb7ZClfBzOZ+uH/TKpJew3e8HZ4JN6/Q9esdy+u/tZg==
-X-Received: by 2002:a17:907:c23:b0:8aa:b526:36b3 with SMTP id
- ga35-20020a1709070c2300b008aab52636b3mr20987531ejc.14.1676054827310; 
- Fri, 10 Feb 2023 10:47:07 -0800 (PST)
-Received: from gimli.lan ([2001:9b0:21e:3500::af3])
- by smtp.gmail.com with ESMTPSA id
- b4-20020a17090630c400b008af3930c394sm2630206ejb.60.2023.02.10.10.47.06
+ bh=dHQBeG7OSkClQZq30ACW6cnfBNFIIGhVZxqilAlhcA0=;
+ b=obiMvC8kuRQZbdyYM6HUk5cIIwJ9xvi2Isjj57baQGsrxW7/ykFy3fm457CHliLYiF
+ hbJboGbjGtiyw9A5fMCJIJ7rlDL+bzcNEP0F4UtanH7dwGiWhOYprqB+1CleqkfXRIOc
+ tPUyGv8ZyNhnzn6NdmFZVdd0qLVFxhhpu0mtQ7E8yXGoIxmUgElECEPBkT9+UfVeFLvK
+ yArMR5kqvMNpEPy2ogbiO8XYBl+ze6fhzs9bG4O71hLugJBvVCh1dc7A/SwX2EkIebwo
+ 865N+F+ptMaG8vSHc3rKuBCkp7Ux+zrF9vzhg5oDMTCufgRcYAdznYkBgqdtHNs68ufn
+ kzzw==
+X-Gm-Message-State: AO0yUKXROEzD7A92uxd/PokSUeYlVp85EYtSV4de4+VVtfh8QY8OM4a4
+ nlQSB9qVWSs+Ceo4PICw6etbjPQisfw=
+X-Google-Smtp-Source: AK7set9i8nVylDG+U9TP0gJFGj8Q6h/xuvHkimceXMH/j7W3eanN2MCkGRcLZ5IzwiwrUib4n/Enxg==
+X-Received: by 2002:a05:600c:a287:b0:3df:ee64:4814 with SMTP id
+ hu7-20020a05600ca28700b003dfee644814mr14051468wmb.20.1676066149915; 
+ Fri, 10 Feb 2023 13:55:49 -0800 (PST)
+Received: from localhost.localdomain (1-1-22-171.ftth.cust.kwaoo.net.
+ [171.22.1.1]) by smtp.gmail.com with ESMTPSA id
+ o41-20020a05600c512900b003dc4aae4739sm10819338wms.27.2023.02.10.13.55.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Feb 2023 10:47:06 -0800 (PST)
-From: Joachim Wiberg <troglobit@gmail.com>
+ Fri, 10 Feb 2023 13:55:49 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Feb 2023 19:47:04 +0100
-Message-Id: <20230210184704.3381562-1-troglobit@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri, 10 Feb 2023 22:55:48 +0100
+Message-Id: <20230210215548.1050371-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Organization: Addiva Elektronik
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LIMz32+IdHV+jCITE3W+bT73lOFXI/D0TeLcBuZZCl8=;
- b=eIgS3Cv04a5mblDDFJc6d1Q71CRGcmVVT4INdtlKQxi1R0RN/TCDCsEIEi0WYg7X6G
- f8OnXcpm/4VlHppDX9+Gf/OQ/TrLKNlsWVQcOFBhFak4vxKMwvY7/8ZoFK+xh4JKT9gy
- ZnqZvm/KuHnQKXf1yoRShVFjqsjJjmGmwCVK0InZf18sdoKwLHV+xm0T3pLRBLUCyjav
- /6rB9LzLdV9mQfG2dEQFsGvVp2rqVr+lYpbG0bvxRDCF8wXPBKr4HU1XOMmrBFOi4sUA
- yNtGioLUTqy0UD8hMxQWdYfmXywvN16nZD2N6FJ4UfXAZOP7r4YtqyHU3tbskKwEF76J
- Ox7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=dHQBeG7OSkClQZq30ACW6cnfBNFIIGhVZxqilAlhcA0=;
+ b=NCay/V8YdPQJ0Di8hy6jyOlJBR4GVhcFqxPz1zr+RNZ4yli6FGH3rAapSWNz0VAOM3
+ P8En6V/N3tkm2NBSIA6liV08lFYWUAFgy2XXNTt6KVGC1vQaeJ82kVehzsUFtt7SKnz7
+ yVxnBJENpuoqejFM8QeNdeWH7KKJIufqSmo4fu4Xpr0Eew+8L9eEpyWA0E3GmvDqJPXe
+ v7PqpnkM0k02ecRftbjkDYAaYmEzQfff0GezHWWp1/cuXWx2CGAPmGir5JZF6RixLsJ7
+ XbTFppW2OX/UTg5dedKC/I5m1q8N7j0Fgupyaf9e5WbxtLVcY51dfPnuiOoZaxoZJmn5
+ rT0Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=eIgS3Cv0
-Subject: [Buildroot] [PATCH 1/1] package/ssdp-responder;
- drop systemd unit installation, not needed
+ header.a=rsa-sha256 header.s=20210112 header.b=NCay/V8Y
+Subject: [Buildroot] [PATCH] package/erlang: do not hard-code the Erlang
+ Interface Version (EI_VSN)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,45 +95,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Johan Oudinet <johan.oudinet@gmail.com>, Will Newton <will.newton@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When systemd is enabled the ssdp-responder build system already installs
-the unit file, with the correct name, so we can safely drop this.
+The note above the erlang version instructs to refer to another note
+further down the file. However, even if it is not too difficult to find,
+it is still located a bit too far away, and the reference is not very
+explicit what note we should look at.
 
-This fixes the recurring autobuilder problems that cropped up the last
-week+ or so after fixing the spelling error in 6e0ba6b.
+When we introduced that variable in 6c1d128844c5 (package/erlang: export
+EI_VSN so other packages can use it), the rationale for hard-coding it
+was "to avoid spawning a shell every time the variable is dereferenced".
 
- - http://autobuild.buildroot.net/results/f6912d6f79155c5d12811beeb6cb43860e37e7e7
- - http://autobuild.buildroot.net/results/7ee4ed26de7e45b52a9f6f36b839e578d2319247
- - http://autobuild.buildroot.net/results/33d9c10ea58a7cd3b3e2ed75d586007a92ccdaf0
- - http://autobuild.buildroot.net/results/f1238081fc94e3004aebb8e849fdd567a92a2d39
- - http://autobuild.buildroot.net/results/f7f2cf790f51e6224dca258c52bd31d21d621074
+However, that can get a bit confusing and hard to follow. Also, that in
+fact spawns a shell only once for each rebar-packages, so the overhead
+is far from being too high.
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+The EI_VSN is only used by rebar-package packages, is derefrenced from
+the rebar-infra and not the packages themselves, and is not needed by
+erlang itself (it knows its own EI_VSN), so we can de-hard-code it, and
+rely on build-time detection, by looking in the appropriate file.
+
+We have two files where we could look:
+  - lib/erl_interface/vsn.mk in the erlang source tree, but it is not
+    installed,
+  - .../lib/erlang/releases/$(ERLANG_RELASE)/installed_application_versions
+    as installed by erlang.
+
+We use the second one, as it is cleaner, for a package, to look into
+installed files, rather than to look in the source tree of another
+package.
+
+Although both the host and target erlang are the same, we still look
+into the corresponding file to extract the version. This is so that it
+would be easier if in the future we ever manage to rely on a
+system-installed erlang that could have a EI_VSN different from the
+target one.
+
+We can't re-use the variable ERLANG_EI_VSN, because it now needs to be
+$(call)-ed with a parameter. Hopefully, external packages that use it
+directly rather than through the rebar infra, are not legion...
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Will Newton <will.newton@gmail.com>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/ssdp-responder/ssdp-responder.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/erlang/erlang.mk | 8 ++++----
+ package/pkg-rebar.mk     | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
-index d40f6f8c57..5193966908 100644
---- a/package/ssdp-responder/ssdp-responder.mk
-+++ b/package/ssdp-responder/ssdp-responder.mk
-@@ -25,9 +25,4 @@ define SSDP_RESPONDER_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50ssdpd
- endef
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index ac2c204a49..5d6b69057a 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--define SSDP_RESPONDER_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 $(@D)/ssdp-responder.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/ssdp-responder.service
--endef
--
- $(eval $(autotools-package))
+-# See note below when updating Erlang
+ ERLANG_VERSION = 22.3.4.22
++ERLANG_RELEASE = $(firstword $(subst ., ,$(ERLANG_VERSION)))
+ ERLANG_SITE = \
+ 	https://github.com/erlang/otp/releases/download/OTP-$(ERLANG_VERSION)
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+@@ -36,9 +36,9 @@ ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
+ HOST_ERLANG_DEPENDENCIES += host-autoconf
+ HOST_ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
+ 
+-# Whenever updating Erlang, this value should be updated as well, to the
+-# value of EI_VSN in the file lib/erl_interface/vsn.mk
+-ERLANG_EI_VSN = 3.13.2.2
++# Return the EIV (Erlang Interface Version, EI_VSN)
++# $(1): base directory, i.e. either $(HOST_DIR) or $(STAGING_DIR)/usr
++erlang_ei_vsn = `sed -r -e '/^erl_interface-(.+)/!d; s//\1/' $(1)/lib/erlang/releases/$(ERLANG_RELEASE)/installed_application_versions`
+ 
+ # The configure checks for these functions fail incorrectly
+ ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
+index e4e3f3bb6c..4b993dd970 100644
+--- a/package/pkg-rebar.mk
++++ b/package/pkg-rebar.mk
+@@ -32,10 +32,10 @@ REBAR_TARGET_DEPS_DIR = $(STAGING_DIR)/usr/share/rebar/deps
+ #
+ REBAR_HOST_DEPS_ENV = \
+ 	ERL_COMPILER_OPTIONS='{i, "$(REBAR_HOST_DEPS_DIR)"}' \
+-	ERL_EI_LIBDIR=$(HOST_DIR)/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
++	ERL_EI_LIBDIR=$(HOST_DIR)/lib/erlang/lib/erl_interface-$(call erlang_ei_vsn,$(HOST_DIR))/lib
+ REBAR_TARGET_DEPS_ENV = \
+ 	ERL_COMPILER_OPTIONS='{i, "$(REBAR_TARGET_DEPS_DIR)"}' \
+-	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
++	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(call erlang_ei_vsn,$(STAGING_DIR)/usr)/lib
+ 
+ ################################################################################
+ # Helper functions
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
