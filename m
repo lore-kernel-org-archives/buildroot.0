@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF354C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CBBAC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:55:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78E02701CA;
-	Tue, 21 Feb 2023 01:55:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78E02701CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id F23347001C;
+	Tue, 21 Feb 2023 01:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F23347001C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DTCNX24ouiE8; Tue, 21 Feb 2023 01:54:59 +0000 (UTC)
+	with ESMTP id gbbVx6TWGe8h; Tue, 21 Feb 2023 01:55:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92C30700DC;
-	Tue, 21 Feb 2023 01:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C30700DC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D23C700DC;
+	Tue, 21 Feb 2023 01:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D23C700DC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E6AB51BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 55CB51BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 338CB70008
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3542970025
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 338CB70008
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3542970025
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fGKMXHKR51M0 for <buildroot@lists.busybox.net>;
+ with ESMTP id RJKlqL_YKVdA for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6515D6FFF3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DF446FE60
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6515D6FFF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DF446FE60
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60CB28648F; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 4B21381979; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 23:18:26 +0100
+Date: Sat, 11 Feb 2023 15:58:35 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a54bb2a2d99b835f672ae194dc4934757881e08b
-X-Git-Newrev: 9b9bea584c2f2c14122395eba7cdbf325ed7256c
+X-Git-Oldrev: 2bf4d02ff35bd8a0d5aace354c987a166437db88
+X-Git-Newrev: 451672e890b5f605aa9ad7a386491a31397c737f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205258.60CB28648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libX11:
- bump version to 1.8.4
+Message-Id: <20230220205258.4B21381979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/chrony: run as
+ unprivileged user
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,106 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b9bea584c2f2c14122395eba7cdbf325ed7256c
+commit: https://git.buildroot.net/buildroot/commit/?id=451672e890b5f605aa9ad7a386491a31397c737f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-February/003318.html
+There are three ways to run chronyd:
+  - start as root, and continue running as root;
+  - start as root, then setuid() to a non-root user via either a command
+    line option or a configuration directive;
+  - start as root, and setuid() to a build-time specified non-root user.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Currently, the first situation is used by Buildroot, which does not
+follow security best practices of dropping elevated privileges for
+daemon at runtime when that is possible.
+
+We switch to the third situation, where a compile-time default non-root
+user is then used at runtime to drop privileges, with libcap used to
+keep the capabilities required to call the appropriate syscalls to
+adjust the system time (typically, CAP_SYS_TIME to call adjtimex() or
+clock_settime() et al.).
+
+This means that libcap is now a mandatory dependency.
+
+To be noted: users who previously had configured their systems to run
+chronyd as non root, would have done so with either the command-line
+option (`-u`), or the configuration directive (`user`). Those take
+precedence over the compile-time default, so this should not break their
+systems (presumably, they also run as the `chrony` user). They would
+also have taken care to run chronyc as the appropriate user to
+manipulate chronyd at runtime via the UNIX socket.
+
+For those who were running chronyd as root, this does not change either:
+the functionality is unchanged, and they were running chronyc as root,
+which should still be capable of manipulating chronyd via its UNIX
+socket.
+
+Take that opportunity to brine chrony's Config.in to current coding
+style: enclose sub-option in an if-endif block.
+
+Signed-off-by: James Kent <james.kent@orchestrated-technology.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/chrony/Config.in |  6 +++++-
+ package/chrony/chrony.mk | 11 +++++------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 62b67ad544..ed68164d5f 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-December/003305.html
--sha256  e31565c84006b6b8e01dc9399c806085739710bc2db2e0930f1511ed9d6585bd  libX11-1.8.3.tar.xz
--sha512  bc862338fed855986659e9ffa641db6b36c3ac9abced590d1b164e3cc24446671936e3688cdca18393129c4ea41777977eeb37e87d8edc14d6cc5d194a9c0325  libX11-1.8.3.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003318.html
-+sha256  c9a287a5aefa9804ce3cfafcf516fe96ed3f7e8e45c0e2ee59e84c86757df518  libX11-1.8.4.tar.xz
-+sha512  3150a47498b0cb012482ee02efeaae16d9e736288f2b3f917be912e1613d56ad6b4ab180de8820305deb2b95dfd993633f43a65344d75979d6b86bdf110cb63e  libX11-1.8.4.tar.xz
- # Locally computed
- sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 3bb3fffce0..add16f49db 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/chrony/Config.in b/package/chrony/Config.in
+index 158dc20530..c22b756c11 100644
+--- a/package/chrony/Config.in
++++ b/package/chrony/Config.in
+@@ -1,16 +1,20 @@
+ config BR2_PACKAGE_CHRONY
+ 	bool "chrony"
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBCAP
+ 	help
+ 	  Chrony is a pair of programs which are used to maintain the
+ 	  accuracy of the system clock.
  
--XLIB_LIBX11_VERSION = 1.8.3
-+XLIB_LIBX11_VERSION = 1.8.4
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+ 	  http://chrony.tuxfamily.org/
+ 
++if BR2_PACKAGE_CHRONY
++
+ config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
+ 	bool "enable debug logging support"
+-	depends on BR2_PACKAGE_CHRONY
+ 	help
+ 	  Enable support for debug logging output from Chrony when
+ 	  enabled at runtime. If disabled, code for debug logging will
+ 	  not be compiled in.
++
++endif
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 379e95a778..86f23d9060 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -10,20 +10,19 @@ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
+ CHRONY_CPE_ID_VENDOR = tuxfamily
+ CHRONY_SELINUX_MODULES = chronyd
+-CHRONY_DEPENDENCIES = host-pkgconf
++CHRONY_DEPENDENCIES = host-pkgconf libcap
+ 
+ CHRONY_CONF_OPTS = \
+ 	--host-system=Linux \
+ 	--host-machine=$(BR2_ARCH) \
+ 	--prefix=/usr \
+ 	--without-tomcrypt \
++	--with-user=chrony \
+ 	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
+ 
+-ifeq ($(BR2_PACKAGE_LIBCAP),y)
+-CHRONY_DEPENDENCIES += libcap
+-else
+-CHRONY_CONF_OPTS += --without-libcap
+-endif
++define CHRONY_USERS
++	chrony -1 chrony -1 * /run/chrony - - Time daemon
++endef
+ 
+ ifeq ($(BR2_PACKAGE_LIBNSS),y)
+ CHRONY_DEPENDENCIES += libnss
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
