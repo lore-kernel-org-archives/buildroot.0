@@ -1,50 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 090D5C636CC
-	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 22:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4A77C61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 22:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F78D81EA2;
-	Sat, 11 Feb 2023 22:21:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F78D81EA2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4302660A69;
+	Sat, 11 Feb 2023 22:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4302660A69
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dtdJofrwxxt1; Sat, 11 Feb 2023 22:48:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 924C660BB3;
+	Sat, 11 Feb 2023 22:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 924C660BB3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D2641BF588
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 22:48:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1DE8081E6B
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 22:48:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DE8081E6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ncIj-kbpbsbm; Sat, 11 Feb 2023 22:21:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7B6681EFA;
-	Sat, 11 Feb 2023 22:21:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7B6681EFA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DBB571BF853
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 22:21:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAC5B41675
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 22:21:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAC5B41675
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6zOK03mB5gTn for <buildroot@lists.busybox.net>;
- Sat, 11 Feb 2023 22:21:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4D5941550
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 22:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4D5941550
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EB3A854C7; Sat, 11 Feb 2023 22:21:14 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aucaO5Yt-iUr for <buildroot@lists.busybox.net>;
+ Sat, 11 Feb 2023 22:48:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1E7F81D3A
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B1E7F81D3A
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 22:48:19 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ s13-20020a05600c45cd00b003ddca7a2bcbso1126768wmo.3
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 14:48:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=bLbTqO8GS5+VtpWT/aFaHs1x16dGbwyAkEG6riGZsM0=;
+ b=76ZpTE9OCaxV/Yy5GKsBJ7CldYsDPn9c7eykPAeLI70AshkWbSVd0nvhOYNT9FizGF
+ 3RGl2REx6V1ucHFdHiKS2LbKVyWIVDRx59GFSMKGBNJlJxa6yAS1MVDhuMfZDA24GOpx
+ n7oo/FfdicUHNjsOKlQjYe3cXDiMsiQDn+uIwxwxzAt6ddmZaYg6Fv159RTXcICOgSLf
+ jumIgc0oKHWPKayXWXKQsGTq/4Mo0ZFprybuFlRmeEKqdQBVX9gyqTL93g28+ly9bo+Z
+ 44A2J53Zmo1zF4RzSdkg6ai3jb9e2GLOWE6/bj0W+i8CLxMvTym7bK0M6boV5vWlHMq2
+ NLUA==
+X-Gm-Message-State: AO0yUKWyxQ9h0X8bXDMOEQ8MfdgLSVCgpqqT/HqHx+eiHta+8nrI7Bu/
+ JjeIPtgPoUa+ZtkLI3jZbdyA5K8PIAs=
+X-Google-Smtp-Source: AK7set/pJJQENiFsEtbiasa4f0zvY4j4gICcGR+UB3YHrvZUqcD+vk1w8zkuz8eWKTAR6BMgh4dTwA==
+X-Received: by 2002:a05:600c:43d2:b0:3da:f5d1:c677 with SMTP id
+ f18-20020a05600c43d200b003daf5d1c677mr15933379wmn.35.1676155697826; 
+ Sat, 11 Feb 2023 14:48:17 -0800 (PST)
+Received: from comet.lan (lfbn-ren-1-1841-207.w83-199.abo.wanadoo.fr.
+ [83.199.27.207]) by smtp.gmail.com with ESMTPSA id
+ t8-20020a05600c2f8800b003ddf2865aeasm12826171wmn.41.2023.02.11.14.48.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 11 Feb 2023 14:48:17 -0800 (PST)
+From: Francois Dugast <francois.dugast.foss@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 23:18:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9b9bea584c2f2c14122395eba7cdbf325ed7256c
-X-Git-Newrev: 5e1fdd144300106704e21176673e465163245669
-X-Patchwork-Hint: ignore
-Message-Id: <20230211222114.8EB3A854C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.115
+Date: Sat, 11 Feb 2023 23:47:55 +0100
+Message-Id: <20230211224755.13044-1-francois.dugast.foss@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=bLbTqO8GS5+VtpWT/aFaHs1x16dGbwyAkEG6riGZsM0=;
+ b=FmDLk1cZkFnLRnSs2ZAScsKZq9uc0dOBv3ybpUgxJDMKbBwtHt5HDHnrdWAq5kgDxE
+ Vfju+Ehs60M7wmHe9PM3D9idNopRtAE/lVpytaUsZMk2aabniGAgaa2wWlFy1PNYaf9x
+ YKw6asN96oVWjSh0fzUrvQ7m+IZk5SGVNwc8p1PRLogLxgsZ2otEEvONw6JuFXnbzs6M
+ zPnFzhvAIJfbFVvNdyq1uDqXTgXuwQzuRZVYR2RL6rHbWiSWVIF39lkV3pdpc4Bv2+H6
+ G69qQx3cS0n6SFigjYlkdPvFJIpfL2q1tIpLn3uHhEGeOHhyyHqNdtD7zoXB2zjS/rgD
+ mokw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=FmDLk1cZ
+Subject: [Buildroot] [PATCH 1/1] board/visionfive2: add link to documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,52 +94,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Francois Dugast <francois.dugast.foss@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e1fdd144300106704e21176673e465163245669
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add a link to RVspace Documentation Center, which did not exist
+when readme.txt was first submitted. It provides datasheet, quick
+start, schematics, and so on.
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-February/003323.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
 ---
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ board/visionfive2/readme.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 387beadc3f..87cc170617 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003250.html
--sha256  3049cf843a47d12e5eeefbc3be3496d782fa09f42346bf0b7defe3d1e598d026  libdrm-2.4.114.tar.xz
--sha512  8dcd4be5674e3ea2ab4394fa8f461914e5aa7f4f57a2f448c5216d84ee6682e16b45eafabf97b7d9f5c062183d9a6bf3f0c97499d4cb01c19807a51209a0f644  libdrm-2.4.114.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003323.html
-+sha256  554cfbfe0542bddb391b4e3e05bfbbfc3e282b955bd56218d21c0616481f65eb  libdrm-2.4.115.tar.xz
-+sha512  0c38d3cfd76f627b899f052527c2939d5fc87a417422dceb0761839ba21e69736703a87ba170b5ba7a4aca2506a240760c8c97ca1781a7fb78468225295293bd  libdrm-2.4.115.tar.xz
+diff --git a/board/visionfive2/readme.txt b/board/visionfive2/readme.txt
+index 2da98f3847..1924cbc12b 100644
+--- a/board/visionfive2/readme.txt
++++ b/board/visionfive2/readme.txt
+@@ -4,6 +4,8 @@ Starfive VisionFive2
+ The VisionFive2 is a low-cost RISC-V 64-bit based platform, powered by a
+ Starfive JH7110 processor.
  
- # Hash for license file
- sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 56366b6c48..52ac13b7d0 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
++
+ How to build
+ ============
  
--LIBDRM_VERSION = 2.4.114
-+LIBDRM_VERSION = 2.4.115
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
