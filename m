@@ -1,82 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6972EC61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 17:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB346C636CC
+	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 17:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2AA34011F;
-	Sat, 11 Feb 2023 17:06:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2AA34011F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 254cSZ4azfZS; Sat, 11 Feb 2023 17:06:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4C214012D;
-	Sat, 11 Feb 2023 17:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4C214012D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 674E11BF580
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 17:06:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DD6141600
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 17:06:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DD6141600
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D6A440570;
+	Sat, 11 Feb 2023 17:55:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D6A440570
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DfSMd2WMLjR3 for <buildroot@lists.busybox.net>;
- Sat, 11 Feb 2023 17:06:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A29B6415FC
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com
- [209.85.208.180])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A29B6415FC
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 17:06:28 +0000 (UTC)
-Received: by mail-lj1-f180.google.com with SMTP id x29so10042268ljq.0
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 09:06:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+SCk9FBG/Sb7a0EOKOXUXe+YfuzIIFy966AcPsOeEZc=;
- b=d3+kCOSEknFVOp2e4sjKc4bhI0Rj7WaroK5Zbcn8E4SK99ALIHgu5z6uZNLlPwqHR2
- 4fmugr4ZTWt85GT7snNTjP7txmBaq7HqU2jT+YXQaKCHOP8Sfcv0RClueSeY7FJKPkRv
- rMrn1sf8Trv58T+uZPkLfXoTpOx73fZlgqvCAYJpkxi3e11TqU6VAnI7iFspUh3tu4TC
- 9enLDjHtMhSLZT/PpfuD2wCqOcb3CscIvCI1u5Z7fQmTJr+JnuLoAwmBJDCfDgDs7/8Y
- pWWNKEEXFWa85JwEdiQXWzeDVuRSe1MqIVBxFgwSZEsu5S59a/JByUPA5FxxFxrrEHA2
- heEA==
-X-Gm-Message-State: AO0yUKVcYRc3KERSeAJOJMsdwfT/JOIGPXJlEwJfCG7C0zkk3XlWRk3g
- q9DS7a8ZqPmA8GBGk0C8E1kDIXRRzotB9Spt
-X-Google-Smtp-Source: AK7set9YkRPa5JodxH1G/68L7EDbQC0iInHiP2OFm7A0MVOOyBogl1UMqzErp5l1tGjHxRaf/ofCQg==
-X-Received: by 2002:a05:651c:b22:b0:293:2b29:4b85 with SMTP id
- b34-20020a05651c0b2200b002932b294b85mr4534456ljr.37.1676135186485; 
- Sat, 11 Feb 2023 09:06:26 -0800 (PST)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com.
- [209.85.167.49]) by smtp.gmail.com with ESMTPSA id
- a16-20020a2eb170000000b0028bbe8c08a1sm1012573ljm.43.2023.02.11.09.06.25
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 11 Feb 2023 09:06:25 -0800 (PST)
-Received: by mail-lf1-f49.google.com with SMTP id g28so479295lfv.0
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 09:06:25 -0800 (PST)
-X-Received: by 2002:a05:6512:4c2:b0:4d5:9153:b261 with SMTP id
- w2-20020a05651204c200b004d59153b261mr3421108lfq.38.1676135185117; Sat, 11 Feb
- 2023 09:06:25 -0800 (PST)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uauEQ0TvgGRb; Sat, 11 Feb 2023 17:55:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15E34405E7;
+	Sat, 11 Feb 2023 17:55:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15E34405E7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A26AC1BF580
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 17:55:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7BDFD60758
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 17:55:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BDFD60758
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jCTarntscmep for <buildroot@lists.busybox.net>;
+ Sat, 11 Feb 2023 17:55:51 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 136FC606FF
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 136FC606FF
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 17:55:50 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([62.216.209.210]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRmjw-1p27yg0upm-00T9zI; Sat, 11
+ Feb 2023 18:55:48 +0100
+Date: Sat, 11 Feb 2023 18:55:47 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20230211185547.59a1fa42@gmx.net>
+In-Reply-To: <20230211164926.GI2796@scaer>
+References: <20230211163202.25627-1-ps.report@gmx.net>
+ <20230211164926.GI2796@scaer>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20230202071518.3961314-1-thomas@devoogdt.com>
-In-Reply-To: <20230202071518.3961314-1-thomas@devoogdt.com>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Sat, 11 Feb 2023 18:06:13 +0100
-X-Gmail-Original-Message-ID: <CACXRmJhmt9e0q8i7+x3cVvEnna+CvrYozwFXNUxXWnnWkdcKMA@mail.gmail.com>
-Message-ID: <CACXRmJhmt9e0q8i7+x3cVvEnna+CvrYozwFXNUxXWnnWkdcKMA@mail.gmail.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Subject: Re: [Buildroot] [PATCH] package/fluent-bit: add support for non
- glibc toolchain
+X-Provags-ID: V03:K1:yXV98DTiPFR8XpzijBAxdDtj4cjDxQruOzAxm1iIbbz8Nn9BgiT
+ iW11gbmltMdLgvyGaKrYOf0RGQOwbRqlaaku2SDTpPcQxk4MAGb6/62sEjfLeN1ueQazEBG
+ 7kBJUExTB11fMmgaaD6iZxDCZ2lUBh2D4B1EdjLAw99u/6Gwi4XcVUtkMNsgguqGSf+F3BS
+ C3mJ780Gbq7dtqzEjxP5g==
+UI-OutboundReport: notjunk:1;M01:P0:LqRKBvYgaek=;Qtp9IJk6jNRQA2QVRKZz1XSzCVO
+ P76BE6jU+gTqEeND6pdM92uYqUqyELKsEyogqP1UqL6I1Cc+ORd+VZiWKW0BlYBHzLwRXnKsa
+ 0W02CY7DAwC7UYUtLOXpbjIjVRJx6/UA3ZzyPC68GjOPCUVvTnohyH9dDd12tyw3QXp0rGdrT
+ H1xuLDfP0vA5k3iWNsvKdj2y9JiE0xi8sTZ4ARKrnXyRzCPN5yUqQtMC2m1tQ9DZ9yEfIPptA
+ mG6Xr9/lRUdk+n7LHpk6avpDGQ7OeealR+bIX2jGE1MkF0N+Xw7eqQLKY//K0jX+myifYMsTh
+ RfaFhsWjp7gewpupv+so/3JeQHg+vJ62fGQNxmRaQEpAXPjISn9MEiIlUrkH+XZ3EqNnO2sqe
+ 2nQpQ/6a8KvH7BdVMG00i+gYONmd6pELzgBecU5tQyymwYvRUyXgfkJnEKbyefs+n5CaSgugo
+ Ia0hIa7kAIIzDs36bv1ZtMeReSscwba13VNOZKlh1omQUlBNcBxvjV29BGl1Q14gbHwC9FMvr
+ wwF0kE56VeXYgXr5mXzcUfeNdL30rw3WVUTOy5WOe3trM4dSUITyfYBpt6YaLQ1PMMsGUuelN
+ ZH6VparrFZ+mSo57DC1dHVmNLkgnyc08/FkUZxS1ST2803gxsG+Fr6Esv72K2wH0se1wuU17H
+ uirQDpqgAShfIuJRNlLdEHeG+RE4wxOlnTKqyMXzFdX86cszxZuBrLDMycN82yi9yxXil+UH9
+ u9Mm/NpzjOBVVp4rV7JhOZZsVuoHRYKaWVhyKN++cgl6N5PbIIUzH0ki1awH6sfNbQqPQjjac
+ JzHMjlTA6QCWPxLCp4/Eq9e8BdI8fRd0XnOYU6b9uQDlHjTCZ5c2QYqKVg8d5VXYiZt0XQtGj
+ 93nik/XMZtzOKJ/c2PugwkRwNTw4EpDk5tA4T7PEIhbz3JoD6OsUTlt+22n+KuyvARJ7Ol8Eu
+ Z91kaqDFlLen+rkSqce6awKOa1I=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; s=s31663417; 
+ t=1676138148; bh=LSJSvEmyNFbXPKvoOnt6cX0sj5fOyq6WsUeOi4THif4=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=mqSXEmthBkRSr918Di4U7N16yX3dLqy7I1Kf3sZ5v+PD5qc4MhXOXyUxDvk5RFTg6
+ P8Viu6O8KIMJPQkSIu5iW2fruyjWi2ozvr5IdDtOWFqKbI1anvg5FCuL+AUr0jHHVB
+ oBVhRlFP+dtIhii6ayhXKG33U+EvIaH7cWDo5iJG409vdqhhMGhBi41Pk7g1WbvqO7
+ xsL2G5EWqKbIxZ4JTYPKYEwQTF4xMoTz2vlUiJ/271c85Q1rCmP9IrHYOJohcAtHFN
+ 2twreL7wQBbj0vHiZSHkgBF58XQzxvH9QfLjX82z220Mus0Sj0d2TE9ukicIgMrvtZ
+ WkcaC9nn1h7JA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=mqSXEmth
+Subject: Re: [Buildroot] [PATCH v1] package/ntpsec: fix Stack Smashing
+ Protection detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,253 +93,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas.devoogdt@barco.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Hello Yann, *,
 
-The patches need to be rebased if
-https://patchwork.ozlabs.org/project/buildroot/patch/20230211143356.173296-1-thomas@devoogdt.com/
-gets to the master first.
+On Sat, 11 Feb 2023 17:49:26 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Kr,
+> Peter, All,
+>
+> On 2023-02-11 17:32 +0100, Peter Seiderer spake thusly:
+> > Fix SSP missdetection (compiler supports '-fstack-protector-all' command
+> > line argument but selected libc/toolchain does not support SSP,
+> > e.g. i686-musl.
+> >
+> > Fixes:
+> >
+> >   - http://autobuild.buildroot.net/results/ded9ad5badbcfa6552443d3ce0866722becfefbd
+> >
+> >   [...]
+> >   Checking if C compiler supports -fstack-protector-all : yes
+> >   [...]
+> >   Checking for type struct timex                                  : no
+> >   The configuration failed
+> >   (complete log in .../build/ntpsec-1_2_2/build/config.log)
+> >
+> >   And from build/ntpsec-1_2_2/build/config.log:
+> >
+> >   err: .../host/lib/gcc/i686-buildroot-linux-musl/12.2.0/../../../../i686-buildroot-linux-musl/bin/ld: test.c.1.o: in function `main':
+> >   test.c:(.text.startup+0x2a): undefined reference to `__stack_chk_fail_local'
+> >   .../host/lib/gcc/i686-buildroot-linux-musl/12.2.0/../../../../i686-buildroot-linux-musl/bin/ld: .../build/ntpsec-1_2_2/build/.conf_check_01f3f794d5b6ffb7add7ce130581ae04/testbuild/main/testprog: hidden symbol `__stack_chk_fail_local' isn't defined
+> >   .../host/lib/gcc/i686-buildroot-linux-musl/12.2.0/../../../../i686-buildroot-linux-musl/bin/ld: final link failed: bad value
+> >   collect2: error: ld returned 1 exit status
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  package/ntpsec/ntpsec.mk | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
+> > index c7fa2f85a8..18a8353900 100644
+> > --- a/package/ntpsec/ntpsec.mk
+> > +++ b/package/ntpsec/ntpsec.mk
+> > @@ -30,6 +30,15 @@ NTPSEC_DEPENDENCIES = \
+> >  	libcap \
+> >  	openssl
+> >
+> > +# prevent '-fstack-protector-all' compiler flag detection without
+> > +# ssp support (e.g. i686-musl)
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
+> > +define NTPSEC_FORCE_DISABLE_SSP
+> > +	$(SED) s/fstack-protector-all/fstack-protector-all-disabled/g $(@D)/wscript
+> > +endef
+> > +endif
+> > +NTPSEC_PRE_CONFIGURE_HOOKS += NTPSEC_FORCE_DISABLE_SSP
+>
+> Assigning to hooks should be done in the conditional if-block, not
+> outside.
+>
+> But in Buildroot, the SSP flags are automatically handled by the
+> wrapper, so we should just unconditionally remove said flags as set by
+> the package, like was done in 50cbac5099b1 (package/sysvinit: add patch
+> to fix compile without stack-protector support) for example (and no,
+> that commit was not chosen totally at random ;-) ).
 
-Thomas
+Nice reference ;-), do you prefer the above sed hack unconditionally
+(not sure if the wscript will add additional -lssp/-lssp_nonshared if
+available) or a patch removing the whole -fstack-protector-all/-lssp/-lssp_nonshared
+handling?
 
-Op do 2 feb. 2023 om 08:15 schreef Thomas Devoogdt <thomas@devoogdt.com>:
+Regards,
+Peter
+
+
 >
-> From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> Regards,
+> Yann E. MORIN.
 >
-> - require threads and dynamic library support
-> - require sync_4 support
-> - provide fts.h trough musl-fts
+> >  # CC="$(HOSTCC)" is strange but needed to build some host tools, the
+> >  # cross-compiler will properly be used to build target code thanks to
+> >  # --cross-compiler
+> > --
+> > 2.39.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
 >
-> 'static_assert()' is not available if no C++ toolchain or no glibc
-> is used, so add two patches to fix this
->
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> ---
->  .../0002-lib-c-ares-fixup-static_assert.patch | 56 +++++++++++++++++++
->  .../0003-lib-cfl-fixup-static_assert.patch    | 33 +++++++++++
->  package/fluent-bit/Config.in                  | 10 +++-
->  package/fluent-bit/fluent-bit.mk              | 11 +++-
->  4 files changed, 105 insertions(+), 5 deletions(-)
->  create mode 100644 package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
->  create mode 100644 package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch
->
-> No idea if there is an interest in uClibc or musl-enabled toolchains regarding buildroot?
-> I was able to compile fluent-bit for most of the supported platforms with a limited amount
-> of changes.
->
-> I had to create two patches in two libs. One (cfl) was already upstreamed,
-> and added the link to it. The other (c-ares) should be fixed by the m4 bump. I guess that
-> fluent-bit will bump those sub-libs over time, so we can drop these patches.
->
->                              arm-aarch64 [ 1/44]: OK
->                    bootlin-aarch64-glibc [ 2/44]: OK
->                bootlin-arcle-hs38-uclibc [ 3/44]: OK
->                     bootlin-armv5-uclibc [ 4/44]: OK
->                      bootlin-armv7-glibc [ 5/44]: OK
->                    bootlin-armv7m-uclibc [ 6/44]: SKIPPED
->                       bootlin-armv7-musl [ 7/44]: OK
->                 bootlin-m68k-5208-uclibc [ 8/44]: SKIPPED
->                bootlin-m68k-68040-uclibc [ 9/44]: OK
->              bootlin-microblazeel-uclibc [10/44]: OK
->                 bootlin-mipsel32r6-glibc [11/44]: OK
->                    bootlin-mipsel-uclibc [12/44]: OK
->                      bootlin-nios2-glibc [13/44]: OK
->                  bootlin-openrisc-uclibc [14/44]: OK
->         bootlin-powerpc64le-power8-glibc [15/44]: OK
->            bootlin-powerpc-e500mc-uclibc [16/44]: OK
->                    bootlin-riscv32-glibc [17/44]: OK
->                    bootlin-riscv64-glibc [18/44]: OK
->                     bootlin-riscv64-musl [19/44]: OK
->                       bootlin-sh4-uclibc [20/44]: OK
->                    bootlin-sparc64-glibc [21/44]: OK
->                     bootlin-sparc-uclibc [22/44]: SKIPPED
->                     bootlin-x86-64-glibc [23/44]: OK
->                      bootlin-x86-64-musl [24/44]: OK
->                    bootlin-x86-64-uclibc [25/44]: OK
->                    bootlin-xtensa-uclibc [26/44]: OK
->                             br-arm-basic [27/44]: OK
->                     br-arm-full-nothread [28/44]: SKIPPED
->                       br-arm-full-static [29/44]: SKIPPED
->                    br-i386-pentium4-full [30/44]: OK
->                 br-i386-pentium-mmx-musl [31/44]: OK
->                       br-mips64-n64-full [32/44]: OK
->                  br-mips64r6-el-hf-glibc [33/44]: OK
->                br-powerpc-603e-basic-cpp [34/44]: OK
->                br-powerpc64-power7-glibc [35/44]: OK
->                        linaro-aarch64-be [36/44]: OK
->                           linaro-aarch64 [37/44]: OK
->                               linaro-arm [38/44]: OK
->                      sourcery-arm-armv4t [39/44]: OK
->                             sourcery-arm [40/44]: OK
->                      sourcery-arm-thumb2 [41/44]: OK
->                          sourcery-mips64 [42/44]: OK
->                            sourcery-mips [43/44]: OK
->                           sourcery-nios2 [44/44]: OK
-> 44 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
->
-> diff --git a/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch b/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
-> new file mode 100644
-> index 0000000000..de5d0d06a8
-> --- /dev/null
-> +++ b/package/fluent-bit/0002-lib-c-ares-fixup-static_assert.patch
-> @@ -0,0 +1,56 @@
-> +From aca354ae22c55fa6051d04a9f674fe0825443a94 Mon Sep 17 00:00:00 2001
-> +From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> +Date: Wed, 1 Feb 2023 11:26:56 +0100
-> +Subject: [PATCH] lib: c-ares: fixup static_assert
-> +
-> +"undefined reference to 'static_assert'"
-> +
-> +Not defined when using uClibc or if not C++ >= 11.
-> +
-> +upstream: https://github.com/c-ares/c-ares/issues/504
-> +
-> +Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> +---
-> + lib/c-ares-1.18.1/configure                      | 4 ++++
-> + lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4 | 3 +++
-> + 2 files changed, 7 insertions(+)
-> +
-> +diff --git a/lib/c-ares-1.18.1/configure b/lib/c-ares-1.18.1/configure
-> +index 737f0a0dd..b99b7ed49 100755
-> +--- a/lib/c-ares-1.18.1/configure
-> ++++ b/lib/c-ares-1.18.1/configure
-> +@@ -6316,6 +6316,8 @@ else $as_nop
-> +   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-> + /* end confdefs.h.  */
-> +
-> ++#define static_assert _Static_assert
-> ++
-> +   template <typename T>
-> +     struct check
-> +     {
-> +@@ -6393,6 +6395,8 @@ else $as_nop
-> +          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-> + /* end confdefs.h.  */
-> +
-> ++#define static_assert _Static_assert
-> ++
-> +   template <typename T>
-> +     struct check
-> +     {
-> +diff --git a/lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4 b/lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4
-> +index 229de3091..fe4a11c67 100644
-> +--- a/lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4
-> ++++ b/lib/c-ares-1.18.1/m4/ax_cxx_compile_stdcxx_11.m4
-> +@@ -37,6 +37,9 @@
-> + #serial 9
-> +
-> + m4_define([_AX_CXX_COMPILE_STDCXX_11_testbody], [[
-> ++
-> ++#define static_assert _Static_assert
-> ++
-> +   template <typename T>
-> +     struct check
-> +     {
-> +--
-> +2.39.0
-> +
-> diff --git a/package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch b/package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch
-> new file mode 100644
-> index 0000000000..7b99a8e4de
-> --- /dev/null
-> +++ b/package/fluent-bit/0003-lib-cfl-fixup-static_assert.patch
-> @@ -0,0 +1,33 @@
-> +From 8d17fc961fef2e88f4c8fa2316af925d5466ca4d Mon Sep 17 00:00:00 2001
-> +From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> +Date: Wed, 1 Feb 2023 11:38:15 +0100
-> +Subject: [PATCH] lib: cfl: fixup static_assert
-> +
-> +"undefined reference to 'static_assert'"
-> +
-> +Not defined when using uClibc or if not C++ >= 11.
-> +
-> +upstream: https://github.com/Cyan4973/xxHash/commit/6189ecd3d44a693460f86280ccf49d33cb4b18e1
-> +
-> +Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> +---
-> + lib/cfl/lib/xxhash/xxhash.h | 3 +--
-> + 1 file changed, 1 insertion(+), 2 deletions(-)
-> +
-> +diff --git a/lib/cfl/lib/xxhash/xxhash.h b/lib/cfl/lib/xxhash/xxhash.h
-> +index 08ab79457..511c4d12b 100644
-> +--- a/lib/cfl/lib/xxhash/xxhash.h
-> ++++ b/lib/cfl/lib/xxhash/xxhash.h
-> +@@ -1546,8 +1546,7 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size)
-> + /* note: use after variable declarations */
-> + #ifndef XXH_STATIC_ASSERT
-> + #  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)    /* C11 */
-> +-#    include <assert.h>
-> +-#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
-> ++#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { _Static_assert((c),m); } while(0)
-> + #  elif defined(__cplusplus) && (__cplusplus >= 201103L)            /* C++11 */
-> + #    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
-> + #  else
-> +--
-> +2.39.0
-> +
-> diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-> index 6c2299e695..f53eacb447 100644
-> --- a/package/fluent-bit/Config.in
-> +++ b/package/fluent-bit/Config.in
-> @@ -1,6 +1,9 @@
->  config BR2_PACKAGE_FLUENT_BIT
->         bool "fluent-bit"
-> -       depends on BR2_TOOLCHAIN_USES_GLIBC
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +       depends on !BR2_STATIC_LIBS # dlfcn.h
-> +       select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
->         select BR2_PACKAGE_OPENSSL
->         select BR2_PACKAGE_LIBYAML
->         help
-> @@ -29,5 +32,6 @@ config BR2_PACKAGE_FLUENT_BIT_WASM
->
->  endif
->
-> -comment "fluent-bit needs a glibc toolchain"
-> -       depends on !BR2_TOOLCHAIN_USES_GLIBC
-> +comment "fluent-bit needs a toolchain w/ threads, dynamic library"
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-> index 6e9a33e02e..151afc34aa 100644
-> --- a/package/fluent-bit/fluent-bit.mk
-> +++ b/package/fluent-bit/fluent-bit.mk
-> @@ -47,12 +47,19 @@ FLUENT_BIT_CONF_OPTS += \
->         -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
->         -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -U_FILE_OFFSET_BITS"
->
-> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
-> +FLUENT_BIT_DEPENDENCIES += musl-fts
-> +FLUENT_BIT_LINKER_FLAGS += -lfts
-> +endif
-> +
->  # Uses __atomic_compare_exchange_8
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -FLUENT_BIT_CONF_OPTS += \
-> -       -DCMAKE_EXE_LINKER_FLAGS=-latomic
-> +FLUENT_BIT_LINKER_FLAGS += -latomic
->  endif
->
-> +FLUENT_BIT_CONF_OPTS += \
-> +       -DCMAKE_EXE_LINKER_FLAGS="$(FLUENT_BIT_LINKER_FLAGS)"
-> +
->  define FLUENT_BIT_INSTALL_INIT_SYSV
->         $(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
->                 $(TARGET_DIR)/etc/init.d/S99fluent-bit
-> --
-> 2.39.0
->
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
