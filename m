@@ -1,59 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEDDEC636CC
-	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 13:17:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B125C61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 13:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37C268202A;
-	Sat, 11 Feb 2023 13:17:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37C268202A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8879B4030F;
+	Sat, 11 Feb 2023 13:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8879B4030F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r7uTwKAtp7LF; Sat, 11 Feb 2023 13:17:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nH6hO2HBhA6b; Sat, 11 Feb 2023 13:53:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CAF48201E;
-	Sat, 11 Feb 2023 13:17:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CAF48201E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87EFF40297;
+	Sat, 11 Feb 2023 13:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87EFF40297
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B36421BF420
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 13:17:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 739371BF420
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 13:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 945A760A9D
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 13:17:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 945A760A9D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D5D160A65
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 13:53:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D5D160A65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PiCZDCJhUadq for <buildroot@lists.busybox.net>;
- Sat, 11 Feb 2023 13:17:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47FC960A6D
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 47FC960A6D
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 13:17:35 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EB04C240003;
- Sat, 11 Feb 2023 13:17:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pQpkw-001W5i-Uo; Sat, 11 Feb 2023 14:17:30 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@smile.fr>
-References: <20230208181933.3925279-1-peter@korsgaard.com>
- <20230208192425.GA2677@scaer>
- <e22f405b-5dba-66e6-f40e-8a8fb5cd2b4a@smile.fr>
-Date: Sat, 11 Feb 2023 14:17:30 +0100
-In-Reply-To: <e22f405b-5dba-66e6-f40e-8a8fb5cd2b4a@smile.fr> (Romain Naour's
- message of "Sat, 11 Feb 2023 10:33:04 +0100")
-Message-ID: <87v8k8cped.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ with ESMTP id mlSDd0BU5EBD for <buildroot@lists.busybox.net>;
+ Sat, 11 Feb 2023 13:53:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72BE260759
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 72BE260759
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 13:53:15 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id j25so7866301wrc.4
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 05:53:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=PqGTkvc+hipAL1TiVecqhjSvqFJ9NhtxyQjxOdpwZqE=;
+ b=P8eClLOWEQ2A3ho0UWc+b0QDBv7rb+SQC/qFB129dYVXQAqF4oF71OQgaNdGadKch/
+ p7nv6JoYdzPdUjxMgeaPTxji6RhTnuUr3OXR3zq42Ow6B56DDAv6QQcU74WOybCvYD1I
+ /gR2Yby0cm2Fmp1y+klfRrkC/Jvvs5kZFuFBf52W+BwaPvgWTGKVLdCbE4duVVPR/r5m
+ G1H8EQuzPU58dyJCWdHXx7uvpNUzd+Fjsvvz3sjWC1CcAgMM/hNQjv5o2PVzhI/3Uyk6
+ V7k0gkId1J6qfh0SEikms1FBTBrJMgsik5ay5n3fwypyT8ZQrS7wDWRPKrwrKvFWsqZg
+ CO4w==
+X-Gm-Message-State: AO0yUKUbJIs7LIA/lG7Q5kmvWsYP6aWPj4u8thXLGlUZr60redKA37Zp
+ OMNORlL+kef9Hdhg/btjPWI=
+X-Google-Smtp-Source: AK7set+VS6gbyxv/qznqHcPVJDwISGbpaWGLat6iMdZsBCINKLHHRt+GADCyvrn5/e+ciYEfYknDtQ==
+X-Received: by 2002:adf:fd83:0:b0:2c5:3fcf:44c8 with SMTP id
+ d3-20020adffd83000000b002c53fcf44c8mr6835472wrr.28.1676123593626; 
+ Sat, 11 Feb 2023 05:53:13 -0800 (PST)
+Received: from ?IPV6:2003:c6:373c:c74e:3414:cb6a:6234:dc92?
+ (p200300c6373cc74e3414cb6a6234dc92.dip0.t-ipconnect.de.
+ [2003:c6:373c:c74e:3414:cb6a:6234:dc92])
+ by smtp.gmail.com with ESMTPSA id
+ m3-20020adfe0c3000000b002c4084d3472sm6095002wri.58.2023.02.11.05.53.12
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Feb 2023 05:53:13 -0800 (PST)
+Message-ID: <7f57a607-bf3c-0250-ed23-c6fbf73961a3@gmail.com>
+Date: Sat, 11 Feb 2023 14:53:15 +0100
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/5] package/pkg-waf.mk: drop bundled
- waf/waflib when external waf is used
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Content-Language: en-US
+To: Peter Korsgaard <peter@korsgaard.com>
+References: <20221031124625.21172-1-raphael.pavlidis@gmail.com>
+ <87h6vw5l2r.fsf@dell.be.48ers.dk>
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+In-Reply-To: <87h6vw5l2r.fsf@dell.be.48ers.dk>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=PqGTkvc+hipAL1TiVecqhjSvqFJ9NhtxyQjxOdpwZqE=;
+ b=lXarbSaOCCRQA90jhMmPEUU2vCyO86OpmWgku4+BIioI7n/qJ9O35+pHwZ+kbmsxPk
+ T65QBFJOxvnriuVQTAmIjeb/pTCaSVm0ZUi+zTam20le6ktS18T+HY1O/BmLJoYpm4ux
+ +6Nn1qoCBYlYtPwIHHv40r3AJruZcR5Nzf5BX1Ztz21DFfoZqYuVQuZD9BnSHUEUoYdp
+ htEBMpzY5zPPdWuHA+HnpsLMOaXVk3rEmbkH+wYovI+L2Pb8k22hJ0W/amH2xWVwKgt4
+ QjPV5pINjn/rGEsiCP6SMXeQsDliscfMsj1H/RujqE2Cd3Z5xlIHJ+YMc145xvTDUzwv
+ 1esg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=lXarbSaO
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/sway: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +101,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+Hi Peter,
 
-Hi,
+On 08.02.23 14:43, Peter Korsgaard wrote:
+[--SNIP--]
+> 
+> How did you test this? Here wlroots with x11 support doesn't build as we
+> don't have an Xwayland .pc file or binary in Buildroot.
+> 
+I create a xwayland package, which build the xserver binary, but did not 
+send the patch yet. (This will fix the problems with weston, too)
 
- >>> +# The version of waflib has to match with the version of waf,
- >>> +# otherwise waf errors out with:
- >>> +# Waf script 'X' and library 'Y' do not match
- >>> +define WAF_PACKAGE_REMOVE_WAF_LIB
- >>> +	$(RM) -fr $(@D)/waf $(@D)/waflib
+>> +else
+>   > +SWAY_CONF_OPTS += -Dxwayland=disabled
+>   > +endif
+>   > +
+>   > +ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
+>   > +SWAY_CONF_OPTS += -Dgdk-pixbuf=enabled
+> 
+> You also need to ensure that sway is built after gdk-pixbuf with:
+> 
+> SWAY_DEPENDENCIES += gdk-pixbuf
+> 
+> Committed with that fixed, thanks.
+> 
 
- > We need more $$ here :)
-
- > Otherwise:
-
- >>>> aubio 0.4.9 Patching
- > rm -f -fr /waf /waflib
-
-Ahh crap, thanks for pointing it out.
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Raphael Pavlidis
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
