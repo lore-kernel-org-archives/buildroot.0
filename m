@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52CB7C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2A3EC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF899701BC;
-	Tue, 21 Feb 2023 01:54:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF899701BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 612B37006F;
+	Tue, 21 Feb 2023 01:54:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 612B37006F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FDVyCvUOJK0v; Tue, 21 Feb 2023 01:54:22 +0000 (UTC)
+	with ESMTP id DxHxSfmU-WOC; Tue, 21 Feb 2023 01:54:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F3DE700B0;
-	Tue, 21 Feb 2023 01:54:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F3DE700B0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8661470099;
+	Tue, 21 Feb 2023 01:54:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8661470099
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2562D1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D28C11BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2D3B70017
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2D3B70017
+ by smtp3.osuosl.org (Postfix) with ESMTP id 14E2F610E4
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E2F610E4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BTwvWntTCbyx for <buildroot@lists.busybox.net>;
+ with ESMTP id EyTqcylJV3lY for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E4B470000
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42E0270008
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E4B470000
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42E0270008
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C8B481979; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+ id 40CD08648F; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 11:02:49 +0100
+Date: Sat, 11 Feb 2023 13:12:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f25b0b6d1dcc8580f6b880eb57872b5c4064b89f
-X-Git-Newrev: 9d1b223b91b08acdb52611864ae5921b9f3c757b
+X-Git-Oldrev: 33107962eb29d2d33fcf4bed429d5239c1b2d278
+X-Git-Newrev: 2bf4d02ff35bd8a0d5aace354c987a166437db88
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205258.2C8B481979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pkg-waf: add missing $
+Message-Id: <20230220205258.40CD08648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/stm32f429_xip_defconfig: bump Linux version to 6.1.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,36 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d1b223b91b08acdb52611864ae5921b9f3c757b
+commit: https://git.buildroot.net/buildroot/commit/?id=2bf4d02ff35bd8a0d5aace354c987a166437db88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We want to have $(@D) expanded at the time the recipe is run, so like
-all other variables, we need to $$-expand it.
+The size of xipImage has grown by 84KB but there are still 278KB left
+before running out of 2MB of flash memory.
 
-Fixes: 1b4d7f6e13212b4c65ec2832681719fd960e75e6
-Fixes: http://autobuild.buildroot.org/results/b6f/b6fd3a866af182edc7831492aecc8323f377b826
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-waf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/stm32f429_disco_xip_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
-index 0e752072c8..c3e965bdf3 100644
---- a/package/pkg-waf.mk
-+++ b/package/pkg-waf.mk
-@@ -42,7 +42,7 @@ define inner-waf-package
- # otherwise waf errors out with:
- # Waf script 'X' and library 'Y' do not match
- define WAF_PACKAGE_REMOVE_WAF_LIB
--	$(RM) -fr $(@D)/waf $(@D)/waflib
-+	$(RM) -fr $$(@D)/waf $$(@D)/waflib
- endef
- 
- # We need host-python3 to run waf
+diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
+index f9b3270ecd..872e4b6a30 100644
+--- a/configs/stm32f429_disco_xip_defconfig
++++ b/configs/stm32f429_disco_xip_defconfig
+@@ -1,12 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_m4=y
+-BR2_KERNEL_HEADERS_5_15=y
++BR2_KERNEL_HEADERS_6_1=y
+ # BR2_UCLIBC_INSTALL_UTILS is not set
+ BR2_ENABLE_LTO=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.10"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
