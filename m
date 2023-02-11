@@ -4,66 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB983C61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 18:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FD21C61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 18:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 125344097B;
-	Sat, 11 Feb 2023 18:00:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 125344097B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C44C41581;
+	Sat, 11 Feb 2023 18:14:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C44C41581
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tuBWlvLkqieJ; Sat, 11 Feb 2023 18:00:18 +0000 (UTC)
+	with ESMTP id dR3wl4Suxzbf; Sat, 11 Feb 2023 18:14:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BC864090B;
-	Sat, 11 Feb 2023 18:00:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BC864090B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 48D331BF580
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 18:00:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 259DA4156C;
+	Sat, 11 Feb 2023 18:14:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 259DA4156C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CCF51BF59D
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 18:14:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2316181DED
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 18:00:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2316181DED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56A7241554
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 18:14:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56A7241554
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NL4tE73YRrXq for <buildroot@lists.busybox.net>;
- Sat, 11 Feb 2023 18:00:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EC8C81D3D
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9EC8C81D3D
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 18:00:13 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.243.59])
- by smtp6-g21.free.fr (Postfix) with ESMTP id 680CF7804ED;
- Sat, 11 Feb 2023 19:00:10 +0100 (CET)
-Received: from [37.169.166.33]
-	by webmail.free.fr
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U8AplOLdpBYQ for <buildroot@lists.busybox.net>;
+ Sat, 11 Feb 2023 18:14:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3653E41550
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3653E41550
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 18:14:46 +0000 (UTC)
+Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
+ by mailout01.t-online.de (Postfix) with SMTP id 3518418F9B
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 19:14:44 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.202.51]) by fwd88.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1pQuOW-3o1jhh0; Sat, 11 Feb 2023 19:14:40 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37908)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1pQuOW-0004mz-0L
+ for buildroot@buildroot.org; Sat, 11 Feb 2023 19:14:40 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sat, 11 Feb 2023 19:14:39 +0100
+Message-Id: <20230211181439.33767-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Date: Sat, 11 Feb 2023 19:00:10 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-In-Reply-To: <20230211151034.GH2796@scaer>
-References: <20230211151034.GH2796@scaer>
-Message-ID: <789a9e1c7f5e0d253cea4254686c3b63@free.fr>
-X-Sender: ju.o@free.fr
-User-Agent: Webmail Free/1.3.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1676138410;
- bh=lozoKHitHnfctvI6nGV/MIXai9d+W10sz8r+XFwWCvg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=OlUcg8ouA3025DJED6BRlAkkxEmXl1IhRoGppA4y0h0Q9hvf21KwXKiMI3q9kGfnz
- a+/a1YLxCVAhlAD3VSVu0MNdkJJV+/tHjaswQoixUhOURSjUZLAvqpmghnXPZ7UXIc
- vA/MRJ5Ug6qC4tS/tdEB8+TQaDJ94MxSdUCwZSLA5uobVa+uUxIzAcC/FQSONq5hK0
- KUa+h/HgonPm/9CB+PsrR3oHCQYOnXyvlVDo4F/hzJzUEnlBtHN4FmHdBbh+VJcn8R
- jHTLPHw8izTokxw5aPyqAVm9h5eUWUIuyoIXCCKCb0iGkgDTZyP+oifvm1/3p3o4E4
- X89yXEWIrVsWg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=OlUcg8ou
-Subject: Re: [Buildroot] [PATCH next v2 5/7]
- package/python-magic-wormhole-mailbox-server: new package
+X-TOI-EXPURGATEID: 150726::1676139280-726BD7D8-DAF58075/0/0 CLEAN NORMAL
+X-TOI-MSGID: 87f46265-f4f0-4ee5-9cbc-5d4a9ae25f9c
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.115
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,70 +65,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yann, All,
+Release notes:
+https://lists.x.org/archives/xorg-announce/2023-February/003323.html
 
-On 11/02/2023 16:10, Yann E. MORIN wrote:
-> Julien, All,
-> 
-> On 2022-11-22 21:31 +0100, Julien Olivain spake thusly:
->> This package is the main server that Magic-Wormhole clients connect 
->> to.
->> The server performs store-and-forward delivery for small key-exchange
->> and control messages. Bulk data is sent over a direct TCP connection,
->> or through a transit-relay.
->> 
->> https://github.com/magic-wormhole/magic-wormhole-mailbox-server
->> 
->> Signed-off-by: Julien Olivain <ju.o@free.fr>
->> ---
-> [--SNIP--]
->> diff --git a/package/python-magic-wormhole-mailbox-server/Config.in 
->> b/package/python-magic-wormhole-mailbox-server/Config.in
->> new file mode 100644
->> index 0000000000..db20d3e7b6
->> --- /dev/null
->> +++ b/package/python-magic-wormhole-mailbox-server/Config.in
->> @@ -0,0 +1,15 @@
->> +config BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER
->> +	bool "python-magic-wormhole-mailbox-server"
->> +	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
->> +	select BR2_PACKAGE_PYTHON_ATTRS # runtime
->> +	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
-> 
-> python-autobahn depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS,
-> so this should have been propagated. It's relatively easy to reproduce
-> on current master as of commit 451672e890b5:
-> 
->     $ KCONFIG_SEED=0x1D15B9D4 make randconfig
->     [...]
->     WARNING: unmet direct dependencies detected for 
-> BR2_PACKAGE_PYTHON_AUTOBAHN
->       Depends on [n]: BR2_PACKAGE_PYTHON3 [=y] &&
-> BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS [=n]
->       Selected by [y]:
->       - BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER [=y] &&
-> BR2_PACKAGE_PYTHON3 [=y]
-> 
-> Care to send a fix, and check the other packages that were added in 
-> this
-> series, please?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdrm/libdrm.hash | 6 +++---
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thank you for reporting this issue!  I just checked the series and it is
-the only patch selecting autobhan with the missing host rustc 
-dependency.
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 387beadc3f..87cc170617 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-November/003250.html
+-sha256  3049cf843a47d12e5eeefbc3be3496d782fa09f42346bf0b7defe3d1e598d026  libdrm-2.4.114.tar.xz
+-sha512  8dcd4be5674e3ea2ab4394fa8f461914e5aa7f4f57a2f448c5216d84ee6682e16b45eafabf97b7d9f5c062183d9a6bf3f0c97499d4cb01c19807a51209a0f644  libdrm-2.4.114.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-February/003323.html
++sha256  554cfbfe0542bddb391b4e3e05bfbbfc3e282b955bd56218d21c0616481f65eb  libdrm-2.4.115.tar.xz
++sha512  0c38d3cfd76f627b899f052527c2939d5fc87a417422dceb0761839ba21e69736703a87ba170b5ba7a4aca2506a240760c8c97ca1781a7fb78468225295293bd  libdrm-2.4.115.tar.xz
+ 
+ # Hash for license file
+ sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index cfb0f730fb..f0a6a29636 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.114
++LIBDRM_VERSION = 2.4.115
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+-- 
+2.39.1
 
-I will send a patch right away.
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
