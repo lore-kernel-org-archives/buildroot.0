@@ -4,86 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0637C61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 10:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35CD4C61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 10:53:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73D0640C0F;
-	Sat, 11 Feb 2023 10:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73D0640C0F
+	by smtp2.osuosl.org (Postfix) with ESMTP id CED8C40AEE;
+	Sat, 11 Feb 2023 10:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CED8C40AEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yoEF_h_XAk1P; Sat, 11 Feb 2023 10:52:50 +0000 (UTC)
+	with ESMTP id QWdV88Kpz1P8; Sat, 11 Feb 2023 10:53:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D7C4403CA;
-	Sat, 11 Feb 2023 10:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D7C4403CA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA0241BF59A
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 10:52:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CA0741743;
+	Sat, 11 Feb 2023 10:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CA0741743
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CA2E1BF59A
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 10:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAE6041897
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 10:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAE6041897
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36FA7403CA
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 10:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36FA7403CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jVh-r_bTH1qr for <buildroot@lists.busybox.net>;
- Sat, 11 Feb 2023 10:52:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sNui6w2HADoL for <buildroot@lists.busybox.net>;
+ Sat, 11 Feb 2023 10:52:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61C214188E
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 61C214188E
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 10:52:46 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- j29-20020a05600c1c1d00b003dc52fed235so5802449wms.1
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 02:52:46 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B44F4037E
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6B44F4037E
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 10:52:48 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ az4-20020a05600c600400b003dff767a1f1so5804776wmb.2
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 02:52:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=HDpz/FB7oDbh1fdP3/mEqmwS6q467CMt0IJRcCrygOo=;
- b=S3qtdYP34ONHAw9OYIXeCWa3JtD4DbzQ7T+cKMVL3XlDzUuQBz7xF1GJKTMPhnjKte
- HlEvHNLESpK1lwI5rl814oPyvgUkKUrwmMBEs1LcSee4Y1ubSSkcfbhu7hJUp4OzSvhc
- 76eZ3FxpM7hznHYzvE4Nh0TOLlFwN/pFBUEqNU1p/z7ozeWcxDF/oTPV612v4srhkBBf
- Yx+c2etB9xYof3U+4t3jSizS6j3435/GSmqJIJnthMwck2FP/CDEc8oQ+MRxXUEp4GAM
- RehQlivqYOAY4JJM9t8iJ2mGEZjgh3Q9kEw0e6UCw5Uix3Yns+DqtAhRYUamjw7n3oha
- rk0g==
-X-Gm-Message-State: AO0yUKVaX55mjQgSCKgCYYcEKgfGQHhsdOu9NBIsQudCFfFH5ph0eRYf
- aiisgl5DgCkQgaLOhlEvXabGEkX3AwQ=
-X-Google-Smtp-Source: AK7set/wBPFKFTp0pEry4xbNM3CW+8cEklhXuGuGAwnEMQk51wv5cm9pVMU4+YOdcd3nZCLg98lGhA==
-X-Received: by 2002:a05:600c:707:b0:3df:ea9a:21c9 with SMTP id
- i7-20020a05600c070700b003dfea9a21c9mr16553131wmn.27.1676112764251; 
- Sat, 11 Feb 2023 02:52:44 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=fCajYRnY/N2y2S8ssf360c2sw2eoQqKoaInHI6kPZU8=;
+ b=D3AHzq5YoPwExCo5olLeDF2JzHqI0tJ8XapBAOB2D6NpILXInn+yEA3Jsk+AawQjcM
+ SavuJsRB/hOL+dXAj3yseRyEz9qB+gWbwjFKIIuP8yUa605+sG+uG6m7V9wbqaD/JO45
+ 4T14eW2X5KGq9uE0kybd9MY08iO2TavtGQSZZKlJDzsEE0wzu6W5XbEG+gh5MNqPXUL5
+ mUgCyoX5sJIVcMOaf/Waxu1v7dx4z5uxfQQbMJ65qs0Mdauo4thV7uDIpDf9GnKpEAbY
+ VfL7TCvvxYKHNUrswsQAyOIdOERYlouetjR4WsWEnv4tZ8cHv5LOqVWsCil48lr4Qvic
+ UYsw==
+X-Gm-Message-State: AO0yUKUOm9fVzNTd+RdBo8y2GVRBgiWVo/vsHTCnWbKycng8thDkHsvz
+ vAKL5JZMeL+/BZhTmSbZvOldTL/GMZY=
+X-Google-Smtp-Source: AK7set9nWp/6p2gMLJ4NKePp8jbVX7MuOCSVd/wmKHGu1am7faGBaTScqcOK7lW86LuRyd+PQ8/G+g==
+X-Received: by 2002:a05:600c:130f:b0:3dc:4313:fd1e with SMTP id
+ j15-20020a05600c130f00b003dc4313fd1emr14449201wmf.34.1676112766463; 
+ Sat, 11 Feb 2023 02:52:46 -0800 (PST)
 Received: from localhost.localdomain (1-1-22-171.ftth.cust.kwaoo.net.
  [171.22.1.1]) by smtp.gmail.com with ESMTPSA id
- t14-20020a05600c198e00b003dff870ce0esm11963447wmq.2.2023.02.11.02.52.43
+ i20-20020a1c5414000000b003dc53217e07sm8084200wmb.16.2023.02.11.02.52.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Feb 2023 02:52:43 -0800 (PST)
+ Sat, 11 Feb 2023 02:52:46 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 11:52:42 +0100
-Message-Id: <cover.1676112761.git.yann.morin.1998@free.fr>
+Date: Sat, 11 Feb 2023 11:52:44 +0100
+Message-Id: <912929d06f13459e472f6badf7e9251792b272fe.1676112761.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1676112761.git.yann.morin.1998@free.fr>
+References: <cover.1676112761.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=HDpz/FB7oDbh1fdP3/mEqmwS6q467CMt0IJRcCrygOo=;
- b=OR9E0lJi5UTUHEVbo+3upgwp3scUpeXe7T3uDjCYaXRXJDME632H85fZfli2aEbm4o
- ZVrpzHg25kmAGpwlMYSgslkeqjOGYvHL8yXZ6aFHaQ3M3cx4YQl5DuqSG7zkUgJJU7rv
- cnXCetCWfMPt//xVz81QxIk7NVZaJHKvsbBunyEfveh2lpI9l2mlBwJm6hU/wiCHJVHK
- xRX+luSSA/Cpg0iXBEUBYgKSAXm5YlOXwKlkYGnYB24itIeMWfERS7U6MK5ZFTnNePO1
- IYecOaVhwFqIWQ8+M7FrOwE+7X9JyznxxstKM36ph8mqebS3NmuQG2YB9225vo+QT5k5
- Scug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=fCajYRnY/N2y2S8ssf360c2sw2eoQqKoaInHI6kPZU8=;
+ b=O19d+ha8nrvNxVm4wyrHEAs/yqcPuAQVLgnDtOtkyhq+Pvin61Hv7xoKm2pUT3saa3
+ a52pCzMLrPDsInF48GEzJYAMCa2iT1hgtdj7E8zzirxb33t/mGREIlWsrLOVywFLCa8n
+ 8LG5i1xX/+G/DddEBKtI3cyURlIB3xyC1UdYju4tES9quLi2waIj7mrRzyrkua4IIf0S
+ 9IoWPsuX2cTHDTRO+6Yhjm/DHic+pXsp/6TwhRVuF7Ylgkf9CrRDdqfBW27L0hsqOO9P
+ EPwQQ37RmvOsZQs+EeOwrIxX3btI0XiYnrZTZQhQoHBawGqV9gIOdxMh9jaVqSl2bV1+
+ gppw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=OR9E0lJi
-Subject: [Buildroot] [PATCH 0/2] br2-external: export list and versions of
- used extrenal trees (branch yem/br2-ext-name-ver)
+ header.a=rsa-sha256 header.s=20210112 header.b=O19d+ha8
+Subject: [Buildroot] [PATCH 1/2] br2-external: make the list of external
+ trees public
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,45 +98,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+Currently, the list of external trees is a private variable, but for
+debugging or compliance, one may need to get that list.
 
-This small two-patch series extends the information exported about the
-br2-external trees in use for the current configuration: the list of
-br2-external trees names, and the version for each. They are available
-in Kconfig, and thus in the .config file, as well as make variables that
-are exported in the environment.
+Add a Kconfig option so that the list appears in the .config file, and
+export the already existing .mk variable in the environment, so that
+post-build or post-image scripts can use it.
 
-Note: we'd have liked to also have the origin of said trees, like the
-git origin remote or such, but that is far from trivial to extract.
-Indeed, a br2-external on a git tree may have more than one remote
-configured, and may get checked-out from a hash that is reachable from
-branches in more than one remote.
+Reported-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/scripts/br2-external | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      br2-external: make the list of external trees public
-      br2-external: make version of external trees available
-
- support/scripts/br2-external | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
-
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 2c33e6eacc..5815c6ded0 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -126,7 +126,7 @@ do_mk() {
+         done
+         printf '\n'
+ 
+-        printf 'BR2_EXTERNAL_NAMES = \n'
++        printf 'export BR2_EXTERNAL_NAMES = \n'
+         printf 'BR2_EXTERNAL_DIRS = \n'
+         printf 'BR2_EXTERNAL_MKS = \n'
+ 
+@@ -181,6 +181,14 @@ do_kconfig() {
+ 
+     printf 'menu "External options"\n\n' >>"${outputdir}/.br2-external.in.menus"
+ 
++    {
++        printf 'config BR2_EXTERNAL_NAMES\n'
++        printf '\tstring\n'
++        # Use star-expansion: we really one a single arg.
++        printf '\tdefault "%s"\n' "${BR2_EXT_NAMES[*]}"
++        printf '\n'
++    } >>"${outputdir}/.br2-external.in.paths"
++
+     for br2_name in "${BR2_EXT_NAMES[@]}"; do
+         eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
+         eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
