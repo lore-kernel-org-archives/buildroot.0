@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8594BC636CC
-	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 22:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13B45C636CC
+	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 22:21:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DEA981E8B;
-	Sat, 11 Feb 2023 22:21:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DEA981E8B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B423F81E2E;
+	Sat, 11 Feb 2023 22:21:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B423F81E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QVrv36mmNDhD; Sat, 11 Feb 2023 22:21:18 +0000 (UTC)
+	with ESMTP id 9UYNik2R5_wh; Sat, 11 Feb 2023 22:21:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86EA681E2E;
-	Sat, 11 Feb 2023 22:21:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86EA681E2E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A3C91BF588
+	by smtp1.osuosl.org (Postfix) with ESMTP id E376D81ED0;
+	Sat, 11 Feb 2023 22:21:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E376D81ED0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C6D5B1BF588
  for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 22:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 64BAD60B9C
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1D1E41655
  for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 22:21:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64BAD60B9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1D1E41655
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M7U-pRiIR6wJ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bgLLywBVPNdX for <buildroot@lists.busybox.net>;
  Sat, 11 Feb 2023 22:21:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 816A860608
+ by smtp4.osuosl.org (Postfix) with ESMTP id 980AC410D3
  for <buildroot@buildroot.org>; Sat, 11 Feb 2023 22:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 816A860608
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 980AC410D3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D4F8854A9; Sat, 11 Feb 2023 22:21:14 +0000 (UTC)
+ id 7F2A4854B0; Sat, 11 Feb 2023 22:21:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 23:18:12 +0100
+Date: Sat, 11 Feb 2023 23:18:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 451672e890b5f605aa9ad7a386491a31397c737f
-X-Git-Newrev: a54bb2a2d99b835f672ae194dc4934757881e08b
+X-Git-Oldrev: a54bb2a2d99b835f672ae194dc4934757881e08b
+X-Git-Newrev: 9b9bea584c2f2c14122395eba7cdbf325ed7256c
 X-Patchwork-Hint: ignore
-Message-Id: <20230211222114.6D4F8854A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: bump version to 8.2.2
+Message-Id: <20230211222114.7F2A4854B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
+ 1.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,44 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a54bb2a2d99b835f672ae194dc4934757881e08b
+commit: https://git.buildroot.net/buildroot/commit/?id=9b9bea584c2f2c14122395eba7cdbf325ed7256c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://news-web.php.net/php.announce/345
-
-Changelog: https://www.php.net/ChangeLog-8.php#8.2.2
+Release notes:
+https://lists.x.org/archives/xorg-announce/2023-February/003318.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index a9c3b7640b..869cb9b94f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index 62b67ad544..ed68164d5f 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
 @@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  650d3bd7a056cabf07f6a0f6f1dd8ba45cd369574bbeaa36de7d1ece212c17af  php-8.2.1.tar.xz
-+sha256  bdc4aa38e652bac86039601840bae01c0c3653972eaa6f9f93d5f71953a7ee33  php-8.2.2.tar.xz
- 
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 372d55f68a..9ce153f4fa 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+-# From https://lists.x.org/archives/xorg-announce/2022-December/003305.html
+-sha256  e31565c84006b6b8e01dc9399c806085739710bc2db2e0930f1511ed9d6585bd  libX11-1.8.3.tar.xz
+-sha512  bc862338fed855986659e9ffa641db6b36c3ac9abced590d1b164e3cc24446671936e3688cdca18393129c4ea41777977eeb37e87d8edc14d6cc5d194a9c0325  libX11-1.8.3.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-February/003318.html
++sha256  c9a287a5aefa9804ce3cfafcf516fe96ed3f7e8e45c0e2ee59e84c86757df518  libX11-1.8.4.tar.xz
++sha512  3150a47498b0cb012482ee02efeaae16d9e736288f2b3f917be912e1613d56ad6b4ab180de8820305deb2b95dfd993633f43a65344d75979d6b86bdf110cb63e  libX11-1.8.4.tar.xz
+ # Locally computed
+ sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 3bb3fffce0..add16f49db 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.2.1
-+PHP_VERSION = 8.2.2
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-XLIB_LIBX11_VERSION = 1.8.3
++XLIB_LIBX11_VERSION = 1.8.4
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
