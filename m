@@ -4,84 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EED7C61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 14:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B154C636CC
+	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 15:02:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CC4B4032A;
-	Sat, 11 Feb 2023 14:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CC4B4032A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2799D40386;
+	Sat, 11 Feb 2023 15:02:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2799D40386
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wMcLm6JNP1sh; Sat, 11 Feb 2023 14:46:32 +0000 (UTC)
+	with ESMTP id dnP7zAx5pC49; Sat, 11 Feb 2023 15:02:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D904F4031E;
-	Sat, 11 Feb 2023 14:46:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D904F4031E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4BCD14039D;
+	Sat, 11 Feb 2023 15:02:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BCD14039D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A28531BF369
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 14:46:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 18C2A1BF369
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 15:02:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C63E60A65
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 14:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C63E60A65
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6E4260ADE
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 15:02:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6E4260ADE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ARv8yvaZfjer for <buildroot@lists.busybox.net>;
- Sat, 11 Feb 2023 14:46:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94EB360644
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 94EB360644
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 14:46:29 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id r3so7599717edq.13
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 06:46:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=DzQl1v2pYDjyZBBZMpDebdCDWNuG1YUQAY6WS76dHNo=;
- b=G2iYADDBrxk4Jzak2S4B5BVwj7wTdToWRuu6kaC5EfLkddo/09z7YXfJYoqCEcdrDw
- H89d66RFbsTzO50JHS1ISk1KEcoZc1swZ5vbKqbmAzQN5pUDJCNdZci8hu2ceMRpRtK0
- MTMqNWrfY7G5uC0fneQNHTHVe1oF/n+da2Bhgt6jx0w9q+ctKikW9Wrs0dqNlHZizsMg
- i2w8P/pm9S/LOAma3QGXPrvy0Cg7nizta9VPEAIqUvYcYM74Huuh+o1yF1A3cx19NKQB
- Uk8Zbe+0BRONZDtjo/yDfn1KWB+udUglSHlGkwv7kqCQB3pskj2SCVo99W1RS3SdrVei
- tGRQ==
-X-Gm-Message-State: AO0yUKUNgG306vrafBGQQPHQzBpyNsgIZ9vdOrl5/Jjt1h+hXwfhD5Wt
- cp6ASv8C2b0SsZMSqOoZ/RMDy/UG1DzohPP4lyo=
-X-Google-Smtp-Source: AK7set/MMcZUEQpvl8njpm5/Wka0/oKK2+PyQEm5b432PhKe6zX1cxp0q4a4kq3iOCefuzkflf8dKA==
-X-Received: by 2002:a50:99d9:0:b0:4ab:d49:212b with SMTP id
- n25-20020a5099d9000000b004ab0d49212bmr13569172edb.0.1676126787694; 
- Sat, 11 Feb 2023 06:46:27 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-44-29-201.retail.telecomitalia.it. [79.44.29.201])
- by smtp.gmail.com with ESMTPSA id
- v26-20020a056402175a00b004acb3026af2sm1704660edx.59.2023.02.11.06.46.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Feb 2023 06:46:27 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ with ESMTP id SXb-IVoKfW-J for <buildroot@lists.busybox.net>;
+ Sat, 11 Feb 2023 15:02:03 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D133F60AA5
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 15:02:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D133F60AA5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B8AD184A7C; Sat, 11 Feb 2023 15:02:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 15:46:23 +0100
-Message-Id: <20230211144623.380475-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DzQl1v2pYDjyZBBZMpDebdCDWNuG1YUQAY6WS76dHNo=;
- b=mOVPRT9VdAGCUQauHD6ee5RSnjo3hCx312HC4UPxFmF301wICOo5Z4O39mvTvVjuNV
- E6qyWs2S4qxSsZWiv2GZ4hFS9dh4z5rx+ICbathWJ5gG9q9BETe4eJ+vbW858S0R2bgP
- NMhOKkeIbMm4WmywResMpN4NMj4NYmLms/FNE=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=mOVPRT9V
-Subject: [Buildroot] [PATCH v2 1/1] package/davinci-bootcount: bump to
- version 2.0.0
+Date: Sat, 11 Feb 2023 15:58:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2bf4d02ff35bd8a0d5aace354c987a166437db88
+X-Git-Newrev: 451672e890b5f605aa9ad7a386491a31397c737f
+X-Patchwork-Hint: ignore
+Message-Id: <20230211150203.B8AD184A7C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/chrony: run as unprivileged user
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,63 +56,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: dario.binacchi@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- Dario Binacchi <dariobin@libero.it>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- stm32mp1: support for STM32 TAMP_BKP21R bootcount register
-- tab formatting
-- gitignore: added autoscan files
-- updated documentation
-- i2c_eeprom: bootcount does not use two uint16s
-- am33xx: declare registers as 'volatile'
-- src/am33xx: do not close fd, it seems to prevent reliably writing register
-- configure.ac: update version, homepage
-- Added EEPROM read/write for non-TI AM335x platforms
+commit: https://git.buildroot.net/buildroot/commit/?id=451672e890b5f605aa9ad7a386491a31397c737f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+There are three ways to run chronyd:
+  - start as root, and continue running as root;
+  - start as root, then setuid() to a non-root user via either a command
+    line option or a configuration directive;
+  - start as root, and setuid() to a build-time specified non-root user.
 
+Currently, the first situation is used by Buildroot, which does not
+follow security best practices of dropping elevated privileges for
+daemon at runtime when that is possible.
+
+We switch to the third situation, where a compile-time default non-root
+user is then used at runtime to drop privileges, with libcap used to
+keep the capabilities required to call the appropriate syscalls to
+adjust the system time (typically, CAP_SYS_TIME to call adjtimex() or
+clock_settime() et al.).
+
+This means that libcap is now a mandatory dependency.
+
+To be noted: users who previously had configured their systems to run
+chronyd as non root, would have done so with either the command-line
+option (`-u`), or the configuration directive (`user`). Those take
+precedence over the compile-time default, so this should not break their
+systems (presumably, they also run as the `chrony` user). They would
+also have taken care to run chronyc as the appropriate user to
+manipulate chronyd at runtime via the UNIX socket.
+
+For those who were running chronyd as root, this does not change either:
+the functionality is unchanged, and they were running chronyc as root,
+which should still be capable of manipulating chronyd via its UNIX
+socket.
+
+Take that opportunity to brine chrony's Config.in to current coding
+style: enclose sub-option in an if-endif block.
+
+Signed-off-by: James Kent <james.kent@orchestrated-technology.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
+ package/chrony/Config.in |  6 +++++-
+ package/chrony/chrony.mk | 11 +++++------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-Changes in v2:
-- move 'v' from DAVINCI_BOOTCOUNT_VERSION to DAVINCI_BOOTCOUNT_SITE
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/davinci-bootcount/davinci-bootcount.hash | 2 +-
- package/davinci-bootcount/davinci-bootcount.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/davinci-bootcount/davinci-bootcount.hash b/package/davinci-bootcount/davinci-bootcount.hash
-index ef4bca2b7dfe..53435b1d1d6d 100644
---- a/package/davinci-bootcount/davinci-bootcount.hash
-+++ b/package/davinci-bootcount/davinci-bootcount.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  de7843cf1245a739b6d18d4db478893e50c2de0ee19bbce96dc323065d28c3e4  davinci-bootcount-0973689c7556a953d2b468e4d8d46758c6d467b4.tar.gz
-+sha256  12b5aa83736efb2fefd22cd4d9f305a25c68dfaa10401d5efb17e55a5163934e  davinci-bootcount-2.0.0.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/davinci-bootcount/davinci-bootcount.mk b/package/davinci-bootcount/davinci-bootcount.mk
-index 385d96d5a2c4..695d39688ac6 100644
---- a/package/davinci-bootcount/davinci-bootcount.mk
-+++ b/package/davinci-bootcount/davinci-bootcount.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/chrony/Config.in b/package/chrony/Config.in
+index 158dc20530..c22b756c11 100644
+--- a/package/chrony/Config.in
++++ b/package/chrony/Config.in
+@@ -1,16 +1,20 @@
+ config BR2_PACKAGE_CHRONY
+ 	bool "chrony"
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBCAP
+ 	help
+ 	  Chrony is a pair of programs which are used to maintain the
+ 	  accuracy of the system clock.
  
--DAVINCI_BOOTCOUNT_VERSION = 0973689c7556a953d2b468e4d8d46758c6d467b4
--DAVINCI_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-davinci-bootcount,$(DAVINCI_BOOTCOUNT_VERSION))
-+DAVINCI_BOOTCOUNT_VERSION = 2.0.0
-+DAVINCI_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-davinci-bootcount,v$(DAVINCI_BOOTCOUNT_VERSION))
- DAVINCI_BOOTCOUNT_LICENSE = GPL-3.0
- DAVINCI_BOOTCOUNT_LICENSE_FILES = COPYING
+ 	  http://chrony.tuxfamily.org/
  
--- 
-2.32.0
-
++if BR2_PACKAGE_CHRONY
++
+ config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
+ 	bool "enable debug logging support"
+-	depends on BR2_PACKAGE_CHRONY
+ 	help
+ 	  Enable support for debug logging output from Chrony when
+ 	  enabled at runtime. If disabled, code for debug logging will
+ 	  not be compiled in.
++
++endif
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 379e95a778..86f23d9060 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -10,20 +10,19 @@ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
+ CHRONY_CPE_ID_VENDOR = tuxfamily
+ CHRONY_SELINUX_MODULES = chronyd
+-CHRONY_DEPENDENCIES = host-pkgconf
++CHRONY_DEPENDENCIES = host-pkgconf libcap
+ 
+ CHRONY_CONF_OPTS = \
+ 	--host-system=Linux \
+ 	--host-machine=$(BR2_ARCH) \
+ 	--prefix=/usr \
+ 	--without-tomcrypt \
++	--with-user=chrony \
+ 	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
+ 
+-ifeq ($(BR2_PACKAGE_LIBCAP),y)
+-CHRONY_DEPENDENCIES += libcap
+-else
+-CHRONY_CONF_OPTS += --without-libcap
+-endif
++define CHRONY_USERS
++	chrony -1 chrony -1 * /run/chrony - - Time daemon
++endef
+ 
+ ifeq ($(BR2_PACKAGE_LIBNSS),y)
+ CHRONY_DEPENDENCIES += libnss
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
