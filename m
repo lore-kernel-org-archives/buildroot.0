@@ -1,73 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FB1BC636CC
-	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 14:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EED7C61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 11 Feb 2023 14:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB4EF415FA;
-	Sat, 11 Feb 2023 14:34:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB4EF415FA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9CC4B4032A;
+	Sat, 11 Feb 2023 14:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CC4B4032A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xnuFUqENKYOZ; Sat, 11 Feb 2023 14:34:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wMcLm6JNP1sh; Sat, 11 Feb 2023 14:46:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89FA8416B5;
-	Sat, 11 Feb 2023 14:34:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89FA8416B5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EDF7B1BF369
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 14:34:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D904F4031E;
+	Sat, 11 Feb 2023 14:46:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D904F4031E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A28531BF369
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 14:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8177416B5
- for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 14:34:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8177416B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C63E60A65
+ for <buildroot@lists.busybox.net>; Sat, 11 Feb 2023 14:46:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C63E60A65
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id In9Gyw_haOSM for <buildroot@lists.busybox.net>;
- Sat, 11 Feb 2023 14:34:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ARv8yvaZfjer for <buildroot@lists.busybox.net>;
+ Sat, 11 Feb 2023 14:46:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AC19415FA
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com
- [209.85.128.41])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7AC19415FA
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 14:34:03 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id u10so5796825wmj.3
- for <buildroot@buildroot.org>; Sat, 11 Feb 2023 06:34:03 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94EB360644
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 94EB360644
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 14:46:29 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id r3so7599717edq.13
+ for <buildroot@buildroot.org>; Sat, 11 Feb 2023 06:46:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=jkugv0pgXLfV0KvGHWIRneCCv6uJYIgz1WN7ivdzam8=;
- b=NX18atE+o6xD+dsi16U1evoKenTURzIMWuLXP8Ytq8IXgiLTsEQK8xjS9MkmogXIrf
- JWvkTjBAqoaCH5WBz6kMXzPTpMHqlTDEQpkbPM1GMHkFcB8nw62n5DxLiPvZbZOJeT9o
- b0T5tqEPjLqgGIbU95YK+j1WXipd9LWXK3KtylBUortX8KDqhRbkrfije72mTzxkyMWc
- y8PTklXto797oHWpwCV4FFStYpWCcIJygf9vzpeAO7VbtWRhMZqVXbGAh1lLT+tcqgj3
- KRUYDTcD0O1z5/jrBn9sOz7Vpe0EANVDobVx6SJ4g922Wl1PTcHDVaVCF8vKHcIS1lop
- LCfA==
-X-Gm-Message-State: AO0yUKWWhD5UsoqeLDVG3QtnfOgNYVeJpCQrc50dhWddUMkzT9D6vVVx
- RhBo8FBKUcNN03zcVbCUkHycx9Jng0U=
-X-Google-Smtp-Source: AK7set+zU/5MyI9a/Eerp8WEd5GWM3uxrFHfATb4wWm5lbYiedchiafz8tH4t9uDh4i6U28LfBVBLg==
-X-Received: by 2002:a05:600c:16d6:b0:3e1:541:2b55 with SMTP id
- l22-20020a05600c16d600b003e105412b55mr10875155wmn.16.1676126041142; 
- Sat, 11 Feb 2023 06:34:01 -0800 (PST)
-Received: from localhost.localdomain ([87.66.230.131])
+ bh=DzQl1v2pYDjyZBBZMpDebdCDWNuG1YUQAY6WS76dHNo=;
+ b=G2iYADDBrxk4Jzak2S4B5BVwj7wTdToWRuu6kaC5EfLkddo/09z7YXfJYoqCEcdrDw
+ H89d66RFbsTzO50JHS1ISk1KEcoZc1swZ5vbKqbmAzQN5pUDJCNdZci8hu2ceMRpRtK0
+ MTMqNWrfY7G5uC0fneQNHTHVe1oF/n+da2Bhgt6jx0w9q+ctKikW9Wrs0dqNlHZizsMg
+ i2w8P/pm9S/LOAma3QGXPrvy0Cg7nizta9VPEAIqUvYcYM74Huuh+o1yF1A3cx19NKQB
+ Uk8Zbe+0BRONZDtjo/yDfn1KWB+udUglSHlGkwv7kqCQB3pskj2SCVo99W1RS3SdrVei
+ tGRQ==
+X-Gm-Message-State: AO0yUKUNgG306vrafBGQQPHQzBpyNsgIZ9vdOrl5/Jjt1h+hXwfhD5Wt
+ cp6ASv8C2b0SsZMSqOoZ/RMDy/UG1DzohPP4lyo=
+X-Google-Smtp-Source: AK7set/MMcZUEQpvl8njpm5/Wka0/oKK2+PyQEm5b432PhKe6zX1cxp0q4a4kq3iOCefuzkflf8dKA==
+X-Received: by 2002:a50:99d9:0:b0:4ab:d49:212b with SMTP id
+ n25-20020a5099d9000000b004ab0d49212bmr13569172edb.0.1676126787694; 
+ Sat, 11 Feb 2023 06:46:27 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-79-44-29-201.retail.telecomitalia.it. [79.44.29.201])
  by smtp.gmail.com with ESMTPSA id
- o19-20020a05600c4fd300b003dc59d6f2f8sm8652879wmq.17.2023.02.11.06.34.00
+ v26-20020a056402175a00b004acb3026af2sm1704660edx.59.2023.02.11.06.46.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Feb 2023 06:34:00 -0800 (PST)
-From: thomas@devoogdt.com
+ Sat, 11 Feb 2023 06:46:27 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 15:33:56 +0100
-Message-Id: <20230211143356.173296-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 11 Feb 2023 15:46:23 +0100
+Message-Id: <20230211144623.380475-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/fluent-bit: bump to version 2.0.9
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=DzQl1v2pYDjyZBBZMpDebdCDWNuG1YUQAY6WS76dHNo=;
+ b=mOVPRT9VdAGCUQauHD6ee5RSnjo3hCx312HC4UPxFmF301wICOo5Z4O39mvTvVjuNV
+ E6qyWs2S4qxSsZWiv2GZ4hFS9dh4z5rx+ICbathWJ5gG9q9BETe4eJ+vbW858S0R2bgP
+ NMhOKkeIbMm4WmywResMpN4NMj4NYmLms/FNE=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=mOVPRT9V
+Subject: [Buildroot] [PATCH v2 1/1] package/davinci-bootcount: bump to
+ version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,88 +93,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>,
- Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Cc: dario.binacchi@amarulasolutions.com, linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dariobin@libero.it>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+- stm32mp1: support for STM32 TAMP_BKP21R bootcount register
+- tab formatting
+- gitignore: added autoscan files
+- updated documentation
+- i2c_eeprom: bootcount does not use two uint16s
+- am33xx: declare registers as 'volatile'
+- src/am33xx: do not close fd, it seems to prevent reliably writing register
+- configure.ac: update version, homepage
+- Added EEPROM read/write for non-TI AM335x platforms
 
-- Release Notes:
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-    https://fluentbit.io/announcements/v2.0.9/
-
-- Patch dropped, as it is upstream:
-
-    https://github.com/fluent/fluent-bit/commit/7bcb502ebdcd647d6b83c972805e734ad522eb1a
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
 ---
- ...eLists.txt-only-require-a-C-compiler.patch | 27 -------------------
- package/fluent-bit/fluent-bit.hash            |  2 +-
- package/fluent-bit/fluent-bit.mk              |  2 +-
- 3 files changed, 2 insertions(+), 29 deletions(-)
- delete mode 100644 package/fluent-bit/0001-CMakeLists.txt-only-require-a-C-compiler.patch
 
-diff --git a/package/fluent-bit/0001-CMakeLists.txt-only-require-a-C-compiler.patch b/package/fluent-bit/0001-CMakeLists.txt-only-require-a-C-compiler.patch
-deleted file mode 100644
-index e71bcf0c0d..0000000000
---- a/package/fluent-bit/0001-CMakeLists.txt-only-require-a-C-compiler.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 7bcb502ebdcd647d6b83c972805e734ad522eb1a Mon Sep 17 00:00:00 2001
--From: Thomas Devoogdt <thomas.devoogdt@barco.com>
--Date: Mon, 30 Jan 2023 09:10:37 +0100
--Subject: [PATCH] CMakeLists.txt: only require a C compiler
--
--Fluent-bit is mostly written in C,
--so don't require CXX in the top-level project.
--
--Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index a7adb02de..3ff7360d8 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,5 +1,5 @@
-- cmake_minimum_required(VERSION 3.12)
---project(fluent-bit)
--+project(fluent-bit C)
-- 
-- # CMP0069 ensures that LTO is enabled for all compilers
-- cmake_policy(SET CMP0069 NEW)
---- 
--2.30.2
--
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-index ce7cea7b59..0caadcd56f 100644
---- a/package/fluent-bit/fluent-bit.hash
-+++ b/package/fluent-bit/fluent-bit.hash
+Changes in v2:
+- move 'v' from DAVINCI_BOOTCOUNT_VERSION to DAVINCI_BOOTCOUNT_SITE
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ package/davinci-bootcount/davinci-bootcount.hash | 2 +-
+ package/davinci-bootcount/davinci-bootcount.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/davinci-bootcount/davinci-bootcount.hash b/package/davinci-bootcount/davinci-bootcount.hash
+index ef4bca2b7dfe..53435b1d1d6d 100644
+--- a/package/davinci-bootcount/davinci-bootcount.hash
++++ b/package/davinci-bootcount/davinci-bootcount.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  8ff5566389033669feabc9c69a5c6f417dad5c8b066454388e6a706507262acf  fluent-bit-2.0.8.tar.gz
-+sha256  393ad4a6ced48c327607653d610ef273843085a17b6e5c8013877abdf31e6945  fluent-bit-2.0.9.tar.gz
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 13077e53cc..c10ef613d7 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  de7843cf1245a739b6d18d4db478893e50c2de0ee19bbce96dc323065d28c3e4  davinci-bootcount-0973689c7556a953d2b468e4d8d46758c6d467b4.tar.gz
++sha256  12b5aa83736efb2fefd22cd4d9f305a25c68dfaa10401d5efb17e55a5163934e  davinci-bootcount-2.0.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/davinci-bootcount/davinci-bootcount.mk b/package/davinci-bootcount/davinci-bootcount.mk
+index 385d96d5a2c4..695d39688ac6 100644
+--- a/package/davinci-bootcount/davinci-bootcount.mk
++++ b/package/davinci-bootcount/davinci-bootcount.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--FLUENT_BIT_VERSION = 2.0.8
-+FLUENT_BIT_VERSION = 2.0.9
- FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
- FLUENT_BIT_LICENSE = Apache-2.0
- FLUENT_BIT_LICENSE_FILES = LICENSE
+-DAVINCI_BOOTCOUNT_VERSION = 0973689c7556a953d2b468e4d8d46758c6d467b4
+-DAVINCI_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-davinci-bootcount,$(DAVINCI_BOOTCOUNT_VERSION))
++DAVINCI_BOOTCOUNT_VERSION = 2.0.0
++DAVINCI_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-davinci-bootcount,v$(DAVINCI_BOOTCOUNT_VERSION))
+ DAVINCI_BOOTCOUNT_LICENSE = GPL-3.0
+ DAVINCI_BOOTCOUNT_LICENSE_FILES = COPYING
+ 
 -- 
-2.34.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
