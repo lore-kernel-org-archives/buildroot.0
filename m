@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D7E2C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8C79C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:57:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF96701D5;
-	Tue, 21 Feb 2023 01:56:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EF96701D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 940B37001E;
+	Tue, 21 Feb 2023 01:57:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 940B37001E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f_atSLBTbyvK; Tue, 21 Feb 2023 01:56:52 +0000 (UTC)
+	with ESMTP id hRQ9XToUTIaU; Tue, 21 Feb 2023 01:57:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53C5A701E9;
-	Tue, 21 Feb 2023 01:56:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53C5A701E9
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE653700D1;
+	Tue, 21 Feb 2023 01:57:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE653700D1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 979B71BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D2D31BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F169B610E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F169B610E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 267F070031
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 267F070031
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id szIkpud_CME6 for <buildroot@lists.busybox.net>;
+ with ESMTP id QY1yXSSlVXkm for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 228DB70024
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60F7B6FE60
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 228DB70024
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60F7B6FE60
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2115981979; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+ id 5ABE38648F; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Feb 2023 21:37:48 +0100
+Date: Sun, 12 Feb 2023 22:06:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: add76a41c3c68e649ecae69aa896d5f8b627d1be
-X-Git-Newrev: 895686180fa73a23f2e4e9ee374618fa259a79ce
+X-Git-Oldrev: aa93d0cdd7adf1051cdb1643e978c81ae183327c
+X-Git-Newrev: 888ac96e55c0c53bf5ada2f3f6d58e9e1179d91b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.2115981979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/zabbix: fix
- BR2_SHARED_STATIC_LIBS
+Message-Id: <20230220205259.5ABE38648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/cryptsetup: bump
+ version to 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=895686180fa73a23f2e4e9ee374618fa259a79ce
+commit: https://git.buildroot.net/buildroot/commit/?id=888ac96e55c0c53bf5ada2f3f6d58e9e1179d91b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-zabbix uses custom --enable-{static,shared} options, instead of standard
-libtool directives resulting in the following build failure with openssl
-or libcurl:
-
-configure:13132: /home/autobuild/autobuild/instance-6/output-1/host/bin/or1k-buildroot-linux-gnu-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0  -I/home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -rdynamic  -static -L/home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/lib conftest.c -lssl -lcrypto -lm   >&5
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/10.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_globallookup':
-dso_dlfcn.c:(.text+0x2c): warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/10.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a(b_addr.o): in function `BIO_lookup_ex':
-b_addr.c:(.text+0x1128): warning: Using 'getaddrinfo' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/10.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a(b_sock.o): in function `BIO_gethostbyname':
-b_sock.c:(.text+0x90): warning: Using 'gethostbyname' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/10.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: /tmp/cceWHjDi.o: in function `main':
-conftest.c:(.text.startup+0x8): undefined reference to `SSL_connect'
-
-[...]
-
-configure: error: OpenSSL library libssl or libcrypto not found
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/zabbix/zabbix.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-index adc54028ad..e00d693ba5 100644
---- a/package/zabbix/zabbix.mk
-+++ b/package/zabbix/zabbix.mk
-@@ -125,6 +125,13 @@ endif
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 149d1e71f1..87cdf840c3 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.6/sha256sums.asc
+-sha256  44397ba76e75a9cde5b02177bc63cd7af428a785788e3a7067733e7761842735  cryptsetup-2.6.0.tar.xz
++sha256  410ded65a1072ab9c8e41added37b9729c087fef4d2db02bb4ef529ad6da4693  cryptsetup-2.6.1.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 659fdfa2a4..3f3034475f 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- endif # BR2_PACKAGE_ZABBIX_SERVER
- 
-+# zabbix uses custom --enable-{static,shared} options, instead of
-+# standard libtool directives resulting in a build failure with libcurl
-+# or openssl.
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+ZABBIX_CONF_OPTS += --disable-static
-+endif
-+
- define ZABBIX_INSTALL_INIT_SYSTEMD
- 	$(foreach unit,$(ZABBIX_SYSTEMD_UNITS),\
- 		$(INSTALL) -D -m 0644 $(ZABBIX_PKGDIR)/$(unit) $(TARGET_DIR)/usr/lib/systemd/system/$(unit) && \
+ CRYPTSETUP_VERSION_MAJOR = 2.6
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
