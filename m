@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E9EC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353B9C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82B384F5DE;
-	Tue, 21 Feb 2023 00:49:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82B384F5DE
+	by smtp4.osuosl.org (Postfix) with ESMTP id D63704F5EB;
+	Tue, 21 Feb 2023 00:49:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D63704F5EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8Xvng-9gztw9; Tue, 21 Feb 2023 00:49:22 +0000 (UTC)
+	with ESMTP id R41ffzc3hiNJ; Tue, 21 Feb 2023 00:49:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41F514F5E7;
-	Tue, 21 Feb 2023 00:49:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41F514F5E7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6FFE1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4CDE4F5F2;
+	Tue, 21 Feb 2023 00:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4CDE4F5F2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 55BED1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 330F9610BA
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 330F9610BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6004417C2
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6004417C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4SLta92PS0hO for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hZT_w6Olvady for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 713F76FB5A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 713F76FB5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 03E9641802
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03E9641802
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F4C0828C8; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+ id 003C28648F; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 12:00:54 +0100
+Date: Sun, 12 Feb 2023 21:30:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 203cf2d8b7e9668ba51dc8a72636896e656e7e1b
-X-Git-Newrev: 9b88d0f7b9775db73da55504f3968bc0ff25687a
+X-Git-Oldrev: 631d0289fe880952d9bedf37cc10b043c70c1482
+X-Git-Newrev: d40cab45e21cd1c66bfffa911b1310e29c321486
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205234.6F4C0828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-filelock: bump
- to version 3.9.0
+Message-Id: <20230220205259.003C28648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opencv3: bump to
+ version 3.4.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b88d0f7b9775db73da55504f3968bc0ff25687a
+commit: https://git.buildroot.net/buildroot/commit/?id=d40cab45e21cd1c66bfffa911b1310e29c321486
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Migrate from setuptools to hatchling pep517 build backend.
+This bump will fix the following build failure with gcc >= 12:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+/home/thomas/autobuild/instance-1/output-1/build/opencv3-3.4.17/modules/core/src/persistence_base64.cpp: In function 'bool base64::base64_valid(const uint8_t*, size_t, size_t)':
+/home/thomas/autobuild/instance-1/output-1/build/opencv3-3.4.17/modules/core/src/persistence_base64.cpp:167:31: error: comparing the result of pointer addition '(src + ((sizetype)off))' and NULL [-Werror=address]
+  167 |     if (src == 0 || src + off == 0)
+      |                     ~~~~~~~~~~^~~~
+cc1plus: some warnings being treated as errors
+
+Update hash of LICENSE file (update in year:
+https://github.com/opencv/opencv/commit/f6fe5c07f61eb0bc934672200b2bfd453f2fc41d)
+
+https://github.com/opencv/opencv/wiki/ChangeLog#version3419
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cb9c120c15c8042e6919858d6885c1cc4d996c0c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-filelock/python-filelock.hash | 4 ++--
- package/python-filelock/python-filelock.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/opencv3/opencv3.hash | 4 ++--
+ package/opencv3/opencv3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
-index f9e6bc03e8..4ef7afed00 100644
---- a/package/python-filelock/python-filelock.hash
-+++ b/package/python-filelock/python-filelock.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/filelock/json
--md5  d66099b8823ebbdd980cde0dae8f7341  filelock-3.8.2.tar.gz
--sha256  7565f628ea56bfcd8e54e42bdc55da899c85c1abfe1b5bcfd147e9188cebb3b2  filelock-3.8.2.tar.gz
-+md5  40eeb4a2963e1b07b8eab12b5db08418  filelock-3.9.0.tar.gz
-+sha256  7b319f24340b51f55a2bf7a12ac0755a9b03e718311dac567a0f4f7fabd2f5de  filelock-3.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
-diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
-index 86f1220b54..02759935ad 100644
---- a/package/python-filelock/python-filelock.mk
-+++ b/package/python-filelock/python-filelock.mk
-@@ -4,11 +4,12 @@
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+index 30308188aa..3d6fd2ed8a 100644
+--- a/package/opencv3/opencv3.hash
++++ b/package/opencv3/opencv3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1353eec67849aadb20df71d8bae18b83708e18fc5da080fe5efeabb1e99b2ee8  opencv3-3.4.17.tar.gz
+-sha256  9076d3d934839a2f8e7bfe549abda6faea4751f1edd6e9460ff703559890ad5f  LICENSE
++sha256  9b913e74299ce4416a5c94000da577c592bf670fd53bad16220eb115a0821529  opencv3-3.4.19.tar.gz
++sha256  c1fed9cd2f557ba23a1b37a21e2c90629d1a60bdb61e92d0e79369bb6fca3390  LICENSE
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 8e4c90786e..29fb246e65 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FILELOCK_VERSION = 3.8.2
-+PYTHON_FILELOCK_VERSION = 3.9.0
- PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
--PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/d8/73/292d9ea2370840a163e6dd2d2816a571244e9335e2f6ad957bf0527c492f
--PYTHON_FILELOCK_SETUP_TYPE = setuptools
-+PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/0b/dc/eac02350f06c6ed78a655ceb04047df01b02c6b7ea3fc02d4df24ca87d24
-+PYTHON_FILELOCK_SETUP_TYPE = pep517
- PYTHON_FILELOCK_LICENSE = Public Domain
- PYTHON_FILELOCK_LICENSE_FILES = LICENSE
-+PYTHON_FILELOCK_DEPENDENCIES = host-python-hatchling host-python-hatch-vcs
- 
- $(eval $(python-package))
+-OPENCV3_VERSION = 3.4.17
++OPENCV3_VERSION = 3.4.19
+ OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
