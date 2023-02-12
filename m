@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32E64C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC8D9C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:55:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3EEF700DC;
-	Tue, 21 Feb 2023 01:55:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3EEF700DC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58E0C700AC;
+	Tue, 21 Feb 2023 01:55:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58E0C700AC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LjnmxgGt0ctp; Tue, 21 Feb 2023 01:55:25 +0000 (UTC)
+	with ESMTP id nPt4U7CxAPir; Tue, 21 Feb 2023 01:55:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4093700AC;
-	Tue, 21 Feb 2023 01:55:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4093700AC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E5756FFED;
+	Tue, 21 Feb 2023 01:55:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E5756FFED
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 655761BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E9C5B1BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 662C76FFF3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91A8770027
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 662C76FFF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91A8770027
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9LPlqf7ChNTC for <buildroot@lists.busybox.net>;
+ with ESMTP id hgVCB8hi5y2A for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86BE97001C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A660E7000A
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86BE97001C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A660E7000A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E84F81979; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+ id A4AA981979; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Feb 2023 23:18:48 +0100
+Date: Sun, 12 Feb 2023 09:39:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9b9bea584c2f2c14122395eba7cdbf325ed7256c
-X-Git-Newrev: 5e1fdd144300106704e21176673e465163245669
+X-Git-Oldrev: a39116b5dba6cf0695620e2ba5302f21fa80a4a5
+X-Git-Newrev: 59b2e826f2a6c1874c5d032d3a5852326028bc0e
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205258.6E84F81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
- to 2.4.115
+Message-Id: <20230220205258.A4AA981979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/download: fix the
+ cargo post-process in face of failed vendoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e1fdd144300106704e21176673e465163245669
+commit: https://git.buildroot.net/buildroot/commit/?id=59b2e826f2a6c1874c5d032d3a5852326028bc0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-February/003323.html
+In commit 04154a651729 (support/download/cargo-post-process: cargo
+output for vendor config), we switched away from our hand-crafted
+cargo.toml mangling, to use cargo itself to update that file.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+In doing so, we enabled the shell pipefail option, so that we could
+catch cargo failures, while redirecting its output through tee to the
+cargo.toml.
+
+However, pipefail is overzealous, and will hit us even for pipes we do
+not want to globally fail, like the one that actually checks whether an
+archive is already vendored or not:
+
+    if tar tf "${output}" | grep -q "^[^/]*/VENDOR" ; then
+        ...
+
+with pipefail, the above may always fail:
+  - if the tarball is already vendored, grep will exit on the first
+    match because of -q (it only needs a single match to decide that its
+    return code will be zero), so the | will get closed, and tar may
+    get -EPIPE before it had a chance to finish listing the archive, and
+    thus would terminate in error;
+  - if the tarball is not vendored, grep will exit in error.
+
+It turns out that the tee was only added so that we could see the
+messages emitted by cargo, and still fill the cargo.tom with the output
+of cargo.
+
+But that's a bit overkill: the cargo messages are going to stderr, and
+the blurb to add to cargo.toml to stdout, so we just need to redirect
+stdout.
+
+Yes, we do not see what cargo added to cargo.toml, but that is not so
+interesting.
+
+Still, cargo ends its messages with a suggestion for the user to modify
+cargo.toml, with:
+
+    To use vendored sources, add this to your .cargo/config.toml for this project:
+
+But since we've already redirected that to cargo.toml, there is nothing
+for the user to edit, so the above can get confusing. Emit a little
+blurb that states that everything is under control.
+
+And then we can drop pipefail.
+
+Note: the go-post-process initially had pipefail too, but it was dropped
+in bfd1a31d0e59 (support/download/go-post-process: drop -o pipefail) as
+it was causing spurious breakage when extracting the archive before
+vendoring, so it is only reasonable that we also remove it from the
+cargo-post-process.
+
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Simon Richter <simon.richter@ptwdosimetry.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/download/cargo-post-process | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 387beadc3f..87cc170617 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003250.html
--sha256  3049cf843a47d12e5eeefbc3be3496d782fa09f42346bf0b7defe3d1e598d026  libdrm-2.4.114.tar.xz
--sha512  8dcd4be5674e3ea2ab4394fa8f461914e5aa7f4f57a2f448c5216d84ee6682e16b45eafabf97b7d9f5c062183d9a6bf3f0c97499d4cb01c19807a51209a0f644  libdrm-2.4.114.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003323.html
-+sha256  554cfbfe0542bddb391b4e3e05bfbbfc3e282b955bd56218d21c0616481f65eb  libdrm-2.4.115.tar.xz
-+sha512  0c38d3cfd76f627b899f052527c2939d5fc87a417422dceb0761839ba21e69736703a87ba170b5ba7a4aca2506a240760c8c97ca1781a7fb78468225295293bd  libdrm-2.4.115.tar.xz
+diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
+index aea2d8da7a..3f4666c006 100755
+--- a/support/download/cargo-post-process
++++ b/support/download/cargo-post-process
+@@ -1,7 +1,6 @@
+ #!/usr/bin/env bash
  
- # Hash for license file
- sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 56366b6c48..52ac13b7d0 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ set -e
+-set -o pipefail
  
--LIBDRM_VERSION = 2.4.114
-+LIBDRM_VERSION = 2.4.115
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+ . "${0%/*}/helpers"
+ 
+@@ -31,7 +30,13 @@ flock "${CARGO_HOME}"/.br-lock \
+ cargo vendor \
+     --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} \
+     --locked VENDOR \
+-    | tee .cargo/config
++    > .cargo/config
++
++# "cargo vendor' outputs on stderr a message directing to add some data
++# to the project's .cargo/config.toml, data that it outputs on stdout.
++# Since we redirect stdout to .cargo/config.toml, the message on stderr
++# gets confusing, so instruct the user that it's been handled.
++printf '(note: .cargo/config.toml automatically updated by Buildroot)\n\n'
+ 
+ popd > /dev/null
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
