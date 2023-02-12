@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4098C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:48:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DEE7C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8032D4F56F;
-	Tue, 21 Feb 2023 00:48:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8032D4F56F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16FE04F5C5;
+	Tue, 21 Feb 2023 00:48:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16FE04F5C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UMzCkzOS5aEa; Tue, 21 Feb 2023 00:48:00 +0000 (UTC)
+	with ESMTP id l6IdXdDL7EJZ; Tue, 21 Feb 2023 00:48:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E2404F580;
-	Tue, 21 Feb 2023 00:47:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E2404F580
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A58A81BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D77FF4F5CC;
+	Tue, 21 Feb 2023 00:48:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D77FF4F5CC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5237A1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 050336FB84
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 050336FB84
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65259417E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65259417E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cNXcHicxMzuL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X6rX7LIeHwav for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D1486FB7B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D1486FB7B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CC7D41805
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CC7D41805
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C4B486495; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 99B4086495; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 12:00:41 +0100
+Date: Sun, 12 Feb 2023 09:38:54 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7be2ff33abdd049dc3670c5a6e2e385c1fba6f41
-X-Git-Newrev: 3030baaa67dcafcc9f2c0802278c51f2ea016936
+X-Git-Oldrev: d758b054b496619999e03c60c63b6636d818f3e5
+X-Git-Newrev: a39116b5dba6cf0695620e2ba5302f21fa80a4a5
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205234.1C4B486495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-crontab: bump
- to version 2.7.1
+Message-Id: <20230220205258.99B4086495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/download: catch
+ post-process errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3030baaa67dcafcc9f2c0802278c51f2ea016936
+commit: https://git.buildroot.net/buildroot/commit/?id=a39116b5dba6cf0695620e2ba5302f21fa80a4a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-crontab/python-crontab.hash | 4 ++--
- package/python-crontab/python-crontab.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/12a/12a63ae177fe3ed0c9a1ef2fa01870f334f36b0f/
 
-diff --git a/package/python-crontab/python-crontab.hash b/package/python-crontab/python-crontab.hash
-index b3aa96fc1b..d9519096df 100644
---- a/package/python-crontab/python-crontab.hash
-+++ b/package/python-crontab/python-crontab.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-crontab/json
--md5  2982bdce2d9b7789f32da649a9507c4b  python-crontab-2.6.0.tar.gz
--sha256  1e35ed7a3cdc3100545b43e196d34754e6551e7f95e4caebbe0e1c0ca41c2f1b  python-crontab-2.6.0.tar.gz
-+md5  0a71aa83eed18752c2850632d84cfd89  python-crontab-2.7.1.tar.gz
-+sha256  b21af4647c7bbb848fef2f020616c6b0289dcb9f94b4f991a55310ff9bec5749  python-crontab-2.7.1.tar.gz
- # Locally computed sha256 checksums
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/python-crontab/python-crontab.mk b/package/python-crontab/python-crontab.mk
-index 9b29e11ccd..1c2802ef61 100644
---- a/package/python-crontab/python-crontab.mk
-+++ b/package/python-crontab/python-crontab.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+Currently, when the post-process helper fails while downloading from
+upstream, there is no fallback to the backup mirror.
+
+In case the post-process helper fails, we must consider that to be a
+download failure, so we must bail out as if the download backend itself
+did fail, but we fail to do so.
+
+Duplicate the logic we have for the download helper: if the post-process
+helper fails, remove the downloaded stuff, and continue on to the next
+URI, which will ultimately hit the backup mirror (if one has been
+configured).
+
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/download/dl-wrapper | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 09a6ac1f1a..1e8d6058f6 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -138,9 +138,15 @@ main() {
+         fi
  
--PYTHON_CRONTAB_VERSION = 2.6.0
--PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/06/b0/c270a1b5c83d9e0f83ab654d3153c39d80f61ba49fefde50fd23ab351381
-+PYTHON_CRONTAB_VERSION = 2.7.1
-+PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/6a/b6/94d861e868698b8e3f288f7e4684e30535b0d9a6b38316ee0a3d4d31e6ae
- PYTHON_CRONTAB_SETUP_TYPE = setuptools
- PYTHON_CRONTAB_LICENSE = LGPL-3.0+
- PYTHON_CRONTAB_LICENSE_FILES = COPYING
+         if [ -n "${post_process}" ] ; then
+-            "${OLDPWD}/support/download/${post_process}-post-process" \
+-                -o "${tmpf}" \
+-                -n "${raw_base_name}"
++            if ! "${OLDPWD}/support/download/${post_process}-post-process" \
++                    -o "${tmpf}" \
++                    -n "${raw_base_name}"
++            then
++                # cd back to keep path coherence
++                cd "${OLDPWD}"
++                rm -rf "${tmpd}"
++                continue
++            fi
+         fi
+ 
+         # cd back to free the temp-dir, so we can remove it later
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
