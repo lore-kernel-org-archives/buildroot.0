@@ -4,63 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46281C05027
-	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 13:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C31C05027
+	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 13:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C4C1840399;
-	Sun, 12 Feb 2023 13:00:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4C1840399
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52D0140452;
+	Sun, 12 Feb 2023 13:03:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52D0140452
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JIeDCFxEU13b; Sun, 12 Feb 2023 13:00:43 +0000 (UTC)
+	with ESMTP id QFWxw5P4_I0H; Sun, 12 Feb 2023 13:03:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DB11401B1;
-	Sun, 12 Feb 2023 13:00:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB11401B1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2AF9A40453;
+	Sun, 12 Feb 2023 13:03:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AF9A40453
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB4BA1BF593
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 13:00:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E5521BF593
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 13:03:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD5DE4099E
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 13:00:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD5DE4099E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4152140919
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 13:03:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4152140919
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M9qdNXqNU8ij for <buildroot@lists.busybox.net>;
- Sun, 12 Feb 2023 13:00:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6A4C40992
-Received: from smtpdh20-2.aruba.it (smtpdh20-2.aruba.it [62.149.155.165])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B6A4C40992
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 13:00:36 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.66.151])
- by Aruba Outgoing Smtp  with ESMTPSA
- id RBy5puVbiWQwzRBy5p6TYU; Sun, 12 Feb 2023 14:00:33 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ with ESMTP id 28R0xCivofhG for <buildroot@lists.busybox.net>;
+ Sun, 12 Feb 2023 13:03:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1E6040361
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E1E6040361
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 13:03:41 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ j29-20020a05600c1c1d00b003dc52fed235so7156914wms.1
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 05:03:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=V/dc/9esBcSQ+EjntFJ737Vr43iSMOEAs8GnlXiNHCk=;
+ b=jRDglLecM8kjWVpQOdnN1XgI84hHf0xESom4tGeiiYxb4oGhwJHcfeTWyUcLfavOH8
+ tdDjnpcvMT61kdJ7r41oXA0nDRt5FjjwHMSK+qQeSrX1A1J/vrm66UqIxZdOCBXeuJ/v
+ vT6CCqh2P96IW828t0OYw0CGNmJNVN6M924Yw1SrFqKwBN7HPWFuKvxMdKTPFAyh9peN
+ mPek7GvhrfpaNNd9MTdMFZ7aZCsugLvEYko8SZ5afDPAb8+k+tRdFHfmr/YftpxrpuYw
+ nYjXYMtZh29j6w8KshRofEUks54j1aJnDk5eI0Y1HlhXFwuE1kOp+8RIgPXbA+QhxF8E
+ gHBw==
+X-Gm-Message-State: AO0yUKUp0pOl9YLlM1XUqzcmpciVsK7TzTMTQqPVDBFKWw0VDwcE3LO7
+ YVwYtpxMgROPitxCc5wX0Uvnf5u3p8Q=
+X-Google-Smtp-Source: AK7set9JD4aedr7dO4huRli72S3xYIpkqSJp5H2Sgp+NIlU8LNbN84fhqWMDqi7tudyiTPJWqmw0pg==
+X-Received: by 2002:a05:600c:3c9c:b0:3dc:d5b:5f6a with SMTP id
+ bg28-20020a05600c3c9c00b003dc0d5b5f6amr17001273wmb.30.1676207019706; 
+ Sun, 12 Feb 2023 05:03:39 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ o3-20020a5d6843000000b002c54ca185c3sm4896682wrw.22.2023.02.12.05.03.38
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 12 Feb 2023 05:03:39 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Feb 2023 14:00:32 +0100
-Message-Id: <20230212130032.724850-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 12 Feb 2023 14:03:36 +0100
+Message-Id: <20230212130336.373391-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfHwBKkDof5R9umyiInZ6IBh8z7CgkC5LusQNgh6V2JyRgkhgBeOkeM/c72/4z9b4ZU+7Pt/rc99ttwLm0sM7U72Vm10IO7650M/CI38NrVMSxlWr5IgE
- 9kpM85ZxpC1Gh7oja0qqCtZmK6V7IgultAIulH+aV+ED4nxxbFhD8SvraD0jyAiMpy8+US3kuZGCx4PF/mmmo/XUlXG9SoPq2VIc1dtdD6FxpFR53Gr6nz49
- NjZu1UJJsOm4ZmpFFpUg2hSGlyz/X2TzSIF9S3Z/ylOatAQJwG7vFEa1sbBKr2ppiDnG+gMnM3QrLgC15n1jXQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1676206833; bh=juCjt+GghFsAm6G4myUwUKSgSCi93wXxKWjTrtRC8jY=;
- h=From:To:Subject:Date:MIME-Version;
- b=eUHGFCMgLY9m0R4s5/V77ipWOrgvXpFIj7VMlhIJYKoIY4eyEnXPMB5Xm0/EglDxE
- exu2jrEtn0nup1liBEsJBgi36nIgDXhFViE5ALYwUf53DtSDjJwMp+MbYpxhv21VpF
- mxRSq1sMorG7Hh8hxd1bzFGb4HEgkZRjGR0D+3KKY5kVfBSnON1v6JOm0qidZr67nM
- ZmDE7dd5rH/gX4QXwhblExgHvfbsQY6H16Mwcqunr087oABtFD5sw+z+RFmDJ2GEMH
- D84km8rqM3NMnZaa8v6RSgbNlI8PV/NE6y+cXfxbx0hWT3cn5LNrw3QNrSSslI6dGM
- 0nTDWEFgGF3FQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=V/dc/9esBcSQ+EjntFJ737Vr43iSMOEAs8GnlXiNHCk=;
+ b=TXIeeDWcqL3JQDm9mrQYya3hccQUCfTBmm5uDY5sj8vWNmoZIB19DQAGqxYJKGg31A
+ GvApz3rq8wcgVTXBv7N91lZqk9+foRoL7ll5mBm3wEypMcwyEFD0egeykzvICZvwR8bS
+ mI6xiP+GGJSIUB4WmIDiFtjf9G4z6qB5ZxVGONOsQMU+PgmpxerdgyL0hrh9T/mWekJe
+ nFEM1hxz2S7MItPMK7/eWvLObSgrDF282Z7sLkPO6CGhLU2PMJ/6kumvFdhE38N6msxs
+ b7KVO//F3FUz9zmexyXzj7INmB93M8GzHjydbPH21RHirmDDZNU9xVEl4QGukeoeHXIT
+ vn1Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=eUHGFCMg
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.88.1
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=TXIeeDWc
+Subject: [Buildroot] [PATCH 1/1] package/olsr: fix build with gpsd >= 3.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,45 +94,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Fix the following build failure with gpsd >= 3.25 raised since commit
+3c7fece853f3def9a425eccc384b9dacb1010051:
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index f847ec4f77..ec3fe0d777 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_87_RTM/src/SHA256SUMS
--sha256  68a1894496d3d158babc75f8a5dda3f55b7c1560573936e3b101a10fa4ac152d  nss-3.87.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_88_1_RTM/src/SHA256SUMS
-+sha256  27d243edf87d1cf1bb9c861f03d387e0e9230ce5017f4308c941f558b54b3496  nss-3.88.1.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index a60e615f9a..3782d239a5 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.87
-+LIBNSS_VERSION = 3.88.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+In file included from src/configuration.h:50,
+                 from src/configuration.c:46:
+src/gpsdclient.h:64:8: error: redefinition of 'struct fixsource_t'
+   64 | struct fixsource_t {
+      |        ^~~~~~~~~~~
+In file included from src/gpsdclient.h:49,
+                 from src/configuration.h:50,
+                 from src/configuration.c:46:
+/tmp/instance-17/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/gps.h:2714:8: note: originally defined here
+ 2714 | struct fixsource_t
+      |        ^~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/47a619686bb47debd525c92aa7e14bee5c40ca9e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../olsr/0006-build-patch-for-gpsd-3-25.patch | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/olsr/0006-build-patch-for-gpsd-3-25.patch
+
+diff --git a/package/olsr/0006-build-patch-for-gpsd-3-25.patch b/package/olsr/0006-build-patch-for-gpsd-3-25.patch
+new file mode 100644
+index 0000000000..c82bc1bb28
+--- /dev/null
++++ b/package/olsr/0006-build-patch-for-gpsd-3-25.patch
+@@ -0,0 +1,31 @@
++From 17d583258969c1d182361e0e168b3cad79ef64e6 Mon Sep 17 00:00:00 2001
++From: Rui Chen <rui@chenrui.dev>
++Date: Mon, 16 Jan 2023 18:35:32 -0500
++Subject: [PATCH] build: patch for gpsd 3.25
++
++Signed-off-by: Rui Chen <rui@chenrui.dev>
++[Retrieved from: https://github.com/OLSR/olsrd/pull/119]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/pud/src/gpsdclient.h | 8 --------
++ 1 file changed, 8 deletions(-)
++
++diff --git a/lib/pud/src/gpsdclient.h b/lib/pud/src/gpsdclient.h
++index 061056b12..a51dd2211 100644
++--- a/lib/pud/src/gpsdclient.h
+++++ b/lib/pud/src/gpsdclient.h
++@@ -60,14 +60,6 @@ struct GpsdConnectionState {
++     struct devconfig_t dev[MAXUSERDEVS];
++ };
++ 
++-/* describe a data source */
++-struct fixsource_t {
++-    char spec[PATH_MAX]; /* working space, will be modified */
++-    char *server; /* pointer into spec field */
++-    char *port; /* pointer into spec field */
++-    char *device; /* pointer into spec field */
++-};
++-
++ /**
++  * The gpsd daemon spec
++  */
 -- 
-2.34.1
+2.39.0
 
 _______________________________________________
 buildroot mailing list
