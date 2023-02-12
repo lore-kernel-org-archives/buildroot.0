@@ -4,82 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 846C2C636D3
-	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 10:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0946C636D3
+	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 10:22:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3183A40135;
-	Sun, 12 Feb 2023 10:12:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3183A40135
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3AB1840452;
+	Sun, 12 Feb 2023 10:22:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AB1840452
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d6ZpW45GzwXB; Sun, 12 Feb 2023 10:12:58 +0000 (UTC)
+	with ESMTP id xhW0-QXXSlxd; Sun, 12 Feb 2023 10:22:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4265E4014E;
-	Sun, 12 Feb 2023 10:12:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4265E4014E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 96BFA1BF378
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 10:12:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D842401F1;
+	Sun, 12 Feb 2023 10:22:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D842401F1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5370B1BF378
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 10:22:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D1DF60E1B
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 10:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D1DF60E1B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D00881865
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 10:22:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D00881865
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 20p95djRiYq3 for <buildroot@lists.busybox.net>;
- Sun, 12 Feb 2023 10:12:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KnbIdB5Zc1Sm for <buildroot@lists.busybox.net>;
+ Sun, 12 Feb 2023 10:22:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 244D060BFB
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
- [IPv6:2001:4860:4864:20::2e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 244D060BFB
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 10:12:54 +0000 (UTC)
-Received: by mail-oa1-x2e.google.com with SMTP id
- 586e51a60fabf-16ab8581837so11995142fac.4
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 02:12:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE1BB81842
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com
+ [IPv6:2001:4860:4864:20::2c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CE1BB81842
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 10:22:29 +0000 (UTC)
+Received: by mail-oa1-x2c.google.com with SMTP id
+ 586e51a60fabf-16aa71c1600so12063933fac.11
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 02:22:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=d/7yw0iO+HjLdLkh02/dO0olnzilhv8t/Pt6Otom3yo=;
- b=7lPz9w2m8dfzonxVIJJWU2qGt08PdSqXuj8WJgzM9Roc6/hzuiijs5PfyQGkSrWA90
- LnZO2i5G/ZE5hB1m5zTS2D4pINc6ZZpXYJY7/0OsLQoD9JHBEuWhz40ksgx/erOh+oMu
- WMM1HJkVLASVJbgJNg10WXFGBs1O6xorc0yufmS1Lsb1KidTdj4stG/KEfm7o994RAq7
- qt5UCU09q87w5clBfsjXA5MDtwA+81f5LyOPJNef5Kk3yKs5jNa9bs2Bt5c3Cp04FGYF
- 8sbSYz7tgP3WKByTxDXWWqzCH9C+6cQwqNkdJrRNSgnERsoMiKMGRxXTxkGRJkDuow5O
- Dz3g==
-X-Gm-Message-State: AO0yUKWrpqqRvvMHdtO+dDJXPBHEHm/eqeD86m97yyElAoQFSa8WTGoa
- lr5Pf7mH0uTSiBOKZY4qDR2h2n+i6c6dGYo0vn1X9qWJ8F8=
-X-Google-Smtp-Source: AK7set9ZMolc60UeGA9FwHdnMVUXOvdVnpwa+gkMn6vHfUWX73hDwWK0shQdZ+3m5Ncvh8VOmzGI8O0hQRa3BAiTuVc=
+ bh=Hf6osAFRGTOHzH50TJGFtbGWTiESqgkK2WNl9LpCafY=;
+ b=HvzitevcfQHG4UU4YL2pQYsgKOBAcSwakJ7Jzlnm09sfgAXwwqkTLzKVTnztpgksRB
+ IrgNdUv9ymxiDEmk7yDT7NTF0pJlnEcCWRbThOC6cNS190WahWYrJ+zRAXklr6oVNWwi
+ isauOBkr9ag8H3E3l+UApX22TnSdriy720d4FNNRi5tKR0EfJdE6sJgmKvMhY5J3Jkai
+ CRK+FUVSnmADOReCPMsju+7OLP987pEscqRfdSyueSs1+ZWJwP3Uq1azy2vGwkD2TISn
+ VfDe/Aqfd39Q4KQHd8XIP1KXylptlMWb5V6uknpsYwgvzwt0DlxUc4p8kAfOY6ddv2C6
+ pR+A==
+X-Gm-Message-State: AO0yUKV9GtPG521M4KlWrap8G0gGsaeOp1fhWxAhORI8dCN65KVUaeC1
+ RjiWQkcRdyIB15hs6XIjAPYAboZvsp8Utt47of8=
+X-Google-Smtp-Source: AK7set/gWP22gET0sw4AmH8QrXMAJMPv0jSxukJMxDgO1WDCrieMmfN/+WbMGjeFfd7iBNvb/sSS6chfm7wFAyiXjg0=
 X-Received: by 2002:a05:6870:829e:b0:16d:f057:bf55 with SMTP id
- q30-20020a056870829e00b0016df057bf55mr182354oae.93.1676196772764; Sun, 12 Feb
- 2023 02:12:52 -0800 (PST)
+ q30-20020a056870829e00b0016df057bf55mr183294oae.93.1676197348643; Sun, 12 Feb
+ 2023 02:22:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20230211184346.1192333-1-james.hilliard1@gmail.com>
- <20230212091914.GJ2796@scaer>
-In-Reply-To: <20230212091914.GJ2796@scaer>
+References: <20221018034605.800593-1-james.hilliard1@gmail.com>
+ <20230212094205.GK2796@scaer>
+ <CADvTj4oC6WXD=n3zMyBMZuCiZvra3PztQ9YhpDfZ72cJqeq0SQ@mail.gmail.com>
+ <20230212101112.GL2796@scaer>
+In-Reply-To: <20230212101112.GL2796@scaer>
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 12 Feb 2023 03:12:41 -0700
-Message-ID: <CADvTj4pWs_a+Qbx8ZWZKoUY+H1vJpTEpdZF7Ruz6inV8eCXV-A@mail.gmail.com>
+Date: Sun, 12 Feb 2023 03:22:17 -0700
+Message-ID: <CADvTj4rnf9zZfsX54nqQONjUdoR-Ok13d=oi9oJRfw6tnP7adA@mail.gmail.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=d/7yw0iO+HjLdLkh02/dO0olnzilhv8t/Pt6Otom3yo=;
- b=Me6YHvKdgrqxQqYa/jTv01YHb76jI5NKhuty/5EW2Ib3FVcmMK8iL7m7sb8dC53ynx
- HON0e1umiYbXJMbdZR+XEjG/GzI6ioxI6N3KL1deDY5ip57mbpmLRyjIRwQLatPvkfwm
- 2o++xythN9+fXRIjxCOzf/bgfzgKkX7Fkcb+o/QwAdRjEhmOalu2n8ONAH/EX3eYEfJ2
- TWU8LhND88tL7dXFKskvU33pv0z3PV6/+ELfza7RgkybEhFTyiaWAyECPA/KrZ4ZKSzJ
- n/j+nGqGvKFJSjHqvAdZRv1Kvh6ZK0djwN8BUbYMpb5skmipvRV3uzQdiZa9+NJvlHjs
- O8wA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Hf6osAFRGTOHzH50TJGFtbGWTiESqgkK2WNl9LpCafY=;
+ b=ZU1oNfKQwdHADtSPQ+9Ac7P8gO74RREYwXCjlp1kzLvUD9U9KvGZvH20s1LdIkmjE9
+ Y+MxdV1Faib+z14V1J5TMXkj19H4eRXkW5Ff8y55gxoB4rBQ4vwi2JKpZTHr/r7QAmRh
+ +xtgn/3KwDNENzdBwkeNMzlUqxm/RiBLLHa6G4PP6ZCh6FvKvqhrWZoKu6UvS8CpNXzO
+ DHC2B3kpJS23KxSKIiGpikxixsYdNnWk+2LddSpz7I7mL4BqVmCsL55u/7fw7JRWwWGs
+ 9ZKnqyXjp3cnLDM5wcQo2t6B8vTqggbb4koqFLX2/Vhm5M5OPVJz2NZyAhNvjGN+HjcP
+ zmtQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Me6YHvKd
-Subject: Re: [Buildroot] [PATCH 1/1] Makefile: fix rule order for legal-info
+ header.a=rsa-sha256 header.s=20210112 header.b=ZU1oNfKQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix rule order
+ for re{install, build, configure}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,139 +94,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Feb 12, 2023 at 2:19 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Sun, Feb 12, 2023 at 3:11 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
 > James, All,
 >
-> On 2023-02-11 11:43 -0700, James Hilliard spake thusly:
-> > This command relies on the clean/prepare operations being in a
-> > specific order.
-> >
-> > Currently the execution ordering of the clean/prepare operations may
-> > change, for example if --shuffle=reversed is set.
-> >
-> > To ensure the evaluation order is always correct use double colon
-> > rules to make the evaluation order explicit as per make docs:
-> >
-> > The double-colon rules for a target are executed in the order they
-> > appear in the makefile.
+> On 2023-02-12 03:02 -0700, James Hilliard spake thusly:
+> > On Sun, Feb 12, 2023 at 2:42 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > On 2022-10-17 21:46 -0600, James Hilliard spake thusly:
+> > > > To ensure the evaluation order is always correct use double colon
+> > > > rules to make the evaluation order explicit as per make docs:
+> > > >
+> > > > The double-colon rules for a target are executed in the order they
+> > > > appear in the makefile.
+> [--SNIP--]
+> > > So, I'd like that we get another way to fix that, if possible...
+> > I have unfortunately not found any other method to fix the execution
+> > ordering...
 >
-> Thanks for this patch!
+> What about something along the lines of (untestd!):
 >
-> What bothers me a bit about using double-colon, is that the make manual
-> explicitly state that "[d]ouble-colon rules are somewhat obscure and not
-> often very useful; they provide a mechanism for cases in which the
-> method used to update a target differs depending on which prerequisite
-> files caused the update, and such cases are rare."
->
-> So, I understand that it does fix the issue, but I'm afraid that it is
-> going to be so easy to forget about that issue, and what I get from the
-> make manual is that we should not use them unless as a last resort in
-> very special corner cases, and the case at hand is not identified by the
-> manual, which somewhat implies that double-colon rules were written
-> specifically to handle the case where "the method used to update a
-> target differs depending on which prerequisite files caused the update",
-> not specifically to ensure that the order is guarantedd. It even goes as
-> far as suggesting that this should not really be relied upon:
->
->     The double-colon rules for a target are executed in the order they
->     appear in the makefile. However, the cases where double-colon rules
->     really make sense are those where the order of executing the recipes
->     would not matter.
->
-> So, to me, the ordering is only a side-effect of the original goal,
-> which is to have different commands to generate a target, based on what
-> prerequisite caused the the update...
->
-> I am also afraid that there are so many other places around where we
-> implicitly rely on the order the prerequisites are listed, and that we
-> can't easily spot (that I spotted the legal-info issue and asked you
-> about it, is pure chance, as I was looking at something completely
-> different).
+>     $(1)-rebuild: $(1): $(1)-clean-for-rebuild
+>     $(1)-rebuild: $(1)
 
-Well we should be able to flush them out using make shuffle mode.
-
-That's how I caught the other issues at least.
+That would appear to be invalid syntax.
 
 >
-> However, in the legal-info case, the rule is definitely not
-> parallel-safe, and we do really want it and its dependencies *not* to
-> execute in parallel in fact.
->
-> Indeed, all PKG-legal-info rules will emit a little blurb that is
-> appended to the manisfest.csv, with commands like:
->     echo 'PKG,VERSION,blablsablab' >> manifest.csv
->
-> So, if we run that in parallel, this is going to explode [1].
+> We already use such a construct in package/pkg-kconfig.mk, but only
+> once, so this is not as if it were widespread either...
 
-Hmm, might just need a flock operation when doing the manifest.csv
-file echo append.
+I don't see anything like that there, just this which isn't doing anything
+unusual with multiple prerequisites that require a specific execution
+order like the re{install,build,configure} rules in pkg-generic.mk:
 
-We do something like that for downloads already:
-https://github.com/buildroot/buildroot/blob/2022.11.1/package/pkg-download.mk#L113
+# Force olddefconfig again on -reconfigure
+$(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
+
+$(1)-clean-kconfig-for-reconfigure:
+    rm -f $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
 
 >
-> So, I believe in this case, we do not want to use :: rules, but really
-> ensure that legal-info and all PKG-legal-info rules are never run in
-> parallel, *and* that they are executed in the order they are listed in
-> the prerequisites.
-
-Well legal-info can take a while to run so it might make sense to make
-it work in parallel.
-
->
-> We probably want to just add in the top-level Makefile:
->
->     .NOTPARALLEL: legal-info
->
-> and in package/pkg-generic.mk, something along the lines of:
->
->     .NOTPARALLEL: $(2)-legal-info #(2)-all-legal-info
->
-> Thoughts?
-
-Might work...but it seems like using flock may be simpler and faster.
-
->
-> [0] https://www.gnu.org/software/make/manual/make.html#Double_002dColon
-> [1] with very nice and bright colors, but a bit too loud still
+> Still, I think it is more easy to read...
 >
 > Regards,
 > Yann E. MORIN.
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  Makefile | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 4880b426b5..09575a5e3c 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -839,7 +839,9 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
-> >       @cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
-> >
-> >  .PHONY: legal-info
-> > -legal-info: legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
-> > +legal-info:: legal-info-clean
-> > +legal-info:: legal-info-prepare
-> > +legal-info:: $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
-> >               $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
-> >       @cat support/legal-info/README.header >>$(LEGAL_REPORT)
-> >       @if [ -r $(LEGAL_WARNINGS) ]; then \
-> > --
-> > 2.34.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
 >
 > --
 > .-----------------.--------------------.------------------.--------------------.
