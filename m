@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F983C05027
-	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 21:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C595BC636D3
+	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 21:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47DE381773;
-	Sun, 12 Feb 2023 21:07:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47DE381773
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72D038176B;
+	Sun, 12 Feb 2023 21:08:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72D038176B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cwDtKm9XYmI9; Sun, 12 Feb 2023 21:07:14 +0000 (UTC)
+	with ESMTP id ISX4XlsuCDGn; Sun, 12 Feb 2023 21:08:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B66581765;
-	Sun, 12 Feb 2023 21:07:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B66581765
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9FA5A1BF471
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 21:07:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9ED3481767;
+	Sun, 12 Feb 2023 21:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ED3481767
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6814B1BF471
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 21:08:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 795158176B
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 21:07:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 795158176B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4243D40897
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 21:08:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4243D40897
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mbBXQxRmx5ES for <buildroot@lists.busybox.net>;
- Sun, 12 Feb 2023 21:07:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 818E18175A
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 818E18175A
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 21:07:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mCavk03GfrPJ for <buildroot@lists.busybox.net>;
+ Sun, 12 Feb 2023 21:08:09 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 013B24088E
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 013B24088E
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 21:08:08 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 814565FFA1;
- Sun, 12 Feb 2023 22:07:05 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 439145FF9E;
+ Sun, 12 Feb 2023 22:08:05 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 12 Feb 2023 22:07:05 +0100
-Date: Sun, 12 Feb 2023 22:07:05 +0100
+ Sun, 12 Feb 2023 22:08:05 +0100
+Date: Sun, 12 Feb 2023 22:08:04 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230212210705.GY2796@scaer>
-References: <20230212205334.990478-1-giulio.benetti@benettiengineering.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230212210804.GZ2796@scaer>
+References: <20230211182838.272469-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230212205334.990478-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230211182838.272469-1-bernd.kuhls@t-online.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1676236027;
- bh=B7TY2JYjy0t0y0GUxdzekgls97Ow9mC/5sCBUt3AICM=;
+ d=free.fr; s=smtp-20201208; t=1676236087;
+ bh=xLViAdyLgnIzvB45ZM31Uhp0S13GIiTtB/KtI5M+TFw=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=fHTB0Juxr72K6RHKs29HOao7F/kbnCIdz9ZQ0ZkyRMnMq+py7sAtlbeGnrc8ZBLxp
- NIyO49bMq7NQGIR74jxo4BgsNcIl/QMD3gkz5NIKxQ4433icAV6SX+HHCqQun2Fuxe
- Wxv35+6fP7VgolIwb50Ou97mmHcy4txV5jTbSrfUi3LBXSCFzAyh/IvRnUcbSHzh3x
- yow8hy9V/qifArcYBl12qTbKVZsTzxNr1ykakDfCTlVwghGVU5rYrSQOdKon02tsj/
- 9j0W4gEKEpad3KTRF/ldMhWhxKN+gSFzCeVUk/YyYA0FB+yFVbL6w7/cAO+9Re3ZB1
- aF6pDmknDRS+Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=BcOV4xejT8jUQo9w6YkoSdXL/norOxYlAUg9OXNUADPwSulPNgtTaxrnLSieiSj1Q
+ qKWjXHjy1veWRHTm/DDy1dENbYmdMgTszz6O4jw2KkfogH60cSFDN4Jgd1uldkea/b
+ WDj4XewJ4XGA7cyYJ5QmD/AvudeQxyMAqb7FxCsNFuwQEWFDUQa+NgT90xLONyglns
+ LII4xs/Ct58UO5y+t9J4j00tfo6IiC6qj4jzdbQTT40MuynEUUhLdLAtu51MvbzPXs
+ FZRnlRAsvEJPYjvZgFAgWSfXgoPsELVaVxK4mz4vJR2X/3AK+Cq5cjYfzX1a6rj+Ty
+ XoyP8Sne+HDuw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fHTB0Jux
-Subject: Re: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.6.1
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=BcOV4xej
+Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xvidtune: bump
+ version to 1.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,10 +82,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+Bernd, All,
 
-On 2023-02-12 21:53 +0100, Giulio Benetti spake thusly:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+On 2023-02-11 19:28 +0100, Bernd Kuhls spake thusly:
+> Release notes:
+> https://lists.x.org/archives/xorg-announce/2023-February/003319.html
+> 
+> Switched tarball to xz, updated _SITE.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Applied to master, thanks.
 
@@ -92,35 +98,41 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/cryptsetup/cryptsetup.hash | 2 +-
->  package/cryptsetup/cryptsetup.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/x11r7/xapp_xvidtune/xapp_xvidtune.hash | 5 +++--
+>  package/x11r7/xapp_xvidtune/xapp_xvidtune.mk   | 6 +++---
+>  2 files changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-> index 149d1e71f1..87cdf840c3 100644
-> --- a/package/cryptsetup/cryptsetup.hash
-> +++ b/package/cryptsetup/cryptsetup.hash
-> @@ -1,4 +1,4 @@
->  # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.6/sha256sums.asc
-> -sha256  44397ba76e75a9cde5b02177bc63cd7af428a785788e3a7067733e7761842735  cryptsetup-2.6.0.tar.xz
-> +sha256  410ded65a1072ab9c8e41added37b9729c087fef4d2db02bb4ef529ad6da4693  cryptsetup-2.6.1.tar.xz
->  sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
->  sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 659fdfa2a4..3f3034475f 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -5,7 +5,7 @@
+> diff --git a/package/x11r7/xapp_xvidtune/xapp_xvidtune.hash b/package/x11r7/xapp_xvidtune/xapp_xvidtune.hash
+> index ecf7d0330b..0e7e231383 100644
+> --- a/package/x11r7/xapp_xvidtune/xapp_xvidtune.hash
+> +++ b/package/x11r7/xapp_xvidtune/xapp_xvidtune.hash
+> @@ -1,4 +1,5 @@
+> -# From http://lists.x.org/archives/xorg-announce/2013-January/002129.html
+> -sha256  24e5e103933a04bfb2e1d18562619ed74031ab515e7343eb546bacdbcbeecf01  xvidtune-1.0.3.tar.bz2
+> +# From https://lists.x.org/archives/xorg-announce/2023-February/003319.html
+> +sha256  0d4eecd54e440cc11f1bdaaa23180fcf890f003444343f533f639086b05b2cc5  xvidtune-1.0.4.tar.xz
+> +sha512  747d5358f4f7d3d7db508c3f034711ce4b9dd278160d35312e9c4d1604623e84a2438d039b536546fd2df7db8c5ea1907e8a6101985fad2932b6dee5a62c7b80  xvidtune-1.0.4.tar.xz
+>  # Locally computed
+>  sha256  f3da8eaed19e27e4f67e6f076d4ebdb8d649e15a8ad33a415fb65a23de1b6689  COPYING
+> diff --git a/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk b/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk
+> index d7c4d5bf56..cc40d39098 100644
+> --- a/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk
+> +++ b/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk
+> @@ -4,9 +4,9 @@
+>  #
 >  ################################################################################
 >  
->  CRYPTSETUP_VERSION_MAJOR = 2.6
-> -CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
-> +CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
->  CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
->  CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
->  CRYPTSETUP_DEPENDENCIES = \
+> -XAPP_XVIDTUNE_VERSION = 1.0.3
+> -XAPP_XVIDTUNE_SOURCE = xvidtune-$(XAPP_XVIDTUNE_VERSION).tar.bz2
+> -XAPP_XVIDTUNE_SITE = http://xorg.freedesktop.org/releases/individual/app
+> +XAPP_XVIDTUNE_VERSION = 1.0.4
+> +XAPP_XVIDTUNE_SOURCE = xvidtune-$(XAPP_XVIDTUNE_VERSION).tar.xz
+> +XAPP_XVIDTUNE_SITE = https://xorg.freedesktop.org/archive/individual/app
+>  XAPP_XVIDTUNE_LICENSE = MIT
+>  XAPP_XVIDTUNE_LICENSE_FILES = COPYING
+>  XAPP_XVIDTUNE_DEPENDENCIES = xlib_libXaw xlib_libXxf86vm
 > -- 
-> 2.34.1
+> 2.39.1
 > 
 > _______________________________________________
 > buildroot mailing list
