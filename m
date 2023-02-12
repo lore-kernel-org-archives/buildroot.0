@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D380AC05027
-	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 11:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 602E8C636D3
+	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 11:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A06660E2E;
-	Sun, 12 Feb 2023 11:17:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A06660E2E
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB58360E34;
+	Sun, 12 Feb 2023 11:26:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB58360E34
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Iq8eqszqStZl; Sun, 12 Feb 2023 11:17:56 +0000 (UTC)
+	with ESMTP id EVJT-slDOqFJ; Sun, 12 Feb 2023 11:26:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54F1160E1B;
-	Sun, 12 Feb 2023 11:17:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54F1160E1B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2AF101BF599
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 11:17:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 182CD60E2E;
+	Sun, 12 Feb 2023 11:26:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 182CD60E2E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 14ECD1BF599
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 11:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0275A41496
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 11:17:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0275A41496
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFD2E81902
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 11:26:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFD2E81902
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y0k2nvVcdlnI for <buildroot@lists.busybox.net>;
- Sun, 12 Feb 2023 11:17:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mYfTjrG8tzKH for <buildroot@lists.busybox.net>;
+ Sun, 12 Feb 2023 11:26:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89CCA410EA
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com
- [IPv6:2001:4860:4864:20::2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 89CCA410EA
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 11:17:52 +0000 (UTC)
-Received: by mail-oa1-x2f.google.com with SMTP id
- 586e51a60fabf-16dcb07b805so5628959fac.0
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 03:17:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7834181775
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com
+ [IPv6:2607:f8b0:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7834181775
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 11:26:11 +0000 (UTC)
+Received: by mail-ot1-x335.google.com with SMTP id
+ d21-20020a056830005500b0068bd2e0b25bso2956542otp.1
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 03:26:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=0INdIO5+3GzoB49D/OcWm1C6KVUCyigo38Egvd/MKXw=;
- b=NYMamcm6FhQsJ9Wt0azRSDyguGNZaLIek3yI1t3KqXOv7mFWTQxCyFNeFsl2uwOmd8
- RnKWUkXsJ/pPhLym5LG4PF2LZf/bYK1MUq468wGNQ0xIEblIs8CG8fAtWGFq0p1PDD16
- bd68PrlpQZqHVByXc6lmqa07nz5Jr8oP2tBhe28ZNTAlytKjeC5KFQvCIlAKiJM+MVqn
- nD/BWMNqsMHNTtM2iZ1/kOlzm7roUeHA72ZVbdzvmfP8/xlXUQDgXpzgYDQW1xV62NSG
- 4T0/IGcPxaM8N4v4CIZJE3rpZfjBFMrXZF2K+W+AdLDvCGX0Y26tJzYNpNGaILZ07ZRs
- 5T9g==
-X-Gm-Message-State: AO0yUKXZERB6vRHxxETA2KP4KTSTF1/fTbBN4zdn2yn23y6fi0YsNfKN
- aVWQEjAKg/cT4Z/STTkhXkP3tZb/oViJQUIinhs=
-X-Google-Smtp-Source: AK7set/cGjdlMqE5z4h8JZ68WGTdwv7rGviBM+OS557T+h00CQ+2pBxjlL2NQHKXy1ToJhI+63cQl3xJ+BtUYiw67hI=
-X-Received: by 2002:a05:6870:4388:b0:16d:cc4c:de8 with SMTP id
- r8-20020a056870438800b0016dcc4c0de8mr441416oah.18.1676200671359; Sun, 12 Feb
- 2023 03:17:51 -0800 (PST)
+ bh=5rliafuN8Qmj3oKhweJWpse1q1jBCrCNW6l5SPa10lo=;
+ b=E+WoVI7bL2BovIVznelZ0/01FALAgJvI1xh2k8M22JGtDOIZfejWju/xUKnyT8n6/8
+ V3esFKb7E3z6l0uDY2cnMvUi6Lry+iEr1DnhUfV2761oGaPpCb2qoOLsDpDdgOOHU9T3
+ RKDsKqx03uf2YutR7/zb0+tmWvLrRQAUCoQYyCVsZTPMJYFiZuG2oxBwWtpVMV2h8jOZ
+ reBTyPaOgCzaJR23W/PYZeNeN44JXnxHo7U5Yvm3a2EtaYoyfEvwk2iLN679Hb102ZcY
+ 1GTC6j6ZDxzD2x4BONbCnNLn+YnZNZ7Bph9Qm16DgPg/GEzlq+IpqUkR+SnfJ27tSikr
+ TANQ==
+X-Gm-Message-State: AO0yUKV9wvqaLonkvRTD3lBUq0JBhTAD2JTGXRmbjLnzC1+QtCIVTLia
+ OBeZOZ3pEKmqcbiZWX8FcUu39AEGGI6NJ5EBTI0=
+X-Google-Smtp-Source: AK7set8/AzThQ2zCcixyR9TmQhbTNEVLMuS1fWEgFxnuqfAR/T41+NdQgp1FqFBr87ayKML67G7Diasfd7n7CxajzXY=
+X-Received: by 2002:a9d:74d7:0:b0:68d:c53a:a0c1 with SMTP id
+ a23-20020a9d74d7000000b0068dc53aa0c1mr1334132otl.113.1676201170357; Sun, 12
+ Feb 2023 03:26:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20221018034605.800593-1-james.hilliard1@gmail.com>
- <20230212094205.GK2796@scaer>
- <CADvTj4oC6WXD=n3zMyBMZuCiZvra3PztQ9YhpDfZ72cJqeq0SQ@mail.gmail.com>
- <20230212101112.GL2796@scaer>
- <CADvTj4rnf9zZfsX54nqQONjUdoR-Ok13d=oi9oJRfw6tnP7adA@mail.gmail.com>
- <20230212105722.GM2796@scaer>
-In-Reply-To: <20230212105722.GM2796@scaer>
+References: <20230211184346.1192333-1-james.hilliard1@gmail.com>
+ <20230212091914.GJ2796@scaer>
+ <CADvTj4pWs_a+Qbx8ZWZKoUY+H1vJpTEpdZF7Ruz6inV8eCXV-A@mail.gmail.com>
+ <20230212110612.GN2796@scaer>
+In-Reply-To: <20230212110612.GN2796@scaer>
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 12 Feb 2023 04:17:39 -0700
-Message-ID: <CADvTj4qAFrPZKMTieyKDJ--M-Gqm2+bg_7ugnDh3q8Wi2CB08g@mail.gmail.com>
+Date: Sun, 12 Feb 2023 04:25:59 -0700
+Message-ID: <CADvTj4rW_bbzB-TzoVFnVSR2dFBq6vnCTx715tdqrfHSk2aJLQ@mail.gmail.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=0INdIO5+3GzoB49D/OcWm1C6KVUCyigo38Egvd/MKXw=;
- b=nzds6OZxFf0BOyiQYWbdkAPkVJ0m7lYiuC0MXUfjvR22uJPRoyaVItyYlcQr+ISB5q
- uFabCK919quqp3fzR8uWuSWYDS+TMocR7U+uLtgS66w2XcCYH0SE1pokCfAmy6vAtjiC
- Fvpe5ivxERoHL6IKRJHd2JBMRbLNOb0wut53Yp2veK0cyiyTE1cTWQfGY/Cxa4SmcF32
- 0MHjIN/bXLJFVeyp6Cnpk++Ft9oKB2KtfFRinu2ODbuId1WpN8emuTeLfhD/bBnGVvQt
- Ur49QaiNxIxAi8jNAtO8koe7NTj/bhxKpe1kfHYGU/3CMX1jvffq38VFwqBeVPAV6Y6T
- oFcQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=5rliafuN8Qmj3oKhweJWpse1q1jBCrCNW6l5SPa10lo=;
+ b=E4g2pOcLgm9CZsygjgnHGtHGt090HeeDe5cYccbUAOrnaeSWPpWvYHsWba0YGLtLz1
+ p5AlDIr4ikS7qPTvCSJY/yaADEOnO7EKYRzKmrw8qLtl1iNixTF/9XD71oQlXKdx97b/
+ AfRzp1BCnQL1mb4aX+HRGV3+q7eb2a0/JL++h88d321/OkJgFK1svio9qEM9CQKqaHAi
+ 9LwCT9ZYPNMh/jsHjUor/fL4ZAQ3EEkMmOALatU+9Fgqye2QATglykPw9B7SrUVLSMWL
+ N6aEW7qTub24/PEbuDIO9H1OPMm/CE+KfkzakZkSxsJjbvuAHEotmxWIrstd0ZJBv2FQ
+ ce8A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=nzds6OZx
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix rule order
- for re{install, build, configure}
+ header.a=rsa-sha256 header.s=20210112 header.b=E4g2pOcL
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: fix rule order for legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,148 +93,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Feb 12, 2023 at 3:57 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Sun, Feb 12, 2023 at 4:06 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
 > James, All,
 >
-> On 2023-02-12 03:22 -0700, James Hilliard spake thusly:
-> > On Sun, Feb 12, 2023 at 3:11 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> On 2023-02-12 03:12 -0700, James Hilliard spake thusly:
+> > On Sun, Feb 12, 2023 at 2:19 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > On 2023-02-11 11:43 -0700, James Hilliard spake thusly:
+> > > > This command relies on the clean/prepare operations being in a
+> > > > specific order.
+> [--SNIP--]
+> > > However, in the legal-info case, the rule is definitely not
+> > > parallel-safe, and we do really want it and its dependencies *not* to
+> > > execute in parallel in fact.
 > > >
-> > > James, All,
+> > > Indeed, all PKG-legal-info rules will emit a little blurb that is
+> > > appended to the manisfest.csv, with commands like:
+> > >     echo 'PKG,VERSION,blablsablab' >> manifest.csv
 > > >
-> > > On 2023-02-12 03:02 -0700, James Hilliard spake thusly:
-> > > > On Sun, Feb 12, 2023 at 2:42 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > > > On 2022-10-17 21:46 -0600, James Hilliard spake thusly:
-> > > > > > To ensure the evaluation order is always correct use double colon
-> > > > > > rules to make the evaluation order explicit as per make docs:
-> > > > > >
-> > > > > > The double-colon rules for a target are executed in the order they
-> > > > > > appear in the makefile.
-> > > [--SNIP--]
-> > > > > So, I'd like that we get another way to fix that, if possible...
-> > > > I have unfortunately not found any other method to fix the execution
-> > > > ordering...
-> > >
-> > > What about something along the lines of (untestd!):
-> > >
-> > >     $(1)-rebuild: $(1): $(1)-clean-for-rebuild
-> > >     $(1)-rebuild: $(1)
+> > > So, if we run that in parallel, this is going to explode [1].
+> > Hmm, might just need a flock operation when doing the manifest.csv
+> > file echo append.
+>
+> Except we probably want, no, sorry: we do want, that the manifest to be
+> reproducible (and alphabeticaly sorted), which would not be guaranteed
+> with an flock.
+
+Hmm, I thought we were sorting afterwards like this, guess that needs
+to be checked:
+https://github.com/buildroot/buildroot/blob/59b2e826f2a6c1874c5d032d3a5852326028bc0e/Makefile#L851
+
+>
+> > We do something like that for downloads already:
+> > https://github.com/buildroot/buildroot/blob/2022.11.1/package/pkg-download.mk#L113
+>
+> Careful there: the flock is to protect against a concurrent Buildroot
+> build, not an internal protection (although it also serves as an
+> internal protection, when two packages have the same dl dir, like mesa3d
+> and mesa3d-headers).
+
+I assumed it was mostly for packages with the same dl dir, I think it matters
+more what it can do rather than what it was designed to do ;).
+
+>
+> > > So, I believe in this case, we do not want to use :: rules, but really
+> > > ensure that legal-info and all PKG-legal-info rules are never run in
+> > > parallel, *and* that they are executed in the order they are listed in
+> > > the prerequisites.
 > >
-> > That would appear to be invalid syntax.
-> >
-> > >
-> > > We already use such a construct in package/pkg-kconfig.mk, but only
-> > > once, so this is not as if it were widespread either...
-> >
-> > I don't see anything like that there,
+> > Well legal-info can take a while to run so it might make sense to make
+> > it work in parallel.
 >
->     240:  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
->
-> So, this looks like it is named "target pattern", and it works with a
-> pattern (eh!).
->
->     $ cat Makefile
->      1  all: a
->      2
->      3  a:
->      4          @echo a
->      5
->      6  a-clean:
->      7          @sleep 1
->      8          @echo a-clean
->      9
->     10  a-rebuild: %-rebuild: %-clean
->     11  a-rebuild: a
->
-> However, that does not work with parallel builds:
->
->     $ make
->     a
->
->     $ make a
->     a
->
->     $ make a-rebuild
->     a-clean
->     a
->
->     $ make -j a-rebuild
->     a
->     a-clean
->
-> However, you stated in a previous reply:
->
->     So unlike the legal-info issue using .NOTPARALLEL would not work
->     here as these make targets do need to work with parallel builds.
->
-> I don't think that's true. Indeed, foo-rebuild is usually done after a
-> ful build, when iterating over the foo package, iether to test a new
-> source tree (with ocerride-ssrcdir) or to test fixes in foo.mk. In
-> either case, we do not need a top-level parallel build, because only one
-> package, foo, will be built.
->
-> So, even in this case, we should be able to use .NOTPARALLEL, no?
+> I understand that, but I still think legal-info should produce a
+> reproducible output, and that can't be guaranteed if all we change is
+> using an flock around the manifests.
 
-Breaking parallel build for foo-rebuild would be rather unexpected behavior
-as foo-rebuild does work for full builds as well and one may default to using
-foo-rebuild instead of a foo target for various reasons(to ensure that a package
-is always rsynced from an overridden source directory for example).
-
-I see no good reason to disable parallel build on it when simply ordering the
-dependency execution order fixes the issue.
+It should be reproducible if we run a sort right?
 
 >
-> It also means that the kconfig rule I mentionned above, does not work
-> with top-level parallel builds, but that's OK: it's only used to spawn
-> kconfig configurators (menuconfig et al.), so it should not be used with
-> top-level parallel, and thus should require .NOTPARALLEL as well.
+> Also, legal-info is probably run after a complete build, so the overhead
+> of downloading, extracting, and patching, ahs already been paid during
+> the build.
 
-Might be better to use double colon rules there as well, they are more
-explicit than using .NOTPARALLEL IMO as .NOTPARALLEL doesn't
-specify an execution order, also it can potentially introduce accidental
-performance regressions.
+Doesn't it still take a little while even if that's done?
 
 >
-> Meh, TLPB and shuffling are really uncovering issues everywhere... :-(
+> We talked about legal-info during the dev-days, and one idea that
+> floated was that we need to generate an SBOM of the build, and the
+> closest we have now is legal-info. The SBOM should always be generated,
+> and I believe legal-info should awlays be generated, so the overhead
+> point would be moot (but would be replaced by the overhead of running
+> legal-info for every builds...) More needs to be dug on that topic...
 
-Better to make them very obvious so they can be fixed IMO.
+Well I think for both cases the faster the generation the better so parallel
+where possible has advantages there.
 
-Once the known issues are fixed I can run shuffle mode on my autobuilders
-to uncover remaining issues.
+If something is too slow it's less likely to be used/tested.
 
 >
 > Regards,
 > Yann E. MORIN.
->
-> > just this which isn't doing anything
-> > unusual with multiple prerequisites that require a specific execution
-> > order like the re{install,build,configure} rules in pkg-generic.mk:
-> >
-> > # Force olddefconfig again on -reconfigure
-> > $(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
-> >
-> > $(1)-clean-kconfig-for-reconfigure:
-> >     rm -f $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
-> >
-> > >
-> > > Still, I think it is more easy to read...
-> > >
-> > > Regards,
-> > > Yann E. MORIN.
-> > >
-> > > --
-> > > .-----------------.--------------------.------------------.--------------------.
-> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > > '------------------------------^-------^------------------^--------------------'
 >
 > --
 > .-----------------.--------------------.------------------.--------------------.
