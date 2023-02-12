@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E59C636D3
-	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 20:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25283C636D3
+	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 20:03:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D0F040480;
-	Sun, 12 Feb 2023 20:03:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D0F040480
+	by smtp2.osuosl.org (Postfix) with ESMTP id CAFFB400D3;
+	Sun, 12 Feb 2023 20:03:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAFFB400D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IVBXtXNReHRi; Sun, 12 Feb 2023 20:03:37 +0000 (UTC)
+	with ESMTP id ArOnhvqqVCdO; Sun, 12 Feb 2023 20:03:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7CDE4059B;
-	Sun, 12 Feb 2023 20:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7CDE4059B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 138981BF861
+	by smtp2.osuosl.org (Postfix) with ESMTP id B35ED405B7;
+	Sun, 12 Feb 2023 20:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B35ED405B7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BD5A1BF865
  for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 20:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E24FE60BA4
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB31540258
  for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 20:03:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E24FE60BA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB31540258
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9ia1rn6G9lDL for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VYZE4CxFRU52 for <buildroot@lists.busybox.net>;
  Sun, 12 Feb 2023 20:03:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C21BC60AAA
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC42C40242
  for <buildroot@buildroot.org>; Sun, 12 Feb 2023 20:03:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C21BC60AAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC42C40242
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD49B856EA; Sun, 12 Feb 2023 20:03:33 +0000 (UTC)
+ id B878585644; Sun, 12 Feb 2023 20:03:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Feb 2023 21:02:14 +0100
+Date: Sun, 12 Feb 2023 21:03:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 59b2e826f2a6c1874c5d032d3a5852326028bc0e
-X-Git-Newrev: 99024eca8f154062ea88af985ff10e12ae7016b6
+X-Git-Oldrev: 99024eca8f154062ea88af985ff10e12ae7016b6
+X-Git-Newrev: 1bb77eb8f14585bc79307fd672cab79b7e4e476d
 X-Patchwork-Hint: ignore
-Message-Id: <20230212200333.AD49B856EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.88.1
+Message-Id: <20230212200333.B878585644@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/log4cplus: bump to version 2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99024eca8f154062ea88af985ff10e12ae7016b6
+commit: https://git.buildroot.net/buildroot/commit/?id=1bb77eb8f14585bc79307fd672cab79b7e4e476d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+https://github.com/log4cplus/log4cplus/blob/REL_2_1_0/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/log4cplus/log4cplus.hash | 2 +-
+ package/log4cplus/log4cplus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index f847ec4f77..ec3fe0d777 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_87_RTM/src/SHA256SUMS
--sha256  68a1894496d3d158babc75f8a5dda3f55b7c1560573936e3b101a10fa4ac152d  nss-3.87.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_88_1_RTM/src/SHA256SUMS
-+sha256  27d243edf87d1cf1bb9c861f03d387e0e9230ce5017f4308c941f558b54b3496  nss-3.88.1.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 90fd9259d5..ac342cf3af 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/log4cplus/log4cplus.hash b/package/log4cplus/log4cplus.hash
+index c4540c9d56..1779b30949 100644
+--- a/package/log4cplus/log4cplus.hash
++++ b/package/log4cplus/log4cplus.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f5949e713cf8635fc554384ab99b04716e3430f28eed6dd7d71ad03d959b91a0  log4cplus-2.0.8.tar.xz
++sha256  d84ac8b1c46645122fbf72691f8eacef68c71b587403ee833bd9a252e06d46cc  log4cplus-2.1.0.tar.xz
+ sha256  91d7e42ff80e74c4c94e5ad353375fa0358cd0abbf43f5fe957097cdbd4e2c4d  LICENSE
+diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+index 2dab661654..28eb4ed8f4 100644
+--- a/package/log4cplus/log4cplus.mk
++++ b/package/log4cplus/log4cplus.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.87
-+LIBNSS_VERSION = 3.88.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LOG4CPLUS_VERSION = 2.0.8
++LOG4CPLUS_VERSION = 2.1.0
+ LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
+ LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
+ LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
