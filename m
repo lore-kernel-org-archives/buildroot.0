@@ -4,67 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19E72C05027
-	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 09:42:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 761BCC636D3
+	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 09:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 81CAC40420;
-	Sun, 12 Feb 2023 09:42:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81CAC40420
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0ED9B404B5;
+	Sun, 12 Feb 2023 09:54:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ED9B404B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i7e0_W4lOgM7; Sun, 12 Feb 2023 09:42:15 +0000 (UTC)
+	with ESMTP id AWLXXo_mAJY6; Sun, 12 Feb 2023 09:54:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A8F24040D;
-	Sun, 12 Feb 2023 09:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A8F24040D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 894771BF332
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 09:42:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F18A4040D;
+	Sun, 12 Feb 2023 09:54:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F18A4040D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 17DA31BF332
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 09:54:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63A0A41676
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 09:42:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63A0A41676
+ by smtp1.osuosl.org (Postfix) with ESMTP id ECC998176D
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 09:54:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECC998176D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7zti09Tq0dc3 for <buildroot@lists.busybox.net>;
- Sun, 12 Feb 2023 09:42:11 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B095A415E4
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B095A415E4
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 09:42:11 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 654EE5FFA7;
- Sun, 12 Feb 2023 10:42:05 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 12 Feb 2023 10:42:05 +0100
-Date: Sun, 12 Feb 2023 10:42:05 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6yaeMQunUiLs for <buildroot@lists.busybox.net>;
+ Sun, 12 Feb 2023 09:54:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5DC581255
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E5DC581255
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 09:54:27 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id u10so6759381wmj.3
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 01:54:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=LW8FIVvrN120YNmsz8aqTc2ktWeOqzQ1JHGZFvQYJFU=;
+ b=WPkHSg63WwR0/0UMtgYi8b7Ka4Pz9OSvoaeNW5CIKe1OilpflznjiRGSzprKTraxYZ
+ gAeSueY4mQ+4QQhnuyWjfk4J/f/eAhsJ6GA8aTOvODJmWPFyIsmisaAoboZGEd80Ht/s
+ QfJegbPesd7k85oUzp1GZW3Ifk9+W5YYgYiO2T9paLc1OmLbkMEK3MKxL+BhBdRG6MXS
+ 4OH+zPg9vmiAz8VXjlR8dxkFpzlp4J29+bcGTu+tJ5Ucg9sRAsQWxaoFLklOwOvcOWM5
+ tC5d9HZqxkbi3qMcMT5GUHRVta6n5u5yJjwxe58SE7TYoBDwVfZVVpufX9R7k3egkMKz
+ 9n0g==
+X-Gm-Message-State: AO0yUKXo0SkHgZulCZGG7LELuEgzUR+TjUBTH142Mo3eeFgEZ9iP/hIx
+ ALsXAuP48bRqkuIMrvQvk4/LX79+RFA=
+X-Google-Smtp-Source: AK7set+mF1qdtwoxcvsvWtdloJIV+wJkLML/i125VK0VuWaGvb8iGhph4cUkaCAiyCHc4R5EvqxOuQ==
+X-Received: by 2002:a1c:7417:0:b0:3dd:62fe:9914 with SMTP id
+ p23-20020a1c7417000000b003dd62fe9914mr16701491wmc.18.1676195665828; 
+ Sun, 12 Feb 2023 01:54:25 -0800 (PST)
+Received: from localhost.localdomain (1-1-22-171.ftth.cust.kwaoo.net.
+ [171.22.1.1]) by smtp.gmail.com with ESMTPSA id
+ l19-20020a05600c2cd300b003dfefe115b9sm11682386wmc.0.2023.02.12.01.54.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 12 Feb 2023 01:54:25 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230212094205.GK2796@scaer>
-References: <20221018034605.800593-1-james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 12 Feb 2023 10:54:24 +0100
+Message-Id: <20230212095424.1326531-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221018034605.800593-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1676194928;
- bh=GZUoezZqL2PiEjPAbBkc9Ipxs/LkcDKNQ8S2ZAZJpvU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=rIQ4CiXwQFIzJwp4miqPluTgRh2Abmb6Z0Exm7VD7uaPidwULfl93YGSip0C7yRL1
- 7f6h9PfBTVCNl3sQCq/LYAKgypxLVJ1I6+PR+WMn1LD+KaLeMCsADGdX76wa0ABLsR
- Shid45tBrQ9Cs4SZyTcQMFVdcJ41O27KKturFCYtupSq4t2KDA115z6nYR9IF5pz7u
- OD78F/HgyhZf0GuJdH7ZXATv/vHMHMxhHv6MV8tlSOFonGGLb0+3xr4ztSm5ORWef1
- OJ5IZxqGUsuogi3eqR0fDWhmibeenIsV0z3WfFcWX+jLB2up5SbIpgw2JN5wyO436v
- yZ/qo+Buf66dw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=rIQ4CiXw
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix rule order
- for re{install, build, configure}
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=LW8FIVvrN120YNmsz8aqTc2ktWeOqzQ1JHGZFvQYJFU=;
+ b=A2KrRE73HSd4wTlo79bHhDB1DqgK9Dl5ky1Odu4DNylZoSWZhcrBfDz/6+Lqgx7p/i
+ UntSjW3zkkPr+VbEQ7YMBazlf1mUnHNu5uTWafQO1/47V362FXKnhI6Eh2CnZ/4K1p1w
+ 9rhPRsScqDU5QhvEvZkIdtj9aeiGR00eSKo3yjO2Ru8vzzDFKPNcClBIswsOifDfP3Ch
+ UVfGJqfl8WtOHXWjrD9BvAIg838mJ6as0I85BsvxC0lmff3Ze3e4B27KBaosvy6oaKvA
+ eH+ID8OGKnCIt3SUY+5Qp+LD1QA2mnqykxVTLSnF8CbV2+7M4l4FcdSQggM18XXDjwpP
+ 27pQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=A2KrRE73
+Subject: [Buildroot] [PATCH] package/python-magic-wormhole-mailbox-server:
+ add missing reverse dependency on host-rustc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,129 +94,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+From: Julien Olivain <ju.o@free.fr>
 
-Thanks again for working on such grunt work, it's much appreaciated!
+As reported by Yann in [1], Kconfig warns about an unmet dependency.
 
-On 2022-10-17 21:46 -0600, James Hilliard spake thusly:
-> These command rely on the clean operations being first so that the
-> stamp files being deleted will rebuild the targets.
-> 
-> The execution ordering of the clean and rebuild operations may
-> change, for example if --shuffle=reversed is set.
-> 
-> To ensure the evaluation order is always correct use double colon
-> rules to make the evaluation order explicit as per make docs:
-> 
-> The double-colon rules for a target are executed in the order they
-> appear in the makefile.
+The issue can be reproduced on master branch at commit 451672e,
+with the command:
 
-I am not convinced that we should switch over to using double-colons.
+    KCONFIG_SEED=0x1D15B9D4 make randconfig
 
-As I reviewed your other related patch about legal-info [0], the make
-manual [1] suggests that double-colons are rally intended for cases
-where "the method used to update a target differs depending on which
-prerequisite files caused the update" and "double-colon rules really
-make sense are those where the order of executing the recipes would not
-matter".
+The patch adds the missing dependency.
 
-So, we'd use a mechanism where order should not matter, to solve an
-issue with ordering. That'd be weird...
+Fixes:
 
-Yes, the manual states that "double-colon rules for a target are
-executed in the order they appear in the makefile", but that really
-looks like a side-effect of another goal.
+    WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON_AUTOBAHN
+      Depends on [n]: BR2_PACKAGE_PYTHON3 [=y] && BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS [=n]
+      Selected by [y]:
+      - BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER [=y] && BR2_PACKAGE_PYTHON3 [=y]
 
-Also, we'd need to carefully review all our Makefile to ensure that
-there are no other cases wehre ordering of prerequisites matter. We'd
-also have to be careful every time we introduce a new rule and remember
-to check whether it depends on the ordering prereauisites or not, adn
-worse yet, also whether we can afford the rule to be parallel-safe or
-not (see the explanation for that in the legal-info review).
+[1] https://lists.buildroot.org/pipermail/buildroot/2023-February/661898.html
 
-Having colons and double-colons is going to be quite a headache... We
-already have issues with remembering that we need to use $$ to expand
-variables in some places, and the rules there are relatively clean and
-explicit, but for the :: case, I'm afraid that's going to be a bit more
-complex.
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-magic-wormhole-mailbox-server/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-We currently have a single location where we use double-colon:
-    support/kconfig/Makefile.br
-
-which is added by our patch against kconfig:
-    support/kconfig/patches/10-br-build-system.patch
-
-which dates back to 2010:
-    7c524dd0b683 Clean up our patches against kconfig
-
-which got in three in 2007:
-    a665ed34960b - pull kconfig from linux-2.6.21.5
-
-So, I'd like that we get another way to fix that, if possible...
-
-Again, thanks a lot for spending efforts in that area, this is really
-great!
-
-[0] https://lore.kernel.org/buildroot/20230212091914.GJ2796@scaer/
-[1] https://www.gnu.org/software/make/manual/make.html#Double_002dColon
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/pkg-generic.mk | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index f24e03a325..6cb461af90 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -1057,17 +1057,20 @@ endif
->  			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
->  			rm -f $$($(2)_TARGET_INSTALL_HOST)
->  
-> -$(1)-reinstall:		$(1)-clean-for-reinstall $(1)
-> +$(1)-reinstall::		$(1)-clean-for-reinstall
-> +$(1)-reinstall::		$(1)
->  
->  $(1)-clean-for-rebuild: $(1)-clean-for-reinstall
->  			rm -f $$($(2)_TARGET_BUILD)
->  
-> -$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
-> +$(1)-rebuild::		$(1)-clean-for-rebuild
-> +$(1)-rebuild::		$(1)
->  
->  $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
->  			rm -f $$($(2)_TARGET_CONFIGURE)
->  
-> -$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
-> +$(1)-reconfigure::	$(1)-clean-for-reconfigure
-> +$(1)-reconfigure::	$(1)
->  
->  # define the PKG variable for all targets, containing the
->  # uppercase package variable prefix
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/python-magic-wormhole-mailbox-server/Config.in b/package/python-magic-wormhole-mailbox-server/Config.in
+index db20d3e7b6..a0721e866f 100644
+--- a/package/python-magic-wormhole-mailbox-server/Config.in
++++ b/package/python-magic-wormhole-mailbox-server/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER
+ 	bool "python-magic-wormhole-mailbox-server"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-autobahn -> python-cryptography
+ 	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
