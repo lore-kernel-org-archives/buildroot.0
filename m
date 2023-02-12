@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8217FC6379F
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:50:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74B0FC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 128024F620;
-	Tue, 21 Feb 2023 00:50:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 128024F620
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D2B24F5E2;
+	Tue, 21 Feb 2023 00:50:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D2B24F5E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g9rBgcvFRpHr; Tue, 21 Feb 2023 00:50:07 +0000 (UTC)
+	with ESMTP id lt7mE_lJAL5a; Tue, 21 Feb 2023 00:50:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91A284F644;
-	Tue, 21 Feb 2023 00:50:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91A284F644
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D90051BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4F734F642;
+	Tue, 21 Feb 2023 00:50:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4F734F642
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A6991BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:00:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 653396FB5A
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 653396FB5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAB1741812
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAB1741812
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sCU3rLVGy30S for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zCAAueXNpxBg for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A40B76FB48
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A40B76FB48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2614F4159D
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2614F4159D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 90AD6828C8; Mon, 20 Feb 2023 20:52:34 +0000 (UTC)
+ id 15E7486495; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jan 2023 12:01:00 +0100
+Date: Sun, 12 Feb 2023 21:34:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 194c0247e796e9d1b3c6682b3cf37395d05f95d9
-X-Git-Newrev: f947ac259692879cf651c13dc595236103b0d1f9
+X-Git-Oldrev: 4706e04e3ca7428c755bffd79ddf8ef8628141e0
+X-Git-Newrev: add76a41c3c68e649ecae69aa896d5f8b627d1be
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205234.90AD6828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-iniconfig: bump
- to version 2.0.0
+Message-Id: <20230220205259.15E7486495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsolv: fix build
+ without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f947ac259692879cf651c13dc595236103b0d1f9
+commit: https://git.buildroot.net/buildroot/commit/?id=add76a41c3c68e649ecae69aa896d5f8b627d1be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Migrate from setuptools to hatchling pep517 build backend.
+Fix the following build failure without C++ raised since the addition ot
+the package in commit 93ce3c1be0753189d6af3ee9968b935037519c25:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+CMake Error at CMakeLists.txt:1 (PROJECT):
+  No CMAKE_CXX_COMPILER could be found.
+
+  Tell CMake where to find the compiler by setting either the environment
+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
+  to the compiler, or to the compiler name if it is in the PATH.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a7f2176d40f156c319754ef5d3b7fd0decfe754f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-iniconfig/python-iniconfig.hash | 4 ++--
- package/python-iniconfig/python-iniconfig.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libsolv/0001-Fix-build-without-C.patch | 49 ++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/python-iniconfig/python-iniconfig.hash b/package/python-iniconfig/python-iniconfig.hash
-index b2469db99b..541ae3e3f3 100644
---- a/package/python-iniconfig/python-iniconfig.hash
-+++ b/package/python-iniconfig/python-iniconfig.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/iniconfig/json
--md5  0b7f3be87481211c183eae095bcea6f1  iniconfig-1.1.1.tar.gz
--sha256  bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32  iniconfig-1.1.1.tar.gz
-+md5  3c030b3f51dcc3aca585de05635600e4  iniconfig-2.0.0.tar.gz
-+sha256  2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3  iniconfig-2.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-diff --git a/package/python-iniconfig/python-iniconfig.mk b/package/python-iniconfig/python-iniconfig.mk
-index 5c31c69957..99e946f0ab 100644
---- a/package/python-iniconfig/python-iniconfig.mk
-+++ b/package/python-iniconfig/python-iniconfig.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--PYTHON_INICONFIG_VERSION = 1.1.1
-+PYTHON_INICONFIG_VERSION = 2.0.0
- PYTHON_INICONFIG_SOURCE = iniconfig-$(PYTHON_INICONFIG_VERSION).tar.gz
--PYTHON_INICONFIG_SITE = https://files.pythonhosted.org/packages/23/a2/97899f6bd0e873fed3a7e67ae8d3a08b21799430fb4da15cfedf10d6e2c2
--PYTHON_INICONFIG_SETUP_TYPE = setuptools
-+PYTHON_INICONFIG_SITE = https://files.pythonhosted.org/packages/d7/4b/cbd8e699e64a6f16ca3a8220661b5f83792b3017d0f79807cb8708d33913
-+PYTHON_INICONFIG_SETUP_TYPE = pep517
- PYTHON_INICONFIG_LICENSE = MIT
- PYTHON_INICONFIG_LICENSE_FILES = LICENSE
-+PYTHON_INICONFIG_DEPENDENCIES = host-python-hatchling host-python-hatch-vcs
- 
- $(eval $(python-package))
+diff --git a/package/libsolv/0001-Fix-build-without-C.patch b/package/libsolv/0001-Fix-build-without-C.patch
+new file mode 100644
+index 0000000000..2389aebcde
+--- /dev/null
++++ b/package/libsolv/0001-Fix-build-without-C.patch
+@@ -0,0 +1,49 @@
++From 5691f58d1f8ce1332b02536e48f1ac5864629c6c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 12 Feb 2023 15:27:27 +0100
++Subject: [PATCH] Fix build without C++
++
++Fix the following build failure without C++:
++
++CMake Error at CMakeLists.txt:1 (PROJECT):
++  No CMAKE_CXX_COMPILER could be found.
++
++  Tell CMake where to find the compiler by setting either the environment
++  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
++  to the compiler, or to the compiler name if it is in the PATH.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a7f2176d40f156c319754ef5d3b7fd0decfe754f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/openSUSE/libsolv/pull/520]
++---
++ CMakeLists.txt     | 2 +-
++ ext/CMakeLists.txt | 1 +
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 3541f496..f899c49a 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-PROJECT (libsolv)
+++PROJECT (libsolv C)
++ 
++ CMAKE_MINIMUM_REQUIRED (VERSION 2.8.5)
++ 
++diff --git a/ext/CMakeLists.txt b/ext/CMakeLists.txt
++index f01c0238..589fa946 100644
++--- a/ext/CMakeLists.txt
+++++ b/ext/CMakeLists.txt
++@@ -103,6 +103,7 @@ IF (ENABLE_CUDFREPO)
++ ENDIF (ENABLE_CUDFREPO)
++ 
++ IF (ENABLE_HAIKU)
+++    enable_language(CXX)
++     SET (libsolvext_SRCS ${libsolvext_SRCS}
++ 	repo_haiku.cpp)
++     SET (libsolvext_HEADERS ${libsolvext_HEADERS}
++-- 
++2.39.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
