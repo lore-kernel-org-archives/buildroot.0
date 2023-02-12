@@ -4,86 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05734C636D3
-	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 12:44:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 245D5C636D3
+	for <buildroot@archiver.kernel.org>; Sun, 12 Feb 2023 12:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7792D60BFB;
-	Sun, 12 Feb 2023 12:44:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7792D60BFB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8601260BCE;
+	Sun, 12 Feb 2023 12:58:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8601260BCE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qq3fcSSeYK44; Sun, 12 Feb 2023 12:44:33 +0000 (UTC)
+	with ESMTP id s7pHIFYWGCFy; Sun, 12 Feb 2023 12:58:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC7C860B96;
-	Sun, 12 Feb 2023 12:44:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC7C860B96
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 433821BF593
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 12:44:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5BC260B96;
+	Sun, 12 Feb 2023 12:58:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5BC260B96
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5791E1BF593
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 12:58:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D44060B96
- for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 12:44:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D44060B96
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E8F9812CF
+ for <buildroot@lists.busybox.net>; Sun, 12 Feb 2023 12:58:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E8F9812CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bmLlac0oTWX3 for <buildroot@lists.busybox.net>;
- Sun, 12 Feb 2023 12:44:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6J4hpQKuCR-1 for <buildroot@lists.busybox.net>;
+ Sun, 12 Feb 2023 12:58:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFB9D60B95
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DFB9D60B95
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 12:44:29 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- l37-20020a05600c1d2500b003dfe46a9801so7171758wms.0
- for <buildroot@buildroot.org>; Sun, 12 Feb 2023 04:44:29 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40BDA812B1
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 40BDA812B1
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 12:58:50 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id a2so9688528wrd.6
+ for <buildroot@buildroot.org>; Sun, 12 Feb 2023 04:58:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HamzXKSmL3EXG0UubYc5t3Ub8fBNjsLO7NJTJjtVh1Q=;
- b=LBKK/Qz6mkV6chG0/WcliXVJUuClVrwf88olNYt9/VN0jGBQL9uLZ61d328pmCUfAu
- Hkd/8pc9xZKJW5EPN61E6qLRTkEXTw3JcnSkCOw3ixwyrq+ScyVdpkOHIsilXN1kywfY
- n5TiEWZWBpt+WmfD7BFwgPLzxdo7nAToJkVu1Md5yRBDQr0+yjJMjYUmTk/EEK0LZb1s
- qFUk8QIBJ7HcVq9+oBN0w4pkOKYr3Pb1H065q15iUAo1pel4/a4u777loNdPOSAG6eLb
- 2koJHIvnNaIuTTm0hklUywXxZ+FJwcwn9ogW1BiR9dCVhj+FN+JBJ8lL5XHQofsJVxiy
- Y1jw==
-X-Gm-Message-State: AO0yUKV+1tiZ9ZNnDrbPnW0PZpR0F9IWtyamEqOn3uoAp+Erl7Pmya+1
- Ybo163hR0FzlAe5krnwtv2m9F6bqmsU=
-X-Google-Smtp-Source: AK7set/+PwIvaD0LEuWvVehXzgFpJDcAGsLWTM6/VzMvJsPeLNjzkErFOdH9r1K1orf1CkqwTtp5qg==
-X-Received: by 2002:a1c:f315:0:b0:3da:2500:e702 with SMTP id
- q21-20020a1cf315000000b003da2500e702mr17099308wmq.32.1676205867564; 
- Sun, 12 Feb 2023 04:44:27 -0800 (PST)
+ bh=5DZ6NQgAqDIqMbwN6shXQoyHFaXxcdvsEHlxkTo3vTM=;
+ b=q9uBE2MFwAMI1XDndPefHD2bYH9UiOSNIw7C7Spwhqt7IpX/IXpNZCmfpb19vKMbyB
+ SbLWpWCM0WandEWfrQxwS/cFlKj1wvgy/czcuPwsq9d4P9DYCYHsE9CbKUNfZiEY0eG1
+ 8h6uWIuiLGdTvzOrbGvGJxDvT4wTgoO6yoKqbz+RLz1+TT43Lb/AUax/l+virMMR77xv
+ iFhDkxXwVLNXDS6+YWCKcXeC3WJoXQDQse7vs87Sa+gZ3uo4YtBuAIIWPVAMwycgXrQK
+ 4vFgbw6hkPSNP17YIWFqm7mFSR7xzIBGkt41jYjVLemEQ5LZv7KYiJGCsTi7drzDZLhC
+ PpxQ==
+X-Gm-Message-State: AO0yUKWC3xO4Y3P8b1Usyiy6jlkdhODeJXwqjJjjg/M3k0LwIcSYjamn
+ dAUEBey0gccaIiDJSk6yXFRVAlq3NyY=
+X-Google-Smtp-Source: AK7set8BZRZ9gbL0cv1ZEdeH8iyBJB9cTLguLWyESX3g/Yd/Jy9enfh8rCPlxfDrETU9uu7HRI6M0g==
+X-Received: by 2002:a5d:595f:0:b0:2c5:585d:74c5 with SMTP id
+ e31-20020a5d595f000000b002c5585d74c5mr619986wri.22.1676206728116; 
+ Sun, 12 Feb 2023 04:58:48 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- q14-20020a05600c46ce00b003db12112fcfsm12001880wmo.4.2023.02.12.04.44.26
+ b16-20020adfe650000000b002c5534db60bsm1882023wrn.71.2023.02.12.04.58.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 12 Feb 2023 04:44:27 -0800 (PST)
+ Sun, 12 Feb 2023 04:58:47 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Feb 2023 13:44:21 +0100
-Message-Id: <20230212124421.17787-1-fontaine.fabrice@gmail.com>
+Date: Sun, 12 Feb 2023 13:58:44 +0100
+Message-Id: <20230212125844.332225-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HamzXKSmL3EXG0UubYc5t3Ub8fBNjsLO7NJTJjtVh1Q=;
- b=FI0CDI8+0iQkBtMH+7eJNPLpgKWmI0LQfAfAvMDOexN8RTOmWOC0ElC05OC5RkT5rm
- 65ftfoKf03VzrCU9jyaw5LCBbFPHNQbbEy3ZIIYYt2gOGZRr7Z3Zi/ezycOu3caRXird
- kJQg1Wmh2yyij/3KsoGHAlRpE2/YNhW3aNsS0pvtp4clC6iNbeigk5OfQNrbJXa9s09c
- XrPlapbABDnAgpQCvIPQciGWiXJrumTlfzlYY3527HP0hg6C8akL8f0JxK5oXyB8//nq
- qWLae6drmq0K60D3K4dQafeqv3XKy3PxAI4dzeFlPONFpvqPYwBJ3XFLI4vhSAWVOz4v
- bJ+w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=5DZ6NQgAqDIqMbwN6shXQoyHFaXxcdvsEHlxkTo3vTM=;
+ b=Sd2nCeNMcpDyGnM1TONbS39n88/dKY6YK252L6FI8cBofRhdr8cyAhoYydNyEc3Ydm
+ YGjgRwU59O7nd3i3p2Dz4hiwckL6Q1Pa8bRyGKhdWF4pNXwtpKIp8i4dNJkQPVT1hbU1
+ DwFouR9lRJ4ZFdHFXiFPuzASWhGkxFqX8N3vDArqtRj9Ueex6HLXV8bBGCBlRch3+pxS
+ 5HaQu7VnLIlNg7MRoN/Z4HYRxWPtGYbcfQudY6VcKkeg5VvV1YGE0qWao7m8rV1cyqjO
+ wIyE9Y3prFiJMJQgNF3HCkkRQEg8XRaoB0lk+lDiLSK0bDuN4Avl4rVC88MIjBgr2dT5
+ sR7g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=FI0CDI8+
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/zabbix: fix BR2_SHARED_STATIC_LIBS
+ header.a=rsa-sha256 header.s=20210112 header.b=Sd2nCeNM
+Subject: [Buildroot] [PATCH 1/1] package/log4cplus: bump to version 2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,72 +93,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexey Lukyanchuk <skif@skif-web.ru>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-zabbix uses custom --enable-{static,shared} options, instead of standard
-libtool directives resulting in the following build failure with openssl
-or libcurl:
-
-configure:13132: /home/autobuild/autobuild/instance-6/output-1/host/bin/or1k-buildroot-linux-gnu-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0  -I/home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -rdynamic  -static -L/home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/lib conftest.c -lssl -lcrypto -lm   >&5
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/10.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_globallookup':
-dso_dlfcn.c:(.text+0x2c): warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/10.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a(b_addr.o): in function `BIO_lookup_ex':
-b_addr.c:(.text+0x1128): warning: Using 'getaddrinfo' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/10.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-6/output-1/host/or1k-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a(b_sock.o): in function `BIO_gethostbyname':
-b_sock.c:(.text+0x90): warning: Using 'gethostbyname' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/10.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: /tmp/cceWHjDi.o: in function `main':
-conftest.c:(.text.startup+0x8): undefined reference to `SSL_connect'
-
-[...]
-
-configure: error: OpenSSL library libssl or libcrypto not found
-
----
-
-configure:15199: checking for main in -lz
-configure:15219: /home/autobuild/autobuild/instance-13/output-1/host/bin/s390x-buildroot-linux-gnu-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0 -D_FORTIFY_SOURCE=2  -I/home/autobuild/autobuild/instance-13/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/bin/../../usr/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -rdynamic  -static   -L/home/autobuild/autobuild/instance-13/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib conftest.c -lz   -lm    >&5
-/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/10.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: cannot find -lz
-collect2: error: ld returned 1 exit status
-
-[...]
-
-configure: error: static library z required for linking libcurl not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/c05230d13fa0538323bb77e8f35533e6dd02453f
- - http://autobuild.buildroot.org/results/cc947038510e16417298b381521f226f7c45f986
+https://github.com/log4cplus/log4cplus/blob/REL_2_1_0/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Update commit log and comment
+ package/log4cplus/log4cplus.hash | 2 +-
+ package/log4cplus/log4cplus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/zabbix/zabbix.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-index 23172a358d..06d12dbef4 100644
---- a/package/zabbix/zabbix.mk
-+++ b/package/zabbix/zabbix.mk
-@@ -125,6 +125,13 @@ endif
+diff --git a/package/log4cplus/log4cplus.hash b/package/log4cplus/log4cplus.hash
+index c4540c9d56..1779b30949 100644
+--- a/package/log4cplus/log4cplus.hash
++++ b/package/log4cplus/log4cplus.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f5949e713cf8635fc554384ab99b04716e3430f28eed6dd7d71ad03d959b91a0  log4cplus-2.0.8.tar.xz
++sha256  d84ac8b1c46645122fbf72691f8eacef68c71b587403ee833bd9a252e06d46cc  log4cplus-2.1.0.tar.xz
+ sha256  91d7e42ff80e74c4c94e5ad353375fa0358cd0abbf43f5fe957097cdbd4e2c4d  LICENSE
+diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+index 2dab661654..28eb4ed8f4 100644
+--- a/package/log4cplus/log4cplus.mk
++++ b/package/log4cplus/log4cplus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif # BR2_PACKAGE_ZABBIX_SERVER
- 
-+# zabbix uses custom --enable-{static,shared} options, instead of
-+# standard libtool directives resulting in a build failure with libcurl
-+# or openssl.
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+ZABBIX_CONF_OPTS += --disable-static
-+endif
-+
- define ZABBIX_INSTALL_INIT_SYSTEMD
- 	$(foreach unit,$(ZABBIX_SYSTEMD_UNITS),\
- 		$(INSTALL) -D -m 0644 $(ZABBIX_PKGDIR)/$(unit) $(TARGET_DIR)/usr/lib/systemd/system/$(unit) && \
+-LOG4CPLUS_VERSION = 2.0.8
++LOG4CPLUS_VERSION = 2.1.0
+ LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
+ LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
+ LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
 -- 
 2.39.0
 
