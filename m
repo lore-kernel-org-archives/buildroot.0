@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD098C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23191C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:56:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E09C700A8;
-	Tue, 21 Feb 2023 01:56:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E09C700A8
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7F9561123;
+	Tue, 21 Feb 2023 01:56:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7F9561123
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oegVMyfVgWxm; Tue, 21 Feb 2023 01:56:02 +0000 (UTC)
+	with ESMTP id 9z8D0DG85xkI; Tue, 21 Feb 2023 01:56:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A03E57008A;
-	Tue, 21 Feb 2023 01:56:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A03E57008A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18A40701D5;
+	Tue, 21 Feb 2023 01:56:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18A40701D5
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 174061BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 275251BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB99E7000A
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5AF470020
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB99E7000A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5AF470020
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mBSucRLQ3rhG for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+ with ESMTP id 7gXOHeQuk07E for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C142B70014
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF29F70022
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C142B70014
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF29F70022
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B21B5828C8; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id DD8DF828C8; Mon, 20 Feb 2023 20:52:58 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Feb 2023 21:02:14 +0100
+Date: Sun, 12 Feb 2023 21:27:42 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 59b2e826f2a6c1874c5d032d3a5852326028bc0e
-X-Git-Newrev: 99024eca8f154062ea88af985ff10e12ae7016b6
+X-Git-Oldrev: d0dc2fa3865b0dbb2a6c103d6bc3bbc294ada604
+X-Git-Newrev: 6dbf3909dd4816230001f0d71dd31d9e96939083
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205258.B21B5828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnss: bump version
- to 3.88.1
+Message-Id: <20230220205258.DD8DF828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/zxing-cpp: update
+ homepage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99024eca8f154062ea88af985ff10e12ae7016b6
+commit: https://git.buildroot.net/buildroot/commit/?id=6dbf3909dd4816230001f0d71dd31d9e96939083
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Commit 456a7398316655ad0b669635f580e4887c24a700 decided to switch to an
+active fork but forgot to update homepage in Config.in
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index f847ec4f77..ec3fe0d777 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_87_RTM/src/SHA256SUMS
--sha256  68a1894496d3d158babc75f8a5dda3f55b7c1560573936e3b101a10fa4ac152d  nss-3.87.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_88_1_RTM/src/SHA256SUMS
-+sha256  27d243edf87d1cf1bb9c861f03d387e0e9230ce5017f4308c941f558b54b3496  nss-3.88.1.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 90fd9259d5..ac342cf3af 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/zxing-cpp/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/zxing-cpp/Config.in b/package/zxing-cpp/Config.in
+index 6c17565d2a..2550dcf023 100644
+--- a/package/zxing-cpp/Config.in
++++ b/package/zxing-cpp/Config.in
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_ZXING_CPP
+ 	  implemented in Java, with ports to other languages. This
+ 	  compiles the C++ port.
  
--LIBNSS_VERSION = 3.87
-+LIBNSS_VERSION = 3.88.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-	  https://github.com/glassechidna/zxing-cpp
++	  https://github.com/zxing-cpp/zxing-cpp
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
