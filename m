@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B96EC636CC
-	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 18:12:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD27C636CC
+	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 18:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0FF4B409EC;
-	Mon, 13 Feb 2023 18:12:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FF4B409EC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 809F7409E2;
+	Mon, 13 Feb 2023 18:13:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 809F7409E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AM7O3winNPQq; Mon, 13 Feb 2023 18:12:28 +0000 (UTC)
+	with ESMTP id WWgS2WdSQNLB; Mon, 13 Feb 2023 18:13:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5355D409E2;
-	Mon, 13 Feb 2023 18:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5355D409E2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 99BF01BF289
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 18:12:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2D61409EE;
+	Mon, 13 Feb 2023 18:13:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2D61409EE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B9C71BF289
+ for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 18:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7392C6102A
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 18:12:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7392C6102A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42CA881281
+ for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 18:13:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42CA881281
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EYSO2jxqyPmN for <buildroot@lists.busybox.net>;
- Mon, 13 Feb 2023 18:12:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0TllLMnx2O9K for <buildroot@lists.busybox.net>;
+ Mon, 13 Feb 2023 18:13:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39D8960FAA
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 39D8960FAA
- for <buildroot@buildroot.org>; Mon, 13 Feb 2023 18:12:23 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id a2so13178536wrd.6
- for <buildroot@buildroot.org>; Mon, 13 Feb 2023 10:12:23 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F96A8125B
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2F96A8125B
+ for <buildroot@buildroot.org>; Mon, 13 Feb 2023 18:13:39 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id j23so13220727wra.0
+ for <buildroot@buildroot.org>; Mon, 13 Feb 2023 10:13:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Ww7iROaGBsqIfP1OUYFOTz4pQESRZs3+jA1MCfyPBJk=;
- b=hws8D/uckXYCu1G1cD+CJE/YsoTSSeRblz+w2wAdJ1yFZvQXZ9mCp89yo13lzpywtK
- XxtX6MpW3JinlMk/rPusQG0F9bTHTbt6pXbE0jWp6QNN26z4qS0H+Vb3erLI9Vb5jlOW
- UZrDN9KdROSWl2Mz+9odm3idJPO9oifhQzoRjrny7XyLCrPi1GClL8eJKscVoGE1EoSI
- /vsfuhtqNU7X7cmmeiaOiDR3jmeA9Wg1rWr2AM52rY34JzXBxnx472qJr8CSdc/0KRH2
- 5x2z3Dzt5M4WFhAVj2aQmsgBJLikNGxmfTdxYPKogjKnvBz/oYVuuPJoFM/kAKeoPuM7
- IoMQ==
-X-Gm-Message-State: AO0yUKVY6O3PuKTheRLn4M01RlnHXgluVdTy1wxp3a8lTcMEFdkLp4ft
- EG7GhnM0eAardhLei6LseukoLnDTY/4=
-X-Google-Smtp-Source: AK7set/JD53knE2OtvjIsff10aKOfnP3iVsIbMJJhv1G6iEOQkpJpOF3/NusSl/kPJ2lvjHPH2L9WQ==
-X-Received: by 2002:adf:f450:0:b0:2c5:5331:5516 with SMTP id
- f16-20020adff450000000b002c553315516mr5291454wrp.51.1676311941781; 
- Mon, 13 Feb 2023 10:12:21 -0800 (PST)
+ bh=m3WLMb0Dr5LVBJHGE7hqxYzxVuU5iWGLqSsbiafn4r4=;
+ b=yOkGpzqbJ05QYVU59eEDhwSWxfb9yOxbTJKb/AzYEwvOwxwPsrlK+lW7rR/YohjXuM
+ NCM5XvMI4Qlgt+XjeF7zkf82GiEm1YeQY5FaOqakS/cfeabd6xVL661bMvMmiT2ogXyn
+ uJ5R1FwnxDfpyJAJgXETgon2owy9Hg9p09uqAzSG/e/Femzc1XFXX/klYlWZCx0AhsJA
+ G+KG9Sqxc6wXibC3Ogg7tGkyaKbWBfoce9EOlydP4lnowfYbirLbIuqYDAB25jzw+JRq
+ R1D/FwIl6fbkeqK3M0ZHD7E+adPOyI0R2Zz33wKLiWHHvVCuHthZOosDo9IiGAWi7d2J
+ ysTw==
+X-Gm-Message-State: AO0yUKUw2lfQ38JVDzyF/gzwRvXuAAPi6rrKIQuaxLtv3EZCWVa4EVTn
+ t0mQmdLLJjSyp9K6EIFvsd7MfW5lAz8=
+X-Google-Smtp-Source: AK7set8OCxT/E7OOGQ5eS0xGfp36a9zCCB/tDeEWUVPjheLdC8L97I2URVLSsZ9uRmhA42uoSftHTQ==
+X-Received: by 2002:a5d:504e:0:b0:2c5:4d8f:7193 with SMTP id
+ h14-20020a5d504e000000b002c54d8f7193mr6476130wrt.56.1676312016898; 
+ Mon, 13 Feb 2023 10:13:36 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- g9-20020a5d5409000000b002c558228b6dsm3739445wrv.12.2023.02.13.10.12.21
+ b4-20020a5d4b84000000b002c55b0e6ef1sm2146544wrt.4.2023.02.13.10.13.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 Feb 2023 10:12:21 -0800 (PST)
+ Mon, 13 Feb 2023 10:13:36 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Feb 2023 19:12:17 +0100
-Message-Id: <20230213181217.908103-1-fontaine.fabrice@gmail.com>
+Date: Mon, 13 Feb 2023 19:13:32 +0100
+Message-Id: <20230213181332.908961-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Ww7iROaGBsqIfP1OUYFOTz4pQESRZs3+jA1MCfyPBJk=;
- b=FDticLJVRXuKIYawW1+oNUSDRLfwiG8WOLdMOJNAzHCk5e4G2gWLRPehv6nH/mPY6E
- iG9SIE1Qv+y3uOiiWnhU4/KCJk3sm3PdlF0LOD5j2eKr1xMstASxAWzS4CdU3Fp2otYf
- KqiV8VnILu+CprSoGA+KJy+zrud6XAqeDpP/gEh9AUg6lyMsc+wJVe9gPX2dj+eJoJ76
- +5JUCK4RIHxuGj32MUbTpaGH7iqOjGwmsTK1S2lnErI07E4d0wVOahZIBpnN5sMFb2Jc
- CMf2R92RBTC8PTfDSz1HWO0tANiWyRsFIbJt6MTauSEb04lHS/r0JB6oodsg0P1u+9Ed
- 4n1Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=m3WLMb0Dr5LVBJHGE7hqxYzxVuU5iWGLqSsbiafn4r4=;
+ b=p78NdguGVb6TGaaHi9Uax9huYetyv6RbFb+cOzVac2lvygeyTG+wV0pjRqOdhLaPGI
+ NoeQjyfGLdNLxtI4YNbkETYiJw+0TPNyuZlCeA9mO2mPCDXUCDvhq0AMIKDyTmrBleWQ
+ e98iKixsHA/Z0/X/Wf6czMlBGRexr8mhFO8ziON8C8Thvnslneoz2WNpMSENHr9lOoyY
+ n/Tlf7CrYhiBUuCCKmh/HrG7tV89Jfl8+9wdsBJ2wvnyj8+Y0xl1pKKIneFX87/MxczT
+ szHvJy+3D7zhg1MOz1MnzlgCiqtBdnHtBzYZweeCnmYuY+rjoJI8ShZR3u2T86Dyi1q+
+ Kijg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=FDticLJV
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: fix legal info
+ header.a=rsa-sha256 header.s=20210112 header.b=p78NdguG
+Subject: [Buildroot] [PATCH 1/1] package/apr-util: security bump to version
+ 1.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,35 +94,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>,
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 57e297a215193c92f6a178139db53616f2ee23b5 forgot to update hash of
-COPYRIGHT file (year updated with
-https://github.com/postgres/postgres/commit/1fbcb1360bc19b89369209203ea7cc19b8cde224)
+*) SECURITY: CVE-2022-25147 (cve.mitre.org)
+   Integer Overflow or Wraparound vulnerability in apr_base64 functions
+   of Apache Portable Runtime Utility (APR-util) allows an attacker to
+   write beyond bounds of a buffer.
 
-Fixes:
- - http://autobuild.buildroot.org/results/93f40dc71619745ddc6741598c9a488c81ea440f
+https://downloads.apache.org/apr/Announcement-aprutil-1.x.html
+https://downloads.apache.org/apr/CHANGES-APR-UTIL-1.6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/postgresql/postgresql.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/apr-util/apr-util.hash | 4 ++--
+ package/apr-util/apr-util.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index e6a9bd6658..3e89d3ec35 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
+index 59ef590109..7e2793cd77 100644
+--- a/package/apr-util/apr-util.hash
++++ b/package/apr-util/apr-util.hash
 @@ -1,4 +1,4 @@
- # From https://ftp.postgresql.org/pub/source/v15.2/postgresql-15.2.tar.bz2.sha256
- sha256  99a2171fc3d6b5b5f56b757a7a3cb85d509a38e4273805def23941ed2b8468c7  postgresql-15.2.tar.bz2
- # License file, Locally calculated
--sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-+sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
+-# From http://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256
+-sha256  d3e12f7b6ad12687572a3a39475545a072608f4ba03a6ce8a3778f607dd0035b  apr-util-1.6.1.tar.bz2
++# From http://www.apache.org/dist/apr/apr-util-1.6.3.tar.bz2.sha256
++sha256  a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5  apr-util-1.6.3.tar.bz2
+ # Locally calculated
+ sha256  ef5609d18601645ad6fe22c6c122094be40e976725c1d0490778abacc836e7a2  LICENSE
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index fb0735f5e7..02b6d5e277 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APR_UTIL_VERSION = 1.6.1
++APR_UTIL_VERSION = 1.6.3
+ APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
+ APR_UTIL_SITE = https://archive.apache.org/dist/apr
+ APR_UTIL_LICENSE = Apache-2.0
 -- 
 2.39.0
 
