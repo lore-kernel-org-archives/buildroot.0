@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91FEC636CC
-	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 18:20:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9001AC636D4
+	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 18:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8535F40A14;
-	Mon, 13 Feb 2023 18:20:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8535F40A14
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42541409D5;
+	Mon, 13 Feb 2023 18:20:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42541409D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M7ZKjJNDca7Q; Mon, 13 Feb 2023 18:20:38 +0000 (UTC)
+	with ESMTP id TyPpC30npnQa; Mon, 13 Feb 2023 18:20:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C124240A30;
-	Mon, 13 Feb 2023 18:20:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C124240A30
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5BDB91BF289
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 18:20:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7394840A14;
+	Mon, 13 Feb 2023 18:20:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7394840A14
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 878211BF289
+ for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 18:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36D7C409FC
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 18:20:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36D7C409FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E34581BC2
+ for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 18:20:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E34581BC2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xzp3h0pRfo06 for <buildroot@lists.busybox.net>;
- Mon, 13 Feb 2023 18:20:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X7sLn6wNuzvG for <buildroot@lists.busybox.net>;
+ Mon, 13 Feb 2023 18:20:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70719409ED
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 70719409ED
- for <buildroot@buildroot.org>; Mon, 13 Feb 2023 18:20:27 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id dr8so33972570ejc.12
- for <buildroot@buildroot.org>; Mon, 13 Feb 2023 10:20:27 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99F48813D9
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 99F48813D9
+ for <buildroot@buildroot.org>; Mon, 13 Feb 2023 18:20:37 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id sb24so10099785ejb.8
+ for <buildroot@buildroot.org>; Mon, 13 Feb 2023 10:20:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=zAxdQNCQUUvqjwHuSYBsbQFXcnFQPEjUIveU70MdVVo=;
- b=Q9uPGF1kM1nHB5PwahR4fcyHLz6MAbEQ7NQ0AFB90aRyGEp+6MfVAlYmcR5JkNIvp7
- GSTmPLGaULRGvCNjTr8RcI4/+s2OwfFUTpC86LuG41gqgbDbYdjXBN5UHKX585HXkpgc
- 4b0FnNbPRrHJReUBjrEB8++UPl2S0D/rtnuTgPdHBnWTE07fB2zn4TkmuD80BpSBgJM7
- HEOcNBJU/jW5d+B1WPRP2aQ+2B/2rg+eQAGmDLUvvUR2gL5l3R9LBBXa+mRNM9ZYVCTn
- PRgVA08iCwiwfmHrpUQVhVC6N3uL+/a7r8I0NlzodlxgIn54XDnMLn1Vm98FZfnisdd1
- +75w==
-X-Gm-Message-State: AO0yUKXMoGwHIodzKVJSj95LQWdjNpT1h0d1ZX0OSSCJBBwJgdB/WgLO
- AjmRaC6AG+0o0KG7vjKjd9dvCcIgsGWnWA==
-X-Google-Smtp-Source: AK7set+H1Ds5h96awyJcoMMLM3E58yG1uKbMMkVuv3LrrpeAhLhPiFFCiXYETY6b3SpPoCfUOCBrVg==
-X-Received: by 2002:a17:907:31c1:b0:8b1:238b:a29f with SMTP id
- xf1-20020a17090731c100b008b1238ba29fmr1920504ejb.10.1676312425216; 
- Mon, 13 Feb 2023 10:20:25 -0800 (PST)
+ bh=ibP5XnSr2CZ8K3N7AgDhAySxWPJhU4l6JQxR3tkjqqo=;
+ b=FieZOUPMzf1MPb1DdFYV6FYLIWihjXDnchw//uyAkkF2xr8FMqFipKaAhklcV6LEYZ
+ nKLEMf8L0dlv9wI7YA9nPoHI8Sn2wNojjeLd4o1iHYFsUyVZKVzB5ATuB6aPSuY3wG77
+ kaqjSBP4Ip6hHcy+e05vm8z5wN2mJkYQLvalXIYVXB3KuV/OY9GLWssQC7DggBdUl4dm
+ FL3i9e/pGy+w7i9PUWFC3YF+ivSNlF2d48GVfnaBpMt6uDwnh2751gF9WFeZhoo+vbUG
+ pFBT+BelQupdMToo6kMXG8l7K/1WRrXPV3yY9BVVXxQHWd64YH+Z4R+Ze9a9PEvy7J5a
+ +GyA==
+X-Gm-Message-State: AO0yUKUoBNi2im6h/tPwjZLHeBrWgKaa3qFtG9eFrxpFyacz1VTn6wvG
+ /499mnlL3svFM8vqQKOUlrryQLqxB7kVQQ==
+X-Google-Smtp-Source: AK7set9uqylAqX3Le9B/3ys3QDfhLyPhlpzQejbE05s24+qpt10oAtpvQdiPclmfX+E9ViDa98GF5A==
+X-Received: by 2002:a17:906:af76:b0:88d:9cf8:2dbb with SMTP id
+ os22-20020a170906af7600b0088d9cf82dbbmr24120093ejb.12.1676312435357; 
+ Mon, 13 Feb 2023 10:20:35 -0800 (PST)
 Received: from t450s.fritz.box (ip4d15a215.dynamic.kabel-deutschland.de.
  [77.21.162.21]) by smtp.gmail.com with ESMTPSA id
- v24-20020a170906859800b0088c224bf5b5sm7145165ejx.148.2023.02.13.10.20.24
+ v24-20020a170906859800b0088c224bf5b5sm7145165ejx.148.2023.02.13.10.20.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 Feb 2023 10:20:24 -0800 (PST)
+ Mon, 13 Feb 2023 10:20:34 -0800 (PST)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Feb 2023 19:19:47 +0100
-Message-Id: <20230213181944.10292-3-heiko.thiery@gmail.com>
+Date: Mon, 13 Feb 2023 19:19:49 +0100
+Message-Id: <20230213181944.10292-4-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230213181944.10292-1-heiko.thiery@gmail.com>
 References: <20230213181944.10292-1-heiko.thiery@gmail.com>
@@ -74,17 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=zAxdQNCQUUvqjwHuSYBsbQFXcnFQPEjUIveU70MdVVo=;
- b=WBMJo65A03ClwAb3myTnBufAon8IPKkSr90RtexVOzvF1LBvIu4p8xhSDzWg5XQ4A9
- Jp9rYeEuAB5ozypTme9sbRqT4utNbJYV5qdq++j5aTs5DKH+LNsgpm/FyLCxRG8tK3he
- ODzDPJRr9XlYjtkOHH6KUXkafEkoDghG9b21BATS3zpxA+sUxcRuUqvzkzRRkHEeYd5Y
- Ocgu7btnWLSx3oTx1x/q+ztSanSoSbQc+My5TSfVe4sxokoePCAqPAGtkuBmcE3N5k2V
- aobHlIfI8Oy6z1URjEpOLHHEX89kPcyEdhhq5cItKYOLf0gDdMnOmANnu/0oX86/QSzd
- CN1w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ibP5XnSr2CZ8K3N7AgDhAySxWPJhU4l6JQxR3tkjqqo=;
+ b=XpPlQNkIZTTr7H6z8j75tvAoAYsAFLA8LuGmJYMgcpSe5QxN9FmVNBLwtcdf2+jWH2
+ hPtWvfV4cgEgo82WHBs9aWKwWgQFbVzKMTBqBWd6KoKJRMZrmbE1g5xff/Fqp3SCWUtC
+ rIBlS0AINGnMldgIz/FMBkvrEbrbLr2QqjPqofdaBb05bIxWp1JEt+8cwHWeJTLGwI38
+ JzIYrvPmz4BgoZF5otkGLkXUHLMXdv/ELeFVYzLKkUIaDHUB+xll2Vl+vPWbAbIaeuPf
+ NWJf87K80CTdJ/QewG5LS34h4JCV5Ib5DGfvNZTnHxE8IK5wMZwEUsqeE/JoVbLR2KkA
+ SZfQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=WBMJo65A
-Subject: [Buildroot] [PATCH 3/4] package/sysrepo: bump version to 2.2.36
+ header.a=rsa-sha256 header.s=20210112 header.b=XpPlQNkI
+Subject: [Buildroot] [PATCH 4/4] package/netopeer2: bump version to 2.1.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,32 +105,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/sysrepo/sysrepo.hash | 2 +-
- package/sysrepo/sysrepo.mk   | 2 +-
+ package/netopeer2/netopeer2.hash | 2 +-
+ package/netopeer2/netopeer2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
-index a90d8259bf..6a5e98f41b 100644
---- a/package/sysrepo/sysrepo.hash
-+++ b/package/sysrepo/sysrepo.hash
+diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
+index cc71a2dab8..6a278fbbaf 100644
+--- a/package/netopeer2/netopeer2.hash
++++ b/package/netopeer2/netopeer2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  1bc866f13e41ba5e7e4acd52b5c3d42b1a2a1e032775e0a9b094f3265844cd25  sysrepo-2.2.12.tar.gz
-+sha256  bebb7901682eb23bf4c73d086d0a45c124ec751a67793a66024f1d4203425730  sysrepo-2.2.36.tar.gz
- sha256  88f1b7e5c64d2c113e07105aa9c0fb80639b40287565be1c2afd0949df83d826  LICENSE
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 9da8c22ca2..6b031ae6f9 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
+-sha256  b166fe3425bb55b5f330fb7f53158f613bffc07493925ac437193e4d2defb3e7  netopeer2-2.1.42.tar.gz
++sha256  2b1daac037f18c303e0c0dc3318ba30196459472e4c59f2f8547ee74d4cdf31d  netopeer2-2.1.49.tar.gz
+ sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index 7cb9202575..47fcd31acd 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSREPO_VERSION = 2.2.12
-+SYSREPO_VERSION = 2.2.36
- SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
- SYSREPO_INSTALL_STAGING = YES
- SYSREPO_LICENSE = BSD-3-Clause
+-NETOPEER2_VERSION = 2.1.42
++NETOPEER2_VERSION = 2.1.49
+ NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
+ NETOPEER2_DL_SUBDIR = netopeer2
+ NETOPEER2_LICENSE = BSD-3-Clause
 -- 
 2.20.1
 
