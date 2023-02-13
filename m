@@ -4,48 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2A02C64ED6
-	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 14:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6195AC636CC
+	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 14:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BAF960FDB;
-	Mon, 13 Feb 2023 14:54:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BAF960FDB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1541A60FE0;
+	Mon, 13 Feb 2023 14:54:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1541A60FE0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8l3uNVQozYi9; Mon, 13 Feb 2023 14:54:21 +0000 (UTC)
+	with ESMTP id 2j4anm4YrYp6; Mon, 13 Feb 2023 14:54:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A69260FFD;
-	Mon, 13 Feb 2023 14:54:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A69260FFD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 158E31BF349
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 14:54:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C5E560FD2;
+	Mon, 13 Feb 2023 14:54:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C5E560FD2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AAF401BF349
+ for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 14:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0FB28140D
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 14:54:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0FB28140D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84B724089E
+ for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 14:54:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84B724089E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HDI-v3Y2IYtb for <buildroot@lists.busybox.net>;
- Mon, 13 Feb 2023 14:54:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0401C812C5
- for <buildroot@buildroot.org>; Mon, 13 Feb 2023 14:54:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0401C812C5
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4FFA85C84; Mon, 13 Feb 2023 14:54:15 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 13 Feb 2023 15:53:18 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: a542730884998f5f421617c76b238ab4a67d17b8
-X-Git-Newrev: c0664cc9f46eb4ad7116daec6be6639d28d9ab79
-X-Patchwork-Hint: ignore
-Message-Id: <20230213145415.E4FFA85C84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/gdal: switch to
- cmake build to fix libgeotiff detection
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y7vW42FEwv9i for <buildroot@lists.busybox.net>;
+ Mon, 13 Feb 2023 14:54:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1F6840866
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F1F6840866
+ for <buildroot@buildroot.org>; Mon, 13 Feb 2023 14:54:43 +0000 (UTC)
+Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
+ by mail.kmu-office.ch (Postfix) with ESMTPSA id AF7925C04BE;
+ Mon, 13 Feb 2023 15:54:40 +0100 (CET)
+MIME-Version: 1.0
+Date: Mon, 13 Feb 2023 15:54:40 +0100
+From: Stefan Agner <stefan@agner.ch>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <20230204115212.GC14083@scaer>
+References: <175cc1e7e72602b9c0e8d6b761cf72b375383189.1675421166.git.stefan@agner.ch>
+ <20230204115212.GC14083@scaer>
+Message-ID: <4731f67c09026856282903ad811d15ca@agner.ch>
+X-Sender: stefan@agner.ch
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=agner.ch; s=dkim; t=1676300080;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=YHrYKOjQ+nn6hHaczGfFKL5XEbaqKZ9JwXWpP0tD/Jo=;
+ b=NJ/ydbV5QYZIPU8c/RoDaDkwa21ucrBibWmftdm8lw8egYlUKAvj0VY62GvzYdglqYsKM7
+ e9wqgr+3fuArt8+UpgYgUiq1gi2LEMpqhCj3/3Yz0qmDgm2Xp/OUJMGQ8nVOxupOqGyckT
+ zozhWgSCi3J7i2RtlMlI6nQKtLhOJkQ=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
+ header.a=rsa-sha256 header.s=dkim header.b=NJ/ydbV5
+Subject: Re: [Buildroot] [PATCH] package/dbus-broker: bump to release 33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,227 +72,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0664cc9f46eb4ad7116daec6be6639d28d9ab79
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+On 2023-02-04 12:52, Yann E. MORIN wrote:
+> Stefan, All,
+> 
+> On 2023-02-03 11:46 +0100, Stefan Agner spake thusly:
+>> This release contains mostly a bugfixes, with some improvements around
+>> error handling for unimplemented functionality and resiliency against
+>> runtime changes of dbus service-files.
+>>
+>> Signed-off-by: Stefan Agner <stefan@agner.ch>
+>> ---
+>>  package/dbus-broker/dbus-broker.hash | 2 +-
+>>  package/dbus-broker/dbus-broker.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/dbus-broker/dbus-broker.hash b/package/dbus-broker/dbus-broker.hash
+>> index f6c2cbe160..89b27ddddc 100644
+>> --- a/package/dbus-broker/dbus-broker.hash
+>> +++ b/package/dbus-broker/dbus-broker.hash
+>> @@ -1,5 +1,5 @@
+>>  # Locally calculated
+>> -sha256  bea7f653e7251063c5f427e9e3f93562d38a0d8667ae6d49fb56f113605985de  dbus-broker-32.tar.xz
+>> +sha256  23713f25624749fdb274907e429080fa2d8f4dbe76acd87bb6d21a3c818c7841  dbus-broker-33.tar.xz
+>>  sha256  3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4  LICENSE
+>>  sha256  20ea1f96abc15553695c6725bb3dcabff4b43b85b7ca7d675a2b8860e3b01f87  subprojects/libcdvar-1/AUTHORS
+>>  sha256  8153c478102dc209b30dd4627cf5bb3596263f99692bf3eec174b1e17bbf8a3b  subprojects/libcdvar-1/README.md
+> 
+> Unfortunately, there are issues with licensing info:
+> 
+>     $ make dbus-broker-legal-info
+>     [...]
+>     ERROR: subprojects/libcstdaux-1/AUTHORS has wrong sha256 hash:
+>     ERROR: expected:
+> 32913ba08dc041f3f4ca361fc0d68014120e1c612772aabbcc901556df499ce5
+>     ERROR: got     :
+> e796182869fe0892347d069f3f423774124987d6c45d016854fc51530633c177
+>     ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+>     make[1]: *** [package/dbus-broker/dbus-broker.mk:71:
+> dbus-broker-legal-info] Error 1
+>     make: *** [Makefile:23: _all] Error 2
+> 
+> Can you look into that and resubmit the bump, please?
 
-GDAL autoconf has wrong libgeotiff detection. It uses host's
-library if installed instead of buildroot one.
-Modern versions of gdal have no autoconf build scripts, just cmake only.
+Change was due to copyright date bump and additional authors which is
+maintained in the same file. Will adjust the hash and resend.
 
-So move to cmake build variant.
+--
+Stefan
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=15281
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2b43579e9453a4e4f0d25d902634ebd9f1721dfc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdal/gdal.mk | 168 ++++++++++++++++++++++++++-------------------------
- 1 file changed, 87 insertions(+), 81 deletions(-)
-
-diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
-index 33e7ba724a..2d6dff1a93 100644
---- a/package/gdal/gdal.mk
-+++ b/package/gdal/gdal.mk
-@@ -12,6 +12,15 @@ GDAL_LICENSE_FILES = LICENSE.TXT
- GDAL_CPE_ID_VENDOR = osgeo
- GDAL_INSTALL_STAGING = YES
- GDAL_CONFIG_SCRIPTS = gdal-config
-+GDAL_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+# Using 'make' with CMake's Makefile generator will not work, as
-+# 'make' uses GNUmakefile first, but GNUmakefile is provided by
-+# autotools in gdal. We need to force 'make' to use the Makefile,
-+# which is generated by CMake. GNUmakefile and autoconf are dropped in
-+# 3.6 so this can be dropped in future version.
-+GDAL_MAKE_OPTS += -f Makefile
-+
- # gdal at its core only needs host-pkgconf, libgeotiff, proj and tiff
- # but since by default mrf driver support is enabled, it also needs
- # jpeg, libpng and zlib. By default there are also many other drivers
-@@ -20,97 +29,94 @@ GDAL_CONFIG_SCRIPTS = gdal-config
- # respectively needed dependencies.
- GDAL_DEPENDENCIES = host-pkgconf jpeg json-c libgeotiff libpng proj tiff zlib
- 
--# Yes, even though they have --with options, these few libraries are
-+# Yes, even though they have -DDGDAL_USE options, a few libraries are
- # mandatory. If we don't provide them, bundled versions are used.
- GDAL_CONF_OPTS = \
--	--with-geotiff \
--	--with-jpeg \
--	--with-libjson-c=$(STAGING_DIR)/usr \
--	--with-libtool \
--	--with-libz \
--	--with-png \
--	--with-proj \
--	--without-armadillo \
--	--without-blosc \
--	--without-brunsli \
--	--without-cfitsio \
--	--without-crypto \
--	--without-cryptopp \
--	--without-curl \
--	--without-dds \
--	--without-ecw \
--	--without-expat \
--	--without-exr \
--	--without-fgdb \
--	--without-freexl \
--	--without-geos \
--	--without-gnm \
--	--without-libkml \
--	--without-lz4 \
--	--without-gta \
--	--without-hdf4 \
--	--without-hdf5 \
--	--without-hdfs \
--	--without-heif \
--	--without-idb \
--	--without-jp2lura \
--	--without-java \
--	--without-jpeg12 \
--	--without-jxl \
--	--without-kakadu \
--	--without-kea \
--	--without-lerc \
--	--without-gif \
--	--without-liblzma \
--	--without-libdeflate \
--	--without-mongocxxv3 \
--	--without-mrsid \
--	--without-jp2mrsid \
--	--without-macosx-framework \
--	--without-msg \
--	--without-mysql \
--	--without-netcdf \
--	--without-null \
--	--without-oci \
--	--without-odbc \
--	--without-ogdi \
--	--without-opencl \
--	--without-openjpeg \
--	--without-pam \
--	--without-pcidsk \
--	--without-pcraster \
--	--without-pcre \
--	--without-pcre2 \
--	--without-pdfium \
--	--without-podofo \
--	--without-poppler \
--	--without-python \
--	--without-qhull \
--	--without-rasdaman \
--	--without-rasterlite2 \
--	--without-rdb \
--	--without-sfcgal \
--	--without-sosi \
--	--without-spatialite \
--	--without-sqlite3 \
--	--without-teigha \
--	--without-tiledb \
--	--without-webp \
--	--without-xerces \
--	--without-zstd
-+	-DGDAL_USE_GEOTIFF=ON \
-+	-DGDAL_USE_JPEG=ON \
-+	-DGDAL_USE_JSONC=ON \
-+	-DGDAL_USE_ZLIB=ON \
-+	-DGDAL_USE_PNG=ON \
-+	-DGDAL_USE_ARMADILLO=OFF \
-+	-DGDAL_USE_BLOSC=OFF \
-+	-DGDAL_USE_BRUNSLI=OFF \
-+	-DGDAL_USE_CFITSIO=OFF \
-+	-DGDAL_USE_OPENSSL=OFF \
-+	-DGDAL_USE_CRYPTOPP=OFF \
-+	-DGDAL_USE_CRNLIB=OFF \
-+	-DGDAL_USE_CURL=OFF \
-+	-DGDAL_USE_ECW=OFF \
-+	-DGDAL_USE_EXPAT=OFF \
-+	-DGDAL_USE_FILEGDB=OFF \
-+	-DGDAL_USE_FREEXL=OFF \
-+	-DGDAL_USE_GEOS=OFF \
-+	-DGDAL_USE_LIBKML=OFF \
-+	-DGDAL_USE_LZ4=OFF \
-+	-DGDAL_USE_GTA=OFF \
-+	-DGDAL_USE_HDF4=OFF \
-+	-DGDAL_USE_HDF5=OFF \
-+	-DGDAL_USE_HDFS=OFF \
-+	-DGDAL_USE_HEIF=OFF \
-+	-DGDAL_USE_IDB=OFF \
-+	-DGDAL_USE_LURATECH=OFF \
-+	-DGDAL_USE_JPEG12_INTERNAL=OFF \
-+	-DGDAL_USE_JXL=OFF \
-+	-DGDAL_USE_KDU=OFF \
-+	-DGDAL_USE_KEA=OFF \
-+	-DGDAL_USE_LERC=OFF \
-+	-DGDAL_USE_GIF=OFF \
-+	-DGDAL_USE_LIBLZMA=OFF \
-+	-DGDAL_USE_DEFLATE=OFF \
-+	-DGDAL_USE_MONGOCXX=OFF \
-+	-DGDAL_USE_MRSID=OFF \
-+	-DGDAL_USE_PUBLICDECOMPWT=OFF \
-+	-DGDAL_USE_MYSQL=OFF \
-+	-DGDAL_USE_NETCDF=OFF \
-+	-DGDAL_USE_ORACLE=OFF \
-+	-DGDAL_USE_ODBC=OFF \
-+	-DGDAL_USE_OGDI=OFF \
-+	-DGDAL_USE_OPENCL=OFF \
-+	-DGDAL_USE_OPENEXR=OFF \
-+	-DGDAL_USE_OPENJPEG=OFF \
-+	-DGDAL_USE_PCRE=OFF \
-+	-DGDAL_USE_PCRE2=OFF \
-+	-DGDAL_USE_PDFIUM=OFF \
-+	-DGDAL_USE_PODOFO=OFF \
-+	-DGDAL_USE_POPPLER=OFF \
-+	-DGDAL_USE_QHULL=OFF \
-+	-DGDAL_USE_RASDAMAN=OFF \
-+	-DGDAL_USE_RASTERLITE2=OFF \
-+	-DGDAL_USE_RDB=OFF \
-+	-DGDAL_USE_SFCGAL=OFF \
-+	-DGDAL_USE_FYBA=OFF \
-+	-DGDAL_USE_SPATIALITE=OFF \
-+	-DGDAL_USE_SQLITE3=OFF \
-+	-DGDAL_USE_TEIGHA=OFF \
-+	-DGDAL_USE_TILEDB=OFF \
-+	-DGDAL_USE_WEBP=OFF \
-+	-DGDAL_USE_XERCESC=OFF \
-+	-DGDAL_USE_ZSTD=OFF \
-+	-DGDAL_ENABLE_DRIVER_PCIDSK=OFF \
-+	-DGDAL_ENABLE_DRIVER_PCRASTER=OFF \
-+	-DGDAL_ENABLE_DRIVER_NULL=OFF \
-+	-DGDAL_ENABLE_MACOSX_FRAMEWORK=OFF \
-+	-DENABLE_GNM=OFF \
-+	-DENABLE_PAM=OFF \
-+	-DBUILD_JAVA_BINDINGS=OFF \
-+	-DBUILD_PYTHON_BINDINGS=OFF
- 
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
- GDAL_DEPENDENCIES += libxml2
--GDAL_CONF_OPTS += --with-xml2
-+GDAL_CONF_OPTS += -DGDAL_USE_LIBXML2=ON
- else
--GDAL_CONF_OPTS += --without-xml2
-+GDAL_CONF_OPTS += -DGDAL_USE_LIBXML2=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
- GDAL_DEPENDENCIES += postgresql
--GDAL_CONF_OPTS += --with-pg
-+GDAL_CONF_OPTS += -DGDAL_USE_POSTGRESQL=ON
- else
--GDAL_CONF_OPTS += --without-pg
-+GDAL_CONF_OPTS += -DGDAL_USE_POSTGRESQL=OFF
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> 
+>> diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
+>> index e82b79220d..c4e3679a2e 100644
+>> --- a/package/dbus-broker/dbus-broker.mk
+>> +++ b/package/dbus-broker/dbus-broker.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>
+>> -DBUS_BROKER_VERSION = 32
+>> +DBUS_BROKER_VERSION = 33
+>>  DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
+>>  DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
+>>
+>> --
+>> 2.39.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
