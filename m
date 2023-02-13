@@ -1,62 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 625ABC636CC
-	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 09:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94556C636D4
+	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 11:58:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F1A45405C5;
-	Mon, 13 Feb 2023 09:26:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1A45405C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E143818A1;
+	Mon, 13 Feb 2023 11:58:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E143818A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FDRT28QYmMsv; Mon, 13 Feb 2023 09:26:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TyO0UO3lAUrt; Mon, 13 Feb 2023 11:58:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BC82405BA;
-	Mon, 13 Feb 2023 09:26:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BC82405BA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BDC1F1BF3E8
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 09:26:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CB878183D;
+	Mon, 13 Feb 2023 11:58:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CB878183D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EAEC11BF39E
+ for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 11:58:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97B65402B5
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 09:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97B65402B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id C557060F8F
+ for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 11:58:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C557060F8F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WT766qTC42qt for <buildroot@lists.busybox.net>;
- Mon, 13 Feb 2023 09:26:41 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59F204024E
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 59F204024E
- for <buildroot@buildroot.org>; Mon, 13 Feb 2023 09:26:41 +0000 (UTC)
-Received: from iago.. (rm-19-42-195.service.infuturo.it [151.19.42.195])
- by serv15.avernis.de (Postfix) with ESMTPSA id D4405BDE0DC9;
- Mon, 13 Feb 2023 10:26:34 +0100 (CET)
-From: Andreas Ziegler <br015@umbiko.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ehpn-VCCwWwF for <buildroot@lists.busybox.net>;
+ Mon, 13 Feb 2023 11:58:18 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C429060F77
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C429060F77
+ for <buildroot@buildroot.org>; Mon, 13 Feb 2023 11:58:17 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A9274C0010;
+ Mon, 13 Feb 2023 11:58:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1pRXTJ-002RcS-DQ; Mon, 13 Feb 2023 12:58:13 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Feb 2023 10:26:11 +0100
-Message-Id: <20230213092611.86858-1-br015@umbiko.net>
-X-Mailer: git-send-email 2.34.1
+Date: Mon, 13 Feb 2023 12:58:10 +0100
+Message-Id: <20230213115812.582772-2-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230213115812.582772-1-peter@korsgaard.com>
+References: <20230213115812.582772-1-peter@korsgaard.com>
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.7 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1676280395; bh=YzHeTQx+iZnpIluUx3QG1ESTgYyQ6Aoo1EOAmzA4wFg=;
- h=From:To:Cc:Subject:Date;
- b=rkX/9Olv1OJ1AjrI0AowITLdZ4KbbY+UDg8wLz0D1YK6N3vdXFNHmqvSLusoZTvTQ
- /9ErNyJxOMvKMv/LwrrZ3ouOKLRSJGaeEbmj5PX3sPwIIgUlqgop6a3U6pAT/CMXuj
- VYk9JX0jiPy94hFyzXO4+QKTSVI9HxmuIRcZ52G4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=umbiko.net header.i=@umbiko.net
- header.a=rsa-sha256 header.s=mail header.b=rkX/9Olv
-Subject: [Buildroot] [PATCH] package/mpd: update to version 0.23.12
+Subject: [Buildroot] [PATCH 2/3] package/linux-headers: drop 4.9.x option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,60 +62,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ziegler <br015@umbiko.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-List of changes:
-	decoder::mad: fix integer underflow with very small files
-	input::curl: require CURL 7.55.0 or later
-	output::pipewire: adjust to PipeWire 0.3.64 API change
-	tags:: fix crash bug due to race condition
-	fix build failures with GCC 13
+The 4.9.x series is now EOL upstream, so drop the linux-headers option and
+add legacy handling for it.
 
-Change log:
-	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.12/NEWS
-
-Commit:
-	https://github.com/MusicPlayerDaemon/MPD/commit/b1422fb
-
-Tested on:
-	i386 (build)
-	x86_64 (build, run)
-	Aarch64 (build)
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy                     | 7 +++++++
+ linux/linux.hash                     | 1 -
+ package/linux-headers/Config.in.host | 6 ------
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 8c488d0357..2521238f64 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  edb4e7a8f9dff238b5610f9e2461940ea98c727a5462fafb1cdf836304dfdca9  mpd-0.23.11.tar.xz
-+sha256  b7fca62284ecc25a681ea6a07abc49200af5353be42cb5a31e3173be9d8702e7  mpd-0.23.12.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 449600eda2..6c25c9b46f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 72deb03c35..e2dc854c78 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).11
-+MPD_VERSION = $(MPD_VERSION_MAJOR).12
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_KERNEL_HEADERS_4_9
++	bool "kernel headers version 4.9.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 4.9.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
+ config BR2_PACKAGE_DOCKER_PROXY
+ 	bool "docker-proxy removed"
+ 	select BR2_LEGACY
+diff --git a/linux/linux.hash b/linux/linux.hash
+index f797d5a61a..ae8b5e5f62 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -6,7 +6,6 @@ sha256  e7ed24f2690bf0e11158ccfa8ddc5c0e8a4816d83c4055d205218853da9c5dad  linux-
+ sha256  d807f97812e566410cd13b3170009e0d7552748d4f22d608ffd4dbd7f85bf9c6  linux-5.10.167.tar.xz
+ sha256  8dd0ea7f1db4c1e89d485255798e3c3dfb9be63c0f2af369912a1a37b75f36a8  linux-5.4.231.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  5385aaec55c766e3f462511453f5c63d7898b2d0e9ea74f22a23ebbedab0b3c6  linux-4.9.337.tar.xz
+ sha256  a35bcde16b13aa423a1822675775a1b0abf17f5392454febabd8c3757187959a  linux-4.14.305.tar.xz
+ sha256  489fb9368bd7ab808264dea1a4acdf607f057bf1ba19f647a17aa18d08f313f9  linux-4.19.272.tar.xz
+ # Locally computed
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8a76f93d62..6970090855 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -24,11 +24,6 @@ config BR2_KERNEL_HEADERS_AS_KERNEL
+ 	depends on BR2_LINUX_KERNEL
+ 	select BR2_KERNEL_HEADERS_LATEST if BR2_LINUX_KERNEL_LATEST_VERSION
+ 
+-config BR2_KERNEL_HEADERS_4_9
+-	bool "Linux 4.9.x kernel headers"
+-	depends on !BR2_riscv
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+-
+ config BR2_KERNEL_HEADERS_4_14
+ 	bool "Linux 4.14.x kernel headers"
+ 	depends on !BR2_riscv
+@@ -393,7 +388,6 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.9.337"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.305"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.272"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.231"	if BR2_KERNEL_HEADERS_5_4
 -- 
-2.34.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
