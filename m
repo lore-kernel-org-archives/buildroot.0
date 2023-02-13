@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B8BC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 846E2C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:58:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD13A700A6;
-	Tue, 21 Feb 2023 01:58:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD13A700A6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 351E77020B;
+	Tue, 21 Feb 2023 01:58:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 351E77020B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id udzDmoRWfoU0; Tue, 21 Feb 2023 01:58:19 +0000 (UTC)
+	with ESMTP id GECAIXorZNkt; Tue, 21 Feb 2023 01:58:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AA8970162;
-	Tue, 21 Feb 2023 01:58:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AA8970162
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DA05700BC;
+	Tue, 21 Feb 2023 01:58:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DA05700BC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D66F01BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D98421BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F7DA70035
+ by smtp3.osuosl.org (Postfix) with ESMTP id B164870038
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F7DA70035
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B164870038
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lq5C7Hr_LrvG for <buildroot@lists.busybox.net>;
+ with ESMTP id KctmhIK8ZjKb for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 829D37001C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9441570028
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 829D37001C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9441570028
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72B05828C8; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+ id 837B27FF06; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 13 Feb 2023 23:18:03 +0100
+Date: Mon, 13 Feb 2023 23:18:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 89710c804ede6879db45c8e41aca3607bd2bb051
-X-Git-Newrev: 4733f9bd5774171b8309e5c42e0419a0e8264308
+X-Git-Oldrev: 4733f9bd5774171b8309e5c42e0419a0e8264308
+X-Git-Newrev: e648d399d8bd609697e78f13f7fa76be06d91a57
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.72B05828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/highway: new package
+Message-Id: <20230220205259.837B27FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libjxl: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,258 +63,212 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4733f9bd5774171b8309e5c42e0419a0e8264308
+commit: https://git.buildroot.net/buildroot/commit/?id=e648d399d8bd609697e78f13f7fa76be06d91a57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Highway is a C++ library that provides portable SIMD/vector intrinsics.
+libjxl is the reference implementation of JPEG XL (encoder and decoder).
 
-https://github.com/google/highway
+https://github.com/libjxl/libjxl
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  2 +
- package/Config.in                                  |  1 +
- ...0001-Check-for-the-presence-of-sys-auxv.h.patch | 62 ++++++++++++++++++++++
- package/highway/Config.in                          | 34 ++++++++++++
- package/highway/highway.hash                       |  3 ++
- package/highway/highway.mk                         | 50 +++++++++++++++++
- support/testing/tests/package/test_highway.py      | 22 ++++++++
- 7 files changed, 174 insertions(+)
+ DEVELOPERS                                   |  2 ++
+ package/Config.in                            |  1 +
+ package/libjxl/Config.in                     | 25 +++++++++++++
+ package/libjxl/libjxl.hash                   |  4 +++
+ package/libjxl/libjxl.mk                     | 33 +++++++++++++++++
+ support/testing/tests/package/test_libjxl.py | 53 ++++++++++++++++++++++++++++
+ toolchain/Config.in                          |  5 +++
+ 7 files changed, 123 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index dcc607ba60..28cad8f58f 100644
+index 28cad8f58f..df2b98ad53 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1687,6 +1687,7 @@ F:	package/fluid-soundfont/
- F:	package/fluidsynth/
+@@ -1688,6 +1688,7 @@ F:	package/fluidsynth/
  F:	package/glslsandbox-player/
  F:	package/gnupg2/
-+F:	package/highway/
+ F:	package/highway/
++F:	package/libjxl/
  F:	package/octave/
  F:	package/ola/
  F:	package/perftest/
-@@ -1709,6 +1710,7 @@ F:	support/testing/tests/package/sample_python_gnupg.py
- F:	support/testing/tests/package/sample_python_pyalsa.py
- F:	support/testing/tests/package/sample_python_spake2.py
+@@ -1712,6 +1713,7 @@ F:	support/testing/tests/package/sample_python_spake2.py
  F:	support/testing/tests/package/test_gnupg2.py
-+F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_highway.py
  F:	support/testing/tests/package/test_hwloc.py
++F:	support/testing/tests/package/test_libjxl.py
  F:	support/testing/tests/package/test_ncdu.py
  F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
 diff --git a/package/Config.in b/package/Config.in
-index 511e691ed3..d205bcd816 100644
+index d205bcd816..fff2fb7a93 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2034,6 +2034,7 @@ menu "Other"
- 	source "package/gsl/Config.in"
- 	source "package/gtest/Config.in"
- 	source "package/gumbo-parser/Config.in"
-+	source "package/highway/Config.in"
- 	source "package/jemalloc/Config.in"
- 	source "package/lapack/Config.in"
- 	source "package/libabseil-cpp/Config.in"
-diff --git a/package/highway/0001-Check-for-the-presence-of-sys-auxv.h.patch b/package/highway/0001-Check-for-the-presence-of-sys-auxv.h.patch
+@@ -1603,6 +1603,7 @@ menu "Graphics"
+ 	source "package/libgta/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libgtk3/Config.in"
++	source "package/libjxl/Config.in"
+ 	source "package/libmediaart/Config.in"
+ 	source "package/libmng/Config.in"
+ 	source "package/libpng/Config.in"
+diff --git a/package/libjxl/Config.in b/package/libjxl/Config.in
 new file mode 100644
-index 0000000000..df86798613
+index 0000000000..da04b89f9b
 --- /dev/null
-+++ b/package/highway/0001-Check-for-the-presence-of-sys-auxv.h.patch
-@@ -0,0 +1,62 @@
-+From 491e3b1c2b8c44a2cfd35db117b02ef0fdf6a8e5 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Wed, 23 Nov 2022 23:27:11 +0100
-+Subject: [PATCH] Check for the presence of <sys/auxv.h>
++++ b/package/libjxl/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_LIBJXL
++	bool "libjxl"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # highway
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC # highway
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP # highway
++	# libjxl fail to link statically due to libatomic issue
++	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_81426
++	select BR2_PACKAGE_BROTLI
++	select BR2_PACKAGE_HIGHWAY
++	select BR2_PACKAGE_LCMS2
++	help
++	  libjxl is the reference implementation of JPEG XL (encoder
++	  and decoder).
 +
-+Not all gcc versions are providing <sys/auxv.h>. Checking for
-+HWY_ARCH_ARM && HWY_COMPILER_GCC_ACTUAL && HWY_OS_LINUX is not
-+sufficient and fail to build in some situations (it was observed for
-+some gcc armv7m toolchains).
++	  https://github.com/libjxl/libjxl
 +
-+This patch adds a check for <sys/auxv.h> and include it only if present.
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ CMakeLists.txt       | 3 +++
-+ hwy/detect_targets.h | 2 +-
-+ hwy/targets.cc       | 2 +-
-+ 3 files changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index b6b14ab..df6b5ab 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -84,6 +84,9 @@ check_cxx_source_compiles(
-+   HWY_RISCV
-+ )
-+ 
-++include(CheckIncludeFile)
-++check_include_file(sys/auxv.h  HAVE_SYS_AUXV_H)
-++
-+ if (HWY_ENABLE_CONTRIB)
-+ # Glob all the traits so we don't need to modify this file when adding
-+ # additional special cases.
-+diff --git a/hwy/detect_targets.h b/hwy/detect_targets.h
-+index 7f7e179..f0c6f94 100644
-+--- a/hwy/detect_targets.h
-++++ b/hwy/detect_targets.h
-+@@ -392,7 +392,7 @@
-+ #define HWY_HAVE_RUNTIME_DISPATCH 1
-+ // On Arm, currently only GCC does, and we require Linux to detect CPU
-+ // capabilities.
-+-#elif HWY_ARCH_ARM && HWY_COMPILER_GCC_ACTUAL && HWY_OS_LINUX
-++#elif HWY_ARCH_ARM && HWY_COMPILER_GCC_ACTUAL && HWY_OS_LINUX && HAVE_SYS_AUXV_H
-+ #define HWY_HAVE_RUNTIME_DISPATCH 1
-+ #else
-+ #define HWY_HAVE_RUNTIME_DISPATCH 0
-+diff --git a/hwy/targets.cc b/hwy/targets.cc
-+index 2fde4db..abd6a94 100644
-+--- a/hwy/targets.cc
-++++ b/hwy/targets.cc
-+@@ -42,7 +42,7 @@
-+ #include <cpuid.h>
-+ #endif  // HWY_COMPILER_MSVC
-+ 
-+-#elif HWY_ARCH_ARM && HWY_OS_LINUX
-++#elif HWY_ARCH_ARM && HWY_OS_LINUX && HAVE_SYS_AUXV_H
-+ #include <asm/hwcap.h>
-+ #include <sys/auxv.h>
-+ #endif  // HWY_ARCH_*
-+-- 
-+2.38.1
-+
-diff --git a/package/highway/Config.in b/package/highway/Config.in
-new file mode 100644
-index 0000000000..f4cef30e01
---- /dev/null
-+++ b/package/highway/Config.in
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_HIGHWAY
-+	bool "highway"
++comment "libjxl needs a toolchain with C++, threads, gcc >= 7, dynamic library"
 +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	# For gcc bug 58969, see:
-+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58969
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++11, GCC_BUG_58969
-+	help
-+	  Highway is a C++ library that provides portable SIMD/vector
-+	  intrinsics.
-+
-+	  https://github.com/google/highway
-+
-+if BR2_PACKAGE_HIGHWAY
-+
-+config BR2_PACKAGE_HIGHWAY_CONTRIB
-+	bool "Enable Contrib"
-+	help
-+	  Build Highway contrib library which contains extra
-+	  SIMD-related utilities: an image class with aligned rows, a
-+	  math library (16 functions already implemented, mostly
-+	  trigonometry), and functions for computing dot products and
-+	  sorting.
-+
-+config BR2_PACKAGE_HIGHWAY_EXAMPLES
-+	bool "Enable Examples"
-+	help
-+	  Build Highway examples
-+
-+endif
-+
-+comment "highway needs a toolchain w/ C++, gcc >= 7"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/highway/highway.hash b/package/highway/highway.hash
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_81426
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
 new file mode 100644
-index 0000000000..3ff468443e
+index 0000000000..e71d32e61d
 --- /dev/null
-+++ b/package/highway/highway.hash
-@@ -0,0 +1,3 @@
++++ b/package/libjxl/libjxl.hash
+@@ -0,0 +1,4 @@
 +# Locally computed:
-+sha256  e8ef71236ac0d97f12d553ec1ffc5b6375d57b5f0b860c7447dd69b6ed1072db  highway-1.0.2.tar.gz
-+sha256  43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1  LICENSE
-diff --git a/package/highway/highway.mk b/package/highway/highway.mk
++sha256  3114bba1fabb36f6f4adc2632717209aa6f84077bc4e93b420e0d63fa0455c5e  libjxl-0.7.0.tar.gz
++sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
++sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
+diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
 new file mode 100644
-index 0000000000..ed7f6ca871
+index 0000000000..cc24ba258c
 --- /dev/null
-+++ b/package/highway/highway.mk
-@@ -0,0 +1,50 @@
++++ b/package/libjxl/libjxl.mk
+@@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# highway
++# libjxl
 +#
 +################################################################################
 +
-+HIGHWAY_VERSION = 1.0.2
-+HIGHWAY_SITE = $(call github,google,highway,$(HIGHWAY_VERSION))
-+HIGHWAY_LICENSE = Apache-2.0
-+HIGHWAY_LICENSE_FILES = LICENSE
-+HIGHWAY_INSTALL_STAGING = YES
++LIBJXL_VERSION = 0.7.0
++LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
++LIBJXL_LICENSE = BSD-3-Clause
++LIBJXL_LICENSE_FILES = LICENSE PATENTS
++LIBJXL_CPE_ID_VENDOR = libjxl_project
++LIBJXL_INSTALL_STAGING = YES
 +
-+HIGHWAY_CXXFLAGS = $(TARGET_CXXFLAGS)
++LIBJXL_DEPENDENCIES = \
++	brotli \
++	lcms2 \
++	highway
 +
-+ifeq ($(BR2_PACKAGE_HIGHWAY_CONTRIB),y)
-+HIGHWAY_CONF_OPTS += -DHWY_ENABLE_CONTRIB=ON
-+else
-+HIGHWAY_CONF_OPTS += -DHWY_ENABLE_CONTRIB=OFF
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++LIBJXL_DEPENDENCIES += libpng
 +endif
 +
-+ifeq ($(BR2_PACKAGE_HIGHWAY_EXAMPLES),y)
-+HIGHWAY_CONF_OPTS += -DHWY_ENABLE_EXAMPLES=ON
-+# Examples are not installed by cmake. This binary can be useful for
-+# quick testing and debug.
-+define HIGHWAY_INSTALL_EXAMPLES
-+	$(INSTALL) -m 0755 \
-+		$(@D)/examples/hwy_benchmark \
-+		$(TARGET_DIR)/usr/bin/hwy_benchmark
-+endef
-+HIGHWAY_POST_INSTALL_TARGET_HOOKS += HIGHWAY_INSTALL_EXAMPLES
-+else
-+HIGHWAY_CONF_OPTS += -DHWY_ENABLE_EXAMPLES=OFF
-+endif
-+
-+ifeq ($(BR2_ARM_FPU_VFPV4),y)
-+HIGHWAY_CONF_OPTS += -DHWY_CMAKE_ARM7=ON
-+else
-+HIGHWAY_CONF_OPTS += -DHWY_CMAKE_ARM7=OFF
-+endif
-+
-+# Workaround for gcc bug 104028 on m68k.
-+# See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104028
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_104028),y)
-+HIGHWAY_CXXFLAGS += -O0
-+endif
-+
-+HIGHWAY_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="$(HIGHWAY_CXXFLAGS)"
++LIBJXL_CONF_OPTS = \
++	-DJPEGXL_BUNDLE_LIBPNG=OFF \
++	-DJPEGXL_BUNDLE_SKCMS=OFF \
++	-DJPEGXL_ENABLE_DOXYGEN=OFF \
++	-DJPEGXL_ENABLE_JNI=OFF \
++	-DJPEGXL_ENABLE_MANPAGES=OFF \
++	-DJPEGXL_ENABLE_OPENEXR=OFF \
++	-DJPEGXL_ENABLE_SJPEG=OFF \
++	-DJPEGXL_ENABLE_SKCMS=OFF
 +
 +$(eval $(cmake-package))
-diff --git a/support/testing/tests/package/test_highway.py b/support/testing/tests/package/test_highway.py
+diff --git a/support/testing/tests/package/test_libjxl.py b/support/testing/tests/package/test_libjxl.py
 new file mode 100644
-index 0000000000..f32363e26f
+index 0000000000..b6d5ffc9ce
 --- /dev/null
-+++ b/support/testing/tests/package/test_highway.py
-@@ -0,0 +1,22 @@
++++ b/support/testing/tests/package/test_libjxl.py
+@@ -0,0 +1,53 @@
 +import os
 +
 +import infra.basetest
 +
 +
-+class TestHighway(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++class TestLibJXL(infra.basetest.BRTest):
++    # infra.basetest.BASIC_TOOLCHAIN_CONFIG is not used as it is armv5
++    # and the image encoding would take too long (several minutes).
++    # We also add GraphicsMagick to generate and compare images for
++    # the test.
++    config = \
 +        """
-+        BR2_PACKAGE_HIGHWAY=y
-+        BR2_PACKAGE_HIGHWAY_EXAMPLES=y
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.79"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 +        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
 +        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_GRAPHICSMAGICK=y
++        BR2_PACKAGE_LIBJXL=y
 +        """
 +
 +    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M", "-initrd", img])
 +        self.emulator.login()
 +
-+        self.assertRunOk("hwy_benchmark", timeout=20)
++        ref = "/var/tmp/reference.ppm"
++        jxl = "/var/tmp/encoded.jxl"
++        dec = "/var/tmp/decoded.ppm"
++
++        cmd = "gm convert IMAGE:LOGO {}".format(ref)
++        self.assertRunOk(cmd)
++
++        cmd = "cjxl {} {}".format(ref, jxl)
++        self.assertRunOk(cmd, timeout=30)
++
++        cmd = "djxl {} {}".format(jxl, dec)
++        self.assertRunOk(cmd)
++
++        cmd = "gm compare -metric mse -maximum-error 1e-3 {} {}".format(
++            ref, dec)
++        self.assertRunOk(cmd)
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 01215e0e96..08e4ccad9e 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -141,6 +141,11 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_68485
+ 	bool
+ 	default y if BR2_microblaze
+ 
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81426
++config BR2_TOOLCHAIN_HAS_GCC_BUG_81426
++	bool
++	default y if BR2_sh
++
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83143
+ # Error: invalid operands (*UND* and .text sections) for `-' on sh4.
+ # This bug no longer exists in gcc 10.x but reappeared on gcc 11.x and
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
