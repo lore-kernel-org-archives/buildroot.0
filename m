@@ -1,72 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 555BFC61DA4
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 05:20:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 651C7C05027
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 06:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B9A9416B5;
-	Tue, 14 Feb 2023 05:20:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B9A9416B5
+	by smtp3.osuosl.org (Postfix) with ESMTP id A50AC60FEA;
+	Tue, 14 Feb 2023 06:38:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A50AC60FEA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T553FVq1AHhn; Tue, 14 Feb 2023 05:20:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c3W7hDXA7KmM; Tue, 14 Feb 2023 06:38:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B2AB41621;
-	Tue, 14 Feb 2023 05:20:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B2AB41621
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B4F481BF34B
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 05:20:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B998160E22;
+	Tue, 14 Feb 2023 06:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B998160E22
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 114F81BF307
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 06:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F6E840272
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 05:20:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F6E840272
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC26780F04
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 06:38:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC26780F04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KM_RBCjYK7cE for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 05:20:41 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 204AF400C4
-Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 204AF400C4
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 05:20:40 +0000 (UTC)
-Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1pRnk5-0002rD-IZ; Tue, 14 Feb 2023 08:20:37 +0300
-Message-ID: <1c1cf3a6-fb4a-fa1c-dd09-29c0ac1a23c1@inbox.ru>
-Date: Tue, 14 Feb 2023 08:20:37 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eCbWucL0LgD7 for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 06:38:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AC2280DB9
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com
+ [IPv6:2607:f8b0:4864:20::e2d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8AC2280DB9
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 06:38:34 +0000 (UTC)
+Received: by mail-vs1-xe2d.google.com with SMTP id g8so15543366vso.3
+ for <buildroot@buildroot.org>; Mon, 13 Feb 2023 22:38:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1676356713;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=aMzsxJpamRXTMZYt3btmDZfgMeedLd1wjUTp5M67yVY=;
+ b=L2hC3HH03tKGew7v/62NBbSoRl5F4VcJsU5Az9xp46RLT/a1+BifaENst01o7EnX2n
+ vQUen9CaYwJkmwVL95jPdaS+zG1b+fYw34GgiaWGmuSVYxf7Bb1dKodMIssb/JhnKFkz
+ iuODs+JXOdudFNaUybNXyDslbpVDZ1EJMQIMgUWthBg1kzA/s6v9Gm1zhjT0dnZFtt8X
+ 9Mx9GaIKPgftGYveZo0dVDwJJrrlkXlJHV3WvABT8JSNvsvVxfSisHHO0rvmFzHC9NpI
+ j3cwXedsf2OLiDD9jVk1+D3/K2sIFprimnOLhhPJ6Jdi0SAJr4vd4e5b8/TOiBKScge6
+ wnIw==
+X-Gm-Message-State: AO0yUKVZgj9Uec1gIbWNAsLNKtIs+8bdBf8U2rd3Ihh0/aKCyav8Xn7c
+ ueRzNNAtcURFjEtmfFL3FAlDtoP963SoNiuTdTH0yX3z0Dw=
+X-Google-Smtp-Source: AK7set+c/yunzXy2A6b+XaIIKWW870Ic2rL01Bu2X0w65ynpjIuQjr0MLZahpo62rOS+09RRCJ460h38WtqkfrGKPyE=
+X-Received: by 2002:a67:c808:0:b0:412:5092:4e1b with SMTP id
+ u8-20020a67c808000000b0041250924e1bmr138302vsk.36.1676356712854; Mon, 13 Feb
+ 2023 22:38:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20230213181217.908103-1-fontaine.fabrice@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20230213181217.908103-1-fontaine.fabrice@gmail.com>
-X-Mailru-Src: smtp
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD9806C989EC2150E33181E03CED8DE9BF6D6EE14565F1E5870182A05F538085040EC5BFCDA8738BD0495D14CC6C589C262F751C277233084E75485BF0B6DC5E796
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7370F4F695FFFC24BEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006370CE4B4B08BC34B6C8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8C1FF90F79B5D9886FC52835BFB457A0E6F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE759A2DA0C93DFCD719FA2833FD35BB23D9E625A9149C048EE7B96B19DC4093321618001F51B5FD3F9D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8BE2A68AC901FE7BE8A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7CE31A2885C41F97C443847C11F186F3C59DAA53EE0834AAEE
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34F1ADD4D8CD3C81CE5851A77E30640FF29DDCAD52F7D2B708E7AB69E1814B572E6D7E6099AEBB22511D7E09C32AA3244C348613BF304B0AD9EB0DF98313AD3EF763871F383B54D9B3729B2BEF169E0186
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojgB/I+mAIlFF33w0dLsOwjA==
-X-Mailru-Sender: 689FA8AB762F73933AF1F914F131DBF5B07E76836255B62E91DF32C45FAFFAFD98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; s=mail4; 
- h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=M9RSSlpYv5WlFJat8yyxf16t5VL1IBNKogUxp7aGa1A=; 
- t=1676352041;x=1676442041; 
- b=CkXP7Uilyzi5zMF0cjrDW61jAtbCIEptI/N96Vxly8fuQ90WD+r4YrcMnJ3oXaZ64K+tc9mM7F5PnktJlAjYhTnURGWsth4TiSBGnzguG2XJTSdlMl2jqH0iZIJZfAvgmyHTmCjYW/hAujytmUjM+IjNSZk9cX7e6IH76D+x9KeGLASppu1FgyH5/7DSvZrDqrIQiU0aYa5UiODl6LqWEZESRIsq1jyL6B1HrSB0IczbxolhiUHIpQDmXUCJVsFDp1f3nNBxk5P2ClUoQ4NsF2xnzMcgSpgdvBUU4RgZ+mznzPn4XfLndwXb50OKO7ex12lCYA5wSMJjH4hz+NV37Q==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
- header.a=rsa-sha256 header.s=mail4 header.b=CkXP7Uil
-X-Mailman-Original-Authentication-Results: smtpng1.m.smailru.net; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: fix legal info
+References: <20230130104308.483243-1-marcus.folkesson@gmail.com>
+In-Reply-To: <20230130104308.483243-1-marcus.folkesson@gmail.com>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Tue, 14 Feb 2023 07:38:21 +0100
+Message-ID: <CAM8FrKJbGWDCB66E50cSYDG=AjLJH1UXK3jRgOv2nFTZMfGgfg@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112; t=1676356713;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=aMzsxJpamRXTMZYt3btmDZfgMeedLd1wjUTp5M67yVY=;
+ b=l3DWiH+Sda1CkyrEdAPquqm2Gos6vv68KT2IPP7/WYF4lGObKCs4on4fjJTKMKTMST
+ Ti73aAc53AxZFrY4fz3b/Z+XEYw5g3n479QaZ9Vud21txFfyZPIBHGYTqz7B2sjPcUFX
+ FW/ejicbRCt2a3Ce1T05wiLoy/FXSNQZDuUCZtOY00NU09Vj37WNQArKlw9EMYVIw7Es
+ i4B0msF2QC/rfWZ/wOE/j3HNiBjbcb6E8bSzk28EWyNUX9ZpkC8+1slf/r+NboiY3wWx
+ CU6OdKwIXrb40oQNaX+5ErDQaKdlOuD9ieLLYXJw6ubaYPb5R2CiHYT+LIYilhhHerms
+ 4Cgw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=l3DWiH+S
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/pkg-kconfig.mk new
+ <pkg>-show-fragment target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,40 +90,210 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: multipart/mixed; boundary="===============5868932697778380358=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============5868932697778380358==
+Content-Type: multipart/alternative; boundary="00000000000062f70205f4a33678"
 
+--00000000000062f70205f4a33678
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 13.02.2023 21:12, Fabrice Fontaine wrote:
-> Commit 57e297a215193c92f6a178139db53616f2ee23b5 forgot to update hash of
-> COPYRIGHT file (year updated with
-> https://github.com/postgres/postgres/commit/1fbcb1360bc19b89369209203ea7cc19b8cde224)
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/93f40dc71619745ddc6741598c9a488c81ea440f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Ping
+
+Den m=C3=A5n 30 jan. 2023 kl 11:43 skrev Marcus Folkesson <
+marcus.folkesson@gmail.com>:
+
+> This patch introduce the new target to simplify the generation of
+> configuration fragments as the output could be directly copied into a
+> fragment file as-is.
+>
+> It is *heavily* based on the <pkg>-diff-config target, but serves a
+> different purpose.
+>
+> Output from linux-diff-config:
+> -CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK y
+> -CONFIG_GCC_PLUGIN_CYC_COMPLEXITY n
+> -CONFIG_GCC_PLUGIN_LATENT_ENTROPY n
+> -CONFIG_GCC_PLUGIN_RANDSTRUCT n
+> -CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF n
+> -CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL n
+> -CONFIG_GCC_PLUGIN_STRUCTLEAK_USER n
+> -CONFIG_STACKPROTECTOR_PER_TASK y
+> CONFIG_CRYPTO_DH n -> y
+> CONFIG_CRYPTO_KPP m -> y
+> CONFIG_GCC_PLUGINS y -> n
+> CONFIG_KEY_DH_OPERATIONS n -> y
+> CONFIG_PKCS8_PRIVATE_KEY_PARSER n -> y
+> CONFIG_VIDEO_IMX274 n -> m
+>
+> Output from linux-show-fragment:
+> CONFIG_CRYPTO_DH=3Dy
+> CONFIG_CRYPTO_KPP=3Dy
+> CONFIG_KEY_DH_OPERATIONS=3Dy
+> CONFIG_PKCS8_PRIVATE_KEY_PARSER=3Dy
+> CONFIG_VIDEO_IMX274=3Dm
+>
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 > ---
->   package/postgresql/postgresql.hash | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-> index e6a9bd6658..3e89d3ec35 100644
-> --- a/package/postgresql/postgresql.hash
-> +++ b/package/postgresql/postgresql.hash
-> @@ -1,4 +1,4 @@
->   # From https://ftp.postgresql.org/pub/source/v15.2/postgresql-15.2.tar.bz2.sha256
->   sha256  99a2171fc3d6b5b5f56b757a7a3cb85d509a38e4273805def23941ed2b8468c7  postgresql-15.2.tar.bz2
->   # License file, Locally calculated
-> -sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-> +sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
+>  package/pkg-kconfig.mk | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index f4f35bf96a..ee96525c47 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -309,12 +309,26 @@ $(1)-diff-config: $(1)-check-configuration-done
+>         $$(Q)cp -a $$($(2)_DIR)/.config.dc.bak
+> $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
+>         $$(Q)rm -f $$($(2)_DIR)/.config.dc.bak
+>
+> +# Target to output differences between the configuration obtained via th=
+e
+> +# defconfig + fragments (if any) and the current configuration.
+> +# Output format is suitable to be used as-is in fragment files.
+> +# Note: it preserves the timestamp of the current configuration when
+> moving it
+> +# around.
+> +$(1)-show-fragment: $(1)-check-configuration-done
+> +       $$(Q)cp -a $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
+> $$($(2)_DIR)/.config.dc.bak
+> +       $$(call
+> kconfig-package-merge-config,$(2),$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)=
+,\
+> +               $$($(2)_KCONFIG_FRAGMENT_FILES))
+> +       $$(Q)utils/diffconfig -m $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) =
+\
+> +                $$($(2)_DIR)/.config.dc.bak
+> +       $$(Q)cp -a $$($(2)_DIR)/.config.dc.bak
+> $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
+> +       $$(Q)rm -f $$($(2)_DIR)/.config.dc.bak
+>
+>  endif # package enabled
+>
+>  .PHONY: \
+>         $(1)-diff-config \
+>         $(1)-check-configuration-done \
+> +       $(1)-show-fragment \
+>         $$($(2)_DIR)/.kconfig_editor_% \
+>         $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS))
+>
+> --
+> 2.38.1
+>
+>
+
+--00000000000062f70205f4a33678
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Ping</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
+class=3D"gmail_attr">Den m=C3=A5n 30 jan. 2023 kl 11:43 skrev Marcus Folkes=
+son &lt;<a href=3D"mailto:marcus.folkesson@gmail.com">marcus.folkesson@gmai=
+l.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
+px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">T=
+his patch introduce the new target to simplify the generation of<br>
+configuration fragments as the output could be directly copied into a<br>
+fragment file as-is.<br>
+<br>
+It is *heavily* based on the &lt;pkg&gt;-diff-config target, but serves a<b=
+r>
+different purpose.<br>
+<br>
+Output from linux-diff-config:<br>
+-CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK y<br>
+-CONFIG_GCC_PLUGIN_CYC_COMPLEXITY n<br>
+-CONFIG_GCC_PLUGIN_LATENT_ENTROPY n<br>
+-CONFIG_GCC_PLUGIN_RANDSTRUCT n<br>
+-CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF n<br>
+-CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL n<br>
+-CONFIG_GCC_PLUGIN_STRUCTLEAK_USER n<br>
+-CONFIG_STACKPROTECTOR_PER_TASK y<br>
+CONFIG_CRYPTO_DH n -&gt; y<br>
+CONFIG_CRYPTO_KPP m -&gt; y<br>
+CONFIG_GCC_PLUGINS y -&gt; n<br>
+CONFIG_KEY_DH_OPERATIONS n -&gt; y<br>
+CONFIG_PKCS8_PRIVATE_KEY_PARSER n -&gt; y<br>
+CONFIG_VIDEO_IMX274 n -&gt; m<br>
+<br>
+Output from linux-show-fragment:<br>
+CONFIG_CRYPTO_DH=3Dy<br>
+CONFIG_CRYPTO_KPP=3Dy<br>
+CONFIG_KEY_DH_OPERATIONS=3Dy<br>
+CONFIG_PKCS8_PRIVATE_KEY_PARSER=3Dy<br>
+CONFIG_VIDEO_IMX274=3Dm<br>
+<br>
+Signed-off-by: Marcus Folkesson &lt;<a href=3D"mailto:marcus.folkesson@gmai=
+l.com" target=3D"_blank">marcus.folkesson@gmail.com</a>&gt;<br>
+---<br>
+=C2=A0package/<a href=3D"http://pkg-kconfig.mk" rel=3D"noreferrer" target=
+=3D"_blank">pkg-kconfig.mk</a> | 14 ++++++++++++++<br>
+=C2=A01 file changed, 14 insertions(+)<br>
+<br>
+diff --git a/package/<a href=3D"http://pkg-kconfig.mk" rel=3D"noreferrer" t=
+arget=3D"_blank">pkg-kconfig.mk</a> b/package/<a href=3D"http://pkg-kconfig=
+.mk" rel=3D"noreferrer" target=3D"_blank">pkg-kconfig.mk</a><br>
+index f4f35bf96a..ee96525c47 100644<br>
+--- a/package/<a href=3D"http://pkg-kconfig.mk" rel=3D"noreferrer" target=
+=3D"_blank">pkg-kconfig.mk</a><br>
++++ b/package/<a href=3D"http://pkg-kconfig.mk" rel=3D"noreferrer" target=
+=3D"_blank">pkg-kconfig.mk</a><br>
+@@ -309,12 +309,26 @@ $(1)-diff-config: $(1)-check-configuration-done<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 $$(Q)cp -a $$($(2)_DIR)/.config.dc.bak $$($(2)_=
+DIR)/$$($(2)_KCONFIG_DOTCONFIG)<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 $$(Q)rm -f $$($(2)_DIR)/.config.dc.bak<br>
+<br>
++# Target to output differences between the configuration obtained via the<=
+br>
++# defconfig + fragments (if any) and the current configuration.<br>
++# Output format is suitable to be used as-is in fragment files.<br>
++# Note: it preserves the timestamp of the current configuration when movin=
+g it<br>
++# around.<br>
++$(1)-show-fragment: $(1)-check-configuration-done<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0$$(Q)cp -a $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONF=
+IG) $$($(2)_DIR)/.config.dc.bak<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0$$(call kconfig-package-merge-config,$(2),$$($(=
+2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG),\<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$$($(2)_KCONFIG_FRA=
+GMENT_FILES))<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0$$(Q)utils/diffconfig -m $$($(2)_DIR)/$$($(2)_K=
+CONFIG_DOTCONFIG) \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $$($(2)_DIR)/.conf=
+ig.dc.bak<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0$$(Q)cp -a $$($(2)_DIR)/.config.dc.bak $$($(2)_=
+DIR)/$$($(2)_KCONFIG_DOTCONFIG)<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0$$(Q)rm -f $$($(2)_DIR)/.config.dc.bak<br>
+<br>
+=C2=A0endif # package enabled<br>
+<br>
+=C2=A0.PHONY: \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(1)-diff-config \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(1)-check-configuration-done \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0$(1)-show-fragment \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 $$($(2)_DIR)/.kconfig_editor_% \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS))<br=
+>
+<br>
+-- <br>
+2.38.1<br>
+<br>
+</blockquote></div>
+
+--00000000000062f70205f4a33678--
+
+--===============5868932697778380358==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5868932697778380358==--
