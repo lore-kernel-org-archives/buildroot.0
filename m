@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AABB1C05027
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FC13C05027
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:10:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D0E840BA8;
-	Tue, 14 Feb 2023 17:10:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D0E840BA8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 18D3540BC8;
+	Tue, 14 Feb 2023 17:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18D3540BC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7cs8zMOKgTEN; Tue, 14 Feb 2023 17:10:43 +0000 (UTC)
+	with ESMTP id 73eUdNE1WLrJ; Tue, 14 Feb 2023 17:10:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 691A140B9E;
-	Tue, 14 Feb 2023 17:10:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 691A140B9E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 949A81BF95C
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C64B40B92;
+	Tue, 14 Feb 2023 17:10:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C64B40B92
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E0221BF4DB
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 693B76059F
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 693B76059F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 718F340673
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 718F340673
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 89KbhgfX7lHz for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8omb6ItjM0s2 for <buildroot@lists.busybox.net>;
  Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89F5C60EA1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B09E4071E
  for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89F5C60EA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B09E4071E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8869B85E19; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
+ id 712EC85E1D; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 17:59:01 +0100
+Date: Tue, 14 Feb 2023 17:59:00 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fdc283c0b121d0d0f66ad927ce69059ef44bf62d
-X-Git-Newrev: 5f1df54d4d43053354749c3b8fe46c3755c746d8
+X-Git-Oldrev: ab94614e7d5b2076433aef665bc0186e4e477df9
+X-Git-Newrev: 016b0adec19704b3e28456a3f237c0a20d978fe4
 X-Patchwork-Hint: ignore
-Message-Id: <20230214170848.8869B85E19@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/freeswitch:
- security bump version to 1.10.9
+Message-Id: <20230214170848.712EC85E1D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/freeswitch: fix
+ build with libressl >= 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,71 +63,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f1df54d4d43053354749c3b8fe46c3755c746d8
+commit: https://git.buildroot.net/buildroot/commit/?id=016b0adec19704b3e28456a3f237c0a20d978fe4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Release notes:
-https://github.com/signalwire/freeswitch/releases/tag/v1.10.9
+Fix the following build failure with libressl raised since bump to
+version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 
-Upstream removed zrtp support:
-https://github.com/signalwire/freeswitch/pull/1848
+crypto/hash/hmac_ossl.c: In function 'srtp_hmac_alloc':
+crypto/hash/hmac_ossl.c:88:55: error: invalid application of 'sizeof' to incomplete type 'HMAC_CTX' {aka 'struct hmac_ctx_st'}
+   88 |         pointer = (uint8_t *)srtp_crypto_alloc(sizeof(HMAC_CTX) +
+      |                                                       ^~~~~~~~
+crypto/hash/hmac_ossl.c:97:9: warning: implicit declaration of function 'HMAC_CTX_init'; did you mean 'HMAC_CTX_new'? [-Wimplicit-function-declaration]
+   97 |         HMAC_CTX_init(new_hmac_ctx);
+      |         ^~~~~~~~~~~~~
+      |         HMAC_CTX_new
+crypto/hash/hmac_ossl.c: In function 'srtp_hmac_dealloc':
+crypto/hash/hmac_ossl.c:130:5: warning: implicit declaration of function 'HMAC_CTX_cleanup' [-Wimplicit-function-declaration]
+  130 |     HMAC_CTX_cleanup(hmac_ctx);
+      |     ^~~~~~~~~~~~~~~~
+crypto/hash/hmac_ossl.c:133:40: error: invalid application of 'sizeof' to incomplete type 'HMAC_CTX' {aka 'struct hmac_ctx_st'}
+  133 |     octet_string_set_to_zero(a, sizeof(HMAC_CTX) + sizeof(srtp_auth_t));
+      |                                        ^~~~~~~~
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 46683dd4a6e65b5ae3188440e9ae8eaf055d9a85)
+Fixes:
+ - http://autobuild.buildroot.org/results/e696ead9ffffa5bb80928d75607bfbb9b263d3c6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit e4a762bf7f1b5753730d73ccac9b059f79c81387)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freeswitch/freeswitch.hash |  5 ++---
- package/freeswitch/freeswitch.mk   | 11 +----------
- 2 files changed, 3 insertions(+), 13 deletions(-)
+ ...rypto-hash-hmac_ossl.c-fix-build-with-lib.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 18a36ff23c..3497a3283f 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,11 +1,10 @@
--# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.8.-release.tar.xz.sha256
--sha256  1176b26b2f463de2980e5be953f81ced94d23c784452bd41e086d3933a88be5f  freeswitch-1.10.8.-release.tar.xz
-+# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.9.-release.tar.xz.sha256
-+sha256  f649d53af7beccb59c1d03864cd8f2d287e4ea26ef652b5c4969d29121ced063  freeswitch-1.10.9.-release.tar.xz
- # Locally computed
- sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
- sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
- sha256  e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
- sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
- sha256  2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  libs/libyuv/LICENSE
--sha256  7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/libzrtp/src/zrtp_legal.c
- sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  libs/srtp/LICENSE
- sha256  ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/mod/codecs/mod_isac/LICENSE
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 6234dd8e97..7497cc4964 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREESWITCH_VERSION = 1.10.8
-+FREESWITCH_VERSION = 1.10.9
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
- FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
- # External modules need headers/libs from staging
-@@ -81,15 +81,6 @@ FREESWITCH_CONF_OPTS = \
- 	--without-python \
- 	--disable-system-xmlrpc-c
- 
--# zrtp supports a limited set of archs, sparc support is also broken due
--# to a broken ld call by gcc, see libs/libzrtp/include/zrtp_config.h
--ifeq ($(BR2_i386)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le)$(BR2_x86_64),y)
--FREESWITCH_LICENSE_FILES += libs/libzrtp/src/zrtp_legal.c
--FREESWITCH_CONF_OPTS += --enable-zrtp
--else
--FREESWITCH_CONF_OPTS += --disable-zrtp
--endif
--
- # Enable optional modules
- FREESWITCH_ENABLED_MODULES += \
- 	applications/mod_avmd \
+diff --git a/package/freeswitch/0003-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch b/package/freeswitch/0003-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
+new file mode 100644
+index 0000000000..eb717fc26d
+--- /dev/null
++++ b/package/freeswitch/0003-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
+@@ -0,0 +1,59 @@
++From c8cc6f1773ff370bb14bb963e2f632eef6d6a3c2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 12 May 2022 23:22:42 +0200
++Subject: [PATCH] libs/srtp/crypto/hash/hmac_ossl.c: fix build with libressl >=
++ 3.5.0
++
++Fix the following build failure with libressl >= 3.5.0:
++
++crypto/hash/hmac_ossl.c: In function 'srtp_hmac_alloc':
++crypto/hash/hmac_ossl.c:88:55: error: invalid application of 'sizeof' to incomplete type 'HMAC_CTX' {aka 'struct hmac_ctx_st'}
++   88 |         pointer = (uint8_t *)srtp_crypto_alloc(sizeof(HMAC_CTX) +
++      |                                                       ^~~~~~~~
++crypto/hash/hmac_ossl.c:97:9: warning: implicit declaration of function 'HMAC_CTX_init'; did you mean 'HMAC_CTX_new'? [-Wimplicit-function-declaration]
++   97 |         HMAC_CTX_init(new_hmac_ctx);
++      |         ^~~~~~~~~~~~~
++      |         HMAC_CTX_new
++crypto/hash/hmac_ossl.c: In function 'srtp_hmac_dealloc':
++crypto/hash/hmac_ossl.c:130:5: warning: implicit declaration of function 'HMAC_CTX_cleanup' [-Wimplicit-function-declaration]
++  130 |     HMAC_CTX_cleanup(hmac_ctx);
++      |     ^~~~~~~~~~~~~~~~
++crypto/hash/hmac_ossl.c:133:40: error: invalid application of 'sizeof' to incomplete type 'HMAC_CTX' {aka 'struct hmac_ctx_st'}
++  133 |     octet_string_set_to_zero(a, sizeof(HMAC_CTX) + sizeof(srtp_auth_t));
++      |                                        ^~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e696ead9ffffa5bb80928d75607bfbb9b263d3c6
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libs/srtp/crypto/hash/hmac_ossl.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/libs/srtp/crypto/hash/hmac_ossl.c b/libs/srtp/crypto/hash/hmac_ossl.c
++index 8146438b05..6730cbb35c 100644
++--- a/libs/srtp/crypto/hash/hmac_ossl.c
+++++ b/libs/srtp/crypto/hash/hmac_ossl.c
++@@ -79,7 +79,8 @@ static srtp_err_status_t srtp_hmac_alloc(srtp_auth_t **a,
++ 
++ /* OpenSSL 1.1.0 made HMAC_CTX an opaque structure, which must be allocated
++    using HMAC_CTX_new.  But this function doesn't exist in OpenSSL 1.0.x. */
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+++	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
++     {
++         /* allocate memory for auth and HMAC_CTX structures */
++         uint8_t *pointer;
++@@ -125,7 +126,8 @@ static srtp_err_status_t srtp_hmac_dealloc(srtp_auth_t *a)
++ 
++     hmac_ctx = (HMAC_CTX *)a->state;
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+++	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
++     HMAC_CTX_cleanup(hmac_ctx);
++ 
++     /* zeroize entire state*/
++-- 
++2.35.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
