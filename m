@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AF7BC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 299DFC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E339700BC;
-	Tue, 21 Feb 2023 01:58:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E339700BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC342700D1;
+	Tue, 21 Feb 2023 01:59:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC342700D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MUwbN-9BMfrq; Tue, 21 Feb 2023 01:58:57 +0000 (UTC)
+	with ESMTP id plNpkIkNo_qk; Tue, 21 Feb 2023 01:59:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89BDD701E1;
-	Tue, 21 Feb 2023 01:58:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89BDD701E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0351C7020D;
+	Tue, 21 Feb 2023 01:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0351C7020D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 938861BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 39B481BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5E6A7001C
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBD5E70028
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5E6A7001C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBD5E70028
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IhtBbJyLg6C4 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+ with ESMTP id nw2cGbUQDBmj for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01F2C70000
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5BC87002D
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01F2C70000
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5BC87002D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E20FD8648F; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+ id BF4628648F; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:14:21 +0100
+Date: Tue, 14 Feb 2023 18:12:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3cd0132561ecfb471d76409f40aa565612f10208
-X-Git-Newrev: 38101cea6ed695901ec54e52ae3db528f5e19979
+X-Git-Oldrev: e2b70aa9492517717f948f199e99f055a5c1dde1
+X-Git-Newrev: 4231054b05436978795267330202f72be0d3a4d4
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.E20FD8648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dnsmasq: bump version
- to 2.89
+Message-Id: <20230220205259.BF4628648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/apr-util: security
+ bump to version 1.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38101cea6ed695901ec54e52ae3db528f5e19979
+commit: https://git.buildroot.net/buildroot/commit/?id=4231054b05436978795267330202f72be0d3a4d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Tested-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+*) SECURITY: CVE-2022-25147 (cve.mitre.org)
+   Integer Overflow or Wraparound vulnerability in apr_base64 functions
+   of Apache Portable Runtime Utility (APR-util) allows an attacker to
+   write beyond bounds of a buffer.
+
+https://downloads.apache.org/apr/Announcement-aprutil-1.x.html
+https://downloads.apache.org/apr/CHANGES-APR-UTIL-1.6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dnsmasq/dnsmasq.hash | 4 ++--
- package/dnsmasq/dnsmasq.mk   | 2 +-
+ package/apr-util/apr-util.hash | 4 ++--
+ package/apr-util/apr-util.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index fd015d38ac..02ffb2656b 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.88.tar.xz.asc
--sha256  23544deda10340c053bea6f15a93fed6ea7f5aaa85316bfc671ffa6d22fbc1b3  dnsmasq-2.88.tar.xz
-+# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.89.tar.xz.asc
-+sha256  02bd230346cf0b9d5909f5e151df168b2707103785eb616b56685855adebb609  dnsmasq-2.89.tar.xz
+diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
+index 59ef590109..7e2793cd77 100644
+--- a/package/apr-util/apr-util.hash
++++ b/package/apr-util/apr-util.hash
+@@ -1,4 +1,4 @@
+-# From http://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256
+-sha256  d3e12f7b6ad12687572a3a39475545a072608f4ba03a6ce8a3778f607dd0035b  apr-util-1.6.1.tar.bz2
++# From http://www.apache.org/dist/apr/apr-util-1.6.3.tar.bz2.sha256
++sha256  a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5  apr-util-1.6.3.tar.bz2
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 3945e4256a..58c5390433 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
+ sha256  ef5609d18601645ad6fe22c6c122094be40e976725c1d0490778abacc836e7a2  LICENSE
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index fb0735f5e7..02b6d5e277 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DNSMASQ_VERSION = 2.88
-+DNSMASQ_VERSION = 2.89
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+-APR_UTIL_VERSION = 1.6.1
++APR_UTIL_VERSION = 1.6.3
+ APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
+ APR_UTIL_SITE = https://archive.apache.org/dist/apr
+ APR_UTIL_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
