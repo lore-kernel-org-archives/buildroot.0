@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28D6AC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AF7BC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC51770104;
-	Tue, 21 Feb 2023 01:58:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC51770104
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E339700BC;
+	Tue, 21 Feb 2023 01:58:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E339700BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cB8eJj02Xd0k; Tue, 21 Feb 2023 01:58:45 +0000 (UTC)
+	with ESMTP id MUwbN-9BMfrq; Tue, 21 Feb 2023 01:58:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED3D170209;
-	Tue, 21 Feb 2023 01:58:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED3D170209
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89BDD701E1;
+	Tue, 21 Feb 2023 01:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89BDD701E1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E99E21BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 938861BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B13F070037
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5E6A7001C
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B13F070037
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5E6A7001C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PoTdJbGOui9A for <buildroot@lists.busybox.net>;
+ with ESMTP id IhtBbJyLg6C4 for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6ADB7002E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01F2C70000
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6ADB7002E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01F2C70000
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D509681979; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+ id E20FD8648F; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:13:18 +0100
+Date: Tue, 14 Feb 2023 18:14:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 89fa774a191d41ed5d125d87d812ff3478902251
-X-Git-Newrev: 3cd0132561ecfb471d76409f40aa565612f10208
+X-Git-Oldrev: 3cd0132561ecfb471d76409f40aa565612f10208
+X-Git-Newrev: 38101cea6ed695901ec54e52ae3db528f5e19979
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.D509681979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/postgresql: fix legal
- info
+Message-Id: <20230220205259.E20FD8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dnsmasq: bump version
+ to 2.89
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cd0132561ecfb471d76409f40aa565612f10208
+commit: https://git.buildroot.net/buildroot/commit/?id=38101cea6ed695901ec54e52ae3db528f5e19979
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 57e297a215193c92f6a178139db53616f2ee23b5 forgot to update hash of
-COPYRIGHT file (year updated with
-https://github.com/postgres/postgres/commit/1fbcb1360bc19b89369209203ea7cc19b8cde224)
-
-Fixes:
- - http://autobuild.buildroot.org/results/93f40dc71619745ddc6741598c9a488c81ea440f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Tested-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index e6a9bd6658..3e89d3ec35 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.postgresql.org/pub/source/v15.2/postgresql-15.2.tar.bz2.sha256
- sha256  99a2171fc3d6b5b5f56b757a7a3cb85d509a38e4273805def23941ed2b8468c7  postgresql-15.2.tar.bz2
- # License file, Locally calculated
--sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-+sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index fd015d38ac..02ffb2656b 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.88.tar.xz.asc
+-sha256  23544deda10340c053bea6f15a93fed6ea7f5aaa85316bfc671ffa6d22fbc1b3  dnsmasq-2.88.tar.xz
++# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.89.tar.xz.asc
++sha256  02bd230346cf0b9d5909f5e151df168b2707103785eb616b56685855adebb609  dnsmasq-2.89.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 3945e4256a..58c5390433 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.88
++DNSMASQ_VERSION = 2.89
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
