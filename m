@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB4F8C61DA4
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 15:33:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 388A7C05027
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 15:34:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A6EA415EF;
-	Tue, 14 Feb 2023 15:33:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A6EA415EF
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEF0441610;
+	Tue, 14 Feb 2023 15:34:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEF0441610
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kEj3axmiD-0u; Tue, 14 Feb 2023 15:33:27 +0000 (UTC)
+	with ESMTP id H3M7HaILKmsC; Tue, 14 Feb 2023 15:34:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FBBE40922;
-	Tue, 14 Feb 2023 15:33:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FBBE40922
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9478A415EF;
+	Tue, 14 Feb 2023 15:34:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9478A415EF
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2055C1BF94D
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 15:33:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5F4891BF852
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 15:34:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BC28E40BB0
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 15:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC28E40BB0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4768F40B76
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 15:34:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4768F40B76
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rSnslUeJmFZr for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 15:33:08 +0000 (UTC)
+ with ESMTP id W-4uwzbXngMz for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 15:34:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8AC1740B79
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 15:33:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AC1740B79
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D42D40B7B
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 15:34:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D42D40B7B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6BAEC85D7B; Tue, 14 Feb 2023 15:33:07 +0000 (UTC)
+ id 6C24285D87; Tue, 14 Feb 2023 15:34:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 16:31:43 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 594acef246416a0b95452db393765ff60e37d662
-X-Git-Newrev: 01e97d849ead68fbc8521e84499f21b4154681de
+Date: Tue, 14 Feb 2023 16:32:10 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: a74860f35d9887cdc397659f56f27940bca787d1
+X-Git-Newrev: 782f193f0fd48a39335ba5321ed76310a7a9a048
 X-Patchwork-Hint: ignore
-Message-Id: <20230214153307.6BAEC85D7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/c-ares: security
+Message-Id: <20230214153421.6C24285D87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/c-ares: security
  bump to version 1.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01e97d849ead68fbc8521e84499f21b4154681de
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=782f193f0fd48a39335ba5321ed76310a7a9a048
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Low. Stack overflow in ares_set_sortlist() which is used during c-ares
 initialization and typically provided by an administrator and not an end
