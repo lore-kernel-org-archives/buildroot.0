@@ -4,94 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CACE0C6379F
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 21:25:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7652C6379F
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 21:27:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 695AC60F9C;
-	Tue, 14 Feb 2023 21:25:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 695AC60F9C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B4F660FAD;
+	Tue, 14 Feb 2023 21:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B4F660FAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WckaHwHCZDWu; Tue, 14 Feb 2023 21:25:07 +0000 (UTC)
+	with ESMTP id YyxqF4KSoZo7; Tue, 14 Feb 2023 21:27:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B36D360DFF;
-	Tue, 14 Feb 2023 21:25:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B36D360DFF
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEA9860F99;
+	Tue, 14 Feb 2023 21:27:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEA9860F99
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5605C1BF2B3
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:25:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2D0281BF2B3
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DBF5408C1
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:25:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DBF5408C1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13DE7408C1
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13DE7408C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F-70dTIhtAv7 for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 21:25:04 +0000 (UTC)
+ with ESMTP id 7euX4wuf3Hnb for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 21:27:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F12D940894
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F12D940894
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 21:25:03 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id gn39so5070671ejc.8
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 13:25:03 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CD6540894
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1CD6540894
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 21:27:41 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id jg8so43421778ejc.6
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 13:27:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:references:cc:to:from
+ h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=KXyd8PKvb7bOQfXU/IVIIHhDZ/ojeTheAjs0gcGv/Fo=;
- b=rryOGbpNh/iDILICH4s/0+PaHnvnnD+F0Tunm3lZPAGlmPYJ1xKu+WayUw1vTN9FzI
- ns0f9Ij/7OkseAazZksAtTK+k2eqJkKfPIHifkDWEhXqjf4gUIN4sKFYrOtYd/01RKtc
- UIuxVHfdaFTo5DSEakEsYUHKr7yzEQYhULVaWzcjquIVDeiGo+MLmbLB+atGP0GzRXnB
- fsfIP7fsq7Uzn0PehnO8Pqxws4+n92Ks4H5QLuiSLKyOj3C8xLxGQYbnCxa61CbufhRI
- esSd/KA8sIhI0V11kGD9y6Ovu9v9RCP/TtYcoOY5/9UL3NRxNjXUKKj07KbdcbUELDEy
- 91mQ==
-X-Gm-Message-State: AO0yUKWNSPdF5Hh/CgwD8H8tsx3D0QFz8zdUvDxqAXL9w30IfaMtlK7i
- OjEijvlk5LDEm/W3aE1aTKRcXQ==
-X-Google-Smtp-Source: AK7set9mk19wVJHwHlpifuSaFwBOSUiaXVvkHftZHhuc/QBypnns+AIb6Dso0T4H9bVerxfEP/HHHQ==
-X-Received: by 2002:a17:906:a951:b0:8af:2cf7:dd2b with SMTP id
- hh17-20020a170906a95100b008af2cf7dd2bmr4992114ejb.13.1676409902080; 
- Tue, 14 Feb 2023 13:25:02 -0800 (PST)
+ bh=EWB3l4yswHdJ5idHgm1aKHGqo3cyZ1IQmkao+te4I7c=;
+ b=hqLCfuBGaEqeU9Oh28+sALdPkIZyCRWJotvfL8xUwhqjtwG4Yzw2ZrzXA+CH5dyIYk
+ Tki/YwEMMG0jFPXiPHAvfe76eSTZUINo3BwIfW0J3rUvLTvMfu1vS6pL/KbSGlDz2VId
+ GXpsrklyJOwaGeKF+gGYU6Se7z9p7WnAGeNGHb2Jj67Js+AvUoRzyxfoKZMek4B3FyxZ
+ /Lixqp7jIfvRQhIAIypito9ckdyoT1dysEyjht8gpsJRBQkaag5fGjHP/3Tgh94NnMDP
+ dfQA8AX5x2lnTTKybQbsPgKmfsUMtykmTEClsyS1knRQHr17AunpNUsr+qW/DjILGj5b
+ Mo5g==
+X-Gm-Message-State: AO0yUKXrjclHW6Rc1mIzZG56NWGqaNwhQycuamQYwPVqyNsGo5uMYqfU
+ 2m1XWFwKMjPzvQ0tV59pVcuLfOqyFtwrAqZ4
+X-Google-Smtp-Source: AK7set9wD+PWphuIiO05fPE5N6Dyn7KB2voxgucztewk6dI+862C2wh0leMzAFymqTSXObsCkaHxpg==
+X-Received: by 2002:a17:906:4dcf:b0:8b1:3135:a63b with SMTP id
+ f15-20020a1709064dcf00b008b13135a63bmr3725502ejw.9.1676410060252; 
+ Tue, 14 Feb 2023 13:27:40 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- s22-20020a170906c31600b008b13823b892sm722616ejz.53.2023.02.14.13.25.00
+ y25-20020a1709064b1900b008b05b21e8aesm5842441eju.172.2023.02.14.13.27.39
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Feb 2023 13:25:01 -0800 (PST)
-Message-ID: <e5f2f930-d17f-a2e7-6c8b-0d59d2379ecf@mind.be>
-Date: Tue, 14 Feb 2023 22:24:58 +0100
+ Tue, 14 Feb 2023 13:27:39 -0800 (PST)
+Message-ID: <91a00522-fc54-e631-5598-158a0aaf7d0c@mind.be>
+Date: Tue, 14 Feb 2023 22:27:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
 Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20230211184346.1192333-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>
-References: <20221018034605.800593-1-james.hilliard1@gmail.com>
- <20230212094205.GK2796@scaer> <7d630b5f-69b3-6129-2426-7e9b7499f6d3@mind.be>
-In-Reply-To: <7d630b5f-69b3-6129-2426-7e9b7499f6d3@mind.be>
+In-Reply-To: <20230211184346.1192333-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:references:cc:to:from
+ h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=KXyd8PKvb7bOQfXU/IVIIHhDZ/ojeTheAjs0gcGv/Fo=;
- b=KvWkGeNcrSQK46vx6ZhkuK8epYCekVSUpilqq5ZideXJlBR/q+B/Yf1QEJcI3o3vHq
- WKCsgTkadhoSRcP5nw9MiLgaRFIW2nVeLLKU3tz93ArSZhEfJAaLJXp0Iit6sXHX6gT1
- Xx/SqPD2crXijYqtPwULUQsCScJr7JgqDsHI7kfYXbqg2gXh9/g14Alw7HFwpU3DdUO5
- WryrfVNLtsFNLzsIXPgQ3T22AuohgpJbXQvqu+/FB2bSXWBRcUtnOGg3S9ddDAWZjDB9
- 9TUs+nx0JXlTRpG8YnrWTzRZH3b/f2aSzFKZORx/32aVrtvSvjwDgXwdb+0fuDkvOVD9
- GJhQ==
+ bh=EWB3l4yswHdJ5idHgm1aKHGqo3cyZ1IQmkao+te4I7c=;
+ b=N3ImzWvRf87In2/d5FtvaoYy8hJhPYH5x6U0ibVptfeYqGpdkQ8z77fviBRhKB5Mmg
+ BTZM2tozpEbIIp0FEiZDZW0T2zgFCcmQFwtGFXg+L8JltLTvIzT9Qw6AqdTvvBUVngNh
+ yLnGss+NPNtXPEyVfr8ehBWLHgMe4GwtlNOx2XBiYowIuYpwVqeemmWVUtZnXmoGyYhk
+ i9kfP6IwESM4xHQHEME9UnLla+Gc6yP/SX/RFBZNjzH9o/W32zMDZN4aayD4UUuy5Zv4
+ /VAwROLSqBZMFI/L6qFz0XlDrxBRTJl74f563WhSMUKSWYlvHbB6TpT7fLptpCZ/KaAN
+ QMvA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KvWkGeNc
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix rule order
- for re{install, build, configure}
+ header.a=rsa-sha256 header.s=google header.b=N3ImzWvR
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: fix rule order for legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,37 +100,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ck9uIDE0LzAyLzIwMjMgMjI6MjIsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgpbMV0KPiDC
-oEkgbWF5IGJlIHN0dXBpZCwgYnV0IHdoYXQgd2Ugd2FudCBpcyB0byBoYXZlIGFuIG9yZGVyaW5n
-IGJldHdlZW4gCj4gY2xlYW4tZm9yLXJlaW5zdGFsbCBhbmQgJCgxKSwgcmlnaHQ/IFNvLCBsZXQn
-cyB1c2UgYW4gb3JkZXJpbmcgZGVwZW5kZW5jeT8KPgo+ICQoMSktcmVpbnN0YWxsOsKgwqDCoMKg
-wqDCoMKgICQoMSktY2xlYW4tZm9yLXJlaW5zdGFsbCAkKDEpCj4gJCgxKTrCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgJCgxKS1jbGVhbi1mb3ItcmVpbnN0YWxsCgoKIMKgR2FoLCBJIGZvcmdvdCB0
-aGUgYWN0dWFsIG9yZGVyLW9ubHkgYml0Li4uCgokKDEpLXJlaW5zdGFsbDrCoMKgICQoMSktY2xl
-YW4tZm9yLXJlaW5zdGFsbCAkKDEpCiQoMSk6wqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAkKDEpLWNs
-ZWFuLWZvci1yZWluc3RhbGwKCgogwqBSZWdhcmRzLAogwqBBcm5vdXQKCgo+Cj4KPiDCoFJlZ2Fy
-ZHMsCj4gwqBBcm5vdXQKPgo+Pj4gwqAgwqAgJCgxKS1jbGVhbi1mb3ItcmVidWlsZDogJCgxKS1j
-bGVhbi1mb3ItcmVpbnN0YWxsCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBybSAtZiAk
-JCgkKDIpX1RBUkdFVF9CVUlMRCkKPj4+IMKgIC0kKDEpLXJlYnVpbGQ6wqDCoMKgwqDCoMKgwqAg
-JCgxKS1jbGVhbi1mb3ItcmVidWlsZCAkKDEpCj4+PiArJCgxKS1yZWJ1aWxkOjrCoMKgwqDCoMKg
-wqDCoCAkKDEpLWNsZWFuLWZvci1yZWJ1aWxkCj4+PiArJCgxKS1yZWJ1aWxkOjrCoMKgwqDCoMKg
-wqDCoCAkKDEpCj4+PiDCoCDCoCAkKDEpLWNsZWFuLWZvci1yZWNvbmZpZ3VyZTogJCgxKS1jbGVh
-bi1mb3ItcmVidWlsZAo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcm0gLWYgJCQoJCgy
-KV9UQVJHRVRfQ09ORklHVVJFKQo+Pj4gwqAgLSQoMSktcmVjb25maWd1cmU6wqDCoMKgICQoMSkt
-Y2xlYW4tZm9yLXJlY29uZmlndXJlICQoMSkKPj4+ICskKDEpLXJlY29uZmlndXJlOjrCoMKgwqAg
-JCgxKS1jbGVhbi1mb3ItcmVjb25maWd1cmUKPj4+ICskKDEpLXJlY29uZmlndXJlOjrCoMKgwqAg
-JCgxKQo+Pj4gwqAgwqAgIyBkZWZpbmUgdGhlIFBLRyB2YXJpYWJsZSBmb3IgYWxsIHRhcmdldHMs
-IGNvbnRhaW5pbmcgdGhlCj4+PiDCoCAjIHVwcGVyY2FzZSBwYWNrYWdlIHZhcmlhYmxlIHByZWZp
-eAo+Pj4gLS0gCj4+PiAyLjM0LjEKPj4+Cj4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwo+Pj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+Pj4gYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKPj4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo+PgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+
+
+On 11/02/2023 19:43, James Hilliard wrote:
+> This command relies on the clean/prepare operations being in a
+> specific order.
+> 
+> Currently the execution ordering of the clean/prepare operations may
+> change, for example if --shuffle=reversed is set.
+> 
+> To ensure the evaluation order is always correct use double colon
+> rules to make the evaluation order explicit as per make docs:
+> 
+> The double-colon rules for a target are executed in the order they
+> appear in the makefile.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   Makefile | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 4880b426b5..09575a5e3c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -839,7 +839,9 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+>   	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+>   
+>   .PHONY: legal-info
+> -legal-info: legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
+> +legal-info:: legal-info-clean
+> +legal-info:: legal-info-prepare
+> +legal-info:: $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
+>   		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
+
+  Like for rebuild, reinstall, reconfigure I think the following should work:
+
+legal-info-prepare: | legal-info-clean
+$(1)-all-legal-info: | legal-info-prepare
+
+(the last one would be in pkg-generic instead of here, of course).
+
+Although in this case I think a full dependency should be even OK, so without the |
+
+  Regards,
+  Arnout
+
+>   	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
+>   	@if [ -r $(LEGAL_WARNINGS) ]; then \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
