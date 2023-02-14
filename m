@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E07B0C05027
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:10:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AABB1C05027
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:10:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9930B40BDA;
-	Tue, 14 Feb 2023 17:10:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9930B40BDA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D0E840BA8;
+	Tue, 14 Feb 2023 17:10:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D0E840BA8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kmY1MBqXQQxu; Tue, 14 Feb 2023 17:10:30 +0000 (UTC)
+	with ESMTP id 7cs8zMOKgTEN; Tue, 14 Feb 2023 17:10:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BAB6640BA2;
-	Tue, 14 Feb 2023 17:10:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAB6640BA2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8F45B1BF94D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 691A140B9E;
+	Tue, 14 Feb 2023 17:10:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 691A140B9E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 949A81BF95C
  for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7489B80E48
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7489B80E48
+ by smtp3.osuosl.org (Postfix) with ESMTP id 693B76059F
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 693B76059F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DAjzpwjjk_eG for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 89KbhgfX7lHz for <buildroot@lists.busybox.net>;
  Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7666880E46
+ by smtp3.osuosl.org (Postfix) with ESMTP id 89F5C60EA1
  for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7666880E46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89F5C60EA1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66F3F85E1A; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
+ id 8869B85E19; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 17:59:00 +0100
+Date: Tue, 14 Feb 2023 17:59:01 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a206365859d6c23ead253b8836f21f3e71318ce9
-X-Git-Newrev: ab94614e7d5b2076433aef665bc0186e4e477df9
+X-Git-Oldrev: fdc283c0b121d0d0f66ad927ce69059ef44bf62d
+X-Git-Newrev: 5f1df54d4d43053354749c3b8fe46c3755c746d8
 X-Patchwork-Hint: ignore
-Message-Id: <20230214170848.66F3F85E1A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/sofia-sip: bump
- version to 1.13.12
+Message-Id: <20230214170848.8869B85E19@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/freeswitch:
+ security bump version to 1.10.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab94614e7d5b2076433aef665bc0186e4e477df9
+commit: https://git.buildroot.net/buildroot/commit/?id=5f1df54d4d43053354749c3b8fe46c3755c746d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Switch to github helper due to lack of upstream-provided tarball.
+Release notes:
+https://github.com/signalwire/freeswitch/releases/tag/v1.10.9
 
-Needed for upcoming bump of freeswitch to version 1.10.9.
+Upstream removed zrtp support:
+https://github.com/signalwire/freeswitch/pull/1848
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8bb962724e3a76112b7c374ae6a1c4521f97cc65)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 46683dd4a6e65b5ae3188440e9ae8eaf055d9a85)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sofia-sip/sofia-sip.hash | 2 +-
- package/sofia-sip/sofia-sip.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/freeswitch/freeswitch.hash |  5 ++---
+ package/freeswitch/freeswitch.mk   | 11 +----------
+ 2 files changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index 776136bb15..4617725571 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 18a36ff23c..3497a3283f 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,11 +1,10 @@
+-# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.8.-release.tar.xz.sha256
+-sha256  1176b26b2f463de2980e5be953f81ced94d23c784452bd41e086d3933a88be5f  freeswitch-1.10.8.-release.tar.xz
++# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.9.-release.tar.xz.sha256
++sha256  f649d53af7beccb59c1d03864cd8f2d287e4ea26ef652b5c4969d29121ced063  freeswitch-1.10.9.-release.tar.xz
  # Locally computed
--sha256  daf75c41408c559c2d58a8fd4d39be4a8ff5144bc1db220d4dbc28deeed6670a  sofia-sip-1.13.9-f6ee306084.tar.gz
-+sha256  03dda8653367501b7b1188a6b6513416902372e27475553de9318ee89ac390ff  sofia-sip-1.13.12.tar.gz
- sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
- sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 9071d964e4..59c365365b 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -4,10 +4,11 @@
+ sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
+ sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
+ sha256  e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
+ sha256  2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  libs/libyuv/LICENSE
+-sha256  7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/libzrtp/src/zrtp_legal.c
+ sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  libs/srtp/LICENSE
+ sha256  ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/mod/codecs/mod_isac/LICENSE
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 6234dd8e97..7497cc4964 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SOFIA_SIP_VERSION = 1.13.9
--SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-f6ee306084.tar.gz
--SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs/sofia-sip
-+SOFIA_SIP_VERSION = 1.13.12
-+SOFIA_SIP_SITE = $(call github,freeswitch,sofia-sip,v$(SOFIA_SIP_VERSION))
- SOFIA_SIP_INSTALL_STAGING = YES
-+# Fetched from github, no pre-generated configure script provided
-+SOFIA_SIP_AUTORECONF = YES
- SOFIA_SIP_DEPENDENCIES = host-pkgconf
- SOFIA_SIP_LICENSE = LGPL-2.1+
- SOFIA_SIP_LICENSE_FILES = COPYING COPYRIGHTS
+-FREESWITCH_VERSION = 1.10.8
++FREESWITCH_VERSION = 1.10.9
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
+ FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
+@@ -81,15 +81,6 @@ FREESWITCH_CONF_OPTS = \
+ 	--without-python \
+ 	--disable-system-xmlrpc-c
+ 
+-# zrtp supports a limited set of archs, sparc support is also broken due
+-# to a broken ld call by gcc, see libs/libzrtp/include/zrtp_config.h
+-ifeq ($(BR2_i386)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le)$(BR2_x86_64),y)
+-FREESWITCH_LICENSE_FILES += libs/libzrtp/src/zrtp_legal.c
+-FREESWITCH_CONF_OPTS += --enable-zrtp
+-else
+-FREESWITCH_CONF_OPTS += --disable-zrtp
+-endif
+-
+ # Enable optional modules
+ FREESWITCH_ENABLED_MODULES += \
+ 	applications/mod_avmd \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
