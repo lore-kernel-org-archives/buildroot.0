@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6110BC05027
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 14:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5E92C61DA4
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 14:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5B69812CA;
-	Tue, 14 Feb 2023 14:02:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5B69812CA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58B1D81288;
+	Tue, 14 Feb 2023 14:02:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58B1D81288
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SwMErvvUtMTi; Tue, 14 Feb 2023 14:02:18 +0000 (UTC)
+	with ESMTP id pkGUC4nfEF2V; Tue, 14 Feb 2023 14:02:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FBC081288;
-	Tue, 14 Feb 2023 14:02:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FBC081288
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 694D01BF40E
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 14:02:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD13981E7C;
+	Tue, 14 Feb 2023 14:02:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD13981E7C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D414B1BF40E
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 14:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5165940B58
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 14:02:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5165940B58
+ by smtp3.osuosl.org (Postfix) with ESMTP id AED4760C22
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 14:02:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AED4760C22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2xsBK4PcAeaf for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 14:02:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uZFutkaelUhl for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 14:02:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1F6340B5A
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C1F6340B5A
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 14:02:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B49CA61133
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B49CA61133
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 14:02:14 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5A1A61BF21B;
- Tue, 14 Feb 2023 14:02:05 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id B4E432000A;
+ Tue, 14 Feb 2023 14:02:11 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pRvsi-003KMn-Cj; Tue, 14 Feb 2023 15:02:04 +0100
+ id 1pRvso-003KN1-Ou; Tue, 14 Feb 2023 15:02:10 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
 References: <20230117200821.2882597-1-bernd.kuhls@t-online.de>
- <20230117200821.2882597-2-bernd.kuhls@t-online.de>
-Date: Tue, 14 Feb 2023 15:02:04 +0100
-In-Reply-To: <20230117200821.2882597-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 17 Jan 2023 21:08:20 +0100")
-Message-ID: <87v8k48hwj.fsf@dell.be.48ers.dk>
+ <20230117200821.2882597-3-bernd.kuhls@t-online.de>
+Date: Tue, 14 Feb 2023 15:02:10 +0100
+In-Reply-To: <20230117200821.2882597-3-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 17 Jan 2023 21:08:21 +0100")
+Message-ID: <87r0us8hwd.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] package/kodi: fix openrisc build
+Subject: Re: [Buildroot] [PATCH 3/3] package/kodi: fix riscv build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,13 +75,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  > Fixes build error not yet found by autobuilders
  > -- System type: Linux
  > CMake Error at cmake/scripts/linux/ArchSetup.cmake:42 (message):
- >   Unknown CPU: or1k
+ >   Unknown CPU: riscv32
 
- > with this defconfig:
+ > using this defconfig:
 
- > BR2_or1k=y
+ > BR2_riscv=y
+ > BR2_RISCV_32=y
  > BR2_TOOLCHAIN_EXTERNAL=y
- > BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE=y
  > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
  > BR2_PACKAGE_KODI=y
  > BR2_PACKAGE_MESA3D=y
