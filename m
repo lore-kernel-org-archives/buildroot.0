@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EC6BC05027
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16108C05027
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D7A140BB2;
-	Tue, 14 Feb 2023 17:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D7A140BB2
+	by smtp2.osuosl.org (Postfix) with ESMTP id B9A4A40BCF;
+	Tue, 14 Feb 2023 17:09:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9A4A40BCF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H47wiXHjg9-2; Tue, 14 Feb 2023 17:09:15 +0000 (UTC)
+	with ESMTP id onX8g0QHM0fr; Tue, 14 Feb 2023 17:09:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 584B040BBF;
-	Tue, 14 Feb 2023 17:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 584B040BBF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 520301BF94D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 073E140BC8;
+	Tue, 14 Feb 2023 17:09:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 073E140BC8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 851BA1BF4DB
  for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2BF4960F1C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CFE080F2C
  for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BF4960F1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CFE080F2C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6MMlzSjz102A for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yq_g4VZd0vgf for <buildroot@lists.busybox.net>;
  Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C4B560C28
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2EDD80E48
  for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C4B560C28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2EDD80E48
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5CA4885E19; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
+ id 9434985E1A; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 17:59:00 +0100
+Date: Tue, 14 Feb 2023 18:06:56 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a3bc915b74ffecb71c53367f7daaec6a573b0417
-X-Git-Newrev: a206365859d6c23ead253b8836f21f3e71318ce9
+X-Git-Oldrev: 5f1df54d4d43053354749c3b8fe46c3755c746d8
+X-Git-Newrev: 39853c1211f3f7af063be7c6f8ec4423fc49454a
 X-Patchwork-Hint: ignore
-Message-Id: <20230214170848.5CA4885E19@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/sofia-sip: bump
- version to 1.13.9
+Message-Id: <20230214170848.9434985E1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] DEVELOPERS: Remove openal
+ from my list
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +58,46 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3043785771585270219=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a206365859d6c23ead253b8836f21f3e71318ce9
+--===============3043785771585270219==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=39853c1211f3f7af063be7c6f8ec4423fc49454a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6c33056fff080dd1795bcfb543b87e7b70ac455c)
+Signed-off-by: André Zwing <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6c8cda8c94e00dc4571a6ad1b3f9c1c617a63873)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sofia-sip/sofia-sip.hash | 2 +-
- package/sofia-sip/sofia-sip.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index ae2b3e725c..776136bb15 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  ebd006a98a7dff6e7f4d8357c5ebeee1d3bee3ac29ff213a4909e845f230fcbe  sofia-sip-1.13.8-756ab9b5c9.tar.gz
-+sha256  daf75c41408c559c2d58a8fd4d39be4a8ff5144bc1db220d4dbc28deeed6670a  sofia-sip-1.13.9-f6ee306084.tar.gz
- sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
- sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 80e59057c4..9071d964e4 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3e4504d86d..1ff3c6e5dc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -132,7 +132,6 @@ F:	package/ktap/
  
--SOFIA_SIP_VERSION = 1.13.8
--SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-756ab9b5c9.tar.gz
-+SOFIA_SIP_VERSION = 1.13.9
-+SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-f6ee306084.tar.gz
- SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs/sofia-sip
- SOFIA_SIP_INSTALL_STAGING = YES
- SOFIA_SIP_DEPENDENCIES = host-pkgconf
+ N:	André Zwing <nerv@dawncrow.de>
+ F:	package/libkrb5/
+-F:	package/openal/
+ F:	package/p7zip/
+ F:	package/wine/
+ 
+
+--===============3043785771585270219==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3043785771585270219==--
