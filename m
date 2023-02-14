@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B18CC61DA4
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA32CC61DA4
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E973640B90;
-	Tue, 14 Feb 2023 17:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E973640B90
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7573B40B8C;
+	Tue, 14 Feb 2023 17:14:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7573B40B8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b3AWWVyjfHdB; Tue, 14 Feb 2023 17:13:55 +0000 (UTC)
+	with ESMTP id LSdHXkUrXHIX; Tue, 14 Feb 2023 17:14:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4330340B84;
-	Tue, 14 Feb 2023 17:13:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4330340B84
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC9A51BF4DB
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:13:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA19540BA2;
+	Tue, 14 Feb 2023 17:14:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA19540BA2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A6A5B1BF4DB
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:14:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A35D580D51
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:13:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A35D580D51
+ by smtp3.osuosl.org (Postfix) with ESMTP id 80BA86059F
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:14:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80BA86059F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bILUbnseeikn for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 17:13:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4Ip0AnomRxf9 for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 17:14:07 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B07E80D37
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9B07E80D37
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:13:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C0D560ADA
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5C0D560ADA
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:14:07 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5001FFF802;
- Tue, 14 Feb 2023 17:13:42 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id BCF36240008;
+ Tue, 14 Feb 2023 17:14:03 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pRys9-004XCm-Ew; Tue, 14 Feb 2023 18:13:41 +0100
+ id 1pRysT-004XDb-Ew; Tue, 14 Feb 2023 18:14:01 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230213181332.908961-1-fontaine.fabrice@gmail.com>
-Date: Tue, 14 Feb 2023 18:13:41 +0100
-In-Reply-To: <20230213181332.908961-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 13 Feb 2023 19:13:32 +0100")
-Message-ID: <87a61g6ugq.fsf@dell.be.48ers.dk>
+References: <20230213181523.910359-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Feb 2023 18:14:01 +0100
+In-Reply-To: <20230213181523.910359-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 Feb 2023 19:15:23 +0100")
+Message-ID: <875yc46ug6.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/apr-util: security bump to
- version 1.6.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/zabbix: bump to version 6.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +63,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: Alexey Lukyanchuk <skif@skif-web.ru>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -72,13 +71,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > *) SECURITY: CVE-2022-25147 (cve.mitre.org)
- >    Integer Overflow or Wraparound vulnerability in apr_base64 functions
- >    of Apache Portable Runtime Utility (APR-util) allows an attacker to
- >    write beyond bounds of a buffer.
+ > - host-pkgconf is now mandatory
+ > - switch to pcre2 which is supported since version 6.0.0 and
+ >   https://github.com/zabbix/zabbix/commit/18917f919a68abc863a5c79ba88c0cb156255fdc
+ > - Update hash of README (links updated with
+ >   https://github.com/zabbix/zabbix/commit/067f5f873fb18ae7b22c5eaef40f0898b98edeb5
+ >   https://github.com/zabbix/zabbix/commit/499dbc81b987513233d579610335b8938f1ae91d)
 
- > https://downloads.apache.org/apr/Announcement-aprutil-1.x.html
- > https://downloads.apache.org/apr/CHANGES-APR-UTIL-1.6
+ > https://github.com/zabbix/zabbix/blob/6.2.7/ChangeLog
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
