@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FC13C05027
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CFBC6379F
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18D3540BC8;
-	Tue, 14 Feb 2023 17:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18D3540BC8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 36F9B4056F;
+	Tue, 14 Feb 2023 17:11:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36F9B4056F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 73eUdNE1WLrJ; Tue, 14 Feb 2023 17:10:56 +0000 (UTC)
+	with ESMTP id K27E3C6wiMzm; Tue, 14 Feb 2023 17:11:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C64B40B92;
-	Tue, 14 Feb 2023 17:10:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C64B40B92
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9E0221BF4DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA72740BAB;
+	Tue, 14 Feb 2023 17:11:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA72740BAB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A624F1BF94D
  for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 718F340673
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 718F340673
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB3DA60EA1
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:08:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB3DA60EA1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8omb6ItjM0s2 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DUqYapZWAgmE for <buildroot@lists.busybox.net>;
  Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B09E4071E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 80E6960E92
  for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B09E4071E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80E6960E92
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 712EC85E1D; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
+ id 7CF8985E16; Tue, 14 Feb 2023 17:08:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 17:59:00 +0100
+Date: Tue, 14 Feb 2023 17:59:01 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ab94614e7d5b2076433aef665bc0186e4e477df9
-X-Git-Newrev: 016b0adec19704b3e28456a3f237c0a20d978fe4
+X-Git-Oldrev: 016b0adec19704b3e28456a3f237c0a20d978fe4
+X-Git-Newrev: fdc283c0b121d0d0f66ad927ce69059ef44bf62d
 X-Patchwork-Hint: ignore
-Message-Id: <20230214170848.712EC85E1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/freeswitch: fix
- build with libressl >= 3.5.0
+Message-Id: <20230214170848.7CF8985E16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/freeswitch: bump
+ version to 1.10.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,104 +63,259 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=016b0adec19704b3e28456a3f237c0a20d978fe4
+commit: https://git.buildroot.net/buildroot/commit/?id=fdc283c0b121d0d0f66ad927ce69059ef44bf62d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure with libressl raised since bump to
-version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
+Release notes:
+https://github.com/signalwire/freeswitch/releases/tag/v1.10.8
 
-crypto/hash/hmac_ossl.c: In function 'srtp_hmac_alloc':
-crypto/hash/hmac_ossl.c:88:55: error: invalid application of 'sizeof' to incomplete type 'HMAC_CTX' {aka 'struct hmac_ctx_st'}
-   88 |         pointer = (uint8_t *)srtp_crypto_alloc(sizeof(HMAC_CTX) +
-      |                                                       ^~~~~~~~
-crypto/hash/hmac_ossl.c:97:9: warning: implicit declaration of function 'HMAC_CTX_init'; did you mean 'HMAC_CTX_new'? [-Wimplicit-function-declaration]
-   97 |         HMAC_CTX_init(new_hmac_ctx);
-      |         ^~~~~~~~~~~~~
-      |         HMAC_CTX_new
-crypto/hash/hmac_ossl.c: In function 'srtp_hmac_dealloc':
-crypto/hash/hmac_ossl.c:130:5: warning: implicit declaration of function 'HMAC_CTX_cleanup' [-Wimplicit-function-declaration]
-  130 |     HMAC_CTX_cleanup(hmac_ctx);
-      |     ^~~~~~~~~~~~~~~~
-crypto/hash/hmac_ossl.c:133:40: error: invalid application of 'sizeof' to incomplete type 'HMAC_CTX' {aka 'struct hmac_ctx_st'}
-  133 |     octet_string_set_to_zero(a, sizeof(HMAC_CTX) + sizeof(srtp_auth_t));
-      |                                        ^~~~~~~~
+Removed two patches which are included in upstream release,
+renumbered remaining patch.
 
-Fixes:
- - http://autobuild.buildroot.org/results/e696ead9ffffa5bb80928d75607bfbb9b263d3c6
+Removed libs/apr-util/LICENSE due to upstream removal of bundled
+apr-util package.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e4a762bf7f1b5753730d73ccac9b059f79c81387)
+Added fix to disable pcap detection, otherwise /usr/bin/pcap-config
+can be picked-up which breaks building freeswitch.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1b8230ab648ec33b93ff29a6c1ed5b327d36c7dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rypto-hash-hmac_ossl.c-fix-build-with-lib.patch | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ ...-fix-build-SWITCH_BYTE_ORDER-__BIG_ENDIAN.patch |  26 -----
+ ...ypto-hash-hmac_ossl.c-fix-build-with-lib.patch} |   0
+ .../freeswitch/0002-core-fix--disable-libyuv.patch | 129 ---------------------
+ package/freeswitch/freeswitch.hash                 |   5 +-
+ package/freeswitch/freeswitch.mk                   |   9 +-
+ 5 files changed, 8 insertions(+), 161 deletions(-)
 
-diff --git a/package/freeswitch/0003-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch b/package/freeswitch/0003-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
-new file mode 100644
-index 0000000000..eb717fc26d
---- /dev/null
-+++ b/package/freeswitch/0003-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
-@@ -0,0 +1,59 @@
-+From c8cc6f1773ff370bb14bb963e2f632eef6d6a3c2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 12 May 2022 23:22:42 +0200
-+Subject: [PATCH] libs/srtp/crypto/hash/hmac_ossl.c: fix build with libressl >=
-+ 3.5.0
+diff --git a/package/freeswitch/0001-fix-build-SWITCH_BYTE_ORDER-__BIG_ENDIAN.patch b/package/freeswitch/0001-fix-build-SWITCH_BYTE_ORDER-__BIG_ENDIAN.patch
+deleted file mode 100644
+index 57f6e660c1..0000000000
+--- a/package/freeswitch/0001-fix-build-SWITCH_BYTE_ORDER-__BIG_ENDIAN.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 68039d344d8e826e8b403c9cd0284fd07b4495ac Mon Sep 17 00:00:00 2001
+-From: Dragos Oancea <dragos@signalwire.com>
+-Date: Tue, 26 Oct 2021 08:42:58 +0000
+-Subject: [PATCH] [core] fix build SWITCH_BYTE_ORDER == __BIG_ENDIAN
+-
+-Downloaded from upstream commit:
+-https://github.com/signalwire/freeswitch/commit/68039d344d8e826e8b403c9cd0284fd07b4495ac
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/switch_rtp.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/switch_rtp.c b/src/switch_rtp.c
+-index 1880bbb19c..843ee81381 100644
+---- a/src/switch_rtp.c
+-+++ b/src/switch_rtp.c
+-@@ -2155,7 +2155,7 @@ static void switch_send_rtcp_event(switch_rtp_t *rtp_session ,struct switch_rtcp
+- 				switch_event_add_header_string(event, SWITCH_STACK_BOTTOM, header, value);
+- 				snprintf(header, sizeof(header), "Source-Lost");
+- #if SWITCH_BYTE_ORDER == __BIG_ENDIAN
+--				tmpLost = report->lost; /* signed 24bit will extended signess to int32_t automatically */
+-+				tmpLost = rtcp_report_block->lost; /* signed 24bit will extended signess to int32_t automatically */
+- #else
+- 				tmpLost = ntohl(rtcp_report_block->lost)>>8;
+- 				tmpLost = tmpLost | ((tmpLost & 0x00800000) ? 0xff000000 : 0x00000000); /* ...and signess compensation */
+diff --git a/package/freeswitch/0003-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch b/package/freeswitch/0001-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
+similarity index 100%
+rename from package/freeswitch/0003-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
+rename to package/freeswitch/0001-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
+diff --git a/package/freeswitch/0002-core-fix--disable-libyuv.patch b/package/freeswitch/0002-core-fix--disable-libyuv.patch
+deleted file mode 100644
+index 137cb27cf8..0000000000
+--- a/package/freeswitch/0002-core-fix--disable-libyuv.patch
++++ /dev/null
+@@ -1,129 +0,0 @@
+-From a2ce46c6fde38d6ac54a8a2ee1a5b391e2ed2071 Mon Sep 17 00:00:00 2001
+-From: Sebastian Kemper <sebastian_ml@gmx.net>
+-Date: Mon, 1 Nov 2021 09:59:09 +0100
+-Subject: [PATCH] [core] fix "--disable-libyuv"
+-
+-Recent changes made it impossible to compile freeswitch without libyuv
+-support.
+-
+-src/switch_core_video.c: In function 'switch_img_read_from_file':
+-src/switch_core_video.c:3139:4: error: implicit declaration of function 'RAWToI420' [-Werror=implicit-function-declaration]
+-RAWToI420(data, width * 3,
+-^
+-src/switch_core_video.c:3148:4: error: implicit declaration of function 'ABGRToARGB' [-Werror=implicit-function-declaration]
+-ABGRToARGB(data, width * 4, img->planes[SWITCH_PLANE_PACKED], img->stride[SWITCH_PLANE_PACKED], width, height);
+-^
+-
+-Fix this my adding/moving the checks for "SWITCH_HAVE_YUV".
+-
+-Downloaded from upstream commit:
+-https://github.com/signalwire/freeswitch/commit/a2ce46c6fde38d6ac54a8a2ee1a5b391e2ed2071
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Sebastian Kemper <sebastian_ml@gmx.net>
+----
+- src/switch_core_video.c        | 12 ++++++++++++
+- tests/unit/switch_core_video.c |  4 ++++
+- 2 files changed, 16 insertions(+)
+-
+-diff --git a/src/switch_core_video.c b/src/switch_core_video.c
+-index 7dbd685d6ee..0d377f9c3e4 100644
+---- a/src/switch_core_video.c
+-+++ b/src/switch_core_video.c
+-@@ -3116,6 +3116,7 @@ SWITCH_DECLARE(switch_status_t) switch_img_data_url_png(switch_image_t *img, cha
+- 
+- SWITCH_DECLARE(switch_image_t *) switch_img_read_from_file(const char* file_name, switch_img_fmt_t img_fmt)
+- {
+-+#ifdef SWITCH_HAVE_YUV
+- 	int width = 0, height = 0, channels = 0;
+- 	int comp = STBI_rgb;
+- 	unsigned char *data = NULL;
+-@@ -3155,12 +3156,16 @@ SWITCH_DECLARE(switch_image_t *) switch_img_read_from_file(const char* file_name
+- 	} else if (data) {
+- 		stbi_image_free(data);
+- 	}
+-+#endif
+- 
+- 	return NULL;
+- }
+- 
+- SWITCH_DECLARE(switch_status_t) switch_img_write_to_file(switch_image_t *img, const char* file_name, int quality)
+- {
+-+#ifndef SWITCH_HAVE_YUV
+-+	return SWITCH_STATUS_FALSE;
+-+#else
+- 	int comp = STBI_rgb;
+- 	unsigned char *data = NULL;
+- 	const char *ext = strrchr(file_name, '.');
+-@@ -3217,6 +3222,7 @@ SWITCH_DECLARE(switch_status_t) switch_img_write_to_file(switch_image_t *img, co
+- 	free(data);
+- 
+- 	return ret ? SWITCH_STATUS_SUCCESS : SWITCH_STATUS_FALSE;
+-+#endif
+- }
+- 
+- typedef struct data_url_context_s {
+-@@ -3224,14 +3230,19 @@ typedef struct data_url_context_s {
+- 	char **urlP;
+- } data_url_context_t;
+- 
+-+#ifdef SWITCH_HAVE_YUV
+- static void data_url_write_func(void *context, void *data, int size)
+- {
+- 	switch_buffer_t *buffer = (switch_buffer_t *)context;
+- 	switch_buffer_write(buffer, data, size);
+- }
+-+#endif
+- 
+- SWITCH_DECLARE(switch_status_t) switch_img_data_url(switch_image_t *img, char **urlP, const char *type, int quality)
+- {
+-+#ifndef SWITCH_HAVE_YUV
+-+	return SWITCH_STATUS_FALSE;
+-+#else
+- 	int comp = STBI_rgb;
+- 	unsigned char *data = NULL;
+- 	int stride_in_bytes = 0;
+-@@ -3300,6 +3311,7 @@ SWITCH_DECLARE(switch_status_t) switch_img_data_url(switch_image_t *img, char **
+- 	switch_buffer_destroy(&buffer);
+- 
+- 	return ret ? SWITCH_STATUS_SUCCESS : SWITCH_STATUS_FALSE;
+-+#endif /* SWITCH_HAVE_YUV */
+- }
+- 
+- 
+-diff --git a/tests/unit/switch_core_video.c b/tests/unit/switch_core_video.c
+-index 27c96102929..e395db474d5 100644
+---- a/tests/unit/switch_core_video.c
+-+++ b/tests/unit/switch_core_video.c
+-@@ -48,6 +48,7 @@ FST_CORE_BEGIN("./conf")
+- 		}
+- 		FST_TEARDOWN_END()
+- 
+-+#ifdef SWITCH_HAVE_YUV
+- 		FST_TEST_BEGIN(data_url_test)
+- 		{
+- 			char *data_url = NULL;
+-@@ -88,6 +89,7 @@ FST_CORE_BEGIN("./conf")
+- 			unlink(argb_filename);
+- 		}
+- 		FST_TEST_END()
+-+#endif /* SWITCH_HAVE_YUV */
+- 
+- 		FST_TEST_BEGIN(img_patch)
+- 		{
+-@@ -239,6 +241,7 @@ FST_CORE_BEGIN("./conf")
+- 		}
+- 		FST_TEST_END()
+- 
+-+#ifdef SWITCH_HAVE_YUV
+- 		FST_TEST_BEGIN(stb_data_url)
+- 		{
+- 			switch_image_t *img = switch_img_alloc(NULL, SWITCH_IMG_FMT_I420, 120, 60, 1);
+-@@ -321,6 +324,7 @@ FST_CORE_BEGIN("./conf")
+- 			unlink(jpg_write_filename);
+- 		}
+- 		FST_TEST_END()
+-+#endif /* SWITCH_HAVE_YUV */
+- 	}
+- 	FST_SUITE_END()
+- }
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 8066c620c4..18a36ff23c 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,10 +1,9 @@
+-# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.7.-release.tar.xz.sha256
+-sha256  0919bddc2ea9cab2e4944314e71637bea9dd4f40d510722a74ea032104594c41  freeswitch-1.10.7.-release.tar.xz
++# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.8.-release.tar.xz.sha256
++sha256  1176b26b2f463de2980e5be953f81ced94d23c784452bd41e086d3933a88be5f  freeswitch-1.10.8.-release.tar.xz
+ # Locally computed
+ sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
+ sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
+ sha256  e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
+-sha256  1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
+ sha256  2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  libs/libyuv/LICENSE
+ sha256  7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/libzrtp/src/zrtp_legal.c
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 24c1ee4dd4..6234dd8e97 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,20 +4,19 @@
+ #
+ ################################################################################
+ 
+-FREESWITCH_VERSION = 1.10.7
++FREESWITCH_VERSION = 1.10.8
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
+ FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
+ FREESWITCH_INSTALL_STAGING = YES
+ FREESWITCH_LICENSE = MPL-1.1, \
+ 	GPL-3.0+ with font exception (fonts), \
+-	Apache-2.0 (apr, apr-util), \
++	Apache-2.0 (apr), \
+ 	BSD-3-Clause (libsrtp)
+ 
+ FREESWITCH_LICENSE_FILES = \
+ 	COPYING \
+ 	libs/apr/LICENSE \
+-	libs/apr-util/LICENSE \
+ 	libs/srtp/LICENSE
+ 
+ FREESWITCH_CPE_ID_VENDOR = freeswitch
+@@ -50,6 +49,10 @@ FREESWITCH_CONF_ENV += \
+ 	ac_cv_prog_PHP_CONFIG=false \
+ 	ac_cv_have_php_config=no
+ 
++# disable pcap detection, pcap is an optional dependency for unit tests
++FREESWITCH_CONF_ENV += \
++	ac_cv_prog_HAVE_PCAP_CONFIG=false
 +
-+Fix the following build failure with libressl >= 3.5.0:
-+
-+crypto/hash/hmac_ossl.c: In function 'srtp_hmac_alloc':
-+crypto/hash/hmac_ossl.c:88:55: error: invalid application of 'sizeof' to incomplete type 'HMAC_CTX' {aka 'struct hmac_ctx_st'}
-+   88 |         pointer = (uint8_t *)srtp_crypto_alloc(sizeof(HMAC_CTX) +
-+      |                                                       ^~~~~~~~
-+crypto/hash/hmac_ossl.c:97:9: warning: implicit declaration of function 'HMAC_CTX_init'; did you mean 'HMAC_CTX_new'? [-Wimplicit-function-declaration]
-+   97 |         HMAC_CTX_init(new_hmac_ctx);
-+      |         ^~~~~~~~~~~~~
-+      |         HMAC_CTX_new
-+crypto/hash/hmac_ossl.c: In function 'srtp_hmac_dealloc':
-+crypto/hash/hmac_ossl.c:130:5: warning: implicit declaration of function 'HMAC_CTX_cleanup' [-Wimplicit-function-declaration]
-+  130 |     HMAC_CTX_cleanup(hmac_ctx);
-+      |     ^~~~~~~~~~~~~~~~
-+crypto/hash/hmac_ossl.c:133:40: error: invalid application of 'sizeof' to incomplete type 'HMAC_CTX' {aka 'struct hmac_ctx_st'}
-+  133 |     octet_string_set_to_zero(a, sizeof(HMAC_CTX) + sizeof(srtp_auth_t));
-+      |                                        ^~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e696ead9ffffa5bb80928d75607bfbb9b263d3c6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libs/srtp/crypto/hash/hmac_ossl.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/libs/srtp/crypto/hash/hmac_ossl.c b/libs/srtp/crypto/hash/hmac_ossl.c
-+index 8146438b05..6730cbb35c 100644
-+--- a/libs/srtp/crypto/hash/hmac_ossl.c
-++++ b/libs/srtp/crypto/hash/hmac_ossl.c
-+@@ -79,7 +79,8 @@ static srtp_err_status_t srtp_hmac_alloc(srtp_auth_t **a,
-+ 
-+ /* OpenSSL 1.1.0 made HMAC_CTX an opaque structure, which must be allocated
-+    using HMAC_CTX_new.  But this function doesn't exist in OpenSSL 1.0.x. */
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
-++	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
-+     {
-+         /* allocate memory for auth and HMAC_CTX structures */
-+         uint8_t *pointer;
-+@@ -125,7 +126,8 @@ static srtp_err_status_t srtp_hmac_dealloc(srtp_auth_t *a)
-+ 
-+     hmac_ctx = (HMAC_CTX *)a->state;
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
-++	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
-+     HMAC_CTX_cleanup(hmac_ctx);
-+ 
-+     /* zeroize entire state*/
-+-- 
-+2.35.1
-+
+ # copied from freeswitch/configure.ac, line 258+
+ FREESWITCH_CONF_ENV += \
+ 	ac_cv_file__dev_ptmx=yes \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
