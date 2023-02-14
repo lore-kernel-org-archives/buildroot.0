@@ -4,64 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 573CFC6379F
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 11:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3FCBC61DA4
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 11:18:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE07660B2A;
-	Tue, 14 Feb 2023 11:08:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE07660B2A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FFED60EC4;
+	Tue, 14 Feb 2023 11:18:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FFED60EC4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lSv0ySzju1Dz; Tue, 14 Feb 2023 11:08:36 +0000 (UTC)
+	with ESMTP id c78MjemI7txl; Tue, 14 Feb 2023 11:18:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CE8C6058D;
-	Tue, 14 Feb 2023 11:08:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CE8C6058D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0120E1BF5A2
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 11:08:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69F2B60E8F;
+	Tue, 14 Feb 2023 11:18:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69F2B60E8F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C5061BF5A2
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 11:18:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD25340AFC
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 11:08:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD25340AFC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3329480F3D
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 11:18:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3329480F3D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5AmmZJSol9So for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 11:08:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aje9Bu9ZZLq8 for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 11:18:52 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24A32404F6
-Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 24A32404F6
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 11:08:30 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.66.151])
- by Aruba Outgoing Smtp  with ESMTPSA
- id RtAhp0raxloaaRtAipA3iA; Tue, 14 Feb 2023 12:08:28 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 12:08:27 +0100
-Message-Id: <20230214110827.1281144-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0359F80E48
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0359F80E48
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 11:18:51 +0000 (UTC)
+Received: from opfednr04.francetelecom.fr (unknown [xx.xx.xx.68])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by opfednr23.francetelecom.fr (ESMTP service) with ESMTPS id 4PGJcT3SG1z5w3C; 
+ Tue, 14 Feb 2023 12:18:49 +0100 (CET)
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Tue, 14 Feb 2023 12:18:46 +0100
+Date: Tue, 14 Feb 2023 12:18:46 +0100
+From: <yann.morin@orange.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <16600_1676373529_63EB6E19_16600_354_5_20230214111846.GB3487@tl-lnx-nyma7486>
+References: <20230214105033.1042139-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfOxjKdZTL+J6kLGfkLm19dg9hYiR/RH1yrSTn0FSVyo1whTKWl7YtQy4CuM+BfDmlqZXFmgSBAMAGjlEYLo1XnLA64VwGSr1S7tlqLNgDergh2kud6Up
- vvBQmUku8EZrc/1GOVcpET1QLh3H3rlG+xvQSD2yYO6m7TM+jSnfFBDQijVXJ9O7cFDHNnrJdCWTDULromRCCoZnkO29tq5k5cp1ZzlD83LuaFVp3PaLNrix
- z0vwdAyg01GC3ZjlGxhUxps6WK/wCMMKbW/GgJrwSwtA6uPbR0QCv3MQtcRpBpIx
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1676372908; bh=T0WlA0yrn6afRt50xouEnIXS9pym1tkVXJsFPaUUicA=;
- h=From:To:Subject:Date:MIME-Version;
- b=C8MMaqcTZrElrBGWmwEpjJ/ArXV+4nn3GbjBz+L2oT48PcncqFypaTa5Z78TZGq/H
- R4q5ZxPkph60gsPabZN+5pXuo35no/ichLjfhuXU41VXfrgFmkRmRE6bCxUuxsDYRo
- obryuka+radWC+J3h3Ac3uRgPqjHJikUnHMrv9Zoky8oAi94QbuLxJ/G1GML7oeci8
- Yifony5oqr5kB5i+U9zsBu9fLYCVS1ArtoCaVjl6Fxcnk9d9x981oC8Kq+hGTL65KN
- VrSUGDjchm0QBy37HdaB+wuCczpt1Ilrk1RF2tKLczzj1DtwQnA3RMK3el5boMy/pl
- 0a6dv2oXs88fQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=C8MMaqcT
-Subject: [Buildroot] [PATCH] package/rtl8812au-aircrack-ng: bump to
- 2023-02-03 version to fix build failure with Linux 6.1
+Content-Disposition: inline
+In-Reply-To: <20230214105033.1042139-1-giulio.benetti@benettiengineering.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX106.corporate.adroot.infra.ftgroup (10.115.27.3)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; s=ORANGE001; t=1676373529;
+ bh=A0kaYIIBAzbMbuNkr4ZCYNybuyM+jNc7idegI+F3GFY=;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+ b=EbIlEyZo5joAYy3udaxlSSjvn/doyhFvaY86e+EFtU7CJCPZ2g2HILHwFYWmfntPw
+ P3D/Hh0739SupAfGSpYts8xMMYYFjst3HvrzYsXAptIWNJoONv5QJzoW4F+BR47xPT
+ IGDYp4vbcNzNctD5+n3P+EEqZd3tlzCjv2Bkell5M34Ls0PNEU6j7VOsGVrGvrDJU5
+ gUJdFJQDnp+5iXzVcbUAEevJt6S1KT2PxaCDp65rTJRiuXmx/I/nuMpQihvEuEFJZc
+ CdvBKRJmqGN7FBei9wYqS8ELuQJZAubLStM+cTDr48wvseaVAH8CZtz92R9PA0GJlp
+ TwYiCsYhlVKgg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=EbIlEyZo
+Subject: Re: [Buildroot] [PATCH] package/rtl8821cu: disable package for
+ s390x architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,45 +82,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/e128298929fce31374687a566e50b00c150131b8/
+Giulio, All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash | 2 +-
- package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2023-02-14 11:50 +0100, Giulio Benetti spake thusly:
+> s390x doesn't support CONFIG_WIRELESS in Linux so let's disable this
+> package for this architecture.
 
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-index bc3a926314..cdf5f3b4e2 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  eed4888da9cfdc0f83ad3335beaf73af33ce0796b0a2637aeec102d47e1eb8f0  rtl8812au-aircrack-ng-e7a4a390ccbdd768411e1b2a8922c47837f76b47.tar.gz
-+sha256  69891a35724a6c30fcb29d9eba783879e0bee3f5f7847341fce06101a7542f5f  rtl8812au-aircrack-ng-d98018d038a5db96066e79f26ed4a72f2fe1774e.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-index 45a6ce5729..ab3ebe2077 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8812AU_AIRCRACK_NG_VERSION = e7a4a390ccbdd768411e1b2a8922c47837f76b47
-+RTL8812AU_AIRCRACK_NG_VERSION = d98018d038a5db96066e79f26ed4a72f2fe1774e
- RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
- RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
- RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
+Instead of fixing each and every rtlXXXX packages one by one when there
+is an autobuild failure, can we just exclude them in bulk, since they
+are all wireless drivers, and thus will never be available for s390x?
+
+Regards,
+Yann E. MORIN.
+
+> Fixes:
+> http://autobuild.buildroot.net/results/3a74d393cdbc308eab9ec3f0f9e420947669a0ea/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/rtl8821cu/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/rtl8821cu/Config.in b/package/rtl8821cu/Config.in
+> index a5a7b9d255..00a41b5196 100644
+> --- a/package/rtl8821cu/Config.in
+> +++ b/package/rtl8821cu/Config.in
+> @@ -1,8 +1,10 @@
+>  comment "rtl8821cu needs a Linux kernel to be built"
+> +	depends on !BR2_s390x
+>  	depends on !BR2_LINUX_KERNEL
+>  
+>  config BR2_PACKAGE_RTL8821CU
+>  	bool "rtl8821cu"
+> +	depends on !BR2_s390x
+>  	depends on BR2_LINUX_KERNEL
+>  	help
+>  	  rtl8821cu wifi driver
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.34.1
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
