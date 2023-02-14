@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF8ABC61DA4
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 15:33:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB4F8C61DA4
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 15:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86E5B40191;
-	Tue, 14 Feb 2023 15:33:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86E5B40191
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A6EA415EF;
+	Tue, 14 Feb 2023 15:33:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A6EA415EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U1dOwfQh-6s7; Tue, 14 Feb 2023 15:33:17 +0000 (UTC)
+	with ESMTP id kEj3axmiD-0u; Tue, 14 Feb 2023 15:33:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81F9941722;
-	Tue, 14 Feb 2023 15:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81F9941722
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 599F41BF852
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 15:33:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FBBE40922;
+	Tue, 14 Feb 2023 15:33:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FBBE40922
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2055C1BF94D
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 15:33:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34F6B41725
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC28E40BB0
  for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 15:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34F6B41725
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC28E40BB0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3lofJCkygNEd for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rSnslUeJmFZr for <buildroot@lists.busybox.net>;
  Tue, 14 Feb 2023 15:33:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D117F41718
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8AC1740B79
  for <buildroot@buildroot.org>; Tue, 14 Feb 2023 15:33:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D117F41718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AC1740B79
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7643885D6E; Tue, 14 Feb 2023 15:33:07 +0000 (UTC)
+ id 6BAEC85D7B; Tue, 14 Feb 2023 15:33:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 16:32:20 +0100
+Date: Tue, 14 Feb 2023 16:31:43 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 01e97d849ead68fbc8521e84499f21b4154681de
-X-Git-Newrev: 6ef0499c2cd7ddb1611634d8295f7109d9de47a9
+X-Git-Oldrev: 594acef246416a0b95452db393765ff60e37d662
+X-Git-Newrev: 01e97d849ead68fbc8521e84499f21b4154681de
 X-Patchwork-Hint: ignore
-Message-Id: <20230214153307.7643885D6E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/vim: security
- bump to version 9.0.1260
+Message-Id: <20230214153307.6BAEC85D7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/c-ares: security
+ bump to version 1.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ef0499c2cd7ddb1611634d8295f7109d9de47a9
+commit: https://git.buildroot.net/buildroot/commit/?id=01e97d849ead68fbc8521e84499f21b4154681de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-- Fix CVE-2023-0049, CVE-2023-0051, CVE-2023-0054 and CVE-2023-0288
-- Update hash of README.txt: typo fixed by
-  https://github.com/vim/vim/commit/f1dcd14fc5d4370476cd82895a4479ca2d252e54
+Low. Stack overflow in ares_set_sortlist() which is used during c-ares
+initialization and typically provided by an administrator and not an end
+user.
+
+https://c-ares.org/changelog.html#1_19_0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 98f8ddbc74962ab33df5ada2ccb53a27c49e60f1)
+(cherry picked from commit 121a9d3649498c5f6f3a5ae8a37d6befe2cc8ef8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 4 ++--
- package/vim/vim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 03ee908db4..4000beedc1 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  c95c9abcf024bd6293ad199e4efa1c09452a9c6456c9cbaf53d896cf7b9f4d08  vim-9.0.0951.tar.gz
-+sha256  bcaf9b21ab00ab49de4f3bdfda1bcda82533ec16c412824226544a3fce6506ff  vim-9.0.1260.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
--sha256  de04910387a62ad4f9b36b91457c8d5ef32733ac5d768a128071b93f4821fcd1  README.txt
-+sha256  d187aff219161f37138479257f82d687ea10b2cdd17d58b53a3ec9b79d6dc870  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index d814c68630..e3648bfab9 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index af1f076aab..edf891674b 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  1a7d52a8a84a9fbffb1be9133c0f6e17217d91ea5a6fa61f6b4729cda78ebbcf  c-ares-1.18.1.tar.gz
++sha256  bfceba37e23fd531293829002cac0401ef49a6dc55923f7f92236585b7ad1dd3  c-ares-1.19.0.tar.gz
+ 
+ # Hash for license file
+ sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 0152759ebc..4332fc6919 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VIM_VERSION = 9.0.0951
-+VIM_VERSION = 9.0.1260
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+-C_ARES_VERSION = 1.18.1
++C_ARES_VERSION = 1.19.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
