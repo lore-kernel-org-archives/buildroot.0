@@ -4,130 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A02DC61DA4
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 21:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24845C61DA4
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 21:16:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24A0D60B3B;
-	Tue, 14 Feb 2023 21:13:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24A0D60B3B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F42B60F80;
+	Tue, 14 Feb 2023 21:16:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F42B60F80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AX4cWcGodQJQ; Tue, 14 Feb 2023 21:13:21 +0000 (UTC)
+	with ESMTP id uouC2dnDJMk3; Tue, 14 Feb 2023 21:16:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4119B60C33;
-	Tue, 14 Feb 2023 21:13:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4119B60C33
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E573B1BF2B3
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:13:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8118460FAD;
+	Tue, 14 Feb 2023 21:16:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8118460FAD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 46D081BF2B3
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E3B84059C
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:13:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E3B84059C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 201AD408CC
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:16:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 201AD408CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S2J_l3LNCVAt for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 21:13:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VnoF-r4aNBCc for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 21:16:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE856403C4
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com
- (mail-me3aus01on20714.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:7004::714])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DE856403C4
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 21:13:16 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BuR+oeNxvEwkhdyEWQZD/gm8QE5m3tm/4snSmp9IpMSXnRM6myvnVDqTACo4CRKBxAhvRwFz8aiDRLePao8VM0i4bkd4vTnQw6R6wwC4sRJWEz1JOfNHFnA2wt7WogUyMfmmeseLM3oJsqK2wNj9WaCACsB723NoqeVvjgZaWovBL9cOjObkkho0kWIxZsWq03YEkw5i8oXzDzHTmQDvtHfvKG+QUTE1EMtaZLb9Mlm2M6tfbY1KPDtbH9dIW1qSF6CnWTuDnOHEsMziZx49mfCOHUVsI8qSsVO+PqCv60XQtPk20JKniixTK/DQHCElOt85dKdoo4lCKwAqnPPKeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qv5phjPStcL/X2x9nNYgmo8FtsGAPeulXqKTM5qr92g=;
- b=RJVsIw7KmBhzaUaI53gYCwvWwLX4QWjwjfEtKnEjLwJX3V5afAqa6EOePd1cWMwJIUVZeLwqC5/5hj4GBIbwl7uMAvzlAf+ta92HQjtlu8ChPoS6tAY5OT3Khm7t0bOf7Y5eD//EqcQorR85SIR/Q92Gu2Xp8dtBnVm3YeQlxKRctGpyc74Fi6XeHyD56gaYPNjxp+29lOMFu/fatcjJtD3oTjnTcn/RXFRTQnmRkDgdiB/xSUlv+qLy3QGwvawNGNT3j3N0XTYEtfqakxSsVpxBttuW7hiOewfFv9TdYorq85+7j+LYDfXxPuqWzy2CI7WA06MBWX+Cb+15bmKT1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=gallagher.com; dmarc=pass action=none
- header.from=gallagher.com; dkim=pass header.d=gallagher.com; arc=none
-Received: from SY2PR01MB2778.ausprd01.prod.outlook.com (2603:10c6:1:25::22) by
- SY6PR01MB8492.ausprd01.prod.outlook.com (2603:10c6:10:1df::13) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.10; Tue, 14 Feb 2023 21:13:09 +0000
-Received: from SY2PR01MB2778.ausprd01.prod.outlook.com
- ([fe80::da47:405c:794b:7d68]) by SY2PR01MB2778.ausprd01.prod.outlook.com
- ([fe80::da47:405c:794b:7d68%4]) with mapi id 15.20.6111.010; Tue, 14 Feb 2023
- 21:13:09 +0000
-From: Afshin Pir <Afshin.Pir@gallagher.com>
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: Define dependency package only in staging
-Thread-Index: AdlAuSMUlgoy2IcdQjG7t9MusSnjUw==
-Date: Tue, 14 Feb 2023 21:13:09 +0000
-Message-ID: <SY2PR01MB277812C5F0180DAA6B2A1D2994A29@SY2PR01MB2778.ausprd01.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SY2PR01MB2778:EE_|SY6PR01MB8492:EE_
-x-ms-office365-filtering-correlation-id: 2e271f0f-7bb4-4ceb-3bac-08db0ed04646
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Bjf0AkHZFwWAw+OyA87CTYJAiS8psabXQo4DUYEXTML/r7LHnyRThL4hTSmZroDQsV9OmZQdXeTwCz4Ov03qa4T+UBLjhbzMX0OoF+0cZfySTzxGPx0owP43WVWJgkUnwfVMxUeQQ3rYqLoSUfXKbSAQlqpblG3amuuQfmXsXYdRB2wFuyYAvkTXe/RE2n/dLsQPZEwL0rX41GcjgIFMXU5P6TBLtIkNOqIjXoW7BkppPJLdJpgfeBixAd4HANfh5qywlSa/cMRpiD834N1hqGG5KRzycAjIP4wqV5p4I/w4XdQ9fFg9FLTNGReW/AO/fWmDRBVas6w4Kpa2vy4KpykjfpulbGAbbR+3rnZyzv+NqYIXDYqA2RnNW8irs4ui2q4RXD9pCPV6QZWEyVaRo0nBmbh8lSt1wN0cWU577EZNu3+jTSw7s+7MYFYSQJuXtj+kMA0ip10wBnQduAFxqHWu3xlUANHD9eCz1C0AUwos0ig64WdP+M4yaP7nvjZsuKigsDGEmULjpxB0sp2zikOalnqax5ite7//3RgVgIMzjN13kRFHYG/pCspTUXIS3/387MZla8aH76wTUkjQQXk4L5npoxdTRUIDgQ2wD9yHWm6cnBX0q2fZclhmjQ4BI3eAwMA8bUK6QSTtAufiA3UzXCFM2spvuPfM9pvw08gXLSm76FBYRi0q4fkGRMPTdjpJNxVExw/GkiOLK6EUVw==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SY2PR01MB2778.ausprd01.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230025)(4636009)(366004)(39860400002)(136003)(396003)(376002)(346002)(451199018)(186003)(26005)(38070700005)(9686003)(5660300002)(316002)(52536014)(41300700001)(6506007)(2906002)(8936002)(4744005)(66556008)(8676002)(66446008)(66476007)(6916009)(64756008)(76116006)(38100700002)(33656002)(66946007)(83380400001)(55016003)(86362001)(71200400001)(7696005)(508600001)(122000001);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TgjfQ1WNgiPynqbEbPNKE2enut+sUfiOphZQJG/NHlTMXDzoJdSJvE/HMN5W?=
- =?us-ascii?Q?nrLVeFyUub9Z8xpkVjZxuFVOdrreyKFGDgc/Qfxu3O5q/eC8mWWONa2Tny35?=
- =?us-ascii?Q?d650uC2AOgvbvy2GOjIFFZCc8yJ2+JCawbC5s/CxIA3DILdBW6onEsmkboZT?=
- =?us-ascii?Q?plOdIWWQjctVsYL3K7zxb2WCjoVEE5RalqUM3Vx1IkK+MR5oW5Mjem0vaJyg?=
- =?us-ascii?Q?AL3gUNupykj/2/I6yDtI0R4RVwXxNnXE0b50jC0WJPv5eeItx35Hzmadrqfh?=
- =?us-ascii?Q?liosV4riPDdmCbwcArpmB5H3QYTCoaWK7pn95qdo3ctoNxavLNSXc2Dw/LyF?=
- =?us-ascii?Q?9MBrYjvxNey3xDeIn4tY/b0Qv8TAXnkb9nAb7ZrLm812YP3U8Ex3DpHCTNRu?=
- =?us-ascii?Q?MKhpM6seALtxH22HfcfZdQMForEUO7VKvbOFfuwfGbI02zOUgFcJuwcgGDr+?=
- =?us-ascii?Q?6ih61vJCxqSPKW61s8A3llIAdNYZj/h4zAXqoEEYhDmz/eVv2nIolnQmKcXz?=
- =?us-ascii?Q?a+K2fVLx5GqrH0jlraXDEn1A7MB7j81PKR4QOnqWelKVi6qS1v0tp+hUJP5S?=
- =?us-ascii?Q?0X8isEUNEQk02DPBQVHTrK8Gdcn3ae2Z7pWg23P1iTVp1GKa+GO8uXe1Ice/?=
- =?us-ascii?Q?ASU+fJCMastXqe/VsgO8s5otHmbZJFLkFpcC3+3kPns5DN7yQ7GCwnWlPr/i?=
- =?us-ascii?Q?dPVw5B/L2L3vQyP+wGs+64wzutHma3CwPAL8ks+0CS+aTDJOBvziFcFbJuUb?=
- =?us-ascii?Q?hixiteItPEqVMmz2ZR9nTLAt4Rh7DQTW+eCBbdxGuwdTvUjbUJJmA9BOmHpg?=
- =?us-ascii?Q?d/ehU+786oKMKluL5/IkSFMf4kXLiU5r1LRe4gyyd15IL1au7fID1hVIGxoF?=
- =?us-ascii?Q?NJfsdqz2pGOWdCf3fu7GCP4OkYpBgI/sXcVpg0qe9hooaLrgiW+cHodwRJPW?=
- =?us-ascii?Q?yZXOkK70CaNh0kmERH3/+06ZaJAGeA3YdUu2POyMW+oEa6+rj6tIfrIiY+2H?=
- =?us-ascii?Q?i6LXfSgCJEotyjykT4TWpQ0W/rWlh1QhZ7Lu98g7Jnm9H9SMNFOvqwKCS6ft?=
- =?us-ascii?Q?paG0kBiac7bnE16GpOTmpDrZHOoWwO0TDoRTKj2soRoPSDGSkJX10DgAHROa?=
- =?us-ascii?Q?ByyxdGkUy2/EXHXWYHGERJQQNFUvk/k27DHcTC4Bv7xv/xb01fD4VCB/SNHO?=
- =?us-ascii?Q?uptcNuLatSAPVGaFsEyJuFRgY4cNZ6MqlgFKszbDzLHTudNpqm0ZbkeyPVkZ?=
- =?us-ascii?Q?d8yEtOcavvF5faTNWY+vadOljl3+JTGp+LPZp2TFBBwzZsxC+qQW/DuJrz2e?=
- =?us-ascii?Q?X5i5s7oMfJDchmAq0IrBSeBIg3jGCfcgpVxxRyLFkOVYHpaxVSZcWBUyNBWY?=
- =?us-ascii?Q?Ywe1JUIsTxDa7VUXJptXiliYqHs/grDNsK51rNPhXUjUV56UvwyYcwB/PGch?=
- =?us-ascii?Q?nh2d8t1tfm6drdA+JZN+eL4TGfzly2nlVEUCdC0WUNP5ww7g4xmbLxunU6J0?=
- =?us-ascii?Q?O6yDLEnn5APE5JKeGuHvxwijBY0ovv8XsyY88fEzpUlfOMp1RI7/TfulwSfW?=
- =?us-ascii?Q?TUQmUxKjXTFU9vx1pXsW+0nb1ZS5Y5C7hzMaU+V6?=
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86623408B0
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 86623408B0
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 21:16:13 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id s11so11597939edd.10
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 13:16:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=pbzviloVXXDAqQyXXjnFrf6aBd9J275mm6jkx8Qdp0w=;
+ b=3hNNpYK5/i1PkiUpGoupi+jztqjGpTWSmuCGKOnTFQsSpW1ClXS26fF5RGYl9masD+
+ 4dp64acPkFrQBJ/67ZdvsLk/TUWY89XZoPXSfsy5MykbG3nBNVBzxr9y9Qr1tR++wyRV
+ SoGM1mEO8ahrBv7VuYP6xo9vJscd+5+RS5PrcYQ+B9xetm563qO01/fYAj2NEBt+0SHl
+ 7sUvHcOEqpmrxQjXMYk5b11hO1RSm2LieHTH7wJXr4DYacdTR4CbWrgZ5PVFxc8reaZK
+ l05DHTBq8/AUTxh4osb4hW5lxN5FJSSQWCXKAML4zC1w2LM/maDk5QX8pFhNuVS0qaU6
+ AeeA==
+X-Gm-Message-State: AO0yUKWM0NohJnPNVvyCb0vxIiT7Yv6RedKNctMYaDHx1a+l4S+O5hi9
+ c4z4WmQfVsYW9TkPm2zYnCOebw==
+X-Google-Smtp-Source: AK7set82dR0+UYzZHCSleN07ZLQ1x1Vi+yXTOKxCCo3hlf5bx2q21+tOry+6fHcUDWlc41GSN59j2g==
+X-Received: by 2002:a50:cd85:0:b0:4ab:7ee:5e22 with SMTP id
+ p5-20020a50cd85000000b004ab07ee5e22mr3365504edi.27.1676409371600; 
+ Tue, 14 Feb 2023 13:16:11 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ c61-20020a509fc3000000b004acbe0b36d2sm4868835edf.6.2023.02.14.13.16.09
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 14 Feb 2023 13:16:10 -0800 (PST)
+Message-ID: <8010c40b-1f2b-1351-c59b-fd96b61e9861@mind.be>
+Date: Tue, 14 Feb 2023 22:16:07 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: gallagher.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SY2PR01MB2778.ausprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e271f0f-7bb4-4ceb-3bac-08db0ed04646
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2023 21:13:09.7739 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 2156b869-431f-4815-b2ce-b4893b5c9aaa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i5PzI86Nn+SS1P9drdpxVJ5bUgY0+5Drrr0MNV3JX6lyi2z3V/jBnTOL+l098on1EwaXK7+nIL3urPM0HTP7uO6XAjMsAiwhkV4uAxFRGBU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY6PR01MB8492
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-GB
+To: Lang Daniel <d.lang@abatec.at>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <VI1P190MB04936E3BDB708B8974C8287B9F139@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+ <12146851.O9o76ZdvQC@pwmachine>
+ <17501a13-8018-656f-5f4d-b1cf6c1ecd5c@mind.be> <2667723.mvXUDI8C0e@pwmachine>
+ <VI1P190MB0493D7E80E03DC76691F434A9FDD9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <VI1P190MB0493D7E80E03DC76691F434A9FDD9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gallagher.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qv5phjPStcL/X2x9nNYgmo8FtsGAPeulXqKTM5qr92g=;
- b=e2drIwc90jjV09yoPxY/HZ/x7AZqBpAP1v2Yqd6WAL4znchRe77eS1++atgdvLETz4psp52qLirxhAhowQ9k+w+gPHa0pVo1UFqwAOpA/b6r3Co03GbKGjhMtjCWGD/F6bMapHN6GM5PCAdOIKpulsaXH+fvp5fTQ9yNYY1guU0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=gallagher.com header.i=@gallagher.com
- header.a=rsa-sha256 header.s=selector1 header.b=e2drIwc9
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=gallagher.com;
-Subject: [Buildroot] Define dependency package only in staging
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=pbzviloVXXDAqQyXXjnFrf6aBd9J275mm6jkx8Qdp0w=;
+ b=Ssx+XQX5f0R9ZnbYvD4+PrTYN95h2uhsRoKen/dV6acR2lGO5HRgz2XJsENr52Mabc
+ ZDo+P2gyU7ylazQJEQ6LwVcA1ha04gA0oDROVJcUOJCobBoODtr/Ks3+XAlcjA2VFAYd
+ ugAc1H00/mbb95U3vqFzV/VTUKbT/1nVNEOvFjvQkzfrLP232ewI1j89um93mpWni+65
+ JWc4LWL+2XQl9JD4ubCy+fuknp5K8Uc1BHkic93etwC0lHwwAyDcwKj/hObfXbltNhKe
+ zX3+1BNYpOadcEAUDfBC3dPxmgLmSScrfEENXU55eiuWDCp0IawIxiTyS2OR1vDMiMtR
+ 28xw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Ssx+XQX5
+Subject: Re: [Buildroot] [PATCH] package/libbpf: Don't remove bpf.h on host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -139,140 +104,164 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2841494383596408049=="
+Cc: Francis Laniel <flaniel@linux.microsoft.com>,
+ Romain Naour <romain.naour@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2841494383596408049==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_SY2PR01MB277812C5F0180DAA6B2A1D2994A29SY2PR01MB2778ausp_"
 
---_000_SY2PR01MB277812C5F0180DAA6B2A1D2994A29SY2PR01MB2778ausp_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
 
-Hi All
+On 13/02/2023 13:24, Lang Daniel wrote:
+> Hi Arnout, Francis,
+[snip]
+>> Therefore, we believe that the solution is to use -isystem instead of -I in the
+>> HOSTCC setting of the kernel. This is indeed what is already done for uboot:
+>>
+>> 	HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem
+>> /,$(HOST_CFLAGS)))" \
+>>
+>> Note that there is a risk that this by itself goes wrong as well. We tried at
+>> some point to use -isystem instead of -I in HOST_CFLAGS:
+>>
+>> commit 6f8162cf8c1abef7e0a4771fe0d6b26a28f5c2b6
+>> Author: David Raeman <draeman@bbn.com>
+>> Date:   Mon Jul 25 21:52:26 2016
+>>
+>>       package/Makefile.in should grab HOST_DIR headers using -isystem instead of -I.
+>>
+>>
+>> but this was reverted a copule of days later:
+>>
+>> commit 255b6f80d395ef048f46cfcf75dba690c56af657
+>> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Date:   Sat Jul 30 18:10:18 2016
+>>
+>>       Revert "package/Makefile.in should grab HOST_DIR headers using -isystem
+>> instead of -I."
+>>
+>> (Unfortunately, the commit has no further explanation of what went wrong).
+>>
+>>    So, could you (Daniel and Francis) try to apply this patch and replace -I with
+>> -isystem like is done for U-Boot, and do a bunch of kernel builds to see if it
+>> breaks anything?
+> 
+> I didn't apply the patch for package/Makefile.in as that would change the behavour
+> for all packages.
 
-I wonder if it is possible that to force the dependant package to be instal=
-led only in staging folder. For example, I have written package A which dep=
-end on Package B like this:
-config BR2_PACKAGE_A
-               bool "my-a-provider"
-               select BR2_PACKAGE_B
-               help
-                       Test A Package
-The problem is that the above configuration installs B in the target, but i=
-n reality, it is enough to be installed in staging directory (since it prov=
-ides a header-only version). In there anyway to define a dependency for sta=
-ging only?
+  Yeah, that's the thing that turned out not to work before.
 
-Best Regards,
-Afshin
-________________________________
-This email is confidential and may contain information subject to legal pri=
-vilege. If you are not the intended recipient please advise us of our error=
- by return e-mail then delete this email and any attached files. You may no=
-t copy, disclose or use the contents in any way. The views expressed in thi=
-s email may not be those of Gallagher Group Ltd or subsidiary companies the=
-reof.
-________________________________
+> I did however copy the logic used in the U-Boot.
+> 
+> -HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
+> +HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS))) $(HOST_LDFLAGS)" \
 
---_000_SY2PR01MB277812C5F0180DAA6B2A1D2994A29SY2PR01MB2778ausp_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+  That was indeed what I meant.
 
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;
-	mso-fareast-language:EN-US;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri",sans-serif;
-	mso-fareast-language:EN-US;}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-NZ" link=3D"#0563C1" vlink=3D"#954F72" style=3D"word-wrap:=
-break-word">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hi All<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I wonder if it is possible that to force the dependa=
-nt package to be installed only in staging folder. For example, I have writ=
-ten package A which depend on Package B like this:<o:p></o:p></p>
-<p class=3D"MsoNormal">config BR2_PACKAGE_A<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bool &quot;my-a-provider&quot;<o:p></o:p><=
-/p>
-<p class=3D"MsoNormal">&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select BR2_PACKAGE_B<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; help<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;Test A Package<o:p></o:p></p>
-<p class=3D"MsoNormal">The problem is that the above configuration installs=
- B in the target, but in reality, it is enough to be installed in staging d=
-irectory (since it provides a header-only version). In there anyway to defi=
-ne a dependency for staging only?<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Best Regards,<o:p></o:p></p>
-<p class=3D"MsoNormal">Afshin<o:p></o:p></p>
-</div>
-<hr>
-This email is confidential and may contain information subject to legal pri=
-vilege. If you are not the intended recipient please advise us of our error=
- by return e-mail then delete this email and any attached files. You may no=
-t copy, disclose or use the contents
- in any way. The views expressed in this email may not be those of Gallaghe=
-r Group Ltd or subsidiary companies thereof.
-<hr>
-</body>
-</html>
+> 
+> And applied this patch to keep bpf.h
+> 
+> I tested the following config:
+> 
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="{VERSION}"
+> BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="pahole-kernel.config"
+> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE=y
+> 
+> and with a fragment for linux:
+> 
+> CONFIG_BPF_SYSCALL=y
+> CONFIG_BPF_UNPRIV_DEFAULT_OFF=n
+> CONFIG_DEBUG_INFO_REDUCED=n
+> CONFIG_DEBUG_INFO_COMPRESSED=n
+> CONFIG_DEBUG_INFO_BTF=y
+> CONFIG_SYSTEM_TRUSTED_KEYRING=y
+> 
+> where VERSION is one of:
+> 5.2.21 5.3.18 5.4.231 5.5.19 5.6.19 5.7.19 5.8.18 5.9.16 5.10.167 5.11.22
+> 5.12.19 5.13.19 5.14.21 5.15.93 5.16.20 5.17.15 5.18.19 5.19.17 6.0.19 6.1.11
+> 
+> Version 5.2, as far as I could work it out, is the version that introduced
+> the pahole dependency when CONFIG_DEBUG_INFO_BTF is set.
+> 
+> None-LTS versions after 5.10 and before 6.0 fail with:
+> 
+>    LD      vmlinux.o
+>    MODPOST vmlinux.symvers
+>    MODINFO modules.builtin.modinfo
+>    GEN     modules.builtin
+>    LD      .tmp_vmlinux.btf
+>    BTF     .btf.vmlinux.bin.o
+>    LD      .tmp_vmlinux.kallsyms1
+>    KSYMS   .tmp_vmlinux.kallsyms1.S
+>    AS      .tmp_vmlinux.kallsyms1.S
+>    LD      .tmp_vmlinux.kallsyms2
+>    KSYMS   .tmp_vmlinux.kallsyms2.S
+>    AS      .tmp_vmlinux.kallsyms2.S
+>    LD      vmlinux
+>    BTFIDS  vmlinux
+> FAILED: load BTF from vmlinux: Invalid argument
+> make[2]: *** [Makefile:1177: vmlinux] Error 255
+> make[1]: *** [package/pkg-generic.mk:293: /home/d.lang/ws/other/buildroot/output/build/linux-5.11.22/.stamp_built] Error 2
+> make: *** [Makefile:82: _all] Error 2
+> 
+> But that should be unrelated to the change in package/libbpf and HOSTCC.
+> I will try to work out the reason behind that error.
 
---_000_SY2PR01MB277812C5F0180DAA6B2A1D2994A29SY2PR01MB2778ausp_--
+  Since you said "non-LTS versions", I guess it's an upstream issue that got 
+fixed in 6.1 and applied to 6.0.x and 5.15.x?
 
---===============2841494383596408049==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
+> Should I create a patch to change HOSTCC or is additional testing required?
+
+  Yes please! And include your extensive test coverage in the commit message.
+
+  Regards,
+  Arnout
+
+> 
+>>
+>>    For now, I've marked this patch as Changes Requested (it can only be applied
+>> if the bpf.h problem is solved in some other way), and marked Francis's patch
+>> [1] as Superseded.
+>>
+>>    Regards,
+>>    Arnout
+>>
+>>
+>> [1]
+>> https://patchwork.ozlabs.org/project/buildroot/patch/20220610165441.84812-2-flaniel@linux.microsoft.com/
+>>
+>>
+>>>
+>>> Sadly, I tested your patch and I hit the problem described in the comment
+>>> regarding redefinition of bpf_core_relo_kind.
+>>>
+>>> Did you also hit it or you were able to build the kernel with
+>>> BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE?
+> 
+> It seems like I was tested with a too recent kernel and originally preparing
+> this patch and therefore didn't hit this error.
+> 
+>>>
+>>>
+>>> Best regards and thank you in advance.
+>>>
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot@buildroot.org
+>>> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2841494383596408049==--
