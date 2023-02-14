@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DC42C05027
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCF2FC05027
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:19:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1699640BD1;
-	Tue, 14 Feb 2023 17:18:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1699640BD1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EC4C40BE0;
+	Tue, 14 Feb 2023 17:19:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EC4C40BE0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kd5ZaLn-JmIa; Tue, 14 Feb 2023 17:18:55 +0000 (UTC)
+	with ESMTP id SG5mYY6phYqd; Tue, 14 Feb 2023 17:19:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2BAB740C04;
-	Tue, 14 Feb 2023 17:18:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BAB740C04
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF8D240BD1;
+	Tue, 14 Feb 2023 17:19:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF8D240BD1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 755F01BF4DB
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:16:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 973E51BF4DB
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:17:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9423760D78
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:16:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9423760D78
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E47C60F33
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:16:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E47C60F33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q2lF5ktNutLp for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 17:16:54 +0000 (UTC)
+ with ESMTP id 2ggBw4mRpxVK for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 17:16:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B036F60E92
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:16:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B036F60E92
+ by smtp3.osuosl.org (Postfix) with ESMTP id 02FFD60F32
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:16:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02FFD60F32
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F07885E9F; Tue, 14 Feb 2023 17:16:54 +0000 (UTC)
+ id F2D9385E9E; Tue, 14 Feb 2023 17:16:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:12:33 +0100
+Date: Tue, 14 Feb 2023 18:14:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2b70aa9492517717f948f199e99f055a5c1dde1
-X-Git-Newrev: 4231054b05436978795267330202f72be0d3a4d4
+X-Git-Oldrev: 38101cea6ed695901ec54e52ae3db528f5e19979
+X-Git-Newrev: 67eb00b807ddd168a9765e953405d03e18599fb5
 X-Patchwork-Hint: ignore
-Message-Id: <20230214171654.9F07885E9F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apr-util: security bump to version
- 1.6.3
+Message-Id: <20230214171654.F2D9385E9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireless-regdb: bump version to
+ 2023.02.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4231054b05436978795267330202f72be0d3a4d4
+commit: https://git.buildroot.net/buildroot/commit/?id=67eb00b807ddd168a9765e953405d03e18599fb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-*) SECURITY: CVE-2022-25147 (cve.mitre.org)
-   Integer Overflow or Wraparound vulnerability in apr_base64 functions
-   of Apache Portable Runtime Utility (APR-util) allows an attacker to
-   write beyond bounds of a buffer.
-
-https://downloads.apache.org/apr/Announcement-aprutil-1.x.html
-https://downloads.apache.org/apr/CHANGES-APR-UTIL-1.6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apr-util/apr-util.hash | 4 ++--
- package/apr-util/apr-util.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
-index 59ef590109..7e2793cd77 100644
---- a/package/apr-util/apr-util.hash
-+++ b/package/apr-util/apr-util.hash
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 91fcb320d2..36451f839d 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
 @@ -1,4 +1,4 @@
--# From http://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256
--sha256  d3e12f7b6ad12687572a3a39475545a072608f4ba03a6ce8a3778f607dd0035b  apr-util-1.6.1.tar.bz2
-+# From http://www.apache.org/dist/apr/apr-util-1.6.3.tar.bz2.sha256
-+sha256  a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5  apr-util-1.6.3.tar.bz2
- # Locally calculated
- sha256  ef5609d18601645ad6fe22c6c122094be40e976725c1d0490778abacc836e7a2  LICENSE
-diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
-index fb0735f5e7..02b6d5e277 100644
---- a/package/apr-util/apr-util.mk
-+++ b/package/apr-util/apr-util.mk
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256  8828c25a4ee25020044004f57374bb9deac852809fad70f8d3d01770bf9ac97f  wireless-regdb-2022.02.18.tar.xz
++sha256  fe81e8a8694dc4753a45087a1c4c7e1b48dee5a59f5f796ce374ea550f0b2e73  wireless-regdb-2023.02.13.tar.xz
+ # Locally computed
+ sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 35a8c6686d..68fbe35b8b 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APR_UTIL_VERSION = 1.6.1
-+APR_UTIL_VERSION = 1.6.3
- APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
- APR_UTIL_SITE = https://archive.apache.org/dist/apr
- APR_UTIL_LICENSE = Apache-2.0
+-WIRELESS_REGDB_VERSION = 2022.02.18
++WIRELESS_REGDB_VERSION = 2023.02.13
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
