@@ -1,95 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CE58C6379F
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 21:46:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9389AC61DA4
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 23:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B7EC60BD3;
-	Tue, 14 Feb 2023 21:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B7EC60BD3
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE15340A59;
+	Tue, 14 Feb 2023 23:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE15340A59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QWmXHUVmWC2L; Tue, 14 Feb 2023 21:46:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Hjs8B-65J27f; Tue, 14 Feb 2023 23:20:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB65060F99;
-	Tue, 14 Feb 2023 21:46:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB65060F99
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A87BC1BF2B3
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:46:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43B6C403C4;
+	Tue, 14 Feb 2023 23:20:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43B6C403C4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E6461BF232
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 23:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F027408D4
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 21:46:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F027408D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3541E8198D
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 23:20:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3541E8198D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tXb6DfL1J54j for <buildroot@lists.busybox.net>;
- Tue, 14 Feb 2023 21:46:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5944C40318
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5944C40318
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 21:46:39 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id jg8so43523604ejc.6
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 13:46:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=CnbjcOopVAsRie40WmroehLFw5b/I/qBSTJrIlxXEwM=;
- b=0hhx1SRVuHU9+MyHPJGfkcI1S5gvOilURRZyBSQRYSUtV3kLeRggbd/Gx1MpDtRgJj
- N/82clKtbn5/1JB98yAUrUomGEpDPkJuFdn1DaIomO6cGDkHIIhyuyktJA5+M8jfeI7X
- Zsfmpf44pRcuhJgpqEjRLtGyRpo7x7IW8QL98iAqUohQ8onK2agpq7jVj2hKkvALp7jC
- zPXkEHsFuB1+KvuCKM/NcQLLW1L2T/nKUWUHChe1ViXqeiq08Tjdu1jbrl5TH/FJeBVA
- vUsnpBQeJfrRoZF1QxVU637ejioYri3o1C1EFrllvaqEPJfaNBfZiCDhdpF22YPij5Qm
- t3sg==
-X-Gm-Message-State: AO0yUKW/D23//N/bbPO2zIudPIu5rwaremuYIqQ7FTmuqcMtVjohf6s9
- qqnYYB9mxxLUfJTGrw6ff6GO1EC7AelRA/GA
-X-Google-Smtp-Source: AK7set9JHFHBKwlMeqjlcjA4nb/GVWWMG47JQV0rrbyh11VHIVuZt3988iHwsyAIkVGRxPwaBEmY8Q==
-X-Received: by 2002:a17:906:bc92:b0:878:509f:798c with SMTP id
- lv18-20020a170906bc9200b00878509f798cmr3983903ejb.4.1676411197306; 
- Tue, 14 Feb 2023 13:46:37 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- y25-20020a17090614d900b008b133f9a197sm1019034ejc.198.2023.02.14.13.46.36
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Feb 2023 13:46:36 -0800 (PST)
-Message-ID: <1f6626fc-12c0-d1f0-2a8a-2fa2fd0431b6@mind.be>
-Date: Tue, 14 Feb 2023 22:46:33 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0vV7mN-3KxgA for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 23:20:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6D3781448
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A6D3781448
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 23:20:11 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.54])
+ by smtp4-g21.free.fr (Postfix) with ESMTP id 385E419F593;
+ Wed, 15 Feb 2023 00:20:08 +0100 (CET)
+Received: from [37.170.153.8]
+	by webmail.free.fr
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-GB
-To: ckhardin@gmail.com, buildroot@buildroot.org
-References: <20230209231518.9458-1-ckhardin@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230209231518.9458-1-ckhardin@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=CnbjcOopVAsRie40WmroehLFw5b/I/qBSTJrIlxXEwM=;
- b=V4OJ0boATda9Wt9J5a8BHttcKUrpz0jk2AFPhWaZlvthUQ9vKg7RHoipWLtLY/t4R1
- 7Yt7IVKC+IZsKmUFgMbRweQyvzID4Rg4FbSTOOEf5n28iY6CbV+O4rV6gV4d2yg9Drny
- ls8KZe23Mzh6gTQJ3/JAbpd7W6sj5fufQfEBxSYeL7xJiahm2NXOLdD64Vn7HrXYs4DZ
- 51egURB93lKIZvHz5fw0tjcS7FWxuMIRtXz01CDXwx45m7qokdOsqGZ3TNd4iAFtPLwE
- kYtj+neGvryI2fgfbMEtgXflcoBurtzog26lObpr6UJUoSQOCovR4tajielRUxLCeSyT
- +zfg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=V4OJ0boA
-Subject: Re: [Buildroot] [PATCH 1/4] linux: create a scmversion file based
- on the custom repo variables
+Date: Wed, 15 Feb 2023 00:20:08 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20230213232050.5fe67607@windsurf>
+References: <20221124220552.2836398-1-ju.o@free.fr>
+ <20230213232050.5fe67607@windsurf>
+Message-ID: <f255f9b172b09c9e7c8ad2c52e685a4d@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1676416808;
+ bh=yLmYpdlNCZdn5F0Wz97d5RtWE7nwTgLl73fpEM/+TIg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Y8wYF8eAm2CkwSjuBc65yVgrmsL4zL8U/urKUTccbKGfO7nHji6C3xPUXOESR/bKr
+ sL9UEWfYjxM7mdmBv/mzccJj4MqktauUmvfRmjbBMbUeBNH5ji+NeMLdJZVRkJ/tDF
+ eQcKnTz/OZbPF0abALrqQpDo1pEmnVK518iTAthWGUBlrN4u23SNip4Kw7AaKFty0U
+ BVEXX95a+QnxdW8SrxthRSHQux6kx8SfBZDeSTustO6kTZ7olGHYJmFW5rExy36qfs
+ 4ILZetimk+2/g17oWOY16iavpb4SqDhhlXmMn6Hc8zj70/o8nXraK+HZmDeF/A88Xr
+ 4hHjjToqiJ7qw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Y8wYF8eA
+Subject: Re: [Buildroot] [PATCH next v2 1/2] package/highway: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,82 +75,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Charles,
+Hi Thomas,
 
-  First of all, in patchwork [1] there are about twelve patches from you about 
-this subject, but I think all except these four are superseded. Is that correct? 
-Could you update patchwork and mark the old ones as superseded?
-
-
-On 10/02/2023 00:15, ckhardin@gmail.com wrote:
-> From: Charles Hardin <ckhardin@gmail.com>
+On 13/02/2023 23:20, Thomas Petazzoni wrote:
+> On Thu, 24 Nov 2022 23:05:51 +0100
+> Julien Olivain <ju.o@free.fr> wrote:
 > 
-> When using the custom repositories, the archive creation will
-> omit the source history to get reproducible hashes. This has
-> the side effect of making the setlocalversion scripts within the
-> builds to not create the tracking information as expected. So,
-> just generate a .scmversion so that kernels will be labelled
-> with where buildroot referenced them.
-
-  This is less than ideal because it's completely different than the normal git 
-describe output. In particular, if you first develop something in an 
-OVERRIDE_SRCDIR (after applying patch 4) and then change the config to point to 
-the exact same commit with BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION, it will create 
-a completely different UTS_RELEASE string...
-
-  I think a better solution would be to extend the git download wrapper with a 
-hook that gets called in the git tree itself. E.g.:
-
-LINUX_SCMVERSION_HOOK = ./scripts/setlocalversion --save-scmversion
-
-  The same hook could then also be used for rsync. And it would be easy to add 
-the same feature to barebox, tf-a, ...
-
-  Regards,
-  Arnout
-
-
+>> Highway is a C++ library that provides portable SIMD/vector 
+>> intrinsics.
+>> 
+>> https://github.com/google/highway
+>> 
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > 
-> For example (line wrapped)
+> Thanks! I've applied, with some small changes, see below.
+
+Thanks for the improvements!
+
+[...]
+>> +This patch adds a check for <sys/auxv.h> and include it only if 
+>> present.
+>> +
+>> +Signed-off-by: Julien Olivain <ju.o@free.fr>
 > 
->      #define UTS_RELEASE "5.4.70-repo-version-" \
->                          "92c23d10d0031e0a13244a1a97e7530d3b53fc6e"
-> 
-> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
-> ---
->   linux/linux.mk | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 7645b5f507..0b27c8dee2 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -596,6 +596,20 @@ endif
->   ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL)),)
->   $(error No custom repo URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL setting)
->   endif
-> +
-> +# Create a custom scm version file to reflect the source version since the
-> +# archive will omit source directories like .git to maintain reproducible
-> +# hashes for the archives
-> +LINUX_CUSTOM_REPO_SCMVERSION = \
-> +	"-repo-version-$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION))"
-> +define LINUX_CUSTOM_REPO_SCMVERSION_HOOK
-> +	(cd $(@D); \
-> +		if [ ! -f .scmversion ]; then \
-> +			echo $(LINUX_CUSTOM_REPO_SCMVERSION) > .scmversion; \
-> +		fi)
-> +endef
-> +
-> +LINUX_POST_EXTRACT_HOOKS += LINUX_CUSTOM_REPO_SCMVERSION_HOOK
->   endif
->   
->   ifeq ($(BR_BUILDING),y)
+> Has this patch been submitted upstream?
+
+Yes! A slightly reworked version was accepted upstream and is already in 
+the
+latest 1.0.3 version tag. See:
+https://github.com/google/highway/commit/1cab22047a6ef750ef2bc38ad47d6e765d6d376a
+
+I'm currently reworking this 1.0.3 and I'll send a version bump when 
+ready.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
