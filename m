@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6652C61DA4
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 14:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9047EC61DA4
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 14:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6725281AF6;
-	Tue, 14 Feb 2023 14:43:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6725281AF6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EAD881E6F;
+	Tue, 14 Feb 2023 14:43:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EAD881E6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Usu32HpG4IK; Tue, 14 Feb 2023 14:43:14 +0000 (UTC)
+	with ESMTP id vnvGUI4f07kU; Tue, 14 Feb 2023 14:43:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 734BF81E69;
-	Tue, 14 Feb 2023 14:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 734BF81E69
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A26FA1BF95C
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 14:42:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3377B81E8E;
+	Tue, 14 Feb 2023 14:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3377B81E8E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 50DA81BF3E1
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 14:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CB1E81AC1
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 14:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CB1E81AC1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B6BB6112C
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 14:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B6BB6112C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f4NoBYg_vnoC for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2cZNu0zQn200 for <buildroot@lists.busybox.net>;
  Tue, 14 Feb 2023 14:42:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7472C80CF2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4AB4760E7C
  for <buildroot@buildroot.org>; Tue, 14 Feb 2023 14:42:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7472C80CF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AB4760E7C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E80085D74; Tue, 14 Feb 2023 14:42:33 +0000 (UTC)
+ id 3471A85D6F; Tue, 14 Feb 2023 14:42:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 15:13:51 +0100
+Date: Tue, 14 Feb 2023 14:31:09 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 8e9afb26b93bcdeab3115c0f170d73c5368ac36c
-X-Git-Newrev: 594acef246416a0b95452db393765ff60e37d662
+X-Git-Oldrev: c0664cc9f46eb4ad7116daec6be6639d28d9ab79
+X-Git-Newrev: dad63d9ec99d676f6d7b90fd17181433d56864d9
 X-Patchwork-Hint: ignore
-Message-Id: <20230214144233.5E80085D74@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/sdl2: security
- bump to version 2.26.2
+Message-Id: <20230214144233.3471A85D6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/kodi: fix armv5
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,134 +63,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=594acef246416a0b95452db393765ff60e37d662
+commit: https://git.buildroot.net/buildroot/commit/?id=dad63d9ec99d676f6d7b90fd17181433d56864d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-- Drop patch (already in version)
-- Fix CVE-2022-4743: A potential memory leak issue was discovered in
-  SDL2 in GLES_CreateTexture() function in SDL_render_gles.c. The
-  vulnerability allows an attacker to cause a denial of service attack.
+Disable neon support when not available.
 
-https://github.com/libsdl-org/SDL/releases/tag/release-2.26.0
-https://github.com/libsdl-org/SDL/releases/tag/release-2.26.1
-https://github.com/libsdl-org/SDL/releases/tag/release-2.26.2
+Fixes build error not yet found by autobuilders
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+/tmp/cc8LvPwi.s: Assembler messages:
+/tmp/cc8LvPwi.s:28: Error: selected processor does not support `vldmia r1,{ q4-q7 }' in ARM mode
+/tmp/cc8LvPwi.s:29: Error: selected processor does not support `vldmia r0,{ q8-q11 }' in ARM mode
+/tmp/cc8LvPwi.s:30: Error: selected processor does not support `vmul.f32 q0,q8,d8[0]' in ARM mode
+/tmp/cc8LvPwi.s:31: Error: selected processor does not support `vmul.f32 q1,q8,d10[0]' in ARM mode
+/tmp/cc8LvPwi.s:32: Error: selected processor does not support `vmul.f32 q2,q8,d12[0]' in ARM mode
+/tmp/cc8LvPwi.s:33: Error: selected processor does not support `vmul.f32 q3,q8,d14[0]' in ARM mode
+/tmp/cc8LvPwi.s:34: Error: selected processor does not support `vmla.f32 q0,q9,d8[1]' in ARM mode
+/tmp/cc8LvPwi.s:35: Error: selected processor does not support `vmla.f32 q1,q9,d10[1]' in ARM mode
+/tmp/cc8LvPwi.s:36: Error: selected processor does not support `vmla.f32 q2,q9,d12[1]' in ARM mode
+/tmp/cc8LvPwi.s:37: Error: selected processor does not support `vmla.f32 q3,q9,d14[1]' in ARM mode
+/tmp/cc8LvPwi.s:38: Error: selected processor does not support `vmla.f32 q0,q10,d9[0]' in ARM mode
+/tmp/cc8LvPwi.s:39: Error: selected processor does not support `vmla.f32 q1,q10,d11[0]' in ARM mode
+/tmp/cc8LvPwi.s:40: Error: selected processor does not support `vmla.f32 q2,q10,d13[0]' in ARM mode
+/tmp/cc8LvPwi.s:41: Error: selected processor does not support `vmla.f32 q3,q10,d15[0]' in ARM mode
+/tmp/cc8LvPwi.s:42: Error: selected processor does not support `vmla.f32 q0,q11,d9[1]' in ARM mode
+/tmp/cc8LvPwi.s:43: Error: selected processor does not support `vmla.f32 q1,q11,d11[1]' in ARM mode
+/tmp/cc8LvPwi.s:44: Error: selected processor does not support `vmla.f32 q2,q11,d13[1]' in ARM mode
+/tmp/cc8LvPwi.s:45: Error: selected processor does not support `vmla.f32 q3,q11,d15[1]' in ARM mode
+/tmp/cc8LvPwi.s:46: Error: selected processor does not support `vstmia r0,{ q0-q3 }' in ARM mode
+
+with this defconfig:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_STABLE=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_PY_ONLY=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d33a8417bf1bc5d7276e19da5c37da210d4de31a)
+(cherry picked from commit 2952832a40b08e93bb3dc614bb2068b152b1919f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...oesn-t-have-a-mode-configured-use-the-pre.patch | 76 ----------------------
- package/sdl2/sdl2.hash                             |  4 +-
- package/sdl2/sdl2.mk                               |  2 +-
- 3 files changed, 3 insertions(+), 79 deletions(-)
+ package/kodi/kodi.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch b/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
-deleted file mode 100644
-index c8be280c56..0000000000
---- a/package/sdl2/0001-If-a-CRTC-doesn-t-have-a-mode-configured-use-the-pre.patch
-+++ /dev/null
-@@ -1,76 +0,0 @@
--From da9ba3a2a1536017e4ce1ee0f4276578d1ce6e29 Mon Sep 17 00:00:00 2001
--From: Sam Lantinga <slouken@libsdl.org>
--Date: Fri, 18 Nov 2022 12:17:27 -0800
--Subject: [PATCH] If a CRTC doesn't have a mode configured, use the preferred
-- or largest mode as the default mode
--
--Fixes https://github.com/libsdl-org/SDL/issues/6421
--
--[mf@go-sys.de: backport from upstream]
--Signed-off-by: Michael Fischer <mf@go-sys.de>
--[yann.morin.1998@free.fr: do an actual backport]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- src/video/kmsdrm/SDL_kmsdrmvideo.c | 35 +++++++++++++++++++++++++-----
-- 1 file changed, 29 insertions(+), 6 deletions(-)
--
--diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
--index eae721455..eeeefef2b 100644
----- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
--+++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
--@@ -666,8 +666,8 @@ KMSDRM_CrtcGetVrr(uint32_t drm_fd, uint32_t crtc_id)
-- /* Gets a DRM connector, builds an SDL_Display with it, and adds it to the
--    list of SDL Displays in _this->displays[]  */
-- static void
---KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
---
--+KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources)
--+{
--     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
--     SDL_DisplayData *dispdata = NULL;
--     SDL_VideoDisplay display = {0};
--@@ -770,14 +770,37 @@ KMSDRM_AddDisplay (_THIS, drmModeConnector *connector, drmModeRes *resources) {
--         drmModeModeInfo *mode = &connector->modes[i];
-- 
--         if (!SDL_memcmp(mode, &crtc->mode, sizeof(crtc->mode))) {
---          mode_index = i;
---          break;
--+            mode_index = i;
--+            break;
--         }
--     }
-- 
--     if (mode_index == -1) {
---      ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
---      goto cleanup;
--+        int current_area, largest_area = 0;
--+
--+        /* Find the preferred mode or the highest resolution mode */
--+        for (i = 0; i < connector->count_modes; i++) {
--+            drmModeModeInfo *mode = &connector->modes[i];
--+
--+            if (mode->type & DRM_MODE_TYPE_PREFERRED) {
--+                mode_index = i;
--+                break;
--+            }
--+
--+            current_area = mode->hdisplay * mode->vdisplay;
--+            if (current_area > largest_area) {
--+                mode_index = i;
--+                largest_area = current_area;
--+            }
--+        }
--+        if (mode_index != -1) {
--+            crtc->mode = connector->modes[mode_index];
--+        }
--+    }
--+
--+    if (mode_index == -1) {
--+        ret = SDL_SetError("Failed to find index of mode attached to the CRTC.");
--+        goto cleanup;
--     }
-- 
--     /*********************************************/
---- 
--2.25.1
--
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 923a900dc0..86e0d86e7c 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.2.tar.gz.sig
--sha256  b35ef0a802b09d90ed3add0dcac0e95820804202914f5bb7b0feb710f1a1329f  SDL2-2.24.2.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.2.tar.gz.sig
-+sha256  95d39bc3de037fbdfa722623737340648de4f180a601b0afad27645d150b99e0  SDL2-2.26.2.tar.gz
- # Locally calculated
- sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index a1dc8b5b73..8995178e71 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index c41c515d10..74c800e5b4 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -144,6 +144,14 @@ else
+ KODI_CONF_OPTS += -DWITH_CPU=$(BR2_ARCH)
+ endif
  
--SDL2_VERSION = 2.24.2
-+SDL2_VERSION = 2.26.2
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++KODI_CONF_OPTS += -DENABLE_NEON=ON
++else ifeq ($(BR2_aarch64),y)
++KODI_CONF_OPTS += -DENABLE_NEON=ON
++else
++KODI_CONF_OPTS += -DENABLE_NEON=OFF
++endif
++
+ ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+ KODI_CONF_OPTS += -D_SSE_OK=ON -D_SSE_TRUE=ON
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
