@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18E29C6379F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Feb 2023 22:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84C2FC636CC
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 01:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5EED4031F;
-	Mon, 13 Feb 2023 22:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5EED4031F
+	by smtp2.osuosl.org (Postfix) with ESMTP id DBD2E4023D;
+	Tue, 14 Feb 2023 01:32:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBD2E4023D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VJqH68-TuJr4; Mon, 13 Feb 2023 22:22:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NIZOi_nsm9Zf; Tue, 14 Feb 2023 01:32:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3E87403A7;
-	Mon, 13 Feb 2023 22:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3E87403A7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CF2371BF325
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 22:22:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1FE8B40A82;
+	Tue, 14 Feb 2023 01:32:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FE8B40A82
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 396CF1BF2FD
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 01:32:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B62B2610BA
- for <buildroot@lists.busybox.net>; Mon, 13 Feb 2023 22:22:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B62B2610BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1344581DEE
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 01:32:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1344581DEE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RPcmJ5ADQMy8 for <buildroot@lists.busybox.net>;
- Mon, 13 Feb 2023 22:22:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N1LRExBTtQKc for <buildroot@lists.busybox.net>;
+ Tue, 14 Feb 2023 01:32:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1297960C07
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1297960C07
- for <buildroot@buildroot.org>; Mon, 13 Feb 2023 22:22:37 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6158C240003;
- Mon, 13 Feb 2023 22:22:36 +0000 (UTC)
-Date: Mon, 13 Feb 2023 23:22:35 +0100
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230213232235.63bbc016@windsurf>
-In-Reply-To: <20221124220552.2836398-2-ju.o@free.fr>
-References: <20221124220552.2836398-1-ju.o@free.fr>
- <20221124220552.2836398-2-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1914081DEC
+Received: from desiato.infradead.org (desiato.infradead.org
+ [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1914081DEC
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 01:32:29 +0000 (UTC)
+Received: from 108-90-42-56.lightspeed.sntcca.sbcglobal.net ([108.90.42.56]
+ helo=[192.168.1.80])
+ by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+ id 1pRkAZ-009XP4-35; Tue, 14 Feb 2023 01:31:44 +0000
+Message-ID: <22dce104-b4e5-6e61-7174-28ab0e11b679@infradead.org>
+Date: Mon, 13 Feb 2023 17:32:23 -0800
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676326956;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=3OSmtt3M5ZGCaERYu2NEzd9bOskEiuNBgj1yUPAyguE=;
- b=PV2q5GMymGcNlBl+3DQ5inUzCoqmJKHhj8Go5SUtg1ZfRtIbCjkBAYU5lW3a0joxPv9gvc
- zmmL1kYINI56deOGFWzUtivlGLbUFqN/K5OKym3UI4HnQvouYyWZ12aePrWiHv02VDbjEe
- EU1H39kBnMd7js/gVBp0Jz9E0XqRyCjdzkD/4TguUKLMm6i2iRjN7dnSDyMEp6qrwImrpt
- 5aIyyxJc/N0UJmXgMzLpvvvcFeTtB/Gtz61iX2Kq5+N5uIH25OHVVyDucU1TNTO3siyLFm
- U0tSmXHCZXW86YZeQKSYdo6WbETMw8THBMx7zxEhGYU3nnrKRxk0r04WYFeTXg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PV2q5GMy
-Subject: Re: [Buildroot] [PATCH next v2 2/2] package/libjxl: new package
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <20230213200604.2539630-1-yann.morin.1998@free.fr>
+Content-Language: en-US
+From: Geoff Levand <geoff@infradead.org>
+In-Reply-To: <20230213200604.2539630-1-yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+ :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+ Reply-To:Cc:Content-ID:Content-Description;
+ bh=kMVU4BSP3I2u2nI6bag1ogtyskM18QoWqtJu3r/1oVY=; b=koBf2ki9R+F+MukAtPzfZtHtdI
+ LuW9JVr8l34Lit2QwFJi0gNsKPn0FFIty71e46MqamoxUO2qB4l4hikxlYkXMav84ngXh7uTUBtdw
+ AasgCMQZMRZU3C3FnLiPjUu86+rQDHUZrcAjgRAiV31zgwqV2R4puD7rWgRI5v3ikV69rcL2zlpBx
+ ujzHAEfppKyxohIbj6r45XTuyzh9Jbq0R4BCTlefMIHK7jL698DcR+Ha0chJ9XR+rO0R3ewL0HWER
+ niD8NNG9kKFuBiQzjF9ePTYqEJZmSOySMLO4Lr2XeE2KcE+HdupR7pbpOisEBsvYzSNwHPy5bGvaC
+ JfdD984g==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org
+ header.a=rsa-sha256 header.s=desiato.20200630 header.b=koBf2ki9
+Subject: Re: [Buildroot] [PATCH] package/flannel: use the github helper
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,81 +76,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
-
-On Thu, 24 Nov 2022 23:05:52 +0100
-Julien Olivain <ju.o@free.fr> wrote:
-
-> libjxl is the reference implementation of JPEG XL (encoder and decoder).
+On 2/13/23 12:06, Yann E. MORIN wrote:
+> Currently, flannel uses an ad-hoc github URL and a version-only tarball
+> name, even though we already had the github helper (introduced in 2013)
+> when flannel was introduced (in 2016).
 > 
-> https://github.com/libjxl/libjxl
+> Switch to the github helper, which allows us to get a properly named
+> tarball.
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Geoff Levand <geoff@infradead.org>
+> ---
+>  package/flannel/flannel.hash | 2 +-
+>  package/flannel/flannel.mk   | 3 +--
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+> index 6a0223a20f..bafc453097 100644
+> --- a/package/flannel/flannel.hash
+> +++ b/package/flannel/flannel.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  e17164db3b158d13ce5e40bb7b233790cb186762d929fa4f626baf586d4d63ca  v0.14.0.tar.gz
+> +sha256  e17164db3b158d13ce5e40bb7b233790cb186762d929fa4f626baf586d4d63ca  flannel-0.14.0.tar.gz
+>  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+> index 231cf90dfd..b4e2b2f777 100644
+> --- a/package/flannel/flannel.mk
+> +++ b/package/flannel/flannel.mk
+> @@ -5,8 +5,7 @@
+>  ################################################################################
+>  
+>  FLANNEL_VERSION = 0.14.0
+> -FLANNEL_SITE = https://github.com/flannel-io/flannel/archive
+> -FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
+> +FLANNEL_SITE = $(call github,flannel-io,flannel,v$(FLANNEL_VERSION))
+>  
+>  FLANNEL_LICENSE = Apache-2.0
+>  FLANNEL_LICENSE_FILES = LICENSE
 
-Thanks, I've applied with some small changes, see below.
+Looks good.  Thanks for working it out.
 
-> diff --git a/package/libjxl/Config.in b/package/libjxl/Config.in
-> new file mode 100644
-> index 0000000000..6a15bde107
-> --- /dev/null
-> +++ b/package/libjxl/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_LIBJXL
-> +	bool "libjxl"
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # highway
-> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC # highway
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_INSTALL_LIBSTDCPP # highway
-> +	# libjxl fail to link statically due to libatomic issue
-> +	depends on !BR2_STATIC_LIBS
-> +	# GCC bug on sh4: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81426
-> +	depends on !BR2_sh4
+Acked-by: Geoff Levand <geoff@infradead.org>
 
-Changed to use a new BR2_TOOLCHAIN_HAS_GCC_BUG_81426 blind option.
 
-> +	select BR2_PACKAGE_BROTLI
-> +	select BR2_PACKAGE_HIGHWAY
-> +	select BR2_PACKAGE_LCMS2
-> +	help
-> +	  libjxl is the reference implementation of JPEG XL (encoder
-> +	  and decoder).
-> +
-> +	  https://github.com/libjxl/libjxl
-> +
-> +comment "libjxl needs a toolchain with C++, threads, gcc >= 7"
-> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-> +		!BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS
 
-This was not complete: you have 6 "depends on" above, so 6 depends on
-should be handled here one way or another:
 
-comment "libjxl needs a toolchain with C++, threads, gcc >= 7, dynamic library"
-        depends on BR2_TOOLCHAIN_HAS_ATOMIC
-        depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_81426
-        depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-                !BR2_INSTALL_LIBSTDCPP || \
-                !BR2_TOOLCHAIN_HAS_THREADS || \
-                BR2_STATIC_LIBS
-
-Applied with that change. Thanks a lot for the runtime tests, very
-useful as usual!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
