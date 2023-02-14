@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70EB1C61DA4
-	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 889E1C64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 14 Feb 2023 17:20:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1AA89405AD;
-	Tue, 14 Feb 2023 17:19:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AA89405AD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 198E140BB9;
+	Tue, 14 Feb 2023 17:20:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 198E140BB9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yf1aLYXoViFF; Tue, 14 Feb 2023 17:19:58 +0000 (UTC)
+	with ESMTP id 3HSNufy8xyAD; Tue, 14 Feb 2023 17:20:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4FD3D40C13;
-	Tue, 14 Feb 2023 17:19:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FD3D40C13
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 87FC81BF94D
- for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:16:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24EA440C0E;
+	Tue, 14 Feb 2023 17:20:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24EA440C0E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10AEC1BF4DB
+ for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:17:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2469460F1C
+ by smtp2.osuosl.org (Postfix) with ESMTP id D661840B8A
  for <buildroot@lists.busybox.net>; Tue, 14 Feb 2023 17:16:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2469460F1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D661840B8A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IC3nexV5Omge for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mZaWd7ui7vXO for <buildroot@lists.busybox.net>;
  Tue, 14 Feb 2023 17:16:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 356F360F33
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4FCF14058F
  for <buildroot@buildroot.org>; Tue, 14 Feb 2023 17:16:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 356F360F33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FCF14058F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 25AFB85E9E; Tue, 14 Feb 2023 17:16:55 +0000 (UTC)
+ id 39BA985E9F; Tue, 14 Feb 2023 17:16:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:15:11 +0100
+Date: Tue, 14 Feb 2023 18:15:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 910aae1e23806fff74b16088c8975827e6664c2e
-X-Git-Newrev: df50979e7bf0ff7f0b8a2461ed7ae9dbd103d836
+X-Git-Oldrev: df50979e7bf0ff7f0b8a2461ed7ae9dbd103d836
+X-Git-Newrev: efdcc850be902de2596412dbf0f142c3f679ce35
 X-Patchwork-Hint: ignore
-Message-Id: <20230214171655.25AFB85E9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnuplot: bump version to 5.4.6
+Message-Id: <20230214171655.39BA985E9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.11.14
+ "Sergey Kapitsa"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +58,99 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7632402980166698157=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df50979e7bf0ff7f0b8a2461ed7ae9dbd103d836
+--===============7632402980166698157==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=efdcc850be902de2596412dbf0f142c3f679ce35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
+This is stable bugfix release of libmdbx,
+in memory of Sergey Kapitsa (Russian physicist and demographer) on his 95th birthday.
+
+It is reasonable to backport this patch to all applicable releases/branches of Buildroot,
+at least this release fixes build for sh4 arch.
+
+Release notes for v0.11.14
+--------------------------
+
+Fixes:
+
+ - backport: Refined the `__cold`/`__hot` macros to avoid the
+   `error: inlining failed in call to ‘always_inline FOO(...)’: target specific option mismatch`
+   issue during build using GCC >10.x for SH4 arch.
+   Actually this is GCC' SH4-backend bug which triggered by the `__attribute__((__optimize__("Os")))`
+   used in conjunction with the `__attribute__((__cold__))`.
+
+ - backport: Fixed `SIGSEGV` or an erroneous call to `free()` in case where
+   errors occur when reopening by `mdbx_env_open()` of a previously used
+   environment.
+
+ - backport: Fixed `cursor_put_nochecklen()` internals for case when dupsort'ed named subDb
+   contains a single key with multiple values (aka duplicates), which are replaced
+   with a single value by put-operation with the `MDBX_UPSERT+MDBX_ALLDUPS` flags.
+   In this case, the database becomes completely empty, without any pages.
+   However exactly this condition was not considered and thus wasn't handled correctly.
+   See [issue#8](https://gitflic.ru/project/erthink/libmdbx/issue/8) for more information.
+
+ - backport: Fixed extra assertion inside `override_meta()`, which could
+   lead to false-positive failing of the assertion in a debug builds during
+   DB recovery and/or auto-rollback.
+
+Minors:
+
+ - backport: Fixed typos.
+ - backport: Refined `const` and `noexcept` for few C++ API methods.
+ - backport: Resolve false-posirive `used uninitialized` warning from GCC >10.x
+   while build for SH4 arch.
+ - backport: Fixed insignificant typo of `||` inside `#if` byte-order condition.
+
+The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
+
+Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnuplot/gnuplot.hash | 8 ++++----
- package/gnuplot/gnuplot.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libmdbx/libmdbx.hash | 2 +-
+ package/libmdbx/libmdbx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
-index 1ee6b53694..de0741d609 100644
---- a/package/gnuplot/gnuplot.hash
-+++ b/package/gnuplot/gnuplot.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.5/
--md5  c10cf81faa69d77e255a1dcfc625ba78  gnuplot-5.4.5.tar.gz
--sha1  1179a768fd5f585a5dcb6aedea76cfa7a8dd5dfe  gnuplot-5.4.5.tar.gz
-+# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.6/
-+md5  da719235bb2f46830f9d2101d04b14a5  gnuplot-5.4.6.tar.gz
-+sha1  31ea0c00af5c156e5d068e3b1cc2fb1847f471ab  gnuplot-5.4.6.tar.gz
- # Locally computed
--sha256  66f679115dd30559e110498fc94d926949d4d370b4999a042e724b8e910ee478  gnuplot-5.4.5.tar.gz
-+sha256  02fc27918200ed64d8f0c3b84fe81b95b59cd47ad99f270939ae497c19f27419  gnuplot-5.4.6.tar.gz
- sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
-diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-index 1ee49cb6ce..c49fbc497d 100644
---- a/package/gnuplot/gnuplot.mk
-+++ b/package/gnuplot/gnuplot.mk
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index e3fb309461..b1a2891b91 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
+-sha256  9449fd357119e19902363ab90134d82c9a713b706394c2a1389b5bb4787b5164  libmdbx-amalgamated-0.11.13.tar.xz
++sha256  97b03965b5b61727dc4232c50ccb174c632470a3d24438b3c52315bef6fb4033  libmdbx-amalgamated-0.11.14.tar.xz
+ 
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index a139e062f6..5e7995f8c8 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPLOT_VERSION = 5.4.5
-+GNUPLOT_VERSION = 5.4.6
- GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
- GNUPLOT_LICENSE = gnuplot license (open source)
- GNUPLOT_LICENSE_FILES = Copyright
+-LIBMDBX_VERSION = 0.11.13
++LIBMDBX_VERSION = 0.11.14
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
+ LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
+
+--===============7632402980166698157==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7632402980166698157==--
