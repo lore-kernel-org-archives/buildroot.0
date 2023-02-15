@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 226ADC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3DEFC677F1
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:02:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7F057024C;
-	Tue, 21 Feb 2023 02:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7F057024C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84D4870139;
+	Tue, 21 Feb 2023 02:02:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84D4870139
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6UillVFLxIGd; Tue, 21 Feb 2023 02:02:04 +0000 (UTC)
+	with ESMTP id MOM1xi65Km3D; Tue, 21 Feb 2023 02:02:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D15587011E;
-	Tue, 21 Feb 2023 02:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D15587011E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F9F7700D9;
+	Tue, 21 Feb 2023 02:02:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F9F7700D9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5C6BB1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 919C91BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E31B70039
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E47270045
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E31B70039
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E47270045
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4jS2FnBIbUAr for <buildroot@lists.busybox.net>;
+ with ESMTP id Z-dERMiYTaJA for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 803227003E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53AB0610E5
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 803227003E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53AB0610E5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B298828C8; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+ id 4FD2A828C8; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 23:21:19 +0100
+Date: Wed, 15 Feb 2023 23:16:55 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9c3e7014105eb69db7d9c9f662ab0a5054f35797
-X-Git-Newrev: 3e9f0dc59a5c4310139040f88189d10ad0b76906
+X-Git-Oldrev: 8984b7581a7d534c9170061913b4840ed33d87c2
+X-Git-Newrev: 8c41d4836999fa691c5952bd476182bf93647e7c
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205301.6B298828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-marshmallow-sqlalchemy: new package
+Message-Id: <20230220205301.4FD2A828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-webargs: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,99 +59,102 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8927912756547185395=="
+Content-Type: multipart/mixed; boundary="===============6713044988050563889=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8927912756547185395==
+--===============6713044988050563889==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e9f0dc59a5c4310139040f88189d10ad0b76906
+commit: https://git.buildroot.net/buildroot/commit/?id=8c41d4836999fa691c5952bd476182bf93647e7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Martin Hundeboll <martin@geanix.com>
+webargs is a dependency of to-be-added python-flask-smorest.
+
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/python-marshmallow-sqlalchemy/Config.in            | 10 ++++++++++
- .../python-marshmallow-sqlalchemy.hash                     |  5 +++++
- .../python-marshmallow-sqlalchemy.mk                       | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/python-webargs/Config.in           | 11 +++++++++++
+ package/python-webargs/python-webargs.hash |  5 +++++
+ package/python-webargs/python-webargs.mk   | 14 ++++++++++++++
+ 5 files changed, 32 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 2b05714e9c..bcf377d3d4 100644
+index 949eef8327..7335e70d15 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1968,6 +1968,7 @@ F:	package/zic/
+@@ -1967,6 +1967,7 @@ F:	package/zic/
+ 
  N:	Martin Hundebøll <martin@geanix.com>
  F:	package/python-apispec/
- F:	package/python-marshmallow/
-+F:	package/python-marshmallow-sqlalchemy/
- F:	package/python-webargs/
++F:	package/python-webargs/
  
  N:	Martin Kepplinger <martink@posteo.de>
+ F:	package/tslib/
 diff --git a/package/Config.in b/package/Config.in
-index ece35f12c8..3807050eeb 100644
+index de40f2d529..747fac54bf 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1130,6 +1130,7 @@ menu "External python modules"
- 	source "package/python-markdown2/Config.in"
- 	source "package/python-markupsafe/Config.in"
- 	source "package/python-marshmallow/Config.in"
-+	source "package/python-marshmallow-sqlalchemy/Config.in"
- 	source "package/python-matplotlib/Config.in"
- 	source "package/python-mbstrdecoder/Config.in"
- 	source "package/python-memory-profiler/Config.in"
-diff --git a/package/python-marshmallow-sqlalchemy/Config.in b/package/python-marshmallow-sqlalchemy/Config.in
+@@ -1341,6 +1341,7 @@ menu "External python modules"
+ 	source "package/python-wcwidth/Config.in"
+ 	source "package/python-weasyprint/Config.in"
+ 	source "package/python-web2py/Config.in"
++	source "package/python-webargs/Config.in"
+ 	source "package/python-webencodings/Config.in"
+ 	source "package/python-webob/Config.in"
+ 	source "package/python-webpy/Config.in"
+diff --git a/package/python-webargs/Config.in b/package/python-webargs/Config.in
 new file mode 100644
-index 0000000000..f48d27edd6
+index 0000000000..f2332d3b70
 --- /dev/null
-+++ b/package/python-marshmallow-sqlalchemy/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_MARSHMALLOW_SQLALCHEMY
-+	bool "python-marshmallow-sqlalchemy"
++++ b/package/python-webargs/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_WEBARGS
++	bool "python-webargs"
 +	select BR2_PACKAGE_PYTHON_MARSHMALLOW # runtime
 +	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
-+	select BR2_PACKAGE_PYTHON_SQLALCHEMY # runtime
 +	help
-+	  SQLAlchemy integration with the marshmallow
-+	  (de)serialization library.
++	  Declarative parsing and validation of HTTP request objects,
++	  with built-in support for popular web frameworks, including
++	  Flask, Django, Bottle, Tornado, Pyramid, Falcon, and
++	  aiohttp.
 +
-+	  https://github.com/marshmallow-code/marshmallow-sqlalchemy
-diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
++	  https://github.com/marshmallow-code/webargs
+diff --git a/package/python-webargs/python-webargs.hash b/package/python-webargs/python-webargs.hash
 new file mode 100644
-index 0000000000..6b847de94d
+index 0000000000..619b584807
 --- /dev/null
-+++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
++++ b/package/python-webargs/python-webargs.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/marshmallow-sqlalchemy/json
-+md5  5e012b07ccf4ad67dbd3f38cc68cb1f4  marshmallow-sqlalchemy-0.28.1.tar.gz
-+sha256  aa376747296780a56355e3067b9c8bf43a2a1c44ff985de82b3a5d9e161ca2b8  marshmallow-sqlalchemy-0.28.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/webargs/json
++md5   9fff29294a5db748eca791da2b93e370  webargs-8.2.0.tar.gz
++sha256  99d68940c452e07726485a15fef43f12f8ae6c0c5b391bcba76065d4527fb85d  webargs-8.2.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  625df8e2758a271b4bc90525c0b6161814e0f72cb3504b03ab5206b7abf50072  LICENSE
-diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
++sha256  5973e5dcc20b65e4eb4b4acdf273bb78a18522914ab626f496f1b070f7e6294d  LICENSE
+diff --git a/package/python-webargs/python-webargs.mk b/package/python-webargs/python-webargs.mk
 new file mode 100644
-index 0000000000..293ea29be6
+index 0000000000..e048d8a4ac
 --- /dev/null
-+++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
++++ b/package/python-webargs/python-webargs.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-marshmallow-sqlalchemy
++# python-webargs
 +#
 +################################################################################
 +
-+PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 0.28.1
-+PYTHON_MARSHMALLOW_SQLALCHEMY_SOURCE = marshmallow-sqlalchemy-$(PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION).tar.gz
-+PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/eb/96/3895bde2247fa653c36d887ff08e439665668aa7c991a3924ae199be88d6
-+PYTHON_MARSHMALLOW_SQLALCHEMY_SETUP_TYPE = setuptools
-+PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE = MIT
-+PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE_FILES = LICENSE
++PYTHON_WEBARGS_VERSION = 8.2.0
++PYTHON_WEBARGS_SOURCE = webargs-$(PYTHON_WEBARGS_VERSION).tar.gz
++PYTHON_WEBARGS_SITE = https://files.pythonhosted.org/packages/4b/7d/fece8e6547b3edde8953b1c84a63da02e1a88efcb9d7d485e4d1b25d9c47
++PYTHON_WEBARGS_SETUP_TYPE = setuptools
++PYTHON_WEBARGS_LICENSE = MIT
++PYTHON_WEBARGS_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 
---===============8927912756547185395==
+--===============6713044988050563889==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -162,4 +165,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8927912756547185395==--
+--===============6713044988050563889==--
