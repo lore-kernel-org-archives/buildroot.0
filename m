@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 211B6C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95CA1C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:00:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C513F70221;
-	Tue, 21 Feb 2023 02:00:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C513F70221
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B8B97022C;
+	Tue, 21 Feb 2023 02:00:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B8B97022C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PhSqRZ-oEiAS; Tue, 21 Feb 2023 02:00:25 +0000 (UTC)
+	with ESMTP id rwMTdAprfvpb; Tue, 21 Feb 2023 02:00:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 113B4701F6;
-	Tue, 21 Feb 2023 02:00:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 113B4701F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83C6E701F6;
+	Tue, 21 Feb 2023 02:00:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83C6E701F6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 537CA1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 62BBB1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68C727003C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6FB177003D
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68C727003C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FB177003D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hq2EWtPNuSRv for <buildroot@lists.busybox.net>;
+ with ESMTP id DDx4E7UYDyTC for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96C4170026
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B8A37001F
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96C4170026
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B8A37001F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85045828C8; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+ id 783F681979; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 21:56:11 +0100
+Date: Wed, 15 Feb 2023 21:56:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8972b7ec25c0c053eb62ce7ea445830b8aac394f
-X-Git-Newrev: 4cc59b5cb397ee79d1a8152540eec512354b1825
+X-Git-Oldrev: d22988bfbdca479b18cce6a60b7d51b59e125a6d
+X-Git-Newrev: 8972b7ec25c0c053eb62ce7ea445830b8aac394f
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205300.85045828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/netopeer2: bump
- version to 2.1.49
+Message-Id: <20230220205300.783F681979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sysrepo: bump version
+ to 2.2.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cc59b5cb397ee79d1a8152540eec512354b1825
+commit: https://git.buildroot.net/buildroot/commit/?id=8972b7ec25c0c053eb62ce7ea445830b8aac394f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netopeer2/netopeer2.hash | 2 +-
- package/netopeer2/netopeer2.mk   | 2 +-
+ package/sysrepo/sysrepo.hash | 2 +-
+ package/sysrepo/sysrepo.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
-index cc71a2dab8..6a278fbbaf 100644
---- a/package/netopeer2/netopeer2.hash
-+++ b/package/netopeer2/netopeer2.hash
+diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
+index a90d8259bf..6a5e98f41b 100644
+--- a/package/sysrepo/sysrepo.hash
++++ b/package/sysrepo/sysrepo.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  b166fe3425bb55b5f330fb7f53158f613bffc07493925ac437193e4d2defb3e7  netopeer2-2.1.42.tar.gz
-+sha256  2b1daac037f18c303e0c0dc3318ba30196459472e4c59f2f8547ee74d4cdf31d  netopeer2-2.1.49.tar.gz
- sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
-diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
-index 7cb9202575..47fcd31acd 100644
---- a/package/netopeer2/netopeer2.mk
-+++ b/package/netopeer2/netopeer2.mk
+-sha256  1bc866f13e41ba5e7e4acd52b5c3d42b1a2a1e032775e0a9b094f3265844cd25  sysrepo-2.2.12.tar.gz
++sha256  bebb7901682eb23bf4c73d086d0a45c124ec751a67793a66024f1d4203425730  sysrepo-2.2.36.tar.gz
+ sha256  88f1b7e5c64d2c113e07105aa9c0fb80639b40287565be1c2afd0949df83d826  LICENSE
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 9da8c22ca2..6b031ae6f9 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETOPEER2_VERSION = 2.1.42
-+NETOPEER2_VERSION = 2.1.49
- NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
- NETOPEER2_DL_SUBDIR = netopeer2
- NETOPEER2_LICENSE = BSD-3-Clause
+-SYSREPO_VERSION = 2.2.12
++SYSREPO_VERSION = 2.2.36
+ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
+ SYSREPO_INSTALL_STAGING = YES
+ SYSREPO_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
