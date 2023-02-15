@@ -1,87 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C38C7C636CC
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E0EBC64ED6
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 22:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D029D417B7;
-	Wed, 15 Feb 2023 21:58:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D029D417B7
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9EDD80C67;
+	Wed, 15 Feb 2023 22:23:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9EDD80C67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lwRs5SJBlcdU; Wed, 15 Feb 2023 21:58:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UZadGEFTVbTd; Wed, 15 Feb 2023 22:23:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87EB44034F;
-	Wed, 15 Feb 2023 21:58:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87EB44034F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C39F41BF3A0
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:58:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7EC580BC9;
+	Wed, 15 Feb 2023 22:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7EC580BC9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 134921BF476
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 22:23:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 974E64034F
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:58:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974E64034F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E1D1E40C45
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 22:22:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1D1E40C45
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3XvCaerxLVg7 for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 21:58:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AC81402C1
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8AC81402C1
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:58:03 +0000 (UTC)
-Received: by mail-oi1-x22b.google.com with SMTP id r28so17154557oiw.3
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 13:58:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3mhKZ321Oy5qJNM9nUwYHTU0jULo1cdbW/6A0bSAh6I=;
- b=5LGkgm4u0feXMZ7sISR6Gl6+LAJA0BERaYJ3GT/SCcJlFEfcesgzT25szyMnXvzXaf
- rE6KHpB8RmHxcVVeO8k79gUR5RZ2z9zyaqtytSSFkGcBUnICCiKm3SP7kobsQVsawmuU
- yHogCgor31UsPDYnRbrCaW9GcU9zMzEBjftnZcX+uS5IFzXCiAkCryJW1tE00YuaR20p
- xatZgC2trffyaE4/2ADxulsZyM7GoghOg2I57k7g+le5kRV2kulnyKWO6i59bS0NGR/X
- COhlh2aN/6e0KttsehbJmvn3nzxIwoB/kTW9K/E6RSZj/Zf/NrYV+Jw5NlmmOWmtmIhq
- Py8w==
-X-Gm-Message-State: AO0yUKXkQIUB+UvG/VE/6gXr9gs2Up05Baq3NREW69C8mpSmrscyewR6
- nWs2Y+sB+e0XfnQbiYNCzfR9bo1rI/p013xkkd9nnBtMSZ8=
-X-Google-Smtp-Source: AK7set9FkbPHFKcQRi2OL8Gdvj89s7/Un1OuRXbkuuKx0Yt/ll1Arpa8HF1oC0mZAgz95qTJch8vrxC8VRpNy5tRrF8=
-X-Received: by 2002:a05:6808:1441:b0:37d:61fc:aa8a with SMTP id
- x1-20020a056808144100b0037d61fcaa8amr3857oiv.93.1676498282518; Wed, 15 Feb
- 2023 13:58:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20230215211531.331246-1-james.hilliard1@gmail.com>
- <e581867a-6166-3a05-1d6a-af4373610f39@mind.be>
- <CADvTj4ocjP2JLa8UC6-shMf0rGGxF+T2NkAGOsdjiXeVYXTFLw@mail.gmail.com>
- <5ee9bd2b-3a6e-7de3-9bc8-168e0639c5af@mind.be>
-In-Reply-To: <5ee9bd2b-3a6e-7de3-9bc8-168e0639c5af@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 15 Feb 2023 14:57:50 -0700
-Message-ID: <CADvTj4qtzU45p5_N8M159E-o0MO3PJZ0Xg5dBvaxMCGaw-3bvQ@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=3mhKZ321Oy5qJNM9nUwYHTU0jULo1cdbW/6A0bSAh6I=;
- b=iCISqqEdX7fT+VIt3s36Min/Q5miv3wRHQB54ocVY1MB73eKqTUdvNCAzsyBBBpQXj
- AexIAHM8mzbGEWGslMW2DInUh9p0+ZwNZwheIMIjzTepPUh/Op720jeI3LZFgnYkGgEz
- VSHXo1HhqQWcz70gdG9cdxth5ozHuTr8HsnLKu8kb3aszHaW7Y5gCan4DlA4oF8wmATA
- Z75MdIFvvuVLYlJ6xIEJJX9Fp8QGEyeowjtomkYj1qLkBNskFVF+6Hd/HkOel0/OMYuw
- PqgkH2pJhbsiUAv+D5oj/CkZUKUxemaszDBnx79uxQ6Za1gFZFBqUHCPS69ZlHSl1P+6
- Md7g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=iCISqqEd
-Subject: Re: [Buildroot] [PATCH v2 1/1] utils/genrandconfig: make default
- toolchain_csv path absolute
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0PSSuihFFzPp for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 22:22:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1876740147
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 22:22:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1876740147
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 06C4E85F32; Wed, 15 Feb 2023 22:22:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 15 Feb 2023 23:21:19 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9c3e7014105eb69db7d9c9f662ab0a5054f35797
+X-Git-Newrev: 3e9f0dc59a5c4310139040f88189d10ad0b76906
+X-Patchwork-Hint: ignore
+Message-Id: <20230215222259.06C4E85F32@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-marshmallow-sqlalchemy: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,111 +56,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2784779124041804067=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Feb 15, 2023 at 2:46 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 15/02/2023 22:29, James Hilliard wrote:
-> > On Wed, Feb 15, 2023 at 2:20 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>
-> >>
-> >> On 15/02/2023 22:15, James Hilliard wrote:
-> >>> The default toolchain_csv path is a relative path to the buildroot
-> >>> directory.
-> >>>
-> >>> If we run genrandconfig with a cwd that is not the buildroot directory
-> >>> the default toolchain_csv path will be wrong.
-> >>>
-> >>> To fix this make the default toolchain_csv path absolute.
-> >>>
-> >>> Fixes:
-> >>> FileNotFoundError: [Errno 2] No such file or directory: 'support/config-fragments/autobuild/toolchain-configs.csv'
-> >>>
-> >>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> >>> ---
-> >>> Changes v1 -> v2:
-> >>>     - set default path as absolute
-> >>> ---
-> >>>    utils/genrandconfig | 4 +++-
-> >>>    1 file changed, 3 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/utils/genrandconfig b/utils/genrandconfig
-> >>> index b3576f8a51..3552b83694 100755
-> >>> --- a/utils/genrandconfig
-> >>> +++ b/utils/genrandconfig
-> >>> @@ -801,7 +801,9 @@ if __name__ == '__main__':
-> >>>                                    dest="toolchains_csv",
-> >>>                                    help="Generate random toolchain configuration",
-> >>>                                    action='store_false')
-> >>> -    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
-> >>> +    buildroot_abs = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-> >>> +    parser.set_defaults(toolchains_csv=os.path.join(buildroot_abs,
-> >>> +                        "support/config-fragments/autobuild/toolchain-configs.csv"))
-> >>
-> >>    Sorry, that's not going to work either (if it was that easy I'd done it myself :-)
-> >
-> > Under what scenario would this break?
->
->   I have ~/src/buildroot/utils in my PATH, so I just run 'genrandconfig' from
-> path. If I want to run it in a different worktree (e.g. ~/src/buildroot-next
-> which tracks the next branch), I would go to that directory and run
-> "genrandconfig", so it would use the one in ~/src/buildroot, not the one in
-> ~/sr/buildroot-next. In that case, of course, I want to use the
-> toolchain-configs.csv from the next branch, not the one from ~/src/buildroot.
+--===============2784779124041804067==
+Content-Type: text/plain
 
-Well you can still do that by passing the relative path via --toolchains-csv to
-override the default abs path.
+commit: https://git.buildroot.net/buildroot/commit/?id=3e9f0dc59a5c4310139040f88189d10ad0b76906
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->
->
-> >>    buildrootdir can be set to something else with the -b argument, and we want it
-> >> relative to *that* one of course.
-> >
-> > Using buildrootdir is cwd dependent,
->
->   The default value is cwd dependent; the value you give with the -b option can
-> be absolute or relative.
+Signed-off-by: Martin Hundeboll <martin@geanix.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/python-marshmallow-sqlalchemy/Config.in            | 10 ++++++++++
+ .../python-marshmallow-sqlalchemy.hash                     |  5 +++++
+ .../python-marshmallow-sqlalchemy.mk                       | 14 ++++++++++++++
+ 5 files changed, 31 insertions(+)
 
-Yeah, but I think making it an abs path relative to the genrandconfig
-file as the
-default is less likely to cause unexpected issues. Having it relative
-to cwd when
-not passing an option is a bit unexpected IMO.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2b05714e9c..bcf377d3d4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1968,6 +1968,7 @@ F:	package/zic/
+ N:	Martin Hundebøll <martin@geanix.com>
+ F:	package/python-apispec/
+ F:	package/python-marshmallow/
++F:	package/python-marshmallow-sqlalchemy/
+ F:	package/python-webargs/
+ 
+ N:	Martin Kepplinger <martink@posteo.de>
+diff --git a/package/Config.in b/package/Config.in
+index ece35f12c8..3807050eeb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1130,6 +1130,7 @@ menu "External python modules"
+ 	source "package/python-markdown2/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+ 	source "package/python-marshmallow/Config.in"
++	source "package/python-marshmallow-sqlalchemy/Config.in"
+ 	source "package/python-matplotlib/Config.in"
+ 	source "package/python-mbstrdecoder/Config.in"
+ 	source "package/python-memory-profiler/Config.in"
+diff --git a/package/python-marshmallow-sqlalchemy/Config.in b/package/python-marshmallow-sqlalchemy/Config.in
+new file mode 100644
+index 0000000000..f48d27edd6
+--- /dev/null
++++ b/package/python-marshmallow-sqlalchemy/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_MARSHMALLOW_SQLALCHEMY
++	bool "python-marshmallow-sqlalchemy"
++	select BR2_PACKAGE_PYTHON_MARSHMALLOW # runtime
++	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
++	select BR2_PACKAGE_PYTHON_SQLALCHEMY # runtime
++	help
++	  SQLAlchemy integration with the marshmallow
++	  (de)serialization library.
++
++	  https://github.com/marshmallow-code/marshmallow-sqlalchemy
+diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
+new file mode 100644
+index 0000000000..6b847de94d
+--- /dev/null
++++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/marshmallow-sqlalchemy/json
++md5  5e012b07ccf4ad67dbd3f38cc68cb1f4  marshmallow-sqlalchemy-0.28.1.tar.gz
++sha256  aa376747296780a56355e3067b9c8bf43a2a1c44ff985de82b3a5d9e161ca2b8  marshmallow-sqlalchemy-0.28.1.tar.gz
++# Locally computed sha256 checksums
++sha256  625df8e2758a271b4bc90525c0b6161814e0f72cb3504b03ab5206b7abf50072  LICENSE
+diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
+new file mode 100644
+index 0000000000..293ea29be6
+--- /dev/null
++++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-marshmallow-sqlalchemy
++#
++################################################################################
++
++PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 0.28.1
++PYTHON_MARSHMALLOW_SQLALCHEMY_SOURCE = marshmallow-sqlalchemy-$(PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION).tar.gz
++PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/eb/96/3895bde2247fa653c36d887ff08e439665668aa7c991a3924ae199be88d6
++PYTHON_MARSHMALLOW_SQLALCHEMY_SETUP_TYPE = setuptools
++PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE = MIT
++PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 
->
-> > the approach I used is not as it uses the
-> > absolute path of the genrandconfig file to compute the default toolchain_csv
-> > abs path.
->
->   And my point is that it should be relative to the buildrootdir given with the
-> commandline option, not relative to the place where genrandconfig happens to reside.
+--===============2784779124041804067==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-It's still relative to cwd when passing a relative path via
---toolchains-csv, just the
-default is changed to be an abs path.
-
->
->   TBH, I think genrandonfig has too many options :-)
->
->   Regards,
->   Arnout
->
-> >
-> >>
-> >>    Regards,
-> >>    Arnout
-> >>
-> >>>
-> >>>        args = parser.parse_args()
-> >>>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2784779124041804067==--
