@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 299DFC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:59:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3BDFC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:59:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC342700D1;
-	Tue, 21 Feb 2023 01:59:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC342700D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F25270216;
+	Tue, 21 Feb 2023 01:59:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F25270216
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id plNpkIkNo_qk; Tue, 21 Feb 2023 01:59:10 +0000 (UTC)
+	with ESMTP id kVcnN-Oz4T9Q; Tue, 21 Feb 2023 01:59:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0351C7020D;
-	Tue, 21 Feb 2023 01:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0351C7020D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 928AC70122;
+	Tue, 21 Feb 2023 01:59:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 928AC70122
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 39B481BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F1851BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:05:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBD5E70028
+ by smtp3.osuosl.org (Postfix) with ESMTP id E524870000
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBD5E70028
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E524870000
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nw2cGbUQDBmj for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+ with ESMTP id tIlw7Vv6RKbH for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5BC87002D
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5BC87002D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D46370024
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D46370024
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF4628648F; Mon, 20 Feb 2023 20:52:59 +0000 (UTC)
+ id 27CA781979; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Feb 2023 18:12:33 +0100
+Date: Wed, 15 Feb 2023 10:13:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e2b70aa9492517717f948f199e99f055a5c1dde1
-X-Git-Newrev: 4231054b05436978795267330202f72be0d3a4d4
+X-Git-Oldrev: efdcc850be902de2596412dbf0f142c3f679ce35
+X-Git-Newrev: 98e0452ebb7cb25311d4f615e07df89a5776268b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205259.BF4628648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/apr-util: security
- bump to version 1.6.3
+Message-Id: <20230220205300.27CA781979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/go: security bump to
+ version 1.19.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4231054b05436978795267330202f72be0d3a4d4
+commit: https://git.buildroot.net/buildroot/commit/?id=98e0452ebb7cb25311d4f615e07df89a5776268b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-*) SECURITY: CVE-2022-25147 (cve.mitre.org)
-   Integer Overflow or Wraparound vulnerability in apr_base64 functions
-   of Apache Portable Runtime Utility (APR-util) allows an attacker to
-   write beyond bounds of a buffer.
+go1.19.6 (released 2023-02-14) includes security fixes to the crypto/tls,
+mime/multipart, net/http, and path/filepath packages, as well as bug fixes to
+the go command, the linker, the runtime, and the crypto/x509, net/http, and time
+packages. See the Go 1.19.6 milestone on the Go issue tracker for details.
 
-https://downloads.apache.org/apr/Announcement-aprutil-1.x.html
-https://downloads.apache.org/apr/CHANGES-APR-UTIL-1.6
+CVE-2022-41725: net/http, mime/multipart: denial of service from excessive resource consumption
+CVE-2022-41724: crypto/tls: large handshake records may cause panics
+CVE-2022-41723: net/http: avoid quadratic complexity in HPACK decoding
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://go.dev/doc/devel/release#go1.19.minor
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apr-util/apr-util.hash | 4 ++--
- package/apr-util/apr-util.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
-index 59ef590109..7e2793cd77 100644
---- a/package/apr-util/apr-util.hash
-+++ b/package/apr-util/apr-util.hash
-@@ -1,4 +1,4 @@
--# From http://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256
--sha256  d3e12f7b6ad12687572a3a39475545a072608f4ba03a6ce8a3778f607dd0035b  apr-util-1.6.1.tar.bz2
-+# From http://www.apache.org/dist/apr/apr-util-1.6.3.tar.bz2.sha256
-+sha256  a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5  apr-util-1.6.3.tar.bz2
- # Locally calculated
- sha256  ef5609d18601645ad6fe22c6c122094be40e976725c1d0490778abacc836e7a2  LICENSE
-diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
-index fb0735f5e7..02b6d5e277 100644
---- a/package/apr-util/apr-util.mk
-+++ b/package/apr-util/apr-util.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 4c22f0f274..8254a91524 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  8e486e8e85a281fc5ce3f0bedc5b9d2dbf6276d7db0b25d3ec034f313da0375f  go1.19.5.src.tar.gz
++sha256  d7f0013f82e6d7f862cc6cb5c8cdb48eef5f2e239b35baa97e2f1a7466043767  go1.19.6.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index c38ae0b99c..a9056da47b 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APR_UTIL_VERSION = 1.6.1
-+APR_UTIL_VERSION = 1.6.3
- APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
- APR_UTIL_SITE = https://archive.apache.org/dist/apr
- APR_UTIL_LICENSE = Apache-2.0
+-GO_VERSION = 1.19.5
++GO_VERSION = 1.19.6
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
