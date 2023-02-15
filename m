@@ -1,71 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 729D3C636D4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 06:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25716C636D4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 07:29:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0199381ECD;
-	Wed, 15 Feb 2023 06:30:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0199381ECD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DB4A60BC5;
+	Wed, 15 Feb 2023 07:29:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DB4A60BC5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BN84QH-hKL72; Wed, 15 Feb 2023 06:30:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4LYbTrP4MTi2; Wed, 15 Feb 2023 07:29:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 284A981ECE;
-	Wed, 15 Feb 2023 06:30:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 284A981ECE
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5E9960AEE;
+	Wed, 15 Feb 2023 07:29:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5E9960AEE
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 83A131BF84C
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 06:30:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8CC1E1BF5A7
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 07:29:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6AECD60BAA
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 06:30:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AECD60BAA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 73F0560AEE
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 07:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73F0560AEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IpidAMFF1Fae for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 06:30:04 +0000 (UTC)
+ with ESMTP id gk9AS1X3MlGh for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 07:29:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34A1560B8B
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 34A1560B8B
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 06:30:03 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id A27C85FF67;
- Wed, 15 Feb 2023 07:29:56 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 15 Feb 2023 07:29:56 +0100
-Date: Wed, 15 Feb 2023 07:29:56 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20230215062956.GA2718518@scaer>
-References: <20230210215548.1050371-1-yann.morin.1998@free.fr>
- <4f51a196-e922-1e9e-6fbb-e81b35dc9f73@mind.be>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AB50607BC
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com
+ [209.85.214.177])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9AB50607BC
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 07:29:27 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id jk14so822208plb.8
+ for <buildroot@buildroot.org>; Tue, 14 Feb 2023 23:29:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=2DLD6cQG5d47MAKGcWjPvj2V0xTytEib3700rdnBuHU=;
+ b=5173yLJXbHzq8t8IK979TSreNTsdOVigHr29nPgU2d3SouADwHHqrcAg494OtgGclA
+ v+A3D7wEeRK6vrvXUlxr/fzsJxCbTUL51eJcAOPbJA9P4NWPFE9AuiBnE/QyduyRlZoQ
+ hH7gewNtJurSCwQ3sF8VqvgKpEQLPPbdOPBZgwBZFXlNNP0f9uW3nUTeArtfgUfXFsAb
+ vylc74YZrrNnjwscTe6baBWZpkgmDcLjxBBoT0LlcND7qGyLVW1NIt7OLnOaGw5pXpyM
+ 3mKNtYcU0JMluCu3iC/0aerRu8LaaF8dsSZPxAFrfl5zjpCDxcqabG9Sb9lyamJjGS1t
+ G1tQ==
+X-Gm-Message-State: AO0yUKV8x0O8RwIxNIDNMHOEm38y6MsWuDRad7kiejV1sMJBXaq8Wa2N
+ 7cFkqePbP/sYkirzJdk4eNK7eMAbee8=
+X-Google-Smtp-Source: AK7set9sRb9CpWWZYUAUwionOfr6OcaoNr0VljpRQMBFh1bhz7IuUHfPlY4cCuP8vf/ByX+6XwxpYQ==
+X-Received: by 2002:a17:902:f541:b0:19a:a815:2876 with SMTP id
+ h1-20020a170902f54100b0019aa8152876mr1630863plf.62.1676446166543; 
+ Tue, 14 Feb 2023 23:29:26 -0800 (PST)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ p7-20020a170902b08700b0019aaccb665bsm3837527plr.245.2023.02.14.23.29.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 14 Feb 2023 23:29:25 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Tue, 14 Feb 2023 23:29:23 -0800
+Message-Id: <20230215072923.184867-1-christian@paral.in>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <4f51a196-e922-1e9e-6fbb-e81b35dc9f73@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1676442600;
- bh=4xkMjTB9yVuNbfH/SG9irS9R3+HYWmoGoXktwz8OCRg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=WwRotEKe7gpzqVLe3vvp3kGTfm3KEKRZjXqlLfgwHT7f2QDdZvTOfVVqYUosaZJir
- h6RSbbDH5V1oWJAyqTesDr9o6jm1+0Y0a0dNQCSWdjofTuMrPT2Rl9YeTUILG1HtZw
- IkUl2bPneK6Y/Pvpf0CkcVFqD59piderx9+eqa8eYWEgnzBJGHvjVDbdRoeBdOImIt
- cKBDEjgOpKsrlwRgL2s8WwReQ0PodugLfIYIOAnLvqAi2BqnxSEBvJDCExZwYTAsR0
- +KJnb2VqDuRwpSutazZjDKAqPEouMFh6AfQY0Twm5YMU1jlut0aMaQHjd3sHiMokHI
- 22nj/l2EjxeHQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=WwRotEKe
-Subject: Re: [Buildroot] [PATCH] package/erlang: do not hard-code the Erlang
- Interface Version (EI_VSN)
+Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump to version
+ 1.19.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,93 +79,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Will Newton <will.newton@gmail.com>,
- Johan Oudinet <johan.oudinet@gmail.com>, buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
+go1.19.6 (released 2023-02-14) includes security fixes to the crypto/tls,
+mime/multipart, net/http, and path/filepath packages, as well as bug fixes to
+the go command, the linker, the runtime, and the crypto/x509, net/http, and time
+packages. See the Go 1.19.6 milestone on the Go issue tracker for details.
 
-On 2023-02-14 22:30 +0100, Arnout Vandecappelle spake thusly:
-> On 10/02/2023 22:55, Yann E. MORIN wrote:
-[--SNIP--]
-> >Although both the host and target erlang are the same, we still look
-> >into the corresponding file to extract the version. This is so that it
-> >would be easier if in the future we ever manage to rely on a
-> >system-installed erlang that could have a EI_VSN different from the
-> >target one.
+CVE-2022-41725: net/http, mime/multipart: denial of service from excessive resource consumption
+CVE-2022-41724: crypto/tls: large handshake records may cause panics
+CVE-2022-41723: net/http: avoid quadratic complexity in HPACK decoding
 
-This ^^^ [0] ...
+https://go.dev/doc/devel/release#go1.19.minor
 
-[--SNIP--]
-> >@@ -36,9 +36,9 @@ ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
-> >  HOST_ERLANG_DEPENDENCIES += host-autoconf
-> >  HOST_ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
-> >-# Whenever updating Erlang, this value should be updated as well, to the
-> >-# value of EI_VSN in the file lib/erl_interface/vsn.mk
-> >-ERLANG_EI_VSN = 3.13.2.2
-> >+# Return the EIV (Erlang Interface Version, EI_VSN)
-> >+# $(1): base directory, i.e. either $(HOST_DIR) or $(STAGING_DIR)/usr
-> >+erlang_ei_vsn = `sed -r -e '/^erl_interface-(.+)/!d; s//\1/' $(1)/lib/erlang/releases/$(ERLANG_RELEASE)/installed_application_versions`
->  Since this is only used by rebar-package, I think it should move to pkg-rebar.mk.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I also thought about that, but the knowledge where the file is installed
-is in erlang, so it makes sense that erlang exports away its own
-version, like the variable was set previously.
-
-That's also what we do for AUTOCONF, AUTORECONF, AUTOMAKE et al: they
-are defined in their respective packages, but used in the
-autotools-package infra.
-
-> >  # The configure checks for these functions fail incorrectly
-> >  ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
-> >diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
-> >index e4e3f3bb6c..4b993dd970 100644
-> >--- a/package/pkg-rebar.mk
-> >+++ b/package/pkg-rebar.mk
-> >@@ -32,10 +32,10 @@ REBAR_TARGET_DEPS_DIR = $(STAGING_DIR)/usr/share/rebar/deps
-> >  #
-> >  REBAR_HOST_DEPS_ENV = \
-> >  	ERL_COMPILER_OPTIONS='{i, "$(REBAR_HOST_DEPS_DIR)"}' \
-> >-	ERL_EI_LIBDIR=$(HOST_DIR)/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
-> >+	ERL_EI_LIBDIR=$(HOST_DIR)/lib/erlang/lib/erl_interface-$(call erlang_ei_vsn,$(HOST_DIR))/lib
-
-... [0] explains this ^^^, and ...
-
->  Since we support only one erlang version, we could just as well put
-> $(wildcard $(HOST_DIR)/lib/erlang/lib/erl_interface-*/lib)
-
-... [0] answers that, I believe. ;-)
-
-> or does that directory not necessarily exist yet after erlang has been installed?
-
-The directory does exist, as erl_interface is installed by erlang (it is
-kind of part of its stdlib, I'd say), and thus is registered by erlang
-itself.
-
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> 
-> >  REBAR_TARGET_DEPS_ENV = \
-> >  	ERL_COMPILER_OPTIONS='{i, "$(REBAR_TARGET_DEPS_DIR)"}' \
-> >-	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
-> >+	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(call erlang_ei_vsn,$(STAGING_DIR)/usr)/lib
-> >  ################################################################################
-> >  # Helper functions
-
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 4c22f0f274..8254a91524 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  8e486e8e85a281fc5ce3f0bedc5b9d2dbf6276d7db0b25d3ec034f313da0375f  go1.19.5.src.tar.gz
++sha256  d7f0013f82e6d7f862cc6cb5c8cdb48eef5f2e239b35baa97e2f1a7466043767  go1.19.6.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index c38ae0b99c..a9056da47b 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.19.5
++GO_VERSION = 1.19.6
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
