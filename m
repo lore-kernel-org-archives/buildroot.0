@@ -1,95 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C797C636D4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:15:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D89BAC6379F
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:16:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6AD681FBE;
-	Wed, 15 Feb 2023 21:15:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6AD681FBE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CDD84175D;
+	Wed, 15 Feb 2023 21:16:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CDD84175D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hJFWHgOwRpyS; Wed, 15 Feb 2023 21:15:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0fpV5h5yQV1N; Wed, 15 Feb 2023 21:16:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E45481F5C;
-	Wed, 15 Feb 2023 21:15:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E45481F5C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C8C441757;
+	Wed, 15 Feb 2023 21:16:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C8C441757
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 68F591BF3A0
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:15:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 862B11BF3A0
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:16:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42C9381446
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:15:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42C9381446
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D25481773
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:16:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D25481773
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IEFu4Lf29pml for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 21:15:22 +0000 (UTC)
+ with ESMTP id KLgTkuuh9GSY for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 21:16:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C6FC81432
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5C6FC81432
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:15:22 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id jg8so256173ejc.6
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 13:15:22 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F172E81432
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F172E81432
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:16:20 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id v13so103548iln.4
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 13:16:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=2qla3I38Um9KyOiSqJ/CWLddVIevOf7oSdnPt5xUHIo=;
- b=VfJpcPqtOp6Y/5yNM0OEw3Y6yKW0LSU3+hj7Gvz60+IHMpYvAME08QaKL8yHASBluZ
- taq5TMLsI2/VLySQbAw4m7I+8NJIAt2YQcdFNh9gvVueH5kCNdDmtGW+7sTv67wUC4kK
- 0n1Kj1F8GOJhkDnsKktIi1dKgY8K1S/Fk1brAmMNAi8LMNOxShEy/+wJ6/Bm5vcLfqQw
- iqqaNFCzU8M5tQimBkEO5tkfauAmX8l/DJ+gervCrWIf0FXJuHpYQ534XgBIkiDyfNE2
- PNOBz4OUQjK0fOZIx0Y3pPidJQjImsZ+imKtF/+UU2WwGDkB3Aejj3+kJqFSkly2dS4O
- B6sA==
-X-Gm-Message-State: AO0yUKUIKr0vLown71xnxbmZzyoEJnkHVjzZT0IqvOboLaC613Sxzqx/
- 8C0JJz8hFp238nBixsKZFJgpC/FWp2qJKc94
-X-Google-Smtp-Source: AK7set8B3lvkdvex1NdqfU3lBDKwEFveBqZ3AbgPvdRPbL3hYPQaX+mROg1uIkAgde9Ze4cpay0AuQ==
-X-Received: by 2002:a17:906:2c14:b0:8b1:239b:addd with SMTP id
- e20-20020a1709062c1400b008b1239badddmr4070988ejh.5.1676495720402; 
- Wed, 15 Feb 2023 13:15:20 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- v1-20020a170906b00100b0087862f45a29sm10196979ejy.174.2023.02.15.13.15.19
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 15 Feb 2023 13:15:19 -0800 (PST)
-Message-ID: <3210b93a-49ea-4be4-143c-fd6f578d3435@mind.be>
-Date: Wed, 15 Feb 2023 22:15:17 +0100
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=stk85CQaTnKPOFf12S4cGkRm/EKZdwUgPGGUTzhkork=;
+ b=FEShZ9pzTKaNLSaFmM5ncfAMY1cLwTHxVmb3Hz/XUKwwuap/rlFIJh4cQnMH8k/7EI
+ XP5A247IJIrYLFso8FbPj8pY13geFBpJSWFTGMZRDHMgR3Em97GpvGX2/kk7GbC9Lj8t
+ DZK1oAMDEe2EEnlWBcrn30XZ1DN7iA/z/YGxLi7YPvtT8Zq5aNKEsibOpuEtaAnXjTTM
+ wq1Te9d1dxW5VPyc1ylAEiqcoAcSau16Kpc7piId2Tfmxb2WxspZmJ8iZt8FKm54ya5y
+ apbGeyQLxuLZJpIOAQfmeb1Z/gSdr1CyMokYbgVg49T/BNWPqK//2CNT6x1WlC+wrdxG
+ 82og==
+X-Gm-Message-State: AO0yUKXZQKZVu4oir+kIJe6wFh9X4L0LB/Nqq9cxPpmsexQ8fIGt72Wv
+ Z88hqpV0GVnW8OJQWTXkkQlgPrJNbGg=
+X-Google-Smtp-Source: AK7set+ZPJ8p1v2alGD2VoNLLsHTlraeMpb1eeYEpT5lr3Qa0R7OJT1K/ISDK0Aavt+3b+56qj8qgA==
+X-Received: by 2002:a92:9404:0:b0:310:c6f7:c1e9 with SMTP id
+ c4-20020a929404000000b00310c6f7c1e9mr2474730ili.5.1676495779812; 
+ Wed, 15 Feb 2023 13:16:19 -0800 (PST)
+Received: from james-x399.localdomain (71-218-114-73.hlrn.qwest.net.
+ [71.218.114.73]) by smtp.gmail.com with ESMTPSA id
+ g15-20020a92dd8f000000b00313f2279f06sm5819000iln.73.2023.02.15.13.16.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 15 Feb 2023 13:16:19 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 15 Feb 2023 14:15:31 -0700
+Message-Id: <20230215211531.331246-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-GB
-To: Stefan Agner <stefan@agner.ch>, buildroot@buildroot.org
-References: <12a7772dc9c30d31bc4dd7a4e15ca12425c14834.1676297701.git.stefan@agner.ch>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <12a7772dc9c30d31bc4dd7a4e15ca12425c14834.1676297701.git.stefan@agner.ch>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=2qla3I38Um9KyOiSqJ/CWLddVIevOf7oSdnPt5xUHIo=;
- b=M4HyfmprMOOjo8b3BdXoWGy5Lfcf5VXMchlYk0TGd0gSsbo/p2ZQwQIb1tccWg9HHU
- fX6wRBq93sbjHqSDOSvjUcL5zFwsbU+8jizwmirsF8QLH76KbRuB8WIRJLIOja58D0ia
- bDMhZcPXPgFzr/2j5+ORlvpfaV4zn8VtJai3N5H1PARAgGxY+lTwbT4uRKf2lxIF+w4T
- bVOADV4eafvyq9ycVBdkHqduTLciGLhhHhG5t5bQzQbXy/hgiasHDsRR4MTSVPZCy5GY
- 4h0j0lK1N/NgndXcP+ntwzcsje0+HIIftqNU5OG90nM8xzEDZbJB1YC9mhj/l6fgqHJb
- brGQ==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=stk85CQaTnKPOFf12S4cGkRm/EKZdwUgPGGUTzhkork=;
+ b=kta+awSWyMtKKeujCAxgzIg9TXBrYCtzkwbQoq6C3ksbiMUhSztYmVuVjbOkdWCR8F
+ t3onpFS4100jYglmuWqsNWH8bqnYYbNxRcKLx2AXyV8BUmddbhS0/yqDUyryq0WX7W5K
+ WOrpRd4UrwNyPrqdDukxouAxaDUvEjix4XI2IvahCKkWJK1DJ5y08LaJN5UEsHWkg3zm
+ vd3dUYKsnTT/1zcVTydXP1xlOzz/Ocy5LonPJWlpb1dRHoRwzTHFl+MEANdgzCOY0iJZ
+ yUqCr/flfvlG203HPs75bPaRk+8PagVp04nMts8OCXf+dCJ3xxEdhCRRtzs2FouW1yYL
+ KDvQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=M4Hyfmpr
-Subject: Re: [Buildroot] [PATCH] package/pkg-golang: disable version control
- information
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kta+awSW
+Subject: [Buildroot] [PATCH v2 1/1] utils/genrandconfig: make default
+ toolchain_csv path absolute
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,49 +94,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+The default toolchain_csv path is a relative path to the buildroot
+directory.
 
+If we run genrandconfig with a cwd that is not the buildroot directory
+the default toolchain_csv path will be wrong.
 
-On 13/02/2023 15:15, Stefan Agner wrote:
-> By default go tries to include version control (VCS) information in
-> binaries. Since Buildroot separates version control from the build
-> process it is sensible to disable this behavior.
-> 
-> This avoids build errors when building with a git repository higher
-> up in the tree owned by root. In this case the go build system
-> calls `git status --porcelain` which returns with an error:
-> fatal: detected dubious ownership in repository at '/build'
-> 
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
+To fix this make the default toolchain_csv path absolute.
 
-  Applied to master, thanks.
+Fixes:
+FileNotFoundError: [Errno 2] No such file or directory: 'support/config-fragments/autobuild/toolchain-configs.csv'
 
-  Regards,
-  Arnout
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - set default path as absolute
+---
+ utils/genrandconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> ---
->   package/pkg-golang.mk | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> index cdc67b32c0..da9c9a21ac 100644
-> --- a/package/pkg-golang.mk
-> +++ b/package/pkg-golang.mk
-> @@ -45,7 +45,8 @@ $(2)_BUILD_OPTS += \
->   	-modcacherw \
->   	-tags "$$($(2)_TAGS)" \
->   	-trimpath \
-> -	-p $$(PARALLEL_JOBS)
-> +	-p $$(PARALLEL_JOBS) \
-> +	-buildvcs=false
->   
->   # Target packages need the Go compiler on the host at download time (for
->   # vendoring), and at build and install time.
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index b3576f8a51..3552b83694 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -801,7 +801,9 @@ if __name__ == '__main__':
+                                 dest="toolchains_csv",
+                                 help="Generate random toolchain configuration",
+                                 action='store_false')
+-    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
++    buildroot_abs = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
++    parser.set_defaults(toolchains_csv=os.path.join(buildroot_abs,
++                        "support/config-fragments/autobuild/toolchain-configs.csv"))
+ 
+     args = parser.parse_args()
+ 
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
