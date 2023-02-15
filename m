@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1424C6379F
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B24FC636D4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:00:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 958CA8161D;
-	Wed, 15 Feb 2023 21:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 958CA8161D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 458298135E;
+	Wed, 15 Feb 2023 21:00:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 458298135E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VwyOuhGDU2iz; Wed, 15 Feb 2023 21:00:38 +0000 (UTC)
+	with ESMTP id njMGWSdwdqKY; Wed, 15 Feb 2023 21:00:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D43CE81F9B;
-	Wed, 15 Feb 2023 21:00:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D43CE81F9B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A6E3E1BF3A0
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:00:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5770981F6C;
+	Wed, 15 Feb 2023 21:00:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5770981F6C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 338A61BF3A0
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:00:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80D69607F5
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:00:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80D69607F5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EA3240185
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:00:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EA3240185
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zj9MD_0jGTq8 for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 21:00:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74B6360776
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 74B6360776
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:00:31 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id ED702240009;
- Wed, 15 Feb 2023 21:00:27 +0000 (UTC)
-Date: Wed, 15 Feb 2023 22:00:26 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230215220026.1a771114@windsurf>
-In-Reply-To: <20230214120808.1282621-1-giulio.benetti@benettiengineering.com>
-References: <20230214120808.1282621-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676494828;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BT31JYrcHSVzzTIZifC6RMvnpGYakfwcDjAQPLl+q2o=;
- b=Zf5jhpzwjbnwWLm02HCjB5JQ8LEZKpn4/OHt+VqXMGWh+WJ/kq6JjSRJE+ifpe/IWDMpWc
- bygtJn3IJk9i6flmQDFmYHoWTVhvFFazCAewY6IhFzBCLVI32ULacGT4/lJrFq+/Y3tq6G
- MmTmYTIDLrppgpAwxtdSlchdNnve8x4hDsszptwfoo10bV3dCygdNb52djFSsOrdpqfsgc
- njTypY9JeHcmNcwfQ8GlCCVl4FeSSmEpH+68jZEjM+ebNWPGvThCStHkCJJF84X+4BsvRK
- PWan5C6Vub+Bvg8ts5ZsPBGTcaOai57GcWXR2hs+9Ecbs8x+JWIZgUvuRsEtMw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Zf5jhpzw
-Subject: Re: [Buildroot] [RFC PATCH] package/Config.in: move all Wireless
- Driver into a separate menu and enable them only if architecture s390x is
- not used
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TMlu6Ji0JhXH for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 21:00:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EFDB40169
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:00:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EFDB40169
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1CEBC85D23; Wed, 15 Feb 2023 21:00:47 +0000 (UTC)
+From: Arnout Vandecappelle <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Wed, 15 Feb 2023 22:00:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0b5b92019ba30aecdaa7ba34c255d15e0c0489e8
+X-Git-Newrev: 4433ad8f5c88fafe3f0aebbaff1abdae17aadcb7
+X-Patchwork-Hint: ignore
+Message-Id: <20230215210047.1CEBC85D23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/helper: check the arch sysroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,34 +56,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 14 Feb 2023 13:08:08 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4433ad8f5c88fafe3f0aebbaff1abdae17aadcb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/Config.in | 28 ++++++++++++++++------------
->  1 file changed, 16 insertions(+), 12 deletions(-)
+Since the commit [1], the utils/genrandconfig script improved the
+configuration randomization used by autobuilders. Since then it can
+generate a configuration that is not suitable for an external toolchain
+such the "Codescape IMG GNU Linux Toolchain".
 
-Why not, but then you need to change all the existing packages that
-have a !S390 dependency to remove it, as it becomes redundant.
+Indeed this toolchain can be selected for mips32r5 or mips64r5 while only
+mips32r2 or mips64r2 are really supported. The toolchain issue will be
+fixed in a followup change.
 
-However, I feel like the dependency is more "obvious" if it is in each
-package. I know it's a bit of redundancy, but it is less "strange" than
-having it in package/Config.in.
+We want to catch such issue in check_unusable_toolchain function otherwise
+it is detected late during the sysroot import into staging and trigger
+a weird error message:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ln: failed to create symbolic link 'output/host/mips64el-buildroot-linux-gnu/sysroot//nvmedata/autobuild/instance-25/buildroot/libc.a': No such file or directory
+ln: failed to create symbolic link 'output/host/mips64el-buildroot-linux-gnu/sysroot/usr//nvmedata/autobuild/instance-25/buildroot/libc.a': No such file or directory
+
+This is similar test than for the main sysroot check but this time we have
+to use the toolchain cflags to check the architecture sysroot.
+
+If the architecture sysroot doesn't exist, the toolchain will reply with
+"libc.a".
+
+Either the toolchain is really broken or we used a wrong target
+architecture variant. In the later case, the toolchain infrastructure will
+print a meaningful error message.
+
+Note: We also may get a similar issue using the toolchain-external-custom package
+if a toolchain is used with a wrong target architecture	variant.
+
+Fixes:
+http://autobuild.buildroot.org/results/701/701e8a5f713f7bdd1f32a4c549cdaac580e2522a/
+
+[1] aeee90ec109b83c42779e6a2617f7d57e25a2b65
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ toolchain/helpers.mk                                   | 11 +++++++++++
+ toolchain/toolchain-external/pkg-toolchain-external.mk |  2 +-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 1cd7494fdb..24c482923a 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -422,12 +422,16 @@ check_cross_compiler_exists = \
+ #   the host tuple.
+ # - Exclude distro-class toolchains which are not relocatable.
+ # - Exclude broken toolchains which return "libc.a" with -print-file-name.
++# - Exclude toolchains used with wrong toolchain cflags or broken toolchains
++#   which return "libc.a" with -print-file-name and toolchain cflags.
+ # - Exclude toolchains which doesn't support --sysroot option.
+ #
+ # $1: cross-gcc path
++# $1: toolchain cflags
+ #
+ check_unusable_toolchain = \
+ 	__CROSS_CC=$(strip $1) ; \
++	__TOOLCHAIN_CFLAGS=$(strip $2) ; \
+ 	vendor=`$${__CROSS_CC} -dumpmachine | cut -f2 -d'-'` ; \
+ 	if test "$${vendor}" = "angstrom" ; then \
+ 		echo "Angstrom toolchains are not pure toolchains: they contain" ; \
+@@ -449,6 +453,13 @@ check_unusable_toolchain = \
+ 		echo "Unable to detect the toolchain sysroot, Buildroot cannot use this toolchain." ; \
+ 		exit 1 ; \
+ 	fi ; \
++	libc_a_archsysroot_path=`$${__CROSS_CC} $${__TOOLCHAIN_CFLAGS} -print-file-name=libc.a` ; \
++	if test "$${libc_a_archsysroot_path}" = "libc.a" ; then \
++		echo "Unable to detect the toolchain architecture sysroot." ; \
++		echo "Please check the Target Architecture Variant selected, the toolchains may not support it." ; \
++		echo "Buildroot cannot use this toolchain." ; \
++		exit 1 ; \
++	fi; \
+ 	sysroot_dir="$(call toolchain_find_sysroot,$${__CROSS_CC})" ; \
+ 	if test -z "$${sysroot_dir}" ; then \
+ 		echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 299b6008aa..c37f3500d9 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -563,7 +563,7 @@ endif
+ # kernel headers version, type of C library and all C library features.
+ define $(2)_CONFIGURE_CMDS
+ 	$$(Q)$$(call check_cross_compiler_exists,$$(TOOLCHAIN_EXTERNAL_CC))
+-	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
++	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC),"$$(TOOLCHAIN_EXTERNAL_CFLAGS)")
+ 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
+ 	$$(call check_kernel_headers_version,\
+ 		$$(BUILD_DIR),\
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
