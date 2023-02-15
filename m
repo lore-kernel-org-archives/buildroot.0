@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7803EC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDA42C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2247A70003;
-	Tue, 21 Feb 2023 02:02:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2247A70003
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72E9A701FE;
+	Tue, 21 Feb 2023 02:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72E9A701FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BcraymFCs_Gd; Tue, 21 Feb 2023 02:02:42 +0000 (UTC)
+	with ESMTP id 3x4WkPQ51lHP; Tue, 21 Feb 2023 02:02:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0EE270228;
-	Tue, 21 Feb 2023 02:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0EE270228
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0ECCC7014A;
+	Tue, 21 Feb 2023 02:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ECCC7014A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 21D571BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 315AE1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B721610E5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 85B7A70049
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B721610E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85B7A70049
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dT_CO32rOR9u for <buildroot@lists.busybox.net>;
+ with ESMTP id JOjiLnnkWPnO for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A24C7002F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AD1C70040
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A24C7002F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AD1C70040
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26D8E81979; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+ id 790FB7FF06; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 22:45:44 +0100
+Date: Wed, 15 Feb 2023 23:22:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a7bd0fdb88a15b15d4b41bdc82a37cf35ab2b268
-X-Git-Newrev: b259dac22a4179494e9947c485b6b171d8fef52e
+X-Git-Oldrev: 3e9f0dc59a5c4310139040f88189d10ad0b76906
+X-Git-Newrev: d00e437922fb1b611f35c3138b9fbf7bcff62757
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205301.26D8E81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dmalloc: use actual
- patches rather than sed-ing
+Message-Id: <20230220205301.790FB7FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-flask-smorest:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,294 +59,108 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8377869696176540018=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b259dac22a4179494e9947c485b6b171d8fef52e
+--===============8377869696176540018==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d00e437922fb1b611f35c3138b9fbf7bcff62757
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Our dmalloc packaging is very old and carries historical baggage and
-idiosyncracies that we have long stopped doing in the rest ofthe code
-base.
-
-Drop our post-patch hooks that seds the configure and Makefile.in files,
-and add patches (that could be upstreamed one day).
-
-We provide the results in the environment, like would be done with
-actual autoconf cache variables (ac_cv_*).
-
-Note: those are the result of cleaning up for further patches that did
-not manifest because it was too complex to add proper SSP support to
-dmalloc (instead, we're going to forcibly disable it in the following
-commit).
-
-Note-2: those patches have not been submitted upstream, as it's mostly
-dead: even though there's been some commit activities recently-ish, there
-has been no review or comments or the many PR pending for many years
-now.
-
-Note-3: we patch both configure and configure.ac, rather than
-autoreconf, for two reasons: 1. the both are in the upstream git tree,
-so submitting these patches would require patching both, and 2. dmalloc
-does not autoreconf nicely out of the box, and it was deemed too much
-hassle to fix that in addition.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...003-configure-allow-overriding-some-tests.patch | 80 ++++++++++++++++++++++
- ...e-the-configure-detected-or-user-supplied.patch | 50 ++++++++++++++
- ...onfigure-use-LD-instead-of-hard-coding-ld.patch | 67 ++++++++++++++++++
- package/dmalloc/dmalloc.mk                         | 17 ++---
- 4 files changed, 202 insertions(+), 12 deletions(-)
+ DEVELOPERS                                             |  1 +
+ package/Config.in                                      |  1 +
+ package/python-flask-smorest/Config.in                 | 11 +++++++++++
+ package/python-flask-smorest/python-flask-smorest.hash |  5 +++++
+ package/python-flask-smorest/python-flask-smorest.mk   | 14 ++++++++++++++
+ 5 files changed, 32 insertions(+)
 
-diff --git a/package/dmalloc/0003-configure-allow-overriding-some-tests.patch b/package/dmalloc/0003-configure-allow-overriding-some-tests.patch
-new file mode 100644
-index 0000000000..3003e8cbe4
---- /dev/null
-+++ b/package/dmalloc/0003-configure-allow-overriding-some-tests.patch
-@@ -0,0 +1,80 @@
-+From 9d57d4353c82110c609f36f91986277343d4ee45 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 13:26:56 +0100
-+Subject: [PATCH] configure: allow overriding some tests
-+
-+Some tests use AC_RUN_IFELSE, so they do not work for cross-compilation.
-+
-+Allow the user to provide these results from the environment.
-+
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ configure    | 6 +++---
-+ configure.ac | 6 +++---
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/configure b/configure
-+index c18dfb2..d165962 100755
-+--- a/configure
-++++ b/configure
-+@@ -4540,7 +4540,7 @@ fi
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking strdup macro" >&5
-+ $as_echo_n "checking strdup macro... " >&6; }
-+ if test "$cross_compiling" = yes; then :
-+-  ac_cv_strdup_macro=no
-++  ac_cv_strdup_macro="${ac_cv_strdup_macro-no}"
-+ 
-+ else
-+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+@@ -4578,7 +4578,7 @@ $as_echo "$ac_cv_strdup_macro" >&6; }
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking strndup macro" >&5
-+ $as_echo_n "checking strndup macro... " >&6; }
-+ if test "$cross_compiling" = yes; then :
-+-  ac_cv_strndup_macro=no
-++  ac_cv_strndup_macro="${ac_cv_strndup_macro-no}"
-+ 
-+ else
-+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+@@ -4753,7 +4753,7 @@ done
-+ 
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking basic-block size" >&5
-+ $as_echo_n "checking basic-block size... " >&6; }
-+-ac_cv_page_size=0
-++ac_cv_page_size="${ac_cv_page_size-0}"
-+ if test $ac_cv_page_size = 0; then
-+    if test "$cross_compiling" = yes; then :
-+    ac_cv_page_size=0
-+diff --git a/configure.ac b/configure.ac
-+index 9740fdc..51bdf4d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -292,7 +292,7 @@ int main() { return 1; }
-+ ]])],
-+ [ac_cv_strdup_macro=yes],
-+ [ac_cv_strdup_macro=no],
-+-[ac_cv_strdup_macro=no]
-++[ac_cv_strdup_macro="${ac_cv_strdup_macro-no}"]
-+ )
-+ AC_MSG_RESULT([$ac_cv_strdup_macro])
-+ 
-+@@ -316,7 +316,7 @@ int main() { return 1; }
-+ ]])],
-+ [ac_cv_strndup_macro=yes],
-+ [ac_cv_strndup_macro=no],
-+-[ac_cv_strndup_macro=no]
-++[ac_cv_strndup_macro="${ac_cv_strndup_macro-no}"]
-+ )
-+ AC_MSG_RESULT([$ac_cv_strndup_macro])
-+ 
-+@@ -390,7 +390,7 @@ AC_MSG_RESULT([$ac_cv_use_mmap])
-+ #
-+ AC_CHECK_FUNCS(getpagesize)
-+ AC_MSG_CHECKING([basic-block size])
-+-ac_cv_page_size=0
-++ac_cv_page_size="${ac_cv_page_size-0}"
-+ if test $ac_cv_page_size = 0; then
-+    AC_RUN_IFELSE([AC_LANG_SOURCE([
-+ #if HAVE_UNISTD_H
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch b/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
-new file mode 100644
-index 0000000000..394e7ca34e
---- /dev/null
-+++ b/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
-@@ -0,0 +1,50 @@
-+From c958fd5cd7d5ff03c0a023608b53b74997c514b3 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 13:43:55 +0100
-+Subject: [PATCH] Makefile: use the configure-detected or user-supplied ar
-+ program
-+
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ Makefile.in | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 86d3cca..089ac99 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -303,11 +303,11 @@ $(LIB_SL) : $(LIBRARY)
-+ 	mv $@.t $@
-+ 
-+ $(LIBRARY) : $(OBJS) $(NORMAL_OBJS)
-+-	ar cr $@ $?
-++	$(AR) cr $@ $?
-+ 	@RANLIB@ $@
-+ 
-+ $(LIB_TH) : $(OBJS) $(THREAD_OBJS)
-+-	ar cr $@ $?
-++	$(AR) cr $@ $?
-+ 	@RANLIB@ $@
-+ 
-+ $(LIB_TH_SL) : $(LIB_TH)
-+@@ -316,7 +316,7 @@ $(LIB_TH_SL) : $(LIB_TH)
-+ 	mv $@.t $@
-+ 
-+ $(LIB_CXX) : $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
-+-	ar cr $@ $?
-++	$(AR) cr $@ $?
-+ 	@RANLIB@ $@
-+ 
-+ $(LIB_CXX_SL) : $(LIB_CXX)
-+@@ -325,7 +325,7 @@ $(LIB_CXX_SL) : $(LIB_CXX)
-+ 	mv $@.t $@
-+ 
-+ $(LIB_TH_CXX) : $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
-+-	ar cr $@ $?
-++	$(AR) cr $@ $?
-+ 	@RANLIB@ $@
-+ 
-+ $(LIB_TH_CXX_SL) : $(LIB_TH_CXX)
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch b/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch
-new file mode 100644
-index 0000000000..3ba6ee3dc7
---- /dev/null
-+++ b/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch
-@@ -0,0 +1,67 @@
-+From d77e5f3d45b0cbae850e3a6e23d52edc137be803 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 13:52:05 +0100
-+Subject: [PATCH] configure: use ${LD} instead of hard-coding 'ld'
-+
-+When doing cross-compilation, we do not want to use the native tools to
-+test, but the target tools.
-+
-+Note that the weird quoting is inherited from a legacy patch in
-+Buildroot, which dates back ages (at least 2006), and as it has not been
-+identified as breaking things, we keep it as-is... Meh...
-+
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ configure    | 12 ++++++------
-+ configure.ac | 12 ++++++------
-+ 2 files changed, 12 insertions(+), 12 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 810636e..30a7ea3 100755
-+--- a/configure
-++++ b/configure
-+@@ -4377,12 +4377,12 @@ if ac_fn_c_try_compile "$LINENO"; then :
-+             ac_cv_shared_link_args='# Could not configure shlib linking'
-+             enable_shlib=no
-+           fi
-+-       elif (ld -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -shared --whole-archive -soname $@ -o $@.t'
-+-	elif (ld -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -shared -o $@.t -all -soname $@ -none -lc -all'
-+-	elif (ld -G -o conftest.so.t conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -G -o $@.t'
-++       elif (${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -shared --whole-archive -soname $@ -o $@.t'
-++	elif (${LD-ld} -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -shared -o $@.t -all -soname $@ -none -lc -all'
-++	elif (${LD-ld} -G -o conftest.so.t conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -G -o $@.t'
-+ 	else
-+ 		# oh well, toss an error
-+ 		ac_cv_shared_link_args='# Could not configure shlib linking'
-+diff --git a/configure.ac b/configure.ac
-+index 51bdf4d..0d80a78 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -169,12 +169,12 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([ int foo(int val) { return val + 1; } ])],[
-+             ac_cv_shared_link_args='# Could not configure shlib linking'
-+             enable_shlib=no
-+           fi
-+-       elif (ld -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -shared --whole-archive -soname $@ -o $@.t'
-+-	elif (ld -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -shared -o $@.t -all -soname $@ -none -lc -all'
-+-	elif (ld -G -o conftest.so.t conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -G -o $@.t'
-++       elif (${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -shared --whole-archive -soname $@ -o $@.t'
-++	elif (${LD-ld} -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -shared -o $@.t -all -soname $@ -none -lc -all'
-++	elif (${LD-ld} -G -o conftest.so.t conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -G -o $@.t'
-+ 	else
-+ 		# oh well, toss an error
-+ 		ac_cv_shared_link_args='# Could not configure shlib linking'
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index 81ac467277..6b90f810b2 100644
---- a/package/dmalloc/dmalloc.mk
-+++ b/package/dmalloc/dmalloc.mk
-@@ -44,18 +44,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_63261),y)
- DMALLOC_CFLAGS += -O0
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index bcf377d3d4..f8451c7fec 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1967,6 +1967,7 @@ F:	package/zic/
  
--DMALLOC_CONF_ENV = CFLAGS="$(DMALLOC_CFLAGS)"
--
--define DMALLOC_POST_PATCH
--	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(@D)/configure
--	$(SED) 's/ac_cv_strdup_macro=no$$/ac_cv_strdup_macro=yes/' $(@D)/configure
--	$(SED) 's/ac_cv_strndup_macro=no$$/ac_cv_strndup_macro=yes/' $(@D)/configure
--	$(SED) 's/(ld -/($${LD-ld} -/' $(@D)/configure
--	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(@D)/configure
--	$(SED) 's/ar cr/$$(AR) cr/' $(@D)/Makefile.in
--endef
--
--DMALLOC_POST_PATCH_HOOKS += DMALLOC_POST_PATCH
-+DMALLOC_CONF_ENV = \
-+	CFLAGS="$(DMALLOC_CFLAGS)" \
-+	ac_cv_page_size=12 \
-+	ac_cv_strdup_macro=yes \
-+	ac_cv_strndup_macro=yes
- 
- # both DESTDIR and PREFIX are ignored..
- define DMALLOC_INSTALL_STAGING_CMDS
+ N:	Martin Hundebøll <martin@geanix.com>
+ F:	package/python-apispec/
++F:	package/python-flask-smorest/
+ F:	package/python-marshmallow/
+ F:	package/python-marshmallow-sqlalchemy/
+ F:	package/python-webargs/
+diff --git a/package/Config.in b/package/Config.in
+index 3807050eeb..0af4adffa5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1058,6 +1058,7 @@ menu "External python modules"
+ 	source "package/python-flask-expects-json/Config.in"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
++	source "package/python-flask-smorest/Config.in"
+ 	source "package/python-flask-sqlalchemy/Config.in"
+ 	source "package/python-flask-wtf/Config.in"
+ 	source "package/python-flatbuffers/Config.in"
+diff --git a/package/python-flask-smorest/Config.in b/package/python-flask-smorest/Config.in
+new file mode 100644
+index 0000000000..a8ccfbd9f7
+--- /dev/null
++++ b/package/python-flask-smorest/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_FLASK_SMOREST
++	bool "python-flask-smorest"
++	select BR2_PACKAGE_PYTHON_APISPEC # runtime
++	select BR2_PACKAGE_PYTHON_FLASK # runtime
++	select BR2_PACKAGE_PYTHON_MARSHMALLOW # runtime
++	select BR2_PACKAGE_PYTHON_WEBARGS # runtime
++	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
++	help
++	  Flask/Marshmallow-based REST API framework.
++
++	  https://github.com/marshmallow-code/flask-smorest
+diff --git a/package/python-flask-smorest/python-flask-smorest.hash b/package/python-flask-smorest/python-flask-smorest.hash
+new file mode 100644
+index 0000000000..5abe0c5033
+--- /dev/null
++++ b/package/python-flask-smorest/python-flask-smorest.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/flask-smorest/json
++md5  1dad52f26c59ca2dcaf0c5d109879605  flask-smorest-0.40.0.tar.gz
++sha256  9b46b4937ccf78702d99fed8cfd1cd5c37608ddefd65ff16a86d1ad5c7f7d8c0  flask-smorest-0.40.0.tar.gz
++# Locally computed sha256 checksums
++sha256	40999ea1d9c1b8202fa44f8e6849a557e22df892481e067abf999879064b9521  LICENSE
+diff --git a/package/python-flask-smorest/python-flask-smorest.mk b/package/python-flask-smorest/python-flask-smorest.mk
+new file mode 100644
+index 0000000000..069d9244dd
+--- /dev/null
++++ b/package/python-flask-smorest/python-flask-smorest.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-flask-smorest
++#
++################################################################################
++
++PYTHON_FLASK_SMOREST_VERSION = 0.40.0
++PYTHON_FLASK_SMOREST_SOURCE = flask-smorest-$(PYTHON_FLASK_SMOREST_VERSION).tar.gz
++PYTHON_FLASK_SMOREST_SITE = https://files.pythonhosted.org/packages/e6/b5/1b81ea4f7e377cf8a653aa10c249656a1c73de7a3695b2544d7a713ea3c2
++PYTHON_FLASK_SMOREST_SETUP_TYPE = setuptools
++PYTHON_FLASK_SMOREST_LICENSE = MIT
++PYTHON_FLASK_SMOREST_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+
+--===============8377869696176540018==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8377869696176540018==--
