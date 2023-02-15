@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B888C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:01:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 226ADC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:02:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DE4770099;
-	Tue, 21 Feb 2023 02:01:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DE4770099
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7F057024C;
+	Tue, 21 Feb 2023 02:02:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7F057024C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Osmp9cSezRgQ; Tue, 21 Feb 2023 02:01:52 +0000 (UTC)
+	with ESMTP id 6UillVFLxIGd; Tue, 21 Feb 2023 02:02:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6045370247;
-	Tue, 21 Feb 2023 02:01:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6045370247
+	by smtp3.osuosl.org (Postfix) with ESMTP id D15587011E;
+	Tue, 21 Feb 2023 02:02:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D15587011E
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 125F01BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5C6BB1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D9F8670043
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9F8670043
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E31B70039
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E31B70039
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WlWnt8nPzF9Z for <buildroot@lists.busybox.net>;
+ with ESMTP id 4jS2FnBIbUAr for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 10F7470039
+ by smtp3.osuosl.org (Postfix) with ESMTP id 803227003E
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10F7470039
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 803227003E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EFADF81979; Mon, 20 Feb 2023 20:53:00 +0000 (UTC)
+ id 6B298828C8; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 22:38:20 +0100
+Date: Wed, 15 Feb 2023 23:21:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d69ea9664f067e5660e13ddf65c52df46f2eca07
-X-Git-Newrev: 3b361028e6302ee0b062674f0483845930e94ba7
+X-Git-Oldrev: 9c3e7014105eb69db7d9c9f662ab0a5054f35797
+X-Git-Newrev: 3e9f0dc59a5c4310139040f88189d10ad0b76906
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205300.EFADF81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/flannel: use the
- github helper
+Message-Id: <20230220205301.6B298828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/python-marshmallow-sqlalchemy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,54 +59,107 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8927912756547185395=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b361028e6302ee0b062674f0483845930e94ba7
+--===============8927912756547185395==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3e9f0dc59a5c4310139040f88189d10ad0b76906
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, flannel uses an ad-hoc github URL and a version-only tarball
-name, even though we already had the github helper (introduced in 2013)
-when flannel was introduced (in 2016).
-
-Switch to the github helper, which allows us to get a properly named
-tarball.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Geoff Levand <geoff@infradead.org>
-Acked-by: Geoff Levand <geoff@infradead.org>
+Signed-off-by: Martin Hundeboll <martin@geanix.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/flannel/flannel.hash | 2 +-
- package/flannel/flannel.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/python-marshmallow-sqlalchemy/Config.in            | 10 ++++++++++
+ .../python-marshmallow-sqlalchemy.hash                     |  5 +++++
+ .../python-marshmallow-sqlalchemy.mk                       | 14 ++++++++++++++
+ 5 files changed, 31 insertions(+)
 
-diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
-index 6a0223a20f..bafc453097 100644
---- a/package/flannel/flannel.hash
-+++ b/package/flannel/flannel.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  e17164db3b158d13ce5e40bb7b233790cb186762d929fa4f626baf586d4d63ca  v0.14.0.tar.gz
-+sha256  e17164db3b158d13ce5e40bb7b233790cb186762d929fa4f626baf586d4d63ca  flannel-0.14.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index 231cf90dfd..b4e2b2f777 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2b05714e9c..bcf377d3d4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1968,6 +1968,7 @@ F:	package/zic/
+ N:	Martin Hundebøll <martin@geanix.com>
+ F:	package/python-apispec/
+ F:	package/python-marshmallow/
++F:	package/python-marshmallow-sqlalchemy/
+ F:	package/python-webargs/
  
- FLANNEL_VERSION = 0.14.0
--FLANNEL_SITE = https://github.com/flannel-io/flannel/archive
--FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
-+FLANNEL_SITE = $(call github,flannel-io,flannel,v$(FLANNEL_VERSION))
- 
- FLANNEL_LICENSE = Apache-2.0
- FLANNEL_LICENSE_FILES = LICENSE
+ N:	Martin Kepplinger <martink@posteo.de>
+diff --git a/package/Config.in b/package/Config.in
+index ece35f12c8..3807050eeb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1130,6 +1130,7 @@ menu "External python modules"
+ 	source "package/python-markdown2/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+ 	source "package/python-marshmallow/Config.in"
++	source "package/python-marshmallow-sqlalchemy/Config.in"
+ 	source "package/python-matplotlib/Config.in"
+ 	source "package/python-mbstrdecoder/Config.in"
+ 	source "package/python-memory-profiler/Config.in"
+diff --git a/package/python-marshmallow-sqlalchemy/Config.in b/package/python-marshmallow-sqlalchemy/Config.in
+new file mode 100644
+index 0000000000..f48d27edd6
+--- /dev/null
++++ b/package/python-marshmallow-sqlalchemy/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_MARSHMALLOW_SQLALCHEMY
++	bool "python-marshmallow-sqlalchemy"
++	select BR2_PACKAGE_PYTHON_MARSHMALLOW # runtime
++	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
++	select BR2_PACKAGE_PYTHON_SQLALCHEMY # runtime
++	help
++	  SQLAlchemy integration with the marshmallow
++	  (de)serialization library.
++
++	  https://github.com/marshmallow-code/marshmallow-sqlalchemy
+diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
+new file mode 100644
+index 0000000000..6b847de94d
+--- /dev/null
++++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/marshmallow-sqlalchemy/json
++md5  5e012b07ccf4ad67dbd3f38cc68cb1f4  marshmallow-sqlalchemy-0.28.1.tar.gz
++sha256  aa376747296780a56355e3067b9c8bf43a2a1c44ff985de82b3a5d9e161ca2b8  marshmallow-sqlalchemy-0.28.1.tar.gz
++# Locally computed sha256 checksums
++sha256  625df8e2758a271b4bc90525c0b6161814e0f72cb3504b03ab5206b7abf50072  LICENSE
+diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
+new file mode 100644
+index 0000000000..293ea29be6
+--- /dev/null
++++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-marshmallow-sqlalchemy
++#
++################################################################################
++
++PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 0.28.1
++PYTHON_MARSHMALLOW_SQLALCHEMY_SOURCE = marshmallow-sqlalchemy-$(PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION).tar.gz
++PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/eb/96/3895bde2247fa653c36d887ff08e439665668aa7c991a3924ae199be88d6
++PYTHON_MARSHMALLOW_SQLALCHEMY_SETUP_TYPE = setuptools
++PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE = MIT
++PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+
+--===============8927912756547185395==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8927912756547185395==--
