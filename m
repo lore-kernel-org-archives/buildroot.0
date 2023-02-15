@@ -4,47 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33A7FC636D4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C38C7C636CC
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:58:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAFAA401D6;
-	Wed, 15 Feb 2023 21:48:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAFAA401D6
+	by smtp4.osuosl.org (Postfix) with ESMTP id D029D417B7;
+	Wed, 15 Feb 2023 21:58:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D029D417B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NMpq4Kp6-iqu; Wed, 15 Feb 2023 21:48:35 +0000 (UTC)
+	with ESMTP id lwRs5SJBlcdU; Wed, 15 Feb 2023 21:58:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F80240861;
-	Wed, 15 Feb 2023 21:48:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F80240861
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A42BB1BF3A0
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:48:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87EB44034F;
+	Wed, 15 Feb 2023 21:58:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87EB44034F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C39F41BF3A0
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E8FD40199
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:48:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E8FD40199
+ by smtp4.osuosl.org (Postfix) with ESMTP id 974E64034F
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:58:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974E64034F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JyAjRo9qUiI4 for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 21:48:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36179400CC
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:48:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36179400CC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 219DD85ED1; Wed, 15 Feb 2023 21:48:03 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 22:45:44 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7bd0fdb88a15b15d4b41bdc82a37cf35ab2b268
-X-Git-Newrev: b259dac22a4179494e9947c485b6b171d8fef52e
-X-Patchwork-Hint: ignore
-Message-Id: <20230215214803.219DD85ED1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dmalloc: use actual patches rather
- than sed-ing
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3XvCaerxLVg7 for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 21:58:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AC81402C1
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
+ [IPv6:2607:f8b0:4864:20::22b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8AC81402C1
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:58:03 +0000 (UTC)
+Received: by mail-oi1-x22b.google.com with SMTP id r28so17154557oiw.3
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 13:58:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=3mhKZ321Oy5qJNM9nUwYHTU0jULo1cdbW/6A0bSAh6I=;
+ b=5LGkgm4u0feXMZ7sISR6Gl6+LAJA0BERaYJ3GT/SCcJlFEfcesgzT25szyMnXvzXaf
+ rE6KHpB8RmHxcVVeO8k79gUR5RZ2z9zyaqtytSSFkGcBUnICCiKm3SP7kobsQVsawmuU
+ yHogCgor31UsPDYnRbrCaW9GcU9zMzEBjftnZcX+uS5IFzXCiAkCryJW1tE00YuaR20p
+ xatZgC2trffyaE4/2ADxulsZyM7GoghOg2I57k7g+le5kRV2kulnyKWO6i59bS0NGR/X
+ COhlh2aN/6e0KttsehbJmvn3nzxIwoB/kTW9K/E6RSZj/Zf/NrYV+Jw5NlmmOWmtmIhq
+ Py8w==
+X-Gm-Message-State: AO0yUKXkQIUB+UvG/VE/6gXr9gs2Up05Baq3NREW69C8mpSmrscyewR6
+ nWs2Y+sB+e0XfnQbiYNCzfR9bo1rI/p013xkkd9nnBtMSZ8=
+X-Google-Smtp-Source: AK7set9FkbPHFKcQRi2OL8Gdvj89s7/Un1OuRXbkuuKx0Yt/ll1Arpa8HF1oC0mZAgz95qTJch8vrxC8VRpNy5tRrF8=
+X-Received: by 2002:a05:6808:1441:b0:37d:61fc:aa8a with SMTP id
+ x1-20020a056808144100b0037d61fcaa8amr3857oiv.93.1676498282518; Wed, 15 Feb
+ 2023 13:58:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20230215211531.331246-1-james.hilliard1@gmail.com>
+ <e581867a-6166-3a05-1d6a-af4373610f39@mind.be>
+ <CADvTj4ocjP2JLa8UC6-shMf0rGGxF+T2NkAGOsdjiXeVYXTFLw@mail.gmail.com>
+ <5ee9bd2b-3a6e-7de3-9bc8-168e0639c5af@mind.be>
+In-Reply-To: <5ee9bd2b-3a6e-7de3-9bc8-168e0639c5af@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 15 Feb 2023 14:57:50 -0700
+Message-ID: <CADvTj4qtzU45p5_N8M159E-o0MO3PJZ0Xg5dBvaxMCGaw-3bvQ@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=3mhKZ321Oy5qJNM9nUwYHTU0jULo1cdbW/6A0bSAh6I=;
+ b=iCISqqEdX7fT+VIt3s36Min/Q5miv3wRHQB54ocVY1MB73eKqTUdvNCAzsyBBBpQXj
+ AexIAHM8mzbGEWGslMW2DInUh9p0+ZwNZwheIMIjzTepPUh/Op720jeI3LZFgnYkGgEz
+ VSHXo1HhqQWcz70gdG9cdxth5ozHuTr8HsnLKu8kb3aszHaW7Y5gCan4DlA4oF8wmATA
+ Z75MdIFvvuVLYlJ6xIEJJX9Fp8QGEyeowjtomkYj1qLkBNskFVF+6Hd/HkOel0/OMYuw
+ PqgkH2pJhbsiUAv+D5oj/CkZUKUxemaszDBnx79uxQ6Za1gFZFBqUHCPS69ZlHSl1P+6
+ Md7g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=iCISqqEd
+Subject: Re: [Buildroot] [PATCH v2 1/1] utils/genrandconfig: make default
+ toolchain_csv path absolute
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,296 +93,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b259dac22a4179494e9947c485b6b171d8fef52e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Feb 15, 2023 at 2:46 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 15/02/2023 22:29, James Hilliard wrote:
+> > On Wed, Feb 15, 2023 at 2:20 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>
+> >>
+> >>
+> >> On 15/02/2023 22:15, James Hilliard wrote:
+> >>> The default toolchain_csv path is a relative path to the buildroot
+> >>> directory.
+> >>>
+> >>> If we run genrandconfig with a cwd that is not the buildroot directory
+> >>> the default toolchain_csv path will be wrong.
+> >>>
+> >>> To fix this make the default toolchain_csv path absolute.
+> >>>
+> >>> Fixes:
+> >>> FileNotFoundError: [Errno 2] No such file or directory: 'support/config-fragments/autobuild/toolchain-configs.csv'
+> >>>
+> >>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >>> ---
+> >>> Changes v1 -> v2:
+> >>>     - set default path as absolute
+> >>> ---
+> >>>    utils/genrandconfig | 4 +++-
+> >>>    1 file changed, 3 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/utils/genrandconfig b/utils/genrandconfig
+> >>> index b3576f8a51..3552b83694 100755
+> >>> --- a/utils/genrandconfig
+> >>> +++ b/utils/genrandconfig
+> >>> @@ -801,7 +801,9 @@ if __name__ == '__main__':
+> >>>                                    dest="toolchains_csv",
+> >>>                                    help="Generate random toolchain configuration",
+> >>>                                    action='store_false')
+> >>> -    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
+> >>> +    buildroot_abs = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+> >>> +    parser.set_defaults(toolchains_csv=os.path.join(buildroot_abs,
+> >>> +                        "support/config-fragments/autobuild/toolchain-configs.csv"))
+> >>
+> >>    Sorry, that's not going to work either (if it was that easy I'd done it myself :-)
+> >
+> > Under what scenario would this break?
+>
+>   I have ~/src/buildroot/utils in my PATH, so I just run 'genrandconfig' from
+> path. If I want to run it in a different worktree (e.g. ~/src/buildroot-next
+> which tracks the next branch), I would go to that directory and run
+> "genrandconfig", so it would use the one in ~/src/buildroot, not the one in
+> ~/sr/buildroot-next. In that case, of course, I want to use the
+> toolchain-configs.csv from the next branch, not the one from ~/src/buildroot.
 
-Our dmalloc packaging is very old and carries historical baggage and
-idiosyncracies that we have long stopped doing in the rest ofthe code
-base.
+Well you can still do that by passing the relative path via --toolchains-csv to
+override the default abs path.
 
-Drop our post-patch hooks that seds the configure and Makefile.in files,
-and add patches (that could be upstreamed one day).
+>
+>
+> >>    buildrootdir can be set to something else with the -b argument, and we want it
+> >> relative to *that* one of course.
+> >
+> > Using buildrootdir is cwd dependent,
+>
+>   The default value is cwd dependent; the value you give with the -b option can
+> be absolute or relative.
 
-We provide the results in the environment, like would be done with
-actual autoconf cache variables (ac_cv_*).
+Yeah, but I think making it an abs path relative to the genrandconfig
+file as the
+default is less likely to cause unexpected issues. Having it relative
+to cwd when
+not passing an option is a bit unexpected IMO.
 
-Note: those are the result of cleaning up for further patches that did
-not manifest because it was too complex to add proper SSP support to
-dmalloc (instead, we're going to forcibly disable it in the following
-commit).
+>
+> > the approach I used is not as it uses the
+> > absolute path of the genrandconfig file to compute the default toolchain_csv
+> > abs path.
+>
+>   And my point is that it should be relative to the buildrootdir given with the
+> commandline option, not relative to the place where genrandconfig happens to reside.
 
-Note-2: those patches have not been submitted upstream, as it's mostly
-dead: even though there's been some commit activities recently-ish, there
-has been no review or comments or the many PR pending for many years
-now.
+It's still relative to cwd when passing a relative path via
+--toolchains-csv, just the
+default is changed to be an abs path.
 
-Note-3: we patch both configure and configure.ac, rather than
-autoreconf, for two reasons: 1. the both are in the upstream git tree,
-so submitting these patches would require patching both, and 2. dmalloc
-does not autoreconf nicely out of the box, and it was deemed too much
-hassle to fix that in addition.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...003-configure-allow-overriding-some-tests.patch | 80 ++++++++++++++++++++++
- ...e-the-configure-detected-or-user-supplied.patch | 50 ++++++++++++++
- ...onfigure-use-LD-instead-of-hard-coding-ld.patch | 67 ++++++++++++++++++
- package/dmalloc/dmalloc.mk                         | 17 ++---
- 4 files changed, 202 insertions(+), 12 deletions(-)
-
-diff --git a/package/dmalloc/0003-configure-allow-overriding-some-tests.patch b/package/dmalloc/0003-configure-allow-overriding-some-tests.patch
-new file mode 100644
-index 0000000000..3003e8cbe4
---- /dev/null
-+++ b/package/dmalloc/0003-configure-allow-overriding-some-tests.patch
-@@ -0,0 +1,80 @@
-+From 9d57d4353c82110c609f36f91986277343d4ee45 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 13:26:56 +0100
-+Subject: [PATCH] configure: allow overriding some tests
-+
-+Some tests use AC_RUN_IFELSE, so they do not work for cross-compilation.
-+
-+Allow the user to provide these results from the environment.
-+
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ configure    | 6 +++---
-+ configure.ac | 6 +++---
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/configure b/configure
-+index c18dfb2..d165962 100755
-+--- a/configure
-++++ b/configure
-+@@ -4540,7 +4540,7 @@ fi
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking strdup macro" >&5
-+ $as_echo_n "checking strdup macro... " >&6; }
-+ if test "$cross_compiling" = yes; then :
-+-  ac_cv_strdup_macro=no
-++  ac_cv_strdup_macro="${ac_cv_strdup_macro-no}"
-+ 
-+ else
-+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+@@ -4578,7 +4578,7 @@ $as_echo "$ac_cv_strdup_macro" >&6; }
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking strndup macro" >&5
-+ $as_echo_n "checking strndup macro... " >&6; }
-+ if test "$cross_compiling" = yes; then :
-+-  ac_cv_strndup_macro=no
-++  ac_cv_strndup_macro="${ac_cv_strndup_macro-no}"
-+ 
-+ else
-+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+@@ -4753,7 +4753,7 @@ done
-+ 
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking basic-block size" >&5
-+ $as_echo_n "checking basic-block size... " >&6; }
-+-ac_cv_page_size=0
-++ac_cv_page_size="${ac_cv_page_size-0}"
-+ if test $ac_cv_page_size = 0; then
-+    if test "$cross_compiling" = yes; then :
-+    ac_cv_page_size=0
-+diff --git a/configure.ac b/configure.ac
-+index 9740fdc..51bdf4d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -292,7 +292,7 @@ int main() { return 1; }
-+ ]])],
-+ [ac_cv_strdup_macro=yes],
-+ [ac_cv_strdup_macro=no],
-+-[ac_cv_strdup_macro=no]
-++[ac_cv_strdup_macro="${ac_cv_strdup_macro-no}"]
-+ )
-+ AC_MSG_RESULT([$ac_cv_strdup_macro])
-+ 
-+@@ -316,7 +316,7 @@ int main() { return 1; }
-+ ]])],
-+ [ac_cv_strndup_macro=yes],
-+ [ac_cv_strndup_macro=no],
-+-[ac_cv_strndup_macro=no]
-++[ac_cv_strndup_macro="${ac_cv_strndup_macro-no}"]
-+ )
-+ AC_MSG_RESULT([$ac_cv_strndup_macro])
-+ 
-+@@ -390,7 +390,7 @@ AC_MSG_RESULT([$ac_cv_use_mmap])
-+ #
-+ AC_CHECK_FUNCS(getpagesize)
-+ AC_MSG_CHECKING([basic-block size])
-+-ac_cv_page_size=0
-++ac_cv_page_size="${ac_cv_page_size-0}"
-+ if test $ac_cv_page_size = 0; then
-+    AC_RUN_IFELSE([AC_LANG_SOURCE([
-+ #if HAVE_UNISTD_H
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch b/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
-new file mode 100644
-index 0000000000..394e7ca34e
---- /dev/null
-+++ b/package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
-@@ -0,0 +1,50 @@
-+From c958fd5cd7d5ff03c0a023608b53b74997c514b3 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 13:43:55 +0100
-+Subject: [PATCH] Makefile: use the configure-detected or user-supplied ar
-+ program
-+
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ Makefile.in | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 86d3cca..089ac99 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -303,11 +303,11 @@ $(LIB_SL) : $(LIBRARY)
-+ 	mv $@.t $@
-+ 
-+ $(LIBRARY) : $(OBJS) $(NORMAL_OBJS)
-+-	ar cr $@ $?
-++	$(AR) cr $@ $?
-+ 	@RANLIB@ $@
-+ 
-+ $(LIB_TH) : $(OBJS) $(THREAD_OBJS)
-+-	ar cr $@ $?
-++	$(AR) cr $@ $?
-+ 	@RANLIB@ $@
-+ 
-+ $(LIB_TH_SL) : $(LIB_TH)
-+@@ -316,7 +316,7 @@ $(LIB_TH_SL) : $(LIB_TH)
-+ 	mv $@.t $@
-+ 
-+ $(LIB_CXX) : $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
-+-	ar cr $@ $?
-++	$(AR) cr $@ $?
-+ 	@RANLIB@ $@
-+ 
-+ $(LIB_CXX_SL) : $(LIB_CXX)
-+@@ -325,7 +325,7 @@ $(LIB_CXX_SL) : $(LIB_CXX)
-+ 	mv $@.t $@
-+ 
-+ $(LIB_TH_CXX) : $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
-+-	ar cr $@ $?
-++	$(AR) cr $@ $?
-+ 	@RANLIB@ $@
-+ 
-+ $(LIB_TH_CXX_SL) : $(LIB_TH_CXX)
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch b/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch
-new file mode 100644
-index 0000000000..3ba6ee3dc7
---- /dev/null
-+++ b/package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch
-@@ -0,0 +1,67 @@
-+From d77e5f3d45b0cbae850e3a6e23d52edc137be803 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 8 Feb 2023 13:52:05 +0100
-+Subject: [PATCH] configure: use ${LD} instead of hard-coding 'ld'
-+
-+When doing cross-compilation, we do not want to use the native tools to
-+test, but the target tools.
-+
-+Note that the weird quoting is inherited from a legacy patch in
-+Buildroot, which dates back ages (at least 2006), and as it has not been
-+identified as breaking things, we keep it as-is... Meh...
-+
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ configure    | 12 ++++++------
-+ configure.ac | 12 ++++++------
-+ 2 files changed, 12 insertions(+), 12 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 810636e..30a7ea3 100755
-+--- a/configure
-++++ b/configure
-+@@ -4377,12 +4377,12 @@ if ac_fn_c_try_compile "$LINENO"; then :
-+             ac_cv_shared_link_args='# Could not configure shlib linking'
-+             enable_shlib=no
-+           fi
-+-       elif (ld -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -shared --whole-archive -soname $@ -o $@.t'
-+-	elif (ld -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -shared -o $@.t -all -soname $@ -none -lc -all'
-+-	elif (ld -G -o conftest.so.t conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -G -o $@.t'
-++       elif (${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -shared --whole-archive -soname $@ -o $@.t'
-++	elif (${LD-ld} -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -shared -o $@.t -all -soname $@ -none -lc -all'
-++	elif (${LD-ld} -G -o conftest.so.t conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -G -o $@.t'
-+ 	else
-+ 		# oh well, toss an error
-+ 		ac_cv_shared_link_args='# Could not configure shlib linking'
-+diff --git a/configure.ac b/configure.ac
-+index 51bdf4d..0d80a78 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -169,12 +169,12 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([ int foo(int val) { return val + 1; } ])],[
-+             ac_cv_shared_link_args='# Could not configure shlib linking'
-+             enable_shlib=no
-+           fi
-+-       elif (ld -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -shared --whole-archive -soname $@ -o $@.t'
-+-	elif (ld -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -shared -o $@.t -all -soname $@ -none -lc -all'
-+-	elif (ld -G -o conftest.so.t conftest.a) 2>&5; then
-+-		ac_cv_shared_link_args='ld -G -o $@.t'
-++       elif (${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -shared --whole-archive -soname $@ -o $@.t'
-++	elif (${LD-ld} -shared -o conftest.so.t -all -soname conftest.so.t -none -lc -all conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -shared -o $@.t -all -soname $@ -none -lc -all'
-++	elif (${LD-ld} -G -o conftest.so.t conftest.a) 2>&5; then
-++		ac_cv_shared_link_args="${LD-ld}"' -G -o $@.t'
-+ 	else
-+ 		# oh well, toss an error
-+ 		ac_cv_shared_link_args='# Could not configure shlib linking'
-+-- 
-+2.25.1
-+
-diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index 81ac467277..6b90f810b2 100644
---- a/package/dmalloc/dmalloc.mk
-+++ b/package/dmalloc/dmalloc.mk
-@@ -44,18 +44,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_63261),y)
- DMALLOC_CFLAGS += -O0
- endif
- 
--DMALLOC_CONF_ENV = CFLAGS="$(DMALLOC_CFLAGS)"
--
--define DMALLOC_POST_PATCH
--	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(@D)/configure
--	$(SED) 's/ac_cv_strdup_macro=no$$/ac_cv_strdup_macro=yes/' $(@D)/configure
--	$(SED) 's/ac_cv_strndup_macro=no$$/ac_cv_strndup_macro=yes/' $(@D)/configure
--	$(SED) 's/(ld -/($${LD-ld} -/' $(@D)/configure
--	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(@D)/configure
--	$(SED) 's/ar cr/$$(AR) cr/' $(@D)/Makefile.in
--endef
--
--DMALLOC_POST_PATCH_HOOKS += DMALLOC_POST_PATCH
-+DMALLOC_CONF_ENV = \
-+	CFLAGS="$(DMALLOC_CFLAGS)" \
-+	ac_cv_page_size=12 \
-+	ac_cv_strdup_macro=yes \
-+	ac_cv_strndup_macro=yes
- 
- # both DESTDIR and PREFIX are ignored..
- define DMALLOC_INSTALL_STAGING_CMDS
+>
+>   TBH, I think genrandonfig has too many options :-)
+>
+>   Regards,
+>   Arnout
+>
+> >
+> >>
+> >>    Regards,
+> >>    Arnout
+> >>
+> >>>
+> >>>        args = parser.parse_args()
+> >>>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
