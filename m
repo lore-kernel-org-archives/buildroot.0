@@ -4,79 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7BD4C05027
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 00:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70377C636D4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 05:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F1E140B6E;
-	Wed, 15 Feb 2023 00:10:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F1E140B6E
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEEB340B8E;
+	Wed, 15 Feb 2023 05:27:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEEB340B8E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Aor_9sMLIr3j; Wed, 15 Feb 2023 00:10:44 +0000 (UTC)
+	with ESMTP id YO6dtRmUERNS; Wed, 15 Feb 2023 05:27:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69AC94052F;
-	Wed, 15 Feb 2023 00:10:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69AC94052F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD95C1BF94D
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 00:10:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8F7D404ED;
+	Wed, 15 Feb 2023 05:27:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8F7D404ED
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 27CB41BF836
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 05:27:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C4E754091F
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 00:10:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4E754091F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06C8F404ED
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 05:27:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06C8F404ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MkqFFe4NTMHk for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 00:10:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D06B5408F0
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com
- [IPv6:2607:f8b0:4864:20::112b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D06B5408F0
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 00:10:39 +0000 (UTC)
-Received: by mail-yw1-x112b.google.com with SMTP id
- 00721157ae682-52eb7a5275aso219341767b3.2
- for <buildroot@buildroot.org>; Tue, 14 Feb 2023 16:10:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=25CJS3ULvqpOGBVbKsAZhp3nryg4p9fCOvEkDThGcQU=;
- b=7afhP+Vbo+ng3ZkFiOoKkVuf/JB0nMRwkSLbCBf8pgch5tmHWaBRUUUUEcnbJGwU8E
- 2K7dXswqasVquVFeuaj61MxcqnseWBbZP4QrQNEdhW3v3VrLnyrBk1AL8TiH6At+5Hn9
- eOoAdwEo7WdZsFOgGof7ZMC8stwpvxS2xXU77KWhsjABnqDT+jg9B4ZJ70ze6zBSKNvU
- EoQHpA/VoE5rUf6Z4L1zlfK4eYK0fsPswSaJD3Mzud3FxFGfhv2xylTvlogFqHF0hsRB
- 7X5uZvF45xcz63W+KlThCNCZb7cidpUurPOUvQsvxNBonfUcl3jLD/SGIcm0wzzYbL/Q
- YaAw==
-X-Gm-Message-State: AO0yUKWD1hu3BfdptVOeVVSv2PMU/s1VB3NKngZdPX/lMNxGH9ciK8OY
- 5tY4xDlsjL8+94Y1zrdlnk6RSd+JVxTBkTx58wBheNTdvDuSbg==
-X-Google-Smtp-Source: AK7set86wow/KK20bJzc8wAd9T5pqGpij73hV8eSRQniW04qcQnFpOj4GfkTifDCbMXQFNDuHQB47dCjLd2gE1BjDEM=
-X-Received: by 2002:a81:a212:0:b0:46a:cb68:9add with SMTP id
- w18-20020a81a212000000b0046acb689addmr60502ywg.102.1676419838554; Tue, 14 Feb
- 2023 16:10:38 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ybyk0hgAoGYr for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 05:27:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1E8A40017
+Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E1E8A40017
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 05:27:49 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id DFCDE44057D;
+ Wed, 15 Feb 2023 07:23:33 +0200 (IST)
+References: <SY2PR01MB277812C5F0180DAA6B2A1D2994A29@SY2PR01MB2778.ausprd01.prod.outlook.com>
+ <87v8k40wok.fsf@tarshish>
+ <SY2PR01MB27785A7F0A589B49D0ABE42994A29@SY2PR01MB2778.ausprd01.prod.outlook.com>
+User-agent: mu4e 1.8.13; emacs 28.2
+To: Afshin Pir <Afshin.Pir@gallagher.com>
+Date: Wed, 15 Feb 2023 07:20:10 +0200
+In-reply-to: <SY2PR01MB27785A7F0A589B49D0ABE42994A29@SY2PR01MB2778.ausprd01.prod.outlook.com>
+Message-ID: <87r0ur1ory.fsf@tarshish>
 MIME-Version: 1.0
-From: Cem Sezer <cps@microplex.com>
-Date: Tue, 14 Feb 2023 16:10:28 -0800
-Message-ID: <CACw=RXJvPxp4-z1JkH33ZBpGNEo37hQXnZTfyyeqVGiqXbYEqw@mail.gmail.com>
-To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microplex.com; s=google;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=25CJS3ULvqpOGBVbKsAZhp3nryg4p9fCOvEkDThGcQU=;
- b=jgaDC6IBzel4gyoTybYpGLCTWshJ7OqZqEOHkxb7rOFzvFRNXl+sjJ/86nagmUUore
- jkgR1TZmGI38M3D00xVCpety62dsM97BH+Yd5H37irO33M/6JFCGMeZuKp11FhY09BtD
- 0IUX8bWKUbcX02ij6CCh9WIb14Yn+eT9Pj+BP19dHkSiHJNIfnBfQ6fa0vGxoy98UzRp
- cHY276yH6NjoiTF4tIckCc468BQe2CQvxZSqFQRgvlxFBRvfwfIKECXZ+ycWNFFDewZV
- PxUCiTWmLzCBComKkYDKXjNQKkYzezzw7o33hJ51P8tCtW9u7M8xUoLNPIcqQzvJcaLw
- mgcA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=microplex.com header.i=@microplex.com
- header.a=rsa-sha256 header.s=google header.b=jgaDC6IB
-Subject: [Buildroot] Having trouble getting a simple cmake based custom
- package to work
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1676438613;
+ bh=fp6DES+ctQlvx2LuYtal627ASlFa0mJ0OAqRZg/Kct8=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=aVMrbZpz1M0C1ons09hKAxnGKAyKM9a9ZPr3Z8fWYg+GRW7KTG9vDhPrIpd0lcB/h
+ /8/GEVEgVjUbGN0MN6G7Gqcmx/g2L04JehM50pHAlEr63d+XPw7As+pWJAHiHbUPoV
+ WVmioKNCPtM699LEwGMT4Kz9QcW34BhjpHbg86dE4B5JY9ev6mhADu41xwfgJFpENO
+ BHhARSpYLbrCwArVZnTv1Aq2d8wf32ZasROBROjTsCDzNqbKgscf3eXTq/uUWyIk8P
+ UY8vk4mrj8iilcEUCvYubg6PBp8pzmfx4Hz9PzZv3Vd34gM8aGDr/WUOLGl4QwHJ+D
+ nHlj0QcH82Z/g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=aVMrbZpz
+Subject: Re: [Buildroot] Define dependency package only in staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,114 +74,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8574478768861889798=="
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8574478768861889798==
-Content-Type: multipart/alternative; boundary="000000000000f8caa905f4b1e8de"
+Hi Afshin,
 
---000000000000f8caa905f4b1e8de
-Content-Type: text/plain; charset="UTF-8"
+Please keep the list on Cc.
 
-Hello,
+On Tue, Feb 14 2023, Afshin Pir wrote:
+> You mean will it work if I add that in package "A" configuration like this:
+>         B_INSTALL_TARGE = NO
+> Because normally each package its own configuration.
 
-I'm looking to continue this thread as I have the exact same problem.
+That should be
 
-http://lists.busybox.net/pipermail/buildroot/2020-August/591250.html
+  B_INSTALL_TARGET = NO
 
-The latest entry in the thread is the following, discussing the error
-message "*No rule to make target 'install/fast': *is where I'm stuck at the
-moment:
+But now I see that you want B out of target only when A selects B, not
+for the general case, right? There is no direct support for that in
+Buildroot. You can always use a post build script to remove whatever you
+like from your target.
 
->* However, when it is
-*>* trying to install my package I have a new error. The system seems to be
-*>* looking for a install/fast target, which the Makefil does not have.
-*
-I have no idea on that problem.  Maybe read the CMake docs again?
-https://cmake.org/cmake/help/latest/command/install.html
+Alternatively you can add a blind config symbol to package B Config.in
+that adds 'B_INSTALL_TARGET = NO', and then select this symbol from
+package A.
 
-Greets
-Alex
+baruch
 
-I am still new to cmake, but I've been having trouble getting a basic
-helloworld (in C) cmake package to work. I looked at that link above
-for the cmake docs, but am unfamiliar with what I need to do here. My
-CMakeLists.txt right now is just the following:
+> -----Original Message-----
+> From: Baruch Siach <baruch@tkos.co.il>
+> Sent: Wednesday, 15 February 2023 10:20 am
+> To: Afshin Pir <Afshin.Pir@gallagher.com>
+> Cc: buildroot@buildroot.org
+> Subject: Re: [Buildroot] Define dependency package only in staging
+>
+> Hi Afshin,
+>
+> On Tue, Feb 14 2023, Afshin Pir wrote:
+>> I wonder if it is possible that to force the dependant package to be
+>> installed only in staging folder. For example, I have written package
+>> A which depend on Package B like this:
+>>
+>> config BR2_PACKAGE_A
+>>                bool "my-a-provider"
+>>                select BR2_PACKAGE_B
+>>                help
+>>                        Test A Package
+>>
+>> The problem is that the above configuration installs B in the target,
+>> but in reality, it is enough to be installed in staging directory
+>> (since it provides a header-only version). In there anyway to define a
+>> dependency for staging only?
+>
+> '<PKG>_INSTALL_TARGET = NO' might help you.
+>
+> baruch
 
-cmake_minimum_required(VERSION 3.1.0)
 
-project(helloworld_c_cmake LANGUAGES C)
-
-set(SOURCES main.c)
-
-add_executable(${PROJECT_NAME} ${SOURCES})
-
-
-Any pointers in the right direction would be appreciated. Perhaps this
-is more of a cmake question than a buildroot question, but tying the
-two together has been confusing, and I'm sure it must be something
-simple. Thanks in advance,
-
-Cem
-
---000000000000f8caa905f4b1e8de
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hello,<br></div><div><br></div><div>I&#39;m looking t=
-o continue this thread as I have the exact same problem.=C2=A0</div><div><b=
-r></div><a href=3D"http://lists.busybox.net/pipermail/buildroot/2020-August=
-/591250.html" target=3D"_blank">http://lists.busybox.net/pipermail/buildroo=
-t/2020-August/591250.html</a><br><div><br></div><div>The latest entry in th=
-e thread is the following, discussing the error message &quot;<i style=3D"c=
-olor:rgb(0,0,0);white-space:pre-wrap">No rule to make target &#39;install/f=
-ast&#39;: </i>is where I&#39;m stuck at=C2=A0the moment:=C2=A0</div><div><b=
-r></div><div><pre style=3D"white-space:pre-wrap;color:rgb(0,0,0)">&gt;<i> H=
-owever, when it is
-</i>&gt;<i> trying to install my package I have a new error. The system see=
-ms to be
-</i>&gt;<i> looking for a install/fast target, which the Makefil does not h=
-ave.
-</i>
-I have no idea on that problem.  Maybe read the CMake docs again?
-
-<a href=3D"https://cmake.org/cmake/help/latest/command/install.html" target=
-=3D"_blank">https://cmake.org/cmake/help/latest/command/install.html</a>
-
-Greets
-Alex</pre><pre style=3D"white-space:pre-wrap;color:rgb(0,0,0)"><span style=
-=3D"color:rgb(34,34,34);font-family:Arial,Helvetica,sans-serif;white-space:=
-normal">I am still new to cmake, but I&#39;ve been having trouble getting a=
- basic helloworld=C2=A0(in C) cmake package to work. I looked at that link =
-above for the cmake docs, but am unfamiliar with what I need to do here. My=
- CMakeLists.txt right now is just the following:<br><br></span>cmake_minimu=
-m_required(VERSION 3.1.0) <br><br>project(helloworld_c_cmake LANGUAGES C)<b=
-r><br>set(SOURCES main.c)<br><br>add_executable(${PROJECT_NAME} ${SOURCES})=
-</pre><pre style=3D"white-space:pre-wrap;color:rgb(0,0,0)"><br></pre><pre s=
-tyle=3D"white-space:pre-wrap;color:rgb(0,0,0)"><span style=3D"color:rgb(34,=
-34,34);font-family:Arial,Helvetica,sans-serif;white-space:normal">Any point=
-ers in the right direction would </span><font face=3D"arial, sans-serif"><s=
-pan style=3D"color:rgb(34,34,34);white-space:normal">be appreciated</span><=
-span style=3D"color:rgb(34,34,34);white-space:normal">. P</span>erhaps this=
- is more of a cmake question than a buildroot question, but tying the two t=
-ogether has been confusing, and I&#39;m sure it must be something simple.=
-=C2=A0Thanks in advance,=C2=A0</font></pre><pre style=3D"white-space:pre-wr=
-ap;color:rgb(0,0,0)"><span style=3D"color:rgb(34,34,34);font-family:Arial,H=
-elvetica,sans-serif;white-space:normal">Cem</span></pre><pre></pre><br></di=
-v></div>
-
---000000000000f8caa905f4b1e8de--
-
---===============8574478768861889798==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8574478768861889798==--
