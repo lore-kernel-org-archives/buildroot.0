@@ -1,68 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70377C636D4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 05:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 729D3C636D4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 06:30:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AEEB340B8E;
-	Wed, 15 Feb 2023 05:27:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEEB340B8E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0199381ECD;
+	Wed, 15 Feb 2023 06:30:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0199381ECD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YO6dtRmUERNS; Wed, 15 Feb 2023 05:27:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BN84QH-hKL72; Wed, 15 Feb 2023 06:30:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8F7D404ED;
-	Wed, 15 Feb 2023 05:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8F7D404ED
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 27CB41BF836
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 05:27:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 284A981ECE;
+	Wed, 15 Feb 2023 06:30:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 284A981ECE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 83A131BF84C
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 06:30:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06C8F404ED
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 05:27:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06C8F404ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6AECD60BAA
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 06:30:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AECD60BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ybyk0hgAoGYr for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 05:27:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1E8A40017
-Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E1E8A40017
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 05:27:49 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id DFCDE44057D;
- Wed, 15 Feb 2023 07:23:33 +0200 (IST)
-References: <SY2PR01MB277812C5F0180DAA6B2A1D2994A29@SY2PR01MB2778.ausprd01.prod.outlook.com>
- <87v8k40wok.fsf@tarshish>
- <SY2PR01MB27785A7F0A589B49D0ABE42994A29@SY2PR01MB2778.ausprd01.prod.outlook.com>
-User-agent: mu4e 1.8.13; emacs 28.2
-To: Afshin Pir <Afshin.Pir@gallagher.com>
-Date: Wed, 15 Feb 2023 07:20:10 +0200
-In-reply-to: <SY2PR01MB27785A7F0A589B49D0ABE42994A29@SY2PR01MB2778.ausprd01.prod.outlook.com>
-Message-ID: <87r0ur1ory.fsf@tarshish>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IpidAMFF1Fae for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 06:30:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34A1560B8B
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 34A1560B8B
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 06:30:03 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id A27C85FF67;
+ Wed, 15 Feb 2023 07:29:56 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 15 Feb 2023 07:29:56 +0100
+Date: Wed, 15 Feb 2023 07:29:56 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20230215062956.GA2718518@scaer>
+References: <20230210215548.1050371-1-yann.morin.1998@free.fr>
+ <4f51a196-e922-1e9e-6fbb-e81b35dc9f73@mind.be>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <4f51a196-e922-1e9e-6fbb-e81b35dc9f73@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1676438613;
- bh=fp6DES+ctQlvx2LuYtal627ASlFa0mJ0OAqRZg/Kct8=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=aVMrbZpz1M0C1ons09hKAxnGKAyKM9a9ZPr3Z8fWYg+GRW7KTG9vDhPrIpd0lcB/h
- /8/GEVEgVjUbGN0MN6G7Gqcmx/g2L04JehM50pHAlEr63d+XPw7As+pWJAHiHbUPoV
- WVmioKNCPtM699LEwGMT4Kz9QcW34BhjpHbg86dE4B5JY9ev6mhADu41xwfgJFpENO
- BHhARSpYLbrCwArVZnTv1Aq2d8wf32ZasROBROjTsCDzNqbKgscf3eXTq/uUWyIk8P
- UY8vk4mrj8iilcEUCvYubg6PBp8pzmfx4Hz9PzZv3Vd34gM8aGDr/WUOLGl4QwHJ+D
- nHlj0QcH82Z/g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=aVMrbZpz
-Subject: Re: [Buildroot] Define dependency package only in staging
+ d=free.fr; s=smtp-20201208; t=1676442600;
+ bh=4xkMjTB9yVuNbfH/SG9irS9R3+HYWmoGoXktwz8OCRg=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=WwRotEKe7gpzqVLe3vvp3kGTfm3KEKRZjXqlLfgwHT7f2QDdZvTOfVVqYUosaZJir
+ h6RSbbDH5V1oWJAyqTesDr9o6jm1+0Y0a0dNQCSWdjofTuMrPT2Rl9YeTUILG1HtZw
+ IkUl2bPneK6Y/Pvpf0CkcVFqD59piderx9+eqa8eYWEgnzBJGHvjVDbdRoeBdOImIt
+ cKBDEjgOpKsrlwRgL2s8WwReQ0PodugLfIYIOAnLvqAi2BqnxSEBvJDCExZwYTAsR0
+ +KJnb2VqDuRwpSutazZjDKAqPEouMFh6AfQY0Twm5YMU1jlut0aMaQHjd3sHiMokHI
+ 22nj/l2EjxeHQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=WwRotEKe
+Subject: Re: [Buildroot] [PATCH] package/erlang: do not hard-code the Erlang
+ Interface Version (EI_VSN)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,72 +77,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot@buildroot.org
+Cc: Will Newton <will.newton@gmail.com>,
+ Johan Oudinet <johan.oudinet@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Afshin,
+Arnout, All,
 
-Please keep the list on Cc.
+On 2023-02-14 22:30 +0100, Arnout Vandecappelle spake thusly:
+> On 10/02/2023 22:55, Yann E. MORIN wrote:
+[--SNIP--]
+> >Although both the host and target erlang are the same, we still look
+> >into the corresponding file to extract the version. This is so that it
+> >would be easier if in the future we ever manage to rely on a
+> >system-installed erlang that could have a EI_VSN different from the
+> >target one.
 
-On Tue, Feb 14 2023, Afshin Pir wrote:
-> You mean will it work if I add that in package "A" configuration like this:
->         B_INSTALL_TARGE = NO
-> Because normally each package its own configuration.
+This ^^^ [0] ...
 
-That should be
+[--SNIP--]
+> >@@ -36,9 +36,9 @@ ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
+> >  HOST_ERLANG_DEPENDENCIES += host-autoconf
+> >  HOST_ERLANG_PRE_CONFIGURE_HOOKS += ERLANG_RUN_AUTOCONF
+> >-# Whenever updating Erlang, this value should be updated as well, to the
+> >-# value of EI_VSN in the file lib/erl_interface/vsn.mk
+> >-ERLANG_EI_VSN = 3.13.2.2
+> >+# Return the EIV (Erlang Interface Version, EI_VSN)
+> >+# $(1): base directory, i.e. either $(HOST_DIR) or $(STAGING_DIR)/usr
+> >+erlang_ei_vsn = `sed -r -e '/^erl_interface-(.+)/!d; s//\1/' $(1)/lib/erlang/releases/$(ERLANG_RELEASE)/installed_application_versions`
+>  Since this is only used by rebar-package, I think it should move to pkg-rebar.mk.
 
-  B_INSTALL_TARGET = NO
+I also thought about that, but the knowledge where the file is installed
+is in erlang, so it makes sense that erlang exports away its own
+version, like the variable was set previously.
 
-But now I see that you want B out of target only when A selects B, not
-for the general case, right? There is no direct support for that in
-Buildroot. You can always use a post build script to remove whatever you
-like from your target.
+That's also what we do for AUTOCONF, AUTORECONF, AUTOMAKE et al: they
+are defined in their respective packages, but used in the
+autotools-package infra.
 
-Alternatively you can add a blind config symbol to package B Config.in
-that adds 'B_INSTALL_TARGET = NO', and then select this symbol from
-package A.
+> >  # The configure checks for these functions fail incorrectly
+> >  ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+> >diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
+> >index e4e3f3bb6c..4b993dd970 100644
+> >--- a/package/pkg-rebar.mk
+> >+++ b/package/pkg-rebar.mk
+> >@@ -32,10 +32,10 @@ REBAR_TARGET_DEPS_DIR = $(STAGING_DIR)/usr/share/rebar/deps
+> >  #
+> >  REBAR_HOST_DEPS_ENV = \
+> >  	ERL_COMPILER_OPTIONS='{i, "$(REBAR_HOST_DEPS_DIR)"}' \
+> >-	ERL_EI_LIBDIR=$(HOST_DIR)/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
+> >+	ERL_EI_LIBDIR=$(HOST_DIR)/lib/erlang/lib/erl_interface-$(call erlang_ei_vsn,$(HOST_DIR))/lib
 
-baruch
+... [0] explains this ^^^, and ...
 
-> -----Original Message-----
-> From: Baruch Siach <baruch@tkos.co.il>
-> Sent: Wednesday, 15 February 2023 10:20 am
-> To: Afshin Pir <Afshin.Pir@gallagher.com>
-> Cc: buildroot@buildroot.org
-> Subject: Re: [Buildroot] Define dependency package only in staging
->
-> Hi Afshin,
->
-> On Tue, Feb 14 2023, Afshin Pir wrote:
->> I wonder if it is possible that to force the dependant package to be
->> installed only in staging folder. For example, I have written package
->> A which depend on Package B like this:
->>
->> config BR2_PACKAGE_A
->>                bool "my-a-provider"
->>                select BR2_PACKAGE_B
->>                help
->>                        Test A Package
->>
->> The problem is that the above configuration installs B in the target,
->> but in reality, it is enough to be installed in staging directory
->> (since it provides a header-only version). In there anyway to define a
->> dependency for staging only?
->
-> '<PKG>_INSTALL_TARGET = NO' might help you.
->
-> baruch
+>  Since we support only one erlang version, we could just as well put
+> $(wildcard $(HOST_DIR)/lib/erlang/lib/erl_interface-*/lib)
 
+... [0] answers that, I believe. ;-)
+
+> or does that directory not necessarily exist yet after erlang has been installed?
+
+The directory does exist, as erl_interface is installed by erlang (it is
+kind of part of its stdlib, I'd say), and thus is registered by erlang
+itself.
+
+Regards,
+Yann E. MORIN.
+
+>  Regards,
+>  Arnout
+> 
+> 
+> >  REBAR_TARGET_DEPS_ENV = \
+> >  	ERL_COMPILER_OPTIONS='{i, "$(REBAR_TARGET_DEPS_DIR)"}' \
+> >-	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
+> >+	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(call erlang_ei_vsn,$(STAGING_DIR)/usr)/lib
+> >  ################################################################################
+> >  # Helper functions
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
