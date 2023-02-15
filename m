@@ -4,70 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDDC5C636D4
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60C15C636CC
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 21:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A20B41779;
-	Wed, 15 Feb 2023 21:24:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A20B41779
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4E0D4179D;
+	Wed, 15 Feb 2023 21:25:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4E0D4179D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l8zo1Cwi8nmy; Wed, 15 Feb 2023 21:24:55 +0000 (UTC)
+	with ESMTP id uZEur1BqhNDb; Wed, 15 Feb 2023 21:25:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8233741776;
-	Wed, 15 Feb 2023 21:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8233741776
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D80B71BF3A0
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:24:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7494A41773;
+	Wed, 15 Feb 2023 21:25:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7494A41773
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E95A1BF3A0
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:24:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0F5281E37
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0F5281E37
+ by smtp3.osuosl.org (Postfix) with ESMTP id D77B960AB1
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 21:24:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D77B960AB1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gfKNuprRWFj8 for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 21:24:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F97181AC1
-Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0F97181AC1
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:24:50 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.66.151])
- by Aruba Outgoing Smtp  with ESMTPSA
- id SPGdpCSs4nPhRSPGepb3wQ; Wed, 15 Feb 2023 22:24:46 +0100
-Message-ID: <25265a89-2f7a-4db5-0f15-ef66c48b3b63@benettiengineering.com>
-Date: Wed, 15 Feb 2023 22:24:42 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Clw0VlN-cj9K for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 21:24:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7561D60A70
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7561D60A70
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 21:24:53 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id h16so20560386wrz.12
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 13:24:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Y5hcGk7L/GazluwnLY3fP+ltRIpKG4GsYmE66mUfmaY=;
+ b=fTa/Il8yya5gf/7NIxUqZc0nTDTNJ1b90Q9wTKit8cGHaL7GFETxbu9yCrLXeFsNCz
+ 31y0tuqcfLY/Zc04RcV38hg8D+LBr9XpCV0NTkCBlGaPLa1yxt3hRnAb0SCz55FgCz/+
+ l0n9+xdIzKZLKz+iaUp2U6JJqkeTAsLHPWfNwq/b6Nd16Zx8voeCrVWbaskXs6fV/zPg
+ SD3FpSxz9tuKX3B8IG0LmpTSdTXMuZoMEkgtPNI6PSzgvZbXVlnGChCnhW5mzwj6A9JO
+ h9imlLK3yuXH1YcsF786q95Ci80gefMfOV0v766stOFbM68VhQs3pK5p/TxRTbBb2MJT
+ eJ9A==
+X-Gm-Message-State: AO0yUKXjp0zS95BDPizzGvLBBjiGyQg8fAKYYwrdID7voHvVBHK+3eua
+ iJLwBSyAW7aNshiVOG6s8ZgPpw==
+X-Google-Smtp-Source: AK7set/OxmeYWJPQD8o4UyMBbflFtLA+iLW0iifnfFal2yKMTfY2AUAG2S26PTqVjVkbAy4qijjBzA==
+X-Received: by 2002:adf:ea4f:0:b0:2c5:57d5:ef6e with SMTP id
+ j15-20020adfea4f000000b002c557d5ef6emr2594419wrn.46.1676496291530; 
+ Wed, 15 Feb 2023 13:24:51 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ m21-20020a056000181500b002c56af32e8csm2898854wrh.35.2023.02.15.13.24.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 15 Feb 2023 13:24:50 -0800 (PST)
+Message-ID: <242cceb0-476d-3a5b-5dcf-fc16b2ecf906@mind.be>
+Date: Wed, 15 Feb 2023 22:24:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230214120808.1282621-1-giulio.benetti@benettiengineering.com>
- <20230215220026.1a771114@windsurf>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230215220026.1a771114@windsurf>
-X-CMAE-Envelope: MS4xfNRSjkSnqEXFr4TYm2u87sFwMLIZCWJfjWvNGe+TNLPvd4ngmmlxmyILp7Vq0elyv48BoROxlvKH5sSVFz+y82Cu/W6uEekHgs06lw7ptEQrN+3gacvn
- vvYdhxg/YL/ayxlm874jlA6jPPZv6NDO1YKFaJdeL6mSWO7bSr7F2/ofbQ5zo+Gv43t0BLN7K/irwmaFxkSLCrne83Y0hEaIYQQChvlFQhJ8Oj5AIvyeMqIi
- bVCtvVy7DkkLVjQASWUfo1nOQ++9ALNbs+37AJRxMnnLvsu2uvhZAktl927oCKb8mNHtEzeMUVYN26gRs7PasQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1676496286; bh=W+7UT5UvNMq2gXfOiwU7PLb3OcJXJtx69lSVE+fptMk=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=JekkH+r8Zy/m6NaXGaHlom9Xsz2GRnLNNFUa44HzHZm9S2rf7PCEcRfeiwopnijKE
- Nn3zary0e976rset5/AecpdfuPRohAPPIBusEksUO6T4bVZKeqpM0yQKv95YsIuydz
- 9uPF0atciHHmXBKlYjbaxvTt/hRjwPBibgqpOQsFuxiy5VC4iv7RURAzZBYv6+orny
- DUMRRu+1gbfyvWc7aTKEQBHzkpgTgKQkRejPIVFlXwu/136lJAtbKPhLijjelY9G1S
- KRl4T2gL7YEQTa5Lkr7p9r2JztCRC5XFbrNsE8eYxGOLO8UYEYauLyJsh/R9BYu+6T
- ANxW4NCs7z5+g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=JekkH+r8
-Subject: Re: [Buildroot] [RFC PATCH] package/Config.in: move all Wireless
- Driver into a separate menu and enable them only if architecture s390x is
- not used
+ Thunderbird/102.7.1
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20230213181120.907459-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20230213181120.907459-1-fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Y5hcGk7L/GazluwnLY3fP+ltRIpKG4GsYmE66mUfmaY=;
+ b=BfQMhS/+v4lcjyLDmdc4d5WL26ufXq9sBpUHgYJ37swE0fIC/9Grgov3Ir/uUsMIi5
+ +NKLaEQj1bEw/aURBBz+oAF4Yfu3SEs8t1IvgUHZGFrEMpoqsz+/5feqGPiA/fswNuo4
+ sav4nXfsDPl/hPKpZuJy7lSjiZMEKWqJqt0Qr2rSL+bYAEzp9P5bpsG3Y6gpQGQGcDJq
+ slpDTR7yxMeeeg1eBhMgmRSlsiAuTIem+gKgI04sjxtQoQQ3DINuTEAllxYEtm/CsdG3
+ zsmeuAQRjcylje+roKzKx4itV55o6VvqMurc47mB4LXK2Ru64QQnVgWtNlGzWrIcWwsW
+ A6vg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=BfQMhS/+
+Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: compress-offload
+ needs kernel >= 5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,59 +101,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/02/23 22:00, Thomas Petazzoni via buildroot wrote:
-> On Tue, 14 Feb 2023 13:08:08 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+
+
+On 13/02/2023 19:11, Fabrice Fontaine wrote:
+> SND_AUDIOCODEC_A{LAC,PE} are only available since kernel 5.7 and
+> https://github.com/torvalds/linux/commit/0f546d6f0292fb624b4cf0cc70096ddb9ea070e6
+> resulting in the following build failure since bump to version 0.3.65
+> in commit 247e2d0eb1e60f483044d58bed58c5ed321528f7 and
+> https://git.buildroot.net/buildroot/commit/?id=247e2d0eb1e60f483044d58bed58c5ed321528f7:
 > 
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>   package/Config.in | 28 ++++++++++++++++------------
->>   1 file changed, 16 insertions(+), 12 deletions(-)
+> ../spa/plugins/alsa/alsa-compress-offload-sink.c:183:11: error: 'SND_AUDIOCODEC_ALAC' undeclared here (not in a function); did you mean 'SND_AUDIOCODEC_AAC'?
+>    183 |         { SND_AUDIOCODEC_ALAC, },
+>        |           ^~~~~~~~~~~~~~~~~~~
+>        |           SND_AUDIOCODEC_AAC
 > 
-> Why not, but then you need to change all the existing packages that
-> have a !S390 dependency to remove it, as it becomes redundant.
+> Moreover, flac_d is also only available since kernel 5.5 and
+> https://github.com/torvalds/linux/commit/d2522335c92c090bf58531a2b696d7fe80ab2a7a
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/9ecd9aca5edc3756154da59573157954f06e6537
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-yes, that wouldn't be a problem, it would be part of this patch
+  Applied to master, thanks.
 
-> However, I feel like the dependency is more "obvious" if it is in each
-> package. I know it's a bit of redundancy, but it is less "strange" than
-> having it in package/Config.in.
+  Regards,
+  Arnout
 
-But this way we kill two birds with one stone for dependencies and in
-the future I see more probable having people adding external Wireless
-Drivers to that menu, so it will inherits the dependency.
-And in any case there are already some dependencies in package/Config.in
-like !BR2_STATIC_LIBS and other BR2_PACKAGE_, 18 if statements in total.
-
-I'm wondering also if it would make sense to create many Config.in.* for
-every top-level menu in package/ like:
-$ ls buildroot/package/Config.in*
-package/Config.in
-package/Config.in.audio-video-app
-package/Config.in.comp-decop
-package/Config.in.host
-...
-
-The only con is to check for packages in multiple Config.in.* but it's 
-already like that with Config.in.host.
-The pro we could have instead is to "hide" the dependency checking on a
-specific Config.in.X
-
-Nothing special on the final result but maybe it would be more 
-user-friendly.
-
-Just my 2 cents
-
-Best regards
--- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
+> ---
+>   package/pipewire/Config.in   | 12 ++++++++++++
+>   package/pipewire/pipewire.mk |  2 +-
+>   2 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+> index f038291e87..4929e5d3d1 100644
+> --- a/package/pipewire/Config.in
+> +++ b/package/pipewire/Config.in
+> @@ -15,6 +15,18 @@ config BR2_PACKAGE_PIPEWIRE
+>   
+>   if BR2_PACKAGE_PIPEWIRE
+>   
+> +config BR2_PACKAGE_PIPEWIRE_COMPRESS_OFFLOAD
+> +	bool "pipewire Compress-Offload"
+> +	depends on !BR2_STATIC_LIBS # tinycompress
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
+> +	select BR2_PACKAGE_TINYCOMPRESS
+> +	help
+> +	  Enable ALSA Compress-Offload support
+> +
+> +comment "pipewire Compress-Offload needs a toolchain w/ dynamic library, headers >= 5.7"
+> +	depends on BR2_STATIC_LIBS || \
+> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
+> +
+>   config BR2_PACKAGE_PIPEWIRE_EXAMPLES
+>   	bool "pipewire examples"
+>   	help
+> diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+> index 976d7783b9..ecf4a035ec 100644
+> --- a/package/pipewire/pipewire.mk
+> +++ b/package/pipewire/pipewire.mk
+> @@ -215,7 +215,7 @@ else
+>   PIPEWIRE_CONF_OPTS += -Dsdl2=disabled
+>   endif
+>   
+> -ifeq ($(BR2_PACKAGE_TINYCOMPRESS),y)
+> +ifeq ($(BR2_PACKAGE_PIPEWIRE_COMPRESS_OFFLOAD),y)
+>   PIPEWIRE_CONF_OPTS += -Dcompress-offload=enabled
+>   PIPEWIRE_DEPENDENCIES += tinycompress
+>   else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
