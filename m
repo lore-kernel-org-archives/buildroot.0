@@ -4,48 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97784C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41F6EC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46B6061099;
-	Tue, 21 Feb 2023 00:58:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46B6061099
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3E7C61129;
+	Tue, 21 Feb 2023 00:58:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3E7C61129
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0_W_wLluJTVN; Tue, 21 Feb 2023 00:58:10 +0000 (UTC)
+	with ESMTP id u6__ruwP75RC; Tue, 21 Feb 2023 00:58:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69C05610ED;
-	Tue, 21 Feb 2023 00:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69C05610ED
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 06D471BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFCFB60A47;
+	Tue, 21 Feb 2023 00:58:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFCFB60A47
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 94E371BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E81BA6FB9A
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E81BA6FB9A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22FCE41826
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22FCE41826
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GtbHIFhqMxnj for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u98Lev0PR-GW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30A9C6FB83
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30A9C6FB83
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4513B41809
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4513B41809
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D7398648F; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 35B1E86495; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 16 Jan 2023 21:12:17 +0100
+Date: Wed, 15 Feb 2023 22:46:35 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 627c38caf07de44e26b187e40f0cfed9e2e6591a
-X-Git-Newrev: 8eef1e1488bce0732dbce137baa4f506a29dd13f
+X-Git-Oldrev: b259dac22a4179494e9947c485b6b171d8fef52e
+X-Git-Newrev: 3481674ee36fe9fa695e2e6c255bf02b5ab380b0
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205236.1D7398648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/z3: bump to version
- 4.12.0
+Message-Id: <20230220205301.35B1E86495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dmalloc: don't use SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,47 +55,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8eef1e1488bce0732dbce137baa4f506a29dd13f
+commit: https://git.buildroot.net/buildroot/commit/?id=3481674ee36fe9fa695e2e6c255bf02b5ab380b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log since v4.11.2, see:
-- https://github.com/Z3Prover/z3/releases/tag/z3-4.12.0
+dmalloc directly calls into $(LD) to generate a shared library our of
+the static one.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+To detect what command it should run, ./configure tries various
+incantations of ld with various command line options until one does not
+fail. One of those is (basically):
+    $(LD) --whole-archive -o contest.o.t contest.a
+
+This makes ./configure conclude what the command to link a shared
+library in the Makefile should be, and thus stores that in a variable:
+    shlinkargs='$(LD) --whole-archive -o $@'
+
+... which is then AC_SUBST()ed into Makefile.in with a rule like:
+
+    $(SHLIB): $(LIBRARY)
+        @shlinkargs@ $(LIRARY)
+
+which once substiuted, gives:
+
+    $(SHLIB): $(LIBRARY)
+        $(LD) --whole-archive -o $@ $(LIRARY)
+
+However, when SSP is enabled, the __stack_chk_fail_local and co symbols
+are provided by additional libraries or object files, and that is the
+responsibility of gcc to pass those when linking. But as dmalloc
+directly calls ld, it misses those.
+
+Changing dmalloc to use $(CC) is not trivial, however.
+
+First, we can't pass LD=$(TARGET_CC), otherwise the whole package
+explodes [0]: indeed --whole-archive is unknown to gcc, so it must be
+passed as -Wl,--whole archive instead. So we'd need to add a new test
+that uses $(CC), like so:
+    $(CC) -Wl,--whole-archive -o contest.o.t contest.a
+
+However, in that case, gcc does pass additional libs/objs (like, for
+eample, the SSP ones) to the linker. But then those are also included
+in the whole-archive section. This causes the linker to add all the
+symbols form those libs/objs, even those not needed for SSP; on some
+archs, like PPC, that may require floating point symbols (__muldiv3 et
+al.) which are in another library, and thus the linker can't find them.
+
+The proper solution wouild be to add -Wl,--no-whole-archive, but that
+would have to be added _after_ the library we want to link, i.e.e we
+should be able to evntually run:
+
+    $(CC) -Wl,--whole-archive -o $@ $(LIRARY) -Wl,--no-whole-archive
+
+That would require that we introduce a new variable that is added
+_after_ the $(LIBRARY), e.g. @shlinkargs_post@ or so...
+
+This is a bigger endeavour than we want to pursue...
+
+Since dmalloc is a debugging utility, it is not supposed to go into
+production builds, and during debugging, it would not be surprising that
+it needs to poke around arrays to debug them.
+
+So, we go the easier route: disable SSP altogether.
+
+[0] with lots of nice colors, but that's not the point, is it?
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/z3/z3.hash | 2 +-
- package/z3/z3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dmalloc/dmalloc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/z3/z3.hash b/package/z3/z3.hash
-index d38c5f1971..517e2f4923 100644
---- a/package/z3/z3.hash
-+++ b/package/z3/z3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e3a82431b95412408a9c994466fad7252135c8ed3f719c986cd75c8c5f234c7e  z3-4.11.2.tar.gz
-+sha256  5f575f0a3950760436217da1cc1a714569b6d4f664a75bb6775876328cf0a580  z3-4.12.0.tar.gz
- sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
-diff --git a/package/z3/z3.mk b/package/z3/z3.mk
-index 2252e05395..ecd79325dc 100644
---- a/package/z3/z3.mk
-+++ b/package/z3/z3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 6b90f810b2..5bd6691725 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -14,6 +14,13 @@ DMALLOC_LICENSE_FILES = LICENSE.txt
+ DMALLOC_INSTALL_STAGING = YES
+ DMALLOC_CFLAGS = $(TARGET_CFLAGS)
  
--Z3_VERSION = 4.11.2
-+Z3_VERSION = 4.12.0
- Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
- Z3_LICENSE = MIT
- Z3_LICENSE_FILES = LICENSE.txt
++# dmalloc uses $(LD) to link, and thus misses the object files or libs that
++# are needed to provide the __stack_chk_fail_local and co. symbols. Changing
++# to use $(CC) is really more complex that we'd like. Since dmalloc is
++# involved in debugging memory allocation, it is not expected to be a
++# production library, so we do not care that much that it has SSP.
++DMALLOC_CFLAGS += -fno-stack-protector
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DMALLOC_CONF_OPTS += --disable-shlib
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
