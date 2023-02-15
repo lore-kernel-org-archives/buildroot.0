@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66311C636CC
-	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 22:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83FB4C636D4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Feb 2023 22:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBDFD81EDA;
-	Wed, 15 Feb 2023 22:43:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBDFD81EDA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0715C8122E;
+	Wed, 15 Feb 2023 22:47:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0715C8122E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X2dtm1ix5dPJ; Wed, 15 Feb 2023 22:43:08 +0000 (UTC)
+	with ESMTP id pQaMQisfc6Dr; Wed, 15 Feb 2023 22:47:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC42A81355;
-	Wed, 15 Feb 2023 22:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC42A81355
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A31AE1BF476
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 22:43:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E3E181231;
+	Wed, 15 Feb 2023 22:47:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E3E181231
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 04B611BF476
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 22:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CACC81099
- for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 22:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CACC81099
+ by smtp3.osuosl.org (Postfix) with ESMTP id D27A260767
+ for <buildroot@lists.busybox.net>; Wed, 15 Feb 2023 22:47:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D27A260767
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s1yViigdJzmA for <buildroot@lists.busybox.net>;
- Wed, 15 Feb 2023 22:43:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b1Xz7HPcoMYa for <buildroot@lists.busybox.net>;
+ Wed, 15 Feb 2023 22:47:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF54381004
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com
- [IPv6:2607:f8b0:4864:20::52d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF54381004
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 22:43:04 +0000 (UTC)
-Received: by mail-pg1-x52d.google.com with SMTP id 78so98524pgb.8
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 14:43:04 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F37B8600B4
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F37B8600B4
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 22:47:15 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id b5so218066plz.5
+ for <buildroot@buildroot.org>; Wed, 15 Feb 2023 14:47:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=XfJBKbZHLDvLnDTFPz2dNR8D/AzwhSd+8l1zrz8/9ZU=;
- b=UUWDRhpZeKeWXTmDtwsk1Ml5VNRdsJcJHqwHCt0jsT43PqaueAiAJsvfr7OlNHEDxK
- 8UYEOzDo6zQo6iVhw082J4WHjT02W9sCqhQbdMg1bfzYBZJcTPNDMmntCAhJUIUD416Z
- 1ACO2jxigxhzycumpErFbpf5NW4FpxDd64Qh+Gia6ZdL7PK4nhyQm/YjSST9Ntb4ySgc
- Lg4Gxs6vUjfULV2Fn8QhbQZ5Pm0qloQgirn7nXWUHujGxJ/TDsbxbvEHyLjRHO6+i8Oc
- mw0pQZSQmFyGEc/YHqHHawLF2HBEiIGsWy58RpLfH/FRjhCUgLsv629agdeSerkkbRjJ
- f/kg==
-X-Gm-Message-State: AO0yUKXQdxKL1Rx8exBa4OZFE5Wb2t88P4cbraM8TS/lGNwDRmhJE+zG
- M298HRY/pMlFFe+tA9z/Xit5pAThw/zDaw==
-X-Google-Smtp-Source: AK7set/mzM6yfB+DNVIKrEwdU4ewsP12AdYfK+G223Z/T8urOyxtSXOecjLWpmWynjqgyfWIoM7EfQ==
-X-Received: by 2002:a05:6a00:330a:b0:5a8:d38a:c6c4 with SMTP id
- cq10-20020a056a00330a00b005a8d38ac6c4mr86726pfb.14.1676500983489; 
- Wed, 15 Feb 2023 14:43:03 -0800 (PST)
+ bh=LrxoDi8lQy8/WK4JFqD/y+xh4I73z1HLgicuA5/HBgk=;
+ b=fnvhzkIIAiKTMblcB8NsT7dva/xdL8fjGHoXrQoQW0tzWJ2NFc/T8/UdMdNtib/+2/
+ +jwUwXIbJ7Gl9+FSpLQ8VgSpDZq82WHIZvSqFTN5rhauEMaYI+Zw4ekd2l+8pM+MFJ+4
+ 3t/t8oTBuJmI7pJ4MOA10gtI6gWYUihoJQ1Q4B/7pNJXdGwZW+gCAHRqZKrUpLd8Eb8v
+ foDSuE92TZ6SBfrr2t2Jhui///itkXLrn1DYqUse7i4SQFxIzMrMesjgTiLvKL6IQMyA
+ C+93nOIBww7DZtYclDuKkD11MIdElC4rqNWGqp0WKCOds4a9HE8bPwVCxfISuY7BWLkU
+ KPhQ==
+X-Gm-Message-State: AO0yUKVQKo+JcCExvH8DHOi+70F2Pblw7NIn+ddmxUAkR2s9QcKj7jdf
+ i3+APURcR7DkmG9pW+xpfcf/rGGcwjZzQg==
+X-Google-Smtp-Source: AK7set9oSvgVxb8rBulGXlvW7npXdqi6s+pE3hKZuRHFbQLBZJap2ciFTYItMQEIUpAbqpNbQbgBgA==
+X-Received: by 2002:a17:90b:4f88:b0:233:f909:366f with SMTP id
+ qe8-20020a17090b4f8800b00233f909366fmr4729662pjb.33.1676501234379; 
+ Wed, 15 Feb 2023 14:47:14 -0800 (PST)
 Received: from fedora.hsd1.wa.comcast.net ([2601:603:2180:2f70::1599])
  by smtp.gmail.com with ESMTPSA id
- q22-20020a62ae16000000b005a8aab9ae7esm7163575pff.216.2023.02.15.14.43.02
+ i4-20020a17090a65c400b002347475e71fsm380499pjs.14.2023.02.15.14.47.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 15 Feb 2023 14:43:02 -0800 (PST)
+ Wed, 15 Feb 2023 14:47:13 -0800 (PST)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Feb 2023 14:43:00 -0800
-Message-Id: <20230215224300.486258-1-aduskett@gmail.com>
+Date: Wed, 15 Feb 2023 14:47:12 -0800
+Message-Id: <20230215224712.487272-1-aduskett@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=XfJBKbZHLDvLnDTFPz2dNR8D/AzwhSd+8l1zrz8/9ZU=;
- b=lzlDMGMAWyzVdBP1lL1y+nnbZ2meh0Pn9A8xSxYZwMud6JKeM53H4POCZo1IYW5OY1
- LkVRGyPY54kTSi56JEk6kZ1Iwh4Mh7y6+BsrH+J6CrZI8cqM2jXUTC/pT/edHNvp7l0z
- ismFd3Wq6zt5iWouWDz/upex8qXEiF6RLPjuaKSU2217PjP69gabyJ1Dnxod+APM2Qxq
- j7rAUcc3efG2T0jb9jwP1YN2XP5EGMW1fX9RyAd4Pibp1gm+qY9q61yVRtqiuaq4slES
- alJF1ZCXnovi11w/WAFRr6hjBd9n0AcyJutc3Q4u3UW5Xi8Z/71952tHkVb/3OK3nod3
- h9MA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=LrxoDi8lQy8/WK4JFqD/y+xh4I73z1HLgicuA5/HBgk=;
+ b=fFhTL3qEk1A1z10w02XycreJUNjw0e5WSfhgN7EuVjXZs9jdrNeCySrGumVsUQOtgV
+ QseGLQYL++0lUZe4LliGEnLXDfvDpdaQmoKQo2XrQRjKm1Ne4e/Q8sytn7QryHwePnlB
+ F0NyunM2E7BlqId4X55IqsWcfIibWuwPS4tIc7Tt54uS3SlxmkJdVNhOMWDusd/js/Bj
+ LfUEZrBagihbxcBzdAai2mdM2uk2tZefUuXwoQTnYxaCSp5rOF92dsj26GFXTkK3ec/v
+ J5+PE8UURfpST8zEec/ZDt9KQb22X9hych7wXFLNR1/PJrSQtXBdVDjlcSKKP2iRX1QZ
+ jKOw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=lzlDMGMA
-Subject: [Buildroot] [PATCH 1/1] package/openjdk{-bin}: bump versions to
+ header.a=rsa-sha256 header.s=20210112 header.b=fFhTL3qE
+Subject: [Buildroot] [PATCH v2 1/1] package/openjdk{-bin}: bump versions to
  11.0.18+10 and 17.0.6+10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -102,12 +102,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
+v1 -> v2: Add missing openjdk-bin updates
+
+ package/openjdk-bin/openjdk-bin.hash          |  8 ++++----
+ package/openjdk-bin/openjdk-bin.mk            |  4 ++--
  ...ARCv2-ISA-processors-support-to-Zero.patch | 20 +++++++++----------
  package/openjdk/openjdk.hash                  |  4 ++--
  package/openjdk/openjdk.mk                    |  4 ++--
- 3 files changed, 14 insertions(+), 14 deletions(-)
+ 5 files changed, 20 insertions(+), 20 deletions(-)
  rename package/openjdk/{17.0.1+12 => 17.0.6+10}/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch (83%)
 
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 4d3942125f..241ca34a04 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,10 +1,10 @@
+ # https://github.com/adoptium/temurin17-binaries/releases
+-sha256  288f34e3ba8a4838605636485d0365ce23e57d5f2f68997ac4c2e4c01967cd48  OpenJDK17U-jdk_x64_linux_hotspot_17.0.2_8.tar.gz
+-sha256  302caf29f73481b2b914ba2b89705036010c65eb9bc8d7712b27d6e9bedf6200  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.2_8.tar.gz
++sha256  a0b1b9dd809d51a438f5fa08918f9aca7b2135721097f0858cf29f77a35d4289  OpenJDK17U-jdk_x64_linux_hotspot_17.0.6_10.tar.gz
++sha256  9e0e88bbd9fa662567d0c1e22d469268c68ac078e9e5fe5a7244f56fec71f55f  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.6_10.tar.gz
+ 
+ # From https://github.com/adoptium/temurin11-binaries/releases
+-sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
+-sha256  79572f5172c6a040591d34632f98a20ed148702bbce2f57649e8ac01c0d2e3db  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.14.1_1.tar.gz
++sha256  4a29efda1d702b8ff38e554cf932051f40ec70006caed5c4857a8cbc7a0b7db7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.18_10.tar.gz
++sha256  04d5eeff6a6449bcdca0f52cd97bafd43ce09d40ef1e73fa0e1add63bea4a9c8  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.18_10.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 608a0bc3ac..c3eb0b05e6 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -6,10 +6,10 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.2_8
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.6_10
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.18_10
+ endif
+ 
+ ifeq ($(HOSTARCH),x86_64)
 diff --git a/package/openjdk/17.0.1+12/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.6+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
 similarity index 83%
 rename from package/openjdk/17.0.1+12/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
