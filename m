@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70FB4C61DA4
-	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 08:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F336C636CC
+	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 09:26:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFCC481F8C;
-	Thu, 16 Feb 2023 08:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFCC481F8C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id viJQtC2Lwuzm; Thu, 16 Feb 2023 08:47:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52B2A82033;
-	Thu, 16 Feb 2023 08:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52B2A82033
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4EF321BF3CD
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 08:47:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 22C0760FA2
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 08:47:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22C0760FA2
+	by smtp3.osuosl.org (Postfix) with ESMTP id F39F661027;
+	Thu, 16 Feb 2023 09:26:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F39F661027
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2oUaRrIhFqFW for <buildroot@lists.busybox.net>;
- Thu, 16 Feb 2023 08:47:41 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EnADk1yjtS61; Thu, 16 Feb 2023 09:26:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4BB0611C3;
+	Thu, 16 Feb 2023 09:26:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4BB0611C3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 910BD1BF82D
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 09:26:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 741E441841
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 09:26:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 741E441841
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sllPF6ICI66B for <buildroot@lists.busybox.net>;
+ Thu, 16 Feb 2023 09:26:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 665CE60F3A
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 665CE60F3A
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 08:47:41 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id my5so3393949ejc.7
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 00:47:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9132841840
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9132841840
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 09:26:33 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id he5so1066040wmb.3
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 01:26:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Z/xGpRliYiWfslg8iGTMNeJ3GkQ1deQ9BM7svIwCVF8=;
- b=Ol6SNPnXQTt9wfR81EdGfF9zvT6N8cc+dkGa7FERLkjoxxC7D7qrKZvBOSMRcytAgp
- OgUHSvly53T+T6gbuWA06qN7L+XugGfnWV83qG8oiKWjjpQEFOFM77UlkRSUgMAfrZiS
- uKN/9frNObR/sZRWXTk6Ye+Up3XKprjmiKLvZyuaUBZ3DUcBCn1iOyOzHBKCzqkZcG5x
- WqukgP8gQk0i6TSQLFqL/KQvfbq0dmwB3ZSkR+kXgzjc3ue5/cwLsDNzkl92wLvnitki
- W/dk8cktO82OMvoLqstvlsP4dPeuNyI8Ivy6SedauuCX/YCYhufMfH39s881ljBC0Lh5
- fpMw==
-X-Gm-Message-State: AO0yUKUR3PQc9FLgez9Fpl2Rzk93XoFErfpu4cP3whxPeX//3nBZGxRO
- Yf7ja3PMV1hDRmfwcUYe+33TWf7rstY=
-X-Google-Smtp-Source: AK7set9CuFeVKO0C0GXCvnF6X3NMp8P2EybxRnXii617wVBuA4DOzSzmcXVweV8UlwN+LF58hbbbqQ==
-X-Received: by 2002:a17:906:e89:b0:8aa:12c2:5ef2 with SMTP id
- p9-20020a1709060e8900b008aa12c25ef2mr5286161ejf.13.1676537259294; 
- Thu, 16 Feb 2023 00:47:39 -0800 (PST)
-Received: from debian-noppl.. (84-113-221-34.cable.dynamic.surfer.at.
- [84.113.221.34]) by smtp.gmail.com with ESMTPSA id
- e10-20020a170906844a00b008b112db2fd6sm521219ejy.61.2023.02.16.00.47.38
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=6oPssI4ek+VgxcHLeGYbGbjSlF7ZF+nzAaQA6FkYZgI=;
+ b=MpWYgmFAAxiOg8l6RuE0r6s8lQUJCh1H1IGobXAURvMSYrIWr5moYeyZnxMkJbdq5q
+ zF2tylBY+KLi3cLkhUzLhoIj3D8wnipT4zEvvrjcUDF+i23/nLg2wEiX0fiJQLzq0s5T
+ Ui5VN4w4+8Dsnv4aO+g/bqPCAlqs84+pGj/tHdpndmsMXy0iclrmZ3iMDrogitJdYOtF
+ pd780Mv0PROkRj8RWOS2F9g7xY3P2h35BEEr30DqKX2zbgswlnDlY8pL1t1yHP6ZA9yE
+ NdLS9M+FvvNKP0sp0Uj7Na+VH62tHPPXZUiy4IIybAFRr+JMLYx7Fr9vVwDRspTOOxpf
+ gY9w==
+X-Gm-Message-State: AO0yUKUSRN54VzlRvFq0TqBg9U6D5Zt5f2rPATouhM7r3vf7zR1gxgDJ
+ 6jStXvzQEdUUnV3YO1zxMJcDHrDmF5VgI2sZ
+X-Google-Smtp-Source: AK7set/QnbPVJc/k1eGLbHFPvxX8O6GXuw47hFdCdl6k8m7JfCfLp6Hc2dbEZwZx9JGFs5ov0uq79Q==
+X-Received: by 2002:a05:600c:1713:b0:3dc:2b62:ee9f with SMTP id
+ c19-20020a05600c171300b003dc2b62ee9fmr4653878wmn.3.1676539591394; 
+ Thu, 16 Feb 2023 01:26:31 -0800 (PST)
+Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
+ [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
+ m8-20020a7bca48000000b003dd1b00bd9asm1093428wml.32.2023.02.16.01.26.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Feb 2023 00:47:38 -0800 (PST)
-From: Norbert Lange <nolange79@gmail.com>
+ Thu, 16 Feb 2023 01:26:30 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Feb 2023 09:47:13 +0100
-Message-Id: <20230216084714.85507-1-nolange79@gmail.com>
-X-Mailer: git-send-email 2.39.1
+Date: Thu, 16 Feb 2023 10:26:16 +0100
+Message-Id: <20230216092616.2973294-1-thomas.devoogdt@barco.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Z/xGpRliYiWfslg8iGTMNeJ3GkQ1deQ9BM7svIwCVF8=;
- b=Y6KCVv4soXYg07TICvruMlw1DrkeT5oZRVCyvupBKoB5HTWzsJv6ad0WwZI1vfSbzB
- 2meR8mP+U19sKYWIG8hYQVck9k5PHnI1h6c1KXSAvy6PTQwkAdo3AjY3dIk9QG9+vubG
- Hx0QVBNJA7hJTg547WoFtD6Usj3KTQockLMZPT6oh2acBDRhyL7YK0PkQaXdzSKfAH99
- vjDqLPj+ve0TFvPPVPFnOQ5VXkUd4cpM+yVqz00NDNLv/cTLjlQZiKipwgiw9OuaYHEs
- 6n8Dk+/54ogdZwlMJ3s+R6qRcncfBo5H0tOA2HpGQRq9PjTRZx4U7Cg6MyWtdBBI+aBY
- Nmqg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=6oPssI4ek+VgxcHLeGYbGbjSlF7ZF+nzAaQA6FkYZgI=;
+ b=pnbK6UUKkUibQ5giK09A8yPFusE+b0OPV7hk46vbQVIZ8HME6+Glx54YCR2R2Z+Zl8
+ AcTGc8ef26Nyqr1K+w7wUqHTI9eUWRFdlfk7DqUMtwa5qHV/w7HpESny9gReBwxv/4/i
+ KUJPsnB7cfXtOXGRkV1n0jx+WDFOaG9IU8sbWC4Y+HomDtutNd7FBSj4boCJ8B9oP4fx
+ 9BuvCcIR6Ab4y5Dyrt+908dYg5YxhSd2J3nDl0DcmHxUYYjcUkQP4TSCUFPJj6uPISQJ
+ DuPfAxAHspss1tEkP+66TU22N/N3RN/0wq8yW1egkPUtU/Pfw4gnXuJoAtZsoTTBYcUW
+ Rxwg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Y6KCVv4s
-Subject: [Buildroot] [PATCH v2] package/zstd: bump to version 1.5.4
+ header.a=rsa-sha256 header.s=20210112 header.b=pnbK6UUK
+Subject: [Buildroot] [PATCH] package/lighttpd: bump to version 1.4.69
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,386 +94,300 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
- Norbert Lange <nolange79@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The LICENSE text has changed, nominally the copyright owner changed
-from "Facebook" to "Meta Platforms, Inc. and affiliates",
-reflecting the name change of that company.
+Changelog:
+ - https://www.lighttpd.net/2023/1/3/1.4.68/
+ - https://www.lighttpd.net/2023/2/10/1.4.69/
 
-Add upstream patch to fix zstd-dll build.
+In this commit:
+- rebased patch & dropped server.use-ipv6 option [2]
+- fix changed meson options [1]
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+[1]: https://git.lighttpd.net/lighttpd/lighttpd1.4/commit/376d20f1617f2c0202fb415e4cc66d3f780db5ca
+[2]: https://git.lighttpd.net/lighttpd/lighttpd1.4/commit/6b31f76cd9b36b6033607181238fbf41c5b81e07
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
-v1->v2: recreate upstream patch with git-formatpatch
----
- ...-dll-build-missing-dependencies-3496.patch | 321 ++++++++++++++++++
- package/zstd/zstd.hash                        |   6 +-
- package/zstd/zstd.mk                          |   2 +-
- 3 files changed, 325 insertions(+), 4 deletions(-)
- create mode 100644 package/zstd/0001-Fix-zstd-dll-build-missing-dependencies-3496.patch
+ ...lt-lighttpd-configuration-file-to-ha.patch | 33 ++++------
+ package/lighttpd/lighttpd.hash                |  4 +-
+ package/lighttpd/lighttpd.mk                  | 64 +++++++++----------
+ 3 files changed, 47 insertions(+), 54 deletions(-)
 
-diff --git a/package/zstd/0001-Fix-zstd-dll-build-missing-dependencies-3496.patch b/package/zstd/0001-Fix-zstd-dll-build-missing-dependencies-3496.patch
-new file mode 100644
-index 0000000000..60737159c6
---- /dev/null
-+++ b/package/zstd/0001-Fix-zstd-dll-build-missing-dependencies-3496.patch
-@@ -0,0 +1,321 @@
-+From e47c7c0d5a923dcdc3b302f9944eb4a70b7ee0be Mon Sep 17 00:00:00 2001
-+From: Yonatan Komornik <11005061+yoniko@users.noreply.github.com>
-+Date: Sun, 12 Feb 2023 12:32:31 -0800
-+Subject: [PATCH] Fix zstd-dll build missing dependencies (#3496)
-+
-+* Fixes zstd-dll build (https://github.com/facebook/zstd/issues/3492):
-+- Adds pool.o and threading.o dependency to the zstd-dll target
-+- Moves custom allocation functions into header to avoid needing to add dependency on common.o
-+- Adds test target for zstd-dll
-+- Adds github workflow that buildis zstd-dll
-+
-+[nolange79: backport from upstream c78f434aa4f5f1097c8edb975f4c1635817a5a71]
-+Signed-off-by: Norbert Lange <nolange79@gmail.com>
-+---
-+ .github/workflows/dev-short-tests.yml     |  9 +++-
-+ contrib/linux-kernel/zstd_common_module.c |  3 --
-+ lib/common/allocations.h                  | 55 +++++++++++++++++++++++
-+ lib/common/pool.c                         |  2 +-
-+ lib/common/zstd_common.c                  | 35 ---------------
-+ lib/common/zstd_internal.h                |  5 ---
-+ lib/compress/zstd_compress.c              |  1 +
-+ lib/compress/zstd_cwksp.h                 |  1 +
-+ lib/compress/zstdmt_compress.c            |  1 +
-+ lib/decompress/zstd_ddict.c               |  1 +
-+ lib/decompress/zstd_decompress.c          |  1 +
-+ programs/Makefile                         |  2 +-
-+ tests/Makefile                            |  8 +++-
-+ 13 files changed, 76 insertions(+), 48 deletions(-)
-+ create mode 100644 lib/common/allocations.h
-+
-+diff --git a/.github/workflows/dev-short-tests.yml b/.github/workflows/dev-short-tests.yml
-+index 132dbb99..3ae2e9da 100644
-+--- a/.github/workflows/dev-short-tests.yml
-++++ b/.github/workflows/dev-short-tests.yml
-+@@ -55,6 +55,14 @@ jobs:
-+       run: |
-+         make c89build V=1
-+ 
-++  build-zstd-dll:
-++    runs-on: ubuntu-latest
-++    steps:
-++    - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # tag=v3
-++    - name: build zstd bin against a dynamic lib (debuglevel for more dependencies)
-++      run: |
-++        make -C lib lib-mt-release 
-++        DEBUGLEVEL=2 make -C programs zstd-dll
-+ 
-+   gcc-7-libzstd:
-+     runs-on: ubuntu-latest
-+@@ -328,7 +336,6 @@ jobs:
-+         make -j -C programs allVariants MOREFLAGS=-O0
-+         ./tests/test-variants.sh
-+ 
-+-
-+   qemu-consistency:
-+     name: QEMU ${{ matrix.name }}
-+     runs-on: ubuntu-20.04
-+diff --git a/contrib/linux-kernel/zstd_common_module.c b/contrib/linux-kernel/zstd_common_module.c
-+index 2fead39e..466828e3 100644
-+--- a/contrib/linux-kernel/zstd_common_module.c
-++++ b/contrib/linux-kernel/zstd_common_module.c
-+@@ -24,9 +24,6 @@ EXPORT_SYMBOL_GPL(HUF_readStats_wksp);
-+ EXPORT_SYMBOL_GPL(ZSTD_isError);
-+ EXPORT_SYMBOL_GPL(ZSTD_getErrorName);
-+ EXPORT_SYMBOL_GPL(ZSTD_getErrorCode);
-+-EXPORT_SYMBOL_GPL(ZSTD_customMalloc);
-+-EXPORT_SYMBOL_GPL(ZSTD_customCalloc);
-+-EXPORT_SYMBOL_GPL(ZSTD_customFree);
-+ 
-+ MODULE_LICENSE("Dual BSD/GPL");
-+ MODULE_DESCRIPTION("Zstd Common");
-+diff --git a/lib/common/allocations.h b/lib/common/allocations.h
-+new file mode 100644
-+index 00000000..a3153c4b
-+--- /dev/null
-++++ b/lib/common/allocations.h
-+@@ -0,0 +1,55 @@
-++/*
-++ * Copyright (c) Meta Platforms, Inc. and affiliates.
-++ * All rights reserved.
-++ *
-++ * This source code is licensed under both the BSD-style license (found in the
-++ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
-++ * in the COPYING file in the root directory of this source tree).
-++ * You may select, at your option, one of the above-listed licenses.
-++ */
-++
-++/* This file provides custom allocation primitives
-++ */
-++
-++#define ZSTD_DEPS_NEED_MALLOC
-++#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
-++
-++#include "mem.h" /* MEM_STATIC */
-++#define ZSTD_STATIC_LINKING_ONLY
-++#include "../zstd.h" /* ZSTD_customMem */
-++
-++#ifndef ZSTD_ALLOCATIONS_H
-++#define ZSTD_ALLOCATIONS_H
-++
-++/* custom memory allocation functions */
-++
-++MEM_STATIC void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
-++{
-++    if (customMem.customAlloc)
-++        return customMem.customAlloc(customMem.opaque, size);
-++    return ZSTD_malloc(size);
-++}
-++
-++MEM_STATIC void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
-++{
-++    if (customMem.customAlloc) {
-++        /* calloc implemented as malloc+memset;
-++         * not as efficient as calloc, but next best guess for custom malloc */
-++        void* const ptr = customMem.customAlloc(customMem.opaque, size);
-++        ZSTD_memset(ptr, 0, size);
-++        return ptr;
-++    }
-++    return ZSTD_calloc(1, size);
-++}
-++
-++MEM_STATIC void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
-++{
-++    if (ptr!=NULL) {
-++        if (customMem.customFree)
-++            customMem.customFree(customMem.opaque, ptr);
-++        else
-++            ZSTD_free(ptr);
-++    }
-++}
-++
-++#endif /* ZSTD_ALLOCATIONS_H */
-+diff --git a/lib/common/pool.c b/lib/common/pool.c
-+index f3d9d085..d5ca5a78 100644
-+--- a/lib/common/pool.c
-++++ b/lib/common/pool.c
-+@@ -10,9 +10,9 @@
-+ 
-+ 
-+ /* ======   Dependencies   ======= */
-++#include "../common/allocations.h"  /* ZSTD_customCalloc, ZSTD_customFree */
-+ #include "zstd_deps.h" /* size_t */
-+ #include "debug.h"     /* assert */
-+-#include "zstd_internal.h"  /* ZSTD_customCalloc, ZSTD_customFree */
-+ #include "pool.h"
-+ 
-+ /* ======   Compiler specifics   ====== */
-+diff --git a/lib/common/zstd_common.c b/lib/common/zstd_common.c
-+index 32085524..3f04c22a 100644
-+--- a/lib/common/zstd_common.c
-++++ b/lib/common/zstd_common.c
-+@@ -14,7 +14,6 @@
-+ *  Dependencies
-+ ***************************************/
-+ #define ZSTD_DEPS_NEED_MALLOC
-+-#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
-+ #include "error_private.h"
-+ #include "zstd_internal.h"
-+ 
-+@@ -47,37 +46,3 @@ ZSTD_ErrorCode ZSTD_getErrorCode(size_t code) { return ERR_getErrorCode(code); }
-+ /*! ZSTD_getErrorString() :
-+  *  provides error code string from enum */
-+ const char* ZSTD_getErrorString(ZSTD_ErrorCode code) { return ERR_getErrorString(code); }
-+-
-+-
-+-
-+-/*=**************************************************************
-+-*  Custom allocator
-+-****************************************************************/
-+-void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
-+-{
-+-    if (customMem.customAlloc)
-+-        return customMem.customAlloc(customMem.opaque, size);
-+-    return ZSTD_malloc(size);
-+-}
-+-
-+-void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
-+-{
-+-    if (customMem.customAlloc) {
-+-        /* calloc implemented as malloc+memset;
-+-         * not as efficient as calloc, but next best guess for custom malloc */
-+-        void* const ptr = customMem.customAlloc(customMem.opaque, size);
-+-        ZSTD_memset(ptr, 0, size);
-+-        return ptr;
-+-    }
-+-    return ZSTD_calloc(1, size);
-+-}
-+-
-+-void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
-+-{
-+-    if (ptr!=NULL) {
-+-        if (customMem.customFree)
-+-            customMem.customFree(customMem.opaque, ptr);
-+-        else
-+-            ZSTD_free(ptr);
-+-    }
-+-}
-+diff --git a/lib/common/zstd_internal.h b/lib/common/zstd_internal.h
-+index 37836dc7..1f942f27 100644
-+--- a/lib/common/zstd_internal.h
-++++ b/lib/common/zstd_internal.h
-+@@ -350,11 +350,6 @@ typedef struct {
-+ const seqStore_t* ZSTD_getSeqStore(const ZSTD_CCtx* ctx);   /* compress & dictBuilder */
-+ int ZSTD_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
-+ 
-+-/* custom memory allocation functions */
-+-void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem);
-+-void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem);
-+-void ZSTD_customFree(void* ptr, ZSTD_customMem customMem);
-+-
-+ 
-+ /* ZSTD_invalidateRepCodes() :
-+  * ensures next compression will not use repcodes from previous block.
-+diff --git a/lib/compress/zstd_compress.c b/lib/compress/zstd_compress.c
-+index b55f684c..173ce242 100644
-+--- a/lib/compress/zstd_compress.c
-++++ b/lib/compress/zstd_compress.c
-+@@ -11,6 +11,7 @@
-+ /*-*************************************
-+ *  Dependencies
-+ ***************************************/
-++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customCalloc, ZSTD_customFree */
-+ #include "../common/zstd_deps.h"  /* INT_MAX, ZSTD_memset, ZSTD_memcpy */
-+ #include "../common/mem.h"
-+ #include "hist.h"           /* HIST_countFast_wksp */
-+diff --git a/lib/compress/zstd_cwksp.h b/lib/compress/zstd_cwksp.h
-+index 97676693..9113cdbd 100644
-+--- a/lib/compress/zstd_cwksp.h
-++++ b/lib/compress/zstd_cwksp.h
-+@@ -14,6 +14,7 @@
-+ /*-*************************************
-+ *  Dependencies
-+ ***************************************/
-++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customFree */
-+ #include "../common/zstd_internal.h"
-+ 
-+ #if defined (__cplusplus)
-+diff --git a/lib/compress/zstdmt_compress.c b/lib/compress/zstdmt_compress.c
-+index 7a2c7172..bf2de4a7 100644
-+--- a/lib/compress/zstdmt_compress.c
-++++ b/lib/compress/zstdmt_compress.c
-+@@ -20,6 +20,7 @@
-+ 
-+ 
-+ /* ======   Dependencies   ====== */
-++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customCalloc, ZSTD_customFree */
-+ #include "../common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memset, INT_MAX, UINT_MAX */
-+ #include "../common/mem.h"         /* MEM_STATIC */
-+ #include "../common/pool.h"        /* threadpool */
-+diff --git a/lib/decompress/zstd_ddict.c b/lib/decompress/zstd_ddict.c
-+index ad5c34a7..309ec0d0 100644
-+--- a/lib/decompress/zstd_ddict.c
-++++ b/lib/decompress/zstd_ddict.c
-+@@ -14,6 +14,7 @@
-+ /*-*******************************************************
-+ *  Dependencies
-+ *********************************************************/
-++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customFree */
-+ #include "../common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memmove, ZSTD_memset */
-+ #include "../common/cpu.h"         /* bmi2 */
-+ #include "../common/mem.h"         /* low level memory routines */
-+diff --git a/lib/decompress/zstd_decompress.c b/lib/decompress/zstd_decompress.c
-+index d487966c..3f3ca57c 100644
-+--- a/lib/decompress/zstd_decompress.c
-++++ b/lib/decompress/zstd_decompress.c
-+@@ -55,6 +55,7 @@
-+ /*-*******************************************************
-+ *  Dependencies
-+ *********************************************************/
-++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customCalloc, ZSTD_customFree */
-+ #include "../common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memmove, ZSTD_memset */
-+ #include "../common/mem.h"         /* low level memory routines */
-+ #define FSE_STATIC_LINKING_ONLY
-+diff --git a/programs/Makefile b/programs/Makefile
-+index fcff41dc..8507abef 100644
-+--- a/programs/Makefile
-++++ b/programs/Makefile
-+@@ -225,7 +225,7 @@ zstd-noxz : zstd
-+ .PHONY: zstd-dll
-+ zstd-dll : LDFLAGS+= -L$(LIBZSTD)
-+ zstd-dll : LDLIBS += -lzstd
-+-zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c
-++zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c pool.c threading.c
-+ zstd-dll : zstd
-+ 
-+ 
-+diff --git a/tests/Makefile b/tests/Makefile
-+index 3eed19ea..778c7d67 100644
-+--- a/tests/Makefile
-++++ b/tests/Makefile
-+@@ -95,7 +95,7 @@ allnothread: fullbench fuzzer paramgrill datagen decodecorpus
-+ dll: fuzzer-dll zstreamtest-dll
-+ 
-+ .PHONY: zstd zstd32 zstd-nolegacy  # only external makefile knows how to build or update them
-+-zstd zstd32 zstd-nolegacy:
-++zstd zstd32 zstd-nolegacy zstd-dll:
-+ 	$(MAKE) -C $(PRGDIR) $@ MOREFLAGS+="$(DEBUGFLAGS)"
-+ 
-+ .PHONY: libzstd
-+@@ -328,13 +328,17 @@ test-all: test test32 test-decodecorpus-cli
-+ test-zstd: ZSTD = $(PRGDIR)/zstd
-+ test-zstd: zstd
-+ 
-++.PHONY: test-zstd-dll
-++test-zstd-dll: ZSTD = $(PRGDIR)/zstd
-++test-zstd-dll: zstd-dll
-++
-+ test-zstd32: ZSTD = $(PRGDIR)/zstd32
-+ test-zstd32: zstd32
-+ 
-+ test-zstd-nolegacy: ZSTD = $(PRGDIR)/zstd-nolegacy
-+ test-zstd-nolegacy: zstd-nolegacy
-+ 
-+-test-zstd test-zstd32 test-zstd-nolegacy: datagen
-++test-zstd test-zstd32 test-zstd-nolegacy test-zstd-dll: datagen
-+ 	file $(ZSTD)
-+ 	EXE_PREFIX="$(QEMU_SYS)" ZSTD_BIN="$(ZSTD)" DATAGEN_BIN=./datagen ./playTests.sh $(ZSTDRTTEST)
-+ 
-+-- 
-+2.39.1
-+
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index eca44b89f0..ca4e2fa0b9 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,6 +1,6 @@
--# From https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz.sha256
--sha256  7c42d56fac126929a6a85dbc73ff1db2411d04f104fae9bdea51305663a83fd0  zstd-1.5.2.tar.gz
-+# From https://github.com/facebook/zstd/releases/download/v1.5.4/zstd-1.5.4.tar.gz.sha256
-+sha256  0f470992aedad543126d06efab344dc5f3e171893810455787d38347343a4424  zstd-1.5.4.tar.gz
+diff --git a/package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch b/package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch
+index 1a887655b8..2eab2a84e5 100644
+--- a/package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch
++++ b/package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch
+@@ -1,11 +1,11 @@
+-From d1de409b0aeb8dffd42673444043caf01437804e Mon Sep 17 00:00:00 2001
++From d9e1c9c4a95797c812dd4906ecbbc532ae459364 Mon Sep 17 00:00:00 2001
+ From: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Date: Mon, 13 Dec 2021 22:07:17 +0100
+ Subject: [PATCH] Modify the default lighttpd configuration file to have one a
+  starting conf
  
- # License files (locally computed)
--sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
-+sha256  7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8  LICENSE
- sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 73bb97a793..45e8bf1bc2 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -4,7 +4,7 @@
- #
+   * Changed the log path to /var/log and logs filenames
+-  * Disable IPv6
++  * Disable IPv6 (Dropped since 1.4.68)
+   * Do not setuid to a user that doesn't exist on the system
+   * Change the network backend to writev since linux-sendfile fails on buildroot
+ 
+@@ -13,13 +13,15 @@ Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ [Gustavo: update for 1.4.37]
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++[Thomas: update for 1.4.69 - drop server.use-ipv6]
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ ---
+  doc/config/conf.d/access_log.conf |  2 +-
+- doc/config/lighttpd.conf          | 16 ++++++++--------
+- 2 files changed, 9 insertions(+), 9 deletions(-)
++ doc/config/lighttpd.conf          | 14 +++++++-------
++ 2 files changed, 8 insertions(+), 8 deletions(-)
+ 
+ diff --git a/doc/config/conf.d/access_log.conf b/doc/config/conf.d/access_log.conf
+-index e685d43..92cff4f 100644
++index e685d437..92cff4f0 100644
+ --- a/doc/config/conf.d/access_log.conf
+ +++ b/doc/config/conf.d/access_log.conf
+ @@ -9,7 +9,7 @@ server.modules += ( "mod_accesslog" )
+@@ -32,7 +34,7 @@ index e685d43..92cff4f 100644
+  ##
+  ## The default format produces CLF compatible output.
+ diff --git a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+-index 495d2a1..c3e1446 100644
++index d45a284d..4e926d5a 100644
+ --- a/doc/config/lighttpd.conf
+ +++ b/doc/config/lighttpd.conf
+ @@ -13,8 +13,8 @@
+@@ -46,16 +48,7 @@ index 495d2a1..c3e1446 100644
+  var.state_dir   = "/run"
+  var.home_dir    = "/var/lib/lighttpd"
+  var.conf_dir    = "/etc/lighttpd"
+-@@ -90,7 +90,7 @@ server.port = 80
+- ##
+- ## Use IPv6?
+- ##
+--server.use-ipv6 = "enable"
+-+# server.use-ipv6 = "enable"
+- 
+- ##
+- ## bind to a specific IP
+-@@ -101,8 +101,8 @@ server.use-ipv6 = "enable"
++@@ -97,8 +97,8 @@ server.port = 80
+  ## Run as a different username/groupname.
+  ## This requires root permissions during startup. 
+  ##
+@@ -66,7 +59,7 @@ index 495d2a1..c3e1446 100644
+  
+  ##
+  ## Enable lighttpd to serve requests on sockets received from systemd
+-@@ -118,7 +118,7 @@ server.groupname = "lighttpd"
++@@ -114,7 +114,7 @@ server.groupname = "lighttpd"
+  ##
+  ## Document root
+  ##
+@@ -75,7 +68,7 @@ index 495d2a1..c3e1446 100644
+  
+  ##
+  ## The value for the "Server:" response field.
+-@@ -144,7 +144,7 @@ server.pid-file = state_dir + "/lighttpd.pid"
++@@ -140,7 +140,7 @@ server.pid-file = state_dir + "/lighttpd.pid"
+  ##
+  ## Path to the error log file
+  ##
+@@ -84,7 +77,7 @@ index 495d2a1..c3e1446 100644
+  
+  ##
+  ## If you want to log to syslog you have to unset the 
+-@@ -192,7 +192,7 @@ include conf_dir + "/conf.d/debug.conf"
++@@ -187,7 +187,7 @@ include conf_dir + "/conf.d/debug.conf"
+  ## and write(). Every modern OS provides its own syscall to help network
+  ## servers transfer files as fast as possible 
+  ##
+@@ -94,5 +87,5 @@ index 495d2a1..c3e1446 100644
+  ##
+  ## As lighttpd is a single-threaded server, its main resource limit is
+ -- 
+-2.34.1
++2.39.0
+ 
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 8353857ad9..29bf5124b6 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.67.sha512sum
+-sha512  acfde71675d1c54b4e805998d1dabaa291437181bdbca0d6a3a069584c4576d7585d2401f57f8691f23aaf6283a95ac61156789a055a2a7236fd305c1f248627  lighttpd-1.4.67.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.69.sha512sum
++sha512  9d174c8e0a192b4eb8218a9f76b0bd42f90030228600bb7bbe35ebb9e7bbaea36ee2732535c5cc6dab171294817837bfa26074ff84a37832dd89f57488b4071f  lighttpd-1.4.69.tar.xz
+ # Locally calculated
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index d3440040fb..ca2035b6b3 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ZSTD_VERSION = 1.5.2
-+ZSTD_VERSION = 1.5.4
- ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
- ZSTD_INSTALL_STAGING = YES
- ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).67
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).69
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
+@@ -13,49 +13,49 @@ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_CPE_ID_VENDOR = lighttpd
+ LIGHTTPD_DEPENDENCIES = host-pkgconf xxhash
+ LIGHTTPD_CONF_OPTS = \
+-	-Dwith_dbi=false \
+-	-Dwith_fam=false \
++	-Dwith_dbi=disabled \
++	-Dwith_fam=disabled \
+ 	-Dwith_gnutls=false \
+-	-Dwith_libev=false \
+-	-Dwith_libunwind=false \
++	-Dwith_libev=disabled \
++	-Dwith_libunwind=disabled \
+ 	-Dwith_mbedtls=false \
+ 	-Dwith_nettle=false \
+ 	-Dwith_nss=false \
+-	-Dwith_pcre=false \
+-	-Dwith_sasl=false \
++	-Dwith_pcre=disabled \
++	-Dwith_sasl=disabled \
+ 	-Dwith_wolfssl=false \
+ 	-Dwith_xattr=false \
+-	-Dwith_xxhash=true \
++	-Dwith_xxhash=enabled \
+ 	-Dbuild_extra_warnings=false \
+ 	-Dbuild_static=false \
+ 	-Dmoduledir=lib/lighttpd
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_BROTLI),y)
+ LIGHTTPD_DEPENDENCIES += brotli
+-LIGHTTPD_CONF_OPTS += -Dwith_brotli=true
++LIGHTTPD_CONF_OPTS += -Dwith_brotli=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_brotli=false
++LIGHTTPD_CONF_OPTS += -Dwith_brotli=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_BZIP2),y)
+ LIGHTTPD_DEPENDENCIES += bzip2
+-LIGHTTPD_CONF_OPTS += -Dwith_bzip=true
++LIGHTTPD_CONF_OPTS += -Dwith_bzip=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_bzip=false
++LIGHTTPD_CONF_OPTS += -Dwith_bzip=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_KRB5),y)
+ LIGHTTPD_DEPENDENCIES += libkrb5
+-LIGHTTPD_CONF_OPTS += -Dwith_krb5=true
++LIGHTTPD_CONF_OPTS += -Dwith_krb5=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_krb5=false
++LIGHTTPD_CONF_OPTS += -Dwith_krb5=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_LDAP),y)
+ LIGHTTPD_DEPENDENCIES += openldap
+-LIGHTTPD_CONF_OPTS += -Dwith_ldap=true
++LIGHTTPD_CONF_OPTS += -Dwith_ldap=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_ldap=false
++LIGHTTPD_CONF_OPTS += -Dwith_ldap=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_LUA),y)
+@@ -67,16 +67,16 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_MAXMINDDB),y)
+ LIGHTTPD_DEPENDENCIES += libmaxminddb
+-LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=true
++LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=false
++LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_MYSQL),y)
+ LIGHTTPD_DEPENDENCIES += mysql
+-LIGHTTPD_CONF_OPTS += -Dwith_mysql=true
++LIGHTTPD_CONF_OPTS += -Dwith_mysql=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_mysql=false
++LIGHTTPD_CONF_OPTS += -Dwith_mysql=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_OPENSSL),y)
+@@ -88,9 +88,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_PAM),y)
+ LIGHTTPD_DEPENDENCIES += linux-pam
+-LIGHTTPD_CONF_OPTS += -Dwith_pam=true
++LIGHTTPD_CONF_OPTS += -Dwith_pam=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_pam=false
++LIGHTTPD_CONF_OPTS += -Dwith_pam=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_PCRE),y)
+@@ -102,36 +102,36 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_PGSQL),y)
+ LIGHTTPD_DEPENDENCIES += postgresql
+-LIGHTTPD_CONF_OPTS += -Dwith_pgsql=true
++LIGHTTPD_CONF_OPTS += -Dwith_pgsql=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_pgsql=false
++LIGHTTPD_CONF_OPTS += -Dwith_pgsql=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
+ LIGHTTPD_DEPENDENCIES += libxml2 sqlite
+-LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=true
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=enabled
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+-LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=true
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=enabled
+ LIGHTTPD_DEPENDENCIES += util-linux
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=false
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=disabled
+ endif
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=false -Dwith_webdav_locks=false
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=disabled -Dwith_webdav_locks=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_ZLIB),y)
+ LIGHTTPD_DEPENDENCIES += zlib
+-LIGHTTPD_CONF_OPTS += -Dwith_zlib=true
++LIGHTTPD_CONF_OPTS += -Dwith_zlib=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_zlib=false
++LIGHTTPD_CONF_OPTS += -Dwith_zlib=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_ZSTD),y)
+ LIGHTTPD_DEPENDENCIES += zstd
+-LIGHTTPD_CONF_OPTS += -Dwith_zstd=true
++LIGHTTPD_CONF_OPTS += -Dwith_zstd=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_zstd=false
++LIGHTTPD_CONF_OPTS += -Dwith_zstd=disabled
+ endif
+ 
+ define LIGHTTPD_INSTALL_CONFIG
 -- 
-2.39.1
+2.39.0
 
 _______________________________________________
 buildroot mailing list
