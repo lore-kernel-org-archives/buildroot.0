@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F336C636CC
-	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 09:26:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A4C8C636CC
+	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 09:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F39F661027;
-	Thu, 16 Feb 2023 09:26:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F39F661027
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0694261027;
+	Thu, 16 Feb 2023 09:41:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0694261027
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EnADk1yjtS61; Thu, 16 Feb 2023 09:26:38 +0000 (UTC)
+	with ESMTP id xvPl80lMWpsI; Thu, 16 Feb 2023 09:41:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4BB0611C3;
-	Thu, 16 Feb 2023 09:26:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4BB0611C3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 910BD1BF82D
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 09:26:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7832611C8;
+	Thu, 16 Feb 2023 09:41:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7832611C8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 09E741BF82D
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 09:41:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 741E441841
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 09:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 741E441841
+ by smtp3.osuosl.org (Postfix) with ESMTP id E62A760742
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 09:41:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E62A760742
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sllPF6ICI66B for <buildroot@lists.busybox.net>;
- Thu, 16 Feb 2023 09:26:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MUj5ho08rBhE for <buildroot@lists.busybox.net>;
+ Thu, 16 Feb 2023 09:41:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9132841840
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9132841840
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 09:26:33 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id he5so1066040wmb.3
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 01:26:33 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 840A161027
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 840A161027
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 09:41:10 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id m10so1234441wrn.4
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 01:41:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=6oPssI4ek+VgxcHLeGYbGbjSlF7ZF+nzAaQA6FkYZgI=;
- b=MpWYgmFAAxiOg8l6RuE0r6s8lQUJCh1H1IGobXAURvMSYrIWr5moYeyZnxMkJbdq5q
- zF2tylBY+KLi3cLkhUzLhoIj3D8wnipT4zEvvrjcUDF+i23/nLg2wEiX0fiJQLzq0s5T
- Ui5VN4w4+8Dsnv4aO+g/bqPCAlqs84+pGj/tHdpndmsMXy0iclrmZ3iMDrogitJdYOtF
- pd780Mv0PROkRj8RWOS2F9g7xY3P2h35BEEr30DqKX2zbgswlnDlY8pL1t1yHP6ZA9yE
- NdLS9M+FvvNKP0sp0Uj7Na+VH62tHPPXZUiy4IIybAFRr+JMLYx7Fr9vVwDRspTOOxpf
- gY9w==
-X-Gm-Message-State: AO0yUKUSRN54VzlRvFq0TqBg9U6D5Zt5f2rPATouhM7r3vf7zR1gxgDJ
- 6jStXvzQEdUUnV3YO1zxMJcDHrDmF5VgI2sZ
-X-Google-Smtp-Source: AK7set/QnbPVJc/k1eGLbHFPvxX8O6GXuw47hFdCdl6k8m7JfCfLp6Hc2dbEZwZx9JGFs5ov0uq79Q==
-X-Received: by 2002:a05:600c:1713:b0:3dc:2b62:ee9f with SMTP id
- c19-20020a05600c171300b003dc2b62ee9fmr4653878wmn.3.1676539591394; 
- Thu, 16 Feb 2023 01:26:31 -0800 (PST)
+ bh=zIRUrs4BuHzfGEoU3zLEURkoljKiPIpQANguWP2Wy60=;
+ b=Kqjn/v0u/cGoEGo8uSBzNsIwjkELX8ETcIMsMPW3qjBxfyR6UrnmxY19yNUlxrKF3r
+ 3jUj/q+M0YllAEunfsgVfYp5JnNcUu24Su/+JpTjX4QdOeNJtl1nM4DEcbAc6LbFMN4w
+ hsF6U+LAwwzSfuBW+EOFaH+NgsvcJFrKreXZWybN5jvByN0Thuuk0VGjnWJzOkSthV/u
+ N5eV8SJ6L8oXFoWkaSpgRSv8hQl34zw+BlOquaHQ0hXR+LYGRmaNNAOJpNBo0BSMmqYC
+ 37FjeOuiiai0di0xd/hdJzUjhAJ1KfFEfUnqqLglKobHFteTiUfbmqp5pq/bWaZGNj9M
+ HiRA==
+X-Gm-Message-State: AO0yUKWnzFXCZh3QPJGkT2MfIs+6jXofpdTpsvcQCMlTQ92MMlhBVH6v
+ 1GCwQrSGrCxeT6i4hhIt3+OF5IsrNWZyAMBg
+X-Google-Smtp-Source: AK7set/ZUN9kfWP6i/0JfP1/xgOoD3r6mpR7x9gadQgA+H7SVyTlr9LYxEutJ3Z2PXaMiOqlgJ5OIw==
+X-Received: by 2002:a5d:4d47:0:b0:2c5:5aef:274e with SMTP id
+ a7-20020a5d4d47000000b002c55aef274emr3545077wru.43.1676540467963; 
+ Thu, 16 Feb 2023 01:41:07 -0800 (PST)
 Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
  [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- m8-20020a7bca48000000b003dd1b00bd9asm1093428wml.32.2023.02.16.01.26.30
+ i1-20020a05600c290100b003dc492e4430sm1125467wmd.28.2023.02.16.01.41.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Feb 2023 01:26:30 -0800 (PST)
+ Thu, 16 Feb 2023 01:41:07 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Feb 2023 10:26:16 +0100
-Message-Id: <20230216092616.2973294-1-thomas.devoogdt@barco.com>
+Date: Thu, 16 Feb 2023 10:41:02 +0100
+Message-Id: <20230216094102.2984308-1-thomas.devoogdt@barco.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=6oPssI4ek+VgxcHLeGYbGbjSlF7ZF+nzAaQA6FkYZgI=;
- b=pnbK6UUKkUibQ5giK09A8yPFusE+b0OPV7hk46vbQVIZ8HME6+Glx54YCR2R2Z+Zl8
- AcTGc8ef26Nyqr1K+w7wUqHTI9eUWRFdlfk7DqUMtwa5qHV/w7HpESny9gReBwxv/4/i
- KUJPsnB7cfXtOXGRkV1n0jx+WDFOaG9IU8sbWC4Y+HomDtutNd7FBSj4boCJ8B9oP4fx
- 9BuvCcIR6Ab4y5Dyrt+908dYg5YxhSd2J3nDl0DcmHxUYYjcUkQP4TSCUFPJj6uPISQJ
- DuPfAxAHspss1tEkP+66TU22N/N3RN/0wq8yW1egkPUtU/Pfw4gnXuJoAtZsoTTBYcUW
- Rxwg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=zIRUrs4BuHzfGEoU3zLEURkoljKiPIpQANguWP2Wy60=;
+ b=dWT80sTlTXjdfqJV2BzeSm19FrCjcIuv9w5DSJ8VlSfsYGjFPMTg+AdJiNF/Z5Wjsy
+ LPN723+NLvN6+YsZDypQE+uj61Wh0XqdHT0sO1MdX/f5nvQH1W240eKmJeEUDBTClIXE
+ eTtPobZUVZbsc3y08fESYu/aInJE2LD3ZGeWfMC2Utyp/FqmxzKHNL4mAa8Je82fzFb2
+ 00SlvG8+7VRv3ecyl0ipEEpF3z+xkxeZVNbAvzGI8N6WAofI8FxeMvYqIUCnb1wbduE0
+ 4TMm3sTARguOhd1+F2srrCtIn7dMGZo1R+a0CE1U0kqk0Ktn+SXGaQVbSKiNcTqWUFjo
+ QpRQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pnbK6UUK
-Subject: [Buildroot] [PATCH] package/lighttpd: bump to version 1.4.69
+ header.a=rsa-sha256 header.s=20210112 header.b=dWT80sTl
+Subject: [Buildroot] [PATCH v2] package/lighttpd: bump to version 1.4.69
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,13 +106,16 @@ Changelog:
  - https://www.lighttpd.net/2023/2/10/1.4.69/
 
 In this commit:
-- rebased patch & dropped server.use-ipv6 option [2]
-- fix changed meson options [1]
+- rebased patch & dropped server.use-ipv6 option [1]
+- fix changed meson options [2]
 
 [1]: https://git.lighttpd.net/lighttpd/lighttpd1.4/commit/376d20f1617f2c0202fb415e4cc66d3f780db5ca
 [2]: https://git.lighttpd.net/lighttpd/lighttpd1.4/commit/6b31f76cd9b36b6033607181238fbf41c5b81e07
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+  v2: fix git message url links
+
 ---
  ...lt-lighttpd-configuration-file-to-ha.patch | 33 ++++------
  package/lighttpd/lighttpd.hash                |  4 +-
