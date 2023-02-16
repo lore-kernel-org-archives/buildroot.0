@@ -4,83 +4,130 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41866C636CC
-	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 01:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2876CC636CC
+	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 02:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94BD181F95;
-	Thu, 16 Feb 2023 01:15:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94BD181F95
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F08D81F61;
+	Thu, 16 Feb 2023 02:43:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F08D81F61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PJCLxeWaHoda; Thu, 16 Feb 2023 01:15:43 +0000 (UTC)
+	with ESMTP id L2g-iVA3x-5g; Thu, 16 Feb 2023 02:43:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1BD181F87;
-	Thu, 16 Feb 2023 01:15:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1BD181F87
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE1121BF3DE
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 01:15:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE05C81F49;
+	Thu, 16 Feb 2023 02:43:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE05C81F49
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 162701BF3A9
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 02:43:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A7E7081F79
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 01:15:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7E7081F79
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E0A040121
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 02:43:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E0A040121
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JOcMSDLXP6n2 for <buildroot@lists.busybox.net>;
- Thu, 16 Feb 2023 01:15:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tAIIqD_KNJqE for <buildroot@lists.busybox.net>;
+ Thu, 16 Feb 2023 02:43:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E73EE81F2A
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com
- [IPv6:2607:f8b0:4864:20::1131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E73EE81F2A
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 01:15:36 +0000 (UTC)
-Received: by mail-yw1-x1131.google.com with SMTP id
- 00721157ae682-530b9a0a789so4067067b3.13
- for <buildroot@buildroot.org>; Wed, 15 Feb 2023 17:15:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=E/7Ga1SpLpxZVq/rLP7bEWpamiWpDD+BZZ+WmhsQA9Y=;
- b=ZN1HXXWw6EpzJz0jD3bGfJNQNFsICX3ddw/pOv1oXCoweXrN9kgJNp+uxJJKrJGAMw
- 0k+5b9EFBN8iIKETi/VgSzaiKKhytLeFf0gBYWh0qZe/g3jXel0jlQxjxyPjc+ZOVPOY
- 0nHv9ZtGJAJjBULs+KjaqpCSIIMOxeA63mLPlrAIj0WhKr/asNL7mNJB7wWWgzfVWVbd
- hO1LlDQLL2e7a3+DDbll2sj/hueqcRehlUL2RmKCSXRve+6eVi1cBkkc+CGEav9bHhDL
- 51HQnytrWYKjs5zZWEJhKguHTYelbyiYDYesECR1Z19X3k49qaAsb8VV26vcMzZgFBKu
- VD9A==
-X-Gm-Message-State: AO0yUKVydxnIuM7mstC5BlFUykFruRPWRe4rQJooG54Nf8KPFC9lHOyo
- P62rOb5Iy1LnSfTi16G+iXt2EnOgKDGvTKZyj/FfZ8xTAWVv7ViL
-X-Google-Smtp-Source: AK7set83TNZicfYXkJuXJfcIVDXev+aabQTUUHKWXQamNE1zscvNn85WXgGkGhYuZiQaXAEZamoxiF/NXojfxib5hks=
-X-Received: by 2002:a81:a212:0:b0:46a:cb68:9add with SMTP id
- w18-20020a81a212000000b0046acb689addmr565019ywg.102.1676510135781; Wed, 15
- Feb 2023 17:15:35 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71CD6400A6
+Received: from AUS01-SY4-obe.outbound.protection.outlook.com
+ (mail-sy4aus01on20706.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:7005::706])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 71CD6400A6
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 02:43:37 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QrInHuaDqEtEK6ISWAXeK814ldjTs3BtzLtaVzgQtr9UF0Sb0AP6nNvETpz0ME2yUe9IozBd7DcHRdy5nqZ2GKugOtKEjfnboL0eE1H0UnCjJEqmBiInA8MIrp/Vo/OTadnDKp4BBarc+eu42A28MDClNOoX80kxWMN4q477GtWsKD438o0k5+UhBOXozcbApqIhfGKOKUqrl3L11z2GCBDOl87IFVDSUIuvb9/nUi6qKKj9eOjJVtF0QIgHO+G5mCAENBSPuwhtWkYYWhnq/InMj2BfdZTpSFqVcgLBDG0ADarXJ6aCQ8Ss1oPum17iWbWgItgxuhv6WgGFyNg2qQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SsPPF2rkejBSOWlHLJLCddUnAtpsQOC0dJEtMgKfa6k=;
+ b=S3eOkJeejnEj7xieV79DGRDAhmBYB2q+zAy8G+m5mlYDR5CIYXIbOJo9DmI3tc3PO2UsSr5cziFe8nYLDmac5OXG5UKB1Lsld/8TjOOe3UnzyOKy6qQqsCj+RVUXDYAoZJfVaNtcVZUJAIYL2gQhvkH0SEefI5tFVb+jcFywCA1RT+i1T0XufxlF2vBr6KOHaUX4ybS2N46bI/PtYy7y1eubljGAnochAzbvgxL9yBU8g/4pMccjIEtowfighDseZqA2FRAukFQxRm5rPbXmBqsH9qyi+4e6ONEvPrV2HkGpiNLZU95hhWVI9xsIJjd7oNdt10aNIhJzYAw5dkJ20A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=gallagher.com; dmarc=pass action=none
+ header.from=gallagher.com; dkim=pass header.d=gallagher.com; arc=none
+Received: from SY2PR01MB2778.ausprd01.prod.outlook.com (2603:10c6:1:25::22) by
+ ME3PR01MB6210.ausprd01.prod.outlook.com (2603:10c6:220:100::7) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.6; Thu, 16 Feb 2023 02:43:31 +0000
+Received: from SY2PR01MB2778.ausprd01.prod.outlook.com
+ ([fe80::da47:405c:794b:7d68]) by SY2PR01MB2778.ausprd01.prod.outlook.com
+ ([fe80::da47:405c:794b:7d68%4]) with mapi id 15.20.6111.010; Thu, 16 Feb 2023
+ 02:43:31 +0000
+From: Afshin Pir <Afshin.Pir@gallagher.com>
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: Can I enable a config option from command line?
+Thread-Index: AdlBsHPfaFgGiZC7TRGGoeoyjjdi4w==
+Date: Thu, 16 Feb 2023 02:43:30 +0000
+Message-ID: <SY2PR01MB27780FE651C1964CD2B732A094A09@SY2PR01MB2778.ausprd01.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SY2PR01MB2778:EE_|ME3PR01MB6210:EE_
+x-ms-office365-filtering-correlation-id: 7539851f-4581-4f09-8240-08db0fc79706
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8/CABDmNXsXf2s+hx9jPxeSeqc+ChGvgc4cMS1SLRLrGAw8bROWGcyUcY34r3FNGK+VHLXJ68ubqxwGnyC2tmaoWY3PAcBTwtBzHHdjNSh6JARSrAHxMICZ+lIgfftL/zbY6DuhlAflWykcZqZPs6O7soFILgiUwpRnOntVHr/K6Ri8caqKHnL3PrBs9dwDWKBP0DJ1+rqyQkVme0mNPMkm1VN+GL/LKbPhSZkW2J+2wye6k39uetNhG5lx/+2YpdPKxKwk+1tvEG7oHa9XLhrdmFKDpmw4kJGFqi4ZN4fXDJ+WrCXxJDV8/NhdbNNgDHfjtywKswkxQlv6r2llqCE8Fb02oi8s3J1QpolKju2hSdZODfyyMhBUoWibBVLIzJQZE2A9AtH+T2Pko4vFlUiRJifVXeNxfTP7hrs7Vdzc2q/U8GlccFkOEA7gylBsBV+NpC19bZYjZLnYcO8BijkfGo5xLYiyBp7qDiYICZS4Bw6c66t85VTizMF48B6yGEP7Y57l15PKH8zjtI8QDAxCHns/awmq3XX1bFJCY0h/nOzIyoiPHDGFRD7rmZ384NcjIIO0eiQRpoPTMc1rXVasq8s/Baf2+uGwBg1MAFTbJryKunYN3i+gbJnBxn0+YnOAKfzRoq3V62W9Pz1TJQNzDl0NlqdPiD8VWrIfDbujQ+ODi9mOlM4kVbriPsZSQuJNRwl4ketqTNClmXTEgag==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SY2PR01MB2778.ausprd01.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230025)(4636009)(396003)(39860400002)(346002)(376002)(366004)(136003)(451199018)(52536014)(41300700001)(508600001)(9326002)(8936002)(316002)(66556008)(66946007)(66476007)(76116006)(66446008)(64756008)(6916009)(8676002)(5660300002)(4744005)(122000001)(7696005)(38100700002)(2906002)(71200400001)(186003)(38070700005)(33656002)(26005)(55016003)(9686003)(86362001)(83380400001)(6506007);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kCdAtNAVVM6iXyR79n6SshI+dep9rZSLdJ2g3Q93Vte7NKyfD0XDGJGvl1Lk?=
+ =?us-ascii?Q?S03V63uBP4Yjc1JX08jNp+Qc4+kcIuOYr4J27ubPbmXcXKa5uy71JCM6jfmo?=
+ =?us-ascii?Q?YPITgE65QhbSDCHlnVOrk8rdhdy3g7z8SVC66HXztBlPMvVQRisRBp+AK8nP?=
+ =?us-ascii?Q?XhKctOJ+bQdHruE8ABSeM5jKsbiDRFoTn2UBWpVRH5gqEAqC9ZjeS4wh+7jU?=
+ =?us-ascii?Q?GCQ9wfPVpWn2/IR+dh/aPEMl8ZeQfC6+OsSCT+ME6gInAh8BoioMXe5beDcO?=
+ =?us-ascii?Q?kxxYGwxwYslKWw0yMWr/HQJYVKZlFSmfbXhbiFD7wjwVGFOxUZeYPR8geNKQ?=
+ =?us-ascii?Q?fh3mZdDweDB5wwyrXO8oFur1N9htoq9SZuM5gNLGytxSXQE//9CAgn1NkPe8?=
+ =?us-ascii?Q?KvZImVqPyValudsOcg9hR4/j+kJEXjBgUMzXS0dVAEZz6NJOIOSnawsuPzJl?=
+ =?us-ascii?Q?uCJsoQEZRUQ0NnpddXY8kNS+cbm88Df071+ar5YscQyiF6ZBxSCt4iknhVXN?=
+ =?us-ascii?Q?nvRbdMSBrT9K0frnbs1fYUqqykTUSHfTxYD3hI5XElGjhfyJqxgTNNz25qjk?=
+ =?us-ascii?Q?X5//NG0OkVVQAPn28x4E7FJIRKHT0b+afe1TOdddnp6bh1Upml3i/fPW/1OX?=
+ =?us-ascii?Q?Si5SbL+/UQK5rvJrk2NkFuSL4PH+K0oFdtD4AgjrVkukeIoNYkFtYGtJ+/xH?=
+ =?us-ascii?Q?0Z3w0/KjnDlswci8i8SMJJMNapDJ15fXt5WZRV8HChiX+diIcuES2PVO2/2f?=
+ =?us-ascii?Q?TDAT7K0wAvJvzT87xR3SThFkSnOaWQX5T9w5zIECz2DMwDTs4kXzOcHrONir?=
+ =?us-ascii?Q?KfkEmvY9R8FV06itLWxp5TnSYtCJsyppRn2E3kxC6F8nbVkFwX4fkyBbjhme?=
+ =?us-ascii?Q?UZEkUoAQGYXvTOTqIJbkXiJxsxqQZJGDf7wQNmPXD1mtBBHysNRKfBJPK9aZ?=
+ =?us-ascii?Q?nRlQGIRySgHQsRhYGypL+jXLK7oamlZ/w2Di80zmi+r6N389pxAYToKgTPzF?=
+ =?us-ascii?Q?AK4MamgkT5vRphjzXf7x9biFc8KnRm8/23WyeOXVTnNns/XbCRI11Lf1niBQ?=
+ =?us-ascii?Q?qcScP6peWWSka/Sao38e08lq5aspsl2rE4hFxKF52FokLOdgzsvgozEcxiaU?=
+ =?us-ascii?Q?eTkwl5H5+oITc1lAtbzyD0csbtislHAIJS06Ah5OObCAzcqKp5C8WuTjb3uc?=
+ =?us-ascii?Q?PstUx15ZdncF1mXg8hpX/XtnCNUBCScX+5RQJNLinb3GGxMyYzfC0U6M2yAB?=
+ =?us-ascii?Q?5AyoVm/KMM35d/uM+UaE+AoH7Kf6xKtFGc79VCy/irhOIj41n8vzn5PFrrgh?=
+ =?us-ascii?Q?QzBQhYUAIU8Suedp9j49wjgbVJKXGiD6QXfUsA8Su5tQyOax/UNr1lGqK7Lu?=
+ =?us-ascii?Q?/qOkZvnLZtIk5dE6zIvMSNXcTx+Eob9gHcHFqGUnzxnSdjnkaYFAhgkP/TrM?=
+ =?us-ascii?Q?Frp5wsBC3bvmQmM0Bq5BG/e5ymv35iwLIxFuNiFw0c6xI/q/9XLtNOjHkfaP?=
+ =?us-ascii?Q?d9ktf5Dlc0yzBkJtryrPcN9od4Dx+2UePznnjMymG7aLVSlsxPY4v4stAeY5?=
+ =?us-ascii?Q?wF+AHL3mzTVg6TiX476cl5Jn2X/8B2CrnF0Fke7E?=
 MIME-Version: 1.0
-References: <CACw=RXJvPxp4-z1JkH33ZBpGNEo37hQXnZTfyyeqVGiqXbYEqw@mail.gmail.com>
- <40f6ba58-7cda-d062-960f-17ada0c85b24@mind.be>
-In-Reply-To: <40f6ba58-7cda-d062-960f-17ada0c85b24@mind.be>
-From: Cem Sezer <cps@microplex.com>
-Date: Wed, 15 Feb 2023 17:15:23 -0800
-Message-ID: <CACw=RX+ZeuZcg45_BSkVdFXmDgQR5sDox=ONE=y4o2aZVy=NAQ@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+X-OriginatorOrg: gallagher.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SY2PR01MB2778.ausprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7539851f-4581-4f09-8240-08db0fc79706
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2023 02:43:30.9283 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 2156b869-431f-4815-b2ce-b4893b5c9aaa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7+70MykFOp2j1Sz6zTpowSpO/Nz8IgsmDw76deOdzdd+iidcc6r1+E8ngjV/IykFQp+EONTMmWFUk9YYh4MRtFx9tYzJGetOeU9F70AgvjY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME3PR01MB6210
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microplex.com; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=E/7Ga1SpLpxZVq/rLP7bEWpamiWpDD+BZZ+WmhsQA9Y=;
- b=xpeRg9f68wqd66vvLXsjsPMVkA11LxAAZoGdwz7fIL8iS6/ASEm2H5ydYAwZajHDM/
- Weo4B65KlaIa9nnb1yQGQbPKkZs2ucJ0alBBygVlQJeQ0OKmRHO8M69B7gOQ4eKVXvuw
- UBZcRJbgUf1LMB5HoItPmvJQwJd3O5ftjM9FeQEh1ZCaZl3Rkdcw8aOaw1MbeMXkCgoT
- mBckx7HFxEWoyl12bPY9FfFm7XMvt6dAkwOw4j1ZCpBNRSedj4Zn5iYGP7L1xvVTArmY
- BKc2HNsT6i2luVGnhwAsCiQRYEvDpyzlSSL5BAOaY8Timb9VbclhzfQ4HnFMwSrSkeG6
- zEDA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=microplex.com header.i=@microplex.com
- header.a=rsa-sha256 header.s=google header.b=xpeRg9f6
-Subject: Re: [Buildroot] Having trouble getting a simple cmake based custom
- package to work
+ d=gallagher.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SsPPF2rkejBSOWlHLJLCddUnAtpsQOC0dJEtMgKfa6k=;
+ b=tXMwYxVleekqGMRSrQJXUrmC1/LMFW+uCbBt+Sg8C3YpvczXtHntTALLCUxcsKJOQcRmUDgFZqKySpKd2U64kt9BE36j/xRM9oH2GT8XdZCycIVWsy2wKptT0N3HHEIN95BlV9KuUP4UEDDxNCui8rm0etW/F+ev8sqizL2PQw4=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=gallagher.com header.i=@gallagher.com
+ header.a=rsa-sha256 header.s=selector1 header.b=tXMwYxVl
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=gallagher.com;
+Subject: [Buildroot] Can I enable a config option from command line?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,200 +139,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8705283271485481795=="
+Content-Type: multipart/mixed; boundary="===============0886685514056118362=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8705283271485481795==
-Content-Type: multipart/alternative; boundary="0000000000001b204105f4c6efe6"
+--===============0886685514056118362==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_SY2PR01MB27780FE651C1964CD2B732A094A09SY2PR01MB2778ausp_"
 
---0000000000001b204105f4c6efe6
-Content-Type: text/plain; charset="UTF-8"
-
-Hello Arnout,
-
-Thank you for your reply. I realize this was a silly question and I did fix
-it by adding install(TARGETS helloworld_c_cmake DESTINATION bin) to
-CMakeLists.txt. I appreciate the helpfulness of this community. I have been
-tinkering with a larger project and am using this one as a reference.
-
-Kind regards,
-
-Cem
-
-
-On Wed, Feb 15, 2023 at 12:23 PM Arnout Vandecappelle <arnout@mind.be>
-wrote:
-
->
->
-> On 15/02/2023 01:10, Cem Sezer wrote:
-> > Hello,
-> >
-> > I'm looking to continue this thread as I have the exact same problem.
-> >
-> > http://lists.busybox.net/pipermail/buildroot/2020-August/591250.html
-> > <http://lists.busybox.net/pipermail/buildroot/2020-August/591250.html>
-> >
-> > The latest entry in the thread is the following, discussing the error
-> message
-> > "/No rule to make target 'install/fast': /is where I'm stuck at the
-> moment:
-> >
-> >>/However, when it is />/trying to install my package I have a new error.
-> The system seems to be />/looking for a install/fast target, which the
-> Makefil does not have. /
-> > I have no idea on that problem.  Maybe read the CMake docs again?
-> >
-> > https://cmake.org/cmake/help/latest/command/install.html  <
-> https://cmake.org/cmake/help/latest/command/install.html>
-> >
-> > Greets
-> > Alex
-> >
-> > I am still new to cmake, but I've been having trouble getting a basic
-> > helloworld (in C) cmake package to work. I looked at that link above for
-> the
-> > cmake docs, but am unfamiliar with what I need to do here. My
-> CMakeLists.txt
-> > right now is just the following:
-> >
-> > cmake_minimum_required(VERSION 3.1.0)
-> >
-> > project(helloworld_c_cmake LANGUAGES C)
-> >
-> > set(SOURCES main.c)
-> >
-> > add_executable(${PROJECT_NAME} ${SOURCES})
->
->   Since there is no installation rule in the CMakeLists.txt, the
-> install/fast
-> target is not going to be generated. The link above to the cmake
-> documentation
-> explains how to add an installation rule.
->
->   Regards,
->   Arnout
->
-> >
-> >
-> > Any pointers in the right direction would be appreciated. Perhaps this
-> is more
-> > of a cmake question than a buildroot question, but tying the two
-> together has
-> > been confusing, and I'm sure it must be something simple. Thanks in
-> advance,
-> >
-> > Cem
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---0000000000001b204105f4c6efe6
-Content-Type: text/html; charset="UTF-8"
+--_000_SY2PR01MB27780FE651C1964CD2B732A094A09SY2PR01MB2778ausp_
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hello Arnout,<div><br></div><div>Thank you for your reply.=
- I realize this was a silly question and I did fix it by adding install(TAR=
-GETS helloworld_c_cmake DESTINATION bin) to CMakeLists.txt. I appreciate th=
-e helpfulness of this community. I have been tinkering with a larger projec=
-t and am using this one as a reference.</div><div><br></div><div>Kind regar=
-ds,</div><div><br></div><div>Cem<br><div><br></div></div></div><br><div cla=
-ss=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Wed, Feb 15, 20=
-23 at 12:23 PM Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">a=
-rnout@mind.be</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" sty=
-le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddi=
-ng-left:1ex"><br>
-<br>
-On 15/02/2023 01:10, Cem Sezer wrote:<br>
-&gt; Hello,<br>
-&gt; <br>
-&gt; I&#39;m looking to continue this thread as I have the exact same probl=
-em.<br>
-&gt; <br>
-&gt; <a href=3D"http://lists.busybox.net/pipermail/buildroot/2020-August/59=
-1250.html" rel=3D"noreferrer" target=3D"_blank">http://lists.busybox.net/pi=
-permail/buildroot/2020-August/591250.html</a> <br>
-&gt; &lt;<a href=3D"http://lists.busybox.net/pipermail/buildroot/2020-Augus=
-t/591250.html" rel=3D"noreferrer" target=3D"_blank">http://lists.busybox.ne=
-t/pipermail/buildroot/2020-August/591250.html</a>&gt;<br>
-&gt; <br>
-&gt; The latest entry in the thread is the following, discussing the error =
-message <br>
-&gt; &quot;/No rule to make target &#39;install/fast&#39;: /is where I&#39;=
-m stuck at=C2=A0the moment:<br>
-&gt; <br>
-&gt;&gt;/However, when it is /&gt;/trying to install my package I have a ne=
-w error. The system seems to be /&gt;/looking for a install/fast target, wh=
-ich the Makefil does not have. /<br>
-&gt; I have no idea on that problem.=C2=A0 Maybe read the CMake docs again?=
-<br>
-&gt; <br>
-&gt; <a href=3D"https://cmake.org/cmake/help/latest/command/install.html" r=
-el=3D"noreferrer" target=3D"_blank">https://cmake.org/cmake/help/latest/com=
-mand/install.html</a>=C2=A0 &lt;<a href=3D"https://cmake.org/cmake/help/lat=
-est/command/install.html" rel=3D"noreferrer" target=3D"_blank">https://cmak=
-e.org/cmake/help/latest/command/install.html</a>&gt;<br>
-&gt; <br>
-&gt; Greets<br>
-&gt; Alex<br>
-&gt; <br>
-&gt; I am still new to cmake, but I&#39;ve been having trouble getting a ba=
-sic <br>
-&gt; helloworld=C2=A0(in C) cmake package to work. I looked at that link ab=
-ove for the <br>
-&gt; cmake docs, but am unfamiliar with what I need to do here. My CMakeLis=
-ts.txt <br>
-&gt; right now is just the following:<br>
-&gt; <br>
-&gt; cmake_minimum_required(VERSION 3.1.0)<br>
-&gt; <br>
-&gt; project(helloworld_c_cmake LANGUAGES C)<br>
-&gt; <br>
-&gt; set(SOURCES main.c)<br>
-&gt; <br>
-&gt; add_executable(${PROJECT_NAME} ${SOURCES})<br>
-<br>
-=C2=A0 Since there is no installation rule in the CMakeLists.txt, the insta=
-ll/fast <br>
-target is not going to be generated. The link above to the cmake documentat=
-ion <br>
-explains how to add an installation rule.<br>
-<br>
-=C2=A0 Regards,<br>
-=C2=A0 Arnout<br>
-<br>
-&gt; <br>
-&gt; <br>
-&gt; Any pointers in the right direction would be appreciated. Perhaps this=
- is more <br>
-&gt; of a cmake question than a buildroot question, but tying the two toget=
-her has <br>
-&gt; been confusing, and I&#39;m sure it must be something simple.=C2=A0Tha=
-nks in advance,<br>
-&gt; <br>
-&gt; Cem<br>
-&gt; <br>
-&gt; <br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-</blockquote></div>
+Hi
 
---0000000000001b204105f4c6efe6--
+When building buildroot, I use a default config file. But there is only 1 o=
+ption (BR2_ENABLE_RUNTIME_DEBUG=3Dy) which is not in config file by default=
+, and I want to enable it by command line when building buildroot.
+Is there any way to achieve this?
 
---===============8705283271485481795==
+Best Regards,
+Afshin
+________________________________
+This email is confidential and may contain information subject to legal pri=
+vilege. If you are not the intended recipient please advise us of our error=
+ by return e-mail then delete this email and any attached files. You may no=
+t copy, disclose or use the contents in any way. The views expressed in thi=
+s email may not be those of Gallagher Group Ltd or subsidiary companies the=
+reof.
+________________________________
+
+--_000_SY2PR01MB27780FE651C1964CD2B732A094A09SY2PR01MB2778ausp_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-NZ" link=3D"#0563C1" vlink=3D"#954F72" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hi<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">When building buildroot, I use a default config file=
+. But there is only 1 option (BR2_ENABLE_RUNTIME_DEBUG=3Dy) which is not in=
+ config file by default, and I want to enable it by command line when build=
+ing buildroot.<o:p></o:p></p>
+<p class=3D"MsoNormal">Is there any way to achieve this?<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Best Regards,<o:p></o:p></p>
+<p class=3D"MsoNormal">Afshin<o:p></o:p></p>
+</div>
+<hr>
+This email is confidential and may contain information subject to legal pri=
+vilege. If you are not the intended recipient please advise us of our error=
+ by return e-mail then delete this email and any attached files. You may no=
+t copy, disclose or use the contents
+ in any way. The views expressed in this email may not be those of Gallaghe=
+r Group Ltd or subsidiary companies thereof.
+<hr>
+</body>
+</html>
+
+--_000_SY2PR01MB27780FE651C1964CD2B732A094A09SY2PR01MB2778ausp_--
+
+--===============0886685514056118362==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -296,4 +254,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8705283271485481795==--
+--===============0886685514056118362==--
