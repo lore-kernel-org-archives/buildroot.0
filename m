@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57A54C636CC
-	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 18:34:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBAB6C61DA4
+	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 18:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5E8E60687;
-	Thu, 16 Feb 2023 18:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5E8E60687
+	by smtp3.osuosl.org (Postfix) with ESMTP id 720DE613BA;
+	Thu, 16 Feb 2023 18:34:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 720DE613BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6OiixCnEiR7S; Thu, 16 Feb 2023 18:34:10 +0000 (UTC)
+	with ESMTP id KIr97hfylrNZ; Thu, 16 Feb 2023 18:34:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA8C46120B;
-	Thu, 16 Feb 2023 18:34:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA8C46120B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C82801BF963
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 18:34:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 975E860758;
+	Thu, 16 Feb 2023 18:34:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 975E860758
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 258081BF963
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 18:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAE3081355
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 18:34:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAE3081355
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CAC460758
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 18:34:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CAC460758
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tutH84MMPEbf for <buildroot@lists.busybox.net>;
- Thu, 16 Feb 2023 18:33:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9Q_OQz6-8Svm for <buildroot@lists.busybox.net>;
+ Thu, 16 Feb 2023 18:34:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51C898101B
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 51C898101B
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 18:33:59 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id r28so2276672wra.5
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 10:33:59 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 019B560591
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 019B560591
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 18:34:02 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ k8-20020a05600c1c8800b003dc57ea0dfeso4971239wms.0
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 10:34:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=yCrzBAxJkPAIJUb0B/F7khSEXOW3yJ8n32WhD/8g1rE=;
- b=kxD4IjjjiFoLiVAsJ4aH4BwBVamuk0w52clEIaprzwt0uwEopPBrdOHrruOFsdhiGN
- b9NWFFq61XR+kJJmgXOlaS/8czdisbyNQ79uX/FDa5+St1xQsXjOok0fD+mza1dQflOu
- l5sT+X8gyScuYSKOpPz/2BNp+L9RRbu5lrTnDVQkxEuI5PlDndkgsVjlfR+DBF6O/DPX
- fa4ePFnoRince6zPq+mK+rg6/9kiNgNY4U4Qu0Wilhlo0xTsJQdHxMK1zXu0LY3Tlzrw
- 8qTJAZ5aJJFojJPmFaLX4rPvM0oxbFCLS8oSwDrsaZeJFxctlVMVrybNqCEn/ILP683k
- iPgw==
-X-Gm-Message-State: AO0yUKU8e4Ek+45RoaJPjAi+ujVu1N5K2z2pdhBxasU/UFmoYCOJpyez
- mRI9OzIQ4kTQz51vIocFXAe8PW87Ys53Wg==
-X-Google-Smtp-Source: AK7set8qEHwblHpajSu4KJlX+jIkqKO+b/MWVOrJiGv72IDgY/AnsNfAxOnTtAFZCPEAgBpNsIIp/Q==
-X-Received: by 2002:a5d:458d:0:b0:2c3:eafd:143d with SMTP id
- p13-20020a5d458d000000b002c3eafd143dmr6625869wrq.69.1676572437331; 
- Thu, 16 Feb 2023 10:33:57 -0800 (PST)
+ bh=umSD0yPAKfbVi2GJoDU0a/R6f8F/6/x7WqRSHgHxo7I=;
+ b=T/RYmNle/41sxsgIHTTcIWpuDlX6kxem0yK7oUztxKzb1V/VNZNHg7vpbBAU11fKki
+ aXbXqzl8GA0GGknl5NpDA2/xAGroGdMUZs4KNjhSE5GVM9geuWs1HdnjvL881KDtCpHy
+ WNvJmlSvpsdt6/6E7hv5looDpVdYzzcla1OaxuVEaSpUsW2dZyYB5aoMXv3q3vez7kA+
+ IQA7qwqsDtw3CaAaWWyYKL1W7a471OKVRP8D1+BCF20eOB9eW5z7TBhtbfhlWpwfDc7M
+ H5oXtpTGUxAwtpyCS25WmjFl6jKWYjeZmBupCKTkLQ0EJoGD7FZx+NSDKNETPm06jRUc
+ 6GYQ==
+X-Gm-Message-State: AO0yUKVIJhHsUmb4zEDMN7R+gaoHGS4w52KsfTtzBxN/NV4MMMJw6wY9
+ BKloNETB/zQW96/6JlyWmGZd0ewpvLxq3w==
+X-Google-Smtp-Source: AK7set+aBkS+Hq2das7DtK6goP3/XLWI6DRYsSLGQAORF65VyhTjbCBmB2tXflCBA3lbX6b5BSd8RA==
+X-Received: by 2002:a05:600c:130f:b0:3dc:198c:dde with SMTP id
+ j15-20020a05600c130f00b003dc198c0ddemr5175805wmf.41.1676572441150; 
+ Thu, 16 Feb 2023 10:34:01 -0800 (PST)
 Received: from LinkTed.fritz.box ([2a02:8070:4182:37a0:64cb:8203:42ee:ef04])
  by smtp.gmail.com with ESMTPSA id
- k5-20020a05600c1c8500b003e204158ac7sm6754969wms.47.2023.02.16.10.33.56
+ k5-20020a05600c1c8500b003e204158ac7sm6754969wms.47.2023.02.16.10.34.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Feb 2023 10:33:57 -0800 (PST)
+ Thu, 16 Feb 2023 10:34:00 -0800 (PST)
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Feb 2023 19:33:21 +0100
-Message-Id: <20230216183322.21622-2-raphael.pavlidis@gmail.com>
+Date: Thu, 16 Feb 2023 19:33:22 +0100
+Message-Id: <20230216183322.21622-3-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230216183322.21622-1-raphael.pavlidis@gmail.com>
 References: <20230215143534.19834-1-raphael.pavlidis@gmail.com>
@@ -75,17 +76,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=yCrzBAxJkPAIJUb0B/F7khSEXOW3yJ8n32WhD/8g1rE=;
- b=q6MISUxeO6zUMRBXGNMZCNYBv1GH1cJve7pQZPkydoEYNddi9iXmyK7ZFmWsuKFdz/
- iJJPP/2PVT3UHe6O+cjZuW3h8fxfFYnWDngYe0s4sZksxYrpX6J7L+Xw3P/p5Ic3nkF9
- zZL4k++v4NDDzb1c6GTJVOy8eJscgmn26uAuxxp/Eh3LX19UN+MyqJRl8gxWEcZDN6xy
- RY89/z7SWdhuKgjKkfLi9kK7IkV9wItHZLfzZ1gQsnNQE6ph8rQ2gtB3K9t8G3eTuaJB
- 6LTUWRpoROkuTwUuRKEZXVQy824hOE7re0mq+izTNS8P5Bk1cJuCBn5RIsgzB0KF02cF
- 8SdQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=umSD0yPAKfbVi2GJoDU0a/R6f8F/6/x7WqRSHgHxo7I=;
+ b=CmbxSaP+sRYv69+h5D5AoIcL/FQmcTJlqanWM0ma0bbXFavdsJ2a7EB6gOGeTU7SU3
+ AfSrRaktG4VV4ZoPkO04Lwb1Cc+3vptflDJcdyj2URDmaqDQowsw4wuttp2Ln+4Gt3Ip
+ 8gglqiIOjbyQLHdvEK/wmh4lxRgRZyyAt4svdlONQT8SeV+BNjWoHJttjCPIB/z7I1Ju
+ Ww8rGVR4bfr447Wh4WAHmO90TlG86lbh06aQpW/xJpXLYl9cqLICbxpbn8loe32Yupku
+ jHqkbaAXK24pMvdXZ7gH+Ou2sjd5UderWi2WYZhCflxycvQlUnw4lPOaXpGuD1x2RRbH
+ 2PRQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=q6MISUxe
-Subject: [Buildroot] [PATCH v2 2/3] package/weston: add xwayland dependency
+ header.a=rsa-sha256 header.s=20210112 header.b=CmbxSaP+
+Subject: [Buildroot] [PATCH v2 3/3] package/wlroots: add XWayland support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,56 +109,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If the XWayland support is enabled then build the corresponding XServer.
+The new option enables the XWayland support, so X11 application can be
+running on a wlroots based compositor. Also, do not enable the XWayland
+support if the X11 backend is active.
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/weston/Config.in | 10 +++++++++-
- package/weston/weston.mk |  2 +-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/wlroots/Config.in  | 19 +++++++++++++++++++
+ package/wlroots/wlroots.mk |  6 +++++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 3b4e932b7d..09119edaaa 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -109,16 +109,24 @@ comment "X11 (nested) compositor needs X.org enabled"
+diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
+index 84a4ef846e..fe3080450c 100644
+--- a/package/wlroots/Config.in
++++ b/package/wlroots/Config.in
+@@ -41,4 +41,23 @@ config BR2_PACKAGE_WLROOTS_X11
+ 	help
+ 	  Support Wayland sessions nested inside a X11 window
  
- config BR2_PACKAGE_WESTON_XWAYLAND
- 	bool "XWayland support"
--	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_LIBEPOXY
-+	depends on BR2_PACKAGE_XORG7 # xwayland
++config BR2_PACKAGE_WLROOTS_XWAYLAND
++	bool "XWayland support"
++	depends on BR2_PACKAGE_XORG7 # libxcb, xcb-util-wm, xwayland
 +	depends on BR2_USE_MMU # xwayland
 +	depends on !BR2_STATIC_LIBS # xwayland
 +	depends on BR2_TOOLCHAIN_HAS_THREADS # xwayland
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_LIBXCB
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XCB_UTIL_WM
 +	select BR2_PACKAGE_XWAYLAND
- 
- comment "XWayland support needs libepoxy and X.org enabled"
- 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
- 
++	help
++	  Support for X11 applications
++
++comment "XWayland support needs X.org enabled"
++	depends on !BR2_PACKAGE_XORG7
++
 +comment "XWayland support needs a toolchain w/ threads, dynamic library"
 +	depends on BR2_USE_MMU
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 +
- # Weston needs at least one shell; this can be one of the bundled ones,
- # below, of from a third-party package, which should then select this.
- config BR2_PACKAGE_WESTON_HAS_SHELL
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 5e71473640..01f84178b2 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -123,7 +123,7 @@ WESTON_CONF_OPTS += -Dbackend-default=$(call qstrip,$(BR2_PACKAGE_WESTON_DEFAULT
+ endif
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 4f14d20b11..5b930a51be 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -30,8 +30,12 @@ WLROOTS_BACKENDS = libinput drm
  
- ifeq ($(BR2_PACKAGE_WESTON_XWAYLAND),y)
- WESTON_CONF_OPTS += -Dxwayland=true
--WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
-+WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor xwayland
+ ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+ WLROOTS_BACKENDS += x11
+-WLROOTS_CONF_OPTS += -Dxwayland=enabled
+ WLROOTS_DEPENDENCIES += libxcb xcb-util-wm xcb-util-renderutil xlib_libX11
++endif
++
++ifeq ($(BR2_PACKAGE_WLROOTS_XWAYLAND),y)
++WLROOTS_CONF_OPTS += -Dxwayland=enabled
++WLROOTS_DEPENDENCIES += libxcb xcb-util-wm xwayland
  else
- WESTON_CONF_OPTS += -Dxwayland=false
+ WLROOTS_CONF_OPTS += -Dxwayland=disabled
  endif
 -- 
 2.39.1
