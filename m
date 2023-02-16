@@ -1,62 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F957C636CC
-	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 18:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0E5BC61DA4
+	for <buildroot@archiver.kernel.org>; Thu, 16 Feb 2023 19:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A827660687;
-	Thu, 16 Feb 2023 18:37:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A827660687
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C0104194E;
+	Thu, 16 Feb 2023 19:34:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C0104194E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id U5x-PAR47o5b; Thu, 16 Feb 2023 19:34:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 063C641795;
+	Thu, 16 Feb 2023 19:34:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 063C641795
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9CD381BF330
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 19:34:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7031060AD4
+ for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 19:34:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7031060AD4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KVWKLcJ9XwZT; Thu, 16 Feb 2023 18:37:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACFC86120B;
-	Thu, 16 Feb 2023 18:37:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACFC86120B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 36A591BF963
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 18:37:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10ECD81241
- for <buildroot@lists.busybox.net>; Thu, 16 Feb 2023 18:37:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10ECD81241
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dZbwXjJytpZb for <buildroot@lists.busybox.net>;
- Thu, 16 Feb 2023 18:37:00 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18456812A9
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 18456812A9
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 18:37:00 +0000 (UTC)
-Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout01.t-online.de (Postfix) with SMTP id 6E318C4A0
- for <buildroot@buildroot.org>; Thu, 16 Feb 2023 19:36:57 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.190.165]) by fwd89.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pSj7n-1HQesj0; Thu, 16 Feb 2023 19:36:55 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46210)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pSj7n-0007ES-1p
- for buildroot@buildroot.org; Thu, 16 Feb 2023 19:36:55 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Thu, 16 Feb 2023 19:36:55 +0100
-Message-Id: <20230216183655.402798-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230216183655.402798-1-bernd.kuhls@t-online.de>
-References: <20230216183655.402798-1-bernd.kuhls@t-online.de>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I5W16vKpI8X3 for <buildroot@lists.busybox.net>;
+ Thu, 16 Feb 2023 19:34:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71EA360ABE
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com
+ [209.85.208.180])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 71EA360ABE
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 19:34:19 +0000 (UTC)
+Received: by mail-lj1-f180.google.com with SMTP id g14so3067152ljh.10
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 11:34:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EqT+5B7rum9SxHHjFjhLQwKqmqwG+2BQN2+M8BG08dE=;
+ b=4hgBKczGbK98ROr4La9f8N6UrkSfz2r3+0sn9AWYK+AqR3+DsGgqxYzkEkyf6dX6NO
+ PLJ6LC9MhcRx/F//G3mjMBvd91oVEXS1y1FD/R4un6BGlDPmTxuh2RR03Q5HrNtqhh9/
+ S/Tp0aAeNGdPM7E6OcKP+jyffYLqQzR4WnqgSTRyN7PeO8qNBBgqk9+idUyUePzjf+7S
+ 3scZcyeZ+Y/V1DqbPQGgh2lIKjAxCxIWBGr8VXqS2Hyw3osynGYhDWAXYfWo7UwjIVzB
+ vkzwfHvwcakCD1lRk+jf1Mx+dvmwTF+bu2bUES2cY8LcaN4vt2V+ASP7kULTqyAY8ps/
+ aOrA==
+X-Gm-Message-State: AO0yUKUJ162TtojRl8W6Fd5owBRvnM1c3cupW3ITV+15xJiz7LqwKhJT
+ fqBzbLhlRIxOgEv85+7F1sCIXm3ooFqp/AGU
+X-Google-Smtp-Source: AK7set9JoObO3Pl5KEnakwoI6sa/cMz5ss2e6nkqNH2esLo5kxLWi8IiXs+ZOz1G3h3FkxKVheCcdQ==
+X-Received: by 2002:a2e:870b:0:b0:28e:763b:63bc with SMTP id
+ m11-20020a2e870b000000b0028e763b63bcmr2091432lji.46.1676576056992; 
+ Thu, 16 Feb 2023 11:34:16 -0800 (PST)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com.
+ [209.85.167.47]) by smtp.gmail.com with ESMTPSA id
+ l5-20020a2ea305000000b002934a7c04efsm325662lje.98.2023.02.16.11.34.16
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 16 Feb 2023 11:34:16 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id br9so4108280lfb.4
+ for <buildroot@buildroot.org>; Thu, 16 Feb 2023 11:34:16 -0800 (PST)
+X-Received: by 2002:ac2:54b8:0:b0:4d5:ca32:68a0 with SMTP id
+ w24-20020ac254b8000000b004d5ca3268a0mr1941976lfk.5.1676576056013; Thu, 16 Feb
+ 2023 11:34:16 -0800 (PST)
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1676572615-CFFFF046-AF839620/0/0 CLEAN NORMAL
-X-TOI-MSGID: 3168b14e-781e-4c24-acf9-ad4b0a90da7c
-Subject: [Buildroot] [PATCH 2/2] package/xutil_util-macros: bump version to
- 1.20.0
+References: <20230216174134.34179-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20230216174134.34179-1-fontaine.fabrice@gmail.com>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Thu, 16 Feb 2023 20:34:05 +0100
+X-Gmail-Original-Message-ID: <CACXRmJiqrD+svtBb91oXJiLrZr8_433u_nSuP9nATPpN5tjpqw@mail.gmail.com>
+Message-ID: <CACXRmJiqrD+svtBb91oXJiLrZr8_433u_nSuP9nATPpN5tjpqw@mail.gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/fluent-bit: fix build with
+ libexecinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,59 +88,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-February/003324.html
+Hi,
 
-Updated license hash due to copyright year bump:
-https://gitlab.freedesktop.org/xorg/util/macros/-/commit/cb147377e9341af05232f95814022abdecf14024
+Perhaps I'm missing something, but why is it not needed to select
+`BR2_PACKAGE_LIBEXECINFO` in the Config.in file?
+(Similar to `select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC`)
 
-Switched tarball to xz, updated _SITE.
+The `ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)` can be re-used to add and
+select execinfo.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/xutil_util-macros/xutil_util-macros.hash | 8 ++++----
- package/xutil_util-macros/xutil_util-macros.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Kr,
 
-diff --git a/package/xutil_util-macros/xutil_util-macros.hash b/package/xutil_util-macros/xutil_util-macros.hash
-index 30c9916dca..4fcddb7a85 100644
---- a/package/xutil_util-macros/xutil_util-macros.hash
-+++ b/package/xutil_util-macros/xutil_util-macros.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2021-January/003069.html
--sha256  0f812e6e9d2786ba8f54b960ee563c0663ddbe2434bf24ff193f5feab1f31971  util-macros-1.19.3.tar.bz2
--sha512  b9c7398a912c688a782eab5b1e0f6da2df11a430775c5c98fc3269f73a665de6eeb60d300a849e38d345714a6e51f74e9334cb6039767304cca4b93d823a53a2  util-macros-1.19.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003324.html
-+sha256  0b86b262dbe971edb4ff233bc370dfad9f241d09f078a3f6d5b7f4b8ea4430db  util-macros-1.20.0.tar.xz
-+sha512  76caefb118bf1675d7b2b96e1bbb04eb9a320b02e120839e55a22ef98538ecf00d0e686a67186fc8fdc8492d277ffe3125ae8b7ac61ce4739edc0de3f468d2eb  util-macros-1.20.0.tar.xz
- # Locally computed
--sha256  489b630a75e3255485732eae3d50ff4d29d3feb66760bb3acb04f897e4d9e375  COPYING
-+sha256  7db0516389152a90c20ea910e8839d10204ebc25ccbc71fc7f5809dfb98e80ac  COPYING
-diff --git a/package/xutil_util-macros/xutil_util-macros.mk b/package/xutil_util-macros/xutil_util-macros.mk
-index b0ce14ee5a..e2e40eb84e 100644
---- a/package/xutil_util-macros/xutil_util-macros.mk
-+++ b/package/xutil_util-macros/xutil_util-macros.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--XUTIL_UTIL_MACROS_VERSION = 1.19.3
--XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.bz2
--XUTIL_UTIL_MACROS_SITE = http://xorg.freedesktop.org/releases/individual/util
-+XUTIL_UTIL_MACROS_VERSION = 1.20.0
-+XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.xz
-+XUTIL_UTIL_MACROS_SITE = https://xorg.freedesktop.org/archive/individual/util
- XUTIL_UTIL_MACROS_LICENSE = MIT
- XUTIL_UTIL_MACROS_LICENSE_FILES = COPYING
- 
--- 
-2.39.1
+Thomas Devoogdt
 
+Op do 16 feb. 2023 om 18:41 schreef Fabrice Fontaine
+<fontaine.fabrice@gmail.com>:
+>
+> Fix the following build failure with libexecinfo raised since commit
+> d649bcd3805a26cedb30120ebbdcf12f8fbf449f:
+>
+> /home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/mips-buildroot-linux-musl/10.4.0/../../../../mips-buildroot-linux-musl/bin/ld: ../lib/monkey/library/libmonkey.a(mk_utils.c.o): in function `mk_utils_stacktrace':
+> mk_utils.c:(.text+0x1578): undefined reference to `backtrace'
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/63a6ba9104dfddbd7f6a7debadc0c6ef6e3a21f5
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/fluent-bit/fluent-bit.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+> index d618fdf1e2..8ba16399bb 100644
+> --- a/package/fluent-bit/fluent-bit.mk
+> +++ b/package/fluent-bit/fluent-bit.mk
+> @@ -56,6 +56,11 @@ FLUENT_BIT_CXXFLAGS += -fcommon
+>  FLUENT_BIT_CFLAGS += -U_FILE_OFFSET_BITS
+>  FLUENT_BIT_CXXFLAGS += -U_FILE_OFFSET_BITS
+>
+> +ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+> +FLUENT_BIT_DEPENDENCIES += libexecinfo
+> +FLUENT_BIT_LDFLAGS += -lexecinfo
+> +endif
+> +
+>  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+>  FLUENT_BIT_DEPENDENCIES += musl-fts
+>  FLUENT_BIT_LDFLAGS += -lfts
+> --
+> 2.39.0
+>
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
