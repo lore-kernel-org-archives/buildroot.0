@@ -4,48 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E94DC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2936C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09F736FC02;
-	Tue, 21 Feb 2023 02:07:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09F736FC02
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DBF870077;
+	Tue, 21 Feb 2023 02:07:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DBF870077
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 53pvdqo6JWmT; Tue, 21 Feb 2023 02:06:59 +0000 (UTC)
+	with ESMTP id Ncc-7SDgLf1Z; Tue, 21 Feb 2023 02:07:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1515270269;
-	Tue, 21 Feb 2023 02:06:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1515270269
+	by smtp3.osuosl.org (Postfix) with ESMTP id B08A97027E;
+	Tue, 21 Feb 2023 02:07:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B08A97027E
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1D4FD1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8540B1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6973061088
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7977610E9
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6973061088
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7977610E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oyPIP9j36i23 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+ with ESMTP id QNgsvHQsD8ih for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 457C5610E9
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 457C5610E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id C2E2070036
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2E2070036
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 359A181979; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id BCE9E828C8; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 17:53:44 +0100
+Date: Fri, 17 Feb 2023 15:57:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9fc69996bcd190e693b1af95cc44fda89028d049
-X-Git-Newrev: 05de8e14ce9bf9ea109aa028b34aba559aa18aad
+X-Git-Oldrev: a850f632b9f76b8526f807468548c570b1dc2bd6
+X-Git-Newrev: c5b597d5d839486e82a80f1c59c2a91a5af87c06
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205302.359A181979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xdriver_xf86-video-trident: bump version to 1.4.0
+Message-Id: <20230220205301.BCE9E828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/catch2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,120 +55,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05de8e14ce9bf9ea109aa028b34aba559aa18aad
+commit: https://git.buildroot.net/buildroot/commit/?id=c5b597d5d839486e82a80f1c59c2a91a5af87c06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-February/003326.html
+Catch2 is a modern C++ unit testing framework which is increasing in
+popularity.
 
-Removed patch which was applied upstream.
-Switched tarball to xz, updated _SITE.
+This package is staging only and allows to build tests to be run on
+the target.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- https://github.com/catchorg/Catch2
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Remove-ramdac.patch                       | 56 ----------------------
- .../xdriver_xf86-video-trident.hash                |  5 +-
- .../xdriver_xf86-video-trident.mk                  |  6 +--
- 3 files changed, 6 insertions(+), 61 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/catch2/Config.in   | 28 ++++++++++++++++++++++++++++
+ package/catch2/catch2.hash |  3 +++
+ package/catch2/catch2.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-video-trident/0001-Remove-ramdac.patch b/package/x11r7/xdriver_xf86-video-trident/0001-Remove-ramdac.patch
-deleted file mode 100644
-index 38ca9afebf..0000000000
---- a/package/x11r7/xdriver_xf86-video-trident/0001-Remove-ramdac.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 07a5c4732f1c28ffcb873ee04500e3cb813c50b4 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 7 Dec 2021 22:28:04 +0100
--Subject: [PATCH] Remove ramdac
--
--ramdac drivers have been removed from xserver since version 21.0.99.1
--and
--https://gitlab.freedesktop.org/xorg/xserver/-/commit/f0385fb420158ac3bc1c4c325431ffc5c62344bb
--resulting in the following build failure:
--
--In file included from trident_bank.c:37:
--trident.h:41:10: fatal error: xf86RamDac.h: No such file or directory
--   41 | #include "xf86RamDac.h"
--      |          ^~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/c81ac8075af257e8626d9d097270be7a7b4a1496
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/xorg/driver/xf86-video-trident/-/merge_requests/1]
-----
-- src/trident.h | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/src/trident.h b/src/trident.h
--index 5cadf52..c82de4c 100644
----- a/src/trident.h
--+++ b/src/trident.h
--@@ -38,7 +38,6 @@
-- #include "xaa.h"
-- #endif
-- #include "xf86fbman.h"
---#include "xf86RamDac.h"
-- #include "compiler.h"
-- #include "vgaHW.h"
-- #include "xf86i2c.h"
--@@ -103,7 +102,6 @@ typedef struct {
--     int			useEXA;
--     int			Chipset;
--     int			DACtype;
---    int			RamDac;
--     int                 ChipRev;
--     int			HwBpp;
--     int			BppShift;
--@@ -169,7 +167,6 @@ typedef struct {
--     CARD32		BltScanDirection;
--     CARD32		DrawFlag;
--     CARD16		LinePattern;
---    RamDacRecPtr	RamDacRec;
--     int			CursorOffset;
--     xf86CursorInfoPtr	CursorInfoRec;
--     xf86Int10InfoPtr	Int10;
---- 
--2.33.0
--
-diff --git a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.hash b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.hash
-index 321f35d4f0..2ef664487c 100644
---- a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.hash
-+++ b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.hash
-@@ -1,4 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2017-January/002762.html
--sha256  9e5119d974c3e2221994542d35e3a0b3426a441869ddd6dd08a84f324856ac3f  xf86-video-trident-1.3.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003326.html
-+sha256  7f76219ca7d7dc6061aa3c2aa59bc2a63895b8e6217e413ce315949f57b0189b  xf86-video-trident-1.4.0.tar.xz
-+sha512  86f349ccfcf7c704e77a95882f63ac92f55819a3a00388f294777762fed04dde2197dd6124cded9e787af1982fecc43ad4d0af34307845e616a73d5a2ba750b9  xf86-video-trident-1.4.0.tar.xz
- # Locally calculated
- sha256  4f065198c49eac1513b915bc4478152c21119f31a97919a6ea8f3e1d10133d15  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
-index 20ec4bbc24..53fe150420 100644
---- a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
-+++ b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3d9c51a094..7894b10e38 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2035,6 +2035,7 @@ F:	package/sdl2/
  
--XDRIVER_XF86_VIDEO_TRIDENT_VERSION = 1.3.8
--XDRIVER_XF86_VIDEO_TRIDENT_SOURCE = xf86-video-trident-$(XDRIVER_XF86_VIDEO_TRIDENT_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_TRIDENT_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_TRIDENT_VERSION = 1.4.0
-+XDRIVER_XF86_VIDEO_TRIDENT_SOURCE = xf86-video-trident-$(XDRIVER_XF86_VIDEO_TRIDENT_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_TRIDENT_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_TRIDENT_LICENSE = MIT
- XDRIVER_XF86_VIDEO_TRIDENT_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_TRIDENT_DEPENDENCIES = xserver_xorg-server xorgproto
+ N:	Michael Nosthoff <buildroot@heine.tech>
+ F:	package/boost/
++F:	package/catch2/
+ F:	package/fmt/
+ F:	package/grpc/
+ F:	package/gtest/
+diff --git a/package/Config.in b/package/Config.in
+index 523cf7cbdf..6c5238a9b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2012,6 +2012,7 @@ menu "Other"
+ 	source "package/boost/Config.in"
+ 	source "package/c-capnproto/Config.in"
+ 	source "package/capnproto/Config.in"
++	source "package/catch2/Config.in"
+ 	source "package/cctz/Config.in"
+ 	source "package/cereal/Config.in"
+ 	source "package/clang/Config.in"
+diff --git a/package/catch2/Config.in b/package/catch2/Config.in
+new file mode 100644
+index 0000000000..2f53d197b2
+--- /dev/null
++++ b/package/catch2/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_CATCH2
++	bool "catch2"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
++	depends on BR2_USE_MMU # fork()
++	help
++	  Catch2 is mainly a unit testing framework for C++, but it
++	  also provides basic micro-benchmarking features, and simple
++	  BDD macros.
++
++	  Catch2's main advantage is that using it is both simple and
++	  natural. Tests autoregister themselves and do not have to
++	  be named with valid identifiers, assertions look like
++	  normal C++ code, and sections provide a nice way to share
++	  set-up and tear-down code in tests.
++
++	  This package allows running testsuites on the target which
++	  might be advantageous in certain cases.
++
++	  https://github.com/catchorg/Catch2
++
++comment "catch2 needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
+new file mode 100644
+index 0000000000..664164fd76
+--- /dev/null
++++ b/package/catch2/catch2.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  2106bccfec18c8ce673623d56780220e38527dd8f283ccba26aa4b8758737d0e  catch2-3.1.1.tar.gz
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
+diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
+new file mode 100644
+index 0000000000..ab62cc943b
+--- /dev/null
++++ b/package/catch2/catch2.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# catch2
++#
++################################################################################
++
++CATCH2_VERSION = 3.1.1
++CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
++CATCH2_INSTALL_STAGING = YES
++CATCH2_INSTALL_TARGET = NO
++CATCH2_LICENSE = BSL-1.0
++CATCH2_LICENSE_FILES = LICENSE.txt
++CATCH2_SUPPORTS_IN_SOURCE_BUILD = NO
++
++# We force building a static library only as building a dynamic
++# library is not really supported officially:
++# https://github.com/catchorg/Catch2/blob/devel/docs/faq.md#can-i-compile-catch2-into-a-dynamic-library
++CATCH2_CONF_OPTS = \
++	-DCATCH_INSTALL_DOCS=OFF \
++	-DBUILD_SHARED_LIBS=OFF
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
