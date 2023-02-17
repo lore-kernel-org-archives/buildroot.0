@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86311C6379F
-	for <buildroot@archiver.kernel.org>; Fri, 17 Feb 2023 15:53:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46785C636D6
+	for <buildroot@archiver.kernel.org>; Fri, 17 Feb 2023 16:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C86B80EE8;
-	Fri, 17 Feb 2023 15:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C86B80EE8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 951248149C;
+	Fri, 17 Feb 2023 16:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 951248149C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oxQMqqu0Gvzz; Fri, 17 Feb 2023 15:53:05 +0000 (UTC)
+	with ESMTP id yThgGorycezh; Fri, 17 Feb 2023 16:15:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 478C580F51;
-	Fri, 17 Feb 2023 15:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 478C580F51
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F5991BF311
- for <buildroot@lists.busybox.net>; Fri, 17 Feb 2023 15:53:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E726081371;
+	Fri, 17 Feb 2023 16:15:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E726081371
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B2DA1BF2E4
+ for <buildroot@lists.busybox.net>; Fri, 17 Feb 2023 16:15:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75756419D5
- for <buildroot@lists.busybox.net>; Fri, 17 Feb 2023 15:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75756419D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24BF861AAF
+ for <buildroot@lists.busybox.net>; Fri, 17 Feb 2023 16:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24BF861AAF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x_YpRcXCQc36 for <buildroot@lists.busybox.net>;
- Fri, 17 Feb 2023 15:53:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jDkh4VKJlAy2 for <buildroot@lists.busybox.net>;
+ Fri, 17 Feb 2023 16:15:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AE014186A
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
- [IPv6:2001:4860:4864:20::30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3AE014186A
- for <buildroot@buildroot.org>; Fri, 17 Feb 2023 15:53:00 +0000 (UTC)
-Received: by mail-oa1-x30.google.com with SMTP id
- 586e51a60fabf-17172af73b7so1600887fac.2
- for <buildroot@buildroot.org>; Fri, 17 Feb 2023 07:53:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70671617B7
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
+ [IPv6:2001:4860:4864:20::32])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 70671617B7
+ for <buildroot@buildroot.org>; Fri, 17 Feb 2023 16:15:49 +0000 (UTC)
+Received: by mail-oa1-x32.google.com with SMTP id
+ 586e51a60fabf-17172b43531so1677056fac.1
+ for <buildroot@buildroot.org>; Fri, 17 Feb 2023 08:15:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=to:subject:message-id:date:from:mime-version:x-gm-message-state
  :from:to:cc:subject:date:message-id:reply-to;
- bh=zMKiJtgN9N1gk7hODipOT7ggzV8JLccegrQfdA36U9o=;
- b=5/rhtiUF9n3ylHlDDEZBvhgk0auS0bExKjM8YE1mpeGL/iX0V/F0fepa/yHyNiM0Z+
- oFdezOaR1j7B3xFIJRDDsymPGM7S+sRa6oL56e7vSnZDX357lxWHFvv3IaE4OLRksJMq
- kYaH8eMEescgdKw4DCLSjKv938LcV2Fp8y2Ftxs1IIFgvXx1/V7EyzmW4dl8XUvUyxhs
- +jyt5+aRbLLpbEdX2Bf7V029l3JWFdvdooIMgSt8KIuHItwsyDsTCY64WV8V5EAmdLSw
- w+0atUAzeEPUtt8WnRuuJzjgi9Xp5YT6qU0gztjnfenApTa5TExpVsi1G6h6omPWD4Vi
- YoTg==
-X-Gm-Message-State: AO0yUKWH3YGBBu+zfiwF2KD9X/LMJKNIvNsqOCJagEJYQf5QgTheQZSe
- U3Km0FvjDMjmoKbmkVxNGwkzOw/Uub5Qx+p1NCVDtG59gzo=
-X-Google-Smtp-Source: AK7set9w98FHT4GaHybFFUg8e0oAgJqGMDX4Ek1vR0+VnAmdKRIhyNuQ4ThszrLj5oigLXopu8CrF1IqyZIiofI8oJ0=
+ bh=Ql/nHJcqNvHewVDA7BLoYjRVzsK/wRxV9/WYzvHp1So=;
+ b=gMSTUcza7nm42M0RVddpX6719blwUKOw1pbwq5OaIUCsPZinZzBxlDDInx4Sqzk4cd
+ DUnnyVlF/iuOp/SuHMhMpFiYaUxnX7MlFrFQAWRJP4aRTVLej37Gi6fnlua5P1chdqHy
+ nHLWe4cTng5rGEki+wixxzZTFRbbNXpp3wD7iOdlz7jIdXLbH4ViKf/UKJBfj8DjP6/w
+ R63MFcr5AzFXdqWoe6mP5VYV0vKqnzbs4XuYve9fsX8eceGUDRnBYo1vFRAwIJxESTSK
+ JPGutqEi/WUPQH/m9WTCQezHLdMhzFO/CEG1RPIdi5Bf2TGbUBOOoA7P+HHji7dmRN5u
+ eydg==
+X-Gm-Message-State: AO0yUKUVdbtPqwzSUNAxV88XJA9O6u/GsYfri500R/zvh1Azq1SYqgqS
+ PAbpiLDchpBOInk8pfXSo5KOMUhDNJxRTttT5QU7MQJo
+X-Google-Smtp-Source: AK7set/o1+otL/ek1Y1RK1/pOWthJGSgVPZGeRxRxzTqokognrIO1D8ZgP+Ni83r/jFnvL4g3WibaHHu0h+x1OmJR3k=
 X-Received: by 2002:a05:6870:a18b:b0:16e:8b95:8548 with SMTP id
- a11-20020a056870a18b00b0016e8b958548mr422386oaf.208.1676649178980; Fri, 17
- Feb 2023 07:52:58 -0800 (PST)
+ a11-20020a056870a18b00b0016e8b958548mr430386oaf.208.1676650548412; Fri, 17
+ Feb 2023 08:15:48 -0800 (PST)
 MIME-Version: 1.0
 From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Fri, 17 Feb 2023 16:52:49 +0100
-Message-ID: <CADYjeStw7HOAxA_ipNUNW4EsQzUZQydhW+Uaa8_UusE_wisy-g@mail.gmail.com>
+Date: Fri, 17 Feb 2023 17:15:39 +0100
+Message-ID: <CADYjeStG8bZEBprwqez+_3+n-HZ5pG9p8mBySxV+4FU7GM0r3g@mail.gmail.com>
 To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
  :date:message-id:reply-to;
- bh=zMKiJtgN9N1gk7hODipOT7ggzV8JLccegrQfdA36U9o=;
- b=iaXQuo6LU3Nn8GfLAucKfqZ5UPjiKhzK4rPWaWGG8J+OhKpnIsxKhwb0HT0TEM37pc
- La1PvcKt+34QSP8OFuxT27r1URMbLykro46zv+ZcG73JGIgG8lJuIZov4bKibVAniDu5
- 6aYfrAJMumrWXGnKH4eixFlhGQOFos1Fw+r63t5UFrwYcqZtoyDV4nqkIA4rPLX1jdlH
- E3psgC2ers6gJRhcCym5Vr911oMKeMUeMMAqUx/4c6WjqtkxgWIgZ58SRfwQV27ptgiD
- RmXkqkyUlGbr5cUjAKcA7l6AUGdVRWR+r6hoeFDnRJZD2qxkXAfcxVv4FcCJoGbSj/Jv
- 96Sw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Ql/nHJcqNvHewVDA7BLoYjRVzsK/wRxV9/WYzvHp1So=;
+ b=jqJKbSdPXNUzavpBMLEU3iLNhutW5rXo23vRFQIy3QRivR4d904Pkbdk6xj4a3mGcO
+ pFiFwUO3v0tC8dFzRLfTUveNuE16+9wP5A//3L/DiYAi7JgIZlYLEE7vMwAvW5dgO5Cj
+ +lzQho000hP0iMflQRF3n5PB9uKmm0ec6/SSs3pqwszDNtLIW0s30aa+7a54Z6UYGw8w
+ eN6a9QdpyuTVjZSMo3Tnx32NRaVgZgIpD1lHgdzpHns6h9jOZPRr9Z9iILijz/1XB561
+ vhVQmb9BuM2TBwAsoiK/FnKlCKLVi9dOiMRazDSCeGtKFnoLv00B5KwkbaaE3zMdrbHe
+ Taig==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=iaXQuo6L
-Subject: [Buildroot] Missing curl binary
+ header.a=rsa-sha256 header.s=20210112 header.b=jqJKbSdP
+Subject: [Buildroot] Updating trust store using update-ca-certificates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,40 +87,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0390430063246284107=="
+Content-Type: multipart/mixed; boundary="===============6494970827493114117=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0390430063246284107==
-Content-Type: multipart/alternative; boundary="000000000000b9e67c05f4e74eea"
+--===============6494970827493114117==
+Content-Type: multipart/alternative; boundary="00000000000059c47605f4e7a0ee"
 
---000000000000b9e67c05f4e74eea
+--00000000000059c47605f4e7a0ee
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
-I am trying to include curl binary in my image. I have
-selected BR2_PACKAGE_LIBCURL=y , BR2_PACKAGE_LIBCURL_CURL=y in the Config.
-But still the curl binary is not installed in the target. Can anyone please
-let me know what is the issue here and how to resolve it?
+I am trying to add a custom CA to the trust store. I have copied the CA
+file to "/usr/local/share/ca-certificates/" in the rootfs_overlay and also
+has a .crt extension. Now after executing "make" the CA is not added to the
+trust store in /etc/ssl/certs/ in the target. Anyways it's installed only
+in "/usr/local/share/ca-certificates/" in the target. I thought
+"update-ca-certificates" will add this during image build.
+Can anyone please let me know what is missing here?
 
 Thank you,
 Sourabh
 
---000000000000b9e67c05f4e74eea
+--00000000000059c47605f4e7a0ee
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hello,<br><div><br></div><div>I am trying to include curl =
-binary in my image. I have selected=C2=A0BR2_PACKAGE_LIBCURL=3Dy ,=C2=A0BR2=
-_PACKAGE_LIBCURL_CURL=3Dy in the Config. But still the curl binary is not i=
-nstalled in the target. Can anyone please let me know what is the issue her=
-e and how to resolve it?</div><div><br></div><div>Thank you,</div><div>Sour=
-abh</div></div>
+<div dir=3D"ltr">Hello,<br><div><br></div><div>I am trying to add a custom =
+CA to the trust store. I have copied the CA file to &quot;/usr/local/share/=
+ca-certificates/&quot; in the rootfs_overlay and also has a .crt extension.=
+ Now after executing &quot;make&quot; the CA is not added to the trust stor=
+e in /etc/ssl/certs/ in the target. Anyways it&#39;s installed only in &quo=
+t;/usr/local/share/ca-certificates/&quot; in the target. I thought &quot;up=
+date-ca-certificates&quot; will add this during image build.</div><div>Can =
+anyone please let me know what is missing here?</div><div><br></div><div>Th=
+ank you,</div><div>Sourabh</div></div>
 
---000000000000b9e67c05f4e74eea--
+--00000000000059c47605f4e7a0ee--
 
---===============0390430063246284107==
+--===============6494970827493114117==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -131,4 +137,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0390430063246284107==--
+--===============6494970827493114117==--
