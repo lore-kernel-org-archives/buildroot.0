@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC39C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 00:59:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE7AAC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:00:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 344AA61056;
-	Tue, 21 Feb 2023 00:59:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 344AA61056
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B94D610E1;
+	Tue, 21 Feb 2023 01:00:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B94D610E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dCaQrNtcOK7P; Tue, 21 Feb 2023 00:59:50 +0000 (UTC)
+	with ESMTP id oLicXHpF047M; Tue, 21 Feb 2023 01:00:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E1DE610BE;
-	Tue, 21 Feb 2023 00:59:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E1DE610BE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 24EB71BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3628610BE;
+	Tue, 21 Feb 2023 01:00:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3628610BE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AC77D1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48249610BB
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48249610BB
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3FEF4182D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3FEF4182D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QPExJSAnDeEL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rQOTYisl1Fy0 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AB766FB94
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AB766FB94
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D60841824
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D60841824
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72D978648F; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0748E8648F; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 16 Jan 2023 21:45:15 +0100
+Date: Sat, 18 Feb 2023 12:15:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 162f656884185662d85e5366871284adca87a465
-X-Git-Newrev: ac5ecaf86809a999d68d851c2200705a8f10a7b0
+X-Git-Oldrev: 41cca5274a8afce269f9b2bdc9e113e073e28abb
+X-Git-Newrev: b6085c00d0feece6f3ba635e7847ea653bc5fac3
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205236.72D978648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] fs/erofs: enable support for
- reproducible build
+Message-Id: <20230220205302.0748E8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-webargs: fix
+ formatting in hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +56,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac5ecaf86809a999d68d851c2200705a8f10a7b0
+commit: https://git.buildroot.net/buildroot/commit/?id=b6085c00d0feece6f3ba635e7847ea653bc5fac3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-By default, mkfs.erofs will sue the current date to set some metadata
-in the filesystem it generates, and will also use generate a random UUID
-for that filesystem. This is not reproducible.
+Fixes:
 
-When BR2_REPRODUCIBLE is selected, set the filesystem timestamps to
-$SOURCE_DATE_EPOCH, and the filesystem UUID to the nil uuid (as good
-as any other arbitrary one).
+package/python-webargs/python-webargs.hash:2: separation does not match expectation (http://nightly.buildroot.org/#adding-packages-hash)
 
-Signed-off-by: Casey Reeves <casey@xogium.me>
-[yann.morin.1998@free.fr:
-  - one multi-line assignment, not two
-  - slightly rephrase the commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- fs/erofs/erofs.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/python-webargs/python-webargs.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
-index 0e9d4401a9..e43d74927b 100644
---- a/fs/erofs/erofs.mk
-+++ b/fs/erofs/erofs.mk
-@@ -10,6 +10,12 @@ ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZ4HC),y)
- ROOTFS_EROFS_ARGS += -zlz4hc
- endif
- 
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+ROOTFS_EROFS_ARGS += \
-+	-T $(SOURCE_DATE_EPOCH) \
-+	-U 00000000-0000-0000-0000-000000000000
-+endif
-+
- ifneq ($(BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE),0)
- ROOTFS_EROFS_ARGS += -C$(strip $(BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE))
- endif
+diff --git a/package/python-webargs/python-webargs.hash b/package/python-webargs/python-webargs.hash
+index 619b584807..10bb3651f0 100644
+--- a/package/python-webargs/python-webargs.hash
++++ b/package/python-webargs/python-webargs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/webargs/json
+-md5   9fff29294a5db748eca791da2b93e370  webargs-8.2.0.tar.gz
++md5  9fff29294a5db748eca791da2b93e370  webargs-8.2.0.tar.gz
+ sha256  99d68940c452e07726485a15fef43f12f8ae6c0c5b391bcba76065d4527fb85d  webargs-8.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  5973e5dcc20b65e4eb4b4acdf273bb78a18522914ab626f496f1b070f7e6294d  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
