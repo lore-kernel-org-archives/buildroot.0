@@ -4,80 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3786C61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 10:28:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68F28C61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 10:39:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 320EF410B2;
-	Sat, 18 Feb 2023 10:28:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 320EF410B2
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC1D641C8B;
+	Sat, 18 Feb 2023 10:39:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC1D641C8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yfqWLcprSPNG; Sat, 18 Feb 2023 10:28:48 +0000 (UTC)
+	with ESMTP id Wvx009EE70DR; Sat, 18 Feb 2023 10:39:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41EAC409DD;
-	Sat, 18 Feb 2023 10:28:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41EAC409DD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 003931BF5DB
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 10:28:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48F5341C91;
+	Sat, 18 Feb 2023 10:39:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48F5341C91
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FC311BF5DB
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 10:39:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE79D409DD
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 10:28:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE79D409DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id E086C40441
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 10:39:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E086C40441
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XzZepmcO1Z6Y for <buildroot@lists.busybox.net>;
- Sat, 18 Feb 2023 10:28:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F9DF40947
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com
- [IPv6:2001:4860:4864:20::29])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1F9DF40947
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 10:28:43 +0000 (UTC)
-Received: by mail-oa1-x29.google.com with SMTP id
- 586e51a60fabf-171b0cfc092so303108fac.4
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 02:28:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:in-reply-to:references:mime-version
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=4wbhlvLrXddHoPBXQYA+aCX6T7nr4yEnHS+MDI71z88=;
- b=ycYMTG2q1DE798nU6jVHIBU0lBONendRnXhviqvCeVzpdYKzipfvpwrDMqcm5o5ECZ
- NySvSiR0xqs43SjkjR+xCjUawRAsymxD80Ua8+w85/ZrJG5+ief6L1tgC5+34hnatpYz
- n9PjMWPsq+khdf3IzD749jOay+IVxwmj+mbmcqDAJBSEXYAD7OuAP/FHBuRmRHppz9ux
- vhUW0/Hqjwo+1/WNBXd1x3CdV+aH3DOI9WRzUl31HErI/YuX6/ro5QEyzWaZjqAdaGLx
- wedMqrA/VIWmUeGqFycUF+pI8enBmUH4dZkr7Z4cCac38rxj1zspya3CW0Q8xJ4PCbr/
- xCBw==
-X-Gm-Message-State: AO0yUKWlb+KZ9thlfTYA8ohoc5OZIxXOdeGyLUtplUewNC9MDl4sI18V
- YGoc2OAL67U/WKoLwIxPJEJdGvPHlwHI1rUUGSD89SA8
-X-Google-Smtp-Source: AK7set/iqNjb1+jMjz3gdKuQ0jiyt2dEPVPONj14F2tGJvy9ZzXGS5oMsFypeSi26/3pSzii939boWdVnKUdEuuDapA=
-X-Received: by 2002:a05:6870:a18b:b0:16e:8b95:8548 with SMTP id
- a11-20020a056870a18b00b0016e8b958548mr656926oaf.208.1676716122956; Sat, 18
- Feb 2023 02:28:42 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Trw0rWYIKeRc for <buildroot@lists.busybox.net>;
+ Sat, 18 Feb 2023 10:39:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3000F400E7
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3000F400E7
+ for <buildroot@buildroot.org>; Sat, 18 Feb 2023 10:39:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 31A7EFF806;
+ Sat, 18 Feb 2023 10:39:43 +0000 (UTC)
+Date: Sat, 18 Feb 2023 11:39:39 +0100
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Message-ID: <20230218113939.526f0a76@windsurf>
+In-Reply-To: <20230218101426.630874-1-bagasdotme@gmail.com>
+References: <20230218101426.630874-1-bagasdotme@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <CADYjeStw7HOAxA_ipNUNW4EsQzUZQydhW+Uaa8_UusE_wisy-g@mail.gmail.com>
-In-Reply-To: <CADYjeStw7HOAxA_ipNUNW4EsQzUZQydhW+Uaa8_UusE_wisy-g@mail.gmail.com>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Sat, 18 Feb 2023 11:28:33 +0100
-Message-ID: <CADYjeSu9k+yqBH4D+-VWxEHuZA2njPZPwLNBx-BVNaSqWA1n-w@mail.gmail.com>
-To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=to:subject:message-id:date:from:in-reply-to:references:mime-version
- :from:to:cc:subject:date:message-id:reply-to;
- bh=4wbhlvLrXddHoPBXQYA+aCX6T7nr4yEnHS+MDI71z88=;
- b=en8eNz0sYoR+QwrQiQhYAV8iENVPt16bYGANbudZ5GVGDNTLpLsQN5we/6ZoMS2VGu
- avvr5OoDC8e9qAgfZQYUlB2+LW8NFo/FX8qurc/lPVEhn4e2DVmr1/DytaX5rXXPSCPs
- YaU/ciQ8iaefn5CBnBiONAFhJici0Qmx490MiDKvkeIQZxWQBwKZgZW/oTCMUrRKX8mn
- 5BY+SwfHC5LRBkh/Iw2frz+EvsdryiMh1iM+P6MFFqdb/0rjWisokHQA5P1m6pWi0MCu
- HGDo1xh7tEIIW497yWwkoCMtOXLRSaxnEO9X07rer64hioYhYvWfOl+RZySYY93l5BRY
- GZbg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=en8eNz0s
-Subject: Re: [Buildroot] Missing curl binary
+ d=bootlin.com; s=gm1; t=1676716783;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FG5HfLXCZLtJ2K/+6pfmEGz8Q1cL0ovJQRLiRnPTYoI=;
+ b=MefiJtOAF9Ufu/2RDHWqWDNLoORj/B3N9zrkHyupHfUV58WURFsMoHePbijYb/+r2GiC19
+ Q7IsIuLw5wgiDMXim3LdOFcEh1Pd1AeMO9evR0Lbnkn3hjagZDVey45OQb4cbX1hxKUfdQ
+ 9hXqRvjmAZLp8XwYkkhDEBwHMRcLa0UHE7QrinPH/7cItiq7xMm8AYw8wfr+ASykXQTlTh
+ OP5xszqNy5S4KBrYkGU4JwhucdAL+WX801pb4kqKs7HJIhYM5S/8rgK23VIYV0EsjvkBFa
+ Mtx+OvH91tMTiG8UvL0LuJ2b8U8+FJKoIN4WUXgQoAL8sQPodyzjFxVrO/ctkA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=MefiJtOA
+Subject: Re: [Buildroot] [PATCH] Revert "package/gnupg2: bump to version
+ 2.4.0"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,59 +76,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0945601526140385451=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Julien Olivain <ju.o@free.fr>, Buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0945601526140385451==
-Content-Type: multipart/alternative; boundary="000000000000e5e71205f4f6e4cd"
+Hello Bagas,
 
---000000000000e5e71205f4f6e4cd
-Content-Type: text/plain; charset="UTF-8"
+Let's add Julien Olivain in Cc, as he did the bump of gnupg2 to version
+2.4.0.
 
-Can anyone please let me know how to resolve this?
+Julien: could you have a look at the below issue, which is affecting
+gnupg2 in the autobuilders?
 
-On Fri, Feb 17, 2023, 16:52 Sourabh Hegde <hrsourabh011@gmail.com> wrote:
+Thanks a lot!
 
-> Hello,
->
-> I am trying to include curl binary in my image. I have
-> selected BR2_PACKAGE_LIBCURL=y , BR2_PACKAGE_LIBCURL_CURL=y in the Config.
-> But still the curl binary is not installed in the target. Can anyone please
-> let me know what is the issue here and how to resolve it?
->
-> Thank you,
-> Sourabh
->
+Thomas
 
---000000000000e5e71205f4f6e4cd
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Sat, 18 Feb 2023 17:14:26 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-<div dir=3D"auto">Can anyone please let me know how to resolve this?</div><=
-br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri,=
- Feb 17, 2023, 16:52 Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail=
-.com">hrsourabh011@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"g=
-mail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-l=
-eft:1ex"><div dir=3D"ltr">Hello,<br><div><br></div><div>I am trying to incl=
-ude curl binary in my image. I have selected=C2=A0BR2_PACKAGE_LIBCURL=3Dy ,=
-=C2=A0BR2_PACKAGE_LIBCURL_CURL=3Dy in the Config. But still the curl binary=
- is not installed in the target. Can anyone please let me know what is the =
-issue here and how to resolve it?</div><div><br></div><div>Thank you,</div>=
-<div>Sourabh</div></div>
-</blockquote></div>
+> Bumping the package version to 2.4.0, it fails to cross-compile with
+> unsafe cross-compile paths (for example recent build log at [1]):
+> 
+> make[4]: Entering directory '/home/thomas/autobuild/instance-3/output-1/build/gnupg2-2.4.0/common'
+> /home/thomas/autobuild/instance-3/output-1/host/bin/aarch64-buildroot-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -DGNUPG_BINDIR="\"/usr/bin\"" -DGNUPG_LIBEXECDIR="\"/usr/libexec\"" -DGNUPG_LIBDIR="\"/usr/lib/gnupg\"" -DGNUPG_DATADIR="\"/usr/share/gnupg\"" -DGNUPG_SYSCONFDIR="\"/etc/gnupg\"" -DGNUPG_LOCALSTATEDIR="\"/var\""        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/libusb-1.0 -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/include -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/include -I/usr/include -I/usr/include -I/usr/include -Wall -Wno-format-zero-length -Wno-pointer-sign -Wpointer-arith -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g1 -D_FORTIFY_SOURCE=2 -c -o t-stringhelp.o t-stringhelp.c
+> /home/thomas/autobuild/instance-3/output-1/host/bin/aarch64-buildroot-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -DGNUPG_BINDIR="\"/usr/bin\"" -DGNUPG_LIBEXECDIR="\"/usr/libexec\"" -DGNUPG_LIBDIR="\"/usr/lib/gnupg\"" -DGNUPG_DATADIR="\"/usr/share/gnupg\"" -DGNUPG_SYSCONFDIR="\"/etc/gnupg\"" -DGNUPG_LOCALSTATEDIR="\"/var\""        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/libusb-1.0 -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/include -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -DWITHOUT_NPTH=1 -Wall -Wno-format-zero-length -Wno-pointer-sign -Wpointer-arith -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g1 -D_FORTIFY_SOURCE=2 -c -o libcommon_a-i18n.o `test -f 'i
+ 18
+>  n.c' || echo './'`i18n.c
+> /home/thomas/autobuild/instance-3/output-1/host/bin/aarch64-buildroot-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -DGNUPG_BINDIR="\"/usr/bin\"" -DGNUPG_LIBEXECDIR="\"/usr/libexec\"" -DGNUPG_LIBDIR="\"/usr/lib/gnupg\"" -DGNUPG_DATADIR="\"/usr/share/gnupg\"" -DGNUPG_SYSCONFDIR="\"/etc/gnupg\"" -DGNUPG_LOCALSTATEDIR="\"/var\""        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/libusb-1.0 -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/include -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -DWITHOUT_NPTH=1 -Wall -Wno-format-zero-length -Wno-pointer-sign -Wpointer-arith -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g1 -D_FORTIFY_SOURCE=2 -c -o libcommon_a-mapstrings.o `test
+  -
+>  f 'mapstrings.c' || echo './'`mapstrings.c
+> /home/thomas/autobuild/instance-3/output-1/host/bin/aarch64-buildroot-linux-gnu-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -DGNUPG_BINDIR="\"/usr/bin\"" -DGNUPG_LIBEXECDIR="\"/usr/libexec\"" -DGNUPG_LIBDIR="\"/usr/lib/gnupg\"" -DGNUPG_DATADIR="\"/usr/share/gnupg\"" -DGNUPG_SYSCONFDIR="\"/etc/gnupg\"" -DGNUPG_LOCALSTATEDIR="\"/var\""        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/libusb-1.0 -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/include -I/home/thomas/autobuild/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -DWITHOUT_NPTH=1 -Wall -Wno-format-zero-length -Wno-pointer-sign -Wpointer-arith -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g1 -D_FORTIFY_SOURCE=2 -c -o libcommon_a-stringhelp.o `test
+  -
+>  f 'stringhelp.c' || echo './'`stringhelp.c
+> aarch64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
+> make[4]: *** [Makefile:1283: t-stringhelp.o] Error 1
+> 
+> Revert the bump for now until the issue can be fixed upstream.
+> 
+> [1]: http://autobuild.buildroot.net/results/5bf00af86da6e41d1a48abc7304bf339908a0150/build-end.log
+> 
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  package/gnupg2/0001-ks_ldap_free_state.patch | 21 ++++++++++++++++++++
+>  package/gnupg2/gnupg2.hash                   | 10 +++++-----
+>  package/gnupg2/gnupg2.mk                     |  2 +-
+>  3 files changed, 27 insertions(+), 6 deletions(-)
+>  create mode 100644 package/gnupg2/0001-ks_ldap_free_state.patch
+> 
+> diff --git a/package/gnupg2/0001-ks_ldap_free_state.patch b/package/gnupg2/0001-ks_ldap_free_state.patch
+> new file mode 100644
+> index 0000000000..fa55d27c04
+> --- /dev/null
+> +++ b/package/gnupg2/0001-ks_ldap_free_state.patch
+> @@ -0,0 +1,21 @@
+> +
+> +Fix undefined reference to `ks_ldap_free_state' if OpenLDAP is not
+> +installed
+> +
+> +Backported from: 7011286ce6e1fb56c2989fdafbd11b931c489faa
+> +
+> +Signed-off-by: Michael Fischer <mf@go-sys.de>
+> +
+> +--- a/dirmngr/server.c
+> ++++ b/dirmngr/server.c
+> +@@ -3137,8 +3137,10 @@ start_command_handler (assuan_fd_t fd, unsigned int session_id)
+> +                ctrl->refcount);
+> +   else
+> +     {
+> ++#if USE_LDAP
+> +       ks_ldap_free_state (ctrl->ks_get_state);
+> +       ctrl->ks_get_state = NULL;
+> ++#endif
+> +       release_ctrl_ocsp_certs (ctrl);
+> +       xfree (ctrl->server_local);
+> +       dirmngr_deinit_default_ctrl (ctrl);
+> diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+> index c642862fe2..f9c071ad45 100644
+> --- a/package/gnupg2/gnupg2.hash
+> +++ b/package/gnupg2/gnupg2.hash
+> @@ -1,7 +1,7 @@
+> -# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000477.html
+> -sha1  63dde155a8df0d5e1987efa5fc17438beca83ac1  gnupg-2.4.0.tar.bz2
+> +# From  https://lists.gnupg.org/pipermail/gnupg-announce/2022q4/000476.html
+> +sha1  1f31b7b4c9c9adad97f94ea3acf1aa64c0424bcc  gnupg-2.3.8.tar.bz2
+>  # Calculated based on the hash above and signature
+> -# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.4.0.tar.bz2.sig
+> -# using key 6DAA6E64A76D2840571B4902528897B826403ADA
+> -sha256  1d79158dd01d992431dd2e3facb89fdac97127f89784ea2cb610c600fb0c1483  gnupg-2.4.0.tar.bz2
+> +# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.3.8.tar.bz2.sig
+> +# using key 6DAA6E64A76D2840571B4902528897B826403ADA and AC8E115BF73E2D8D47FA9908E98E9B2D19C6C8BD
+> +sha256  540b7a40e57da261fb10ef521a282e0021532a80fd023e75fb71757e8a4969ed  gnupg-2.3.8.tar.bz2
+>  sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+> diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+> index 5935ce6939..9dc29ca99e 100644
+> --- a/package/gnupg2/gnupg2.mk
+> +++ b/package/gnupg2/gnupg2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -GNUPG2_VERSION = 2.4.0
+> +GNUPG2_VERSION = 2.3.8
+>  GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+>  GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+>  GNUPG2_LICENSE = GPL-3.0+
+> 
+> base-commit: d00e437922fb1b611f35c3138b9fbf7bcff62757
 
---000000000000e5e71205f4f6e4cd--
 
---===============0945601526140385451==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0945601526140385451==--
