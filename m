@@ -4,89 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 626A6C636D7
-	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 10:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3786C61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 10:28:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 057D441C8C;
-	Sat, 18 Feb 2023 10:18:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 057D441C8C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 320EF410B2;
+	Sat, 18 Feb 2023 10:28:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 320EF410B2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5949gyvlmLIA; Sat, 18 Feb 2023 10:18:04 +0000 (UTC)
+	with ESMTP id yfqWLcprSPNG; Sat, 18 Feb 2023 10:28:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDC9541C8D;
-	Sat, 18 Feb 2023 10:18:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDC9541C8D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 049811BF5DB
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 10:18:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41EAC409DD;
+	Sat, 18 Feb 2023 10:28:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41EAC409DD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 003931BF5DB
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 10:28:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D22B080FB6
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 10:18:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D22B080FB6
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE79D409DD
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 10:28:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE79D409DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nl1OZUV9xMhd for <buildroot@lists.busybox.net>;
- Sat, 18 Feb 2023 10:18:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XzZepmcO1Z6Y for <buildroot@lists.busybox.net>;
+ Sat, 18 Feb 2023 10:28:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91BF680B71
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
- [IPv6:2607:f8b0:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 91BF680B71
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 10:18:00 +0000 (UTC)
-Received: by mail-pl1-x62b.google.com with SMTP id jk12so678922plb.5
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 02:18:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F9DF40947
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com
+ [IPv6:2001:4860:4864:20::29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1F9DF40947
+ for <buildroot@buildroot.org>; Sat, 18 Feb 2023 10:28:43 +0000 (UTC)
+Received: by mail-oa1-x29.google.com with SMTP id
+ 586e51a60fabf-171b0cfc092so303108fac.4
+ for <buildroot@buildroot.org>; Sat, 18 Feb 2023 02:28:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :cc:to:from:subject:user-agent:mime-version:date:message-id
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=8/0SxckNUsjMzrVNQZOU8nKEJVCUi2uW4m5UnBXnsBY=;
- b=FKy8pwKDeyeNw4uXdYtOLjsa9PexAwGdPwH6Tzrdn1KTIGY/j4mJk4VfVqOpCWQXVA
- Uwxgdxx4x07+rOoMN03ZzlTxGbtvex+sihTwVwu+K+OP0XTs+g+e3kuVwpzfSwS7JltD
- mMtvOhvu5x2bcfqfMGK+HUzbFGGCW2mT8c7aT10usAscCbHrItBWKP2iNCQEwhRh3sW9
- +EWH2m2xdJZQUp/e/iACri3dJoSMkID/xNIhe09l8+DjxVJtB0gVoZpFHkKk9Pf1YpEE
- q6xqmt/4FgsFUW1BrWpFOGhrAU9SGCZDSPIbLeczi81/uGZ5BY8dg9zm1W5D/y4jwL81
- dkkw==
-X-Gm-Message-State: AO0yUKVpew0YufiTgq+V9a/NdMJQmAa+C3vOB7fDz6KXAnHXjAafzXjI
- uEwJgA/F8oCoPlDhktWtqqM0S8L49F0=
-X-Google-Smtp-Source: AK7set/RijPBuDlRApJZXlAxFfsZgoy5D9XJ7KW9ef6eeyrQmtKwH3uSrM1vumq/PMOwFyt+aUvjUw==
-X-Received: by 2002:a17:902:eccf:b0:19a:73f7:6762 with SMTP id
- a15-20020a170902eccf00b0019a73f76762mr4717479plh.52.1676715479840; 
- Sat, 18 Feb 2023 02:17:59 -0800 (PST)
-Received: from [192.168.43.80] (subs28-116-206-12-56.three.co.id.
- [116.206.12.56]) by smtp.gmail.com with ESMTPSA id
- e4-20020a170902b78400b0019607aeda8bsm3454197pls.73.2023.02.18.02.17.58
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 18 Feb 2023 02:17:59 -0800 (PST)
-Message-ID: <3692da35-d89d-46a6-524d-590c83f35a0f@gmail.com>
-Date: Sat, 18 Feb 2023 17:17:56 +0700
+ bh=4wbhlvLrXddHoPBXQYA+aCX6T7nr4yEnHS+MDI71z88=;
+ b=ycYMTG2q1DE798nU6jVHIBU0lBONendRnXhviqvCeVzpdYKzipfvpwrDMqcm5o5ECZ
+ NySvSiR0xqs43SjkjR+xCjUawRAsymxD80Ua8+w85/ZrJG5+ief6L1tgC5+34hnatpYz
+ n9PjMWPsq+khdf3IzD749jOay+IVxwmj+mbmcqDAJBSEXYAD7OuAP/FHBuRmRHppz9ux
+ vhUW0/Hqjwo+1/WNBXd1x3CdV+aH3DOI9WRzUl31HErI/YuX6/ro5QEyzWaZjqAdaGLx
+ wedMqrA/VIWmUeGqFycUF+pI8enBmUH4dZkr7Z4cCac38rxj1zspya3CW0Q8xJ4PCbr/
+ xCBw==
+X-Gm-Message-State: AO0yUKWlb+KZ9thlfTYA8ohoc5OZIxXOdeGyLUtplUewNC9MDl4sI18V
+ YGoc2OAL67U/WKoLwIxPJEJdGvPHlwHI1rUUGSD89SA8
+X-Google-Smtp-Source: AK7set/iqNjb1+jMjz3gdKuQ0jiyt2dEPVPONj14F2tGJvy9ZzXGS5oMsFypeSi26/3pSzii939boWdVnKUdEuuDapA=
+X-Received: by 2002:a05:6870:a18b:b0:16e:8b95:8548 with SMTP id
+ a11-20020a056870a18b00b0016e8b958548mr656926oaf.208.1676716122956; Sat, 18
+ Feb 2023 02:28:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Buildroot <buildroot@buildroot.org>
-References: <Y/ClewHezrg+Z3hx@debian.me>
-Content-Language: en-US
-In-Reply-To: <Y/ClewHezrg+Z3hx@debian.me>
+References: <CADYjeStw7HOAxA_ipNUNW4EsQzUZQydhW+Uaa8_UusE_wisy-g@mail.gmail.com>
+In-Reply-To: <CADYjeStw7HOAxA_ipNUNW4EsQzUZQydhW+Uaa8_UusE_wisy-g@mail.gmail.com>
+From: Sourabh Hegde <hrsourabh011@gmail.com>
+Date: Sat, 18 Feb 2023 11:28:33 +0100
+Message-ID: <CADYjeSu9k+yqBH4D+-VWxEHuZA2njPZPwLNBx-BVNaSqWA1n-w@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
- :cc:subject:date:message-id:reply-to;
- bh=8/0SxckNUsjMzrVNQZOU8nKEJVCUi2uW4m5UnBXnsBY=;
- b=UdFluVQj0u+sdy1aoGrs7fKtfZhFNi2zbwadLCkw+15fKuHBmfBsp5wRi1LIHG1DIo
- iqT8mAxW1kOZ1ZCTGSNBS4Zt6fcSn0DjCznssZV64GkLTfhuzOH2vVlvvpw5pNkyjreR
- +lB+YuF8Nn2D/dAmdgag5bLDnkOWbx3Fac2rsW1OgNN4mGLaYXDs8N9EKHmkh0EUwfPO
- MmgN3GPiVb6EELwpt1UM7ty5YKoRbPzQ0ryu3kGRdgm9/MXFoO4H9d1inI48jAnNU8cr
- miPCQkgrTWnKB8AwtfhXVVwvM2NOrdFN6Ts/H8LexVABLVgej2eXWnZrbgS2ngVSXG2u
- MHUA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=4wbhlvLrXddHoPBXQYA+aCX6T7nr4yEnHS+MDI71z88=;
+ b=en8eNz0sYoR+QwrQiQhYAV8iENVPt16bYGANbudZ5GVGDNTLpLsQN5we/6ZoMS2VGu
+ avvr5OoDC8e9qAgfZQYUlB2+LW8NFo/FX8qurc/lPVEhn4e2DVmr1/DytaX5rXXPSCPs
+ YaU/ciQ8iaefn5CBnBiONAFhJici0Qmx490MiDKvkeIQZxWQBwKZgZW/oTCMUrRKX8mn
+ 5BY+SwfHC5LRBkh/Iw2frz+EvsdryiMh1iM+P6MFFqdb/0rjWisokHQA5P1m6pWi0MCu
+ HGDo1xh7tEIIW497yWwkoCMtOXLRSaxnEO9X07rer64hioYhYvWfOl+RZySYY93l5BRY
+ GZbg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=UdFluVQj
-Subject: Re: [Buildroot] (no subject)
+ header.a=rsa-sha256 header.s=20210112 header.b=en8eNz0s
+Subject: Re: [Buildroot] Missing curl binary
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,52 +89,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>, Julien Olivain <ju.o@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0945601526140385451=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2/18/23 17:16, Bagas Sanjaya wrote:
-> (resend again with revert patch removed)
-> 
-> Hi,
-> 
-> I found that package/gnupg2 (version 2.4.0) fails to build, complaining
-> about unsafe search path for cross-compilation. I found this when
-> test-building for my git bump at [1].
-> 
-> The excerpt from the build log was:
-> 
-> make[4]: Entering directory '/home/bagas/repo/buildroot/output/build/gnupg2-2.4.0/common'
-> /home/bagas/repo/buildroot/output/host/bin/aarch64-linux-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -DGNUPG_BINDIR="\"/usr/bin\"" -DGNUPG_LIBEXECDIR="\"/usr/libexec\"" -DGNUPG_LIBDIR="\"/usr/lib/gnupg\"" -DGNUPG_DATADIR="\"/usr/share/gnupg\"" -DGNUPG_SYSCONFDIR="\"/etc/gnupg\"" -DGNUPG_LOCALSTATEDIR="\"/var\""        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/bagas/repo/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/include -I/usr/include -I/usr/include -I/usr/include -Wall -Wno-format-zero-length -Wno-pointer-sign -Wpointer-arith -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -c -o t-stringhelp.o t-stringhelp.c
-> /home/bagas/repo/buildroot/output/host/bin/aarch64-linux-gcc -DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\" -DGNUPG_BINDIR="\"/usr/bin\"" -DGNUPG_LIBEXECDIR="\"/usr/libexec\"" -DGNUPG_LIBDIR="\"/usr/lib/gnupg\"" -DGNUPG_DATADIR="\"/usr/share/gnupg\"" -DGNUPG_SYSCONFDIR="\"/etc/gnupg\"" -DGNUPG_LOCALSTATEDIR="\"/var\""        -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/bagas/repo/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -DWITHOUT_NPTH=1 -Wall -Wno-format-zero-length -Wno-pointer-sign -Wpointer-arith -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -c -o libcommon_a-i18n.o `test -f 'i18n.c' || echo './'`i18n.c
-> aarch64-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
-> make[4]: *** [Makefile:1283: t-stringhelp.o] Error 1
-> 
-> Reverting 0f868e97f6b4 ("package/gnupg2: bump to version 2.4.0") made the error above
-> gone, thus the problem was in upstream code.
-> 
-> This issue is also confirmed by autobuilder (example log is [2]).
-> 
-> The full build log is attached.
-> 
-> If the revert is desired, the patch is at [3].
-> 
-> Thanks.
-> 
-> [1]: https://lore.kernel.org/buildroot/20230218085837.350535-1-bagasdotme@gmail.com/
-> [2]: http://autobuild.buildroot.net/results/5bf00af86da6e41d1a48abc7304bf339908a0150/build-end.log
-> [3]: https://lore.kernel.org/buildroot/20230218101426.630874-1-bagasdotme@gmail.com/
-> 
+--===============0945601526140385451==
+Content-Type: multipart/alternative; boundary="000000000000e5e71205f4f6e4cd"
 
-Oops, please ignore (no subject). I will send the report later.
+--000000000000e5e71205f4f6e4cd
+Content-Type: text/plain; charset="UTF-8"
 
--- 
-An old man doll... just what I always wanted! - Clara
+Can anyone please let me know how to resolve this?
+
+On Fri, Feb 17, 2023, 16:52 Sourabh Hegde <hrsourabh011@gmail.com> wrote:
+
+> Hello,
+>
+> I am trying to include curl binary in my image. I have
+> selected BR2_PACKAGE_LIBCURL=y , BR2_PACKAGE_LIBCURL_CURL=y in the Config.
+> But still the curl binary is not installed in the target. Can anyone please
+> let me know what is the issue here and how to resolve it?
+>
+> Thank you,
+> Sourabh
+>
+
+--000000000000e5e71205f4f6e4cd
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Can anyone please let me know how to resolve this?</div><=
+br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri,=
+ Feb 17, 2023, 16:52 Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail=
+.com">hrsourabh011@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"g=
+mail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-l=
+eft:1ex"><div dir=3D"ltr">Hello,<br><div><br></div><div>I am trying to incl=
+ude curl binary in my image. I have selected=C2=A0BR2_PACKAGE_LIBCURL=3Dy ,=
+=C2=A0BR2_PACKAGE_LIBCURL_CURL=3Dy in the Config. But still the curl binary=
+ is not installed in the target. Can anyone please let me know what is the =
+issue here and how to resolve it?</div><div><br></div><div>Thank you,</div>=
+<div>Sourabh</div></div>
+</blockquote></div>
+
+--000000000000e5e71205f4f6e4cd--
+
+--===============0945601526140385451==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0945601526140385451==--
