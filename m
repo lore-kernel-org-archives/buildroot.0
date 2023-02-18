@@ -1,84 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B12A5C61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 17:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4FE7C61DA4
+	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 17:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20CD182251;
-	Sat, 18 Feb 2023 17:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20CD182251
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA3B641CC0;
+	Sat, 18 Feb 2023 17:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA3B641CC0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P8q0xRdIjSCr; Sat, 18 Feb 2023 17:09:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O5IjwcRQugFg; Sat, 18 Feb 2023 17:40:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EFF482248;
-	Sat, 18 Feb 2023 17:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EFF482248
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E4401BF3E5
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 17:09:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7E6941CB9;
+	Sat, 18 Feb 2023 17:40:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7E6941CB9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 736701BF3E5
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 17:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F18581FE4
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 17:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F18581FE4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D2BA60F0F
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 17:40:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D2BA60F0F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6_klUTKvuJyr for <buildroot@lists.busybox.net>;
- Sat, 18 Feb 2023 17:09:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h4a90JkUbyow for <buildroot@lists.busybox.net>;
+ Sat, 18 Feb 2023 17:40:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83E2582003
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com
- [IPv6:2607:f8b0:4864:20::233])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 83E2582003
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 17:09:10 +0000 (UTC)
-Received: by mail-oi1-x233.google.com with SMTP id 10so1141461oiz.3
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 09:09:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=6D+JrGf1GuKPtxYMBiS3kKsg0bk3uypHYA9mSwxI9cs=;
- b=MgYrUKm6RPEXy1h1zISBn6B8iqLHTt9UFD9TVYNheRKPItoTHKbcQEDV+0DxOBUctR
- dY2Wd/mkCOXO69JdUEUQkbi5jMITeKheg7C3++B8oslFZWfElFFq9v7PFZ8YG/PptJcG
- H68nzxQjiI0tisxurhyQoiU/flkHQPRoT/FcA8GOubiB25kOsIsV/tdwx3Becnpz9X0j
- 5Z3fJuWrGCCL0dXSBny4nLVAd2j1X5NS9jYRV5E6zyXoZOp0Z+JtdYMjQe0VrutNO/Jr
- PSE5rMUTfEeZ/5hY8fEgBEaSNA69wk0wj4uvvnNYLCiS0oMK95qCYJOVHL9uKm0pDae3
- HNlQ==
-X-Gm-Message-State: AO0yUKV+RGqGTQ2Q7PDL8pRTzo4v1Qn6M5Ttf/gsXwQYUtKifYYL0YdX
- Dc299d7YPeNTA3mYYS+8+OWWw0G0fPIaBxzu54O4/OiQbs0=
-X-Google-Smtp-Source: AK7set/2NK7ZIsteOD0o1N0KI0KJckMPCq+kz5PhohaHTIRF+vbGhmI5sMj0PV/u5XHmcmqybetaJJcG2UspgCrFajs=
-X-Received: by 2002:a05:6808:2385:b0:367:18a6:eb14 with SMTP id
- bp5-20020a056808238500b0036718a6eb14mr879173oib.208.1676740149456; Sat, 18
- Feb 2023 09:09:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE8E760D51
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CE8E760D51
+ for <buildroot@buildroot.org>; Sat, 18 Feb 2023 17:40:38 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.59])
+ by smtp2-g21.free.fr (Postfix) with ESMTP id 926582003B4;
+ Sat, 18 Feb 2023 18:40:35 +0100 (CET)
+Received: from [37.171.207.33]
+	by webmail.free.fr
 MIME-Version: 1.0
-References: <CADYjeStw7HOAxA_ipNUNW4EsQzUZQydhW+Uaa8_UusE_wisy-g@mail.gmail.com>
- <20230218121846.306f95f5@windsurf>
-In-Reply-To: <20230218121846.306f95f5@windsurf>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Sat, 18 Feb 2023 18:09:00 +0100
-Message-ID: <CADYjeSuabp-+BxUL+nEhqfUA5saeaxQvQOvM9rniYSqp3moosQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=6D+JrGf1GuKPtxYMBiS3kKsg0bk3uypHYA9mSwxI9cs=;
- b=A+kxJvvy2FuykfDsC0BBTjvuTMEdmE/yGtR8ek6F83IvyqDyLj4SgXd+67MAs9ihsT
- xjSpCFNTpdyA0/In7M1wGe2Sbb//SxXW8JBa6qmX6C+nmoWwLRLbcWsXZpGXsUA3oOcj
- VnSCjVOhCsaEb6xh21ZlrmH8fSG5XPBJy07oCCO11dBKhndp9C8YIl85WOt3FHLrQlZ8
- FgcB1aVpbHvDTW2+8ICZSS2XszzsIS4w2AvuiG9qHhDhDWJ6xK7dTNopvhqhAXcpTxjH
- 6npvr6SVvPH2X7f2fWT+Gpe3di292inKzbx7HrQTBMHVe83ghnQaOBKss5R5Hc/owfMA
- 5VSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=A+kxJvvy
-Subject: Re: [Buildroot] Missing curl binary
+Date: Sat, 18 Feb 2023 18:40:35 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <b5fef166-72c3-25ac-2427-e4255b68f2db@gmail.com>
+References: <20230218101426.630874-1-bagasdotme@gmail.com>
+ <20230218113939.526f0a76@windsurf>
+ <96015d0268df72d3cdd58e7db09c1333@free.fr>
+ <b5fef166-72c3-25ac-2427-e4255b68f2db@gmail.com>
+Message-ID: <1852709c493974b2588cc7c9c28bba7e@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1676742035;
+ bh=6huMSAyDOwYktbO40QMEFhRyA/U0ITwqn1lVadXYJ1A=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=fd3JsPC+kY2RUos9iaU0JeG2z81ihcHbHoY3HRpdgnELblEngkwQoT2uftvOZoD/d
+ yHhuxpkL8GH2EnBgReQEloLxgfxerZ4zuTy7irG+cUogRpD7ZjDtpc56mhJev3K0J1
+ G0g5zDLZN53Pg/9foAb/Jbg/xE+agndwGMo5hlKaCS0WiAqshgq5Dt7nInfKx3Ul70
+ lJplCfCrpYBS7SsSC4kHLgRCinUtGM7/8NOV+jaMkfvhQImjd6WDAG4u2AksKSqyG6
+ Q4xAftOtTg61fhY5c4DLWSne19RGQWHXRp6ECn3i2UxMCpDLZzLZlXoCI6We8QidMf
+ U6itSVkqzBFMg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fd3JsPC+
+Subject: Re: [Buildroot] Debugging gnupg2 unsafe search path error (was Re:
+ [PATCH] Revert "package/gnupg2: bump to version 2.4.0")
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,118 +78,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8189021515410564378=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot <buildroot@buildroot.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8189021515410564378==
-Content-Type: multipart/alternative; boundary="000000000000fd31ce05f4fc7c2d"
+Hi Bagas,
 
---000000000000fd31ce05f4fc7c2d
-Content-Type: text/plain; charset="UTF-8"
+On 18/02/2023 14:45, Bagas Sanjaya wrote:
+> On 2/18/23 18:13, Julien Olivain wrote:
+>> In my first proposal of gnupg2 version 2.4.0 bump [1], I initially 
+>> proposed
+>> to add Buildroot staging bin dir in PATH, to make sure we won't have 
+>> such
+>> host/br-staging confusion:
+>> 
+>> GNUPG2_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
+>> 
+>> Bagas, could you try on your side if this solve the issue?
+>> 
+>> [1] 
+>> https://patchwork.ozlabs.org/project/buildroot/patch/20230103193649.7488-5-ju.o@free.fr/
+>> 
+> 
+> Hi Julien,
+> 
+> I applied your suggestion on top of master as:
+> 
+> ---- >8 ----
+> diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+> index 5935ce6939..55917912a8 100644
+> --- a/package/gnupg2/gnupg2.mk
+> +++ b/package/gnupg2/gnupg2.mk
+> @@ -15,6 +15,9 @@ GNUPG2_SELINUX_MODULES = gpg
+>  GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba 
+> libnpth \
+>  	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
+> 
+> +# Let's see if staging GNUPG2_CONF_ENV here works.
+> +GNUPG2_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
+> +
+>  GNUPG2_CONF_OPTS = \
+>  	--disable-rpath \
+>  	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
+> 
+> 
+> Unfortunately, the build error still occurs with your suggestion.
 
-Hi Thomas,
+Thank you for testing.
 
-Yes, that was the issue. Doing "make libcurl-dirclean all" fixed it.
+I still can't reproduce the issue on my side.  Compilation works fine on 
+my system
+(with and without a /usr/bin/gpgrt-config script), and also in the 
+Buildroot
+utils/docker-run (which does not include a /usr/bin/gpgrt-config 
+script). My system
+has the same libgpg-error version 1.46 as Buildroot.
 
-Thanks for the support
+Could you tell me what is the distribution of your host system (or what 
+is the version
+of the libgpg-error on the host)?  I'll try the same environment in a 
+docker.
 
-On Sat, 18 Feb 2023 at 12:18, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-wrote:
+Another way to force the gpgrt-config path without putting the full 
+staging usr bin
+in the PATH (as Thomas recommended not to do) would be to add the 
+following:
 
-> On Fri, 17 Feb 2023 16:52:49 +0100
-> Sourabh Hegde <hrsourabh011@gmail.com> wrote:
->
-> > I am trying to include curl binary in my image. I have
-> > selected BR2_PACKAGE_LIBCURL=y , BR2_PACKAGE_LIBCURL_CURL=y in the
-> Config.
-> > But still the curl binary is not installed in the target. Can anyone
-> please
-> > let me know what is the issue here and how to resolve it?
->
-> I suppose you did a build with BR2_PACKAGE_LIBCURL=y, then after the
-> build completed you changed the configuration to enable
-> BR2_PACKAGE_LIBCURL_CURL=y and just ran "make". This doesn't work, as
-> the libcurl package is already built, and Buildroot is not smart enough
-> to detect that you changed something related to the libcurl
-> configuration.
->
-> Run: "make libcurl-dirclean all" to force rebuilding the libcurl
-> package (or do a full rebuild).
->
-> See https://buildroot.org/downloads/manual/manual.html#full-rebuild for
-> more details.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
+    GNUPG2_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
 
---000000000000fd31ce05f4fc7c2d
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+While compiling gnupg2 in Buildroot, you should see in the configuration 
+log:
 
-<div dir=3D"ltr">Hi Thomas,<div><br></div><div>Yes, that was the issue. Doi=
-ng &quot;make libcurl-dirclean all&quot; fixed it.</div><div><br></div><div=
->Thanks for the support</div></div><br><div class=3D"gmail_quote"><div dir=
-=3D"ltr" class=3D"gmail_attr">On Sat, 18 Feb 2023 at 12:18, Thomas Petazzon=
-i &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@boot=
-lin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"=
-margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-lef=
-t:1ex">On Fri, 17 Feb 2023 16:52:49 +0100<br>
-Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail.com" target=3D"_blan=
-k">hrsourabh011@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; I am trying to include curl binary in my image. I have<br>
-&gt; selected BR2_PACKAGE_LIBCURL=3Dy , BR2_PACKAGE_LIBCURL_CURL=3Dy in the=
- Config.<br>
-&gt; But still the curl binary is not installed in the target. Can anyone p=
-lease<br>
-&gt; let me know what is the issue here and how to resolve it?<br>
-<br>
-I suppose you did a build with BR2_PACKAGE_LIBCURL=3Dy, then after the<br>
-build completed you changed the configuration to enable<br>
-BR2_PACKAGE_LIBCURL_CURL=3Dy and just ran &quot;make&quot;. This doesn&#39;=
-t work, as<br>
-the libcurl package is already built, and Buildroot is not smart enough<br>
-to detect that you changed something related to the libcurl<br>
-configuration.<br>
-<br>
-Run: &quot;make libcurl-dirclean all&quot; to force rebuilding the libcurl<=
-br>
-package (or do a full rebuild).<br>
-<br>
-See <a href=3D"https://buildroot.org/downloads/manual/manual.html#full-rebu=
-ild" rel=3D"noreferrer" target=3D"_blank">https://buildroot.org/downloads/m=
-anual/manual.html#full-rebuild</a> for<br>
-more details.<br>
-<br>
-Best regards,<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
+     ...
+     checking for gpg-error-config... 
+/path/to/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/gpg-error-config
+     checking for gpgrt-config... 
+/path/to/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/gpgrt-config
+     ...
 
---000000000000fd31ce05f4fc7c2d--
+Without this line, if the host contains a gpgrt-config, you should see:
 
---===============8189021515410564378==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+     checking for gpg-error-config... 
+/path/to/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/gpg-error-config
+     checking for gpgrt-config... /usr/bin/gpgrt-config
 
+and if the host does not not contain a gpgrt-config, you should see:
+
+     checking for gpg-error-config... 
+/path/to/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/gpg-error-config
+     checking for gpgrt-config... no
+
+I still suspect the root cause is the presence of a 
+/usr/bin/gpgrt-config of a specific/older
+libgpg-error version on the host.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8189021515410564378==--
