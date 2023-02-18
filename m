@@ -1,103 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 010C6C636CC
-	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 14:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BAE5C636CC
+	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 15:32:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 830A560EA6;
-	Sat, 18 Feb 2023 14:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 830A560EA6
+	by smtp4.osuosl.org (Postfix) with ESMTP id C741841B83;
+	Sat, 18 Feb 2023 15:32:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C741841B83
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lJ4sreVggjST; Sat, 18 Feb 2023 14:22:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ftfmk4fDIGQt; Sat, 18 Feb 2023 15:32:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF94C60E97;
-	Sat, 18 Feb 2023 14:22:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF94C60E97
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABBA841B91;
+	Sat, 18 Feb 2023 15:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABBA841B91
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 796781BF2F2
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 14:22:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CF4F31BF3EC
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 15:32:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 613FA403C6
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 14:22:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 613FA403C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9C794048C
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 15:32:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9C794048C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dYaJ0ceW1THc for <buildroot@lists.busybox.net>;
- Sat, 18 Feb 2023 14:22:36 +0000 (UTC)
-X-Greylist: delayed 00:41:30 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6D50402B1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com
- [148.163.156.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A6D50402B1
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 14:22:36 +0000 (UTC)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 31ICCCKr007044
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 13:41:05 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com
- [169.51.49.99])
- by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntxfes6p9-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 13:41:05 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
- by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31I2sXRq003895
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 13:41:03 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
- by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ntpa68ev4-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 13:41:03 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com
- [10.20.54.103])
- by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 31IDf1X945547902
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 13:41:01 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 037842004B
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 13:41:01 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id C560C20040
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 13:41:00 +0000 (GMT)
-Received: from oc8242746057.ibm.com.com (unknown [9.179.31.148])
- by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 13:41:00 +0000 (GMT)
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-To: buildroot@buildroot.org
-Date: Sat, 18 Feb 2023 14:40:59 +0100
-Message-Id: <20230218134059.53863-1-egorenar@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id yNCvACLnEPix for <buildroot@lists.busybox.net>;
+ Sat, 18 Feb 2023 15:32:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BF28400F2
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1BF28400F2
+ for <buildroot@buildroot.org>; Sat, 18 Feb 2023 15:32:23 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 308225FFC6;
+ Sat, 18 Feb 2023 16:32:17 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 18 Feb 2023 16:32:16 +0100
+Date: Sat, 18 Feb 2023 16:32:16 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20230218153216.GD2718518@scaer>
+References: <CADYjeStG8bZEBprwqez+_3+n-HZ5pG9p8mBySxV+4FU7GM0r3g@mail.gmail.com>
+ <20230218121940.7442410e@windsurf>
+ <CADYjeSuzT5ueq5F5SQvib87d1HCKXLj565mW-Rm91N7Na1KrDQ@mail.gmail.com>
+ <20230218141937.60c307f7@windsurf> <20230218142115.GC2718518@scaer>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7pzdVScpCKmDI4u7x4nfSKiKNjp69VtR
-X-Proofpoint-GUID: 7pzdVScpCKmDI4u7x4nfSKiKNjp69VtR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-18_08,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0
- priorityscore=1501 mlxlogscore=809 phishscore=0 spamscore=0 suspectscore=0
- adultscore=0 bulkscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302180116
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ibm.com; h=from : to : subject :
- date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=PPz1bsl7aUud2g8y5UKuU6cByjTe6RSbJ0P3PnzAu34=;
- b=f20IxLMGwhAQTeZRGPLNUrhVaIQkzDp53t8ExqGFMguzd6cpYhUTdhKf1mqf4mDZ14kC
- hm51WO7yJUpiZeKXRTujwjimria/u61aXRHL27punhm4RhtPsEvX/5ZWppMEO67u48kr
- mh4yD9IqcFyOp+xI9BzJsiUkUfPf3l4uiM1ZxxQqG3t+lzyMsuIghUF04batH1so68oc
- 0vzvZ5TmHruc9dNyBLAZQfGyGMH3m0H2B0BOpz4Bnv2nZ2w4ni57AQEKsz/fnzmtRxjp
- vrFNlXuh0yG9KAQYPcBfpApSRcdCO95aG8a6eSndLAyEkH5EV5thsSuO5CRB95bVAKy9 AQ== 
+Content-Disposition: inline
+In-Reply-To: <20230218142115.GC2718518@scaer>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1676734340;
+ bh=f9bNII5/Dqsu4IGK/iFl0u+fdqGcNP5NiHotQCYzOCA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=iKt9jcqT1ZgN+mJ0YBbVH0BojPjcdRxu3UxOxxW2kOa8ugWnBn8+C69ZDtJoEL1dL
+ 1TYwDZ8lyDMoV1f7r7OvtDS3CzYDivzS4mGQxWRWlytTv+kM8YRN84UTz+dG0Uk102
+ o8rrke8Ss/mqH9+V0F8oQ8MnSFz5tS4qphMhglAmtyTYXkx2nBx6G6LCUaOlUUZeFC
+ o14RnWIUIwIHwnNMbZc8USbVD8M11lv5VmUuDRhVWbg8r3Ysk4StONlufB7aTN0Njc
+ JVRui8v1yLlEbOCxQMy7qe6JxjWSyj7AdlDoR62dvCrslvzw58f+p0xQiemmCJ7T9W
+ Rn6Mpxw5nxhEg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
- header.a=rsa-sha256 header.s=pp1 header.b=f20IxLMG
-Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version 2.26.0
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=iKt9jcqT
+Subject: Re: [Buildroot] Updating trust store using update-ca-certificates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,42 +79,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Sourabh Hegde <hrsourabh011@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
----
- package/s390-tools/s390-tools.hash | 2 +-
- package/s390-tools/s390-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas, Sourabh, All,
 
-diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
-index a0dde477c324..37b67c5cb180 100644
---- a/package/s390-tools/s390-tools.hash
-+++ b/package/s390-tools/s390-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ccb20954e748309a50fd56edd9abd94c6f897081e9a1a33e9d965a56f650990d  s390-tools-2.25.0.tar.gz
-+sha256  da81c55fb11d84923c0ebaed703f557052eb1a273495f60ebe3d20a74627303e  s390-tools-2.26.0.tar.gz
- sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
-diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-index cb6278dfb837..8cd549140547 100644
---- a/package/s390-tools/s390-tools.mk
-+++ b/package/s390-tools/s390-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+On 2023-02-18 15:21 +0100, Yann E. MORIN spake thusly:
+> On 2023-02-18 14:19 +0100, Thomas Petazzoni via buildroot spake thusly:
+> > On Sat, 18 Feb 2023 13:54:15 +0100
+> > Sourabh Hegde <hrsourabh011@gmail.com> wrote:
+> > > I was thinking the ca-certificates package will take care of this. Maybe I
+> > > was wrong.
+> > > So, how should we add local CA to the trust store in the target?
+> > I am not sure as I'm not super familiar with that aspect. If what you
+> > need to do is to call update-ca-certificates during the build, then we
+> > could potentially build it for the host, and run it as a post-build
+> > script. Of course, this assumes update-ca-certificates is capable of
+> > doing its work on a root filesystem that isn't at the root.
+
+No, update-ca-certificates does not know how to work out-of-tree, which
+is the reason why we already need to handle it manually when we install
+ca-certificates.
+
+Also, we do remove update-ca-certificates on purpose from TARGET_DIR,
+because it is not expected that we need/can regenerate the root bundle
+on the target.
+
+> > Do you have more details about what needs to be done? With more
+> > details, we could probably give some more useful hints.
+> 
+> I think we just need to split CA_CERTIFICATES_INSTALL_TARGET_CMDS in two:
+> one part to actually instll the certifcates provided by ca-certificates
+> itself, and the rest to update the castore with all certificate, as a
+> target-finalize hook.
+> 
+> I.e. all that starts from "Remove any existing certificates under
+> /etc/ssl/certs" should be moved to a target-finalize hook.
+
+Basically, something around those lines (totally untested):
+
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 0b6962ab7b..cc55d39957 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -20,7 +20,9 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/ssl/certs
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+ 	rm -f $(TARGET_DIR)/usr/sbin/update-ca-certificates
++endef
  
--S390_TOOLS_VERSION = 2.25.0
-+S390_TOOLS_VERSION = 2.26.0
- S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
- S390_TOOLS_LICENSE = MIT
- S390_TOOLS_LICENSE_FILES = LICENSE
--- 
-2.39.2
++define CA_CERTIFICATES_GEN_BUNDLE
+ 	# Remove any existing certificates under /etc/ssl/certs
+ 	rm -f $(TARGET_DIR)/etc/ssl/certs/*
+ 
+@@ -30,14 +32,15 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+ 	for i in `find usr/share/ca-certificates -name "*.crt" | LC_COLLATE=C sort` ; do \
+ 		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
+ 		cat $$i ;\
+-	done >$(@D)/ca-certificates.crt
++	done >$(BUILD_DIR)/ca-certificates.crt
+ 
+ 	# Create symlinks to the certificates by their hash values
+ 	$(HOST_DIR)/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
+ 
+ 	# Install the certificates bundle
+-	$(INSTALL) -D -m 644 $(@D)/ca-certificates.crt \
++	$(INSTALL) -D -m 644 $(BUILD_DIR)/ca-certificates.crt \
+ 		$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
+ endef
++CA_CERTIFICATES_TARGET_FINALIZE_HOOKS += CA_CERTIFICATES_GEN_BUNDLE
+ 
+ $(eval $(generic-package))
 
+Sourabh, can you test and adapt that and report, please?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
