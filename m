@@ -1,58 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00BC0C61DA4
-	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 11:49:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EE89C636CC
+	for <buildroot@archiver.kernel.org>; Sat, 18 Feb 2023 12:54:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9879B41C94;
-	Sat, 18 Feb 2023 11:49:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9879B41C94
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DA0D60E7B;
+	Sat, 18 Feb 2023 12:54:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DA0D60E7B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LS3Xjr0NyF_j; Sat, 18 Feb 2023 12:54:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 999A160E33;
+	Sat, 18 Feb 2023 12:54:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 999A160E33
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 970811BF5B4
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 12:54:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 715F241B59
+ for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 12:54:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 715F241B59
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bFGSM6HJTHmy; Sat, 18 Feb 2023 11:49:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 893AB41C96;
-	Sat, 18 Feb 2023 11:49:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 893AB41C96
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BE5961BF3D8
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 11:49:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A69214031F
- for <buildroot@lists.busybox.net>; Sat, 18 Feb 2023 11:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A69214031F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k-VbatiJLGbZ for <buildroot@lists.busybox.net>;
- Sat, 18 Feb 2023 11:49:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAD7F40126
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AAD7F40126
- for <buildroot@buildroot.org>; Sat, 18 Feb 2023 11:49:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2E5291814B9; Sat, 18 Feb 2023 12:49:29 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Sat, 18 Feb 2023 12:48:37 +0100
-Message-Id: <20230218114837.1761715-1-buildroot@heine.tech>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CcH8TeXUSGtt for <buildroot@lists.busybox.net>;
+ Sat, 18 Feb 2023 12:54:25 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34A5641A69
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com
+ [IPv6:2001:4860:4864:20::2f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 34A5641A69
+ for <buildroot@buildroot.org>; Sat, 18 Feb 2023 12:54:25 +0000 (UTC)
+Received: by mail-oa1-x2f.google.com with SMTP id
+ 586e51a60fabf-171b3af5e56so435625fac.8
+ for <buildroot@buildroot.org>; Sat, 18 Feb 2023 04:54:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OvxVYgYUG6GZOL4ssV0rpWiOoT4Ecb2NP5YFumRlLbs=;
+ b=wcRBYME0wAQ2p//1w+v3Z5ZBcjUOVYocOm0SYu8n97jaS3nVFCLnYNUgP1kGu0C0De
+ 78bxuyAD3aHHKpjuyzcMtU3ZVvWmvTB2wVW/GrqT+A3xHQr0UEOhE8yt3En+CDlz9zM9
+ 9wRU58sDNDaiUasV7cyqx3gwFgPpzd80mdItX5hKYaRkUc90PWK4L+k/GgZkrONqJhef
+ brKhwE2DHUqpDBB8mxxin7TeDSqL72GXffTty+evRmksv4w/yz4VJuaYKwqPM8hdfgiv
+ ekfiPAL+Gi1opDvQLIdjhZb+fb/IkyYOqGWGBWMa3q+76QrFISbiOOBTb0k1m+lzEcVM
+ Xiwg==
+X-Gm-Message-State: AO0yUKWZlso9upyLrqlnqLsulH5khlQ7vvA86HQ0s83bxRiyj3f2t1Nk
+ B//eSWRFO6/+8vYysjzRCixmXjLXVD+qAOAMZSI29CK0
+X-Google-Smtp-Source: AK7set/dhqJGgHQFeDCbxsOTYPrVNh3yni2rm0wzYigmJ4ZRn/hLX8fYxGvoxkJt3nA4z2xGow/Xg2MM/ihbkdA94FA=
+X-Received: by 2002:a05:6870:a18b:b0:16e:8b95:8548 with SMTP id
+ a11-20020a056870a18b00b0016e8b958548mr680471oaf.208.1676724864079; Sat, 18
+ Feb 2023 04:54:24 -0800 (PST)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+References: <CADYjeStG8bZEBprwqez+_3+n-HZ5pG9p8mBySxV+4FU7GM0r3g@mail.gmail.com>
+ <20230218121940.7442410e@windsurf>
+In-Reply-To: <20230218121940.7442410e@windsurf>
+From: Sourabh Hegde <hrsourabh011@gmail.com>
+Date: Sat, 18 Feb 2023 13:54:15 +0100
+Message-ID: <CADYjeSuzT5ueq5F5SQvib87d1HCKXLj565mW-Rm91N7Na1KrDQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1676720969; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=ECid9HtHf2pUBWGRC/ncbM5imNXDvGohZYuRt4cNl+8=;
- b=G3xxlKw4zLxNjy1th4hdoWi5YBSL6Pq0Zli9bSdTB1yBU1sNMwOozTkMqcZ6hPwjbYOEei
- YUUsWtmMWRKGcmiJlW4DA+LrxbXbev5j/fysA4l9F0PxEB81g+WdmhXOo2EqEgVSmMILOy
- afi27myezVj+4Bc42HezCnukJehsaXs=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=G3xxlKw4
-Subject: [Buildroot] [PATCH] packge/libabseil-cpp: bump to version 20230125.0
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=OvxVYgYUG6GZOL4ssV0rpWiOoT4Ecb2NP5YFumRlLbs=;
+ b=XpQpzXUrYRU1qo7+tdxVGFAU+OXuQBVseAKZNPC9cMFGEHyrlLjl9EX5AixJdvxdIN
+ nrqsBTytQyB82sTGO9laHPbhhYQbudHVPShzpuzvpSQCpyEacObMvaGw+AohQx8PPW9O
+ +R0alK1DJTCzWvmhKUboDGAsFeDxW8xdgBZ6T/bKjk8uBsVZ+0eTjuJi8JOGGETfNNY2
+ xTi7RtbJMVT1HQ0WmbLOGJvPOCDKY31lhjzIRfz7T33HfFTKt11KdiaORfaRL6d6giqG
+ K47ueAjMi6T0DIzRop81qZrizXSkM7zlE6IwKR4AXBhJ42/vgIh9CsD+BYxBzzOPdnXU
+ ehbA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=XpQpzXUr
+Subject: Re: [Buildroot] Updating trust store using update-ca-certificates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,120 +91,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Robert Rose <robertroyrose@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8249485345006788541=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libabseil now depends on c++14 and gcc >= 7.3.1 [0][1]
+--===============8249485345006788541==
+Content-Type: multipart/alternative; boundary="000000000000e8da0405f4f8edba"
 
-[0] https://github.com/abseil/abseil-cpp/releases/tag/20230125.0
-[1] https://github.com/google/oss-policies-info/blob/main/foundational-cxx-support-matrix.md
+--000000000000e8da0405f4f8edba
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
+Hello Thomas,
 
-Note:
-I'm not sure if the BR2_TOOLCHAIN_GCC_AT_LEAST_7 dependency is sufficient.
-But I don't think we have a more version specific Flag available?
----
- package/grpc/Config.in                   | 6 +++---
- package/libabseil-cpp/Config.in          | 6 +++---
- package/libabseil-cpp/libabseil-cpp.hash | 2 +-
- package/libabseil-cpp/libabseil-cpp.mk   | 6 +++---
- 4 files changed, 10 insertions(+), 10 deletions(-)
+Thanks for the update.
 
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index db6425819b..06436fe888 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libabseil-cpp
- 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -19,9 +19,9 @@ config BR2_PACKAGE_GRPC
- 
- 	  http://github.com/grpc/grpc
- 
--comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 5"
-+comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 7"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index 45f339ff26..d4139e8e04 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBABSEIL_CPP
- 	bool "libabseil-cpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -31,7 +31,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP
- 
- 	  https://github.com/abseil/abseil-cpp
- 
--comment "libabseil-cpp needs a toolchain w/ gcc >= 4.9, C++, threads, dynamic library"
-+comment "libabseil-cpp needs a toolchain w/ gcc >= 7.3.1, C++14, threads, dynamic library"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-index 808bdbab29..81710f50fb 100644
---- a/package/libabseil-cpp/libabseil-cpp.hash
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  91ac87d30cc6d79f9ab974c51874a704de9c2647c40f6932597329a282217ba8  libabseil-cpp-20220623.1.tar.gz
-+sha256  3ea49a7d97421b88a8c48a0de16c16048e17725c7ec0f1d3ea2683a2a75adc21  libabseil-cpp-20230125.0.tar.gz
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-index ceda106b7d..4e6ac2ee31 100644
---- a/package/libabseil-cpp/libabseil-cpp.mk
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
-@@ -4,19 +4,19 @@
- #
- ################################################################################
- 
--LIBABSEIL_CPP_VERSION = 20220623.1
-+LIBABSEIL_CPP_VERSION = 20230125.0
- LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
- LIBABSEIL_CPP_LICENSE = Apache-2.0
- LIBABSEIL_CPP_LICENSE_FILES = LICENSE
- LIBABSEIL_CPP_INSTALL_STAGING = YES
- 
- LIBABSEIL_CPP_CONF_OPTS = \
--	-DCMAKE_CXX_STANDARD=11 \
-+	-DCMAKE_CXX_STANDARD=14 \
- 	-DABSL_ENABLE_INSTALL=ON \
- 	-DABSL_USE_GOOGLETEST_HEAD=OFF
- 
- HOST_LIBABSEIL_CPP_CONF_OPTS = \
--	-DCMAKE_CXX_STANDARD=11 \
-+	-DCMAKE_CXX_STANDARD=14 \
- 	-DABSL_ENABLE_INSTALL=ON \
- 	-DABSL_USE_GOOGLETEST_HEAD=OFF
- 
--- 
-2.34.1
+I was thinking the ca-certificates package will take care of this. Maybe I
+was wrong.
+
+So, how should we add local CA to the trust store in the target?
+
+On Sat, 18 Feb 2023 at 12:19, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
+
+> On Fri, 17 Feb 2023 17:15:39 +0100
+> Sourabh Hegde <hrsourabh011@gmail.com> wrote:
+>
+> > I am trying to add a custom CA to the trust store. I have copied the CA
+> > file to "/usr/local/share/ca-certificates/" in the rootfs_overlay and
+> also
+> > has a .crt extension. Now after executing "make" the CA is not added to
+> the
+> > trust store in /etc/ssl/certs/ in the target. Anyways it's installed only
+> > in "/usr/local/share/ca-certificates/" in the target. I thought
+> > "update-ca-certificates" will add this during image build.
+> > Can anyone please let me know what is missing here?
+>
+> What makes you think update-ca-certificates is run during the build? I
+> don't remember Buildroot having anything that does this.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
+
+--000000000000e8da0405f4f8edba
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello Thomas,<div><br></div><div>Thanks for the=C2=A0updat=
+e.</div><div><br></div><div>I was thinking the ca-certificates package will=
+ take care of this. Maybe I was wrong.</div><div><br></div><div>So, how sho=
+uld we add local CA to the trust store in the target?</div></div><br><div c=
+lass=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Sat, 18 Feb 2=
+023 at 12:19, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootl=
+in.com">thomas.petazzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote cl=
+ass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid=
+ rgb(204,204,204);padding-left:1ex">On Fri, 17 Feb 2023 17:15:39 +0100<br>
+Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail.com" target=3D"_blan=
+k">hrsourabh011@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; I am trying to add a custom CA to the trust store. I have copied the C=
+A<br>
+&gt; file to &quot;/usr/local/share/ca-certificates/&quot; in the rootfs_ov=
+erlay and also<br>
+&gt; has a .crt extension. Now after executing &quot;make&quot; the CA is n=
+ot added to the<br>
+&gt; trust store in /etc/ssl/certs/ in the target. Anyways it&#39;s install=
+ed only<br>
+&gt; in &quot;/usr/local/share/ca-certificates/&quot; in the target. I thou=
+ght<br>
+&gt; &quot;update-ca-certificates&quot; will add this during image build.<b=
+r>
+&gt; Can anyone please let me know what is missing here?<br>
+<br>
+What makes you think update-ca-certificates is run during the build? I<br>
+don&#39;t remember Buildroot having anything that does this.<br>
+<br>
+Best regards,<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div>
+
+--000000000000e8da0405f4f8edba--
+
+--===============8249485345006788541==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8249485345006788541==--
