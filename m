@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FBEFC636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:00:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA29BC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:00:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AFC6605AC;
-	Tue, 21 Feb 2023 01:00:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AFC6605AC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98EC46112F;
+	Tue, 21 Feb 2023 01:00:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98EC46112F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GL17onMsz_Qb; Tue, 21 Feb 2023 01:00:40 +0000 (UTC)
+	with ESMTP id jEiRfrXNUa6h; Tue, 21 Feb 2023 01:00:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 426446115B;
-	Tue, 21 Feb 2023 01:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 426446115B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 444B51BF2E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFB3C610B7;
+	Tue, 21 Feb 2023 01:00:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFB3C610B7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BED0C1BF2E3
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D54A6FB87
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D54A6FB87
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06DAB41830
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06DAB41830
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XJlFI3W_9acK for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h2er7CvjWjEw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B48B96FB80
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B48B96FB80
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21F8441825
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21F8441825
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A304981979; Mon, 20 Feb 2023 20:52:36 +0000 (UTC)
+ id 1E3E186496; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Jan 2023 17:50:12 +0100
+Date: Sun, 19 Feb 2023 17:52:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4b6ccffcfb84938d2f0813d7c98907d75b49b842
-X-Git-Newrev: a796cfb2e0343730a1232d0f5aff405a9788a15d
+X-Git-Oldrev: be235c048f004617851d7ef752ee5f4dc2373e28
+X-Git-Newrev: 66b1926764582a628b0b6b68a3aebe4b9790ab12
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205236.A304981979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Update for 2022.11.1
+Message-Id: <20230220205302.1E3E186496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php: security bump
+ version to 8.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,89 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a796cfb2e0343730a1232d0f5aff405a9788a15d
+commit: https://git.buildroot.net/buildroot/commit/?id=66b1926764582a628b0b6b68a3aebe4b9790ab12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d48a8beb39275a479185ab9b3232cd15dcfb87ab)
-[Peter: drop Makefile change]
+Changelog: https://www.php.net/ChangeLog-8.php#8.2.3
+
+Fixes CVE-2023-0567, CVE-2023-0568 & CVE-2023-0662.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES                  | 50 ++++++++++++++++++++++++++++++++++++++++++++++++
- support/misc/Vagrantfile |  2 +-
- 2 files changed, 51 insertions(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 6de79c7d35..e23cd4eaf8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,53 @@
-+2022.11.1, released January 18th, 2023
-+
-+	Important / security related fixes.
-+
-+	Br2-external: Fix make performance issue when many (> 6)
-+	external trees are used together.
-+
-+	Erofs: Use fixed timestamp and UUID when BR2_REPRODUCIBLE is
-+	used.
-+
-+	Go: Ensure our go build and module cache is used, even for the
-+	download step.
-+
-+	Legal-info: Stop warning about not saving sources for local /
-+	override packages if <PKG>_REDISTRIBUTE is set to NO.
-+
-+	Linux: Fix build of < 5.6 kernels with host-gcc >= 10.
-+
-+	A large number of NXP related packages and defconfigs have
-+	been updated as upstream moved the git repositories to Github.
-+
-+	Defconfigs: zcu106, kria kv260: Fix U-Boot build
-+
-+	Updated/fixed packages: asterisk, bearssl, botan, cairo,
-+	capnproto, check, checkpolicy, connman, containerd, crun,
-+	dbus-cxx, docker-cli, docker-engine, exempi, exfat,
-+	exfat-utils, falcosecurity-libs, fluidsynth, fmc, fmlib,
-+	freeradius-server, gcc, glib-networking, go,
-+	gobject-introspection, gperf, i2pd, ima-evm-utils,
-+	imx-alsa-plugins, imx-kobs, imx-lib, imx-m4fwloader,
-+	imx-mkimage, intel-microcode, janus-gateway, libcurl,
-+	libdeflate, libftdi1, libkcapi, libksba, libmbim, libmng,
-+	libpjsip, libtalloc, libuwsc, libxkbcommon, lpeg, lrzsz,
-+	lttng-tools, lua-cqueues, mali-driver, mbedtls, mfgtools,
-+	moby-buildkit, mutt, opensc, php, policycoreutils, polkit,
-+	postgresql, pptp-linux, qcom-db410c-firmware, qemu, qoriq-rcw,
-+	qt5virtualkeyboard, redis, rhash, rtl8189es, rtl8192eu,
-+	rtl_433, ruby, sqlite, swupdate, tealdeer, tekui, tiff,
-+	tinyxml, tor, webkitgtk, wireshark, wpasupplicant, wpewebkit,
-+	xr819-xradio, xdriver_xf86-video-imx-viv, xserver_xorg-server,
-+	xxhash, zip
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#14971: Kernel 3.10.108 fail to build in Buildroot 2022.08-rc1
-+	#14996: Too many directories in BR2_EXTERNAL causes hang during make
-+	#15161: kernel can't support SUBDIR
-+	#15196: Setting BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE does not work
-+	#15226: lsblk: not found
-+
- 2022.11, released December 5th, 2022
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 869cb9b94f..41aa326156 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  bdc4aa38e652bac86039601840bae01c0c3653972eaa6f9f93d5f71953a7ee33  php-8.2.2.tar.xz
++sha256  b9b566686e351125d67568a33291650eb8dfa26614d205d70d82e6e92613d457  php-8.2.3.tar.xz
  
- 	Fixes all over the tree.
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 02fe6bca67..9eee9955ec 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
+ # License file
+ sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 9ce153f4fa..bd7d5a8c3c 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Buildroot version to use
--RELEASE='2022.11'
-+RELEASE='2022.11.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+-PHP_VERSION = 8.2.2
++PHP_VERSION = 8.2.3
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
