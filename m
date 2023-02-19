@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A4DAC636CC
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 21:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 892DBC05027
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 21:10:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2EE9405F5;
-	Sun, 19 Feb 2023 21:10:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2EE9405F5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3162541590;
+	Sun, 19 Feb 2023 21:10:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3162541590
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pY7k7D_CKWDK; Sun, 19 Feb 2023 21:10:28 +0000 (UTC)
+	with ESMTP id KU9G8E9t6Z_l; Sun, 19 Feb 2023 21:10:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9F1B414F7;
-	Sun, 19 Feb 2023 21:10:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9F1B414F7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DA69B1BF405
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 21:10:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78642414ED;
+	Sun, 19 Feb 2023 21:10:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78642414ED
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5AD721BF405
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 21:10:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1F1D41607
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 21:10:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1F1D41607
+ by smtp2.osuosl.org (Postfix) with ESMTP id 429B740B48
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 21:10:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 429B740B48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Byq9MtrcZakC for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JZoKtvCzW38d for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 21:10:17 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD32540BE8
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CD32540BE8
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 21:10:16 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B5D2EFF803;
  Sun, 19 Feb 2023 21:10:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF4E24161B
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 21:10:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF4E24161B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B95E86296; Sun, 19 Feb 2023 21:10:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 22:10:00 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d782c0682f559d407e64698470b511512a5bdc78
-X-Git-Newrev: 2ecaf26b5e3693cf0145a2d1fcc2e0953884baf4
-X-Patchwork-Hint: ignore
-Message-Id: <20230219211013.9B95E86296@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/poke: bump to version 3.0
+Date: Sun, 19 Feb 2023 22:10:12 +0100
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20230219221012.31f1977e@windsurf>
+In-Reply-To: <20230218180215.1077049-1-romain.naour@gmail.com>
+References: <20230218180215.1077049-1-romain.naour@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676841013;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=mNk62/UueGd4MglxrIcusClgkJFihDcvAqqyNw7963Q=;
+ b=iboxH77Cgo+wNA4c84G/rVrZK5G3wrureHg5fRFsfWqKKYZb/h2Sj/qZiAH5DH6nrie1I+
+ EA8zIJ+dURdiev8+xQVwFolITssZ+BPcSTkF6uGZGA4iQl6QtXiDKbTH5+mS3ccRiiHag6
+ 2/vn/9317h/XYdPhXFH+jurAVPBICKoXRsiS1IvBsKN8t+nKIO/ZzZfj7vwbmtxOyRIBNl
+ 2RuseCGGYw8+9vViDD9FB0ORMo3WuQ/EtgNr/konQN4hY9rJMsYtoFAKOaHBRDTO3WWD0V
+ BdqcA1WpJNC6W3NK/AvJmP9UEmMghTm72wkX++t/Gi6GisGKDxv9C8r7aWLBZQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iboxH77C
+Subject: Re: [Buildroot] [PATCH] package/poke: bump to version 3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +77,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ecaf26b5e3693cf0145a2d1fcc2e0953884baf4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 18 Feb 2023 19:02:15 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-See:
-http://www.jemarch.net/poke-3.0-relnotes.html
+> See:
+> http://www.jemarch.net/poke-3.0-relnotes.html
+> 
+> Build tested:
+> https://gitlab.com/kubu93/buildroot/-/pipelines/782116399
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> test-pkg config:
+>  BR2_PACKAGE_POKE=y
+> ---
+>  package/poke/poke.hash | 2 +-
+>  package/poke/poke.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Build tested:
-https://gitlab.com/kubu93/buildroot/-/pipelines/782116399
+Applied to master, thanks.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/poke/poke.hash | 2 +-
- package/poke/poke.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/poke/poke.hash b/package/poke/poke.hash
-index 09dc4e8972..e6e436570c 100644
---- a/package/poke/poke.hash
-+++ b/package/poke/poke.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  841e285917c6738ce982a6930e30ebeadecfb0655a79d9184f16f876a9fe6e47  poke-2.4.tar.gz
-+sha256  79a9b2f33c9f8c327c499afadaeeabfeecf6ad4988924d2c6c6f317e50317add  poke-3.0.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  jitter/COPYING
-diff --git a/package/poke/poke.mk b/package/poke/poke.mk
-index d49e628dbf..4a6ff344b2 100644
---- a/package/poke/poke.mk
-+++ b/package/poke/poke.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POKE_VERSION = 2.4
-+POKE_VERSION = 3.0
- POKE_SITE = $(BR2_GNU_MIRROR)/poke
- # gnulib license is a mix/mess of public-domain and various GPL and LGPL versions.
- POKE_LICENSE = GPL-3.0+, GPL-3.0+ (jitter), gnulib license (gnulib)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
