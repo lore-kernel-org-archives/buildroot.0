@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B515C05027
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 16:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1CE0C61DA4
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 16:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA73840B70;
-	Sun, 19 Feb 2023 16:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA73840B70
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E35640B61;
+	Sun, 19 Feb 2023 16:55:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E35640B61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5fsPntRUTaF0; Sun, 19 Feb 2023 16:54:58 +0000 (UTC)
+	with ESMTP id zbAhGHet_MKV; Sun, 19 Feb 2023 16:55:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24B9640B3A;
-	Sun, 19 Feb 2023 16:54:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24B9640B3A
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2FF040B53;
+	Sun, 19 Feb 2023 16:55:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2FF040B53
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 142E91BF287
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 16:54:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 98EFE1BF287
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 16:55:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF56160E70
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 16:54:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF56160E70
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7219760E89
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 16:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7219760E89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Hv4cRv9wykw for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 16:54:54 +0000 (UTC)
+ with ESMTP id NPHFEktWOqyt for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 16:55:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC13860DCB
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CC13860DCB
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 16:54:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C60460E70
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C60460E70
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 16:55:46 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6B566C0002;
- Sun, 19 Feb 2023 16:54:51 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 922C740004;
+ Sun, 19 Feb 2023 16:55:44 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pTmxe-0074nE-9T; Sun, 19 Feb 2023 17:54:50 +0100
+ id 1pTmyV-0074ps-3w; Sun, 19 Feb 2023 17:55:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230216174018.33199-1-fontaine.fabrice@gmail.com>
-Date: Sun, 19 Feb 2023 17:54:50 +0100
-In-Reply-To: <20230216174018.33199-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 16 Feb 2023 18:40:18 +0100")
-Message-ID: <878rgt389x.fsf@dell.be.48ers.dk>
+References: <20230216174134.34179-1-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Feb 2023 17:55:42 +0100
+In-Reply-To: <20230216174134.34179-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 16 Feb 2023 18:41:34 +0100")
+Message-ID: <874jrh388h.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/freerdp: bump to version 2.10.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/fluent-bit: fix build with
+ libexecinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -71,7 +72,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > https://github.com/FreeRDP/FreeRDP/releases/tag/2.10.0
+ > Fix the following build failure with libexecinfo raised since commit
+ > d649bcd3805a26cedb30120ebbdcf12f8fbf449f:
+
+ > /home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/mips-buildroot-linux-musl/10.4.0/../../../../mips-buildroot-linux-musl/bin/ld:
+ > ../lib/monkey/library/libmonkey.a(mk_utils.c.o): in function
+ > `mk_utils_stacktrace':
+ > mk_utils.c:(.text+0x1578): undefined reference to `backtrace'
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/63a6ba9104dfddbd7f6a7debadc0c6ef6e3a21f5
+
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
