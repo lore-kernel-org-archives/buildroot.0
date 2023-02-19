@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90FE8C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:05:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEE35C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:05:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 469A370188;
-	Tue, 21 Feb 2023 02:05:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 469A370188
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AC666107C;
+	Tue, 21 Feb 2023 02:05:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AC666107C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uPhONIFqTR4y; Tue, 21 Feb 2023 02:05:04 +0000 (UTC)
+	with ESMTP id 4kEbXm7fafzM; Tue, 21 Feb 2023 02:05:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7838F70224;
-	Tue, 21 Feb 2023 02:05:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7838F70224
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F86970288;
+	Tue, 21 Feb 2023 02:05:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F86970288
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9FB411BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AF9831BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52CFF6FE60
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6C927001F
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52CFF6FE60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6C927001F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DDGKmcqzvHpN for <buildroot@lists.busybox.net>;
+ with ESMTP id f4QfgZrVYpKN for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7642170048
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EE0670046
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7642170048
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EE0670046
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 749448648F; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+ id 68E1C81979; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 18:00:13 +0100
+Date: Sun, 19 Feb 2023 17:57:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 05c3177493aa8447d5cb568c8c13e0c09eded18b
-X-Git-Newrev: df4f7f8e85274d5bde29171203c7eb95f4903765
+X-Git-Oldrev: 364511933811d76d4b866fe3aa04adff449cf94b
+X-Git-Newrev: 05c3177493aa8447d5cb568c8c13e0c09eded18b
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205302.749448648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/weston: add xwayland
- dependency
+Message-Id: <20230220205302.68E1C81979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xwayland: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,61 +63,192 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df4f7f8e85274d5bde29171203c7eb95f4903765
+commit: https://git.buildroot.net/buildroot/commit/?id=05c3177493aa8447d5cb568c8c13e0c09eded18b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If the XWayland support is enabled then build the corresponding XServer.
+XServer to run X clients under wayland
+
+This XServer is required to run the X clients under Wayland compositor,
+for example weston or wlroots based compositors.
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/Config.in | 10 +++++++++-
- package/weston/weston.mk |  2 +-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ DEVELOPERS                           |  1 +
+ package/x11r7/Config.in              |  1 +
+ package/x11r7/xwayland/Config.in     | 26 ++++++++++
+ package/x11r7/xwayland/xwayland.hash |  6 +++
+ package/x11r7/xwayland/xwayland.mk   | 94 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 128 insertions(+)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 3b4e932b7d..09119edaaa 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -109,16 +109,24 @@ comment "X11 (nested) compositor needs X.org enabled"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7894b10e38..a7a0bb14d1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2426,6 +2426,7 @@ F:	support/testing/tests/package/test_python_s3transfer.py
+ N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
+ F:	package/slirp4netns/
+ F:	package/sway/
++F:	package/x11r7/xwayland/
  
- config BR2_PACKAGE_WESTON_XWAYLAND
- 	bool "XWayland support"
--	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_LIBEPOXY
-+	depends on BR2_PACKAGE_XORG7 # xwayland
-+	depends on BR2_USE_MMU # xwayland
-+	depends on !BR2_STATIC_LIBS # xwayland
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # xwayland
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_LIBXCB
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_XWAYLAND
- 
- comment "XWayland support needs libepoxy and X.org enabled"
- 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
- 
-+comment "XWayland support needs a toolchain w/ threads, dynamic library"
+ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/freescale-imx/
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 365de34c98..4de8922e0d 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -12,6 +12,7 @@ menuconfig BR2_PACKAGE_XORG7
+ if BR2_PACKAGE_XORG7
+ 	menu "X11R7 Servers"
+ 		source package/x11r7/xserver_xorg-server/Config.in
++		source package/x11r7/xwayland/Config.in
+ 	endmenu
+ 	menu "X11R7 Libraries"
+ 		source package/x11r7/libxcb/Config.in
+diff --git a/package/x11r7/xwayland/Config.in b/package/x11r7/xwayland/Config.in
+new file mode 100644
+index 0000000000..4f14f2cc36
+--- /dev/null
++++ b/package/x11r7/xwayland/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_XWAYLAND
++	bool "xwayland server"
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # wayland
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
++	# We need a SHA1 implementation. If either openssl or
++	# libgcrypt are already part of the build, we'll use one of
++	# them, otherwise, use the small libsha1 library.
++	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
++	select BR2_PACKAGE_PIXMAN
++	select BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
++	select BR2_PACKAGE_XLIB_LIBXCVT
++	select BR2_PACKAGE_XLIB_LIBXFONT2
++	select BR2_PACKAGE_XLIB_LIBXKBFILE
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_XLIB_XTRANS
++	select BR2_PACKAGE_XORGPROTO
++	help
++	  X.Org X server to run X clients under wayland
++
++	  http://xorg.freedesktop.org
++
++comment "xwayland needs a toolchain w/ threads, dynamic library"
 +	depends on BR2_USE_MMU
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+new file mode 100644
+index 0000000000..0c476f3183
+--- /dev/null
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -0,0 +1,6 @@
++# From https://lists.x.org/archives/xorg-announce/2023-February/003322.html
++sha256  d11eeee73290b88ea8da42a7d9350dedfaba856ce4ae44e58c045ad9ecaa2f73  xwayland-22.1.8.tar.xz
++sha512  f52c6f99d8ef7605bc1c651d5ee5e306c12af30649a2d712b1c4c3cf4c7c80246ae24bd9ac39461d47aafc78f5d659446a459cd6259e05ef3128b204981d114a  xwayland-22.1.8.tar.xz
 +
- # Weston needs at least one shell; this can be one of the bundled ones,
- # below, of from a third-party package, which should then select this.
- config BR2_PACKAGE_WESTON_HAS_SHELL
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 5e71473640..01f84178b2 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -123,7 +123,7 @@ WESTON_CONF_OPTS += -Dbackend-default=$(call qstrip,$(BR2_PACKAGE_WESTON_DEFAULT
- 
- ifeq ($(BR2_PACKAGE_WESTON_XWAYLAND),y)
- WESTON_CONF_OPTS += -Dxwayland=true
--WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
-+WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor xwayland
- else
- WESTON_CONF_OPTS += -Dxwayland=false
- endif
++# Locally calculated
++sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+new file mode 100644
+index 0000000000..174b440b07
+--- /dev/null
++++ b/package/x11r7/xwayland/xwayland.mk
+@@ -0,0 +1,94 @@
++################################################################################
++#
++# xwayland
++#
++################################################################################
++
++XWAYLAND_VERSION = 22.1.8
++XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
++XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
++XWAYLAND_LICENSE = MIT
++XWAYLAND_LICENSE_FILES = COPYING
++XWAYLAND_INSTALL_STAGING = YES
++XWAYLAND_DEPENDENCIES = \
++	pixman \
++	wayland \
++	wayland-protocols \
++	xlib_libxcvt \
++	xlib_libXfont2 \
++	xlib_libxkbfile \
++	xlib_libXrandr \
++	xlib_xtrans \
++	xorgproto
++XWAYLAND_CONF_OPTS = \
++	-Dxwayland_eglstream=false \
++	-Dxvfb=false \
++	-Ddefault_font_path=/usr/share/fonts/X11/ \
++	-Ddtrace=false \
++	-Ddocs=false
++
++ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_LIBEPOXY),yy)
++XWAYLAND_CONF_OPTS += -Dglamor=true
++XWAYLAND_DEPENDENCIES += libdrm libepoxy
++else
++XWAYLAND_CONF_OPTS += -Dglamor=false
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++XWAYLAND_CONF_OPTS += -Dglx=true
++XWAYLAND_DEPENDENCIES += libgl
++else
++XWAYLAND_CONF_OPTS += -Dglx=false
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXDMCP),y)
++XWAYLAND_CONF_OPTS += \
++	-Dxdmcp=true \
++	-Dxdm-auth-1=true
++XWAYLAND_DEPENDENCIES += xlib_libXdmcp
++else
++XWAYLAND_CONF_OPTS += \
++	-Dxdmcp=false \
++	-Dxdm-auth-1=false
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++XWAYLAND_CONF_OPTS += -Dsecure-rpc=true
++XWAYLAND_DEPENDENCIES += libtirpc
++else
++XWAYLAND_CONF_OPTS += -Dsecure-rpc=false
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX)$(BR2_PACKAGE_AUDIT),yy)
++XWAYLAND_CONF_OPTS += -Dxselinux=true
++XWAYLAND_DEPENDENCIES += libselinux audit
++else
++XWAYLAND_CONF_OPTS += -Dxselinux=false
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++XWAYLAND_CONF_OPTS += -Dsha1=libcrypto
++XWAYLAND_DEPENDENCIES += openssl
++else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++XWAYLAND_CONF_OPTS += -Dsha1=libgcrypt
++XWAYLAND_DEPENDENCIES += libgcrypt
++else
++XWAYLAND_CONF_OPTS += -Dsha1=libsha1
++XWAYLAND_DEPENDENCIES += libsha1
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_LIBDRM),yy)
++XWAYLAND_CONF_OPTS += -Ddri3=true
++XWAYLAND_DEPENDENCIES += xlib_libxshmfence libdrm
++else
++XWAYLAND_CONF_OPTS += -Ddri3=false
++endif
++
++ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
++XWAYLAND_CONF_OPTS += -Dlibunwind=true
++XWAYLAND_DEPENDENCIES += libunwind
++else
++XWAYLAND_CONF_OPTS += -Dlibunwind=false
++endif
++
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
