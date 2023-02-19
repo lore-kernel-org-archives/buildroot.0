@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C93C05027
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 22:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD207C05027
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 22:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2BB460F8D;
-	Sun, 19 Feb 2023 22:21:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2BB460F8D
+	by smtp1.osuosl.org (Postfix) with ESMTP id D833D81E1E;
+	Sun, 19 Feb 2023 22:45:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D833D81E1E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ZwraFTYWVsF; Sun, 19 Feb 2023 22:21:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wbZr4j9F7ftP; Sun, 19 Feb 2023 22:45:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2231260F7B;
-	Sun, 19 Feb 2023 22:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2231260F7B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 948D51BF404
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 22:20:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00D7E81DE7;
+	Sun, 19 Feb 2023 22:45:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00D7E81DE7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 572CD1BF404
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 22:45:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D95B41635
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 22:20:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D95B41635
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3062D81DE7
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 22:45:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3062D81DE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YCUbRMWQRZN3 for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 22:20:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3Su0IMgAX4KZ for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 22:45:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B4C1415E7
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1B4C1415E7
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 22:20:56 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id bp6so1902158lfb.0
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 14:20:55 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26E6781DAB
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 26E6781DAB
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 22:45:54 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id l7so1051352wms.0
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 14:45:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=CfL7CS0fUHC4ooSh6QS/HUU46Z1apvUlDMBmm+UFiE0=;
- b=h2rCkgKXVbBuHAvw+VixO3SkYC678MSOE8dNG5qhZF2SssBKJPLPrvmOIw4TqKvubD
- NEE5iZRqAESjYDmtfIXMxMbt7fSg1CbM91w3gjGV5wtnZ60v9MYHOT/KknV9KtIj82Wt
- e4C64c8iDN48xQdY6/SuihOznzT/77lni1kDfulAGwpo3dNdCRC9DLdbanKQkKMLQIUr
- 4HQsV+e0MCdiIKTylwdA+lBvz7Gu/FSNp47vZmZnjPKLlaTfsiZxUO0jkGdHrVzSr9QT
- qnyiqyxKUlv8XwKAm1Qk/Ul/bjOmYeXvTPShBoKJjAPNThbSeMQfuBwQFDq9rH3ucFc7
- X+PQ==
-X-Gm-Message-State: AO0yUKVgeSpzluJD9DjtEnwD1ZJx2/tKIhOpqstzoOfVAVhqtrm7ojLu
- XEPnoyFk12aqMNBnj08M1paG86VZWlQ=
-X-Google-Smtp-Source: AK7set/hxeCaN6Qhyq+JfUqm138t0yLUMDmX1LP9Pv1NLnECy/9dXwbzH9imY2xvh0wp0lW0Ral8GQ==
-X-Received: by 2002:ac2:46cb:0:b0:4d5:a689:e53b with SMTP id
- p11-20020ac246cb000000b004d5a689e53bmr528870lfo.27.1676845253534; 
- Sun, 19 Feb 2023 14:20:53 -0800 (PST)
-Received: from luthien.lan ([98.128.186.100]) by smtp.gmail.com with ESMTPSA id
- u6-20020ac243c6000000b004db3900da02sm151498lfl.73.2023.02.19.14.20.53
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=WvMHzXgjNMYxN30MMvWRe3K9N5MhKRGhdT24A9bRV+4=;
+ b=3tv5sau/6PXLz7euBI61KphibSPfcPfinCnsoAjrfwxV7VHFUIgfoeKZ1RJz+Z7Frq
+ V12EEJfW57ZOE/i0jBq/FyGLMesa2omz9opyQkUHiurPPh69HyLM4GX/foksbt49WIBg
+ 6oQVk6MPTvh+FVuRBZ/9AiCchAwVAz0v+FVvR78LeaCxVPLO9r/IpM1z0JdPY4mGAVdu
+ mz9Zq0p0TSsn9b4Ui/J+cgJsItOIFHRELeXnCqUQnmbOpNiiFxh+Yt+lUcfnrxAEE+l9
+ 8lIK5GZaOXfq8CeGgvBrEGw4h3EMCDeXPFGzEFwQbytJwn3Q46QgL6r7vqdNrEpBL/pV
+ L3mQ==
+X-Gm-Message-State: AO0yUKXMmm/0b1u97Nzg7IrNObZBXyq4ChCedXr3dr8PaREU6rAnQ7/y
+ Ml4IsXVqB9GY2N/WgkjLWKjZ+QBVsqI=
+X-Google-Smtp-Source: AK7set9WSfkslJ116Ru1N/PbGXqqeIThq86jXSlbf9q5U/TvLmAq+qbBKTcNBAo+g+DOIyWdc2UNVg==
+X-Received: by 2002:a05:600c:319a:b0:3da:acb1:2f09 with SMTP id
+ s26-20020a05600c319a00b003daacb12f09mr6032977wmp.19.1676846751693; 
+ Sun, 19 Feb 2023 14:45:51 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ u9-20020a05600c4d0900b003e1f2e43a1csm11484250wmp.48.2023.02.19.14.45.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Feb 2023 14:20:53 -0800 (PST)
-From: Joachim Wiberg <troglobit@gmail.com>
+ Sun, 19 Feb 2023 14:45:51 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 23:20:47 +0100
-Message-Id: <20230219222048.22093-2-troglobit@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230219222048.22093-1-troglobit@gmail.com>
-References: <20230219222048.22093-1-troglobit@gmail.com>
+Date: Sun, 19 Feb 2023 23:45:46 +0100
+Message-Id: <20230219224546.1232023-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=CfL7CS0fUHC4ooSh6QS/HUU46Z1apvUlDMBmm+UFiE0=;
- b=BdL2I3qidboTAJfmZb6SiPkdPuKxl9FMt8SEsazKlaPqQqvWqm0LNUhRu1wdQM3jJZ
- QY0yxfuHogfydijgpris5oEG6wpA8iEYIT/bhJRFjbl745IKacCy+D5YvDR4RdVoQPnL
- wp5RjWdhhknTDMw8xka01MalI046vB5Hnm0v1VINfA9R3bBO69GGO4yLu5swWa8LYyDm
- E9I4Hg9iifQwMlLgGEMtNu+9Ye8c//+opIyRdCPMlOCjkc23Z8Vr1W1gdNdOAyVWIbEb
- +Q3oDNxLsUWY2p5ZaTtzeRPtY7iOS9Z2AiU2q510MnPtXz9k5qdmtB+3UvNs4MdOAhl0
- Retw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=WvMHzXgjNMYxN30MMvWRe3K9N5MhKRGhdT24A9bRV+4=;
+ b=HsL1hBAgrP8ho658v9XQ3I+jL6WPHyzsX2geriK04XHhGtoJuu5mRAPAZhnLEddcPk
+ R34xdAhvagU6pSjuvy3EzahQk935Mo3xpxF1U8+f7Gnv6rtsuvPf9ne1lfw6LtKfXXhb
+ 95+a0/koI9BS3HBHtkB3KYKgD301Vo6FZ3B+UkybqjWSd31rqmeohVDv7g4EFHpV3G3U
+ FqhEERoV98fycuIXZpuk3SvziVnMO29qP9AvYJKL9zkMmSGQMcAO0QTr5MnjZmU0yQ+b
+ X5djbzn+9CLr8n3WjfKxnu+iu594s1vEUpubHrIHVkxAiq7Cstla5gLQSS+XDZC95Qtq
+ tZeA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BdL2I3qi
-Subject: [Buildroot] [PATCH 1/1] package/ssdp-responder: bump to v2.0
+ header.a=rsa-sha256 header.s=20210112 header.b=HsL1hBAg
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,50 +93,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Aleksander Morgado <aleksander@aleksander.es>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ChangeLog:
- - https://github.com/troglobit/ssdp-responder/releases/tag/v2.0
- - https://github.com/troglobit/ssdp-responder/blob/v2.0/ChangeLog.md
+Commit d769cfc13f6c2544f8bc5b6339d23763319a2383 was incomplete as
+plugins/meson.build still unconditionally calls shared_module. So
+disable plugins to fix the following static build failure raised since
+bump to version 1.20.2 in commit
+b95334b71fbdde0f7621b58ed35fa98df9e0966d:
 
-Critical Fixes:
- - Fix periodic busy loop causing intermittent 100% CPU load
- - Fix invalid <UDN>uuid:uuid:...</UDN> in description.xml (dup uuid:)
+[238/417] Linking target plugins/libmm-shared-telit.so
+FAILED: plugins/libmm-shared-telit.so
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Plugins could be enabled back through builtin_plugins as soon as
+https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/commit/1c4da332ee6e0d948f85a63f74cb27e89075c011
+lands in a stable release
+
+Fixes:
+ - http://autobuild.buildroot.org/results/deb2a752accb021392bb9dc3d06b2b1bf151535c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ssdp-responder/ssdp-responder.hash | 2 +-
- package/ssdp-responder/ssdp-responder.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/modem-manager/modem-manager.mk | 44 ++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/ssdp-responder/ssdp-responder.hash b/package/ssdp-responder/ssdp-responder.hash
-index 425ad86e08..8b4f3e4e45 100644
---- a/package/ssdp-responder/ssdp-responder.hash
-+++ b/package/ssdp-responder/ssdp-responder.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  974c244abd4ba8c87532867a84756182a1460c99072ffb1eb91c5a1f73311d89  ssdp-responder-1.9.tar.gz
-+sha256  d8888f2ac59febfb3b2473a1402041014052ad4dc1eeb4168c78aeca1692aae3  ssdp-responder-2.0.tar.gz
- sha256  68d6fdc22e337f725fe719bf9ae6d92b1d8d0ca4cff8219b303ab76706670a8d  LICENSE
-diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
-index 5193966908..20e7219386 100644
---- a/package/ssdp-responder/ssdp-responder.mk
-+++ b/package/ssdp-responder/ssdp-responder.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 979a80a8e9..824b9eda5a 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -80,6 +80,50 @@ else
+ MODEM_MANAGER_CONF_OPTS += -Dbash_completion=false
+ endif
  
--SSDP_RESPONDER_VERSION = 1.9
-+SSDP_RESPONDER_VERSION = 2.0
- SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
- SSDP_RESPONDER_LICENSE = ISC
- SSDP_RESPONDER_LICENSE_FILES = LICENSE
++ifeq ($(BR2_STATIC_LIBS),y)
++MODEM_MANAGER_CONF_OPTS += \
++	-Dplugin_generic=disabled \
++	-Dplugin_altair_lte=disabled \
++	-Dplugin_anydata=disabled \
++	-Dplugin_broadmobi=disabled \
++	-Dplugin_cinterion=disabled \
++	-Dplugin_dell=disabled \
++	-Dplugin_dlink=disabled \
++	-Dplugin_fibocom=disabled \
++	-Dplugin_foxconn=disabled \
++	-Dplugin_gosuncn=disabled \
++	-Dplugin_haier=disabled \
++	-Dplugin_huawei=disabled \
++	-Dplugin_intel=disabled \
++	-Dplugin_iridium=disabled \
++	-Dplugin_linktop=disabled \
++	-Dplugin_longcheer=disabled \
++	-Dplugin_mbm=disabled \
++	-Dplugin_motorola=disabled \
++	-Dplugin_mtk=disabled \
++	-Dplugin_nokia=disabled \
++	-Dplugin_nokia_icera=disabled \
++	-Dplugin_novatel=disabled \
++	-Dplugin_novatel_lte=disabled \
++	-Dplugin_option=disabled \
++	-Dplugin_option_hso=disabled \
++	-Dplugin_pantech=disabled \
++	-Dplugin_qcom_soc=disabled \
++	-Dplugin_quectel=disabled \
++	-Dplugin_samsung=disabled \
++	-Dplugin_sierra_legacy=disabled \
++	-Dplugin_sierra=disabled \
++	-Dplugin_simtech=disabled \
++	-Dplugin_telit=disabled \
++	-Dplugin_thuraya=disabled \
++	-Dplugin_tplink=disabled \
++	-Dplugin_ublox=disabled \
++	-Dplugin_via=disabled \
++	-Dplugin_wavecom=disabled \
++	-Dplugin_x22x=disabled \
++	-Dplugin_zte=disabled
++endif
++
+ define MODEM_MANAGER_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
+ 		$(TARGET_DIR)/etc/init.d/S44modem-manager
 -- 
-2.34.1
+2.39.0
 
 _______________________________________________
 buildroot mailing list
