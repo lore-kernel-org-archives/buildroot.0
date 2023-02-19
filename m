@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BBF2C05027
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 14:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B092C61DA4
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 14:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC51640B00;
-	Sun, 19 Feb 2023 14:01:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC51640B00
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD9E240B1D;
+	Sun, 19 Feb 2023 14:01:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD9E240B1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dilhqQ2gElwE; Sun, 19 Feb 2023 14:01:16 +0000 (UTC)
+	with ESMTP id s_N_Qfc8fdXO; Sun, 19 Feb 2023 14:01:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43E1640AF4;
-	Sun, 19 Feb 2023 14:01:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43E1640AF4
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3DF640AD9;
+	Sun, 19 Feb 2023 14:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3DF640AD9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 560E61BF285
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 14:01:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 20B741BF285
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 14:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CC3760C06
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 14:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CC3760C06
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF14C60C06
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 14:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF14C60C06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zl6lvT4VrKaP for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 14:01:04 +0000 (UTC)
+ with ESMTP id ZJKONT6OQfKs for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 14:01:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62BDE60BFC
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 62BDE60BFC
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 14:01:04 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id bk4so441520wrb.9
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 06:01:04 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E59A460BFC
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E59A460BFC
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 14:01:07 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id g7so339593wrd.3
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 06:01:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=jALTwcTDLPdI2KlI2RUplUVENqDdPdnW1cUpA/CwtMM=;
- b=32XFY/Fmjd3JEu4VUbO88oubAFp2wqwJNKv0cvBsSGQUchFFxiOfWw3DrEk1kDWBXo
- 9iFEVVnqM1h/KVA2HFQeoglWpF8RCy5eDCdAzj1CDKLmTPTkfdtOgyjoIpFirFsK8hxx
- tAW/dTwq3zVxB6JR5o4OhT0FLawe3Yw0bkokcgUN0ovmQXaKNKEBrTdJrum4oLMF9FxZ
- yGM4/7Q41GYmavqgFS0ImvYEQxOzUnA0qP0/v7RqVVvBJosTtt5X24tqfjcfQ78pQ+tr
- 1bCC4DbzqFk6uWX8NmOhEKJT5ebfjAuENk1GzanAa3vbrpBQJP5m8iG5o0+QvNvbA2Uz
- 7f6g==
-X-Gm-Message-State: AO0yUKXo2Bw9svtQthTbU7ZrO3DqAu5IdrezxRO2dK3CJ1SLI8oUE4rx
- j+GcRPf7QWsHu1ytDK945AY94HlVXoo=
-X-Google-Smtp-Source: AK7set+fAPkPpcU0Q51oyH8paCFTprY2t7YEbe91Tm8WDf7pheT+YxYhdBXn8zRL4Miy/F3PCtXchQ==
-X-Received: by 2002:a05:6000:1144:b0:2c5:7c55:501b with SMTP id
- d4-20020a056000114400b002c57c55501bmr127806wrx.26.1676815260988; 
- Sun, 19 Feb 2023 06:01:00 -0800 (PST)
+ bh=eNhzHZZzW4ZAer07H8jdPLlpPEGLK6eVP9/NbUUQ4i4=;
+ b=8RMCPhVQqI7tpWrCbtyT/EBKLyYX/hcKw7u9fMuyQ1CyAdI/fU/xhaq5BkhcrEQ0cs
+ dINLG47WFCvLY8XNILYPVChQBFjvX73qn4aj+pmO1zWnAsBXcTBPRv5gSeiuk8atPUnK
+ jczKjMC5G/XErD6ZkuL8T1idmVX1iFpmdQv9X9EzlmyB0J2LA3j3SnxItrdgxyFpPkWH
+ a/65Z0LCSaiQ+8JLCzlRMaQBWzIwo9utaScftp2HBb9u7zK+LMoaAthJ495Od75HUran
+ N+5BMFa5JBixjrjlHJbSGhzJvNZ9fZ5q05ZUbjp2fEE6k4Gkf/T+XG02nx1xJovaQCUb
+ bTtQ==
+X-Gm-Message-State: AO0yUKWjYKaaNcPyrPVoJLG/mmQQ2Zd17ufLp04YBteLK2Nvu+On9OTi
+ 8l4p6cNTsSW0yAkF9PwnDJDgAerjZF4=
+X-Google-Smtp-Source: AK7set8bdFI67VT3f/W0zxgBvS2J6xn9OMmBeF7Rulw/7akGuYCvFt/3JIqJncVGeZqhESqr1dGkOQ==
+X-Received: by 2002:adf:ea46:0:b0:2c5:93fe:12b7 with SMTP id
+ j6-20020adfea46000000b002c593fe12b7mr49099wrn.41.1676815266089; 
+ Sun, 19 Feb 2023 06:01:06 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- x13-20020a5d6b4d000000b002c6e8af1037sm1659333wrw.104.2023.02.19.06.00.58
+ x13-20020a5d6b4d000000b002c6e8af1037sm1659333wrw.104.2023.02.19.06.01.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Feb 2023 06:01:00 -0800 (PST)
+ Sun, 19 Feb 2023 06:01:05 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 15:00:50 +0100
-Message-Id: <20230219140051.80647-2-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Feb 2023 15:00:51 +0100
+Message-Id: <20230219140051.80647-3-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230219140051.80647-1-fontaine.fabrice@gmail.com>
 References: <20230219140051.80647-1-fontaine.fabrice@gmail.com>
@@ -74,17 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jALTwcTDLPdI2KlI2RUplUVENqDdPdnW1cUpA/CwtMM=;
- b=d7TccPMEKbUyL2WedKyMuFP/2Egn3n+COU4xQ6Lj1RqzKPH2TYkapxgkobq/iehvnU
- Ew4qOx+9LBgmuvXfxRKIBQ6KFqLcYAECLNudEZZhrTJvqbyKUHQ78BWnHf6nIPgTKWVA
- p4rwENbyJwlnk5W0zY2kSzgUzhnC8MgqgQi/3K92zAIa/fXE3CXNsFl6NK8Fv6NtvMTw
- MNpYnYATGmA9ZPPvQHNe8j8Woz++frAvny/v9173z3Sga9vlulfJ1vews1fxLGcNgdCL
- m04tPMNeasYI81TUq2nwimnNe1tt+MgxlYKR8alXhbm0rGzetItttPZ+zwdZqYAQPOnS
- gNOA==
+ bh=eNhzHZZzW4ZAer07H8jdPLlpPEGLK6eVP9/NbUUQ4i4=;
+ b=MY7akKF69n7O7LNcrxbzThue9v/mm1xlnOuQLlr/I75PficeJ3DBjhgzRV2nmiGlc2
+ 4ICFv087BzxPFOlFvVvdk8dcOnS8xx1utMTxgmrqXsH1RYQeuKKHVqLG/5HzOLU7cLEL
+ Skyh9YUrlI5kUhAJXcOo5hLASXNIQViQwK1/1rVOVMbTvU1QsZDkzaiInT639ZN/AOIs
+ EguwVbXhRrrrdy3fWVnyhQI6CO0WJZkx8jfW6Xxho7/T2pneU4voc87qpDmFtw9kK/Nx
+ JPfWnzTyy2bcUosV0IS+0lmbjljgMM447BCZP9J16Ams7m3cHq/U+i+dQtkqJpwCW+O8
+ zjuA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=d7TccPME
-Subject: [Buildroot] [PATCH 2/3] package/libjxl: disable benchmark and tests
+ header.a=rsa-sha256 header.s=20210112 header.b=MY7akKF6
+Subject: [Buildroot] [PATCH 3/3] package/libjxl: security bump to version
+ 0.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,29 +104,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable benchmark and tests which are enabled by default since the
-addition of the package in commit
-e648d399d8bd609697e78f13f7fa76be06d91a57
+Security: Fix OOB read in exif.h
+
+https://github.com/libjxl/libjxl/releases/tag/v0.8.1
+https://github.com/libjxl/libjxl/releases/tag/v0.8.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libjxl/libjxl.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libjxl/libjxl.hash |  2 +-
+ package/libjxl/libjxl.mk   | 10 +++++++---
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
+diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
+index e71d32e61d..6b4c9d8d0a 100644
+--- a/package/libjxl/libjxl.hash
++++ b/package/libjxl/libjxl.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  3114bba1fabb36f6f4adc2632717209aa6f84077bc4e93b420e0d63fa0455c5e  libjxl-0.7.0.tar.gz
++sha256  60f43921ad3209c9e180563025eda0c0f9b1afac51a2927b9ff59fff3950dc56  libjxl-0.8.1.tar.gz
+ sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
+ sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
 diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
-index 02a93ac5d9..77405e4f11 100644
+index 77405e4f11..095dc06764 100644
 --- a/package/libjxl/libjxl.mk
 +++ b/package/libjxl/libjxl.mk
-@@ -23,7 +23,9 @@ endif
- LIBJXL_CONF_OPTS = \
- 	-DJPEGXL_BUNDLE_LIBPNG=OFF \
- 	-DJPEGXL_BUNDLE_SKCMS=OFF \
-+	-DJPEGXL_ENABLE_BENCHMARK=OFF \
- 	-DJPEGXL_ENABLE_DOXYGEN=OFF \
-+	-DJPEGXL_ENABLE_EXAMPLES=OFF \
- 	-DJPEGXL_ENABLE_JNI=OFF \
- 	-DJPEGXL_ENABLE_MANPAGES=OFF \
- 	-DJPEGXL_ENABLE_OPENEXR=OFF \
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBJXL_VERSION = 0.7.0
++LIBJXL_VERSION = 0.8.1
+ LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
+ LIBJXL_LICENSE = BSD-3-Clause
+ LIBJXL_LICENSE_FILES = LICENSE PATENTS
+@@ -34,9 +34,13 @@ LIBJXL_CONF_OPTS = \
+ 
+ ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
+ LIBJXL_DEPENDENCIES += jpeg-turbo
+-LIBJXL_CONF_OPTS += -DJPEGXL_ENABLE_TOOLS=ON
++LIBJXL_CONF_OPTS += \
++	-DJPEGXL_ENABLE_JPEGLI=ON \
++	-DJPEGXL_ENABLE_TOOLS=ON
+ else
+-LIBJXL_CONF_OPTS += -DJPEGXL_ENABLE_TOOLS=OFF
++LIBJXL_CONF_OPTS += \
++	-DJPEGXL_ENABLE_JPEGLI=OFF \
++	-DJPEGXL_ENABLE_TOOLS=OFF
+ endif
+ 
+ $(eval $(cmake-package))
 -- 
 2.39.0
 
