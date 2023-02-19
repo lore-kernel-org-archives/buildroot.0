@@ -4,47 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06D8BC05027
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 22:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C118C05027
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 22:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADC0B60F5E;
-	Sun, 19 Feb 2023 22:05:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADC0B60F5E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7924560F4C;
+	Sun, 19 Feb 2023 22:20:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7924560F4C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 04xT05q2hXXM; Sun, 19 Feb 2023 22:05:30 +0000 (UTC)
+	with ESMTP id j3kle_YkkGgH; Sun, 19 Feb 2023 22:20:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E28BC60F75;
-	Sun, 19 Feb 2023 22:05:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E28BC60F75
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E20911BF404
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 22:05:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC8B360F2E;
+	Sun, 19 Feb 2023 22:20:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC8B360F2E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 51D121BF404
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 22:20:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB72481DFD
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 22:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB72481DFD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3929140B9E
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 22:20:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3929140B9E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5YER125eUL3o for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 22:05:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF1C88174D
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 22:05:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF1C88174D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA3CC86317; Sun, 19 Feb 2023 22:05:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MOvu8fgDGR_e for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 22:20:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 378A640B48
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
+ [IPv6:2a00:1450:4864:20::135])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 378A640B48
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 22:20:54 +0000 (UTC)
+Received: by mail-lf1-x135.google.com with SMTP id br16so1629930lfb.2
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 14:20:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=od3vBgYK//9Xus6H7Xyzd1LGiT350r91S4c852xJIpk=;
+ b=SSbWqNAPUHIlD67YN6OuxJKEv/YJfgRzi21qQeZRyVXH8bOC3v8t6JnIvwSkK1w1Qv
+ 6onapeE7WidCDmCpA0lgDtqotM2TooDX8CJLBTNId7oeP4iBH349u6mo6zq13JnTne8K
+ K9HGPnme7XSpudQDp0l8x/DZ9wf9Y05lSeUqb9XZYBRijei7kytQTwptKQ8yLfd46/el
+ 0GZv6tgG6evlG3WfOaHzqXdMsn4296Su8kInDMb/BRfJQMcwLrHRmJ/vQ2OIOySdU408
+ 5t+NyQ8V5oEUMuYA1Q+A0KsDtRrH+YJo0nWpT0jS8g5szN+8MpYepgVW73YhIiF5FbGL
+ sqGw==
+X-Gm-Message-State: AO0yUKUKuQKl8asOHG7bDtcWj6++S1f45WRI1iCanCKV+K/lyupV6CZN
+ oZkeE8JqEShWTHkZh6qluQY1QnJq2Wo=
+X-Google-Smtp-Source: AK7set/F+l0XZfRwIyDEdPxa55pb9jzgwvNSwVguTMke2BWanyp/SfCUfdWzUkOq+zm8hRZgO9NVhA==
+X-Received: by 2002:a05:6512:3b9d:b0:4db:29c5:6524 with SMTP id
+ g29-20020a0565123b9d00b004db29c56524mr771986lfv.25.1676845251580; 
+ Sun, 19 Feb 2023 14:20:51 -0800 (PST)
+Received: from luthien.lan ([98.128.186.100]) by smtp.gmail.com with ESMTPSA id
+ u6-20020ac243c6000000b004db3900da02sm151498lfl.73.2023.02.19.14.20.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 19 Feb 2023 14:20:51 -0800 (PST)
+From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 23:04:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ecaf26b5e3693cf0145a2d1fcc2e0953884baf4
-X-Git-Newrev: 7b4937a1709a88f90abbeac48e2e2db33b83d44b
-X-Patchwork-Hint: ignore
-Message-Id: <20230219220525.DA3CC86317@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ipmiutil: fix uclibc build without
- wchar
+Date: Sun, 19 Feb 2023 23:20:46 +0100
+Message-Id: <20230219222048.22093-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=od3vBgYK//9Xus6H7Xyzd1LGiT350r91S4c852xJIpk=;
+ b=Q3urY7gf+/0T5Z80U7KOfn1uYe6bLk6KVoLgq1vZahbJaLe1i5l7CP9pVKhxb1sp0d
+ MmUmlmzc29B3iavDDmLWb5kUQ9dl7qWkVIUZZ1iHtLinSJik1d1oR2iZWMqMfTYNMD7l
+ WVqwFOlZUw05GL/ql8CVly625dEUmepwq+pHIY5117ywpVn9UxB+ThP8bU/wrxqKC2Jr
+ iJvRGYTGwY7NfJ1/bw5PJF7BZwDRIg/GCyTkOR/qI3h62SvcW+rvCjXxVL7CfWkxwQhP
+ 8xefWf0m3v4Jg+S39ZIg3VWX/y0aB0qfXfgRjjVZ/DGgATBA7ypnln1yAadKxu73ux8o
+ C7OA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Q3urY7gf
+Subject: [Buildroot] [PATCH 0/1] package/ssdp-responder: bump to v2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,49 +92,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b4937a1709a88f90abbeac48e2e2db33b83d44b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Meta data:
 
-For an unknown reason, wchar_t is incorrectly detected with uclibc
-resulting in the following build failure:
+    $ ./utils/check-package package/ssdp-responder/*
+    102 lines processed
+    0 warnings generated
 
-In file included from igetevent.c:136:
-imb_api.h:150:5: error: unknown type name 'wchar_t'
-  150 |     wchar_t *Buffer;
-      |     ^~~~~~~
+    $ ./utils/test-pkg -c ssdp-responder.config -p ssdp-responder
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
+    6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
 
-The build failure can be reproduced even when reverting bump to version
-3.1.8.
+Joachim Wiberg (1):
+  package/ssdp-responder: bump to v2.0
 
-Fixes:
- - http://autobuild.buildroot.org/results/e9ff3bd08e106dc834968bf5e4296ce8299027f8
+ package/ssdp-responder/ssdp-responder.hash | 2 +-
+ package/ssdp-responder/ssdp-responder.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ipmiutil/ipmiutil.mk | 1 +
- 1 file changed, 1 insertion(+)
+-- 
+2.34.1
 
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index ad9fbfc24c..b48eaa7cb2 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -10,6 +10,7 @@ IPMIUTIL_LICENSE = BSD-3-Clause
- IPMIUTIL_LICENSE_FILES = COPYING
- 
- IPMIUTIL_MAKE = $(MAKE1)
-+IPMIUTIL_CONF_ENV = ac_cv_type_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- # tests against distro libcrypto so it might get a false positive when
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
