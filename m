@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A822C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:03:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7EADC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD8A27025C;
-	Tue, 21 Feb 2023 02:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD8A27025C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C49270262;
+	Tue, 21 Feb 2023 02:03:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C49270262
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id umBlHwZUyfra; Tue, 21 Feb 2023 02:03:23 +0000 (UTC)
+	with ESMTP id Nfv4r6MdCXXB; Tue, 21 Feb 2023 02:03:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4D4A7011E;
-	Tue, 21 Feb 2023 02:03:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4D4A7011E
+	by smtp3.osuosl.org (Postfix) with ESMTP id B01E0700D9;
+	Tue, 21 Feb 2023 02:03:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B01E0700D9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F1EE1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C72731BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7DAE70040
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7DAE70040
+ by smtp3.osuosl.org (Postfix) with ESMTP id 52A947004D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52A947004D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NCvkWxiHIMzU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+ with ESMTP id 9vGLNiBTC9DZ for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A17CC7001F
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A17CC7001F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D0A970024
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D0A970024
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FD3C828C8; Mon, 20 Feb 2023 20:53:01 +0000 (UTC)
+ id 419C4828C8; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Feb 2023 14:47:44 +0100
+Date: Sun, 19 Feb 2023 17:54:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9f4f8c5f8993c6d7c2ef730ac211ef84ac9ae26d
-X-Git-Newrev: 4ced0a528ddbffcc130997aaeee7598c82c6cd49
+X-Git-Oldrev: 05de8e14ce9bf9ea109aa028b34aba559aa18aad
+X-Git-Newrev: 71c51f1920deda32ea63105163fe84b20a0f9109
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205301.9FD3C828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt5/qt5speech: new
- package
+Message-Id: <20230220205302.419C4828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xutil_util-macros:
+ bump version to 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,111 +57,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ced0a528ddbffcc130997aaeee7598c82c6cd49
+commit: https://git.buildroot.net/buildroot/commit/?id=71c51f1920deda32ea63105163fe84b20a0f9109
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                           |  1 +
- package/qt5/Config.in                |  1 +
- package/qt5/qt5speech/Config.in      | 12 ++++++++++++
- package/qt5/qt5speech/qt5speech.hash |  7 +++++++
- package/qt5/qt5speech/qt5speech.mk   | 23 +++++++++++++++++++++++
- 5 files changed, 44 insertions(+)
+Release notes:
+https://lists.x.org/archives/xorg-announce/2023-February/003324.html
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 319ea9f4dc..a429f81cc9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2299,6 +2299,7 @@ F:	support/testing/tests/package/test_docker_compose.py
+Updated license hash due to copyright year bump:
+https://gitlab.freedesktop.org/xorg/util/macros/-/commit/cb147377e9341af05232f95814022abdecf14024
+
+Switched tarball to xz, updated _SITE.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xutil_util-macros/xutil_util-macros.hash | 8 ++++----
+ package/xutil_util-macros/xutil_util-macros.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/xutil_util-macros/xutil_util-macros.hash b/package/xutil_util-macros/xutil_util-macros.hash
+index 30c9916dca..4fcddb7a85 100644
+--- a/package/xutil_util-macros/xutil_util-macros.hash
++++ b/package/xutil_util-macros/xutil_util-macros.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-January/003069.html
+-sha256  0f812e6e9d2786ba8f54b960ee563c0663ddbe2434bf24ff193f5feab1f31971  util-macros-1.19.3.tar.bz2
+-sha512  b9c7398a912c688a782eab5b1e0f6da2df11a430775c5c98fc3269f73a665de6eeb60d300a849e38d345714a6e51f74e9334cb6039767304cca4b93d823a53a2  util-macros-1.19.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-February/003324.html
++sha256  0b86b262dbe971edb4ff233bc370dfad9f241d09f078a3f6d5b7f4b8ea4430db  util-macros-1.20.0.tar.xz
++sha512  76caefb118bf1675d7b2b96e1bbb04eb9a320b02e120839e55a22ef98538ecf00d0e686a67186fc8fdc8492d277ffe3125ae8b7ac61ce4739edc0de3f468d2eb  util-macros-1.20.0.tar.xz
+ # Locally computed
+-sha256  489b630a75e3255485732eae3d50ff4d29d3feb66760bb3acb04f897e4d9e375  COPYING
++sha256  7db0516389152a90c20ea910e8839d10204ebc25ccbc71fc7f5809dfb98e80ac  COPYING
+diff --git a/package/xutil_util-macros/xutil_util-macros.mk b/package/xutil_util-macros/xutil_util-macros.mk
+index b0ce14ee5a..e2e40eb84e 100644
+--- a/package/xutil_util-macros/xutil_util-macros.mk
++++ b/package/xutil_util-macros/xutil_util-macros.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- N:	Peter Seiderer <ps.report@gmx.net>
- F:	package/dotconf/
-+F:	package/qt5/qt5speech/
- F:	package/speechd/
+-XUTIL_UTIL_MACROS_VERSION = 1.19.3
+-XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.bz2
+-XUTIL_UTIL_MACROS_SITE = http://xorg.freedesktop.org/releases/individual/util
++XUTIL_UTIL_MACROS_VERSION = 1.20.0
++XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.xz
++XUTIL_UTIL_MACROS_SITE = https://xorg.freedesktop.org/archive/individual/util
+ XUTIL_UTIL_MACROS_LICENSE = MIT
+ XUTIL_UTIL_MACROS_LICENSE_FILES = COPYING
  
- N:	Peter Thompson <peter.macleod.thompson@gmail.com>
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 6dc9cfa148..f1b16ff39b 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -59,6 +59,7 @@ source "package/qt5/qt5scxml/Config.in"
- source "package/qt5/qt5sensors/Config.in"
- source "package/qt5/qt5serialbus/Config.in"
- source "package/qt5/qt5serialport/Config.in"
-+source "package/qt5/qt5speech/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5tools/Config.in"
- source "package/qt5/qt5virtualkeyboard/Config.in"
-diff --git a/package/qt5/qt5speech/Config.in b/package/qt5/qt5speech/Config.in
-new file mode 100644
-index 0000000000..cebd06057e
---- /dev/null
-+++ b/package/qt5/qt5speech/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_QT5SPEECH
-+	bool "qt5speech"
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  Qt Speech enables support for accessibility features such as
-+	  text-to-speech.
-+
-+	  For output optional enable flite or speechd.
-+
-+	  https://doc.qt.io/qt-5/qtspeech-index.html
-diff --git a/package/qt5/qt5speech/qt5speech.hash b/package/qt5/qt5speech/qt5speech.hash
-new file mode 100644
-index 0000000000..595aac9f22
---- /dev/null
-+++ b/package/qt5/qt5speech/qt5speech.hash
-@@ -0,0 +1,7 @@
-+# Locally calculated
-+sha256  6d0794ab9d5286d04fbac2db44c00ed3306e569c876f84cfd91ac0e79c834b1e  qtspeech-d32f4a479d38a11f547598004b975f4356424a16.tar.bz2
-+
-+# Hashes for license files:
-+sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
-+sha256  75d800e60c8d58c2e7f0338e8552ea6123a9ce7e5dd8e1cdf2095e013b737488  LICENSE.LGPLv3
-+sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
-diff --git a/package/qt5/qt5speech/qt5speech.mk b/package/qt5/qt5speech/qt5speech.mk
-new file mode 100644
-index 0000000000..8cf6fe19c1
---- /dev/null
-+++ b/package/qt5/qt5speech/qt5speech.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# qt5speech
-+#
-+################################################################################
-+
-+QT5SPEECH_VERSION = d32f4a479d38a11f547598004b975f4356424a16
-+QT5SPEECH_SITE = $(QT5_SITE)/qtspeech/-/archive/$(QT5SPEECH_VERSION)
-+QT5SPEECH_SOURCE = qtspeech-$(QT5SPEECH_VERSION).tar.bz2
-+QT5SPEECH_INSTALL_STAGING = YES
-+QT5SPEECH_LICENSE = GPL-2.0+ or LGPL-3.0, GFDL-1.3 (docs)
-+QT5SPEECH_LICENSE_FILES = LICENSE.GPLv2 LICENSE.LGPLv3 LICENSE.FDL
-+QT5SPEECH_SYNC_QT_HEADERS = YES
-+
-+ifeq ($(BR2_PACKAGE_FLITE),y)
-+QT5SPEECH_DEPENDENCIES += flite
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SPEECHD),y)
-+QT5SPEECH_DEPENDENCIES += speechd
-+endif
-+
-+$(eval $(qmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
