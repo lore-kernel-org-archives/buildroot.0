@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06336C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:04:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90FE8C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:05:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A75B86F9F8;
-	Tue, 21 Feb 2023 02:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A75B86F9F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 469A370188;
+	Tue, 21 Feb 2023 02:05:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 469A370188
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w3OHS6_3LzUc; Tue, 21 Feb 2023 02:04:51 +0000 (UTC)
+	with ESMTP id uPhONIFqTR4y; Tue, 21 Feb 2023 02:05:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD8D870279;
-	Tue, 21 Feb 2023 02:04:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD8D870279
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7838F70224;
+	Tue, 21 Feb 2023 02:05:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7838F70224
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8FA961BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9FB411BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B7B1610DB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 52CFF6FE60
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B7B1610DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52CFF6FE60
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7hSs_RAxyghB for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+ with ESMTP id DDGKmcqzvHpN for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE7D86FE60
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7642170048
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE7D86FE60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7642170048
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBA407FF06; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+ id 749448648F; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 21:55:23 +0100
+Date: Sun, 19 Feb 2023 18:00:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8797f3fb272e9c1a5fe6a1953cacf6e5065a133a
-X-Git-Newrev: 99d5f1f7d3cd4b1f2041edbddd5d09caacf4848d
+X-Git-Oldrev: 05c3177493aa8447d5cb568c8c13e0c09eded18b
+X-Git-Newrev: df4f7f8e85274d5bde29171203c7eb95f4903765
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205302.BBA407FF06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/speechd: fix build
- without makeinfo
+Message-Id: <20230220205302.749448648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/weston: add xwayland
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,116 +57,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99d5f1f7d3cd4b1f2041edbddd5d09caacf4848d
+commit: https://git.buildroot.net/buildroot/commit/?id=df4f7f8e85274d5bde29171203c7eb95f4903765
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure without makeinfo raised since the
-addition of the package in commit
-9f4f8c5f8993c6d7c2ef730ac211ef84ac9ae26d:
+If the XWayland support is enabled then build the corresponding XServer.
 
-/home/buildroot/autobuild/instance-2/output-1/build/speechd-0.11.4/missing: line 81: makeinfo: command not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/d4f193545eb31864a9bac5a9d05bba39d3c7ff3e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/speechd/0001-add-disable-doc.patch | 78 ++++++++++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
+ package/weston/Config.in | 10 +++++++++-
+ package/weston/weston.mk |  2 +-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/speechd/0001-add-disable-doc.patch b/package/speechd/0001-add-disable-doc.patch
-new file mode 100644
-index 0000000000..dd17b10e4f
---- /dev/null
-+++ b/package/speechd/0001-add-disable-doc.patch
-@@ -0,0 +1,78 @@
-+From d88557d3c29c33f76af20cb7a6eb798f6f598c23 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 19 Feb 2023 15:18:35 +0100
-+Subject: [PATCH] add --disable-doc
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 3b4e932b7d..09119edaaa 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -109,16 +109,24 @@ comment "X11 (nested) compositor needs X.org enabled"
+ 
+ config BR2_PACKAGE_WESTON_XWAYLAND
+ 	bool "XWayland support"
+-	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_LIBEPOXY
++	depends on BR2_PACKAGE_XORG7 # xwayland
++	depends on BR2_USE_MMU # xwayland
++	depends on !BR2_STATIC_LIBS # xwayland
++	depends on BR2_TOOLCHAIN_HAS_THREADS # xwayland
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_LIBXCB
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
++	select BR2_PACKAGE_XWAYLAND
+ 
+ comment "XWayland support needs libepoxy and X.org enabled"
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
+ 
++comment "XWayland support needs a toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 +
-+Allow the user to disable documentation through --disable-doc to avoid
-+the following build failure without makeinfo:
-+
-+make[3]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/speechd-0.11.4/doc'
-+  MAKEINFO ssip.info
-+  MAKEINFO spd-say.info
-+/home/buildroot/autobuild/instance-2/output-1/build/speechd-0.11.4/missing: line 81: makeinfo: command not found
-+/home/buildroot/autobuild/instance-2/output-1/build/speechd-0.11.4/missing: line 81: makeinfo: command not found
-+WARNING: 'makeinfo' is missing on your system.
-+         You should only need it if you modified a '.texi' file, or
-+         any other file indirectly affecting the aspect of the manual.
-+         You might want to install the Texinfo package:
-+         <https://www.gnu.org/software/texinfo/>
-+         The spurious makeinfo call might also be the consequence of
-+         using a buggy 'make' (AIX, DU, IRIX), in which case you might
-+         want to install GNU make:
-+         <https://www.gnu.org/software/make/>
-+WARNING: 'makeinfo' is missing on your system.
-+         You should only need it if you modified a '.texi' file, or
-+         any other file indirectly affecting the aspect of the manual.
-+         You might want to install the Texinfo package:
-+         <https://www.gnu.org/software/texinfo/>
-+         The spurious makeinfo call might also be the consequence of
-+         using a buggy 'make' (AIX, DU, IRIX), in which case you might
-+         want to install GNU make:
-+         <https://www.gnu.org/software/make/>
-+make[3]: *** [Makefile:492: ssip.info] Error 127
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/d4f193545eb31864a9bac5a9d05bba39d3c7ff3e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/brailcom/speechd/pull/810]
-+---
-+ Makefile.am  | 6 +++++-
-+ configure.ac | 4 ++++
-+ 2 files changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 26617c78..480eb50e 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -22,7 +22,11 @@ pkgconfig_DATA = speech-dispatcher.pc
-+ 
-+ BUILT_SOURCES = $(top_srcdir)/.version
-+ 
-+-SUBDIRS= include locale src config doc po
-++SUBDIRS= include locale src config po
-++
-++if ENABLE_DOC
-++SUBDIRS += doc
-++endif
-+ 
-+ EXTRA_DIST= config.rpath COPYING.LGPL COPYING.GPL-2 COPYING.GPL-3 ANNOUNCE BUGS FAQ README.md README.packagers README.translators README.overview.md README.style.md build.sh speech-dispatcherd.service.in speech-dispatcher.socket speech-dispatcher.service.in po/Makevars.in po/README
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index faaa8629..4f2af908 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -168,6 +168,10 @@ AC_SUBST([EXTRA_SOCKET_LIBS])
-+ AC_SUBST([ERROR_CFLAGS])
-+ AC_SUBST([RDYNAMIC])
-+ 
-++AC_ARG_ENABLE([doc],
-++              [AC_HELP_STRING([--disable-doc], [turn off documentation])])
-++AM_CONDITIONAL(ENABLE_DOC, test "$enable_doc" != "no")
-++
-+ # Check for python support.
-+ # Python 3 or greater required
-+ AC_ARG_ENABLE([python],
-+-- 
-+2.39.0
-+
+ # Weston needs at least one shell; this can be one of the bundled ones,
+ # below, of from a third-party package, which should then select this.
+ config BR2_PACKAGE_WESTON_HAS_SHELL
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 5e71473640..01f84178b2 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -123,7 +123,7 @@ WESTON_CONF_OPTS += -Dbackend-default=$(call qstrip,$(BR2_PACKAGE_WESTON_DEFAULT
+ 
+ ifeq ($(BR2_PACKAGE_WESTON_XWAYLAND),y)
+ WESTON_CONF_OPTS += -Dxwayland=true
+-WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
++WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor xwayland
+ else
+ WESTON_CONF_OPTS += -Dxwayland=false
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
