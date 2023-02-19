@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D544C05027
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 21:09:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD77C05027
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 21:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1A5E40B73;
-	Sun, 19 Feb 2023 21:09:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1A5E40B73
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CDAA41195;
+	Sun, 19 Feb 2023 21:10:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CDAA41195
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k4Lbq6HTUuGB; Sun, 19 Feb 2023 21:09:56 +0000 (UTC)
+	with ESMTP id 29h5fKfZdtny; Sun, 19 Feb 2023 21:10:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC68840B48;
-	Sun, 19 Feb 2023 21:09:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC68840B48
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 70BFC1BF405
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 21:09:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6DFA840B48;
+	Sun, 19 Feb 2023 21:10:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DFA840B48
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 83E621BF405
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 21:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A482415F4
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 21:09:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A482415F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C6A3405F5
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 21:10:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C6A3405F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P1j7hOtel9Va for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 21:09:53 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E938D415ED
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E938D415ED
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 21:09:52 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4495F240006;
- Sun, 19 Feb 2023 21:09:50 +0000 (UTC)
-Date: Sun, 19 Feb 2023 22:09:49 +0100
-To: Alexander Egorenkov <egorenar@linux.ibm.com>
-Message-ID: <20230219220949.4507fcc8@windsurf>
-In-Reply-To: <20230218134059.53863-1-egorenar@linux.ibm.com>
-References: <20230218134059.53863-1-egorenar@linux.ibm.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676840990;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lZBAmK7tDfoxbj4D/pxRvfcawD5dzIL6LivsAOlSTrQ=;
- b=HIbrtTBbaab9y12X0JFgUVd76RpZd9VXWjrDUknrpOg6vpdjqqrCatKFBMoiwUZ1v2gmne
- SAyYCq1rSUz1YgmQ58uG69PHT9d7zUCneh+rQr+UoTFxD+SXg97y+yCjx/RgJl2GfCotiV
- WnzD4kn0KVVFgc6wq1yepZ7i+Yjm6Yu+fQ8ei/6z31t81Z0wt0+ZC7P6IbPKgL96FJKqIy
- G2QWAAY/uX5mtJB7bh71RLX/LgGDFok2Mz9fxxMVZS4M+OuyTf++WdkIpZcUYkhRbuTGud
- /9BDAaW+f80txu2Lb5FpUyedkwcGCVPEiEet4hvHf3kQh2dAETFJ/t5Uy4NuGQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HIbrtTBb
-Subject: Re: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version
- 2.26.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e9Nf35vkyR4c for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 21:10:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1A2B40B48
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 21:10:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1A2B40B48
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9112386293; Sun, 19 Feb 2023 21:10:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 19 Feb 2023 22:09:25 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b3a462e85a786401964d522124e4f431d79339e5
+X-Git-Newrev: d782c0682f559d407e64698470b511512a5bdc78
+X-Patchwork-Hint: ignore
+Message-Id: <20230219211013.9112386293@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/s390-tools: bump to version 2.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +57,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 18 Feb 2023 14:40:59 +0100
-Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d782c0682f559d407e64698470b511512a5bdc78
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-> ---
->  package/s390-tools/s390-tools.hash | 2 +-
->  package/s390-tools/s390-tools.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/s390-tools/s390-tools.hash | 2 +-
+ package/s390-tools/s390-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
+index a0dde477c3..37b67c5cb1 100644
+--- a/package/s390-tools/s390-tools.hash
++++ b/package/s390-tools/s390-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  ccb20954e748309a50fd56edd9abd94c6f897081e9a1a33e9d965a56f650990d  s390-tools-2.25.0.tar.gz
++sha256  da81c55fb11d84923c0ebaed703f557052eb1a273495f60ebe3d20a74627303e  s390-tools-2.26.0.tar.gz
+ sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index cb6278dfb8..8cd5491405 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-S390_TOOLS_VERSION = 2.25.0
++S390_TOOLS_VERSION = 2.26.0
+ S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
+ S390_TOOLS_LICENSE = MIT
+ S390_TOOLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
