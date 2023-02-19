@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F18F7C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E94DC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1BB07029C;
-	Tue, 21 Feb 2023 02:06:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1BB07029C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09F736FC02;
+	Tue, 21 Feb 2023 02:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09F736FC02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9AI3MzjFK9IZ; Tue, 21 Feb 2023 02:06:46 +0000 (UTC)
+	with ESMTP id 53pvdqo6JWmT; Tue, 21 Feb 2023 02:06:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE7B170077;
-	Tue, 21 Feb 2023 02:06:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE7B170077
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1515270269;
+	Tue, 21 Feb 2023 02:06:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1515270269
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1AC441BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D4FD1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2549870044
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6973061088
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2549870044
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6973061088
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 81ZtWwRQGAs0 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+ with ESMTP id oyPIP9j36i23 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8046E70024
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8046E70024
+ by smtp3.osuosl.org (Postfix) with ESMTP id 457C5610E9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 457C5610E9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EA908648F; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+ id 359A181979; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:22:29 +0100
+Date: Sun, 19 Feb 2023 17:53:44 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b21cd8be3f9469d6bdbbaed951ae7c59efb46a24
-X-Git-Newrev: 4c7fcbbe75de5c535e8d5dd7182900b6d09e2b03
+X-Git-Oldrev: 9fc69996bcd190e693b1af95cc44fda89028d049
+X-Git-Newrev: 05de8e14ce9bf9ea109aa028b34aba559aa18aad
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205303.7EA908648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/webkitgtk: security
- bump to version 2.38.5
+Message-Id: <20230220205302.359A181979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xdriver_xf86-video-trident: bump version to 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,86 +63,114 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c7fcbbe75de5c535e8d5dd7182900b6d09e2b03
+commit: https://git.buildroot.net/buildroot/commit/?id=05de8e14ce9bf9ea109aa028b34aba559aa18aad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bugfix release, with many security fixes, including (but not limited to)
-a patch for CVE-2023-23529.
-
 Release notes:
+https://lists.x.org/archives/xorg-announce/2023-February/003326.html
 
-  https://webkitgtk.org/2023/02/15/webkitgtk2.38.5-released.html
+Removed patch which was applied upstream.
+Switched tarball to xz, updated _SITE.
 
-Accompanying security advisory:
-
-  https://webkitgtk.org/security/WSA-2023-0002.html
-
-Also raise the minimal GCC version to 8.3, which was already required since webkitgtk-2.36.4.
-Similar to commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4,
-we do check on >= GCC 8, because we can't check on >= GCC 8.3.
-
-  https://github.com/WebKit/WebKit/commit/f812c5db1ff22bcbe1070ca4ed613085cd36499b
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in      | 4 ++--
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ .../0001-Remove-ramdac.patch                       | 56 ----------------------
+ .../xdriver_xf86-video-trident.hash                |  5 +-
+ .../xdriver_xf86-video-trident.mk                  |  6 +--
+ 3 files changed, 6 insertions(+), 61 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index dc5d738dae..976341093e 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -16,7 +16,7 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 
--comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
-+comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 8, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
-@@ -32,7 +32,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_USE_WCHAR # icu, libsoup
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 34fd19d3de..c771297b5a 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.38.4.tar.xz.sums
--md5  1c9ca83a0ad7e4ca9e933094572cb7d9  webkitgtk-2.38.4.tar.xz
--sha1  38b47df2be9bfb97d68fce8c7fa2819966a79036  webkitgtk-2.38.4.tar.xz
--sha256  4f47ea29a2d4d5f15eef3dc9e2d6c6f067e8de863a3f64455e1ccf9693cc1d36  webkitgtk-2.38.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.38.5.tar.xz.sums
-+md5  de05d314a3ecb5fb3835e4d84f8f466d  webkitgtk-2.38.5.tar.xz
-+sha1  1774390c628bb3a524d4ed76f11de4a878078db6  webkitgtk-2.38.5.tar.xz
-+sha256  40c20c43022274df5893f22b1054fa894c3eea057389bb08aee08c5b0bb0c1a7  webkitgtk-2.38.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index a6974db926..3263f7fea0 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-trident/0001-Remove-ramdac.patch b/package/x11r7/xdriver_xf86-video-trident/0001-Remove-ramdac.patch
+deleted file mode 100644
+index 38ca9afebf..0000000000
+--- a/package/x11r7/xdriver_xf86-video-trident/0001-Remove-ramdac.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 07a5c4732f1c28ffcb873ee04500e3cb813c50b4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 7 Dec 2021 22:28:04 +0100
+-Subject: [PATCH] Remove ramdac
+-
+-ramdac drivers have been removed from xserver since version 21.0.99.1
+-and
+-https://gitlab.freedesktop.org/xorg/xserver/-/commit/f0385fb420158ac3bc1c4c325431ffc5c62344bb
+-resulting in the following build failure:
+-
+-In file included from trident_bank.c:37:
+-trident.h:41:10: fatal error: xf86RamDac.h: No such file or directory
+-   41 | #include "xf86RamDac.h"
+-      |          ^~~~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/c81ac8075af257e8626d9d097270be7a7b4a1496
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/xorg/driver/xf86-video-trident/-/merge_requests/1]
+----
+- src/trident.h | 3 ---
+- 1 file changed, 3 deletions(-)
+-
+-diff --git a/src/trident.h b/src/trident.h
+-index 5cadf52..c82de4c 100644
+---- a/src/trident.h
+-+++ b/src/trident.h
+-@@ -38,7 +38,6 @@
+- #include "xaa.h"
+- #endif
+- #include "xf86fbman.h"
+--#include "xf86RamDac.h"
+- #include "compiler.h"
+- #include "vgaHW.h"
+- #include "xf86i2c.h"
+-@@ -103,7 +102,6 @@ typedef struct {
+-     int			useEXA;
+-     int			Chipset;
+-     int			DACtype;
+--    int			RamDac;
+-     int                 ChipRev;
+-     int			HwBpp;
+-     int			BppShift;
+-@@ -169,7 +167,6 @@ typedef struct {
+-     CARD32		BltScanDirection;
+-     CARD32		DrawFlag;
+-     CARD16		LinePattern;
+--    RamDacRecPtr	RamDacRec;
+-     int			CursorOffset;
+-     xf86CursorInfoPtr	CursorInfoRec;
+-     xf86Int10InfoPtr	Int10;
+--- 
+-2.33.0
+-
+diff --git a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.hash b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.hash
+index 321f35d4f0..2ef664487c 100644
+--- a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.hash
++++ b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.hash
+@@ -1,4 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-January/002762.html
+-sha256  9e5119d974c3e2221994542d35e3a0b3426a441869ddd6dd08a84f324856ac3f  xf86-video-trident-1.3.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2023-February/003326.html
++sha256  7f76219ca7d7dc6061aa3c2aa59bc2a63895b8e6217e413ce315949f57b0189b  xf86-video-trident-1.4.0.tar.xz
++sha512  86f349ccfcf7c704e77a95882f63ac92f55819a3a00388f294777762fed04dde2197dd6124cded9e787af1982fecc43ad4d0af34307845e616a73d5a2ba750b9  xf86-video-trident-1.4.0.tar.xz
+ # Locally calculated
+ sha256  4f065198c49eac1513b915bc4478152c21119f31a97919a6ea8f3e1d10133d15  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
+index 20ec4bbc24..53fe150420 100644
+--- a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
++++ b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.38.4
-+WEBKITGTK_VERSION = 2.38.5
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-XDRIVER_XF86_VIDEO_TRIDENT_VERSION = 1.3.8
+-XDRIVER_XF86_VIDEO_TRIDENT_SOURCE = xf86-video-trident-$(XDRIVER_XF86_VIDEO_TRIDENT_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_TRIDENT_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_TRIDENT_VERSION = 1.4.0
++XDRIVER_XF86_VIDEO_TRIDENT_SOURCE = xf86-video-trident-$(XDRIVER_XF86_VIDEO_TRIDENT_VERSION).tar.xz
++XDRIVER_XF86_VIDEO_TRIDENT_SITE = https://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_TRIDENT_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_TRIDENT_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_TRIDENT_DEPENDENCIES = xserver_xorg-server xorgproto
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
