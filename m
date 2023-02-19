@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3957C636CC
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 20:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B8CEC636CC
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 20:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69EF640471;
-	Sun, 19 Feb 2023 20:57:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69EF640471
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA12640B83;
+	Sun, 19 Feb 2023 20:58:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA12640B83
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R-MJdaIHgP6V; Sun, 19 Feb 2023 20:57:36 +0000 (UTC)
+	with ESMTP id zjj3-iVn5K5i; Sun, 19 Feb 2023 20:58:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94EF2405F5;
-	Sun, 19 Feb 2023 20:57:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94EF2405F5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E11281BF2B6
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 20:57:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 206FC40B48;
+	Sun, 19 Feb 2023 20:58:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 206FC40B48
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B7B671BF2B6
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 20:58:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8533415E5
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 20:57:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8533415E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92C9640B48
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 20:58:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92C9640B48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mi8QWt7u7nIl for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 20:57:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A32C41505
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 20:57:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A32C41505
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85A218611D; Sun, 19 Feb 2023 20:57:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 21:55:53 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 99d5f1f7d3cd4b1f2041edbddd5d09caacf4848d
-X-Git-Newrev: d7f2d8403ec82f3b1772ec17bf1df8c42987a1f8
-X-Patchwork-Hint: ignore
-Message-Id: <20230219205732.85A218611D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnupg2: fix build failure when
- host provides an old gpgrt-config
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jUMDLMNifEG7 for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 20:58:07 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67342405F5
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 67342405F5
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 20:58:07 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 60B3560003;
+ Sun, 19 Feb 2023 20:58:04 +0000 (UTC)
+Date: Sun, 19 Feb 2023 21:58:03 +0100
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Message-ID: <20230219215803.1ad7ae5b@windsurf>
+In-Reply-To: <20230218112449.1753677-1-buildroot@heine.tech>
+References: <20230218112449.1753677-1-buildroot@heine.tech>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676840284;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=eGGchMx6tYSYbSiD4rEnwV68p9UReQGVDD+YP2Qgb70=;
+ b=WZkrnK/XgRKc7V5cA3DD5fazS/4TE+FXn9GOu1+bMnB/uvS0VlHfTFwnu7YyTF5eUnHNoT
+ sk3Wn3oqRiagiLg8TLu0TpLF/gIUmBD9PhGjh3OV6ZcQupPxOmfi/QJ5J9s3luocMRWsAf
+ 07hIwWTwSWcu5DCVaRMPvkX1DU51RIQGkIZfFrxSwBRNdFpolIlwiOMRZq6vKSmuAZyWfo
+ VDKZpwA8iCr1i0eWesuc3m0jmJM3hePf5l8u6htSFl5n4JeyJ2xcilBfTyEmM5e+P9qlDf
+ UgW1koD3hvY8KfGYWVYpPcZz8ZQ+8xqXbQpbiZDoSkYxgA/Bc26zh3DbdP+aVQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WZkrnK/X
+Subject: Re: [Buildroot] [PATCH] package/catch2: bump to version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,90 +77,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7f2d8403ec82f3b1772ec17bf1df8c42987a1f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 18 Feb 2023 12:24:45 +0100
+Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
 
-gnupg2 uses the libgpg-error library. The libgpg-error library has a
-long plan to be renamed to "gpgrt" (see [1]). For the transition, it
-provides two configuration scripts "gpg-error-config" (the old,
-original one, kept for compatibility) and "gpgrt-config" (which is
-meant to be the replacement). When both are detected, "gpgrt-config"
-should be preferred.
+> raise the minimum gcc to 5 as stated in release notes for 3.1.0 [0].
+> 
+> [0] https://github.com/catchorg/Catch2/releases/tag/v3.1.0
+> ---
+>  package/catch2/Config.in   | 6 +++---
+>  package/catch2/catch2.hash | 2 +-
+>  package/catch2/catch2.mk   | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
-gnupg2 configure script searches for "gpg-error-config" in the path
-provided to --with-libgpg-error-prefix=PFX (more specifically, in
-"PFX/bin").
+Applied to master, thanks.
 
-The logic to find "gpgrt-config" is different: it is searched in
-paths "$prefix/bin:$PATH". See [2]. On Buildroot, autotools target
-packages are configured with "--prefix=/usr", which makes the
-configure script to search in the host "/usr/bin".
-
-In some host environment providing such a "/usr/bin/gpgrt-config"
-script of an older version, host compilation flags are incorrectly
-added for the target, which leads to compilation failures.
-
-The issue can be reproduced in a Buildroot Docker image from [3] in
-which the libgpg-error-dev package is added. When tested, the
-libgpg-error-dev package was at version 1.38.
-
-In that configuration, gnupg2 configure will output the message:
-
-    checking for gpgrt-config... /usr/bin/gpgrt-config
-
-and the compilation fails with a message:
-
-    aarch64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
-
-Note: it was observed that in some other configurations in which the
-host /usr/bin/gpgrt-config was from libgpg-error version 1.46, the
-host script was redirecting correctly in the buildroot sysroot.
-
-Since gnupg2 searches for "gpgrt-config" with a
-"AC_PATH_PROG(GPGRT_CONFIG, ...)" macro, this patch fixes this
-issue by simply forcing the script path in the GPGRT_CONFIG
-environment variable.
-
-See also [4] which discussed the "gpgrt-config" search logic.
-
-Fixes:
-- http://autobuild.buildroot.net/results/423c3ce7317c181e9f2e4a49b76ee9d26167375c/
-(and many others)
-
-[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=README;h=e0b9f16445a96942af0839bcdb9a0b0f8cf31380;hb=885a287a57cf060b4c5b441822c09d23b8dee2bd#l29
-[2] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=m4/gpg-error.m4;h=a975e53d07d1b743f51d8aa1767cd8e0d71b4071;hb=c0556edb80518720b0d884251685fe008c8f0429#l68
-[3] https://git.buildroot.org/buildroot/tree/support/docker/Dockerfile?id=b6085c00d0feece6f3ba635e7847ea653bc5fac3
-[4] https://dev.gnupg.org/T5365
-
-Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gnupg2/gnupg2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 5935ce6939..73de185ba7 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -23,6 +23,10 @@ GNUPG2_CONF_OPTS = \
- 	--with-ksba-prefix=$(STAGING_DIR)/usr \
- 	--with-npth-prefix=$(STAGING_DIR)/usr
- 
-+# Force the path to "gpgrt-config" (from the libgpg-error package) to
-+# avoid using the one on host, if present.
-+GNUPG2_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
-+
- ifneq ($(BR2_PACKAGE_GNUPG2_GPGV),y)
- define GNUPG2_REMOVE_GPGV
- 	rm -f $(TARGET_DIR)/usr/bin/gpgv
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
