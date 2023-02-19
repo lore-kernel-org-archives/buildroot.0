@@ -4,55 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1CE0C61DA4
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 16:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ECE9C05027
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 16:56:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E35640B61;
-	Sun, 19 Feb 2023 16:55:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E35640B61
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEF5F40B55;
+	Sun, 19 Feb 2023 16:56:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEF5F40B55
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zbAhGHet_MKV; Sun, 19 Feb 2023 16:55:49 +0000 (UTC)
+	with ESMTP id 0sDrTdB4BC9w; Sun, 19 Feb 2023 16:56:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2FF040B53;
-	Sun, 19 Feb 2023 16:55:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2FF040B53
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98EFE1BF287
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 16:55:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C35F40B51;
+	Sun, 19 Feb 2023 16:56:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C35F40B51
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 53E791BF287
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 16:56:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7219760E89
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 16:55:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7219760E89
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BD8C81E1A
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 16:56:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BD8C81E1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NPHFEktWOqyt for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 16:55:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C60460E70
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6C60460E70
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 16:55:46 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 922C740004;
- Sun, 19 Feb 2023 16:55:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pTmyV-0074ps-3w; Sun, 19 Feb 2023 17:55:43 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XutXXHtajbzD for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 16:56:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68BBA81E17
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 16:56:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68BBA81E17
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 56D9786033; Sun, 19 Feb 2023 16:56:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230216174134.34179-1-fontaine.fabrice@gmail.com>
-Date: Sun, 19 Feb 2023 17:55:42 +0100
-In-Reply-To: <20230216174134.34179-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 16 Feb 2023 18:41:34 +0100")
-Message-ID: <874jrh388h.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/fluent-bit: fix build with
- libexecinfo
+To: buildroot@buildroot.org
+Date: Sun, 19 Feb 2023 17:52:32 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: be235c048f004617851d7ef752ee5f4dc2373e28
+X-Git-Newrev: 66b1926764582a628b0b6b68a3aebe4b9790ab12
+X-Patchwork-Hint: ignore
+Message-Id: <20230219165607.56D9786033@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: security bump version to 8.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,31 +56,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=66b1926764582a628b0b6b68a3aebe4b9790ab12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix the following build failure with libexecinfo raised since commit
- > d649bcd3805a26cedb30120ebbdcf12f8fbf449f:
+Changelog: https://www.php.net/ChangeLog-8.php#8.2.3
 
- > /home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/mips-buildroot-linux-musl/10.4.0/../../../../mips-buildroot-linux-musl/bin/ld:
- > ../lib/monkey/library/libmonkey.a(mk_utils.c.o): in function
- > `mk_utils_stacktrace':
- > mk_utils.c:(.text+0x1578): undefined reference to `backtrace'
+Fixes CVE-2023-0567, CVE-2023-0568 & CVE-2023-0662.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/63a6ba9104dfddbd7f6a7debadc0c6ef6e3a21f5
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 869cb9b94f..41aa326156 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  bdc4aa38e652bac86039601840bae01c0c3653972eaa6f9f93d5f71953a7ee33  php-8.2.2.tar.xz
++sha256  b9b566686e351125d67568a33291650eb8dfa26614d205d70d82e6e92613d457  php-8.2.3.tar.xz
+ 
+ # License file
+ sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 9ce153f4fa..bd7d5a8c3c 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.2.2
++PHP_VERSION = 8.2.3
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
