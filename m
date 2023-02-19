@@ -4,88 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B092C61DA4
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 14:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3B1BC61DA4
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 14:25:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD9E240B1D;
-	Sun, 19 Feb 2023 14:01:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD9E240B1D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A537400E2;
+	Sun, 19 Feb 2023 14:25:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A537400E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s_N_Qfc8fdXO; Sun, 19 Feb 2023 14:01:28 +0000 (UTC)
+	with ESMTP id 98lCSWPI8ewn; Sun, 19 Feb 2023 14:25:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3DF640AD9;
-	Sun, 19 Feb 2023 14:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3DF640AD9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 20B741BF285
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 14:01:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9DDF740AB5;
+	Sun, 19 Feb 2023 14:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DDF740AB5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CD2BB1BF386
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 14:25:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF14C60C06
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 14:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF14C60C06
+ by smtp2.osuosl.org (Postfix) with ESMTP id A70F2404A5
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 14:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A70F2404A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZJKONT6OQfKs for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 14:01:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KbtFaLVmYoyW for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 14:25:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E59A460BFC
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E59A460BFC
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 14:01:07 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id g7so339593wrd.3
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 06:01:07 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2491400E2
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A2491400E2
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 14:25:53 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ j10-20020a05600c1c0a00b003e00c739ce4so486001wms.5
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 06:25:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=eNhzHZZzW4ZAer07H8jdPLlpPEGLK6eVP9/NbUUQ4i4=;
- b=8RMCPhVQqI7tpWrCbtyT/EBKLyYX/hcKw7u9fMuyQ1CyAdI/fU/xhaq5BkhcrEQ0cs
- dINLG47WFCvLY8XNILYPVChQBFjvX73qn4aj+pmO1zWnAsBXcTBPRv5gSeiuk8atPUnK
- jczKjMC5G/XErD6ZkuL8T1idmVX1iFpmdQv9X9EzlmyB0J2LA3j3SnxItrdgxyFpPkWH
- a/65Z0LCSaiQ+8JLCzlRMaQBWzIwo9utaScftp2HBb9u7zK+LMoaAthJ495Od75HUran
- N+5BMFa5JBixjrjlHJbSGhzJvNZ9fZ5q05ZUbjp2fEE6k4Gkf/T+XG02nx1xJovaQCUb
- bTtQ==
-X-Gm-Message-State: AO0yUKWjYKaaNcPyrPVoJLG/mmQQ2Zd17ufLp04YBteLK2Nvu+On9OTi
- 8l4p6cNTsSW0yAkF9PwnDJDgAerjZF4=
-X-Google-Smtp-Source: AK7set8bdFI67VT3f/W0zxgBvS2J6xn9OMmBeF7Rulw/7akGuYCvFt/3JIqJncVGeZqhESqr1dGkOQ==
-X-Received: by 2002:adf:ea46:0:b0:2c5:93fe:12b7 with SMTP id
- j6-20020adfea46000000b002c593fe12b7mr49099wrn.41.1676815266089; 
- Sun, 19 Feb 2023 06:01:06 -0800 (PST)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=nu1Tv3Q5qkxEsVLRoplk1UGAaGScg2pWWVPYX47gzOs=;
+ b=wxRA+JtePpk7zTf6FLKr5Z1iHSXlPAAsILJi1OGMN4eQEhLPrMOFLsBGSwgVIQy4Os
+ LVEWz2fn7IrSoqW7HGuHYgjTEWqg5xWSDF1p7XLMzkIkq22b03LaPrvnfKiYW68QfOow
+ s/YVg5tWqcC8mJxEMpYl23BLctg9sm9Q6U4UzTCpUPGM6MVZhE5UfErJ/34WphFkLgfz
+ 8kMrah3sR7Ih/f4ZC0T6q1zql+uEN3sEyFMDcF4+sgJqW0SKlzQG5xqJrB1V7EKeQs+5
+ vu6BXP3dwBKlOS43nVQ4p9Ogb9rIJOC09PIXFptnpNEVGeZYxrkHlTDf+55eNuby3iCW
+ OwGA==
+X-Gm-Message-State: AO0yUKV1F+/mqpamJ1NQTT7BWcE7FOhOlGiK05EYDeETLC2kbKUWA+91
+ 7ewBnv5IsFxWD/iOO7G4VNIFIJMP8D0=
+X-Google-Smtp-Source: AK7set89kr2GlH5gsOA2Jfn35rJVSOA3OwgOj9QU19YuwlKdZED2WzmYAbrMUGnSTooDByc8u0mc4A==
+X-Received: by 2002:a05:600c:13d5:b0:3e0:39:ec9d with SMTP id
+ e21-20020a05600c13d500b003e00039ec9dmr5422393wmg.23.1676816751461; 
+ Sun, 19 Feb 2023 06:25:51 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- x13-20020a5d6b4d000000b002c6e8af1037sm1659333wrw.104.2023.02.19.06.01.04
+ u10-20020a05600c00ca00b003ddf2865aeasm6172774wmm.41.2023.02.19.06.25.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Feb 2023 06:01:05 -0800 (PST)
+ Sun, 19 Feb 2023 06:25:51 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 15:00:51 +0100
-Message-Id: <20230219140051.80647-3-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Feb 2023 15:25:47 +0100
+Message-Id: <20230219142548.626439-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230219140051.80647-1-fontaine.fabrice@gmail.com>
-References: <20230219140051.80647-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=eNhzHZZzW4ZAer07H8jdPLlpPEGLK6eVP9/NbUUQ4i4=;
- b=MY7akKF69n7O7LNcrxbzThue9v/mm1xlnOuQLlr/I75PficeJ3DBjhgzRV2nmiGlc2
- 4ICFv087BzxPFOlFvVvdk8dcOnS8xx1utMTxgmrqXsH1RYQeuKKHVqLG/5HzOLU7cLEL
- Skyh9YUrlI5kUhAJXcOo5hLASXNIQViQwK1/1rVOVMbTvU1QsZDkzaiInT639ZN/AOIs
- EguwVbXhRrrrdy3fWVnyhQI6CO0WJZkx8jfW6Xxho7/T2pneU4voc87qpDmFtw9kK/Nx
- JPfWnzTyy2bcUosV0IS+0lmbjljgMM447BCZP9J16Ams7m3cHq/U+i+dQtkqJpwCW+O8
- zjuA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=nu1Tv3Q5qkxEsVLRoplk1UGAaGScg2pWWVPYX47gzOs=;
+ b=nMFGuV5Ip1rTgre+H0lpLBekrSCSPrm1CI+1O0kcSqS0kj/kK1LaDDwU8ZUzc92pyA
+ 3NEQadL3+s0pqBe/cHupnzCQniC9llkYbojauGNhmtHFNM61DqU/olnysBO4bmD3HhSz
+ Vg1Idmz1SWGUrJKCVgi0jgst+z6jCmJgEKUC71Dr8V+WW39gIZ7qyTo9/6Cx1ak5FOdF
+ 1VQ6gjLfwYHrb5uqQeHnbUHgloF3F5CtBDjnsT9lgLAKYhT7uNs+ap0ITOQk1QvrKTih
+ bhe5S35ODSjl3ddBTegIzaWWMuyVn/TvX2OuR2RPr8GUBEoePd5E0EtS7LlOW+ZKeE/0
+ 3k7w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=MY7akKF6
-Subject: [Buildroot] [PATCH 3/3] package/libjxl: security bump to version
- 0.8.1
+ header.a=rsa-sha256 header.s=20210112 header.b=nMFGuV5I
+Subject: [Buildroot] [PATCH 1/2] package/speechd: disable kali support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,63 +94,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
+Cc: Peter Seiderer <ps.report@gmx.net>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Security: Fix OOB read in exif.h
+Disable kali support as it is not needed and raises the following build
+failure without C++ since the addition of the package in commit
+9f4f8c5f8993c6d7c2ef730ac211ef84ac9ae26d:
 
-https://github.com/libjxl/libjxl/releases/tag/v0.8.1
-https://github.com/libjxl/libjxl/releases/tag/v0.8.0
+  CXX      sd_kali-kali.o
+/bin/sh: line 1: no: command not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2f6c8b3674753d6a9f165117c70e7dad88505505
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libjxl/libjxl.hash |  2 +-
- package/libjxl/libjxl.mk   | 10 +++++++---
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ package/speechd/speechd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
-index e71d32e61d..6b4c9d8d0a 100644
---- a/package/libjxl/libjxl.hash
-+++ b/package/libjxl/libjxl.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  3114bba1fabb36f6f4adc2632717209aa6f84077bc4e93b420e0d63fa0455c5e  libjxl-0.7.0.tar.gz
-+sha256  60f43921ad3209c9e180563025eda0c0f9b1afac51a2927b9ff59fff3950dc56  libjxl-0.8.1.tar.gz
- sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
- sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
-diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
-index 77405e4f11..095dc06764 100644
---- a/package/libjxl/libjxl.mk
-+++ b/package/libjxl/libjxl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
+index 0d43e4b6fb..46c0672f59 100644
+--- a/package/speechd/speechd.mk
++++ b/package/speechd/speechd.mk
+@@ -12,6 +12,7 @@ SPEECHD_INSTALL_STAGING = YES
+ # speechd source code is released without configure script
+ SPEECHD_AUTORECONF = YES
+ SPEECHD_DEPENDENCIES = host-pkgconf dotconf libglib2 libsndfile
++SPEECHD_CONF_OPTS = --without-kali
  
--LIBJXL_VERSION = 0.7.0
-+LIBJXL_VERSION = 0.8.1
- LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
- LIBJXL_LICENSE = BSD-3-Clause
- LIBJXL_LICENSE_FILES = LICENSE PATENTS
-@@ -34,9 +34,13 @@ LIBJXL_CONF_OPTS = \
- 
- ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
- LIBJXL_DEPENDENCIES += jpeg-turbo
--LIBJXL_CONF_OPTS += -DJPEGXL_ENABLE_TOOLS=ON
-+LIBJXL_CONF_OPTS += \
-+	-DJPEGXL_ENABLE_JPEGLI=ON \
-+	-DJPEGXL_ENABLE_TOOLS=ON
- else
--LIBJXL_CONF_OPTS += -DJPEGXL_ENABLE_TOOLS=OFF
-+LIBJXL_CONF_OPTS += \
-+	-DJPEGXL_ENABLE_JPEGLI=OFF \
-+	-DJPEGXL_ENABLE_TOOLS=OFF
- endif
- 
- $(eval $(cmake-package))
+ # fix missing config.rpath (needed for autoreconf) in the codebase
+ define SPEECHD_TOUCH_CONFIG_RPATH
 -- 
 2.39.0
 
