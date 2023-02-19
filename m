@@ -1,65 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECB31C05027
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 15:04:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC415C05027
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 15:31:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86FD981C81;
-	Sun, 19 Feb 2023 15:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86FD981C81
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D5514156E;
+	Sun, 19 Feb 2023 15:31:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D5514156E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Akx8iXFArSfX; Sun, 19 Feb 2023 15:04:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lRRdpNeYkKu9; Sun, 19 Feb 2023 15:31:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9A7F81C56;
-	Sun, 19 Feb 2023 15:04:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9A7F81C56
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B7B1A1BF426
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 15:04:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 294BF41571;
+	Sun, 19 Feb 2023 15:31:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 294BF41571
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E2ED1BF426
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 15:31:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E21160BFC
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 15:04:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E21160BFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCD74404A5
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 15:31:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCD74404A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p1PkLNE6AEvi for <buildroot@lists.busybox.net>;
- Sun, 19 Feb 2023 15:04:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H8CLNwuyoo0O for <buildroot@lists.busybox.net>;
+ Sun, 19 Feb 2023 15:31:03 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5126A60BF0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5126A60BF0
- for <buildroot@buildroot.org>; Sun, 19 Feb 2023 15:04:41 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.174.20.96])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 8508119F593;
- Sun, 19 Feb 2023 16:04:35 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 16:04:26 +0100
-Message-Id: <20230219150426.1509780-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.39.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02759401AE
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 02759401AE
+ for <buildroot@buildroot.org>; Sun, 19 Feb 2023 15:31:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.6])
+ by smtp2-g21.free.fr (Postfix) with ESMTP id 964352003DE;
+ Sun, 19 Feb 2023 16:30:59 +0100 (CET)
+Received: from 37-174-20-96.coucou-networks.fr ([37.174.20.96])
+ by webmail.free.fr
 MIME-Version: 1.0
+Date: Sun, 19 Feb 2023 16:30:59 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20230219140051.80647-1-fontaine.fabrice@gmail.com>
+References: <20230219140051.80647-1-fontaine.fabrice@gmail.com>
+Message-ID: <334eac4665b498754a5615cdec982341@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1676819078;
- bh=LZQWAd6eJWAA4fCLV+lu3XKWgOpotbQwXsLJUcDWKyo=;
- h=From:To:Cc:Subject:Date:From;
- b=huY498vk9QzCu3z2w47tAfoEsYStwgENiYIvT1TemvTvUxvaJ42tyhZ9v92qFqo+L
- NmjhhC3qP18Ic/DF9AzUSGUv3Mx5mM547IfDq86jnUZ6t/Ye/BA1FQmJsYgHXk776B
- EGEt4aOw7ZYuLUtE0ahLI1a5I8vR+byrmo4Xbh/s5cM9iTWJRGKS9P5++uk85G5i9s
- joNQmYZNtZ4xtc+aCMC+NZlKJQnDNAjtkMIesI/D2TLkHCaDx/BdsFEkmMWIcU94Mj
- Lsk1KtctU0S9SqJNF9v1+Jwkjoy5O5w3F5+1rCsWErbJnjp3h8zxg/HQxlvTEna61N
- zCw9MOuVMD+7g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1676820659;
+ bh=ZJujfHdre3sIZ0NU2hLoXyxiKtVghhLBPoWmbv+HU9U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=r4pm7rpSHiVcVS4baxcxvxRs66fyeO4ZWZEchqUx5VbkioZFfaYzuRu0bdt/xGS1J
+ KHUuKp+gUnE8rf3WKTF/HLbI+wtJW3B+mjZRUIDhub4OE8m/0p2YS+xCq3zQtslI4l
+ RwQBdleaoxTZ8YzP5CbNYnUhNH1Yq9EEd/kLEgGAevoJCQMcST/+ZvErWsuR7mjQ2d
+ XdKTUhzVJiIJa+59/y2wGaube/BUfzv7MAAJvXGwpHbgWchhv4TtqJ+MHAewkg9Yqc
+ lU8mS+95X8ZDHdVlI4lNMlYEkAcavsi2cyxc3Isug6rlXcgwAcNpv6gGHpPYQint8h
+ c9tzKXWcGB9Dg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=huY498vk
-Subject: [Buildroot] [PATCH 1/1] package/gnupg2: fix build failure when host
- provides an old gpgrt-config
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=r4pm7rpS
+Subject: Re: [Buildroot] [PATCH 1/3] package/libjxl: fix build with libjpeg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,116 +74,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Bagas Sanjaya <bagasdotme@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-gnupg2 uses the libgpg-error library. The libgpg-error library has a
-long plan to be renamed to "gpgrt" (see [1]). For the transition, it
-provides two configuration scripts "gpg-error-config" (the old,
-original one, kept for compatibility) and "gpgrt-config" (which is
-meant to be the replacement). When both are detected, "gpgrt-config"
-should be preferred.
+Hi Fabrice,
 
-gnupg2 configure script searches for "gpg-error-config" in the path
-provided to --with-libgpg-error-prefix=PFX (more specifically, in
-"PFX/bin").
+On 19/02/2023 15:00, Fabrice Fontaine wrote:
+> Building with libjpeg will raise the following build failure on some
+> architectures since the addition of the package in commit
+> e648d399d8bd609697e78f13f7fa76be06d91a57:
+> 
+> /tmp/instance-14/output-1/build/libjxl-0.7.0/lib/extras/enc/jpg.cc: In
+> function 'jxl::Status
+> jxl::extras::{anonymous}::EncodeWithLibJpeg(const
+> jxl::extras::PackedImage&, const JxlBasicInfo&, const
+> std::vector<unsigned char>&, std::vector<unsigned char>, size_t, const
+> string&, std::vector<unsigned char>*)':
+> /tmp/instance-14/output-1/build/libjxl-0.7.0/lib/extras/enc/jpg.cc:126:34:
+> error: invalid conversion from 'long unsigned int*' to 'size_t*' {aka
+> 'unsigned int*'} [-fpermissive]
+>   126 |   jpeg_mem_dest(&cinfo, &buffer, &size);
+>       |                                  ^~~~~
+>       |                                  |
+>       |                                  long unsigned int*
+> 
+> Upstream advocates to use jpeg-turbo:
+> https://github.com/libjxl/libjxl/issues/1802
+> 
+> Fixes:
+>  -
+> http://autobuild.buildroot.org/results/9a2a7c6072876f2562609bf98f32a1ce93631a75
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libjxl/libjxl.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
+> index cc24ba258c..02a93ac5d9 100644
+> --- a/package/libjxl/libjxl.mk
+> +++ b/package/libjxl/libjxl.mk
+> @@ -30,4 +30,11 @@ LIBJXL_CONF_OPTS = \
+>  	-DJPEGXL_ENABLE_SJPEG=OFF \
+>  	-DJPEGXL_ENABLE_SKCMS=OFF
+> 
+> +ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
+> +LIBJXL_DEPENDENCIES += jpeg-turbo
+> +LIBJXL_CONF_OPTS += -DJPEGXL_ENABLE_TOOLS=ON
+> +else
+> +LIBJXL_CONF_OPTS += -DJPEGXL_ENABLE_TOOLS=OFF
 
-The logic to find "gpgrt-config" is different: it is searched in
-paths "$prefix/bin:$PATH". See [2]. On Buildroot, autotools target
-packages are configured with "--prefix=/usr", which makes the
-configure script to search in the host "/usr/bin".
+Having JPEGXL_ENABLE_TOOLS=ON without any libjpeg is a valid
+configuration for libjxl.
 
-In some host environment providing such a "/usr/bin/gpgrt-config"
-script of an older version, host compilation flags are incorrectly
-added for the target, which leads to compilation failures.
+Is it possible to disable the tools only if BR2_PACKAGE_LIBJPEG=y?
 
-The issue can be reproduced in a Buildroot Docker image from [3] in
-which the libgpg-error-dev package is added. When tested, the
-libgpg-error-dev package was at version 1.38.
+The configuration with tools and without any libjpeg is the one
+used by the package runtime test.
 
-In that configuration, gnupg2 configure will output the message:
+Running the test with command:
 
-    checking for gpgrt-config... /usr/bin/gpgrt-config
+     support/testing/run-tests \
+         -d dl -o output_folder \
+         tests.package.test_libjxl
 
-and the compilation fails with a message:
+now fails with output:
 
-    aarch64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
+     AssertionError: 127 != 0 :
+     Failed to run: cjxl /var/tmp/reference.ppm /var/tmp/encoded.jxl
+     output was:
+       -sh: cjxl: not found
 
-Note: it was observed that in some other configurations in which the
-host /usr/bin/gpgrt-config was from libgpg-error version 1.46, the
-host script was redirecting correctly in the buildroot sysroot.
+> +endif
+> +
+>  $(eval $(cmake-package))
 
-Since gnupg2 searches for "gpgrt-config" with a
-"AC_PATH_PROG(GPGRT_CONFIG, ...)" macro, this patch fixes this
-issue by simply forcing the script path in the GPGRT_CONFIG
-environment variable.
+Best regards,
 
-See also [4] which discussed the "gpgrt-config" search logic.
-
-Fixes:
-- http://autobuild.buildroot.net/results/423c3ce7317c181e9f2e4a49b76ee9d26167375c/
-(and many others)
-
-[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=README;h=e0b9f16445a96942af0839bcdb9a0b0f8cf31380;hb=885a287a57cf060b4c5b441822c09d23b8dee2bd#l29
-[2] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=m4/gpg-error.m4;h=a975e53d07d1b743f51d8aa1767cd8e0d71b4071;hb=c0556edb80518720b0d884251685fe008c8f0429#l68
-[3] https://git.buildroot.org/buildroot/tree/support/docker/Dockerfile?id=b6085c00d0feece6f3ba635e7847ea653bc5fac3
-[4] https://dev.gnupg.org/T5365
-
-Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on master branch at commit b6085c0 with commands:
-
-    make check-package
-    ...
-    0 warnings generated
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_gnupg2
-    ...
-    OK
-
-    utils/docker-run support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_gnupg2
-    ...
-    OK
-
-    utils/test-pkg -p gnupg2
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: SKIPPED
-                            sourcery-arm [6/6]: OK
-    6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/gnupg2/gnupg2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 5935ce6939..73de185ba7 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -23,6 +23,10 @@ GNUPG2_CONF_OPTS = \
- 	--with-ksba-prefix=$(STAGING_DIR)/usr \
- 	--with-npth-prefix=$(STAGING_DIR)/usr
- 
-+# Force the path to "gpgrt-config" (from the libgpg-error package) to
-+# avoid using the one on host, if present.
-+GNUPG2_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
-+
- ifneq ($(BR2_PACKAGE_GNUPG2_GPGV),y)
- define GNUPG2_REMOVE_GPGV
- 	rm -f $(TARGET_DIR)/usr/bin/gpgv
--- 
-2.39.2
-
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
