@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 102D5C05027
-	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 17:33:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A1F1C61DA4
+	for <buildroot@archiver.kernel.org>; Sun, 19 Feb 2023 17:33:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1E3D41712;
-	Sun, 19 Feb 2023 17:33:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1E3D41712
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA5C641711;
+	Sun, 19 Feb 2023 17:33:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA5C641711
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E8IBKn4V7EWy; Sun, 19 Feb 2023 17:33:00 +0000 (UTC)
+	with ESMTP id Ac9u9GbP4Df5; Sun, 19 Feb 2023 17:33:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABFFF41769;
-	Sun, 19 Feb 2023 17:32:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABFFF41769
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB5C741750;
+	Sun, 19 Feb 2023 17:33:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB5C741750
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CC3621BF423
- for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 17:32:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CFAF81BF423
+ for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 17:32:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4000140B86
+ by smtp2.osuosl.org (Postfix) with ESMTP id A59304049D
  for <buildroot@lists.busybox.net>; Sun, 19 Feb 2023 17:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4000140B86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A59304049D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 31XbirnwiIaG for <buildroot@lists.busybox.net>;
+ with ESMTP id v9iIK7hWFeES for <buildroot@lists.busybox.net>;
  Sun, 19 Feb 2023 17:32:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CA4B4049D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63A8340B5C
  for <buildroot@buildroot.org>; Sun, 19 Feb 2023 17:32:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CA4B4049D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63A8340B5C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15D2D8607C; Sun, 19 Feb 2023 17:32:25 +0000 (UTC)
+ id 5277F8607C; Sun, 19 Feb 2023 17:32:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 17:57:32 +0100
+Date: Sun, 19 Feb 2023 18:11:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 364511933811d76d4b866fe3aa04adff449cf94b
-X-Git-Newrev: 05c3177493aa8447d5cb568c8c13e0c09eded18b
+X-Git-Oldrev: 5945a71d87c988cb6b864600dd8dbecae0ef30fd
+X-Git-Newrev: 1c9622ae5084473b9eeb15b04673d081f5c9fa11
 X-Patchwork-Hint: ignore
-Message-Id: <20230219173225.15D2D8607C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xwayland: new package
+Message-Id: <20230219173225.5277F8607C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lighttpd: bump to version 1.4.69
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,192 +62,295 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05c3177493aa8447d5cb568c8c13e0c09eded18b
+commit: https://git.buildroot.net/buildroot/commit/?id=1c9622ae5084473b9eeb15b04673d081f5c9fa11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-XServer to run X clients under wayland
+Changelog:
+ - https://www.lighttpd.net/2023/1/3/1.4.68/
+ - https://www.lighttpd.net/2023/2/10/1.4.69/
 
-This XServer is required to run the X clients under Wayland compositor,
-for example weston or wlroots based compositors.
+In this commit:
+- rebased patch & dropped server.use-ipv6 option [1]
+- fix changed meson options [2]
 
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+[1]: https://git.lighttpd.net/lighttpd/lighttpd1.4/commit/376d20f1617f2c0202fb415e4cc66d3f780db5ca
+[2]: https://git.lighttpd.net/lighttpd/lighttpd1.4/commit/6b31f76cd9b36b6033607181238fbf41c5b81e07
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                           |  1 +
- package/x11r7/Config.in              |  1 +
- package/x11r7/xwayland/Config.in     | 26 ++++++++++
- package/x11r7/xwayland/xwayland.hash |  6 +++
- package/x11r7/xwayland/xwayland.mk   | 94 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 128 insertions(+)
+ ...default-lighttpd-configuration-file-to-ha.patch | 33 +++++------
+ package/lighttpd/lighttpd.hash                     |  4 +-
+ package/lighttpd/lighttpd.mk                       | 64 +++++++++++-----------
+ 3 files changed, 47 insertions(+), 54 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7894b10e38..a7a0bb14d1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2426,6 +2426,7 @@ F:	support/testing/tests/package/test_python_s3transfer.py
- N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
- F:	package/slirp4netns/
- F:	package/sway/
-+F:	package/x11r7/xwayland/
+diff --git a/package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch b/package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch
+index 1a887655b8..2eab2a84e5 100644
+--- a/package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch
++++ b/package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch
+@@ -1,11 +1,11 @@
+-From d1de409b0aeb8dffd42673444043caf01437804e Mon Sep 17 00:00:00 2001
++From d9e1c9c4a95797c812dd4906ecbbc532ae459364 Mon Sep 17 00:00:00 2001
+ From: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Date: Mon, 13 Dec 2021 22:07:17 +0100
+ Subject: [PATCH] Modify the default lighttpd configuration file to have one a
+  starting conf
  
- N:	Refik Tuzakli <tuzakli.refik@gmail.com>
- F:	package/freescale-imx/
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 365de34c98..4de8922e0d 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -12,6 +12,7 @@ menuconfig BR2_PACKAGE_XORG7
- if BR2_PACKAGE_XORG7
- 	menu "X11R7 Servers"
- 		source package/x11r7/xserver_xorg-server/Config.in
-+		source package/x11r7/xwayland/Config.in
- 	endmenu
- 	menu "X11R7 Libraries"
- 		source package/x11r7/libxcb/Config.in
-diff --git a/package/x11r7/xwayland/Config.in b/package/x11r7/xwayland/Config.in
-new file mode 100644
-index 0000000000..4f14f2cc36
---- /dev/null
-+++ b/package/x11r7/xwayland/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_XWAYLAND
-+	bool "xwayland server"
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # wayland
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
-+	# We need a SHA1 implementation. If either openssl or
-+	# libgcrypt are already part of the build, we'll use one of
-+	# them, otherwise, use the small libsha1 library.
-+	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
-+	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	select BR2_PACKAGE_XLIB_LIBXCVT
-+	select BR2_PACKAGE_XLIB_LIBXFONT2
-+	select BR2_PACKAGE_XLIB_LIBXKBFILE
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_XTRANS
-+	select BR2_PACKAGE_XORGPROTO
-+	help
-+	  X.Org X server to run X clients under wayland
-+
-+	  http://xorg.freedesktop.org
-+
-+comment "xwayland needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-new file mode 100644
-index 0000000000..0c476f3183
---- /dev/null
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -0,0 +1,6 @@
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003322.html
-+sha256  d11eeee73290b88ea8da42a7d9350dedfaba856ce4ae44e58c045ad9ecaa2f73  xwayland-22.1.8.tar.xz
-+sha512  f52c6f99d8ef7605bc1c651d5ee5e306c12af30649a2d712b1c4c3cf4c7c80246ae24bd9ac39461d47aafc78f5d659446a459cd6259e05ef3128b204981d114a  xwayland-22.1.8.tar.xz
-+
-+# Locally calculated
-+sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-new file mode 100644
-index 0000000000..174b440b07
---- /dev/null
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -0,0 +1,94 @@
-+################################################################################
-+#
-+# xwayland
-+#
-+################################################################################
-+
-+XWAYLAND_VERSION = 22.1.8
-+XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
-+XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
-+XWAYLAND_LICENSE = MIT
-+XWAYLAND_LICENSE_FILES = COPYING
-+XWAYLAND_INSTALL_STAGING = YES
-+XWAYLAND_DEPENDENCIES = \
-+	pixman \
-+	wayland \
-+	wayland-protocols \
-+	xlib_libxcvt \
-+	xlib_libXfont2 \
-+	xlib_libxkbfile \
-+	xlib_libXrandr \
-+	xlib_xtrans \
-+	xorgproto
-+XWAYLAND_CONF_OPTS = \
-+	-Dxwayland_eglstream=false \
-+	-Dxvfb=false \
-+	-Ddefault_font_path=/usr/share/fonts/X11/ \
-+	-Ddtrace=false \
-+	-Ddocs=false
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_LIBEPOXY),yy)
-+XWAYLAND_CONF_OPTS += -Dglamor=true
-+XWAYLAND_DEPENDENCIES += libdrm libepoxy
-+else
-+XWAYLAND_CONF_OPTS += -Dglamor=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+XWAYLAND_CONF_OPTS += -Dglx=true
-+XWAYLAND_DEPENDENCIES += libgl
-+else
-+XWAYLAND_CONF_OPTS += -Dglx=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXDMCP),y)
-+XWAYLAND_CONF_OPTS += \
-+	-Dxdmcp=true \
-+	-Dxdm-auth-1=true
-+XWAYLAND_DEPENDENCIES += xlib_libXdmcp
-+else
-+XWAYLAND_CONF_OPTS += \
-+	-Dxdmcp=false \
-+	-Dxdm-auth-1=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+XWAYLAND_CONF_OPTS += -Dsecure-rpc=true
-+XWAYLAND_DEPENDENCIES += libtirpc
-+else
-+XWAYLAND_CONF_OPTS += -Dsecure-rpc=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX)$(BR2_PACKAGE_AUDIT),yy)
-+XWAYLAND_CONF_OPTS += -Dxselinux=true
-+XWAYLAND_DEPENDENCIES += libselinux audit
-+else
-+XWAYLAND_CONF_OPTS += -Dxselinux=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+XWAYLAND_CONF_OPTS += -Dsha1=libcrypto
-+XWAYLAND_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+XWAYLAND_CONF_OPTS += -Dsha1=libgcrypt
-+XWAYLAND_DEPENDENCIES += libgcrypt
-+else
-+XWAYLAND_CONF_OPTS += -Dsha1=libsha1
-+XWAYLAND_DEPENDENCIES += libsha1
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_LIBDRM),yy)
-+XWAYLAND_CONF_OPTS += -Ddri3=true
-+XWAYLAND_DEPENDENCIES += xlib_libxshmfence libdrm
-+else
-+XWAYLAND_CONF_OPTS += -Ddri3=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+XWAYLAND_CONF_OPTS += -Dlibunwind=true
-+XWAYLAND_DEPENDENCIES += libunwind
-+else
-+XWAYLAND_CONF_OPTS += -Dlibunwind=false
-+endif
-+
-+$(eval $(meson-package))
+   * Changed the log path to /var/log and logs filenames
+-  * Disable IPv6
++  * Disable IPv6 (Dropped since 1.4.68)
+   * Do not setuid to a user that doesn't exist on the system
+   * Change the network backend to writev since linux-sendfile fails on buildroot
+ 
+@@ -13,13 +13,15 @@ Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ [Gustavo: update for 1.4.37]
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++[Thomas: update for 1.4.69 - drop server.use-ipv6]
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ ---
+  doc/config/conf.d/access_log.conf |  2 +-
+- doc/config/lighttpd.conf          | 16 ++++++++--------
+- 2 files changed, 9 insertions(+), 9 deletions(-)
++ doc/config/lighttpd.conf          | 14 +++++++-------
++ 2 files changed, 8 insertions(+), 8 deletions(-)
+ 
+ diff --git a/doc/config/conf.d/access_log.conf b/doc/config/conf.d/access_log.conf
+-index e685d43..92cff4f 100644
++index e685d437..92cff4f0 100644
+ --- a/doc/config/conf.d/access_log.conf
+ +++ b/doc/config/conf.d/access_log.conf
+ @@ -9,7 +9,7 @@ server.modules += ( "mod_accesslog" )
+@@ -32,7 +34,7 @@ index e685d43..92cff4f 100644
+  ##
+  ## The default format produces CLF compatible output.
+ diff --git a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+-index 495d2a1..c3e1446 100644
++index d45a284d..4e926d5a 100644
+ --- a/doc/config/lighttpd.conf
+ +++ b/doc/config/lighttpd.conf
+ @@ -13,8 +13,8 @@
+@@ -46,16 +48,7 @@ index 495d2a1..c3e1446 100644
+  var.state_dir   = "/run"
+  var.home_dir    = "/var/lib/lighttpd"
+  var.conf_dir    = "/etc/lighttpd"
+-@@ -90,7 +90,7 @@ server.port = 80
+- ##
+- ## Use IPv6?
+- ##
+--server.use-ipv6 = "enable"
+-+# server.use-ipv6 = "enable"
+- 
+- ##
+- ## bind to a specific IP
+-@@ -101,8 +101,8 @@ server.use-ipv6 = "enable"
++@@ -97,8 +97,8 @@ server.port = 80
+  ## Run as a different username/groupname.
+  ## This requires root permissions during startup. 
+  ##
+@@ -66,7 +59,7 @@ index 495d2a1..c3e1446 100644
+  
+  ##
+  ## Enable lighttpd to serve requests on sockets received from systemd
+-@@ -118,7 +118,7 @@ server.groupname = "lighttpd"
++@@ -114,7 +114,7 @@ server.groupname = "lighttpd"
+  ##
+  ## Document root
+  ##
+@@ -75,7 +68,7 @@ index 495d2a1..c3e1446 100644
+  
+  ##
+  ## The value for the "Server:" response field.
+-@@ -144,7 +144,7 @@ server.pid-file = state_dir + "/lighttpd.pid"
++@@ -140,7 +140,7 @@ server.pid-file = state_dir + "/lighttpd.pid"
+  ##
+  ## Path to the error log file
+  ##
+@@ -84,7 +77,7 @@ index 495d2a1..c3e1446 100644
+  
+  ##
+  ## If you want to log to syslog you have to unset the 
+-@@ -192,7 +192,7 @@ include conf_dir + "/conf.d/debug.conf"
++@@ -187,7 +187,7 @@ include conf_dir + "/conf.d/debug.conf"
+  ## and write(). Every modern OS provides its own syscall to help network
+  ## servers transfer files as fast as possible 
+  ##
+@@ -94,5 +87,5 @@ index 495d2a1..c3e1446 100644
+  ##
+  ## As lighttpd is a single-threaded server, its main resource limit is
+ -- 
+-2.34.1
++2.39.0
+ 
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 8353857ad9..29bf5124b6 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.67.sha512sum
+-sha512  acfde71675d1c54b4e805998d1dabaa291437181bdbca0d6a3a069584c4576d7585d2401f57f8691f23aaf6283a95ac61156789a055a2a7236fd305c1f248627  lighttpd-1.4.67.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.69.sha512sum
++sha512  9d174c8e0a192b4eb8218a9f76b0bd42f90030228600bb7bbe35ebb9e7bbaea36ee2732535c5cc6dab171294817837bfa26074ff84a37832dd89f57488b4071f  lighttpd-1.4.69.tar.xz
+ # Locally calculated
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index d3440040fb..ca2035b6b3 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).67
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).69
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
+@@ -13,49 +13,49 @@ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_CPE_ID_VENDOR = lighttpd
+ LIGHTTPD_DEPENDENCIES = host-pkgconf xxhash
+ LIGHTTPD_CONF_OPTS = \
+-	-Dwith_dbi=false \
+-	-Dwith_fam=false \
++	-Dwith_dbi=disabled \
++	-Dwith_fam=disabled \
+ 	-Dwith_gnutls=false \
+-	-Dwith_libev=false \
+-	-Dwith_libunwind=false \
++	-Dwith_libev=disabled \
++	-Dwith_libunwind=disabled \
+ 	-Dwith_mbedtls=false \
+ 	-Dwith_nettle=false \
+ 	-Dwith_nss=false \
+-	-Dwith_pcre=false \
+-	-Dwith_sasl=false \
++	-Dwith_pcre=disabled \
++	-Dwith_sasl=disabled \
+ 	-Dwith_wolfssl=false \
+ 	-Dwith_xattr=false \
+-	-Dwith_xxhash=true \
++	-Dwith_xxhash=enabled \
+ 	-Dbuild_extra_warnings=false \
+ 	-Dbuild_static=false \
+ 	-Dmoduledir=lib/lighttpd
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_BROTLI),y)
+ LIGHTTPD_DEPENDENCIES += brotli
+-LIGHTTPD_CONF_OPTS += -Dwith_brotli=true
++LIGHTTPD_CONF_OPTS += -Dwith_brotli=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_brotli=false
++LIGHTTPD_CONF_OPTS += -Dwith_brotli=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_BZIP2),y)
+ LIGHTTPD_DEPENDENCIES += bzip2
+-LIGHTTPD_CONF_OPTS += -Dwith_bzip=true
++LIGHTTPD_CONF_OPTS += -Dwith_bzip=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_bzip=false
++LIGHTTPD_CONF_OPTS += -Dwith_bzip=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_KRB5),y)
+ LIGHTTPD_DEPENDENCIES += libkrb5
+-LIGHTTPD_CONF_OPTS += -Dwith_krb5=true
++LIGHTTPD_CONF_OPTS += -Dwith_krb5=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_krb5=false
++LIGHTTPD_CONF_OPTS += -Dwith_krb5=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_LDAP),y)
+ LIGHTTPD_DEPENDENCIES += openldap
+-LIGHTTPD_CONF_OPTS += -Dwith_ldap=true
++LIGHTTPD_CONF_OPTS += -Dwith_ldap=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_ldap=false
++LIGHTTPD_CONF_OPTS += -Dwith_ldap=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_LUA),y)
+@@ -67,16 +67,16 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_MAXMINDDB),y)
+ LIGHTTPD_DEPENDENCIES += libmaxminddb
+-LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=true
++LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=false
++LIGHTTPD_CONF_OPTS += -Dwith_maxminddb=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_MYSQL),y)
+ LIGHTTPD_DEPENDENCIES += mysql
+-LIGHTTPD_CONF_OPTS += -Dwith_mysql=true
++LIGHTTPD_CONF_OPTS += -Dwith_mysql=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_mysql=false
++LIGHTTPD_CONF_OPTS += -Dwith_mysql=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_OPENSSL),y)
+@@ -88,9 +88,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_PAM),y)
+ LIGHTTPD_DEPENDENCIES += linux-pam
+-LIGHTTPD_CONF_OPTS += -Dwith_pam=true
++LIGHTTPD_CONF_OPTS += -Dwith_pam=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_pam=false
++LIGHTTPD_CONF_OPTS += -Dwith_pam=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_PCRE),y)
+@@ -102,36 +102,36 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_PGSQL),y)
+ LIGHTTPD_DEPENDENCIES += postgresql
+-LIGHTTPD_CONF_OPTS += -Dwith_pgsql=true
++LIGHTTPD_CONF_OPTS += -Dwith_pgsql=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_pgsql=false
++LIGHTTPD_CONF_OPTS += -Dwith_pgsql=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
+ LIGHTTPD_DEPENDENCIES += libxml2 sqlite
+-LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=true
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=enabled
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+-LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=true
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=enabled
+ LIGHTTPD_DEPENDENCIES += util-linux
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=false
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=disabled
+ endif
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=false -Dwith_webdav_locks=false
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=disabled -Dwith_webdav_locks=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_ZLIB),y)
+ LIGHTTPD_DEPENDENCIES += zlib
+-LIGHTTPD_CONF_OPTS += -Dwith_zlib=true
++LIGHTTPD_CONF_OPTS += -Dwith_zlib=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_zlib=false
++LIGHTTPD_CONF_OPTS += -Dwith_zlib=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_ZSTD),y)
+ LIGHTTPD_DEPENDENCIES += zstd
+-LIGHTTPD_CONF_OPTS += -Dwith_zstd=true
++LIGHTTPD_CONF_OPTS += -Dwith_zstd=enabled
+ else
+-LIGHTTPD_CONF_OPTS += -Dwith_zstd=false
++LIGHTTPD_CONF_OPTS += -Dwith_zstd=disabled
+ endif
+ 
+ define LIGHTTPD_INSTALL_CONFIG
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
