@@ -4,48 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B705C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAE76C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AAD470284;
-	Tue, 21 Feb 2023 02:07:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AAD470284
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7B4370121;
+	Tue, 21 Feb 2023 02:07:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7B4370121
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G6KnmZMIQkL1; Tue, 21 Feb 2023 02:07:24 +0000 (UTC)
+	with ESMTP id TJgxU4kcWp6e; Tue, 21 Feb 2023 02:07:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4984C7027E;
-	Tue, 21 Feb 2023 02:07:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4984C7027E
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECC27702AC;
+	Tue, 21 Feb 2023 02:07:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECC27702AC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9579D1BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C4791BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:07:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B006070024
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B006070024
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29E656109D
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:57:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29E656109D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wnhukpuq5TPb for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E1FB7004E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E1FB7004E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59467828C8; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:12:11 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 67c967c2d16c29f193fde43b3c48edf0911baccd
-X-Git-Newrev: ee13e3fb41dc7c0c001127733b5a599c1e509747
-X-Patchwork-Hint: ignore
-Message-Id: <20230220205303.59467828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/glslsandbox-player:
- add wayland-protocols optional dependency
+ with ESMTP id D8J_c0JKqUZ1 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:57:27 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E35AB60E63
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E35AB60E63
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:57:26 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4CF0AC0005;
+ Mon, 20 Feb 2023 20:57:25 +0000 (UTC)
+Date: Mon, 20 Feb 2023 21:57:24 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230220215724.538719dd@windsurf>
+In-Reply-To: <20230219173536.615233-1-fontaine.fabrice@gmail.com>
+References: <20230219173536.615233-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676926645;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=vp+Vm4x7me48Z2jQWx/gTEYaLOFE8JHZRkZQqgJe5/o=;
+ b=jRZCk3hGIvLuoUHlaA0xlE3DH8w0eoHInjNamk0VS5Ihg+SF5Ou2gRR2iJGV1+JU7JoVls
+ nbmWpZBWU93aWC+JFWd2qHQzk6CxmpfFtGzNIDES//y5hpZWwns0CGkSX1FAM8dB6BK7Rs
+ cxNJCtGvGpi4uLgYspLKjxrjE+MC+6mA6A0UPuSqchUJR6ozzY/Bh2s5TJJ4Fh7Qt9D3R2
+ PaqFZsnvXAnhaE0cVvOpikyX2rHyyt+7CabWUmqTmLx3Qu/GrwyHGdsblJG1OOTe/j/Frz
+ 7i2w9ecT52bnLGoonH7CfH36PxDC1mDdjtTobY5Vk6qLpMstqcyWjVNdh4Kv+g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=jRZCk3hG
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/nginx-naxsi: fix build with pcre2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,77 +76,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee13e3fb41dc7c0c001127733b5a599c1e509747
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sun, 19 Feb 2023 18:35:36 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-wayland-protocols is an optional dependency which is enabled by default
-resulting in the following wayland build failure since the addition of
-the package in commit f201ca9d0d25b491ec5e1ed4e1d02fd52d027997:
+> Fix the following build failure raised since bump of nginx to version
+> 1.22.1 in commit 722b84eafa5e3d9540e0a80bae0c971a3a778358:
+> 
+> /home/buildroot/autobuild/run/instance-2/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c: In function 'ngx_http_process_basic_rule_buffer':
+> /home/buildroot/autobuild/run/instance-2/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c:205:61: error: invalid use of incomplete typedef 'ngx_regex_t' {aka 'struct pcre2_real_code_8'}
+>   205 |       (tmp_idx < len && (match = pcre_exec(rl->br->rx->regex->code,
+>       |                                                             ^~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/7fff888bd36710e2d2f5bb39a38597e8c04305ce
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Fix patch number
 
-checking for wayland_client... yes
-checking for wayland_egl... yes
-configure: Wayland EGL support enabled
-checking for wayland_protocols... no
-configure: error: Package requirements (wayland-protocols >= 1.12) were not met:
+Applied to master, thanks.
 
-Package 'wayland-protocols', required by 'virtual:world', not found
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables wayland_protocols_CFLAGS
-and wayland_protocols_LIBS to avoid the need to call pkg-config.
-
-Fixes:
- - http://autobuild.buildroot.org/results/865af860f9e52fe5311bb0c6a246ff871ae5a989
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/glslsandbox-player/Config.in             | 5 ++++-
- package/glslsandbox-player/glslsandbox-player.mk | 6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
-index 132705584e..530c158fc3 100644
---- a/package/glslsandbox-player/Config.in
-+++ b/package/glslsandbox-player/Config.in
-@@ -111,8 +111,11 @@ endchoice
- if BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL
- config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_IVI
- 	bool "Wayland IVI shell support"
--endif
- 
-+config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG
-+	bool "Wayland XDG shell support"
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+endif
- endif
- 
- comment "glslsandbox-player needs openGL ES and EGL driver"
-diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
-index f0a9475aa6..241f3475d2 100644
---- a/package/glslsandbox-player/glslsandbox-player.mk
-+++ b/package/glslsandbox-player/glslsandbox-player.mk
-@@ -72,6 +72,12 @@ GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-ivi
- else
- GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-ivi
- endif
-+ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG),y)
-+GLSLSANDBOX_PLAYER_DEPENDENCIES += wayland-protocols
-+GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-wlxdg
-+else
-+GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-wlxdg
-+endif
- else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11),y)
- GLSLSANDBOX_PLAYER_DEPENDENCIES += xlib_libX11
- GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=x11
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
