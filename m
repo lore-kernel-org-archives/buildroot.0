@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A09FEC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C890C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:51:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 496FE822E6;
-	Mon, 20 Feb 2023 20:51:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 496FE822E6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11A67822EC;
+	Mon, 20 Feb 2023 20:51:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11A67822EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EOwPyCrPrPow; Mon, 20 Feb 2023 20:51:08 +0000 (UTC)
+	with ESMTP id 1twqhjc0IzNz; Mon, 20 Feb 2023 20:51:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79419822E2;
-	Mon, 20 Feb 2023 20:51:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79419822E2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3BC001BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48535822E7;
+	Mon, 20 Feb 2023 20:51:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48535822E7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B61491BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14822400AF
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14822400AF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 660CD822DD
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 660CD822DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NQjTghhaM9Ja for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 442634010E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 442634010E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BBF98648A; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 21:50:31 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13b05a9b00bb1eeacefafe7b2a3537988a53dcea
-X-Git-Newrev: ff7c37e57419aeb2fb63ebc21bad9696aaaba2b4
-X-Patchwork-Hint: ignore
-Message-Id: <20230220205040.2BBF98648A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libjxl: security bump to version
- 0.8.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id blM1n6CeUzWA for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30850822D4
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 30850822D4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:14 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D6B3C40004;
+ Mon, 20 Feb 2023 20:51:11 +0000 (UTC)
+Date: Mon, 20 Feb 2023 21:51:11 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230220215111.19dcba5d@windsurf>
+In-Reply-To: <20230219140051.80647-1-fontaine.fabrice@gmail.com>
+References: <20230219140051.80647-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676926272;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Nr8Ln2SPKSnFYUQXJ/25yMLuqV1mZTng6rtfYN3Pzp0=;
+ b=DpP2wsHcQvEl8oTDg1PZM4lQv5fH/dT3FRSW6E0pRSg1HLO7trCJ4joPrPANPaLG4Lb12e
+ 0u8ZXv8Dl7EqKwNfrvTgdk5Doe/mJNphX4FUBFyJXtygC8kjR53GrZM1LSYjFIYTWrUxxY
+ gWwSkkLIupvCE8c4B8XzOlLugB3EZehqyIxRSjGL07AY8jynjCGUAUvWm/1LiDdvHQMBNh
+ 0x6Y4q4IytLlwe7jEQNi3RoxFrbeSmisoHb94VWLFfoDN+PXRME2aLMGW/FxHCm6GcL/I7
+ jplBra4RxEHfhfnVQGHKfYCGrXqNeGz/m4RTI9uZS/gSN3mMlTtDqS98CV1qow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=DpP2wsHc
+Subject: Re: [Buildroot] [PATCH 1/3] package/libjxl: fix build with libjpeg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,103 +77,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff7c37e57419aeb2fb63ebc21bad9696aaaba2b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 19 Feb 2023 15:00:49 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Security: Fix OOB read in exif.h
+> Building with libjpeg will raise the following build failure on some
+> architectures since the addition of the package in commit
+> e648d399d8bd609697e78f13f7fa76be06d91a57:
+> 
+> /tmp/instance-14/output-1/build/libjxl-0.7.0/lib/extras/enc/jpg.cc: In function 'jxl::Status jxl::extras::{anonymous}::EncodeWithLibJpeg(const jxl::extras::PackedImage&, const JxlBasicInfo&, const std::vector<unsigned char>&, std::vector<unsigned char>, size_t, const string&, std::vector<unsigned char>*)':
+> /tmp/instance-14/output-1/build/libjxl-0.7.0/lib/extras/enc/jpg.cc:126:34: error: invalid conversion from 'long unsigned int*' to 'size_t*' {aka 'unsigned int*'} [-fpermissive]
+>   126 |   jpeg_mem_dest(&cinfo, &buffer, &size);
+>       |                                  ^~~~~
+>       |                                  |
+>       |                                  long unsigned int*
+> 
+> Upstream advocates to use jpeg-turbo:
+> https://github.com/libjxl/libjxl/issues/1802
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/9a2a7c6072876f2562609bf98f32a1ce93631a75
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libjxl/libjxl.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-https://github.com/libjxl/libjxl/releases/tag/v0.8.1
-https://github.com/libjxl/libjxl/releases/tag/v0.8.0
+To be honest, I find quite ugly the fact that only jpeg-turbo is
+supported, but it indeed seems like libjpeg and jpeg-turbo are not 100%
+compatible, unfortunately.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-segmentation-fault-when-JPEG-is-disabled.patch | 44 ++++++++++++++++++++++
- package/libjxl/libjxl.hash                         |  2 +-
- package/libjxl/libjxl.mk                           |  2 +-
- 3 files changed, 46 insertions(+), 2 deletions(-)
+So: entire series applied, thanks!
 
-diff --git a/package/libjxl/0001-djxl-fix-segmentation-fault-when-JPEG-is-disabled.patch b/package/libjxl/0001-djxl-fix-segmentation-fault-when-JPEG-is-disabled.patch
-new file mode 100644
-index 0000000000..3d709c956b
---- /dev/null
-+++ b/package/libjxl/0001-djxl-fix-segmentation-fault-when-JPEG-is-disabled.patch
-@@ -0,0 +1,44 @@
-+From 504f35c8204248ae6f97278e8b7c6cc5853a1b94 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Fri, 10 Feb 2023 21:31:30 +0100
-+Subject: [PATCH] djxl: fix segmentation fault when JPEG is disabled
-+
-+When libjxl is compiled without JPEG support, by configuring for example
-+with:
-+
-+    cmake -DCMAKE_DISABLE_FIND_PACKAGE_JPEG=TRUE ...
-+
-+djxl crashes with a segmentation fault at:
-+https://github.com/libjxl/libjxl/blob/v0.8.1/tools/djxl_main.cc#L367
-+
-+The crash can be reproduced with the sequence:
-+
-+    gm convert IMAGE:LOGO ref.ppm
-+    cjxl ref.ppm enc.jxl
-+    djxl enc.jxl dec.ppm
-+
-+The crash happen because opt_jpeg_quality_id does not get
-+initialized at:
-+https://github.com/libjxl/libjxl/blob/v0.8.1/tools/djxl_main.cc#L107
-+
-+This commit fixes the crash by adding a test on opt_jpeg_quality_id.
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Retrieved from:
-+https://github.com/libjxl/libjxl/pull/2178/commits/504f35c8204248ae6f97278e8b7c6cc5853a1b94]
-+---
-+ tools/djxl_main.cc | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/tools/djxl_main.cc b/tools/djxl_main.cc
-+index b755301fcb..42b889e7ce 100644
-+--- a/tools/djxl_main.cc
-++++ b/tools/djxl_main.cc
-+@@ -370,6 +370,7 @@ int main(int argc, const char* argv[]) {
-+     args.color_space = force_colorspace;
-+   }
-+   if (codec == jxl::extras::Codec::kPNM && extension != ".pfm" &&
-++      args.opt_jpeg_quality_id != -1 &&
-+       !cmdline.GetOption(args.opt_jpeg_quality_id)->matched()) {
-+     args.bits_per_sample = 0;
-+   }
-diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
-index e71d32e61d..6b4c9d8d0a 100644
---- a/package/libjxl/libjxl.hash
-+++ b/package/libjxl/libjxl.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  3114bba1fabb36f6f4adc2632717209aa6f84077bc4e93b420e0d63fa0455c5e  libjxl-0.7.0.tar.gz
-+sha256  60f43921ad3209c9e180563025eda0c0f9b1afac51a2927b9ff59fff3950dc56  libjxl-0.8.1.tar.gz
- sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
- sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
-diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
-index b4dfbecf82..f603327bf6 100644
---- a/package/libjxl/libjxl.mk
-+++ b/package/libjxl/libjxl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBJXL_VERSION = 0.7.0
-+LIBJXL_VERSION = 0.8.1
- LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
- LIBJXL_LICENSE = BSD-3-Clause
- LIBJXL_LICENSE_FILES = LICENSE PATENTS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
