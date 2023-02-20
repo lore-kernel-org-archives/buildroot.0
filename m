@@ -1,88 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DC41C05027
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 11:24:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5358DC05027
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 12:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 919CA60FD6;
-	Mon, 20 Feb 2023 11:24:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 919CA60FD6
+	by smtp2.osuosl.org (Postfix) with ESMTP id BAB87400B8;
+	Mon, 20 Feb 2023 12:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAB87400B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rkcNo7JIkoXM; Mon, 20 Feb 2023 11:24:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id obn1WtMhhLgR; Mon, 20 Feb 2023 12:51:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF42A60FC2;
-	Mon, 20 Feb 2023 11:24:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF42A60FC2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 889811BF3BC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 11:24:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D15B40A1E;
+	Mon, 20 Feb 2023 12:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D15B40A1E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 53E961BF288
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 12:51:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 620CA81E94
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 11:24:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 620CA81E94
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E7DE40A1E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 12:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E7DE40A1E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NLiznBm1yvpv for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 11:24:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57C8781E6E
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 57C8781E6E
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 11:24:15 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id p8so912824wrt.12
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 03:24:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VRJPclZis7dbRXI6h70RqepHQGGC2IziHls1q28pu04=;
- b=RKS7ecYK3NcDlWj8vaj+fi7UJk4gWfc+ybMYsv+mIdLRRyQwxqFTLrZu1UxhMqL49y
- +Q5+996BhpXyM9eee7wjbwcRCeT4tjojpOfX0EinH1KbJq+/rZbenzpnn0PT2Kd1Y9+r
- 6sIEVrtfEISpzfdxpU3oMQ5hI0/tNUIoRKoA0F9TJeGbcKM1JCitZ/bk0fw7yJlbJTCQ
- Em2SEblMT+/IvKRlZXGiqRO5TApPTUI+f5lpUl8c/iwCYACfQsGKrItIfqfDfFnwpHtx
- P5SnXva5DGw3Ep9i6sTkPZPMUyLHSrkYnbNnwj/NGDFBcsSkFoUKK+Nwru6ACx2AKQsM
- XJoA==
-X-Gm-Message-State: AO0yUKXiX3r+Le8hpyOmGnuV+u0wfRZcttuvYgSULIKQGj6i++o9rzgW
- Fuc30eHind5+M8up/st9K3L5OteETi4=
-X-Google-Smtp-Source: AK7set/Td6azCwHZCeLdE4S79gNq8y997EXYF6VXNM1OG9bkeAhhz/T7jAFhE2wtn4Xt0S5goBxyOg==
-X-Received: by 2002:a5d:440e:0:b0:2c5:4d68:5511 with SMTP id
- z14-20020a5d440e000000b002c54d685511mr1409509wrq.48.1676892253038; 
- Mon, 20 Feb 2023 03:24:13 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- f18-20020adffcd2000000b002c59e001631sm892983wrs.77.2023.02.20.03.24.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Feb 2023 03:24:12 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9wbBtLeipEdI for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 12:51:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 649EB400B8
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 649EB400B8
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 12:51:45 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 2D1721814B9; Mon, 20 Feb 2023 13:51:40 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 12:24:10 +0100
-Message-Id: <20230220112410.953669-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.0
+Date: Mon, 20 Feb 2023 13:49:45 +0100
+Message-Id: <20230220124945.1842532-1-buildroot@heine.tech>
 MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VRJPclZis7dbRXI6h70RqepHQGGC2IziHls1q28pu04=;
- b=jIwruay3imyBjiYEA19a/VjVqU/4BYIkDxkyujP6hzGeMBBspoNW2uGB7beKldKcaV
- d0B5WjEcVcfWOgTgZJNR0J2qRn1SHMK8rSu7DCRq/6Jwi0roS4JVbMi/pjjfgh1UvBFI
- 9G8kFi+JzjYlFs6yF1AlKJmTiy2d7fslV7xHolEUi8sMpzCvxqv4RRe7SLDcqLFL5H1O
- vztL2rM/u3ZOddJWZ2raHv7xMSv3EopUcwo9VrgaCBr/VDrdM2WhCe7pCP7PpdtnccYe
- 5InVEZcPKrLYLq/nGEyD4JDAS7wVx6psHVoUQwy+ZipkAMHfwdCUQNoS8CHgPYQJmoWB
- fkag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=jIwruay3
-Subject: [Buildroot] [PATCH 1/1] package/glslsandbox-player: fix build with
- rockchip-mali
+ d=heine.tech; s=dkim; 
+ t=1676897502; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=ZMNHzgnuvBQGKeJnqtP+YBfSq0Tp4o31waIqh2scZmA=;
+ b=moRWzXqhv1CK0bI+hp1e5ZVpS6DUMZJlsQI3cVj9ibVS4jpqTtdvnNkdcpGfpHMM44muXn
+ eQscKE8U6WwsCf7pJmvh6F2XCDfo671QVL5eEfwUsA+1PDOaw1gN2PBeEZI2rmXzNrSSsl
+ Czfrq6UeZs6SZ9/ykaVwho2jdHajcY0=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=moRWzXqh
+Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.52.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,92 +64,432 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>, Robert Rose <robertroyrose@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with rockchip-mali raised since commit
-97c74a73e5dee17530647f89b2c7d8692781eb14:
+- alter patches 0001 and 0003 for changed paths/locations
+- bump minimum gcc to 7.3, see [0]
+- alter gcc dependency of dependend packages accordingly
 
-checking for glesv2... no
-configure: error: Package requirements (glesv2 >= 1) were not met:
+[0] https://github.com/grpc/grpc/tree/master/src/cpp
 
-Package dependency requirement 'glesv2 >= 1' could not be satisfied.
-Package 'glesv2' has version '', required version is '>= 1'
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables glesv2_CFLAGS
-and glesv2_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-Fixes:
- - http://autobuild.buildroot.org/results/ac765b0ff5f914df4087ae4691fe711dc912f03b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- ...gure.ac-fix-build-with-rockchip-mali.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/glslsandbox-player/0001-configure.ac-fix-build-with-rockchip-mali.patch
+ package/collectd/Config.in                    |  6 +-
+ package/falcosecurity-libs/Config.in          |  2 +-
+ ...the-availability-of-pthread_setname_.patch | 32 ++++++----
+ .../grpc/0003-host-grpc-only-cpp-plugin.patch | 62 ++++++++++---------
+ package/grpc/Config.in                        |  6 +-
+ package/grpc/grpc.hash                        |  2 +-
+ package/grpc/grpc.mk                          |  2 +-
+ package/sysdig/Config.in                      |  6 +-
+ 8 files changed, 65 insertions(+), 53 deletions(-)
 
-diff --git a/package/glslsandbox-player/0001-configure.ac-fix-build-with-rockchip-mali.patch b/package/glslsandbox-player/0001-configure.ac-fix-build-with-rockchip-mali.patch
-new file mode 100644
-index 0000000000..97bfe00401
---- /dev/null
-+++ b/package/glslsandbox-player/0001-configure.ac-fix-build-with-rockchip-mali.patch
-@@ -0,0 +1,46 @@
-+From b811d408fe52fd5ee5a908eb16a2ff2b4217c235 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 20 Feb 2023 11:53:39 +0100
-+Subject: [PATCH 1/1] configure.ac: fix build with rockchip-mali
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index a431da79f1..7f87b54645 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -683,15 +683,15 @@ config BR2_PACKAGE_COLLECTD_GRPC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
+ 	depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # grpc -> libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # grpc
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
+ 	select BR2_PACKAGE_GRPC
+ 	help
+ 	  Send/receive values using the gRPC protocol.
+ 
+-comment "grpc needs a toolchain w/ C++, gcc >= 5"
++comment "grpc needs a toolchain w/ C++, gcc >= 7.3"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
+ 
+diff --git a/package/falcosecurity-libs/Config.in b/package/falcosecurity-libs/Config.in
+index f101883384..41251fb748 100644
+--- a/package/falcosecurity-libs/Config.in
++++ b/package/falcosecurity-libs/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_FALCOSECURITY_LIBS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # grpc, gtest
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # grpc, gtest
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # jq, protobuf, tbb
+ 	depends on !BR2_STATIC_LIBS # protobuf, tbb
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
+diff --git a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
+index 92dc5a6c45..5abdf6600f 100644
+--- a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
++++ b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
+@@ -1,4 +1,4 @@
+-From 0dfb289a3b362b082ac3608d887e42f09dadc0d2 Mon Sep 17 00:00:00 2001
++From 7fddf245b63d723ffa03e9c87366e4a7673121c8 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Mon, 31 Dec 2018 16:22:07 +0100
+ Subject: [PATCH] Properly detect the availability of pthread_setname_np()
+@@ -18,17 +18,23 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+   this with our cmake based workaround.
+   See: https://github.com/grpc/grpc/pull/27540
+ ]
++Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 +
-+Don't check glesv2 version in glesv2.pc file to avoid the following
-+build failure with rockchip-mali:
++[buildroot@heine.tech:
++  In 1.52.0 the path of port_platform.h changed. Alter patch accordingly.
++]
 +
-+checking for glesv2... no
-+configure: error: Package requirements (glesv2 >= 1) were not met:
+ Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ ---
+- CMakeLists.txt                            | 6 ++++++
+- include/grpc/impl/codegen/port_platform.h | 2 ++
++ CMakeLists.txt                       | 6 ++++++
++ include/grpc/support/port_platform.h | 2 ++
+  2 files changed, 8 insertions(+)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 45c2fcb..0b2be4f 100644
++index b0299050c4..5dfc04be90 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -208,6 +208,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
++@@ -247,6 +247,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
+  endif()
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+  
+@@ -41,11 +47,11 @@ index 45c2fcb..0b2be4f 100644
+  if(MSVC)
+    include(cmake/msvc_static_runtime.cmake)
+    add_definitions(-D_WIN32_WINNT=0x600 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS)
+-diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
+-index 4f213ff..55ecd9d 100644
+---- a/include/grpc/impl/codegen/port_platform.h
+-+++ b/include/grpc/impl/codegen/port_platform.h
+-@@ -186,6 +186,7 @@
++diff --git a/include/grpc/support/port_platform.h b/include/grpc/support/port_platform.h
++index 9f9cac0054..29f99db7cf 100644
++--- a/include/grpc/support/port_platform.h
+++++ b/include/grpc/support/port_platform.h
++@@ -181,6 +181,7 @@
+  #endif /* _LP64 */
+  #ifdef __GLIBC__
+  #define GPR_POSIX_CRASH_HANDLER 1
+@@ -53,7 +59,7 @@ index 4f213ff..55ecd9d 100644
+  #ifdef __GLIBC_PREREQ
+  #if __GLIBC_PREREQ(2, 12)
+  #define GPR_LINUX_PTHREAD_NAME 1
+-@@ -194,6 +195,7 @@
++@@ -189,6 +190,7 @@
+  // musl libc & others
+  #define GPR_LINUX_PTHREAD_NAME 1
+  #endif
+@@ -61,6 +67,6 @@ index 4f213ff..55ecd9d 100644
+  #include <linux/version.h>
+  #else /* musl libc */
+  #define GPR_MUSL_LIBC_COMPAT 1
+-
+ -- 
+-2.26.63
++2.34.1
 +
-+Package dependency requirement 'glesv2 >= 1' could not be satisfied.
-+Package 'glesv2' has version '', required version is '>= 1'
+diff --git a/package/grpc/0003-host-grpc-only-cpp-plugin.patch b/package/grpc/0003-host-grpc-only-cpp-plugin.patch
+index c68b096df6..73cef78fd8 100644
+--- a/package/grpc/0003-host-grpc-only-cpp-plugin.patch
++++ b/package/grpc/0003-host-grpc-only-cpp-plugin.patch
+@@ -1,4 +1,4 @@
+-From a1922eadfc87da3dd221ff631f94ddd4a8ee7049 Mon Sep 17 00:00:00 2001
++From 7858880865e3a35a3d1d69ea490fb8f390dee12d Mon Sep 17 00:00:00 2001
+ From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ Date: Tue, 25 May 2021 14:55:23 +0200
+ Subject: [PATCH] Add option to restrict building of (host-)grpc to
+@@ -14,12 +14,15 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ 
+ Updated for 1.48.0:
+ Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 +
-+Consider adjusting the PKG_CONFIG_PATH environment variable if you
-+installed software in a non-standard prefix.
-+
-+Alternatively, you may set the environment variables glesv2_CFLAGS
-+and glesv2_LIBS to avoid the need to call pkg-config.
-+See the pkg-config man page for more details.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/ac765b0ff5f914df4087ae4691fe711dc912f03b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/jolivain/glslsandbox-player/pull/5]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 1f45b1f..5cb2d4c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -84,7 +84,7 @@ AS_IF([test "x$enable_strict_gles" = "xyes"], [
-+ ])
-+ 
-+ PKG_CHECK_MODULES([egl], [egl >= 1])
-+-PKG_CHECK_MODULES([glesv2], [glesv2 >= 1])
-++PKG_CHECK_MODULES([glesv2], [glesv2])
-+ 
-+ AC_CHECK_HEADERS([EGL/eglext.h], [], [],
-+ [[#include <EGL/egl.h>
++Updated for 1.52.1:
++Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ ---
+- CMakeLists.txt | 43 +++++++++++++++++++++++++++++++++++--------
+- 1 file changed, 35 insertions(+), 8 deletions(-)
++ CMakeLists.txt | 39 +++++++++++++++++++++++++++++++++++----
++ 1 file changed, 35 insertions(+), 4 deletions(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index d3963b074b..51cef83141 100644
++index b0299050c4..d6efe523c0 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+ @@ -49,12 +49,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
+@@ -39,7 +42,7 @@ index d3963b074b..51cef83141 100644
+  set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
+      "Generate installation target")
+  
+-@@ -555,6 +559,8 @@ add_custom_target(plugins
++@@ -562,6 +566,8 @@ add_custom_target(plugins
+    DEPENDS ${_gRPC_PLUGIN_LIST}
+  )
+  
+@@ -48,7 +51,7 @@ index d3963b074b..51cef83141 100644
+  add_custom_target(tools_c
+    DEPENDS
+  )
+-@@ -567,6 +573,8 @@ add_custom_target(tools_cxx
++@@ -573,6 +579,8 @@ add_custom_target(tools_cxx
+  add_custom_target(tools
+    DEPENDS tools_c tools_cxx)
+  
+@@ -57,7 +60,7 @@ index d3963b074b..51cef83141 100644
+  protobuf_generate_grpc_cpp_with_import_path_correction(
+    src/proto/grpc/channelz/channelz.proto src/proto/grpc/channelz/channelz.proto
+  )
+-@@ -1228,6 +1236,7 @@ if(gRPC_BUILD_TESTS)
++@@ -1332,6 +1340,7 @@ if(gRPC_BUILD_TESTS)
+      DEPENDS buildtests_c buildtests_cxx)
+  endif()
+  
+@@ -65,7 +68,7 @@ index d3963b074b..51cef83141 100644
+  
+  add_library(address_sorting
+    third_party/address_sorting/address_sorting.c
+-@@ -1280,6 +1289,8 @@ if(gRPC_INSTALL)
++@@ -1385,6 +1394,8 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -74,16 +77,16 @@ index d3963b074b..51cef83141 100644
+  if(gRPC_BUILD_TESTS)
+  
+  add_library(end2end_tests
+-@@ -1451,6 +1462,8 @@ endforeach()
++@@ -1538,6 +1549,8 @@ target_link_libraries(end2end_tests
+  
+  endif()
+  
+ +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+ +
+  add_library(gpr
+-   src/core/ext/upb-generated/google/protobuf/any.upb.c
+-   src/core/ext/upb-generated/google/rpc/status.upb.c
+-@@ -2373,6 +2386,8 @@ if(gRPC_INSTALL)
++   src/core/lib/gpr/alloc.cc
++   src/core/lib/gpr/atm.cc
++@@ -2566,6 +2579,8 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -92,7 +95,7 @@ index d3963b074b..51cef83141 100644
+  if(gRPC_BUILD_TESTS)
+  
+  add_library(grpc_test_util
+-@@ -2511,6 +2526,8 @@ endif()
++@@ -2684,6 +2699,8 @@ endif()
+  
+  endif()
+  
+@@ -101,7 +104,7 @@ index d3963b074b..51cef83141 100644
+  add_library(grpc_unsecure
+    src/core/ext/filters/census/grpc_context.cc
+    src/core/ext/filters/channel_idle/channel_idle_filter.cc
+-@@ -2916,6 +2933,8 @@ if(gRPC_INSTALL)
++@@ -3177,6 +3194,8 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -110,7 +113,7 @@ index d3963b074b..51cef83141 100644
+  if(gRPC_BUILD_TESTS)
+  
+  if(gRPC_BUILD_CODEGEN)
+-@@ -2987,6 +3006,8 @@ endif()
++@@ -3262,6 +3281,8 @@ endif()
+  
+  endif()
+  
+@@ -119,7 +122,7 @@ index d3963b074b..51cef83141 100644
+  add_library(grpc++
+    src/core/ext/transport/binder/client/binder_connector.cc
+    src/core/ext/transport/binder/client/channel_create.cc
+-@@ -3463,6 +3484,7 @@ if(gRPC_INSTALL)
++@@ -3717,6 +3738,7 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -127,7 +130,7 @@ index d3963b074b..51cef83141 100644
+  
+  if(gRPC_BUILD_CODEGEN)
+  add_library(grpc++_reflection
+-@@ -3705,6 +3727,8 @@ target_link_libraries(grpc++_test_util
++@@ -3979,6 +4001,8 @@ target_link_libraries(grpc++_test_util
+  
+  endif()
+  
+@@ -136,7 +139,7 @@ index d3963b074b..51cef83141 100644
+  add_library(grpc++_unsecure
+    src/cpp/client/channel_cc.cc
+    src/cpp/client/client_callback.cc
+-@@ -4023,6 +4047,7 @@ if(gRPC_INSTALL)
++@@ -4644,6 +4668,7 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -144,7 +147,7 @@ index d3963b074b..51cef83141 100644
+  
+  add_library(grpc_plugin_support
+    src/compiler/cpp_generator.cc
+-@@ -4082,7 +4107,7 @@ foreach(_hdr
++@@ -4705,7 +4730,7 @@ foreach(_hdr
+  endforeach()
+  
+  
+@@ -153,7 +156,7 @@ index d3963b074b..51cef83141 100644
+    install(TARGETS grpc_plugin_support EXPORT gRPCTargets
+      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
+-@@ -4166,6 +4191,8 @@ endif()
++@@ -4791,6 +4816,8 @@ endif()
+  
+  endif()
+  
+@@ -162,16 +165,16 @@ index d3963b074b..51cef83141 100644
+  add_library(upb
+    third_party/upb/third_party/utf8_range/naive.c
+    third_party/upb/third_party/utf8_range/range2-neon.c
+-@@ -4256,6 +4283,8 @@ target_link_libraries(gen_hpack_tables
+-   gpr
++@@ -4891,6 +4918,8 @@ target_link_libraries(bad_server_response_test
++   grpc_test_util
+  )
+  
+ +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+ +
+  
++ endif()
+  if(gRPC_BUILD_TESTS)
+- 
+-@@ -11228,7 +11257,7 @@ target_link_libraries(grpc_cli
++@@ -12155,7 +12184,7 @@ target_link_libraries(grpc_completion_queue_test
+  
+  
+  endif()
+@@ -180,16 +183,16 @@ index d3963b074b..51cef83141 100644
+  
+  add_executable(grpc_cpp_plugin
+    src/compiler/cpp_plugin.cc
+-@@ -11258,7 +11287,7 @@ target_link_libraries(grpc_cpp_plugin
++@@ -12187,7 +12216,7 @@ target_link_libraries(grpc_cpp_plugin
+  
+  
+  
+ -if(gRPC_INSTALL)
+ +if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+-   install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
++   install(TARGETS grpc_cpp_plugin EXPORT gRPCPluginTargets
+      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
+-@@ -19803,7 +19832,7 @@ endif()
++@@ -25209,7 +25238,7 @@ endif()
+  
+  
+  
+@@ -198,9 +201,12 @@ index d3963b074b..51cef83141 100644
+  
+  if(gRPC_INSTALL)
+    install(EXPORT gRPCTargets
+-@@ -19900,3 +19929,5 @@ generate_pkgconfig(
++@@ -25317,3 +25346,5 @@ generate_pkgconfig(
+    "-lgrpc++_unsecure"
+    ""
+    "grpc++_unsecure.pc")
+ +
+ +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
 +-- 
-+2.39.0
++2.34.1
 +
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index db6425819b..dffe164e3a 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+@@ -19,9 +19,9 @@ config BR2_PACKAGE_GRPC
+ 
+ 	  http://github.com/grpc/grpc
+ 
+-comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 5"
++comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 7.3"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index e6b76dcb5e..e53c13476f 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b55696fb249669744de3e71acc54a9382bea0dce7cd5ba379b356b12b82d4229  grpc-1.51.1.tar.gz
++sha256  ec125d7fdb77ecc25b01050a0d5d32616594834d3fe163b016768e2ae42a2df6  grpc-1.52.1.tar.gz
+ sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 9125b1f9f6..fd051170fe 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRPC_VERSION = 1.51.1
++GRPC_VERSION = 1.52.1
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
+ GRPC_LICENSE_FILES = LICENSE
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index c0a631bd49..581d778d54 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # falcosecurity-libs
+ 	depends on BR2_LINUX_KERNEL # falcosecurity-libs
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # falcosecurity-libs
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # grpc
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # falcosecurity-libs
+ 	depends on !BR2_STATIC_LIBS # falcosecurity-libs
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # falcosecurity-libs
+@@ -23,12 +23,12 @@ config BR2_PACKAGE_SYSDIG
+ 
+ 	  https://github.com/draios/sysdig/wiki
+ 
+-comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 5, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
++comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 7.3, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_USES_GLIBC \
+ 		|| !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
 -- 
-2.39.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
