@@ -4,70 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 121D0C636CC
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 09:30:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A17AC64EC7
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 09:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C9BF605A1;
-	Mon, 20 Feb 2023 09:30:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C9BF605A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id D569E60746;
+	Mon, 20 Feb 2023 09:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D569E60746
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c-3HAcnpc9ws; Mon, 20 Feb 2023 09:29:59 +0000 (UTC)
+	with ESMTP id b5wA4QUEJsPf; Mon, 20 Feb 2023 09:33:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 218C6606ED;
-	Mon, 20 Feb 2023 09:29:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 218C6606ED
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ECD361BF403
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 09:29:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3E6F6076C;
+	Mon, 20 Feb 2023 09:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3E6F6076C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 381C01BF403
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 09:33:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C66CD81BCB
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 09:29:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C66CD81BCB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0FE7460746
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 09:33:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FE7460746
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Lqkr-W1_CvZ for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 09:29:50 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84542813B6
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 84542813B6
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 09:29:49 +0000 (UTC)
-Received: from 91-152-140-132.elisa-laajakaista.fi ([91.152.140.132]
- helo=momiji.lan) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1pU2US-008eZf-Uq; Mon, 20 Feb 2023 10:29:45 +0100
-Received: from localhost (momiji.lan [local])
- by momiji.lan (OpenSMTPD) with ESMTPA id 7f0c5d67;
- Mon, 20 Feb 2023 09:29:43 +0000 (UTC)
-Date: Mon, 20 Feb 2023 11:29:39 +0200
-Message-ID: <20230220112939.GB446957@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-In-Reply-To: <20230220090923.2155635-3-thomas.devoogdt@barco.com>
-References: <20230220090923.2155635-1-thomas.devoogdt@barco.com>
- <20230220090923.2155635-3-thomas.devoogdt@barco.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id emozErZUcG-5 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 09:33:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92FAD6076C
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 92FAD6076C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 09:33:42 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id l1so114589wry.10
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 01:33:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mztngCcBFqAP1bSp206mgJj1SdrwZti33HUp0jNRSrE=;
+ b=oX/W7KCScoMkzz6Kjy3Jn+IsB8g1KKP14zkwrz7pDxxnyPLcMNUw2naUFNTIEcZc1J
+ 4iRufAQG9DgZuD97rxR47nVqxoxQa3zeIc4Uyiu1G+NQQvDxsAwoCvoRnnQvw4K0hB+3
+ okvlb4JTNdZOEsYbTipFWIjDp0EizgBxK1Uo0UYYxStP/GUBkwmYbAXfZgkzZYs6skC0
+ tL+81s3xcckXFGgQW8eILvP1x1gkIM5qCxbG4Jsp0hio6+HjMAJP3m49V36xMxu03upv
+ Mu+SETZyQDr+rK2+sqT/XGySDgyoqFPELBGq5mAQRieg8I2pEadoxWoQlLTmGApb7D9b
+ BKoQ==
+X-Gm-Message-State: AO0yUKUlkdbr6ebw4On6x+x/3aqKw44qgsoulr7B5DQEYWzEI/jBkOHf
+ oBrCc12Da5QeUH7dzFQc6HiF2RRu3LU=
+X-Google-Smtp-Source: AK7set9DRGn1FrHxN9Go0mrtQ7vJJQ+GHPvBJer8KWInMBZ2a/SjBeb1QTPpN3NRnJtjrIaPnVew2g==
+X-Received: by 2002:adf:f208:0:b0:2c5:9ab9:60f6 with SMTP id
+ p8-20020adff208000000b002c59ab960f6mr595904wro.62.1676885620401; 
+ Mon, 20 Feb 2023 01:33:40 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ a8-20020adfed08000000b002c55cdb1de5sm832465wro.116.2023.02.20.01.33.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Feb 2023 01:33:39 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 20 Feb 2023 10:33:36 +0100
+Message-Id: <20230220093336.77462-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=dd0SSKSkh0WU37LEdxNmxKDTbpKKf4/ot1anW0oW19k=; b=kDKEFtEKc/UXU6Fnn9Q92JpsUN
- RSkoCCeGf2QUd1LvoDCqw3VpKTxvMrfOQAFMPl7vCU8+rQZIxsPFiz1JARVp+TuCpK2UpipDCu2pS
- wuP9Dl+RU35hH0d+HMAGtGmvgwzuiVBMUy9yvG6pfxHlJoPmb7rEmvK1wMBZyKxzC8FF57uMO4Dcc
- 2lcIXjpgc6KbwZChOSOqDRtutuerqPP2zgiZW0t+SMeHARu+PwNKrh+i4CZn+C9P7JQPphY/+z3Rt
- YGnbsrLVJ3g2wy0N1OWfhctdqSor4RhAZlg16DbNTiXqYFzhmUIQZ9Xm1si4d7tHXlx2zei7Au/LR
- 5gjF+jXw==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=kDKEFtEK
-Subject: Re: [Buildroot] [PATCH v1 3/3] package/webkitgtk: security bump to
- version 2.38.5
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mztngCcBFqAP1bSp206mgJj1SdrwZti33HUp0jNRSrE=;
+ b=izKeddLJVzdKEwOSswxNj99soM0AyMwODjzG2Hge6t0uy61Rjk9LtaDw9DQKVgZGVR
+ XlMLHRV/Vwqz7S3X5HTsUnXOmO6Syay7iVRxD30U2kIH/EPQneRxuLaXf6WtloGWgm/O
+ hq4vl3LDGc7mKbBiV2HE8e6MqOh9ucj9Izk4NhxUPq1Vykl4JgyhD+1gOm9wO/rbvpDe
+ jQZiRt2gFZKlyS8yCmjoNXP4SlJgGxapvaY1cu4OhAwz6Thd4vqJImjEgbRMo2p4z9vQ
+ QACemIe7+waGTDfPH1RWtNLHjhvAj2glpb+5311TTlXDClc0XW4dkFXiX31YT/teGKy7
+ D8nQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=izKeddLJ
+Subject: [Buildroot] [PATCH 1/1] package/zabbix: fix libcurl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,117 +93,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Thomas Devoogdt <thomas.devoogdt@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============9179063920796365557=="
+Cc: Alexey Lukyanchuk <skif@skif-web.ru>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following libcurl build failure:
 
---===============9179063920796365557==
-Content-Type: multipart/signed; boundary="NrGCcomJnAmWy9lP"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
+In file included from /tmp/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/include/curl/curl.h:3195,
+                 from ../../../../include/sysinc.h:384,
+                 from ../../../../include/common.h:23,
+                 from simple.c:20:
+simple.c: In function 'check_https':
+simple.c:167:65: error: invalid use of void expression
+  167 |         if (CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_USERAGENT, "Zabbix " ZABBIX_VERSION)) ||
+      |                                                                 ^
 
+Fixes:
+ - http://autobuild.buildroot.org/results/053a62e9969046a7f8a0e1890c24d2bfb099ae42
 
---NrGCcomJnAmWy9lP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...se-parentheses-to-ensure-compilation.patch | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch
 
-SGkgVGhvbWFzLCBhbGwsCgpPbiBNb24sIDIwIEZlYiAyMDIzIDEwOjA5OjIzICswMTAwIFRob21h
-cyBEZXZvb2dkdCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4gd3JvdGU6Cj4gRnJvbTogVGhvbWFzIERl
-dm9vZ2R0IDx0aG9tYXMuZGV2b29nZHRAZ21haWwuY29tPgo+IAo+IEJ1Z2ZpeCByZWxlYXNlLCB3
-aXRoIG1hbnkgc2VjdXJpdHkgZml4ZXMsIGluY2x1ZGluZyAoYnV0IG5vdCBsaW1pdGVkIHRvKQo+
-IGEgcGF0Y2ggZm9yIENWRS0yMDIzLTIzNTI5Lgo+IAo+IFJlbGVhc2Ugbm90ZXM6Cj4gCj4gICBo
-dHRwczovL3dlYmtpdGd0ay5vcmcvMjAyMy8wMi8xNS93ZWJraXRndGsyLjM4LjUtcmVsZWFzZWQu
-aHRtbAoKSGVoZSwgSSB3YXMganVzdCBhYm91dCB0byBzdWJtaXQgdGhpcyB1cGRhdGUgbXlzZWxm
-IGFmdGVyIHNtb2tlLXRlc3RpbmcKYSBidWlsZC4gVGhhbmtzIGZvciBzZW5kaW5nIGl0IDotKQoK
-PiBBY2NvbXBhbnlpbmcgc2VjdXJpdHkgYWR2aXNvcnk6Cj4gCj4gICBodHRwczovL3dlYmtpdGd0
-ay5vcmcvc2VjdXJpdHkvV1NBLTIwMjMtMDAwMi5odG1sCj4gCj4gQWxzbyByYWlzZSB0aGUgbWlu
-aW1hbCBHQ0MgdmVyc2lvbiB0byA4LjMsIHdoaWNoIHdhcyBhbHJlYWR5IHJlcXVpcmVkIHNpbmNl
-IHdlYmtpdGd0ay0yLjM2LjQuCj4gU2ltaWxhciB0byBjb21taXQgZWMxZmY4MDJkZjlhMGYxN2Rk
-MmI3MzRiYTUzNmE1ZTIwNmFhNWFhNCwKPiB3ZSBkbyBjaGVjayBvbiA+PSBHQ0MgOCwgYmVjYXVz
-ZSB3ZSBjYW4ndCBjaGVjayBvbiA+PSBHQ0MgOC4zLgo+IAo+ICAgaHR0cHM6Ly9naXRodWIuY29t
-L1dlYktpdC9XZWJLaXQvY29tbWl0L2Y4MTJjNWRiMWZmMjJiY2JlMTA3MGNhNGVkNjEzMDg1Y2Qz
-NjQ5OWIKPiAKPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hcy5kZXZvb2dk
-dEBnbWFpbC5jb20+CgpBY2tlZC1ieTogQWRyaWFuIFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGln
-YWxpYS5jb20+Cgo+IC0tLQo+ICBwYWNrYWdlL3dlYmtpdGd0ay9Db25maWcuaW4gICAgICB8IDQg
-KystLQo+ICBwYWNrYWdlL3dlYmtpdGd0ay93ZWJraXRndGsuaGFzaCB8IDggKysrKy0tLS0KPiAg
-cGFja2FnZS93ZWJraXRndGsvd2Via2l0Z3RrLm1rICAgfCAyICstCj4gIDMgZmlsZXMgY2hhbmdl
-ZCwgNyBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNr
-YWdlL3dlYmtpdGd0ay9Db25maWcuaW4gYi9wYWNrYWdlL3dlYmtpdGd0ay9Db25maWcuaW4KPiBp
-bmRleCBkYzVkNzM4ZGFlLi45NzYzNDEwOTNlIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvd2Via2l0
-Z3RrL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2Uvd2Via2l0Z3RrL0NvbmZpZy5pbgo+IEBAIC0x
-Niw3ICsxNiw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9XRUJLSVRHVEtfQVJDSF9TVVBQT1JUUwo+
-ICAJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19TWU5DXzQKPiAgCWRlcGVuZHMgb24gQlIy
-X1BBQ0tBR0VfTElCR1BHX0VSUk9SX0FSQ0hfU1VQUE9SVFMgIyBsaWJnY3J5cHQKPiAgCj4gLWNv
-bW1lbnQgIndlYmtpdGd0ayBuZWVkcyBsaWJndGszIGFuZCBhIHRvb2xjaGFpbiB3LyBDKyssIHdj
-aGFyLCB0aHJlYWRzLCBkeW5hbWljIGxpYnJhcnksIGdjYyA+PSA3LCBob3N0IGdjYyA+PSA0Ljki
-Cj4gK2NvbW1lbnQgIndlYmtpdGd0ayBuZWVkcyBsaWJndGszIGFuZCBhIHRvb2xjaGFpbiB3LyBD
-KyssIHdjaGFyLCB0aHJlYWRzLCBkeW5hbWljIGxpYnJhcnksIGdjYyA+PSA4LCBob3N0IGdjYyA+
-PSA0LjkiCj4gIAlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1dFQktJVEdUS19BUkNIX1NVUFBPUlRT
-Cj4gIAlkZXBlbmRzIG9uICFCUjJfQklORk1UX0ZMQVQKPiAgCWRlcGVuZHMgb24gIUJSMl9QQUNL
-QUdFX0xJQkdUSzMgfHwgIUJSMl9JTlNUQUxMX0xJQlNURENQUCB8fCBcCj4gQEAgLTMyLDcgKzMy
-LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1dFQktJVEdUSwo+ICAJZGVwZW5kcyBvbiBCUjJfSE9T
-VF9HQ0NfQVRfTEVBU1RfNF85ICMgaWN1LCBob3N0LXJ1YnkKPiAgCWRlcGVuZHMgb24gQlIyX0lO
-U1RBTExfTElCU1REQ1BQCj4gIAlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMg
-IyB3YXlsYW5kLCBpY3UsIGxpYnNvdXAKPiAtCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9HQ0Nf
-QVRfTEVBU1RfNwo+ICsJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF84Cj4g
-IAlkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBpY3UsIGxpYnNvdXAKPiAgCWRlcGVuZHMgb24g
-QlIyX1BBQ0tBR0VfTElCR1RLMwo+ICAJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9XRUJLSVRHVEtf
-QVJDSF9TVVBQT1JUUwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dlYmtpdGd0ay93ZWJraXRndGsu
-aGFzaCBiL3BhY2thZ2Uvd2Via2l0Z3RrL3dlYmtpdGd0ay5oYXNoCj4gaW5kZXggMzRmZDE5ZDNk
-ZS4uYzc3MTI5N2I1YSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3dlYmtpdGd0ay93ZWJraXRndGsu
-aGFzaAo+ICsrKyBiL3BhY2thZ2Uvd2Via2l0Z3RrL3dlYmtpdGd0ay5oYXNoCj4gQEAgLTEsNyAr
-MSw3IEBACj4gLSMgRnJvbSBodHRwczovL3dlYmtpdGd0ay5vcmcvcmVsZWFzZXMvd2Via2l0Z3Rr
-LTIuMzguNC50YXIueHouc3Vtcwo+IC1tZDUgIDFjOWNhODNhMGFkN2U0Y2E5ZTkzMzA5NDU3MmNi
-N2Q5ICB3ZWJraXRndGstMi4zOC40LnRhci54ego+IC1zaGExICAzOGI0N2RmMmJlOWJmYjk3ZDY4
-ZmNlOGM3ZmEyODE5OTY2YTc5MDM2ICB3ZWJraXRndGstMi4zOC40LnRhci54ego+IC1zaGEyNTYg
-IDRmNDdlYTI5YTJkNGQ1ZjE1ZWVmM2RjOWUyZDZjNmYwNjdlOGRlODYzYTNmNjQ0NTVlMWNjZjk2
-OTNjYzFkMzYgIHdlYmtpdGd0ay0yLjM4LjQudGFyLnh6Cj4gKyMgRnJvbSBodHRwczovL3dlYmtp
-dGd0ay5vcmcvcmVsZWFzZXMvd2Via2l0Z3RrLTIuMzguNS50YXIueHouc3Vtcwo+ICttZDUgIGRl
-MDVkMzE0YTNlY2I1ZmIzODM1ZTRkODRmOGY0NjZkICB3ZWJraXRndGstMi4zOC41LnRhci54ego+
-ICtzaGExICAxNzc0MzkwYzYyOGJiM2E1MjRkNGVkNzZmMTFkZTRhODc4MDc4ZGI2ICB3ZWJraXRn
-dGstMi4zOC41LnRhci54ego+ICtzaGEyNTYgIDQwYzIwYzQzMDIyMjc0ZGY1ODkzZjIyYjEwNTRm
-YTg5NGMzZWVhMDU3Mzg5YmIwOGFlZTA4YzViMGJiMGMxYTcgIHdlYmtpdGd0ay0yLjM4LjUudGFy
-Lnh6Cj4gIAo+ICAjIEhhc2hlcyBmb3IgbGljZW5zZSBmaWxlczoKPiAgc2hhMjU2ICAwYjVkM2E3
-Y2MzMjU5NDI1NjczNzNiMGVjZDc1N2QwN2MxMzJlMGViZDdjOTdiZmM2M2Y3ZTFhNzYwOTRlZGI0
-ICBTb3VyY2UvV2ViQ29yZS9MSUNFTlNFLUFQUExFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvd2Vi
-a2l0Z3RrL3dlYmtpdGd0ay5tayBiL3BhY2thZ2Uvd2Via2l0Z3RrL3dlYmtpdGd0ay5tawo+IGlu
-ZGV4IGE2OTc0ZGI5MjYuLjMyNjNmN2ZlYTAgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS93ZWJraXRn
-dGsvd2Via2l0Z3RrLm1rCj4gKysrIGIvcGFja2FnZS93ZWJraXRndGsvd2Via2l0Z3RrLm1rCj4g
-QEAgLTQsNyArNCw3IEBACj4gICMKPiAgIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgCj4gLVdF
-QktJVEdUS19WRVJTSU9OID0gMi4zOC40Cj4gK1dFQktJVEdUS19WRVJTSU9OID0gMi4zOC41Cj4g
-IFdFQktJVEdUS19TSVRFID0gaHR0cHM6Ly93d3cud2Via2l0Z3RrLm9yZy9yZWxlYXNlcwo+ICBX
-RUJLSVRHVEtfU09VUkNFID0gd2Via2l0Z3RrLSQoV0VCS0lUR1RLX1ZFUlNJT04pLnRhci54ego+
-ICBXRUJLSVRHVEtfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4gLS0gCj4gMi4zOS4yCj4gCj4gX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiAKCkNoZWVycywK4oCUQWRy
-acOhbgo=
-
---NrGCcomJnAmWy9lP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCY/M9gwAKCRCRxVnb5MkS
-O3JmAJ9VVb9TLTWc0gertZ4xMRrGfKIS0gCfZOwXw+jnuXQCEIHc4fNSuACTrH4=
-=8yiW
------END PGP SIGNATURE-----
-
---NrGCcomJnAmWy9lP--
-
---===============9179063920796365557==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch b/package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch
+new file mode 100644
+index 0000000000..482480e5e0
+--- /dev/null
++++ b/package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch
+@@ -0,0 +1,65 @@
++From 2fe3c652bd6a6522d5be3fd41c6ed39ddc2d21fa Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 13 Feb 2023 14:32:38 +0100
++Subject: [PATCH] Use parentheses to ensure compilation
++
++Compiler fails with latest Curl release. Use parenthesis to ensure
++compiler evaluates expression correctly:
++
++In file included from /tmp/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/include/curl/curl.h:3195,
++                 from ../../../../include/sysinc.h:384,
++                 from ../../../../include/common.h:23,
++                 from simple.c:20:
++simple.c: In function 'check_https':
++simple.c:167:65: error: invalid use of void expression
++  167 |         if (CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_USERAGENT, "Zabbix " ZABBIX_VERSION)) ||
++      |                                                                 ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/053a62e9969046a7f8a0e1890c24d2bfb099ae42
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent (no feedback on first patch)]
++---
++ src/libs/zbxsysinfo/simple/simple.c | 18 +++++++++---------
++ 1 file changed, 9 insertions(+), 9 deletions(-)
++
++diff --git a/src/libs/zbxsysinfo/simple/simple.c b/src/libs/zbxsysinfo/simple/simple.c
++index fc16a784cf..c3ce974492 100644
++--- a/src/libs/zbxsysinfo/simple/simple.c
+++++ b/src/libs/zbxsysinfo/simple/simple.c
++@@ -177,14 +177,14 @@ static int	check_https(const char *host, unsigned short port, int timeout, int *
++ 	else
++ 		zbx_snprintf(https_host, sizeof(https_host), "%s%s", (0 == strncmp(host, "https://", 8) ? "" : "https://"), host);
++ 
++-	if (CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_USERAGENT, "Zabbix " ZABBIX_VERSION)) ||
++-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_URL, https_host)) ||
++-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_PORT, (long)port)) ||
++-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_NOBODY, 1L)) ||
++-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_SSL_VERIFYPEER, 0L)) ||
++-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_SSL_VERIFYHOST, 0L)) ||
++-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_TIMEOUT, (long)timeout)) ||
++-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = ZBX_CURLOPT_ACCEPT_ENCODING, "")))
+++	if (CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_USERAGENT), "Zabbix " ZABBIX_VERSION)) ||
+++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_URL), https_host)) ||
+++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_PORT), (long)port)) ||
+++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_NOBODY), 1L)) ||
+++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_SSL_VERIFYPEER), 0L)) ||
+++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_SSL_VERIFYHOST), 0L)) ||
+++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_TIMEOUT), (long)timeout)) ||
+++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = ZBX_CURLOPT_ACCEPT_ENCODING), "")))
++ 	{
++ 		zabbix_log(LOG_LEVEL_DEBUG, "%s: could not set cURL option [%d]: %s",
++ 				__func__, (int)opt, curl_easy_strerror(err));
++@@ -193,7 +193,7 @@ static int	check_https(const char *host, unsigned short port, int timeout, int *
++ 
++ 	if (NULL != CONFIG_SOURCE_IP)
++ 	{
++-		if (CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_INTERFACE, CONFIG_SOURCE_IP)))
+++		if (CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_INTERFACE), CONFIG_SOURCE_IP)))
++ 		{
++ 			zabbix_log(LOG_LEVEL_DEBUG, "%s: could not set source interface option [%d]: %s",
++ 					__func__, (int)opt, curl_easy_strerror(err));
++-- 
++2.39.0
++
+-- 
+2.39.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9179063920796365557==--
