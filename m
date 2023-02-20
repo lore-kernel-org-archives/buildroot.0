@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 535AFC05027
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 17:15:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01957C05027
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 17:15:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0164782257;
-	Mon, 20 Feb 2023 17:15:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0164782257
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C8E2821DD;
+	Mon, 20 Feb 2023 17:15:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C8E2821DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oiUP5SZKKwYS; Mon, 20 Feb 2023 17:15:32 +0000 (UTC)
+	with ESMTP id i-DXOGiwTT1c; Mon, 20 Feb 2023 17:15:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2909381441;
-	Mon, 20 Feb 2023 17:15:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2909381441
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A23351BF2B9
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A829882276;
+	Mon, 20 Feb 2023 17:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A829882276
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 57EF11BF2B9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 885C340BE4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 885C340BE4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3066F813E1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3066F813E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HPV954sMDHe4 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N5cLwvxn6Iwz for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B722C40BCB
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B722C40BCB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AEB4812B9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AEB4812B9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3DCE863E9; Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
+ id 2AD36863E7; Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:05:58 +0100
+Date: Mon, 20 Feb 2023 18:12:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 924ca9414fa962ce767c39b277489a0bdcbfad79
-X-Git-Newrev: 14ca6b5fdb6a5e0fa99b04461240772d93076b2e
+X-Git-Oldrev: 67c967c2d16c29f193fde43b3c48edf0911baccd
+X-Git-Newrev: ee13e3fb41dc7c0c001127733b5a599c1e509747
 X-Patchwork-Hint: ignore
-Message-Id: <20230220171438.A3DCE863E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: bump version to 7.88.0
+Message-Id: <20230220171439.2AD36863E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glslsandbox-player: add
+ wayland-protocols optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +63,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14ca6b5fdb6a5e0fa99b04461240772d93076b2e
+commit: https://git.buildroot.net/buildroot/commit/?id=ee13e3fb41dc7c0c001127733b5a599c1e509747
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://curl.se/changes.html#7_88_0
+wayland-protocols is an optional dependency which is enabled by default
+resulting in the following wayland build failure since the addition of
+the package in commit f201ca9d0d25b491ec5e1ed4e1d02fd52d027997:
 
-Updated license hash due to copyright year bump:
-https://github.com/curl/curl/commit/2bc1d775f510196154283374284f98d3eae03544#diff-400d38e5cfee181230373a8b02d38f50271a5bf62c62410382efddb8e8b19e22
+checking for wayland_client... yes
+checking for wayland_egl... yes
+configure: Wayland EGL support enabled
+checking for wayland_protocols... no
+configure: error: Package requirements (wayland-protocols >= 1.12) were not met:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Package 'wayland-protocols', required by 'virtual:world', not found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables wayland_protocols_CFLAGS
+and wayland_protocols_LIBS to avoid the need to call pkg-config.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/865af860f9e52fe5311bb0c6a246ff871ae5a989
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 6 +++---
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/glslsandbox-player/Config.in             | 5 ++++-
+ package/glslsandbox-player/glslsandbox-player.mk | 6 ++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 230ec8d704..714b02acb0 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-7.87.0.tar.xz.asc
-+# https://curl.se/download/curl-7.88.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff  curl-7.87.0.tar.xz
--sha256  321b1a09ebc30410f2e837c072e5521cf7095b757193af4a7dae1086e36ed31a  COPYING
-+sha256  fd17432cf28714a4cf39d89e26b8ace0d8901199fe5d01d75eb0ae3bbfcc731f  curl-7.88.0.tar.xz
-+sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 994b685d34..eb481e4782 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
+index 132705584e..530c158fc3 100644
+--- a/package/glslsandbox-player/Config.in
++++ b/package/glslsandbox-player/Config.in
+@@ -111,8 +111,11 @@ endchoice
+ if BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL
+ config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_IVI
+ 	bool "Wayland IVI shell support"
+-endif
  
--LIBCURL_VERSION = 7.87.0
-+LIBCURL_VERSION = 7.88.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG
++	bool "Wayland XDG shell support"
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
++endif
+ endif
+ 
+ comment "glslsandbox-player needs openGL ES and EGL driver"
+diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
+index f0a9475aa6..241f3475d2 100644
+--- a/package/glslsandbox-player/glslsandbox-player.mk
++++ b/package/glslsandbox-player/glslsandbox-player.mk
+@@ -72,6 +72,12 @@ GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-ivi
+ else
+ GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-ivi
+ endif
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += wayland-protocols
++GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-wlxdg
++else
++GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-wlxdg
++endif
+ else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11),y)
+ GLSLSANDBOX_PLAYER_DEPENDENCIES += xlib_libX11
+ GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=x11
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
