@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50516C05027
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 17:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3B6CC05027
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 17:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F420A813E1;
-	Mon, 20 Feb 2023 17:15:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F420A813E1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CCD282255;
+	Mon, 20 Feb 2023 17:15:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CCD282255
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6zkIc571IihF; Mon, 20 Feb 2023 17:15:07 +0000 (UTC)
+	with ESMTP id DbjG0Pzc5k3v; Mon, 20 Feb 2023 17:15:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C97E82269;
-	Mon, 20 Feb 2023 17:15:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C97E82269
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 298B51BF2B9
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0F0E82251;
+	Mon, 20 Feb 2023 17:15:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0F0E82251
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 38FFB1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03BF9415D3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13AF381062
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03BF9415D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13AF381062
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WC2NZnu-ZbfW for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wgOd5SoWkdJc for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D53E941499
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D53E941499
+ by smtp1.osuosl.org (Postfix) with ESMTP id 551F5813E1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 551F5813E1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C09D6863E7; Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
+ id 45181863E9; Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:06:49 +0100
+Date: Mon, 20 Feb 2023 18:13:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 14ca6b5fdb6a5e0fa99b04461240772d93076b2e
-X-Git-Newrev: 7852618c23756d8a79809a4e9e9c331a8fb0cf16
+X-Git-Oldrev: ee13e3fb41dc7c0c001127733b5a599c1e509747
+X-Git-Newrev: 5f1858e859833da272fce70bf445ca1b53ebffe1
 X-Patchwork-Hint: ignore
-Message-Id: <20230220171438.C09D6863E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.38.5
+Message-Id: <20230220171439.45181863E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rockchip-mali: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +62,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7852618c23756d8a79809a4e9e9c331a8fb0cf16
+commit: https://git.buildroot.net/buildroot/commit/?id=5f1858e859833da272fce70bf445ca1b53ebffe1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfix release, fixes zero-day CVE-2023-23529 and includes a few build
-and behaviour patches as well.
+rockchip-mali pre-built libraries needs C++ since the addition of the
+package in commit 97c74a73e5dee17530647f89b2c7d8692781eb14:
 
-Release notes:
+readelf -a output/build/rockchip-mali-721653b5b3b525a4f80d15aa7e2f9df7b7e60427/lib/aarch64-linux-gnu/libmali-bifrost-g31-rxp0-gbm.so|grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdrm.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
 
-  https://wpewebkit.org/release/wpewebkit-2.38.5.html
+While at it, add a comment when dependencies are not met
 
-Accompanying security advisory:
+Fixes:
+ - No autobuilder failures (yet), found when debugging an issue with
+   rockchip-mali and glslsandbox-player
 
-  https://wpewebkit.org/security/WSA-2023-0002.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/rockchip-mali/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index dcd082e045..0fa1018721 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.38.4.tar.xz.sums
--md5  1c947ef5b73049fc6c102c92013009bf  wpewebkit-2.38.4.tar.xz
--sha1  7fe9a7d98401256b0c9872f1c2b702e56840cbd3  wpewebkit-2.38.4.tar.xz
--sha256  8c1bc113ef151fb0be2640824d323bc755dc97295ab7a1bc05e7ec589937a07b  wpewebkit-2.38.4.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.38.5.tar.xz.sums
-+md5  73f7abd0c1cc808032869f72602166e3  wpewebkit-2.38.5.tar.xz
-+sha1  3f10a04758eeb349f63f841aff765dae25bcde1b  wpewebkit-2.38.5.tar.xz
-+sha256  ff00fd3d0a4c6d551850a78a7dfe4883b6b7ebd93c5549e1121b2f43d3ac1661  wpewebkit-2.38.5.tar.xz
+diff --git a/package/rockchip-mali/Config.in b/package/rockchip-mali/Config.in
+index d616284911..5a23954af3 100644
+--- a/package/rockchip-mali/Config.in
++++ b/package/rockchip-mali/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ROCKCHIP_MALI
+ 	bool "rockchip-mali"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_ARM_EABIHF || BR2_aarch64
+ 	# lidbrm. This would normally need a Config.in comment, but
+@@ -30,3 +31,8 @@ config BR2_PACKAGE_PROVIDES_LIBGBM
+ 	default "rockchip-mali"
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index b9c2fef395..48e5c2f8cd 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.38.4
-+WPEWEBKIT_VERSION = 2.38.5
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+ endif
++
++comment "rockchip-mali needs a glibc toolchain w/ C++, threads"
++	depends on BR2_ARM_EABIHF || BR2_aarch64
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
