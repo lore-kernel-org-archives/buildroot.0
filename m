@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CB8EC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82E5BC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:04:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5F4061284;
-	Tue, 21 Feb 2023 01:04:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5F4061284
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CBF161287;
+	Tue, 21 Feb 2023 01:04:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CBF161287
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g2a-Sv_KtqPV; Tue, 21 Feb 2023 01:04:04 +0000 (UTC)
+	with ESMTP id 6qvl36M80hPn; Tue, 21 Feb 2023 01:04:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 067336125C;
-	Tue, 21 Feb 2023 01:04:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 067336125C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80BA61BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B29A611C2;
+	Tue, 21 Feb 2023 01:04:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B29A611C2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F5AD1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A1946FBA5
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A1946FBA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58D314181E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58D314181E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QQaLLmv1exSU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bX3Jbnw-cRX7 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A64E6FB9B
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A64E6FB9B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52C5F41832
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52C5F41832
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 487DC828C8; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
+ id 4218081979; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Jan 2023 08:25:55 +0100
+Date: Mon, 20 Feb 2023 18:10:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d8bbc215f5b6c978e9506927675181bbda06567f
-X-Git-Newrev: a0dfd717f3ff888b4ab6d8c40bb6a01a939370cb
+X-Git-Oldrev: d37b3916a1ce75085da8232db95cfd354137e540
+X-Git-Newrev: a85ed5d21c14cbe3ec2864206fe792152598e4db
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205237.487DC828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXpm:
- security bump version to 3.5.15
+Message-Id: <20230220205303.4218081979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-django:
+ security bump to version 4.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,64 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0dfd717f3ff888b4ab6d8c40bb6a01a939370cb
+commit: https://git.buildroot.net/buildroot/commit/?id=a85ed5d21c14cbe3ec2864206fe792152598e4db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-January/003313.html
+Fix CVE-2023-23969 and CVE-2023-24580
 
-Fixes CVE-2022-4883, CVE-2022-44617 & CVE-2022-46285:
-https://lists.x.org/archives/xorg-announce/2023-January/003312.html
+https://docs.djangoproject.com/en/dev/releases/4.1.6
+https://docs.djangoproject.com/en/dev/releases/4.1.7
 
-Updated license hash due to upstream commit:
-https://gitlab.freedesktop.org/xorg/lib/libxpm/-/commit/501494c6c68a84114fdd0b44d4b67ef9cde776c9
-
-Added configure option to disable compressed pixmaps support:
-https://gitlab.freedesktop.org/xorg/lib/libxpm/-/commit/4841039e5385f264d12757903894f47c64f59361
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.hash | 8 ++++----
- package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-index 9ccfb4c8de..733c404543 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2022-November/003261.html
--sha256  f7eb8f69c039281def8258ae6859adb5f050fbe161ab3d6a2d6ef109a603eac2  libXpm-3.5.14.tar.xz
--sha512  c3fe554453068a6b188d3cad2cb3648e84b7f1909aea8f213daadce3d444b34361c3b2edce14a4fd481f97e4dc45c3125e2483ff4f44b3390a75829ed2782e4b  libXpm-3.5.14.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-January/003313.html
-+sha256  60bb906c5c317a6db863e39b69c4a83fdbd2ae2154fcf47640f8fefc9fdfd1c1  libXpm-3.5.15.tar.xz
-+sha512  955d716fcea2c9d868ab941c56f017b39bfa0f47fd2904e9b04c6a9be17f23f8b8c906da9c90a89a789f1f399d419641705ff5b6f9921820e34d4807c7a1992f  libXpm-3.5.15.tar.xz
- # Locally calculated
--sha256  ed3b06bb3b75a0954bd6837a96b41a4676f60dfeee647271613aadecc0fd596e  COPYING
-+sha256  a80d706759624a04aa90fd62bc644a360fc3d72e08dcbfb129f167c11ca285de  COPYING
- sha256  cbe4ced0abc8a32bea471204ae01038c202758ce4e772d3d329a341ffa761e71  COPYRIGHT
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 417dcfec38..970ec93407 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 1d3035bb98..cb03b33bfe 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  6b6a47d7478ead15b0a0835841c433dc  Django-4.1.5.tar.gz
+-sha256  ff56ebd7ead0fd5dbe06fe157b0024a7aaea2e0593bb3785fb594cf94dad58ef  Django-4.1.5.tar.gz
++md5  626f96c63ddfab24bab90d80c87a7aad  Django-4.1.7.tar.gz
++sha256  44f714b81c5f190d9d2ddad01a532fe502fa01c4cb8faf1d081f4264ed15dcd8  Django-4.1.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index e08de68954..e8c91cf51f 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--XLIB_LIBXPM_VERSION = 3.5.14
-+XLIB_LIBXPM_VERSION = 3.5.15
- XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
- XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
-@@ -16,6 +16,7 @@ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
- 	$(TARGET_NLS_DEPENDENCIES)
- XLIB_LIBXPM_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+XLIB_LIBXPM_CONF_OPTS = --disable-open-zfile
+-PYTHON_DJANGO_VERSION = 4.1.5
++PYTHON_DJANGO_VERSION = 4.1.7
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/41/c8/b3c469353f9d1b7f0e99b45520582b891da02cd87408bc867affa6e039a3
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/9f/a7/07939866241b7e8f8d3bf164b7d6ad428163723e29dd472700f8ab0e5fd5
  
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
- XLIB_LIBXPM_CONF_ENV += ac_cv_search_gettext=no
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
