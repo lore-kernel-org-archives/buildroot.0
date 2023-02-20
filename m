@@ -4,68 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8585CC6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:50:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2820C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D069822D0;
-	Mon, 20 Feb 2023 20:50:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D069822D0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B185822D1;
+	Mon, 20 Feb 2023 20:50:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B185822D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VYn_fMgiUsJG; Mon, 20 Feb 2023 20:50:07 +0000 (UTC)
+	with ESMTP id kLl3XireLgvn; Mon, 20 Feb 2023 20:50:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BAA9822C2;
-	Mon, 20 Feb 2023 20:50:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BAA9822C2
+	by smtp1.osuosl.org (Postfix) with ESMTP id B23AD822C2;
+	Mon, 20 Feb 2023 20:50:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B23AD822C2
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E65F91BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15BBD1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C07B34010E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C07B34010E
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3E854015F
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3E854015F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZJevBVqfzTM2 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:50:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5004E400AF
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5004E400AF
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:50:03 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C204210000A;
- Mon, 20 Feb 2023 20:49:59 +0000 (UTC)
-Date: Mon, 20 Feb 2023 21:49:58 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20230220214958.19d88af8@windsurf>
-In-Reply-To: <87edqkz1yv.fsf@dell.be.48ers.dk>
-References: <20230220090923.2155635-1-thomas.devoogdt@barco.com>
- <20230220090923.2155635-2-thomas.devoogdt@barco.com>
- <87edqkz1yv.fsf@dell.be.48ers.dk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676926200;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xnqQfRunjdc6xxAKSzifYLbCgmFLEeZitYLqyxELgMc=;
- b=gaDhCRmT65mkgTkFJfcPTv+Ae7FM9/bZOHqiyzIA0KY+5f5CPZPt7SKjwl3HGE7nGhKdno
- 4cjWJd0NNChwgnuztBjOi1k3RrzcXzkVm8KbOUDflW8oW89CVqsOKOssHkX3X/o6riggtu
- t9jHlIR9668Q9Jb7sCyfCJ1RrVj7jbqXOK+AG3aDTuONeDUM0YfJF+EpFJ4VTYFpnflwGd
- oskjvX+EFS6fORmo88i73BjMP7lXF+jhv8ZyKuJGwBYO6sEYE0H5yCoH6/IdtEkCxU8r0e
- XCmPK6t6RVX8jpJQgcnmGMQ28zKIj7V7Uly4Q7DAGcOyJQ2188Ym+zi8SvBaGA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gaDhCRmT
-Subject: Re: [Buildroot] [PATCH v1 2/3] package/libgtk3: re-enable atk-bridge
+ with ESMTP id AddE-FakrIvn for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 236C5400AF
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 236C5400AF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1212286487; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 20 Feb 2023 21:50:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1d29799914d5df6fb372284d8c3408809e00d0b4
+X-Git-Newrev: 92c4589b904cfbc4cd633a92729ecd98a50851ff
+X-Patchwork-Hint: ignore
+Message-Id: <20230220205040.1212286487@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libjxl: fix build with libjpeg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,37 +57,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Thomas Devoogdt <thomas@devoogdt.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org,
- Adrian Perez de Castro <aperez@igalia.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 20 Feb 2023 18:22:16 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=92c4589b904cfbc4cd633a92729ecd98a50851ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> at-spi2-core depends on xorg7 / xlib-libXtst, so that would mean that we
-> would pull that in even for libgtk3 builds with the broadway/wayland
-> backends, is that sensible?
-> 
-> Maybe it is? Does at-spi2 work under wayland?
+Building with libjpeg will raise the following build failure on some
+architectures since the addition of the package in commit
+e648d399d8bd609697e78f13f7fa76be06d91a57:
 
-Please note that we also have a series that removes atk, at-spi2-atk,
-and bumps at-spi2-core, which now replaces both atk and at-spi2-atk:
+/tmp/instance-14/output-1/build/libjxl-0.7.0/lib/extras/enc/jpg.cc: In function 'jxl::Status jxl::extras::{anonymous}::EncodeWithLibJpeg(const jxl::extras::PackedImage&, const JxlBasicInfo&, const std::vector<unsigned char>&, std::vector<unsigned char>, size_t, const string&, std::vector<unsigned char>*)':
+/tmp/instance-14/output-1/build/libjxl-0.7.0/lib/extras/enc/jpg.cc:126:34: error: invalid conversion from 'long unsigned int*' to 'size_t*' {aka 'unsigned int*'} [-fpermissive]
+  126 |   jpeg_mem_dest(&cinfo, &buffer, &size);
+      |                                  ^~~~~
+      |                                  |
+      |                                  long unsigned int*
 
-  https://patchwork.ozlabs.org/project/buildroot/list/?series=336254
+Upstream advocates to use jpeg-turbo:
+https://github.com/libjxl/libjxl/issues/1802
 
-Best regards,
+Fixes:
+ - http://autobuild.buildroot.org/results/9a2a7c6072876f2562609bf98f32a1ce93631a75
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libjxl/libjxl.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
+index cc24ba258c..1257928efd 100644
+--- a/package/libjxl/libjxl.mk
++++ b/package/libjxl/libjxl.mk
+@@ -30,4 +30,11 @@ LIBJXL_CONF_OPTS = \
+ 	-DJPEGXL_ENABLE_SJPEG=OFF \
+ 	-DJPEGXL_ENABLE_SKCMS=OFF
+ 
++ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
++LIBJXL_DEPENDENCIES += jpeg-turbo
++LIBJXL_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_JPEG=OFF
++else
++LIBJXL_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_JPEG=ON
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
