@@ -1,87 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26197C636CC
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 14:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94E0BC636CC
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 14:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4FA460EA1;
-	Mon, 20 Feb 2023 14:27:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4FA460EA1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rhmu2s04qNr3; Mon, 20 Feb 2023 14:27:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CD5960BF2;
-	Mon, 20 Feb 2023 14:27:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CD5960BF2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 152B31BF2B4
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 14:27:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F01A2416C8
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 14:27:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F01A2416C8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16954409F3;
+	Mon, 20 Feb 2023 14:59:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16954409F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SReAYawVjhrl for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 14:27:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A954416D1
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7A954416D1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 14:27:53 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id c12so1418677wrw.1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 06:27:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Oigb9QpCgJo4Dk+Y7YpTg6wrShCIk1c4dIHsp6Twq4w=;
- b=jMO/fXzafy1miRgT49DLbhgHL1GRUEnYbnQba3Ui6VpSH2Ns33CjrNKoeg8mfjQehC
- zm40YxWB5q/ch7eGoye/oZJ+EiimdknY1Av+J+aRoT3SMBK8IUlD4yzevWbE2abqq2GV
- wlYJGlbxMhozKorS7XH0qwVhnD/39pu058tNlN7Tj7KiC7ZvAMsqnYCoLE+6IsHC9zrg
- +Pvi5TCDG2NnvndvQdZ27O1VkcmetPzj5rGChrex7dKASwWWaT2HA3BXHZ1ZpXk6lBA3
- TWjWo2VGjXHz+w4r5maUU/HL8YXJqQn5Q1qQlJneXwCXmYST/JJxcPSQExPszYo3eD6f
- gn0A==
-X-Gm-Message-State: AO0yUKXeLQW2V1qgW9LlYlB5ES/Kc8/tYc8QA0jSPqkhonVYYVz3Yy5H
- N5S2gTjfiy+LD+XJRMZ2Fo9C1P3WE0Y=
-X-Google-Smtp-Source: AK7set8jPaRRgP4tcSYm7+o3EJ3/ZnreByl7ZOsVNoTCLyad3Vyf4ga9Gv7Rr0WbSHHc7tDIG+MeAg==
-X-Received: by 2002:adf:df0b:0:b0:2c5:510b:8f9c with SMTP id
- y11-20020adfdf0b000000b002c5510b8f9cmr1305927wrl.52.1676903271120; 
- Mon, 20 Feb 2023 06:27:51 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- g16-20020a5d4890000000b002c56a991971sm5110555wrq.76.2023.02.20.06.27.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Feb 2023 06:27:50 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 15:27:46 +0100
-Message-Id: <20230220142746.1935069-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.0
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Mos0MAmduzsv; Mon, 20 Feb 2023 14:59:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16DCC4098E;
+	Mon, 20 Feb 2023 14:59:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16DCC4098E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5800B1BF27E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 14:59:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 324A740102
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 14:59:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 324A740102
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lr5nxpW84ait for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 14:59:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D39F240101
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D39F240101
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 14:59:13 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 27C80FF810;
+ Mon, 20 Feb 2023 14:59:10 +0000 (UTC)
+Date: Mon, 20 Feb 2023 15:59:09 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230220155909.634ee802@windsurf>
+In-Reply-To: <CAPi7W81cfaQ_Gk5u5sNHufCATEdrYM4Lgi2gH6hPySPwEYE=jQ@mail.gmail.com>
+References: <20230220112410.953669-1-fontaine.fabrice@gmail.com>
+ <20230220150704.7ff37d71@windsurf>
+ <CAPi7W81cfaQ_Gk5u5sNHufCATEdrYM4Lgi2gH6hPySPwEYE=jQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Oigb9QpCgJo4Dk+Y7YpTg6wrShCIk1c4dIHsp6Twq4w=;
- b=pdUh36xmg0BngvMI1GbpLHMz4VfB0gEqo9M56smg9/cONu+yOzdJg8VVZNTpoI1jIz
- X6TyQ2fJJ5dtKhEq1rC+b+HK475+lZxPOaqXXA1j8WCDe30b81+nlSQJbvp07on6hLmg
- kOc2hmGQ+PE/Zr/26wQxDobW3ic+U7i+W1XemDkzqsEffh3CHJPynjYu6GcZPHpdAwLA
- OTiKKb8Jqp3TjLl5cgo2wMiahqqiNQw2GUwUz7tr8ZZdRJ55Fhk9PVGk3xLVTZbBk61a
- uY/TnzCKYfIUkOUJNwC1j1fR11O/dpIcnb93UWmijVsKb2Zsdt46SInXsvtCN540s2Ws
- WUoA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pdUh36xm
-Subject: [Buildroot] [PATCH v2,1/1] package/libarchive: fix host build
+ d=bootlin.com; s=gm1; t=1676905152;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=P1TR38zsdNqtnLHj70WsfF0Kwd3h/17DuEK54etdk1k=;
+ b=WrRNRxkP9pXF+/NMWbjywFMLSFaKmidfN0z04JCaIVit6wWHnqcODqcsxyzSW4mPuc8eld
+ bYiTCdYTg3tCH2+nzGfpMC6rTf4DYb8dP8GHo+pHKpAw2nN7sqzI8uuUScL5fxbzPSGx6r
+ PJxTnAuv5L6L2cNfs1H5ja+fop8ALN4grU6BpHTeUI/gm8bDp3GwyLb5jCja3726P8xrey
+ phOKspxpQOYDetkybN5d08UjEJSSMIYQ8GdhSKJTommSvBhwILfffh2tQcYz9CDlPASJEd
+ S0BeuDg2AVLlriIIWsky3aCrTdP8ulaUGOaBgnQJsiH8In5sFvDIq3neZA9R3Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WrRNRxkP
+Subject: Re: [Buildroot] [PATCH 1/1] package/glslsandbox-player: fix build
+ with rockchip-mali
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,48 +78,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following host build failure raised since commit
-9525bc7e64e8f44c31ab9dfd3f516ecb35982429:
+On Mon, 20 Feb 2023 15:23:42 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-configure.ac:140: error: possibly undefined macro: AC_MSG_FAILURE
-      If this token and others are legitimate, please use m4_pattern_allow.
-      See the Autoconf documentation.
-configure.ac:328: error: possibly undefined macro: AC_CHECK_LIB
+> Patching rockchip-mali is probably better but I don't know what version
+> number should be put inside glesv2.pc.
+> Should I hardcode 2 in the pkgconfig file?
 
-Fixes:
- - http://autobuild.buildroot.org/results/11868e9bc4916843a7fc76f7b5e4c251f89e33dc
+I guess whatever works for glslsandbox-player. Packages like
+rockchip-mali are anyway crappy.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Drop per-package from commit message
+> Moreover, should I patch the file through a sed in buildroot or send an
+> upstream patch?
+> Upstreaming this change is probably impossible as rockchip-mali uses a
+> commit from October 2018 and the pkgconfig is not available anymore in
+> usptream master.
 
- package/libarchive/libarchive.mk | 2 ++
- 1 file changed, 2 insertions(+)
+I suppose a patch is fine, and it won't be upstream. As said above,
+those OpenGL blobs are anyway crappy :-/
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index cd7c13fbed..2010b6529f 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -140,6 +140,8 @@ endif
- 
- # The only user of host-libarchive needs zlib support
- HOST_LIBARCHIVE_DEPENDENCIES = host-zlib
-+# needed for autoreconf
-+HOST_LIBARCHIVE_DEPENDENCIES += host-pkgconf
- HOST_LIBARCHIVE_CONF_OPTS = \
- 	--disable-bsdtar \
- 	--disable-bsdcpio \
+Thomas
 -- 
-2.39.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
