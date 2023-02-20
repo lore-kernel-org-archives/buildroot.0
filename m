@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEE35C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8249EC636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:05:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AC666107C;
-	Tue, 21 Feb 2023 02:05:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AC666107C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37CDD70151;
+	Tue, 21 Feb 2023 02:05:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37CDD70151
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4kEbXm7fafzM; Tue, 21 Feb 2023 02:05:17 +0000 (UTC)
+	with ESMTP id IvXxdVXvyoPU; Tue, 21 Feb 2023 02:05:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F86970288;
-	Tue, 21 Feb 2023 02:05:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F86970288
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4805E7026D;
+	Tue, 21 Feb 2023 02:05:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4805E7026D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AF9831BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 463271BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6C927001F
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE5A47002A
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6C927001F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE5A47002A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f4QfgZrVYpKN for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+ with ESMTP id 2GhHwkCu4Un7 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EE0670046
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EE0670046
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DF937004C
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DF937004C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 68E1C81979; Mon, 20 Feb 2023 20:53:02 +0000 (UTC)
+ id 2B61186495; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Feb 2023 17:57:32 +0100
+Date: Mon, 20 Feb 2023 18:06:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 364511933811d76d4b866fe3aa04adff449cf94b
-X-Git-Newrev: 05c3177493aa8447d5cb568c8c13e0c09eded18b
+X-Git-Oldrev: 14ca6b5fdb6a5e0fa99b04461240772d93076b2e
+X-Git-Newrev: 7852618c23756d8a79809a4e9e9c331a8fb0cf16
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205302.68E1C81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xwayland: new
- package
+Message-Id: <20230220205303.2B61186495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: security
+ bump to version 2.38.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,192 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05c3177493aa8447d5cb568c8c13e0c09eded18b
+commit: https://git.buildroot.net/buildroot/commit/?id=7852618c23756d8a79809a4e9e9c331a8fb0cf16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-XServer to run X clients under wayland
+Bugfix release, fixes zero-day CVE-2023-23529 and includes a few build
+and behaviour patches as well.
 
-This XServer is required to run the X clients under Wayland compositor,
-for example weston or wlroots based compositors.
+Release notes:
 
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+  https://wpewebkit.org/release/wpewebkit-2.38.5.html
+
+Accompanying security advisory:
+
+  https://wpewebkit.org/security/WSA-2023-0002.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                           |  1 +
- package/x11r7/Config.in              |  1 +
- package/x11r7/xwayland/Config.in     | 26 ++++++++++
- package/x11r7/xwayland/xwayland.hash |  6 +++
- package/x11r7/xwayland/xwayland.mk   | 94 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 128 insertions(+)
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7894b10e38..a7a0bb14d1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2426,6 +2426,7 @@ F:	support/testing/tests/package/test_python_s3transfer.py
- N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
- F:	package/slirp4netns/
- F:	package/sway/
-+F:	package/x11r7/xwayland/
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index dcd082e045..0fa1018721 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.38.4.tar.xz.sums
+-md5  1c947ef5b73049fc6c102c92013009bf  wpewebkit-2.38.4.tar.xz
+-sha1  7fe9a7d98401256b0c9872f1c2b702e56840cbd3  wpewebkit-2.38.4.tar.xz
+-sha256  8c1bc113ef151fb0be2640824d323bc755dc97295ab7a1bc05e7ec589937a07b  wpewebkit-2.38.4.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.38.5.tar.xz.sums
++md5  73f7abd0c1cc808032869f72602166e3  wpewebkit-2.38.5.tar.xz
++sha1  3f10a04758eeb349f63f841aff765dae25bcde1b  wpewebkit-2.38.5.tar.xz
++sha256  ff00fd3d0a4c6d551850a78a7dfe4883b6b7ebd93c5549e1121b2f43d3ac1661  wpewebkit-2.38.5.tar.xz
  
- N:	Refik Tuzakli <tuzakli.refik@gmail.com>
- F:	package/freescale-imx/
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 365de34c98..4de8922e0d 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -12,6 +12,7 @@ menuconfig BR2_PACKAGE_XORG7
- if BR2_PACKAGE_XORG7
- 	menu "X11R7 Servers"
- 		source package/x11r7/xserver_xorg-server/Config.in
-+		source package/x11r7/xwayland/Config.in
- 	endmenu
- 	menu "X11R7 Libraries"
- 		source package/x11r7/libxcb/Config.in
-diff --git a/package/x11r7/xwayland/Config.in b/package/x11r7/xwayland/Config.in
-new file mode 100644
-index 0000000000..4f14f2cc36
---- /dev/null
-+++ b/package/x11r7/xwayland/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_XWAYLAND
-+	bool "xwayland server"
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # wayland
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
-+	# We need a SHA1 implementation. If either openssl or
-+	# libgcrypt are already part of the build, we'll use one of
-+	# them, otherwise, use the small libsha1 library.
-+	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
-+	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	select BR2_PACKAGE_XLIB_LIBXCVT
-+	select BR2_PACKAGE_XLIB_LIBXFONT2
-+	select BR2_PACKAGE_XLIB_LIBXKBFILE
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_XTRANS
-+	select BR2_PACKAGE_XORGPROTO
-+	help
-+	  X.Org X server to run X clients under wayland
-+
-+	  http://xorg.freedesktop.org
-+
-+comment "xwayland needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-new file mode 100644
-index 0000000000..0c476f3183
---- /dev/null
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -0,0 +1,6 @@
-+# From https://lists.x.org/archives/xorg-announce/2023-February/003322.html
-+sha256  d11eeee73290b88ea8da42a7d9350dedfaba856ce4ae44e58c045ad9ecaa2f73  xwayland-22.1.8.tar.xz
-+sha512  f52c6f99d8ef7605bc1c651d5ee5e306c12af30649a2d712b1c4c3cf4c7c80246ae24bd9ac39461d47aafc78f5d659446a459cd6259e05ef3128b204981d114a  xwayland-22.1.8.tar.xz
-+
-+# Locally calculated
-+sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-new file mode 100644
-index 0000000000..174b440b07
---- /dev/null
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -0,0 +1,94 @@
-+################################################################################
-+#
-+# xwayland
-+#
-+################################################################################
-+
-+XWAYLAND_VERSION = 22.1.8
-+XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
-+XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
-+XWAYLAND_LICENSE = MIT
-+XWAYLAND_LICENSE_FILES = COPYING
-+XWAYLAND_INSTALL_STAGING = YES
-+XWAYLAND_DEPENDENCIES = \
-+	pixman \
-+	wayland \
-+	wayland-protocols \
-+	xlib_libxcvt \
-+	xlib_libXfont2 \
-+	xlib_libxkbfile \
-+	xlib_libXrandr \
-+	xlib_xtrans \
-+	xorgproto
-+XWAYLAND_CONF_OPTS = \
-+	-Dxwayland_eglstream=false \
-+	-Dxvfb=false \
-+	-Ddefault_font_path=/usr/share/fonts/X11/ \
-+	-Ddtrace=false \
-+	-Ddocs=false
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_LIBEPOXY),yy)
-+XWAYLAND_CONF_OPTS += -Dglamor=true
-+XWAYLAND_DEPENDENCIES += libdrm libepoxy
-+else
-+XWAYLAND_CONF_OPTS += -Dglamor=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+XWAYLAND_CONF_OPTS += -Dglx=true
-+XWAYLAND_DEPENDENCIES += libgl
-+else
-+XWAYLAND_CONF_OPTS += -Dglx=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXDMCP),y)
-+XWAYLAND_CONF_OPTS += \
-+	-Dxdmcp=true \
-+	-Dxdm-auth-1=true
-+XWAYLAND_DEPENDENCIES += xlib_libXdmcp
-+else
-+XWAYLAND_CONF_OPTS += \
-+	-Dxdmcp=false \
-+	-Dxdm-auth-1=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+XWAYLAND_CONF_OPTS += -Dsecure-rpc=true
-+XWAYLAND_DEPENDENCIES += libtirpc
-+else
-+XWAYLAND_CONF_OPTS += -Dsecure-rpc=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX)$(BR2_PACKAGE_AUDIT),yy)
-+XWAYLAND_CONF_OPTS += -Dxselinux=true
-+XWAYLAND_DEPENDENCIES += libselinux audit
-+else
-+XWAYLAND_CONF_OPTS += -Dxselinux=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+XWAYLAND_CONF_OPTS += -Dsha1=libcrypto
-+XWAYLAND_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+XWAYLAND_CONF_OPTS += -Dsha1=libgcrypt
-+XWAYLAND_DEPENDENCIES += libgcrypt
-+else
-+XWAYLAND_CONF_OPTS += -Dsha1=libsha1
-+XWAYLAND_DEPENDENCIES += libsha1
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_LIBDRM),yy)
-+XWAYLAND_CONF_OPTS += -Ddri3=true
-+XWAYLAND_DEPENDENCIES += xlib_libxshmfence libdrm
-+else
-+XWAYLAND_CONF_OPTS += -Ddri3=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+XWAYLAND_CONF_OPTS += -Dlibunwind=true
-+XWAYLAND_DEPENDENCIES += libunwind
-+else
-+XWAYLAND_CONF_OPTS += -Dlibunwind=false
-+endif
-+
-+$(eval $(meson-package))
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index b9c2fef395..48e5c2f8cd 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEWEBKIT_VERSION = 2.38.4
++WPEWEBKIT_VERSION = 2.38.5
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
