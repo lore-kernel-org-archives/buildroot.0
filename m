@@ -4,81 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA98BC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FA9CC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:13:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75266701D2;
-	Tue, 21 Feb 2023 02:12:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75266701D2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27B9B702F7;
+	Tue, 21 Feb 2023 02:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27B9B702F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g-83XfB-RW5a; Tue, 21 Feb 2023 02:12:56 +0000 (UTC)
+	with ESMTP id gpfd1QMOuPzh; Tue, 21 Feb 2023 02:13:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6954B702EA;
-	Tue, 21 Feb 2023 02:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6954B702EA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A6FF51BF310
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 22:24:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 439D360AA3;
+	Tue, 21 Feb 2023 02:13:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 439D360AA3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B60021BF310
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 22:31:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8DA6360B0E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 22:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DA6360B0E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9C9A281911
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 22:31:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C9A281911
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NVtRWWzmzYbO for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 22:24:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TrXkEY4Cqu7v for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 22:31:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C055D60F31
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
- [IPv6:2607:f8b0:4864:20::631])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C055D60F31
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 22:24:07 +0000 (UTC)
-Received: by mail-pl1-x631.google.com with SMTP id q11so3320228plx.5
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 14:24:07 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C7B3813F9
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
+ [IPv6:2607:f8b0:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9C7B3813F9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 22:31:37 +0000 (UTC)
+Received: by mail-pg1-x52c.google.com with SMTP id s17so1405743pgv.4
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 14:31:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=G02WDayHIFfs0x7slgsbSdczWN/Rn8GNJu1U7twfh1c=;
- b=Z1T/B9F0hvEAvQ76Ov5bzGhbc02+dAdHiEV9yb8NsigCN6sXtFHEeDD1CLSy1AfPaB
- BWFHq73Ttb/nTDjlTr1RozISUj+g6S8pZIK2oEzFOXEIFepHhzi0/4zei8B66NnYvkde
- UtQbB9bnyvG9pFxmlu63FkjQ/gFH9kGSxQ87gqHDVLp72Z+A/MxxPdlyozVg2ijgtLvp
- ASRi8OQE1C17vt2GTTXOiGhYzt2P2p5qBl9ZIHJItMLZ0pe2kw+jNd36q5OZJkXef1KD
- xQyOHlQNyq5iHlzOhN1zwqQWEHnO7XMAMcDLBFsv22vDBhY9yayHL9yRjp57mmEjCIBQ
- qu7Q==
-X-Gm-Message-State: AO0yUKUBoweRn8RHfeLIgtxgJ7eX9QxAIFl7ZKBkR2kF+YNCdlczVOrU
- Auy7ReqvXAzpbvKhlVWPR9UT71UTPU8ILBjBa7n8tcCdzZ4=
-X-Google-Smtp-Source: AK7set8+9kAHX7H1swQh7RJFEZkfFMTMg4m6ptUdGbDKhUKmeMa09Q73pgYWhdHgxzQS1Ijmrc372oT6Vqj5194RTAQ=
-X-Received: by 2002:a17:903:25d2:b0:19b:42d:79f8 with SMTP id
- jc18-20020a17090325d200b0019b042d79f8mr346971plb.5.1676931847028; Mon, 20 Feb
- 2023 14:24:07 -0800 (PST)
+ bh=PFHXUB1eoWQysKWWnqE327MVrC3rdOfEw515pj87giE=;
+ b=ydzLdpGq8Nos5hVgJmSJJlmGlotTq0AraGZ3Ynl+FY0Y9+85LFrfCuqWMJByrTEPz5
+ Po56AcUPC3EtjWEHjUKN79tOMFc8hvgUZMuQ1N+/cxSCl/+NR7qOeKqrTWKys1zv/eyq
+ pZbP8VvIkUM7el51HAAMBc6M+ahv6WE4hOiwdeR9PNm74cR59CFNseHIjA5nKWuA/dXQ
+ 4wXi3y8l5I9hrU4Ox16ZcE3iiGFeu/2L891qv5dSiZhPg6DKF6pmQhvB1/JrCks326KP
+ +zkjnoiUu+w7d57XAERw05sBcioh7c5AvFQKISY0kFMpi/sPQ1zqHowu6xkhhuyJBaJK
+ XkdQ==
+X-Gm-Message-State: AO0yUKUlizcrelYmxEL57PWqRxZyLzONN95WKLAfIbac3trtJX1rnxEF
+ 7sXLy0KEV4Dy6uL/LqyU7RGXnh3Yb3oJuDcbrcDUXWKc
+X-Google-Smtp-Source: AK7set/Ckxk4Pr3weAsj/7ZJLsDHUkvcurAFZSKAEb8GUwiWbSAzARzrc7MROxbtHJ00NDs6xdIvQ9PIHFYAztgM84w=
+X-Received: by 2002:a05:6a00:340f:b0:5a8:d43a:c6a8 with SMTP id
+ cn15-20020a056a00340f00b005a8d43ac6a8mr341007pfb.0.1676932296904; Mon, 20 Feb
+ 2023 14:31:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20230219232301.1795196-1-fontaine.fabrice@gmail.com>
- <20230220220741.1f38012c@windsurf>
-In-Reply-To: <20230220220741.1f38012c@windsurf>
+References: <20230219172440.519540-1-fontaine.fabrice@gmail.com>
+ <20230220215531.7b3a1783@windsurf>
+In-Reply-To: <20230220215531.7b3a1783@windsurf>
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Feb 2023 23:23:55 +0100
-Message-ID: <CAPi7W824Q9jqJAkb3Na+P-d-jYX29=Kw3rU1CRC7sFKUBvVd6Q@mail.gmail.com>
+Date: Mon, 20 Feb 2023 23:31:25 +0100
+Message-ID: <CAPi7W83eUdKfWmPmhcSnLfj6JoCuDHzGd__en6qsgKhA9bVi8w@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=G02WDayHIFfs0x7slgsbSdczWN/Rn8GNJu1U7twfh1c=;
- b=FrTDdPZPwL+a20RH1RZnPuO5lch+uWq3nUp1HSbGj7QyxFnP5khub9YbcL/77NWxQw
- yqREwHqNEU3h7eCExlNcU+NjOcTLTcA3c+N7783/RvHLvJoDUoLLU1k8c6id61iZMhAq
- I66DXdsxqNwZ7KkXUgKBOZGwn/0OxsCu+0Y8hGUdsiXk1jXnVnHn8ugsVg5EouN73RnC
- nlrM/2U32J0rLtrM9sO7+wJz3JebfbNHUKh4JZvika8UnsBGBB7B0hRMGOAkAI7pYAPk
- rsV5Xn6iMwO9BTC6GEewrxqjMxr3DXiL9NKS7SNZhpZoYLe9QAlzWIM+9xdaQu8hdh2E
- z59A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=PFHXUB1eoWQysKWWnqE327MVrC3rdOfEw515pj87giE=;
+ b=eQNVmI70u+sZw+RfHwA1MSRF+cmcE/jgPhgE7zUrtiFWy+zVaJPKZps0y0toypab6v
+ d2wWk58HIoIdDICT7Zm22g+sqGhnY/HspZEydCFIVzLtYWLIScOF2bbvswgy5aBBxrQD
+ B2eXIRR0PfXkMG2V5XXcQqLSRXVdyAgPGOZZUaTboOyiksdbjVkVOXksqcTB2itvsIm9
+ x3U84cP6lcxoGOgznjrr9T1W4P/3FmIxxh2mAKFsMN3FuxpIZoIGElgSORRrg/5h3jR+
+ TGRsoSca2VSwkuf7ugE2jBMtkdC/BIrpyrCeKVrthW4/wvuQZZSCKRuXeYgW/3x4yC7e
+ Uxjw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=FrTDdPZP
-Subject: Re: [Buildroot] [PATCH 1/1] package/tmux: fix BR2_SHARED_STATIC_LIBS
+ header.a=rsa-sha256 header.s=20210112 header.b=eQNVmI70
+Subject: Re: [Buildroot] [PATCH v3,
+ 1/1] package/libmodsecurity: needs dynamic library with libcurl,
+ libssh2 and mbedtls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,118 +92,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7189125898602859996=="
+Cc: Frank Vanbever <frank.vanbever@mind.be>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============6319722673426628804=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7189125898602859996==
-Content-Type: multipart/alternative; boundary="0000000000000e03b005f5291f89"
+--===============6319722673426628804==
+Content-Type: multipart/alternative; boundary="000000000000de948405f5293973"
 
---0000000000000e03b005f5291f89
+--000000000000de948405f5293973
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Le lun. 20 f=C3=A9vr. 2023 =C3=A0 22:07, Thomas Petazzoni <
+Hello,
+
+Le lun. 20 f=C3=A9vr. 2023 =C3=A0 21:55, Thomas Petazzoni <
 thomas.petazzoni@bootlin.com> a =C3=A9crit :
 
 > Hello Fabrice,
 >
-> On Mon, 20 Feb 2023 00:23:01 +0100
+> On Sun, 19 Feb 2023 18:24:40 +0100
 > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 >
-> > tmux uses custom --enable-static option, instead of standard libtool
-> > directive resulting in the following build failure with systemd or
-> > utf8proc raised since commits
-> > 1f618aa388535181c281c85e2b5264532de4ef0f and
-> > e279599d255a79c08ef20b97b96eb248689d52a9:
+> > Commit 9fc652a373034118535397fdd4042ab9f8fd7adf was incomplete as
+> > mbedtls can be pulled in libcurl through libssh2 resulting in the
+> > following build failure:
+> >
+> >
+> /home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/powerpc64le-bu=
+ildroot-linux-musl/11.3.0/../../../../powerpc64le-buildroot-linux-musl/bin/=
+ld:
+> /home/autobuild/autobuild/instance-4/output-1/host/powerpc64le-buildroot-=
+linux-musl/sysroot/usr/lib//libmbedcrypto.a(md5.c.o):
+> in function `mbedtls_md5_init':
+> > md5.c:(.text+0x0): multiple definition of `mbedtls_md5_init';
+> ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x0):
+> first defined here
+> >
+> > Fixes:
+> >  -
+> http://autobuild.buildroot.org/results/4c235e46188f23d1a48297f4e5942cec7b=
+25959a
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> > Changes v2 -> v3:
+> >  - Fix syntax
+> > Changes v1 -> v2:
+> >  - Update nginx-modsecurity
 >
-> I am rather confused by the reasoning here.
+> Isn't that a bit madness? If libmodsecurity has its copy of parts of
+> mbedtls, but didn't take care of renaming the symbols, then ultimately
+> what we should conclude is that using libmodsecurity in a statically
+> linked configuration is not supported.
 >
-> > checking for utf8proc.h... yes
-> > checking for library containing utf8proc_charwidth... no
-> > configure: error: "utf8proc not found"
+> So I would advocate for simplifying the whole thing and just make
+> libmodsecurity and its reverse dependencies depends on !BR2_STATIC_LIBS
+> and be done with it.
 >
-> So this one is:
->
->
-> http://autobuild.buildroot.net/results/6e8/6e8523d8d514bf6d8fc3377d05e5ed=
-be7fc2d5bb/build-end.log
->
-> http://autobuild.buildroot.net/results/623/62309091c9da69eb29c3e9464aa95d=
-089ce886f8/build-end.log
->
-> I think here the problem is indeed that tmux interprets --enable-static
-> as "please provide a statically linked binary" instead of the standard
-> "please build/install static libraries".
->
-> So, when it tries to detect libutf8proc, it doesn't find it:
->
-> /home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/or1k-buildroo=
-t-linux-musl/11.3.0/../../../../or1k-buildroot-linux-musl/bin/ld:
-> cannot find -lutf8proc: No such file or directory
->
-> because utf8proc is based on CMake, and CMake is not able to build both
-> shared and static libraries, so in the BR2_STATIC_SHARED_LIBS=3Dy case,
-> it only installs shared libraries. Because the above utf8proc library
-> test is done with -static, it requires a static variant of libutf8proc,
-> which isn't there.
->
-> So indeed, for this case, it makes sense to not pass --enable-static to
-> tmux, but it's both due to tmux having a non-standard behavior for
-> --enable-static *AND* the fact that utf8proc also doesn't behave
-> properly in the BR2_STATIC_SHARED_LIBS=3Dy case.
->
-> > In file included from tmux.h:34,
-> >                  from alerts.c:23:
-> > compat.h:379:18: error: conflicting types for 'forkpty'; have 'pid_t(in=
-t
-> *, char *, struct termios *, struct winsize *)' {aka 'int(int *, char *,
-> struct termios *, struct winsize *)'}
-> >   379 | pid_t            forkpty(int *, char *, struct termios *, struc=
-t
-> winsize *);
-> >       |                  ^~~~~~~
->
->
-> However this one, I am really, really confused as to how it can be
-> related to BR2_STATIC_SHARED_LIBS and --enable-static. Could you
-> provide some more details on the reasoning?
+> What do you think?
 >
 
-This is the same issue, availability of forkpty in systemd is wrongly
-detected because of --static.
-Here is an extract of
-http://autobuild.buildroot.org/results/cba/cba06f3bb6d9be25e91f56c390a70ddf=
-9904832e//tmux-3.3a/config.log
-:
-
-configure:7278:
-/home/autobuild/autobuild/instance-12/output-1/host/bin/powerpc64-buildroot=
--linux-gnu-gcc
--o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=3D64  -O2 -g0 -D_FORTIFY_SOURCE=3D2  -D_DEFAULT_SOURCE
--D_XOPEN_SOURCE=3D600    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=3D64 -static   conftest.c -lutil
--L/home/autobuild/autobuild/instance-12/output-1/host/bin/../powerpc64-buil=
-droot-linux-gnu/sysroot/usr/lib
--lsystemd  -lncurses
--L/home/autobuild/autobuild/instance-12/output-1/host/bin/../powerpc64-buil=
-droot-linux-gnu/sysroot/usr/lib
--levent_core  -lm  >&5
-/home/autobuild/autobuild/instance-12/output-1/host/lib/gcc/powerpc64-build=
-root-linux-gnu/11.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld:
-cannot find -lsystemd
-
+OK, I'll send a v4
 
 
 >
-> Thanks!
+> Best regards,
 >
 > Thomas
 > --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
 > https://bootlin.com
 >
 
@@ -209,115 +170,78 @@ Best Regards,
 
 Fabrice
 
---0000000000000e03b005f5291f89
+--000000000000de948405f5293973
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0lun. 20 f=C3=A9vr. 2023 =C3=
-=A0=C2=A022:07, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@boo=
-tlin.com">thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=C2=A0:<br></div=
-><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
--left:1px solid rgb(204,204,204);padding-left:1ex">Hello Fabrice,<br>
+<div dir=3D"ltr"><div dir=3D"ltr"><div>Hello,</div></div><br><div class=3D"=
+gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0lun. 20 f=C3=A9v=
+r. 2023 =C3=A0=C2=A021:55, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.pe=
+tazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=C2=
+=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
+ 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hello Fabri=
+ce,<br>
 <br>
-On Mon, 20 Feb 2023 00:23:01 +0100<br>
+On Sun, 19 Feb 2023 18:24:40 +0100<br>
 Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gmail.com" target=
 =3D"_blank">fontaine.fabrice@gmail.com</a>&gt; wrote:<br>
 <br>
-&gt; tmux uses custom --enable-static option, instead of standard libtool<b=
-r>
-&gt; directive resulting in the following build failure with systemd or<br>
-&gt; utf8proc raised since commits<br>
-&gt; 1f618aa388535181c281c85e2b5264532de4ef0f and<br>
-&gt; e279599d255a79c08ef20b97b96eb248689d52a9:<br>
+&gt; Commit 9fc652a373034118535397fdd4042ab9f8fd7adf was incomplete as<br>
+&gt; mbedtls can be pulled in libcurl through libssh2 resulting in the<br>
+&gt; following build failure:<br>
+&gt; <br>
+&gt; /home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/powerpc64le=
+-buildroot-linux-musl/11.3.0/../../../../powerpc64le-buildroot-linux-musl/b=
+in/ld: /home/autobuild/autobuild/instance-4/output-1/host/powerpc64le-build=
+root-linux-musl/sysroot/usr/lib//libmbedcrypto.a(md5.c.o): in function `mbe=
+dtls_md5_init&#39;:<br>
+&gt; md5.c:(.text+0x0): multiple definition of `mbedtls_md5_init&#39;; ../.=
+./src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x0): first =
+defined here<br>
+&gt; <br>
+&gt; Fixes:<br>
+&gt;=C2=A0 - <a href=3D"http://autobuild.buildroot.org/results/4c235e46188f=
+23d1a48297f4e5942cec7b25959a" rel=3D"noreferrer" target=3D"_blank">http://a=
+utobuild.buildroot.org/results/4c235e46188f23d1a48297f4e5942cec7b25959a</a>=
 <br>
-I am rather confused by the reasoning here.<br>
+&gt; <br>
+&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
+@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt; Changes v2 -&gt; v3:<br>
+&gt;=C2=A0 - Fix syntax<br>
+&gt; Changes v1 -&gt; v2:<br>
+&gt;=C2=A0 - Update nginx-modsecurity<br>
 <br>
-&gt; checking for utf8proc.h... yes<br>
-&gt; checking for library containing utf8proc_charwidth... no<br>
-&gt; configure: error: &quot;utf8proc not found&quot;<br>
+Isn&#39;t that a bit madness? If libmodsecurity has its copy of parts of<br=
+>
+mbedtls, but didn&#39;t take care of renaming the symbols, then ultimately<=
+br>
+what we should conclude is that using libmodsecurity in a statically<br>
+linked configuration is not supported.<br>
 <br>
-So this one is:<br>
+So I would advocate for simplifying the whole thing and just make<br>
+libmodsecurity and its reverse dependencies depends on !BR2_STATIC_LIBS<br>
+and be done with it.<br>
 <br>
-=C2=A0 <a href=3D"http://autobuild.buildroot.net/results/6e8/6e8523d8d514bf=
-6d8fc3377d05e5edbe7fc2d5bb/build-end.log" rel=3D"noreferrer" target=3D"_bla=
-nk">http://autobuild.buildroot.net/results/6e8/6e8523d8d514bf6d8fc3377d05e5=
-edbe7fc2d5bb/build-end.log</a><br>
-=C2=A0 <a href=3D"http://autobuild.buildroot.net/results/623/62309091c9da69=
-eb29c3e9464aa95d089ce886f8/build-end.log" rel=3D"noreferrer" target=3D"_bla=
-nk">http://autobuild.buildroot.net/results/623/62309091c9da69eb29c3e9464aa9=
-5d089ce886f8/build-end.log</a><br>
+What do you think?<br></blockquote><div><br></div><div>OK, I&#39;ll send a =
+v4<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"mar=
+gin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1=
+ex">
 <br>
-I think here the problem is indeed that tmux interprets --enable-static<br>
-as &quot;please provide a statically linked binary&quot; instead of the sta=
-ndard<br>
-&quot;please build/install static libraries&quot;.<br>
-<br>
-So, when it tries to detect libutf8proc, it doesn&#39;t find it:<br>
-<br>
-/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/or1k-buildroot-=
-linux-musl/11.3.0/../../../../or1k-buildroot-linux-musl/bin/ld: cannot find=
- -lutf8proc: No such file or directory<br>
-<br>
-because utf8proc is based on CMake, and CMake is not able to build both<br>
-shared and static libraries, so in the BR2_STATIC_SHARED_LIBS=3Dy case,<br>
-it only installs shared libraries. Because the above utf8proc library<br>
-test is done with -static, it requires a static variant of libutf8proc,<br>
-which isn&#39;t there.<br>
-<br>
-So indeed, for this case, it makes sense to not pass --enable-static to<br>
-tmux, but it&#39;s both due to tmux having a non-standard behavior for<br>
---enable-static *AND* the fact that utf8proc also doesn&#39;t behave<br>
-properly in the BR2_STATIC_SHARED_LIBS=3Dy case.<br>
-<br>
-&gt; In file included from tmux.h:34,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 from ale=
-rts.c:23:<br>
-&gt; compat.h:379:18: error: conflicting types for &#39;forkpty&#39;; have =
-&#39;pid_t(int *, char *, struct termios *, struct winsize *)&#39; {aka &#3=
-9;int(int *, char *, struct termios *, struct winsize *)&#39;}<br>
-&gt;=C2=A0 =C2=A0379 | pid_t=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 forkp=
-ty(int *, char *, struct termios *, struct winsize *);<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 ^~~~~~~<br>
-<br>
-<br>
-However this one, I am really, really confused as to how it can be<br>
-related to BR2_STATIC_SHARED_LIBS and --enable-static. Could you<br>
-provide some more details on the reasoning?<br></blockquote><div><br></div>=
-<div>This is the same issue, availability of forkpty in systemd is wrongly =
-detected because of --static.</div><div>Here is an extract of</div><div><a =
-href=3D"http://autobuild.buildroot.org/results/cba/cba06f3bb6d9be25e91f56c3=
-90a70ddf9904832e//tmux-3.3a/config.log">http://autobuild.buildroot.org/resu=
-lts/cba/cba06f3bb6d9be25e91f56c390a70ddf9904832e//tmux-3.3a/config.log</a>:=
-</div><div><pre>configure:7278: /home/autobuild/autobuild/instance-12/outpu=
-t-1/host/bin/powerpc64-buildroot-linux-gnu-gcc -o conftest -D_LARGEFILE_SOU=
-RCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64  -O2 -g0 -D_FORTIFY_SOUR=
-CE=3D2  -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=3D600    -D_LARGEFILE_SOURCE -D_L=
-ARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64 -static   conftest.c -lutil  -L/=
-home/autobuild/autobuild/instance-12/output-1/host/bin/../powerpc64-buildro=
-ot-linux-gnu/sysroot/usr/lib -lsystemd  -lncurses  -L/home/autobuild/autobu=
-ild/instance-12/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/=
-usr/lib -levent_core  -lm  &gt;&amp;5
-/home/autobuild/autobuild/instance-12/output-1/host/lib/gcc/powerpc64-build=
-root-linux-gnu/11.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: can=
-not find -lsystemd<br></pre></div><div>=C2=A0</div><blockquote class=3D"gma=
-il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
-04,204);padding-left:1ex">
-<br>
-Thanks!<br>
+Best regards,<br>
 <br>
 Thomas<br>
 -- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
+Thomas Petazzoni, CTO, Bootlin<br>
+Embedded Linux and Kernel engineering<br>
 <a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
 //bootlin.com</a><br></blockquote><div><br></div><div>Best Regards,</div><d=
 iv><br></div><div>Fabrice <br></div></div></div>
 
---0000000000000e03b005f5291f89--
+--000000000000de948405f5293973--
 
---===============7189125898602859996==
+--===============6319722673426628804==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -328,4 +252,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7189125898602859996==--
+--===============6319722673426628804==--
