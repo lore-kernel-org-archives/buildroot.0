@@ -4,57 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB5DFC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 19:18:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F61FC636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 19:21:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 46B8F82297;
-	Mon, 20 Feb 2023 19:18:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46B8F82297
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF6DB822AF;
+	Mon, 20 Feb 2023 19:21:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF6DB822AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zp9ptJZoilBx; Mon, 20 Feb 2023 19:18:34 +0000 (UTC)
+	with ESMTP id 3_xON15CECZS; Mon, 20 Feb 2023 19:21:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B40B8226C;
-	Mon, 20 Feb 2023 19:18:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B40B8226C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 79F181BF321
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 19:18:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2360A822AB;
+	Mon, 20 Feb 2023 19:21:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2360A822AB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BEC8F1BF321
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 19:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5322B40356
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 19:18:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5322B40356
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5F9A60FC9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 19:21:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5F9A60FC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nR20MSinrawC for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 19:18:29 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A42540302
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7A42540302
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 19:18:29 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout08.t-online.de (Postfix) with SMTP id 770BD272D9;
- Mon, 20 Feb 2023 20:18:26 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.190.238]) by fwd80.t-online.de
- with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
- esmtp id 1pUBg7-28cWQb0; Mon, 20 Feb 2023 20:18:23 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34622)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1pUBg6-0008RW-23;
- Mon, 20 Feb 2023 20:18:22 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EP5CqAxlnK0F for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 19:21:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 773D86100B
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 773D86100B
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 19:21:30 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id c12so2260057wrw.1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 11:21:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9a3dUIdATQU772Y3dXR7mvrw87VRRF2Ej6jQ9jOfcm8=;
+ b=pFqaTAcRrKadwVSTkfe7W9mPmyHFUJt8hy+GEQ1rMJmDmiuFU3UXKctQLCfWTX1zdY
+ GMSMl+7QmqMLG5rWRBYQPYXpQ7LrHFB7hn/+KVbBr5ualtIw/H3FWmwq7SU/I6L4KVty
+ 1t6c4TdGwaZP44SBv/EE418q4m5+txa3/bM2niXON6s6IXKdN/0k62fF7XsQBnKCMDbm
+ FgejRp3DuYNHRMb/stAAvgeICwnhwoBmBLF8vWnyW2zABzK3rkpHfGnnYc82RQ7xMM2A
+ M1vmcbzHlBHBdDJIIXlAba1G+pMpZtUY0+uQ28NOjzgvroRv3G9VSXQrUQb+KZrjztCs
+ 1pag==
+X-Gm-Message-State: AO0yUKWdJsN0bkLs/qNyCPSYqffIROtqFXG3YrSfu6LKTp3ZfQX8smNX
+ bZFugiCFOEtUPPvz+XzL049OyB6L0X8=
+X-Google-Smtp-Source: AK7set+UfCAuAbCIC9Z2sO1DurBLqwY//XDJpxxONF2+F7Hqve+4e/YOGXF+pu1HyQb899m+xKolug==
+X-Received: by 2002:adf:db4c:0:b0:2c5:4a89:f60b with SMTP id
+ f12-20020adfdb4c000000b002c54a89f60bmr2464234wrj.38.1676920888223; 
+ Mon, 20 Feb 2023 11:21:28 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ z6-20020adfe546000000b002425be3c9e2sm2029955wrm.60.2023.02.20.11.21.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Feb 2023 11:21:27 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 20:18:22 +0100
-Message-Id: <20230220191822.99026-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.39.1
+Date: Mon, 20 Feb 2023 20:21:25 +0100
+Message-Id: <20230220192125.555632-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1676920703-AB7F3A74-190FBD63/0/0 CLEAN NORMAL
-X-TOI-MSGID: e1a5ca9d-2dec-4e1f-b032-580ee57e4b75
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 22.3.5
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9a3dUIdATQU772Y3dXR7mvrw87VRRF2Ej6jQ9jOfcm8=;
+ b=kFEVTNMKBCSqUWbrtLp3q65eh2MiYz1TFXtsdZo3ZQABzQNEoQExf9JmagZxsdvrGl
+ cHSy3ByDzl3/pxbAl2FAJqgUSaBSwXPOq+/D1wEbFuTXZxn4LafJrKPDMuGOplxXMr5h
+ BRpEOou6iSkqwjN9++tkXz6DKMxKhxnyTFMvYdx+XoeASdMvEvS4wL6ZfVPfmMv9TpGP
+ wtaD5qk7sbSuAXKgU7EwX89yhmk6QAyl3wsr05auz8BczXfNFftuQ3++e6tlTri+1uLR
+ v3bZOZ98pe6Eaiye/5pM1N3pcZcPJjk0f46BLZEZ6upbGUPkkPeCaUVfhG48T4RtMvRb
+ eOzQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kFEVTNMK
+Subject: [Buildroot] [PATCH 1/1] package/libarchive: fix uclibc with
+ libiconv build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,64 +94,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2023-February/000705.html
+Replace patch added by commit 9525bc7e64e8f44c31ab9dfd3f516ecb35982429
+as current patch is not correct, build failures are still raised by
+uclibc-ng with libiconv on fwup/gvfs/...:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+configure: error: Requires libarchive. Libarchive must be built with zlib support.
+
+[...]
+
+Run-time dependency libarchive found: NO (tried cmake)
+
+../output-1/build/gvfs-1.48.1/meson.build:405:2: ERROR: Dependency lookup for libarchive with method 'pkgconfig' failed: Could not generate cargs for libarchive:
+Package iconv was not found in the pkg-config search path.
+Perhaps you should add the directory containing `iconv.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'iconv', required by 'libarchive', not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/05a5496495e51da2c9caf7570695cc95e1745e30
+ - http://autobuild.buildroot.org/results/98dc4b415115cca65b53e4cd986144ef85bf17ad
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...y-add-iconv-to-the-pc-file-if-needed.patch | 44 -------------------
+ ...o-not-add-iconv-for-Requires.private.patch | 28 ++++++++++++
+ 2 files changed, 28 insertions(+), 44 deletions(-)
+ delete mode 100644 package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
+ create mode 100644 package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 9177adceda..ad1999a30d 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 22.3.4
-+MESA3D_HEADERS_VERSION = 22.3.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index e4de997f0e..50c5bcc7fc 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2023-January/000703.html
--sha256  37a1ddaf03f41919ee3c89c97cff41e87de96e00e9d3247959cc8279d8294593  mesa-22.3.4.tar.xz
--sha512  6af340153244d3e95d0e155a45d6db134335654d62590797ae0ef6ba44c2ccfe91ebf95f70ff82c67cee108ac35536767b1f6848d6d1129f52eb9e8414ee321d  mesa-22.3.4.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2023-February/000705.html
-+sha256  3eed2ecae2bc674494566faab9fcc9beb21cd804c7ba2b59a1694f3d7236e6a9  mesa-22.3.5.tar.xz
-+sha512  a4cad9b7e6501678fac279bd88a37e522633c7128afa8df04982f469c930e3557bb1d05b4b0f5ae16704d8d04e50c90a7489943a48861df17dd947704c329b85  mesa-22.3.5.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 36b7151510..a744334c5b 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 22.3.4
-+MESA3D_VERSION = 22.3.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+diff --git a/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch b/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
+deleted file mode 100644
+index c93944f789..0000000000
+--- a/package/libarchive/0001-Only-add-iconv-to-the-pc-file-if-needed.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 1f35c466aaa9444335a1b854b0b7223b0d2346c2 Mon Sep 17 00:00:00 2001
+-From: Peter Pentchev <roam@ringlet.net>
+-Date: Thu, 29 Dec 2022 00:04:40 +0200
+-Subject: [PATCH] Only add "iconv" to the .pc file if needed (#1825)
+-
+-Hi,
+-
+-Thanks for writing and maintaining libarchive!
+-
+-What do you think about this trivial change that does not add "iconv" to
+-the pkg-config file's list of required packages unless it is actually
+-needed? On at least Debian GNU/Linux systems, the iconv(3) function is
+-part of the system C library and there is no Debian package that
+-installs an iconv.pc file, so I had to make this change to the Debian
+-package of libarchive.
+-
+-Thanks again, and keep up the great work!
+-
+-G'luck,
+-Peter
+-
+-Downloaded from upstream commit:
+-https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- configure.ac | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 99bff20d1..e2715cfde 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -378,7 +378,9 @@ if test "x$with_iconv" != "xno"; then
+-     AC_CHECK_HEADERS([localcharset.h])
+-     am_save_LIBS="$LIBS"
+-     LIBS="${LIBS} ${LIBICONV}"
+--    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
+-+    if test -n "$LIBICONV"; then
+-+      LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
+-+    fi
+-     AC_CHECK_FUNCS([locale_charset])
+-     LIBS="${am_save_LIBS}"
+-     if test "x$ac_cv_func_locale_charset" != "xyes"; then
+diff --git a/package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch b/package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch
+new file mode 100644
+index 0000000000..91903866ef
+--- /dev/null
++++ b/package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch
+@@ -0,0 +1,28 @@
++From 619c1be8d38ff79622db8f66f3b02832795315f9 Mon Sep 17 00:00:00 2001
++From: Christian Hesse <mail@eworm.de>
++Date: Wed, 14 Dec 2022 09:04:39 +0100
++Subject: [PATCH] autotools: do not add iconv for Requires.private
++
++There is no pkgconfig file for iconv, thus things break with this
++change. Let's drop iconv from Requires.private.
++
++Fixes: a83f3d32 ("autotools: Fix static linking when openssl is enabled in windows")
++[Retrieved from:
++https://github.com/libarchive/libarchive/pull/1817/commits/619c1be8d38ff79622db8f66f3b02832795315f9]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 99bff20d1..f245d0c55 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -378,7 +378,6 @@ if test "x$with_iconv" != "xno"; then
++     AC_CHECK_HEADERS([localcharset.h])
++     am_save_LIBS="$LIBS"
++     LIBS="${LIBS} ${LIBICONV}"
++-    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
++     AC_CHECK_FUNCS([locale_charset])
++     LIBS="${am_save_LIBS}"
++     if test "x$ac_cv_func_locale_charset" != "xyes"; then
 -- 
-2.39.1
+2.39.0
 
 _______________________________________________
 buildroot mailing list
