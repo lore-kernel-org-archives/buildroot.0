@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 803E2C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:46:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52F8AC6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:47:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 205C5415F0;
-	Sun, 12 Mar 2023 21:46:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 205C5415F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF0E94029B;
+	Sun, 12 Mar 2023 21:47:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF0E94029B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wjxZegWY26o5; Sun, 12 Mar 2023 21:46:53 +0000 (UTC)
+	with ESMTP id 3FBI2EbYPElP; Sun, 12 Mar 2023 21:47:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D93F541621;
-	Sun, 12 Mar 2023 21:46:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93F541621
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 148801BF863
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BDA840287;
+	Sun, 12 Mar 2023 21:47:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BDA840287
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 158F11BF868
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFD0640106
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0C3B8134E
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFD0640106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0C3B8134E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sf_m4OOb5k0O for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DNCKto8H5HMk for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EFE13405F4
+ by smtp1.osuosl.org (Postfix) with ESMTP id E075B8133E
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFE13405F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E075B8133E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DAF1387008; Sun, 12 Mar 2023 21:46:21 +0000 (UTC)
+ id CCF6C87007; Sun, 12 Mar 2023 21:46:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 23:47:53 +0100
+Date: Mon, 20 Feb 2023 23:47:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cc0d6bdd66e477ee0e3de0538e37d49bdfd7a9e6
-X-Git-Newrev: 4d7f902eb127eb9dd1334cda04a2008d14945a7d
+X-Git-Oldrev: f2c1e10b8ac3531ab5a48e23c23b702cd24b3f73
+X-Git-Newrev: cc0d6bdd66e477ee0e3de0538e37d49bdfd7a9e6
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214621.DAF1387008@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/bananapi_m2_ultra_defconfig: bump
- Linux to 6.1 and U-Boot to 2023.01
+Message-Id: <20230312214621.CCF6C87007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openjdk{-bin}: bump versions to
+ 11.0.18+10 and 17.0.6+10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,154 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d7f902eb127eb9dd1334cda04a2008d14945a7d
+commit: https://git.buildroot.net/buildroot/commit/?id=cc0d6bdd66e477ee0e3de0538e37d49bdfd7a9e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/bananapi_m2_ultra_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/openjdk-bin/openjdk-bin.hash                 |  8 ++++----
+ package/openjdk-bin/openjdk-bin.mk                   |  4 ++--
+ ...01-Add-ARCv2-ISA-processors-support-to-Zero.patch | 20 ++++++++++----------
+ package/openjdk/openjdk.hash                         |  4 ++--
+ package/openjdk/openjdk.mk                           |  4 ++--
+ 5 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/configs/bananapi_m2_ultra_defconfig b/configs/bananapi_m2_ultra_defconfig
-index 2ec0e60e8d..0f267021f8 100644
---- a/configs/bananapi_m2_ultra_defconfig
-+++ b/configs/bananapi_m2_ultra_defconfig
-@@ -1,12 +1,12 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Ultra"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-ultra/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.12"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-r40-bananapi-m2-ultra"
-@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m2_berry"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 4d3942125f..241ca34a04 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,10 +1,10 @@
+ # https://github.com/adoptium/temurin17-binaries/releases
+-sha256  288f34e3ba8a4838605636485d0365ce23e57d5f2f68997ac4c2e4c01967cd48  OpenJDK17U-jdk_x64_linux_hotspot_17.0.2_8.tar.gz
+-sha256  302caf29f73481b2b914ba2b89705036010c65eb9bc8d7712b27d6e9bedf6200  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.2_8.tar.gz
++sha256  a0b1b9dd809d51a438f5fa08918f9aca7b2135721097f0858cf29f77a35d4289  OpenJDK17U-jdk_x64_linux_hotspot_17.0.6_10.tar.gz
++sha256  9e0e88bbd9fa662567d0c1e22d469268c68ac078e9e5fe5a7244f56fec71f55f  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.6_10.tar.gz
+ 
+ # From https://github.com/adoptium/temurin11-binaries/releases
+-sha256  43fb84f8063ad9bf6b6d694a67b8f64c8827552b920ec5ce794dfe5602edffe7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz
+-sha256  79572f5172c6a040591d34632f98a20ed148702bbce2f57649e8ac01c0d2e3db  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.14.1_1.tar.gz
++sha256  4a29efda1d702b8ff38e554cf932051f40ec70006caed5c4857a8cbc7a0b7db7  OpenJDK11U-jdk_x64_linux_hotspot_11.0.18_10.tar.gz
++sha256  04d5eeff6a6449bcdca0f52cd97bafd43ce09d40ef1e73fa0e1add63bea4a9c8  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.18_10.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 608a0bc3ac..c3eb0b05e6 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -6,10 +6,10 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.2_8
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.6_10
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.14.1_1
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.18_10
+ endif
+ 
+ ifeq ($(HOSTARCH),x86_64)
+diff --git a/package/openjdk/17.0.1+12/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.6+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+similarity index 83%
+rename from package/openjdk/17.0.1+12/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+rename to package/openjdk/17.0.6+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+index 1ef523a419..dfd3b07bea 100644
+--- a/package/openjdk/17.0.1+12/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
++++ b/package/openjdk/17.0.6+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+@@ -23,8 +23,8 @@ diff --git a/make/autoconf/libraries.m4 b/make/autoconf/libraries.m4
+ index 5120918aed2..f7a99955874 100644
+ --- a/make/autoconf/libraries.m4
+ +++ b/make/autoconf/libraries.m4
+-@@ -122,6 +122,14 @@ AC_DEFUN_ONCE([LIB_SETUP_LIBRARIES],
+-     BASIC_JVM_LIBS="$BASIC_JVM_LIBS -lpthread"
++@@ -146,6 +146,14 @@ AC_DEFUN_ONCE([LIB_SETUP_LIBRARIES],
++     fi
+    fi
+  
+ +  # Libatomic library
+@@ -55,7 +55,7 @@ index c0f2446dbd7..dc416ece885 100644
+      arm*)
+        VAR_CPU=arm
+        VAR_CPU_ARCH=arm
+-@@ -478,6 +484,8 @@ AC_DEFUN([PLATFORM_SETUP_LEGACY_VARS_HELPER],
++@@ -563,6 +569,8 @@ AC_DEFUN([PLATFORM_SETUP_LEGACY_VARS_HELPER],
+      HOTSPOT_$1_CPU_DEFINE=PPC64
+  
+    # The cpu defines below are for zero, we don't support them directly.
+@@ -68,7 +68,7 @@ diff --git a/src/hotspot/os/linux/os_linux.cpp b/src/hotspot/os/linux/os_linux.c
+ index b08caf4d5d3..2bf084895ba 100644
+ --- a/src/hotspot/os/linux/os_linux.cpp
+ +++ b/src/hotspot/os/linux/os_linux.cpp
+-@@ -1858,6 +1858,9 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
++@@ -1674,6 +1674,9 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
+  #ifndef EM_AARCH64
+    #define EM_AARCH64    183               /* ARM AARCH64 */
+  #endif
+@@ -78,7 +78,7 @@ index b08caf4d5d3..2bf084895ba 100644
+  #ifndef EM_RISCV
+    #define EM_RISCV      243               /* RISC-V */
+  #endif
+-@@ -1879,6 +1882,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
++@@ -1698,6 +1701,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
+      {EM_SH,          EM_SH,      ELFCLASS32, ELFDATA2MSB, (char*)"SuperH BE"},
+  #endif
+      {EM_ARM,         EM_ARM,     ELFCLASS32, ELFDATA2LSB, (char*)"ARM"},
+@@ -86,7 +86,7 @@ index b08caf4d5d3..2bf084895ba 100644
+      // we only support 64 bit z architecture
+      {EM_S390,        EM_S390,    ELFCLASS64, ELFDATA2MSB, (char*)"IBM System/390"},
+      {EM_ALPHA,       EM_ALPHA,   ELFCLASS64, ELFDATA2LSB, (char*)"Alpha"},
+-@@ -1906,6 +1910,8 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
++@@ -1726,6 +1730,8 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
+    static  Elf32_Half running_arch_code=EM_PPC;
+  #elif  (defined AARCH64)
+    static  Elf32_Half running_arch_code=EM_AARCH64;
+@@ -95,12 +95,12 @@ index b08caf4d5d3..2bf084895ba 100644
+  #elif  (defined ARM)
+    static  Elf32_Half running_arch_code=EM_ARM;
+  #elif  (defined S390)
+-@@ -1926,7 +1932,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
+-   static  Elf32_Half running_arch_code=EM_RISCV;
++@@ -1748,7 +1754,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
++   static  Elf32_Half running_arch_code=EM_LOONGARCH;
+  #else
+      #error Method os::dll_load requires that one of following is defined:\
+--        AARCH64, ALPHA, ARM, AMD64, IA32, IA64, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
+-+        AARCH64, ALPHA, ARC, ARM, AMD64, IA32, IA64, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
++-        AARCH64, ALPHA, ARM, AMD64, IA32, IA64, LOONGARCH, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
+++        AARCH64, ALPHA, ARC ARM, AMD64, IA32, IA64, LOONGARCH, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
+  #endif
+  
+    // Identify compatibility class for VM's architecture and library's architecture
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index 293787792d..0a67e7a3ec 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2fdd23261526362d4aaf58323441d4c31d29de2e374ba94bbf2727a00adc0ea7  openjdk-17.0.2+8.tar.gz
+-sha256  0e859cc03378439023e17ee82aecee5a52265fb38906a8bebf16027aa2b2bcf5  openjdk-11.0.14.1+1.tar.gz
++sha256  331bad1f80e98761eb9692863146fec647db573db5a5efa5b9bd6326d53a3472  openjdk-17.0.6+10.tar.gz
++sha256  04af71fc7adda41a49861870f9ec0ac0f059c2cf9393ce32995ea8ef4279a1b1  openjdk-11.0.18+10.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 42d52d57c4..0fe506bbfd 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -6,10 +6,10 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ OPENJDK_VERSION_MAJOR = 17
+-OPENJDK_VERSION_MINOR = 0.2+8
++OPENJDK_VERSION_MINOR = 0.6+10
+ else
+ OPENJDK_VERSION_MAJOR = 11
+-OPENJDK_VERSION_MINOR = 0.14.1+1
++OPENJDK_VERSION_MINOR = 0.18+10
+ endif
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
