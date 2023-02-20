@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28147C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:06:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BC05C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2C99611B9;
-	Tue, 21 Feb 2023 01:06:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2C99611B9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4524761227;
+	Tue, 21 Feb 2023 01:06:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4524761227
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mjcaOvdVHcAA; Tue, 21 Feb 2023 01:06:35 +0000 (UTC)
+	with ESMTP id NrQw4uEYlw51; Tue, 21 Feb 2023 01:06:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 00641612BA;
-	Tue, 21 Feb 2023 01:06:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00641612BA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C3D1E1BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74E2161288;
+	Tue, 21 Feb 2023 01:06:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74E2161288
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 854331BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8DC16FBAC
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8DC16FBAC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7FC624010E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FC624010E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ucS-rxls80wC for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id secytvoPCk7S for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F06446FBA1
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F06446FBA1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CFB6414E7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CFB6414E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE956828C8; Mon, 20 Feb 2023 20:52:37 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 6693C86496; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:55:10 +0100
+Date: Mon, 20 Feb 2023 18:13:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2d7de5b2befe5a1703fbd583514aa46b457246d4
-X-Git-Newrev: 9086723227c535010986d831954ec932d3e783fb
+X-Git-Oldrev: ee13e3fb41dc7c0c001127733b5a599c1e509747
+X-Git-Newrev: 5f1858e859833da272fce70bf445ca1b53ebffe1
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205237.EE956828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gssdp: switch to https
- download
+Message-Id: <20230220205303.6693C86496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rockchip-mali: needs
+ C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9086723227c535010986d831954ec932d3e783fb
+commit: https://git.buildroot.net/buildroot/commit/?id=5f1858e859833da272fce70bf445ca1b53ebffe1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gssdp/gssdp.hash | 2 +-
- package/gssdp/gssdp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+rockchip-mali pre-built libraries needs C++ since the addition of the
+package in commit 97c74a73e5dee17530647f89b2c7d8692781eb14:
 
-diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
-index c9bbd66083..34ccfa8044 100644
---- a/package/gssdp/gssdp.hash
-+++ b/package/gssdp/gssdp.hash
-@@ -1,4 +1,4 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.4/gssdp-1.4.0.1.sha256sum:
-+# Hash from: https://download.gnome.org/sources/gssdp/1.4/gssdp-1.4.0.1.sha256sum:
- sha256  8676849d57fb822b8728856dbadebf3867f89ee47a0ec47a20045d011f431582  gssdp-1.4.0.1.tar.xz
+readelf -a output/build/rockchip-mali-721653b5b3b525a4f80d15aa7e2f9df7b7e60427/lib/aarch64-linux-gnu/libmali-bifrost-g31-rxp0-gbm.so|grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdrm.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+While at it, add a comment when dependencies are not met
+
+Fixes:
+ - No autobuilder failures (yet), found when debugging an issue with
+   rockchip-mali and glslsandbox-player
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rockchip-mali/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/rockchip-mali/Config.in b/package/rockchip-mali/Config.in
+index d616284911..5a23954af3 100644
+--- a/package/rockchip-mali/Config.in
++++ b/package/rockchip-mali/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ROCKCHIP_MALI
+ 	bool "rockchip-mali"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_ARM_EABIHF || BR2_aarch64
+ 	# lidbrm. This would normally need a Config.in comment, but
+@@ -30,3 +31,8 @@ config BR2_PACKAGE_PROVIDES_LIBGBM
+ 	default "rockchip-mali"
  
- # Hash for license file:
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index f1fed3713d..f7ebb44acd 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -7,7 +7,7 @@
- GSSDP_VERSION_MAJOR = 1.4
- GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).0.1
- GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
--GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
-+GSSDP_SITE = https://download.gnome.org/sources/gssdp/$(GSSDP_VERSION_MAJOR)
- GSSDP_LICENSE = LGPL-2.1+
- GSSDP_LICENSE_FILES = COPYING
- GSSDP_INSTALL_STAGING = YES
+ endif
++
++comment "rockchip-mali needs a glibc toolchain w/ C++, threads"
++	depends on BR2_ARM_EABIHF || BR2_aarch64
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
