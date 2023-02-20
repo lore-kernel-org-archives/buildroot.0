@@ -4,86 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C86BC636CC
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 13:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4829CC05027
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 13:26:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC8D8408F9;
-	Mon, 20 Feb 2023 13:21:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC8D8408F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2681405B0;
+	Mon, 20 Feb 2023 13:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2681405B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ngk2AGAv9Tfa; Mon, 20 Feb 2023 13:21:21 +0000 (UTC)
+	with ESMTP id apVtNMMX_tXv; Mon, 20 Feb 2023 13:26:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CF5B7405A9;
-	Mon, 20 Feb 2023 13:21:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF5B7405A9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6C2B11BF3A8
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 13:21:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1204640591;
+	Mon, 20 Feb 2023 13:26:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1204640591
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C9761BF3A8
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 13:25:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4302C405A9
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 13:21:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4302C405A9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2661D81D46
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 13:25:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2661D81D46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rSNRMyzaJ3Y3 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 13:21:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VxMdB_luxrfh for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 13:25:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 095D640591
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 095D640591
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 13:21:17 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- n11-20020a05600c3b8b00b003ddca7a2bcbso887739wms.3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 05:21:17 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2D5281C26
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B2D5281C26
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 13:25:56 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id p8so1335020wrt.12
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 05:25:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=MaoVdNVNaLQ21zbFyz9SARHeb9Xr1ejrhayG6XM7EOw=;
- b=fUYLVqWw6pkhXHRlasIBZl1DXF3upI8GsMmEflkm4YLiLOk5HHLdXOPHckSy3HiQtJ
- bT9nti2dkOBDEwQhWaAUi4BO7fS1QY/HPWXc9bk7mNbvi2YYsjuCJ7F/oRg6Yd/pIHcn
- J5Seh9glZyLUKsANLCj6uzizeSxr2HMRlapZTIUx1M4RIAvdFb+w5QaEbO6iFVJ6A9Vm
- 9R/B0V4nTXD3uV57yTF9vguw+gVJCP7OkrJDdS29P5otMv9qgAWH/Yv7PFB3LEtSaDc0
- 73YhABjaa8AP+gxOKleipTzM9w8dvIxPCapRmg7/9MEdDPzddlvGwSw4VkHcrw8tjFar
- WJqQ==
-X-Gm-Message-State: AO0yUKV9pl08ytekmV/93PWReh589lTZuxAoIycE0N7tSFaed3RhcHWk
- uNHIYp2f6avZnV7bBx72Q+G41GugUnM=
-X-Google-Smtp-Source: AK7set8EG9onQP/UieIfIQ2B3Afy6zd9gSFpF96s1OcwxY38rhisxR8ilKIEG+s2l44Vrq3DhkLpiw==
-X-Received: by 2002:a05:600c:30d2:b0:3dc:16d4:a99f with SMTP id
- h18-20020a05600c30d200b003dc16d4a99fmr7151480wmn.8.1676899275896; 
- Mon, 20 Feb 2023 05:21:15 -0800 (PST)
+ bh=7R3wtu9gIRfoOvs9nxlPnX903Apq/Fj7hvLQ6+p7eeQ=;
+ b=awugs9PVc/bgvQkEja41CwcjN7X4bCEZ0mEuKDmgwK5m7VTs6FQ7z/IlwRlP0bCe8O
+ 1DMuIC0cOkX2Klw9wf/YGWmgMt3k11ZfjRnoMofhFRlDnSY7/F529+Asd0Ras0OAoKju
+ liGZR4GKl/blYVmfEID8iYUSRwG3WUF6RHU59vEShCWnnfUyPSRiumODTj2GkkN9Ucd/
+ yvqVLgAOi2f6XxqoesM1vVCTBmXr5dyaMGHNEGzRC8hwCOxmitLXNm9RLcOwsrzomgNC
+ cOwGP7Hm2l+JUKXQzqCMg0kMBCKAP5z6As+4usAD5WZ2LYPyPFvSGN6x0zMOKfnq8GY/
+ t/IQ==
+X-Gm-Message-State: AO0yUKX8w+XOdD2DtjH9of7L7Bs36b2RjKenHs0Tdw5bAsO04MdfDSZh
+ SlItzdv9K253jJZF5IyDiCpN+j4aZyA=
+X-Google-Smtp-Source: AK7set9ZDLaw5hEbcMSzy1kyBKm8Z3Ne9RGsGslPjCmQ4n6XM/f1EFrR11r8yaNp0CVEakoArfaOBA==
+X-Received: by 2002:adf:f207:0:b0:2c5:51a7:efd4 with SMTP id
+ p7-20020adff207000000b002c551a7efd4mr1267942wro.54.1676899554401; 
+ Mon, 20 Feb 2023 05:25:54 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- a12-20020a05600c224c00b003dc53217e07sm13820989wmm.16.2023.02.20.05.21.15
+ f18-20020adffcd2000000b002c59e001631sm1196664wrs.77.2023.02.20.05.25.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Feb 2023 05:21:15 -0800 (PST)
+ Mon, 20 Feb 2023 05:25:53 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 14:21:13 +0100
-Message-Id: <20230220132113.1814581-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Feb 2023 14:25:51 +0100
+Message-Id: <20230220132552.1825946-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=MaoVdNVNaLQ21zbFyz9SARHeb9Xr1ejrhayG6XM7EOw=;
- b=GHqbi8InsTgOryEilM/TFhQrpyqVm11A+1b1wcfT1mrWeSTGO21AXm5vZcEe0g859c
- hcDR+AgnIjhSZGKY4t5vy3PpGgetdY3jqe1pipHG0ew7N45U/+vyc+b+/F4/03NLRrpV
- ZzOHBtifEl6uWJZFi4BbjGgHBNBKP38j9Nv7v0gdAn5Ypc4sA/NnYYg+Ok5fxdpJH2RO
- p2tISXhAVAfXX2l+GzxTVK5qUnY2GI79fpGCB5hKQHuKVuZHZaqdAFl9gwbJEAu1G6Nt
- CroZkCReH7VAbkAhV80Mx9qLy+ZLnMA0NoPffLXocrSU4/Rz84LXOsOCFI7VrRKvxAXo
- fEAw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=7R3wtu9gIRfoOvs9nxlPnX903Apq/Fj7hvLQ6+p7eeQ=;
+ b=Oz6C+8CnkU7SfsM40QDan8rb9xTQ94h0RRjU8UFspp3fLgwG64lN+XXi0G0wI5Chof
+ pGyJ5C5cEQGb4GTsq3CS3GuWPYFa5frnNhrnHDLkVWS0reSPXj5lFxepexrmQkO8NkNl
+ FWqcCEthATd4ZvFNYApf7ZGfPkfBUxdi+c17x2ruD3cKO+LYvHOkFz0nscoQLvh1gILb
+ TcwhrTSk9XxtsWCWeqIXHoz3CvCJoH2CMvXgtlxr+Q0JnSh4i83HiHxP1bOBIjedvwz8
+ C48wCuXESz+w+aMXPnqyb9PQVKPUqVWgPbdEeXAZjIO6ks/QqrlXePnQwmk71nPidB40
+ i62A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=GHqbi8In
-Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: security bump
- to version 39.0.1
+ header.a=rsa-sha256 header.s=20210112 header.b=Oz6C+8Cn
+Subject: [Buildroot] [PATCH 1/1] package/speechd: fix build with help2man
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,58 +93,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-23931: cryptography is a package designed to expose
-cryptographic primitives and recipes to Python developers. In affected
-versions `Cipher.update_into` would accept Python objects which
-implement the buffer protocol, but provide only immutable buffers. This
-would allow immutable objects (such as `bytes`) to be mutated, thus
-violating fundamental rules of Python and resulting in corrupted output.
-This now correctly raises an exception. This issue has been present
-since `update_into` was originally introduced in cryptography 1.8.
+Fix the following build failure with help2man raised since the addition
+of the package in commit 9f4f8c5f8993c6d7c2ef730ac211ef84ac9ae26d:
 
-https://github.com/pyca/cryptography/security/advisories/GHSA-w7pp-m8wf-vj6r
-https://cryptography.io/en/latest/changelog/#v39-0-1
+LC_ALL=C help2man -n "speech synthesis daemon" --output=speech-dispatcher.1 ./speech-dispatcher
+help2man: can't get `--help' info from ./speech-dispatcher
+Try `--no-discard-stderr' if option outputs to stderr
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cc1817efb4a5d54ffd2e7ac2f4fc773535f70972
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-cryptography/python-cryptography.hash | 2 +-
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/speechd/speechd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 3f2204eeb1..a23944a06f 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  2d00e023261719f85caf360ee061d37ee27654a0344d1376441c8a29ea3bac86  cryptography-39.0.0.tar.gz
-+sha256  531348679f144d118156be5b17ddac750974cdcd9f44bb0a7cfd7ddcfee79c80  cryptography-39.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 6868ff4633..a130b2d10d 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
+index 46c0672f59..dee94a6752 100644
+--- a/package/speechd/speechd.mk
++++ b/package/speechd/speechd.mk
+@@ -12,6 +12,7 @@ SPEECHD_INSTALL_STAGING = YES
+ # speechd source code is released without configure script
+ SPEECHD_AUTORECONF = YES
+ SPEECHD_DEPENDENCIES = host-pkgconf dotconf libglib2 libsndfile
++SPEECHD_CONF_ENV = ac_cv_prog_HELP2MAN=""
+ SPEECHD_CONF_OPTS = --without-kali
  
--PYTHON_CRYPTOGRAPHY_VERSION = 39.0.0
-+PYTHON_CRYPTOGRAPHY_VERSION = 39.0.1
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/12/e3/c46c274cf466b24e5d44df5d5cd31a31ff23e57f074a2bb30931a8c9b01a
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/6a/f5/a729774d087e50fffd1438b3877a91e9281294f985bda0fd15bf99016c78
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+ # fix missing config.rpath (needed for autoreconf) in the codebase
 -- 
 2.39.0
 
