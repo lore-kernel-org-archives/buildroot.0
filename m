@@ -4,85 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF3B0C636CC
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 13:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C86BC636CC
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 13:21:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6631640133;
-	Mon, 20 Feb 2023 13:15:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6631640133
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC8D8408F9;
+	Mon, 20 Feb 2023 13:21:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC8D8408F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YXO_QXYHX64w; Mon, 20 Feb 2023 13:15:37 +0000 (UTC)
+	with ESMTP id Ngk2AGAv9Tfa; Mon, 20 Feb 2023 13:21:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 88AE340591;
-	Mon, 20 Feb 2023 13:15:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88AE340591
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 417A01BF3A8
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 13:15:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF5B7405A9;
+	Mon, 20 Feb 2023 13:21:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF5B7405A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C2B11BF3A8
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 13:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A95760E19
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 13:15:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A95760E19
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4302C405A9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 13:21:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4302C405A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K8RCvu4k7Zv0 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 13:15:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rSNRMyzaJ3Y3 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 13:21:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E175560E4C
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E175560E4C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 13:15:32 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id t15so1276532wrz.7
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 05:15:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 095D640591
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 095D640591
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 13:21:17 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ n11-20020a05600c3b8b00b003ddca7a2bcbso887739wms.3
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 05:21:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qpeTOku2KugoSLZDfVeeu0txOmaKYhcZkQvGA+5pqK0=;
- b=vR2x+m6LyOTMRXcxjechiKc80wogX8Bdx0erPLpCejJL8uBV9m1X0k7EA7i+CFG9T4
- TI7BYukUoWF1Ff0S3Kkalvi8BrxmnP4/XvIR6B/cFe7u7nyYV+Q8fIvPbCX3ZyRSIqqL
- 9X9utboxHxYoQvVBu5qP+Av2E/JCWKh101LUNuzvUqdke1NhVv1lTdoB/18vK9+041W8
- 4Q1d3ipHsdNYD+p5PZE6jvSgCOVGFP7WgZmhe97EJhdT6F6Nk3Wdvvh88BV5WVIMa/Zn
- 3t9VAUSBweW82BKmLRG0xjIxTm1APD+Ni50CYBRqMwX273/Hb4HMC4c1B6FrRXBBNbOs
- QJ9g==
-X-Gm-Message-State: AO0yUKUs4jHHJ2x6558ClAi+MkNXBaYhQ1rX/p3AZHQc5BCiuOf9hH5B
- QuPSTmOn1g0haBNBf+fV25486xTX5NU=
-X-Google-Smtp-Source: AK7set+IxA5a00KKQEEBsoTTF33obIaBiUF54UyeIQOEBFqewInFP+E7/BKMVlUeITARIZa5HpaeUg==
-X-Received: by 2002:a5d:4e49:0:b0:2c3:e4f5:18c with SMTP id
- r9-20020a5d4e49000000b002c3e4f5018cmr934342wrt.30.1676898930751; 
- Mon, 20 Feb 2023 05:15:30 -0800 (PST)
+ bh=MaoVdNVNaLQ21zbFyz9SARHeb9Xr1ejrhayG6XM7EOw=;
+ b=fUYLVqWw6pkhXHRlasIBZl1DXF3upI8GsMmEflkm4YLiLOk5HHLdXOPHckSy3HiQtJ
+ bT9nti2dkOBDEwQhWaAUi4BO7fS1QY/HPWXc9bk7mNbvi2YYsjuCJ7F/oRg6Yd/pIHcn
+ J5Seh9glZyLUKsANLCj6uzizeSxr2HMRlapZTIUx1M4RIAvdFb+w5QaEbO6iFVJ6A9Vm
+ 9R/B0V4nTXD3uV57yTF9vguw+gVJCP7OkrJDdS29P5otMv9qgAWH/Yv7PFB3LEtSaDc0
+ 73YhABjaa8AP+gxOKleipTzM9w8dvIxPCapRmg7/9MEdDPzddlvGwSw4VkHcrw8tjFar
+ WJqQ==
+X-Gm-Message-State: AO0yUKV9pl08ytekmV/93PWReh589lTZuxAoIycE0N7tSFaed3RhcHWk
+ uNHIYp2f6avZnV7bBx72Q+G41GugUnM=
+X-Google-Smtp-Source: AK7set8EG9onQP/UieIfIQ2B3Afy6zd9gSFpF96s1OcwxY38rhisxR8ilKIEG+s2l44Vrq3DhkLpiw==
+X-Received: by 2002:a05:600c:30d2:b0:3dc:16d4:a99f with SMTP id
+ h18-20020a05600c30d200b003dc16d4a99fmr7151480wmn.8.1676899275896; 
+ Mon, 20 Feb 2023 05:21:15 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- e4-20020a5d5004000000b002c5706f7c6dsm12137907wrt.94.2023.02.20.05.15.29
+ a12-20020a05600c224c00b003dc53217e07sm13820989wmm.16.2023.02.20.05.21.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Feb 2023 05:15:30 -0800 (PST)
+ Mon, 20 Feb 2023 05:21:15 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 14:15:25 +0100
-Message-Id: <20230220131525.1783413-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Feb 2023 14:21:13 +0100
+Message-Id: <20230220132113.1814581-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qpeTOku2KugoSLZDfVeeu0txOmaKYhcZkQvGA+5pqK0=;
- b=F5PKnEEnxAKajb8N7p8BXapih7qqn/29ylXsG872wxR11lU2adQ/baxDMfvMwt0nub
- y+YeRZExu+J5+GHJ/4YQKOlhEqC2Ff8iBe1iAqwEKD+3aa41d9dP91LQwyjMOKVZ0RLM
- lBzQzdyC/vOB/IHgJIHDcm2wHNzeFdChU85O12cFnZJTJlv0KP5nvdRm8ru4KHterFAC
- MXiO/nxfVMuOnIFpY/huBva9Y4cCRwJbmrsXVwSC3ANS8bj41ZnmpKN7wHbV7ONmn+oo
- arKbof72cAnUcVZ+KVbwCLq873VNHEwnsLN/dZ/9vW9UcK7W74tCX7PLdkSf+zcDLKDu
- QDTw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=MaoVdNVNaLQ21zbFyz9SARHeb9Xr1ejrhayG6XM7EOw=;
+ b=GHqbi8InsTgOryEilM/TFhQrpyqVm11A+1b1wcfT1mrWeSTGO21AXm5vZcEe0g859c
+ hcDR+AgnIjhSZGKY4t5vy3PpGgetdY3jqe1pipHG0ew7N45U/+vyc+b+/F4/03NLRrpV
+ ZzOHBtifEl6uWJZFi4BbjGgHBNBKP38j9Nv7v0gdAn5Ypc4sA/NnYYg+Ok5fxdpJH2RO
+ p2tISXhAVAfXX2l+GzxTVK5qUnY2GI79fpGCB5hKQHuKVuZHZaqdAFl9gwbJEAu1G6Nt
+ CroZkCReH7VAbkAhV80Mx9qLy+ZLnMA0NoPffLXocrSU4/Rz84LXOsOCFI7VrRKvxAXo
+ fEAw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=F5PKnEEn
-Subject: [Buildroot] [PATCH 1/1] package/python-django: security bump to
- version 4.1.7
+ header.a=rsa-sha256 header.s=20210112 header.b=GHqbi8In
+Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: security bump
+ to version 39.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,52 +96,57 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-23969 and CVE-2023-24580
+Fix CVE-2023-23931: cryptography is a package designed to expose
+cryptographic primitives and recipes to Python developers. In affected
+versions `Cipher.update_into` would accept Python objects which
+implement the buffer protocol, but provide only immutable buffers. This
+would allow immutable objects (such as `bytes`) to be mutated, thus
+violating fundamental rules of Python and resulting in corrupted output.
+This now correctly raises an exception. This issue has been present
+since `update_into` was originally introduced in cryptography 1.8.
 
-https://docs.djangoproject.com/en/dev/releases/4.1.6
-https://docs.djangoproject.com/en/dev/releases/4.1.7
+https://github.com/pyca/cryptography/security/advisories/GHSA-w7pp-m8wf-vj6r
+https://cryptography.io/en/latest/changelog/#v39-0-1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 1d3035bb98..cb03b33bfe 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 3f2204eeb1..a23944a06f 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  6b6a47d7478ead15b0a0835841c433dc  Django-4.1.5.tar.gz
--sha256  ff56ebd7ead0fd5dbe06fe157b0024a7aaea2e0593bb3785fb594cf94dad58ef  Django-4.1.5.tar.gz
-+md5  626f96c63ddfab24bab90d80c87a7aad  Django-4.1.7.tar.gz
-+sha256  44f714b81c5f190d9d2ddad01a532fe502fa01c4cb8faf1d081f4264ed15dcd8  Django-4.1.7.tar.gz
+ # Locally calculated after vendoring
+-sha256  2d00e023261719f85caf360ee061d37ee27654a0344d1376441c8a29ea3bac86  cryptography-39.0.0.tar.gz
++sha256  531348679f144d118156be5b17ddac750974cdcd9f44bb0a7cfd7ddcfee79c80  cryptography-39.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index e08de68954..e8c91cf51f 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+ sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 6868ff4633..a130b2d10d 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 4.1.5
-+PYTHON_DJANGO_VERSION = 4.1.7
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/41/c8/b3c469353f9d1b7f0e99b45520582b891da02cd87408bc867affa6e039a3
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/9f/a7/07939866241b7e8f8d3bf164b7d6ad428163723e29dd472700f8ab0e5fd5
- 
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
+-PYTHON_CRYPTOGRAPHY_VERSION = 39.0.0
++PYTHON_CRYPTOGRAPHY_VERSION = 39.0.1
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/12/e3/c46c274cf466b24e5d44df5d5cd31a31ff23e57f074a2bb30931a8c9b01a
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/6a/f5/a729774d087e50fffd1438b3877a91e9281294f985bda0fd15bf99016c78
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 -- 
 2.39.0
 
