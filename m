@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95704C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:07:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C703C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4061370144;
-	Tue, 21 Feb 2023 02:07:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4061370144
+	by smtp3.osuosl.org (Postfix) with ESMTP id B026270291;
+	Tue, 21 Feb 2023 02:08:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B026270291
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lIN2R2HuOx3c; Tue, 21 Feb 2023 02:07:49 +0000 (UTC)
+	with ESMTP id UBDZzOQEX_aw; Tue, 21 Feb 2023 02:08:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76E697019E;
-	Tue, 21 Feb 2023 02:07:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76E697019E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A30841BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:07:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC18D7019E;
+	Tue, 21 Feb 2023 02:08:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC18D7019E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BAC91BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:07:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E00242A99
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:07:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E00242A99
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5AFB8176C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:07:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5AFB8176C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cDgIdXpSDvZe for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 21:07:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4399342A87
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 21:07:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4399342A87
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E1878649D; Mon, 20 Feb 2023 21:07:39 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 22:07:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b3093e258aba57015d23d40ab478c818128c6a13
-X-Git-Newrev: 54237eec447abd4bd788b0a8ac5d48293c2c4eb5
-X-Patchwork-Hint: ignore
-Message-Id: <20230220210739.2E1878649D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tmux: fix BR2_SHARED_STATIC_LIBS
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ezyY9zYh1nq4 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 21:07:45 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C42B81D34
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C42B81D34
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 21:07:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 742F5E0002;
+ Mon, 20 Feb 2023 21:07:42 +0000 (UTC)
+Date: Mon, 20 Feb 2023 22:07:41 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230220220741.1f38012c@windsurf>
+In-Reply-To: <20230219232301.1795196-1-fontaine.fabrice@gmail.com>
+References: <20230219232301.1795196-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676927262;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=XVFdoaiH06TlDGcsULNldZza6v3cHV39p/Z66J59A9o=;
+ b=YU0W6CETLpnEEVRUtZhr7ABzc65nFJoYoUN9wLZ4ms+2f+eAPdJiAh/3JUHsu9msvqzzV+
+ d0ec3GtUHe9kwEKmFZDqoi3eXtrZApB8f9yBiB42skm2nmJwZGPv9ZnznKLVPk8DC6R2zF
+ 5umd+X1kelltMMgpM3OQAOME5y880LFEQrZERJ77xT83wbTdAM568iNtJW9sfMoDBXbOP/
+ PYAJmrvE4eappSM8n98Lsyk4g/OoSZ3C/etHRKkd5HeEkm2FThTXLZgf6jlBGMpb7TwnoK
+ urN5QgtzoJVutBt8gLAfhyR/P1wO0MUlptKtfmk1kuRN7YvkgwmoqLZPySACLw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=YU0W6CET
+Subject: Re: [Buildroot] [PATCH 1/1] package/tmux: fix BR2_SHARED_STATIC_LIBS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,63 +75,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54237eec447abd4bd788b0a8ac5d48293c2c4eb5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabrice,
 
-tmux uses custom --enable-static option to drive whether a static link
-should be attempted, which is not what the standard libtool directive
-is about and that we pass in our autotools-package infra.
+On Mon, 20 Feb 2023 00:23:01 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-This results in the following build failure with systemd or utf8proc
-raised since commits 1f618aa388535181c281c85e2b5264532de4ef0f and
-e279599d255a79c08ef20b97b96eb248689d52a9:
+> tmux uses custom --enable-static option, instead of standard libtool
+> directive resulting in the following build failure with systemd or
+> utf8proc raised since commits
+> 1f618aa388535181c281c85e2b5264532de4ef0f and
+> e279599d255a79c08ef20b97b96eb248689d52a9:
 
-checking for utf8proc.h... yes
-checking for library containing utf8proc_charwidth... no
-configure: error: "utf8proc not found"
+I am rather confused by the reasoning here.
 
-In file included from tmux.h:34,
-                 from alerts.c:23:
-compat.h:379:18: error: conflicting types for 'forkpty'; have 'pid_t(int *, char *, struct termios *, struct winsize *)' {aka 'int(int *, char *, struct termios *, struct winsize *)'}
-  379 | pid_t            forkpty(int *, char *, struct termios *, struct winsize *);
-      |                  ^~~~~~~
+> checking for utf8proc.h... yes
+> checking for library containing utf8proc_charwidth... no
+> configure: error: "utf8proc not found"
 
-Link to (closed) upstream issue:
-https://github.com/tmux/tmux/issues/3290
+So this one is:
 
-Fixes:
- - http://autobuild.buildroot.org/results/6e8523d8d514bf6d8fc3377d05e5edbe7fc2d5bb
- - http://autobuild.buildroot.org/results/cba06f3bb6d9be25e91f56c390a70ddf9904832e
+  http://autobuild.buildroot.net/results/6e8/6e8523d8d514bf6d8fc3377d05e5edbe7fc2d5bb/build-end.log
+  http://autobuild.buildroot.net/results/623/62309091c9da69eb29c3e9464aa95d089ce886f8/build-end.log
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/tmux/tmux.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+I think here the problem is indeed that tmux interprets --enable-static
+as "please provide a statically linked binary" instead of the standard
+"please build/install static libraries".
 
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 47ee9b16ca..af06c8570b 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -25,6 +25,12 @@ else
- TMUX_CONF_OPTS += --disable-utf8proc
- endif
- 
-+# tmux uses custom --enable-static option, instead of standard libtool
-+# directive resulting in a build failure with systemd or utf8proc
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+TMUX_CONF_OPTS += --disable-static
-+endif
-+
- # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
- # can reject the user connection. See man shells.
- define TMUX_ADD_TMUX_TO_SHELLS
+So, when it tries to detect libutf8proc, it doesn't find it:
+
+/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/or1k-buildroot-linux-musl/11.3.0/../../../../or1k-buildroot-linux-musl/bin/ld: cannot find -lutf8proc: No such file or directory
+
+because utf8proc is based on CMake, and CMake is not able to build both
+shared and static libraries, so in the BR2_STATIC_SHARED_LIBS=y case,
+it only installs shared libraries. Because the above utf8proc library
+test is done with -static, it requires a static variant of libutf8proc,
+which isn't there.
+
+So indeed, for this case, it makes sense to not pass --enable-static to
+tmux, but it's both due to tmux having a non-standard behavior for
+--enable-static *AND* the fact that utf8proc also doesn't behave
+properly in the BR2_STATIC_SHARED_LIBS=y case.
+
+> In file included from tmux.h:34,
+>                  from alerts.c:23:
+> compat.h:379:18: error: conflicting types for 'forkpty'; have 'pid_t(int *, char *, struct termios *, struct winsize *)' {aka 'int(int *, char *, struct termios *, struct winsize *)'}
+>   379 | pid_t            forkpty(int *, char *, struct termios *, struct winsize *);
+>       |                  ^~~~~~~
+
+
+However this one, I am really, really confused as to how it can be
+related to BR2_STATIC_SHARED_LIBS and --enable-static. Could you
+provide some more details on the reasoning?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
