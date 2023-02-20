@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38003C636D6
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:10:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0EC0C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1D14702DD;
-	Tue, 21 Feb 2023 02:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1D14702DD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61345701C4;
+	Tue, 21 Feb 2023 02:11:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61345701C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vO0wgSi5W-xe; Tue, 21 Feb 2023 02:10:57 +0000 (UTC)
+	with ESMTP id tj3h6QT9a_TP; Tue, 21 Feb 2023 02:11:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45BFE702D8;
-	Tue, 21 Feb 2023 02:10:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45BFE702D8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 15B791BF2B1
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:34:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 99BCC702BE;
+	Tue, 21 Feb 2023 02:11:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99BCC702BE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AF75D1BF2B1
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6B4440C11
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:34:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6B4440C11
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88F1E6100B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:34:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88F1E6100B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xQ-qA70vTzep for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 21:34:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB8E2409D6
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB8E2409D6
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 21:34:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VSe78CCg8BWU for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 21:34:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7115760FE9
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7115760FE9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 21:34:58 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9D02E240004;
- Mon, 20 Feb 2023 21:34:50 +0000 (UTC)
-Date: Mon, 20 Feb 2023 22:34:49 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id 883E61C0002;
+ Mon, 20 Feb 2023 21:34:56 +0000 (UTC)
+Date: Mon, 20 Feb 2023 22:34:55 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230220223449.1c38bdb4@windsurf>
-In-Reply-To: <20230215225947.26078-1-fontaine.fabrice@gmail.com>
-References: <20230215225947.26078-1-fontaine.fabrice@gmail.com>
+Message-ID: <20230220223455.318a2fbf@windsurf>
+In-Reply-To: <20230215230413.28610-1-fontaine.fabrice@gmail.com>
+References: <20230215230413.28610-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676928891;
+ d=bootlin.com; s=gm1; t=1676928896;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=/cyX9AefYfGPKNQeZ/XhAvyOohEIqFn/dKkf4smXbuA=;
- b=i0CpAocZyk6xDKeBeTexSBWzY+43RSGaByqLJW+tSOqXWgCGtiB9kynOggG9hLr36+eNLx
- UrOGgH6zFs7RhtkDf43ifMl1simUs5g5s7dIpFWQdHqpq9+PSKzl1umapV+1r8KALD0e0O
- Ys5pfVK4n++N5r3XkU+8iNazTMmCFy4I9LGd+nnQQy9NwmXihECPlhe69GW3kN6v3EY5Jz
- /q+nt+vKykNVXK6d8sJrAF1hz16p/9mSleHEcBJrVt9OfVyZ6GuddrUQHCxQVA8ydTH++i
- 7MELZoNbd11ixxroeHqkuudzJbctFPMeU6utIWz17bd9nwmMqtPtbrH6JC93PQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=qfY47CEAk4kfhBV2VSSVNPqQUg5yncwz0qitx/ta6xU=;
+ b=GNZ9gIZ416lMZBm/+CEb+7H53RBgzOshEwHf3EAtNh1QOlUo3qhb/yW6xuPjUL+e8Y7xIC
+ B4cqr9CtAjxibhYJFOK1NLtXw1tteB/srCrtt0CZDNE9hZGLn6qnxbyG4rBhQd9GbFkMsp
+ FxKXrefJaYgdnhcKPvyRbFemMnkPD97w53WDrW0ExfglqJjMCHOQH4q9UFU1d/K5+Ud6RO
+ PGGAC+Pjx6p0HemdCsQDc96ULzmG2FHwVvwfOWbL+BhOhZS8Zce96Vq3Vd9epI2Tp3maMW
+ Qgm5c7g/qFV6B6HXTs28rwU9lGGvPA2XLqMRxbLhf6PIM3ATSb2KO5hTnKn5DQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=i0CpAocZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-marshmallow: add CPE
+ header.s=gm1 header.b=GNZ9gIZ4
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-webargs: add CPE
  variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -85,17 +85,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 15 Feb 2023 23:59:47 +0100
+On Thu, 16 Feb 2023 00:04:13 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> cpe:2.3:a:marshmallow_project:marshmallow is a valid CPE identifier for
-> this package:
+> cpe:2.3:a:webargs_project:webargs is a valid CPE identifier for this
+> package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amarshmallow_project%3Amarshmallow
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awebargs_project%3Awebargs
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-marshmallow/python-marshmallow.mk | 2 ++
+>  package/python-webargs/python-webargs.mk | 2 ++
 >  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
