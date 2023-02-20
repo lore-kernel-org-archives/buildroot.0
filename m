@@ -4,63 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF69EC636CC
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 10:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D53C7C636CC
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 10:30:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D6F681ECD;
-	Mon, 20 Feb 2023 10:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D6F681ECD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F67B81421;
+	Mon, 20 Feb 2023 10:30:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F67B81421
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ql37ppJyrxNc; Mon, 20 Feb 2023 10:21:10 +0000 (UTC)
+	with ESMTP id TpY-cXVJ1tQr; Mon, 20 Feb 2023 10:30:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2873A81FDB;
-	Mon, 20 Feb 2023 10:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2873A81FDB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C2CBA1BF3E9
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 10:21:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97312817F5;
+	Mon, 20 Feb 2023 10:30:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97312817F5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AE1DC1BF3E9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 10:30:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B27D60F44
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 10:21:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B27D60F44
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88889404BA
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 10:30:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88889404BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YCmaZOoIKMXW for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 10:21:02 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4989260B13
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4989260B13
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 10:21:02 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id C5A8BBDEA8E7;
- Mon, 20 Feb 2023 11:11:15 +0100 (CET)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T87jtBhoPkxf for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 10:30:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 750AE400CF
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 750AE400CF
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 10:30:07 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id t15so703002wrz.7
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 02:30:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JXwZLwqaysaDgsq+D6pmfduMgpT9cydrAcdtey4xtOM=;
+ b=kHA23D/Nv5YmMB/K00TYlKFeJCGWJOUy4wyBD4etgzFAV96r+vB3z9HsAeMSSAAB1b
+ BPJ9D1Gy9ba3eND0P0IHBJ1TgeMnesWkEThk3ZNOLkwTNvs+Z+/MJsW+XKgIaxIkyQrP
+ yD2PjhSQPgNL/P0/mllsGCMDaBZIbPoQi0iOxmGPK8tfzkJOc4irmNb+basEDf/TTad/
+ AqylAu3txt4e/1mzTgCH5oQtJhSbbIFHFHzBW4Qt/8HmMFopx86/Jpejl0/t4SX/zHyG
+ 52w3ceEQ8e9EDtFdq7PBfk+VKSsSEbp/N05II/EewlfHufOVPysEdZhHbSnEKLA/gzQv
+ G5Ew==
+X-Gm-Message-State: AO0yUKVpm+EaJ1XLmt2sQsSQL2PvrJFhiISpiREu/Y/1W37XeKfe64FA
+ 4t0x1qnB5B+GnNBzNhJjuitgJ0Dunng=
+X-Google-Smtp-Source: AK7set9Ek5Qd07pBt7IQEWJ87F0p7DSygz9ZCMurnX5yGP9LimuppE/aHRk7XoPF/KYt9fRdeLy5SQ==
+X-Received: by 2002:a05:6000:617:b0:2c5:5822:96d4 with SMTP id
+ bn23-20020a056000061700b002c5582296d4mr1824526wrb.30.1676889005167; 
+ Mon, 20 Feb 2023 02:30:05 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ j2-20020adfea42000000b002c5804b6afasm11788235wrn.67.2023.02.20.02.30.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Feb 2023 02:30:04 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 20 Feb 2023 11:30:01 +0100
+Message-Id: <20230220103001.607877-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Date: Mon, 20 Feb 2023 10:11:15 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20230206083931.759b3ee3@pc-7.home>
-References: <mailman.18015.1675100677.179342.buildroot@buildroot.org>
- <db5852a56a1ea7adb916e3831da75975@umbiko.net>
- <20230206083931.759b3ee3@pc-7.home>
-Message-ID: <a5346e03afe03aa60614179b11224a3a@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.7 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1676887875; bh=17Zset61H2eEZ+d5tIyLK6RhOgyY+H5NImqDY5nXcSE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=MLucStuo6ORlytVv+YvsvoJ0Y8GfMydqDfVfDwj0x33UlTpmDPUTqZbLhokZpIQOJ
- RpQIzXFjE91mEwsvWyVUehYW6RdBgFHUIB4Me7E5gKHmNSs8+rXsYsquAsooKXH0JC
- VWmR+vtsUg3LHGOx5M8QJR6V/94AgCt5Z8qOXOVA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=umbiko.net header.i=@umbiko.net
- header.a=rsa-sha256 header.s=mail header.b=MLucStuo
-Subject: Re: [Buildroot] [PATCH 3/4] package/linux-tools: add rtla
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JXwZLwqaysaDgsq+D6pmfduMgpT9cydrAcdtey4xtOM=;
+ b=H3trf9x0H+vLJTF+PFF4vcL9/3ZtfBR4gaA3+4khmcW2GymCM4xBv6BLSg5FAKNCpE
+ RtXM5e+I8rS5qXN41PVWIiCNf+jtWazhBUgea+qtRAR0UAC6+w3SpR+gBeaIPQxCilUg
+ dbfLhDocf90WzT9Oh8lvc+YfVVPkEKblS8BtXihMbIDc8k149uvmmxPDRT/66mEdx5oQ
+ bLcK/Rko4VJAaRt53a5Km6afn7A/RuM7rIw6Q+mn4EDpfCAAxerpa9duGUjXbN0sR3v2
+ Z/ragxQpwWNwGpvw3kOCXTAw8m4uc13ZvwV37tyy7h/uEEghxT2xNhrlPKokvmYjrhEX
+ ZVqg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=H3trf9x0
+Subject: [Buildroot] [PATCH 1/1] package/glslsandbox-player: add
+ wayland-protocols optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,105 +94,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre Floury <pierre.floury@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTWF4aW1lLCAqCgpPbiAyMDIzLTAyLTA2IDA3OjM5LCBNYXhpbWUgQ2hldmFsbGllciB3cm90
-ZToKPiBIZWxsbyBBbmRyZWFzLAo+IAo+IE9uIFN1biwgMDUgRmViIDIwMjMgMDk6MjI6NTYgKzAx
-MDAKPiBBbmRyZWFzIFppZWdsZXIgPGJyMDE1QHVtYmlrby5uZXQ+IHdyb3RlOgo+IAo+PiBIaSBN
-YXhpbWUsCj4+IAo+PiBJIHdhcyBhYmxlIHRvIGJ1aWxkIFJUTEEgYWZ0ZXIgc29tZSBhZGFwdGlv
-bnMsIHNlZSBiZWxvdy4KPiAKPiBUaGFua3MgZm9yIHRoZSBlZmZvcnQsIEkgYXBwcmVjaWF0ZSAh
-CgpZb3UgYXJlIHdlbGNvbWUgOi0pCgpUaGVyZSBpcyBvbmUgbW9yZSB0aGluZyB0aGF0IG1pZ2h0
-IGJlIGltcHJvdmVkOgoKT24gYW4gYWFyY2g2NCBidWlsZCwgdXNpbmcgYW4gaW50ZXJuYWwgbXVz
-bCB0b29sY2hhaW4sIEkgZW5jb3VudGVyZWQgdGhlIApmb2xsb3dpbmcgYnVpbGQgaXNzdWU6CgpJ
-biBmaWxlIGluY2x1ZGVkIGZyb20gc3JjL3RyYWNlLmg6MiwKICAgICAgICAgICAgICAgICAgZnJv
-bSBzcmMvb3Nub2lzZS5oOjIsCiAgICAgICAgICAgICAgICAgIGZyb20gc3JjL3J0bGEuYzoxMToK
-L2hvbWUvZGF0YS9idWlsZHJvb3QucnBpNjQvaG9zdC9iaW4vLi4vYWFyY2g2NC1idWlsZHJvb3Qt
-bGludXgtbXVzbC9zeXNyb290L3Vzci9pbmNsdWRlL3RyYWNlZnMvdHJhY2Vmcy5oOjUwOjM1OiAK
-ZXJyb3I6IHVua25vd24gdHlwZSBuYW1lIOKAmGNwdV9zZXRfdOKAmQogICAgNTAgfCAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgY3B1X3NldF90ICpzZXQsIHNpemVfdCAKc2V0X3Np
-emUpOwogICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+
-CiguLi4pCnNyYy9vc25vaXNlX3RvcC5jOiBJbiBmdW5jdGlvbiDigJhvc25vaXNlX3RvcF9tYWlu
-4oCZOgpzcmMvb3Nub2lzZV90b3AuYzo2MTg6MjY6IHdhcm5pbmc6IGltcGxpY2l0IGRlY2xhcmF0
-aW9uIG9mIGZ1bmN0aW9uIArigJh0cmFjZWZzX2l0ZXJhdGVfcmF3X2V2ZW50c+KAmTsgZGlkIHlv
-dSBtZWFuIOKAmHRyYWNlZnNfc3lzdGVtX2V2ZW50c+KAmT8gClstV2ltcGxpY2l0LWZ1bmN0aW9u
-LWRlY2xhcmF0aW9uXQogICA2MTggfCAgICAgICAgICAgICAgICAgcmV0dmFsID0gdHJhY2Vmc19p
-dGVyYXRlX3Jhd19ldmVudHModHJhY2UtPnRlcCwKICAgICAgIHwgICAgICAgICAgICAgICAgICAg
-ICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+CiAgICAgICB8ICAgICAgICAgICAgICAg
-ICAgICAgICAgICB0cmFjZWZzX3N5c3RlbV9ldmVudHMKKC4uLikKCkl0IHNlZW1zIHRoYXQgYm90
-aCBsaWJyYXJpZXMgYXJlIGNvbXBpbGVkIHdpdGggX0dOVV9TT1VSQ0UKCiQgZ3JlcCBfR05VX1NP
-VVJDRSAuLi9saWJ0cmFjZWZzLTEuNi40L01ha2VmaWxlCm92ZXJyaWRlIENGTEFHUyArPSAtRF9H
-TlVfU09VUkNFICQoTElCVFJBQ0VFVkVOVF9JTkNMVURFUykgJChJTkNMVURFUykKJCBncmVwIF9H
-TlVfU09VUkNFIC4uL2xpYnRyYWNlZXZlbnQtMS43LjEvTWFrZWZpbGUKb3ZlcnJpZGUgQ0ZMQUdT
-ICs9ICQodWRpczg2LWZsYWdzKSAtRF9HTlVfU09VUkNFCgpidXQgcnRsYSBkZWZpbmVzIGl0IGlu
-Y29uc2lzdGVudGx5CiQgZ3JlcCBfR05VX1NPVVJDRSB0b29scy90cmFjaW5nL3J0bGEvTWFrZWZp
-bGUKCiQgZ3JlcCBfR05VX1NPVVJDRSB0b29scy90cmFjaW5nL3J0bGEvc3JjLyouW2NoXQp0b29s
-cy90cmFjaW5nL3J0bGEvc3JjL3RyYWNlLmM6I2RlZmluZSBfR05VX1NPVVJDRQoKdGhlcmVieSBt
-aXNzaW5nIHNvbWUgZGVmaW5pdGlvbnMgZnJvbSA8c2NoZWQuaD4KClByb3Bvc2VkIGZpeCBiZWxv
-dy4KCjxjdXQ+Cgo+PiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpbnV4LXRvb2xzL2xpbnV4LXRv
-b2wtcnRsYS5tay5pbgo+PiA+IGIvcGFja2FnZS9saW51eC10b29scy9saW51eC10b29sLXJ0bGEu
-bWsuaW4KPj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+PiA+IGluZGV4IDAwMDAwMDAwMDAuLmE3
-MzZlM2I3ODUKPj4gPiAtLS0gL2Rldi9udWxsCj4+ID4gKysrIGIvcGFja2FnZS9saW51eC10b29s
-cy9saW51eC10b29sLXJ0bGEubWsuaW4KPj4gPiBAQCAtMCwwICsxLDMyIEBACj4+ID4gKyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjCj4+ID4gKyMKPj4gPiArIyBydGxhCj4+ID4gKyMKPj4gPiArIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMKPj4gPiArCj4+ID4gK0xJTlVYX1RPT0xTICs9IHJ0bGEKPj4g
-PiArCj4+ID4gK1JUTEFfREVQRU5ERU5DSUVTID0gaG9zdC1wa2djb25mIGxpYnRyYWNlZnMKPj4g
-Cj4+IFJUTEEgbmVlZHMgc29tZSBrZXJuZWwgZmVhdHVyZXM7IGJldHRlciB0byBpbmNsdWRlIHRo
-ZW0gaGVyZSwgc2F2ZXMKPj4gdGltZSBleHBlcmltZW50aW5nOgo+PiAKPj4gIyBsaW51eCBrZXJu
-ZWwgbmVlZHMgRlRSQUNFLCBUSU1FUkxBVF9UUkFDRVIsIEhJU1RfVFJJR0dFUlMgZm9yIFJUTEEK
-Pj4gdG8gd29yawo+PiBpZmVxICgkKEJSMl9QQUNLQUdFX0xJTlVYX1RPT0xTX1JUTEEpLHkpCj4+
-IGRlZmluZSBSVExBX0xJTlVYX0NPTkZJR19GSVhVUFMKPj4gCSQoY2FsbCBLQ09ORklHX0VOQUJM
-RV9PUFQsQ09ORklHX0ZUUkFDRSkKPj4gCSQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklH
-X1RJTUVSTEFUX1RSQUNFUikKPj4gCSQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklHX0hJ
-U1RfVFJJR0dFUlMpCj4+IGVuZGVmCj4+IGVuZGlmCj4gCj4gT2ggSSB3YXNuJ3QgYXdhcmUgdGhh
-dCB3ZSBjb3VsZCBlbmFibGUga2VybmVsIG9wdGlvbnMgdGhhdCB3YXkuIEknbGwKPiBpbmNsdWRl
-IHRoZW0gaW4gdGhlIHYyLCBhbG9uZyB3aXRoIENPTkZJR19PU05PSVNFX1RSQUNFUiB0aGF0IGlz
-IGFsc28KPiByZXF1aXJlZC4KPiAKPj4gPiArUlRMQV9NQUtFX09QVFMgPSAkKExJTlVYX01BS0Vf
-RkxBR1MpIFwKPj4gPiArCUNDPSQoVEFSR0VUX0NDKSBcCgpEZWZpbmUgX0dOVV9TT1VSQ0UgdG8g
-cHJldmVudCB0aGUgbXVzbCBidWlsZCBlcnJvciBhYm92ZS4gVGhpcyBnZW5lcmF0ZXMgCmEgd2Fy
-bmluZyBkdWUgdG8gcmVkZWZpbml0aW9uIG9mIHN5bWJvbCBpbiB0cmFjZS5jLCBidXQgaXQgaXMg
-bGVzcyAKaW50cnVzaXZlIHRoYW4gcGF0Y2hpbmcgdGhlIHNvdXJjZSBjb2RlOgoKKyAJRVhUUkFf
-Q0ZMQUdTPSItRF9HTlVfU09VUkNFIiBcCgo+PiA+ICsJTERGTEFHUz0iJChUQVJHRVRfTERGTEFH
-UykiIFwKPj4gPiArCVBLR19DT05GSUdfUEFUSD0kKFNUQUdJTkdfRElSKS91c3IvbGliL3BrZ2Nv
-bmZpZwo+PiA+ICsKPj4gCj4+IFRoZSBSVExBIE1ha2VmaWxlIHVuY29uZGl0aW9uYWxseSBjb21w
-aWxlcyB3aXRoIHN0YWNrIHNtYXNoaW5nCj4+IHByb3RlY3Rpb247IGxpbmtpbmcgZmFpbHMgb24g
-YnVpbGRzIGNvbmZpZ3VyZWQgd2l0aG91dCB0aGlzIGZlYXR1cmU6Cj4+IAo+PiAjIGFkYXB0ZWQg
-ZnJvbSBsaW51eC10b29sLXRtb24ubWsuaW4KPj4gaWZlcSAoJChCUjJfVE9PTENIQUlOX0hBU19T
-U1ApLCkKPj4gZGVmaW5lIFJUTEFfRElTQUJMRV9TVEFDS19QUk9URUNUT1IKPj4gCSQoU0VEKSAn
-cy8tZnN0YWNrLXByb3RlY3Rvci4qIC8vJwo+PiAkKExJTlVYX0RJUikvdG9vbHMvdHJhY2luZy9y
-dGxhL01ha2VmaWxlCj4+IGVuZGVmCj4+IGVuZGlmCj4gCj4gR29vZCBjYXRjaCB0b28sIEkgZGlk
-bid0IHNlZSB0aGF0Lgo+IAo+PiA+ICtkZWZpbmUgUlRMQV9CVUlMRF9DTURTCj4+ID4gKwkkKFEp
-aWYgISBncmVwIGluc3RhbGwKPj4gPiAkKExJTlVYX0RJUikvdG9vbHMvdHJhY2luZy9ydGxhL01h
-a2VmaWxlCj4+ID4gPi9kZXYvbnVsbCAyPiYxIDsgdGhlbiBcCj4+ID4gKwkJZWNobyAiWW91ciBr
-ZXJuZWwgdmVyc2lvbiBpcyB0b28gb2xkIGFuZCBkb2VzIG5vdAo+PiA+IGltcGxlbWVudCB0aGUg
-cnRsYSB0b29sLiIgOyBcCj4+ID4gKwkJZWNobyAiQXQgbGVhc3Qga2VybmVsIDUuMTcgbXVzdCBi
-ZSB1c2VkLiIgOyBcCj4+ID4gKwkJZXhpdCAxIDsgXAo+PiA+ICsJZmkKPj4gPiArCj4+IAo+PiAJ
-JChSVExBX0RJU0FCTEVfU1RBQ0tfUFJPVEVDVE9SKQo+PiAKPj4gPiArCSQoVEFSR0VUX01BS0Vf
-RU5WKSBcCj4+ID4gKwkkKE1BS0UpICQoUlRMQV9NQUtFX09QVFMpIFwKPj4gPiArCS1DICQoTElO
-VVhfRElSKS90b29scy90cmFjaW5nIHJ0bGEKPj4gPiArZW5kZWYKPj4gPiArCj4+ID4gK2RlZmlu
-ZSBSVExBX0lOU1RBTExfVEFSR0VUX0NNRFMKPj4gPiArCSQoVEFSR0VUX01BS0VfRU5WKSAkKE1B
-S0UpIC1DICQoTElOVVhfRElSKS90b29scy90cmFjaW5nIFwKPj4gPiArCSQoUlRMQV9NQUtFX09Q
-VFMpIFwKPj4gPiArCURFU1RESVI9JChUQVJHRVRfRElSKSBcCj4+ID4gKwlydGxhX2luc3RhbGwK
-Pj4gPiArZW5kZWYKPj4gCj4+IHJ0bGFfaW5zdGFsbCBmYWlscyB3aXRoOgo+PiBNYWtlZmlsZToz
-NDogKioqIE5PVElDRTogcnN0Mm1hbiByZXF1aXJlZCB0byBnZW5lcmF0ZSBtYW4gcGFnZXMuCj4+
-IFN0b3AuIGJlY2F1c2UgaXQgdHJpZXMgdG8gYnVpbGQgYW5kIGluc3RhbGwgbWFuIHBhZ2VzIGFs
-c28uIEJldHRlciB0bwo+PiB1c2UgYSBjdXN0b20gaW5zdGFsbCBjb21tYW5kOgo+PiAKPj4gIyBU
-aGUgcnRsYV9pbnN0YWxsIHRhcmdldCB0cmllcyB0byBjcmVhdGUgYW5kIGluc3RhbGwgbWFucGFn
-ZXMsCj4+ICMgd2hpY2ggdGVybWluYXRlcyB3aXRoIGFuIGVycm9yIGFuZCBjYW5ub3QgYmUgZGlz
-YWJsZWQKPj4gZGVmaW5lIFJUTEFfSU5TVEFMTF9UQVJHRVRfQ01EUwo+PiAJJChJTlNUQUxMKSAt
-bSAwNzU1IC1EICQoTElOVVhfRElSKS90b29scy90cmFjaW5nL3J0bGEvcnRsYSBcCj4+IAkJJChU
-QVJHRVRfRElSKS91c3IvYmluL3J0bGEKPj4gZW5kZWYKPiAKPiBPayBtYWtlcyBzZW5zZSBhcyB3
-ZWxsIDopCj4gCj4gVGhhbmtzIGEgbG90IGZvciB0aGUgcmV2aWV3LCB0ZXN0cyBhbmQgZml4ZXMg
-IQo+IAo+IE1heGltZQo+IAo+PiBLaW5kIHJlZ2FyZHMsCj4+IEFuZHJlYXMKPj4gCj4+ID4gLS0K
-Pj4gPiAyLjM5LjEKCktpbmQgcmVnYXJkcywKQW5kcmVhcwpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+wayland-protocols is an optional dependency which is enabled by default
+resulting in the following wayland build failure since the addition of
+the package in commit f201ca9d0d25b491ec5e1ed4e1d02fd52d027997:
+
+checking for wayland_client... yes
+checking for wayland_egl... yes
+configure: Wayland EGL support enabled
+checking for wayland_protocols... no
+configure: error: Package requirements (wayland-protocols >= 1.12) were not met:
+
+Package 'wayland-protocols', required by 'virtual:world', not found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables wayland_protocols_CFLAGS
+and wayland_protocols_LIBS to avoid the need to call pkg-config.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/865af860f9e52fe5311bb0c6a246ff871ae5a989
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/glslsandbox-player/Config.in             | 5 ++++-
+ package/glslsandbox-player/glslsandbox-player.mk | 6 ++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
+index 53646cde1f..9b6f8447f9 100644
+--- a/package/glslsandbox-player/Config.in
++++ b/package/glslsandbox-player/Config.in
+@@ -112,8 +112,11 @@ endchoice
+ if BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL
+ config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_IVI
+ 	bool "Wayland IVI shell support"
+-endif
+ 
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG
++	bool "Wayland XDG shell support"
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
++endif
+ endif
+ 
+ comment "glslsandbox-player needs openGL ES and EGL driver"
+diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
+index f0a9475aa6..241f3475d2 100644
+--- a/package/glslsandbox-player/glslsandbox-player.mk
++++ b/package/glslsandbox-player/glslsandbox-player.mk
+@@ -72,6 +72,12 @@ GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-ivi
+ else
+ GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-ivi
+ endif
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_XDG),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += wayland-protocols
++GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-wlxdg
++else
++GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-wlxdg
++endif
+ else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11),y)
+ GLSLSANDBOX_PLAYER_DEPENDENCIES += xlib_libX11
+ GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=x11
+-- 
+2.39.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
