@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05088C636CC
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 17:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50516C05027
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 17:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE4E2812B9;
-	Mon, 20 Feb 2023 17:14:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE4E2812B9
+	by smtp1.osuosl.org (Postfix) with ESMTP id F420A813E1;
+	Mon, 20 Feb 2023 17:15:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F420A813E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J0skbMU83evG; Mon, 20 Feb 2023 17:14:55 +0000 (UTC)
+	with ESMTP id 6zkIc571IihF; Mon, 20 Feb 2023 17:15:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E153782245;
-	Mon, 20 Feb 2023 17:14:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E153782245
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C12D91BF8C7
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C97E82269;
+	Mon, 20 Feb 2023 17:15:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C97E82269
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 298B51BF2B9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A85018143F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A85018143F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03BF9415D3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:14:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03BF9415D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ame8-NiT4wmR for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 17:14:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WC2NZnu-ZbfW for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8E4E81062
+ by smtp4.osuosl.org (Postfix) with ESMTP id D53E941499
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8E4E81062
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D53E941499
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D94BD863E9; Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
+ id C09D6863E7; Mon, 20 Feb 2023 17:14:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:07:55 +0100
+Date: Mon, 20 Feb 2023 18:06:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7852618c23756d8a79809a4e9e9c331a8fb0cf16
-X-Git-Newrev: d37b3916a1ce75085da8232db95cfd354137e540
+X-Git-Oldrev: 14ca6b5fdb6a5e0fa99b04461240772d93076b2e
+X-Git-Newrev: 7852618c23756d8a79809a4e9e9c331a8fb0cf16
 X-Patchwork-Hint: ignore
-Message-Id: <20230220171438.D94BD863E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libostree: bump to version 2023.1
+Message-Id: <20230220171438.C09D6863E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
+ version 2.38.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,38 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d37b3916a1ce75085da8232db95cfd354137e540
+commit: https://git.buildroot.net/buildroot/commit/?id=7852618c23756d8a79809a4e9e9c331a8fb0cf16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Bugfix release, fixes zero-day CVE-2023-23529 and includes a few build
+and behaviour patches as well.
+
+Release notes:
+
+  https://wpewebkit.org/release/wpewebkit-2.38.5.html
+
+Accompanying security advisory:
+
+  https://wpewebkit.org/security/WSA-2023-0002.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index ed31109fdb..63dfe98d80 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8be2a9261c94e8b9ec4113380ffc480f8598245fb321a009bad4fae4b822411f  libostree-2022.7.tar.xz
-+sha256  dd792b167693a1971c9f6e3168013d906ac035100ff6c719a3b322eb44b96f55  libostree-2023.1.tar.xz
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 8e8ec63213..4b17fcf391 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index dcd082e045..0fa1018721 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.38.4.tar.xz.sums
+-md5  1c947ef5b73049fc6c102c92013009bf  wpewebkit-2.38.4.tar.xz
+-sha1  7fe9a7d98401256b0c9872f1c2b702e56840cbd3  wpewebkit-2.38.4.tar.xz
+-sha256  8c1bc113ef151fb0be2640824d323bc755dc97295ab7a1bc05e7ec589937a07b  wpewebkit-2.38.4.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.38.5.tar.xz.sums
++md5  73f7abd0c1cc808032869f72602166e3  wpewebkit-2.38.5.tar.xz
++sha1  3f10a04758eeb349f63f841aff765dae25bcde1b  wpewebkit-2.38.5.tar.xz
++sha256  ff00fd3d0a4c6d551850a78a7dfe4883b6b7ebd93c5549e1121b2f43d3ac1661  wpewebkit-2.38.5.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index b9c2fef395..48e5c2f8cd 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSTREE_VERSION = 2022.7
-+LIBOSTREE_VERSION = 2023.1
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+-WPEWEBKIT_VERSION = 2.38.4
++WPEWEBKIT_VERSION = 2.38.5
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
