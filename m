@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2F8DC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C8B3C636D6
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3D3261102;
-	Tue, 21 Feb 2023 01:07:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3D3261102
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BA8861288;
+	Tue, 21 Feb 2023 01:07:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BA8861288
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id twcv_e1Oh961; Tue, 21 Feb 2023 01:06:59 +0000 (UTC)
+	with ESMTP id 8KCmWizwLZEh; Tue, 21 Feb 2023 01:07:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C97CA6118A;
-	Tue, 21 Feb 2023 01:06:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C97CA6118A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D40381BF2E3
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64C036118A;
+	Tue, 21 Feb 2023 01:07:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64C036118A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 95C2E1BF2E3
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 21:01:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C7FD46FBAB
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7FD46FBAB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A3FC40A1E
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:53:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A3FC40A1E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xhW29yWk4byU for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yBO4Q62DHrFw for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 146316FB83
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 146316FB83
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50C1C41831
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50C1C41831
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1093E81979; Mon, 20 Feb 2023 20:52:38 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 4C7047FF06; Mon, 20 Feb 2023 20:53:03 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Jan 2023 13:55:16 +0100
+Date: Mon, 20 Feb 2023 18:11:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cb96dcaff49c259ad02fad428ab3ae3d210416e4
-X-Git-Newrev: 30b916546b7c5000130db461880e7d21b5741952
+X-Git-Oldrev: a85ed5d21c14cbe3ec2864206fe792152598e4db
+X-Git-Newrev: 67c967c2d16c29f193fde43b3c48edf0911baccd
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205238.1093E81979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gtkmm3: switch to
- https download
+Message-Id: <20230220205303.4C7047FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-cryptography:
+ security bump to version 39.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30b916546b7c5000130db461880e7d21b5741952
+commit: https://git.buildroot.net/buildroot/commit/?id=67c967c2d16c29f193fde43b3c48edf0911baccd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gtkmm3/gtkmm3.hash | 2 +-
- package/gtkmm3/gtkmm3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fix CVE-2023-23931: cryptography is a package designed to expose
+cryptographic primitives and recipes to Python developers. In affected
+versions `Cipher.update_into` would accept Python objects which
+implement the buffer protocol, but provide only immutable buffers. This
+would allow immutable objects (such as `bytes`) to be mutated, thus
+violating fundamental rules of Python and resulting in corrupted output.
+This now correctly raises an exception. This issue has been present
+since `update_into` was originally introduced in cryptography 1.8.
 
-diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
-index 26687507f4..fc7e33339e 100644
---- a/package/gtkmm3/gtkmm3.hash
-+++ b/package/gtkmm3/gtkmm3.hash
-@@ -1,4 +1,4 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.22/gtkmm-3.22.0.sha256sum
-+# From https://download.gnome.org/sources/gtkmm/3.22/gtkmm-3.22.0.sha256sum
- sha256  05da4d4b628fb20c8384630ddf478a3b5562952b2d6181fe28d58f6cbc0514f5  gtkmm-3.22.0.tar.xz
- # Locally computed
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
-index 009889142e..d717c08bd8 100644
---- a/package/gtkmm3/gtkmm3.mk
-+++ b/package/gtkmm3/gtkmm3.mk
-@@ -7,7 +7,7 @@
- GTKMM3_VERSION_MAJOR = 3.22
- GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).0
- GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
--GTKMM3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
-+GTKMM3_SITE = https://download.gnome.org/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
- GTKMM3_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GTKMM3_LICENSE_FILES = COPYING COPYING.tools
- GTKMM3_INSTALL_STAGING = YES
+https://github.com/pyca/cryptography/security/advisories/GHSA-w7pp-m8wf-vj6r
+https://cryptography.io/en/latest/changelog/#v39-0-1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 3f2204eeb1..a23944a06f 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  2d00e023261719f85caf360ee061d37ee27654a0344d1376441c8a29ea3bac86  cryptography-39.0.0.tar.gz
++sha256  531348679f144d118156be5b17ddac750974cdcd9f44bb0a7cfd7ddcfee79c80  cryptography-39.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 6868ff4633..a130b2d10d 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CRYPTOGRAPHY_VERSION = 39.0.0
++PYTHON_CRYPTOGRAPHY_VERSION = 39.0.1
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/12/e3/c46c274cf466b24e5d44df5d5cd31a31ff23e57f074a2bb30931a8c9b01a
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/6a/f5/a729774d087e50fffd1438b3877a91e9281294f985bda0fd15bf99016c78
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
