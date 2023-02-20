@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 165FAC636D6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B223C636D6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 21:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD56541D5D;
-	Mon, 20 Feb 2023 21:05:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD56541D5D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 438AA40276;
+	Mon, 20 Feb 2023 21:05:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 438AA40276
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hXs4qDJTyu2M; Mon, 20 Feb 2023 21:05:10 +0000 (UTC)
+	with ESMTP id yTZjBfLTR10W; Mon, 20 Feb 2023 21:05:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAAFF42A4F;
-	Mon, 20 Feb 2023 21:05:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAAFF42A4F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 17AB71BF2E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D66542A54;
+	Mon, 20 Feb 2023 21:05:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D66542A54
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1971B1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C46FD61033
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C46FD61033
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D42340C2C
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D42340C2C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0nyKiJ1OgdYL for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 20:51:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEB116107A
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB116107A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FD678648F; Mon, 20 Feb 2023 20:51:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 5 Nov 2022 21:03:08 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0b4a9930124f7fb4c7bfae281db900905006a2da
-X-Git-Newrev: b79d735139282ecf052dc89d4c221bbd16447112
-X-Patchwork-Hint: ignore
-Message-Id: <20230220205146.9FD678648F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/strongswan: security
- bump to version 5.9.8
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id afbX2W6CWNZk for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 20:51:49 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E0B740C21
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8E0B740C21
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:51:48 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 542341BF205;
+ Mon, 20 Feb 2023 20:51:45 +0000 (UTC)
+Date: Mon, 20 Feb 2023 21:51:44 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230220215144.68fff5fe@windsurf>
+In-Reply-To: <20230219165638.147772-1-fontaine.fabrice@gmail.com>
+References: <20230219165638.147772-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676926305;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=4qf0c64ia1NOBzUaT2fv+Q0xRM4V8XA1aWHyBLtbpSA=;
+ b=h52gur7q1buW5zMYn3op6rriLY3IGDYelma6Kqvw5A5Fwa1rEF5CuP0h6nJgpdufmQiz/8
+ ChwT8E1mRtkq0rRZyX+yNsBpWWNRFn69Km8i3pVrcJFHKOnU4nR+UVDY9oFHZx6YghTNOI
+ ZYjFxTNNNAHPTcLGTWfcdrf2G+qm9nqhsl5IAwvx2Sh48Ljy/xYVoQfdOCgqpyCH6GM6Vi
+ dbKjytVCaiNljnhsUmfLzK+cIs0Gex1Xhi5fPguF49JXbsWtF5Dd0OTY5m2BVPFLbkYtH+
+ wVjyzo+E/WKKYFe279aVUpUFqRtoJey7M7zdgqo8DbRYuCXQKK74dS3w3f56+g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=h52gur7q
+Subject: Re: [Buildroot] [PATCH 1/1] package/modsecurity2: disable pcre
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,222 +77,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: =?UTF-8?B?SGVydsOp?= Codina <herve.codina@bootlin.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b79d735139282ecf052dc89d4c221bbd16447112
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sun, 19 Feb 2023 17:56:38 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixed a vulnerability related to online certificate revocation checking
-that was caused because the revocation plugin used potentially untrusted
-OCSP URIs and CRL distribution points in certificates. This allowed a
-remote attacker to initiate IKE_SAs and send crafted certificates that
-contain URIs pointing to servers under their control, which could have
-lead to a denial-of-service attack. This vulnerability has been
-registered as CVE-2022-40617.
+> Disable pcre to avoid the following build failure if pcre-config is
+> found on host raised since bump to version 2.9.7 in commit
+> 42e34cf10f9eb037aa8c48a4fb9e8f521901b983:
+> 
+> /home/thomas/autobuild/instance-0/output-1/per-package/modsecurity2/host/bin/../lib/gcc/mips64el-buildroot-linux-gnu/11.3.0/../../../../mips64el-buildroot-linux-gnu/bin/ld: cannot find -lpcre: No such file or directory
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f4864f8cc1d07e357f6e5f8302c19ae94e9cf3af
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/modsecurity2/modsecurity2.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Drop patch (already in version)
+Applied to master, thanks.
 
-https://www.strongswan.org/blog/2022/10/03/strongswan-vulnerability-(cve-2022-40617).html
-https://github.com/strongswan/strongswan/releases/tag/5.9.6
-https://github.com/strongswan/strongswan/releases/tag/5.9.7
-https://github.com/strongswan/strongswan/releases/tag/5.9.8
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...strongswan-plugins-wolfssl-rename-encrypt.patch | 150 ---------------------
- package/strongswan/strongswan.hash                 |   6 +-
- package/strongswan/strongswan.mk                   |   2 +-
- 3 files changed, 4 insertions(+), 154 deletions(-)
-
-diff --git a/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch b/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch
-deleted file mode 100644
-index 7b47b3278b..0000000000
---- a/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch
-+++ /dev/null
-@@ -1,150 +0,0 @@
--From 5900426a710eaa65a27784687775e331bcb0489b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 8 Aug 2022 09:52:19 +0200
--Subject: [PATCH] wolfssl: Rename `encrypt` methods to avoid conflicts with
-- system headers
--
--Rename `encrypt` methods to avoid the following build failure when wolfSSL
--is built with --enable-opensslextra:
--
--In file included from ../../../../src/libstrongswan/utils/utils.h:59,
--                 from ../../../../src/libstrongswan/library.h:101,
--                 from wolfssl_common.h:29,
--                 from wolfssl_aead.c:23:
--wolfssl_aead.c:90:16: error: conflicting types for 'encrypt'; have '_Bool(union <anonymous>,  chunk_t,  chunk_t,  chunk_t,  chunk_t *)'
--   90 | METHOD(aead_t, encrypt, bool,
--      |                ^~~~~~~
--../../../../src/libstrongswan/utils/utils/object.h:99:20: note: in definition of macro 'METHOD'
--   99 |         static ret name(union {iface *_public; this;} \
--      |                    ^~~~
--In file included from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/wc_port.h:573,
--                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/types.h:35,
--                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/logging.h:33,
--                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/ssl.h:35,
--                 from wolfssl_common.h:64,
--                 from wolfssl_aead.c:23:
--/home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/unistd.h:149:6: note: previous declaration of 'encrypt' with type 'void(char *, int)'
--  149 | void encrypt(char *, int);
--      |      ^~~~~~~
--
--Closes strongswan/strongswan#1201
--[Retrieved from:
--https://github.com/strongswan/strongswan/commit/5900426a710eaa65a27784687775e331bcb0489b]
-----
-- src/libstrongswan/plugins/wolfssl/wolfssl_aead.c           | 4 ++--
-- src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c        | 4 ++--
-- src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c  | 4 ++--
-- src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c  | 4 ++--
-- src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c | 4 ++--
-- 5 files changed, 10 insertions(+), 10 deletions(-)
--
--diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c b/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
--index 2ea7c94cd65..44f054916cf 100644
----- a/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
--+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
--@@ -87,7 +87,7 @@ struct private_aead_t {
-- 	encryption_algorithm_t alg;
-- };
-- 
---METHOD(aead_t, encrypt, bool,
--+METHOD(aead_t, encrypt_, bool,
-- 	private_aead_t *this, chunk_t plain, chunk_t assoc, chunk_t iv,
-- 	chunk_t *encrypted)
-- {
--@@ -323,7 +323,7 @@ aead_t *wolfssl_aead_create(encryption_algorithm_t algo,
-- 
-- 	INIT(this,
-- 		.public = {
---			.encrypt = _encrypt,
--+			.encrypt = _encrypt_,
-- 			.decrypt = _decrypt,
-- 			.get_block_size = _get_block_size,
-- 			.get_icv_size = _get_icv_size,
--diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c b/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
--index cffe7ba2375..085a912404c 100644
----- a/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
--+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
--@@ -230,7 +230,7 @@ METHOD(crypter_t, decrypt, bool,
-- 	return success;
-- }
-- 
---METHOD(crypter_t, encrypt, bool,
--+METHOD(crypter_t, encrypt_, bool,
-- 	private_wolfssl_crypter_t *this, chunk_t data, chunk_t iv, chunk_t *dst)
-- {
-- 	u_char *out;
--@@ -578,7 +578,7 @@ wolfssl_crypter_t *wolfssl_crypter_create(encryption_algorithm_t algo,
-- 	INIT(this,
-- 		.public = {
-- 			.crypter = {
---				.encrypt = _encrypt,
--+				.encrypt = _encrypt_,
-- 				.decrypt = _decrypt,
-- 				.get_block_size = _get_block_size,
-- 				.get_iv_size = _get_iv_size,
--diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
--index d8a1ededb06..110543762f2 100644
----- a/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
--+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
--@@ -193,7 +193,7 @@ METHOD(public_key_t, verify, bool,
-- 	}
-- }
-- 
---METHOD(public_key_t, encrypt, bool,
--+METHOD(public_key_t, encrypt_, bool,
-- 	private_wolfssl_ec_public_key_t *this, encryption_scheme_t scheme,
-- 	void *params, chunk_t crypto, chunk_t *plain)
-- {
--@@ -324,7 +324,7 @@ static private_wolfssl_ec_public_key_t *create_empty()
-- 			.key = {
-- 				.get_type = _get_type,
-- 				.verify = _verify,
---				.encrypt = _encrypt,
--+				.encrypt = _encrypt_,
-- 				.get_keysize = _get_keysize,
-- 				.equals = public_key_equals,
-- 				.get_fingerprint = _get_fingerprint,
--diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
--index f423d8d5691..ea0fb3dfc77 100644
----- a/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
--+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
--@@ -111,7 +111,7 @@ METHOD(public_key_t, verify, bool,
-- 	return ret == 0 && res == 1;
-- }
-- 
---METHOD(public_key_t, encrypt, bool,
--+METHOD(public_key_t, encrypt_, bool,
-- 	private_public_key_t *this, encryption_scheme_t scheme,
-- 	void *params, chunk_t crypto, chunk_t *plain)
-- {
--@@ -368,7 +368,7 @@ static private_public_key_t *create_empty(key_type_t type)
-- 		.public = {
-- 			.get_type = _get_type,
-- 			.verify = _verify,
---			.encrypt = _encrypt,
--+			.encrypt = _encrypt_,
-- 			.get_keysize = _get_keysize,
-- 			.equals = public_key_equals,
-- 			.get_fingerprint = _get_fingerprint,
--diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
--index 72df115fe90..da8899c2d8c 100644
----- a/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
--+++ b/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
--@@ -216,7 +216,7 @@ METHOD(public_key_t, verify, bool,
-- 	}
-- }
-- 
---METHOD(public_key_t, encrypt, bool,
--+METHOD(public_key_t, encrypt_, bool,
-- 	private_wolfssl_rsa_public_key_t *this, encryption_scheme_t scheme,
-- 	void *params, chunk_t plain, chunk_t *crypto)
-- {
--@@ -440,7 +440,7 @@ static private_wolfssl_rsa_public_key_t *create_empty()
-- 			.key = {
-- 				.get_type = _get_type,
-- 				.verify = _verify,
---				.encrypt = _encrypt,
--+				.encrypt = _encrypt_,
-- 				.equals = public_key_equals,
-- 				.get_keysize = _get_keysize,
-- 				.get_fingerprint = _get_fingerprint,
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index aca7ddf5cd..4822f9152f 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -1,7 +1,7 @@
--# From http://download.strongswan.org/strongswan-5.9.5.tar.bz2.md5
--md5  53005324e3cba8592f1fb958b1c2d0e5  strongswan-5.9.5.tar.bz2
-+# From http://download.strongswan.org/strongswan-5.9.8.tar.bz2.md5
-+md5  f46b0d3e7aed88824650d0721c887443  strongswan-5.9.8.tar.bz2
- # Calculated based on the hash above
--sha256  983e4ef4a4c6c9d69f5fe6707c7fe0b2b9a9291943bbf4e008faab6bf91c0bdd  strongswan-5.9.5.tar.bz2
-+sha256  d3303a43c0bd7b75a12b64855e8edcb53696f06190364f26d1533bde1f2e453c  strongswan-5.9.8.tar.bz2
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 44c20f8414..cae1433e39 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRONGSWAN_VERSION = 5.9.5
-+STRONGSWAN_VERSION = 5.9.8
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPL-2.0+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
