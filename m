@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2820C6379F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:50:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 498D5C6379F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 20:50:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B185822D1;
-	Mon, 20 Feb 2023 20:50:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B185822D1
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6F80822D5;
+	Mon, 20 Feb 2023 20:50:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6F80822D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kLl3XireLgvn; Mon, 20 Feb 2023 20:50:43 +0000 (UTC)
+	with ESMTP id psafQOEEMa2K; Mon, 20 Feb 2023 20:50:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B23AD822C2;
-	Mon, 20 Feb 2023 20:50:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B23AD822C2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 15BBD1BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11430822DD;
+	Mon, 20 Feb 2023 20:50:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11430822DD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3006D1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3E854015F
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3E854015F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 091FF6100B
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 20:50:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 091FF6100B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AddE-FakrIvn for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xNNk7ak7R5AK for <buildroot@lists.busybox.net>;
  Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 236C5400AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 305DA60E63
  for <buildroot@buildroot.org>; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 236C5400AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 305DA60E63
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1212286487; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
+ id 1F02B86489; Mon, 20 Feb 2023 20:50:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 21:50:20 +0100
+Date: Mon, 20 Feb 2023 21:50:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1d29799914d5df6fb372284d8c3408809e00d0b4
-X-Git-Newrev: 92c4589b904cfbc4cd633a92729ecd98a50851ff
+X-Git-Oldrev: 92c4589b904cfbc4cd633a92729ecd98a50851ff
+X-Git-Newrev: 13b05a9b00bb1eeacefafe7b2a3537988a53dcea
 X-Patchwork-Hint: ignore
-Message-Id: <20230220205040.1212286487@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libjxl: fix build with libjpeg
+Message-Id: <20230220205040.1F02B86489@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libjxl: disable benchmark and tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92c4589b904cfbc4cd633a92729ecd98a50851ff
+commit: https://git.buildroot.net/buildroot/commit/?id=13b05a9b00bb1eeacefafe7b2a3537988a53dcea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building with libjpeg will raise the following build failure on some
-architectures since the addition of the package in commit
-e648d399d8bd609697e78f13f7fa76be06d91a57:
-
-/tmp/instance-14/output-1/build/libjxl-0.7.0/lib/extras/enc/jpg.cc: In function 'jxl::Status jxl::extras::{anonymous}::EncodeWithLibJpeg(const jxl::extras::PackedImage&, const JxlBasicInfo&, const std::vector<unsigned char>&, std::vector<unsigned char>, size_t, const string&, std::vector<unsigned char>*)':
-/tmp/instance-14/output-1/build/libjxl-0.7.0/lib/extras/enc/jpg.cc:126:34: error: invalid conversion from 'long unsigned int*' to 'size_t*' {aka 'unsigned int*'} [-fpermissive]
-  126 |   jpeg_mem_dest(&cinfo, &buffer, &size);
-      |                                  ^~~~~
-      |                                  |
-      |                                  long unsigned int*
-
-Upstream advocates to use jpeg-turbo:
-https://github.com/libjxl/libjxl/issues/1802
-
-Fixes:
- - http://autobuild.buildroot.org/results/9a2a7c6072876f2562609bf98f32a1ce93631a75
+Disable benchmark and tests which are enabled by default since the
+addition of the package in commit
+e648d399d8bd609697e78f13f7fa76be06d91a57
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Reviewed-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libjxl/libjxl.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libjxl/libjxl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
-index cc24ba258c..1257928efd 100644
+index 1257928efd..b4dfbecf82 100644
 --- a/package/libjxl/libjxl.mk
 +++ b/package/libjxl/libjxl.mk
-@@ -30,4 +30,11 @@ LIBJXL_CONF_OPTS = \
- 	-DJPEGXL_ENABLE_SJPEG=OFF \
- 	-DJPEGXL_ENABLE_SKCMS=OFF
- 
-+ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
-+LIBJXL_DEPENDENCIES += jpeg-turbo
-+LIBJXL_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_JPEG=OFF
-+else
-+LIBJXL_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_JPEG=ON
-+endif
-+
- $(eval $(cmake-package))
+@@ -23,7 +23,9 @@ endif
+ LIBJXL_CONF_OPTS = \
+ 	-DJPEGXL_BUNDLE_LIBPNG=OFF \
+ 	-DJPEGXL_BUNDLE_SKCMS=OFF \
++	-DJPEGXL_ENABLE_BENCHMARK=OFF \
+ 	-DJPEGXL_ENABLE_DOXYGEN=OFF \
++	-DJPEGXL_ENABLE_EXAMPLES=OFF \
+ 	-DJPEGXL_ENABLE_JNI=OFF \
+ 	-DJPEGXL_ENABLE_MANPAGES=OFF \
+ 	-DJPEGXL_ENABLE_OPENEXR=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
