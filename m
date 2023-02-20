@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A17AC64EC7
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 09:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A835C05027
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 09:47:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D569E60746;
-	Mon, 20 Feb 2023 09:33:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D569E60746
+	by smtp1.osuosl.org (Postfix) with ESMTP id B203A81D02;
+	Mon, 20 Feb 2023 09:47:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B203A81D02
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b5wA4QUEJsPf; Mon, 20 Feb 2023 09:33:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wq_LTE9n5ktR; Mon, 20 Feb 2023 09:47:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3E6F6076C;
-	Mon, 20 Feb 2023 09:33:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3E6F6076C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 381C01BF403
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 09:33:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09FF781B60;
+	Mon, 20 Feb 2023 09:47:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09FF781B60
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 25FFE1BF403
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 09:46:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FE7460746
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 09:33:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FE7460746
+ by smtp1.osuosl.org (Postfix) with ESMTP id F3BBF81B60
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 09:46:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3BBF81B60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id emozErZUcG-5 for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 09:33:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xTrULXqCMNk3 for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 09:46:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92FAD6076C
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 92FAD6076C
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 09:33:42 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id l1so114589wry.10
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 01:33:42 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1106C81B36
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1106C81B36
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 09:46:57 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id j2so260165wrh.9
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 01:46:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=mztngCcBFqAP1bSp206mgJj1SdrwZti33HUp0jNRSrE=;
- b=oX/W7KCScoMkzz6Kjy3Jn+IsB8g1KKP14zkwrz7pDxxnyPLcMNUw2naUFNTIEcZc1J
- 4iRufAQG9DgZuD97rxR47nVqxoxQa3zeIc4Uyiu1G+NQQvDxsAwoCvoRnnQvw4K0hB+3
- okvlb4JTNdZOEsYbTipFWIjDp0EizgBxK1Uo0UYYxStP/GUBkwmYbAXfZgkzZYs6skC0
- tL+81s3xcckXFGgQW8eILvP1x1gkIM5qCxbG4Jsp0hio6+HjMAJP3m49V36xMxu03upv
- Mu+SETZyQDr+rK2+sqT/XGySDgyoqFPELBGq5mAQRieg8I2pEadoxWoQlLTmGApb7D9b
- BKoQ==
-X-Gm-Message-State: AO0yUKUlkdbr6ebw4On6x+x/3aqKw44qgsoulr7B5DQEYWzEI/jBkOHf
- oBrCc12Da5QeUH7dzFQc6HiF2RRu3LU=
-X-Google-Smtp-Source: AK7set9DRGn1FrHxN9Go0mrtQ7vJJQ+GHPvBJer8KWInMBZ2a/SjBeb1QTPpN3NRnJtjrIaPnVew2g==
-X-Received: by 2002:adf:f208:0:b0:2c5:9ab9:60f6 with SMTP id
- p8-20020adff208000000b002c59ab960f6mr595904wro.62.1676885620401; 
- Mon, 20 Feb 2023 01:33:40 -0800 (PST)
+ bh=7SrqYMgL+UdZyOr85o1esTGRRDrwhpa8Ob9+T2bQh20=;
+ b=G0j8KjV8U7m2b0I7RxWcOtywbxneMXzQAjG2ykBIKsD/jEXSys/yWuXhKtRoR5CFTZ
+ 8vTO9sf/tpDAbHL7cUVGSo12ZR4kKyop+mavwYxRnIMG5goX6QOiY/W9gB0cb3NuQyXo
+ KnDq+2c8vCiNYfTQealISu0DgIbdT5+Mf9Sx1OU60kg3+XZZlGZooUoiL5qOE0BNARzC
+ akskraMgg/P7xx4h6kGfkt0sEOVn5bo/E2CzCTH6Bnb86MPvYup/C+C0z7EKMUOmj4K2
+ hu1kylPdcgG+Qu/pZt9ukqxS9FiILZ6jU7HKJ2v0RJmYVA2x89Fvt7TEZtN332KnBWEw
+ HMzg==
+X-Gm-Message-State: AO0yUKWLad1zomCiKY8ewwxxiA8sFDRXAtCSckZaX9E5nUkurG3oQKfS
+ uI+wYbhJi9md/gjuH6zUIXHCQOWT3Ss=
+X-Google-Smtp-Source: AK7set+sCHDFDHOqEEwvdWKtGAcaKDjtggCHkXS/ZVqp6IEDl6oImp7y/Wnc/xgWvKpmYX8cYYpOCQ==
+X-Received: by 2002:adf:f843:0:b0:2c6:e810:9aae with SMTP id
+ d3-20020adff843000000b002c6e8109aaemr312937wrq.6.1676886415883; 
+ Mon, 20 Feb 2023 01:46:55 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- a8-20020adfed08000000b002c55cdb1de5sm832465wro.116.2023.02.20.01.33.39
+ m11-20020a5d6a0b000000b002c55ec7f661sm11760584wru.5.2023.02.20.01.46.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Feb 2023 01:33:39 -0800 (PST)
+ Mon, 20 Feb 2023 01:46:55 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 10:33:36 +0100
-Message-Id: <20230220093336.77462-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Feb 2023 10:46:53 +0100
+Message-Id: <20230220094653.105814-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mztngCcBFqAP1bSp206mgJj1SdrwZti33HUp0jNRSrE=;
- b=izKeddLJVzdKEwOSswxNj99soM0AyMwODjzG2Hge6t0uy61Rjk9LtaDw9DQKVgZGVR
- XlMLHRV/Vwqz7S3X5HTsUnXOmO6Syay7iVRxD30U2kIH/EPQneRxuLaXf6WtloGWgm/O
- hq4vl3LDGc7mKbBiV2HE8e6MqOh9ucj9Izk4NhxUPq1Vykl4JgyhD+1gOm9wO/rbvpDe
- jQZiRt2gFZKlyS8yCmjoNXP4SlJgGxapvaY1cu4OhAwz6Thd4vqJImjEgbRMo2p4z9vQ
- QACemIe7+waGTDfPH1RWtNLHjhvAj2glpb+5311TTlXDClc0XW4dkFXiX31YT/teGKy7
- D8nQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=7SrqYMgL+UdZyOr85o1esTGRRDrwhpa8Ob9+T2bQh20=;
+ b=UPuPAqs6JflnltT8EDSZhrQ+dlyuUYckF+v0gpvjWcSZoYC2p638tBRCKJ4z87/1t3
+ aEWorF3ccEhmluiiq8l0Zy4tcYwwZV/rsOkSstAQG4zBo0Aha224662EYDLoxjR9d5FA
+ eHZycQAYowPaxNhR5cEcirFa4PwA2zMb1+0MXfhX0ccLV9a79w1sdcpmdrP85vFB1f2c
+ zgvCcu7nInBUDTiAQuYhNLf1WhkCaScy3XU4NeTiUveay+8L//17V+oLlXxVK+2o5AlS
+ DdCUeqe4UWiLrpOpwDT9JDJgxEguZZGljhs92b8f6HopCMYng/TGBiYnXwDrbKNH9iCs
+ p9ZQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=izKeddLJ
-Subject: [Buildroot] [PATCH 1/1] package/zabbix: fix libcurl build
+ header.a=rsa-sha256 header.s=20210112 header.b=UPuPAqs6
+Subject: [Buildroot] [PATCH 1/1] package/libarchive: fix per-package build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,104 +93,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexey Lukyanchuk <skif@skif-web.ru>,
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following libcurl build failure:
+Fix the following per-package build failure raised since commit
+9525bc7e64e8f44c31ab9dfd3f516ecb35982429:
 
-In file included from /tmp/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/include/curl/curl.h:3195,
-                 from ../../../../include/sysinc.h:384,
-                 from ../../../../include/common.h:23,
-                 from simple.c:20:
-simple.c: In function 'check_https':
-simple.c:167:65: error: invalid use of void expression
-  167 |         if (CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_USERAGENT, "Zabbix " ZABBIX_VERSION)) ||
-      |                                                                 ^
+configure.ac:140: error: possibly undefined macro: AC_MSG_FAILURE
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+configure.ac:328: error: possibly undefined macro: AC_CHECK_LIB
 
 Fixes:
- - http://autobuild.buildroot.org/results/053a62e9969046a7f8a0e1890c24d2bfb099ae42
+ - http://autobuild.buildroot.org/results/11868e9bc4916843a7fc76f7b5e4c251f89e33dc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...se-parentheses-to-ensure-compilation.patch | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch
+ package/libarchive/libarchive.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch b/package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch
-new file mode 100644
-index 0000000000..482480e5e0
---- /dev/null
-+++ b/package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch
-@@ -0,0 +1,65 @@
-+From 2fe3c652bd6a6522d5be3fd41c6ed39ddc2d21fa Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 13 Feb 2023 14:32:38 +0100
-+Subject: [PATCH] Use parentheses to ensure compilation
-+
-+Compiler fails with latest Curl release. Use parenthesis to ensure
-+compiler evaluates expression correctly:
-+
-+In file included from /tmp/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/include/curl/curl.h:3195,
-+                 from ../../../../include/sysinc.h:384,
-+                 from ../../../../include/common.h:23,
-+                 from simple.c:20:
-+simple.c: In function 'check_https':
-+simple.c:167:65: error: invalid use of void expression
-+  167 |         if (CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_USERAGENT, "Zabbix " ZABBIX_VERSION)) ||
-+      |                                                                 ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/053a62e9969046a7f8a0e1890c24d2bfb099ae42
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent (no feedback on first patch)]
-+---
-+ src/libs/zbxsysinfo/simple/simple.c | 18 +++++++++---------
-+ 1 file changed, 9 insertions(+), 9 deletions(-)
-+
-+diff --git a/src/libs/zbxsysinfo/simple/simple.c b/src/libs/zbxsysinfo/simple/simple.c
-+index fc16a784cf..c3ce974492 100644
-+--- a/src/libs/zbxsysinfo/simple/simple.c
-++++ b/src/libs/zbxsysinfo/simple/simple.c
-+@@ -177,14 +177,14 @@ static int	check_https(const char *host, unsigned short port, int timeout, int *
-+ 	else
-+ 		zbx_snprintf(https_host, sizeof(https_host), "%s%s", (0 == strncmp(host, "https://", 8) ? "" : "https://"), host);
-+ 
-+-	if (CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_USERAGENT, "Zabbix " ZABBIX_VERSION)) ||
-+-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_URL, https_host)) ||
-+-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_PORT, (long)port)) ||
-+-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_NOBODY, 1L)) ||
-+-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_SSL_VERIFYPEER, 0L)) ||
-+-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_SSL_VERIFYHOST, 0L)) ||
-+-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_TIMEOUT, (long)timeout)) ||
-+-		CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = ZBX_CURLOPT_ACCEPT_ENCODING, "")))
-++	if (CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_USERAGENT), "Zabbix " ZABBIX_VERSION)) ||
-++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_URL), https_host)) ||
-++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_PORT), (long)port)) ||
-++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_NOBODY), 1L)) ||
-++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_SSL_VERIFYPEER), 0L)) ||
-++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_SSL_VERIFYHOST), 0L)) ||
-++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_TIMEOUT), (long)timeout)) ||
-++		CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = ZBX_CURLOPT_ACCEPT_ENCODING), "")))
-+ 	{
-+ 		zabbix_log(LOG_LEVEL_DEBUG, "%s: could not set cURL option [%d]: %s",
-+ 				__func__, (int)opt, curl_easy_strerror(err));
-+@@ -193,7 +193,7 @@ static int	check_https(const char *host, unsigned short port, int timeout, int *
-+ 
-+ 	if (NULL != CONFIG_SOURCE_IP)
-+ 	{
-+-		if (CURLE_OK != (err = curl_easy_setopt(easyhandle, opt = CURLOPT_INTERFACE, CONFIG_SOURCE_IP)))
-++		if (CURLE_OK != (err = curl_easy_setopt(easyhandle, (opt = CURLOPT_INTERFACE), CONFIG_SOURCE_IP)))
-+ 		{
-+ 			zabbix_log(LOG_LEVEL_DEBUG, "%s: could not set source interface option [%d]: %s",
-+ 					__func__, (int)opt, curl_easy_strerror(err));
-+-- 
-+2.39.0
-+
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index cd7c13fbed..2010b6529f 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -140,6 +140,8 @@ endif
+ 
+ # The only user of host-libarchive needs zlib support
+ HOST_LIBARCHIVE_DEPENDENCIES = host-zlib
++# needed for autoreconf
++HOST_LIBARCHIVE_DEPENDENCIES += host-pkgconf
+ HOST_LIBARCHIVE_CONF_OPTS = \
+ 	--disable-bsdtar \
+ 	--disable-bsdcpio \
 -- 
 2.39.0
 
