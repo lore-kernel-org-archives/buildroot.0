@@ -1,72 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94E0BC636CC
-	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 14:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41C4FC636CC
+	for <buildroot@archiver.kernel.org>; Mon, 20 Feb 2023 17:06:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16954409F3;
-	Mon, 20 Feb 2023 14:59:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16954409F3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98CBB81426;
+	Mon, 20 Feb 2023 17:06:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98CBB81426
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mos0MAmduzsv; Mon, 20 Feb 2023 14:59:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t6X71wSr4GUC; Mon, 20 Feb 2023 17:06:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16DCC4098E;
-	Mon, 20 Feb 2023 14:59:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16DCC4098E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5800B1BF27E
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 14:59:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE3B7813F0;
+	Mon, 20 Feb 2023 17:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE3B7813F0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A6141BF2B9
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 324A740102
- for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 14:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 324A740102
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8726813F0
+ for <buildroot@lists.busybox.net>; Mon, 20 Feb 2023 17:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8726813F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lr5nxpW84ait for <buildroot@lists.busybox.net>;
- Mon, 20 Feb 2023 14:59:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CAf2M7eZbD0o for <buildroot@lists.busybox.net>;
+ Mon, 20 Feb 2023 17:06:16 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D39F240101
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D39F240101
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 14:59:13 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 27C80FF810;
- Mon, 20 Feb 2023 14:59:10 +0000 (UTC)
-Date: Mon, 20 Feb 2023 15:59:09 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBB93813E1
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DBB93813E1
+ for <buildroot@buildroot.org>; Mon, 20 Feb 2023 17:06:15 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 08B7F100008;
+ Mon, 20 Feb 2023 17:06:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pU9cD-007UVz-1n; Mon, 20 Feb 2023 18:06:13 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230220155909.634ee802@windsurf>
-In-Reply-To: <CAPi7W81cfaQ_Gk5u5sNHufCATEdrYM4Lgi2gH6hPySPwEYE=jQ@mail.gmail.com>
-References: <20230220112410.953669-1-fontaine.fabrice@gmail.com>
- <20230220150704.7ff37d71@windsurf>
- <CAPi7W81cfaQ_Gk5u5sNHufCATEdrYM4Lgi2gH6hPySPwEYE=jQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+References: <20230219175204.645686-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Feb 2023 18:06:12 +0100
+In-Reply-To: <20230219175204.645686-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 19 Feb 2023 18:52:04 +0100")
+Message-ID: <87cz641d2z.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676905152;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=P1TR38zsdNqtnLHj70WsfF0Kwd3h/17DuEK54etdk1k=;
- b=WrRNRxkP9pXF+/NMWbjywFMLSFaKmidfN0z04JCaIVit6wWHnqcODqcsxyzSW4mPuc8eld
- bYiTCdYTg3tCH2+nzGfpMC6rTf4DYb8dP8GHo+pHKpAw2nN7sqzI8uuUScL5fxbzPSGx6r
- PJxTnAuv5L6L2cNfs1H5ja+fop8ALN4grU6BpHTeUI/gm8bDp3GwyLb5jCja3726P8xrey
- phOKspxpQOYDetkybN5d08UjEJSSMIYQ8GdhSKJTommSvBhwILfffh2tQcYz9CDlPASJEd
- S0BeuDg2AVLlriIIWsky3aCrTdP8ulaUGOaBgnQJsiH8In5sFvDIq3neZA9R3Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WrRNRxkP
-Subject: Re: [Buildroot] [PATCH 1/1] package/glslsandbox-player: fix build
- with rockchip-mali
+Subject: Re: [Buildroot] [PATCH 1/1] package/less: fix CVE-2022-46663
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,38 +62,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 20 Feb 2023 15:23:42 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Patching rockchip-mali is probably better but I don't know what version
-> number should be put inside glesv2.pc.
-> Should I hardcode 2 in the pkgconfig file?
+ > In GNU Less before 609, crafted data can result in "less -R" not
+ > filtering ANSI escape sequences sent to the terminal.
 
-I guess whatever works for glslsandbox-player. Packages like
-rockchip-mali are anyway crappy.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-> Moreover, should I patch the file through a sed in buildroot or send an
-> upstream patch?
-> Upstreaming this change is probably impossible as rockchip-mali uses a
-> commit from October 2018 and the pkgconfig is not available anymore in
-> usptream master.
+Committed, thanks.
 
-I suppose a patch is fine, and it won't be upstream. As said above,
-those OpenGL blobs are anyway crappy :-/
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
