@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71E34C6379F
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88309C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20BC282AA2;
-	Tue, 21 Feb 2023 08:55:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20BC282AA2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3714E82B21;
+	Tue, 21 Feb 2023 08:57:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3714E82B21
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p77F-ERedSRk; Tue, 21 Feb 2023 08:55:57 +0000 (UTC)
+	with ESMTP id b7bNhHg2U6nP; Tue, 21 Feb 2023 08:57:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C8CD82A72;
-	Tue, 21 Feb 2023 08:55:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C8CD82A72
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A11A82A26;
+	Tue, 21 Feb 2023 08:57:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A11A82A26
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 192161BF292
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:55:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9B1571BF292
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B916E61101
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:55:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B916E61101
+ by smtp3.osuosl.org (Postfix) with ESMTP id 74E36611DB
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:57:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74E36611DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 534IKJPNiItP for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 08:55:10 +0000 (UTC)
+ with ESMTP id gKS7GA2GJUuk for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 08:57:08 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8191E610EF
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8191E610EF
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:55:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C136612A4
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7C136612A4
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:57:08 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0F25DFF808;
- Tue, 21 Feb 2023 08:55:06 +0000 (UTC)
-Date: Tue, 21 Feb 2023 09:55:06 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230221095506.13a27e52@windsurf>
-In-Reply-To: <20230214202541.2485669-1-james.hilliard1@gmail.com>
-References: <20230214202541.2485669-1-james.hilliard1@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 8DCF740003;
+ Tue, 21 Feb 2023 08:57:06 +0000 (UTC)
+Date: Tue, 21 Feb 2023 09:57:05 +0100
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230221095705.1dc184ff@windsurf>
+In-Reply-To: <20230207220941.58066-1-ju.o@free.fr>
+References: <20230207220941.58066-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676969707;
+ d=bootlin.com; s=gm1; t=1676969826;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=W7hHIXPFAyiY7oZgMH7BmaQYH2o68bI6TQldEkEFvh8=;
- b=JcHW5Ipg4m4CRXN0Wgawm0uecG5FhxvfpcVqrxInch6w1s0TkxJ4KnIgbY45itaXRKIQiV
- Zoam0MhkKfRyMFWXqlEpfc4PWe0h6RBR4+n2eZDHJi+PPtV5vgrxe6b4XquYTgwDNHMk66
- K7y4TKFgNbPIwZzRmvT8Dt5SAgT8EBH+5JUldC6n8NusT/9VytqT/lySVN2tXVCy6++p+y
- A/azHsKkE0YfO2t8Lv9mSiOA4Vt8fqiZs+4qI++WeIhJaP58Td/U94IOt+J+SpxqIz1IE4
- V8B44SMJQW7XgCr2juetVuq/o2GtYmDrUO7rWzu+/ATVny8OKU3zCyT58uTH+Q==
+ bh=VbdQvQ1OS8g7wL+z+Q1yLeJfm/efub71o8OI8V1/ngA=;
+ b=CGbKhILORGdNHmZisWoXgdsgyVjRDZGrTLBbpK4SJNV3hn3GqF1wo3w+gfgsXFHo6uUlGk
+ trqJjW0zlsFZoXTDaR3BXRKrRdsyx5FBn8AnFbfoJdhDey8h0W+dKx5KFZaYBkUy+/XOqp
+ 8Tv23kcBg0QMdFQXrUjCac3R5CFf+MWQGp7QSGWmd647fTqNuygNyeW5TuVP0TOIaZ9WUM
+ 9AQN3bvn3cLam5KBfd7abVnQvJHbu/moSncugaJxVGlbxbTGHotMnFt1b5kmvqksvRccVR
+ zPZkXySOZNrqpmQLsinXHwgrWDRPmt9AOz/+K2DIChFAa1CCClY0I+zcLZy4fw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JcHW5Ipg
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
- 0.14.13
+ header.s=gm1 header.b=CGbKhILO
+Subject: Re: [Buildroot] [PATCH 1/5] DEVELOPERS: add Julien Olivain for
+ package/openmpi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,22 +78,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 14 Feb 2023 13:25:41 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Tue,  7 Feb 2023 23:09:37 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> The package has been orphan since commit ee58353 (2018-12-22).
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/python-maturin/python-maturin.hash | 2 +-
->  package/python-maturin/python-maturin.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
