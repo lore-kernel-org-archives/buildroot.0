@@ -4,48 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2D4AC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6103C6379F
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C9CE82771;
-	Tue, 21 Feb 2023 08:20:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C9CE82771
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53BCD826B7;
+	Tue, 21 Feb 2023 08:21:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53BCD826B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ry3yrQ7eMrMm; Tue, 21 Feb 2023 08:20:14 +0000 (UTC)
+	with ESMTP id XJ17koP3uJYN; Tue, 21 Feb 2023 08:21:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6F33826DE;
-	Tue, 21 Feb 2023 08:20:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6F33826DE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 92FC21BF292
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:19:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F820826A4;
+	Tue, 21 Feb 2023 08:21:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F820826A4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB4D31BF292
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C474401C2
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:19:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C474401C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94465826A4
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:21:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94465826A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R7JcS-HR6Xgt for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 08:19:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB89B4047D
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:19:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB89B4047D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98C9C86508; Tue, 21 Feb 2023 08:19:21 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 23:58:25 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 497e60a2fa7e11644a41cf4a9441f7fde6c782ac
-X-Git-Newrev: 9e09ac2c02d1ff8d3872ebc72e915e9baa7fbd0d
-X-Patchwork-Hint: ignore
-Message-Id: <20230221081921.98C9C86508@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/freescale_imx6ullevk_defconfig: bump Linux and U-Boot to
- lf-5.15.71-2.2.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6PD07gb6DYdr for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 08:21:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 054F882668
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 054F882668
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:21:19 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7F51C60009;
+ Tue, 21 Feb 2023 08:21:16 +0000 (UTC)
+Date: Tue, 21 Feb 2023 09:21:15 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230221092115.1041a5ed@windsurf>
+In-Reply-To: <20230216212553.2591068-1-giulio.benetti@benettiengineering.com>
+References: <20230216212553.2591068-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676967677;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=V3NJUmRKrs354dKVLy96qyN+xT8lblP85OC+s23QYP8=;
+ b=YZd+O5ys5VmTwSH1MA5WmNkUo+lf+UiDOrsdRfrI0WAYDyKvLTq0z3o2P6/TN5odVuGJDs
+ /wqQH78Ux1e4dwwytlpf28KtAGVPWXaZ+Y1lQeCa9hRfIVTYSPn33Yhk0JixQM8go8B0im
+ n0ZC++T9JX7kScJZCM3Gaa+NVl1oRgsWk8KYoVtE1vvvwSYqpWEPA6NgSztlJ6Y8WAPYqi
+ KjeBJQV6Yau1hv9Iaj/Um5khH/mK97qJj0Y7JLVlk2ssEd6Jf7Zf1pKWi6VZIdG48Lkm1m
+ QnZn1G+42x8TG06QAbW12Z47lLCM2MXBxjTaLyh09D6hbdPR3SLs0reG/cuSoA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=YZd+O5ys
+Subject: Re: [Buildroot] [PATCH 1/3] configs/imx6ullevk_defconfig: bump
+ Linux to 6.1.12 and U-Boot to 2023.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +78,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Fabrice Goucem <fabrice.goucem@oss.nxp.com>,
+ Fabio Estevam <festevam@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e09ac2c02d1ff8d3872ebc72e915e9baa7fbd0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Thu, 16 Feb 2023 22:25:51 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Let's also enable BR2_TARGET_UBOOT_NEEDS_OPENSSL required by uboot to
-build correctly.
+> Let's also reorder BR2_UBOOT_ options by moving
+> BR2_TARGET_UBOOT_FORMAT_DTB_IMX after BR2_TARGET_UBOOT_NEEDS_OPENSSL since
+> this reflects the order in boot/uboot/Config.in file.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  configs/imx6ullevk_defconfig | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/freescale_imx6ullevk_defconfig | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Series applied to next, thanks.
 
-diff --git a/configs/freescale_imx6ullevk_defconfig b/configs/freescale_imx6ullevk_defconfig
-index 7a8965be18..db4fa69f71 100644
---- a/configs/freescale_imx6ullevk_defconfig
-+++ b/configs/freescale_imx6ullevk_defconfig
-@@ -1,11 +1,11 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.15.71-2.2.0)/linux-imx-lf-5.15.71-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ull-14x14-evk"
-@@ -15,8 +15,9 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6ull_14x14_evk"
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.15.71-2.2.0)/uboot-imx-lf-5.15.71-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
