@@ -4,48 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32781C636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:51:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80115C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:51:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D313D40B83;
-	Tue, 21 Feb 2023 20:51:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D313D40B83
+	by smtp2.osuosl.org (Postfix) with ESMTP id 245B441044;
+	Tue, 21 Feb 2023 20:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 245B441044
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 04_o_heHhQwm; Tue, 21 Feb 2023 20:51:30 +0000 (UTC)
+	with ESMTP id iE0B2BiJ9d3O; Tue, 21 Feb 2023 20:51:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD0F140C45;
-	Tue, 21 Feb 2023 20:51:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD0F140C45
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 32C401BF3F4
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E13F40C45;
+	Tue, 21 Feb 2023 20:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E13F40C45
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A41DE1BF3F4
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB21260B33
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB21260B33
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24DF081404
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24DF081404
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o9T1Gx6JSvl9 for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 59B9B60774
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59B9B60774
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43D2F8666F; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:37:19 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 12123bd4a5fc1e63e6b4adc07a3ec5eef8c4f743
-X-Git-Newrev: 3a425a8926c8b546de085ab0f691891005482771
-X-Patchwork-Hint: ignore
-Message-Id: <20230221204903.43D2F8666F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/upx: bump to
- version 4.0.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pG2doR-r1asF for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 20:49:54 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC0F281407
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AC0F281407
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:49:53 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 24CE3240003;
+ Tue, 21 Feb 2023 20:49:49 +0000 (UTC)
+Date: Tue, 21 Feb 2023 21:49:48 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20230221214948.0b7ba737@windsurf>
+In-Reply-To: <20230221203403.GH2718518@scaer>
+References: <20230221142144.1503123-1-fontaine.fabrice@gmail.com>
+ <20230221154827.7e737960@windsurf> <20230221200857.GG2718518@scaer>
+ <20230221212634.736f8d70@windsurf> <20230221203403.GH2718518@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1677012592;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=wnp7om76Z7HPsfW1PdpgEcwDcr/qE08zP40pP7/ctk8=;
+ b=mZTKz0SzBD+UODMoFznzFVfYSYCP9JI4yHDK+j3LA1wwyj16/zs6UYtzoaIYdyeT5waNRX
+ LrAW5WhQx+G71C1SaXJER29z94isOy0iXv/0KGzOfQrNIND3S7GcfN7sVJabXQAvlOA8oM
+ cTizubBkNdNd/I0Wm9xD1+BGt/g10widYUM+NR/tXFe+9mHqTCh4VvH+NjmhXXAymBLqS3
+ m5/9kxHn99Xe2h1bY861VscuVGqfheGntk7hTdpms7rQYvgbuDdq9jgjWW3tEePOZs8JeQ
+ YA8foCbjnH1wbMrB98sSOvbju7/nEBjPqnJRX7FwhMa4Zs5oRHt2wjWkLjHE9w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mZTKz0Sz
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: disable with -Ofast
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,164 +76,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Norbert Lange <nolange79@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Sen Hastings <sen@phobosdpl.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a425a8926c8b546de085ab0f691891005482771
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+On Tue, 21 Feb 2023 21:34:03 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-- Drop patch (already in version)
-- cmake must be used since
-  https://github.com/upx/upx/commit/c7d8b6fed1b551158540e1d2e884dc224fce474c
-- ucl and zlib are directly included in upx since
-  https://github.com/upx/upx/commit/61e1366122f8d1b9e2434a8103e7af00a35ea902
+> The upstream code is (split for readability):
+> 
+>      if (('-Ofast' in c_args or
+>           '-ffast-math' in c_args or
+>           '-ffinite-math-only' in c_args
+>          ) and
+>          not '-fno-finite-math-only' in c_args
+>         )
+> 
+> So, if -fno-finite-math-only is in c_args, then the whole condition
+> should evaluate to false, and thus it should not error out, right?
+> 
+> Or did I lose more than my grep-fu? ;-)
 
-https://github.com/upx/upx/blob/v4.0.1/NEWS
+No, tonight your grep-fu is better than mine: you're totally right! :-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1567516d8984a4bddfbee30ee69c771cf3f8e224)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...1-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch | 80 ----------------------
- package/upx/upx.hash                               |  2 +-
- package/upx/upx.mk                                 | 22 +-----
- 3 files changed, 4 insertions(+), 100 deletions(-)
-
-diff --git a/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch b/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
-deleted file mode 100644
-index 6fae9cac0e..0000000000
---- a/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
-+++ /dev/null
-@@ -1,80 +0,0 @@
--From 3781df9da23840e596d5e9e8493f22666802fe6c Mon Sep 17 00:00:00 2001
--From: John Reiser <jreiser@BitWagon.com>
--Date: Fri, 11 Dec 2020 13:38:18 -0800
--Subject: [PATCH] Check DT_REL/DT_RELA, DT_RELSZ/DT_RELASZ
--
--https://github.com/upx/upx/issues/421
--	modified:   p_lx_elf.cpp
--
--[Retrieved from:
--https://github.com/upx/upx/commit/3781df9da23840e596d5e9e8493f22666802fe6c]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/p_lx_elf.cpp | 34 +++++++++++++++++++++++++++++-----
-- 1 file changed, 29 insertions(+), 5 deletions(-)
--
--diff --git a/src/p_lx_elf.cpp b/src/p_lx_elf.cpp
--index 182db192f..3a4101cf7 100644
----- a/src/p_lx_elf.cpp
--+++ b/src/p_lx_elf.cpp
--@@ -2222,8 +2222,20 @@ bool PackLinuxElf32::canPack()
--                         int z_rsz = dt_table[Elf32_Dyn::DT_RELSZ];
--                         if (z_rel && z_rsz) {
--                             unsigned rel_off = get_te32(&dynseg[-1+ z_rel].d_val);
--+                            if ((unsigned)file_size <= rel_off) {
--+                                char msg[70]; snprintf(msg, sizeof(msg),
--+                                     "bad Elf32_Dynamic[DT_REL] %#x\n",
--+                                     rel_off);
--+                                throwCantPack(msg);
--+                            }
--                             Elf32_Rel *rp = (Elf32_Rel *)&file_image[rel_off];
--                             unsigned relsz   = get_te32(&dynseg[-1+ z_rsz].d_val);
--+                            if ((unsigned)file_size <= relsz) {
--+                                char msg[70]; snprintf(msg, sizeof(msg),
--+                                     "bad Elf32_Dynamic[DT_RELSZ] %#x\n",
--+                                     relsz);
--+                                throwCantPack(msg);
--+                            }
--                             Elf32_Rel *last = (Elf32_Rel *)(relsz + (char *)rp);
--                             for (; rp < last; ++rp) {
--                                 unsigned r_va = get_te32(&rp->r_offset);
--@@ -2562,14 +2574,26 @@ PackLinuxElf64::canPack()
--                         int z_rel = dt_table[Elf64_Dyn::DT_RELA];
--                         int z_rsz = dt_table[Elf64_Dyn::DT_RELASZ];
--                         if (z_rel && z_rsz) {
---                            unsigned rel_off = get_te64(&dynseg[-1+ z_rel].d_val);
--+                            upx_uint64_t rel_off = get_te64(&dynseg[-1+ z_rel].d_val);
--+                            if ((u64_t)file_size <= rel_off) {
--+                                char msg[70]; snprintf(msg, sizeof(msg),
--+                                     "bad Elf64_Dynamic[DT_RELA] %#llx\n",
--+                                     rel_off);
--+                                throwCantPack(msg);
--+                            }
--                             Elf64_Rela *rp = (Elf64_Rela *)&file_image[rel_off];
---                            unsigned relsz   = get_te64(&dynseg[-1+ z_rsz].d_val);
--+                            upx_uint64_t relsz   = get_te64(&dynseg[-1+ z_rsz].d_val);
--+                            if ((u64_t)file_size <= relsz) {
--+                                char msg[70]; snprintf(msg, sizeof(msg),
--+                                     "bad Elf64_Dynamic[DT_RELASZ] %#llx\n",
--+                                     relsz);
--+                                throwCantPack(msg);
--+                            }
--                             Elf64_Rela *last = (Elf64_Rela *)(relsz + (char *)rp);
--                             for (; rp < last; ++rp) {
---                                unsigned r_va = get_te64(&rp->r_offset);
--+                                upx_uint64_t r_va = get_te64(&rp->r_offset);
--                                 if (r_va == user_init_ava) { // found the Elf64_Rela
---                                    unsigned r_info = get_te64(&rp->r_info);
--+                                    upx_uint64_t r_info = get_te64(&rp->r_info);
--                                     unsigned r_type = ELF64_R_TYPE(r_info);
--                                     if (Elf64_Ehdr::EM_AARCH64 == e_machine
--                                     &&  R_AARCH64_RELATIVE == r_type) {
--@@ -2581,7 +2605,7 @@ PackLinuxElf64::canPack()
--                                     }
--                                     else {
--                                         char msg[50]; snprintf(msg, sizeof(msg),
---                                            "bad relocation %#x DT_INIT_ARRAY[0]",
--+                                            "bad relocation %#llx DT_INIT_ARRAY[0]",
--                                             r_info);
--                                         throwCantPack(msg);
--                                     }
-diff --git a/package/upx/upx.hash b/package/upx/upx.hash
-index 7f3698ca0d..9f7c40c819 100644
---- a/package/upx/upx.hash
-+++ b/package/upx/upx.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  47774df5c958f2868ef550fb258b97c73272cb1f44fe776b798e393465993714  upx-3.96-src.tar.xz
-+sha256  77003c8e2e29aa9804e2fbaeb30f055903420b3e01d95eafe01aed957fb7e190  upx-4.0.1-src.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/upx/upx.mk b/package/upx/upx.mk
-index e693a70db1..ef346b2310 100644
---- a/package/upx/upx.mk
-+++ b/package/upx/upx.mk
-@@ -4,28 +4,12 @@
- #
- ################################################################################
- 
--UPX_VERSION = 3.96
-+UPX_VERSION = 4.0.1
- UPX_SITE = https://github.com/upx/upx/releases/download/v$(UPX_VERSION)
- UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
- UPX_LICENSE = GPL-2.0+
- UPX_LICENSE_FILES = COPYING
- UPX_CPE_ID_VENDOR = upx_project
-+UPX_SUPPORTS_IN_SOURCE_BUILD = NO
- 
--# 0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
--UPX_IGNORE_CVES += CVE-2021-20285
--
--HOST_UPX_DEPENDENCIES = host-ucl host-zlib
--
--# We need to specify all, otherwise the default target only prints a message
--# stating to "please choose a target for 'make'"... :-(
--define HOST_UPX_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
--		UPX_UCLDIR=$(HOST_DIR) CXXFLAGS_WERROR= -C $(@D) all
--endef
--
--# UPX has no install procedure, so install it manually.
--define HOST_UPX_INSTALL_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/src/upx.out $(HOST_DIR)/bin/upx
--endef
--
--$(eval $(host-generic-package))
-+$(eval $(host-cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
