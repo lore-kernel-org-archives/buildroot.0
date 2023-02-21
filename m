@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D07FBC6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76742C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:48:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F136415FE;
-	Sun, 12 Mar 2023 21:48:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F136415FE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CE974168B;
+	Sun, 12 Mar 2023 21:48:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CE974168B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C67XcpLv_OKD; Sun, 12 Mar 2023 21:48:15 +0000 (UTC)
+	with ESMTP id eTi85ltS3AdZ; Sun, 12 Mar 2023 21:48:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33DC24168B;
-	Sun, 12 Mar 2023 21:48:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33DC24168B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 03EA81BF2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id E55C64168F;
+	Sun, 12 Mar 2023 21:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E55C64168F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 126E51BF863
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6628460D68
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6628460D68
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEC2140522
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEC2140522
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZAduel0_uh_9 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T6tov-V-6N9I for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8657960D51
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31B974058B
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8657960D51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31B974058B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 83A9487007; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+ id 200DC87009; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 09:38:48 +0100
+Date: Tue, 21 Feb 2023 09:19:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a86bbb4ae4a6f5580e4cbfad8ecf8ebf81b6e053
-X-Git-Newrev: 2215548546af47f3cfce89a15bfc31f736cd74bc
+X-Git-Oldrev: 9e09ac2c02d1ff8d3872ebc72e915e9baa7fbd0d
+X-Git-Newrev: 1d7dd1b79145a34f861d30d09750f6e988e10fd5
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214622.83A9487007@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_aarch64_ebbr: bump linux to
- 6.1.12 and u-boot to 2023.01
+Message-Id: <20230312214622.200DC87009@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: add Giulio Benetti to board
+ imx6ullevk for both mainline and NXP(Freescale) versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,73 +59,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3663442021177122963=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3663442021177122963==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=2215548546af47f3cfce89a15bfc31f736cd74bc
+commit: https://git.buildroot.net/buildroot/commit/?id=1d7dd1b79145a34f861d30d09750f6e988e10fd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump Linux kernel version to 6.1.12.
-- Bump U-Boot version to 2023.01 and rename config fragment to make it
-  clearer that it is not a complete config file.
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/qemu/aarch64-ebbr/{u-boot.config => u-boot.fragment} | 0
- configs/qemu_aarch64_ebbr_defconfig                        | 8 ++++----
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/board/qemu/aarch64-ebbr/u-boot.config b/board/qemu/aarch64-ebbr/u-boot.fragment
-similarity index 100%
-rename from board/qemu/aarch64-ebbr/u-boot.config
-rename to board/qemu/aarch64-ebbr/u-boot.fragment
-diff --git a/configs/qemu_aarch64_ebbr_defconfig b/configs/qemu_aarch64_ebbr_defconfig
-index d293ad0e60..e3157089a9 100644
---- a/configs/qemu_aarch64_ebbr_defconfig
-+++ b/configs/qemu_aarch64_ebbr_defconfig
-@@ -6,12 +6,12 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-ebbr/p
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-ebbr/genimage.cfg"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index caa73698f9..599cfe6886 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1136,10 +1136,13 @@ F:	package/xapian/
  
- # Linux headers
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.0.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.12"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
-@@ -39,9 +39,9 @@ BR2_TARGET_OPTEE_OS_PLATFORM="vexpress-qemu_armv8a"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm64"
--BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/aarch64-ebbr/u-boot.config"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/aarch64-ebbr/u-boot.fragment"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- 
- # Host tools
-
---===============3663442021177122963==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
+ F:	board/bananapi/bananapi-m2-ultra/
++F:	board/freescale/imx6ullevk/
+ F:	board/olimex/a*
+ F:	configs/amarula_vyasa_rk3288_defconfig
+ F:	configs/asus_tinker_rk3288_defconfig
+ F:	configs/bananapi_m2_ultra_defconfig
++F:	configs/freescale_imx6ullevk_defconfig
++F:	configs/imx6ullevk_defconfig
+ F:	configs/olimex_a*
+ F:	package/at/
+ F:	package/binutils/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3663442021177122963==--
