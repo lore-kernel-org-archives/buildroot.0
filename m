@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70990C636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:50:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C231C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26BB540B78;
-	Tue, 21 Feb 2023 20:50:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26BB540B78
+	by smtp2.osuosl.org (Postfix) with ESMTP id AAF4E4103A;
+	Tue, 21 Feb 2023 20:51:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAF4E4103A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vdjZh9Px0tgK; Tue, 21 Feb 2023 20:50:53 +0000 (UTC)
+	with ESMTP id qe1T91XS70wS; Tue, 21 Feb 2023 20:51:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 456954102A;
-	Tue, 21 Feb 2023 20:50:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 456954102A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4DC361BF3F4
+	by smtp2.osuosl.org (Postfix) with ESMTP id DCC1741031;
+	Tue, 21 Feb 2023 20:51:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCC1741031
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 70D531BF8C7
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 311CF81407
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3029B60768
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 311CF81407
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3029B60768
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e3IakGNJYC2l for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WSGXLzgp6IEc for <buildroot@lists.busybox.net>;
  Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DAA081404
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6656D60A71
  for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DAA081404
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6656D60A71
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E9938666E; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
+ id 51BEE86670; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:44:09 +0100
+Date: Tue, 21 Feb 2023 21:37:22 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3820c4b934ddc90c7f34c923254f0b2c9fad2c4f
-X-Git-Newrev: 11374681baa1b7eedc30c5bd04ad3b10c3488155
+X-Git-Oldrev: 3a425a8926c8b546de085ab0f691891005482771
+X-Git-Newrev: 3820c4b934ddc90c7f34c923254f0b2c9fad2c4f
 X-Patchwork-Hint: ignore
-Message-Id: <20230221204903.5E9938666E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/tmux: add
- utf8proc optional dependency
+Message-Id: <20230221204903.51BEE86670@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/upx: security
+ bump to version 4.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11374681baa1b7eedc30c5bd04ad3b10c3488155
+commit: https://git.buildroot.net/buildroot/commit/?id=3820c4b934ddc90c7f34c923254f0b2c9fad2c4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-utf8proc is an optional dependency since version 2.3 and
-https://github.com/tmux/tmux/commit/6c94774b70f72952c4c512e4aa59a207ca1c34f2
+Fix CVE-2023-23456: A heap-based buffer overflow issue was discovered in
+UPX in PackTmt::pack() in p_tmt.cpp file. The flow allows an attacker to
+cause a denial of service (abort) via a crafted file.
+
+Fix CVE-2023-23457: A Segmentation fault was found in UPX in
+PackLinuxElf64::invert_pt_dynamic() in p_lx_elf.cpp. An attacker with a
+crafted input file allows invalid memory address access that could lead
+to a denial of service.
+
+https://github.com/upx/upx/blob/v4.0.2/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1f618aa388535181c281c85e2b5264532de4ef0f)
+(cherry picked from commit 02befac8f9404ae30d0d090221d21a8460c82ec7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tmux/tmux.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/upx/upx.hash | 2 +-
+ package/upx/upx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 281b7d8ee6..b1c0af1a83 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -11,6 +11,13 @@ TMUX_LICENSE_FILES = COPYING
- TMUX_CPE_ID_VENDOR = tmux_project
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+diff --git a/package/upx/upx.hash b/package/upx/upx.hash
+index 9f7c40c819..7c24906152 100644
+--- a/package/upx/upx.hash
++++ b/package/upx/upx.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  77003c8e2e29aa9804e2fbaeb30f055903420b3e01d95eafe01aed957fb7e190  upx-4.0.1-src.tar.xz
++sha256  1221e725b1a89e06739df27fae394d6bc88aedbe12f137c630ec772522cbc76f  upx-4.0.2-src.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index ef346b2310..6018b0a63d 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_UTF8PROC),y)
-+TMUX_DEPENDENCIES += utf8proc
-+TMUX_CONF_OPTS += --enable-utf8proc
-+else
-+TMUX_CONF_OPTS += --disable-utf8proc
-+endif
-+
- # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
- # can reject the user connection. See man shells.
- define TMUX_ADD_TMUX_TO_SHELLS
+-UPX_VERSION = 4.0.1
++UPX_VERSION = 4.0.2
+ UPX_SITE = https://github.com/upx/upx/releases/download/v$(UPX_VERSION)
+ UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
+ UPX_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
