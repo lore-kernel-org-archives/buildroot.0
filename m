@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9349AC6379F
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AE7CC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 469D78274D;
-	Tue, 21 Feb 2023 08:28:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 469D78274D
+	by smtp1.osuosl.org (Postfix) with ESMTP id C49598275A;
+	Tue, 21 Feb 2023 08:28:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C49598275A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kj5H5_xD94l9; Tue, 21 Feb 2023 08:28:30 +0000 (UTC)
+	with ESMTP id STvU1bnpYKVT; Tue, 21 Feb 2023 08:28:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C9B98266A;
-	Tue, 21 Feb 2023 08:28:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C9B98266A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05C0D8275C;
+	Tue, 21 Feb 2023 08:28:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05C0D8275C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 60C761BF292
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:28:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E6351BF292
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:28:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3AC5061089
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:28:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AC5061089
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2457361089
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:28:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2457361089
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ldypXrZSYS5c for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 08:28:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3BE461030
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F3BE461030
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:28:25 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4BDBD1BF20F;
- Tue, 21 Feb 2023 08:28:22 +0000 (UTC)
-Date: Tue, 21 Feb 2023 09:28:21 +0100
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Message-ID: <20230221092821.2f227afc@windsurf>
-In-Reply-To: <20230220124945.1842532-1-buildroot@heine.tech>
-References: <20230220124945.1842532-1-buildroot@heine.tech>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676968103;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=RnUxFkq5PZ6JRhluHoPgXesGozQGhZu4ka/XuR/lJw8=;
- b=ggtxAUUbTGIDuX4KBlPpzecYiQINo3RCmfJyMYLv2MT/1Wmvw+wD6F2BkPJvPLM3GPnZjo
- EF1dBcbuiaXfCR0Qw9FsL7zm4dAbZ6Kriq4yh+24d0vfcs26uleVCYjx+tKBE2blXA3WgF
- uVGbQ4fq1WIsVVSNxlK68sDem+o3L6mESIKo11dICcmYBuIhJyowN5Y7ulP/5DB6F/slPt
- ydp/g/oAyn82gctqqvkOupBpXi6oOH7hfR5MBahdwMrR9SleXoxi8yl94SSrzTVrZwM6K8
- djXsPyf7UR77w/gZi/BJIeDIDDf4s2vKQEk+FJ5qDaQuOM4FNNnDlAGgcz2UEg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ggtxAUUb
-Subject: Re: [Buildroot] [PATCH] package/grpc: bump to version 1.52.1
+ with ESMTP id CO762MFM_XgM for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 08:28:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53963611B8
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:28:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53963611B8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3FA5586561; Tue, 21 Feb 2023 08:28:49 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 21 Feb 2023 09:23:46 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 3927054736881e5807b86fe9b1e5b275d941d6fd
+X-Git-Newrev: 6ab0431b70e3d963ff3bbc8f10a1871d9f628789
+X-Patchwork-Hint: ignore
+Message-Id: <20230221082849.3FA5586561@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 22.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,44 +58,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>, Robert Rose <robertroyrose@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Michael,
+commit: https://git.buildroot.net/buildroot/commit/?id=6ab0431b70e3d963ff3bbc8f10a1871d9f628789
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for the new iteration!
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-February/000705.html
 
-On Mon, 20 Feb 2023 13:49:45 +0100
-Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-> +comment "grpc needs a toolchain w/ C++, gcc >= 7.3"
-
-It's a bit annoying that it depends on gcc >= 7.3 and not gcc >= 7,
-because technically BR2_TOOLCHAIN_GCC_AT_LEAST_7 only implies >= 7.x,
-and not >= 7.3.
-
-Did you check what happens with gcc 7.0, 7.1 or 7.2 ?
-
-https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--bleeding-edge-2017.11-1.tar.bz2
-uses gcc 7.2.0 for example. Here is a fragment to use it:
-https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/fragments/armv7-eabihf--glibc--bleeding-edge-2017.11-1.frag.
-
-I don't easily find a toolchain with gcc 7.0 or 7.1 unfortunately.
-
-Worst case, we could make this dependency >= 8.0.
-
-But clearly, a comment that says >= 7.3, but with a dependency on
-BR2_TOOLCHAIN_GCC_AT_LEAST_7 is going to be very misleading.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 9177adceda..ad1999a30d 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 22.3.4
++MESA3D_HEADERS_VERSION = 22.3.5
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index e4de997f0e..50c5bcc7fc 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2023-January/000703.html
+-sha256  37a1ddaf03f41919ee3c89c97cff41e87de96e00e9d3247959cc8279d8294593  mesa-22.3.4.tar.xz
+-sha512  6af340153244d3e95d0e155a45d6db134335654d62590797ae0ef6ba44c2ccfe91ebf95f70ff82c67cee108ac35536767b1f6848d6d1129f52eb9e8414ee321d  mesa-22.3.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-February/000705.html
++sha256  3eed2ecae2bc674494566faab9fcc9beb21cd804c7ba2b59a1694f3d7236e6a9  mesa-22.3.5.tar.xz
++sha512  a4cad9b7e6501678fac279bd88a37e522633c7128afa8df04982f469c930e3557bb1d05b4b0f5ae16704d8d04e50c90a7489943a48861df17dd947704c329b85  mesa-22.3.5.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index cf2352a355..1e919d73f2 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 22.3.4
++MESA3D_VERSION = 22.3.5
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
