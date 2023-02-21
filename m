@@ -4,46 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56D26C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 18:04:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C35BC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 18:31:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C37186115F;
-	Tue, 21 Feb 2023 18:04:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C37186115F
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEB7060A88;
+	Tue, 21 Feb 2023 18:31:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB7060A88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jpGA5W2Q6_yL; Tue, 21 Feb 2023 18:04:29 +0000 (UTC)
+	with ESMTP id xoHtOv8x4PQe; Tue, 21 Feb 2023 18:31:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B37661106;
-	Tue, 21 Feb 2023 18:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B37661106
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5CCD41BF425
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 18:04:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FE1760A7D;
+	Tue, 21 Feb 2023 18:30:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FE1760A7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B46C11BF409
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 18:30:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3607C8196E
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 18:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3607C8196E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B5C640179
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 18:30:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B5C640179
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f9P9KBLcnhRx for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 18:04:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1wM5E4lgZKmC for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 18:30:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B37381207
-Received: from mail (kmf.trabucayre.com [91.121.117.161])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B37381207
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 18:04:25 +0000 (UTC)
-Received: from localhost.localdomain (localhost [127.0.0.1])
- by mail (Postfix) with ESMTP id 7C44939857;
- Tue, 21 Feb 2023 18:27:18 +0100 (CET)
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F0C140158
+Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F0C140158
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 18:30:54 +0000 (UTC)
+Received: from localhost.localdomain ([151.79.164.54])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id UXPgpHXhH4IFHUXPgpzQcQ; Tue, 21 Feb 2023 19:30:52 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 18:27:16 +0100
-Message-Id: <1677000436-53977-1-git-send-email-gwenj@trabucayre.com>
-X-Mailer: git-send-email 1.6.4.2
-Subject: [Buildroot] [PATCH] package/openfpgaloader: bump to version 0.10.0
+Date: Tue, 21 Feb 2023 19:30:51 +0100
+Message-Id: <20230221183051.4011311-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfC37JHTtnK7zMfn/48+HmfQrxDnN/VpTzGAoO/dFPsjy/sTzjLK5G+/fXr/OPgI33HGiSW/aWrqNqZvpY3WxoPfKZsA7cVbbAwp6V5d6kLknZdiCu0H1
+ +s9q7odKULopO6HpqWIxfAKHBFmP0u1GIp2city+88ZnUY3eIokJ7Yni9L57E03d5zvTPPEnC3qBKfi3hNQGy+z9tVPFUTv9THWuDjRXEgjzWx0QpTLHuWBj
+ G3PQH0QUTytmtBGMpeEHjPTtGMoyTJdtbtC6mzuxOvYoXF1EABAePI5UU69z3zRU
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1677004252; bh=wDqO411vReip33/wSabgcOcsSqffiMjC7X7+SeJeZWs=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=YyNckSAHbqQh9jsoBpCaTDIZ3vvCC1dcYEjTLNyr4eVlGIrcR0dIWlfVIgmSOJFP0
+ IVX7AyWF/cdTmS6rJcoF2C2ugyRy90n8kKnfVQymcAseMtaGFgKS08zrAI86L028mI
+ 8VrI0UgUtkuwzUuF+665LgxWOmnkecqgpPo9VodCgeHA9HKQ+vc3OzxthteEM0vQnq
+ YMuslYiJ4/tP1vd6iK9NHx05FJYLYRUtpzIzlKupWmnGSCC8C3fOhOODUXg90bFBjW
+ qJVTRKYUk4Ryw/Gw0dWADpqng+6+GcYjvMrsHjYdPrAClbkdRfMcm5RC2d0GkqnH9U
+ I7rSygmgxyUxA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=YyNckSAH
+Subject: [Buildroot] [PATCH] package/jpeg: fix build failure when qt5base
+ tries to use libjpeg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,82 +73,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Jean Burgat <jeanburgat33@gmail.com>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Qt5 fails to build with libjpeg since the API is different from
+libjpeg-turbo and libjpeg-turbo is pointed as the library Qt5 usually link
+against to[0]. So let's default jpeg variant to libjpeg-turbo if
+BR2_PACKAGE_QT5BASE_JPEG is selected.
 
-Also adds libgpiod support.
+Fixes:
+still not failed
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+[0]: https://doc.qt.io/qt-5/qtgui-index.html#licenses-and-attributions
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/openfpgaloader/Config.in           | 10 ++++++++++
- package/openfpgaloader/openfpgaloader.hash |  2 +-
- package/openfpgaloader/openfpgaloader.mk   |  9 ++++++++-
- 3 files changed, 19 insertions(+), 2 deletions(-)
+ package/jpeg/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/openfpgaloader/Config.in b/package/openfpgaloader/Config.in
-index 054278c256..4ba01d12d3 100644
---- a/package/openfpgaloader/Config.in
-+++ b/package/openfpgaloader/Config.in
-@@ -24,6 +24,16 @@ config BR2_PACAKGE_OPENFPGALOADER_CMSIS
- comment "openfpgaloader CMSIS-DAP needs udev /dev management and a toolchain w/ NPTL threads"
- 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
+index 371f89aa49..3a39a0dfb8 100644
+--- a/package/jpeg/Config.in
++++ b/package/jpeg/Config.in
+@@ -16,7 +16,8 @@ if BR2_PACKAGE_JPEG
  
-+config BR2_PACKAGE_OPENFPGALOADER_LIBGPIOD
-+	bool "libgpiod support"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8 # libgpiod
-+	select BR2_PACKAGE_LIBGPIOD
-+	help
-+	  openfpgaloader libgpiod support
-+
-+comment "openfpgaloader libgpiod needs kernel headers >= 4.8"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
- endif
+ choice
+ 	prompt "jpeg variant"
+-	default BR2_PACKAGE_JPEG_TURBO if BR2_PACKAGE_JPEG_SIMD_SUPPORT
++	default BR2_PACKAGE_JPEG_TURBO if BR2_PACKAGE_JPEG_SIMD_SUPPORT || \
++					  BR2_PACKAGE_QT5BASE_JPEG
+ 	help
+ 	  Select the normal libjpeg or libjpeg-turbo.
  
- comment "openfpgaloader needs a toolchain w/ threads, C++, gcc >= 4.9"
-diff --git a/package/openfpgaloader/openfpgaloader.hash b/package/openfpgaloader/openfpgaloader.hash
-index 6c9d8a2b91..a8b537782c 100644
---- a/package/openfpgaloader/openfpgaloader.hash
-+++ b/package/openfpgaloader/openfpgaloader.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a862a209d696becff915a77512e6a8c22f92d73480a45cc12273d9ad1db60d23  openfpgaloader-0.6.1.tar.gz
-+sha256  966b4629df86b1d520ddd8a4e0a3fc00060b26b5ab4e172b596bd9d4659a196e  openfpgaloader-0.10.0.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
-index 0c39aad687..042b16612e 100644
---- a/package/openfpgaloader/openfpgaloader.mk
-+++ b/package/openfpgaloader/openfpgaloader.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENFPGALOADER_VERSION = 0.6.1
-+OPENFPGALOADER_VERSION = 0.10.0
- OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,v$(OPENFPGALOADER_VERSION))
- OPENFPGALOADER_LICENSE = Apache-2.0
- OPENFPGALOADER_LICENSE_FILES = LICENSE
-@@ -24,4 +24,11 @@ else
- OPENFPGALOADER_CONF_OPTS += -DENABLE_CMSISDAP=OFF
- endif
- 
-+ifeq ($(BR2_PACAKGE_OPENFPGALOADER_LIBGPIOD),y)
-+OPENFPGALOADER_DEPENDENCIES += libgpiod
-+OPENFPGALOADER_CONF_OPTS += -DENABLE_LIBGPIOD=ON
-+else
-+OPENFPGALOADER_CONF_OPTS += -DENABLE_LIBGPIOD=OFF
-+endif
-+
- $(eval $(cmake-package))
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
