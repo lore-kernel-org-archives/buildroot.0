@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E12C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 17:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05A4EC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 17:22:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3335D61241;
-	Tue, 21 Feb 2023 17:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3335D61241
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9152B61245;
+	Tue, 21 Feb 2023 17:22:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9152B61245
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mO9uYPVAXOmB; Tue, 21 Feb 2023 17:22:22 +0000 (UTC)
+	with ESMTP id foVDew2CCiTk; Tue, 21 Feb 2023 17:22:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86DC961249;
-	Tue, 21 Feb 2023 17:22:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86DC961249
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 608661BF42C
+	by smtp3.osuosl.org (Postfix) with ESMTP id D20EB61249;
+	Tue, 21 Feb 2023 17:22:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D20EB61249
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DA6F1BF956
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 17:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46BF74036F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5520261230
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 17:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46BF74036F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5520261230
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kkzvWahTkidB for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0pR6bQiKDlkV for <buildroot@lists.busybox.net>;
  Tue, 21 Feb 2023 17:22:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81E7A4012E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DBEE61202
 Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 81E7A4012E
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7DBEE61202
  for <buildroot@buildroot.org>; Tue, 21 Feb 2023 17:22:19 +0000 (UTC)
 Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
- by mail.xes-mad.com (Postfix) with ESMTP id F2B7D20259;
- Tue, 21 Feb 2023 11:22:17 -0600 (CST)
+ by mail.xes-mad.com (Postfix) with ESMTP id 1BCB1202B6;
+ Tue, 21 Feb 2023 11:22:18 -0600 (CST)
 From: Vincent Fazio <vfazio@xes-inc.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 11:21:51 -0600
-Message-Id: <20230221172205.2450111-1-vfazio@xes-inc.com>
+Date: Tue, 21 Feb 2023 11:21:52 -0600
+Message-Id: <20230221172205.2450111-2-vfazio@xes-inc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230221172205.2450111-1-vfazio@xes-inc.com>
+References: <20230221172205.2450111-1-vfazio@xes-inc.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=xes-inc.com; s=mail; 
- t=1677000138; bh=g0wg87uMFSp2fcHel9rCZO1iRNxMDQkEc4or4O5YAZk=;
- h=From:To:Cc:Subject:Date:From;
- b=txmEvg0Vq85HpINmwYOPAay4RUTdS/Du/CKoe/52eZrnmhwyyTHLQvShdwOtFGN8C
- qbQCZLIs7vMalMtpj9ezMhe1I5Y78sFpdn7YQ8XvA8hIjhdgjnlhMUirY7gQ6JM6HQ
- HlVvPhe7YHim1iOsJ4a336JQzqydAYxTwaszAKpc=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1677000138; bh=l5ysllLkVOsA9r2Ff62UJsQhkPL/EUlZzmSHM2MbhRw=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=gs+CjMMWnGn4r392HZKGQgj/7gyqQGU1ID66+rc5paFGpJwUx8V+fv0ZDOr64Tz9Y
+ K+bVrO3/CJILw6uqNOiIYES4XYRw2LTHWPyT+dbP50zp2963WMB/JtEo4XHfJab7cO
+ TFLbe/hPNAKEAouvehJpDKtatcyIpy/xuJ3h27D0=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
- header.a=rsa-sha256 header.s=mail header.b=txmEvg0V
-Subject: [Buildroot] [PATCH 01/15] package/pkg-autotools: drop
- FOO_GETTEXTIZE_OPTS support
+ header.a=rsa-sha256 header.s=mail header.b=gs+CjMMW
+Subject: [Buildroot] [PATCH 02/15] manual: remove LIBFOO_GETTEXTIZE_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,63 +80,28 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Vincent Fazio <vfazio@gmail.com>
 
-No package in the current tree is currently utilizing this option.
-
-The long term solution is to use autopoint over gettextize in which case
-these options aren't relevant anyway.
-
 Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 ---
- package/pkg-autotools.mk | 6 +-----
- package/pkg-generic.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 6 deletions(-)
+ docs/manual/adding-packages-autotools.txt | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 717ff81593..55d95d204e 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -92,7 +92,7 @@ endef
- #
- define GETTEXTIZE_HOOK
- 	@$(call MESSAGE,"Gettextizing")
--	$(Q)cd $($(PKG)_SRCDIR) && $(GETTEXTIZE) $($(PKG)_GETTEXTIZE_OPTS)
-+	$(Q)cd $($(PKG)_SRCDIR) && $(GETTEXTIZE)
- endef
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+index a041d91eb6..8655a79693 100644
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -136,12 +136,6 @@ cases, typical packages will therefore only use a few of them.
+   'gettextize'.) Only valid when +LIBFOO_AUTORECONF=YES+. Valid
+   values are +YES+ and +NO+. The default is +NO+.
  
- #
-@@ -152,10 +152,6 @@ ifndef $(2)_GETTEXTIZE
-  endif
- endif
- 
--ifeq ($(4),host)
-- $(2)_GETTEXTIZE_OPTS ?= $$($(3)_GETTEXTIZE_OPTS)
--endif
+-* +LIBFOO_GETTEXTIZE_OPTS+, to specify additional options passed to
+-  the 'gettextize' program, if +LIBFOO_GETTEXTIZE=YES+. You may
+-  use that if, for example, the +.po+ files are not located in the
+-  standard place (i.e. in +po/+ at the root of the package.) By
+-  default, '-f'.
 -
- ifeq ($(4),host)
-  $(2)_AUTORECONF_OPTS ?= $$($(3)_AUTORECONF_OPTS)
- endif
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 82187d7db9..a6ef5efb5f 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1206,9 +1206,16 @@ $(eval $(call check-deprecated-variable,$(2)_INSTALL_HOST_OPT,$(2)_INSTALL_HOST_
- $(eval $(call check-deprecated-variable,$(2)_AUTORECONF_OPT,$(2)_AUTORECONF_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_CONF_OPT,$(2)_CONF_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
--$(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
- 
-+# Check for deprecated variables that have no replacement
-+ifneq ($$($(2)_GETTEXTIZE_OPT),)
-+$$(error "$(2)_GETTEXTIZE_OPT is no longer supported. Please fix your .mk file.")
-+endif
-+ifneq ($$($(2)_GETTEXTIZE_OPTS),)
-+$$(error "$(2)_GETTEXTIZE_OPTS is no longer supported. Please fix your .mk file.")
-+endif
-+
- PACKAGES += $(1)
- 
- ifneq ($$($(2)_PERMISSIONS),)
+ * +LIBFOO_LIBTOOL_PATCH+ tells whether the Buildroot
+   patch to fix libtool cross-compilation issues should be applied or
+   not. Valid values are +YES+ and +NO+. By
 -- 
 2.25.1
 
