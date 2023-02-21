@@ -4,46 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E75CC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 14:14:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70882C6379F
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 14:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18AD540BE5;
-	Tue, 21 Feb 2023 14:14:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18AD540BE5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B45D403AA;
+	Tue, 21 Feb 2023 14:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B45D403AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NN7aMMLbMQ2T; Tue, 21 Feb 2023 14:14:46 +0000 (UTC)
+	with ESMTP id kHAtmk3eLnFC; Tue, 21 Feb 2023 14:21:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34A8F40364;
-	Tue, 21 Feb 2023 14:14:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34A8F40364
+	by smtp2.osuosl.org (Postfix) with ESMTP id 46E2740339;
+	Tue, 21 Feb 2023 14:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46E2740339
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4B8381BF3C9
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 14:14:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C76D21BF2F0
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 14:21:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25B3C42CEE
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 14:14:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25B3C42CEE
+ by smtp4.osuosl.org (Postfix) with ESMTP id A525142D1E
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 14:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A525142D1E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rTUuick0GAbp for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 14:14:41 +0000 (UTC)
-X-Greylist: delayed 00:06:39 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C2DA42CEA
-Received: from mail (kmf.trabucayre.com [91.121.117.161])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C2DA42CEA
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 14:14:41 +0000 (UTC)
-Received: from localhost.localdomain (localhost [127.0.0.1])
- by mail (Postfix) with ESMTP id A006D39856;
- Tue, 21 Feb 2023 14:30:55 +0100 (CET)
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 14:30:54 +0100
-Message-Id: <1676986254-52744-1-git-send-email-gwenj@trabucayre.com>
-X-Mailer: git-send-email 1.6.4.2
-Subject: [Buildroot] [PATCH] package/volk: bump version to 3.0.0
+ with ESMTP id uh0aB8UNBYX2 for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 14:21:06 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 175F742D1B
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 175F742D1B
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 14:21:05 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EA7F124000A;
+ Tue, 21 Feb 2023 14:21:01 +0000 (UTC)
+Date: Tue, 21 Feb 2023 15:21:00 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230221152100.27549e20@windsurf>
+In-Reply-To: <CAPi7W80vMSG032z4F_R94DkaKZ1YoD+z5UG8-7U6-kqi3_Nkqg@mail.gmail.com>
+References: <20230221112911.177963-1-fontaine.fabrice@gmail.com>
+ <20230221150122.63e353f7@windsurf>
+ <CAPi7W80vMSG032z4F_R94DkaKZ1YoD+z5UG8-7U6-kqi3_Nkqg@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676989263;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ZOahBZWCuzWRRvMlpgFliFIWw75BO00Xk3k8/6cFXys=;
+ b=JvLON2Jk9gif0RDLlHrR6XlOV1UhnMkF1QGGVXdxTjo5haMthnIsTl/AP7aWuYoMME9JkC
+ f5tFHajTddmqIGKfVDeTWFYEU3xwxBXCZulk0FcUgqpAsp0uW/TRwoj4PJelOseBy1YOV2
+ u0jDEqm7IC6IQuJFjCcwdfSyKnSnZ7bE7cW8uan/9C/5U+eSJZxIR0+vaa7UKkT+PY3WaE
+ 4c2rgcI1yYFS70SfgCv43SVAeXYofdB9VjOepRnspvEzYuDWEEyZjUvgxWj07z9LXNixZ4
+ eMw7Sabj9VK7CoJlA6i8jcoEm9h4v9nHX0wWdfXrdmoSNE34Jrs4pHGfBi8zBw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JvLON2Jk
+Subject: Re: [Buildroot] [PATCH 1/1]
+ toolchain/toolchain-external/toolchain-external-synopsys-arc: drop locale
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,58 +78,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+On Tue, 21 Feb 2023 15:09:47 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Remove GPL-3.0+ license, no more COPYING-LGPL: merged into COPYING
+> I think the issue is that __UCLIBC_HAS_XLOCALE__ is disabled.
+> To my understanding, locale_t is defined in xlocale.h:
+> https://github.com/wbx-github/uclibc-ng/blob/ab1dd83bec59c9e65c31efd6e887182948f627be/include/xlocale.h#L46
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/volk/volk.hash | 5 ++---
- package/volk/volk.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+Possible indeed. There are newer versions of the ARC toolchain
+available at
+https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases,
+but I checked the latest and it still has xlocale disabled.
 
-diff --git a/package/volk/volk.hash b/package/volk/volk.hash
-index 4c62c6d315..8047a68bab 100644
---- a/package/volk/volk.hash
-+++ b/package/volk/volk.hash
-@@ -1,4 +1,3 @@
- # Locally computed
--sha256  eff53206cd1ec3314755e0b2bde3c7aaea21dd0f0ad8d753bff07d98e93ddee2  volk-2.5.2.tar.xz
--sha256  6dcdafa9e750545f5f65c2e6f53820184822db728ac2b8bfe1d4a47da09ec0d6  COPYING
--sha256  258f450f060a161fb9f9e2e7c07c6b1ee73e5142297e6792dc1ee76b028cf0ca  COPYING-LGPL
-+sha256  88fd80638a3683f23a8cae6c551a8cfe9ea55735c701846f3eeeeeea8a14f6a3  volk-3.0.0.tar.xz
-+sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING
-diff --git a/package/volk/volk.mk b/package/volk/volk.mk
-index af5bd4306b..c9c098f237 100644
---- a/package/volk/volk.mk
-+++ b/package/volk/volk.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--VOLK_VERSION = 2.5.2
-+VOLK_VERSION = 3.0.0
- VOLK_SITE = https://github.com/gnuradio/volk/releases/download/v$(VOLK_VERSION)
- VOLK_SOURCE = volk-$(VOLK_VERSION).tar.xz
- # See https://github.com/gnuradio/volk/tree/v2.5.1#license for some
- # details on the licensing.
--VOLK_LICENSE = GPL-3.0+, LGPL-3.0+
--VOLK_LICENSE_FILES = COPYING COPYING-LGPL
-+VOLK_LICENSE = LGPL-3.0+
-+VOLK_LICENSE_FILES = COPYING
- 
- VOLK_SUPPORTS_IN_SOURCE_BUILD = NO
- 
+One option is to ask the ARC/Synopsys people to enable XLOCALE in their
+uClibc configuration.
+
+Another option is to drop the ARC/Synopsys toolchain entirely.
+
+A third option is to change the check done by Buildroot to verify
+__UCLIBC_HAS_XLOCALE__ instead of __UCLIBC_HAS_LOCALE__. This way it
+will be valid to say that the ARC toolchain does not have locale
+support.
+
+Thomas
 -- 
-2.30.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
