@@ -4,55 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C5A3C636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7685C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0260840374;
-	Tue, 21 Feb 2023 20:35:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0260840374
+	by smtp2.osuosl.org (Postfix) with ESMTP id 724D640169;
+	Tue, 21 Feb 2023 20:35:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 724D640169
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6C-5Hi8rPRRO; Tue, 21 Feb 2023 20:35:30 +0000 (UTC)
+	with ESMTP id sguVz28GZLo7; Tue, 21 Feb 2023 20:35:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C968403C7;
-	Tue, 21 Feb 2023 20:35:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C968403C7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3E4591BF3F4
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:34:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1D9040B3A;
+	Tue, 21 Feb 2023 20:35:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1D9040B3A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B1EF1BF3F4
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:34:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 252C960A9B
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:34:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 252C960A9B
+ by smtp1.osuosl.org (Postfix) with ESMTP id E86E681D70
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E86E681D70
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hO7HxGkGdkWX for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 20:34:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k9qgQao7FHet for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 20:34:52 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2969260A7E
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2969260A7E
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:34:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E914581CA3
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E914581CA3
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:34:51 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 82EEA100003;
- Tue, 21 Feb 2023 20:34:26 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id CC39E100009;
+ Tue, 21 Feb 2023 20:34:49 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pUZLF-007lay-7V; Tue, 21 Feb 2023 21:34:25 +0100
+ id 1pUZLd-007lbU-4V; Tue, 21 Feb 2023 21:34:49 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230205140002.154492-1-fontaine.fabrice@gmail.com>
-Date: Tue, 21 Feb 2023 21:34:25 +0100
-In-Reply-To: <20230205140002.154492-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 5 Feb 2023 15:00:02 +0100")
-Message-ID: <87o7pmycz2.fsf@dell.be.48ers.dk>
+References: <20230219165638.147772-1-fontaine.fabrice@gmail.com>
+Date: Tue, 21 Feb 2023 21:34:49 +0100
+In-Reply-To: <20230219165638.147772-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 19 Feb 2023 17:56:38 +0100")
+Message-ID: <87k00aycye.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/modsecurity2: security bump to
- version 2.9.7
+Subject: Re: [Buildroot] [PATCH 1/1] package/modsecurity2: disable pcre
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,16 +71,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Fix CVE-2023-24021: Incorrect handling of '\0' bytes in file uploads
- >   in ModSecurity before 2.9.7 may allow for Web Application Firewall
- >   bypasses and buffer overflows on the Web Application Firewall when
- >   executing rules that read the FILES_TMP_CONTENT collection.
- > - host-pkgconf is mandatory and used to find libxml2 since
- >   https://github.com/SpiderLabs/ModSecurity/commit/baa38ddbaf55a87afecad7a1e1760c69a2689787
- > - pcre2 is supported since:
- >   https://github.com/SpiderLabs/ModSecurity/commit/8fc0b519b7a6c023259753a21f33bf3649a25b14
+ > Disable pcre to avoid the following build failure if pcre-config is
+ > found on host raised since bump to version 2.9.7 in commit
+ > 42e34cf10f9eb037aa8c48a4fb9e8f521901b983:
 
- > https://github.com/SpiderLabs/ModSecurity/blob/v2.9.7/CHANGES
+ > /home/thomas/autobuild/instance-0/output-1/per-package/modsecurity2/host/bin/../lib/gcc/mips64el-buildroot-linux-gnu/11.3.0/../../../../mips64el-buildroot-linux-gnu/bin/ld:
+ > cannot find -lpcre: No such file or directory
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/f4864f8cc1d07e357f6e5f8302c19ae94e9cf3af
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
