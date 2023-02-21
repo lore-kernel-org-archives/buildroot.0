@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F195CC64EC7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:38:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 095D7C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:38:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F2FD81275;
-	Tue, 21 Feb 2023 08:38:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F2FD81275
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6F8D82813;
+	Tue, 21 Feb 2023 08:38:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6F8D82813
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WXBqqYDjlzOS; Tue, 21 Feb 2023 08:38:09 +0000 (UTC)
+	with ESMTP id s7jQQlj_mhB4; Tue, 21 Feb 2023 08:38:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCB9F82675;
-	Tue, 21 Feb 2023 08:38:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCB9F82675
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 11B0E1BF292
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:37:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D220082862;
+	Tue, 21 Feb 2023 08:38:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D220082862
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C35581BF292
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFAE5611E0
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:37:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFAE5611E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90BCE40A59
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:38:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90BCE40A59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1UGS3WGOE358 for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 08:37:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB646611DF
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:37:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB646611DF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A82F58659D; Tue, 21 Feb 2023 08:37:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 09:37:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97bdc0616c6027fe4b92bfa80dd9e7d43df20505
-X-Git-Newrev: ceb9c36b921f5237f823c34ab369ef521f3ba12b
-X-Patchwork-Hint: ignore
-Message-Id: <20230221083752.A82F58659D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fluent-bit: fix build without C++
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mrScpRPgrNSb for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 08:37:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E30940A04
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4E30940A04
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:37:58 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E905E1C000A;
+ Tue, 21 Feb 2023 08:37:56 +0000 (UTC)
+Date: Tue, 21 Feb 2023 09:37:56 +0100
+To: Alexander Egorenkov <egorenar-dev@posteo.net>
+Message-ID: <20230221093756.06a8f7c5@windsurf>
+In-Reply-To: <20230218092943.2598-1-egorenar-dev@posteo.net>
+References: <20230218092943.2598-1-egorenar-dev@posteo.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676968677;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=RFV2p0T/kTVb/pfrlM3Fdq9jg4EC2Ci4jfsSwlgFu4s=;
+ b=XQD642NDPsJNcdlYbzK3dgER7uz+orRDTU0iVPRS0a6hfagBFGByZhXGh3Lv+Www7nLF+N
+ tJW/qjd6N0c/wX896dG21Mn/yLNU4QzYvPxTKW3d5WF990o497WvtT4Cn3cZGmm3FplEj9
+ DYVmZkIzcqw4X4KmCLReWmscLPbdbaWLspQJ5qTYtODEzUu1xzLUwG4MCzcjXBhQ1HgH0z
+ 2txT+2EfVSEzEwdHltqPTfNeIytA3X1vAvxdiWhdBfV+6SJMKqi4i3uPUZXWXyhIQ8VxiQ
+ GEWbNIMWJF0lrymOdWSYX16GWMHEpv70chrrxPz2RQGcezl+MwXmYnzgPR1gfg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XQD642ND
+Subject: Re: [Buildroot] [PATCH 1/1] package/multipath-tools: fix path to
+ kernel headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,212 +78,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceb9c36b921f5237f823c34ab369ef521f3ba12b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit dedbc69022ba0beaf259463ac8082c86776f7e88 was incomplete resuling
-in the following build failure since the addition of the package in
-commit 6a0f7c39bcb48fc13aa2ce3fc4996baf1be66483:
-
--- Check for working CXX compiler: /usr/bin/c++ - broken
-CMake Error at /home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake:62 (message):
-  The C++ compiler
-
-    "/usr/bin/c++"
-
-  is not able to compile a simple test program.
-
-  It fails with the following output:
-
-    Change Dir: /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp
-
-    Run Build Command(s):/home/autobuild/make/make -f Makefile cmTC_bfb29/fast && make[1]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
-    /home/autobuild/make/make  -f CMakeFiles/cmTC_bfb29.dir/build.make CMakeFiles/cmTC_bfb29.dir/build
-    make[2]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
-    Building CXX object CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o
-    /usr/bin/c++ --sysroot=/home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/xtensa-buildroot-linux-uclibc/sysroot   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O2 -g0  -fcommon -U_FILE_OFFSET_BITS  -g -fPIE -o CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-    c++: error: unrecognized command-line option '-mlongcalls'
-    c++: error: unrecognized command-line option '-mauto-litpools'
-    make[2]: *** [CMakeFiles/cmTC_bfb29.dir/build.make:78: CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o] Error 1
-    make[2]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
-    make[1]: *** [Makefile:127: cmTC_bfb29/fast] Error 2
-    make[1]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
-
-  CMake will not be able to correctly generate this project.
-Call Stack (most recent call first):
-  lib/msgpack-c/CMakeLists.txt:2 (project)
-
-While at it, add missing comment about C++ dependency for wasm
-
-Fixes:
- - http://autobuild.buildroot.org/results/4b0f90d79d6dbbf976acf1da839260b0ee94ddda
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/fluent-bit/0003-fix-build-without-C.patch | 131 ++++++++++++++++++++++
- package/fluent-bit/Config.in                      |   4 +
- 2 files changed, 135 insertions(+)
-
-diff --git a/package/fluent-bit/0003-fix-build-without-C.patch b/package/fluent-bit/0003-fix-build-without-C.patch
-new file mode 100644
-index 0000000000..3bc5f46de9
---- /dev/null
-+++ b/package/fluent-bit/0003-fix-build-without-C.patch
-@@ -0,0 +1,131 @@
-+From 014e44808ebaf29b0c25b5a3fa2e35a99a30f628 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 21 Feb 2023 00:09:57 +0100
-+Subject: [PATCH] fix build without C++
-+
-+Fix the following build failure without C++:
-+
-+-- Check for working CXX compiler: /usr/bin/c++ - broken
-+CMake Error at /home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake:62 (message):
-+  The C++ compiler
-+
-+    "/usr/bin/c++"
-+
-+  is not able to compile a simple test program.
-+
-+  It fails with the following output:
-+
-+    Change Dir: /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp
-+
-+    Run Build Command(s):/home/autobuild/make/make -f Makefile cmTC_bfb29/fast && make[1]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
-+    /home/autobuild/make/make  -f CMakeFiles/cmTC_bfb29.dir/build.make CMakeFiles/cmTC_bfb29.dir/build
-+    make[2]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
-+    Building CXX object CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o
-+    /usr/bin/c++ --sysroot=/home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/xtensa-buildroot-linux-uclibc/sysroot   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O2 -g0  -fcommon -U_FILE_OFFSET_BITS  -g -fPIE -o CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-+    c++: error: unrecognized command-line option '-mlongcalls'
-+    c++: error: unrecognized command-line option '-mauto-litpools'
-+    make[2]: *** [CMakeFiles/cmTC_bfb29.dir/build.make:78: CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o] Error 1
-+    make[2]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
-+    make[1]: *** [Makefile:127: cmTC_bfb29/fast] Error 2
-+    make[1]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
-+
-+  CMake will not be able to correctly generate this project.
-+Call Stack (most recent call first):
-+  lib/msgpack-c/CMakeLists.txt:2 (project)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/4b0f90d79d6dbbf976acf1da839260b0ee94ddda
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/fluent/fluent-bit/pull/6893]
-+---
-+ lib/chunkio/CMakeLists.txt          | 2 +-
-+ lib/lwrb/CMakeLists.txt             | 2 +-
-+ lib/msgpack-c/CMakeLists.txt        | 2 +-
-+ lib/onigmo/CMakeLists.txt           | 2 +-
-+ lib/snappy-fef67ac/CMakeLists.txt   | 2 +-
-+ lib/tutf8e/CMakeLists.txt           | 2 +-
-+ src/stream_processor/CMakeLists.txt | 2 +-
-+ 7 files changed, 7 insertions(+), 7 deletions(-)
-+
-+diff --git a/lib/chunkio/CMakeLists.txt b/lib/chunkio/CMakeLists.txt
-+index 233bce35c..8bfe5199d 100644
-+--- a/lib/chunkio/CMakeLists.txt
-++++ b/lib/chunkio/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required(VERSION 3.0)
-+-project(chunk-io)
-++project(chunk-io C)
-+ 
-+ set(CIO_VERSION_MAJOR  1)
-+ set(CIO_VERSION_MINOR  4)
-+diff --git a/lib/lwrb/CMakeLists.txt b/lib/lwrb/CMakeLists.txt
-+index 2fabd6319..031cbc1dd 100644
-+--- a/lib/lwrb/CMakeLists.txt
-++++ b/lib/lwrb/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ cmake_minimum_required(VERSION 3.0)
-+ 
-+ # Setup project
-+-project(LwLibPROJECT)
-++project(LwLibPROJECT C)
-+ 
-+ # -------------------------------------------------
-+ # This CMakeLists.txt is used only if it is a top-level file.
-+diff --git a/lib/msgpack-c/CMakeLists.txt b/lib/msgpack-c/CMakeLists.txt
-+index 810ad609a..ffbbc5ddb 100644
-+--- a/lib/msgpack-c/CMakeLists.txt
-++++ b/lib/msgpack-c/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required(VERSION 2.8)
-+-project(msgpack-c)
-++project(msgpack-c C)
-+ 
-+ set(src
-+     src/objectc.c
-+diff --git a/lib/onigmo/CMakeLists.txt b/lib/onigmo/CMakeLists.txt
-+index 4a3b30d7d..66865130a 100644
-+--- a/lib/onigmo/CMakeLists.txt
-++++ b/lib/onigmo/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required(VERSION 3.4)
-+-project(onigmo)
-++project(onigmo C)
-+ 
-+ # Onigmo Version
-+ set(ONIGMO_VERSION_MAJOR  6)
-+diff --git a/lib/snappy-fef67ac/CMakeLists.txt b/lib/snappy-fef67ac/CMakeLists.txt
-+index 8bb1e9598..ae9225c49 100644
-+--- a/lib/snappy-fef67ac/CMakeLists.txt
-++++ b/lib/snappy-fef67ac/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required(VERSION 2.8)
-+-project(snappy-c)
-++project(snappy-c C)
-+ 
-+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-+ 
-+diff --git a/lib/tutf8e/CMakeLists.txt b/lib/tutf8e/CMakeLists.txt
-+index 35cbe01ad..a056ef83c 100644
-+--- a/lib/tutf8e/CMakeLists.txt
-++++ b/lib/tutf8e/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required(VERSION 2.8)
-+-project(tutf8e)
-++project(tutf8e C)
-+ 
-+ # Not supported: -std=c90 (lacks support for inline)
-+ # Supported:     -std=gnu90, -std=c99 or -std=gnu99
-+diff --git a/src/stream_processor/CMakeLists.txt b/src/stream_processor/CMakeLists.txt
-+index 8c5d70d13..de2c2fe38 100644
-+--- a/src/stream_processor/CMakeLists.txt
-++++ b/src/stream_processor/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-project(stream-processor)
-++project(stream-processor C)
-+ 
-+ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-+ 
-+-- 
-+2.39.0
-+
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index f53eacb447..bfdea895b0 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -30,6 +30,10 @@ config BR2_PACKAGE_FLUENT_BIT_WASM
- 	help
- 	  Support for WASM-based plugins.
- 
-+comment "wasm runtime support needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- endif
- 
- comment "fluent-bit needs a toolchain w/ threads, dynamic library"
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gU2F0LCAxOCBGZWIgMjAyMyAwOToyOTo0MyArMDAwMApBbGV4YW5kZXIgRWdvcmVua292IDxl
+Z29yZW5hci1kZXZAcG9zdGVvLm5ldD4gd3JvdGU6Cgo+IFdpdGggY2hhbmdlIDZiN2Q0N2JlM2Iy
+MyAoIm11bHRpcGF0aC10b29sczogTWFrZWZpbGVzOiBzaW1wbGlmeSBjb2RlIGZvcgo+IGluY2x1
+ZGUgZGlycyIpIHRoZSBNYWtlZmlsZSB2YXJpYWJsZSAnTElOVVhfSEVBREVSU19JTkNESVInIGhh
+cyBiZWVuIHJlcGxhY2VkCj4gd2l0aCAna2VybmVsX2luY2RpcicuCj4gCj4gZnBpbl9oYW5kbGVy
+cy5jOjM1NTozMjogbm90ZTogZWFjaCB1bmRlY2xhcmVkIGlkZW50aWZpZXIgaXMgcmVwb3J0ZWQg
+b25seSBvbmNlIGZvciBlYWNoIGZ1bmN0aW9uIGl0IGFwcGVhcnMgaW4KPiBmcGluX2hhbmRsZXJz
+LmM6MzYwOjM3OiBlcnJvcjog4oCYRUxTX0RUQUdfTE5LX0lOVEVHUklUWeKAmSB1bmRlY2xhcmVk
+IChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKPiAgIDM2MCB8ICAgICAgICAgICAgICAgICAg
+ICAgICAgIGlmIChkdGFnID09IEVMU19EVEFHX0xOS19JTlRFR1JJVFkpIHsKPiAgICAgICB8ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn4K
+PiBtYWtlWzJdOiAqKiogWy4uL01ha2VmaWxlLmluYzoxMTY6IGZwaW5faGFuZGxlcnMub10gRXJy
+b3IgMQo+IAo+IEZpeGVzOiBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9l
+MGY1NmVmOTI0YzEzZDZiMTUzNWZkYzM1MGFkOGVjYzA2ZWEwYTU4Cj4gU2lnbmVkLW9mZi1ieTog
+QWxleGFuZGVyIEVnb3JlbmtvdiA8ZWdvcmVuYXItZGV2QHBvc3Rlby5uZXQ+Cj4gLS0tCj4gIHBh
+Y2thZ2UvbXVsdGlwYXRoLXRvb2xzL211bHRpcGF0aC10b29scy5tayB8IDIgKy0KPiAgMSBmaWxl
+IGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpBcHBsaWVkIHRvIG1hc3Rl
+ciwgdGhhbmtzLgoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1i
+ZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
