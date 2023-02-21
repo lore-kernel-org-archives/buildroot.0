@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 322F6C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 17:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78198C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 17:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFAEE61155;
-	Tue, 21 Feb 2023 17:24:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFAEE61155
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3232061377;
+	Tue, 21 Feb 2023 17:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3232061377
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bkh21MMJJlv5; Tue, 21 Feb 2023 17:24:39 +0000 (UTC)
+	with ESMTP id Sbyti1WuoiYC; Tue, 21 Feb 2023 17:24:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E44C561386;
-	Tue, 21 Feb 2023 17:24:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E44C561386
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 53E391BF42C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84EE5612D8;
+	Tue, 21 Feb 2023 17:24:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84EE5612D8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 704F81BF956
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 17:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBFD44015F
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 17:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBFD44015F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38B6C82B1E
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 17:22:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38B6C82B1E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id edIBLJwYLY3O for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b3qVSbyVwP3o for <buildroot@lists.busybox.net>;
  Tue, 21 Feb 2023 17:22:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D3D340414
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A13C182A6C
 Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D3D340414
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A13C182A6C
  for <buildroot@buildroot.org>; Tue, 21 Feb 2023 17:22:20 +0000 (UTC)
 Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
- by mail.xes-mad.com (Postfix) with ESMTP id 5058121729;
+ by mail.xes-mad.com (Postfix) with ESMTP id 6952121733;
  Tue, 21 Feb 2023 11:22:19 -0600 (CST)
 From: Vincent Fazio <vfazio@xes-inc.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 11:22:03 -0600
-Message-Id: <20230221172205.2450111-13-vfazio@xes-inc.com>
+Date: Tue, 21 Feb 2023 11:22:04 -0600
+Message-Id: <20230221172205.2450111-14-vfazio@xes-inc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230221172205.2450111-1-vfazio@xes-inc.com>
 References: <20230221172205.2450111-1-vfazio@xes-inc.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=xes-inc.com; s=mail; 
- t=1677000139; bh=S0anN6AfiLxBl5oy20atQsveeOAvD8iqDwvqr6yaA6I=;
+ t=1677000139; bh=MW1QISlU1EBNaGY+KIz0QE7WiAcE7qsEqdgjPcwfH44=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=vyoqDcCT9q5LwNwH8QGE4dsB8XItvjml51MLX51+qRYlSuZCJUjOZu8lzuaooLzf6
- RKN6wmmje0On72GA+BX0E5OUrDMAbWTaFGMr/rXTGJXdW3Szx7vcA3IP29W0V1L8WM
- F4B1xKe/7xM53OxFt+nBvrpZwlOktt/8YSnsyQlY=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=BVfMmoBuJP6o0YO39hWqc6R3WPlZvCpxDA1uIo3hNOyiYbEDiBuHFDCLOobl3088D
+ rLlCEyxOJ3AV/+5Ei9Ck3hJpItvQ68HvFoDNhWvSPJPG9eTsh0hJU00/JlhMFHYTJr
+ WpOl5ixMZJM65pWDjhdxY8ZlS6FeC+RlkckkCn4s=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
- header.a=rsa-sha256 header.s=mail header.b=vyoqDcCT
-Subject: [Buildroot] [PATCH 13/15] package/pkg-autotools: drop support for
- FOO_GETTEXTIZE
+ header.a=rsa-sha256 header.s=mail header.b=BVfMmoBu
+Subject: [Buildroot] [PATCH 14/15] package/gettext: drop GETTEXTIZE variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,78 +80,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Vincent Fazio <vfazio@gmail.com>
 
-Remove all support for FOO_GETTEXTIZE and alert users to FOO_AUTOPOINT
-as the recommended solution in its stead.
+This variable is no longer used anywhere in the tree so remove it.
 
 Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 ---
- package/pkg-autotools.mk | 23 +----------------------
- package/pkg-generic.mk   |  3 +++
- 2 files changed, 4 insertions(+), 22 deletions(-)
+ package/gettext/gettext.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 48485567d7..f17186dfe4 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -87,14 +87,6 @@ define CONFIGURE_FIX_POWERPC64_HOOK
- 	support/scripts/fix-configure-powerpc64.sh $($(PKG)_DIR)
- endef
- 
--#
--# Hook to gettextize the package if needed
--#
--define GETTEXTIZE_HOOK
--	@$(call MESSAGE,"Gettextizing")
--	$(Q)cd $($(PKG)_SRCDIR) && $(GETTEXTIZE)
--endef
--
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 146d40e13b..a86e26f69e 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -4,7 +4,5 @@
  #
- # Hook to autoreconf the package if needed
- #
-@@ -144,14 +136,6 @@ ifndef $(2)_AUTORECONF
-  endif
- endif
+ ################################################################################
  
--ifndef $(2)_GETTEXTIZE
-- ifdef $(3)_GETTEXTIZE
--  $(2)_GETTEXTIZE = $$($(3)_GETTEXTIZE)
-- else
--  $(2)_GETTEXTIZE ?= NO
-- endif
--endif
+-GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
 -
- ifndef $(2)_AUTOPOINT
-  ifdef $(3)_AUTOPOINT
-   $(2)_AUTOPOINT = $$($(3)_AUTOPOINT)
-@@ -245,13 +229,8 @@ $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
- 
- ifeq ($$($(2)_AUTORECONF),YES)
- 
--# This has to come before autoreconf
--ifeq ($$($(2)_GETTEXTIZE),YES)
--$(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
--$(2)_DEPENDENCIES += host-gettext
--$(2)_AUTORECONF_ENV += AUTOPOINT=/bin/true
- # autopoint is provided by gettext
--else ifeq ($$($(2)_AUTOPOINT),YES)
-+ifeq ($$($(2)_AUTOPOINT),YES)
- $(2)_DEPENDENCIES += host-gettext
- $(2)_AUTORECONF_ENV += AUTOPOINT=$$(HOST_DIR)/bin/autopoint
- else
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a6ef5efb5f..6be28db623 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1215,6 +1215,9 @@ endif
- ifneq ($$($(2)_GETTEXTIZE_OPTS),)
- $$(error "$(2)_GETTEXTIZE_OPTS is no longer supported. Please fix your .mk file.")
- endif
-+ifneq ($$($(2)_GETTEXTIZE),)
-+$$(error "$(2)_GETTEXTIZE is no longer supported in favor of $(2)_AUTOPOINT. Please update your package.")
-+endif
- 
- PACKAGES += $(1)
- 
+ $(eval $(virtual-package))
+ $(eval $(host-virtual-package))
 -- 
 2.25.1
 
