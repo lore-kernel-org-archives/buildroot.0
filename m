@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DF68C6379F
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E360C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0948D8204A;
-	Tue, 21 Feb 2023 08:24:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0948D8204A
+	by smtp1.osuosl.org (Postfix) with ESMTP id EED3B826BB;
+	Tue, 21 Feb 2023 08:24:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EED3B826BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NX_OjGbUu2Pm; Tue, 21 Feb 2023 08:24:44 +0000 (UTC)
+	with ESMTP id UM6VIbamP8sS; Tue, 21 Feb 2023 08:24:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD625827C5;
-	Tue, 21 Feb 2023 08:24:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD625827C5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 395F11BF292
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:23:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A53EA826D6;
+	Tue, 21 Feb 2023 08:24:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A53EA826D6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 029CE1BF292
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 13FD5611B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF3B5405E8
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:23:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13FD5611B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF3B5405E8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 39qdG9Ddd0Y9 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2Ui9oPHwxx5v for <buildroot@lists.busybox.net>;
  Tue, 21 Feb 2023 08:23:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A2507611AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97A39401C2
  for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:23:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2507611AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97A39401C2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 90E0286549; Tue, 21 Feb 2023 08:23:39 +0000 (UTC)
+ id 839B486546; Tue, 21 Feb 2023 08:23:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 09:23:07 +0100
+Date: Tue, 21 Feb 2023 09:21:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 792f1975175cb995600f7e3ac092fc3c741aa096
-X-Git-Newrev: 6a789cd0d1badf7f68749b304f7b2e3d9f9ca2c2
+X-Git-Oldrev: 1d7dd1b79145a34f861d30d09750f6e988e10fd5
+X-Git-Newrev: 792f1975175cb995600f7e3ac092fc3c741aa096
 X-Patchwork-Hint: ignore
-Message-Id: <20230221082339.90E0286549@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/highway: bump to
- version 1.0.3
+Message-Id: <20230221082339.839B486546@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{rust,
+ rust-bin}: bump to version 1.67.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,311 +64,372 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a789cd0d1badf7f68749b304f7b2e3d9f9ca2c2
+commit: https://git.buildroot.net/buildroot/commit/?id=792f1975175cb995600f7e3ac092fc3c741aa096
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Dropped patch upstreamed in:
-  https://github.com/google/highway/commit/1cab22047a6ef750ef2bc38ad47d6e765d6d376a
+Link to Rust 1.67.1 announcement: https://blog.rust-lang.org/2023/02/09/Rust-1.67.1.html
 
-- Add an upstream patch, not in 1.0.3 release:
-  https://github.com/google/highway/commit/411300d0eec10d5635cbdd064299630c507348e1
+Drop patch which is now upstream.
 
-- Add a new patch, to fix armv7 builds with vfp < v4.
-  Proposed upstream in:
-  https://github.com/google/highway/pull/1143
-
-- Add a comment about -DHWY_CMAKE_ARM7=OFF since the name is a bit
-  misleading. It should better be ARMV7 or ARMV7_VFPV4.
-
-For change log since 1.0.2, see:
-- https://github.com/google/highway/releases/tag/1.0.3
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0001-Check-for-the-presence-of-sys-auxv.h.patch |  62 -----------
- ...0001-Fix-compilation-for-armv7-with-gcc-8.patch |  46 ++++++++
- ...tion-for-armv7-targets-with-vfp-v4-and-gc.patch | 118 +++++++++++++++++++++
- package/highway/highway.hash                       |   2 +-
- package/highway/highway.mk                         |   5 +-
- 5 files changed, 169 insertions(+), 64 deletions(-)
+ package/rust-bin/rust-bin.hash                     | 252 ++++++++++-----------
+ package/rust-bin/rust-bin.mk                       |   2 +-
+ ...1-fix-unsoundness-in-bootstrap-cache-code.patch |  43 ----
+ package/rust/rust.hash                             |   6 +-
+ package/rust/rust.mk                               |   2 +-
+ 5 files changed, 131 insertions(+), 174 deletions(-)
 
-diff --git a/package/highway/0001-Check-for-the-presence-of-sys-auxv.h.patch b/package/highway/0001-Check-for-the-presence-of-sys-auxv.h.patch
+diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
+index d00e6342e8..11cfae5e9b 100644
+--- a/package/rust-bin/rust-bin.hash
++++ b/package/rust-bin/rust-bin.hash
+@@ -1,129 +1,129 @@
+-# From https://static.rust-lang.org/dist/rust-1.67.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-aarch64-unknown-linux-gnu.tar.xz.asc
+-sha256  5a108891cab3fd0567bf8c2b44f18c045c067c607bbec3ea62b02ad40809b151  rust-1.67.0-aarch64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-i686-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-i686-unknown-linux-gnu.tar.xz.asc
+-sha256  2ba12fe020b17de3a6fe7633c59ab50ef44f9715caa858077aad3301408f583c  rust-1.67.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-mips-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-mips-unknown-linux-gnu.tar.xz.asc
+-sha256  f7fd19d9b4740b2acaee2ac3bf502feb2f16d1d0c203c1d7d2d2652652a9f997  rust-1.67.0-mips-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-mipsel-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-mipsel-unknown-linux-gnu.tar.xz.asc
+-sha256  23dc0289abd12ef396c2ac822a28245157f1be5b574b5a5f4059a9ba7b61184c  rust-1.67.0-mipsel-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-powerpc-unknown-linux-gnu.tar.xz.asc
+-sha256  9998f93c29272d9ecabb69e908da23e728ec835520b430d0af12250d175b981d  rust-1.67.0-powerpc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-powerpc64-unknown-linux-gnu.tar.xz.asc
+-sha256  c24de54f46022c9490fc403ccb1e7384a52181ecd28afea0a37f800793b229b4  rust-1.67.0-powerpc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
+-sha256  271b4181072251276e3c97c3f772b6d9ee39aa8d9f05ed28f34bf5910c9964ad  rust-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
+-sha256  f3a8517334a174826cf92954d525d039c941265066f46948ad89b61791398dd3  rust-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-s390x-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-s390x-unknown-linux-gnu.tar.xz.asc
+-sha256  2b4c27e3a9475278838588fb64159f74a5a8e752f53249a299d2c5188f0bc2e1  rust-1.67.0-s390x-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.67.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-1.67.0-x86_64-unknown-linux-gnu.tar.xz.asc
+-sha256  e6345aebeba55f39cb35fc06a3ac6c43c35f596309a6ed26023b1898346419bd  rust-1.67.0-x86_64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-aarch64-unknown-linux-gnu.tar.xz.asc
+-sha256  d78573b19cff475c5d3612570d79f53b220d6aaf3824c71bc94d74b5f778ef84  rust-std-1.67.0-aarch64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-aarch64-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-aarch64-unknown-linux-musl.tar.xz.asc
+-sha256  6ba01d65aa949128a125d85d750f3facff59c5b1448ccaf66fbdb7bbb3696107  rust-std-1.67.0-aarch64-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-gnueabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-gnueabi.tar.xz.asc
+-sha256  04fb84e9de6c815a7031930afca5d66e6993b639a7f304052df6da750d5bbbe8  rust-std-1.67.0-arm-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-gnueabihf.tar.xz.asc
+-sha256  896aad9bcf8990ef213230755311609a5a05c99f3d265f47bc6844638f60d202  rust-std-1.67.0-arm-unknown-linux-gnueabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-musleabihf.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-musleabihf.tar.xz.asc
+-sha256  8fd54bfb494089fd26c76b8d9f537bf031aa9018aa29ffe5d7258c82eaa51223  rust-std-1.67.0-arm-unknown-linux-musleabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-musleabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-musleabi.tar.xz.asc
+-sha256  212def6f18494cd45c90a471f2b0aff67c4eaa03567c7ab03fe901c337d853d3  rust-std-1.67.0-arm-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv5te-unknown-linux-gnueabi.tar.xz.asc
+-sha256  adcab5bb095b4b9af706d3b2cc62341bced76470a7c573354b52f9c8cffb4b46  rust-std-1.67.0-armv5te-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv5te-unknown-linux-musleabi.tar.xz.asc
+-sha256  97c7922f3250d70e8b7a7f7420caf299274e253e1f46c3160f2dea33e159d5fe  rust-std-1.67.0-armv5te-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
+-sha256  8aec6e33b6c80365979519423a168729c4fff2ea57f66e5123e0602f2ef050a7  rust-std-1.67.0-armv7-unknown-linux-gnueabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-gnueabi.tar.xz.asc
+-sha256  f98f2f4e76ef3056ba98be13ecfaacad07ab214f8ce940dfad56723056d42872  rust-std-1.67.0-armv7-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-musleabihf.tar.xz.asc
+-sha256  dc10cc70b1fd6f74d0c3a7d6cf25bc583edd5f61cd26dbcc6f6bfd22d3e4eb04  rust-std-1.67.0-armv7-unknown-linux-musleabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-musleabi.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-musleabi.tar.xz.asc
+-sha256  1677ef03dfbaa5715609fe7b51e3b036f722fe8934a9186e8f24e26b94588b41  rust-std-1.67.0-armv7-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-i586-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-i586-unknown-linux-gnu.tar.xz.asc
+-sha256  675f0e2e2930f784d03ad6de663fd4ed2b5737689944f0bc8b20653e611c3bb3  rust-std-1.67.0-i586-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-i586-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-i586-unknown-linux-musl.tar.xz.asc
+-sha256  da13b4d9cf2709b3de996d0923df05fb343f774ff89fcfb6a8548f562113c44a  rust-std-1.67.0-i586-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-i686-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-i686-unknown-linux-gnu.tar.xz.asc
+-sha256  080ce3fa7f5b84d900be5842a52053345a40d6dd77b20bcac016eb2083a9a59d  rust-std-1.67.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-i686-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-i686-unknown-linux-musl.tar.xz.asc
+-sha256  b5d5a777ca669d8d6aa8bad85efe5ff9d5559a3f6f9dfb9a8d95337dd0cf1b21  rust-std-1.67.0-i686-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips-unknown-linux-gnu.tar.xz.asc
+-sha256  a2bf13ed3f38427ae65c9ee33a0f4c71fd70d8fae6d9af45045f5318834370e5  rust-std-1.67.0-mips-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips-unknown-linux-musl.tar.xz.asc
+-sha256  d7d223ec4ddb4816e9c537a395a6575ad853e48e0c41415c1a54235c3eb2aa72  rust-std-1.67.0-mips-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips64-unknown-linux-gnuabi64.tar.xz.asc
+-sha256  3b02a3d60f952336e16d1d67a2276ae3197f3839c7b2a557f5ec8d2594325958  rust-std-1.67.0-mips64-unknown-linux-gnuabi64.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips64-unknown-linux-muslabi64.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips64-unknown-linux-muslabi64.tar.xz.asc
+-sha256  2ca3557e288fc1a312021b5ee2c08d1c2acd052b72b60472b494e79b42d2e713  rust-std-1.67.0-mips64-unknown-linux-muslabi64.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips64el-unknown-linux-gnuabi64.tar.xz.asc
+-sha256  585c73b1407938290aa5f72beea6d994c60323b6a48b26b618d2c2f9e53916b1  rust-std-1.67.0-mips64el-unknown-linux-gnuabi64.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips64el-unknown-linux-muslabi64.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips64el-unknown-linux-muslabi64.tar.xz.asc
+-sha256  23364fbf0dae146a0be76496ac3ac22fbae5603435020d930e28531395b8355d  rust-std-1.67.0-mips64el-unknown-linux-muslabi64.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-mipsel-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mipsel-unknown-linux-gnu.tar.xz.asc
+-sha256  2b877cdc8af0546358df77a0e22104d5e59a3fc622b6986a3fcbffc9c96a3c8b  rust-std-1.67.0-mipsel-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-mipsel-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mipsel-unknown-linux-musl.tar.xz.asc
+-sha256  6e2e15c188dc67428467e894a62679d6f4115d5e5e10916d0273c16152ab060e  rust-std-1.67.0-mipsel-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc-unknown-linux-gnu.tar.xz.asc
+-sha256  44b700068e9e40a01418e537b5c0f4ee279995b55ee6d6266409f057ead1c6de  rust-std-1.67.0-powerpc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc64-unknown-linux-gnu.tar.xz.asc
+-sha256  db3960e0eac9d7c2485fe418bf9052d2fdd16557499d320919f385f9f3db5448  rust-std-1.67.0-powerpc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
+-sha256  ec92fa64616c67785039bebabc213e6bae6ffc2744ef052b79c7960df60b257f  rust-std-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
+-sha256  630e4b8b95c0b501676f2477b6009ca122019e1e0d637222443e26a0c5931f3c  rust-std-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-s390x-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-s390x-unknown-linux-gnu.tar.xz.asc
+-sha256  f1988eb337c00dd30469f545b822b8fd3b0372e6aa88924b7906785ea1f69fba  rust-std-1.67.0-s390x-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-sparc64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-sparc64-unknown-linux-gnu.tar.xz.asc
+-sha256  d8cdbee292c86182b54ba152cd33ac3abe4c684186f29017bb4cf7e92ff3a2be  rust-std-1.67.0-sparc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-x86_64-unknown-linux-gnu.tar.xz.asc
+-sha256  8f03b271bba56b0245833f2cb08044865068ce8721d6a736d3ef7056aa109daa  rust-std-1.67.0-x86_64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.67.0-x86_64-unknown-linux-musl.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-x86_64-unknown-linux-musl.tar.xz.asc
+-sha256  33f320dc4ae075f720f541564868e494c17dea97ea853507225f89f8b0c57363  rust-std-1.67.0-x86_64-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-aarch64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-aarch64-unknown-linux-gnu.tar.xz.asc
++sha256  b7b8e8b70cae457092661894efa5a4861ef4f0e20f2f617d05d6f17b1f780a68  rust-1.67.1-aarch64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-i686-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-i686-unknown-linux-gnu.tar.xz.asc
++sha256  b686a2d0d1648e1b84def715dd65a85a3d2802b33ecf65808bdb2ed639aec7d3  rust-1.67.1-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-mips-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-mips-unknown-linux-gnu.tar.xz.asc
++sha256  c9df968487707eb63207f63086daed4fe1484829fb6221bd9414de2700424995  rust-1.67.1-mips-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-mipsel-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-mipsel-unknown-linux-gnu.tar.xz.asc
++sha256  4f56194a354b1413fb973d25f1c895aaa8e85211d316755508d6848e3a4fe18b  rust-1.67.1-mipsel-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-powerpc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-powerpc-unknown-linux-gnu.tar.xz.asc
++sha256  852e5a714ea8d2737f2cd5b0d6a12ecfa712b75238c643ba8138b490fc39fc43  rust-1.67.1-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-powerpc64-unknown-linux-gnu.tar.xz.asc
++sha256  0a5bc85383d5d9d077dccaad1fb213d9498b6137112aaaabced6eb079fe12c9e  rust-1.67.1-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz.asc
++sha256  574851ff8503df9cb0dd04e6a1cd0ce5d709b5ea8b9c1265b314b9e182c818da  rust-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz.asc
++sha256  50e98fefef58218bd2c09c826308d43abe11b05f528b08ecca3d2657d7996630  rust-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-s390x-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-s390x-unknown-linux-gnu.tar.xz.asc
++sha256  6e8629ace0c1b9cc0c2bc6225e6716df852370e5c7e907815ff8e6241e427699  rust-1.67.1-s390x-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.67.1-x86_64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-1.67.1-x86_64-unknown-linux-gnu.tar.xz.asc
++sha256  7dbb718bdb09adad7e36b9a413e571863913682495527f7f2d6507ea2c068542  rust-1.67.1-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-aarch64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-aarch64-unknown-linux-gnu.tar.xz.asc
++sha256  35027409400faaaa38ea2855b92dea6b553b2e656dff735da730f67ac02e57e6  rust-std-1.67.1-aarch64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-aarch64-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-aarch64-unknown-linux-musl.tar.xz.asc
++sha256  dcd3926c151cdd33d4de2860f021c86a18556809c4d06cbddebc1b377638710a  rust-std-1.67.1-aarch64-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-gnueabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-gnueabi.tar.xz.asc
++sha256  da42d5b07984dac9a41719511eeb47cbb6c5e70b32a6eacba96c9f860ced0307  rust-std-1.67.1-arm-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-gnueabihf.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-gnueabihf.tar.xz.asc
++sha256  3b95c9595db3e10077c4eca8f63d80414bf3a50c1f0f6b2ac33f1992ee0940db  rust-std-1.67.1-arm-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-musleabihf.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-musleabihf.tar.xz.asc
++sha256  767761d99846174dfb7dfb579e2e2be63800478858a82f3f7050cc9555209a89  rust-std-1.67.1-arm-unknown-linux-musleabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-musleabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-musleabi.tar.xz.asc
++sha256  1e53306124de9f282452bd6085e86918e5e9f6f1940fc79809a1b284272e2d2b  rust-std-1.67.1-arm-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv5te-unknown-linux-gnueabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv5te-unknown-linux-gnueabi.tar.xz.asc
++sha256  3e8bb4265c8c6d8984b69eeefe015131ea140148a58179b3abec5653d93bea7d  rust-std-1.67.1-armv5te-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv5te-unknown-linux-musleabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv5te-unknown-linux-musleabi.tar.xz.asc
++sha256  cbfce327b623e341c1243f0d29ef2f60e5fb205d406c79eb8be1433652c3c9a5  rust-std-1.67.1-armv5te-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-gnueabihf.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-gnueabihf.tar.xz.asc
++sha256  b6d00c4e338744ce1bf5b314f1056472acf1eb416f65057a8b3ca0a992fb04df  rust-std-1.67.1-armv7-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-gnueabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-gnueabi.tar.xz.asc
++sha256  8a7e46b15adb0718b4e4ee33cd46529117411e8d73c29043778b05e7412c2b46  rust-std-1.67.1-armv7-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-musleabihf.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-musleabihf.tar.xz.asc
++sha256  6102f98617dd37874f3d755d0a325b45d47c6e1715c39d5e9bc037992e4d3cd6  rust-std-1.67.1-armv7-unknown-linux-musleabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-musleabi.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-musleabi.tar.xz.asc
++sha256  720958bc039c9ff00e7e399adf45f044484c5695a71bde0d07e0c895a819fe74  rust-std-1.67.1-armv7-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-i586-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-i586-unknown-linux-gnu.tar.xz.asc
++sha256  22cbbf0b22d9b0894cfbd6e1dd6b95b71c7ad02cee4e477d375dcf81af8d1337  rust-std-1.67.1-i586-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-i586-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-i586-unknown-linux-musl.tar.xz.asc
++sha256  49beb678732f34a0bfc22f94900c3d4a17ec05effdb7377864042df73b2a2819  rust-std-1.67.1-i586-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-i686-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-i686-unknown-linux-gnu.tar.xz.asc
++sha256  aab2d7aa76793e78c9c8810e93ed8978f6422843b1277e9c60337b0f943a4409  rust-std-1.67.1-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-i686-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-i686-unknown-linux-musl.tar.xz.asc
++sha256  a2c6e55a8a2987d0c306d2c164347a70ab7a6a18f6562039a772b33e25934972  rust-std-1.67.1-i686-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips-unknown-linux-gnu.tar.xz.asc
++sha256  048b3da190212b742f7a052618b57683dc96ee2b6c25fc7f5ae751143cb79bad  rust-std-1.67.1-mips-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips-unknown-linux-musl.tar.xz.asc
++sha256  b9ef413b764a92d42e07a2e588268ece09994d2cd1ab2a93858c27f85a250349  rust-std-1.67.1-mips-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips64-unknown-linux-gnuabi64.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips64-unknown-linux-gnuabi64.tar.xz.asc
++sha256  ef7fe3160de629f0d38788f2c270f87b0631480e5b0d848595b460528de719e4  rust-std-1.67.1-mips64-unknown-linux-gnuabi64.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips64-unknown-linux-muslabi64.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips64-unknown-linux-muslabi64.tar.xz.asc
++sha256  15fdb3e8b39c8a122e9beee0c4c909ee8ec356e57aaaaae5f2b9e94f58d73c87  rust-std-1.67.1-mips64-unknown-linux-muslabi64.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips64el-unknown-linux-gnuabi64.tar.xz.asc
++sha256  6ccfd98fd920cc2f1199bcf9a842430c27f6fcd2cc46c18421e487309ff7811e  rust-std-1.67.1-mips64el-unknown-linux-gnuabi64.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips64el-unknown-linux-muslabi64.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips64el-unknown-linux-muslabi64.tar.xz.asc
++sha256  78477c45f5b848b156adaf0e0f6f2954ae73e2903321d1636c155020175eaaf5  rust-std-1.67.1-mips64el-unknown-linux-muslabi64.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-mipsel-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mipsel-unknown-linux-gnu.tar.xz.asc
++sha256  94410897626546dde806a114299c3c32abb6b4b294af5daea5c4d136751fe063  rust-std-1.67.1-mipsel-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-mipsel-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mipsel-unknown-linux-musl.tar.xz.asc
++sha256  b3f1a338e69428f1611f059c67b8afafa78ce5c7ed0799f8a90795390261d3a4  rust-std-1.67.1-mipsel-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc-unknown-linux-gnu.tar.xz.asc
++sha256  26efe78c09ed36da34964c0d023cf9aa404766ab790a94d9becd373b8879cb5a  rust-std-1.67.1-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc64-unknown-linux-gnu.tar.xz.asc
++sha256  135f5e6ab6d8f077a14521d387d3f31831abdb840ca4e6a15b6f0d0d5b7dbc81  rust-std-1.67.1-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz.asc
++sha256  364c47ed22e4268edf238d221c40007d7d8792a66ca325d3937596a9c911ea48  rust-std-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz.asc
++sha256  63a7e6a6c889a3d01bb3c66a3def3e41963511ea52e13906669da5b29b2fd9da  rust-std-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-s390x-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-s390x-unknown-linux-gnu.tar.xz.asc
++sha256  04573298d9e815c1e8c47a2f9548ea55d4a2afc538eceaa6a704d44a5e1f7e3e  rust-std-1.67.1-s390x-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-sparc64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-sparc64-unknown-linux-gnu.tar.xz.asc
++sha256  addf0b0beb1966787e599f32849f18c28d5cb65515272b7d9608d4a1dddee2e7  rust-std-1.67.1-sparc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-x86_64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-x86_64-unknown-linux-gnu.tar.xz.asc
++sha256  f4dc8468dfc1dbd86f865b10f06e0e4b4e76f5a3a1cc27317a520ab1660844e9  rust-std-1.67.1-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.67.1-x86_64-unknown-linux-musl.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-x86_64-unknown-linux-musl.tar.xz.asc
++sha256  89741cd2ac00c3a3f565bcccdf442cc1f9ec58ea419f1f0d09e911be0ff86c87  rust-std-1.67.1-x86_64-unknown-linux-musl.tar.xz
+ # Locally generated
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+index d62ce39cfc..bb66de5ec5 100644
+--- a/package/rust-bin/rust-bin.mk
++++ b/package/rust-bin/rust-bin.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating this version, check whether support/download/cargo-post-process
+ # still generates the same archives.
+-RUST_BIN_VERSION = 1.67.0
++RUST_BIN_VERSION = 1.67.1
+ RUST_BIN_SITE = https://static.rust-lang.org/dist
+ RUST_BIN_LICENSE = Apache-2.0 or MIT
+ RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+diff --git a/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch b/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
 deleted file mode 100644
-index df86798613..0000000000
---- a/package/highway/0001-Check-for-the-presence-of-sys-auxv.h.patch
+index 3eae34642f..0000000000
+--- a/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
 +++ /dev/null
-@@ -1,62 +0,0 @@
--From 491e3b1c2b8c44a2cfd35db117b02ef0fdf6a8e5 Mon Sep 17 00:00:00 2001
--From: Julien Olivain <ju.o@free.fr>
--Date: Wed, 23 Nov 2022 23:27:11 +0100
--Subject: [PATCH] Check for the presence of <sys/auxv.h>
+@@ -1,43 +0,0 @@
+-From 6bf37780ed49846c78d6707355f1cf44790c4301 Mon Sep 17 00:00:00 2001
+-From: Michael Goulet <michael@errs.io>
+-Date: Mon, 12 Dec 2022 18:29:33 +0000
+-Subject: [PATCH] =?UTF-8?q?=F0=9F=9A=A8=20fix=20unsoundness=20in=20bootstr?=
+- =?UTF-8?q?ap=20cache=20code?=
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--Not all gcc versions are providing <sys/auxv.h>. Checking for
--HWY_ARCH_ARM && HWY_COMPILER_GCC_ACTUAL && HWY_OS_LINUX is not
--sufficient and fail to build in some situations (it was observed for
--some gcc armv7m toolchains).
--
--This patch adds a check for <sys/auxv.h> and include it only if present.
--
--Signed-off-by: Julien Olivain <ju.o@free.fr>
+-(cherry picked from commit 3fe64ebbce21e79adb64099984e96dfb79bdd0f9)
+-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 ----
-- CMakeLists.txt       | 3 +++
-- hwy/detect_targets.h | 2 +-
-- hwy/targets.cc       | 2 +-
-- 3 files changed, 5 insertions(+), 2 deletions(-)
+- src/bootstrap/cache.rs | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
 -
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index b6b14ab..df6b5ab 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -84,6 +84,9 @@ check_cxx_source_compiles(
--   HWY_RISCV
-- )
+-diff --git a/src/bootstrap/cache.rs b/src/bootstrap/cache.rs
+-index be5c9bb0788..05f25af68ea 100644
+---- a/src/bootstrap/cache.rs
+-+++ b/src/bootstrap/cache.rs
+-@@ -89,16 +89,16 @@ fn hash<H: Hasher>(&self, state: &mut H) {
 - 
--+include(CheckIncludeFile)
--+check_include_file(sys/auxv.h  HAVE_SYS_AUXV_H)
--+
-- if (HWY_ENABLE_CONTRIB)
-- # Glob all the traits so we don't need to modify this file when adding
-- # additional special cases.
--diff --git a/hwy/detect_targets.h b/hwy/detect_targets.h
--index 7f7e179..f0c6f94 100644
----- a/hwy/detect_targets.h
--+++ b/hwy/detect_targets.h
--@@ -392,7 +392,7 @@
-- #define HWY_HAVE_RUNTIME_DISPATCH 1
-- // On Arm, currently only GCC does, and we require Linux to detect CPU
-- // capabilities.
---#elif HWY_ARCH_ARM && HWY_COMPILER_GCC_ACTUAL && HWY_OS_LINUX
--+#elif HWY_ARCH_ARM && HWY_COMPILER_GCC_ACTUAL && HWY_OS_LINUX && HAVE_SYS_AUXV_H
-- #define HWY_HAVE_RUNTIME_DISPATCH 1
-- #else
-- #define HWY_HAVE_RUNTIME_DISPATCH 0
--diff --git a/hwy/targets.cc b/hwy/targets.cc
--index 2fde4db..abd6a94 100644
----- a/hwy/targets.cc
--+++ b/hwy/targets.cc
--@@ -42,7 +42,7 @@
-- #include <cpuid.h>
-- #endif  // HWY_COMPILER_MSVC
+- impl<T: Internable + Deref> Deref for Interned<T> {
+-     type Target = T::Target;
+--    fn deref(&self) -> &'static Self::Target {
+-+    fn deref(&self) -> &Self::Target {
+-         let l = T::intern_cache().lock().unwrap();
+--        unsafe { mem::transmute::<&Self::Target, &'static Self::Target>(l.get(*self)) }
+-+        unsafe { mem::transmute::<&Self::Target, &Self::Target>(l.get(*self)) }
+-     }
+- }
 - 
---#elif HWY_ARCH_ARM && HWY_OS_LINUX
--+#elif HWY_ARCH_ARM && HWY_OS_LINUX && HAVE_SYS_AUXV_H
-- #include <asm/hwcap.h>
-- #include <sys/auxv.h>
-- #endif  // HWY_ARCH_*
+- impl<T: Internable + AsRef<U>, U: ?Sized> AsRef<U> for Interned<T> {
+--    fn as_ref(&self) -> &'static U {
+-+    fn as_ref(&self) -> &U {
+-         let l = T::intern_cache().lock().unwrap();
+--        unsafe { mem::transmute::<&U, &'static U>(l.get(*self).as_ref()) }
+-+        unsafe { mem::transmute::<&U, &U>(l.get(*self).as_ref()) }
+-     }
+- }
+- 
 --- 
--2.38.1
+-2.25.1
 -
-diff --git a/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch b/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
-new file mode 100644
-index 0000000000..0634460453
---- /dev/null
-+++ b/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
-@@ -0,0 +1,46 @@
-+From 94cda9cc8cd12345a6dbe70e40f3119d5bf7ee78 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Fri, 10 Feb 2023 21:25:36 +0100
-+Subject: [PATCH] Fix compilation for armv7 with gcc < 8
-+
-+Highway uses the construct __attribute__((target(+neon-vfpv4)) for
-+Armv7. The target "+neon-vfpv4" was introduced in gcc 8, in commit [1].
-+When using a gcc < 8 (for example, like [2]), compilation fails with
-+message:
-+
-+    In file included from /build/highway-1.0.3/hwy/foreach_target.h:81:0,
-+                     from /build/highway-1.0.3/hwy/per_target.cc:20:
-+    /build/highway-1.0.3/hwy/per_target.cc: At global scope:
-+    /build/highway-1.0.3/hwy/per_target.cc:23:22: error: attribute(target("+neon-vfpv4")) is unknown
-+
-+This commit protects the definition of HWY_TARGET_STR only when gcc
-+version 8 or greater is used for armv7.
-+
-+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=e87afe54b86c478ae63569e51e7abb67d3fe3fce
-+[2] https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ hwy/ops/set_macros-inl.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/hwy/ops/set_macros-inl.h b/hwy/ops/set_macros-inl.h
-+index 051dbb3..00b4b1b 100644
-+--- a/hwy/ops/set_macros-inl.h
-++++ b/hwy/ops/set_macros-inl.h
-+@@ -230,7 +230,12 @@
-+ // Can use pragmas instead of -march compiler flag
-+ #if HWY_HAVE_RUNTIME_DISPATCH
-+ #if HWY_ARCH_ARM_V7
-++#if HWY_COMPILER_GCC_ACTUAL >= 800
-++// The __attribute__((target(+neon-vfpv4)) was introduced in gcc >= 8.
-++// In case we have a gcc < 8, we can still compile by keeping
-++// HWY_TARGET_STR undefined.
-+ #define HWY_TARGET_STR "+neon-vfpv4"
-++#endif
-+ #else
-+ #define HWY_TARGET_STR "+crypto"
-+ #endif  // HWY_ARCH_ARM_V7
-+-- 
-+2.39.2
-+
-diff --git a/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch b/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
-new file mode 100644
-index 0000000000..f29b385501
---- /dev/null
-+++ b/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
-@@ -0,0 +1,118 @@
-+From 93d4579f90dd6ad26fd0dcda6420b3bb2fdcbc02 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Mon, 20 Feb 2023 23:22:28 +0100
-+Subject: [PATCH] Fix compilation for armv7 targets with vfp < v4 and gcc >= 8
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When using a armv7 gcc >= 8 toolchain (like [1]) with Highway
-+configured with -DHWY_CMAKE_ARM7=OFF and HWY_ENABLE_CONTRIB=ON,
-+compilation fails with error:
-+
-+    In file included from /build/highway-1.0.3/hwy/ops/arm_neon-inl.h:33,
-+                     from /build/highway-1.0.3/hwy/highway.h:358,
-+                     from /build/highway-1.0.3/hwy/contrib/sort/shared-inl.h:104,
-+                     from /build/highway-1.0.3/hwy/contrib/sort/traits128-inl.h:27,
-+                     from /build/highway-1.0.3/hwy/contrib/sort/vqsort_128d.cc:23,
-+                     from /build/highway-1.0.3/hwy/foreach_target.h:81,
-+                     from /build/highway-1.0.3/hwy/contrib/sort/vqsort_128d.cc:20:
-+    /toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/12.2.0/include/arm_neon.h: In function 'void hwy::N_NEON::StoreU(Vec128<long long unsigned int, 2>, Full128<long long unsigned int>, uint64_t*)':
-+    /toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/12.2.0/include/arm_neon.h:11052:1: error: inlining failed in call to 'always_inline' 'void vst1q_u64(uint64_t*, uint64x2_t)': target specific option mismatch
-+    11052 | vst1q_u64 (uint64_t * __a, uint64x2_t __b)
-+          | ^~~~~~~~~
-+    /build/highway-1.0.3/hwy/ops/arm_neon-inl.h:2786:12: note: called from here
-+     2786 |   vst1q_u64(unaligned, v.raw);
-+          |   ~~~~~~~~~^~~~~~~~~~~~~~~~~~
-+
-+The same errors happen when configured with HWY_ENABLE_EXAMPLES=ON,
-+or from client libraries like libjxl (at other places).
-+
-+The issue is that Highway Arm NEON ops have a dependency on the
-+Advanced SIMD (Neon) v2 and the VFPv4 floating-point instructions.
-+The SIMD (Neon) v1 and VFPv3 instructions are not supported.
-+
-+There was several attempts to fix variants of this issues.
-+See #834 and #1032.
-+
-+HWY_NEON target is selected only if __ARM_NEON is defined. See:
-+https://github.com/google/highway/blob/1.0.3/hwy/detect_targets.h#L251
-+
-+This test is not sufficient since __ARM_NEON will be predefined in
-+any cases when Neon is enabled (neon-vfpv3, neon-vfpv4).
-+
-+The issue is that HWY_CMAKE_ARM7=ON implies VFPv4 / NEON SIMD v2.
-+When setting HWY_CMAKE_ARM7=OFF, "neon-vfpv4" will not be forced,
-+but the code is still using intrinsics assuming VFPv4. Gcc will fail
-+with error because code cannot be generated for the selected
-+architecture.
-+
-+This issue can be avoided by adding "-DHWY_DISABLED_TARGETS=HWY_NEON" in
-+CXXFLAGS. The problem with this solution is that every client program will
-+also need to do the same. This goes against the very purpose of
-+"hwy/detect_targets.h".
-+
-+Technically, Armv7-a processors with VFPv4 can be detected using some
-+ACLE (Arm C Language Extensions [2]) predefined macros:
-+
-+Basically, we want Highway to define HWY_NEON only when the target
-+supports SIMDv2/VFPv4 or higher. An older target with vfpv3 only
-+(e.g. Cortex-A8, A9, ...) would NOT define HWY_NEON, and therefore
-+would fallback on HWY_SCALAR implementation.
-+
-+However, not all compiler completely support ACLE. There is also
-+several versions too. So we cannot easily rely on macros like
-+"__ARM_VFPV4__" (which clang predefine, but not gcc).
-+
-+The alternative solution proposed in this patch, is to declare the
-+HWY_NEON target architecture as broken, when we detect the target is
-+Armv7-A, but mandatory features for vfpv4 (namely half-float, FMA)
-+are missing. Half-floats are tested using the macro __ARM_NEON_FP,
-+and the FMA with the macro __ARM_FEATURE_FMA. See ACLE [2]. The
-+intent of declaring the target as broken, rather than selecting
-+HWY_NEON only if vfpv4 features are detected is to remain a bit
-+conservative, since the detection is slithly inaccurate.
-+
-+For a given compiler/cflags, predefined macros for Arm/ACLE can be
-+reviewed with commands like:
-+
-+    arm-linux-gnueabihf-gcc -mcpu=cortex-a9 -mfpu=neon-vfpv3 -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
-+    arm-linux-gnueabihf-gcc -mcpu=cortex-a7 -mfpu=neon-vfpv4 -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
-+    clang -target armv7a -mcpu=cortex-a9 -mfpu=neon-vfpv3 -mfloat-abi=hard -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
-+    clang -target armv7a -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
-+
-+The different values of __ARM_NEON_FP can be seen, depending which
-+"-mfpu" is passed. Same for __ARM_FEATURE_FMA.
-+
-+[1] https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--bleeding-edge-2022.08-1.tar.bz2
-+[2] https://github.com/ARM-software/acle/
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ hwy/detect_targets.h | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/hwy/detect_targets.h b/hwy/detect_targets.h
-+index 2beca95..40ae7fe 100644
-+--- a/hwy/detect_targets.h
-++++ b/hwy/detect_targets.h
-+@@ -154,6 +154,16 @@
-+      (defined(__BYTE_ORDER) && __BYTE_ORDER == __BIG_ENDIAN))
-+ #define HWY_BROKEN_TARGETS (HWY_NEON)
-+ 
-++// armv7-a without a detected vfpv4 is not supported
-++// (for example Cortex-A8, Cortex-A9)
-++// vfpv4 always have neon half-float _and_ FMA.
-++#elif HWY_ARCH_ARM_V7 && \
-++    (__ARM_ARCH_PROFILE == 'A') && \
-++    !defined(__ARM_VFPV4__) && \
-++        !((__ARM_NEON_FP & 0x2 /* half-float */) && \
-++          (__ARM_FEATURE_FMA == 1))
-++#define HWY_BROKEN_TARGETS (HWY_NEON)
-++
-+ // SVE[2] require recent clang or gcc versions.
-+ #elif (HWY_COMPILER_CLANG && HWY_COMPILER_CLANG < 1100) || \
-+     (HWY_COMPILER_GCC_ACTUAL && HWY_COMPILER_GCC_ACTUAL < 1000)
-+-- 
-+2.39.2
-+
-diff --git a/package/highway/highway.hash b/package/highway/highway.hash
-index 3ff468443e..16a9282176 100644
---- a/package/highway/highway.hash
-+++ b/package/highway/highway.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  e8ef71236ac0d97f12d553ec1ffc5b6375d57b5f0b860c7447dd69b6ed1072db  highway-1.0.2.tar.gz
-+sha256  566fc77315878473d9a6bd815f7de78c73734acdcb745c3dde8579560ac5440e  highway-1.0.3.tar.gz
- sha256  43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1  LICENSE
-diff --git a/package/highway/highway.mk b/package/highway/highway.mk
-index ed7f6ca871..56d63a83f9 100644
---- a/package/highway/highway.mk
-+++ b/package/highway/highway.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+index 2a260ca64f..1b4b08cecc 100644
+--- a/package/rust/rust.hash
++++ b/package/rust/rust.hash
+@@ -1,6 +1,6 @@
+-# From https://static.rust-lang.org/dist/rustc-1.67.0-src.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/rustc-1.67.0-src.tar.xz.asc
+-sha256  9ef8cf88a1d35d319808daf2f193aadca9ed9bcae1d4d5db8946a448c9432c6d  rustc-1.67.0-src.tar.xz
++# From https://static.rust-lang.org/dist/rustc-1.67.1-src.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rustc-1.67.1-src.tar.xz.asc
++sha256  77e0615011f887d9533d5374bf9c15c590c3caf32bbb035b392d1c2ae502a682  rustc-1.67.1-src.tar.xz
+ # Locally generated
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index d14ad3a3e7..814a3c1dd4 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -6,7 +6,7 @@
  
--HIGHWAY_VERSION = 1.0.2
-+HIGHWAY_VERSION = 1.0.3
- HIGHWAY_SITE = $(call github,google,highway,$(HIGHWAY_VERSION))
- HIGHWAY_LICENSE = Apache-2.0
- HIGHWAY_LICENSE_FILES = LICENSE
-@@ -35,6 +35,9 @@ endif
- ifeq ($(BR2_ARM_FPU_VFPV4),y)
- HIGHWAY_CONF_OPTS += -DHWY_CMAKE_ARM7=ON
- else
-+# Highway Armv7 Neon support requires in fact vfpv4 / neon v2. When we
-+# are in a vfpv3 case (e.g. Cortex-A8, Cortex-A9) this flag need to be
-+# set to off.
- HIGHWAY_CONF_OPTS += -DHWY_CMAKE_ARM7=OFF
- endif
- 
+ # When updating this version, check whether support/download/cargo-post-process
+ # still generates the same archives.
+-RUST_VERSION = 1.67.0
++RUST_VERSION = 1.67.1
+ RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
+ RUST_SITE = https://static.rust-lang.org/dist
+ RUST_LICENSE = Apache-2.0 or MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
