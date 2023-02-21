@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2960C64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 656D5C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57DB1416CE;
-	Tue, 21 Feb 2023 20:02:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57DB1416CE
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YRSJ51mSVEWX; Tue, 21 Feb 2023 20:02:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FD62416D8;
-	Tue, 21 Feb 2023 20:02:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FD62416D8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7E1BA1BF362
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:02:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65C0F402E4
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:02:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65C0F402E4
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE36D408D2;
+	Tue, 21 Feb 2023 20:04:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE36D408D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id krUhEq49fC_6 for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 20:02:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80078400B8
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:02:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80078400B8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B5768660C; Tue, 21 Feb 2023 20:02:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:01:45 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: db97a1d196da07d2c1d1f41061dcac851c110915
-X-Git-Newrev: ec7258f3f4ea4442cd1f8c78a066a062a4d0cbd0
-X-Patchwork-Hint: ignore
-Message-Id: <20230221200211.6B5768660C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/openmpi: bump to
- version 4.1.4
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oc3WNfumJ7nR; Tue, 21 Feb 2023 20:04:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 218B7405F5;
+	Tue, 21 Feb 2023 20:04:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 218B7405F5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D28A1BF362
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:04:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0E43881980
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:04:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E43881980
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JRkVbVfdnlRe for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 20:04:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 915CC80C03
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 915CC80C03
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:04:13 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8696E1BF206;
+ Tue, 21 Feb 2023 20:04:11 +0000 (UTC)
+Date: Tue, 21 Feb 2023 21:04:10 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230221210410.61bd1054@windsurf>
+In-Reply-To: <20230221183051.4011311-1-giulio.benetti@benettiengineering.com>
+References: <20230221183051.4011311-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1677009851;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qqM/R0TWuIwN0yZ02vC+WOFkfJLXSJQ/QbBCYQrWxLs=;
+ b=EK+u/5I/mqR5VOdzmLc9QBM7HTikiyGpmxAkk09RVFFpau0SRcckLBxi3mlP3Mdekuc8tc
+ uluBbCG+o7MgQh+fOJNyEzfS5ojH5cz6UQrpSRDNbtDIMMD5TbvvlTRoukYrnoIUbHiGA4
+ +QQKBV+PSxxg0YEWbfDtSsZC+m4D3x8jqQVZ52uavRpixIJTD6CnMnFLZjZDk+9FUoyeAq
+ IsC98K30dgNL4XkWOHt9+YziyIj4D3Xx+o//5BbPqXcqSKmCfA/L/b2scRds+/r0zAqY2+
+ jlgtyNz99vfViEDJTQIEsGyheu6SBuzsgSjfFBQbMF8aCEwNrMBZNJInMH1hIQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EK+u/5I/
+Subject: Re: [Buildroot] [PATCH] package/jpeg: fix build failure when
+ qt5base tries to use libjpeg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,117 +78,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec7258f3f4ea4442cd1f8c78a066a062a4d0cbd0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 21 Feb 2023 19:30:51 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Notable changes in this commit:
+> Qt5 fails to build with libjpeg since the API is different from
+> libjpeg-turbo and libjpeg-turbo is pointed as the library Qt5 usually link
+> against to[0]. So let's default jpeg variant to libjpeg-turbo if
+> BR2_PACKAGE_QT5BASE_JPEG is selected.
+> 
+> Fixes:
+> still not failed
+> 
+> [0]: https://doc.qt.io/qt-5/qtgui-index.html#licenses-and-attributions
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/jpeg/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
+> index 371f89aa49..3a39a0dfb8 100644
+> --- a/package/jpeg/Config.in
+> +++ b/package/jpeg/Config.in
+> @@ -16,7 +16,8 @@ if BR2_PACKAGE_JPEG
+>  
+>  choice
+>  	prompt "jpeg variant"
+> -	default BR2_PACKAGE_JPEG_TURBO if BR2_PACKAGE_JPEG_SIMD_SUPPORT
+> +	default BR2_PACKAGE_JPEG_TURBO if BR2_PACKAGE_JPEG_SIMD_SUPPORT || \
+> +					  BR2_PACKAGE_QT5BASE_JPEG
 
-- change from v4.0.x to v4.1.x "current" version series,
+I don't think this will work, as it doesn't prevent from using classic
+libjpeg with Qt5, it only changes the default. So a user can still
+select Qt5 + classic libjpeg, and the autobuilder randomization will
+also generate such configurations.
 
-- move the sha256 hash out of the "Locally computed" section,
-  as the value comes from the download page,
+If really classic libjpeg are jpeg-turbo are no longer compatible, then
+we probably need to drop the virtual package entirely... but it's going
+to be a lot of work to handle both variants in all packages using
+jpeg...
 
-- the LICENSE file hash changed, as the file was updated
-  (copyright years updated and new contributors added),
-
-- the IME (Infinite Memory Engine), introduced in v4.1.x,
-  is disabled to workaround a failure when cross-compiled,
-
-- the package now requires a toolchain with atomic support,
-  and needs to link against libatomic when needed.
-
-For change log since v4.0.0, see:
-- https://github.com/open-mpi/ompi/blob/v4.1.4/NEWS#L61
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/openmpi/Config.in    |  2 ++
- package/openmpi/openmpi.hash | 10 +++++-----
- package/openmpi/openmpi.mk   | 17 ++++++++++++++---
- 3 files changed, 21 insertions(+), 8 deletions(-)
-
-diff --git a/package/openmpi/Config.in b/package/openmpi/Config.in
-index 4413c55f9c..e64eb81c3e 100644
---- a/package/openmpi/Config.in
-+++ b/package/openmpi/Config.in
-@@ -1,5 +1,6 @@
- comment "openmpi needs a toolchain w/ dynamic library, NPTL, wchar, C++"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_sparc
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-@@ -8,6 +9,7 @@ config BR2_PACKAGE_OPENMPI
- 	bool "openmpi"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
-diff --git a/package/openmpi/openmpi.hash b/package/openmpi/openmpi.hash
-index a399adc758..745ed7c580 100644
---- a/package/openmpi/openmpi.hash
-+++ b/package/openmpi/openmpi.hash
-@@ -1,6 +1,6 @@
--# From: https://www.open-mpi.org/software/ompi/v4.0/
--md5  e3da67df1e968c8798827e0e5fe9a510  openmpi-4.0.0.tar.bz2
--sha1  fee1d0287abfb150bae16957de342752c9bdd4e8  openmpi-4.0.0.tar.bz2
-+# From: https://www.open-mpi.org/software/ompi/v4.1/
-+md5  f057e12aabaf7dd5a6a658180fca404e  openmpi-4.1.4.tar.bz2
-+sha1  357c61a8e06e103d987c0e4a054e8780a034c8b1  openmpi-4.1.4.tar.bz2
-+sha256  92912e175fd1234368c8730c03f4996fe5942e7479bb1d10059405e7f2b3930d  openmpi-4.1.4.tar.bz2
- # Locally computed
--sha256  2f0b8a36cfeb7354b45dda3c5425ef8393c9b04115570b615213faaa3f97366b  openmpi-4.0.0.tar.bz2
--sha256  8298a80ed5f09cfd007bae1c0e7d67d1c2810c6389876778dad070c31a691dac  LICENSE
-+sha256  2db71de9577ebfe15c186605844c470dcecd3717f4ef0118c9440d801c0f58f8  LICENSE
-diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
-index 8bdc3fa188..f14b55ced5 100644
---- a/package/openmpi/openmpi.mk
-+++ b/package/openmpi/openmpi.mk
-@@ -4,14 +4,21 @@
- #
- ################################################################################
- 
--OPENMPI_VERSION_MAJOR = 4.0
--OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).0
-+OPENMPI_VERSION_MAJOR = 4.1
-+OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).4
- OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
- OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
- OPENMPI_LICENSE = BSD-3-Clause
- OPENMPI_LICENSE_FILES = LICENSE
- OPENMPI_INSTALL_STAGING = YES
- 
-+# The macro searching for IME (Infinite Memory Engine) filesystem
-+# brings "-I/usr/local/include" in the CPPFLAGS, even if not
-+# found. This makes the configuration fail. See:
-+# https://github.com/open-mpi/ompi/blob/v4.1.4/config/ompi_check_ime.m4#L35
-+# Disable explicitly to avoid the issue.
-+OPENMPI_CONF_OPTS = --without-ime
-+
- # Enabling Fortran support requires pre-seeding the configure script
- # with various values that cannot be guessed, so we provide cache
- # files for various architectures.
-@@ -43,6 +50,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- OPENMPI_CFLAGS += -O0
- endif
- 
--OPENMPI_CONF_ENV = CFLAGS="$(OPENMPI_CFLAGS)"
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+OPENMPI_LIBS += -latomic
-+endif
-+
-+OPENMPI_CONF_ENV = CFLAGS="$(OPENMPI_CFLAGS)" LIBS="$(OPENMPI_LIBS)"
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
