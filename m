@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9BB0C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 14:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A5F1C636D7
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 14:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7067440FE2;
-	Tue, 21 Feb 2023 14:48:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7067440FE2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4048B40FEB;
+	Tue, 21 Feb 2023 14:49:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4048B40FEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VGvcu_-PsHdQ; Tue, 21 Feb 2023 14:48:36 +0000 (UTC)
+	with ESMTP id sK_s6a7jATzM; Tue, 21 Feb 2023 14:49:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91B2340D0F;
-	Tue, 21 Feb 2023 14:48:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91B2340D0F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18F681BF2F0
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 14:48:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8554E40FDC;
+	Tue, 21 Feb 2023 14:49:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8554E40FDC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9854C1BF2F0
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 14:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F208B418AB
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 14:48:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F208B418AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7275660FA2
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 14:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7275660FA2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FFI1JsKBQYBc for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 14:48:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JRctji8NmnXs for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 14:49:44 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54DA441876
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 54DA441876
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 14:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FDE660F5F
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0FDE660F5F
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 14:49:43 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B4264C000A;
- Tue, 21 Feb 2023 14:48:28 +0000 (UTC)
-Date: Tue, 21 Feb 2023 15:48:27 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230221154827.7e737960@windsurf>
-In-Reply-To: <20230221142144.1503123-1-fontaine.fabrice@gmail.com>
-References: <20230221142144.1503123-1-fontaine.fabrice@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id BAC0A240004;
+ Tue, 21 Feb 2023 14:49:41 +0000 (UTC)
+Date: Tue, 21 Feb 2023 15:49:40 +0100
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Message-ID: <20230221154940.17aa2764@windsurf>
+In-Reply-To: <1676986254-52744-1-git-send-email-gwenj@trabucayre.com>
+References: <1676986254-52744-1-git-send-email-gwenj@trabucayre.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676990909;
+ d=bootlin.com; s=gm1; t=1676990982;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=pZ7AwNuaSTPkMpTjSBoLwW0r3lmPax/j8Wo4NU11PL0=;
- b=QUGU8UELO3qWn6K9srgnpDe1WVwuq1mf91AvM5HCFS9wsKw3B2HqQVcq8nCm2cEOjNKtk8
- /7y319NOZpnu71bkvjLxh4DJDQku94vIE7CaR3NU+vTJYLbLW1kn/uRHYHwzfniSEspY9d
- cLU9R2x+JiKn0ACOxR+CChVQpf43nNUkqebmBk+JAheqO47atWsZbFkph0UoG4U/RECMXH
- dURrzL38yAgfh+5aSw7qowW/TKjKfjUUCxrGWVMVKXtse5hzUQ1zf4PGH/9lUq9d6/zA9m
- 3Y5kYrOw8OvX+x2XgGPANC1VyVoeFmfLPzqNfiYbT7RmdJTLzDpQXaY08lG3MA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=nchVOVQt4NkohcTIhLjWJl3hK1c/ab0jflu4EJDecXM=;
+ b=RMXALjtBOyp3qnF+M4NNcgCitgF9NNdxwe9O7pfyWfaCBz1Mqqpzrzm+08fHgT5dEPK79z
+ TmHFshC+KHxXCmSrcmXQY0k8Ldp1YcTOiWhnSLSe43A92DTkEjTTsQgtXq1B47TC4mB4JQ
+ vv43CBOGSigfxqlxZQqEVRiTVwrEJ2UNfa1QMkU4OR1KV0h26W3T+2ipnV/Wyq2sB6bz3A
+ SvCi6FPb1ab5EdnUOHYcAAj5DDgIBR28SOomtdHPShKy7A7FPVgjaOT2dBRTjpWOebZPzX
+ pcG9EgcNJgYIhAxTZIqqFtgs/K5OWOupJSuf0QUEtTQlLCM6Lzx8xurov5JLPg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QUGU8UEL
-Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: disable with -Ofast
+ header.s=gm1 header.b=RMXALjtB
+Subject: Re: [Buildroot] [PATCH] package/volk: bump version to 3.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,56 +77,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+On Tue, 21 Feb 2023 14:30:54 +0100
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-On Tue, 21 Feb 2023 15:21:44 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Remove GPL-3.0+ license, no more COPYING-LGPL: merged into COPYING
 
-> systemd can't be built with -Ofast since version 252 and
-> https://github.com/systemd/systemd/commit/60f97fee2d2f948c8e8963ea8ff767008cb93cae
-> resulting in the following build failure since bump to version 252.4 in
-> commit a2c823d1f548d5a0120d27d6c000603192360f7b:
-> 
-> ../output-1/build/systemd-252.4/meson.build:397:8: ERROR: Problem encountered: -Ofast, -ffast-math, or -ffinite-math-only is specified in c_args.
-> 
-> While at it, revert changes made by commit 9cd084b54e2223e49c37962b0cbefae7bea26ef5
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8f41c4984b645851724e554c3162b83bc312bee7
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/systemd/Config.in  | 1 +
->  package/systemd/systemd.mk | 5 -----
->  system/Config.in           | 4 ++++
->  3 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 9f4d933779..5bbdbb405f 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -25,6 +25,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
-> +	depends on !BR2_OPTIMIZE_FAST
+Do you have some source information on the removal of GPL-3.0+ ?
 
-I really dislike this.
+>  # See https://github.com/gnuradio/volk/tree/v2.5.1#license for some
+>  # details on the licensing.
 
-> -SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
-> -ifeq ($(BR2_OPTIMIZE_FAST),y)
-> -SYSTEMD_CFLAGS += -O3
-> -endif
-
-And this should work. It's really systemd that is stupid to look for
--Ofast in c_flags without seeing that -O3 later overrides it.
+Is this comment still up to date? Probably not based on the URL of the
+link :)
 
 Thomas
 -- 
