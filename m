@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB68C6379F
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:29:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB636C6379F
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:31:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD685827F0;
-	Tue, 21 Feb 2023 08:29:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD685827F0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9381882871;
+	Tue, 21 Feb 2023 08:31:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9381882871
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ANljRLJF6QJ3; Tue, 21 Feb 2023 08:29:21 +0000 (UTC)
+	with ESMTP id hNxBUjYnIs5a; Tue, 21 Feb 2023 08:31:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4E9582884;
-	Tue, 21 Feb 2023 08:29:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4E9582884
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A9F531BF292
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:28:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA3408284B;
+	Tue, 21 Feb 2023 08:31:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA3408284B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 865F91BF292
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7670742AEC
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:28:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7670742AEC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6140D611DC
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:31:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6140D611DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WjHZQk3MWfkL for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 08:28:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 456A642AA6
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 456A642AA6
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:28:58 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6E2B224000E;
- Tue, 21 Feb 2023 08:28:56 +0000 (UTC)
-Date: Tue, 21 Feb 2023 09:28:55 +0100
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20230221092855.0385f44e@windsurf>
-In-Reply-To: <20230219222048.22093-2-troglobit@gmail.com>
-References: <20230219222048.22093-1-troglobit@gmail.com>
- <20230219222048.22093-2-troglobit@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1676968136;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=hRJd6wCQ3+rVt+zpLS25Ow6vnQVvVHuVfiRxuUcm/B8=;
- b=Fy60tK/yxIFUiWJgWxz+isn1H+NLXHSf8k9QNkvvnwM6NVzBjlJsOtDVdsEeaBMFswo2ni
- kI7Efu6Y/knB9OU8UAyWB2b4AGAKZ7IdKe6DgFi7IF12L3yPunjm02v58MHd8269mw/BbA
- wqK3+LjJZFopY11HULbcTWG/JYH8sbg2ass96aPgwo+Hrvl5HhKzveN4OEZ0d5eYwK9jbq
- 5+M18pzT7dSQF4MrVoSQ9JgJjNrUPnElQsMQqa5JTu+axDKVJ7QfInGRAeP78h0quUZHR4
- K98ieskpnvjpJ12+hZ1Qt6LaR6GoGK6SPRzH1OTmsc2H6OK+Y+Dzq++veROwGA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Fy60tK/y
-Subject: Re: [Buildroot] [PATCH 1/1] package/ssdp-responder: bump to v2.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9RlQ2adPnu9Q for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 08:30:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7EB5460FC1
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:30:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EB5460FC1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6EB9E86580; Tue, 21 Feb 2023 08:30:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 21 Feb 2023 09:30:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9cd2e6e090449f9d2f371d24152580c038892f3d
+X-Git-Newrev: 97bdc0616c6027fe4b92bfa80dd9e7d43df20505
+X-Patchwork-Hint: ignore
+Message-Id: <20230221083059.6EB9E86580@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmodsecurity: needs dynamic
+ library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,36 +58,88 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 19 Feb 2023 23:20:47 +0100
-Joachim Wiberg <troglobit@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=97bdc0616c6027fe4b92bfa80dd9e7d43df20505
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> ChangeLog:
->  - https://github.com/troglobit/ssdp-responder/releases/tag/v2.0
->  - https://github.com/troglobit/ssdp-responder/blob/v2.0/ChangeLog.md
-> 
-> Critical Fixes:
->  - Fix periodic busy loop causing intermittent 100% CPU load
->  - Fix invalid <UDN>uuid:uuid:...</UDN> in description.xml (dup uuid:)
-> 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-> ---
->  package/ssdp-responder/ssdp-responder.hash | 2 +-
->  package/ssdp-responder/ssdp-responder.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Commit 9fc652a373034118535397fdd4042ab9f8fd7adf was incomplete as
+mbedtls can be pulled in libcurl through libssh2 resulting in the
+following build failure:
 
-Applied to next, thanks.
+/home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/powerpc64le-buildroot-linux-musl/11.3.0/../../../../powerpc64le-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-4/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/lib//libmbedcrypto.a(md5.c.o): in function `mbedtls_md5_init':
+md5.c:(.text+0x0): multiple definition of `mbedtls_md5_init'; ../../src/.libs/libmodsecurity.a(libmbedtls_la-md5.o):md5.c:(.text+0x0): first defined here
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/4c235e46188f23d1a48297f4e5942cec7b25959a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmodsecurity/Config.in    | 14 +++++++-------
+ package/nginx-modsecurity/Config.in | 11 ++++-------
+ 2 files changed, 11 insertions(+), 14 deletions(-)
+
+diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
+index b15d808759..69bb0494cc 100644
+--- a/package/libmodsecurity/Config.in
++++ b/package/libmodsecurity/Config.in
+@@ -2,8 +2,10 @@ config BR2_PACKAGE_LIBMODSECURITY
+ 	bool "libmodsecurity"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# libmodsecurity embeds several mbedtls source files
+-	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS)
++	# libmodsecurity embeds several mbedtls source files, causing
++	# various issues when static linking and other dependencies of
++	# libmodsecurity in turn use mbedtls
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  Libmodsecurity is one component of the ModSecurity
+@@ -17,8 +19,6 @@ config BR2_PACKAGE_LIBMODSECURITY
+ 
+ 	  https://github.com/SpiderLabs/ModSecurity
+ 
+-comment "libmodsecurity needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "libmodsecurity needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
++comment "libmodsecurity needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
+index 5cbe57a866..0bbf05fad9 100644
+--- a/package/nginx-modsecurity/Config.in
++++ b/package/nginx-modsecurity/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+ 	depends on BR2_INSTALL_LIBSTDCPP # libmodsecurity
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libmodsecurity
+-	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS) # libmodsecurity
++	depends on !BR2_STATIC_LIBS # libmodsecurity
+ 	select BR2_PACKAGE_LIBMODSECURITY
+ 	help
+ 	  The ModSecurity-nginx connector is the connection
+@@ -12,10 +12,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 
+ 	  https://github.com/SpiderLabs/ModSecurity-nginx
+ 
+-comment "nginx-modsecurity needs a toolchain w/ C++, threads"
++comment "nginx-modsecurity needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "nginx-modsecurity needs a toolchain w/ dynamic library"
+-	depends on BR2_PACKAGE_NGINX_HTTP
+-	depends on BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
