@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E7CC61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D94FBC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:48:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EEDE8404E9;
-	Tue, 21 Feb 2023 20:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEDE8404E9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 71EB1405A4;
+	Tue, 21 Feb 2023 20:48:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71EB1405A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MKSOSvUS-xhd; Tue, 21 Feb 2023 20:47:49 +0000 (UTC)
+	with ESMTP id UUarNwcoq2lG; Tue, 21 Feb 2023 20:48:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3CDA240374;
-	Tue, 21 Feb 2023 20:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CDA240374
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7A2D40374;
+	Tue, 21 Feb 2023 20:48:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7A2D40374
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D0B891BF3F4
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:47:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8AC0D1BF3F4
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA88340374
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA88340374
+ by smtp2.osuosl.org (Postfix) with ESMTP id 719E7403C7
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:47:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 719E7403C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aqF76vH6jZw3 for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 20:47:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0322400B8
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B0322400B8
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:47:44 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F1A261BF203;
- Tue, 21 Feb 2023 20:47:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pUZY6-007nc9-59; Tue, 21 Feb 2023 21:47:42 +0100
+ with ESMTP id XRtl0umMT4Hf for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 20:47:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9AD6F40374
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:47:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AD6F40374
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 881978662D; Tue, 21 Feb 2023 20:47:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20230206083621.0D5EB83950@busybox.osuosl.org>
-Date: Tue, 21 Feb 2023 21:47:42 +0100
-In-Reply-To: <20230206083621.0D5EB83950@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Mon, 6 Feb 2023 09:34:39 +0100")
-Message-ID: <87y1oqwxsh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/xxhash: use MOREFLAGS instead
- of overriding CFLAGS
+To: buildroot@buildroot.org
+Date: Tue, 21 Feb 2023 21:32:16 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 26df863eb6f8f91f2d8167cecff35a6a98d03cc5
+X-Git-Newrev: 3959f94377fd1d36c5779791320bbaee0f383e24
+X-Patchwork-Hint: ignore
+Message-Id: <20230221204754.881978662D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/opusfile: fix
+ CVE-2022-47021
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,32 +57,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3959f94377fd1d36c5779791320bbaee0f383e24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=bfef88762d19b2fd8f99b55cee5c9ebaf986e1c7
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+A null pointer dereference issue was discovered in functions op_get_data
+and op_open1 in opusfile.c in xiph opusfile 0.9 thru 0.12 allows
+attackers to cause denial of service or other unspecified impacts.
 
- > Set MOREFLAGS instead of overriding CFLAGS to avoid the following build
- > failure raised since commit 94b66fb49cd57d0863245fbe0a3dc0833e76aad0:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ae65870e652088dd65ca41d63304893d1d4443a2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...e-allocation-failure-from-ogg_sync_buffer.patch | 44 ++++++++++++++++++++++
+ package/opusfile/opusfile.mk                       |  3 ++
+ 2 files changed, 47 insertions(+)
 
- > /home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/x86_64-buildroot-linux-uclibc/11.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /tmp/ccabb8cF.o: relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/953133575d8c13266f1450fa545e70e4a518508d
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2022.11.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch b/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
+new file mode 100644
+index 0000000000..2ef08502ab
+--- /dev/null
++++ b/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
+@@ -0,0 +1,44 @@
++From 0a4cd796df5b030cb866f3f4a5e41a4b92caddf5 Mon Sep 17 00:00:00 2001
++From: Ralph Giles <giles@thaumas.net>
++Date: Tue, 6 Sep 2022 19:04:31 -0700
++Subject: [PATCH] Propagate allocation failure from ogg_sync_buffer.
++
++Instead of segfault, report OP_EFAULT if ogg_sync_buffer returns
++a null pointer. This allows more graceful recovery by the caller
++in the unlikely event of a fallible ogg_malloc call.
++
++We do check the return value elsewhere in the code, so the new
++checks make the code more consistent.
++
++Thanks to https://github.com/xiph/opusfile/issues/36 for reporting.
++
++Signed-off-by: Timothy B. Terriberry <tterribe@xiph.org>
++Signed-off-by: Mark Harris <mark.hsj@gmail.com>
++
++[Retrieved from:
++https://github.com/xiph/opusfile/commit/0a4cd796df5b030cb866f3f4a5e41a4b92caddf5]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/opusfile.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/opusfile.c b/src/opusfile.c
++index ca219b2..3c3c81e 100644
++--- a/src/opusfile.c
+++++ b/src/opusfile.c
++@@ -148,6 +148,7 @@ static int op_get_data(OggOpusFile *_of,int _nbytes){
++   int            nbytes;
++   OP_ASSERT(_nbytes>0);
++   buffer=(unsigned char *)ogg_sync_buffer(&_of->oy,_nbytes);
+++  if(OP_UNLIKELY(buffer==NULL))return OP_EFAULT;
++   nbytes=(int)(*_of->callbacks.read)(_of->stream,buffer,_nbytes);
++   OP_ASSERT(nbytes<=_nbytes);
++   if(OP_LIKELY(nbytes>0))ogg_sync_wrote(&_of->oy,nbytes);
++@@ -1527,6 +1528,7 @@ static int op_open1(OggOpusFile *_of,
++   if(_initial_bytes>0){
++     char *buffer;
++     buffer=ogg_sync_buffer(&_of->oy,(long)_initial_bytes);
+++    if(OP_UNLIKELY(buffer==NULL))return OP_EFAULT;
++     memcpy(buffer,_initial_data,_initial_bytes*sizeof(*buffer));
++     ogg_sync_wrote(&_of->oy,(long)_initial_bytes);
++   }
+diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
+index 72ae82e801..63553a81e7 100644
+--- a/package/opusfile/opusfile.mk
++++ b/package/opusfile/opusfile.mk
+@@ -11,6 +11,9 @@ OPUSFILE_LICENSE = BSD-3-Clause
+ OPUSFILE_LICENSE_FILES = COPYING
+ OPUSFILE_INSTALL_STAGING = YES
+ 
++# 0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
++OPUSFILE_IGNORE_CVES += CVE-2022-47021
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPUSFILE_DEPENDENCIES += openssl
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
