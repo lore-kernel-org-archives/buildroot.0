@@ -1,51 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D353CC636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 21:01:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72F66C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 21:16:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86CD740CB4;
-	Tue, 21 Feb 2023 21:01:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86CD740CB4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10C1481EDF;
+	Tue, 21 Feb 2023 21:16:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10C1481EDF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id POQPm44sC8Iu; Tue, 21 Feb 2023 21:01:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H40Lh8q2HdE2; Tue, 21 Feb 2023 21:16:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C408B404E9;
-	Tue, 21 Feb 2023 21:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C408B404E9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A598D1BF8C7
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:00:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4870A81F0F;
+	Tue, 21 Feb 2023 21:16:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4870A81F0F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F5071BF39F
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F24341849
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:00:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F24341849
+ by smtp1.osuosl.org (Postfix) with ESMTP id 04EF681EDF
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04EF681EDF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AxsGDcJPGtie for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 21:00:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D5B841841
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 21:00:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D5B841841
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29A158667C; Tue, 21 Feb 2023 21:00:52 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:48:49 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 02ea469db39bb3774093cbcf5c327873febeb0f6
-X-Git-Newrev: c42880d994c3162efdd583d4a6097538cd185eb3
-X-Patchwork-Hint: ignore
-Message-Id: <20230221210052.29A158667C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] boot/barebox: pass
- required environment variables for reproducible build
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tepanr_Dn5J5 for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 21:16:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38CEC81F0F
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 38CEC81F0F
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 21:16:05 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [171.22.1.1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 805165FFA2;
+ Tue, 21 Feb 2023 22:15:54 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 21 Feb 2023 22:15:54 +0100
+Date: Tue, 21 Feb 2023 22:15:54 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20230221211554.GI2718518@scaer>
+References: <20230221142144.1503123-1-fontaine.fabrice@gmail.com>
+ <20230221154827.7e737960@windsurf> <20230221200857.GG2718518@scaer>
+ <20230221212634.736f8d70@windsurf> <20230221203403.GH2718518@scaer>
+ <20230221214948.0b7ba737@windsurf>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230221214948.0b7ba737@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1677014162;
+ bh=tIFY1tUTYi+G61OGmrzRb0laIh5HhcDQiRIfcyXWBpU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=IaJD3UuEQ/1ql5AFE2ptoAw2yJgBloZCyRr4zNpuIS08f988fGC1U1OSowuF/iSyf
+ AqT/6LZtt4VPa1UNY0o8Fj+lBLWTzhFWv++nArz1MVG1G5C1mEAAu3xsIES0i+Yk1f
+ 3wd11BNG9lM1Qy/ulaIpuGkjOeb4G+RuBqcAX+BPMYo4qBNxATdgscG8U8t5nQ+YNM
+ 7uwFyw26au6GZRh9isgZ/FP0iYUtK7WFoXVLwaNqQPw3y+mFTxzSsbnaiY/1WypazW
+ QsxDvnw0D5dtaS6ZOIrWCr/hdWIGQhyoc40rwWkv0cYnHYUwoOUfI5VuSNnagRP8Sf
+ 8OGOZKRzJzD5w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=IaJD3UuE
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: disable with -Ofast
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,57 +78,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Norbert Lange <nolange79@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Sen Hastings <sen@phobosdpl.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c42880d994c3162efdd583d4a6097538cd185eb3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+Thomas, All,
 
-Barebox makes use of the same variables as the linux kernel does for
-handling reproducible build -- KBUILD_BUILD_HOST,
-KBUILD_BUILD_TIMESTAMP, KBUILD_BUILD_USER. This patch sets the proper
-variables based on linux/linux.mk, and passes them to the make
-invocation when building, to ensure a reproducible build is possible
-when BR2_REPRODUCIBLE is enabled.
+On 2023-02-21 21:49 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 21 Feb 2023 21:34:03 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+> > The upstream code is (split for readability):
+> > 
+> >      if (('-Ofast' in c_args or
+> >           '-ffast-math' in c_args or
+> >           '-ffinite-math-only' in c_args
+> >          ) and
+> >          not '-fno-finite-math-only' in c_args
+> >         )
+> > 
+> > So, if -fno-finite-math-only is in c_args, then the whole condition
+> > should evaluate to false, and thus it should not error out, right?
+> > 
+> > Or did I lose more than my grep-fu? ;-)
+> 
+> No, tonight your grep-fu is better than mine: you're totally right! :-)
 
-Signed-off-by: Casey Reeves <casey@xogium.me>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c90bd74ebb264ccc925f10a142ccd82ef63a4601)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/barebox/barebox.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Note however that upstream code is anyway buggy. If CFLAGS contain, in
+that order:
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 6506294d6d..05629bb4e3 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -74,6 +74,13 @@ endif
- $(1)_MAKE_FLAGS = ARCH=$$($(1)_ARCH) CROSS_COMPILE="$$(TARGET_CROSS)"
- $(1)_MAKE_ENV = $$(TARGET_MAKE_ENV)
- 
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+$(1)_MAKE_ENV += \
-+	KBUILD_BUILD_USER=buildroot \
-+	KBUILD_BUILD_HOST=buildroot \
-+	KBUILD_BUILD_TIMESTAMP="$(shell LC_ALL=C date -d @$(SOURCE_DATE_EPOCH))"
-+endif
-+
- ifeq ($$(BR2_TARGET_$(1)_USE_DEFCONFIG),y)
- $(1)_KCONFIG_DEFCONFIG = $$(call qstrip,$$(BR2_TARGET_$(1)_BOARD_DEFCONFIG))_defconfig
- else ifeq ($$(BR2_TARGET_$(1)_USE_CUSTOM_CONFIG),y)
-@@ -121,7 +128,7 @@ endef
- 
- define $(1)_BUILD_CMDS
- 	$$($(1)_BUILD_BAREBOXENV_CMDS)
--	$$(TARGET_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
-+	$$($(1)_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
- 	$$($(1)_BUILD_CUSTOM_ENV)
- endef
- 
+    -fno-finite-math-only -ffinite-math-only
+
+then the condition will evaluate to false, and thus the test will not
+abort, but still this would be incorrect, as -ffinite-math-only would
+win the setting because it comes last...
+
+So presumably, we should even be able to do:
+
+    SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-finite-math-only -ffinite-math-only
+
+which would again break the build....
+
+Even if we do not do that ourselves, nothing prevents a suer from
+providing that in their BR2_TARGET_OPTIMIZATION. But then, we can't
+protect people from shooting themselves in the foot... ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
