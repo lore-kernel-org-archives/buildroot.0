@@ -4,85 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FD52C6379F
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 11:30:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B10FDC64EC4
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 11:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8AAF442D3B;
-	Tue, 21 Feb 2023 11:30:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AAF442D3B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A5C942A1D;
+	Tue, 21 Feb 2023 11:34:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A5C942A1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mFuUHaruKEPd; Tue, 21 Feb 2023 11:29:59 +0000 (UTC)
+	with ESMTP id BDjFgIPmqLGv; Tue, 21 Feb 2023 11:34:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A1EA42B57;
-	Tue, 21 Feb 2023 11:29:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A1EA42B57
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D1C411BF33F
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 11:29:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8AD842A70;
+	Tue, 21 Feb 2023 11:34:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8AD842A70
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8499C1BF33F
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 11:34:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABFD140A59
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 11:29:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABFD140A59
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B9016113C
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 11:34:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B9016113C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xvCPvcN-e2YM for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 11:29:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mjmgdhv5UfpQ for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 11:34:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DE4B400DC
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8DE4B400DC
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 11:29:55 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id v3so3977355wrp.2
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 03:29:55 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A80C6110D
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
+ [IPv6:2607:f8b0:4864:20::1036])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2A80C6110D
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 11:34:44 +0000 (UTC)
+Received: by mail-pj1-x1036.google.com with SMTP id 99so4561774pjz.4
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 03:34:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FVPAsNfcwccBJN5qCkFihR922134KQpAej4JQzMz+9c=;
- b=mwHTJGJW89/nMq9XAg6jBw2P28JYmPTgBZPbH1WIDdBOzy1PCUiMUqjb7ab/NVeew9
- m94dgSQwmnA6w/ra2av4gnQIYfDcAWGeWM5luMjZ/lJGDdVY7I5w3VXP21DYESHH9MZo
- CmJ4oMjogJAAfvnL6sbsMhvK/7KS/99JKYTXc0z6iqjEasbH9zOYLCbZ2jJIWvO8LIDX
- VzBMOEC3nEtSFmgxx+ncQxeyHi+G+boO6lXlbFHoFmdWdwQBH5gHbDR35bhh+DXn4KZ2
- yojNWsCYcHYsgMuaxsgk9pWV1DUIC++IaakTXGEt/fQzRC6vmOhxuBYiBCIu2zLZfFUr
- brcg==
-X-Gm-Message-State: AO0yUKUKRWukMzezc8fEmoVMR3bvslOiJ0oYV2ktH1YtVYEfl58CYi9o
- 78I21yjV1Eenkxrq+8bVdcV2LIpH8Ew=
-X-Google-Smtp-Source: AK7set8fET50kyBZlqSXHPx5BCmuVlf2ZFRKUJ90SE8LPmA2KZM7DHQJmrKElnUSsuq7JwLPA5m1Kg==
-X-Received: by 2002:a05:6000:1086:b0:2c7:454:ed41 with SMTP id
- y6-20020a056000108600b002c70454ed41mr1778592wrw.71.1676978993294; 
- Tue, 21 Feb 2023 03:29:53 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- v25-20020a5d5919000000b002c551f7d452sm3955181wrd.98.2023.02.21.03.29.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Feb 2023 03:29:52 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 12:29:11 +0100
-Message-Id: <20230221112911.177963-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.0
+ bh=CyDN7gQot7TPvJ3Mg2drt9XpeodIBIYn7OsexPZMM9A=;
+ b=TQDQi/8QmAezzrnfLKE1lwkpFdjMbnJRzcR6Vs6lt318kHi502F1M9CFl76KHeTz1E
+ Jx4PeBvPCNkGlNBHmXsDmy5szzTuuvTItx+BGTq0iqF6cAOVWebaeytsJ9GbyPaUX06l
+ 4KKW4Ym7BcHUiys148QrDufSJNoJUhdOEpQ4+lYxd+DT5zqQxFPZsmvjWPN9A2hl/rOy
+ cb4Lbx/CzpYwqaVy4nkhwQkqrtcOmX2tNT6MVc2/klkg2zwgk0/UU8fRoFF4NNBalsMi
+ +t1svey5cApJNQyBGYmdPVgSGSkpGO12jAIjXvVErJhnTDoS+mneo/A1Uq5sF6u+AfXZ
+ HFJA==
+X-Gm-Message-State: AO0yUKV4iRPlGr/EjQOtcbJ+zIIelb6UonkHnXkUn2CjY2xHkiPJI4El
+ spazHk8iIFACZDAtiqjw8wilFHofdcMHToQ+Pdko3sKzYso=
+X-Google-Smtp-Source: AK7set8JOrQCNBXi6m0nw+jK5hVlw8kmXRTvQ1kEfcKFiScpNS+2fOase97Fn6whygE+yQkCFlUo8rfzkraSfqG1jx4=
+X-Received: by 2002:a17:90b:1b0a:b0:233:ebe0:371 with SMTP id
+ nu10-20020a17090b1b0a00b00233ebe00371mr2212225pjb.40.1676979283485; Tue, 21
+ Feb 2023 03:34:43 -0800 (PST)
 MIME-Version: 1.0
+References: <20230220231902.340496-1-fontaine.fabrice@gmail.com>
+ <20230221093719.5215ef5d@windsurf>
+In-Reply-To: <20230221093719.5215ef5d@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 21 Feb 2023 12:34:32 +0100
+Message-ID: <CAPi7W83eNioTFO9ok7gz9LBZVCorpiaAbU917y9EVtDdgbwX0A@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FVPAsNfcwccBJN5qCkFihR922134KQpAej4JQzMz+9c=;
- b=RMnzd/RR/tqIAWZ2lLyFVoLzvKDCTUc3lsohhladivDnnhVJLVXgoCcjM7na4Y0RFO
- j9mBs0gYAYhDSoXGTRcNHxQJtHnTHVgvyGJ8fJRG1JtmZ5sTsIgluWwcRTH2JcIVNcbZ
- Y8iu3gULeDXCYGFv05Iq++9lGBXyE1U3UMrKXh2ZEBmS9ogaQoNJHNAhGxKEAU/c8Dlb
- reE87Yva9T8/vPLnUBceQWjXOGSfd8mOrTQmW/ds7HjXSejneRQwIuDzRHK/2ntU7zRl
- g9VxqLfUMEPgzUcpFFeWhApZfk7ntDIiKT3dcPN+SnuDyv4TC5KyFy5kWB9eSInrgUAr
- /oyg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=CyDN7gQot7TPvJ3Mg2drt9XpeodIBIYn7OsexPZMM9A=;
+ b=E7t+zaRN55I5Co6X2bswfNsyvZOqCvBuelaBqZuEorbnFxLAw+xdIfLgLLD59FU8e0
+ uhXyo81mhJWMtrwB9rpto4AgBLCFk6liaUM8tHMA4vP39jBOyKZaCB6bZTCiR54d0O5+
+ lKBe/8KXZ+zrDJgKnCtYntM66SZSPWiNwkfTXE217lFHcIdGEo8UjOV8zcKqjq0g+MXx
+ 36d9vYK6jN2jcKbaPAe8xbBmUkOkM6lfetOUBboTV4vGhCBWi9XKw4eXanQDE/33Ehfs
+ Vu231sRY0GItZ5EVZ8O9DyA8p3pmwQGpsssfSg2V4bO/BS2wAoV5R5gEQ/dsV6/phNwW
+ vGxg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=RMnzd/RR
-Subject: [Buildroot] [PATCH 1/1]
- toolchain/toolchain-external/toolchain-external-synopsys-arc: drop locale
+ header.a=rsa-sha256 header.s=20210112 header.b=E7t+zaRN
+Subject: Re: [Buildroot] [PATCH 1/1] package/fluent-bit: fix build without
+ C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,50 +91,230 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8040491164790247416=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-locale is not enabled resulting in the following libcpprestsdk build
-failure:
+--===============8040491164790247416==
+Content-Type: multipart/alternative; boundary="0000000000007cec5705f5342af8"
 
-In file included from /home/thomas/autobuild/instance-0/output-1/build/libcpprestsdk-2.10.18/Release/include/cpprest/json.h:18,
-                 from /home/thomas/autobuild/instance-0/output-1/build/libcpprestsdk-2.10.18/Release/src/pch/stdafx.h:88,
-                 from /home/thomas/autobuild/instance-0/output-1/build/libcpprestsdk-2.10.18/Release/src/http/client/http_client_msg.cpp:13:
-/home/thomas/autobuild/instance-0/output-1/build/libcpprestsdk-2.10.18/Release/include/cpprest/asyncrt_utils.h:317:13: error: 'locale_t' does not name a type
-  317 |     typedef locale_t xplat_locale;
-      |             ^~~~~~~~
+--0000000000007cec5705f5342af8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes:
- - http://autobuild.buildroot.org/results/e6778e60cc1ea455f5b4511d5824f04d8040f67b
+Le mar. 21 f=C3=A9vr. 2023 =C3=A0 09:37, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> a =C3=A9crit :
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../toolchain-external/toolchain-external-synopsys-arc/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+> On Tue, 21 Feb 2023 00:19:02 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > Commit dedbc69022ba0beaf259463ac8082c86776f7e88 was incomplete resuling
+> > in the following build failure since the addition of the package in
+> > commit 6a0f7c39bcb48fc13aa2ce3fc4996baf1be66483:
+> >
+> > -- Check for working CXX compiler: /usr/bin/c++ - broken
+> > CMake Error at
+> /home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/hos=
+t/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake:62
+> (message):
+> >   The C++ compiler
+> >
+> >     "/usr/bin/c++"
+> >
+> >   is not able to compile a simple test program.
+> >
+> >   It fails with the following output:
+> >
+> >     Change Dir:
+> /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMa=
+keFiles/CMakeTmp
+> >
+> >     Run Build Command(s):/home/autobuild/make/make -f Makefile
+> cmTC_bfb29/fast && make[1]: Entering directory
+> '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CM=
+akeFiles/CMakeTmp'
+> >     /home/autobuild/make/make  -f CMakeFiles/cmTC_bfb29.dir/build.make
+> CMakeFiles/cmTC_bfb29.dir/build
+> >     make[2]: Entering directory
+> '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CM=
+akeFiles/CMakeTmp'
+> >     Building CXX object CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o
+> >     /usr/bin/c++
+> --sysroot=3D/home/autobuild/autobuild/instance-15/output-1/per-package/fl=
+uent-bit/host/xtensa-buildroot-linux-uclibc/sysroot
+>  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64
+> -mlongcalls -mauto-litpools -O2 -g0  -fcommon -U_FILE_OFFSET_BITS  -g -fP=
+IE
+> -o CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o -c
+> /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMa=
+keFiles/CMakeTmp/testCXXCompiler.cxx
+> >     c++: error: unrecognized command-line option '-mlongcalls'
+> >     c++: error: unrecognized command-line option '-mauto-litpools'
+> >     make[2]: *** [CMakeFiles/cmTC_bfb29.dir/build.make:78:
+> CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o] Error 1
+> >     make[2]: Leaving directory
+> '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CM=
+akeFiles/CMakeTmp'
+> >     make[1]: *** [Makefile:127: cmTC_bfb29/fast] Error 2
+> >     make[1]: Leaving directory
+> '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CM=
+akeFiles/CMakeTmp'
+> >
+> >   CMake will not be able to correctly generate this project.
+> > Call Stack (most recent call first):
+> >   lib/msgpack-c/CMakeLists.txt:2 (project)
+> >
+> > While at it, add missing comment about C++ dependency for wasm
+> >
+> > Fixes:
+> >  -
+> http://autobuild.buildroot.org/results/4b0f90d79d6dbbf976acf1da839260b0ee=
+94ddda
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  .../fluent-bit/0003-fix-build-without-C.patch | 131 ++++++++++++++++++
+> >  package/fluent-bit/Config.in                  |   4 +
+> >  2 files changed, 135 insertions(+)
+> >  create mode 100644 package/fluent-bit/0003-fix-build-without-C.patch
+>
+> Applied to master, thanks.
+>
 
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-index c3483f331c..37c7b82644 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-@@ -4,7 +4,6 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	depends on BR2_HOSTARCH = "x86_64"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_ENABLE_LOCALE
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--- 
-2.39.0
+A build failure is raised when applying patch because of line ending in
+lib/snappy-fef67ac/CMakeLists.txt
+
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+
+Best Regards,
+
+Fabrice
+
+--0000000000007cec5705f5342af8
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mar. 21 f=C3=A9vr. 2023 =C3=
+=A0=C2=A009:37, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@boo=
+tlin.com">thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=C2=A0:<br></div=
+><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
+-left:1px solid rgb(204,204,204);padding-left:1ex">On Tue, 21 Feb 2023 00:1=
+9:02 +0100<br>
+Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gmail.com" target=
+=3D"_blank">fontaine.fabrice@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; Commit dedbc69022ba0beaf259463ac8082c86776f7e88 was incomplete resulin=
+g<br>
+&gt; in the following build failure since the addition of the package in<br=
+>
+&gt; commit 6a0f7c39bcb48fc13aa2ce3fc4996baf1be66483:<br>
+&gt; <br>
+&gt; -- Check for working CXX compiler: /usr/bin/c++ - broken<br>
+&gt; CMake Error at /home/autobuild/autobuild/instance-15/output-1/per-pack=
+age/fluent-bit/host/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake:62 =
+(message):<br>
+&gt;=C2=A0 =C2=A0The C++ compiler<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0&quot;/usr/bin/c++&quot;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0is not able to compile a simple test program.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0It fails with the following output:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Change Dir: /home/autobuild/autobuild/instance-15/o=
+utput-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Run Build Command(s):/home/autobuild/make/make -f M=
+akefile cmTC_bfb29/fast &amp;&amp; make[1]: Entering directory &#39;/home/a=
+utobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/C=
+MakeTmp&#39;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0/home/autobuild/make/make=C2=A0 -f CMakeFiles/cmTC_=
+bfb29.dir/build.make CMakeFiles/cmTC_bfb29.dir/build<br>
+&gt;=C2=A0 =C2=A0 =C2=A0make[2]: Entering directory &#39;/home/autobuild/au=
+tobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp&#39=
+;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Building CXX object CMakeFiles/cmTC_bfb29.dir/testC=
+XXCompiler.cxx.o<br>
+&gt;=C2=A0 =C2=A0 =C2=A0/usr/bin/c++ --sysroot=3D/home/autobuild/autobuild/=
+instance-15/output-1/per-package/fluent-bit/host/xtensa-buildroot-linux-ucl=
+ibc/sysroot=C2=A0 =C2=A0-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_O=
+FFSET_BITS=3D64 -mlongcalls -mauto-litpools -O2 -g0=C2=A0 -fcommon -U_FILE_=
+OFFSET_BITS=C2=A0 -g -fPIE -o CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx=
+.o -c /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9=
+/CMakeFiles/CMakeTmp/testCXXCompiler.cxx<br>
+&gt;=C2=A0 =C2=A0 =C2=A0c++: error: unrecognized command-line option &#39;-=
+mlongcalls&#39;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0c++: error: unrecognized command-line option &#39;-=
+mauto-litpools&#39;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0make[2]: *** [CMakeFiles/cmTC_bfb29.dir/build.make:=
+78: CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o] Error 1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0make[2]: Leaving directory &#39;/home/autobuild/aut=
+obuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp&#39;=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0make[1]: *** [Makefile:127: cmTC_bfb29/fast] Error =
+2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0make[1]: Leaving directory &#39;/home/autobuild/aut=
+obuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp&#39;=
+<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0CMake will not be able to correctly generate this project.=
+<br>
+&gt; Call Stack (most recent call first):<br>
+&gt;=C2=A0 =C2=A0lib/msgpack-c/CMakeLists.txt:2 (project)<br>
+&gt; <br>
+&gt; While at it, add missing comment about C++ dependency for wasm<br>
+&gt; <br>
+&gt; Fixes:<br>
+&gt;=C2=A0 - <a href=3D"http://autobuild.buildroot.org/results/4b0f90d79d6d=
+bbf976acf1da839260b0ee94ddda" rel=3D"noreferrer" target=3D"_blank">http://a=
+utobuild.buildroot.org/results/4b0f90d79d6dbbf976acf1da839260b0ee94ddda</a>=
+<br>
+&gt; <br>
+&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
+@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 .../fluent-bit/0003-fix-build-without-C.patch | 131 ++++++++++++=
+++++++<br>
+&gt;=C2=A0 package/fluent-bit/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A04 +<br>
+&gt;=C2=A0 2 files changed, 135 insertions(+)<br>
+&gt;=C2=A0 create mode 100644 package/fluent-bit/0003-fix-build-without-C.p=
+atch<br>
+<br>
+Applied to master, thanks.<br></blockquote><div><br></div><div>A build fail=
+ure is raised when applying patch because of line ending in lib/snappy-fef6=
+7ac/CMakeLists.txt</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" =
+style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
+dding-left:1ex">
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, CTO, Bootlin<br>
+Embedded Linux and Kernel engineering<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a></blockquote><div><br></div><div>Best Regards,</div><div><=
+br></div><div>Fabrice <br></div></div></div>
+
+--0000000000007cec5705f5342af8--
+
+--===============8040491164790247416==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8040491164790247416==--
