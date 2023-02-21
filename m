@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76742C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:48:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EF50C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:48:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CE974168B;
-	Sun, 12 Mar 2023 21:48:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CE974168B
+	by smtp4.osuosl.org (Postfix) with ESMTP id B989E4030C;
+	Sun, 12 Mar 2023 21:48:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B989E4030C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eTi85ltS3AdZ; Sun, 12 Mar 2023 21:48:29 +0000 (UTC)
+	with ESMTP id str-9X5JwiiD; Sun, 12 Mar 2023 21:48:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E55C64168F;
-	Sun, 12 Mar 2023 21:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E55C64168F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 126E51BF863
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86A57416C1;
+	Sun, 12 Mar 2023 21:48:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86A57416C1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1379B1BF868
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DEC2140522
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEC2140522
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACCB3415F5
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACCB3415F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T6tov-V-6N9I for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3Squ130S5rqf for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31B974058B
+ by smtp4.osuosl.org (Postfix) with ESMTP id A343E415F6
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31B974058B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A343E415F6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 200DC87009; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+ id 9C89987009; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 09:19:02 +0100
+Date: Tue, 21 Feb 2023 09:40:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9e09ac2c02d1ff8d3872ebc72e915e9baa7fbd0d
-X-Git-Newrev: 1d7dd1b79145a34f861d30d09750f6e988e10fd5
+X-Git-Oldrev: e464dc4033d0437c337e8cf0998a95c9deeeee12
+X-Git-Newrev: e3706f1e0b7008674169809166c414825a551d04
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214622.200DC87009@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: add Giulio Benetti to board
- imx6ullevk for both mainline and NXP(Freescale) versions
+Message-Id: <20230312214622.9C89987009@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: bump version to
+ 1.42.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,33 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d7dd1b79145a34f861d30d09750f6e988e10fd5
+commit: https://git.buildroot.net/buildroot/commit/?id=e3706f1e0b7008674169809166c414825a551d04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index caa73698f9..599cfe6886 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1136,10 +1136,13 @@ F:	package/xapian/
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 3895c1ffc3..270699d63a 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.40/NetworkManager-1.40.10.sha256sum
+-sha256  fa251455df3c38e2bf1e1ff806b4bc4346938dd135a3568bd250e92caa85eaf7  NetworkManager-1.40.10.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.42/NetworkManager-1.42.0.sha256sum
++sha256  2f6756d507bb6b46716594b67e6fe7491891e1b5b167bbafc5157dfa7753d5b4  NetworkManager-1.42.0.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 138ff46e4a..3001530930 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	board/bananapi/bananapi-m2-ultra/
-+F:	board/freescale/imx6ullevk/
- F:	board/olimex/a*
- F:	configs/amarula_vyasa_rk3288_defconfig
- F:	configs/asus_tinker_rk3288_defconfig
- F:	configs/bananapi_m2_ultra_defconfig
-+F:	configs/freescale_imx6ullevk_defconfig
-+F:	configs/imx6ullevk_defconfig
- F:	configs/olimex_a*
- F:	package/at/
- F:	package/binutils/
+-NETWORK_MANAGER_VERSION_MAJOR = 1.40
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
++NETWORK_MANAGER_VERSION_MAJOR = 1.42
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
