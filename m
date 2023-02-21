@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DB42C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADCC7C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0BCF41912;
-	Sun, 12 Mar 2023 21:54:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0BCF41912
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54AB141579;
+	Sun, 12 Mar 2023 21:54:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54AB141579
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uj4V3MHRPoU9; Sun, 12 Mar 2023 21:54:39 +0000 (UTC)
+	with ESMTP id WJGrqWijH62X; Sun, 12 Mar 2023 21:54:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F19364194B;
-	Sun, 12 Mar 2023 21:54:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F19364194B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 23FC61BF863
+	by smtp4.osuosl.org (Postfix) with ESMTP id D378A41A09;
+	Sun, 12 Mar 2023 21:54:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D378A41A09
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 674D91BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 20A4B415F6
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20A4B415F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09CA940106
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09CA940106
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jHFGXzMdWYdY for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZUemI110-ddq for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79BF241621
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79BF241621
+ by smtp2.osuosl.org (Postfix) with ESMTP id A005640610
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A005640610
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7486187007; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+ id 9019D87006; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 12:20:58 +0100
+Date: Tue, 21 Feb 2023 09:40:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b83550bd0c2bbfc894d1c82ec0ea330c8283deee
-X-Git-Newrev: 7cc92e463771f5542d796a73ff7aadce8cf09b0f
+X-Git-Oldrev: 2215548546af47f3cfce89a15bfc31f736cd74bc
+X-Git-Newrev: e464dc4033d0437c337e8cf0998a95c9deeeee12
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214624.7486187007@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ethtool: bump to version 6.2
+Message-Id: <20230312214622.9019D87006@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zstd: bump to version 1.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,611 +63,377 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cc92e463771f5542d796a73ff7aadce8cf09b0f
+commit: https://git.buildroot.net/buildroot/commit/?id=e464dc4033d0437c337e8cf0998a95c9deeeee12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop our patches as they are included in the new version.
+The LICENSE text has changed, nominally the copyright owner changed
+from "Facebook" to "Meta Platforms, Inc. and affiliates",
+reflecting the name change of that company.
 
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Add upstream patch to fix zstd-dll build.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ethtool/0001-uapi-Bring-in-if.h.patch      | 483 ---------------------
- .../0002-marvell.c-Fix-build-with-musl-libc.patch  |  71 ---
- package/ethtool/ethtool.hash                       |   2 +-
- package/ethtool/ethtool.mk                         |   2 +-
- 4 files changed, 2 insertions(+), 556 deletions(-)
+ ...-zstd-dll-build-missing-dependencies-3496.patch | 321 +++++++++++++++++++++
+ package/zstd/zstd.hash                             |   6 +-
+ package/zstd/zstd.mk                               |   2 +-
+ 3 files changed, 325 insertions(+), 4 deletions(-)
 
-diff --git a/package/ethtool/0001-uapi-Bring-in-if.h.patch b/package/ethtool/0001-uapi-Bring-in-if.h.patch
-deleted file mode 100644
-index faf264f61f..0000000000
---- a/package/ethtool/0001-uapi-Bring-in-if.h.patch
-+++ /dev/null
-@@ -1,483 +0,0 @@
--From fd02caa75918401f2cb75af1f2a181c1959e070d Mon Sep 17 00:00:00 2001
--From: Florian Fainelli <f.fainelli@gmail.com>
--Date: Sat, 14 Jan 2023 08:34:09 -0800
--Subject: [PATCH] uapi: Bring in if.h
--
--Bring in if.h from commit eec517cdb481 ("net: Add IF_OPER_TESTING") as
--well as uapi/linux/hdlc/ioctl.h. Ensure that we define all of the
--necessary guards to provide updated definitions of ifmap, ifreq and
--IFNAMSIZ. This resolves build issues with kernel headers < 4.11 which
--lacked 2618be7dccf8739b89e1906b64bd8d551af351e6 ("uapi: fix linux/if.h
--userspace compilation errors").
--
--Fixes: 1fa60003a8b8 ("misc: header includes cleanup")
--Reported-by: Markus Mayer <mmayer@broadcom.com>
--Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
--Message-Id: <20230114163411.3290201-2-f.fainelli@gmail.com>
--
--[Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20230114163411.3290201-2-f.fainelli@gmail.com/]
--[vfazio@gmail.com: fix whitespace issues]
--Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-----
-- Makefile.am             |   6 +-
-- internal.h              |   7 +-
-- uapi/linux/hdlc/ioctl.h |  94 +++++++++++++
-- uapi/linux/if.h         | 296 ++++++++++++++++++++++++++++++++++++++++
-- 4 files changed, 397 insertions(+), 6 deletions(-)
-- create mode 100644 uapi/linux/hdlc/ioctl.h
-- create mode 100644 uapi/linux/if.h
--
--diff --git a/Makefile.am b/Makefile.am
--index 663f40a..691a20e 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -7,7 +7,8 @@ EXTRA_DIST = LICENSE ethtool.8 ethtool.spec.in aclocal.m4 ChangeLog autogen.sh
-- 
-- sbin_PROGRAMS = ethtool
-- ethtool_SOURCES = ethtool.c uapi/linux/ethtool.h internal.h \
---		  uapi/linux/net_tstamp.h rxclass.c common.c common.h \
--+		  uapi/linux/net_tstamp.h uapi/linux/if.h uapi/linux/hdlc/ioctl.h \
--+		  rxclass.c common.c common.h \
-- 		  json_writer.c json_writer.h json_print.c json_print.h \
-- 		  list.h
-- if ETHTOOL_ENABLE_PRETTY_DUMP
--@@ -43,7 +44,8 @@ ethtool_SOURCES += \
-- 		  netlink/desc-rtnl.c netlink/cable_test.c netlink/tunnels.c \
-- 		  uapi/linux/ethtool_netlink.h \
-- 		  uapi/linux/netlink.h uapi/linux/genetlink.h \
---		  uapi/linux/rtnetlink.h uapi/linux/if_link.h
--+		  uapi/linux/rtnetlink.h uapi/linux/if_link.h \
--+		  uapi/linux/if.h uapi/linux/hdlc/ioctl.h
-- AM_CPPFLAGS += @MNL_CFLAGS@
-- LDADD += @MNL_LIBS@
-- endif
--diff --git a/internal.h b/internal.h
--index b80f77a..3923719 100644
----- a/internal.h
--+++ b/internal.h
--@@ -21,6 +21,9 @@
-- #include <unistd.h>
-- #include <endian.h>
-- #include <sys/ioctl.h>
--+#define __UAPI_DEF_IF_IFNAMSIZ	1
--+#define __UAPI_DEF_IF_IFMAP	1
--+#define __UAPI_DEF_IF_IFREQ	1
-- #include <linux/if.h>
-- 
-- #include "json_writer.h"
--@@ -52,10 +55,6 @@ typedef int32_t s32;
-- #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
-- #endif
-- 
---#ifndef ALTIFNAMSIZ
---#define ALTIFNAMSIZ 128
---#endif
---
-- #include <linux/ethtool.h>
-- #include <linux/net_tstamp.h>
-- 
--diff --git a/uapi/linux/hdlc/ioctl.h b/uapi/linux/hdlc/ioctl.h
--new file mode 100644
--index 0000000..b06341a
----- /dev/null
--+++ b/uapi/linux/hdlc/ioctl.h
--@@ -0,0 +1,94 @@
--+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--+#ifndef __HDLC_IOCTL_H__
--+#define __HDLC_IOCTL_H__
--+
--+
--+#define GENERIC_HDLC_VERSION 4	/* For synchronization with sethdlc utility */
--+
--+#define CLOCK_DEFAULT   0	/* Default setting */
--+#define CLOCK_EXT	1	/* External TX and RX clock - DTE */
--+#define CLOCK_INT	2	/* Internal TX and RX clock - DCE */
--+#define CLOCK_TXINT	3	/* Internal TX and external RX clock */
--+#define CLOCK_TXFROMRX	4	/* TX clock derived from external RX clock */
--+
--+
--+#define ENCODING_DEFAULT	0 /* Default setting */
--+#define ENCODING_NRZ		1
--+#define ENCODING_NRZI		2
--+#define ENCODING_FM_MARK	3
--+#define ENCODING_FM_SPACE	4
--+#define ENCODING_MANCHESTER	5
--+
--+
--+#define PARITY_DEFAULT		0 /* Default setting */
--+#define PARITY_NONE		1 /* No parity */
--+#define PARITY_CRC16_PR0	2 /* CRC16, initial value 0x0000 */
--+#define PARITY_CRC16_PR1	3 /* CRC16, initial value 0xFFFF */
--+#define PARITY_CRC16_PR0_CCITT	4 /* CRC16, initial 0x0000, ITU-T version */
--+#define PARITY_CRC16_PR1_CCITT	5 /* CRC16, initial 0xFFFF, ITU-T version */
--+#define PARITY_CRC32_PR0_CCITT	6 /* CRC32, initial value 0x00000000 */
--+#define PARITY_CRC32_PR1_CCITT	7 /* CRC32, initial value 0xFFFFFFFF */
--+
--+#define LMI_DEFAULT		0 /* Default setting */
--+#define LMI_NONE		1 /* No LMI, all PVCs are static */
--+#define LMI_ANSI		2 /* ANSI Annex D */
--+#define LMI_CCITT		3 /* ITU-T Annex A */
--+#define LMI_CISCO		4 /* The "original" LMI, aka Gang of Four */
--+
--+#ifndef __ASSEMBLY__
--+
--+typedef struct {
--+	unsigned int clock_rate; /* bits per second */
--+	unsigned int clock_type; /* internal, external, TX-internal etc. */
--+	unsigned short loopback;
--+} sync_serial_settings;          /* V.35, V.24, X.21 */
--+
--+typedef struct {
--+	unsigned int clock_rate; /* bits per second */
--+	unsigned int clock_type; /* internal, external, TX-internal etc. */
--+	unsigned short loopback;
--+	unsigned int slot_map;
--+} te1_settings;                  /* T1, E1 */
--+
--+typedef struct {
--+	unsigned short encoding;
--+	unsigned short parity;
--+} raw_hdlc_proto;
--+
--+typedef struct {
--+	unsigned int t391;
--+	unsigned int t392;
--+	unsigned int n391;
--+	unsigned int n392;
--+	unsigned int n393;
--+	unsigned short lmi;
--+	unsigned short dce; /* 1 for DCE (network side) operation */
--+} fr_proto;
--+
--+typedef struct {
--+	unsigned int dlci;
--+} fr_proto_pvc;          /* for creating/deleting FR PVCs */
--+
--+typedef struct {
--+	unsigned int dlci;
--+	char master[IFNAMSIZ];	/* Name of master FRAD device */
--+}fr_proto_pvc_info;		/* for returning PVC information only */
--+
--+typedef struct {
--+    unsigned int interval;
--+    unsigned int timeout;
--+} cisco_proto;
--+
--+typedef struct {
--+	unsigned short dce; /* 1 for DCE (network side) operation */
--+	unsigned int modulo; /* modulo (8 = basic / 128 = extended) */
--+	unsigned int window; /* frame window size */
--+	unsigned int t1; /* timeout t1 */
--+	unsigned int t2; /* timeout t2 */
--+	unsigned int n2; /* frame retry counter */
--+} x25_hdlc_proto;
--+
--+/* PPP doesn't need any info now - supply length = 0 to ioctl */
--+
--+#endif /* __ASSEMBLY__ */
--+#endif /* __HDLC_IOCTL_H__ */
--diff --git a/uapi/linux/if.h b/uapi/linux/if.h
--new file mode 100644
--index 0000000..75ee7f4
----- /dev/null
--+++ b/uapi/linux/if.h
--@@ -0,0 +1,296 @@
--+/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
--+/*
--+ * INET		An implementation of the TCP/IP protocol suite for the LINUX
--+ *		operating system.  INET is implemented using the  BSD Socket
--+ *		interface as the means of communication with the user level.
--+ *
--+ *		Global definitions for the INET interface module.
--+ *
--+ * Version:	@(#)if.h	1.0.2	04/18/93
--+ *
--+ * Authors:	Original taken from Berkeley UNIX 4.3, (c) UCB 1982-1988
--+ *		Ross Biro
--+ *		Fred N. van Kempen, <waltje@uWalt.NL.Mugnet.ORG>
--+ *
--+ *		This program is free software; you can redistribute it and/or
--+ *		modify it under the terms of the GNU General Public License
--+ *		as published by the Free Software Foundation; either version
--+ *		2 of the License, or (at your option) any later version.
--+ */
--+#ifndef _LINUX_IF_H
--+#define _LINUX_IF_H
--+
--+#include <linux/libc-compat.h>          /* for compatibility with glibc */
--+#include <linux/types.h>		/* for "__kernel_caddr_t" et al	*/
--+#include <linux/socket.h>		/* for "struct sockaddr" et al	*/
--+		/* for "__user" et al           */
--+
--+#include <sys/socket.h>			/* for struct sockaddr.		*/
--+
--+#if __UAPI_DEF_IF_IFNAMSIZ
--+#define	IFNAMSIZ	16
--+#endif /* __UAPI_DEF_IF_IFNAMSIZ */
--+#define	IFALIASZ	256
--+#define	ALTIFNAMSIZ	128
--+#include <linux/hdlc/ioctl.h>
--+
--+/* For glibc compatibility. An empty enum does not compile. */
--+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO != 0 || \
--+    __UAPI_DEF_IF_NET_DEVICE_FLAGS != 0
--+/**
--+ * enum net_device_flags - &struct net_device flags
--+ *
--+ * These are the &struct net_device flags, they can be set by drivers, the
--+ * kernel and some can be triggered by userspace. Userspace can query and
--+ * set these flags using userspace utilities but there is also a sysfs
--+ * entry available for all dev flags which can be queried and set. These flags
--+ * are shared for all types of net_devices. The sysfs entries are available
--+ * via /sys/class/net/<dev>/flags. Flags which can be toggled through sysfs
--+ * are annotated below, note that only a few flags can be toggled and some
--+ * other flags are always preserved from the original net_device flags
--+ * even if you try to set them via sysfs. Flags which are always preserved
--+ * are kept under the flag grouping @IFF_VOLATILE. Flags which are __volatile__
--+ * are annotated below as such.
--+ *
--+ * You should have a pretty good reason to be extending these flags.
--+ *
--+ * @IFF_UP: interface is up. Can be toggled through sysfs.
--+ * @IFF_BROADCAST: broadcast address valid. Volatile.
--+ * @IFF_DEBUG: turn on debugging. Can be toggled through sysfs.
--+ * @IFF_LOOPBACK: is a loopback net. Volatile.
--+ * @IFF_POINTOPOINT: interface is has p-p link. Volatile.
--+ * @IFF_NOTRAILERS: avoid use of trailers. Can be toggled through sysfs.
--+ *	Volatile.
--+ * @IFF_RUNNING: interface RFC2863 OPER_UP. Volatile.
--+ * @IFF_NOARP: no ARP protocol. Can be toggled through sysfs. Volatile.
--+ * @IFF_PROMISC: receive all packets. Can be toggled through sysfs.
--+ * @IFF_ALLMULTI: receive all multicast packets. Can be toggled through
--+ *	sysfs.
--+ * @IFF_MASTER: master of a load balancer. Volatile.
--+ * @IFF_SLAVE: slave of a load balancer. Volatile.
--+ * @IFF_MULTICAST: Supports multicast. Can be toggled through sysfs.
--+ * @IFF_PORTSEL: can set media type. Can be toggled through sysfs.
--+ * @IFF_AUTOMEDIA: auto media select active. Can be toggled through sysfs.
--+ * @IFF_DYNAMIC: dialup device with changing addresses. Can be toggled
--+ *	through sysfs.
--+ * @IFF_LOWER_UP: driver signals L1 up. Volatile.
--+ * @IFF_DORMANT: driver signals dormant. Volatile.
--+ * @IFF_ECHO: echo sent packets. Volatile.
--+ */
--+enum net_device_flags {
--+/* for compatibility with glibc net/if.h */
--+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS
--+	IFF_UP				= 1<<0,  /* sysfs */
--+	IFF_BROADCAST			= 1<<1,  /* __volatile__ */
--+	IFF_DEBUG			= 1<<2,  /* sysfs */
--+	IFF_LOOPBACK			= 1<<3,  /* __volatile__ */
--+	IFF_POINTOPOINT			= 1<<4,  /* __volatile__ */
--+	IFF_NOTRAILERS			= 1<<5,  /* sysfs */
--+	IFF_RUNNING			= 1<<6,  /* __volatile__ */
--+	IFF_NOARP			= 1<<7,  /* sysfs */
--+	IFF_PROMISC			= 1<<8,  /* sysfs */
--+	IFF_ALLMULTI			= 1<<9,  /* sysfs */
--+	IFF_MASTER			= 1<<10, /* __volatile__ */
--+	IFF_SLAVE			= 1<<11, /* __volatile__ */
--+	IFF_MULTICAST			= 1<<12, /* sysfs */
--+	IFF_PORTSEL			= 1<<13, /* sysfs */
--+	IFF_AUTOMEDIA			= 1<<14, /* sysfs */
--+	IFF_DYNAMIC			= 1<<15, /* sysfs */
--+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS */
--+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO
--+	IFF_LOWER_UP			= 1<<16, /* __volatile__ */
--+	IFF_DORMANT			= 1<<17, /* __volatile__ */
--+	IFF_ECHO			= 1<<18, /* __volatile__ */
--+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO */
--+};
--+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO != 0 || __UAPI_DEF_IF_NET_DEVICE_FLAGS != 0 */
--+
--+/* for compatibility with glibc net/if.h */
--+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS
--+#define IFF_UP				IFF_UP
--+#define IFF_BROADCAST			IFF_BROADCAST
--+#define IFF_DEBUG			IFF_DEBUG
--+#define IFF_LOOPBACK			IFF_LOOPBACK
--+#define IFF_POINTOPOINT			IFF_POINTOPOINT
--+#define IFF_NOTRAILERS			IFF_NOTRAILERS
--+#define IFF_RUNNING			IFF_RUNNING
--+#define IFF_NOARP			IFF_NOARP
--+#define IFF_PROMISC			IFF_PROMISC
--+#define IFF_ALLMULTI			IFF_ALLMULTI
--+#define IFF_MASTER			IFF_MASTER
--+#define IFF_SLAVE			IFF_SLAVE
--+#define IFF_MULTICAST			IFF_MULTICAST
--+#define IFF_PORTSEL			IFF_PORTSEL
--+#define IFF_AUTOMEDIA			IFF_AUTOMEDIA
--+#define IFF_DYNAMIC			IFF_DYNAMIC
--+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS */
--+
--+#if __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO
--+#define IFF_LOWER_UP			IFF_LOWER_UP
--+#define IFF_DORMANT			IFF_DORMANT
--+#define IFF_ECHO			IFF_ECHO
--+#endif /* __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO */
--+
--+#define IFF_VOLATILE	(IFF_LOOPBACK|IFF_POINTOPOINT|IFF_BROADCAST|IFF_ECHO|\
--+		IFF_MASTER|IFF_SLAVE|IFF_RUNNING|IFF_LOWER_UP|IFF_DORMANT)
--+
--+#define IF_GET_IFACE	0x0001		/* for querying only */
--+#define IF_GET_PROTO	0x0002
--+
--+/* For definitions see hdlc.h */
--+#define IF_IFACE_V35	0x1000		/* V.35 serial interface	*/
--+#define IF_IFACE_V24	0x1001		/* V.24 serial interface	*/
--+#define IF_IFACE_X21	0x1002		/* X.21 serial interface	*/
--+#define IF_IFACE_T1	0x1003		/* T1 telco serial interface	*/
--+#define IF_IFACE_E1	0x1004		/* E1 telco serial interface	*/
--+#define IF_IFACE_SYNC_SERIAL 0x1005	/* can't be set by software	*/
--+#define IF_IFACE_X21D   0x1006          /* X.21 Dual Clocking (FarSite) */
--+
--+/* For definitions see hdlc.h */
--+#define IF_PROTO_HDLC	0x2000		/* raw HDLC protocol		*/
--+#define IF_PROTO_PPP	0x2001		/* PPP protocol			*/
--+#define IF_PROTO_CISCO	0x2002		/* Cisco HDLC protocol		*/
--+#define IF_PROTO_FR	0x2003		/* Frame Relay protocol		*/
--+#define IF_PROTO_FR_ADD_PVC 0x2004	/*    Create FR PVC		*/
--+#define IF_PROTO_FR_DEL_PVC 0x2005	/*    Delete FR PVC		*/
--+#define IF_PROTO_X25	0x2006		/* X.25				*/
--+#define IF_PROTO_HDLC_ETH 0x2007	/* raw HDLC, Ethernet emulation	*/
--+#define IF_PROTO_FR_ADD_ETH_PVC 0x2008	/*  Create FR Ethernet-bridged PVC */
--+#define IF_PROTO_FR_DEL_ETH_PVC 0x2009	/*  Delete FR Ethernet-bridged PVC */
--+#define IF_PROTO_FR_PVC	0x200A		/* for reading PVC status	*/
--+#define IF_PROTO_FR_ETH_PVC 0x200B
--+#define IF_PROTO_RAW    0x200C          /* RAW Socket                   */
--+
--+/* RFC 2863 operational status */
--+enum {
--+	IF_OPER_UNKNOWN,
--+	IF_OPER_NOTPRESENT,
--+	IF_OPER_DOWN,
--+	IF_OPER_LOWERLAYERDOWN,
--+	IF_OPER_TESTING,
--+	IF_OPER_DORMANT,
--+	IF_OPER_UP,
--+};
--+
--+/* link modes */
--+enum {
--+	IF_LINK_MODE_DEFAULT,
--+	IF_LINK_MODE_DORMANT,	/* limit upward transition to dormant */
--+	IF_LINK_MODE_TESTING,	/* limit upward transition to testing */
--+};
--+
--+/*
--+ *	Device mapping structure. I'd just gone off and designed a
--+ *	beautiful scheme using only loadable modules with arguments
--+ *	for driver options and along come the PCMCIA people 8)
--+ *
--+ *	Ah well. The get() side of this is good for WDSETUP, and it'll
--+ *	be handy for debugging things. The set side is fine for now and
--+ *	being very small might be worth keeping for clean configuration.
--+ */
--+
--+/* for compatibility with glibc net/if.h */
--+#if __UAPI_DEF_IF_IFMAP
--+struct ifmap {
--+	unsigned long mem_start;
--+	unsigned long mem_end;
--+	unsigned short base_addr;
--+	unsigned char irq;
--+	unsigned char dma;
--+	unsigned char port;
--+	/* 3 bytes spare */
--+};
--+#endif /* __UAPI_DEF_IF_IFMAP */
--+
--+struct if_settings {
--+	unsigned int type;	/* Type of physical device or protocol */
--+	unsigned int size;	/* Size of the data allocated by the caller */
--+	union {
--+		/* {atm/eth/dsl}_settings anyone ? */
--+		raw_hdlc_proto		*raw_hdlc;
--+		cisco_proto		*cisco;
--+		fr_proto		*fr;
--+		fr_proto_pvc		*fr_pvc;
--+		fr_proto_pvc_info	*fr_pvc_info;
--+		x25_hdlc_proto		*x25;
--+
--+		/* interface settings */
--+		sync_serial_settings	*sync;
--+		te1_settings		*te1;
--+	} ifs_ifsu;
--+};
--+
--+/*
--+ * Interface request structure used for socket
--+ * ioctl's.  All interface ioctl's must have parameter
--+ * definitions which begin with ifr_name.  The
--+ * remainder may be interface specific.
--+ */
--+
--+/* for compatibility with glibc net/if.h */
--+#if __UAPI_DEF_IF_IFREQ
--+struct ifreq {
--+#define IFHWADDRLEN	6
--+	union
--+	{
--+		char	ifrn_name[IFNAMSIZ];		/* if name, e.g. "en0" */
--+	} ifr_ifrn;
--+
--+	union {
--+		struct	sockaddr ifru_addr;
--+		struct	sockaddr ifru_dstaddr;
--+		struct	sockaddr ifru_broadaddr;
--+		struct	sockaddr ifru_netmask;
--+		struct  sockaddr ifru_hwaddr;
--+		short	ifru_flags;
--+		int	ifru_ivalue;
--+		int	ifru_mtu;
--+		struct  ifmap ifru_map;
--+		char	ifru_slave[IFNAMSIZ];	/* Just fits the size */
--+		char	ifru_newname[IFNAMSIZ];
--+		void *	ifru_data;
--+		struct	if_settings ifru_settings;
--+	} ifr_ifru;
--+};
--+#endif /* __UAPI_DEF_IF_IFREQ */
--+
--+#define ifr_name	ifr_ifrn.ifrn_name	/* interface name 	*/
--+#define ifr_hwaddr	ifr_ifru.ifru_hwaddr	/* MAC address 		*/
--+#define	ifr_addr	ifr_ifru.ifru_addr	/* address		*/
--+#define	ifr_dstaddr	ifr_ifru.ifru_dstaddr	/* other end of p-p lnk	*/
--+#define	ifr_broadaddr	ifr_ifru.ifru_broadaddr	/* broadcast address	*/
--+#define	ifr_netmask	ifr_ifru.ifru_netmask	/* interface net mask	*/
--+#define	ifr_flags	ifr_ifru.ifru_flags	/* flags		*/
--+#define	ifr_metric	ifr_ifru.ifru_ivalue	/* metric		*/
--+#define	ifr_mtu		ifr_ifru.ifru_mtu	/* mtu			*/
--+#define ifr_map		ifr_ifru.ifru_map	/* device map		*/
--+#define ifr_slave	ifr_ifru.ifru_slave	/* slave device		*/
--+#define	ifr_data	ifr_ifru.ifru_data	/* for use by interface	*/
--+#define ifr_ifindex	ifr_ifru.ifru_ivalue	/* interface index	*/
--+#define ifr_bandwidth	ifr_ifru.ifru_ivalue    /* link bandwidth	*/
--+#define ifr_qlen	ifr_ifru.ifru_ivalue	/* Queue length 	*/
--+#define ifr_newname	ifr_ifru.ifru_newname	/* New name		*/
--+#define ifr_settings	ifr_ifru.ifru_settings	/* Device/proto settings*/
--+
--+/*
--+ * Structure used in SIOCGIFCONF request.
--+ * Used to retrieve interface configuration
--+ * for machine (useful for programs which
--+ * must know all networks accessible).
--+ */
--+
--+/* for compatibility with glibc net/if.h */
--+#if __UAPI_DEF_IF_IFCONF
--+struct ifconf  {
--+	int	ifc_len;			/* size of buffer	*/
--+	union {
--+		char *ifcu_buf;
--+		struct ifreq *ifcu_req;
--+	} ifc_ifcu;
--+};
--+#endif /* __UAPI_DEF_IF_IFCONF */
--+
--+#define	ifc_buf	ifc_ifcu.ifcu_buf		/* buffer address	*/
--+#define	ifc_req	ifc_ifcu.ifcu_req		/* array of structures	*/
--+
--+#endif /* _LINUX_IF_H */
---- 
--2.25.1
--
-diff --git a/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch b/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch
-deleted file mode 100644
-index f13edbbe50..0000000000
---- a/package/ethtool/0002-marvell.c-Fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From a26296eea68aa6c16b253f34825c9b9007269672 Mon Sep 17 00:00:00 2001
--From: Florian Fainelli <f.fainelli@gmail.com>
--Date: Sat, 14 Jan 2023 08:34:11 -0800
--Subject: [PATCH] marvell.c: Fix build with musl-libc
--
--After commit 1fa60003a8b8 ("misc: header includes cleanup") we stopped
--including net/if.h which resolved the proper defines to pull in
--sys/types.h and provide a definition for u_int32_t. With musl-libc we
--would need to define _GNU_SOURCE to ensure that sys/types.h does provide a
--definition for u_int32_t.
--
--Rather, just replace u_uint{16,32}_t with the more standard
--uint{16,32}_t types from stdint.h
--
--Fixes: 1fa60003a8b8 ("misc: header includes cleanup")
--Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
--
--[Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20230114163411.3290201-4-f.fainelli@gmail.com/]
--Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-----
-- marvell.c | 34 +++++++++++++++++-----------------
-- 1 file changed, 17 insertions(+), 17 deletions(-)
--
--diff --git a/marvell.c b/marvell.c
--index d3d570e..3f3aed8 100644
----- a/marvell.c
--+++ b/marvell.c
--@@ -31,23 +31,23 @@ static void dump_timer(const char *name, const void *p)
-- static void dump_queue(const char *name, const void *a, int rx)
-- {
-- 	struct desc {
---		u_int32_t		ctl;
---		u_int32_t		next;
---		u_int32_t		data_lo;
---		u_int32_t		data_hi;
---		u_int32_t		status;
---		u_int32_t		timestamp;
---		u_int16_t		csum2;
---		u_int16_t		csum1;
---		u_int16_t		csum2_start;
---		u_int16_t		csum1_start;
---		u_int32_t		addr_lo;
---		u_int32_t		addr_hi;
---		u_int32_t		count_lo;
---		u_int32_t		count_hi;
---		u_int32_t               byte_count;
---		u_int32_t               csr;
---		u_int32_t               flag;
--+		uint32_t		ctl;
--+		uint32_t		next;
--+		uint32_t		data_lo;
--+		uint32_t		data_hi;
--+		uint32_t		status;
--+		uint32_t		timestamp;
--+		uint16_t		csum2;
--+		uint16_t		csum1;
--+		uint16_t		csum2_start;
--+		uint16_t		csum1_start;
--+		uint32_t		addr_lo;
--+		uint32_t		addr_hi;
--+		uint32_t		count_lo;
--+		uint32_t		count_hi;
--+		uint32_t		byte_count;
--+		uint32_t		csr;
--+		uint32_t		flag;
-- 	};
-- 	const struct desc *d = a;
-- 
---- 
--2.25.1
--
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 609085aa5e..846ca7efc3 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  c41fc881ffa5a40432d2dd829eb44c64a49dee482e716baacf9262c64daa8f90  ethtool-6.1.tar.xz
-+sha256  86df0114064d4d73f6bf72bf03e85c33964a519ee0c1d1ba65005ad2d0e570e1  ethtool-6.2.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 3381344e0a..a35e274bc4 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
+diff --git a/package/zstd/0001-Fix-zstd-dll-build-missing-dependencies-3496.patch b/package/zstd/0001-Fix-zstd-dll-build-missing-dependencies-3496.patch
+new file mode 100644
+index 0000000000..60737159c6
+--- /dev/null
++++ b/package/zstd/0001-Fix-zstd-dll-build-missing-dependencies-3496.patch
+@@ -0,0 +1,321 @@
++From e47c7c0d5a923dcdc3b302f9944eb4a70b7ee0be Mon Sep 17 00:00:00 2001
++From: Yonatan Komornik <11005061+yoniko@users.noreply.github.com>
++Date: Sun, 12 Feb 2023 12:32:31 -0800
++Subject: [PATCH] Fix zstd-dll build missing dependencies (#3496)
++
++* Fixes zstd-dll build (https://github.com/facebook/zstd/issues/3492):
++- Adds pool.o and threading.o dependency to the zstd-dll target
++- Moves custom allocation functions into header to avoid needing to add dependency on common.o
++- Adds test target for zstd-dll
++- Adds github workflow that buildis zstd-dll
++
++[nolange79: backport from upstream c78f434aa4f5f1097c8edb975f4c1635817a5a71]
++Signed-off-by: Norbert Lange <nolange79@gmail.com>
++---
++ .github/workflows/dev-short-tests.yml     |  9 +++-
++ contrib/linux-kernel/zstd_common_module.c |  3 --
++ lib/common/allocations.h                  | 55 +++++++++++++++++++++++
++ lib/common/pool.c                         |  2 +-
++ lib/common/zstd_common.c                  | 35 ---------------
++ lib/common/zstd_internal.h                |  5 ---
++ lib/compress/zstd_compress.c              |  1 +
++ lib/compress/zstd_cwksp.h                 |  1 +
++ lib/compress/zstdmt_compress.c            |  1 +
++ lib/decompress/zstd_ddict.c               |  1 +
++ lib/decompress/zstd_decompress.c          |  1 +
++ programs/Makefile                         |  2 +-
++ tests/Makefile                            |  8 +++-
++ 13 files changed, 76 insertions(+), 48 deletions(-)
++ create mode 100644 lib/common/allocations.h
++
++diff --git a/.github/workflows/dev-short-tests.yml b/.github/workflows/dev-short-tests.yml
++index 132dbb99..3ae2e9da 100644
++--- a/.github/workflows/dev-short-tests.yml
+++++ b/.github/workflows/dev-short-tests.yml
++@@ -55,6 +55,14 @@ jobs:
++       run: |
++         make c89build V=1
++ 
+++  build-zstd-dll:
+++    runs-on: ubuntu-latest
+++    steps:
+++    - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # tag=v3
+++    - name: build zstd bin against a dynamic lib (debuglevel for more dependencies)
+++      run: |
+++        make -C lib lib-mt-release 
+++        DEBUGLEVEL=2 make -C programs zstd-dll
++ 
++   gcc-7-libzstd:
++     runs-on: ubuntu-latest
++@@ -328,7 +336,6 @@ jobs:
++         make -j -C programs allVariants MOREFLAGS=-O0
++         ./tests/test-variants.sh
++ 
++-
++   qemu-consistency:
++     name: QEMU ${{ matrix.name }}
++     runs-on: ubuntu-20.04
++diff --git a/contrib/linux-kernel/zstd_common_module.c b/contrib/linux-kernel/zstd_common_module.c
++index 2fead39e..466828e3 100644
++--- a/contrib/linux-kernel/zstd_common_module.c
+++++ b/contrib/linux-kernel/zstd_common_module.c
++@@ -24,9 +24,6 @@ EXPORT_SYMBOL_GPL(HUF_readStats_wksp);
++ EXPORT_SYMBOL_GPL(ZSTD_isError);
++ EXPORT_SYMBOL_GPL(ZSTD_getErrorName);
++ EXPORT_SYMBOL_GPL(ZSTD_getErrorCode);
++-EXPORT_SYMBOL_GPL(ZSTD_customMalloc);
++-EXPORT_SYMBOL_GPL(ZSTD_customCalloc);
++-EXPORT_SYMBOL_GPL(ZSTD_customFree);
++ 
++ MODULE_LICENSE("Dual BSD/GPL");
++ MODULE_DESCRIPTION("Zstd Common");
++diff --git a/lib/common/allocations.h b/lib/common/allocations.h
++new file mode 100644
++index 00000000..a3153c4b
++--- /dev/null
+++++ b/lib/common/allocations.h
++@@ -0,0 +1,55 @@
+++/*
+++ * Copyright (c) Meta Platforms, Inc. and affiliates.
+++ * All rights reserved.
+++ *
+++ * This source code is licensed under both the BSD-style license (found in the
+++ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+++ * in the COPYING file in the root directory of this source tree).
+++ * You may select, at your option, one of the above-listed licenses.
+++ */
+++
+++/* This file provides custom allocation primitives
+++ */
+++
+++#define ZSTD_DEPS_NEED_MALLOC
+++#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
+++
+++#include "mem.h" /* MEM_STATIC */
+++#define ZSTD_STATIC_LINKING_ONLY
+++#include "../zstd.h" /* ZSTD_customMem */
+++
+++#ifndef ZSTD_ALLOCATIONS_H
+++#define ZSTD_ALLOCATIONS_H
+++
+++/* custom memory allocation functions */
+++
+++MEM_STATIC void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
+++{
+++    if (customMem.customAlloc)
+++        return customMem.customAlloc(customMem.opaque, size);
+++    return ZSTD_malloc(size);
+++}
+++
+++MEM_STATIC void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
+++{
+++    if (customMem.customAlloc) {
+++        /* calloc implemented as malloc+memset;
+++         * not as efficient as calloc, but next best guess for custom malloc */
+++        void* const ptr = customMem.customAlloc(customMem.opaque, size);
+++        ZSTD_memset(ptr, 0, size);
+++        return ptr;
+++    }
+++    return ZSTD_calloc(1, size);
+++}
+++
+++MEM_STATIC void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
+++{
+++    if (ptr!=NULL) {
+++        if (customMem.customFree)
+++            customMem.customFree(customMem.opaque, ptr);
+++        else
+++            ZSTD_free(ptr);
+++    }
+++}
+++
+++#endif /* ZSTD_ALLOCATIONS_H */
++diff --git a/lib/common/pool.c b/lib/common/pool.c
++index f3d9d085..d5ca5a78 100644
++--- a/lib/common/pool.c
+++++ b/lib/common/pool.c
++@@ -10,9 +10,9 @@
++ 
++ 
++ /* ======   Dependencies   ======= */
+++#include "../common/allocations.h"  /* ZSTD_customCalloc, ZSTD_customFree */
++ #include "zstd_deps.h" /* size_t */
++ #include "debug.h"     /* assert */
++-#include "zstd_internal.h"  /* ZSTD_customCalloc, ZSTD_customFree */
++ #include "pool.h"
++ 
++ /* ======   Compiler specifics   ====== */
++diff --git a/lib/common/zstd_common.c b/lib/common/zstd_common.c
++index 32085524..3f04c22a 100644
++--- a/lib/common/zstd_common.c
+++++ b/lib/common/zstd_common.c
++@@ -14,7 +14,6 @@
++ *  Dependencies
++ ***************************************/
++ #define ZSTD_DEPS_NEED_MALLOC
++-#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
++ #include "error_private.h"
++ #include "zstd_internal.h"
++ 
++@@ -47,37 +46,3 @@ ZSTD_ErrorCode ZSTD_getErrorCode(size_t code) { return ERR_getErrorCode(code); }
++ /*! ZSTD_getErrorString() :
++  *  provides error code string from enum */
++ const char* ZSTD_getErrorString(ZSTD_ErrorCode code) { return ERR_getErrorString(code); }
++-
++-
++-
++-/*=**************************************************************
++-*  Custom allocator
++-****************************************************************/
++-void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
++-{
++-    if (customMem.customAlloc)
++-        return customMem.customAlloc(customMem.opaque, size);
++-    return ZSTD_malloc(size);
++-}
++-
++-void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
++-{
++-    if (customMem.customAlloc) {
++-        /* calloc implemented as malloc+memset;
++-         * not as efficient as calloc, but next best guess for custom malloc */
++-        void* const ptr = customMem.customAlloc(customMem.opaque, size);
++-        ZSTD_memset(ptr, 0, size);
++-        return ptr;
++-    }
++-    return ZSTD_calloc(1, size);
++-}
++-
++-void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
++-{
++-    if (ptr!=NULL) {
++-        if (customMem.customFree)
++-            customMem.customFree(customMem.opaque, ptr);
++-        else
++-            ZSTD_free(ptr);
++-    }
++-}
++diff --git a/lib/common/zstd_internal.h b/lib/common/zstd_internal.h
++index 37836dc7..1f942f27 100644
++--- a/lib/common/zstd_internal.h
+++++ b/lib/common/zstd_internal.h
++@@ -350,11 +350,6 @@ typedef struct {
++ const seqStore_t* ZSTD_getSeqStore(const ZSTD_CCtx* ctx);   /* compress & dictBuilder */
++ int ZSTD_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
++ 
++-/* custom memory allocation functions */
++-void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem);
++-void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem);
++-void ZSTD_customFree(void* ptr, ZSTD_customMem customMem);
++-
++ 
++ /* ZSTD_invalidateRepCodes() :
++  * ensures next compression will not use repcodes from previous block.
++diff --git a/lib/compress/zstd_compress.c b/lib/compress/zstd_compress.c
++index b55f684c..173ce242 100644
++--- a/lib/compress/zstd_compress.c
+++++ b/lib/compress/zstd_compress.c
++@@ -11,6 +11,7 @@
++ /*-*************************************
++ *  Dependencies
++ ***************************************/
+++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customCalloc, ZSTD_customFree */
++ #include "../common/zstd_deps.h"  /* INT_MAX, ZSTD_memset, ZSTD_memcpy */
++ #include "../common/mem.h"
++ #include "hist.h"           /* HIST_countFast_wksp */
++diff --git a/lib/compress/zstd_cwksp.h b/lib/compress/zstd_cwksp.h
++index 97676693..9113cdbd 100644
++--- a/lib/compress/zstd_cwksp.h
+++++ b/lib/compress/zstd_cwksp.h
++@@ -14,6 +14,7 @@
++ /*-*************************************
++ *  Dependencies
++ ***************************************/
+++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customFree */
++ #include "../common/zstd_internal.h"
++ 
++ #if defined (__cplusplus)
++diff --git a/lib/compress/zstdmt_compress.c b/lib/compress/zstdmt_compress.c
++index 7a2c7172..bf2de4a7 100644
++--- a/lib/compress/zstdmt_compress.c
+++++ b/lib/compress/zstdmt_compress.c
++@@ -20,6 +20,7 @@
++ 
++ 
++ /* ======   Dependencies   ====== */
+++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customCalloc, ZSTD_customFree */
++ #include "../common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memset, INT_MAX, UINT_MAX */
++ #include "../common/mem.h"         /* MEM_STATIC */
++ #include "../common/pool.h"        /* threadpool */
++diff --git a/lib/decompress/zstd_ddict.c b/lib/decompress/zstd_ddict.c
++index ad5c34a7..309ec0d0 100644
++--- a/lib/decompress/zstd_ddict.c
+++++ b/lib/decompress/zstd_ddict.c
++@@ -14,6 +14,7 @@
++ /*-*******************************************************
++ *  Dependencies
++ *********************************************************/
+++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customFree */
++ #include "../common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memmove, ZSTD_memset */
++ #include "../common/cpu.h"         /* bmi2 */
++ #include "../common/mem.h"         /* low level memory routines */
++diff --git a/lib/decompress/zstd_decompress.c b/lib/decompress/zstd_decompress.c
++index d487966c..3f3ca57c 100644
++--- a/lib/decompress/zstd_decompress.c
+++++ b/lib/decompress/zstd_decompress.c
++@@ -55,6 +55,7 @@
++ /*-*******************************************************
++ *  Dependencies
++ *********************************************************/
+++#include "../common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customCalloc, ZSTD_customFree */
++ #include "../common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memmove, ZSTD_memset */
++ #include "../common/mem.h"         /* low level memory routines */
++ #define FSE_STATIC_LINKING_ONLY
++diff --git a/programs/Makefile b/programs/Makefile
++index fcff41dc..8507abef 100644
++--- a/programs/Makefile
+++++ b/programs/Makefile
++@@ -225,7 +225,7 @@ zstd-noxz : zstd
++ .PHONY: zstd-dll
++ zstd-dll : LDFLAGS+= -L$(LIBZSTD)
++ zstd-dll : LDLIBS += -lzstd
++-zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c
+++zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c pool.c threading.c
++ zstd-dll : zstd
++ 
++ 
++diff --git a/tests/Makefile b/tests/Makefile
++index 3eed19ea..778c7d67 100644
++--- a/tests/Makefile
+++++ b/tests/Makefile
++@@ -95,7 +95,7 @@ allnothread: fullbench fuzzer paramgrill datagen decodecorpus
++ dll: fuzzer-dll zstreamtest-dll
++ 
++ .PHONY: zstd zstd32 zstd-nolegacy  # only external makefile knows how to build or update them
++-zstd zstd32 zstd-nolegacy:
+++zstd zstd32 zstd-nolegacy zstd-dll:
++ 	$(MAKE) -C $(PRGDIR) $@ MOREFLAGS+="$(DEBUGFLAGS)"
++ 
++ .PHONY: libzstd
++@@ -328,13 +328,17 @@ test-all: test test32 test-decodecorpus-cli
++ test-zstd: ZSTD = $(PRGDIR)/zstd
++ test-zstd: zstd
++ 
+++.PHONY: test-zstd-dll
+++test-zstd-dll: ZSTD = $(PRGDIR)/zstd
+++test-zstd-dll: zstd-dll
+++
++ test-zstd32: ZSTD = $(PRGDIR)/zstd32
++ test-zstd32: zstd32
++ 
++ test-zstd-nolegacy: ZSTD = $(PRGDIR)/zstd-nolegacy
++ test-zstd-nolegacy: zstd-nolegacy
++ 
++-test-zstd test-zstd32 test-zstd-nolegacy: datagen
+++test-zstd test-zstd32 test-zstd-nolegacy test-zstd-dll: datagen
++ 	file $(ZSTD)
++ 	EXE_PREFIX="$(QEMU_SYS)" ZSTD_BIN="$(ZSTD)" DATAGEN_BIN=./datagen ./playTests.sh $(ZSTDRTTEST)
++ 
++-- 
++2.39.1
++
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index eca44b89f0..ca4e2fa0b9 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz.sha256
+-sha256  7c42d56fac126929a6a85dbc73ff1db2411d04f104fae9bdea51305663a83fd0  zstd-1.5.2.tar.gz
++# From https://github.com/facebook/zstd/releases/download/v1.5.4/zstd-1.5.4.tar.gz.sha256
++sha256  0f470992aedad543126d06efab344dc5f3e171893810455787d38347343a4424  zstd-1.5.4.tar.gz
+ 
+ # License files (locally computed)
+-sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
++sha256  7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8  LICENSE
+ sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 73bb97a793..45e8bf1bc2 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 6.1
-+ETHTOOL_VERSION = 6.2
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+-ZSTD_VERSION = 1.5.2
++ZSTD_VERSION = 1.5.4
+ ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
+ ZSTD_INSTALL_STAGING = YES
+ ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
