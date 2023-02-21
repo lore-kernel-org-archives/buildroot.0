@@ -4,85 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75797C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 02:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABB7FC6379F
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 07:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 249E160A99;
-	Tue, 21 Feb 2023 02:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 249E160A99
+	by smtp3.osuosl.org (Postfix) with ESMTP id 170E460B23;
+	Tue, 21 Feb 2023 07:38:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 170E460B23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nnHeckDGbMve; Tue, 21 Feb 2023 02:22:12 +0000 (UTC)
+	with ESMTP id 7fJDHoue9EKI; Tue, 21 Feb 2023 07:38:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3643670386;
-	Tue, 21 Feb 2023 02:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3643670386
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 81E531BF29A
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 01:22:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D98E60B8C;
+	Tue, 21 Feb 2023 07:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D98E60B8C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B81A21BF2EF
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 07:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68911822FA
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 01:22:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68911822FA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84D8442A6B
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 07:38:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84D8442A6B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id anjHRrMwwTcQ for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 01:22:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 019F881363
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 019F881363
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 01:22:50 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id b16so1139074iln.3
- for <buildroot@buildroot.org>; Mon, 20 Feb 2023 17:22:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ZbbkTAYENtOMe+Etb0phZDk2ZnZ1j80IqIe6cZoen4c=;
- b=oDpaxmipFMnGwCoeJha5tywqyn+JLnULaORcGWuS7+m1I4km6nySYe0JHyqxwwWWtX
- 2tX1OAfL83WlM0LjQUaU+g4docXNK7/4ZuxQH33bt2tEJj2QGbvHWdB+2zKxP+1cYaKD
- zxecjv5LsEdQ1e2trZ0OESLyTwKueEZw2fTXEpByFXleJlT9bS3EJV0ggaXPtnzMKeat
- R2C4rxODIXCIDypk7y1UBV6YG3k5+/V63VvXP6Xm+AmAmx3TkZAn7lbjJjHg3pVmc96C
- OUEnQvmYFy0AkQKkjY0FnRFarZil0t6onwmrkjHjhCvPF9zePHl3IO8qraRoxfrSYVMX
- VDDA==
-X-Gm-Message-State: AO0yUKW5lcymGdIXng22cFiixAfoDuVaTiDdDozqXC8sGSaNkJCKLNo+
- 7ZBc6GwA4y2ciVM8ziVInr+q0jbnHNs=
-X-Google-Smtp-Source: AK7set9uus8LD/QuxD130WGFU7Lvu/IikihIcIAcdHnOxDN4sM+pOsQplnWbGI7W+wc2fTO13CuPlA==
-X-Received: by 2002:a92:c54e:0:b0:315:375c:dc5a with SMTP id
- a14-20020a92c54e000000b00315375cdc5amr3850724ilj.20.1676942569665; 
- Mon, 20 Feb 2023 17:22:49 -0800 (PST)
-Received: from james-x399.localdomain (97-118-149-35.hlrn.qwest.net.
- [97.118.149.35]) by smtp.gmail.com with ESMTPSA id
- y14-20020a02bb0e000000b003a958f51423sm4523496jan.167.2023.02.20.17.22.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Feb 2023 17:22:49 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 20 Feb 2023 18:22:38 -0700
-Message-Id: <20230221012238.3809280-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2W5-Ljh_VQTE for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 07:38:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C32641D47
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5C32641D47
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 07:38:37 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6B1BD1C000D
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 07:38:34 +0000 (UTC)
 MIME-Version: 1.0
+To: buildroot@buildroot.org
+Date: Tue, 21 Feb 2023 07:38:34 -0000
+Message-Id: <20230221073840.84D8442A6B@smtp4.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ZbbkTAYENtOMe+Etb0phZDk2ZnZ1j80IqIe6cZoen4c=;
- b=WYkQkFG+ip1QNCrmOn+scYOi1qdtyJ4luAfgiu8XQJRzycUrXfQ8JQsy9uaf4axDp/
- QbmzAuj3NupGghcTsM3gRzbabowly5dQLEa4ruMGeinKUHeWqSp7JnxpMJv9Hg4oBtAL
- WVIrX0kmVHBxeOiDgNTLY5hn4CozDPOP6PEhF+Bgud0xXpYUAoy4d3fh2RAlrRU8e+Fv
- K1uBAutsfNsKyMmeSXcjD0ycEBsp9SWDTGhcMhSGaLYmZ4H0EYpn/4KOAqGB3/fD2l4+
- NFgtS/3R0kIkH4Hv4YkszCztZ3qX0v253hoU9oOabNRFVU6adPKcXSGLVCboWfWfw4J/
- Xbaw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=WYkQkFG+
-Subject: [Buildroot] [PATCH 1/1] package/{rust,
- rust-bin}: bump to version 1.67.1
+ d=bootlin.com; s=gm1; 
+ t=1676965114; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Uea2DoWCGEQnUGXQzeu6SkXh4CNOQ8vHtSuyv3da4QE=;
+ b=pRKOlZ0Gtrg1Ncb/5YucD2rGW5PU3rJG9Yj8od+kVTFQfVUejTD8cqtsc5cv1+ccKj63/m
+ oGX3GOeMfWIxE31Zpxgu+E1XOKzu3rBDNchqflWRzS7hQ+xO6Y/rAt5jdAxUxTCDlYKauw
+ be2rko+svpNRzUBzVqY0NYRbgdhSxGcTvyuZdFzMAnFQKcir+UezcywNYpYUGz1Va4r5MP
+ Zr1uLXybcvK1oKEtw7+21mIR4IcHk726Q0s0X4aSRbW1OCOJ+IOew7mKpFdD7eLvmy1uNS
+ krRjxbe1JH5g7AoIQEQkR/sMPmKehUlpeyn7474Lowtk9TexxBF0APcHCrgQxw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=pRKOlZ0G
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-02-20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,379 +70,286 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Link to Rust 1.67.1 announcement: https://blog.rust-lang.org/2023/02/09/Rust-1.67.1.html
+Hello,
 
-Drop patch which is now upstream.
+Autobuild statistics for 2023-02-20
+===================================
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/rust-bin/rust-bin.hash                | 252 +++++++++---------
- package/rust-bin/rust-bin.mk                  |   2 +-
- ...-unsoundness-in-bootstrap-cache-code.patch |  43 ---
- package/rust/rust.hash                        |   6 +-
- package/rust/rust.mk                          |   2 +-
- 5 files changed, 131 insertions(+), 174 deletions(-)
- delete mode 100644 package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
+      branch |  OK | NOK | TIM | TOT |
+  2022.11.x  | 13  | 12  |  0  | 25  |
+    master   | 153 | 139 |  2  | 294 |
+     next    |  2  |  0  |  0  |  2  |
 
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index d00e6342e8..11cfae5e9b 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -1,129 +1,129 @@
--# From https://static.rust-lang.org/dist/rust-1.67.0-aarch64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-aarch64-unknown-linux-gnu.tar.xz.asc
--sha256  5a108891cab3fd0567bf8c2b44f18c045c067c607bbec3ea62b02ad40809b151  rust-1.67.0-aarch64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-i686-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-i686-unknown-linux-gnu.tar.xz.asc
--sha256  2ba12fe020b17de3a6fe7633c59ab50ef44f9715caa858077aad3301408f583c  rust-1.67.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-mips-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-mips-unknown-linux-gnu.tar.xz.asc
--sha256  f7fd19d9b4740b2acaee2ac3bf502feb2f16d1d0c203c1d7d2d2652652a9f997  rust-1.67.0-mips-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-mipsel-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-mipsel-unknown-linux-gnu.tar.xz.asc
--sha256  23dc0289abd12ef396c2ac822a28245157f1be5b574b5a5f4059a9ba7b61184c  rust-1.67.0-mipsel-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-powerpc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-powerpc-unknown-linux-gnu.tar.xz.asc
--sha256  9998f93c29272d9ecabb69e908da23e728ec835520b430d0af12250d175b981d  rust-1.67.0-powerpc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-powerpc64-unknown-linux-gnu.tar.xz.asc
--sha256  c24de54f46022c9490fc403ccb1e7384a52181ecd28afea0a37f800793b229b4  rust-1.67.0-powerpc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
--sha256  271b4181072251276e3c97c3f772b6d9ee39aa8d9f05ed28f34bf5910c9964ad  rust-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
--sha256  f3a8517334a174826cf92954d525d039c941265066f46948ad89b61791398dd3  rust-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-s390x-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-s390x-unknown-linux-gnu.tar.xz.asc
--sha256  2b4c27e3a9475278838588fb64159f74a5a8e752f53249a299d2c5188f0bc2e1  rust-1.67.0-s390x-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.67.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-1.67.0-x86_64-unknown-linux-gnu.tar.xz.asc
--sha256  e6345aebeba55f39cb35fc06a3ac6c43c35f596309a6ed26023b1898346419bd  rust-1.67.0-x86_64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-aarch64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-aarch64-unknown-linux-gnu.tar.xz.asc
--sha256  d78573b19cff475c5d3612570d79f53b220d6aaf3824c71bc94d74b5f778ef84  rust-std-1.67.0-aarch64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-aarch64-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-aarch64-unknown-linux-musl.tar.xz.asc
--sha256  6ba01d65aa949128a125d85d750f3facff59c5b1448ccaf66fbdb7bbb3696107  rust-std-1.67.0-aarch64-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-gnueabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-gnueabi.tar.xz.asc
--sha256  04fb84e9de6c815a7031930afca5d66e6993b639a7f304052df6da750d5bbbe8  rust-std-1.67.0-arm-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-gnueabihf.tar.xz.asc
--sha256  896aad9bcf8990ef213230755311609a5a05c99f3d265f47bc6844638f60d202  rust-std-1.67.0-arm-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-musleabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-musleabihf.tar.xz.asc
--sha256  8fd54bfb494089fd26c76b8d9f537bf031aa9018aa29ffe5d7258c82eaa51223  rust-std-1.67.0-arm-unknown-linux-musleabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-musleabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-arm-unknown-linux-musleabi.tar.xz.asc
--sha256  212def6f18494cd45c90a471f2b0aff67c4eaa03567c7ab03fe901c337d853d3  rust-std-1.67.0-arm-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv5te-unknown-linux-gnueabi.tar.xz.asc
--sha256  adcab5bb095b4b9af706d3b2cc62341bced76470a7c573354b52f9c8cffb4b46  rust-std-1.67.0-armv5te-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv5te-unknown-linux-musleabi.tar.xz.asc
--sha256  97c7922f3250d70e8b7a7f7420caf299274e253e1f46c3160f2dea33e159d5fe  rust-std-1.67.0-armv5te-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
--sha256  8aec6e33b6c80365979519423a168729c4fff2ea57f66e5123e0602f2ef050a7  rust-std-1.67.0-armv7-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-gnueabi.tar.xz.asc
--sha256  f98f2f4e76ef3056ba98be13ecfaacad07ab214f8ce940dfad56723056d42872  rust-std-1.67.0-armv7-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-musleabihf.tar.xz.asc
--sha256  dc10cc70b1fd6f74d0c3a7d6cf25bc583edd5f61cd26dbcc6f6bfd22d3e4eb04  rust-std-1.67.0-armv7-unknown-linux-musleabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-musleabi.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-armv7-unknown-linux-musleabi.tar.xz.asc
--sha256  1677ef03dfbaa5715609fe7b51e3b036f722fe8934a9186e8f24e26b94588b41  rust-std-1.67.0-armv7-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-i586-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-i586-unknown-linux-gnu.tar.xz.asc
--sha256  675f0e2e2930f784d03ad6de663fd4ed2b5737689944f0bc8b20653e611c3bb3  rust-std-1.67.0-i586-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-i586-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-i586-unknown-linux-musl.tar.xz.asc
--sha256  da13b4d9cf2709b3de996d0923df05fb343f774ff89fcfb6a8548f562113c44a  rust-std-1.67.0-i586-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-i686-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-i686-unknown-linux-gnu.tar.xz.asc
--sha256  080ce3fa7f5b84d900be5842a52053345a40d6dd77b20bcac016eb2083a9a59d  rust-std-1.67.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-i686-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-i686-unknown-linux-musl.tar.xz.asc
--sha256  b5d5a777ca669d8d6aa8bad85efe5ff9d5559a3f6f9dfb9a8d95337dd0cf1b21  rust-std-1.67.0-i686-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips-unknown-linux-gnu.tar.xz.asc
--sha256  a2bf13ed3f38427ae65c9ee33a0f4c71fd70d8fae6d9af45045f5318834370e5  rust-std-1.67.0-mips-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips-unknown-linux-musl.tar.xz.asc
--sha256  d7d223ec4ddb4816e9c537a395a6575ad853e48e0c41415c1a54235c3eb2aa72  rust-std-1.67.0-mips-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips64-unknown-linux-gnuabi64.tar.xz.asc
--sha256  3b02a3d60f952336e16d1d67a2276ae3197f3839c7b2a557f5ec8d2594325958  rust-std-1.67.0-mips64-unknown-linux-gnuabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips64-unknown-linux-muslabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips64-unknown-linux-muslabi64.tar.xz.asc
--sha256  2ca3557e288fc1a312021b5ee2c08d1c2acd052b72b60472b494e79b42d2e713  rust-std-1.67.0-mips64-unknown-linux-muslabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips64el-unknown-linux-gnuabi64.tar.xz.asc
--sha256  585c73b1407938290aa5f72beea6d994c60323b6a48b26b618d2c2f9e53916b1  rust-std-1.67.0-mips64el-unknown-linux-gnuabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-mips64el-unknown-linux-muslabi64.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mips64el-unknown-linux-muslabi64.tar.xz.asc
--sha256  23364fbf0dae146a0be76496ac3ac22fbae5603435020d930e28531395b8355d  rust-std-1.67.0-mips64el-unknown-linux-muslabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-mipsel-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mipsel-unknown-linux-gnu.tar.xz.asc
--sha256  2b877cdc8af0546358df77a0e22104d5e59a3fc622b6986a3fcbffc9c96a3c8b  rust-std-1.67.0-mipsel-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-mipsel-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-mipsel-unknown-linux-musl.tar.xz.asc
--sha256  6e2e15c188dc67428467e894a62679d6f4115d5e5e10916d0273c16152ab060e  rust-std-1.67.0-mipsel-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc-unknown-linux-gnu.tar.xz.asc
--sha256  44b700068e9e40a01418e537b5c0f4ee279995b55ee6d6266409f057ead1c6de  rust-std-1.67.0-powerpc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc64-unknown-linux-gnu.tar.xz.asc
--sha256  db3960e0eac9d7c2485fe418bf9052d2fdd16557499d320919f385f9f3db5448  rust-std-1.67.0-powerpc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
--sha256  ec92fa64616c67785039bebabc213e6bae6ffc2744ef052b79c7960df60b257f  rust-std-1.67.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz.asc
--sha256  630e4b8b95c0b501676f2477b6009ca122019e1e0d637222443e26a0c5931f3c  rust-std-1.67.0-riscv64gc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-s390x-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-s390x-unknown-linux-gnu.tar.xz.asc
--sha256  f1988eb337c00dd30469f545b822b8fd3b0372e6aa88924b7906785ea1f69fba  rust-std-1.67.0-s390x-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-sparc64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-sparc64-unknown-linux-gnu.tar.xz.asc
--sha256  d8cdbee292c86182b54ba152cd33ac3abe4c684186f29017bb4cf7e92ff3a2be  rust-std-1.67.0-sparc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-x86_64-unknown-linux-gnu.tar.xz.asc
--sha256  8f03b271bba56b0245833f2cb08044865068ce8721d6a736d3ef7056aa109daa  rust-std-1.67.0-x86_64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.67.0-x86_64-unknown-linux-musl.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rust-std-1.67.0-x86_64-unknown-linux-musl.tar.xz.asc
--sha256  33f320dc4ae075f720f541564868e494c17dea97ea853507225f89f8b0c57363  rust-std-1.67.0-x86_64-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-aarch64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-aarch64-unknown-linux-gnu.tar.xz.asc
-+sha256  b7b8e8b70cae457092661894efa5a4861ef4f0e20f2f617d05d6f17b1f780a68  rust-1.67.1-aarch64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-i686-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-i686-unknown-linux-gnu.tar.xz.asc
-+sha256  b686a2d0d1648e1b84def715dd65a85a3d2802b33ecf65808bdb2ed639aec7d3  rust-1.67.1-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-mips-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-mips-unknown-linux-gnu.tar.xz.asc
-+sha256  c9df968487707eb63207f63086daed4fe1484829fb6221bd9414de2700424995  rust-1.67.1-mips-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-mipsel-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-mipsel-unknown-linux-gnu.tar.xz.asc
-+sha256  4f56194a354b1413fb973d25f1c895aaa8e85211d316755508d6848e3a4fe18b  rust-1.67.1-mipsel-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-powerpc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-powerpc-unknown-linux-gnu.tar.xz.asc
-+sha256  852e5a714ea8d2737f2cd5b0d6a12ecfa712b75238c643ba8138b490fc39fc43  rust-1.67.1-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-powerpc64-unknown-linux-gnu.tar.xz.asc
-+sha256  0a5bc85383d5d9d077dccaad1fb213d9498b6137112aaaabced6eb079fe12c9e  rust-1.67.1-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz.asc
-+sha256  574851ff8503df9cb0dd04e6a1cd0ce5d709b5ea8b9c1265b314b9e182c818da  rust-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz.asc
-+sha256  50e98fefef58218bd2c09c826308d43abe11b05f528b08ecca3d2657d7996630  rust-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-s390x-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-s390x-unknown-linux-gnu.tar.xz.asc
-+sha256  6e8629ace0c1b9cc0c2bc6225e6716df852370e5c7e907815ff8e6241e427699  rust-1.67.1-s390x-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.67.1-x86_64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-1.67.1-x86_64-unknown-linux-gnu.tar.xz.asc
-+sha256  7dbb718bdb09adad7e36b9a413e571863913682495527f7f2d6507ea2c068542  rust-1.67.1-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-aarch64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-aarch64-unknown-linux-gnu.tar.xz.asc
-+sha256  35027409400faaaa38ea2855b92dea6b553b2e656dff735da730f67ac02e57e6  rust-std-1.67.1-aarch64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-aarch64-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-aarch64-unknown-linux-musl.tar.xz.asc
-+sha256  dcd3926c151cdd33d4de2860f021c86a18556809c4d06cbddebc1b377638710a  rust-std-1.67.1-aarch64-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-gnueabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-gnueabi.tar.xz.asc
-+sha256  da42d5b07984dac9a41719511eeb47cbb6c5e70b32a6eacba96c9f860ced0307  rust-std-1.67.1-arm-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-gnueabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-gnueabihf.tar.xz.asc
-+sha256  3b95c9595db3e10077c4eca8f63d80414bf3a50c1f0f6b2ac33f1992ee0940db  rust-std-1.67.1-arm-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-musleabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-musleabihf.tar.xz.asc
-+sha256  767761d99846174dfb7dfb579e2e2be63800478858a82f3f7050cc9555209a89  rust-std-1.67.1-arm-unknown-linux-musleabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-musleabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-arm-unknown-linux-musleabi.tar.xz.asc
-+sha256  1e53306124de9f282452bd6085e86918e5e9f6f1940fc79809a1b284272e2d2b  rust-std-1.67.1-arm-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv5te-unknown-linux-gnueabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv5te-unknown-linux-gnueabi.tar.xz.asc
-+sha256  3e8bb4265c8c6d8984b69eeefe015131ea140148a58179b3abec5653d93bea7d  rust-std-1.67.1-armv5te-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv5te-unknown-linux-musleabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv5te-unknown-linux-musleabi.tar.xz.asc
-+sha256  cbfce327b623e341c1243f0d29ef2f60e5fb205d406c79eb8be1433652c3c9a5  rust-std-1.67.1-armv5te-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-gnueabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-gnueabihf.tar.xz.asc
-+sha256  b6d00c4e338744ce1bf5b314f1056472acf1eb416f65057a8b3ca0a992fb04df  rust-std-1.67.1-armv7-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-gnueabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-gnueabi.tar.xz.asc
-+sha256  8a7e46b15adb0718b4e4ee33cd46529117411e8d73c29043778b05e7412c2b46  rust-std-1.67.1-armv7-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-musleabihf.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-musleabihf.tar.xz.asc
-+sha256  6102f98617dd37874f3d755d0a325b45d47c6e1715c39d5e9bc037992e4d3cd6  rust-std-1.67.1-armv7-unknown-linux-musleabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-musleabi.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-armv7-unknown-linux-musleabi.tar.xz.asc
-+sha256  720958bc039c9ff00e7e399adf45f044484c5695a71bde0d07e0c895a819fe74  rust-std-1.67.1-armv7-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-i586-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-i586-unknown-linux-gnu.tar.xz.asc
-+sha256  22cbbf0b22d9b0894cfbd6e1dd6b95b71c7ad02cee4e477d375dcf81af8d1337  rust-std-1.67.1-i586-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-i586-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-i586-unknown-linux-musl.tar.xz.asc
-+sha256  49beb678732f34a0bfc22f94900c3d4a17ec05effdb7377864042df73b2a2819  rust-std-1.67.1-i586-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-i686-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-i686-unknown-linux-gnu.tar.xz.asc
-+sha256  aab2d7aa76793e78c9c8810e93ed8978f6422843b1277e9c60337b0f943a4409  rust-std-1.67.1-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-i686-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-i686-unknown-linux-musl.tar.xz.asc
-+sha256  a2c6e55a8a2987d0c306d2c164347a70ab7a6a18f6562039a772b33e25934972  rust-std-1.67.1-i686-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips-unknown-linux-gnu.tar.xz.asc
-+sha256  048b3da190212b742f7a052618b57683dc96ee2b6c25fc7f5ae751143cb79bad  rust-std-1.67.1-mips-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips-unknown-linux-musl.tar.xz.asc
-+sha256  b9ef413b764a92d42e07a2e588268ece09994d2cd1ab2a93858c27f85a250349  rust-std-1.67.1-mips-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips64-unknown-linux-gnuabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips64-unknown-linux-gnuabi64.tar.xz.asc
-+sha256  ef7fe3160de629f0d38788f2c270f87b0631480e5b0d848595b460528de719e4  rust-std-1.67.1-mips64-unknown-linux-gnuabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips64-unknown-linux-muslabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips64-unknown-linux-muslabi64.tar.xz.asc
-+sha256  15fdb3e8b39c8a122e9beee0c4c909ee8ec356e57aaaaae5f2b9e94f58d73c87  rust-std-1.67.1-mips64-unknown-linux-muslabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips64el-unknown-linux-gnuabi64.tar.xz.asc
-+sha256  6ccfd98fd920cc2f1199bcf9a842430c27f6fcd2cc46c18421e487309ff7811e  rust-std-1.67.1-mips64el-unknown-linux-gnuabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-mips64el-unknown-linux-muslabi64.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mips64el-unknown-linux-muslabi64.tar.xz.asc
-+sha256  78477c45f5b848b156adaf0e0f6f2954ae73e2903321d1636c155020175eaaf5  rust-std-1.67.1-mips64el-unknown-linux-muslabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-mipsel-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mipsel-unknown-linux-gnu.tar.xz.asc
-+sha256  94410897626546dde806a114299c3c32abb6b4b294af5daea5c4d136751fe063  rust-std-1.67.1-mipsel-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-mipsel-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-mipsel-unknown-linux-musl.tar.xz.asc
-+sha256  b3f1a338e69428f1611f059c67b8afafa78ce5c7ed0799f8a90795390261d3a4  rust-std-1.67.1-mipsel-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc-unknown-linux-gnu.tar.xz.asc
-+sha256  26efe78c09ed36da34964c0d023cf9aa404766ab790a94d9becd373b8879cb5a  rust-std-1.67.1-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc64-unknown-linux-gnu.tar.xz.asc
-+sha256  135f5e6ab6d8f077a14521d387d3f31831abdb840ca4e6a15b6f0d0d5b7dbc81  rust-std-1.67.1-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz.asc
-+sha256  364c47ed22e4268edf238d221c40007d7d8792a66ca325d3937596a9c911ea48  rust-std-1.67.1-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz.asc
-+sha256  63a7e6a6c889a3d01bb3c66a3def3e41963511ea52e13906669da5b29b2fd9da  rust-std-1.67.1-riscv64gc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-s390x-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-s390x-unknown-linux-gnu.tar.xz.asc
-+sha256  04573298d9e815c1e8c47a2f9548ea55d4a2afc538eceaa6a704d44a5e1f7e3e  rust-std-1.67.1-s390x-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-sparc64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-sparc64-unknown-linux-gnu.tar.xz.asc
-+sha256  addf0b0beb1966787e599f32849f18c28d5cb65515272b7d9608d4a1dddee2e7  rust-std-1.67.1-sparc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-x86_64-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-x86_64-unknown-linux-gnu.tar.xz.asc
-+sha256  f4dc8468dfc1dbd86f865b10f06e0e4b4e76f5a3a1cc27317a520ab1660844e9  rust-std-1.67.1-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.67.1-x86_64-unknown-linux-musl.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.67.1-x86_64-unknown-linux-musl.tar.xz.asc
-+sha256  89741cd2ac00c3a3f565bcccdf442cc1f9ec58ea419f1f0d09e911be0ff86c87  rust-std-1.67.1-x86_64-unknown-linux-musl.tar.xz
- # Locally generated
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-index d62ce39cfc..bb66de5ec5 100644
---- a/package/rust-bin/rust-bin.mk
-+++ b/package/rust-bin/rust-bin.mk
-@@ -6,7 +6,7 @@
- 
- # When updating this version, check whether support/download/cargo-post-process
- # still generates the same archives.
--RUST_BIN_VERSION = 1.67.0
-+RUST_BIN_VERSION = 1.67.1
- RUST_BIN_SITE = https://static.rust-lang.org/dist
- RUST_BIN_LICENSE = Apache-2.0 or MIT
- RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-diff --git a/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch b/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
-deleted file mode 100644
-index 3eae34642f..0000000000
---- a/package/rust/0001-fix-unsoundness-in-bootstrap-cache-code.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 6bf37780ed49846c78d6707355f1cf44790c4301 Mon Sep 17 00:00:00 2001
--From: Michael Goulet <michael@errs.io>
--Date: Mon, 12 Dec 2022 18:29:33 +0000
--Subject: [PATCH] =?UTF-8?q?=F0=9F=9A=A8=20fix=20unsoundness=20in=20bootstr?=
-- =?UTF-8?q?ap=20cache=20code?=
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--(cherry picked from commit 3fe64ebbce21e79adb64099984e96dfb79bdd0f9)
--Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
-----
-- src/bootstrap/cache.rs | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/src/bootstrap/cache.rs b/src/bootstrap/cache.rs
--index be5c9bb0788..05f25af68ea 100644
----- a/src/bootstrap/cache.rs
--+++ b/src/bootstrap/cache.rs
--@@ -89,16 +89,16 @@ fn hash<H: Hasher>(&self, state: &mut H) {
-- 
-- impl<T: Internable + Deref> Deref for Interned<T> {
--     type Target = T::Target;
---    fn deref(&self) -> &'static Self::Target {
--+    fn deref(&self) -> &Self::Target {
--         let l = T::intern_cache().lock().unwrap();
---        unsafe { mem::transmute::<&Self::Target, &'static Self::Target>(l.get(*self)) }
--+        unsafe { mem::transmute::<&Self::Target, &Self::Target>(l.get(*self)) }
--     }
-- }
-- 
-- impl<T: Internable + AsRef<U>, U: ?Sized> AsRef<U> for Interned<T> {
---    fn as_ref(&self) -> &'static U {
--+    fn as_ref(&self) -> &U {
--         let l = T::intern_cache().lock().unwrap();
---        unsafe { mem::transmute::<&U, &'static U>(l.get(*self).as_ref()) }
--+        unsafe { mem::transmute::<&U, &U>(l.get(*self).as_ref()) }
--     }
-- }
-- 
---- 
--2.25.1
--
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-index 2a260ca64f..1b4b08cecc 100644
---- a/package/rust/rust.hash
-+++ b/package/rust/rust.hash
-@@ -1,6 +1,6 @@
--# From https://static.rust-lang.org/dist/rustc-1.67.0-src.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rustc-1.67.0-src.tar.xz.asc
--sha256  9ef8cf88a1d35d319808daf2f193aadca9ed9bcae1d4d5db8946a448c9432c6d  rustc-1.67.0-src.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.67.1-src.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rustc-1.67.1-src.tar.xz.asc
-+sha256  77e0615011f887d9533d5374bf9c15c590c3caf32bbb035b392d1c2ae502a682  rustc-1.67.1-src.tar.xz
- # Locally generated
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index d14ad3a3e7..814a3c1dd4 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -6,7 +6,7 @@
- 
- # When updating this version, check whether support/download/cargo-post-process
- # still generates the same archives.
--RUST_VERSION = 1.67.0
-+RUST_VERSION = 1.67.1
- RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
- RUST_SITE = https://static.rust-lang.org/dist
- RUST_LICENSE = Apache-2.0 or MIT
+Classification of failures by reason for master
+-----------------------------------------------
+
+  gobject-introspection-1.72.0 | 8 
+              host-pahole-1.24 | 7 
+                  linux-6.1.11 | 7 
+                       unknown | 7 
+            host-binutils-2.38 | 5 
+                host-go-1.19.6 | 5 
+                elfutils-0.186 | 4 
+                speechd-0.11.4 | 4 
+                busybox-1.36.0 | 3 
+glibc-2.36-81-g4f4d7a13edfd... | 3 
+            host-binutils-2.37 | 3 
+         host-libarchive-3.6.2 | 3 
+              host-rust-1.67.0 | 3 
+              libgcrypt-1.10.1 | 3 
+               libglib2-2.72.3 | 3 
+                 systemd-252.4 | 3 
+                    brltty-6.5 | 2 
+               fftw-quad-3.3.8 | 2 
+             fontconfig-2.13.1 | 2 
+       freeradius-client-1.1.7 | 2 
+                gerbera-1.10.0 | 2 
+         gobject-introspection | 2 
+            host-binutils-2.39 | 2 
+                  netsurf-3.10 | 2 
+                    olsr-0.9.8 | 2 
+           python-numpy-1.23.5 | 2 
+               valgrind-3.19.0 | 2 
+               xfsprogs-5.14.2 | 2 
+                  zabbix-6.2.7 | 2 
+                  acpid-2.0.34 | 1 
+android-tools-4.2.2+git2013... | 1 
+                  boost-1.80.0 | 1 
+            btrfs-progs-5.16.2 | 1 
+             containerd-1.6.16 | 1 
+             docker-cli-23.0.0 | 1 
+                 fdk-aac-2.0.2 | 1 
+                    flac-1.4.2 | 1 
+              fluent-bit-2.0.9 | 1 
+fs/ubi/ubi.mk:51: /home/bui... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+fs/ubifs/ubifs.mk:49: /home... | 1 
+              fstrcmp-0.7.D001 | 1 
+ glslsandbox-player-2021.08.24 | 1 
+                   gvfs-1.48.1 | 1 
+         host-gcc-final-11.3.0 | 1 
+         host-gcc-final-12.2.0 | 1 
+         libcpprestsdk-2.10.18 | 1 
+             libgpg-error-1.46 | 1 
+                  libjxl-0.7.0 | 1 
+                 libnss-3.88.1 | 1 
+          linux-5.10.162-cip24 | 1 
+     linux-5.10.162-cip24-rt10 | 1 
+             lirc-tools-0.10.2 | 1 
+        ltp-testsuite-20220930 | 1 
+         multipath-tools-0.9.4 | 1 
+                    mutt-2.2.9 | 1 
+                  ntp-4.2.8p15 | 1 
+           optee-client-3.19.0 | 1 
+                    opus-1.3.1 | 1 
+                   perl-5.36.0 | 1 
+                     php-8.2.3 | 1 
+                    pixz-1.0.7 | 1 
+                    qemu-7.2.0 | 1 
+            quickjs-2021-03-27 | 1 
+                    ruby-3.1.3 | 1 
+                 syslinux-6.03 | 1 
+                 uclibc-1.0.42 | 1 
+ulog-0389d243352255f6182326... | 1 
+uqmi-0a19b5b77140465c29e2af... | 1 
+                 wolfssl-5.5.3 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |          acpid-2.0.34          | NOK | http://autobuild.buildroot.net/results/e3180b157da82a873e26d82a214bf45209a1e3b8 | ORPH
+powerpc64le  | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/4cbc60e95e38bbb1d0c5d4ecc504e5da8ae22af4 |     
+   arceb     |          boost-1.80.0          | NOK | http://autobuild.buildroot.net/results/4cf51b37c785eed8f5e950fe26e79e8fb20c8566 |     
+ microblaze  |           brltty-6.5           | NOK | http://autobuild.buildroot.net/results/2529778cc04100e9b901323808d3274ea83bd4f8 |     
+ microblaze  |           brltty-6.5           | NOK | http://autobuild.buildroot.net/results/d496753fa4e5f47dec317b1b81c098bdbbae0238 |     
+    or1k     |       btrfs-progs-5.16.2       | NOK | http://autobuild.buildroot.net/results/893288c3b7ab58a8d15e1f96ee30ae19d2e8312a | ORPH
+  mips64el   |         busybox-1.36.0         | NOK | http://autobuild.buildroot.net/results/a67bbd05aa05e926512a58f5e534635b73c4d03a | ORPH
+   mips64    |         busybox-1.36.0         | NOK | http://autobuild.buildroot.net/results/3ad70dc07bbae130b74bf699e249cbf116d81010 | ORPH
+    arm      |         busybox-1.36.0         | NOK | http://autobuild.buildroot.net/results/6ed313724af39600c19e639e7ae7aeb60109828a | ORPH
+    arm      |       containerd-1.6.16        | NOK | http://autobuild.buildroot.net/results/8cae16a62a81d9ea998a1248bb377d129db33ea5 |     
+   x86_64    |       docker-cli-23.0.0        | NOK | http://autobuild.buildroot.net/results/c8be4259dd17753f79eee10c36a3f5f80b7672fc |     
+microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/1ee3401edeae9430303ffdea35bfbea5921a2b3d | ORPH
+microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/62ad9d9e29485e57df6fccdb55e736f984dd4ae5 | ORPH
+ microblaze  |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/77f471b242682c7af39d5c42becd1ba03f67e68e | ORPH
+microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/d10e2fb80131f6358d297dff596ab6141c28c603 | ORPH
+   x86_64    |         fdk-aac-2.0.2          | NOK | http://autobuild.buildroot.net/results/8ec43c2db6dd7f308bcf02bec4e12ab33632e3f5 |     
+powerpc64le  |        fftw-quad-3.3.8         | NOK | http://autobuild.buildroot.net/results/e5524c2e43dbb7fe5f517b553e18e55927fdde5f | ORPH
+powerpc64le  |        fftw-quad-3.3.8         | NOK | http://autobuild.buildroot.net/results/1d9c3980b45c0d8d1bd3880983e83893e5e54a53 | ORPH
+    sh4a     |           flac-1.4.2           | NOK | http://autobuild.buildroot.net/results/7d426e2650e409ca73cf289b4d7dab7dcbf214e3 |     
+   xtensa    |        fluent-bit-2.0.9        | NOK | http://autobuild.buildroot.net/results/4b0f90d79d6dbbf976acf1da839260b0ee94ddda |     
+  riscv64    |       fontconfig-2.13.1        | NOK | http://autobuild.buildroot.net/results/cb5a21a6f5bf39e09919c4ec915d5aa6480f7aa9 | ORPH
+  riscv64    |       fontconfig-2.13.1        | NOK | http://autobuild.buildroot.net/results/21ac1bdc72848aeaefe85fff95700f1c761a65f5 | ORPH
+  riscv64    |    freeradius-client-1.1.7     | NOK | http://autobuild.buildroot.net/results/22d258b0b35ce5cea180d392c4259d2a85dd5d17 |     
+  riscv64    |    freeradius-client-1.1.7     | NOK | http://autobuild.buildroot.net/results/b11001f71bed7b5ea58f8b70f7539b4f4ee32a0f |     
+    mips     | fs/ubi/ubi.mk:51: /home/bui... | NOK | http://autobuild.buildroot.net/results/a70b5a8fbac22269ac5d21ee10542131214b5ff8 |     
+   s390x     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/6480b3aef0e0aa2adea1da0d35f3573c9d6b2f16 |     
+ microblaze  | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/af49f968088530b66082641464d5b2df7b5ec63e |     
+powerpc64le  | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/e60048d62b7ac4c5651cf98c7842840f6db765b3 |     
+    or1k     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/33e2b14f31d1faf1b41df11db113a5c3fb347924 |     
+    or1k     | fs/ubifs/ubifs.mk:49: /home... | NOK | http://autobuild.buildroot.net/results/e5c0bc96e2b8c7fa9b50096b0021c92f62753019 |     
+   armeb     |        fstrcmp-0.7.D001        | NOK | http://autobuild.buildroot.net/results/56dda0c224c04d68747cfc4c2045165fc2bc2d71 |     
+ aarch64_be  |         gerbera-1.10.0         | NOK | http://autobuild.buildroot.net/results/0c9cc1d43daccd21b16de1ea21322c7b1e9a1bbd |     
+powerpc64le  |         gerbera-1.10.0         | NOK | http://autobuild.buildroot.net/results/22275e769ac373961971fb44695d645d7687f123 |     
+  powerpc    | glibc-2.36-81-g4f4d7a13edfd... | NOK | http://autobuild.buildroot.net/results/fa8e220621a2ac472346fa14ad9a7006a1274b8d |     
+ powerpc64   | glibc-2.36-81-g4f4d7a13edfd... | NOK | http://autobuild.buildroot.net/results/3ed5e504e7f994b1e103e9fa6a8b324126eff5f7 |     
+  powerpc    | glibc-2.36-81-g4f4d7a13edfd... | NOK | http://autobuild.buildroot.net/results/2aec85e60080e8abcb0200bf2b60807f35eba2bf |     
+  aarch64    | glslsandbox-player-2021.08.24  | NOK | http://autobuild.buildroot.net/results/ac765b0ff5f914df4087ae4691fe711dc912f03b |     
+microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/9303b861da97521c25bd2898ea044f37c01ad5bf |     
+microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/3bead068b84e8a40077c8bef57d90a5ab47a18c2 |     
+ microblaze  |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/358bc905ee73e70dd41a1347174577c905bd82a0 | ORPH
+   s390x     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/86adfc65a263e02ebf1f9acf75574c7c1f212dfd | ORPH
+powerpc64le  |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/4657f21099bfa7d52dcec08dc09d8bf6b74fa34b | ORPH
+    or1k     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/fab352ec1be76fca9b4133ab58b109a56a75ceb3 | ORPH
+microblazeel |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/55df3b1bc4aed899f9bf673045f633f0e27a05ec | ORPH
+ microblaze  |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/1d7775d5538c765d23bf5619219739679824e3ab | ORPH
+   mipsel    |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/60cd771ca50accf6cf19f66226c42a9edb7930f1 | ORPH
+    i686     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/f2a649a36e9cc5a27dc1a5bfd7af85e703e282c8 | ORPH
+   x86_64    |          gvfs-1.48.1           | NOK | http://autobuild.buildroot.net/results/98dc4b415115cca65b53e4cd986144ef85bf17ad | ORPH
+   mips64    |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/86b4f7b620c5ed46a94f2835d4f1f142717db952 |     
+  mips64el   |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/7c53e187e2b87ca0262f55a54cc110de9f1e247d |     
+   armeb     |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/8d95190345d3072345cad2bf4c87faee33c9e302 |     
+    mips     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/aa8912eb231b5810fb89323c19e82230ec3b6cbb |     
+   s390x     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/3e6534f937518ff34f0bc92c0355661db86fc81f |     
+    or1k     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/b56524f4bd95d1726140c0330de87bc10d37e4d1 |     
+   s390x     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/7b34fe3de9396d6d721e88e1c35f2a1a1d2e5dc3 |     
+    arm      |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/effb52b4257096c107997ddc172801894bdc6aa4 |     
+  riscv32    |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/42c3383a825966d9cb0944149313cf20f5ed8169 |     
+   xtensa    |       host-binutils-2.39       | NOK | http://autobuild.buildroot.net/results/5bc22eda781d23e4e0dc574d3f7eba6a2fa81381 |     
+microblazeel |     host-gcc-final-11.3.0      | NOK | http://autobuild.buildroot.net/results/ee7821580f8cc59cd1d4992eafcc8de43e7a9668 |     
+   armeb     |     host-gcc-final-12.2.0      | NOK | http://autobuild.buildroot.net/results/e6ceec6b459b37ffbbb277355986e9ec549cc786 |     
+    i686     |         host-go-1.19.6         | NOK | http://autobuild.buildroot.net/results/9612b79f94fae7160b67f349b9b7bca93b1c9b61 |     
+    i686     |         host-go-1.19.6         | NOK | http://autobuild.buildroot.net/results/402c0e7d55677602b81cba7b7b7e478f643b9314 |     
+    i686     |         host-go-1.19.6         | NOK | http://autobuild.buildroot.net/results/57b236ce192b2879786b5140364d836dfc4a0b4f |     
+   mips64    |         host-go-1.19.6         | NOK | http://autobuild.buildroot.net/results/a4c4c3e20c4ac313ef3ddcb6e7847ca4a1bacb4c |     
+  mips64el   |         host-go-1.19.6         | NOK | http://autobuild.buildroot.net/results/4a3b0e8239d3a7a150cc3ed6169176ee78366e21 |     
+   mips64    |     host-libarchive-3.6.2      | NOK | http://autobuild.buildroot.net/results/ee687375ebd7cc912378664308c46a0f83b6c335 |     
+    arc      |     host-libarchive-3.6.2      | NOK | http://autobuild.buildroot.net/results/11868e9bc4916843a7fc76f7b5e4c251f89e33dc |     
+  riscv32    |     host-libarchive-3.6.2      | NOK | http://autobuild.buildroot.net/results/bed12b7f41bb42b009b366a6e7de87ba543f7c9f |     
+   sh4eb     |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/23c8297c18d5e2c9375e001b4264bae290e82309 |     
+    arm      |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/eddbeedc7249a9ea6943c4078f190de891bc356a |     
+    or1k     |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/94d07202bbb84cbde0eb8cc6debd7c9bcdd666f5 |     
+    mips     |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/0d41179361f2cdde07ef8d9b0df58e167ba54155 |     
+   mipsel    |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/a385950474714b5adb117f9b1151fab5c9b16542 |     
+    i686     |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/1797d9e956d5fdbcb847399b54939b4bb244c17d |     
+   armeb     |        host-pahole-1.24        | NOK | http://autobuild.buildroot.net/results/5defc47a6efca1e061642868663f36c2f81e1e57 |     
+   x86_64    |        host-rust-1.67.0        | NOK | http://autobuild.buildroot.net/results/b6a153fc8319e6454d4b7d042c38fa9334ca40d9 |     
+    mips     |        host-rust-1.67.0        | NOK | http://autobuild.buildroot.net/results/a13012dc03256c45aa3f7f69b96d14c86d0f2dd4 |     
+   x86_64    |        host-rust-1.67.0        | NOK | http://autobuild.buildroot.net/results/a90f58bcf2cf05bdd6917def8fb01ceba1f7cf8e |     
+    arc      |     libcpprestsdk-2.10.18      | NOK | http://autobuild.buildroot.net/results/e6778e60cc1ea455f5b4511d5824f04d8040f67b | ORPH
+    i686     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/7fa10c8b2d0e48641e247b457f76de88a5c2e127 | ORPH
+    i686     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/ecb0c243ac4766acc39af8d286c36486837318e1 | ORPH
+    i586     |        libgcrypt-1.10.1        | NOK | http://autobuild.buildroot.net/results/1cbbc0b4bcbf86170ee797a55226002e2e631785 | ORPH
+    arc      |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/31291a8707f6fb0c8567fe73e136059062f92d8b |     
+    arc      |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/ef1a0ff1a9d4b060cf0e259144befd42979e093f |     
+    arc      |        libglib2-2.72.3         | NOK | http://autobuild.buildroot.net/results/a5cbff35ed4b5d6b74cdf2ac7173d8be571a4401 |     
+  aarch64    |       libgpg-error-1.46        | NOK | http://autobuild.buildroot.net/results/7d26d0f05815c529d4d7ebd1de1e7019484d8eef | ORPH
+    arc      |          libjxl-0.7.0          | NOK | http://autobuild.buildroot.net/results/9893a0da313e77a47550595b71befcece76bb206 |     
+   mipsel    |         libnss-3.88.1          | NOK | http://autobuild.buildroot.net/results/26871866e8f2b4a79ef32c114ac5295a3b4d7762 |     
+   s390x     |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/a4d183f54ab5d149613f6ad432331b2a4db4b94c | ORPH
+  mips64el   |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/248fca028f60e7659d1f66b635eb071f162995ef | ORPH
+    mips     |          linux-6.1.11          | NOK | http://autobuild.buildroot.net/results/b5aa7990927abc9fcaed9e23506950c6b550d71c | ORPH
+   mips64    |          linux-6.1.11          | NOK | http://autobuild.buildroot.net/results/4af79f7293316522f49137ffd44a62585780d3ab | ORPH
+    sh4a     |          linux-6.1.11          | NOK | http://autobuild.buildroot.net/results/dab96083e4de1fc5f3e63900aaf2e2bd20d80e87 | ORPH
+    m68k     |          linux-6.1.11          | NOK | http://autobuild.buildroot.net/results/8f6c7cf4636ef5149b210c0de8a8766876d6e3d2 | ORPH
+    m68k     |          linux-6.1.11          | NOK | http://autobuild.buildroot.net/results/7f3c829796e55eee4b64fb2c2e8dc4c0ae01df1e | ORPH
+    i686     |          linux-6.1.11          | NOK | http://autobuild.buildroot.net/results/a9522c0e9bfa4a23f31573c3fb43939b54fa79ff | ORPH
+   mips64    |          linux-6.1.11          | NOK | http://autobuild.buildroot.net/results/41e178fa6b4c03a69c986207741c315cb9255e50 | ORPH
+  sparc64    |       lirc-tools-0.10.2        | NOK | http://autobuild.buildroot.net/results/8d0d603a04380b2305fdce4295df42e426e05368 | ORPH
+   s390x     |     ltp-testsuite-20220930     | NOK | http://autobuild.buildroot.net/results/0f21f69e11fb52b320de306c69b8844ed90417ec |     
+ aarch64_be  |     multipath-tools-0.9.4      | NOK | http://autobuild.buildroot.net/results/e8542b8a733b23450a697d67fbb40042e4dfd4ed |     
+powerpc64le  |           mutt-2.2.9           | NOK | http://autobuild.buildroot.net/results/4291c582a750a7bd794f1d862f67a7d624165c3e |     
+   mips64    |          netsurf-3.10          | NOK | http://autobuild.buildroot.net/results/d47cad90021082b972bbaa597078ffa31cf5456a |     
+ powerpc64   |          netsurf-3.10          | NOK | http://autobuild.buildroot.net/results/94d5b30d7d297813828d4476d20ea6c926d8f8be |     
+  riscv64    |          ntp-4.2.8p15          | NOK | http://autobuild.buildroot.net/results/72ab327ea556ffab1997db5d8089a913f34103f1 | ORPH
+powerpc64le  |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/e5354c926b61d4f3dd9170bf019c24a74166cf06 | ORPH
+    arc      |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/d34acbc52c200a0b76ad8e2f8f8f5d4f83264883 | ORPH
+   arceb     |      optee-client-3.19.0       | NOK | http://autobuild.buildroot.net/results/ba922e5d5afc1a8e96dbe1c814495dd26fdddf36 |     
+   armeb     |           opus-1.3.1           | NOK | http://autobuild.buildroot.net/results/9966147849708b47df5137b88c319c01961b2c7c | ORPH
+    arc      |          perl-5.36.0           | NOK | http://autobuild.buildroot.net/results/8c190f0a7ee54a45c79b925087d16a2b6f0687a7 |     
+ microblaze  |           php-8.2.3            | NOK | http://autobuild.buildroot.net/results/93ccccd233cf83aadce01bf8171317bfe8be492d |     
+    arc      |           pixz-1.0.7           | NOK | http://autobuild.buildroot.net/results/52efcad081d94e9800723bc5bac52a0f1f8c3f76 |     
+    i686     |      python-numpy-1.23.5       | NOK | http://autobuild.buildroot.net/results/20ce30249942f92ba17c40a27867f7c128fe59a1 |     
+    sh4      |      python-numpy-1.23.5       | NOK | http://autobuild.buildroot.net/results/6601739b21ae44c8d685affc2524e14fd9d110f8 |     
+  riscv32    |           qemu-7.2.0           | NOK | http://autobuild.buildroot.net/results/9b3a4007a776dec173ed6347167f9971ac8843e9 |     
+    sh4a     |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/71a29398d5dffa04a01b495e95fd7121b1803c4e |     
+    sh4      |           ruby-3.1.3           | NOK | http://autobuild.buildroot.net/results/5eaac7cb81a496fdc3432a31d6786561bd3776f1 |     
+   x86_64    |         speechd-0.11.4         | NOK | http://autobuild.buildroot.net/results/b91c6f19cceccf064a90e27d7ca082e3b82cc6d0 |     
+  sparc64    |         speechd-0.11.4         | NOK | http://autobuild.buildroot.net/results/583306d5210ab35da1400a8b9b56e9d3e066a64b |     
+   nios2     |         speechd-0.11.4         | NOK | http://autobuild.buildroot.net/results/cc1817efb4a5d54ffd2e7ac2f4fc773535f70972 |     
+  sparc64    |         speechd-0.11.4         | NOK | http://autobuild.buildroot.net/results/215507ff5cfc779ad095156b384bf45cb84b8461 |     
+    i586     |         syslinux-6.03          | NOK | http://autobuild.buildroot.net/results/de88089888b2ca354b28af3550abf846560da7d5 | ORPH
+   mipsel    |         systemd-252.4          | NOK | http://autobuild.buildroot.net/results/5cfb6c51fe8da507fd547c15170169d84ee36abd |     
+   sh4aeb    |         systemd-252.4          | NOK | http://autobuild.buildroot.net/results/be2198865ad16d565816590768948910a9f612f9 |     
+   s390x     |         systemd-252.4          | NOK | http://autobuild.buildroot.net/results/dfc23dfa90556becd4c882e893a0f72f78574c7c |     
+  riscv64    |         uclibc-1.0.42          | NOK | http://autobuild.buildroot.net/results/40315d6915c1d72144da8f9c10d73587eae6b21c |     
+  aarch64    | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/ff50155db80ac1c57034b23dd994f701a0fea8bb |     
+   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/f64ce692967cf043fe8dbd82e789ccb8b4d86901 |     
+powerpc64le  |            unknown             | NOK | http://autobuild.buildroot.net/results/f8b3abd256ff40d04aed63c5676ab54b31cf4b68 |     
+    i686     |            unknown             | NOK | http://autobuild.buildroot.net/results/634e1da40c275bcf51e9d8bbd48e96c0f074c223 |     
+   sparc     |            unknown             | NOK | http://autobuild.buildroot.net/results/7f868232e74ed44c11a8662e53568607531f742a |     
+    or1k     |            unknown             | NOK | http://autobuild.buildroot.net/results/ade13ceb9b7d88105be2b292c49a31f6a8647a9b |     
+ microblaze  |            unknown             | NOK | http://autobuild.buildroot.net/results/3ce8c243b77bed8c69475a5f293d8fe24beaa310 |     
+   nios2     |            unknown             | NOK | http://autobuild.buildroot.net/results/b8f0df18ae70a2b511441f44dd5fc939c0a71b55 |     
+   x86_64    | uqmi-0a19b5b77140465c29e2af... | NOK | http://autobuild.buildroot.net/results/e991e633e9f4bc2b074dab07a500c735120aecff | ORPH
+  powerpc    |        valgrind-3.19.0         | NOK | http://autobuild.buildroot.net/results/38015111b9d410840eb1c19f4c2ea7748160feb8 | ORPH
+    i686     |        valgrind-3.19.0         | NOK | http://autobuild.buildroot.net/results/a9c418e1bfea6d0fe797d252ed104c8945d7a3d8 | ORPH
+   mips64    |         wolfssl-5.5.3          | NOK | http://autobuild.buildroot.net/results/ab27cb2c835b9325c061c6ee50234ccfa6839c02 |     
+   mips64    |        xfsprogs-5.14.2         | NOK | http://autobuild.buildroot.net/results/dc6bd721bcc2b59581bb49d10e0c404d8ea5da46 | ORPH
+   mipsel    |        xfsprogs-5.14.2         | NOK | http://autobuild.buildroot.net/results/35fc9dfe97e2d9dd8a0fefea51882e97c308742d | ORPH
+   mips64    |          zabbix-6.2.7          | NOK | http://autobuild.buildroot.net/results/bc4fc8ff640aa538e1ec70485d47e3ea3d606d8a |     
+   mips64    |          zabbix-6.2.7          | NOK | http://autobuild.buildroot.net/results/5bc66df6a7dd22cbafd4749ee1626113af6cf6e5 |     
+
+
+Classification of failures by reason for 2022.11.x
+--------------------------------------------------
+
+                  netsurf-3.10 | 2 
+                  xxhash-0.8.1 | 2 
+               collectd-5.12.0 | 1 
+                 coreutils-9.1 | 1 
+              dieharder-3.31.1 | 1 
+  gobject-introspection-1.72.0 | 1 
+          linux-5.10.145-cip17 | 1 
+                    mutt-2.2.9 | 1 
+                       unknown | 1 
+                  zabbix-5.4.9 | 1 
+
+
+Detail of failures for 2022.11.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |        collectd-5.12.0         | NOK | http://autobuild.buildroot.net/results/64543c5e5a1abdcbeeb09aa53b30d0c2aa390f62 |     
+    sh4      |         coreutils-9.1          | NOK | http://autobuild.buildroot.net/results/ab4e284f4d67e22ea0d02505829e970b605fd7ae | ORPH
+ microblaze  |        dieharder-3.31.1        | NOK | http://autobuild.buildroot.net/results/8ab826577b203ae89559d427b6aa1611540342aa |     
+  sparc64    |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/117a607f0cba5827e7cccb185a7a6e9603b20efd | ORPH
+    m68k     |      linux-5.10.145-cip17      | NOK | http://autobuild.buildroot.net/results/35e256ea6d48f9f35363fee3f924c541d49b1d31 | ORPH
+    i686     |           mutt-2.2.9           | NOK | http://autobuild.buildroot.net/results/2ff1b2d4a5ef54d47b03a50fe0785dd3d9679fbc |     
+   s390x     |          netsurf-3.10          | NOK | http://autobuild.buildroot.net/results/c9ee089b3fe01158a7b3e65724696f6a18767ff8 |     
+    arc      |          netsurf-3.10          | NOK | http://autobuild.buildroot.net/results/534ce0af5a26d52d145242a518cb4b71e2daf89a |     
+   nios2     |            unknown             | NOK | http://autobuild.buildroot.net/results/7ce89193d8a00bb5f6d8abd60a274893acfc4053 |     
+    or1k     |          xxhash-0.8.1          | NOK | http://autobuild.buildroot.net/results/e79b34a1d7c058ebc0a0eb0982381ed71341a2b6 | ORPH
+   mipsel    |          xxhash-0.8.1          | NOK | http://autobuild.buildroot.net/results/cfc5eda527f53e9109572aefe1a84826c636126d | ORPH
+  sparc64    |          zabbix-5.4.9          | NOK | http://autobuild.buildroot.net/results/e71836f4cba58e791785ac73add1d282afc9fa21 |     
+
+
+
 -- 
-2.34.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
