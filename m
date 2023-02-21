@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33B31C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB8A2C64EC4
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:50:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D507440B61;
-	Tue, 21 Feb 2023 20:50:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D507440B61
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EEDE40B30;
+	Tue, 21 Feb 2023 20:50:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EEDE40B30
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KCk0HXizd0ol; Tue, 21 Feb 2023 20:50:28 +0000 (UTC)
+	with ESMTP id 3A3epKImz8oH; Tue, 21 Feb 2023 20:50:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F3B9C4101B;
-	Tue, 21 Feb 2023 20:50:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3B9C4101B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 44CD31BF94D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D5B240B83;
+	Tue, 21 Feb 2023 20:50:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D5B240B83
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F6541BF3F4
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1EE8D8142C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 663B2410BC
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EE8D8142C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 663B2410BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JbMoqHUs5UAt for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ngh8jT4OlYii for <buildroot@lists.busybox.net>;
  Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44C6D813FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 20B91409A2
  for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44C6D813FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20B91409A2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 354C88666E; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
+ id 0DEB18666E; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:34:02 +0100
+Date: Tue, 21 Feb 2023 20:55:50 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f09b5bec825e039130b3400461b067bb535e3434
-X-Git-Newrev: 12123bd4a5fc1e63e6b4adc07a3ec5eef8c4f743
+X-Git-Oldrev: 39853c1211f3f7af063be7c6f8ec4423fc49454a
+X-Git-Newrev: 3fe181faa9a055c3b172f87bc7b519f65450529b
 X-Patchwork-Hint: ignore
-Message-Id: <20230221204903.354C88666E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/modsecurity2:
- disable pcre
+Message-Id: <20230221204903.0DEB18666E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/elf2flt: fix
+ error when building gdb for target on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,126 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12123bd4a5fc1e63e6b4adc07a3ec5eef8c4f743
+commit: https://git.buildroot.net/buildroot/commit/?id=3fe181faa9a055c3b172f87bc7b519f65450529b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Disable pcre to avoid the following build failure if pcre-config is
-found on host raised since bump to version 2.9.7 in commit
-42e34cf10f9eb037aa8c48a4fb9e8f521901b983:
+Thomas reported that m68k fails to build when enabling BR2_PACKAGE_GDB.
 
-/home/thomas/autobuild/instance-0/output-1/per-package/modsecurity2/host/bin/../lib/gcc/mips64el-buildroot-linux-gnu/11.3.0/../../../../mips64el-buildroot-linux-gnu/bin/ld: cannot find -lpcre: No such file or directory
+It fails when building gdb for the target with the following error:
+elf2flt: ERROR: text=0x3c826 overlaps data=0x256e0 ?
 
-Fixes:
- - http://autobuild.buildroot.org/results/f4864f8cc1d07e357f6e5f8302c19ae94e9cf3af
+It turns out that the gdb binary has another problematic input section
+(.gcc_except_table), which causes elf2flt to try to append to the .text
+output section, after it has already moved on with appending sections
+to the .data output section.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+elf2flt cannot append to a previous output section once it has moved on
+to another output section.
+
+Update the existing elf2flt patch to also add an exception for
+.gcc_except_table.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 06af305874abc1eb4bb98dbd8aabe071fa5d77bc)
+(cherry picked from commit f6f15e85b3ac58ba1d387ea86945d3fabf4f8990)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/modsecurity2/modsecurity2.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...-fatal-error-regression-on-m68k-xtensa-ri.patch | 47 +++++++++++-----------
+ 1 file changed, 24 insertions(+), 23 deletions(-)
 
-diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
-index c251291e64..88bbf3bb29 100644
---- a/package/modsecurity2/modsecurity2.mk
-+++ b/package/modsecurity2/modsecurity2.mk
-@@ -21,6 +21,7 @@ MODSECURITY2_CONF_OPTS = \
- 	--with-apxs=$(STAGING_DIR)/usr/bin/apxs \
- 	--without-curl \
- 	--without-lua \
-+	--without-pcre \
- 	--without-yajl \
- 	--without-ssdeep
+diff --git a/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch b/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
+index 278709cb1c..616bbc891f 100644
+--- a/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
++++ b/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
+@@ -1,8 +1,7 @@
+-From 65ac5f9e69cfb989d970da74c41e478774d29be5 Mon Sep 17 00:00:00 2001
++From a8c9f650b82109abf7aa730f298ea5182ed62613 Mon Sep 17 00:00:00 2001
+ From: Niklas Cassel <niklas.cassel@wdc.com>
+ Date: Tue, 9 Aug 2022 21:06:05 +0200
+-Subject: [PATCH] elf2flt: fix fatal error regression on m68k, xtensa,
+- riscv64
++Subject: [PATCH] elf2flt: fix fatal error regression on m68k, xtensa, riscv64
+ 
+ Commit ba379d08bb78 ("elf2flt: fix for segfault on some ARM ELFs")
+ changed the condition of which input sections that should be included
+@@ -12,16 +11,15 @@ to:
+ ((a->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
+ (SEC_DATA | SEC_READONLY | SEC_RELOC))
+ 
+-On ARM, the .eh_frame input section does not have the SEC_RELOC flag
+-set, so this specific change had no effect on ARM.
++On ARM, the .eh_frame input section does not have the SEC_RELOC flag set,
++so on ARM, this change caused .eh_frame to move from .text to .data.
+ 
+-However, on e.g. m68k and riscv64, the .eh_frame input section does
+-have the SEC_RELOC flag set, which means that after commit ba379d08bb78
+-("elf2flt: fix for segfault on some ARM ELFs"), read-only relocation
+-data sections were placed in .text output section, instead of .data
+-output section.
++However, on e.g. m68k, xtensa and riscv64, the .eh_frame input section
++does have the SEC_RELOC flag set, which means that the change in
++commit ba379d08bb78 ("elf2flt: fix for segfault on some ARM ELFs")
++caused .eh_frame to move in an opposite way, i.e. from .data to .text.
+ 
+-This will result in a fatal error on m68k, xtensa and riscv64:
++This resulted in a fatal error on m68k, xtensa and riscv64:
+ ERROR: text=0x3bab8 overlaps data=0x33f60 ?
+ 
+ This is because elf2flt cannot append to .text after .data has been
+@@ -36,21 +34,26 @@ to .text after .data has been appended to (which will require elf2flt
+ to move/relocate everything that has already been appended to .data,
+ since the virtual addresses are contiguous).
+ 
+-However, for now, add an exception for m68k, xtensa and riscv64
+-(specifically for the problematic input section, .eh_frame), so that we
+-get the same behavior as older elf2flt releases, where we put read-only
+-relocation data in .data, which was working perfectly fine.
++However, for now, add an exception for input sections which have all
++three flags SEC_DATA, SEC_READONLY, and SEC_RELOC set, and which have a
++name equal to a problematic input section (.eh_frame, .gcc_except_table).
++That way, we get the same behavior as older elf2flt releases for m68k,
++xtensa and riscv64, where we put read-only relocation data in .data,
++which was working perfectly fine.
++
++This exception will not change any behavior on ARM, as the .eh_frame
++input section does not have flag SEC_RELOC set.
+ 
+ Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+ ---
+- elf2flt.c | 11 +++++++++--
+- 1 file changed, 9 insertions(+), 2 deletions(-)
++ elf2flt.c | 9 +++++++--
++ 1 file changed, 7 insertions(+), 2 deletions(-)
+ 
+ diff --git a/elf2flt.c b/elf2flt.c
+-index 9c32f9a..a680c89 100644
++index e0d7891..39d035f 100644
+ --- a/elf2flt.c
+ +++ b/elf2flt.c
+-@@ -340,8 +340,15 @@ compare_relocs (const void *pa, const void *pb)
++@@ -341,8 +341,13 @@ compare_relocs (const void *pa, const void *pb)
+  static bool
+  ro_reloc_data_section_should_be_in_text(asection *s)
+  {
+@@ -58,10 +61,8 @@ index 9c32f9a..a680c89 100644
+ -	  (SEC_DATA | SEC_READONLY | SEC_RELOC);
+ +  if ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
+ +      (SEC_DATA | SEC_READONLY | SEC_RELOC)) {
+-+#if defined(TARGET_m68k) || defined(TARGET_riscv64) || defined(TARGET_xtensa)
+-+    if (!strcmp(".eh_frame", s->name))
+++    if (!strcmp(".eh_frame", s->name) || !strcmp(".gcc_except_table", s->name))
+ +      return false;
+-+#endif
+ +    return true;
+ +  }
+ +  return false;
+@@ -69,5 +70,5 @@ index 9c32f9a..a680c89 100644
+  
+  static uint32_t *
+ -- 
+-2.37.1
++2.39.0
  
 _______________________________________________
 buildroot mailing list
