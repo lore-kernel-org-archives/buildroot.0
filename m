@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 334A9C636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 21:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D353CC636D7
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 21:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D346940447;
-	Tue, 21 Feb 2023 21:00:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D346940447
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86CD740CB4;
+	Tue, 21 Feb 2023 21:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86CD740CB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vt7CsUf-John; Tue, 21 Feb 2023 21:00:59 +0000 (UTC)
+	with ESMTP id POQPm44sC8Iu; Tue, 21 Feb 2023 21:01:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F2FB0408EC;
-	Tue, 21 Feb 2023 21:00:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2FB0408EC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 85E831BF3F4
+	by smtp2.osuosl.org (Postfix) with ESMTP id C408B404E9;
+	Tue, 21 Feb 2023 21:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C408B404E9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A598D1BF8C7
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:00:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EFCD60B33
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F24341849
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:00:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EFCD60B33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F24341849
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hJpMJNkLSKMC for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AxsGDcJPGtie for <buildroot@lists.busybox.net>;
  Tue, 21 Feb 2023 21:00:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CFF360A88
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D5B841841
  for <buildroot@buildroot.org>; Tue, 21 Feb 2023 21:00:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CFF360A88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D5B841841
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D1EB8667C; Tue, 21 Feb 2023 21:00:52 +0000 (UTC)
+ id 29A158667C; Tue, 21 Feb 2023 21:00:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:48:58 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 81344a37d6640a75ab3c9e37fb1cc769fa5ec5b6
-X-Git-Newrev: caca4a1ff13298736718d3eb6bda4e209550dc2a
+Date: Tue, 21 Feb 2023 21:48:49 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 02ea469db39bb3774093cbcf5c327873febeb0f6
+X-Git-Newrev: c42880d994c3162efdd583d4a6097538cd185eb3
 X-Patchwork-Hint: ignore
-Message-Id: <20230221210052.7D1EB8667C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] boot/barebox: pass
+Message-Id: <20230221210052.29A158667C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] boot/barebox: pass
  required environment variables for reproducible build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caca4a1ff13298736718d3eb6bda4e209550dc2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c42880d994c3162efdd583d4a6097538cd185eb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Barebox makes use of the same variables as the linux kernel does for
 handling reproducible build -- KBUILD_BUILD_HOST,
@@ -82,7 +82,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index da151d3c25..90be8c1ecc 100644
+index 6506294d6d..05629bb4e3 100644
 --- a/boot/barebox/barebox.mk
 +++ b/boot/barebox/barebox.mk
 @@ -74,6 +74,13 @@ endif
