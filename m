@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AAC3C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:51:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BB5C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B67C64174E;
-	Sun, 12 Mar 2023 21:51:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B67C64174E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 684A641778;
+	Sun, 12 Mar 2023 21:51:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 684A641778
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uHJ5V35y3G7V; Sun, 12 Mar 2023 21:50:59 +0000 (UTC)
+	with ESMTP id nqp7jNHxatwd; Sun, 12 Mar 2023 21:51:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CC54416E5;
-	Sun, 12 Mar 2023 21:50:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CC54416E5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18B841BF863
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F1924176B;
+	Sun, 12 Mar 2023 21:51:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F1924176B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 78EC11BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E69C41624
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E69C41624
+ by smtp2.osuosl.org (Postfix) with ESMTP id 926C5405D9
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 926C5405D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B9FjtDoopCNV for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wqs4r4bBI4u4 for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8875441606
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8875441606
+ by smtp2.osuosl.org (Postfix) with ESMTP id B78594061D
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B78594061D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7630487009; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+ id B483F87008; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 23 Feb 2023 23:43:46 +0100
+Date: Tue, 21 Feb 2023 09:50:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3254a2886a4e20111e5c87614f6f374ec626b755
-X-Git-Newrev: b793f3a49e1ef8a48671ce19579586a0b018179d
+X-Git-Oldrev: b851097ba6db559042183eb31dc48dc1533fac04
+X-Git-Newrev: db97a1d196da07d2c1d1f41061dcac851c110915
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214623.7630487009@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/arm_foundationv8: bump to Linux
- 6.1.13
+Message-Id: <20230312214622.B483F87008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-maturin: bump to version
+ 0.14.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,83 +59,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3600598082517648820=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3600598082517648820==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b793f3a49e1ef8a48671ce19579586a0b018179d
+commit: https://git.buildroot.net/buildroot/commit/?id=db97a1d196da07d2c1d1f41061dcac851c110915
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump Linux kernel to v6.1.13 and increase the rootfs size accordingly.
-- Bump the FVP in the readme to version 11.20 build 15 and update the
-  command line.
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/arm/foundation-v8/readme.txt | 4 ++--
- configs/arm_foundationv8_defconfig | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-maturin/python-maturin.hash | 2 +-
+ package/python-maturin/python-maturin.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
-index b5106f015e..cb0fe08b87 100644
---- a/board/arm/foundation-v8/readme.txt
-+++ b/board/arm/foundation-v8/readme.txt
-@@ -3,14 +3,14 @@ ARM software simulator of the AArch64 architecture.
+diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
+index b104b1fbbe..d1344f2744 100644
+--- a/package/python-maturin/python-maturin.hash
++++ b/package/python-maturin/python-maturin.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  59157a06c0a482aec750d64746f2b23e556ce3ec62d9cdce74fcb7b4658b722b  maturin-0.14.9.tar.gz
++sha256  7ed1234824ef2b0c919c6d24550540bf044fe992612b322a6abda1253f5bb500  maturin-0.14.13.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
+ sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
+diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
+index 3484e09d22..7781a1070b 100644
+--- a/package/python-maturin/python-maturin.mk
++++ b/package/python-maturin/python-maturin.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- First, one has to download the AArch64 software simulator from:
- 
--  https://silver.arm.com/download/download.tm?pv=4807186
-+  https://armkeil.blob.core.windows.net/developer/Files/downloads/ecosystem-models/Foundation_Platform_11.20_15_Linux64.tgz
- 
- Then, use the arm_foundationv8_defconfig configuration to build your
- Buildroot system.
- 
- Finally, boot your system with:
- 
-- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-6.4/Foundation_Platform \
-+ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-9.3/Foundation_Platform \
-     --image output/images/linux-system.axf \
-     --block-device output/images/rootfs.ext2 \
-     --network=nat \
-diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
-index 3c63f5dc76..102fe8fd09 100644
---- a/configs/arm_foundationv8_defconfig
-+++ b/configs/arm_foundationv8_defconfig
-@@ -1,15 +1,16 @@
- BR2_aarch64=y
--# Linux headers same as kernel, a 5.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
-+# Linux headers same as kernel, a 6.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.20"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.13"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8-gicv3-psci"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_BOOT_WRAPPER_AARCH64=y
- BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8-gicv3-psci"
-
---===============3600598082517648820==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_MATURIN_VERSION = 0.14.9
++PYTHON_MATURIN_VERSION = 0.14.13
+ PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
+-PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/90/f9/f4242c0e8bc5def9a7135c12574449dbb411ecc595cf72202ca97a79c2ad
++PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/a9/a9/bcff9592d7ad68052432e6369bd310606e2ddeb9bcc0b52d5f69e4140290
+ PYTHON_MATURIN_SETUP_TYPE = setuptools
+ PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
+ PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3600598082517648820==--
