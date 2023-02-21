@@ -4,46 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F348C636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 15:17:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0453DC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 15:27:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0874A83026;
-	Tue, 21 Feb 2023 15:17:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0874A83026
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8788482F57;
+	Tue, 21 Feb 2023 15:27:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8788482F57
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qx-U7aLAKodf; Tue, 21 Feb 2023 15:17:30 +0000 (UTC)
+	with ESMTP id sjuTfOqcFQlI; Tue, 21 Feb 2023 15:27:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E38282FD7;
-	Tue, 21 Feb 2023 15:17:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E38282FD7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 11C211BF390
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 15:17:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E7D482F37;
+	Tue, 21 Feb 2023 15:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E7D482F37
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B79121BF390
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 15:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED2A342CFE
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 15:17:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED2A342CFE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E618611F3
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 15:27:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E618611F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3HOfshHfP2gq for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 15:17:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73FB242CB1
-Received: from mail (kmf.trabucayre.com [91.121.117.161])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73FB242CB1
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 15:17:26 +0000 (UTC)
-Received: from localhost.localdomain (localhost [127.0.0.1])
- by mail (Postfix) with ESMTP id A5A4339856;
- Tue, 21 Feb 2023 15:40:19 +0100 (CET)
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B6MQedSzMzKW for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 15:27:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03856611FC
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03856611FC
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 15:27:26 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id z8so4578674wrm.8
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 07:27:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=GaRSHCjzu1t3AsoPUE3wmOdk5eFuvXcQMG+iice/Cmo=;
+ b=d/pr2geWgC8+rdODB0+6/MyX6zilJn5Uaz0W5uQr4kHcGInRa+1OIufGtE2OHm9LEz
+ 9Gm63eM8FjAFgmpdqxVKQojid6gdWCfjOR5QzbnkBFHNyzXqAjiI9rUXBnpm8KeJVffn
+ 5/H+vr7N8uY6iL3luJSHm0HDAeRjbDkc9OmoIfyD0mk5xhZzRxcaQLtiagDhfQ5ipxhw
+ iy9jCiE7q6rnMiJHP0fhPGZpypZKFMyrF8ZVPFtoUKNZCblo+xE6vsQ3KMQNVpF2Lpjg
+ xDYRONXt96VS9RCaPnLdxYEjeALeKp3AjXKC9ySwJTtmAluWMqjW0TTuAOsihsfMvONy
+ 4cgA==
+X-Gm-Message-State: AO0yUKXOHLSpT/d/b4No0rpLUyAVShg0DdeN+huJgSVZpjGXRcmeFDQW
+ T9i+ztvLw5ObWvGPKy1F64/3fu9aD30=
+X-Google-Smtp-Source: AK7set+OnjtqUe+ibNCL0Ilxtn8X558ppd2CgCWX9THGTJNuFxgJ3C/u8lkiWtDXpWmxE8Q3LrvX8A==
+X-Received: by 2002:adf:f710:0:b0:2bf:eec5:3912 with SMTP id
+ r16-20020adff710000000b002bfeec53912mr4490004wrp.34.1676993244861; 
+ Tue, 21 Feb 2023 07:27:24 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ n16-20020a5d51d0000000b002c56046a3b5sm5088628wrv.53.2023.02.21.07.27.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 21 Feb 2023 07:27:24 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 15:40:18 +0100
-Message-Id: <1676990418-53157-1-git-send-email-gwenj@trabucayre.com>
-X-Mailer: git-send-email 1.6.4.2
-Subject: [Buildroot] [PATCH v2] package/volk: bump version to 3.0.0
+Date: Tue, 21 Feb 2023 16:27:22 +0100
+Message-Id: <20230221152722.2418893-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=GaRSHCjzu1t3AsoPUE3wmOdk5eFuvXcQMG+iice/Cmo=;
+ b=dTBuyli1zGRE9IlktFGTQOaJEgzpmtcv94Ine305I4CqZC8NEn5klJE05egQ8mIwAD
+ lTyfass/j1oTiauIaGgQXQRXO5iIR/1yaShnK+ebVnecpeCq1iNB92m7/WYMQqY5fBin
+ nOt2yI1Yr+i7jyvjQEiGdLvAa85C2AfCI89niIWNy1b/nk2ay9DaWoeX5gBylUmjWQqE
+ /w+/JrHHtscu46ZJ397TlNmiJk3RfOqdOGtG+VX2t9YI6JzTtAzoaAuW+64BPd1QQhjz
+ s9Vo+sXKZyAlpEgHIVqbtkqvHU9e4H/jdpSQW7bZMVSHjKAmxb7U/Qkz0GSn3LxoK3cM
+ EjXA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=dTBuyli1
+Subject: [Buildroot] [PATCH 1/1] package/janet: needs gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,67 +93,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+janet needs gcc >= 4.9 for stdatomic.h since version 1.26.0 and
+https://github.com/janet-lang/janet/commit/bfcfd58259911b92ff516bab9216831b34653805
+resulting in the following build failure since commit
+5c6f32bd255fc97823d464beacfa905a141066ec:
 
-As mentionned into release message [1], github license page [2] and
-announce [3], this release is primarly dedicated to fully removing
-GPL-3.0+ license, no more COPYING-LGPL: merged into COPYING
+src/core/abstract.c:35:23: fatal error: stdatomic.h: No such file or directory
 
-[1]: https://github.com/gnuradio/volk/releases/tag/v3.0.0
-[2]: https://github.com/gnuradio/volk/tree/v3.0.0#license
-[3]: https://lists.gnu.org/archive/html/discuss-gnuradio/2023-01/msg00046.html
+Fixes:
+ - http://autobuild.buildroot.org/results/a2b40adb93b751221ba2cdf9a705f86c30499021
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-- update commit message with links related to GPL-3.0+ license removing
-- remove .mk note about license details
----
- package/volk/volk.hash | 5 ++---
- package/volk/volk.mk   | 8 +++-----
- 2 files changed, 5 insertions(+), 8 deletions(-)
+ package/janet/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/volk/volk.hash b/package/volk/volk.hash
-index 4c62c6d315..8047a68bab 100644
---- a/package/volk/volk.hash
-+++ b/package/volk/volk.hash
-@@ -1,4 +1,3 @@
- # Locally computed
--sha256  eff53206cd1ec3314755e0b2bde3c7aaea21dd0f0ad8d753bff07d98e93ddee2  volk-2.5.2.tar.xz
--sha256  6dcdafa9e750545f5f65c2e6f53820184822db728ac2b8bfe1d4a47da09ec0d6  COPYING
--sha256  258f450f060a161fb9f9e2e7c07c6b1ee73e5142297e6792dc1ee76b028cf0ca  COPYING-LGPL
-+sha256  88fd80638a3683f23a8cae6c551a8cfe9ea55735c701846f3eeeeeea8a14f6a3  volk-3.0.0.tar.xz
-+sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING
-diff --git a/package/volk/volk.mk b/package/volk/volk.mk
-index af5bd4306b..67475d5c90 100644
---- a/package/volk/volk.mk
-+++ b/package/volk/volk.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
+diff --git a/package/janet/Config.in b/package/janet/Config.in
+index 0e25ce34e3..7b78c14bf4 100644
+--- a/package/janet/Config.in
++++ b/package/janet/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_JANET
+ 	bool "janet"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	help
+ 	  Janet is a functional and imperative programming language.
+ 	  The entire language (core library, interpreter, compiler,
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_JANET
+ 	  and two headers.
  
--VOLK_VERSION = 2.5.2
-+VOLK_VERSION = 3.0.0
- VOLK_SITE = https://github.com/gnuradio/volk/releases/download/v$(VOLK_VERSION)
- VOLK_SOURCE = volk-$(VOLK_VERSION).tar.xz
--# See https://github.com/gnuradio/volk/tree/v2.5.1#license for some
--# details on the licensing.
--VOLK_LICENSE = GPL-3.0+, LGPL-3.0+
--VOLK_LICENSE_FILES = COPYING COPYING-LGPL
-+VOLK_LICENSE = LGPL-3.0+
-+VOLK_LICENSE_FILES = COPYING
- 
- VOLK_SUPPORTS_IN_SOURCE_BUILD = NO
- 
+ 	  https://janet-lang.org/
++
++comment "janet needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 -- 
-2.30.2
+2.39.0
 
 _______________________________________________
 buildroot mailing list
