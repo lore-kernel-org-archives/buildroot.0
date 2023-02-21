@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A118EC6379F
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F195CC64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CD75828A5;
-	Tue, 21 Feb 2023 08:37:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CD75828A5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F2FD81275;
+	Tue, 21 Feb 2023 08:38:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F2FD81275
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eO6zc4qEjMXC; Tue, 21 Feb 2023 08:37:56 +0000 (UTC)
+	with ESMTP id WXBqqYDjlzOS; Tue, 21 Feb 2023 08:38:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75D148284B;
-	Tue, 21 Feb 2023 08:37:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75D148284B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AA4931BF292
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:37:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCB9F82675;
+	Tue, 21 Feb 2023 08:38:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCB9F82675
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 11B0E1BF292
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8513340A59
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFAE5611E0
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:37:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8513340A59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFAE5611E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ePnEJ4VF3Z-D for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1UGS3WGOE358 for <buildroot@lists.busybox.net>;
  Tue, 21 Feb 2023 08:37:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C45BE40A04
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB646611DF
  for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:37:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C45BE40A04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB646611DF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B23E9865A2; Tue, 21 Feb 2023 08:37:52 +0000 (UTC)
+ id A82F58659D; Tue, 21 Feb 2023 08:37:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 09:37:36 +0100
+Date: Tue, 21 Feb 2023 09:37:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ceb9c36b921f5237f823c34ab369ef521f3ba12b
-X-Git-Newrev: 762b3f743dd0687841a2edb64c4b56a522058d5e
+X-Git-Oldrev: 97bdc0616c6027fe4b92bfa80dd9e7d43df20505
+X-Git-Newrev: ceb9c36b921f5237f823c34ab369ef521f3ba12b
 X-Patchwork-Hint: ignore
-Message-Id: <20230221083752.B23E9865A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/multipath-tools: fix path to
- kernel headers
+Message-Id: <20230221083752.A82F58659D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluent-bit: fix build without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,59 +58,211 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8902662730712951316=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8902662730712951316==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=762b3f743dd0687841a2edb64c4b56a522058d5e
+commit: https://git.buildroot.net/buildroot/commit/?id=ceb9c36b921f5237f823c34ab369ef521f3ba12b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With change 6b7d47be3b23 ("multipath-tools: Makefiles: simplify code for
-include dirs") the Makefile variable 'LINUX_HEADERS_INCDIR' has been replaced
-with 'kernel_incdir'.
+Commit dedbc69022ba0beaf259463ac8082c86776f7e88 was incomplete resuling
+in the following build failure since the addition of the package in
+commit 6a0f7c39bcb48fc13aa2ce3fc4996baf1be66483:
 
-fpin_handlers.c:355:32: note: each undeclared identifier is reported only once for each function it appears in
-fpin_handlers.c:360:37: error: ‘ELS_DTAG_LNK_INTEGRITY’ undeclared (first use in this function)
-  360 |                         if (dtag == ELS_DTAG_LNK_INTEGRITY) {
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~
-make[2]: *** [../Makefile.inc:116: fpin_handlers.o] Error 1
+-- Check for working CXX compiler: /usr/bin/c++ - broken
+CMake Error at /home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake:62 (message):
+  The C++ compiler
+
+    "/usr/bin/c++"
+
+  is not able to compile a simple test program.
+
+  It fails with the following output:
+
+    Change Dir: /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp
+
+    Run Build Command(s):/home/autobuild/make/make -f Makefile cmTC_bfb29/fast && make[1]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
+    /home/autobuild/make/make  -f CMakeFiles/cmTC_bfb29.dir/build.make CMakeFiles/cmTC_bfb29.dir/build
+    make[2]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
+    Building CXX object CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o
+    /usr/bin/c++ --sysroot=/home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/xtensa-buildroot-linux-uclibc/sysroot   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O2 -g0  -fcommon -U_FILE_OFFSET_BITS  -g -fPIE -o CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+    c++: error: unrecognized command-line option '-mlongcalls'
+    c++: error: unrecognized command-line option '-mauto-litpools'
+    make[2]: *** [CMakeFiles/cmTC_bfb29.dir/build.make:78: CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o] Error 1
+    make[2]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
+    make[1]: *** [Makefile:127: cmTC_bfb29/fast] Error 2
+    make[1]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
+
+  CMake will not be able to correctly generate this project.
+Call Stack (most recent call first):
+  lib/msgpack-c/CMakeLists.txt:2 (project)
+
+While at it, add missing comment about C++ dependency for wasm
 
 Fixes:
+ - http://autobuild.buildroot.org/results/4b0f90d79d6dbbf976acf1da839260b0ee94ddda
 
-  http://autobuild.buildroot.net/results/e0f56ef924c13d6b1535fdc350ad8ecc06ea0a58
-
-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/multipath-tools/multipath-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fluent-bit/0003-fix-build-without-C.patch | 131 ++++++++++++++++++++++
+ package/fluent-bit/Config.in                      |   4 +
+ 2 files changed, 135 insertions(+)
 
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index 90394fae9f..23b3cc9442 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -22,7 +22,7 @@ MULTIPATH_TOOLS_CPE_ID_VENDOR = opensvc
+diff --git a/package/fluent-bit/0003-fix-build-without-C.patch b/package/fluent-bit/0003-fix-build-without-C.patch
+new file mode 100644
+index 0000000000..3bc5f46de9
+--- /dev/null
++++ b/package/fluent-bit/0003-fix-build-without-C.patch
+@@ -0,0 +1,131 @@
++From 014e44808ebaf29b0c25b5a3fa2e35a99a30f628 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 21 Feb 2023 00:09:57 +0100
++Subject: [PATCH] fix build without C++
++
++Fix the following build failure without C++:
++
++-- Check for working CXX compiler: /usr/bin/c++ - broken
++CMake Error at /home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake:62 (message):
++  The C++ compiler
++
++    "/usr/bin/c++"
++
++  is not able to compile a simple test program.
++
++  It fails with the following output:
++
++    Change Dir: /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp
++
++    Run Build Command(s):/home/autobuild/make/make -f Makefile cmTC_bfb29/fast && make[1]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
++    /home/autobuild/make/make  -f CMakeFiles/cmTC_bfb29.dir/build.make CMakeFiles/cmTC_bfb29.dir/build
++    make[2]: Entering directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
++    Building CXX object CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o
++    /usr/bin/c++ --sysroot=/home/autobuild/autobuild/instance-15/output-1/per-package/fluent-bit/host/xtensa-buildroot-linux-uclibc/sysroot   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O2 -g0  -fcommon -U_FILE_OFFSET_BITS  -g -fPIE -o CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
++    c++: error: unrecognized command-line option '-mlongcalls'
++    c++: error: unrecognized command-line option '-mauto-litpools'
++    make[2]: *** [CMakeFiles/cmTC_bfb29.dir/build.make:78: CMakeFiles/cmTC_bfb29.dir/testCXXCompiler.cxx.o] Error 1
++    make[2]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
++    make[1]: *** [Makefile:127: cmTC_bfb29/fast] Error 2
++    make[1]: Leaving directory '/home/autobuild/autobuild/instance-15/output-1/build/fluent-bit-2.0.9/CMakeFiles/CMakeTmp'
++
++  CMake will not be able to correctly generate this project.
++Call Stack (most recent call first):
++  lib/msgpack-c/CMakeLists.txt:2 (project)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/4b0f90d79d6dbbf976acf1da839260b0ee94ddda
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/fluent/fluent-bit/pull/6893]
++---
++ lib/chunkio/CMakeLists.txt          | 2 +-
++ lib/lwrb/CMakeLists.txt             | 2 +-
++ lib/msgpack-c/CMakeLists.txt        | 2 +-
++ lib/onigmo/CMakeLists.txt           | 2 +-
++ lib/snappy-fef67ac/CMakeLists.txt   | 2 +-
++ lib/tutf8e/CMakeLists.txt           | 2 +-
++ src/stream_processor/CMakeLists.txt | 2 +-
++ 7 files changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/lib/chunkio/CMakeLists.txt b/lib/chunkio/CMakeLists.txt
++index 233bce35c..8bfe5199d 100644
++--- a/lib/chunkio/CMakeLists.txt
+++++ b/lib/chunkio/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 3.0)
++-project(chunk-io)
+++project(chunk-io C)
++ 
++ set(CIO_VERSION_MAJOR  1)
++ set(CIO_VERSION_MINOR  4)
++diff --git a/lib/lwrb/CMakeLists.txt b/lib/lwrb/CMakeLists.txt
++index 2fabd6319..031cbc1dd 100644
++--- a/lib/lwrb/CMakeLists.txt
+++++ b/lib/lwrb/CMakeLists.txt
++@@ -1,7 +1,7 @@
++ cmake_minimum_required(VERSION 3.0)
++ 
++ # Setup project
++-project(LwLibPROJECT)
+++project(LwLibPROJECT C)
++ 
++ # -------------------------------------------------
++ # This CMakeLists.txt is used only if it is a top-level file.
++diff --git a/lib/msgpack-c/CMakeLists.txt b/lib/msgpack-c/CMakeLists.txt
++index 810ad609a..ffbbc5ddb 100644
++--- a/lib/msgpack-c/CMakeLists.txt
+++++ b/lib/msgpack-c/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 2.8)
++-project(msgpack-c)
+++project(msgpack-c C)
++ 
++ set(src
++     src/objectc.c
++diff --git a/lib/onigmo/CMakeLists.txt b/lib/onigmo/CMakeLists.txt
++index 4a3b30d7d..66865130a 100644
++--- a/lib/onigmo/CMakeLists.txt
+++++ b/lib/onigmo/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 3.4)
++-project(onigmo)
+++project(onigmo C)
++ 
++ # Onigmo Version
++ set(ONIGMO_VERSION_MAJOR  6)
++diff --git a/lib/snappy-fef67ac/CMakeLists.txt b/lib/snappy-fef67ac/CMakeLists.txt
++index 8bb1e9598..ae9225c49 100644
++--- a/lib/snappy-fef67ac/CMakeLists.txt
+++++ b/lib/snappy-fef67ac/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 2.8)
++-project(snappy-c)
+++project(snappy-c C)
++ 
++ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++ 
++diff --git a/lib/tutf8e/CMakeLists.txt b/lib/tutf8e/CMakeLists.txt
++index 35cbe01ad..a056ef83c 100644
++--- a/lib/tutf8e/CMakeLists.txt
+++++ b/lib/tutf8e/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 2.8)
++-project(tutf8e)
+++project(tutf8e C)
++ 
++ # Not supported: -std=c90 (lacks support for inline)
++ # Supported:     -std=gnu90, -std=c99 or -std=gnu99
++diff --git a/src/stream_processor/CMakeLists.txt b/src/stream_processor/CMakeLists.txt
++index 8c5d70d13..de2c2fe38 100644
++--- a/src/stream_processor/CMakeLists.txt
+++++ b/src/stream_processor/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-project(stream-processor)
+++project(stream-processor C)
++ 
++ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
++ 
++-- 
++2.39.0
++
+diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
+index f53eacb447..bfdea895b0 100644
+--- a/package/fluent-bit/Config.in
++++ b/package/fluent-bit/Config.in
+@@ -30,6 +30,10 @@ config BR2_PACKAGE_FLUENT_BIT_WASM
+ 	help
+ 	  Support for WASM-based plugins.
  
- MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
- MULTIPATH_TOOLS_MAKE_OPTS = \
--	LINUX_HEADERS_INCDIR=$(STAGING_DIR)/usr/include \
-+	kernel_incdir=$(STAGING_DIR)/usr/include \
- 	LIB="lib" \
- 	RUN="run" \
- 	OPTFLAGS="" \
-
---===============8902662730712951316==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++comment "wasm runtime support needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ endif
+ 
+ comment "fluent-bit needs a toolchain w/ threads, dynamic library"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8902662730712951316==--
