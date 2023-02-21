@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4222C636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E0DFC636D7
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:50:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CE4040FDA;
-	Tue, 21 Feb 2023 20:50:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CE4040FDA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B050408F9;
+	Tue, 21 Feb 2023 20:50:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B050408F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6vV1RVPtfxTj; Tue, 21 Feb 2023 20:50:02 +0000 (UTC)
+	with ESMTP id 9_ltYeDFopCw; Tue, 21 Feb 2023 20:50:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E7F240BE5;
-	Tue, 21 Feb 2023 20:50:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E7F240BE5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 379411BF3F4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FB0340FDA;
+	Tue, 21 Feb 2023 20:50:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FB0340FDA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 418FA1BF8C7
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1197D60B48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C0E2403C7
  for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1197D60B48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C0E2403C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SKGGIfkWQiGR for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id On5R7YnMPQsL for <buildroot@lists.busybox.net>;
  Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B01860768
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A270404E9
  for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B01860768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A270404E9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1ADAA8666F; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
+ id 28F1886670; Tue, 21 Feb 2023 20:49:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:32:26 +0100
+Date: Tue, 21 Feb 2023 21:33:58 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3fe181faa9a055c3b172f87bc7b519f65450529b
-X-Git-Newrev: f4aaa7f20775d3ef01df8544f5ebc21e54b91a67
+X-Git-Oldrev: f4aaa7f20775d3ef01df8544f5ebc21e54b91a67
+X-Git-Newrev: f09b5bec825e039130b3400461b067bb535e3434
 X-Patchwork-Hint: ignore
-Message-Id: <20230221204903.1ADAA8666F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/opusfile: fix
- CVE-2022-47021
+Message-Id: <20230221204903.28F1886670@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/modsecurity2:
+ security bump to version 2.9.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,86 +63,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4aaa7f20775d3ef01df8544f5ebc21e54b91a67
+commit: https://git.buildroot.net/buildroot/commit/?id=f09b5bec825e039130b3400461b067bb535e3434
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-A null pointer dereference issue was discovered in functions op_get_data
-and op_open1 in opusfile.c in xiph opusfile 0.9 thru 0.12 allows
-attackers to cause denial of service or other unspecified impacts.
+- Fix CVE-2023-24021: Incorrect handling of '\0' bytes in file uploads
+  in ModSecurity before 2.9.7 may allow for Web Application Firewall
+  bypasses and buffer overflows on the Web Application Firewall when
+  executing rules that read the FILES_TMP_CONTENT collection.
+- host-pkgconf is mandatory and used to find libxml2 since
+  https://github.com/SpiderLabs/ModSecurity/commit/baa38ddbaf55a87afecad7a1e1760c69a2689787
+- pcre2 is supported since:
+  https://github.com/SpiderLabs/ModSecurity/commit/8fc0b519b7a6c023259753a21f33bf3649a25b14
+
+https://github.com/SpiderLabs/ModSecurity/blob/v2.9.7/CHANGES
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ae65870e652088dd65ca41d63304893d1d4443a2)
+(cherry picked from commit 42e34cf10f9eb037aa8c48a4fb9e8f521901b983)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-allocation-failure-from-ogg_sync_buffer.patch | 44 ++++++++++++++++++++++
- package/opusfile/opusfile.mk                       |  3 ++
- 2 files changed, 47 insertions(+)
+ package/modsecurity2/Config.in         | 2 +-
+ package/modsecurity2/modsecurity2.hash | 4 ++--
+ package/modsecurity2/modsecurity2.mk   | 7 +++----
+ 3 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch b/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
-new file mode 100644
-index 0000000000..2ef08502ab
---- /dev/null
-+++ b/package/opusfile/0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
-@@ -0,0 +1,44 @@
-+From 0a4cd796df5b030cb866f3f4a5e41a4b92caddf5 Mon Sep 17 00:00:00 2001
-+From: Ralph Giles <giles@thaumas.net>
-+Date: Tue, 6 Sep 2022 19:04:31 -0700
-+Subject: [PATCH] Propagate allocation failure from ogg_sync_buffer.
-+
-+Instead of segfault, report OP_EFAULT if ogg_sync_buffer returns
-+a null pointer. This allows more graceful recovery by the caller
-+in the unlikely event of a fallible ogg_malloc call.
-+
-+We do check the return value elsewhere in the code, so the new
-+checks make the code more consistent.
-+
-+Thanks to https://github.com/xiph/opusfile/issues/36 for reporting.
-+
-+Signed-off-by: Timothy B. Terriberry <tterribe@xiph.org>
-+Signed-off-by: Mark Harris <mark.hsj@gmail.com>
-+
-+[Retrieved from:
-+https://github.com/xiph/opusfile/commit/0a4cd796df5b030cb866f3f4a5e41a4b92caddf5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/opusfile.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/opusfile.c b/src/opusfile.c
-+index ca219b2..3c3c81e 100644
-+--- a/src/opusfile.c
-++++ b/src/opusfile.c
-+@@ -148,6 +148,7 @@ static int op_get_data(OggOpusFile *_of,int _nbytes){
-+   int            nbytes;
-+   OP_ASSERT(_nbytes>0);
-+   buffer=(unsigned char *)ogg_sync_buffer(&_of->oy,_nbytes);
-++  if(OP_UNLIKELY(buffer==NULL))return OP_EFAULT;
-+   nbytes=(int)(*_of->callbacks.read)(_of->stream,buffer,_nbytes);
-+   OP_ASSERT(nbytes<=_nbytes);
-+   if(OP_LIKELY(nbytes>0))ogg_sync_wrote(&_of->oy,nbytes);
-+@@ -1527,6 +1528,7 @@ static int op_open1(OggOpusFile *_of,
-+   if(_initial_bytes>0){
-+     char *buffer;
-+     buffer=ogg_sync_buffer(&_of->oy,(long)_initial_bytes);
-++    if(OP_UNLIKELY(buffer==NULL))return OP_EFAULT;
-+     memcpy(buffer,_initial_data,_initial_bytes*sizeof(*buffer));
-+     ogg_sync_wrote(&_of->oy,(long)_initial_bytes);
-+   }
-diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
-index 72ae82e801..63553a81e7 100644
---- a/package/opusfile/opusfile.mk
-+++ b/package/opusfile/opusfile.mk
-@@ -11,6 +11,9 @@ OPUSFILE_LICENSE = BSD-3-Clause
- OPUSFILE_LICENSE_FILES = COPYING
- OPUSFILE_INSTALL_STAGING = YES
+diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
+index 2870386a99..fb1bfc960e 100644
+--- a/package/modsecurity2/Config.in
++++ b/package/modsecurity2/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_MODSECURITY2
+ 	bool "modsecurity2"
+ 	depends on BR2_PACKAGE_APACHE
+ 	select BR2_PACKAGE_LIBXML2
+-	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  ModSecurity is an open source, cross-platform web application
+ 	  firewall (WAF) module. Known as the "Swiss Army Knife" of
+diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
+index a19f4823a8..2c77ffd830 100644
+--- a/package/modsecurity2/modsecurity2.hash
++++ b/package/modsecurity2/modsecurity2.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.5/modsecurity-2.9.5.tar.gz.sha256
+-sha256  e2bfc8cd8b8de1e21f054d310543373ea5d89adbd96784e832be0da3e4dc149e  modsecurity-2.9.5.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
++sha256  2a28fcfccfef21581486f98d8d5fe0397499749b8380f60ec7bb1c08478e1839  modsecurity-2.9.7.tar.gz
  
-+# 0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
-+OPUSFILE_IGNORE_CVES += CVE-2022-47021
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPUSFILE_DEPENDENCIES += openssl
- else
+ # Locally computed
+ sha256  2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9  LICENSE
+diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
+index a1ad8fe5bc..c251291e64 100644
+--- a/package/modsecurity2/modsecurity2.mk
++++ b/package/modsecurity2/modsecurity2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MODSECURITY2_VERSION = 2.9.5
++MODSECURITY2_VERSION = 2.9.7
+ MODSECURITY2_SOURCE = modsecurity-$(MODSECURITY2_VERSION).tar.gz
+ MODSECURITY2_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
+ MODSECURITY2_LICENSE = Apache-2.0
+@@ -12,11 +12,10 @@ MODSECURITY2_LICENSE_FILES = LICENSE
+ MODSECURITY2_CPE_ID_VENDOR = trustwave
+ MODSECURITY2_CPE_ID_PRODUCT = modsecurity
+ MODSECURITY2_INSTALL_STAGING = YES
+-MODSECURITY2_DEPENDENCIES = apache libxml2 pcre
++MODSECURITY2_DEPENDENCIES = host-pkgconf apache libxml2 pcre2
+ 
+ MODSECURITY2_CONF_OPTS = \
+-	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
+-	--with-libxml=$(STAGING_DIR)/usr \
++	--with-pcre2=$(STAGING_DIR)/usr/bin/pcre2-config \
+ 	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
+ 	--with-apu=$(STAGING_DIR)/usr/bin/apu-1-config \
+ 	--with-apxs=$(STAGING_DIR)/usr/bin/apxs \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
