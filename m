@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DC96C61DA3
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71E34C6379F
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 08:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDA0582AB6;
-	Tue, 21 Feb 2023 08:55:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDA0582AB6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20BC282AA2;
+	Tue, 21 Feb 2023 08:55:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20BC282AA2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qQK7D4aqwfgJ; Tue, 21 Feb 2023 08:55:45 +0000 (UTC)
+	with ESMTP id p77F-ERedSRk; Tue, 21 Feb 2023 08:55:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE1E282B21;
-	Tue, 21 Feb 2023 08:55:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE1E282B21
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C8CD82A72;
+	Tue, 21 Feb 2023 08:55:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C8CD82A72
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7DD861BF292
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:55:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 192161BF292
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E92F610EF
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:55:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E92F610EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id B916E61101
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 08:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B916E61101
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WlE8LrF840jM for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 08:55:02 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 46C7961101
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:55:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46C7961101
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30853865D8; Tue, 21 Feb 2023 08:55:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 09:50:26 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b851097ba6db559042183eb31dc48dc1533fac04
-X-Git-Newrev: db97a1d196da07d2c1d1f41061dcac851c110915
-X-Patchwork-Hint: ignore
-Message-Id: <20230221085502.30853865D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-maturin: bump
- to version 0.14.13
+ with ESMTP id 534IKJPNiItP for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 08:55:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8191E610EF
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8191E610EF
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 08:55:10 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0F25DFF808;
+ Tue, 21 Feb 2023 08:55:06 +0000 (UTC)
+Date: Tue, 21 Feb 2023 09:55:06 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230221095506.13a27e52@windsurf>
+In-Reply-To: <20230214202541.2485669-1-james.hilliard1@gmail.com>
+References: <20230214202541.2485669-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1676969707;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=W7hHIXPFAyiY7oZgMH7BmaQYH2o68bI6TQldEkEFvh8=;
+ b=JcHW5Ipg4m4CRXN0Wgawm0uecG5FhxvfpcVqrxInch6w1s0TkxJ4KnIgbY45itaXRKIQiV
+ Zoam0MhkKfRyMFWXqlEpfc4PWe0h6RBR4+n2eZDHJi+PPtV5vgrxe6b4XquYTgwDNHMk66
+ K7y4TKFgNbPIwZzRmvT8Dt5SAgT8EBH+5JUldC6n8NusT/9VytqT/lySVN2tXVCy6++p+y
+ A/azHsKkE0YfO2t8Lv9mSiOA4Vt8fqiZs+4qI++WeIhJaP58Td/U94IOt+J+SpxqIz1IE4
+ V8B44SMJQW7XgCr2juetVuq/o2GtYmDrUO7rWzu+/ATVny8OKU3zCyT58uTH+Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JcHW5Ipg
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
+ 0.14.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db97a1d196da07d2c1d1f41061dcac851c110915
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 14 Feb 2023 13:25:41 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-maturin/python-maturin.hash | 2 +-
- package/python-maturin/python-maturin.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-maturin/python-maturin.hash | 2 +-
+>  package/python-maturin/python-maturin.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index b104b1fbbe..d1344f2744 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  59157a06c0a482aec750d64746f2b23e556ce3ec62d9cdce74fcb7b4658b722b  maturin-0.14.9.tar.gz
-+sha256  7ed1234824ef2b0c919c6d24550540bf044fe992612b322a6abda1253f5bb500  maturin-0.14.13.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index 3484e09d22..7781a1070b 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MATURIN_VERSION = 0.14.9
-+PYTHON_MATURIN_VERSION = 0.14.13
- PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
--PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/90/f9/f4242c0e8bc5def9a7135c12574449dbb411ecc595cf72202ca97a79c2ad
-+PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/a9/a9/bcff9592d7ad68052432e6369bd310606e2ddeb9bcc0b52d5f69e4140290
- PYTHON_MATURIN_SETUP_TYPE = setuptools
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
- PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
