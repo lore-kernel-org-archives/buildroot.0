@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B5AEC6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:49:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDC89C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:49:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A134641724;
-	Sun, 12 Mar 2023 21:49:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A134641724
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64EE841715;
+	Sun, 12 Mar 2023 21:49:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64EE841715
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8kzw1n6QYfjM; Sun, 12 Mar 2023 21:49:37 +0000 (UTC)
+	with ESMTP id 1MJPB95BEwBJ; Sun, 12 Mar 2023 21:49:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD97D41711;
-	Sun, 12 Mar 2023 21:49:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD97D41711
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2C33E1BF863
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6965741702;
+	Sun, 12 Mar 2023 21:49:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6965741702
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 422541BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 013018134E
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 013018134E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3171940635
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3171940635
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CMdwHHB4L15o for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ms8TOx5Ffl_2 for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25A758133E
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25A758133E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E436405CF
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E436405CF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 167E987006; Sun, 12 Mar 2023 21:46:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 4BAF887008; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 22:45:36 +0100
+Date: Tue, 21 Feb 2023 09:23:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: acfe5c70b2301bc147ec524e7bc2d4a95e1cee66
-X-Git-Newrev: df48bcd151988c6691c1b9d5b47b601bfafe11bd
+X-Git-Oldrev: 6a789cd0d1badf7f68749b304f7b2e3d9f9ca2c2
+X-Git-Newrev: 3927054736881e5807b86fe9b1e5b275d941d6fd
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214626.167E987006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Merge branch 'next'
+Message-Id: <20230312214622.4BAF887008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-iptvsimple: bump version
+ to 19.3.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,15 +56,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df48bcd151988c6691c1b9d5b47b601bfafe11bd
-Patch is too large, so refusing to show it
-Patch is too large, so refusing to show it
+commit: https://git.buildroot.net/buildroot/commit/?id=3927054736881e5807b86fe9b1e5b275d941d6fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 47dd202258..de71703c53 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  57710d3add72301d47a9eef016916ee5f61b7b8604c73450d67b9ba962eff60c  kodi-pvr-iptvsimple-19.2.2-Matrix.tar.gz
++sha256  421a883054dd31ad512866236c364e5a564d7db9fa595dadc3e37b9169b7fe79  kodi-pvr-iptvsimple-19.3.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 5b91c35c0c..e5976a7d3a 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_IPTVSIMPLE_VERSION = 19.2.2-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 19.3.0-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
