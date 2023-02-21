@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD2A4C636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E7CC61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 20:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73AEA40432;
-	Tue, 21 Feb 2023 20:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73AEA40432
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEDE8404E9;
+	Tue, 21 Feb 2023 20:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEDE8404E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g2_k7F4tgsO2; Tue, 21 Feb 2023 20:46:26 +0000 (UTC)
+	with ESMTP id MKSOSvUS-xhd; Tue, 21 Feb 2023 20:47:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4E8240374;
-	Tue, 21 Feb 2023 20:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4E8240374
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7276B1BF3F4
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:46:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3CDA240374;
+	Tue, 21 Feb 2023 20:47:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CDA240374
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D0B891BF3F4
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 597E941826
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 597E941826
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA88340374
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 20:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA88340374
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lJJTedC1KyGT for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 20:46:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aqF76vH6jZw3 for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 20:47:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB6F041824
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0322400B8
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DB6F041824
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:46:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0322400B8
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 20:47:44 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8F1C11BF203;
- Tue, 21 Feb 2023 20:46:19 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id F1A261BF203;
+ Tue, 21 Feb 2023 20:47:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pUZWk-007nEF-CV; Tue, 21 Feb 2023 21:46:18 +0100
+ id 1pUZY6-007nc9-59; Tue, 21 Feb 2023 21:47:42 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230205132307.41753-1-fontaine.fabrice@gmail.com>
-Date: Tue, 21 Feb 2023 21:46:18 +0100
-In-Reply-To: <20230205132307.41753-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 5 Feb 2023 14:23:07 +0100")
-Message-ID: <87356yycf9.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20230206083621.0D5EB83950@busybox.osuosl.org>
+Date: Tue, 21 Feb 2023 21:47:42 +0100
+In-Reply-To: <20230206083621.0D5EB83950@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Mon, 6 Feb 2023 09:34:39 +0100")
+Message-ID: <87y1oqwxsh.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/tmux: add utf8proc optional
- dependency
+Subject: Re: [Buildroot] [git commit] package/xxhash: use MOREFLAGS instead
+ of overriding CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,52 +64,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > utf8proc is an optional dependency since version 2.3 and
- > https://github.com/tmux/tmux/commit/6c94774b70f72952c4c512e4aa59a207ca1c34f2
+ > commit: https://git.buildroot.net/buildroot/commit/?id=bfef88762d19b2fd8f99b55cee5c9ebaf986e1c7
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ > Set MOREFLAGS instead of overriding CFLAGS to avoid the following build
+ > failure raised since commit 94b66fb49cd57d0863245fbe0a3dc0833e76aad0:
+
+ > /home/autobuild/autobuild/instance-6/output-1/host/lib/gcc/x86_64-buildroot-linux-uclibc/11.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /tmp/ccabb8cF.o: relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/953133575d8c13266f1450fa545e70e4a518508d
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2022.11.x and 2022.02.x, thanks.
-
-> ---
- >  package/tmux/tmux.mk | 7 +++++++
- >  1 file changed, 7 insertions(+)
-
- > diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
- > index 281b7d8ee6..b1c0af1a83 100644
- > --- a/package/tmux/tmux.mk
- > +++ b/package/tmux/tmux.mk
- > @@ -11,6 +11,13 @@ TMUX_LICENSE_FILES = COPYING
- >  TMUX_CPE_ID_VENDOR = tmux_project
- >  TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
- 
- > +ifeq ($(BR2_PACKAGE_UTF8PROC),y)
- > +TMUX_DEPENDENCIES += utf8proc
- > +TMUX_CONF_OPTS += --enable-utf8proc
- > +else
- > +TMUX_CONF_OPTS += --disable-utf8proc
- > +endif
- > +
- >  # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
- >  # can reject the user connection. See man shells.
- >  define TMUX_ADD_TMUX_TO_SHELLS
- > -- 
-
- > 2.39.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot@buildroot.org
- > https://lists.buildroot.org/mailman/listinfo/buildroot
-
 
 -- 
 Bye, Peter Korsgaard
