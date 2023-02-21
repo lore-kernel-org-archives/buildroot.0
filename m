@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1D7BC636D7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 21:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B94C61DA3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Feb 2023 21:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F4E981EE0;
-	Tue, 21 Feb 2023 21:25:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F4E981EE0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D69A81F5E;
+	Tue, 21 Feb 2023 21:25:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D69A81F5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KmcsPZybJ0rK; Tue, 21 Feb 2023 21:25:20 +0000 (UTC)
+	with ESMTP id aVMmx2f0WRFj; Tue, 21 Feb 2023 21:25:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C849A81F32;
-	Tue, 21 Feb 2023 21:25:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C849A81F32
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BE4181F41;
+	Tue, 21 Feb 2023 21:25:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BE4181F41
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B81A91BF39F
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:25:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0AE091BF39F
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DFB241859
- for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:25:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DFB241859
+ by smtp4.osuosl.org (Postfix) with ESMTP id D84C941859
+ for <buildroot@lists.busybox.net>; Tue, 21 Feb 2023 21:25:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D84C941859
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S8KjRc0DXbr1 for <buildroot@lists.busybox.net>;
- Tue, 21 Feb 2023 21:25:11 +0000 (UTC)
+ with ESMTP id 39sxjnSVviSX for <buildroot@lists.busybox.net>;
+ Tue, 21 Feb 2023 21:25:55 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F5C8409B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9714B409B2
 Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4F5C8409B2
- for <buildroot@buildroot.org>; Tue, 21 Feb 2023 21:25:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9714B409B2
+ for <buildroot@buildroot.org>; Tue, 21 Feb 2023 21:25:54 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7288C240003;
- Tue, 21 Feb 2023 21:25:09 +0000 (UTC)
-Date: Tue, 21 Feb 2023 22:25:08 +0100
-To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Message-ID: <20230221222508.6f2ba8f0@windsurf>
-In-Reply-To: <1677000436-53977-1-git-send-email-gwenj@trabucayre.com>
-References: <1677000436-53977-1-git-send-email-gwenj@trabucayre.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 1024E240004;
+ Tue, 21 Feb 2023 21:25:52 +0000 (UTC)
+Date: Tue, 21 Feb 2023 22:25:52 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230221222552.17c73eca@windsurf>
+In-Reply-To: <20230221172829.3407641-1-fontaine.fabrice@gmail.com>
+References: <20230221172829.3407641-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1677014709;
+ d=bootlin.com; s=gm1; t=1677014753;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=7Ty2O8LNvpPgYVMY5Ti8DU4Z6veQTSMmm3CfgcLM1GQ=;
- b=UQ2xEBHQN4Z46+QFWEBn/KvyWjotzKb1hJyh5/DBYnVqKnvSBtkYyA/tXY+n8xK3a9P4v8
- 0CQyI7ez0TdjfIU3ntNmlDYvHWIcBI41mlRVDdIQ/iEwrniUS+QaP9R/yEUDaz3DK+0Bte
- dnKFkA0s0l25nEodOQSnDmTjeVHRJ/N53hM2kFf71Bn8noKza+L5NUDQEjwGpKe2Cqll3W
- pu9DgL9KidtNZgsu9h1k623/o3e1JBAupS5zuMr3lHe54l3uFNPeIpZJfZSwZu1ILUKAv8
- UMKbyhKSOSu8DbL2NA9oV02sGLBuw7JKu4Xmi23Sn7rn2/h6wPwkAg/cfGlolw==
+ bh=J9yj2zuEp92R21kNkFApnPkpdiofuZgVh9R6QVxOiMs=;
+ b=P63nfXa/nofGIQyR4ppBUT+hdn9B9qpmzFMyqk2J2s/edWn5Sru3kvqqldzkZd9LrAca/g
+ L6VZKoIFhh6WKZkbGCA8AtYyMxqqzze9SVrhgdD7A2y+uddgZaREIvZKA0OCtZ1NvlEocd
+ lWDFqqU+4jPV2cfxRwZGhXG9Li7Tyfx7lmqAt2Rk1WQ7w0c/vlidVgQ2yxmb9smsokiZVU
+ hG3FO0eXAd6KgZInGW18ftZsaIPxUFwVPFAjH8u8y/MDusBHMMckiTtKxOOWbWt571pYAz
+ 5bFaWNds88TEfR09emON+5FvmrzvDmsqmFRY4Lj7L5sxV5+2ARL3PZnQXVoPDg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UQ2xEBHQ
-Subject: Re: [Buildroot] [PATCH] package/openfpgaloader: bump to version
- 0.10.0
+ header.s=gm1 header.b=P63nfXa/
+Subject: Re: [Buildroot] [PATCH 1/1] package/mutt: fix build failure when
+ host provides an old gpgrt-config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jean Burgat <jeanburgat33@gmail.com>,
- Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 21 Feb 2023 18:27:16 +0100
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+On Tue, 21 Feb 2023 18:28:29 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> As already done for gnupg2 in commit
+> d7f2d8403ec82f3b1772ec17bf1df8c42987a1f8, apply the same fix to mutt to
+> avoid the following build failure:
 > 
-> Also adds libgpiod support.
+> /home/thomas/autobuild/instance-2/output-1/host/bin/i686-buildroot-linux-uclibc-gcc -DPKGDATADIR=\"/usr/share/mutt\" -DSYSCONFDIR=\"/etc\" -DBINDIR=\"/usr/bin\" -DMUTTLOCALEDIR=\"/usr/share/locale\" -DHAVE_CONFIG_H=1 -I.  -I. -I.   -I/usr/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Wall -pedantic -Wno-long-long -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -c -o txt2c.o txt2c.c
+> i686-buildroot-linux-uclibc-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
 > 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/98010be4ef70e58819ea2d17315bdac66a619b23
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/openfpgaloader/Config.in           | 10 ++++++++++
->  package/openfpgaloader/openfpgaloader.hash |  2 +-
->  package/openfpgaloader/openfpgaloader.mk   |  9 ++++++++-
->  3 files changed, 19 insertions(+), 2 deletions(-)
+>  package/mutt/mutt.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
