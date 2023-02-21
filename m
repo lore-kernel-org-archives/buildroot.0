@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD618C6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 126CBC6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:50:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 718DD416E5;
-	Sun, 12 Mar 2023 21:50:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 718DD416E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABF854030D;
+	Sun, 12 Mar 2023 21:50:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABF854030D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VHeCJHnt6XMt; Sun, 12 Mar 2023 21:50:32 +0000 (UTC)
+	with ESMTP id vqPOMEtRWpI8; Sun, 12 Mar 2023 21:50:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6209041702;
-	Sun, 12 Mar 2023 21:50:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6209041702
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 75C231BF863
+	by smtp4.osuosl.org (Postfix) with ESMTP id C33CA4174D;
+	Sun, 12 Mar 2023 21:50:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C33CA4174D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DE6061BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68A00405CF
+ by smtp3.osuosl.org (Postfix) with ESMTP id C279560D58
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68A00405CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C279560D58
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4AiGbcTWgqVI for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7aVTjb6JbSyN for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D10C405D9
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D10C405D9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09A3460BC9
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09A3460BC9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A47C87006; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+ id 081CC87006; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 09:28:39 +0100
+Date: Tue, 21 Feb 2023 22:34:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6ab0431b70e3d963ff3bbc8f10a1871d9f628789
-X-Git-Newrev: 07634619d9738154e46e9b309d0697d223639167
+X-Git-Oldrev: 0fd1f8a892a89d1b6d27b8e9884d645f71192813
+X-Git-Newrev: 48d9042e5d2e0bc8bd0efc3a2516b156c4b89190
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214622.6A47C87006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ssdp-responder: bump to v2.0
+Message-Id: <20230312214623.081CC87006@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: allow using
+ Barebox as BL33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +64,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07634619d9738154e46e9b309d0697d223639167
+commit: https://git.buildroot.net/buildroot/commit/?id=48d9042e5d2e0bc8bd0efc3a2516b156c4b89190
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ChangeLog:
- - https://github.com/troglobit/ssdp-responder/releases/tag/v2.0
- - https://github.com/troglobit/ssdp-responder/blob/v2.0/ChangeLog.md
+Since version 2022.04.0, Barebox now supports a generic image built
+for platforms, to be used as BL33 to generate FIP images. This patch
+makes it available as a choice of BL33 to be used with ATF and is
+based on the similar work put into U-Boot as BL33.
 
-Critical Fixes:
- - Fix periodic busy loop causing intermittent 100% CPU load
- - Fix invalid <UDN>uuid:uuid:...</UDN> in description.xml (dup uuid:)
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Casey Reeves <casey@xogium.me>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ssdp-responder/ssdp-responder.hash | 2 +-
- package/ssdp-responder/ssdp-responder.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/arm-trusted-firmware/Config.in               | 21 +++++++++++++++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk |  6 ++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/package/ssdp-responder/ssdp-responder.hash b/package/ssdp-responder/ssdp-responder.hash
-index 425ad86e08..8b4f3e4e45 100644
---- a/package/ssdp-responder/ssdp-responder.hash
-+++ b/package/ssdp-responder/ssdp-responder.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  974c244abd4ba8c87532867a84756182a1460c99072ffb1eb91c5a1f73311d89  ssdp-responder-1.9.tar.gz
-+sha256  d8888f2ac59febfb3b2473a1402041014052ad4dc1eeb4168c78aeca1692aae3  ssdp-responder-2.0.tar.gz
- sha256  68d6fdc22e337f725fe719bf9ae6d92b1d8d0ca4cff8219b303ab76706670a8d  LICENSE
-diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
-index 5193966908..20e7219386 100644
---- a/package/ssdp-responder/ssdp-responder.mk
-+++ b/package/ssdp-responder/ssdp-responder.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index a9b9bbcc5a..cb54c6c9d8 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -129,6 +129,27 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
  
--SSDP_RESPONDER_VERSION = 1.9
-+SSDP_RESPONDER_VERSION = 2.0
- SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
- SSDP_RESPONDER_LICENSE = ISC
- SSDP_RESPONDER_LICENSE_FILES = LICENSE
+ endchoice
+ 
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
++	bool "Use Barebox as BL33"
++	depends on BR2_TARGET_BAREBOX
++	help
++	  This option allows to embed the Barebox generic BL33 image in
++	  the ARM Trusted Firmware. It ensures that the Barebox package
++	  gets built before ATF, and that the appropriate BL33
++	  variable pointing to the generic bl33 image is passed
++	  when building ATF.
++
++if BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
++
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE
++	string "Barebox BL33 image name"
++	default "*-generic-bl33.img"
++	help
++	  Name of the Barebox BL33 image to include in ATF, it must
++	  have been installed to BINARIES_DIR by the Barebox package.
++
++endif
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+ 	bool "Use U-Boot as BL33"
+ 	depends on BR2_TARGET_UBOOT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 1164c81410..648f62ed85 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -105,6 +105,12 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
+ endif
+ endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+ 
++ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33),y)
++ARM_TRUSTED_FIRMWARE_BAREBOX_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE))
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_BAREBOX_BIN)
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += barebox
++endif
++
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33),y)
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += edk2
+ # Since the flash device name vary between platforms, we use the variable
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
