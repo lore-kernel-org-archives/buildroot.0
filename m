@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53158C636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 19:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE677C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 19:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA51140520;
-	Wed, 22 Feb 2023 19:50:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA51140520
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1CD040547;
+	Wed, 22 Feb 2023 19:51:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1CD040547
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GQ28q5fM2S7b; Wed, 22 Feb 2023 19:50:32 +0000 (UTC)
+	with ESMTP id zodKE3E65VCy; Wed, 22 Feb 2023 19:51:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38428404D8;
-	Wed, 22 Feb 2023 19:50:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38428404D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFFCD40579;
+	Wed, 22 Feb 2023 19:51:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFFCD40579
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E7F71BF475
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:50:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B31E31BF475
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 483814193F
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:50:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 483814193F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A9D04193F
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:51:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A9D04193F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u0Bz3mpvFd1L for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 19:50:28 +0000 (UTC)
+ with ESMTP id Lpd6GFl__eyU for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 19:51:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 376674192F
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 19:50:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 376674192F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A90B4192F
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 19:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A90B4192F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 256DE867EB; Wed, 22 Feb 2023 19:50:28 +0000 (UTC)
+ id 78DC3867F4; Wed, 22 Feb 2023 19:51:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 20:47:02 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3fb4e35b33d42cb43c605d1e3d63ebbbfcb334e8
-X-Git-Newrev: 703781013b150c1dae011e43935d89dc9cc69d50
+Date: Wed, 22 Feb 2023 20:46:56 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: 227bfb48661865a2496ce28236d1aba0ca831bae
+X-Git-Newrev: 579945a3baa365aae556b886b9e2405a9176d1a6
 X-Patchwork-Hint: ignore
-Message-Id: <20230222195028.256DE867EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
+Message-Id: <20230222195137.78DC3867F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x]
  support/dependencies/dependencies.sh: require FindBin perl package for
  libopenssl
 X-BeenThere: buildroot@buildroot.org
@@ -64,8 +64,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=703781013b150c1dae011e43935d89dc9cc69d50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=579945a3baa365aae556b886b9e2405a9176d1a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 Fixes:
 http://autobuild.buildroot.net/results/5d1/5d10f4f545dccf126e3f5b5efce777a393c5e7bc/
