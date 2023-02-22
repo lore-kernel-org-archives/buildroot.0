@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C228FC61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:10:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A3DAC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79ED541734;
-	Wed, 22 Feb 2023 17:10:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79ED541734
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05D7E4172B;
+	Wed, 22 Feb 2023 17:10:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05D7E4172B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7nNoxla59cat; Wed, 22 Feb 2023 17:10:37 +0000 (UTC)
+	with ESMTP id K1_5xGgUpSNB; Wed, 22 Feb 2023 17:10:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B23FF41746;
-	Wed, 22 Feb 2023 17:10:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B23FF41746
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 07AA71BF364
+	by smtp2.osuosl.org (Postfix) with ESMTP id 230334173E;
+	Wed, 22 Feb 2023 17:10:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 230334173E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A1F11BF97A
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B96D9410BC
+ by smtp1.osuosl.org (Postfix) with ESMTP id A7C7C8200C
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B96D9410BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7C7C8200C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2X4JudBtrNez for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WgWMXehsemvb for <buildroot@lists.busybox.net>;
  Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8E34410BE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6ED3581432
  for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8E34410BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ED3581432
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A45E2867CA; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+ id 6C4B8867D5; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:48:21 +0100
+Date: Wed, 22 Feb 2023 17:45:13 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 85dcee4664d8d293aeb16c116c374bf528975334
-X-Git-Newrev: 22b99575bdd79222c0f6e78eb401261abc930de7
+X-Git-Oldrev: 48351fe47d2d0390687f9a401fc684076eae2936
+X-Git-Newrev: 3ba34e0e3d59917e9c3645e738ba1faa472b48a6
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170816.A45E2867CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/lua: properly
- handle legacy for removed version
+Message-Id: <20230222170816.6C4B8867D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] boot/uboot: remove use of
+ legacy xloader symbol
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22b99575bdd79222c0f6e78eb401261abc930de7
+commit: https://git.buildroot.net/buildroot/commit/?id=3ba34e0e3d59917e9c3645e738ba1faa472b48a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit "297613f1c7 package/lua: remove 5.2.x version" tried to add
-legacy handling but the new symbols are part of a choice, and Kconfig
-does not enforce the select of a option from a choice.
+Commit "070b183d0c boot/xloader: remove package", from release 2018.11,
+removed the package, but the symbol is still referenced.
 
-Update the legacy entry for 2019.02, following the example described in
-the beginning of the file.
+Remove the reference to it.
 
-Cc: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f461543d9c0f8ea1586004e51561ba0a37b8aecf)
+(cherry picked from commit 9b1b1763b754f8a25cf0f2a7fe05e53d256fe675)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy      | 2 +-
- package/lua/Config.in | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ boot/uboot/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 47e2d48e58..0ed989f8b0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -1933,9 +1933,9 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
- config BR2_PACKAGE_LUA_5_2
- 	bool "Lua 5.2.x version removed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_LUA_5_3
- 	help
- 	  The Lua 5.2.x version was removed.
-+# Note: BR2_PACKAGE_LUA_5_2 is still referenced from package/lua/Config.in
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 953c36135e..3fe2a94ff9 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -414,7 +414,6 @@ endif
  
- config BR2_TARGET_GENERIC_PASSWD_MD5
- 	bool "target passwd md5 format support has been removed"
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 309dd6eec2..8fa9f9b7ab 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
- 
- choice
- 	prompt "Lua Version"
-+	default BR2_PACKAGE_LUA_5_3 if BR2_PACKAGE_LUA_5_2 # legacy
- 	default BR2_PACKAGE_LUA_5_4
+ config BR2_TARGET_UBOOT_SPL
+ 	bool "Install U-Boot SPL binary image"
+-	depends on !BR2_TARGET_XLOADER
  	help
- 	  Select the version of Lua API/ABI you wish to use.
+ 	  Install the U-Boot SPL binary image to the images
+ 	  directory.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
