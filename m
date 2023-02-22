@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8145DC636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:13:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F002C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:13:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E5EB416FF;
-	Wed, 22 Feb 2023 17:13:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E5EB416FF
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBD0E41728;
+	Wed, 22 Feb 2023 17:13:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBD0E41728
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZUrdcw7EMxul; Wed, 22 Feb 2023 17:13:24 +0000 (UTC)
+	with ESMTP id zyuvCM_agukH; Wed, 22 Feb 2023 17:13:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 13F4041768;
-	Wed, 22 Feb 2023 17:13:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13F4041768
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B6F51BF364
+	by smtp2.osuosl.org (Postfix) with ESMTP id 012BF4176A;
+	Wed, 22 Feb 2023 17:13:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 012BF4176A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B547C1BF364
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B5AA410A6
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B5AA410A6
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC4C281430
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC4C281430
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VEzoThxziCIY for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EoOHKktE_1T9 for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE79440E47
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE79440E47
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9211481FFC
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9211481FFC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA79A867D3; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+ id 8E8A1867D1; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:43:46 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: f188f8aa499ab5a8feddf3bc98ced0eecaf9f215
-X-Git-Newrev: 21691c1a49426e765ab5fb321ea7002d5b3bf6d5
+Date: Wed, 22 Feb 2023 17:47:06 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: d91470731e28e3c6c42e95e5c405b6e8ff975feb
+X-Git-Newrev: 693f779fe85292ae9cae612867afe4de05f3cfcc
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170818.BA79A867D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] utils/checkpackagelib:
- warn about ifdef on .mk
+Message-Id: <20230222170816.8E8A1867D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/openpowerlink:
+ properly handle legacy options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,149 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21691c1a49426e765ab5fb321ea7002d5b3bf6d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=693f779fe85292ae9cae612867afe4de05f3cfcc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-There are two legitimate cases to prefer ifdef over ifeq in package
-recipes: command-line overrides are allowed for busybox and uclibc
-configs.
+Commit "b1063a0136 package/openpowerlink: bump to v2.2.2" tried to add
+legacy handling but the new symbols are part of a choice, and Kconfig
+does not enforce the select of a option from a choice.
 
-Except for that, all package in tree already use ifeq, so warn the
-developer adding/changing a package to use ifeq instead of ifdef, in
-order to keep consistence across packages.
-file.mk:2: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL
-file.mk:5: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL
+Update the legacy entry for 2016.02, following the example described in
+the beginning of the file.
 
-The difference between ifeq and ifdef is that ifdef doesn't expand
-recursively.
-
-Add comments to busybox and uclibc packages to avoid a warning in such
-special cases.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 29c9b4435503d1b3130ce37dcab88c89156b1481)
+(cherry picked from commit e1e4f3950719dd92a2456e2c45856f8cf5dc587e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.mk           |  1 +
- package/uclibc/uclibc.mk             |  1 +
- utils/checkpackagelib/lib_mk.py      | 18 ++++++++++++++
- utils/checkpackagelib/test_lib_mk.py | 48 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 68 insertions(+)
+ Config.in.legacy                | 6 ++++--
+ package/openpowerlink/Config.in | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 0f14bf999d..f8f9cb5616 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -110,6 +110,7 @@ BUSYBOX_MAKE_OPTS = \
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5000c7a7be..6f5d01709a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -4152,19 +4152,21 @@ config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
+ config BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE
+ 	bool "openpowerlink package has been updated"
+ 	select BR2_LEGACY
+-	select BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
+ 	help
+ 	  openpowerlink kernel modules are built if the
+ 	  kernel stack library is selected.
++# Note: BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE is still referenced from
++# package/openpowerlink/Config.in
  
- # specifying BUSYBOX_CONFIG_FILE on the command-line overrides the .config
- # setting.
-+# check-package disable Ifdef
- ifndef BUSYBOX_CONFIG_FILE
- BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
- endif
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 0ddf7dfa6d..125aa4cdcf 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -22,6 +22,7 @@ UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
+ config BR2_PACKAGE_OPENPOWERLINK_LIBPCAP
+ 	bool "openpowerlink package has been updated"
+ 	select BR2_LEGACY
+-	select BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
+ 	help
+ 	  The user space support has been split in two part:
+ 	  - a monolithic user space library
+ 	  - a user space daemon driver
++# Note: BR2_PACKAGE_OPENPOWERLINK_LIBPCAP is still referenced from
++# package/openpowerlink/Config.in
  
- # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
- # setting.
-+# check-package disable Ifdef
- ifndef UCLIBC_CONFIG_FILE
- UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
- endif
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index b50a19ac62..8adf844e9a 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -21,6 +21,24 @@ continue_conditional = ["elif", "else"]
- end_conditional = ["endif"]
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "using the linux headers version for the kernel has been removed"
+diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
+index 1a3dd62acd..ef59a04baf 100644
+--- a/package/openpowerlink/Config.in
++++ b/package/openpowerlink/Config.in
+@@ -38,6 +38,8 @@ endchoice
  
+ choice
+ 	prompt "stack type"
++	default BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB if BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE # legacy
++	default BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB if BR2_PACKAGE_OPENPOWERLINK_LIBPCAP # legacy
  
-+class Ifdef(_CheckFunction):
-+    IFDEF = re.compile(r"^\s*(else\s+|)(ifdef|ifndef)\s")
-+
-+    def check_line(self, lineno, text):
-+        m = self.IFDEF.search(text)
-+        if m is None:
-+            return
-+        word = m.group(2)
-+        if word == 'ifdef':
-+            return ["{}:{}: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL"
-+                    .format(self.filename, lineno),
-+                    text]
-+        else:
-+            return ["{}:{}: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL"
-+                    .format(self.filename, lineno),
-+                    text]
-+
-+
- class Indent(_CheckFunction):
-     COMMENT = re.compile(r"^\s*#")
-     CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional + continue_conditional)))
-diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-index 49fa216fcd..80a1736b4e 100644
---- a/utils/checkpackagelib/test_lib_mk.py
-+++ b/utils/checkpackagelib/test_lib_mk.py
-@@ -3,6 +3,54 @@ import checkpackagelib.test_util as util
- import checkpackagelib.lib_mk as m
- 
- 
-+Ifdef = [
-+    ('ignore commented line',
-+     'any',
-+     '# ifdef\n',
-+     []),
-+    ('simple',
-+     'any',
-+     '\n'
-+     'ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE\n'
-+     'endif\n',
-+     [['any:2: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL',
-+       'ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE\n']]),
-+    ('ignore indentation',
-+     'any',
-+     '  ifdef FOO\n'
-+     '  endif\n'
-+     '\tifdef BAR\n'
-+     'endif\n',
-+     [['any:1: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL',
-+       '  ifdef FOO\n'],
-+      ['any:3: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL',
-+       '\tifdef BAR\n']]),
-+    ('typo',
-+     'any',
-+     '\n'
-+     'ifndef ($(BR2_ENABLE_LOCALE),y)\n'
-+     'endif\n',
-+     [['any:2: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL',
-+       'ifndef ($(BR2_ENABLE_LOCALE),y)\n']]),
-+    ('else ifdef',
-+     'any',
-+     'else ifdef  SYMBOL # comment\n',
-+     [['any:1: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL',
-+       'else ifdef  SYMBOL # comment\n']]),
-+    ('else ifndef',
-+     'any',
-+     '\t else  ifndef\t($(SYMBOL),y) # comment\n',
-+     [['any:1: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL',
-+       '\t else  ifndef\t($(SYMBOL),y) # comment\n']]),
-+    ]
-+
-+
-+@pytest.mark.parametrize('testname,filename,string,expected', Ifdef)
-+def test_Ifdef(testname, filename, string, expected):
-+    warnings = util.check_file(m.Ifdef, filename, string)
-+    assert warnings == expected
-+
-+
- Indent = [
-     ('ignore comment at beginning of line',
-      'any',
+ config BR2_PACKAGE_OPENPOWERLINK_STACK_MONOLITHIC_USER_STACK_LIB
+ 	bool "linked into application"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
