@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 902C5C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 14:52:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54A9AC636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 14:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 421964107F;
-	Wed, 22 Feb 2023 14:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 421964107F
+	by smtp2.osuosl.org (Postfix) with ESMTP id D02CA40BDC;
+	Wed, 22 Feb 2023 14:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D02CA40BDC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k3t-J3_1_aCy; Wed, 22 Feb 2023 14:52:31 +0000 (UTC)
+	with ESMTP id v7mj0ldrj0_t; Wed, 22 Feb 2023 14:52:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6186941597;
-	Wed, 22 Feb 2023 14:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6186941597
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13EA2415BE;
+	Wed, 22 Feb 2023 14:52:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13EA2415BE
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 449D11BF589
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:52:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3798F1BF589
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 150F641081
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 150F641081
+ by smtp2.osuosl.org (Postfix) with ESMTP id 117EE415AE
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:52:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 117EE415AE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Et_GyJEOyMsk for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 14:52:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C3A840278
-Received: from smtpcmd04131.aruba.it (smtpcmd04131.aruba.it [62.149.158.131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C3A840278
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:52:24 +0000 (UTC)
-Received: from [172.25.4.63] ([151.79.164.54])
- by Aruba Outgoing Smtp  with ESMTPSA
- id UqTmp2l5xdoL0UqTmp62Sd; Wed, 22 Feb 2023 15:52:23 +0100
-Message-ID: <bb3ac3c3-a45a-d405-be1b-42827dc2d42c@benettiengineering.com>
-Date: Wed, 22 Feb 2023 15:52:22 +0100
+ with ESMTP id 3hrbTT6Sp-se for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 14:52:40 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E75EF40278
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E75EF40278
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:52:38 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0C49C1BF20B;
+ Wed, 22 Feb 2023 14:52:36 +0000 (UTC)
+Date: Wed, 22 Feb 2023 15:52:36 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230222155236.3f6e3ba8@windsurf>
+In-Reply-To: <20230222103242.755918-1-fontaine.fabrice@gmail.com>
+References: <20230222103242.755918-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To: buildroot@buildroot.org
-References: <20230222145059.1939094-1-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230222145059.1939094-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfIvxdgaEm76ValCyePkXE4SsCNiVIS9v+vztjCy9RmjsODCZPWIDvW5Kl6ydWHTUeBnQPb3wHuf7DtVBsLyg4L1VhxI5fUoe5EKrjqwccQJfsw+qxmzh
- jWSmUkVNa8xz3+O3tR7bysthhDfflz6gV7DhAyv/TD6RDr3Dei5PBIARBm+BZNsdWPHTOTryjnzDcdXLDEAatQlfDSIGBFMIxcKs3aY2CdqVHPSfPHMOz0ER
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1677077543; bh=qCqf4IFOabTulnSUE1JfBOY/wdFTk8CVNOUkRkVDRq0=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Ql2p8+6DC4GyaOhdLRT0B3MgYL/7TXTdLNzvakabdRvOIBb4dQ+M2I5NyILRpvqtt
- kEwj+9CnROF3BcHBQhnWNmZPMDCvHPnZQIzv9rnWpcChch2GrugvwD57HWzOpCkS4a
- AL60B1o5SJa5jWGeidtbD3XRpi5VDkQpwC1vfNE1zOcGEuZqq6ewG35k8v3q6jtGWo
- ndtXulRQ4Tpsz44nmMcO4VdcMarcUOhFVI/HltsYJa6T1CZZtjYQBmSxUwbVeLhofq
- Dct8BVYNVrDXmYQLUpWRuexSYUoWpn8ICuSbUZGsXxM5SyQX7SwaWUiThFjifYAals
- FEVwJUM4BKaoA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1677077557;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qA9YObEw1Iwai8y43wz81Pn7jZsnZdJcsbm0eONSwXw=;
+ b=dSTnr9L5HZi2lVqGU8TIl2K7N7pDTYBTCMHI7r95K+9OsfhPupp0MOgvJ7KNq7B7xpo9HE
+ afBdY4wxUfDzaaDkA7qJ2qwqDP0/cIUCNj1zosqLt99skvxF+tOnREUlsEIShNqzPbT8jc
+ beDllO2GW1h3Lc/RFdPNlVA+aEJv4RAebDB51xzo4B2wxT6F5kPhalBpdVnt+nFT7vPzr7
+ 9krdDyRnr71OS+4CjTKSbE6siAK/gEo6Kk8l+E2+o0kP8T8A2mjBlWoE+2w1Up8B3QvgNf
+ WcozQ0/FAu1x2Y737TpOKTpciY9QIjCfOZnvuc9+7xrmn+AkLvLw+jxO23K/vw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Ql2p8+6D
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 7.0.1
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dSTnr9L5
+Subject: Re: [Buildroot] [PATCH 1/1] boot/at91dataflashboot: disable
+ stack-protector
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,62 +76,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pardon, this is for-next
+On Wed, 22 Feb 2023 11:32:42 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Best regards
--- 
-CEO/CTO@Benetti Engineering sas
-
-On 22/02/23 15:50, Giulio Benetti wrote:
-> Since the major release changed all the packages that have direct
-> dependency to harfbuzz has been succesfully built:
-> - efl
-> - libass
-> - mupdf
-> - pango
-> - qt5base
-> - qt5webengine
-> - qt6base
-> - sdl2_ttf
-> - supertuxkart
-> - vlc
-> - webkitgtk
-> - wpewebkit
+> Disable stack-protector to avoid the following build failure:
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> /home/buildroot/autobuild/instance-1/output-1/host/bin/arm-buildroot-linux-gnueabi-ld -T elf32-littlearm.lds -Ttext 0 -n -o DataflashBoot-1.05.out objs/cstartup_ram.o objs/at45.o objs/com.o objs/dataflash.o objs/div0.o objs/init.o objs/main.o objs/stdio.o objs/asm_isr.o objs/jump.o objs/_udivsi3.o objs/_umodsi3.o objs/led.o
+> /home/buildroot/autobuild/instance-1/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: objs/main.o: in function `main':
+> main.c:(.text.startup+0x834): undefined reference to `__stack_chk_guard'
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/502c54be4978e628724d72ee2a75d4c5e0a6ace8
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->   package/harfbuzz/harfbuzz.hash | 2 +-
->   package/harfbuzz/harfbuzz.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-> index 9489f25c6a..eee48c0b68 100644
-> --- a/package/harfbuzz/harfbuzz.hash
-> +++ b/package/harfbuzz/harfbuzz.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d  harfbuzz-5.3.1.tar.xz
-> +sha256  2cf4d3d8f225007511990a36a34195f0d6562ca56df0a8b0885b382837948199  harfbuzz-7.0.1.tar.xz
->   sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-> index b0112168e1..f8724793a9 100644
-> --- a/package/harfbuzz/harfbuzz.mk
-> +++ b/package/harfbuzz/harfbuzz.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -HARFBUZZ_VERSION = 5.3.1
-> +HARFBUZZ_VERSION = 7.0.1
->   HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
->   HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
->   HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+>  boot/at91dataflashboot/at91dataflashboot.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
