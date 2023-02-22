@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60A7FC636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 14:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 808BAC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 14:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7ABF4105C;
-	Wed, 22 Feb 2023 14:35:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7ABF4105C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03F6441056;
+	Wed, 22 Feb 2023 14:38:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03F6441056
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JSGRYUvF4Fj8; Wed, 22 Feb 2023 14:35:22 +0000 (UTC)
+	with ESMTP id 8-v5HmQPEjT1; Wed, 22 Feb 2023 14:38:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA76A41054;
-	Wed, 22 Feb 2023 14:35:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA76A41054
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1F40E1BF589
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:35:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 469404105C;
+	Wed, 22 Feb 2023 14:38:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 469404105C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C3C681BF589
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED5284198B
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:35:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED5284198B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7CC3480FB4
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:38:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CC3480FB4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MqbrT8gFTqMs for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 14:35:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x7hz4Wx8yWp5 for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 14:38:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D25D41987
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8D25D41987
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:35:17 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id t13so7875931wrv.13
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 06:35:17 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 823C280E3B
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 823C280E3B
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:38:01 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id p8so8081303wrt.12
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 06:38:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=rKVsHTvMk2ecd4Dhj2YNSn2NcYzBdDSogs1qt31ivPM=;
- b=swvLbRPXyNAV2zlRU/2k99BnCbYYyBojyDa6xkf//fyvPTPvmh8t9ppfyiqdid9kA0
- /1Z4bG91Z+WjmA0YQoVNkFAg7U33ltB+byx/e91bt87z1kX7wTqwmJnBdpv+GPRN2HQO
- RNqWT6k80tbnYJLDg/VdIHty0DnxeOD65DzcW85QXLsgXVHhqH2/5HBj7G104CRl6wmP
- fc0siCeczAN8mGc/PMyEXpBbr6wctSMIN6A+alQ7Ow0ZKOJM8Rn1D+LDiojHE6IJb9xX
- TNJ9MDNHv6utvAtYxd7mTiu4S+3nemKvtPzQQEGaSz0pbWln+/OHWuelnEmWCmp/LV1d
- Lhzg==
-X-Gm-Message-State: AO0yUKW+S+kyH5yXE/FpAxVVZD/xalWJqiEazBv08bz1WkohU8NCRlSj
- uMO6OQehH1YErdKui7tw2mfhjNPlYAA=
-X-Google-Smtp-Source: AK7set+QM23ylaSm4HBwVV+7A45NrL4fUTiwGvCg9MPj1XW2NNazB1HsSabzQ4tgOCfQchoYy2+FhQ==
-X-Received: by 2002:a5d:5b0a:0:b0:2c6:c9f1:e444 with SMTP id
- bx10-20020a5d5b0a000000b002c6c9f1e444mr6438887wrb.16.1677076515260; 
- Wed, 22 Feb 2023 06:35:15 -0800 (PST)
+ bh=bbF9JKnFn9yENWsHi4dImVK0xF8VGCLg/8ifiYKd2f0=;
+ b=t7HBQQFVC3EFy6Dg6Hvak4GL4E7aoJD3P+8mFOQKq2Q6fI7+EKRsJ3NccD2joUadWX
+ Z68KoKZz2Ql/9ELY46VdWbKFb303t/YT5fSKkdpklYHXLMiFYqmrg28QePB1y6OUEhRJ
+ 173jUCN+WGo7KDt351CByNjlBsqM07eQxpTZVeOP5z6/zCclYvCiCk2jPk7+GSF7yOin
+ H9GpW3UhMQZe5fYvSN5GKJiTOZmfwC9N3dxpkYBHZ0tGqZNHwBehxG5pcUkwBEzS2kI6
+ n0Yj/ARXHXhaA308PvkRTLWpe18rmgn0iNF0VPGaUsqSkrIWc2EQnUng3YJwR/qDLxFc
+ 7fRg==
+X-Gm-Message-State: AO0yUKXpadsFDcdfrZAI5myhHoaCIsHZfLTaNlsoUl+dpDvmS2nCPTHV
+ AiqjfEedC0zcsJ73KxzGBey/5ExwQbY=
+X-Google-Smtp-Source: AK7set9PH5lah/gE2x46SmLAyh3br6pEOUIKgSxSbcomaYClPsXYRSebf2elamqWKZvP5wFR1YhJgw==
+X-Received: by 2002:adf:ffca:0:b0:2c5:5aef:2759 with SMTP id
+ x10-20020adfffca000000b002c55aef2759mr7899251wrs.53.1677076679278; 
+ Wed, 22 Feb 2023 06:37:59 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- b4-20020adff904000000b002c54f39d34csm10934968wrr.111.2023.02.22.06.35.14
+ f21-20020a7bcc15000000b003dfdeb57027sm7038575wmh.38.2023.02.22.06.37.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Feb 2023 06:35:14 -0800 (PST)
+ Wed, 22 Feb 2023 06:37:58 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 15:35:12 +0100
-Message-Id: <20230222143512.1555539-1-fontaine.fabrice@gmail.com>
+Date: Wed, 22 Feb 2023 15:37:53 +0100
+Message-Id: <20230222143753.1563322-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=rKVsHTvMk2ecd4Dhj2YNSn2NcYzBdDSogs1qt31ivPM=;
- b=OtfPilo6k1C8DlT73O1JTUlstAjOO4Wp9hqLaf72vTVRZvNTIh3S2nTkxzPQb+VvEU
- x0htsUP2tB4ds9p1HmUZ1CaI5TPwpdlUpgH3ggsmvHz1jaHOE97l3ZbXI6RQQuRyzVDm
- UJ/hzaSuOlOUWyPfnkjw/+4WQyVRb4OOQFpURZ+L8tv0AH61cYi7+gAh5QI86wiUdig1
- pkr0Ty/iVaTIlSN7LsLP18fA+G0X5dR7Nr6W+KUoAQW1cqx7ut5u4AC87Q/NtIqXkGjK
- DjAcC4lX9P+xAt4cNDMKQPTuYdEueMz7+PDIa5o5s1MfCmrSgKEiDTF7P8eaKbnOXnGA
- kVuw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=bbF9JKnFn9yENWsHi4dImVK0xF8VGCLg/8ifiYKd2f0=;
+ b=MjCBb6GpQL4YGxmoWUCPzi2B0dR+eG0IH/EOWN80Asr42CwwrfvHMRZZFPPZuUxGzg
+ jvVN60s8+UsLiRlKxtjgS3925LaZbnHjoNEslvob7tk6XIinjvoXFE0uFhUNSu4SgV2L
+ InUcgZBB3erksiCt079ekYgfDdS2t3wLX8jFVPgVrA7DrhEr8CGpF7a5PdZ0vUvwQAtH
+ BxeOci8OaT9gmbSQujs9La1MIu/c1BCnu+ik9rUE6oEVEkvj1ATAjEc/9Wdp8FZ6sKFn
+ +bn2Mgx4BkC2i7zv/GnYNSrUUCLJusYN3FJ4gb4ciJZAsVqX5/h0vXrAV+3N7RGK4t3e
+ MwYQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=OtfPilo6
-Subject: [Buildroot] [PATCH 1/1] package/audit: force arm mode instead of
+ header.a=rsa-sha256 header.s=20210112 header.b=MjCBb6Gp
+Subject: [Buildroot] [PATCH 1/1] package/libev: force arm mode instead of
  Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -102,34 +102,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fix the following build failure:
 
-/tmp/ccY5gl3z.s:2145: Error: selected processor does not support `mcr p15,0,r2,c7,c10,5' in Thumb mode
+/tmp/ccHc3Awn.s:825: Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
 
 Fixes:
- - http://autobuild.buildroot.org/results/9d18a0d360b2e2f9e87c55daedda62d6ce198bb9
+ - http://autobuild.buildroot.org/results/1c597c9da724d6cac06b09b1ecd456a28440a3a3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/audit/audit.mk | 7 +++++++
+ package/libev/libev.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index cbb174b980..af81dabac0 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -15,6 +15,13 @@ AUDIT_INSTALL_STAGING = YES
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+index 9f3c19d46c..cbd5433d76 100644
+--- a/package/libev/libev.mk
++++ b/package/libev/libev.mk
+@@ -10,6 +10,13 @@ LIBEV_INSTALL_STAGING = YES
+ LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
+ LIBEV_LICENSE_FILES = LICENSE
  
- AUDIT_CONF_OPTS = --without-python --without-python3
- 
-+# src/libev has some assembly function that is not present in Thumb mode:
++# libev has some assembly function that is not present in Thumb mode:
 +# Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
 +# so, we desactivate Thumb mode
 +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+AUDIT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
++LIBEV_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- AUDIT_DEPENDENCIES += libcap-ng
- AUDIT_CONF_OPTS += --with-libcap-ng=yes
+ # The 'compatibility' event.h header conflicts with libevent
+ # It's completely unnecessary for BR packages so remove it
+ define LIBEV_DISABLE_EVENT_H_INSTALL
 -- 
 2.39.0
 
