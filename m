@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 259EAC61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:09:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A71EC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C20484053D;
-	Wed, 22 Feb 2023 17:09:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C20484053D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5293440516;
+	Wed, 22 Feb 2023 17:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5293440516
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F9Hw9jVMMIfn; Wed, 22 Feb 2023 17:09:10 +0000 (UTC)
+	with ESMTP id SvV65qA6mrTj; Wed, 22 Feb 2023 17:09:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D0DF240B64;
-	Wed, 22 Feb 2023 17:09:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0DF240B64
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 274DD1BF364
+	by smtp2.osuosl.org (Postfix) with ESMTP id 72A0D41713;
+	Wed, 22 Feb 2023 17:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72A0D41713
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8698F1BF364
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C99F81423
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7820E61162
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C99F81423
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7820E61162
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iwMT2EleMhEU for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CwT6WQCvLgrx for <buildroot@lists.busybox.net>;
  Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58E5781430
+ by smtp3.osuosl.org (Postfix) with ESMTP id A84EA61159
  for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58E5781430
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A84EA61159
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4608B867CA; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+ id 99422867D3; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:39:44 +0100
+Date: Wed, 22 Feb 2023 17:47:45 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3fe2713152e60fe63e8fc78d9baf58fee18a3473
-X-Git-Newrev: ef6d357f261bb9209e781f9ca7e33b7bd28b653d
+X-Git-Oldrev: 693f779fe85292ae9cae612867afe4de05f3cfcc
+X-Git-Newrev: 85dcee4664d8d293aeb16c116c374bf528975334
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170816.4608B867CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/pugixml: fix
- configuration options
+Message-Id: <20230222170816.99422867D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gcc: properly
+ handle legacy for renamed ARC option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef6d357f261bb9209e781f9ca7e33b7bd28b653d
+commit: https://git.buildroot.net/buildroot/commit/?id=85dcee4664d8d293aeb16c116c374bf528975334
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit upstream 1c5a0bb32583fd294022e68e66b541bf6ff71a67
-":sparkles: Update CMake to modern approach" removed all feature
-toogles, so starting from release v1.11 any flag passed in BUILD_DEFINES
-was completely ignored during the build.
-Version 1.11.4 was in use in buildroot since February 2021.
+Commit "50332a530b gcc: rename option for ARC gcc" tried to add legacy
+handling but the new symbol is part of a choice, and Kconfig does not
+enforce the select of a option from a choice.
 
-Commit upstream 0f1e75a902ef1751dd63a67fe223b5e8daf4c7f1
-"Re-introduced the custom build defines" added PUGIXML_BUILD_DEFINES to
-release v1.12, but BUILD_DEFINES is still completely ignored during the
-build.
-Version 1.12.1 is in use in buildroot since March 2022.
+Update the legacy entry for 2016.11, following the example described in
+the beginning of the file.
 
-So switch the config options to use PUGIXML_BUILD_DEFINES instead of
-BUILD_DEFINES.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cc3a4a7b1de7b158354c650d234339e8a969a730)
+(cherry picked from commit eb8f38891b16e5fb0f010c658b271e22670a1633)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pugixml/pugixml.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy           | 3 ++-
+ package/gcc/Config.in.host | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index e77ab1a799..bbcb913da6 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -29,11 +29,11 @@ ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
- PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
- endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 6f5d01709a..47e2d48e58 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -3809,10 +3809,11 @@ config BR2_LINUX_KERNEL_TOOL_SELFTESTS
+ config BR2_GCC_VERSION_4_8_ARC
+ 	bool "gcc arc option renamed"
+ 	select BR2_LEGACY
+-	select BR2_GCC_VERSION_ARC
+ 	help
+ 	  The option that selects the gcc version for the ARC
+ 	  architecture has been renamed to BR2_GCC_VERSION_ARC.
++# Note: BR2_GCC_VERSION_4_8_ARC is still referenced from
++# package/gcc/Config.in.host
  
--PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
-+PUGIXML_CONF_OPTS += -DPUGIXML_BUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
+ config BR2_KERNEL_HEADERS_4_0
+ 	bool "kernel headers version 4.0.x are no longer supported"
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 84f7a71c9c..48aa8785f0 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -2,6 +2,7 @@ comment "GCC Options"
  
- HOST_PUGIXML_CONF_OPTS += \
- 	-DBUILD_PKGCONFIG=ON \
--	-DBUILD_DEFINES="$(subst $(space),;,$(HOST_PUGIXML_BUILD_DEFINES))"
-+	-DPUGIXML_BUILD_DEFINES="$(subst $(space),;,$(HOST_PUGIXML_BUILD_DEFINES))"
- 
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+ choice
+ 	prompt "GCC compiler Version"
++	default BR2_GCC_VERSION_ARC if BR2_GCC_VERSION_4_8_ARC # legacy
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_POWERPC_SPE if BR2_powerpc_SPE
+ 	default BR2_GCC_VERSION_10_X
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
