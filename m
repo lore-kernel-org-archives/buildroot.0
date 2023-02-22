@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B343AC6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:53:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C440C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:54:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F1BB41579;
-	Sun, 12 Mar 2023 21:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F1BB41579
+	by smtp4.osuosl.org (Postfix) with ESMTP id F18A241B72;
+	Sun, 12 Mar 2023 21:54:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F18A241B72
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FzwIsOTuOqhL; Sun, 12 Mar 2023 21:53:57 +0000 (UTC)
+	with ESMTP id xUUiFPfNS-wR; Sun, 12 Mar 2023 21:54:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31704417A1;
-	Sun, 12 Mar 2023 21:53:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31704417A1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 491631BF2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF9C641C79;
+	Sun, 12 Mar 2023 21:54:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF9C641C79
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AA11D1BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEF3641635
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEF3641635
+ by smtp2.osuosl.org (Postfix) with ESMTP id 024B34070F
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 024B34070F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O0PwzZ__Zdqx for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l7FE6y9ZU5td for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D0364160A
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D0364160A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F9AF4012B
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F9AF4012B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 09D9287006; Sun, 12 Mar 2023 21:46:25 +0000 (UTC)
+ id 3CC9F87008; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 12 Mar 2023 14:15:21 +0100
+Date: Wed, 22 Feb 2023 22:03:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f1c5671ffef3d68979f6514a687815abd4c1f357
-X-Git-Newrev: 06fa870d7e8ba385de00e64116df74c1e3b9b31a
+X-Git-Oldrev: 8beed8ac56a51d4d6a9dd81b81b8025cb7f8d99b
+X-Git-Newrev: 97c40266b1b69e101ce035c8aa73bf2665c5c256
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214625.09D9287006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iperf3: bump to version 3.13
+Message-Id: <20230312214623.3CC9F87008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: add option to install blobs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06fa870d7e8ba385de00e64116df74c1e3b9b31a
+commit: https://git.buildroot.net/buildroot/commit/?id=97c40266b1b69e101ce035c8aa73bf2665c5c256
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LICENSE file hash changed, due to year update.
+Binary blobs are BIOS of some sorts for the various machines emulated
+by QEMU. There is no option to individually install blobs; it's an
+all-or-nothing option.
 
-For change log, see:
-https://github.com/esnet/iperf/blob/3.13/RELNOTES.md#iperf-313-2023-02-16
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iperf3/iperf3.hash | 6 +++---
- package/iperf3/iperf3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/qemu/Config.in | 11 +++++++++++
+ package/qemu/qemu.mk   |  6 ++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 15c75b6dac..b2c89df98a 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.es.net/pub/iperf/iperf-3.12.tar.gz.sha256
--sha256  72034ecfb6a7d6d67e384e19fb6efff3236ca4f7ed4c518d7db649c447e1ffd6  iperf-3.12.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.13.tar.gz.sha256
-+sha256  bee427aeb13d6a2ee22073f23261f63712d82befaa83ac8cb4db5da4c2bdc865  iperf-3.13.tar.gz
- # Locally computed
--sha256  a5c2e3d799f2835156e565a3de4fad33d32ed289cdc9e414dfaf75719fd12ef9  LICENSE
-+sha256  35aa7c4618b9884d6faa9b43a4e70291b35ea9f89329d5d33becd852e85221b0  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 9041c86575..129319d78a 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 154b98a541..a446c0cf68 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -58,6 +58,17 @@ config BR2_PACKAGE_QEMU_SYSTEM
  
--IPERF3_VERSION = 3.12
-+IPERF3_VERSION = 3.13
- IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+ if BR2_PACKAGE_QEMU_SYSTEM
+ 
++config BR2_PACKAGE_QEMU_BLOBS
++	bool "Install binary blobs"
++	default y
++	help
++	  Say 'y' here (the default) to install binary blobs (such as
++	  BIOS or firmwares for the different machines simulated by
++	  QEMU). Say 'n' to not install those blobs.
++
++	  Note: Some machines may be unbootable without those blobs.
++	  If unsure, say 'y'.
++
+ config BR2_PACKAGE_QEMU_SLIRP
+ 	bool "Enable user mode networking (SLIRP)"
+ 	select BR2_PACKAGE_SLIRP
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 58b4ff10a5..d514a2285c 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -246,6 +246,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ QEMU_OPTS += --static
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QEMU_BLOBS),y)
++QEMU_OPTS += --enable-install-blobs
++else
++QEMU_OPTS += --disable-install-blobs
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define QEMU_CONFIGURE_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
