@@ -4,56 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62B9BC636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 19:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68FCBC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 19:56:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C85640585;
-	Wed, 22 Feb 2023 19:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C85640585
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0697740CAF;
+	Wed, 22 Feb 2023 19:56:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0697740CAF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cVnkfmHljq2l; Wed, 22 Feb 2023 19:52:33 +0000 (UTC)
+	with ESMTP id XJMog20MPFZQ; Wed, 22 Feb 2023 19:56:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5018740566;
-	Wed, 22 Feb 2023 19:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5018740566
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 59E9E1BF475
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:52:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3ACA840571;
+	Wed, 22 Feb 2023 19:56:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ACA840571
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F1CD1BF475
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 411264193F
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 411264193F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26AC681F32
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:56:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26AC681F32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RHlHxQaN7w8Z for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 19:52:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pCWooH-M8Yqm for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 19:56:52 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADF224192F
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ADF224192F
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 19:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3EE181F04
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A3EE181F04
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 19:56:51 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CA461100009;
- Wed, 22 Feb 2023 19:52:25 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id EDB95FF804
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 19:56:48 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pUvA9-008Asw-0U; Wed, 22 Feb 2023 20:52:25 +0100
+ (envelope-from <peter@korsgaard.com>) id 1pUvEN-008BNI-TN
+ for buildroot@buildroot.org; Wed, 22 Feb 2023 20:56:47 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20220928205527.GH1419013@scaer>
- <20220929104648.324977-1-giulio.benetti@benettiengineering.com>
- <20230206234520.4a140264@windsurf>
-Date: Wed, 22 Feb 2023 20:52:24 +0100
-In-Reply-To: <20230206234520.4a140264@windsurf> (Thomas Petazzoni via
- buildroot's message of "Mon, 6 Feb 2023 23:45:20 +0100")
-Message-ID: <87o7plqxzb.fsf@dell.be.48ers.dk>
+To: buildroot@buildroot.org
+References: <20230207083951.455AD83F4E@busybox.osuosl.org>
+Date: Wed, 22 Feb 2023 20:56:47 +0100
+In-Reply-To: <20230207083951.455AD83F4E@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Tue, 7 Feb 2023 09:39:29 +0100")
+Message-ID: <87k009qxs0.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] package/qt5: fix build failure due to
- libressl use
+Subject: Re: [Buildroot] [git commit] support/dependencies/dependencies.sh:
+ require English perl package for host-libxml-parser-perl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +64,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > On Thu, 29 Sep 2022 12:46:48 +0200
- > Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+ > commit:
+ > https://git.buildroot.net/buildroot/commit/?id=8f8085e63a4a755d587a25a73dbaafe33b23f867
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Qt5 only supports openssl, check [0] and [1]. So in qt5base.mk let's check
- >> if BR2_PACKAGE_LIBOPENSSL is enabled instead of BR2_PACKAGE_OPENSSL(that
- >> could be openssl or libressl) and for qt5enginio and qt5webkit let's select
- >> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL instead of only BR2_PACKAGE_OPENSSL.
- >> This way we make sure that only openssl is selected and not libressl or
- >> other future openssl-like implementations.
- >> 
- >> Fixes:
- >> http://autobuild.buildroot.net/results/a956b48b782dbaa055d7146360465e2493a809d9/
- >> 
- >> [0]: https://doc.qt.io/qt-5/ssl.html#enabling-and-disabling-ssl-support
- >> [1]: https://bugreports.qt.io/browse/QTBUG-68374
- >> 
- >> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
- >> ---
- V1-> V2:
- >> * select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL instead of BR2_PACKAGE_LIBOPENSSL
- >> ---
- >> package/qt5/qt5base/qt5base.mk   | 4 ++--
- >> package/qt5/qt5enginio/Config.in | 1 +
- >> package/qt5/qt5webkit/Config.in  | 1 +
- >> 3 files changed, 4 insertions(+), 2 deletions(-)
+ > Fixes http://autobuild.buildroot.net/results/166/1667b4ebd8e16e7d8b47bc3ca128a76daf27b4d9/
 
- > Applied to master, thanks.
+ > The configure script of host-libxml-parser-perl needs the English perl
+ > module on the host:
+
+ > ERROR from evaluation of
+ > /home/buildroot/autobuild/instance-1/output-1/build/host-libxml-parser-perl-2.46/Expat/Makefile.PL:
+ > Can't locate English.pm in @INC (you may need to install the English module)
+ > (@INC contains:
+ > /home/buildroot/autobuild/instance-1/output-1/build/host-libxml-parser-perl-2.46/inc
+ > /home/buildroot/autobuild/instance-1/output-1/host/lib/perl
+ > /usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36
+ > /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5
+ > /usr/share/perl5 .) at ./Makefile.PL line 3.
+
+ > So add a check for it in dependencies.sh similar to the existing check for
+ > ExtUtils::MakeMaker.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2022.11.x and 2022.02.x, thanks.
 
