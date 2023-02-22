@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DA47C636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DEACC64EC4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2704340BE0;
-	Wed, 22 Feb 2023 16:43:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2704340BE0
+	by smtp2.osuosl.org (Postfix) with ESMTP id ADB9D4170B;
+	Wed, 22 Feb 2023 16:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADB9D4170B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GSUmw2Rkfm1F; Wed, 22 Feb 2023 16:43:18 +0000 (UTC)
+	with ESMTP id X9GVzryaHvJT; Wed, 22 Feb 2023 16:44:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7653F416FD;
-	Wed, 22 Feb 2023 16:43:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7653F416FD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 152A91BF847
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:41:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC2E8416F9;
+	Wed, 22 Feb 2023 16:44:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC2E8416F9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 704E01BF847
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:44:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E211161203
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:41:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E211161203
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A21C419EC
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:44:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A21C419EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5aO7ajKSBlTF for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 16:41:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qp8pLGML2YuH for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 16:44:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEDD0611E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EFA4419DC
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EEDD0611E4
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:41:44 +0000 (UTC)
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4EFA4419DC
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:44:12 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 29F3760002;
- Wed, 22 Feb 2023 16:41:42 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 275F360009;
+ Wed, 22 Feb 2023 16:44:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pUsBZ-0080uV-S5; Wed, 22 Feb 2023 17:41:41 +0100
+ id 1pUsDx-0081PB-98; Wed, 22 Feb 2023 17:44:09 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-12-ricardo.martincoski@gmail.com>
-Date: Wed, 22 Feb 2023 17:41:41 +0100
-In-Reply-To: <20221127130739.1862398-12-ricardo.martincoski@gmail.com>
- (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:25 -0300")
-Message-ID: <87cz61tzy2.fsf@dell.be.48ers.dk>
+ <20221127130739.1862398-13-ricardo.martincoski@gmail.com>
+Date: Wed, 22 Feb 2023 17:44:09 +0100
+In-Reply-To: <20221127130739.1862398-13-ricardo.martincoski@gmail.com>
+ (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:26 -0300")
+Message-ID: <878rgptzty.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 11/25] package/busybox: add comment about
- variable override
+Subject: Re: [Buildroot] [next 12/25] utils/checkpackagelib: warn about
+ ifdef on .mk
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,11 +73,28 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > The same comment already exists for UCLIBC_CONFIG_FILE.
- > Both variables can be override from command-line, as described in the
- > manual, at section 'Environment variables'.
+ > There are two legitimate cases to prefer ifdef over ifeq in package
+ > recipes: command-line overrides are allowed for busybox and uclibc
+ > configs.
 
+ > Except for that, all package in tree already use ifeq, so warn the
+ > developer adding/changing a package to use ifeq instead of ifdef, in
+ > order to keep consistence across packages.
+ > file.mk:2: use ifeq ($(SYMBOL),y) instead of ifdef SYMBOL
+ > file.mk:5: use ifneq ($(SYMBOL),y) instead of ifndef SYMBOL
+
+ > The difference between ifeq and ifdef is that ifdef doesn't expand
+ > recursively.
+
+ > Add comments to busybox and uclibc packages to avoid a warning in such
+ > special cases.
+
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > ---
+ > NOTE 1:
+ > I only state "all package in tree already use ifeq" because earlier in
+ > the series other 3 (2 ifdef and 1 ifndef) uses were removed.
 
 Committed to 2022.11.x and 2022.02.x, thanks.
 
