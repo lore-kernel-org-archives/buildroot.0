@@ -4,86 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00370C6379F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 10:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1EECC636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 11:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69FCC418EB;
-	Wed, 22 Feb 2023 10:40:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69FCC418EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B5CF410B5;
+	Wed, 22 Feb 2023 11:11:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B5CF410B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eHaBw7IVx54I; Wed, 22 Feb 2023 10:40:17 +0000 (UTC)
+	with ESMTP id 08LdHP37VNDa; Wed, 22 Feb 2023 11:11:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C1F0418D6;
-	Wed, 22 Feb 2023 10:40:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C1F0418D6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DC6541BF392
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 10:40:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07D0A40541;
+	Wed, 22 Feb 2023 11:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07D0A40541
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D9091BF41A
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 11:11:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4D7240FE2
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 10:40:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4D7240FE2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66EFD60634
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 11:11:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66EFD60634
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iUfcPFkV8lBc for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 10:40:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pchveRyqCSUC for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 11:11:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB7044100E
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB7044100E
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 10:40:12 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id n2so6152582lfb.12
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 02:40:12 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C31A605BE
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5C31A605BE
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 11:11:05 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id v3so7257034wrp.2
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 03:11:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Alh7Ju+kcrLzGwUaoizdXV4AstnH2Va7T7juEqmN18M=;
- b=z92Jv53S5WWTwpX76AfQoPsShvYT80VvyzvFG0M8gtQYs2slnWxZ/MzQAAz7Cp1w3K
- RBpQz9mYw++xdOBvIg1mpE3YENTslbo+g5QPC8fLBKc8o1BQnJX9ran9OVmlDonOHdhl
- BwCpWNpZcxqCfwQJq91wOBlCmQJfGVWgQ5l/xbyadYxjailKc46IfPlMqSysTaCT+W8v
- JRy648q47yZf9AnfElWkXeSEsE1YW/wXTVKMhRVv2E9KJt/1Yo+J4G0kPjiOC8Rvyg6l
- J7GfOykfK6f5q20JROv0+kHHb2tP+o/eaT9mK+SFJuObwlF42vwhyDf7DkomqdR9qCny
- SHTw==
-X-Gm-Message-State: AO0yUKWNC7AMC4orLzT1UzPfa2+aB3DIL53VMgvQZZ62da54dJ6SQ9VE
- shxHQMBOMHD+nsvTzAsdWBpUaacujHM=
-X-Google-Smtp-Source: AK7set9kG04MxptNt8OsL14V1L3w6fU3dtxZwSDvagDOr2ms1HNZq0oEfE7nuCKCFnxasSbkT2FIKQ==
-X-Received: by 2002:ac2:55b2:0:b0:4cb:4571:9efe with SMTP id
- y18-20020ac255b2000000b004cb45719efemr2845816lfg.35.1677062409851; 
- Wed, 22 Feb 2023 02:40:09 -0800 (PST)
-Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
- [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
- r11-20020ac25a4b000000b004d53e991be0sm2151251lfn.146.2023.02.22.02.40.08
+ bh=Mq5Vut3y1Eo1yU2jNR6+p6AmLuTKCNFCb8CFVcqVRq4=;
+ b=xcsk9e76uPnxe/kdU5EuImSGOiaNbpPVChhShopROBAWxmPY38ntomYOkbUJIUCfpC
+ 91ip4vaqvEP1C+nKE2mTyiEHucVPFMQtMD0mqgzlny8qq7gyi7OlFWF+vq5N7sG6p2Xa
+ UBpPJmJuqDgiayx3s/TCSQTbSotrM3YKPnXSXDOJrJZ+u6OucxnXoyij5O9dRyjWCJ6Z
+ pN1t7acvshoDdefwxtieKgeKr8ilD+xTSxcyivZwF2NV/dtqPfN66qdGgGnGcL0m7r0U
+ QP565YlHVEq4MQIsb7AqrjdYTt/Dve6o8H92t7ERx0tTa7SoZkg8LUhr/GNy7OdKx9w6
+ 6aGA==
+X-Gm-Message-State: AO0yUKVnZ/e6zaiUk8PlixZ1n0iB5CqTqSvdxDume8Q4HJ3riHBWyE/d
+ TKsyPuGow4neNWKev6pAtOjuXMx9xl0=
+X-Google-Smtp-Source: AK7set9WSGdoiDw5zvpESl5VgBE6q31m38CGcdk5uI+K3PAurHncTzgyCiYkBP4H6IcY8IiooNyQ5A==
+X-Received: by 2002:a5d:6502:0:b0:2c5:fb6d:33e5 with SMTP id
+ x2-20020a5d6502000000b002c5fb6d33e5mr6166371wru.0.1677064263212; 
+ Wed, 22 Feb 2023 03:11:03 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ d9-20020a056000114900b002c5584d0e3dsm6897613wrx.24.2023.02.22.03.11.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Feb 2023 02:40:09 -0800 (PST)
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-To: buildroot@buildroot.org, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Feb 2023 11:39:17 +0100
-Message-Id: <20230222103917.2709112-1-marcus.folkesson@gmail.com>
-X-Mailer: git-send-email 2.39.2
+ Wed, 22 Feb 2023 03:11:02 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 22 Feb 2023 12:10:59 +0100
+Message-Id: <20230222111059.887398-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Alh7Ju+kcrLzGwUaoizdXV4AstnH2Va7T7juEqmN18M=;
- b=ZbQkFrtf+69wUMKAmExuGFxhdNaWeK0Z86ZsG01Uu2VnCR3zQNe2lCgT5/ezHsAxmd
- Ke3Sm+cZ9BIZHW4wzmfCNIV0CA27qMvHBV0+7eYI5/S2jcF244FcERUlwEKNGKjqLXvJ
- oQV6ymhRuSb0JH15eEKiUdgUksAr+NF1n1z09In2Sq9YClpfIZQ7thAE/eEk45YHeIYp
- 8X7yumHB6ErD4ZF3ouArhesBCKLQYd3AndocYgkgZPClD8AyDYR5/szIDq/Tpcqb/SjW
- E/G53Xr2GzrvYrk4+tTnvT/TbrS1ZB/XntK+Ghc1D+NRMuwad1YiEh5W8fgjPTyROET9
- s48A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Mq5Vut3y1Eo1yU2jNR6+p6AmLuTKCNFCb8CFVcqVRq4=;
+ b=bH+QOZN/maH4a/D4Z2lT0WEZqwRrXhG9b9tprTQaxhHPERiGG86/ZqUy7xciE0H4Gu
+ fSd2Ivw5z6CZ890JZqZiqGm7Ecx48ebwbJrQlS7FfxBxjIMC8UppPOfuk6DLmLEHHFAY
+ UNWRv5ahMTwyiVY6119EjWK/cmaMu29d7fDy7naGQ3itDbX4zjT9ldpFDe+FxlUldbPJ
+ BbB6z2DmWNZrEq99B/Gps13eJpzmtHHkNbI1NB5ZHzHwKgp6jQFFQGrpo0WTp0I8ROJE
+ AwyKZMUuTBe5ipRhsd/lvuQZO2FE/1dj8VA99tff+9v0KVfTV7itAL/CZYLyAxxlGyhk
+ 0Jfw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZbQkFrtf
-Subject: [Buildroot] [PATCH v3] package/libcamera-apps: enable LIBAV only if
- libdrm and ffmpeg is present
+ header.a=rsa-sha256 header.s=20210112 header.b=bH+QOZN/
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,60 +93,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since commit 35266e84043f880d7591e52b71a8c5b8d0e4717d, libcamera-apps
-does enable LIBAV by default which depends on libdrm and ffpmeg.
+Fix the following build failure with libressl raised since bump to
+version 2.10.0 in commit 03bab7117d232c9dcd784a74eefc0e48ea51ee53:
+
+/home/thomas/autobuild/instance-3/output-1/build/freerdp-2.10.0/libfreerdp/crypto/crypto.c: In function 'crypto_cert_get_signature_alg':
+/home/thomas/autobuild/instance-3/output-1/build/freerdp-2.10.0/libfreerdp/crypto/crypto.c:980:8: error: 'NID_sha3_224' undeclared (first use in this function)
+   case NID_sha3_224:
+        ^~~~~~~~~~~~
 
 Fixes:
-- http://autobuild.buildroot.net/results/548f2a3b353ce4693fb60d7fb1e06e02af22991c/
+ - http://autobuild.buildroot.org/results/e96848576ac292799636abe7485c37aa54196a2c
 
-/home/buildroot/autobuild/run/instance-1/output-1/build/libcamera-apps-1.1.1/encoder/libav_encoder.cpp:13:10: fatal error: libdrm/drm_fourcc.h: No such file or directory
-   13 | #include <libdrm/drm_fourcc.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~
-
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+ ...e-sha3-and-shake-hashes-for-libressl.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
 
-Notes:
-    v3:
-        - Only enable libav if both libdrm and ffmpeg is selected
-        - Tested with these four combinations:
-            - libcamera-apps enabled, ffmpeg disabled, libdrm disabled
-            - libcamera-apps enabled, ffmpeg enabled, libdrm disabled
-            - libcamera-apps enabled, ffmpeg disabled, libdrm enabled
-            - libcamera-apps enabled, ffmpeg enabled, libdrm enabled
-    
-    v2:
-        -Add dependency to ffmpeg
-
- package/libcamera-apps/libcamera-apps.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index 290ee9a026..fe402ec3f4 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
-@@ -29,6 +29,13 @@ else
- LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=0
- endif
- 
-+ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_LIBDRM),yy)
-+LIBCAMERA_APPS_DEPENDENCIES += ffmpeg libdrm
-+LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=1
-+else
-+LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=0
-+endif
+diff --git a/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch b/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
+new file mode 100644
+index 0000000000..14f615e2e7
+--- /dev/null
++++ b/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
+@@ -0,0 +1,38 @@
++From bd093454fe126163634c00b7484ab7fee6ffe670 Mon Sep 17 00:00:00 2001
++From: akallabeth <akallabeth@posteo.net>
++Date: Mon, 20 Feb 2023 16:23:39 +0100
++Subject: [PATCH] Fix #8702: Disable sha3 and shake hashes for libressl
 +
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBCAMERA_APPS_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_LIBEPOXY),libepoxy) \
++[Retrieved (and backported) from:
++https://github.com/FreeRDP/FreeRDP/pull/8708/commits/bd093454fe126163634c00b7484ab7fee6ffe670]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libfreerdp/crypto/x509_utils.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libfreerdp/crypto/crypto.c b/libfreerdp/crypto/crypto.c
++index 6e87a88b8d8..62cf2939be7 100644
++--- a/libfreerdp/crypto/crypto.c
+++++ b/libfreerdp/crypto/crypto.c
++@@ -748,7 +748,7 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
++ 			return WINPR_MD_SHA512;
++ 		case NID_ripemd160:
++ 			return WINPR_MD_RIPEMD160;
++-#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) || defined(LIBRESSL_VERSION_NUMBER)
+++#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) && !defined(LIBRESSL_VERSION_NUMBER)
++ 		case NID_sha3_224:
++ 			return WINPR_MD_SHA3_224;
++ 		case NID_sha3_256:
++@@ -757,11 +757,11 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
++ 			return WINPR_MD_SHA3_384;
++ 		case NID_sha3_512:
++ 			return WINPR_MD_SHA3_512;
++-#endif
++ 		case NID_shake128:
++ 			return WINPR_MD_SHAKE128;
++ 		case NID_shake256:
++ 			return WINPR_MD_SHAKE256;
+++#endif
++ 		case NID_undef:
++ 		default:
++ 			return WINPR_MD_NONE;
 -- 
-2.39.2
+2.39.0
 
 _______________________________________________
 buildroot mailing list
