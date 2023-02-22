@@ -4,67 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA949C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 14:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D827C636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 14:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64F2541190;
-	Wed, 22 Feb 2023 14:58:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64F2541190
+	by smtp2.osuosl.org (Postfix) with ESMTP id 093C540108;
+	Wed, 22 Feb 2023 14:58:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 093C540108
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZHZSstuey2Dg; Wed, 22 Feb 2023 14:58:10 +0000 (UTC)
+	with ESMTP id LDjvgA-9JSPb; Wed, 22 Feb 2023 14:58:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A1C2D41199;
-	Wed, 22 Feb 2023 14:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1C2D41199
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 223571BF589
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:58:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3265A415B3;
+	Wed, 22 Feb 2023 14:58:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3265A415B3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 16F741BF97A
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:58:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A8D641190
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:58:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A8D641190
+ by smtp1.osuosl.org (Postfix) with ESMTP id E592A82103
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:58:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E592A82103
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gnhcrGt6eynl for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 14:58:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBD00414ED
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EBD00414ED
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:58:05 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CD51AC000A;
- Wed, 22 Feb 2023 14:58:03 +0000 (UTC)
-Date: Wed, 22 Feb 2023 15:58:03 +0100
-To: Diego Hurtado de Mendoza <diego.hdmp@gmail.com>
-Message-ID: <20230222155803.3789d84b@windsurf>
-In-Reply-To: <20230222094916.1853413-1-diego.hdmp@gmail.com>
-References: <20230222094916.1853413-1-diego.hdmp@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qlG52mc0zh7v for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 14:58:10 +0000 (UTC)
+X-Greylist: delayed 00:07:06 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71530820FC
+Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 71530820FC
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:58:09 +0000 (UTC)
+Received: from localhost.localdomain ([212.103.203.10])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id UqSSpNjOdGxLrUqSSpkGGk; Wed, 22 Feb 2023 15:51:00 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Wed, 22 Feb 2023 15:50:59 +0100
+Message-Id: <20230222145059.1939094-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1677077884;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nvBZ6opkjdLn5j+i7POPtWmdQkr3dtRI9qx4+nrPBE0=;
- b=hDA7YbBQuI6ewDZwG/Fs4sxAo8lJ2iEf6fIeOFNt6Aa/BAtFLbxDgCL/zIwL6qGtajDZGc
- vSNklyFDKdlhejsLMRwsn66IYpWSg45EC3HgGhvEorYoGOrPXcK8/MXluetNcP2e2CjPKT
- 8uNBD0WIivv0P7wypAt63XcG3xvDrjGfYi5ZmCQmBfPH1gNUQyv/6BmCp4QT56a8/bYSfo
- I4Az/sUtQ9QhK16fUZJ/8htrQhwQDaCPY/IM1fEmcLikK461Avr6p09afKl5wfUoLKK906
- 1do/LwFk539nuWwoQ9kt2RCWyJekb4jKWARB69VxVbuaVuXLV4ZnzqYIwdd5sw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hDA7YbBQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/hackrf: bump to version
- 2023.01.1
+X-CMAE-Envelope: MS4xfI9G0RCwDoK3d9hjfuB0Ol8U3ee/cPLY6j391w3dxGc5pFbAqhzsBE4A/z5UovAM2U9p7oV5KLT9+wssm5G3euaZQtUaGhOLVb6fxwSMP1XVcbzWX+J5
+ mcNHOe5B4CoX2G4K4t3pqnAQPE2VdGiimZp6yxqHXbJ9Zv5DP8SsUL6dzopjdR2EKVdcov+dlCkHw08TPHXkeTKf3QoVC4RJbvOLYTGnqmxXTc8rdSvxE2id
+ 2q0IMNGmm/lVsSKuBexSDt6wb33H04cQiLQcIaS2tcMrMPHiG7ubcfOKGacdBqqZ
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1677077460; bh=uZyyHP1ISSd6Pe+JfSzeQEnYQm6xNEG3sbs5GOILNBM=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=luXzfnr7wlZVpNOzp22rUmhtAxUhVHrLtQKY01Eh9bmv9ksknt5w1D+cg3nBMBpYs
+ 6/cKXEEn72FWbr/GW5wWh51WKHYLKD26WiRosfedUZy6iZviEycmT+MCzGmFZO4Qrw
+ zmB9M9ypDheyT/snh7BW0N70CVC49zJO1U4M4+/zVXfgzDpl9E1DePT+BA34xEG9ov
+ ZLv/h4NlFpyM/HcorOeUWp+3iicaTjF8i+a7yk/oG+uFMlsfErxfATuFLbyE3qQ2D7
+ sVMKWqPQ1JT5+RPjdCb1tbhCIINa7xRu7hFu56IOx/x9KiE0i7qlHl3SZJvAhTVYxm
+ DNWlmZMlpeFxg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=luXzfnr7
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 7.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,32 +72,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 22 Feb 2023 10:49:16 +0100
-Diego Hurtado de Mendoza <diego.hdmp@gmail.com> wrote:
+Since the major release changed all the packages that have direct
+dependency to harfbuzz has been succesfully built:
+- efl
+- libass
+- mupdf
+- pango
+- qt5base
+- qt5webengine
+- qt6base
+- sdl2_ttf
+- supertuxkart
+- vlc
+- webkitgtk
+- wpewebkit
 
-> https://github.com/greatscottgadgets/hackrf/releases/tag/v2023.01.1
-> 
-> Signed-off-by: Diego Hurtado de Mendoza <diego.hdmp@gmail.com>
-> ---
->  package/hackrf/hackrf.hash | 2 +-
->  package/hackrf/hackrf.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 9489f25c6a..eee48c0b68 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d  harfbuzz-5.3.1.tar.xz
++sha256  2cf4d3d8f225007511990a36a34195f0d6562ca56df0a8b0885b382837948199  harfbuzz-7.0.1.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index b0112168e1..f8724793a9 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 5.3.1
++HARFBUZZ_VERSION = 7.0.1
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
