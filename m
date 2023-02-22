@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8218C64EC7
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8688CC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 889E3416FF;
-	Wed, 22 Feb 2023 17:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 889E3416FF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3AD9C4176D;
+	Wed, 22 Feb 2023 17:11:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AD9C4176D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bsXUgdpSWRZt; Wed, 22 Feb 2023 17:11:27 +0000 (UTC)
+	with ESMTP id ZJ6QROjuHRCg; Wed, 22 Feb 2023 17:11:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABA1641731;
-	Wed, 22 Feb 2023 17:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABA1641731
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 03D151BF364
+	by smtp2.osuosl.org (Postfix) with ESMTP id D59A341737;
+	Wed, 22 Feb 2023 17:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D59A341737
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3611C1BF97A
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA43F40545
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA43F40545
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B3A3410D0
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B3A3410D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EVoZN1ZEsIgm for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dsveUThSbLjz for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D463C40CAF
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D463C40CAF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6537A410A6
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6537A410A6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3A38867CA; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+ id 50479867D1; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:44:43 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 21691c1a49426e765ab5fb321ea7002d5b3bf6d5
-X-Git-Newrev: 972ad2022e2757eb43d2cea328fc583fbfdaf408
+Date: Wed, 22 Feb 2023 17:41:33 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: ef6d357f261bb9209e781f9ca7e33b7bd28b653d
+X-Git-Newrev: 0776d7c18e95fe0d33e832c578ec59e3dbf00f9a
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170818.C3A38867CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x]
- toolchain/toolchain-buildroot: add comment about using virtual package
- infra
+Message-Id: <20230222170816.50479867D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/busybox: add
+ comment about variable override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,59 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=972ad2022e2757eb43d2cea328fc583fbfdaf408
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0776d7c18e95fe0d33e832c578ec59e3dbf00f9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit "9a8ec9195c toolchain/toolchain-buildroot: migrate to virtual
-package infrastructure" made the packages toolchain and
-toolchain-buildroot to use the virtual package infra even they being
-generic packages.
-This works because on package/pkg-virtual.mk when a package do not
-define neither _PROVIDES_ or _HAS_ symbols, only _IS_VIRTUAL is set to
-YES and _VERSION and _SOURCE are set to empty before relaying the call
-to inner-generic-package.
+The same comment already exists for UCLIBC_CONFIG_FILE.
+Both variables can be override from command-line, as described in the
+manual, at section 'Environment variables'.
 
-Add a comment explaining why the virtual package infra is used in these
-cases.
-
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit abcecd737b198e8a1a48bf4533e5c2b8de8b8cf4)
+(cherry picked from commit 01c0fb3862bce6605881d9e32c29b5f7373bb2f9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-buildroot/toolchain-buildroot.mk | 3 +++
- toolchain/toolchain/toolchain.mk                     | 3 +++
- 2 files changed, 6 insertions(+)
+ package/busybox/busybox.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-index b30cc332d2..6da64b7c77 100644
---- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-@@ -14,4 +14,7 @@ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index ef628e90e9..0f14bf999d 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -108,6 +108,8 @@ BUSYBOX_MAKE_OPTS = \
+ 	CONFIG_PREFIX="$(TARGET_DIR)" \
+ 	SKIP_STRIP=y
  
- TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
-+# Not really a virtual package, but we use the virtual package infra here so
-+# both the build log and build directory look nicer (toolchain-buildroot-virtual
-+# instead of toolchain-buildroot-undefined)
- $(eval $(virtual-package))
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 18f1dbea1a..ac60a7b248 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -47,4 +47,7 @@ endef
- TOOLCHAIN_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_GLIBC_COPY_NSSWITCH_FILE
++# specifying BUSYBOX_CONFIG_FILE on the command-line overrides the .config
++# setting.
+ ifndef BUSYBOX_CONFIG_FILE
+ BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
  endif
- 
-+# Not really a virtual package, but we use the virtual package infra here so
-+# both the build log and build directory look nicer (toolchain-virtual instead
-+# of toolchain-undefined)
- $(eval $(virtual-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
