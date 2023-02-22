@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68FCBC61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 19:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0D6EC636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 20:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0697740CAF;
-	Wed, 22 Feb 2023 19:56:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0697740CAF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 961D540579;
+	Wed, 22 Feb 2023 20:02:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 961D540579
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XJMog20MPFZQ; Wed, 22 Feb 2023 19:56:56 +0000 (UTC)
+	with ESMTP id 3XB-1DXihWnk; Wed, 22 Feb 2023 20:02:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3ACA840571;
-	Wed, 22 Feb 2023 19:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ACA840571
+	by smtp2.osuosl.org (Postfix) with ESMTP id DDC7F40566;
+	Wed, 22 Feb 2023 20:02:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDC7F40566
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F1CD1BF475
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:56:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C94A91BF475
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 20:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26AC681F32
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 19:56:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26AC681F32
+ by smtp1.osuosl.org (Postfix) with ESMTP id B0A7D81FB7
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 20:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0A7D81FB7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pCWooH-M8Yqm for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 19:56:52 +0000 (UTC)
+ with ESMTP id 3hTBey3PUfFa for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 20:02:30 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3EE181F04
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A3EE181F04
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 19:56:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0F0681FAD
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A0F0681FAD
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 20:02:30 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EDB95FF804
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 19:56:48 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id AE08DE0003
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 20:02:28 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1pUvEN-008BNI-TN
- for buildroot@buildroot.org; Wed, 22 Feb 2023 20:56:47 +0100
+ (envelope-from <peter@korsgaard.com>) id 1pUvJr-008BsK-UI
+ for buildroot@buildroot.org; Wed, 22 Feb 2023 21:02:27 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230207083951.455AD83F4E@busybox.osuosl.org>
-Date: Wed, 22 Feb 2023 20:56:47 +0100
-In-Reply-To: <20230207083951.455AD83F4E@busybox.osuosl.org> (Peter Korsgaard's
- message of "Tue, 7 Feb 2023 09:39:29 +0100")
-Message-ID: <87k009qxs0.fsf@dell.be.48ers.dk>
+References: <20230207093548.1B15A83F98@busybox.osuosl.org>
+Date: Wed, 22 Feb 2023 21:02:27 +0100
+In-Reply-To: <20230207093548.1B15A83F98@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Tue, 7 Feb 2023 10:33:33 +0100")
+Message-ID: <87fsaxqxik.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Subject: Re: [Buildroot] [git commit] support/dependencies/dependencies.sh:
- require English perl package for host-libxml-parser-perl
+ require open perl package for libxcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,27 +71,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit:
- > https://git.buildroot.net/buildroot/commit/?id=8f8085e63a4a755d587a25a73dbaafe33b23f867
+ > commit: https://git.buildroot.net/buildroot/commit/?id=4cdd99190e89d538c25a8fc701372775fbde3b97
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes http://autobuild.buildroot.net/results/166/1667b4ebd8e16e7d8b47bc3ca128a76daf27b4d9/
+ > Fixes:
+ > http://autobuild.buildroot.net/results/16c/16cba783be11cc5024f9c56bb0a7abb0acf13ef8/
 
- > The configure script of host-libxml-parser-perl needs the English perl
- > module on the host:
+ > The configure script of libxcrypt needs the open perl module on the host:
 
- > ERROR from evaluation of
- > /home/buildroot/autobuild/instance-1/output-1/build/host-libxml-parser-perl-2.46/Expat/Makefile.PL:
- > Can't locate English.pm in @INC (you may need to install the English module)
- > (@INC contains:
- > /home/buildroot/autobuild/instance-1/output-1/build/host-libxml-parser-perl-2.46/inc
- > /home/buildroot/autobuild/instance-1/output-1/host/lib/perl
+ > Can't locate open.pm in @INC (you may need to install the open module) (@INC
+ > contains: /home/buildroot/autobuild/instance-2/output-1/host/lib/perl
  > /usr/local/lib64/perl5/5.36 /usr/local/share/perl5/5.36
  > /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5
- > /usr/share/perl5 .) at ./Makefile.PL line 3.
+ > /usr/share/perl5) at ./build-aux/scripts/expand-selected-hashes line 20.
 
- > So add a check for it in dependencies.sh similar to the existing check for
- > ExtUtils::MakeMaker.
+ > So add a check for it in dependencies.sh similar to how it is done for mpv.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
