@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8510BC636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D09C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2FF61416F2;
-	Wed, 22 Feb 2023 16:50:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FF61416F2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98CCD4052C;
+	Wed, 22 Feb 2023 17:08:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98CCD4052C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id am6GpcGZhQwC; Wed, 22 Feb 2023 16:50:30 +0000 (UTC)
+	with ESMTP id 9a_L0QPZIP4H; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 61AC9416EA;
-	Wed, 22 Feb 2023 16:50:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61AC9416EA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB88D1BF847
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:50:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C11AA40C82;
+	Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C11AA40C82
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1904F1BF364
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9572F419D7
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:50:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9572F419D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id E702B4053D
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E702B4053D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6T7_MFlKfr5j for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 16:50:27 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF780419A9
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AF780419A9
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:50:26 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 960171C0003;
- Wed, 22 Feb 2023 16:50:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1pUsJy-0084oI-9g; Wed, 22 Feb 2023 17:50:22 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vC9JkFA571Ws for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C9F74052C
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C9F74052C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 19523867CA; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-24-ricardo.martincoski@gmail.com>
-Date: Wed, 22 Feb 2023 17:50:22 +0100
-In-Reply-To: <20221127130739.1862398-24-ricardo.martincoski@gmail.com>
- (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:37 -0300")
-Message-ID: <871qmhskz5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 23/25] package/sunxi-mali-utgard: properly
- handle legacy for renamed options
+To: buildroot@buildroot.org
+Date: Wed, 22 Feb 2023 17:36:45 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: b8d59bec22a31e3faafc77db97dc7fa8fa79fa15
+X-Git-Newrev: 4f63e64d9c8782987c2fc1fafe3ada2f8762e809
+X-Patchwork-Hint: ignore
+Message-Id: <20230222170816.19523867CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ support/scripts/generate-gitlab-ci-yml: improve test-pkg support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +57,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4f63e64d9c8782987c2fc1fafe3ada2f8762e809
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Commit "6a7a652b14 package/sunxi-mali-utgard: rename from
- > sunxi-mali-mainline" tried to add legacy handling but the new symbols
- > are part of a choice, and Kconfig does not enforce the select of a
- > option from a choice.
+Following the example of test-pkg config described in commit
+"12c7a05da1 utils/test-pkg: add gitlab-ci support" to test a defconfig
+fragment that contains a disabled option is currently possible, but
+it do requires one to change the git config core.commentChart so the
+lines starting with "#" are not discarded by git when creating/editing
+the commit message.
 
- > Update the legacy entry for 2022.02, following the example described in
- > the beginning of the file.
+For instance, without the indentation the 3rd line below would be
+excluded from the commit message when the editor is closed:
+    test-pkg config:
+    SOME_OPTION=y
+    # OTHER_OPTION is not set
+    SOME_VARIABLE="some value"
 
- > Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Requiring to change git configs is not very nice.
+So make the developer's life easier by changing the sed expression to
+remove indentation with spaces from a defconfig fragment found on a
+commit message.
+For instance these lines become valid and generate a defconfig fragment
+without the indentation of one space to be tested in GitLab CI:
+test-pkg config:
+ SOME_OPTION=y
+ # OTHER_OPTION is not set
+ SOME_VARIABLE="some value"
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0ad3ae14c52ed0aac872875ca7f87cdcf6942128)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/generate-gitlab-ci-yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index aa43aac019..27f586f1b6 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -91,7 +91,7 @@ gen_tests() {
+ 
+     # Retrieve defconfig for test-pkg from the git commit message (if any)
+     if grep -q -E '^test-pkg config:$' <<<"${CI_COMMIT_DESCRIPTION}"; then
+-        sed -r -n -e '/^test-pkg config:$/{:a;n;p;ba;}' \
++        sed -r -n -e '/^test-pkg config:$/{:a;n;s/^ +//;p;ba;}' \
+             <<<"${CI_COMMIT_DESCRIPTION}" \
+             >defconfig.frag
+         if [ ! -s defconfig.frag ]; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
