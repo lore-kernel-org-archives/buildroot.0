@@ -4,55 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3C1C636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4E26C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:49:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2CB6A416F0;
-	Wed, 22 Feb 2023 16:48:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CB6A416F0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8414B416F0;
+	Wed, 22 Feb 2023 16:49:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8414B416F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yxCr-rCdGKC4; Wed, 22 Feb 2023 16:48:42 +0000 (UTC)
+	with ESMTP id lTI7SLOExgZQ; Wed, 22 Feb 2023 16:49:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F30A416EA;
-	Wed, 22 Feb 2023 16:48:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F30A416EA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 724791BF847
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:48:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A48DB416EA;
+	Wed, 22 Feb 2023 16:49:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A48DB416EA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 581BD1BF847
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:49:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59A6E416F1
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:48:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59A6E416F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 328BC419A9
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:49:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 328BC419A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CCb2_NwuNsel for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 16:48:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wqejh4t_-8OC for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 16:49:07 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C501416CB
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7C501416CB
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:48:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1917F4198C
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1917F4198C
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:49:06 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8E5A7100004;
- Wed, 22 Feb 2023 16:48:29 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0C424FF804;
+ Wed, 22 Feb 2023 16:49:04 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pUsI8-0083mE-Rl; Wed, 22 Feb 2023 17:48:28 +0100
+ id 1pUsIi-00847i-99; Wed, 22 Feb 2023 17:49:04 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-21-ricardo.martincoski@gmail.com>
-Date: Wed, 22 Feb 2023 17:48:28 +0100
-In-Reply-To: <20221127130739.1862398-21-ricardo.martincoski@gmail.com>
- (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:34 -0300")
-Message-ID: <87edqhsl2b.fsf@dell.be.48ers.dk>
+ <20221127130739.1862398-22-ricardo.martincoski@gmail.com>
+Date: Wed, 22 Feb 2023 17:49:04 +0100
+In-Reply-To: <20221127130739.1862398-22-ricardo.martincoski@gmail.com>
+ (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:35 -0300")
+Message-ID: <87a615sl1b.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 20/25] package/lua: properly handle legacy
- for removed version
+Subject: Re: [Buildroot] [next 21/25] package/ti-sgx-km: properly handle
+ legacy for removed options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,14 +73,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > Commit "297613f1c7 package/lua: remove 5.2.x version" tried to add
- > legacy handling but the new symbols are part of a choice, and Kconfig
- > does not enforce the select of a option from a choice.
+ > Commit "c38b5566fe package/ti-sgx-{km, um, demos}: bump to latest TI
+ > version", added in release 2020.02, removed some options that were
+ > previously renamed in release 2018.05.
 
- > Update the legacy entry for 2019.02, following the example described in
- > the beginning of the file.
+ > Update the legacy entry for 2018.05 and add the corresponding legacy
+ > entries for 2020.02.
 
- > Cc: Francois Perrad <francois.perrad@gadz.org>
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Committed to 2022.11.x and 2022.02.x, thanks.
