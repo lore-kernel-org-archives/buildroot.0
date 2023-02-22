@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD50BC636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 22:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51671C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 22:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DED760B96;
-	Wed, 22 Feb 2023 22:21:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DED760B96
+	by smtp3.osuosl.org (Postfix) with ESMTP id D875960BA6;
+	Wed, 22 Feb 2023 22:22:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D875960BA6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4c7dhRCdUskE; Wed, 22 Feb 2023 22:21:02 +0000 (UTC)
+	with ESMTP id iZtIzfM-0H04; Wed, 22 Feb 2023 22:22:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 288C960BA6;
-	Wed, 22 Feb 2023 22:21:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 288C960BA6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B72811BF3D2
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:20:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BF0660E3E;
+	Wed, 22 Feb 2023 22:22:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BF0660E3E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E90AA1BF3D2
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D09160BA6
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:20:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D09160BA6
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA2EE8200B
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:22:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA2EE8200B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s9CGp3D4ETUb for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 22:20:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 335D260B96
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 22:20:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 335D260B96
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23633868E2; Wed, 22 Feb 2023 22:20:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 23:19:04 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 97c40266b1b69e101ce035c8aa73bf2665c5c256
-X-Git-Newrev: f78c5cb5cae93a9e63dad4361d78e1787759382f
-X-Patchwork-Hint: ignore
-Message-Id: <20230222222058.23633868E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/shadow: new package
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IybuhNaNIB7h for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 22:22:01 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33C1681F97
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 33C1681F97
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 22:22:00 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E76C61C0003;
+ Wed, 22 Feb 2023 22:21:57 +0000 (UTC)
+Date: Wed, 22 Feb 2023 23:21:57 +0100
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Message-ID: <20230222232157.380b6109@windsurf>
+In-Reply-To: <20221224171920.11256-1-raphael.pavlidis@gmail.com>
+References: <20221224171920.11256-1-raphael.pavlidis@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1677104518;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LflvcO1hW3ShgPfWxFKo0RvcLy6VAQnmRIvhJwp5DtE=;
+ b=LiPvElulFwM8bh3dKuLacLsRSw4gk8zruf707Tl9OzM1hEmHdsku6h0yvWk63clHfPfXSv
+ hyBPGds/emPr7kGSUYMv6IBfC2Uotz0iww9OmNUxAgCbfE4IVP+66mt4rZlXa6CF4X/OTf
+ USw4MLcYUNcpRDstiWqMsZ0iBPc4l0wdSAXU+BRtgR6N1FsRNbUYoD0CpcO8oVg53cA4+/
+ mzpwMf6biw6ZOz7VnTPvEVXhg2ZOn99gahUpJXoNGdPk3XkabFPG2Ey9LcC3xbNL1GAeIA
+ 5kA1kz2tQLnlXUHTPcK9o09++DM8R14m6XhOutHlt9T+i8Qj1gjsxkCiqgc33w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LiPvElul
+Subject: Re: [Buildroot] [PATCH v4 1/1] package/shadow: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,338 +77,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f78c5cb5cae93a9e63dad4361d78e1787759382f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sat, 24 Dec 2022 18:19:20 +0100
+Raphael Pavlidis <raphael.pavlidis@gmail.com> wrote:
 
-shadow provides utilities to deal with user accounts.
+> shadow provides utilities to deal with user accounts.
+> 
+> The shadow package includes the necessary programs for converting UNIX
+> password files to the shadow password format, plus programs for managing
+> user and group accounts. Especially it is useful if rootless podman
+> container should be used, which requires newuidmap and newgidmap.
+> 
+> Co-authored-by: Nicolas Carrier <Nicolas.Carrier@orolia.com>
+> [Nicolas.Carrier@orolia.com provided the test case]
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+> ---
+> Changes v3 -> v4:
+> - fix formatting issues in Config.in and shadow.mk.
+> - bump to version 4.13.
+> - add SHADOW_CPE_ID_VENDOR in shadow.mk.
+> - add userdel in the setuid list.
+> - fix typo in SHADOW_ACCOUNT_TOOLS_SETUID_PERMISSIONS.
 
-The shadow package includes the necessary programs for converting UNIX
-password files to the shadow password format, plus programs for managing
-user and group accounts. Especially it is useful if rootless podman
-container should be used, which requires newuidmap and newgidmap.
+I have finally applied your patch. I fixed only two things:
 
-Co-authored-by: Nicolas Carrier <Nicolas.Carrier@orolia.com>
-[Nicolas.Carrier@orolia.com provided the test case]
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                   |   1 +
- package/Config.in                            |   1 +
- package/shadow/Config.in                     |  62 ++++++++++++
- package/shadow/shadow.hash                   |   3 +
- package/shadow/shadow.mk                     | 135 +++++++++++++++++++++++++++
- support/testing/tests/package/test_shadow.py |  55 +++++++++++
- 6 files changed, 257 insertions(+)
+ - Added a dependency on !BR2_STATIC_LIBS, because shadow uses
+   <dlfcn.h> unconditionally
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 599cfe6886..d052e59122 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2429,6 +2429,7 @@ F:	support/testing/tests/package/test_python_rsa.py
- F:	support/testing/tests/package/test_python_s3transfer.py
- 
- N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
-+F:	package/shadow/
- F:	package/slirp4netns/
- F:	package/sway/
- F:	package/x11r7/xwayland/
-diff --git a/package/Config.in b/package/Config.in
-index 6c5238a9b0..7c32305129 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2701,6 +2701,7 @@ menu "System tools"
- 	source "package/sdbus-cpp/Config.in"
- 	source "package/sdbusplus/Config.in"
- 	source "package/seatd/Config.in"
-+	source "package/shadow/Config.in"
- 	source "package/smack/Config.in"
- 	source "package/start-stop-daemon/Config.in"
- 	source "package/supervisor/Config.in"
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
-new file mode 100644
-index 0000000000..e3580c2cf5
---- /dev/null
-+++ b/package/shadow/Config.in
-@@ -0,0 +1,62 @@
-+menuconfig BR2_PACKAGE_SHADOW
-+	bool "shadow"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-+	help
-+	  Utilities to deal with user accounts.
-+
-+	  https://github.com/shadow-maint/shadow
-+
-+if BR2_PACKAGE_SHADOW
-+
-+config BR2_PACKAGE_SHADOW_SHADOWGRP
-+	bool "shadowgrp"
-+	help
-+	  Enable shadow group support.
-+
-+config BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID
-+	bool "account-tools-setuid"
-+	depends on BR2_USE_MMU  # linux-pam
-+	depends on BR2_ENABLE_LOCALE  # linux-pam
-+	depends on BR2_USE_WCHAR  # linux-pam
-+	depends on !BR2_STATIC_LIBS  # linux-pam
-+	select BR2_PACKAGE_LINUX_PAM
-+	help
-+	  Install the user and group management tools (e.g. groupadd)
-+	  with setuid and authenticate the callers via PAM.
-+
-+comment "account-tools-setuid needs a toolchain w/ dynamic library, wchar, locale"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
-+
-+config BR2_PACKAGE_SHADOW_UTMPX
-+	bool "utmpx"
-+	help
-+	  Enable loggin in utmpx / wtmpx.
-+
-+config BR2_PACKAGE_SHADOW_SUBORDINATE_IDS
-+	bool "subordinate-ids"
-+	help
-+	  Support subordinate ids. Helpful to use container solution
-+	  like podman without root.
-+
-+config BR2_PACKAGE_SHADOW_SHA_CRYPT
-+	bool "sha-crypt"
-+	default y
-+	help
-+	  Allow the SHA256 and SHA512 password encryption algorithms.
-+
-+config BR2_PACKAGE_SHADOW_BCRYPT
-+	bool "bcrypt"
-+	help
-+	  Allow the bcrypt password encryption algorithm.
-+
-+config BR2_PACKAGE_SHADOW_YESCRYPT
-+	bool "yescrypt"
-+	help
-+	  Allow the yescrypt password encryption algorithm.
-+
-+endif # BR2_PACKAGE_SHADOW
-+
-+comment "shadow needs a toolchain w/ headers >= 4.14, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 || BR2_STATIC_LIBS
-diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
-new file mode 100644
-index 0000000000..2e5c4a8168
---- /dev/null
-+++ b/package/shadow/shadow.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  9afe245d79a2e7caac5f1ed62519b17416b057ec89df316df1c3935502f9dd2c  shadow-4.13.tar.xz
-+sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-new file mode 100644
-index 0000000000..d8f913a648
---- /dev/null
-+++ b/package/shadow/shadow.mk
-@@ -0,0 +1,135 @@
-+################################################################################
-+#
-+# shadow
-+#
-+################################################################################
-+
-+SHADOW_VERSION = 4.13
-+SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/$(SHADOW_VERSION)
-+SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
-+SHADOW_LICENSE = BSD-3-Clause
-+SHADOW_LICENSE_FILES = COPYING
-+SHADOW_CPE_ID_VENDOR = debian
-+
-+SHADOW_CONF_OPTS = \
-+	--disable-man \
-+	--without-btrfs \
-+	--without-nscd \
-+	--without-skey \
-+	--without-sssd \
-+	--without-su \
-+	--without-tcb
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SHADOWGRP),y)
-+SHADOW_CONF_OPTS += --enable-shadowgrp
-+else
-+SHADOW_CONF_OPTS += --disable-shadowgrp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID),y)
-+SHADOW_CONF_OPTS += --enable-account-tools-setuid
-+define SHADOW_ACCOUNT_TOOLS_SETUID_PERMISSIONS
-+	/usr/sbin/chgpasswd f 4755 0 0 - - - - -
-+	/usr/sbin/chpasswd f 4755 0 0 - - - - -
-+	/usr/sbin/groupadd f 4755 0 0 - - - - -
-+	/usr/sbin/groupdel f 4755 0 0 - - - - -
-+	/usr/sbin/groupmod f 4755 0 0 - - - - -
-+	/usr/sbin/newusers f 4755 0 0 - - - - -
-+	/usr/sbin/useradd f 4755 0 0 - - - - -
-+	/usr/sbin/userdel f 4755 0 0 - - - - -
-+	/usr/sbin/usermod f 4755 0 0 - - - - -
-+endef
-+else
-+SHADOW_CONF_OPTS += --disable-account-tools-setuid
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_UTMPX),y)
-+SHADOW_CONF_OPTS += --enable-utmpx
-+else
-+SHADOW_CONF_OPTS += --disable-utmpx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
-+SHADOW_CONF_OPTS += --enable-subordinate-ids
-+define SHADOW_SUBORDINATE_IDS_PERMISSIONS
-+	/usr/bin/newuidmap f 4755 0 0 - - - - -
-+	/usr/bin/newgidmap f 4755 0 0 - - - - -
-+endef
-+else
-+SHADOW_CONF_OPTS += --disable-subordinate-ids
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ACL),y)
-+SHADOW_CONF_OPTS += --with-acl
-+SHADOW_DEPENDENCIES += acl
-+else
-+SHADOW_CONF_OPTS += --without-acl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ATTR),y)
-+SHADOW_CONF_OPTS += --with-attr
-+SHADOW_DEPENDENCIES += attr
-+else
-+SHADOW_CONF_OPTS += --without-attr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+SHADOW_CONF_OPTS += --with-audit
-+SHADOW_DEPENDENCIES += audit
-+else
-+SHADOW_CONF_OPTS += --without-audit
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CRACKLIB),y)
-+SHADOW_CONF_OPTS += --with-libcrack
-+SHADOW_DEPENDENCIES += cracklib
-+else
-+SHADOW_CONF_OPTS += --without-libcrack
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SHADOW_CONF_OPTS += --with-selinux
-+SHADOW_DEPENDENCIES += libselinux libsemanage
-+else
-+SHADOW_CONF_OPTS += --without-selinux
-+endif
-+
-+# linux-pam is also used without account-tools-setuid enabled
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+SHADOW_CONF_OPTS += --with-libpam
-+SHADOW_DEPENDENCIES += linux-pam
-+else
-+SHADOW_CONF_OPTS += --without-libpam
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SHA_CRYPT),y)
-+SHADOW_CONF_OPTS += --with-sha-crypt
-+else
-+SHADOW_CONF_OPTS += --without-sha-crypt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_BCRYPT),y)
-+SHADOW_CONF_OPTS += --with-bcrypt
-+else
-+SHADOW_CONF_OPTS += --without-bcrypt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_YESCRYPT),y)
-+SHADOW_CONF_OPTS += --with-yescrypt
-+else
-+SHADOW_CONF_OPTS += --without-yescrypt
-+endif
-+
-+define SHADOW_PERMISSIONS
-+	/usr/bin/chage f 4755 0 0 - - - - -
-+	/usr/bin/chfn f 4755 0 0 - - - - -
-+	/usr/bin/chsh f 4755 0 0 - - - - -
-+	/usr/bin/expiry f 4755 0 0 - - - - -
-+	/usr/bin/gpasswd f 4755 0 0 - - - - -
-+	/usr/bin/newgrp f 4755 0 0 - - - - -
-+	/usr/bin/passwd f 4755 0 0 - - - - -
-+	$(SHADOW_ACCOUNT_TOOLS_SETUID_PERMISSIONS)
-+	$(SHADOW_SUBORDINATE_IDS_PERMISSIONS)
-+endef
-+
-+$(eval $(autotools-package))
-diff --git a/support/testing/tests/package/test_shadow.py b/support/testing/tests/package/test_shadow.py
-new file mode 100644
-index 0000000000..c5151b4fdb
---- /dev/null
-+++ b/support/testing/tests/package/test_shadow.py
-@@ -0,0 +1,55 @@
-+import os
-+
-+from infra.basetest import BRTest, BASIC_TOOLCHAIN_CONFIG
-+
-+
-+class TestShadow(BRTest):
-+    username = 'user_test'
-+    config = BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_arm=y
-+        BR2_PACKAGE_SHADOW=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="65536"
-+        """
-+    timeout = 60
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           kernel_cmdline=["root=/dev/mmcblk0",
-+                                           "rootfstype=ext4"],
-+                           options=["-drive", f"file={img},if=sd,format=raw"])
-+        self.emulator.login()
-+
-+    def test_nologin(self):
-+        self.login()
-+
-+        self.assertRunOk("! nologin")
-+        cmd = 'test "$(nologin)" = "This account is currently not available."'
-+        self.assertRunOk(cmd)
-+
-+    def test_useradd_del(self):
-+        username = self.username
-+        self.login()
-+
-+        self.assertRunOk(f'userdel {username} || true')
-+        self.assertRunOk(f'groupdel {username} || true')
-+        self.assertRunOk(f'useradd -s /bin/sh {username}')
-+        self.assertRunOk(f'test $(su {username} -c "whoami") = {username}')
-+        self.assertRunOk(f'userdel {username}')
-+
-+    def test_usermod(self):
-+        username = self.username
-+        new_home = '/tmp'
-+        self.login()
-+
-+        self.assertRunOk(f'userdel {username} || true')
-+        self.assertRunOk(f'groupdel {username} || true')
-+        self.assertRunOk(f'useradd -s /bin/sh {username}')
-+        self.assertRunOk(f'usermod {username} --home {new_home}')
-+        self.assertRunOk(f'test $(su {username} -c \'echo $HOME\') = {new_home}')
-+        self.assertRunOk(f'userdel {username}')
-+
+ - Fixed the Config.in comment that already existed that said "shared
+   libs", while we normally use "dynamic library".
+
+With those changes, applied to our next branch. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
