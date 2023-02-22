@@ -4,85 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 808BAC61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 14:38:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA1A8C64EC4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 14:51:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03F6441056;
-	Wed, 22 Feb 2023 14:38:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03F6441056
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40C294107F;
+	Wed, 22 Feb 2023 14:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40C294107F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8-v5HmQPEjT1; Wed, 22 Feb 2023 14:38:05 +0000 (UTC)
+	with ESMTP id fqPWvIV2ZuIA; Wed, 22 Feb 2023 14:51:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 469404105C;
-	Wed, 22 Feb 2023 14:38:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 469404105C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8324640399;
+	Wed, 22 Feb 2023 14:51:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8324640399
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C3C681BF589
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:38:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A46C21BF589
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:51:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CC3480FB4
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:38:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CC3480FB4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E19682091
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 14:51:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E19682091
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x7hz4Wx8yWp5 for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 14:38:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 823C280E3B
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 823C280E3B
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:38:01 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id p8so8081303wrt.12
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 06:38:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=bbF9JKnFn9yENWsHi4dImVK0xF8VGCLg/8ifiYKd2f0=;
- b=t7HBQQFVC3EFy6Dg6Hvak4GL4E7aoJD3P+8mFOQKq2Q6fI7+EKRsJ3NccD2joUadWX
- Z68KoKZz2Ql/9ELY46VdWbKFb303t/YT5fSKkdpklYHXLMiFYqmrg28QePB1y6OUEhRJ
- 173jUCN+WGo7KDt351CByNjlBsqM07eQxpTZVeOP5z6/zCclYvCiCk2jPk7+GSF7yOin
- H9GpW3UhMQZe5fYvSN5GKJiTOZmfwC9N3dxpkYBHZ0tGqZNHwBehxG5pcUkwBEzS2kI6
- n0Yj/ARXHXhaA308PvkRTLWpe18rmgn0iNF0VPGaUsqSkrIWc2EQnUng3YJwR/qDLxFc
- 7fRg==
-X-Gm-Message-State: AO0yUKXpadsFDcdfrZAI5myhHoaCIsHZfLTaNlsoUl+dpDvmS2nCPTHV
- AiqjfEedC0zcsJ73KxzGBey/5ExwQbY=
-X-Google-Smtp-Source: AK7set9PH5lah/gE2x46SmLAyh3br6pEOUIKgSxSbcomaYClPsXYRSebf2elamqWKZvP5wFR1YhJgw==
-X-Received: by 2002:adf:ffca:0:b0:2c5:5aef:2759 with SMTP id
- x10-20020adfffca000000b002c55aef2759mr7899251wrs.53.1677076679278; 
- Wed, 22 Feb 2023 06:37:59 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- f21-20020a7bcc15000000b003dfdeb57027sm7038575wmh.38.2023.02.22.06.37.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Feb 2023 06:37:58 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id DgbleJYdVKD3 for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 14:51:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76E388208D
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:51:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76E388208D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 65618866DE; Wed, 22 Feb 2023 14:51:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 15:37:53 +0100
-Message-Id: <20230222143753.1563322-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=bbF9JKnFn9yENWsHi4dImVK0xF8VGCLg/8ifiYKd2f0=;
- b=MjCBb6GpQL4YGxmoWUCPzi2B0dR+eG0IH/EOWN80Asr42CwwrfvHMRZZFPPZuUxGzg
- jvVN60s8+UsLiRlKxtjgS3925LaZbnHjoNEslvob7tk6XIinjvoXFE0uFhUNSu4SgV2L
- InUcgZBB3erksiCt079ekYgfDdS2t3wLX8jFVPgVrA7DrhEr8CGpF7a5PdZ0vUvwQAtH
- BxeOci8OaT9gmbSQujs9La1MIu/c1BCnu+ik9rUE6oEVEkvj1ATAjEc/9Wdp8FZ6sKFn
- +bn2Mgx4BkC2i7zv/GnYNSrUUCLJusYN3FJ4gb4ciJZAsVqX5/h0vXrAV+3N7RGK4t3e
- MwYQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=MjCBb6Gp
-Subject: [Buildroot] [PATCH 1/1] package/libev: force arm mode instead of
- Thumb mode
+Date: Wed, 22 Feb 2023 15:51:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a39e328bb2835cd157ee1622d5117ba252d44733
+X-Git-Newrev: d0af2840b1b16dd95b9a468e46b6e275186e5447
+X-Patchwork-Hint: ignore
+Message-Id: <20230222145144.65618866DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freerdp: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,45 +55,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure:
+commit: https://git.buildroot.net/buildroot/commit/?id=d0af2840b1b16dd95b9a468e46b6e275186e5447
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/tmp/ccHc3Awn.s:825: Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
+Fix the following build failure with libressl raised since bump to
+version 2.10.0 in commit 03bab7117d232c9dcd784a74eefc0e48ea51ee53:
+
+/home/thomas/autobuild/instance-3/output-1/build/freerdp-2.10.0/libfreerdp/crypto/crypto.c: In function 'crypto_cert_get_signature_alg':
+/home/thomas/autobuild/instance-3/output-1/build/freerdp-2.10.0/libfreerdp/crypto/crypto.c:980:8: error: 'NID_sha3_224' undeclared (first use in this function)
+   case NID_sha3_224:
+        ^~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/1c597c9da724d6cac06b09b1ecd456a28440a3a3
+ - http://autobuild.buildroot.org/results/e96848576ac292799636abe7485c37aa54196a2c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libev/libev.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ...isable-sha3-and-shake-hashes-for-libressl.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index 9f3c19d46c..cbd5433d76 100644
---- a/package/libev/libev.mk
-+++ b/package/libev/libev.mk
-@@ -10,6 +10,13 @@ LIBEV_INSTALL_STAGING = YES
- LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
- LIBEV_LICENSE_FILES = LICENSE
- 
-+# libev has some assembly function that is not present in Thumb mode:
-+# Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
-+# so, we desactivate Thumb mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+LIBEV_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
-+endif
+diff --git a/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch b/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
+new file mode 100644
+index 0000000000..14f615e2e7
+--- /dev/null
++++ b/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
+@@ -0,0 +1,38 @@
++From bd093454fe126163634c00b7484ab7fee6ffe670 Mon Sep 17 00:00:00 2001
++From: akallabeth <akallabeth@posteo.net>
++Date: Mon, 20 Feb 2023 16:23:39 +0100
++Subject: [PATCH] Fix #8702: Disable sha3 and shake hashes for libressl
 +
- # The 'compatibility' event.h header conflicts with libevent
- # It's completely unnecessary for BR packages so remove it
- define LIBEV_DISABLE_EVENT_H_INSTALL
--- 
-2.39.0
-
++[Retrieved (and backported) from:
++https://github.com/FreeRDP/FreeRDP/pull/8708/commits/bd093454fe126163634c00b7484ab7fee6ffe670]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libfreerdp/crypto/x509_utils.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libfreerdp/crypto/crypto.c b/libfreerdp/crypto/crypto.c
++index 6e87a88b8d8..62cf2939be7 100644
++--- a/libfreerdp/crypto/crypto.c
+++++ b/libfreerdp/crypto/crypto.c
++@@ -748,7 +748,7 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
++ 			return WINPR_MD_SHA512;
++ 		case NID_ripemd160:
++ 			return WINPR_MD_RIPEMD160;
++-#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) || defined(LIBRESSL_VERSION_NUMBER)
+++#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) && !defined(LIBRESSL_VERSION_NUMBER)
++ 		case NID_sha3_224:
++ 			return WINPR_MD_SHA3_224;
++ 		case NID_sha3_256:
++@@ -757,11 +757,11 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
++ 			return WINPR_MD_SHA3_384;
++ 		case NID_sha3_512:
++ 			return WINPR_MD_SHA3_512;
++-#endif
++ 		case NID_shake128:
++ 			return WINPR_MD_SHAKE128;
++ 		case NID_shake256:
++ 			return WINPR_MD_SHAKE256;
+++#endif
++ 		case NID_undef:
++ 		default:
++ 			return WINPR_MD_NONE;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
