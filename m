@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53371C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:10:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D68BCC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFC8340545;
-	Wed, 22 Feb 2023 17:10:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFC8340545
+	by smtp2.osuosl.org (Postfix) with ESMTP id 855E041736;
+	Wed, 22 Feb 2023 17:10:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 855E041736
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hssOkDovlGG3; Wed, 22 Feb 2023 17:10:00 +0000 (UTC)
+	with ESMTP id JV0a_JNLUlOJ; Wed, 22 Feb 2023 17:10:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D7FB4173B;
-	Wed, 22 Feb 2023 17:09:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D7FB4173B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AFD41BF97A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96AAA41722;
+	Wed, 22 Feb 2023 17:10:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96AAA41722
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 580171BF364
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B74081418
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9A2460B4D
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B74081418
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9A2460B4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t0QDrSrcy_LY for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H2wIzq1pnc0d for <buildroot@lists.busybox.net>;
  Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73B168143F
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA9FC6115C
  for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73B168143F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA9FC6115C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63A29867D3; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+ id C88FF867D2; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:44:48 +0100
+Date: Wed, 22 Feb 2023 17:50:12 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 13c79ad4a57930f42516763937eb8f4d731fa1c5
-X-Git-Newrev: 48351fe47d2d0390687f9a401fc684076eae2936
+X-Git-Oldrev: 749129b54a81a9b798202e355c31dff62930b434
+X-Git-Newrev: 3fb4e35b33d42cb43c605d1e3d63ebbbfcb334e8
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170816.63A29867D3@busybox.osuosl.org>
+Message-Id: <20230222170816.C88FF867D2@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.02.x]
- toolchain/toolchain-buildroot: add comment about using virtual package
- infra
+ package/sunxi-mali-utgard: properly handle legacy for renamed options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,59 +63,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48351fe47d2d0390687f9a401fc684076eae2936
+commit: https://git.buildroot.net/buildroot/commit/?id=3fb4e35b33d42cb43c605d1e3d63ebbbfcb334e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit "9a8ec9195c toolchain/toolchain-buildroot: migrate to virtual
-package infrastructure" made the packages toolchain and
-toolchain-buildroot to use the virtual package infra even they being
-generic packages.
-This works because on package/pkg-virtual.mk when a package do not
-define neither _PROVIDES_ or _HAS_ symbols, only _IS_VIRTUAL is set to
-YES and _VERSION and _SOURCE are set to empty before relaying the call
-to inner-generic-package.
+Commit "6a7a652b14 package/sunxi-mali-utgard: rename from
+sunxi-mali-mainline" tried to add legacy handling but the new symbols
+are part of a choice, and Kconfig does not enforce the select of a
+option from a choice.
 
-Add a comment explaining why the virtual package infra is used in these
-cases.
+Update the legacy entry for 2022.02, following the example described in
+the beginning of the file.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit abcecd737b198e8a1a48bf4533e5c2b8de8b8cf4)
+(cherry picked from commit efc223abd4fe764f8af8238aec67e8cb700db45e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-buildroot/toolchain-buildroot.mk | 3 +++
- toolchain/toolchain/toolchain.mk                     | 3 +++
- 2 files changed, 6 insertions(+)
+ Config.in.legacy                    | 6 ++++--
+ package/sunxi-mali-utgard/Config.in | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-index b30cc332d2..6da64b7c77 100644
---- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-@@ -14,4 +14,7 @@ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e9159782b8..6cc4f47609 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -470,20 +470,22 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
+ 	bool "sunxi-mali-mainline-r6p2 was renamed"
+ 	select BR2_LEGACY
+-	select BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
+ 	help
+ 	  The sunxi-mali-mainline package has been renamed
+ 	  sunxi-mali-utgard, the suboptions of this package have also
+ 	  been renamed accordingly.
++# Note: BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 is still referenced from
++# package/sunxi-mali-utgard/Config.in
  
- TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1
+ 	bool "sunxi-mali-mainline-r8p1 was renamed"
+ 	select BR2_LEGACY
+-	select BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1
+ 	help
+ 	  The sunxi-mali-mainline package has been renamed
+ 	  sunxi-mali-utgard, the suboptions of this package have also
+ 	  been renamed accordingly.
++# Note: BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1 is still referenced from
++# package/sunxi-mali-utgard/Config.in
  
-+# Not really a virtual package, but we use the virtual package infra here so
-+# both the build log and build directory look nicer (toolchain-buildroot-virtual
-+# instead of toolchain-buildroot-undefined)
- $(eval $(virtual-package))
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 18f1dbea1a..ac60a7b248 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -47,4 +47,7 @@ endef
- TOOLCHAIN_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_GLIBC_COPY_NSSWITCH_FILE
- endif
+ config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
+ 	bool "qt5webkit-examples removed"
+diff --git a/package/sunxi-mali-utgard/Config.in b/package/sunxi-mali-utgard/Config.in
+index ff49ea03f1..59ac21f5ab 100644
+--- a/package/sunxi-mali-utgard/Config.in
++++ b/package/sunxi-mali-utgard/Config.in
+@@ -20,6 +20,8 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
  
-+# Not really a virtual package, but we use the virtual package infra here so
-+# both the build log and build directory look nicer (toolchain-virtual instead
-+# of toolchain-undefined)
- $(eval $(virtual-package))
+ choice
+ 	prompt "Version"
++	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 # legacy
++	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R8P1 if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1 # legacy
+ 	default BR2_PACKAGE_SUNXI_MALI_UTGARD_R6P2
+ 	help
+ 	  Select the version of the userspace module.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
