@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2489C6FD19
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79CF4C6FA99
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F77C4175B;
-	Sun, 12 Mar 2023 21:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F77C4175B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B27B4172F;
+	Sun, 12 Mar 2023 21:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B27B4172F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W9Erp1WV5nLX; Sun, 12 Mar 2023 21:51:54 +0000 (UTC)
+	with ESMTP id QMN7K_JPv0RH; Sun, 12 Mar 2023 21:52:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3ECE441795;
-	Sun, 12 Mar 2023 21:51:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3ECE441795
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7B6591BF2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A14C409A9;
+	Sun, 12 Mar 2023 21:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A14C409A9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EE9621BF2CF
  for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AAD864061D
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAD864061D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18F3160D5F
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18F3160D5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fmYGP7R4Fpc4 for <buildroot@lists.busybox.net>;
- Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7GvL5sHVWyPH for <buildroot@lists.busybox.net>;
+ Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0C7D40614
- for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0C7D40614
+ by smtp3.osuosl.org (Postfix) with ESMTP id 352FE60D67
+ for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 352FE60D67
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE09B87007; Sun, 12 Mar 2023 21:46:22 +0000 (UTC)
+ id 2FE4F87007; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 21:16:10 +0100
+Date: Wed, 22 Feb 2023 16:07:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ec7258f3f4ea4442cd1f8c78a066a062a4d0cbd0
-X-Git-Newrev: f6c05b47f71a6e140a0743dda276267f653f94f3
+X-Git-Oldrev: 9793454bd2f0ada2b3928896aaf90b4d753d0399
+X-Git-Newrev: 8beed8ac56a51d4d6a9dd81b81b8025cb7f8d99b
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214622.CE09B87007@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cmake: disable ccache for
- host-cmake
+Message-Id: <20230312214623.2FE4F87007@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8192eu: bump to 2022-12-29
+ version on branch 5.11.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6c05b47f71a6e140a0743dda276267f653f94f3
+commit: https://git.buildroot.net/buildroot/commit/?id=8beed8ac56a51d4d6a9dd81b81b8025cb7f8d99b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The upcoming ccache update will depend on host-cmake, so we must
-ensure host-cmake doesn't use ccache when being built.
+Drop local patch since it's been merged[0].
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[0]: https://github.com/clnhub/rtl8192eu-linux/pull/69
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cmake/cmake.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ ...ailure-due-to-redefition-of-local-sha256-.patch | 108 ---------------------
+ package/rtl8192eu/rtl8192eu.hash                   |   2 +-
+ package/rtl8192eu/rtl8192eu.mk                     |   2 +-
+ 3 files changed, 2 insertions(+), 110 deletions(-)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 053658fad6..dc92c8bb4e 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -40,9 +40,16 @@ CMAKE_CONF_OPTS = \
- HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
- HOST_CMAKE_CXXFLAGS = $(shell echo $(HOST_CXXFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
+diff --git a/package/rtl8192eu/0001-Fix-build-failure-due-to-redefition-of-local-sha256-.patch b/package/rtl8192eu/0001-Fix-build-failure-due-to-redefition-of-local-sha256-.patch
+deleted file mode 100644
+index 52ef8c9005..0000000000
+--- a/package/rtl8192eu/0001-Fix-build-failure-due-to-redefition-of-local-sha256-.patch
++++ /dev/null
+@@ -1,108 +0,0 @@
+-From 1f968bd58656f200347bd398b34aa9f1b6393302 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Wed, 28 Dec 2022 18:54:48 +0100
+-Subject: [PATCH] Fix build failure due to redefition of local sha256 data
+- types and functions
+-
+-Linux provides sha256_init() and 'struct sha256_state' in file
+-include/crypto/sha2.h so this leads to a build failure due to redefinition.
+-To avoid this let's prepend to all local exposed functions and data types
+-rtl_. sha256_process() and sha256_done() are not required to be renamed but
+-let's change them for consistency.
+-
+-[Upstream status: https://github.com/clnhub/rtl8192eu-linux/pull/69]
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- core/crypto/sha256-internal.c | 16 ++++++++--------
+- core/crypto/sha256_i.h        |  8 ++++----
+- 2 files changed, 12 insertions(+), 12 deletions(-)
+-
+-diff --git a/core/crypto/sha256-internal.c b/core/crypto/sha256-internal.c
+-index 4d61cb1..537bb2e 100644
+---- a/core/crypto/sha256-internal.c
+-+++ b/core/crypto/sha256-internal.c
+-@@ -26,17 +26,17 @@
+- int sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
+- 		  u8 *mac)
+- {
+--	struct sha256_state ctx;
+-+	struct rtl_sha256_state ctx;
+- 	size_t i;
+- 
+- 	if (TEST_FAIL())
+- 		return -1;
+- 
+--	sha256_init(&ctx);
+-+	rtl_sha256_init(&ctx);
+- 	for (i = 0; i < num_elem; i++)
+--		if (sha256_process(&ctx, addr[i], len[i]))
+-+		if (rtl_sha256_process(&ctx, addr[i], len[i]))
+- 			return -1;
+--	if (sha256_done(&ctx, mac))
+-+	if (rtl_sha256_done(&ctx, mac))
+- 		return -1;
+- 	return 0;
+- }
+-@@ -82,7 +82,7 @@ static const unsigned long K[64] = {
+- #endif
+- 
+- /* compress 512-bits */
+--static int sha256_compress(struct sha256_state *md, unsigned char *buf)
+-+static int sha256_compress(struct rtl_sha256_state *md, unsigned char *buf)
+- {
+- 	u32 S[8], W[64], t0, t1;
+- 	u32 t;
+-@@ -125,7 +125,7 @@ static int sha256_compress(struct sha256_state *md, unsigned char *buf)
+- 
+- 
+- /* Initialize the hash state */
+--void sha256_init(struct sha256_state *md)
+-+void rtl_sha256_init(struct rtl_sha256_state *md)
+- {
+- 	md->curlen = 0;
+- 	md->length = 0;
+-@@ -146,7 +146,7 @@ void sha256_init(struct sha256_state *md)
+-    @param inlen  The length of the data (octets)
+-    @return CRYPT_OK if successful
+- */
+--int sha256_process(struct sha256_state *md, const unsigned char *in,
+-+int rtl_sha256_process(struct rtl_sha256_state *md, const unsigned char *in,
+- 		   unsigned long inlen)
+- {
+- 	unsigned long n;
+-@@ -186,7 +186,7 @@ int sha256_process(struct sha256_state *md, const unsigned char *in,
+-    @param out [out] The destination of the hash (32 bytes)
+-    @return CRYPT_OK if successful
+- */
+--int sha256_done(struct sha256_state *md, unsigned char *out)
+-+int rtl_sha256_done(struct rtl_sha256_state *md, unsigned char *out)
+- {
+- 	int i;
+- 
+-diff --git a/core/crypto/sha256_i.h b/core/crypto/sha256_i.h
+-index a502d2b..93a8858 100644
+---- a/core/crypto/sha256_i.h
+-+++ b/core/crypto/sha256_i.h
+-@@ -11,15 +11,15 @@
+- 
+- #define SHA256_BLOCK_SIZE 64
+- 
+--struct sha256_state {
+-+struct rtl_sha256_state {
+- 	u64 length;
+- 	u32 state[8], curlen;
+- 	u8 buf[SHA256_BLOCK_SIZE];
+- };
+- 
+--void sha256_init(struct sha256_state *md);
+--int sha256_process(struct sha256_state *md, const unsigned char *in,
+-+void rtl_sha256_init(struct rtl_sha256_state *md);
+-+int rtl_sha256_process(struct rtl_sha256_state *md, const unsigned char *in,
+- 		   unsigned long inlen);
+--int sha256_done(struct sha256_state *md, unsigned char *out);
+-+int rtl_sha256_done(struct rtl_sha256_state *md, unsigned char *out);
+- 
+- #endif /* SHA256_I_H */
+--- 
+-2.34.1
+-
+diff --git a/package/rtl8192eu/rtl8192eu.hash b/package/rtl8192eu/rtl8192eu.hash
+index 0cb9961345..2d6498f19d 100644
+--- a/package/rtl8192eu/rtl8192eu.hash
++++ b/package/rtl8192eu/rtl8192eu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  827e9592336744cbcfca5de988d8f4e14a62690302d3cabf72aa4bedebded2b7  rtl8192eu-94bce7798bbb18de6d8b1646dedb2511f24867d3.tar.gz
++sha256  72d1d97c6d2038885e5666f3271609b4dcbe45633c19a5606dc59745ff8ab543  rtl8192eu-865656c3a1d1aee8c4ba459ce7608756d17c712f.tar.gz
+diff --git a/package/rtl8192eu/rtl8192eu.mk b/package/rtl8192eu/rtl8192eu.mk
+index d967db90b8..da6fe42e99 100644
+--- a/package/rtl8192eu/rtl8192eu.mk
++++ b/package/rtl8192eu/rtl8192eu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# We may be a ccache dependency, so we can't use ccache
-+HOST_CMAKE_CONFIGURE_OPTS = \
-+	$(HOST_CONFIGURE_OPTS) \
-+	CC="$(HOSTCC_NOCCACHE)" \
-+	GCC="$(HOSTCC_NOCCACHE)" \
-+	CXX="$(HOSTCXX_NOCCACHE)"
-+
- define HOST_CMAKE_CONFIGURE_CMDS
- 	(cd $(@D); \
--		$(HOST_CONFIGURE_OPTS) \
-+		$(HOST_CMAKE_CONFIGURE_OPTS) \
- 		CFLAGS="$(HOST_CMAKE_CFLAGS)" \
- 		./bootstrap --prefix=$(HOST_DIR) \
- 			--parallel=$(PARALLEL_JOBS) -- \
+-RTL8192EU_VERSION = 94bce7798bbb18de6d8b1646dedb2511f24867d3
++RTL8192EU_VERSION = 865656c3a1d1aee8c4ba459ce7608756d17c712f
+ RTL8192EU_SITE = $(call github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
+ RTL8192EU_LICENSE = GPL-2.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
