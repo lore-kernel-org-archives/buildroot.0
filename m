@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E761C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:14:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9B27C636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:14:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 283BF41717;
-	Wed, 22 Feb 2023 17:14:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 283BF41717
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A2C541799;
+	Wed, 22 Feb 2023 17:14:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A2C541799
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hzYNoKVpK4th; Wed, 22 Feb 2023 17:14:25 +0000 (UTC)
+	with ESMTP id WJvj6cT4zrGy; Wed, 22 Feb 2023 17:14:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EBD241728;
-	Wed, 22 Feb 2023 17:14:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EBD241728
+	by smtp2.osuosl.org (Postfix) with ESMTP id CADBB41792;
+	Wed, 22 Feb 2023 17:14:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CADBB41792
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C7ECE1BF364
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 075B81BF364
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 784BA813AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9077A813CC
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 784BA813AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9077A813CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MiS4ADiqOWIr for <buildroot@lists.busybox.net>;
+ with ESMTP id SeHT3tMt663M for <buildroot@lists.busybox.net>;
  Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B14C58143F
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF00781FFC
  for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B14C58143F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF00781FFC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A1D2382261; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+ id CD19C82261; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:43:46 +0100
+Date: Wed, 22 Feb 2023 17:45:18 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 85b4570d63762886188122aec3771d79fbab3660
-X-Git-Newrev: 01f08ce374237ecb7f021194370ddbca04de08e7
+X-Git-Oldrev: 972ad2022e2757eb43d2cea328fc583fbfdaf408
+X-Git-Newrev: 89d06caa82ddd0ba259a5c1d302155fa904ac4bd
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170818.A1D2382261@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/pugixml: use
- explicit build options
+Message-Id: <20230222170818.CD19C82261@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] boot/uboot: remove use of
+ legacy xloader symbol
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,69 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01f08ce374237ecb7f021194370ddbca04de08e7
+commit: https://git.buildroot.net/buildroot/commit/?id=89d06caa82ddd0ba259a5c1d302155fa904ac4bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Commit upstream 986b7ffd01aedcd4f2aa16e78e4cad9313b6d7b2
-"Add Cmake options for pugiconfig.hpp" added feature toogles to release
-v1.12, including PUGIXML_NO_XPATH and PUGIXML_COMPACT.
+Commit "070b183d0c boot/xloader: remove package", from release 2018.11,
+removed the package, but the symbol is still referenced.
 
-Commit upstream 5f49f2c6575cc2b7d343f8d41581fe92d69d7b52
-"Mark advanced options and removed redundant ones" removed CMake
-specific support for PUGIXML_HEADER_ONLY and PUGIXML_HAS_LONG_LONG, but
-they can still be provided using PUGIXML_BUILD_DEFINES, starting from
-release v1.12.
+Remove the reference to it.
 
-So use the explicit build options PUGIXML_NO_XPATH and PUGIXML_COMPACT,
-but keep using PUGIXML_BUILD_DEFINES to set PUGIXML_HEADER_ONLY and
-PUGIXML_HAS_LONG_LONG.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f043f928674e94687d1d3173394142271ca3d397)
+(cherry picked from commit 9b1b1763b754f8a25cf0f2a7fe05e53d256fe675)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pugixml/pugixml.mk | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ boot/uboot/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index c54148d98f..1cf81c45f3 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -12,6 +12,18 @@ PUGIXML_CPE_ID_VENDOR = pugixml_project
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 557472b58b..7b7cad53f1 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -430,7 +430,6 @@ endif
  
- PUGIXML_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),y)
-+PUGIXML_CONF_OPTS += -DPUGIXML_NO_XPATH=OFF
-+else
-+PUGIXML_CONF_OPTS += -DPUGIXML_NO_XPATH=ON
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
-+PUGIXML_CONF_OPTS += -DPUGIXML_COMPACT=ON
-+else
-+PUGIXML_CONF_OPTS += -DPUGIXML_COMPACT=OFF
-+endif
-+
- # Pugixml will automatically enable 'long long' support on C++11 compilers,
- # which means gcc 4.8+. As gcc always supports the 'long long' type,
- # force-enable this option to support older gcc versions. See also:
-@@ -19,12 +31,6 @@ PUGIXML_INSTALL_STAGING = YES
- PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
- HOST_PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
- 
--ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
--PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
--endif
--ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
--PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
--endif
- ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
- PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
- endif
+ config BR2_TARGET_UBOOT_SPL
+ 	bool "Install U-Boot SPL binary image"
+-	depends on !BR2_TARGET_XLOADER
+ 	help
+ 	  Install the U-Boot SPL binary image to the images
+ 	  directory.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
