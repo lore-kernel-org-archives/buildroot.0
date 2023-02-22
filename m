@@ -4,51 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FEBCC6379F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 09:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02C1EC61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 09:41:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A901A40B55;
-	Wed, 22 Feb 2023 09:38:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A901A40B55
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BA0D40B70;
+	Wed, 22 Feb 2023 09:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BA0D40B70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IxQ7b-JCar62; Wed, 22 Feb 2023 09:38:47 +0000 (UTC)
+	with ESMTP id Gnyc6ZAi8kkg; Wed, 22 Feb 2023 09:41:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5C33404DA;
-	Wed, 22 Feb 2023 09:38:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5C33404DA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4CA571BF3F9
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 09:38:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05F6E404DA;
+	Wed, 22 Feb 2023 09:41:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05F6E404DA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8848B1BF3F9
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 09:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26914417EF
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 09:38:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26914417EF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F7B640B61
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 09:41:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F7B640B61
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jG4w2pcWrV1Z for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 09:38:42 +0000 (UTC)
-X-Greylist: delayed 00:06:31 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAC9C410BE
-Received: from mfwd17.mailplug.co.kr (mfwd17.mailplug.co.kr [211.253.10.228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DAC9C410BE
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 09:38:41 +0000 (UTC)
-Received: (qmail 24552 invoked from network); 22 Feb 2023 18:31:58 +0900
-Received: from wmail10.mailplug.com (121.156.118.13)
- by 0 (qmail 1.03 + mailplug 2.0) with SMTP;
- 22 Feb 2023 18:30:58 +0900
-Received: (qmail 624110 invoked by uid 0); 22 Feb 2023 18:30:57 +0900
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id swgddyelXOAI for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 09:41:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9871404DA
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C9871404DA
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 09:41:28 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id AAB22FF80D;
+ Wed, 22 Feb 2023 09:41:25 +0000 (UTC)
+Date: Wed, 22 Feb 2023 10:41:22 +0100
+To: Andrei Cherniaev <cherniaev.andrei@kairo.space>
+Message-ID: <20230222104122.6eff1ef1@windsurf>
+In-Reply-To: <167705825735.1345689.5559147157105378409@wmail10.mailplug.com>
+References: <167705825735.1345689.5559147157105378409@wmail10.mailplug.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-From: Andrei Cherniaev <cherniaev.andrei@kairo.space>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailer: Mailplug (mailplug.com) mailer version 0.1
-X-Priority: 3
-Message-Id: <167705825735.1345689.5559147157105378409@wmail10.mailplug.com>
-Date: Wed, 22 Feb 2023 18:30:55 +0900
-X-MSP-FID: 1416889.1677058255.3641
-Subject: [Buildroot] [RE]Re: [PATCH] boot/grub2: add information where
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1677058885;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=IiR0eqzcUsWERvTf+2ys8lnYAl8hVDvMk4f/MXrO4Y0=;
+ b=LX8SWCSWs58ze9CgpaLG1f5R16aSKQjKWdKfl0W4B7wVjonG/p7uskac8tIXnV8Qo0YhSL
+ 6G23MeSbyy+RcZsD8wT7le5AhM063+JP1kt4G/7wWyCQo8zqHVu6O49GFUK1Ek6O8KAcG5
+ kDGYl/CZ0glGw4iT72rjnwL4+OV0y3E+oKpYdd5u2iiPCpcp8arilYkGRTIimserp9Tedq
+ xKGMdZn21yTiLfdhdLJQwh5fSzDxa68r9ozxtOTjBBxUzqXXdmGyxmryjdLdKAl+MGK6Nv
+ eno9Sj2WowLLRf/RwJLUMvfKykWw7VLZDZp/NfkbNvuvRARCMbw/4tZDhaGEmw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LX8SWCSW
+Subject: Re: [Buildroot] [RE]Re: [PATCH] boot/grub2: add information where
  isconfiguration file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -61,120 +76,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7927119347280134861=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7927119347280134861==
-Content-Type: multipart/alternative;
- boundary="FADC26E290F79CE38C260CDC5BA594B530"
+Hello Andrei,
 
---FADC26E290F79CE38C260CDC5BA594B530
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Sorry but the plain text version of your e-mail is unreadable. Could
+you use an e-mail client that sends a proper plain text version of its
+e-mails?
 
-SGVsbG8gVGhvbWFzIFBldGF6em9uaSJib290L2dydWIyL2dydWIuY2ZnOiBpdCBpcyBwYXJ0IG9m
-IEJ1aWxkcm9vdCBpdHNlbGYsIGFuZCB5b3UgcHJvYmFibHkgZG9uJ3Qgd2FudCB0byBoYXZlIHBy
-b2plY3Qtc3BlY2lmaWMgY2hhbmdlcyBpbiB0aGVyZS4iWW91IHNheSB0aGF0IEkgdHJ5IHRvIHNl
-dCBwcm9qZWN0LXNwZWNpZmljIHNldHRpbmdzLiBMb29rIGF0IEJ1aWxkcm9vdCwgaXQgc2V0IHBy
-b2plY3Qtc3BlY2lmaWMgc2V0IGRlZmF1bHQ9IjAic2V0IHRpbWVvdXQ9IjUiV2h5PyBXaHkgNSwg
-bm90IDY/IEJ1aWxkcm9vdCBzaG91bGRuJ3Qgc2V0IHByb2plY3Qtc3BlY2lmaWMgc2V0dGluZ3Ms
-IGlzbid0IGl0PyBNYXkgYmUgbWFpbnRhaW5lciBzaG91bGQganVzdCByZW1vdmVzZXQgZGVmYXVs
-dD0iMCJzZXQgdGltZW91dD0iNSJmcm9tIGdydWIuY2ZnID9BbmRyZWkgQ2hlcm5pYWV2LS0tLS0g
-T3JpZ2luYWwgTWVzc2FnZSAtLS0tLUZyb20gOiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0
-YXp6b25pQGJvb3RsaW4uY29tPlRvIDogIkFuZHJlaUNoZXJuaWFldiIgPGNoZXJuaWFldi5hbmRy
-ZWlAa2Fpcm8uc3BhY2U+Q2MgOiA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+U2VudCA6IDIwMjMt
-MDItMjIgMDc6MDI6MDJTdWJqZWN0IDogUmU6IFtCdWlsZHJvb3RdIFtQQVRDSF0gYm9vdC9ncnVi
-MjogYWRkIGluZm9ybWF0aW9uIHdoZXJlIGlzY29uZmlndXJhdGlvbiBmaWxlSGVsbG8gQW5kcmVp
-LE9uIE1vbiwgIDkgSmFuIDIwMjMgMTY6MzM6NTIgKzA5MDBBbmRyZWlDaGVybmlhZXYgPGNoZXJu
-aWFldi5hbmRyZWlAa2Fpcm8uc3BhY2U+IHdyb3RlOj4gZGlmZiAtLWdpdCBhL2Jvb3QvZ3J1YjIv
-Q29uZmlnLmluIGIvYm9vdC9ncnViMi9Db25maWcuaW4+IGluZGV4IDkyYjVkZDUwMWIuLmJmMDQw
-MGMwOGYgMTAwNjQ0PiAtLS0gYS9ib290L2dydWIyL0NvbmZpZy5pbj4gKysrIGIvYm9vdC9ncnVi
-Mi9Db25maWcuaW4+IEBAIC0xMjUsNiArMTI1LDcgQEAgY29uZmlnIEJSMl9UQVJHRVRfR1JVQjJf
-QlVJTFRJTl9DT05GSUdfUEM+ICAJICBpbnRvIHRoZSBHcnViIGltYWdlIGl0c2VsZi4gVGhpcyBh
-bGxvd3MgdG8gc2V0IHRoZSByb290PiAgCSAgZGV2aWNlIGFuZCBvdGhlciBjb25maWd1cmF0aW9u
-IHBhcmFtZXRlcnMsIGJ1dCBob3dldmVyIG1lbnU+ICAJICBlbnRyaWVzIGNhbm5vdCBiZSBkZXNj
-cmliZWQgaW4gdGhpcyBlbWJlZGRlZCBjb25maWd1cmF0aW9uLj4gKwkgIFVzZSBib290L2dydWIy
-L2dydWIuY2ZnIHRvIGVkaXQgbWVudSBlbnRyaWVzLkFjdHVhbGx5IG5vLCB5b3UgcHJvYmFibHkg
-ZG9uJ3Qgd2FudCB0byBjaGFuZ2UgYm9vdC9ncnViMi9ncnViLmNmZzogaXRpcyBwYXJ0IG9mIEJ1
-aWxkcm9vdCBpdHNlbGYsIGFuZCB5b3UgcHJvYmFibHkgZG9uJ3Qgd2FudCB0byBoYXZlcHJvamVj
-dC1zcGVjaWZpYyBjaGFuZ2VzIGluIHRoZXJlLkluc3RlYWQsIHlvdSBzaG91bGQgb3ZlcnJpZGUg
-aXQgdXNpbmcgYSByb290ZnMgb3ZlcmxheSAoaWYgZ3J1Yi5jZmcgaXNpbiAkKFRBUkdFVF9ESVIp
-L2Jvb3QpIG9yIGEgcG9zdC1idWlsZC9wb3N0LWltYWdlIHNjcmlwdCAoaWYgaXQncyBpbnRoZSBF
-RkkgcGFydGl0aW9uKS5JIGhhdmUgbmV2ZXJ0aGVsZXNzIGFwcGxpZWQgeW91ciBwYXRjaCwgYnV0
-IGFmdGVyIHR3ZWFraW5nIHRoZSBtZXNzYWdlaW4gdGhlIGhlbHAgdGV4dCwgYW5kIG1vdmluZyBp
-dCB0byB0aGUgbWFpbiBHcnViMiBvcHRpb24uIFNlZTogIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWls
-ZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC83NjkyZDViZWIyZDllNGQwYjQ2M2YwZjI2YTE3
-NzgyOWU1YmNjMWVjQmVzdCByZWdhcmRzLFRob21hcyBQZXRhenpvbmktLSBUaG9tYXMgUGV0YXp6
-b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBl
-bmdpbmVlcmluZyBhbmQgdHJhaW5pbmdodHRwczovL2Jvb3RsaW4uY29t
+Thanks a lot,
 
---FADC26E290F79CE38C260CDC5BA594B530
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
+Thomas Petazzoni
 
-PGh0bWw+PGhlYWQ+PHN0eWxlPnB7bWFyZ2luLXRvcDowcHg7bWFyZ2luLWJvdHRvbTowcHg7fTwv
-c3R5bGU+PC9oZWFkPjxib2R5PjxkaXYgbmFtZT0nbXAtZGVmYXVsdCcgc3R5bGU9J2ZvbnQtZmFt
-aWx5OuuPi+ybgCxEb3R1bTtmb250LXNpemU6MTBwdDsnPjxwPkhlbGxvIFRob21hcyBQZXRhenpv
-bmk8L3A+PHA+PGJyPjwvcD48cD4iYm9vdC9ncnViMi9ncnViLmNmZzogaXQgaXMgcGFydCBvZiBC
-dWlsZHJvb3QgaXRzZWxmLCBhbmQgeW91IHByb2JhYmx5IGRvbid0IHdhbnQgdG8gaGF2ZSBwcm9q
-ZWN0LXNwZWNpZmljIGNoYW5nZXMgaW4gdGhlcmUuIjwvcD48cD5Zb3Ugc2F5IHRoYXQgSSB0cnkg
-dG8gc2V0IHByb2plY3Qtc3BlY2lmaWMgc2V0dGluZ3MuIExvb2sgYXQgQnVpbGRyb290LCBpdCBz
-ZXQgcHJvamVjdC1zcGVjaWZpYyA8L3A+PHA+c2V0IGRlZmF1bHQ9IjAiPGJyPnNldCB0aW1lb3V0
-PSI1IjwvcD48cD5XaHk/IFdoeSA1LCBub3QgNj8gQnVpbGRyb290IHNob3VsZG4ndCBzZXQgcHJv
-amVjdC1zcGVjaWZpYyBzZXR0aW5ncywgaXNuJ3QgaXQ/IE1heSBiZSBtYWludGFpbmVyIHNob3Vs
-ZCBqdXN0IHJlbW92ZTwvcD48cD5zZXQgZGVmYXVsdD0iMCI8YnI+c2V0IHRpbWVvdXQ9IjUiPC9w
-PjxwPmZyb20gZ3J1Yi5jZmcgPzwvcD48cD48YnI+PC9wPjxwPkFuZHJlaSBDaGVybmlhZXY8YnI+
-PC9wPjxicj48L2Rpdj48Zm9udCBzdHlsZT0iZm9udC1mYW1pbHk664+L7JuALERvdHVtO2ZvbnQt
-c2l6ZToxMHB0OyI+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLTxicj5Gcm9tIDogVGhvbWFz
-IFBldGF6em9uaSAmbHQ7dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbSZndDs8YnI+VG8gOiAi
-QW5kcmVpQ2hlcm5pYWV2IiAmbHQ7Y2hlcm5pYWV2LmFuZHJlaUBrYWlyby5zcGFjZSZndDs8YnI+
-Q2MgOiAmbHQ7YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcmZ3Q7PGJyPlNlbnQgOiAyMDIzLTAyLTIy
-IDA3OjAyOjAyPGJyPlN1YmplY3QgOiBSZTogW0J1aWxkcm9vdF0gW1BBVENIXSBib290L2dydWIy
-OiBhZGQgaW5mb3JtYXRpb24gd2hlcmUgaXNjb25maWd1cmF0aW9uIGZpbGU8YnI+PGJyPjxicj48
-L2ZvbnQ+SGVsbG8gQW5kcmVpLDxicj48YnI+T24gTW9uLCAgOSBKYW4gMjAyMyAxNjozMzo1MiAr
-MDkwMDxicj5BbmRyZWlDaGVybmlhZXYgJmx0O2NoZXJuaWFldi5hbmRyZWlAa2Fpcm8uc3BhY2Um
-Z3Q7IHdyb3RlOjxicj48YnI+Jmd0OyBkaWZmIC0tZ2l0IGEvYm9vdC9ncnViMi9Db25maWcuaW4g
-Yi9ib290L2dydWIyL0NvbmZpZy5pbjxicj4mZ3Q7IGluZGV4IDkyYjVkZDUwMWIuLmJmMDQwMGMw
-OGYgMTAwNjQ0PGJyPiZndDsgLS0tIGEvYm9vdC9ncnViMi9Db25maWcuaW48YnI+Jmd0OyArKysg
-Yi9ib290L2dydWIyL0NvbmZpZy5pbjxicj4mZ3Q7IEBAIC0xMjUsNiArMTI1LDcgQEAgY29uZmln
-IEJSMl9UQVJHRVRfR1JVQjJfQlVJTFRJTl9DT05GSUdfUEM8YnI+Jmd0OyAgCSAgaW50byB0aGUg
-R3J1YiBpbWFnZSBpdHNlbGYuIFRoaXMgYWxsb3dzIHRvIHNldCB0aGUgcm9vdDxicj4mZ3Q7ICAJ
-ICBkZXZpY2UgYW5kIG90aGVyIGNvbmZpZ3VyYXRpb24gcGFyYW1ldGVycywgYnV0IGhvd2V2ZXIg
-bWVudTxicj4mZ3Q7ICAJICBlbnRyaWVzIGNhbm5vdCBiZSBkZXNjcmliZWQgaW4gdGhpcyBlbWJl
-ZGRlZCBjb25maWd1cmF0aW9uLjxicj4mZ3Q7ICsJICBVc2UgYm9vdC9ncnViMi9ncnViLmNmZyB0
-byBlZGl0IG1lbnUgZW50cmllcy48YnI+PGJyPkFjdHVhbGx5IG5vLCB5b3UgcHJvYmFibHkgZG9u
-J3Qgd2FudCB0byBjaGFuZ2UgYm9vdC9ncnViMi9ncnViLmNmZzogaXQ8YnI+aXMgcGFydCBvZiBC
-dWlsZHJvb3QgaXRzZWxmLCBhbmQgeW91IHByb2JhYmx5IGRvbid0IHdhbnQgdG8gaGF2ZTxicj5w
-cm9qZWN0LXNwZWNpZmljIGNoYW5nZXMgaW4gdGhlcmUuPGJyPjxicj5JbnN0ZWFkLCB5b3Ugc2hv
-dWxkIG92ZXJyaWRlIGl0IHVzaW5nIGEgcm9vdGZzIG92ZXJsYXkgKGlmIGdydWIuY2ZnIGlzPGJy
-PmluICQoVEFSR0VUX0RJUikvYm9vdCkgb3IgYSBwb3N0LWJ1aWxkL3Bvc3QtaW1hZ2Ugc2NyaXB0
-IChpZiBpdCdzIGluPGJyPnRoZSBFRkkgcGFydGl0aW9uKS48YnI+PGJyPkkgaGF2ZSBuZXZlcnRo
-ZWxlc3MgYXBwbGllZCB5b3VyIHBhdGNoLCBidXQgYWZ0ZXIgdHdlYWtpbmcgdGhlIG1lc3NhZ2U8
-YnI+aW4gdGhlIGhlbHAgdGV4dCwgYW5kIG1vdmluZyBpdCB0byB0aGUgbWFpbiBHcnViMiBvcHRp
-b24uIFNlZTo8YnI+PGJyPiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRy
-b290Ly0vY29tbWl0Lzc2OTJkNWJlYjJkOWU0ZDBiNDYzZjBmMjZhMTc3ODI5ZTViY2MxZWM8YnI+
-PGJyPkJlc3QgcmVnYXJkcyw8YnI+PGJyPlRob21hcyBQZXRhenpvbmk8YnI+LS0gPGJyPlRob21h
-cyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW48YnI+RW1iZWRkZWQgTGludXgg
-YW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmc8YnI+aHR0cHM6Ly9ib290bGluLmNv
-bTxicj48L2JvZHk+PC9odG1sPjxpbWcgc3JjPSJodHRwOi8vbTEzLm1haWxwbHVnLmNvbS9hcGkv
-bm90aWZ5LnBocD9ob21lPU1qQXlNekF5TWpJeE9ETXdOVFY4WW5WcGJHUnliMjkwUUdKMWFXeGtj
-bTl2ZEM1dmNtZDhZMmhsY201cFlXVjJMbUZ1WkhKbGFVQnJZV2x5Ynk1emNHRmpaUT09Ij4=
+On Wed, 22 Feb 2023 18:30:55 +0900
+Andrei Cherniaev <cherniaev.andrei@kairo.space> wrote:
 
---FADC26E290F79CE38C260CDC5BA594B530--
+> Hello Thomas Petazzoni"boot/grub2/grub.cfg: it is part of Buildroot itself, and you probably don't want to have project-specific changes in there."You say that I try to set project-specific settings. Look at Buildroot, it set project-specific set default="0"set timeout="5"Why? Why 5, not 6? Buildroot shouldn't set project-specific settings, isn't it? May be maintainer should just removeset default="0"set timeout="5"from grub.cfg ?Andrei Cherniaev----- Original Message -----From : Thomas Petazzoni <thomas.petazzoni@bootlin.com>To : "AndreiCherniaev" <cherniaev.andrei@kairo.space>Cc : <buildroot@buildroot.org>Sent : 2023-02-22 07:02:02Subject : Re: [Buildroot] [PATCH] boot/grub2: add information where isconfiguration fileHello Andrei,On Mon,  9 Jan 2023 16:33:52 +0900AndreiCherniaev <cherniaev.andrei@kairo.space> wrote:> diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in> index 92b5dd501b..bf0400c08f 100644> --- a/boot/grub2/Config.in> +++ b/boot/grub2/Config.in> @@ -125,6 +125
+ ,7 @@ config BR2_TARGET_GRUB2_BUILTIN_CONFIG_PC>  	  into the Grub image itself. This allows to set the root>  	  device and other configuration parameters, but however menu>  	  entries cannot be described in this embedded configuration.> +	  Use boot/grub2/grub.cfg to edit menu entries.Actually no, you probably don't want to change boot/grub2/grub.cfg: itis part of Buildroot itself, and you probably don't want to haveproject-specific changes in there.Instead, you should override it using a rootfs overlay (if grub.cfg isin $(TARGET_DIR)/boot) or a post-build/post-image script (if it's inthe EFI partition).I have nevertheless applied your patch, but after tweaking the messagein the help text, and moving it to the main Grub2 option. See:  https://gitlab.com/buildroot.org/buildroot/-/commit/7692d5beb2d9e4d0b463f0f26a177829e5bcc1ecBest regards,Thomas Petazzoni-- Thomas Petazzoni, co-owner and CEO, BootlinEmbedded Linux and Kernel engineering and traininghttps://bootlin.com
 
 
---===============7927119347280134861==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7927119347280134861==--
-
