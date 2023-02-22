@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF81C636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 15:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD27AC636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 15:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 490464105B;
-	Wed, 22 Feb 2023 15:51:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 490464105B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B428415AB;
+	Wed, 22 Feb 2023 15:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B428415AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7A_J6IUBFCBo; Wed, 22 Feb 2023 15:51:16 +0000 (UTC)
+	with ESMTP id 1el6bCoXZmKe; Wed, 22 Feb 2023 15:52:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8FEBB404D5;
-	Wed, 22 Feb 2023 15:51:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FEBB404D5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 861C91BF3BE
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 15:50:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7BE040B8E;
+	Wed, 22 Feb 2023 15:52:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7BE040B8E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E65F91BF3BE
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 15:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E4E6418E2
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 15:50:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E4E6418E2
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0A2B6116C
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 15:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0A2B6116C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WwJluJE_YAfi for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 15:50:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1AGmY4-UpwFR for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 15:52:31 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 020A5418DB
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 020A5418DB
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 15:50:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 490326116A
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 490326116A
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 15:52:31 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B0B69100018;
- Wed, 22 Feb 2023 15:50:26 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0BCCA20019;
+ Wed, 22 Feb 2023 15:52:28 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pUrNx-007rrc-BO; Wed, 22 Feb 2023 16:50:25 +0100
+ id 1pUrPv-007sG6-7W; Wed, 22 Feb 2023 16:52:27 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230114170738.1101463-1-fontaine.fabrice@gmail.com>
-Date: Wed, 22 Feb 2023 16:50:25 +0100
-In-Reply-To: <20230114170738.1101463-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 14 Jan 2023 18:07:38 +0100")
-Message-ID: <87ilftwvge.fsf@dell.be.48ers.dk>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20230206100315.9B99A839FF@busybox.osuosl.org>
+Date: Wed, 22 Feb 2023 16:52:27 +0100
+In-Reply-To: <20230206100315.9B99A839FF@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Mon, 6 Feb 2023 11:02:53 +0100")
+Message-ID: <87edqhwvd0.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mongoose: fix build with gcc 4.8
+Subject: Re: [Buildroot] [git commit] package/yajl: explicitly request a tag
+ in _SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,28 +64,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > Fix the following build failure with gcc 4.8 raised since bump to
- > version 7.8 in commit f9e51e1150f59962577358b3da5c390ca4749291:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=5be76a39d3a0c21d6f3ceeab0889edc3cec9f2f3
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > /home/buildroot/autobuild/run/instance-2/output-1/build/mongoose-7.8/mongoose.c: In function 'mg_iotest':
- > /home/buildroot/autobuild/run/instance-2/output-1/build/mongoose-7.8/mongoose.c:4484:3: error: 'for' loop initial declarations are only allowed in C99 mode
- >    for (struct mg_connection *c = mgr->conns; c != NULL; c = c->next) {
- >    ^
+ > The yajl repository has both a branch and a tag names 2.1.0. Because of
+ > this, when we use the usual github URL [1], github doesn't return a
+ > tarball but rather an ASCII string:
+ >    the given path has multiple possibilities: #<Git::Ref:0x00007f193bebe4d8>, #<Git::Ref:0x00007f193bebd858>
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/c538c6d8e87e4e24097c9878ee15083802276505
+ > This obviously (and fortunately) leads to a hash check failure.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > To make sure we get the tag and not the branch, we should use a URL that
+ > explicitly asks for refs/tags/2.1.0 [2]. We can't change VERSION to
+ > include refs/tags, because that also affects the _SOURCE default, the
+ > contents of the tarball, the CPE ID and the release-monitoring access.
+ > Therefore, add the refs/tags/ prefix to the github helper call.
 
-Committed to 2022.11.x, thanks.
+ > [1] https://github.com/lloyd/yajl/archive/2.1.0/yajl-2.1.0.tar.gz
+ > [1] https://github.com/lloyd/yajl/archive/refs/tags/2.1.0/yajl-2.1.0.tar.gz
+
+ > Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+
+Committed to 2022.11.x and 2022.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
