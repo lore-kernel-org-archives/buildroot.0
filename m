@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39E0DC636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:13:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2081C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:13:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E269B4170E;
-	Wed, 22 Feb 2023 16:13:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E269B4170E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 57BD2416EF;
+	Wed, 22 Feb 2023 16:13:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57BD2416EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CVSXVHKZ7Q8u; Wed, 22 Feb 2023 16:13:25 +0000 (UTC)
+	with ESMTP id yZ9j_sO5I405; Wed, 22 Feb 2023 16:13:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D888B41705;
-	Wed, 22 Feb 2023 16:13:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D888B41705
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A24541703;
+	Wed, 22 Feb 2023 16:13:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A24541703
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DE7201BF847
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:11:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 98CD81BF847
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:11:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4E9841921
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:11:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4E9841921
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72F384193F
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:11:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F384193F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IPIpGx5J-RIx for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 16:11:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 744044198B
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:11:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 744044198B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62B4786785; Wed, 22 Feb 2023 16:11:36 +0000 (UTC)
+ with ESMTP id 87P549SvWVc1 for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 16:11:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 268FD41921
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 268FD41921
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:11:47 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 330B5E0004;
+ Wed, 22 Feb 2023 16:11:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pUriZ-007vv4-3O; Wed, 22 Feb 2023 17:11:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:08:43 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: bd8decd5811c44d742188e31e61b34f116f32335
-X-Git-Newrev: b8b6ca8bcfe202d2472500aec38514cced11e30b
-X-Patchwork-Hint: ignore
-Message-Id: <20230222161136.62B4786785@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] utils/checkpackagelib:
- warn about redefined config
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20230206105723.7A6F7838E3@busybox.osuosl.org>
+Date: Wed, 22 Feb 2023 17:11:43 +0100
+In-Reply-To: <20230206105723.7A6F7838E3@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Mon, 6 Feb 2023 11:57:08 +0100")
+Message-ID: <87k009vfwg.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] boot/barebox: explicitly set the
+ timezone for the kbuild timestamp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,169 +64,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8b6ca8bcfe202d2472500aec38514cced11e30b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Warn the developer in the case the same config is declared more than
-once in the same Config.in file.
-But take into account the conditional code that lets the config be
-visible and warn only when it is declared more than once in the same
-conditions.
-For instance, do not warn for:
- if BR2_PACKAGE_BUSYBOX
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
+ > commit: https://git.buildroot.net/buildroot/commit/?id=11e75ecbf092420f00f0fc88a7183d5d99887ff1
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4bbda72743d39df29dfc91e0f52be02b2d465f6d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- utils/checkpackagelib/lib_config.py      | 38 ++++++++++++++++
- utils/checkpackagelib/test_lib_config.py | 78 ++++++++++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
+ > This adjusts the code added in commit
+ > c90bd74ebb264ccc925f10a142ccd82ef63a4601 ("boot/barebox: pass required
+ > environment variables for reproducible build") to explicitly set the
+ > timezone when calculating KBUILD_BUILD_TIMESTAMP, like is already done
+ > in linux/linux.mk.
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index b05831f2c3..f26ca0d898 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -233,3 +233,41 @@ class Indent(_CheckFunction):
-                 return ["{}:{}: should not be indented"
-                         .format(self.filename, lineno),
-                         text]
-+
-+
-+class RedefinedConfig(_CheckFunction):
-+    CONFIG = re.compile(r"^\s*(menu|)config\s+(BR2_\w+)\b")
-+    IF = re.compile(r"^\s*if\s+([^#]*)\b")
-+    ENDIF = re.compile(r"^\s*endif\b")
-+
-+    def before(self):
-+        self.configs = {}
-+        self.conditional = []
-+
-+    def check_line(self, lineno, text):
-+        if _empty_or_comment(text) or _part_of_help_text(text):
-+            return
-+
-+        m = self.IF.search(text)
-+        if m is not None:
-+            condition = m.group(1)
-+            self.conditional.append(condition)
-+            return
-+
-+        m = self.ENDIF.search(text)
-+        if m is not None:
-+            self.conditional.pop()
-+            return
-+
-+        m = self.CONFIG.search(text)
-+        if m is None:
-+            return
-+        config = m.group(2)
-+
-+        key = (config, ' AND '.join(self.conditional))
-+        if key in self.configs.keys():
-+            previous_line = self.configs[key]
-+            return ["{}:{}: config {} redeclared (previous line: {})"
-+                    .format(self.filename, lineno, config, previous_line),
-+                    text]
-+        self.configs[key] = lineno
-diff --git a/utils/checkpackagelib/test_lib_config.py b/utils/checkpackagelib/test_lib_config.py
-index 91a549adf2..474d17105e 100644
---- a/utils/checkpackagelib/test_lib_config.py
-+++ b/utils/checkpackagelib/test_lib_config.py
-@@ -385,3 +385,81 @@ Indent = [
- def test_Indent(testname, filename, string, expected):
-     warnings = util.check_file(m.Indent, filename, string)
-     assert warnings == expected
-+
-+
-+RedefinedConfig = [
-+    ('no redefinition',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO_BAR\n'
-+     'bool "foo"\n',
-+     []),
-+    ('no conditional',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_BAR\n'
-+     'bool "bar"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n',
-+     [['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('three times',
-+     'any',
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n',
-+     [['any:3: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n'],
-+      ['any:5: config BR2_PACKAGE_FOO redeclared (previous line: 1)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('same conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'config BR2_PACKAGE_BAR\n'
-+     'bool "bar"\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     [['any:6: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('equivalent conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     [['any:8: config BR2_PACKAGE_FOO redeclared (previous line: 2)',
-+       'config BR2_PACKAGE_FOO\n']]),
-+    ('not equivalent conditional',
-+     'any',
-+     'if BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'if !BR2_PACKAGE_BAZ\n'
-+     'config BR2_PACKAGE_FOO\n'
-+     'bool "foo"\n'
-+     'endif\n',
-+     []),
-+    ]
-+
-+
-+@pytest.mark.parametrize('testname,filename,string,expected', RedefinedConfig)
-+def test_RedefinedConfig(testname, filename, string, expected):
-+    warnings = util.check_file(m.RedefinedConfig, filename, string)
-+    assert warnings == expected
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2022.11.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
