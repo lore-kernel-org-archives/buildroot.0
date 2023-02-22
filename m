@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90185C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81325C636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E68341770;
-	Wed, 22 Feb 2023 17:12:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E68341770
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37CA741775;
+	Wed, 22 Feb 2023 17:13:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37CA741775
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1NVAHduEYt49; Wed, 22 Feb 2023 17:12:58 +0000 (UTC)
+	with ESMTP id aB6tRxLdHusk; Wed, 22 Feb 2023 17:13:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E8514176D;
-	Wed, 22 Feb 2023 17:12:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E8514176D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F5C61BF364
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AE784175D;
+	Wed, 22 Feb 2023 17:13:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AE784175D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A52F21BF364
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E39A8410D4
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E39A8410D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 601AF81423
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 601AF81423
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A3knPssdVA_W for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8h9V-2lX3XJY for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA691410A6
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA691410A6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94B1881FFF
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94B1881FFF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6798867D2; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+ id 828FA867D2; Wed, 22 Feb 2023 17:08:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:45:42 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 89d06caa82ddd0ba259a5c1d302155fa904ac4bd
-X-Git-Newrev: f513808d04edee344bcbab3ec7951bd9110c482d
+Date: Wed, 22 Feb 2023 17:46:15 +0100
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 253ee5b11f643a08fa7d144c5d5abeb4fb6ce1a7
+X-Git-Newrev: d91470731e28e3c6c42e95e5c405b6e8ff975feb
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170818.D6798867D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] system: remove use of
- legacy md5 option
+Message-Id: <20230222170816.828FA867D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/linux-headers:
+ remove bogus symbol BR2_PACKAGE_HOST_LINUX_HEADERS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f513808d04edee344bcbab3ec7951bd9110c482d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d91470731e28e3c6c42e95e5c405b6e8ff975feb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit "bf3626002f system cfg: remove mkpasswd MD5 format option", from
-release 2019.02, moved the symbol to legacy handling, but the symbol is
-still referenced.
-
-Remove the reference to it.
+The package host-linux-headers does not exist and there were never
+references to this symbol in the tree, do drop it.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 032cfbc716749869b185f83dab450ec47f969765)
+(cherry picked from commit 367bd65f3c216426e2fc21742dbff11ea8d896d7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- system/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/linux-headers/Config.in.host | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index e6dcd25455..bf65b07a76 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -78,7 +78,6 @@ endchoice # Passwd encoding
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f6654f8578..775ec2cb67 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -1,8 +1,5 @@
+ comment "Kernel Header Options"
  
- config BR2_TARGET_GENERIC_PASSWD_METHOD
- 	string
--	default "md5"       if BR2_TARGET_GENERIC_PASSWD_MD5
- 	default "sha-256"   if BR2_TARGET_GENERIC_PASSWD_SHA256
- 	default "sha-512"   if BR2_TARGET_GENERIC_PASSWD_SHA512
- 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS
+-	bool
+-
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
