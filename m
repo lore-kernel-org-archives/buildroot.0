@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93054C636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 22:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F894C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 22:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 346ED61760;
-	Wed, 22 Feb 2023 22:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 346ED61760
+	by smtp3.osuosl.org (Postfix) with ESMTP id 347EF61381;
+	Wed, 22 Feb 2023 22:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 347EF61381
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p6IZu3UJgASZ; Wed, 22 Feb 2023 22:31:38 +0000 (UTC)
+	with ESMTP id hlQsuw3hS43A; Wed, 22 Feb 2023 22:31:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64CDC613B6;
-	Wed, 22 Feb 2023 22:31:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64CDC613B6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 866E01BF3D2
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:31:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F6276175E;
+	Wed, 22 Feb 2023 22:31:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F6276175E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B64981BF3D2
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 60E2761381
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60E2761381
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9CF9582052
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:31:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CF9582052
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Va9DbF0fLQjp for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 22:31:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vyky6U-R1ays for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 22:31:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DCE5612DC
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com
- [IPv6:2607:f8b0:4864:20::f31])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5DCE5612DC
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 22:31:06 +0000 (UTC)
-Received: by mail-qv1-xf31.google.com with SMTP id ne1so9895420qvb.9
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:31:06 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BBE48204B
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com
+ [IPv6:2607:f8b0:4864:20::f2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4BBE48204B
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 22:31:04 +0000 (UTC)
+Received: by mail-qv1-xf2e.google.com with SMTP id y12so9725574qvt.8
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:31:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=9EoSxMmCs7qU8PeYW+nJGy3b/049yB0iwMTUOv5Qglo=;
- b=4aRtpXP0bzkQtozzRFcZ6wXiToQOuI8ZW9yzzwgSmm1LrzjjKm67bsFqmUmfPCt8zB
- nFRspdYAdEg2POMTTtvMOh62T/X8P0zUHJ0mLlqypi9yQ2ti4vfCa+m5gNnrVJjVo/1v
- 4xGVIzFmL0IZvhzBoVkxX4B1jVBkCB612ZIhLwxDfyFtBUJ1MkQuScE1cdq1chKsD1OZ
- 5W1qWe+9Y33qJYRfP187aD1Nc1hZkDo9jn+8AJORnGge40gztLnwHki8Boon9LHJOWjs
- dfs0viaOjnXEclHRW5z1pRGkwlB9iCut5oMYbd50zBb2DtFSxg7b6cwghmnO7IHK4xUp
- EcNw==
-X-Gm-Message-State: AO0yUKVWZi5glTQMqLlM2X/oSDVr+een19ZJ/YQ5KCbVi6gbD6M5ivHt
- mx93vXH6CoB1nFyOBehhc+8I4rwCfIY=
-X-Google-Smtp-Source: AK7set98GVCHPDMlG6pmx7pXkPhkHte51+78RUCp4nyLkcdzIAxD2XEb+Tn5O9ax/PkIAWXjj/UH2w==
-X-Received: by 2002:a05:6214:2a86:b0:56e:f4e0:a4e9 with SMTP id
- jr6-20020a0562142a8600b0056ef4e0a4e9mr16320327qvb.29.1677105064903; 
- Wed, 22 Feb 2023 14:31:04 -0800 (PST)
+ bh=InFi48cPlI7PCEJAuW1tqb9Rbb7BrqWUQPZjI2PtYEE=;
+ b=YDIRTawsTI6jA89CfTRVUrxqqO6oiFcl4U0Dt0/tBXYt583kDXgnKoK+qFeVt/tyWK
+ pcgPYmgkFYaDK4wIHgNU9cxW6Hv9VAaQw2nTPCdxTiucP8gdFw8xyGri7grGTKefTVq+
+ 2ZAzGh7pMPcXm5qmUVT/RjG5zdpkh/UToe1C9HepsaAZMkHPONYTomRf+iKBzO595sI+
+ ZHlBzIvIAx4HoyTE+EFPnGG8OivlVRWSGNVIWSWT1/iCx2WZYbJv2sMLRM/LrLk9vifj
+ 5lKoIWjgT0eNN16m6uIsjqKzV6oOBr7iwXtkUa6RmmX96jRTTPVCdXrWsxA2+wPkhgXR
+ M1Ew==
+X-Gm-Message-State: AO0yUKWviWPS2qliVsSO+yxxPuX7RFwui3D1Q+EM7rn6sIoWVUnoWCPB
+ okkdI/Z5VwXTY3S6XB4u0pFzPuDOCyg=
+X-Google-Smtp-Source: AK7set9mMKT07X9gsiZ949VdMl/rQ1zk8lwKFGZOM7xLldAeECyEiYhhfOdZuguRnmEtWO6OdVBVEw==
+X-Received: by 2002:a05:6214:5096:b0:56b:b33d:c668 with SMTP id
+ kk22-20020a056214509600b0056bb33dc668mr15396155qvb.18.1677105062652; 
+ Wed, 22 Feb 2023 14:31:02 -0800 (PST)
 Received: from abyss.attlocal.net
  (108-193-1-150.lightspeed.sntcca.sbcglobal.net. [108.193.1.150])
  by smtp.gmail.com with ESMTPSA id
- d191-20020a3768c8000000b0073b4d8cb4a5sm3538837qkc.60.2023.02.22.14.31.03
+ d191-20020a3768c8000000b0073b4d8cb4a5sm3538837qkc.60.2023.02.22.14.31.01
  (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
- Wed, 22 Feb 2023 14:31:04 -0800 (PST)
+ Wed, 22 Feb 2023 14:31:02 -0800 (PST)
 From: Charles Hardin <ckhardin@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 14:30:52 -0800
-Message-Id: <70c8c0b4e34438c96257697086ff8b62fb6f2cd7.1677104777.git.ckhardin@gmail.com>
+Date: Wed, 22 Feb 2023 14:30:51 -0800
+Message-Id: <cf471549729217bc79a9fc16bd74d3eb5918389e.1677104777.git.ckhardin@gmail.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <cover.1677104777.git.ckhardin@gmail.com>
 References: <20230209231518.9458-1-ckhardin@gmail.com>
@@ -76,18 +76,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=9EoSxMmCs7qU8PeYW+nJGy3b/049yB0iwMTUOv5Qglo=;
- b=ki+5jgZMF6OTxy5gLzSSgNhzNTxvjN+vvVIbpBakOs3gASXcLPXajWRPvfanRDg20N
- U4f0k1hxr5VU1NlNNHVJnrVQEvFCSQMwLvSRjEU1FVJiIwg6Wan/37TrSr/Yi22mcT0S
- 9YTxmrFrq54cEqTyS0/KjOqhVZHcK40fJ2etHm+d6F4gdVKc4G/q1/xj0SC8NAZEe2aj
- lZhTLZgpkWdiPES22gy9oRso9envAY7lTHw6THOmDaYwE7il5reA/1PAfezYhImmHHC2
- IChV79IVPDCEPMA7Vm2OiiyXkY8Uk2O5MCQsoPd48wVIV64N2OcTYwL1aUXpgkitcuyi
- u7LQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=InFi48cPlI7PCEJAuW1tqb9Rbb7BrqWUQPZjI2PtYEE=;
+ b=WkrakgIrRpstMYWCwdXN9o5ZSKtcchefk2Sfw1f1Pxh2EmKYNwbNOuEBEmlBDR7hFZ
+ JxFODfjgJFDNnWQ2uHiqByHGjX5Ra2/U6QrCSlfmIK7rHpvuNlUDykzYEesrUi3KSmXB
+ CY0BuuxeBgwMUdO0KyHVmPmgRplyDtrQWWsY5nyidw1Rt2ptfHBNdsP4Y3KFkG2NGaiG
+ lqeeUTYmNF/OR/h9yqOjmjdABaQVLoSFjWKsbMY0Fgsm1jKmnTH3eTU7ds39cvBnlTl3
+ PdmCXQNXubyNPcct4ubK74pacfmLqmRMH9P3eF+lAoJ0kinyena7IOYn2G/++5DN86aG
+ nXDA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ki+5jgZM
-Subject: [Buildroot] [PATCH v2 2/3] boot/uboot: add a scmversion rsync hook
- when overriding srcdir
+ header.a=rsa-sha256 header.s=20210112 header.b=WkrakgIr
+Subject: [Buildroot] [PATCH v2 1/3] support/download: add a helper scipt to
+ generate scmversions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,55 +105,246 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-During development the override srcdir is often used with a local
-git repo and branch. To help track the builds used in those flows
-it is useful to have the scm version available as part of the info.
-With this hook, the auto generated version include will include the
-example.
+Primarily focused on uboot and linux, getting the scmversion from
+the custom repository references is required for change control
+tracking off of different builds and pipelines. So, extend the
+download framework to generate these files while the locks are
+being held for the generation to avoid the git information from
+changes during the download process.
 
-    #define PLAIN_VERSION "2018.03-01358-gbda75d6a8b"
-    #define U_BOOT_VERSION "U-Boot " PLAIN_VERSION
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+
+wip scmversion
 
 Signed-off-by: Charles Hardin <ckhardin@gmail.com>
 ---
- boot/uboot/uboot.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/pkg-download.mk     |  1 +
+ support/download/dl-wrapper |  5 +--
+ support/download/git        | 10 ++++++
+ support/download/hg         | 10 ++++++
+ support/download/scmversion | 63 +++++++++++++++++++++++++++++++++++++
+ support/download/svn        | 10 ++++++
+ 6 files changed, 97 insertions(+), 2 deletions(-)
+ create mode 100755 support/download/scmversion
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 4eae8e95c3..edb6c646c7 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -28,18 +28,30 @@ UBOOT_SOURCE = $(notdir $(UBOOT_TARBALL))
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = git
-+UBOOT_SCMVERSION = YES
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_HG),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = hg
-+UBOOT_SCMVERSION = YES
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_SVN),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = svn
-+UBOOT_SCMVERSION = YES
- else
- # Handle stable official U-Boot versions
- UBOOT_SITE = https://ftp.denx.de/pub/u-boot
- UBOOT_SOURCE = u-boot-$(UBOOT_VERSION).tar.bz2
- endif
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 0718f21aad..333a53ce7e 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -119,6 +119,7 @@ define DOWNLOAD
+ 		-n '$($(2)_BASENAME_RAW)' \
+ 		-N '$($(2)_RAWNAME)' \
+ 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
++		$(if $($(2)_SCMVERSION),-s) \
+ 		$(if $($(2)_GIT_SUBMODULES),-r) \
+ 		$(if $($(2)_GIT_LFS),-l) \
+ 		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 1e8d6058f6..dfb02f7fe8 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -25,7 +25,7 @@ main() {
+     local -a uris
  
-+ifneq ($(UBOOT_OVERRIDE_SRCDIR),)
-+define UBOOT_SCMVERSION_HOOK
-+	$(TOPDIR)/support/download/scmversion \
-+		$(abspath $(UBOOT_OVERRIDE_SRCDIR)) $(@D)/.scmversion
-+endef
+     # Parse our options; anything after '--' is for the backend
+-    while getopts ":c:d:D:o:n:N:H:lrf:u:qp:" OPT; do
++    while getopts ":c:d:D:o:n:N:H:slrf:u:qp:" OPT; do
+         case "${OPT}" in
+         c)  cset="${OPTARG}";;
+         d)  dl_dir="${OPTARG}";;
+@@ -34,6 +34,7 @@ main() {
+         n)  raw_base_name="${OPTARG}";;
+         N)  base_name="${OPTARG}";;
+         H)  hfile="${OPTARG}";;
++        s)  scmversion="-s";;
+         l)  large_file="-l";;
+         r)  recurse="-r";;
+         f)  filename="${OPTARG}";;
+@@ -129,7 +130,7 @@ main() {
+                 -f "${filename}" \
+                 -u "${uri}" \
+                 -o "${tmpf}" \
+-                ${quiet} ${large_file} ${recurse} -- "${@}"
++                ${quiet} ${scmversion} ${large_file} ${recurse} -- "${@}"
+         then
+             # cd back to keep path coherence
+             cd "${OLDPWD}"
+diff --git a/support/download/git b/support/download/git
+index 1a1c315f73..277c412e26 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -12,6 +12,7 @@ set -E
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -s          Generate an scmversion file
+ #   -r          Clone and archive sub-modules.
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Clone from repository at URI.
+@@ -51,11 +52,13 @@ _on_error() {
+ }
+ 
+ quiet=
++scmversion=0
+ large_file=0
+ recurse=0
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  quiet=-q; exec >/dev/null;;
++    s)  scmversion=1;;
+     l)  large_file=1;;
+     r)  recurse=1;;
+     o)  output="${OPTARG}";;
+@@ -229,3 +232,10 @@ popd >/dev/null
+ # the state of the remote server. It also would generate large tarballs
+ # (gigabytes for some linux trees) when a full clone took place.
+ mk_tar_gz "${git_cache}" "${basename}" "${date}" "${output}" ".git/*"
 +
-+UBOOT_POST_RSYNC_HOOKS += UBOOT_SCMVERSION_HOOK
-+endif
++# If an scmversion is needed then generate the version information
++if [ ${scmversion} -eq 1 ]; then
++    post_process_unpack "${basename}" "${output}"
++    support/download/scmversion "${git_cache}" "${basename}/.scmversion"
++    post_process_repack "$(pwd)" "${basename}" "${output}"
++fi
+diff --git a/support/download/hg b/support/download/hg
+index 768a27e06f..dcf36e6e1f 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -7,6 +7,7 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -s          Generate an scmversion file
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Clone from repository at URI.
+ #   -c CSET     Use changeset (or revision) CSET.
+@@ -16,9 +17,11 @@ set -e
+ #   HG       : the hg command to call
+ 
+ quiet=
++scmversion=
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  quiet=-q;;
++    s)  scmversion=1;;
+     o)  output="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     c)  cset="${OPTARG}";;
+@@ -48,3 +51,10 @@ _hg clone ${quiet} "${@}" --noupdate "'${uri}'" "'${basename}'"
+ _plain_hg archive ${quiet} --repository "'${basename}'" --type tgz \
+             --prefix "'${basename}'" --rev "'${cset}'" \
+             - >"${output}"
 +
- ifeq ($(BR2_TARGET_UBOOT)$(BR2_TARGET_UBOOT_LATEST_VERSION),y)
- BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
- endif
++# If an scmversion is needed then generate the version information
++if [ ${scmversion} -eq 1 ]; then
++    post_process_unpack "${basename}" "${output}"
++    support/download/scmversion "${@}" "${basename}/.scmversion"
++    post_process_repack "$(pwd)" "${basename}" "${output}"
++fi
+diff --git a/support/download/scmversion b/support/download/scmversion
+new file mode 100755
+index 0000000000..16868a11e5
+--- /dev/null
++++ b/support/download/scmversion
+@@ -0,0 +1,63 @@
++#!/usr/bin/env bash
++set -x
++set -e
++
++# Helper to generate an scmversion in a dowload script before
++# the tarball is created. Because the tarball has to exclude
++# repository directories like .git and .hg to make reproducible
++# archives on subsequent downloads the version information is
++# not available during the builds for a script like setlocalversion
++# to run.
++#
++# So, this is hook to call right before the make tarball gz that
++# will generate a .scmversion file that will be included in an
++# archive and then available during the build steps.
++#
++# Call it with:
++#   $1: the path to the srctree (see mk_tar_gz in helpers)
++#   $2: output file
++#
++# Because this can fail for a variety of reason, there is no exit
++# code to avoid build breakage. It is assumed the scripts will be
++# reproducible because they are based on the contents that get generated
++
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  exec >/dev/null;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
++srctree="${1}"
++scmversion="${2}"
++
++# Bail early if no srctree or scmversion
++if [ -z "${srctree}" -o -z "${scmversion}" ]; then
++    exit 0
++fi
++
++# Does the scmversion exist and readonly
++if [ -f "${scmversion}" -a ! -w "${scmversion}" ]; then
++    printf "WARNING: scmversion %s is readonly\n" "${scmversion}" >&2
++    exit 0
++fi
++
++#
++# Generate the scmversion from some expected locations in srctree
++# and fallback to the buildroot version of setlocalversion another
++# script is not used
++#
++if [ -x "${srctree}/setlocalversion" ]; then
++    res=$(cd "${srctree}"; ./setlocalversion)
++elif [ -x "${srctree}/scripts/setlocalversion" ]; then
++    res=$(cd "${srctree}"; ./scripts/setlocalversion)
++elif [ -x "${srctree}/tools/setlocalversion" ]; then
++    res=$(cd "${srctree}"; ./tools/setlocalversion)
++fi
++if [ -z "${res}" ]; then
++    res=$("${0%/*}/../scripts/setlocalversion" "${srctree}")
++fi
++
++[ -n "${res}" ] && (echo "${res}" > "${scmversion}")
++exit 0
+diff --git a/support/download/svn b/support/download/svn
+index b23b7773d3..b0e9f69a6b 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -12,6 +12,7 @@ set -e
+ #
+ # Options:
+ #   -q          Be quiet.
++#   -s          Generate an scmversion file
+ #   -o FILE     Generate archive in FILE.
+ #   -u URI      Checkout from repository at URI.
+ #   -c REV      Use revision REV.
+@@ -23,9 +24,11 @@ set -e
+ . "${0%/*}/helpers"
+ 
+ quiet=
++scmversion=0
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  quiet=-q;;
++    s)  scmversion=1;;
+     o)  output="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     c)  rev="${OPTARG}";;
+@@ -65,3 +68,10 @@ date="$( _plain_svn info "'${uri}@${rev}'" \
+ # We did a 'svn export' above, so it's not a working copy (there is no .svn
+ # directory or file to ignore).
+ mk_tar_gz "${basename}" "${basename}" "${date}" "${output}"
++
++# If an scmversion is needed then generate the version information
++if [ ${scmversion} -eq 1 ]; then
++    post_process_unpack "${basename}" "${output}"
++    support/download/scmversion "${basename}" "${basename}/.scmversion"
++    post_process_repack "$(pwd)" "${basename}" "${output}"
++fi
 -- 
 2.24.3 (Apple Git-128)
 
