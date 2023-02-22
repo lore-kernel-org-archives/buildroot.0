@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A55C4C636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 20:59:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42883C636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 20:59:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 541C561398;
-	Wed, 22 Feb 2023 20:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 541C561398
+	by smtp3.osuosl.org (Postfix) with ESMTP id E67296137C;
+	Wed, 22 Feb 2023 20:59:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E67296137C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mOYsMQeOvwSk; Wed, 22 Feb 2023 20:59:08 +0000 (UTC)
+	with ESMTP id 7-apbkZa9P4M; Wed, 22 Feb 2023 20:59:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8024861395;
-	Wed, 22 Feb 2023 20:59:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8024861395
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 864121BF97C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1584F613A1;
+	Wed, 22 Feb 2023 20:59:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1584F613A1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 949C91BF97E
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 20:58:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E3518202C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6EA8E419D6
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 20:58:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E3518202C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EA8E419D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tKp4jTD7TyA9 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id muaR21aQgEA3 for <buildroot@lists.busybox.net>;
  Wed, 22 Feb 2023 20:58:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A442081F9D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73FE3419D0
  for <buildroot@buildroot.org>; Wed, 22 Feb 2023 20:58:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A442081F9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73FE3419D0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 94E61868BE; Wed, 22 Feb 2023 20:58:39 +0000 (UTC)
+ id 5F3FD868BE; Wed, 22 Feb 2023 20:58:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 21:58:20 +0100
+Date: Wed, 22 Feb 2023 21:57:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25c8c00b98e37186d23ea6515e944060e59cfa8f
-X-Git-Newrev: 5893d2d1f19168a12e823d78882d6037b791e276
+X-Git-Oldrev: 293a878ae268cd0561fc3ab81c04b9a438acf921
+X-Git-Newrev: 802cfb90d68f866bc8f61d9c6c3a764abae2580f
 X-Patchwork-Hint: ignore
-Message-Id: <20230222205839.94E61868BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gqrx: bump to version 2.15.9
+Message-Id: <20230222205839.5F3FD868BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuradio: drop unrecognized volk
+ variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5893d2d1f19168a12e823d78882d6037b791e276
+commit: https://git.buildroot.net/buildroot/commit/?id=802cfb90d68f866bc8f61d9c6c3a764abae2580f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump will fix the following build failure raised since bump pf
-gnuradio to version 3.10.4.0 in commit
-e37c110bead8b7b35cd97915673fa785ccb39f2d:
+Volk submodule has been removed since version 3.9.0.0 and
+https://github.com/gnuradio/gnuradio/commit/80c04479da962d048d41165081b026aafdaa0316
 
-In file included from /home/buildroot/autobuild/instance-2/output-1/build/gqrx-2.14.4/src/applications/gqrx/receiver.cpp:32:
-/home/buildroot/autobuild/instance-2/output-1/build/gqrx-2.14.4/src/applications/gqrx/receiver.h:34:10: fatal error: gnuradio/blocks/wavfile_sink.h: No such file or directory
-   34 | #include <gnuradio/blocks/wavfile_sink.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-https://github.com/gqrx-sdr/gqrx/blob/v2.15.9/resources/news.txt
-
-Fixes:
- - http://autobuild.buildroot.org/results/42b5ab2e555063273ea55fd1c09a9be6d8b620e2
+orc dependency can also be dropped as it was only used by volk submodule
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Gwenhael Goavec-merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gqrx/Config.in | 2 ++
- package/gqrx/gqrx.hash | 2 +-
- package/gqrx/gqrx.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ package/gnuradio/gnuradio.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index 442b28e546..97f0b7de07 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -34,7 +34,9 @@ config BR2_PACKAGE_GQRX
- 	select BR2_PACKAGE_GNURADIO_DIGITAL
- 	select BR2_PACKAGE_GNURADIO_FFT
- 	select BR2_PACKAGE_GNURADIO_FILTER
-+	select BR2_PACKAGE_GNURADIO_NETWORK
- 	select BR2_PACKAGE_GR_OSMOSDR
-+	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
- 	select BR2_PACKAGE_QT5SVG
-diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-index 1991dfea82..567ff947f9 100644
---- a/package/gqrx/gqrx.hash
-+++ b/package/gqrx/gqrx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated:
--sha256  aec35c77ebde9c71a5f973c509eec3d6aa2f18a6e052b180fcd9029d88273e5b  gqrx-2.14.4.tar.gz
-+sha256  4a826b468b2fb38a59cbe1f1b566e62c3114509186a7a25ba27dc92833f3eb44  gqrx-2.15.9.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  7cc22ce5ee61df62e427ec43b8130de149edee3cafb5af4f18d59b6dc3958faf  LICENSE-CTK
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-index 4d464298ca..d2518213b8 100644
---- a/package/gqrx/gqrx.mk
-+++ b/package/gqrx/gqrx.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index cc41f1e12b..c2fcba9586 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -22,9 +22,7 @@ GNURADIO_DEPENDENCIES = \
+ GNURADIO_CONF_OPTS = \
+ 	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
+ 	-DENABLE_DEFAULT=OFF \
+-	-DENABLE_VOLK=ON \
+ 	-DENABLE_GNURADIO_RUNTIME=ON \
+-	-DENABLE_INTERNAL_VOLK=OFF \
+ 	-DENABLE_TESTING=OFF \
+ 	-DXMLTO_EXECUTABLE=NOTFOUND
  
--GQRX_VERSION = 2.14.4
-+GQRX_VERSION = 2.15.9
- GQRX_SITE = $(call github,csete,gqrx,v$(GQRX_VERSION))
- GQRX_LICENSE = GPL-3.0+, Apache-2.0
- GQRX_LICENSE_FILES = COPYING LICENSE-CTK
--GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr qt5base qt5svg
-+GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr libsndfile qt5base qt5svg
+@@ -36,13 +34,6 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ GNURADIO_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+ endif
  
- GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
- 
+-ifeq ($(BR2_PACKAGE_ORC),y)
+-GNURADIO_DEPENDENCIES += orc
+-GNURADIO_CONF_OPTS += -DENABLE_ORC=ON
+-else
+-GNURADIO_CONF_OPTS += -DENABLE_ORC=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GNURADIO_ANALOG),y)
+ GNURADIO_CONF_OPTS += -DENABLE_GR_ANALOG=ON
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
