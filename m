@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA71EC636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:11:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB28C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:11:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 869A241736;
-	Wed, 22 Feb 2023 17:11:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 869A241736
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2DC741755;
+	Wed, 22 Feb 2023 17:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2DC741755
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Ce32CR4yMCD; Wed, 22 Feb 2023 17:11:02 +0000 (UTC)
+	with ESMTP id ko7KunHXMC6o; Wed, 22 Feb 2023 17:11:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9360D4174F;
-	Wed, 22 Feb 2023 17:11:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9360D4174F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4880C1BF364
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CA6241756;
+	Wed, 22 Feb 2023 17:11:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CA6241756
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B49B31BF364
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 779D34052C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C9A560B4D
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 779D34052C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C9A560B4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WJhO-H5CUTXr for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NpegrdbRAwhx for <buildroot@lists.busybox.net>;
  Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A923240545
+ by smtp3.osuosl.org (Postfix) with ESMTP id 79F7D61159
  for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A923240545
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79F7D61159
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98AB0867CA; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+ id 69B09867CA; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:43:46 +0100
+Date: Wed, 22 Feb 2023 17:37:09 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 4dd50584123986cb032776a3ede0c62eeb11fab7
-X-Git-Newrev: 85b4570d63762886188122aec3771d79fbab3660
+X-Git-Oldrev: 2759b8a3081e806c10b3c2ff7f04efcdef8a8212
+X-Git-Newrev: feebcb90a245e9293b1eb50f3aed64e9d1574134
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170818.98AB0867CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/pugixml: fix
- configuration options
+Message-Id: <20230222170818.69B09867CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x]
+ support/scripts/generate-gitlab-ci-yml: improve test-pkg support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85b4570d63762886188122aec3771d79fbab3660
+commit: https://git.buildroot.net/buildroot/commit/?id=feebcb90a245e9293b1eb50f3aed64e9d1574134
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Commit upstream 1c5a0bb32583fd294022e68e66b541bf6ff71a67
-":sparkles: Update CMake to modern approach" removed all feature
-toogles, so starting from release v1.11 any flag passed in BUILD_DEFINES
-was completely ignored during the build.
-Version 1.11.4 was in use in buildroot since February 2021.
+Following the example of test-pkg config described in commit
+"12c7a05da1 utils/test-pkg: add gitlab-ci support" to test a defconfig
+fragment that contains a disabled option is currently possible, but
+it do requires one to change the git config core.commentChart so the
+lines starting with "#" are not discarded by git when creating/editing
+the commit message.
 
-Commit upstream 0f1e75a902ef1751dd63a67fe223b5e8daf4c7f1
-"Re-introduced the custom build defines" added PUGIXML_BUILD_DEFINES to
-release v1.12, but BUILD_DEFINES is still completely ignored during the
-build.
-Version 1.12.1 is in use in buildroot since March 2022.
+For instance, without the indentation the 3rd line below would be
+excluded from the commit message when the editor is closed:
+    test-pkg config:
+    SOME_OPTION=y
+    # OTHER_OPTION is not set
+    SOME_VARIABLE="some value"
 
-So switch the config options to use PUGIXML_BUILD_DEFINES instead of
-BUILD_DEFINES.
+Requiring to change git configs is not very nice.
+So make the developer's life easier by changing the sed expression to
+remove indentation with spaces from a defconfig fragment found on a
+commit message.
+For instance these lines become valid and generate a defconfig fragment
+without the indentation of one space to be tested in GitLab CI:
+test-pkg config:
+ SOME_OPTION=y
+ # OTHER_OPTION is not set
+ SOME_VARIABLE="some value"
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cc3a4a7b1de7b158354c650d234339e8a969a730)
+(cherry picked from commit 0ad3ae14c52ed0aac872875ca7f87cdcf6942128)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pugixml/pugixml.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/generate-gitlab-ci-yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index 6c756e9c29..c54148d98f 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -29,11 +29,11 @@ ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
- PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
- endif
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index aa43aac019..27f586f1b6 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -91,7 +91,7 @@ gen_tests() {
  
--PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
-+PUGIXML_CONF_OPTS += -DPUGIXML_BUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
- 
- HOST_PUGIXML_CONF_OPTS += \
- 	-DBUILD_PKGCONFIG=ON \
--	-DBUILD_DEFINES="$(subst $(space),;,$(HOST_PUGIXML_BUILD_DEFINES))"
-+	-DPUGIXML_BUILD_DEFINES="$(subst $(space),;,$(HOST_PUGIXML_BUILD_DEFINES))"
- 
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+     # Retrieve defconfig for test-pkg from the git commit message (if any)
+     if grep -q -E '^test-pkg config:$' <<<"${CI_COMMIT_DESCRIPTION}"; then
+-        sed -r -n -e '/^test-pkg config:$/{:a;n;p;ba;}' \
++        sed -r -n -e '/^test-pkg config:$/{:a;n;s/^ +//;p;ba;}' \
+             <<<"${CI_COMMIT_DESCRIPTION}" \
+             >defconfig.frag
+         if [ ! -s defconfig.frag ]; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
