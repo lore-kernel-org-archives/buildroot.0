@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A26C3C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:27:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97326C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:30:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A18E405FB;
-	Wed, 22 Feb 2023 16:27:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A18E405FB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A7AE416D7;
+	Wed, 22 Feb 2023 16:30:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A7AE416D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IcDxPSqCmQ5S; Wed, 22 Feb 2023 16:27:27 +0000 (UTC)
+	with ESMTP id NC1bOjefNIo0; Wed, 22 Feb 2023 16:30:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4177840C3D;
-	Wed, 22 Feb 2023 16:27:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4177840C3D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0F67F1BF847
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:27:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 812AF40108;
+	Wed, 22 Feb 2023 16:30:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 812AF40108
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 308511BF847
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9C0B611CA
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9C0B611CA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A27D82136
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:30:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A27D82136
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NVdA2JjkAa5S for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 16:27:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LLPQTpkjoEwx for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 16:30:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6F22611C8
-Received: from mail.femto-st.fr (lifc.univ-fcomte.fr [194.57.88.66])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D6F22611C8
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:27:23 +0000 (UTC)
-Received: from x230 ([194.167.45.227]) (authenticated bits=0)
- by mail.femto-st.fr (8.15.2/8.15.2/Debian-8+deb9u1) with ESMTPSA id
- 31MGRKSB001504
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Wed, 22 Feb 2023 17:27:21 +0100
-Date: Wed, 22 Feb 2023 17:26:42 +0100
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230222172621.4994893c@x230>
-In-Reply-To: <20230222160514.2069544-4-fontaine.fabrice@gmail.com>
-References: <20230222160514.2069544-1-fontaine.fabrice@gmail.com>
- <20230222160514.2069544-4-fontaine.fabrice@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B08B82135
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4B08B82135
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:30:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5FDC840006;
+ Wed, 22 Feb 2023 16:30:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pUs0U-007xo5-Dw; Wed, 22 Feb 2023 17:30:14 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Joachim Wiberg <troglobit@gmail.com>
+References: <20230131142003.1354787-1-troglobit@gmail.com>
+Date: Wed, 22 Feb 2023 17:30:14 +0100
+In-Reply-To: <20230131142003.1354787-1-troglobit@gmail.com> (Joachim Wiberg's
+ message of "Tue, 31 Jan 2023 15:20:03 +0100")
+Message-ID: <87bkllvf1l.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 194.57.88.66
-Subject: Re: [Buildroot] [PATCH 4/5] package/gnuradio: add gr-network block
- support
+Subject: Re: [Buildroot] [PATCH 1/1] package/netopeer2: fix sysv init script,
+ does not start
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,68 +64,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Heiko Thiery <heiko.thiery@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 22 Feb 2023 17:05:13 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Joachim" == Joachim Wiberg <troglobit@gmail.com> writes:
 
-> grnet networking block support is available since version version
-> 3.9.0.0 and
-> https://github.com/gnuradio/gnuradio/commit/cc37c3e8cd5eabcb5c9d919e5fffc5d938690140
-> 
-> gr-network is a mandatory dependency of latest gqrx
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gnuradio/Config.in   | 6 ++++++
->  package/gnuradio/gnuradio.mk | 6 ++++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-> index 1824589263..51237e62b9 100644
-> --- a/package/gnuradio/Config.in
-> +++ b/package/gnuradio/Config.in
-> @@ -134,6 +134,12 @@ config BR2_PACKAGE_GNURADIO_FILTER
->  	help
->  	  Filter signal processing blocks
->  
-> +config BR2_PACKAGE_GNURADIO_NETWORK
-> +	bool "gr-network support"
-> +	select BR2_PACKAGE_GNURADIO_BLOCKS
-> +	help
-> +	  TCP and UDP source/sink blocks
-> +
->  config BR2_PACKAGE_GNURADIO_QTGUI
->  	bool "gr-qtgui"
->  	depends on BR2_PACKAGE_GNURADIO_PYTHON
-> diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-> index 59fb23d89d..d9218b533d 100644
-> --- a/package/gnuradio/gnuradio.mk
-> +++ b/package/gnuradio/gnuradio.mk
-> @@ -106,6 +106,12 @@ else
->  GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_GNURADIO_NETWORK),y)
-> +GNURADIO_CONF_OPTS += -DENABLE_GR_NETWORK=ON
-> +else
-> +GNURADIO_CONF_OPTS += -DENABLE_GR_NETWORK=OFF
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
->  GNURADIO_DEPENDENCIES += python3 python-pybind \
->  	host-python-numpy host-python-packaging
-> -- 
-> 2.39.0
-> 
-Acked-by: Gwenhael Goavec-merou <gwenhael.goavec-merou@trabucayre.com>
+ >  - The netopeer server forks to background by default, no need for '-b'
+ >  - The path to the daemon is /usr/sbin, not /usr/bin
 
-Regargs,
-Gwen
+ > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+
+Committed to 2022.11.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
