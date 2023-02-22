@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94277C636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:13:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3985C636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 17:14:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43AF441764;
-	Wed, 22 Feb 2023 17:13:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43AF441764
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8039E4178A;
+	Wed, 22 Feb 2023 17:14:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8039E4178A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lFNdJ8CE1Ap3; Wed, 22 Feb 2023 17:13:49 +0000 (UTC)
+	with ESMTP id I_0aoYR2oTFX; Wed, 22 Feb 2023 17:14:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 76F5141763;
-	Wed, 22 Feb 2023 17:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76F5141763
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2B12E1BF364
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5BCED41776;
+	Wed, 22 Feb 2023 17:14:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BCED41776
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B87021BF364
  for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 261A340E47
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 261A340E47
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5157282011
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5157282011
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iT27Fjnjyx0i for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id weCcO5BhNpVa for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23D0840F4E
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23D0840F4E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 900A5813AE
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 900A5813AE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C995867D2; Wed, 22 Feb 2023 17:08:19 +0000 (UTC)
+ id 80416867D2; Wed, 22 Feb 2023 17:08:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 17:48:16 +0100
+Date: Wed, 22 Feb 2023 17:43:46 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 35b29aaa3cf1feb67fea1d4ac17d8185d95d1d6c
-X-Git-Newrev: 768ecb25b245feb5b1269f2b449590486e843401
+X-Git-Oldrev: f4236802adc320e130c3838a9225584bfc0bf57c
+X-Git-Newrev: a6d8ee54041bd23af01064d125b37cad99f6e68d
 X-Patchwork-Hint: ignore
-Message-Id: <20230222170819.0C995867D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/lua: properly
- handle legacy for removed version
+Message-Id: <20230222170818.80416867D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/live555: fix
+ build config with locale
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=768ecb25b245feb5b1269f2b449590486e843401
+commit: https://git.buildroot.net/buildroot/commit/?id=a6d8ee54041bd23af01064d125b37cad99f6e68d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Commit "297613f1c7 package/lua: remove 5.2.x version" tried to add
-legacy handling but the new symbols are part of a choice, and Kconfig
-does not enforce the select of a option from a choice.
+Using current conditional code, added in 2014:
 
-Update the legacy entry for 2019.02, following the example described in
-the beginning of the file.
+ifndef ($(BR2_ENABLE_LOCALE),y)
+LIVE555_CFLAGS += -DLOCALE_NOT_USED
+endif
 
-Cc: Francois Perrad <francois.perrad@gadz.org>
+the define LOCALE_NOT_USED is always passed on CFLAGS, because there is
+no symbol with following names defined:
+ "(y,y)" -> not defined when BR2_ENABLE_LOCALE=y
+ "(,y)" -> not defined when BR2_ENABLE_LOCALE is not set
+
+So fix the typo, switching ifndef to ifneq.
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f461543d9c0f8ea1586004e51561ba0a37b8aecf)
+(cherry picked from commit 04a4b86a982e307268d660a38d231315134572fb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy      | 2 +-
- package/lua/Config.in | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/live555/live555.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6c3384f445..5758d408f6 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -2108,9 +2108,9 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
- config BR2_PACKAGE_LUA_5_2
- 	bool "Lua 5.2.x version removed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_LUA_5_3
- 	help
- 	  The Lua 5.2.x version was removed.
-+# Note: BR2_PACKAGE_LUA_5_2 is still referenced from package/lua/Config.in
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index effd4517cf..56ed705783 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -39,7 +39,7 @@ else
+ LIVE555_CFLAGS += -DNO_OPENSSL
+ endif
  
- config BR2_TARGET_GENERIC_PASSWD_MD5
- 	bool "target passwd md5 format support has been removed"
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 309dd6eec2..8fa9f9b7ab 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
+-ifndef ($(BR2_ENABLE_LOCALE),y)
++ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIVE555_CFLAGS += -DLOCALE_NOT_USED
+ endif
  
- choice
- 	prompt "Lua Version"
-+	default BR2_PACKAGE_LUA_5_3 if BR2_PACKAGE_LUA_5_2 # legacy
- 	default BR2_PACKAGE_LUA_5_4
- 	help
- 	  Select the version of Lua API/ABI you wish to use.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
