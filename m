@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15830C61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 22:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95F78C636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 22:13:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A379A60E49;
-	Wed, 22 Feb 2023 22:13:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A379A60E49
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40CA560AED;
+	Wed, 22 Feb 2023 22:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40CA560AED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 27VYFo4GYaxZ; Wed, 22 Feb 2023 22:13:12 +0000 (UTC)
+	with ESMTP id J_fHzfxUYCXI; Wed, 22 Feb 2023 22:13:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E11BE60AED;
-	Wed, 22 Feb 2023 22:13:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11BE60AED
+	by smtp3.osuosl.org (Postfix) with ESMTP id 570C76175E;
+	Wed, 22 Feb 2023 22:13:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 570C76175E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D02E71BF3D2
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:12:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3635A1BF3D2
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B756981F87
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:12:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B756981F87
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E13A81F87
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 22:12:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E13A81F87
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p2PHKFyUDHHK for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 22:12:11 +0000 (UTC)
+ with ESMTP id 33W3VFryTV84 for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 22:12:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B02F381F7A
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com
- [IPv6:2607:f8b0:4864:20::829])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B02F381F7A
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 22:12:11 +0000 (UTC)
-Received: by mail-qt1-x829.google.com with SMTP id fp16so9080801qtb.10
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:12:11 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B04F81F7A
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com
+ [IPv6:2607:f8b0:4864:20::f2f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2B04F81F7A
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 22:12:14 +0000 (UTC)
+Received: by mail-qv1-xf2f.google.com with SMTP id y3so9764586qvn.4
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 14:12:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=9EoSxMmCs7qU8PeYW+nJGy3b/049yB0iwMTUOv5Qglo=;
- b=or3mlF8QO3QkMO99I8waeNpVJfEvxGWWRhC3x8wHL0emgsueHuKd6o9YTcCRB5HDRJ
- D61vXqj/CZZrXJLmTR7YbRdPqW8HE8OZ3jAiKKxYtSA0jgwbVeoPum6Id9X3qvJgG/fj
- oUftvnBQC3StJL2Zu76w4PCRFFtVBWTCUNv+nZLo1PMGS1nGkMyj6/NsD997R9On6TQm
- AgN/kp9VmjCCK9Ywasr96g7OHQTB67SJo57yyTFt/b6b+TyWmpCRSTQdoBXID9gPrqVM
- VeBfdW8cKxOymrb/4QbBMv2cOJPhbDHikFFIeXF/OC9KDdeeeh70cIu8T/b7ZZvpCNEm
- l5lQ==
-X-Gm-Message-State: AO0yUKX7f+aThzJ8B4K6dKu3lbtnXjBFa7Bl1qSJMlUKOWL0CqODtRR5
- 2cmrO9S9BCYqJNiLqD9RWQ56ZQjad7s=
-X-Google-Smtp-Source: AK7set8L5tuf5b0pCa0OlhXQJvBcxgQC53rdzO5Hb67K+MN+vooJrNm7pza/8D7i3LxcmC1J97fPzw==
-X-Received: by 2002:ac8:7c46:0:b0:3bf:a667:893 with SMTP id
- o6-20020ac87c46000000b003bfa6670893mr10768650qtv.15.1677103930244; 
- Wed, 22 Feb 2023 14:12:10 -0800 (PST)
+ bh=r9ygjNFz9+vKwtefGimzNTrmUuifrBNIgaZUvzppyJ4=;
+ b=JORMxsHA0O4H72kEfIoPQg1IGSRO+BgsqC/qqGmA6oXl9hrrNmtYjvprDgy18ENInL
+ dCQNJl8nLlxxzzEgr1IM0rITnMnKjpkTjxQR1S9kx3VfAO+9ohKAxgw8jsOUUFVXDpsD
+ hES0+xuR7ThFPS5trt1iEFIT9XKxAzVax79vIUh7mEE7kENeJod2Gw+F+UcgrJZImr1D
+ vhKE8+JfBzTNMM+LafCOlQpYgQRU67+6eMnNkiPCtn7eTA9M1jVIMhCvnaXpX5SXKbrA
+ rAeBStpeAb6FY/dcuD2PvAIXY+AUlzKtfjlvIil7e0bT4J8Me1RUkhZgvcaN53iXiiFI
+ apKQ==
+X-Gm-Message-State: AO0yUKXeLxZtfUEbMSLQTy+20e/8Hbu5GIWQIpks8UWbiBO1cwX8IXKB
+ mcvVJOao5QDq16ar5tJz6+4mkdDkipc=
+X-Google-Smtp-Source: AK7set+r2rlfpy6BftnHOTiopkkhScvH2aWWQ2yON1i7t2mAjQ3LL2UF1fJHr8QuyEvO1n/JFr+Tmw==
+X-Received: by 2002:a05:6214:202d:b0:56e:9f19:71f9 with SMTP id
+ 13-20020a056214202d00b0056e9f1971f9mr21097772qvf.17.1677103932709; 
+ Wed, 22 Feb 2023 14:12:12 -0800 (PST)
 Received: from abyss.attlocal.net
  (108-193-1-150.lightspeed.sntcca.sbcglobal.net. [108.193.1.150])
  by smtp.gmail.com with ESMTPSA id
- 79-20020a370552000000b007422efb38fasm3042210qkf.39.2023.02.22.14.12.09
+ 79-20020a370552000000b007422efb38fasm3042210qkf.39.2023.02.22.14.12.11
  (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
- Wed, 22 Feb 2023 14:12:09 -0800 (PST)
+ Wed, 22 Feb 2023 14:12:12 -0800 (PST)
 From: Charles Hardin <ckhardin@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Feb 2023 14:11:33 -0800
-Message-Id: <20230222221134.25904-3-ckhardin@gmail.com>
+Date: Wed, 22 Feb 2023 14:11:34 -0800
+Message-Id: <20230222221134.25904-4-ckhardin@gmail.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20230209231518.9458-1-ckhardin@gmail.com>
 References: <20230209231518.9458-1-ckhardin@gmail.com>
@@ -75,18 +75,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=9EoSxMmCs7qU8PeYW+nJGy3b/049yB0iwMTUOv5Qglo=;
- b=RIy5FTSgKRCXVp9xcjPJQmwAjql8TzGxO8z4yfdAidnisyZYaaGmXoD556+uzqBIQK
- FLuOXEfgNu1qbmdV4MQStleMGYDcscv8YOPd9h01AxMFAzMAYa+1CD5Z5UQ4xSJvjxLx
- Igxf+eDsgVBEyH4qsM5knFTnZUwIlAj4Z/DZsG/CsW5+XZuUR5Qv+IiDxfWdmBBWkqYu
- XA0FRL1/bhZiHY3hA5GOr8jTwqeiqaD4tbhjKE/1GK7qyiqG3B4rc57rkNcipm5V4ofY
- StkmRI3bHSnASQqOShLsHQrTBdDtNH6IBKr3c11HPndp7GkOvPM+mOVWRykeAsDkBd3g
- 3rHw==
+ bh=r9ygjNFz9+vKwtefGimzNTrmUuifrBNIgaZUvzppyJ4=;
+ b=KvnKf6+eosD8i963pURpVqCVgWfG0oEJDWlKNvF6DoM1QSfbgioBwowLMbz3fI8Hnn
+ JhSP9XqR32klnvzPDJA+jh0Y8I1udNned4uOdh+Yvfn7BQCwm8UGioJTvYODc1dh6Oc0
+ dSiGxnU18nHcrobgLrZ/yCWwsDWjs+8sk9S9oGieBWkzSdR6MZjKAicpXNjW+PvYzLUm
+ 99wXrpQA9TK0xtM1Pu7lk3eGYwOlAPqsibQ1o1w6QIYJoNXvWoNYzi7avMD4fN8y82lS
+ hfyn3MQ7sdrZiJD1FvUgcrc4DUjB6At9qIlXwQWoTC+cX8O9Q2gILbAndiWh+H44nAYI
+ C9pg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=RIy5FTSg
-Subject: [Buildroot] [PATCH v2 2/3] boot/uboot: add a scmversion rsync hook
- when overriding srcdir
+ header.a=rsa-sha256 header.s=20210112 header.b=KvnKf6+e
+Subject: [Buildroot] [PATCH v2 3/3] linux: add a scmversion rsync hook when
+ overriding srcdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,48 +111,48 @@ it is useful to have the scm version available as part of the info.
 With this hook, the auto generated version include will include the
 example.
 
-    #define PLAIN_VERSION "2018.03-01358-gbda75d6a8b"
-    #define U_BOOT_VERSION "U-Boot " PLAIN_VERSION
+    #define UTS_RELEASE "5.4.70-00031-g92c23d10d003"
 
 Signed-off-by: Charles Hardin <ckhardin@gmail.com>
 ---
- boot/uboot/uboot.mk | 12 ++++++++++++
+ linux/linux.mk | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 4eae8e95c3..edb6c646c7 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -28,18 +28,30 @@ UBOOT_SOURCE = $(notdir $(UBOOT_TARBALL))
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = git
-+UBOOT_SCMVERSION = YES
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_HG),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = hg
-+UBOOT_SCMVERSION = YES
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_SVN),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = svn
-+UBOOT_SCMVERSION = YES
- else
- # Handle stable official U-Boot versions
- UBOOT_SITE = https://ftp.denx.de/pub/u-boot
- UBOOT_SOURCE = u-boot-$(UBOOT_VERSION).tar.bz2
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7645b5f507..b72318e3f2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -24,12 +24,15 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = git
++LINUX_SCMVERSION = YES
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = hg
++LINUX_SCMVERSION = YES
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = svn
++LINUX_SCMVERSION = YES
+ else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y)
+ LINUX_SOURCE = linux-cip-$(LINUX_VERSION).tar.gz
+ LINUX_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
+@@ -46,6 +49,15 @@ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword $(subst ., ,$(LINUX_
+ endif
  endif
  
-+ifneq ($(UBOOT_OVERRIDE_SRCDIR),)
-+define UBOOT_SCMVERSION_HOOK
++ifneq ($(LINUX_OVERRIDE_SRCDIR),)
++define LINUX_SCMVERSION_HOOK
 +	$(TOPDIR)/support/download/scmversion \
-+		$(abspath $(UBOOT_OVERRIDE_SRCDIR)) $(@D)/.scmversion
++		$(abspath $(LINUX_OVERRIDE_SRCDIR)) $(@D)/.scmversion
 +endef
 +
-+UBOOT_POST_RSYNC_HOOKS += UBOOT_SCMVERSION_HOOK
++LINUX_POST_RSYNC_HOOKS += LINUX_SCMVERSION_HOOK
 +endif
 +
- ifeq ($(BR2_TARGET_UBOOT)$(BR2_TARGET_UBOOT_LATEST_VERSION),y)
- BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
+ ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_VERSION),y)
+ BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
  endif
 -- 
 2.24.3 (Apple Git-128)
