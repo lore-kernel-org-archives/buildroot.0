@@ -4,56 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2F7BC61DA4
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3C1C636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:48:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B1454172D;
-	Wed, 22 Feb 2023 16:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B1454172D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CB6A416F0;
+	Wed, 22 Feb 2023 16:48:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CB6A416F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6OomVgmkPpyS; Wed, 22 Feb 2023 16:48:07 +0000 (UTC)
+	with ESMTP id yxCr-rCdGKC4; Wed, 22 Feb 2023 16:48:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98E1D41722;
-	Wed, 22 Feb 2023 16:48:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98E1D41722
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F30A416EA;
+	Wed, 22 Feb 2023 16:48:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F30A416EA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EF2E21BF847
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:48:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 724791BF847
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C9DA0416EA
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:48:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9DA0416EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59A6E416F1
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59A6E416F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AXNFRw1rmig9 for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 16:48:01 +0000 (UTC)
+ with ESMTP id CCb2_NwuNsel for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 16:48:31 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A559416CB
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0A559416CB
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C501416CB
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7C501416CB
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:48:31 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9CC9DE0008;
- Wed, 22 Feb 2023 16:47:58 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8E5A7100004;
+ Wed, 22 Feb 2023 16:48:29 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pUsHd-0083S0-49; Wed, 22 Feb 2023 17:47:57 +0100
+ id 1pUsI8-0083mE-Rl; Wed, 22 Feb 2023 17:48:28 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-20-ricardo.martincoski@gmail.com>
-Date: Wed, 22 Feb 2023 17:47:57 +0100
-In-Reply-To: <20221127130739.1862398-20-ricardo.martincoski@gmail.com>
- (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:33 -0300")
-Message-ID: <87ilftsl36.fsf@dell.be.48ers.dk>
+ <20221127130739.1862398-21-ricardo.martincoski@gmail.com>
+Date: Wed, 22 Feb 2023 17:48:28 +0100
+In-Reply-To: <20221127130739.1862398-21-ricardo.martincoski@gmail.com>
+ (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:34 -0300")
+Message-ID: <87edqhsl2b.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 19/25] package/gcc: properly handle legacy
- for renamed ARC option
+Subject: Re: [Buildroot] [next 20/25] package/lua: properly handle legacy
+ for removed version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,9 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -75,16 +72,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > Commit "50332a530b gcc: rename option for ARC gcc" tried to add legacy
- > handling but the new symbol is part of a choice, and Kconfig does not
- > enforce the select of a option from a choice.
+ > Commit "297613f1c7 package/lua: remove 5.2.x version" tried to add
+ > legacy handling but the new symbols are part of a choice, and Kconfig
+ > does not enforce the select of a option from a choice.
 
- > Update the legacy entry for 2016.11, following the example described in
+ > Update the legacy entry for 2019.02, following the example described in
  > the beginning of the file.
 
- > Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
- > Cc: Romain Naour <romain.naour@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Francois Perrad <francois.perrad@gadz.org>
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
 Committed to 2022.11.x and 2022.02.x, thanks.
