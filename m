@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48505C636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:41:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26F19C61DA4
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:43:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E70D1416CB;
-	Wed, 22 Feb 2023 16:41:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E70D1416CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id C609B40B64;
+	Wed, 22 Feb 2023 16:43:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C609B40B64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kOZQm_H8F0NM; Wed, 22 Feb 2023 16:41:35 +0000 (UTC)
+	with ESMTP id HlcuZJ5SZjEZ; Wed, 22 Feb 2023 16:43:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 353204172D;
-	Wed, 22 Feb 2023 16:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 353204172D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E8B231BF847
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:40:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 08CCE416CB;
+	Wed, 22 Feb 2023 16:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08CCE416CB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 528E31BF847
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C164A416F7
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:40:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C164A416F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 33BA5419E5
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:41:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33BA5419E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oO74wXFUfzS8 for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 16:40:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T9KgagViNhzE for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 16:41:13 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7922416ED
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D7922416ED
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:40:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E31419DC
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 39E31419DC
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:41:13 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8D404FF807;
- Wed, 22 Feb 2023 16:40:05 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4114D1BF205;
+ Wed, 22 Feb 2023 16:41:10 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pUs9x-0080XI-T7; Wed, 22 Feb 2023 17:40:01 +0100
+ id 1pUsB3-0080Zo-89; Wed, 22 Feb 2023 17:41:09 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-10-ricardo.martincoski@gmail.com>
-Date: Wed, 22 Feb 2023 17:40:01 +0100
-In-Reply-To: <20221127130739.1862398-10-ricardo.martincoski@gmail.com>
- (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:23 -0300")
-Message-ID: <87lekpu00u.fsf@dell.be.48ers.dk>
+ <20221127130739.1862398-11-ricardo.martincoski@gmail.com>
+Date: Wed, 22 Feb 2023 17:41:09 +0100
+In-Reply-To: <20221127130739.1862398-11-ricardo.martincoski@gmail.com>
+ (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:24 -0300")
+Message-ID: <87h6vdtzyy.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 09/25] package/pugixml: fix configuration
+Subject: Re: [Buildroot] [next 10/25] package/pugixml: use explicit build
  options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -73,26 +73,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > Commit upstream 1c5a0bb32583fd294022e68e66b541bf6ff71a67
- > ":sparkles: Update CMake to modern approach" removed all feature
- > toogles, so starting from release v1.11 any flag passed in BUILD_DEFINES
- > was completely ignored during the build.
- > Version 1.11.4 was in use in buildroot since February 2021.
+ > Commit upstream 986b7ffd01aedcd4f2aa16e78e4cad9313b6d7b2
+ > "Add Cmake options for pugiconfig.hpp" added feature toogles to release
+ > v1.12, including PUGIXML_NO_XPATH and PUGIXML_COMPACT.
 
- > Commit upstream 0f1e75a902ef1751dd63a67fe223b5e8daf4c7f1
- > "Re-introduced the custom build defines" added PUGIXML_BUILD_DEFINES to
- > release v1.12, but BUILD_DEFINES is still completely ignored during the
- > build.
- > Version 1.12.1 is in use in buildroot since March 2022.
+ > Commit upstream 5f49f2c6575cc2b7d343f8d41581fe92d69d7b52
+ > "Mark advanced options and removed redundant ones" removed CMake
+ > specific support for PUGIXML_HEADER_ONLY and PUGIXML_HAS_LONG_LONG, but
+ > they can still be provided using PUGIXML_BUILD_DEFINES, starting from
+ > release v1.12.
 
- > So switch the config options to use PUGIXML_BUILD_DEFINES instead of
- > BUILD_DEFINES.
+ > So use the explicit build options PUGIXML_NO_XPATH and PUGIXML_COMPACT,
+ > but keep using PUGIXML_BUILD_DEFINES to set PUGIXML_HEADER_ONLY and
+ > PUGIXML_HAS_LONG_LONG.
 
  > Cc: Arnout Vandecappelle <arnout@mind.be>
  > Cc: Theo Debrouwere <t.debrouwere@televic.com>
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+Committed to 2022.11.x, thanks (2022.02.x uses v1.11.4).
 
 -- 
 Bye, Peter Korsgaard
