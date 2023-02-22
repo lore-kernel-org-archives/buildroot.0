@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C489DC636D6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:41:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48505C636D6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Feb 2023 16:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6102F416FA;
-	Wed, 22 Feb 2023 16:41:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6102F416FA
+	by smtp2.osuosl.org (Postfix) with ESMTP id E70D1416CB;
+	Wed, 22 Feb 2023 16:41:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E70D1416CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K5VitsV7axx7; Wed, 22 Feb 2023 16:41:22 +0000 (UTC)
+	with ESMTP id kOZQm_H8F0NM; Wed, 22 Feb 2023 16:41:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A275F41725;
-	Wed, 22 Feb 2023 16:41:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A275F41725
+	by smtp2.osuosl.org (Postfix) with ESMTP id 353204172D;
+	Wed, 22 Feb 2023 16:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 353204172D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9E13B1BF847
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:39:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E8B231BF847
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 788B0416FF
- for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:39:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 788B0416FF
+ by smtp2.osuosl.org (Postfix) with ESMTP id C164A416F7
+ for <buildroot@lists.busybox.net>; Wed, 22 Feb 2023 16:40:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C164A416F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dxkTspIaKnzK for <buildroot@lists.busybox.net>;
- Wed, 22 Feb 2023 16:39:19 +0000 (UTC)
+ with ESMTP id oO74wXFUfzS8 for <buildroot@lists.busybox.net>;
+ Wed, 22 Feb 2023 16:40:08 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D143F4170E
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D143F4170E
- for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:39:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7922416ED
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D7922416ED
+ for <buildroot@buildroot.org>; Wed, 22 Feb 2023 16:40:07 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CDAB41BF20A;
- Wed, 22 Feb 2023 16:39:16 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8D404FF807;
+ Wed, 22 Feb 2023 16:40:05 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pUs9D-0080BB-Ci; Wed, 22 Feb 2023 17:39:15 +0100
+ id 1pUs9x-0080XI-T7; Wed, 22 Feb 2023 17:40:01 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20221127130739.1862398-1-ricardo.martincoski@gmail.com>
- <20221127130739.1862398-9-ricardo.martincoski@gmail.com>
-Date: Wed, 22 Feb 2023 17:39:15 +0100
-In-Reply-To: <20221127130739.1862398-9-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 27 Nov 2022 10:07:22 -0300")
-Message-ID: <87pma1u024.fsf@dell.be.48ers.dk>
+ <20221127130739.1862398-10-ricardo.martincoski@gmail.com>
+Date: Wed, 22 Feb 2023 17:40:01 +0100
+In-Reply-To: <20221127130739.1862398-10-ricardo.martincoski@gmail.com>
+ (Ricardo Martincoski's message of "Sun, 27 Nov 2022 10:07:23 -0300")
+Message-ID: <87lekpu00u.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [next 08/25] package/pugixml: unconditionally set
- BUILD_DEFINES
+Subject: Re: [Buildroot] [next 09/25] package/pugixml: fix configuration
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,34 +73,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > The ifdef construct intended to avoid passing -DBUILD_DEFINES="" was
- > never needed, because even upstream version v1.9 used in 2019 when the
- > configuration options were added, can handle an empty string for
+ > Commit upstream 1c5a0bb32583fd294022e68e66b541bf6ff71a67
+ > ":sparkles: Update CMake to modern approach" removed all feature
+ > toogles, so starting from release v1.11 any flag passed in BUILD_DEFINES
+ > was completely ignored during the build.
+ > Version 1.11.4 was in use in buildroot since February 2021.
+
+ > Commit upstream 0f1e75a902ef1751dd63a67fe223b5e8daf4c7f1
+ > "Re-introduced the custom build defines" added PUGIXML_BUILD_DEFINES to
+ > release v1.12, but BUILD_DEFINES is still completely ignored during the
+ > build.
+ > Version 1.12.1 is in use in buildroot since March 2022.
+
+ > So switch the config options to use PUGIXML_BUILD_DEFINES instead of
  > BUILD_DEFINES.
- > In fact an empty string is the default for v1.9 if it is not passed
- > during configure.
-
- > Also, the host variant already sets BUILD_DEFINES unconditionally.
-
- > So remove the unneeded conditional.
 
  > Cc: Arnout Vandecappelle <arnout@mind.be>
  > Cc: Theo Debrouwere <t.debrouwere@televic.com>
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
- > ---
- > NOTE 1:
- > For versions starting from v1.11 this flag BUILD_DEFINES is ignored, but
- > it will be fixed in the next patch.
- > I had split into 2 patches because this first one applies to old
- > versions of the package too. Someone could theoretically decide to
- > backport to a local copy of buildroot 2020.05.x for instance.
-
- > NOTE 2:
- > It doesn't test much, since BUILD_DEFINES is ignored, but anyway:
- > https://gitlab.com/RicardoMartincoski/buildroot/-/pipelines/704554673
- > 44 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
- > test-pkg config:
- > BR2_PACKAGE_PUGIXML=y
 
 Committed to 2022.11.x and 2022.02.x, thanks.
 
