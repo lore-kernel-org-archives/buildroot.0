@@ -1,56 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1E2DC61DA4
-	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 18:09:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B295EC61DA4
+	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 19:02:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03150821B9;
-	Thu, 23 Feb 2023 18:09:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03150821B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 287454094C;
+	Thu, 23 Feb 2023 19:02:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 287454094C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n2tXHEzC4qZO; Thu, 23 Feb 2023 18:09:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BcIHb3JZ4zNl; Thu, 23 Feb 2023 19:02:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 309F0821BD;
-	Thu, 23 Feb 2023 18:09:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 309F0821BD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 120E31BF2BD
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 18:09:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 190AD4093F;
+	Thu, 23 Feb 2023 19:02:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 190AD4093F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6616F1BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E032381B23
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 18:09:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E032381B23
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C29B4093F
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:02:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C29B4093F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TtG3TZm1NJO4 for <buildroot@lists.busybox.net>;
- Thu, 23 Feb 2023 18:09:02 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5530C81975
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5530C81975
- for <buildroot@buildroot.org>; Thu, 23 Feb 2023 18:09:02 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23CCF14BF;
- Thu, 23 Feb 2023 10:09:44 -0800 (PST)
-Received: from localhost.localdomain (X72Y076X74.nice.arm.com [10.34.129.9])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 73E8D3F587;
- Thu, 23 Feb 2023 10:09:00 -0800 (PST)
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
-To: buildroot@buildroot.org
-Date: Thu, 23 Feb 2023 19:08:47 +0100
-Message-Id: <20230223180847.2512056-3-vincent.stehle@arm.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230223180847.2512056-1-vincent.stehle@arm.com>
-References: <20230223180847.2512056-1-vincent.stehle@arm.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2KazdVtVpvKj for <buildroot@lists.busybox.net>;
+ Thu, 23 Feb 2023 19:02:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C5BD40937
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4C5BD40937
+ for <buildroot@buildroot.org>; Thu, 23 Feb 2023 19:02:36 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3899720002;
+ Thu, 23 Feb 2023 19:02:32 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pVGrQ-008Hm2-1H; Thu, 23 Feb 2023 20:02:32 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+References: <20221122203130.184496-1-ju.o@free.fr>
+ <7b2f79e7-0880-f210-5c35-d58f7dfaf367@othermo.de>
+Date: Thu, 23 Feb 2023 20:02:31 +0100
+In-Reply-To: <7b2f79e7-0880-f210-5c35-d58f7dfaf367@othermo.de> (Marcus
+ Hoffmann via buildroot's message of "Wed, 21 Dec 2022 23:21:26 +0100")
+Message-ID: <87zg94p5mg.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] configs/arm_foundationv8: bump to Linux
- 6.1.13
+Subject: Re: [Buildroot] [PATCH next v2 1/7] package/python-idna: set
+ _SETUP_TYPE = flit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,55 +65,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBCdW1wIExpbnV4IGtlcm5lbCB0byB2Ni4xLjEzIGFuZCBpbmNyZWFzZSB0aGUgcm9vdGZzIHNp
-emUgYWNjb3JkaW5nbHkuCi0gQnVtcCB0aGUgRlZQIGluIHRoZSByZWFkbWUgdG8gdmVyc2lvbiAx
-MS4yMCBidWlsZCAxNSBhbmQgdXBkYXRlIHRoZQogIGNvbW1hbmQgbGluZS4KClNpZ25lZC1vZmYt
-Ynk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNvbT4KQ2M6IE1hc2FoaXJv
-IFlhbWFkYSA8eWFtYWRhLm1hc2FoaXJvQHNvY2lvbmV4dC5jb20+Ci0tLQogYm9hcmQvYXJtL2Zv
-dW5kYXRpb24tdjgvcmVhZG1lLnR4dCB8IDQgKystLQogY29uZmlncy9hcm1fZm91bmRhdGlvbnY4
-X2RlZmNvbmZpZyB8IDcgKysrKy0tLQogMiBmaWxlcyBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyks
-IDUgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvYm9hcmQvYXJtL2ZvdW5kYXRpb24tdjgvcmVh
-ZG1lLnR4dCBiL2JvYXJkL2FybS9mb3VuZGF0aW9uLXY4L3JlYWRtZS50eHQKaW5kZXggYjUxMDZm
-MDE1ZS4uY2IwZmUwOGI4NyAxMDA2NDQKLS0tIGEvYm9hcmQvYXJtL2ZvdW5kYXRpb24tdjgvcmVh
-ZG1lLnR4dAorKysgYi9ib2FyZC9hcm0vZm91bmRhdGlvbi12OC9yZWFkbWUudHh0CkBAIC0zLDE0
-ICszLDE0IEBAIEFSTSBzb2Z0d2FyZSBzaW11bGF0b3Igb2YgdGhlIEFBcmNoNjQgYXJjaGl0ZWN0
-dXJlLgogCiBGaXJzdCwgb25lIGhhcyB0byBkb3dubG9hZCB0aGUgQUFyY2g2NCBzb2Z0d2FyZSBz
-aW11bGF0b3IgZnJvbToKIAotICBodHRwczovL3NpbHZlci5hcm0uY29tL2Rvd25sb2FkL2Rvd25s
-b2FkLnRtP3B2PTQ4MDcxODYKKyAgaHR0cHM6Ly9hcm1rZWlsLmJsb2IuY29yZS53aW5kb3dzLm5l
-dC9kZXZlbG9wZXIvRmlsZXMvZG93bmxvYWRzL2Vjb3N5c3RlbS1tb2RlbHMvRm91bmRhdGlvbl9Q
-bGF0Zm9ybV8xMS4yMF8xNV9MaW51eDY0LnRnegogCiBUaGVuLCB1c2UgdGhlIGFybV9mb3VuZGF0
-aW9udjhfZGVmY29uZmlnIGNvbmZpZ3VyYXRpb24gdG8gYnVpbGQgeW91cgogQnVpbGRyb290IHN5
-c3RlbS4KIAogRmluYWxseSwgYm9vdCB5b3VyIHN5c3RlbSB3aXRoOgogCi0gJHtMT0NBVElPTl9P
-Rl9GT1VOREFUSU9OVjhfU0lNVUxBVE9SfS9tb2RlbHMvTGludXg2NF9HQ0MtNi40L0ZvdW5kYXRp
-b25fUGxhdGZvcm0gXAorICR7TE9DQVRJT05fT0ZfRk9VTkRBVElPTlY4X1NJTVVMQVRPUn0vbW9k
-ZWxzL0xpbnV4NjRfR0NDLTkuMy9Gb3VuZGF0aW9uX1BsYXRmb3JtIFwKICAgICAtLWltYWdlIG91
-dHB1dC9pbWFnZXMvbGludXgtc3lzdGVtLmF4ZiBcCiAgICAgLS1ibG9jay1kZXZpY2Ugb3V0cHV0
-L2ltYWdlcy9yb290ZnMuZXh0MiBcCiAgICAgLS1uZXR3b3JrPW5hdCBcCmRpZmYgLS1naXQgYS9j
-b25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmlnIGIvY29uZmlncy9hcm1fZm91bmRhdGlv
-bnY4X2RlZmNvbmZpZwppbmRleCAzYzYzZjVkYzc2Li4xMDJmZThmZDA5IDEwMDY0NAotLS0gYS9j
-b25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmlnCisrKyBiL2NvbmZpZ3MvYXJtX2ZvdW5k
-YXRpb252OF9kZWZjb25maWcKQEAgLTEsMTUgKzEsMTYgQEAKIEJSMl9hYXJjaDY0PXkKLSMgTGlu
-dXggaGVhZGVycyBzYW1lIGFzIGtlcm5lbCwgYSA1LjE2IHNlcmllcwotQlIyX1BBQ0tBR0VfSE9T
-VF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzE2PXkKKyMgTGludXggaGVhZGVycyBzYW1lIGFzIGtl
-cm5lbCwgYSA2LjEgc2VyaWVzCitCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9N
-XzZfMT15CiBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5QU1BMCIKIEJSMl9MSU5V
-WF9LRVJORUw9eQogQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Ci1CUjJfTElOVVhf
-S0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjE2LjIwIgorQlIyX0xJTlVYX0tFUk5FTF9D
-VVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xLjEzIgogQlIyX0xJTlVYX0tFUk5FTF9VU0VfQVJDSF9E
-RUZBVUxUX0NPTkZJRz15CiBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKIEJSMl9MSU5V
-WF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJhcm0vZm91bmRhdGlvbi12OC1naWN2My1wc2NpIgog
-QlIyX0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQogQlIyX1RBUkdFVF9ST09URlNf
-RVhUMj15CitCUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjEyOE0iCiAjIEJSMl9UQVJHRVRf
-Uk9PVEZTX1RBUiBpcyBub3Qgc2V0CiBCUjJfVEFSR0VUX0JPT1RfV1JBUFBFUl9BQVJDSDY0PXkK
-IEJSMl9UQVJHRVRfQk9PVF9XUkFQUEVSX0FBUkNINjRfRFRTPSJhcm0vZm91bmRhdGlvbi12OC1n
-aWN2My1wc2NpIgotLSAKMi4zOS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+>>>>> "Marcus" == Marcus Hoffmann via buildroot <buildroot@buildroot.org> writes:
+
+ > On 22.11.22 21:31, Julien Olivain wrote:
+ >> Python idna package switched to pyproject.toml in commit:
+ >> https://github.com/kjd/idna/commit/2a00e518efe55d2eeb62cd3f88ace7db41338603
+ >> which is included in idna v3.4.
+ >> 
+ >> When using the old setuptools infra, the package is incorrectly
+ >> installed as v0.0, which is then incorrectly detected by other
+ >> packages when using setuptools pkg_resources.
+ >> 
+ >> The issue can be reproduced with the command:
+ >> 
+ >> python3 <<EOF
+ >> __requires__ = ["idna >= 2.5"]
+ >> import pkg_resources
+ >> EOF
+ >> 
+ >> which will fail with output:
+ >> 
+ >> pkg_resources.ContextualVersionConflict: (idna 0.0.0
+ >> (/usr/lib/python3.11/site-packages), Requirement.parse('idna>=2.5'),
+ >> {'hyperlink'})
+ >> pkg_resources.DistributionNotFound: The 'idna>=2.5'
+ >> distribution was not found and is required by hyperlink
+ >> 
+ >> This commit changes _SETUP_TYPE to "flit" to fix this issue.
+ >> 
+ >> Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+ > Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+
+Committed to 2022.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
