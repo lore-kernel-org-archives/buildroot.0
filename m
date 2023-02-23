@@ -4,66 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BC9DC64ED6
-	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 22:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 343BEC64ED6
+	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 22:59:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8566405CB;
-	Thu, 23 Feb 2023 22:58:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8566405CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id D403640181;
+	Thu, 23 Feb 2023 22:59:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D403640181
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hFSpK4zfmQy0; Thu, 23 Feb 2023 22:58:10 +0000 (UTC)
+	with ESMTP id 4FaEeotSsnQe; Thu, 23 Feb 2023 22:59:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10AA6405D8;
-	Thu, 23 Feb 2023 22:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10AA6405D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CED0405CE;
+	Thu, 23 Feb 2023 22:59:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CED0405CE
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B98CC1BF338
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 22:58:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B5F651BF215
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 22:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A1A260BBB
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 22:58:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A1A260BBB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FA9360BBB
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 22:59:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FA9360BBB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FRCpaShFIkos for <buildroot@lists.busybox.net>;
- Thu, 23 Feb 2023 22:58:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2967660BC5
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2967660BC5
- for <buildroot@buildroot.org>; Thu, 23 Feb 2023 22:58:04 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4D255100004;
- Thu, 23 Feb 2023 22:58:02 +0000 (UTC)
-Date: Thu, 23 Feb 2023 23:58:01 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230223235801.6b4a2c05@windsurf>
-In-Reply-To: <20230223160714.1210026-1-fontaine.fabrice@gmail.com>
-References: <20230223160714.1210026-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+ with ESMTP id HemrtSX5qfIn for <buildroot@lists.busybox.net>;
+ Thu, 23 Feb 2023 22:59:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 861A160BB9
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 861A160BB9
+ for <buildroot@buildroot.org>; Thu, 23 Feb 2023 22:59:48 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id az36so648261wmb.1
+ for <buildroot@buildroot.org>; Thu, 23 Feb 2023 14:59:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=n8zTSdi6dc7U73LfKMmDxg0mwB5hPdBJYy43N3bLtCQ=;
+ b=haXz4kXOmgI4J2OY3Mm3qJRml7thRjaTrttxzWCCL/OULOipqmC8VH6pgDDVfsZgMH
+ vY1ctXibTZPyPV8l88F+8ZXH5nFki1ZUzT3pL2PZLX6YFTefEcDOlBCe6fnaEZyuzm81
+ uwE8y592umGl9wnckKxdLl23tsbL4wGHRpXeaEt8vsWOBmcIeqAIXbHzHRCJ/bG7+U4k
+ j1wGrHqHpsn5LWLa0roEzAvAiyWRmiOj6L+krW2X+HrPa0M6/KPdFA861n3lJoHRCfOM
+ k+OVsjyUVbHCQLHH40Pnl8m3aR9E8/O67OFZGhVBV0anxzSdKB66ZUa/cXm5o3FNPhcy
+ aGYw==
+X-Gm-Message-State: AO0yUKXWp1ifTATJ6J+L+NMlu6SABLcuPWfjQ2mfhM4XUeX5WRoWiW4A
+ 3v55HGOvhXAUUi/Ug1MI3rZh6c+BJKw=
+X-Google-Smtp-Source: AK7set8QU0sAT9ySkQhLC3orJclgPGJhbs7fwnAggwnWHhbgTBac9Pxgj15kcmjqpQqJT1wRoJYJ8Q==
+X-Received: by 2002:a05:600c:170a:b0:3e2:d81:3564 with SMTP id
+ c10-20020a05600c170a00b003e20d813564mr8574468wmn.3.1677193186269; 
+ Thu, 23 Feb 2023 14:59:46 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ 13-20020a05600c020d00b003dc1d668866sm721554wmi.10.2023.02.23.14.59.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 23 Feb 2023 14:59:45 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 23 Feb 2023 23:59:42 +0100
+Message-Id: <20230223225942.313435-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1677193082;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SJdrKjjEMjVFSz/yr8KAiW117yaCQ+LzJu5PizyceKo=;
- b=LA6pWWS8PGJHmyVxyhIOYvKVUQaCPLkBQ1meFY4a2OFtyYtRRyFdyJ47RUpWdRP5t4KDkV
- Ku7tDEC6qJhYZh5K/vlgRXu+V4kcGSpr7PMnbH7GPgXcf7x5oStfAnqUKVabWsbrnV0K7W
- VVnUIhHd6BtrDw7MrDIN2UNw/sEZienPWI6xsEC9VFsamyuimsddTVzM+27780YKj/am+a
- vTxXA4eTeZ0AicckzDrH/VQ6Juujz10dSQXVnpkTsBtO9gd6QHUmpzn0feMZzpmiyzNDpB
- MZrPjLwLWEXyjGdyOl6dgERRwJ45HbQIlCPiW86IzgAiUOd0I6NDkOYU/nqTuQ==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=n8zTSdi6dc7U73LfKMmDxg0mwB5hPdBJYy43N3bLtCQ=;
+ b=ONUjqjic0NhhNlS93D7DceOYrFBSYQWBzUW9rnzQPqErU6Otg7jcbvV6J2JyfEIDr/
+ aXPj4QmCfJjN5U/LFndgKhXrakcIfDfEelsoTLKJOTQ1wDJRm1UtCeO+APikT1HQdwlF
+ XGCTHgilC2HQDDOs7LM9lVf5ekKFELLzv2UL6A8VZ6AdjLAd9coBa1xZoJIb1GFgF8LD
+ y7R6Btgov43GlsX1p3d+IYcCabKkuM0Gk4AB++6nI4pmkPYD+scNi8r9DXhm6T1hzo81
+ uXqIN3S7F8TzG0ltuYeF0HwzLLe/bAvnx0bRNt03gQF+ptAHNbwJNx5dTxtZ9v4rNTsl
+ YZcg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LA6pWWS8
-Subject: Re: [Buildroot] [PATCH 1/1] package/xtables-addons: drop
- XTABLES_ADDONS_DISABLE_GEOIP_HELPERS
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ONUjqjic
+Subject: [Buildroot] [PATCH 1/1] support/dependencies/dependencies.sh:
+ require MD5 perl package for netsurf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,98 +94,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+Fix the following build failure:
 
-On Thu, 23 Feb 2023 17:07:14 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Can't locate object method "hexhash" via package "MD5" at utils/git-testament.pl line 47
 
-> Drop XTABLES_ADDONS_DISABLE_GEOIP_HELPERS which raises the following
-> build failure (probably since the addition of the package):
+Fixes:
+ - http://autobuild.buildroot.org/results/3dddcbbe7f6ecae5a2db6fac11fb659719452f73
 
-No, it is not since the addition of the package.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ support/dependencies/dependencies.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Upstream commit 7ad55ad6210d450521664f64453f854b3ba13d8d looks like this:
-
-commit 7ad55ad6210d450521664f64453f854b3ba13d8d
-Author: Jan Engelhardt <jengelh@inai.de>
-Date:   Tue Aug 16 10:44:56 2022 +0200
-
-    build: eliminate geoip/ make recursion
-
-diff --git a/Makefile.am b/Makefile.am
-index c051d53..0518bb6 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -1,10 +1,16 @@
- # -*- Makefile -*-
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 078559f086..58f44c8723 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -290,6 +290,10 @@ if grep -q ^BR2_PACKAGE_MPV=y $BR2_CONFIG ; then
+     required_perl_modules="$required_perl_modules Math::BigRat"
+ fi
  
- ACLOCAL_AMFLAGS  = -I m4
--SUBDIRS          = extensions extensions/ACCOUNT extensions/pknock geoip
--
--pkglibexec_SCRIPTS = asn/xt_asn_build asn/xt_asn_dl asn/xt_asn_fetch
--man_MANS = xtables-addons.8 asn/xt_asn_build.1 asn/xt_asn_dl.1
-+SUBDIRS          = extensions extensions/ACCOUNT extensions/pknock
++if grep -q ^BR2_PACKAGE_NETSURF=y $BR2_CONFIG ; then
++    required_perl_modules="$required_perl_modules Digest::MD5"
++fi
 +
-+bin_SCRIPTS = geoip/xt_geoip_query
-+pkglibexec_SCRIPTS = asn/xt_asn_build asn/xt_asn_dl asn/xt_asn_fetch \
-+       geoip/xt_geoip_build geoip/xt_geoip_build_maxmind \
-+       geoip/xt_geoip_dl geoip/xt_geoip_dl_maxmind
-+man_MANS = xtables-addons.8 asn/xt_asn_build.1 asn/xt_asn_dl.1 \
-+       geoip/xt_geoip_build.1 geoip/xt_geoip_dl.1 \
-+       geoip/xt_geoip_build_maxmind.1 geoip/xt_geoip_dl_maxmind.1 \
-+       geoip/xt_geoip_query.1
- 
- .PHONY: FORCE
- FORCE:
-
-So up to this commit (which was part of the xtables-addons v3.22
-release), the $(SED) invocation was working fine to drop geoip from the
-SUBDIRS variable.
-
-Now that they have removed the recursive make, replace " geoip" with
-nothing causes:
-
-bin_SCRIPTS = geoip/xt_geoip_query
-
-to become:
-
-bin_SCRIPTS = xt_geoip_query
-
-causing the build breakage. So it's actually Buildroot commit
-53f2999edfa5e67923d4d8a102c15fa3200e089c (from you!) that broke this :-)
-
-> make[3]: *** No rule to make target '/xt_geoip_query', needed by 'all-am'.  Stop.
-> 
-> unzip and perl don't seem to be needed
-
-They are, but not at build time. The comment was referring to the fact
-that they are needed at runtime: the scripts in the geoip/ subdir are
-written in Perl, and one of them uses unzip. So practically speaking,
-installing them on the target is useless because xtables-addons does
-not force installing Perl on the target.
-
-However, the package anyway also installs asn/xt_asn_fetch and
-asn/xt_asn_build which are also written in Perl.
-
-So perhaps what needs to be done is simply to remove these scripts in a
-POST_INSTALL_TARGET_HOOKS ? (And indeed drop the SED expression as you
-did).
-
-Thanks!
-
-Thomas
+ if grep -q ^BR2_PACKAGE_WHOIS=y $BR2_CONFIG ; then
+     required_perl_modules="$required_perl_modules autodie"
+ fi
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
