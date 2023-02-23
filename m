@@ -4,91 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFFABC636D7
-	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 19:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02F4EC636D6
+	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 19:27:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E59E40932;
-	Thu, 23 Feb 2023 19:24:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E59E40932
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E2D941061;
+	Thu, 23 Feb 2023 19:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E2D941061
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U9z9ytISBaTg; Thu, 23 Feb 2023 19:24:26 +0000 (UTC)
+	with ESMTP id JUQrFjHMxHYj; Thu, 23 Feb 2023 19:27:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A5AF40933;
-	Thu, 23 Feb 2023 19:24:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A5AF40933
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AC8581BF343
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:24:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63968410A1;
+	Thu, 23 Feb 2023 19:27:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63968410A1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 26FF91BF343
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:27:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92D5081852
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92D5081852
+ by smtp4.osuosl.org (Postfix) with ESMTP id F420D410A1
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F420D410A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tiqCPkt34ynl for <buildroot@lists.busybox.net>;
- Thu, 23 Feb 2023 19:24:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4Hvt2vgyAIEM for <buildroot@lists.busybox.net>;
+ Thu, 23 Feb 2023 19:27:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E5EB81842
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E5EB81842
- for <buildroot@buildroot.org>; Thu, 23 Feb 2023 19:24:21 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id da10so47368013edb.3
- for <buildroot@buildroot.org>; Thu, 23 Feb 2023 11:24:21 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9893B41061
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9893B41061
+ for <buildroot@buildroot.org>; Thu, 23 Feb 2023 19:27:15 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id ck15so47419393edb.0
+ for <buildroot@buildroot.org>; Thu, 23 Feb 2023 11:27:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=gor+eyj/klCjiUMdGlriJ/de6KpOs/J3QrosdV+rXvE=;
- b=B1+ket7BJxJCWbkp3MdykrDiIinDoXknS3F92L1weNEVM26y6KHQ8e1CbWlfqhRQ5q
- P3Czz+vBKR++ZWISteCXuRzPngsZOOvkJMHymOAQXlrNpQmTWnFvFTdKYvJRfS45DXke
- rBa3jO21gmkE7d8lCyO+izvhozLy9TRvCjWLoBILR9TDtX5b76ZuafBpv6vUdL0Al4Vn
- sFq/sLGUud1Mavr53S2z9zEuXqvyfuISubjrrwaIYVoSNtLQA3RWpIy2SwM7Um4gIZfE
- OIPeN+lnZQFTYzZs3Ldnf4qGp+ETvGcWe4BbX3lfSqqMUviofg4tPrSvDyoPDHC1qj6k
- NNvQ==
-X-Gm-Message-State: AO0yUKVPxvGMfhSmk+FFbObdSFtI1ZYN0Augx+y38XH+TXGyHedjS4xS
- ZstX5IWJvgfmWmFNGMQ014JWGQ==
-X-Google-Smtp-Source: AK7set+1GAmAW730fYWv4DICFn9Aa9cMLq7TjoGdUNoAOwu+b/3YYGod2wA076xHdDcuMhn3vYhWmA==
-X-Received: by 2002:a17:906:da0d:b0:8af:1a8c:eaa0 with SMTP id
- fi13-20020a170906da0d00b008af1a8ceaa0mr20405456ejb.75.1677180260007; 
- Thu, 23 Feb 2023 11:24:20 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- k7-20020a1709065fc700b008dceec0fd4csm4086679ejv.73.2023.02.23.11.24.18
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 23 Feb 2023 11:24:19 -0800 (PST)
-Message-ID: <7a565459-473d-a5c4-cf25-13f688e2a295@mind.be>
-Date: Thu, 23 Feb 2023 20:24:17 +0100
+ h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=GI+Oul14Ka2lducM8NVYczG8Omk+NFA1kUwa760JsdI=;
+ b=DQdIZYwoAFuS9HFzrl8xSeXa5DU2enxqz3tzBKf40KSY9g8vRw9YQ6pjb4hB05lGgs
+ 83LoVgHiuI+6Unm0+3rhP86YM5SzvYqzGwK08xCZTzfEsmZP4tK9rhni3z87cBA7+NYa
+ 0TDVKAyGHrvlJmlfl3m/bSByKFfWAJnCF1+zzfb1Jnx6fJTHVGyXVsd+JxSw5hi0uTRL
+ U1EGMn67Bpj/gVQL+dO310iZ4+v185VXjT+gmvnzsCliCfuoSrrV3BNKZFqB6ImfEyv+
+ ZZtMfYwp4mnS7GyoWpM5memNL/WDtMlVVXFyCOnE3ryAPn04QuAvIsZAXugVKF6rHcVy
+ lfpg==
+X-Gm-Message-State: AO0yUKUilPw2KlM8Aes+Mzqvixx1ZEwZbMDKX65BXlujSvwdlzfGrlg+
+ szywoP7C4oOgDv40956c8THsmrz725jz+lcwP/uYJg==
+X-Google-Smtp-Source: AK7set981Y7xNHRkxU1nrb+7Q00bCCtkOIQaaTpgMXeSJETX3lR6KATDTlhGKc03lgv6zsP0d7mmY+8LIRjBspmGzv0=
+X-Received: by 2002:a50:d51d:0:b0:4ac:b618:7fb1 with SMTP id
+ u29-20020a50d51d000000b004acb6187fb1mr5906880edi.6.1677180433611; Thu, 23 Feb
+ 2023 11:27:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20230222150449.2005824-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20230222150449.2005824-1-fontaine.fabrice@gmail.com>
+References: <20220518213933.2475-1-adamg@esdemc.com>
+ <11b5699c-ebc7-7a6c-e8f8-c3824fe166d3@mind.be>
+In-Reply-To: <11b5699c-ebc7-7a6c-e8f8-c3824fe166d3@mind.be>
+Date: Thu, 23 Feb 2023 13:27:03 -0600
+Message-ID: <CABu+Ghx2Qkzyb4rj7pQvuftFm9Y6rcsdvUKkDA0L+m+m+oWVAA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=gor+eyj/klCjiUMdGlriJ/de6KpOs/J3QrosdV+rXvE=;
- b=hiT0pzaNV2FnknKrPJCuzdfejrAuOPSoO5qkUZ/3+iIk9KtrXW78NsQ/COhBa5b9dU
- 6Blkz9zi//aqPpTY2uk2dUNBZoPhMEwQDPMUnYqfkfDATqYCpE4wbd5KIJc6gHD/5LtM
- xT+gAHtrIRO4wcqyAF5LErMYCgnuKzWXvq+lOR6UcW4BcSXBxUk3hdAfsgJg+ecmplaU
- NPNaNxbX9a0+dTrq9/Ncru1l8so5UBFjVQUdeFwmiz6iR4TIKG18cNdXG673L266Gc7f
- xmZBYHMZi/4s2G0ynZPmfZDA6zsXU0iaM9WKVi0RQzq/zlkRu+DbIqOvACjA7zAm1yos
- ynZA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hiT0pzaN
-Subject: Re: [Buildroot] [PATCH RFC,1/1] package/gcc: fix GCC_DL_DIR
+ d=esdemc.com; s=google;
+ h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=GI+Oul14Ka2lducM8NVYczG8Omk+NFA1kUwa760JsdI=;
+ b=dadXKxgrk9ioRQ8eR5+AxMGHkuBiUADSIQ6vO3WWVViif72tp4w5+YD0LBXhxBTMAe
+ MQPGKGHAJ1exgaM5w+aY/C60WjzQ/3SnqjqLDbJXtjFiJP5w0paxuyJMrNsK0VYux1z8
+ rffUWv3sqH8O8uHJyR9j7l6Q5lwBQbQcRl1WI=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=esdemc.com header.i=@esdemc.com
+ header.a=rsa-sha256 header.s=google header.b=dadXKxgr
+Subject: Re: [Buildroot] [PATCH v2 1/1] add package/python-pyqtchart
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,60 +86,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Adam Gausmann via buildroot <buildroot@buildroot.org>
+Reply-To: adamg@esdemc.com
+Cc: =?UTF-8?Q?Manuel_V=C3=B6gele?= <develop@manuel-voegele.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+(Apologies to Arnout; I forgot to click reply-all)
 
+Hi Arnout, thanks for the review;
 
-On 22/02/2023 16:04, Fabrice Fontaine wrote:
-> GCC_DL_DIR is empty as gcc is not a "real" package, as a result, the
-> following (silent) error is raised when BR2_CCACHE is set:
-> 
-> /home/thomas/autobuild/instance-0/output-1/per-package/host-gcc-initial/host/bin/ccache /usr/bin/gcc -O2 -I/home/thomas/autobuild/instance-0/output-1/per-package/host-gcc-initial/host/include -DBR_CROSS_PATH_SUFFIX='".br_real"' -DBR_CCACHE_HASH=\"` printf '%s\n'  --target=aarch64_be-buildroot-linux-gnu --with-sysroot=@HOST_DIR@/aarch64_be-buildroot-linux-gnu/sysroot --enable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --disable-decimal-float --enable-plugins --enable-lto --with-gmp=@HOST_DIR@ --with-mpc=@HOST_DIR@ --with-mpfr=@HOST_DIR@  --with-bugurl="http://bugs.buildroot.net/" --without-zstd --disable-libquadmath --disable-libquadmath-support --enable-tls --enable-threads --without-isl --without-cloog --with-abi="lp64" --with-cpu=cortex-a53 --enable-languages=c --disable-shared --without-headers --disable-threads --with-newlib --disable-largefile  | sha256sum - /gcc-11.3.0.tar.xz package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch packag
- e/
->   gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch | cut -c -64 | tr -d '\n'`\" -DBR_SYSROOT='"aarch64_be-buildroot-linux-gnu/sysroot"' -DBR_ADDITIONAL_CFLAGS='"-Wl,-z,max-page-size=65536", "-Wl,-z,common-page-size=65536", "-fstack-protector-strong",' -DBR_CCACHE -DBR2_RELRO_PARTIAL -s -Wl,--hash-style=both toolchain/toolchain-wrapper.c -o /home/thomas/autobuild/instance-0/output-1/build/host-gcc-initial-11.3.0/toolchain-wrapper
-> sha256sum: /gcc-11.3.0.tar.xz: No such file or directory
-> 
-> This patch replaces GCC_DL_DIR by HOST_GCC_INITIAL_DL_DIR. As, this can
-> be considered as a "hack", any comment to improve this patch is
-> appreciated
-> 
-> Fixes:
->   - Found when investigating: http://autobuild.buildroot.org/results/ae75f5cdd4a1fe97359b99b2bcade258097c86dd
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   package/gcc/gcc.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 6dfd93f2a4..0755b59e96 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -284,7 +284,7 @@ HOST_GCC_COMMON_MAKE_OPTS = \
->   	gcc_cv_libc_provides_ssp=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
->   
->   ifeq ($(BR2_CCACHE),y)
-> -HOST_GCC_COMMON_CCACHE_HASH_FILES += $(GCC_DL_DIR)/$(GCC_SOURCE)
-> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_INITIAL_DL_DIR)/$(GCC_SOURCE)
+On Tue, Feb 7, 2023 at 4:55 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+> > +#
+> > +################################################################################
+> > +
+> > +PYTHON_PYQTCHART_VERSION = 5.7
+>
+>   Why this ancient version released 7 years ago?
 
-  How about
+> > +PYTHON_PYQTCHART_SOURCE = PyQtChart_gpl-$(PYTHON_PYQTCHART_VERSION).tar.gz
+> > +PYTHON_PYQTCHART_SITE = http://downloads.sourceforge.net/project/pyqt/PyQtChart/PyQtChart-$(PYT
+HON_PYQTCHART_VERSION)
+>
+>   As mentioned earlier, better download from pypi
 
-HOST_GCC_COMMON_CCACHE_HASH_FILES += $($(PKG)_DL_DIR)/$(GCC_SOURCE)
+Keep in mind, I wrote this almost a year ago!
+This is the version and site that was used for python-pyqt5 back then.
+I will certainly update these in the next revision of the patch.
 
-?
+>   Wouldn't it make more sense to call this python-pyqt5chart, given that there's
+> python-pyqt5, and that there's PyQt6-Charts? Normally we prefer to use the
+> upstream name, which is pyqtchart (or PyQt-Charts or PyQtChart, depending on
+> where you look), but in this case I feel OK calling it python-pyqt5chart.
 
-  Regards,
-  Arnout
+The PyPI packages are "PyQtChart" (The original/legacy name for the
+Qt5 version) and "PyQt6-Charts"; the download page refers to them as
+"PyQt-Charts for PyQt5" and "PyQt-Charts for PyQt6".
+(https://www.riverbankcomputing.com/software/pyqtchart/download)
 
->   
->   # Cfr. PATCH_BASE_DIRS in .stamp_patched, but we catch both versioned
->   # and unversioned patches unconditionally. Moreover, to facilitate the
+My suggestion is to keep it the same as the official PyPI packages;
+either keep the legacy name "PyQtChart" (python-pyqtchart)
+or if you want to include the version number, retroactively use the
+naming scheme from "PyQt6-Charts" to make "PyQt5-Charts"
+(python-pyqt5-charts).
+
+However, I don't have a strong preference; I'll use whatever name
+works best for you all.
+
+Thanks,
+Adam
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
