@@ -4,84 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFBF9C64ED6
-	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 22:09:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 906F5C61DA4
+	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 22:13:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4AB1040579;
-	Thu, 23 Feb 2023 22:09:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AB1040579
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D1684058B;
+	Thu, 23 Feb 2023 22:13:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D1684058B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dCD1RFlf82Ap; Thu, 23 Feb 2023 22:09:57 +0000 (UTC)
+	with ESMTP id D28NSPq7twnX; Thu, 23 Feb 2023 22:13:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7D67A4059F;
-	Thu, 23 Feb 2023 22:09:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D67A4059F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 027ED1BF338
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 22:09:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7410F40569;
+	Thu, 23 Feb 2023 22:13:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7410F40569
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 781361BF338
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 22:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF8B96080B
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 22:09:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF8B96080B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51B2781233
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 22:13:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51B2781233
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1rdzfvF-seJO for <buildroot@lists.busybox.net>;
- Thu, 23 Feb 2023 22:09:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86D4260761
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 86D4260761
- for <buildroot@buildroot.org>; Thu, 23 Feb 2023 22:09:53 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id 6so11679319wrb.11
- for <buildroot@buildroot.org>; Thu, 23 Feb 2023 14:09:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=8L8hGrMAzAOFuWzPInf25vbiV2alZOJZppYC8JUxkLI=;
- b=ca3lnIpPAXB1wEfGxYqbw0Nrt6r6aK0YsQnnfaB55TnkUtQ/lwC7HgV7f9Oo92P1ZS
- tbr59/y1BTPqMTNTwp/MQJMYOOONnfYNimtOvV2Evjg48RGTy/XqSqm7DDirss/lKFGv
- +vWExKxMAQSUTL7MHYGPsdM78OUkHkQCI8VWCMoHiEL4Bk/y3RX4ywY0Sduz05DDxyHs
- x8VSwqE0DtgLccOYhZ2E8ibrIKT/AjuNxYfgmMcDyydm++3XW5N3E1hUDupn/EGPCEAD
- KFPQgR6EZ/s3HGiuZ/ocvlDiHzL9Zu/SLiIAriqBNChBfk1SJS35/qfc+l4YPGC6PVZI
- cU/A==
-X-Gm-Message-State: AO0yUKU582LrNYDSdiYxesfAX74IaUm17hEpS+/SKLUMirI/35ITm9kn
- Gtv9WBT3X5AT15sgqETWCrT5jjU2xsQ=
-X-Google-Smtp-Source: AK7set9EssIrJEG+7T4cyizARiXhvOhV52hE0BykKjKwnRDzfaWvmhzL+zeTvCyN3k3GsSGzLMBPsQ==
-X-Received: by 2002:a5d:595e:0:b0:2c5:8d7c:c144 with SMTP id
- e30-20020a5d595e000000b002c58d7cc144mr11663201wri.39.1677190191098; 
- Thu, 23 Feb 2023 14:09:51 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- k24-20020a05600c0b5800b003dc4fd6e624sm589834wmr.19.2023.02.23.14.09.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 23 Feb 2023 14:09:50 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 23 Feb 2023 23:09:47 +0100
-Message-Id: <20230223220947.8226-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NRPgrc81341Y for <buildroot@lists.busybox.net>;
+ Thu, 23 Feb 2023 22:13:02 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C2938120B
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C2938120B
+ for <buildroot@buildroot.org>; Thu, 23 Feb 2023 22:13:02 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8AFA71C0004;
+ Thu, 23 Feb 2023 22:12:59 +0000 (UTC)
+Date: Thu, 23 Feb 2023 23:12:58 +0100
+To: Martin =?UTF-8?B?QsO2aA==?= via buildroot <buildroot@buildroot.org>
+Message-ID: <20230223231258.0e07045c@windsurf>
+In-Reply-To: <20230223201511.217372-2-contact@martb.dev>
+References: <20230223201511.217372-1-contact@martb.dev>
+ <20230223201511.217372-2-contact@martb.dev>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8L8hGrMAzAOFuWzPInf25vbiV2alZOJZppYC8JUxkLI=;
- b=RJ6dmmNOE2dypYd4+PHeFLR3xwPHjZn++MI/+sFyJ9Xk3f40y39eeUkMlfZtVwmjaS
- VW9LRfArCiocCuIN5yhkNtC0oRSkhqKkx1zRtHWMOt5cuO3MakgbGNHtvmg7Fofw4qly
- 6SxpR8wf6UO0Ng21K/5IHl9UUjPK6xP1tuuvjJFXCA9GYlmwJJaWMqCEVO0+/97Wlzgj
- tKsJ9HvCKVTiW5vDmD9axN9PW6Fe92+ogIBkEHAvxFEeEpsHXIX7fYFQDdosR8KFe0nS
- ntSZklG7AXXqMa6fRdTKACu6hDRM4MN9T1Vz6PWtEXUehFnYagMFkmHKb58hTAqhG+dW
- U9gA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=RJ6dmmNO
-Subject: [Buildroot] [PATCH v2,1/1] package/gcc: fix GCC_DL_DIR
+ d=bootlin.com; s=gm1; t=1677190379;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=7GWletOEHMQRhJ22knrSIPBnpJQOX4GtSb9b49pP6CQ=;
+ b=IaOLKcG6fglv67bURzUJbC2Lar4+K3WUmUDCstmI5LfkZSARMfoouXW+Ht2BQXvN186bEl
+ AjX2nFWZjl2PAdfs68ySDn8gxdrk89I9wzmfbbVisdVxMpXmjLEFPsJdqPMIZyEumrGdD3
+ WkMEu0mU2dGd9IANJpH6IMjJRu+iMiNgAcTko7eKkIPCVRyGFmweSZcXPHSKzGsEO+2s3t
+ r3t9zIDsPEX6JpjsbXw/u7Pul3P33i70pf3gGR5l03taV/lCVNxjKuF0ojCoURXWCqeQn7
+ D03RFmE3FdrurW+MDj3aqxdVtV5EJVT587dTTcJ68TuEHHBFanREH0hgaWfVmw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IaOLKcG6
+Subject: Re: [Buildroot] [PATCH 2/2] package/gnuradio: remove pybind target
+ suffix when crosscompiling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,53 +77,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Martin =?UTF-8?B?QsO2aA==?= <contact@martb.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-GCC_DL_DIR is empty as gcc is not a "real" package, as a result, the
-following (silent) error is raised when BR2_CCACHE is set:
-
-/home/thomas/autobuild/instance-0/output-1/per-package/host-gcc-initial/host/bin/ccache /usr/bin/gcc -O2 -I/home/thomas/autobuild/instance-0/output-1/per-package/host-gcc-initial/host/include -DBR_CROSS_PATH_SUFFIX='".br_real"' -DBR_CCACHE_HASH=\"` printf '%s\n'  --target=aarch64_be-buildroot-linux-gnu --with-sysroot=@HOST_DIR@/aarch64_be-buildroot-linux-gnu/sysroot --enable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --disable-decimal-float --enable-plugins --enable-lto --with-gmp=@HOST_DIR@ --with-mpc=@HOST_DIR@ --with-mpfr=@HOST_DIR@  --with-bugurl="http://bugs.buildroot.net/" --without-zstd --disable-libquadmath --disable-libquadmath-support --enable-tls --enable-threads --without-isl --without-cloog --with-abi="lp64" --with-cpu=cortex-a53 --enable-languages=c --disable-shared --without-headers --disable-threads --with-newlib --disable-largefile  | sha256sum - /gcc-11.3.0.tar.xz package/gcc/11.3.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch package/
- gcc/11.3.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch package/gcc/11.3.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch package/gcc/11.3.0/0007-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch | cut -c -64 | tr -d '\n'`\" -DBR_SYSROOT='"aarch64_be-buildroot-linux-gnu/sysroot"' -DBR_ADDITIONAL_CFLAGS='"-Wl,-z,max-page-size=65536", "-Wl,-z,common-page-size=65536", "-fstack-protector-strong",' -DBR_CCACHE -DBR2_RELRO_PARTIAL -s -Wl,--hash-style=both toolchain/toolchain-wrapper.c -o /home/thomas/autobuild/instance-0/output-1/build/host-gcc-initial-11.3.0/toolchain-wrapper
-sha256sum: /gcc-11.3.0.tar.xz: No such file or directory
-
-This patch replaces GCC_DL_DIR by $($(PKG)_DL_DIR) as suggested by
-Arnout Vandecappelle.
-
-Fixes:
- - Found when investigating: http://autobuild.buildroot.org/results/ae75f5cdd4a1fe97359b99b2bcade258097c86dd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Use $($(PKG)_DL_DIR)
-
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 6dfd93f2a4..25cb4ce8e2 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -284,7 +284,7 @@ HOST_GCC_COMMON_MAKE_OPTS = \
- 	gcc_cv_libc_provides_ssp=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
- 
- ifeq ($(BR2_CCACHE),y)
--HOST_GCC_COMMON_CCACHE_HASH_FILES += $(GCC_DL_DIR)/$(GCC_SOURCE)
-+HOST_GCC_COMMON_CCACHE_HASH_FILES += $($(PKG)_DL_DIR)/$(GCC_SOURCE)
- 
- # Cfr. PATCH_BASE_DIRS in .stamp_patched, but we catch both versioned
- # and unversioned patches unconditionally. Moreover, to facilitate the
--- 
-2.39.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gTWFydGluLAoKVGhhbmtzIGZvciB5b3VyIHBhdGNoLiBTb21lIGNvbW1lbnQvcXVlc3Rp
+b24gYmVsb3cuCgpPbiBUaHUsIDIzIEZlYiAyMDIzIDIxOjE1OjExICswMTAwCk1hcnRpbiBCw7Zo
+IHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPiB3cm90ZToKCj4gVGhpcyBp
+cyByZXF1aXJlZCBhcyBweWJpbmQxMSB1c2VzIGhvc3QgcHl0aG9uMyBhbmQgdGhlcmVmb3JlIHRo
+ZSBob3N0IHBsYXRmb3JtIHN1ZmZpeGVzLgo+IFdpdGhvdXQgdGhpcyBjaGFuZ2UgZ251cmFkaW8g
+YW5kIGFsbCBwbHVnaW5zIHJlbHlpbmcgb24gaXRzIEdyUHliaW5kIG1hY3JvcywgdXNlIHRoZSB3
+cm9uZyBzdWZmaXhlcy4KPiBUaGlzIGxlYWRzIHRvIG1vZHVsZSBsb2FkIGZhaWx1cmVzIHdoZW4g
+Y3Jvc3Njb21waWxpbmcuCj4gCj4gU2VlOgo+IC0gaHR0cHM6Ly9naXRodWIuY29tL2dudXJhZGlv
+L2dudXJhZGlvL2lzc3Vlcy81NDU1Cj4gLSBodHRwczovL2dpdGh1Yi5jb20vcHliaW5kL3B5Ymlu
+ZDExL2lzc3Vlcy8zNjQwCj4gCj4gU2lnbmVkLW9mZi1ieTogTWFydGluIELDtmggPGNvbnRhY3RA
+bWFydGIuZGV2Pgo+IC0tLQo+ICAuLi5uZC1yZW1vdmUtc3VmZml4LXdoZW4tY3Jvc3Njb21waWxp
+bmcucGF0Y2ggfCA1NiArKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCA1NiBp
+bnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2dudXJhZGlvLzAwMDEt
+Z3JQeUJpbmQtcmVtb3ZlLXN1ZmZpeC13aGVuLWNyb3NzY29tcGlsaW5nLnBhdGNoCj4gCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvZ251cmFkaW8vMDAwMS1nclB5QmluZC1yZW1vdmUtc3VmZml4LXdo
+ZW4tY3Jvc3Njb21waWxpbmcucGF0Y2ggYi9wYWNrYWdlL2dudXJhZGlvLzAwMDEtZ3JQeUJpbmQt
+cmVtb3ZlLXN1ZmZpeC13aGVuLWNyb3NzY29tcGlsaW5nLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAx
+MDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4wYWM0Mzk1ZTU4Cj4gLS0tIC9kZXYvbnVsbAo+ICsr
+KyBiL3BhY2thZ2UvZ251cmFkaW8vMDAwMS1nclB5QmluZC1yZW1vdmUtc3VmZml4LXdoZW4tY3Jv
+c3Njb21waWxpbmcucGF0Y2gKPiBAQCAtMCwwICsxLDU2IEBACj4gK0Zyb20gYzU4NzYwYjAwMmMx
+YTk1NGE5YWI2MjgzNTI5MDBmY2Q4ZTZlMTk5YyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAr
+RnJvbTogPT9VVEYtOD9xP01hcnRpbj0yMEI9QzM9QjZoPz0gPGNvbnRhY3RAbWFydGIuZGV2Pgo+
+ICtEYXRlOiBXZWQsIDIyIEZlYiAyMDIzIDAzOjA1OjA4ICswMTAwCj4gK1N1YmplY3Q6IFtQQVRD
+SF0gZ3JQeUJpbmQ6IGZpeCBpbnZhbGlkIHN1ZmZpeAo+ICsKPiArVGhpcyBpcyByZXF1aXJlZCBh
+cyBweWJpbmQxMSB1c2VzIGhvc3QgcHl0aG9uMyBhbmQgdGhlcmVmb3JlIHRoZSBob3N0IHBsYXRm
+b3JtIHN1ZmZpeGVzLgoKV2UgbmVlZCB5b3VyIFNpZ25lZC1vZmYtYnkgaGVyZSwgYW5kIGFsc28g
+dGhlIHVwc3RyZWFtIHN0YXR1cyBvZiB0aGlzCnBhdGNoLgoKVGhvbWFzCi0tIApUaG9tYXMgUGV0
+YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJu
+ZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
