@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 126CBC6FA99
-	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AAC3C6FD19
+	for <buildroot@archiver.kernel.org>; Sun, 12 Mar 2023 21:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABF854030D;
-	Sun, 12 Mar 2023 21:50:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABF854030D
+	by smtp4.osuosl.org (Postfix) with ESMTP id B67C64174E;
+	Sun, 12 Mar 2023 21:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B67C64174E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vqPOMEtRWpI8; Sun, 12 Mar 2023 21:50:46 +0000 (UTC)
+	with ESMTP id uHJ5V35y3G7V; Sun, 12 Mar 2023 21:50:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C33CA4174D;
-	Sun, 12 Mar 2023 21:50:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C33CA4174D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE6061BF2CF
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CC54416E5;
+	Sun, 12 Mar 2023 21:50:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CC54416E5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 18B841BF863
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C279560D58
- for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C279560D58
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E69C41624
+ for <buildroot@lists.busybox.net>; Sun, 12 Mar 2023 21:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E69C41624
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7aVTjb6JbSyN for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B9FjtDoopCNV for <buildroot@lists.busybox.net>;
  Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09A3460BC9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8875441606
  for <buildroot@buildroot.org>; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09A3460BC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8875441606
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 081CC87006; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
+ id 7630487009; Sun, 12 Mar 2023 21:46:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Feb 2023 22:34:27 +0100
+Date: Thu, 23 Feb 2023 23:43:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0fd1f8a892a89d1b6d27b8e9884d645f71192813
-X-Git-Newrev: 48d9042e5d2e0bc8bd0efc3a2516b156c4b89190
+X-Git-Oldrev: 3254a2886a4e20111e5c87614f6f374ec626b755
+X-Git-Newrev: b793f3a49e1ef8a48671ce19579586a0b018179d
 X-Patchwork-Hint: ignore
-Message-Id: <20230312214623.081CC87006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: allow using
- Barebox as BL33
+Message-Id: <20230312214623.7630487009@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/arm_foundationv8: bump to Linux
+ 6.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,76 +59,83 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3600598082517648820=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48d9042e5d2e0bc8bd0efc3a2516b156c4b89190
+--===============3600598082517648820==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b793f3a49e1ef8a48671ce19579586a0b018179d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 2022.04.0, Barebox now supports a generic image built
-for platforms, to be used as BL33 to generate FIP images. This patch
-makes it available as a choice of BL33 to be used with ATF and is
-based on the similar work put into U-Boot as BL33.
+- Bump Linux kernel to v6.1.13 and increase the rootfs size accordingly.
+- Bump the FVP in the readme to version 11.20 build 15 and update the
+  command line.
 
-Signed-off-by: Casey Reeves <casey@xogium.me>
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/arm-trusted-firmware/Config.in               | 21 +++++++++++++++++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk |  6 ++++++
- 2 files changed, 27 insertions(+)
+ board/arm/foundation-v8/readme.txt | 4 ++--
+ configs/arm_foundationv8_defconfig | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index a9b9bbcc5a..cb54c6c9d8 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -129,6 +129,27 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
+index b5106f015e..cb0fe08b87 100644
+--- a/board/arm/foundation-v8/readme.txt
++++ b/board/arm/foundation-v8/readme.txt
+@@ -3,14 +3,14 @@ ARM software simulator of the AArch64 architecture.
  
- endchoice
+ First, one has to download the AArch64 software simulator from:
  
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
-+	bool "Use Barebox as BL33"
-+	depends on BR2_TARGET_BAREBOX
-+	help
-+	  This option allows to embed the Barebox generic BL33 image in
-+	  the ARM Trusted Firmware. It ensures that the Barebox package
-+	  gets built before ATF, and that the appropriate BL33
-+	  variable pointing to the generic bl33 image is passed
-+	  when building ATF.
-+
-+if BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
-+
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE
-+	string "Barebox BL33 image name"
-+	default "*-generic-bl33.img"
-+	help
-+	  Name of the Barebox BL33 image to include in ATF, it must
-+	  have been installed to BINARIES_DIR by the Barebox package.
-+
-+endif
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 	bool "Use U-Boot as BL33"
- 	depends on BR2_TARGET_UBOOT
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 1164c81410..648f62ed85 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -105,6 +105,12 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
- endif
- endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+-  https://silver.arm.com/download/download.tm?pv=4807186
++  https://armkeil.blob.core.windows.net/developer/Files/downloads/ecosystem-models/Foundation_Platform_11.20_15_Linux64.tgz
  
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33),y)
-+ARM_TRUSTED_FIRMWARE_BAREBOX_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE))
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_BAREBOX_BIN)
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += barebox
-+endif
-+
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33),y)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += edk2
- # Since the flash device name vary between platforms, we use the variable
+ Then, use the arm_foundationv8_defconfig configuration to build your
+ Buildroot system.
+ 
+ Finally, boot your system with:
+ 
+- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-6.4/Foundation_Platform \
++ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-9.3/Foundation_Platform \
+     --image output/images/linux-system.axf \
+     --block-device output/images/rootfs.ext2 \
+     --network=nat \
+diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
+index 3c63f5dc76..102fe8fd09 100644
+--- a/configs/arm_foundationv8_defconfig
++++ b/configs/arm_foundationv8_defconfig
+@@ -1,15 +1,16 @@
+ BR2_aarch64=y
+-# Linux headers same as kernel, a 5.16 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.20"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.13"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8-gicv3-psci"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_BOOT_WRAPPER_AARCH64=y
+ BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8-gicv3-psci"
+
+--===============3600598082517648820==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3600598082517648820==--
