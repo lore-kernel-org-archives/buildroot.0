@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0284C636D7
-	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 19:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97AD4C636D6
+	for <buildroot@archiver.kernel.org>; Thu, 23 Feb 2023 19:10:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90685410C6;
-	Thu, 23 Feb 2023 19:10:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90685410C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37427410C6;
+	Thu, 23 Feb 2023 19:10:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37427410C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l-PUViw8y8pj; Thu, 23 Feb 2023 19:10:20 +0000 (UTC)
+	with ESMTP id wOxYkOLzq5wx; Thu, 23 Feb 2023 19:10:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A1C8410D4;
-	Thu, 23 Feb 2023 19:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A1C8410D4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DC19D1BF343
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:09:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1F7E41506;
+	Thu, 23 Feb 2023 19:10:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1F7E41506
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C7FD41BF97F
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3389410C6
- for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:09:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3389410C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id A094E40126
+ for <buildroot@lists.busybox.net>; Thu, 23 Feb 2023 19:08:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A094E40126
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wyV9Q0px5cuQ for <buildroot@lists.busybox.net>;
- Thu, 23 Feb 2023 19:09:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EC2C410C3
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8EC2C410C3
- for <buildroot@buildroot.org>; Thu, 23 Feb 2023 19:09:18 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 928E3E0004
- for <buildroot@buildroot.org>; Thu, 23 Feb 2023 19:09:15 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1pVGxu-008KA5-NF
- for buildroot@buildroot.org; Thu, 23 Feb 2023 20:09:14 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dSnXRlzR30cq for <buildroot@lists.busybox.net>;
+ Thu, 23 Feb 2023 19:08:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACBA2400C8
+ for <buildroot@buildroot.org>; Thu, 23 Feb 2023 19:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACBA2400C8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 995CC86930; Thu, 23 Feb 2023 19:08:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20230207135235.C34CC841B6@busybox.osuosl.org>
-Date: Thu, 23 Feb 2023 20:09:14 +0100
-In-Reply-To: <20230207135235.C34CC841B6@busybox.osuosl.org> (Peter Korsgaard's
- message of "Tue, 7 Feb 2023 14:52:26 +0100")
-Message-ID: <87ilfsp5b9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/mesa3d-headers: only check for
- conflicts when building
+Date: Thu, 23 Feb 2023 20:01:20 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: fc5a107fd3f4bd5c72e48fd4df12abe1319e401d
+X-Git-Newrev: 3dad2c0c146157fe6256af69ee39b7af90a8f5ca
+X-Patchwork-Hint: ignore
+Message-Id: <20230223190839.995CC86930@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] package/python-idna: set
+ _SETUP_TYPE = flit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,26 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3dad2c0c146157fe6256af69ee39b7af90a8f5ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
- > commit:
- > https://git.buildroot.net/buildroot/commit/?id=509956da4cdba6a76214322b1ace979bbe6cd6a8
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Python idna package switched to pyproject.toml in commit:
+https://github.com/kjd/idna/commit/2a00e518efe55d2eeb62cd3f88ace7db41338603
+which is included in idna v3.4.
 
- > The configuration checks should only be done when building so that
- > make allyespackageconfig && make source works.
+When using the old setuptools infra, the package is incorrectly
+installed as v0.0, which is then incorrectly detected by other
+packages when using setuptools pkg_resources.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The issue can be reproduced with the command:
 
-Committed to 2022.11.x and 2022.02.x, thanks.
+    python3 <<EOF
+    __requires__ = ["idna >= 2.5"]
+    import pkg_resources
+    EOF
 
--- 
-Bye, Peter Korsgaard
+which will fail with output:
+
+    pkg_resources.ContextualVersionConflict: (idna 0.0.0 (/usr/lib/python3.11/site-packages), Requirement.parse('idna>=2.5'), {'hyperlink'})
+    pkg_resources.DistributionNotFound: The 'idna>=2.5' distribution was not found and is required by hyperlink
+
+This commit changes _SETUP_TYPE to "flit" to fix this issue.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8a9da9a8cad5f77902547fab3b24d04175749a7c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-idna/python-idna.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index 4d9994a9c7..3976cb1518 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
+@@ -9,7 +9,7 @@ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+ PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/8b/e1/43beb3d38dba6cb420cefa297822eac205a277ab43e5ba5d5c46faf96438
+ PYTHON_IDNA_LICENSE = BSD-3-Clause
+ PYTHON_IDNA_LICENSE_FILES = LICENSE.md
+-PYTHON_IDNA_SETUP_TYPE = setuptools
++PYTHON_IDNA_SETUP_TYPE = flit
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
