@@ -4,84 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7379AC7EE23
-	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 16:58:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D26C7EE23
+	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 17:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D040260C2E;
-	Fri, 24 Feb 2023 16:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D040260C2E
+	by smtp3.osuosl.org (Postfix) with ESMTP id F41F761130;
+	Fri, 24 Feb 2023 17:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F41F761130
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dnhWvA9aWJtx; Fri, 24 Feb 2023 16:58:02 +0000 (UTC)
+	with ESMTP id Jy_tbIiX8swK; Fri, 24 Feb 2023 17:53:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CE2460B6C;
-	Fri, 24 Feb 2023 16:58:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CE2460B6C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA1BB1BF33D
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 16:57:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AEC761132;
+	Fri, 24 Feb 2023 17:53:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AEC761132
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BA761BF5F6
+ for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 17:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2D75402B1
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 16:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2D75402B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9A09821A7
+ for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 17:53:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9A09821A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RXRi0loe9ivo for <buildroot@lists.busybox.net>;
- Fri, 24 Feb 2023 16:57:58 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C54040285
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4C54040285
- for <buildroot@buildroot.org>; Fri, 24 Feb 2023 16:57:58 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id p26so81452wmc.4
- for <buildroot@buildroot.org>; Fri, 24 Feb 2023 08:57:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=LRHnTp3pg+7QZNfAEnlr6R3MR8cedEEVXh7GMc9kX2g=;
- b=VjG1IvgSKdKdVymPf6Cxv0sYnAVdY2rOi0jvuK45Z+v+5nO0vI8Qcsnyt1rISe3TGD
- bxRtxn5HE18RcfHXrq5PcyPQ059dMeISCp9cTgHTmsHNa0BOpqu5xEvJ6PMM8mtRSQOh
- mQvNextk9TnytEpv8myBu7wL8YafojR+9m8AaB9dKhFJXpxOVmoEzQ6zyGj/hHvPWv+W
- X1cYgqL5ufmeU9U3TH8Ny8KX2OgowQm0WWC4ystyX3N+dFG42PL+NiLxfkOPLU/hesMe
- WeqWHSjjImUPjSw1TmBrqcYjzS4Hc8b+MhgFaSVDieXzGri19y2w8bxINO7Vuf9HELkt
- oSRA==
-X-Gm-Message-State: AO0yUKX2P/GydJFuI0drq0qP4JZy4oTQNbzsfENWPLP7TNTBcDz/n/nc
- GgscxiCk+kTzKjcwmGvgBSYvundf8Wk=
-X-Google-Smtp-Source: AK7set/QykFsek9wxWoNetvAWYSAQnFociTQB5waD05XnBfmPwpJklP3RzaalqBkLFCTvE3mRjlB3Q==
-X-Received: by 2002:a05:600c:1895:b0:3e1:fc61:e0e5 with SMTP id
- x21-20020a05600c189500b003e1fc61e0e5mr13914325wmp.33.1677257875861; 
- Fri, 24 Feb 2023 08:57:55 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l4-20020a05600c4f0400b003df7b40f99fsm3880032wmq.11.2023.02.24.08.57.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Feb 2023 08:57:55 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 24 Feb 2023 17:57:53 +0100
-Message-Id: <20230224165753.64394-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.39.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JJ3QsJg8cx_X for <buildroot@lists.busybox.net>;
+ Fri, 24 Feb 2023 17:53:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 142F7821A5
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 142F7821A5
+ for <buildroot@buildroot.org>; Fri, 24 Feb 2023 17:53:33 +0000 (UTC)
+Received: from [81.174.171.191] (helo=donbot)
+ by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+ (Exim 4.95) (envelope-from <john@metanate.com>) id 1pVcG9-0000ev-Gj;
+ Fri, 24 Feb 2023 17:53:29 +0000
+Date: Fri, 24 Feb 2023 17:53:24 +0000
+From: John Keeping <john@metanate.com>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Message-ID: <Y/j5lHY2/7h82EG4@donbot>
+References: <20230224111509.2434694-1-thomas.devoogdt@barco.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LRHnTp3pg+7QZNfAEnlr6R3MR8cedEEVXh7GMc9kX2g=;
- b=mgubcaBlk4rDsBgHoPF9LpnjjIN5kH2ogtZxcdCP/c18+xsqmCrbUL+Zs+CJs3JCH2
- Gz2R2Q+tHH/CMZBtNNEL2IlZQBU4EeblAaW8yqL+5nJLJ7vRGa38CPdfm88VOhHA1pc3
- qrnueTHKyYobCwfPq73ILpUTMVlyPlT7Ys2K0R420UFWX7M42j+g3Mw5ZYoHP5m8GaCN
- orn8pcpR8u+Aqv5jbq/WGnCBvyFWA7qRbwpZPgyXv017u8rEIpYS88usC/UZw4GvXHe8
- YJIjaE7zulqcJ26ckfjsFrbKm8sANpNdYL3VCFRDMxipo08eQVjq1HDthiWtxkV5VQsl
- yFZw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mgubcaBl
-Subject: [Buildroot] [PATCH 1/1] package/ntpsec: fix CPE ID version
+Content-Disposition: inline
+In-Reply-To: <20230224111509.2434694-1-thomas.devoogdt@barco.com>
+X-Authenticated: YES
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+ Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description; bh=f3Ky5ugokTi71izCOletXIT5XUIrTkUJfpQ8TLyx9CQ=; b=pmhXj
+ T8oCnp9Qq5+jIq6oxaqGcADZTNEYStqPhptyvKHF4Avt6xoo+KxYCGrmUB5SowjWa3acCtGZaFcSW
+ Elm6h3lr0MqzMUuA3L6OIGaUzSCnGBkUvMZRrfuIc6PTAfvJg9mKVTIhUhv3B+pbDQKSf6yIme7po
+ +AxT6ENt7EkaJKK38IAgl4wUR74GelvTxYSANjy7iZxACZpaIKwf24vPWENsgmcqwtcZfX2hDdYQ1
+ ZuuMPziHhs+6141JmDNaLOd1WO7+u1S29xiPbZnYHrfWupw82moGnffHMl1m3j47y44Q5lUjTDw/6
+ GI0dpuiemp2tJ/9w82nseHnoO+oCw==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=metanate.com header.i=@metanate.com
+ header.a=rsa-sha256 header.s=stronger header.b=pmhXjT8o
+Subject: Re: [Buildroot] [PATCH v1 1/3] pkg-cmake: add option to select the
+ Ninja generator
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,54 +74,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CPE ID is wrong since the addition of the package in commit
-27b8d0ba8c4004819e092fb81c0f64f284b3aa4a, the correct CPE ID is
-cpe:2.3:a:ntpsec:ntpsec:1.2.2:*:*:*:*:*:*:*, not
-cpe:2.3:a:ntpsec:ntpsec:1.2:2:*:*:*:*:*:*
+On Fri, Feb 24, 2023 at 12:15:07PM +0100, Thomas Devoogdt wrote:
+> E.g. Commit 
+>  16e5c92ff5fd2b44a1126bd7d7538c68ce838213, and
+>  78d499409f71d8a22b0632c8ebc06f67ee6ae6dd 
+> can now be replaced by: WEBKITGTK_CMAKE_NINJA = YES
+> 
+> Packages that are selecting Ninja, should also use the NINJA_{ENV,OPTS} variables iso the MAKE variables.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ntpsec/ntpsec.mk | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+The current webkitgtk build commands use `cmake --build` and `cmake
+--install`, wouldn't it be better to use those here?
 
-diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
-index c7fa2f85a8..e612e982ec 100644
---- a/package/ntpsec/ntpsec.mk
-+++ b/package/ntpsec/ntpsec.mk
-@@ -4,12 +4,9 @@
- #
- ################################################################################
- 
--NTPSEC_VERSION_MAJOR = 1
--NTPSEC_VERSION_MINOR = 2
--NTPSEC_VERSION_POINT = 2
--NTPSEC_VERSION = $(NTPSEC_VERSION_MAJOR)_$(NTPSEC_VERSION_MINOR)_$(NTPSEC_VERSION_POINT)
--NTPSEC_SOURCE = ntpsec-NTPsec_$(NTPSEC_VERSION).tar.bz2
--NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(NTPSEC_VERSION)
-+NTPSEC_VERSION = 1.2.2
-+NTPSEC_SOURCE = ntpsec-NTPsec_$(subst .,_,$(NTPSEC_VERSION)).tar.bz2
-+NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(subst .,_,$(NTPSEC_VERSION))
- NTPSEC_LICENSE = BSD-2-Clause, NTP, BSD-3-Clause, MIT, CC-BY-4.0 (docs)
- NTPSEC_LICENSE_FILES = \
- 	LICENSES/BSD-2 \
-@@ -20,8 +17,6 @@ NTPSEC_LICENSE_FILES = \
- 	docs/copyright.adoc
- 
- NTPSEC_CPE_ID_VENDOR = ntpsec
--NTPSEC_CPE_ID_VERSION = $(NTPSEC_VERSION_MAJOR).$(NTPSEC_VERSION_MINOR)
--NTPSEC_CPE_ID_UPDATE = $(NTPSEC_VERSION_POINT)
- 
- NTPSEC_DEPENDENCIES = \
- 	host-bison \
--- 
-2.39.1
+I wonder if it makes more sense to replace anything generator-specific
+(like $(PKG)_MAKE_OPTS or $(PKG)_NINJA_OPTS) with general
+$(PKG)_CMAKE_BUILD_OPTS and $(PKG)_CMAKE_INSTALL_OPTS so that packages
+become independent of the generator.
 
+If those options are at the end of the command, then packages still have
+the option (in the build phase) to pass built-tool specific options by
+including `--` in the value.
+
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> ---
+>  package/pkg-cmake.mk | 41 +++++++++++++++++++++++++++++++++++++++--
+
+No change in docs/? ;-)
+
+>  1 file changed, 39 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 8c375779cb..4ce3e6bada 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -65,6 +65,13 @@ else
+>  $(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
+>  endif
+>  
+> +ifeq ($$($(3)_CMAKE_NINJA),YES)
+> +$(2)_DEPENDENCIES += host-ninja
+> +$(2)_GENERATOR			= "Ninja"
+> +else
+> +$(2)_GENERATOR			= "Unix Makefiles"
+> +endif
+> +
+>  #
+>  # Configure step. Only define it if not already defined by the package
+>  # .mk file. And take care of the differences between host and target
+> @@ -88,7 +95,7 @@ define $(2)_CONFIGURE_CMDS
+>  	rm -f CMakeCache.txt && \
+>  	PATH=$$(BR_PATH) \
+>  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+> -		-G"Unix Makefiles" \
+> +		-G$$($$(PKG)_GENERATOR) \
+>  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
+>  		-DCMAKE_INSTALL_PREFIX="/usr" \
+>  		-DCMAKE_INSTALL_RUNSTATEDIR="/run" \
+> @@ -119,7 +126,7 @@ define $(2)_CONFIGURE_CMDS
+>  	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+>  	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+>  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+> -		-G"Unix Makefiles" \
+> +		-G$$($$(PKG)_GENERATOR) \
+>  		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+>  		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+>  		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+> @@ -165,45 +172,75 @@ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
+>  #
+>  ifndef $(2)_BUILD_CMDS
+>  ifeq ($(4),target)
+> +ifeq ($$($(3)_CMAKE_NINJA),YES)
+> +define $(2)_BUILD_CMDS
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) $$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +endef
+> +else
+>  define $(2)_BUILD_CMDS
+>  	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+> +endif
+> +else
+> +ifeq ($$($(3)_CMAKE_NINJA),YES)
+> +define $(2)_BUILD_CMDS
+> +	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) $$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +endef
+>  else
+>  define $(2)_BUILD_CMDS
+>  	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+>  endif
+> +endif
+>  
+>  #
+>  # Host installation step. Only define it if not already defined by the
+>  # package .mk file.
+>  #
+>  ifndef $(2)_INSTALL_CMDS
+> +ifeq ($$($(3)_CMAKE_NINJA),YES)
+> +define $(2)_INSTALL_CMDS
+> +	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) $$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_OPTS)
+> +endef
+> +else
+>  define $(2)_INSTALL_CMDS
+>  	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+> +endif
+>  
+>  #
+>  # Staging installation step. Only define it if not already defined by
+>  # the package .mk file.
+>  #
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+> +ifeq ($$($(3)_CMAKE_NINJA),YES)
+> +define $(2)_INSTALL_STAGING_CMDS
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) $$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR install
+> +endef
+> +else
+>  define $(2)_INSTALL_STAGING_CMDS
+>  	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+> +endif
+>  
+>  #
+>  # Target installation step. Only define it if not already defined by
+>  # the package .mk file.
+>  #
+>  ifndef $(2)_INSTALL_TARGET_CMDS
+> +ifeq ($$($(3)_CMAKE_NINJA),YES)
+> +define $(2)_INSTALL_TARGET_CMDS
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) $$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
+> +endef
+> +else
+>  define $(2)_INSTALL_TARGET_CMDS
+>  	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+> +endif
+>  
+>  # Call the generic package infrastructure to generate the necessary
+>  # make targets
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
