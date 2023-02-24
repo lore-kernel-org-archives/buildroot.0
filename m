@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB086C61DA3
-	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 10:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5B1DC64ED8
+	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 10:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4AC76405BA;
-	Fri, 24 Feb 2023 10:10:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AC76405BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68F10405BF;
+	Fri, 24 Feb 2023 10:17:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68F10405BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yvn1UQL6NmsJ; Fri, 24 Feb 2023 10:10:54 +0000 (UTC)
+	with ESMTP id LOO44IUrQHoT; Fri, 24 Feb 2023 10:17:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 985C4405B8;
-	Fri, 24 Feb 2023 10:10:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 985C4405B8
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD68D405BA;
+	Fri, 24 Feb 2023 10:17:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD68D405BA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 224A31BF3C8
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 10:10:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 318B31BF3C8
+ for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 10:17:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EFE4381E4D
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 10:10:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFE4381E4D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B68081F06
+ for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 10:17:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B68081F06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IIqJDD_BD01X for <buildroot@lists.busybox.net>;
- Fri, 24 Feb 2023 10:10:50 +0000 (UTC)
+ with ESMTP id zsRcQHqbmigI for <buildroot@lists.busybox.net>;
+ Fri, 24 Feb 2023 10:17:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 994B081BC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12DC281EFC
 Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
  [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 994B081BC2
- for <buildroot@buildroot.org>; Fri, 24 Feb 2023 10:10:50 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id c12so13357218wrw.1
- for <buildroot@buildroot.org>; Fri, 24 Feb 2023 02:10:50 -0800 (PST)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 12DC281EFC
+ for <buildroot@buildroot.org>; Fri, 24 Feb 2023 10:17:24 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id h14so4704012wru.4
+ for <buildroot@buildroot.org>; Fri, 24 Feb 2023 02:17:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=b9KcCPRhyyDjbqjfb4xPL2qBrYXfa2qexKXBfA8Oqdg=;
- b=0vGm9TK8hYk1iT+yKmCSz5E1c4zr4yEX1xshE/HJ9czC4Pmw+KyOWSxeZeixICCUb+
- +PUu9/TwcBYmeRyl4Ajh1CE3f69YMhzjShQx2NeoC3VJRMuSlLHPU/cRYWivzl/i30o2
- 12OGRvH3svA0TTJEye2mKnBDqtGr6z+8hGzNGIkQxHN7RfgFRupwwyx6VsnQlAFAQPEU
- a2/T5JITOhhIKfqHcyMjscsW3TcFLfflpOCDWAp0TNXEDJn5x7TlGQ8S+rFiAajyhrAG
- B6G2kyKe+psZtxovACyYSFRaK9DOiQGSKRa1qWOIW/EmqrigUFu1pJxxKNYovDXqjS29
- gaMQ==
-X-Gm-Message-State: AO0yUKWlvZF9NVbT5X1VfyUhJqezCxZQIR863jt4WmeNArqC74lX1sJe
- IhzKSo0Wr7vR8R8KNlQP05L4XmOh8lY=
-X-Google-Smtp-Source: AK7set9WRPEcrC473erM3RcnjfOfJXg479edK266cWzfRBeo5DZKy1SkPuzDj81qelgUlZFCWDKQ2g==
-X-Received: by 2002:a05:6000:a17:b0:2c5:5938:e6d6 with SMTP id
- co23-20020a0560000a1700b002c55938e6d6mr12810670wrb.35.1677233448238; 
- Fri, 24 Feb 2023 02:10:48 -0800 (PST)
+ bh=+Rz1xhDpNPBAhxDfutdb496bReiI3xnoPWDUgQlIfY8=;
+ b=2YIdZ+zz7xP+fWSqo2upzejlVw6QTzilkia/qB2ngdKHLueiUEKAXJraQ9EzHvj0bJ
+ 5rmyYuw1+cjfl2twTzyeVPD1C8vMlqsYeGRfOMn9BFiYMEp0w5tf/4TyhgoYgsXLaePA
+ MQ7WVm3GcATl7FUFnUjfM68hZtvf4IFuav9gT9TZcvrpwR3lDnuI8+PYQ8JX6UyzAthE
+ PC9qrfyYv4ozW4OC/s24Ka/baSb5Pecn60y56WBI9jkW2EVAEqH7sxk3juN/BSDV4ylD
+ 7Rr0c8+pTlVEfOZgfe1kPgOcQB8Pu+ZUHmmEVXWGr6wXz83vVGFB7zgQWWZ3ABt6EVfT
+ g5OQ==
+X-Gm-Message-State: AO0yUKV5KD4GIBXhfqeYkdRMIUqLZr06BkG4SDUrAlCK1lye+PRfP3Zn
+ ofPrHGLLqg26fRMiHs0Pv1+ICQKLNDs=
+X-Google-Smtp-Source: AK7set+sEIHiabhA4ugjVEJq5v4uA++44fdNTvUTvGWSliUSTzvSWArkjKWWFr9G/BAkLeBlgFOr6w==
+X-Received: by 2002:adf:d08f:0:b0:2c6:8e3a:f6fe with SMTP id
+ y15-20020adfd08f000000b002c68e3af6femr12709681wrh.51.1677233842796; 
+ Fri, 24 Feb 2023 02:17:22 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- v15-20020a5d4a4f000000b002c7107ce17fsm4151239wrs.3.2023.02.24.02.10.47
+ l11-20020adff48b000000b002c592535839sm12553459wro.17.2023.02.24.02.17.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Feb 2023 02:10:47 -0800 (PST)
+ Fri, 24 Feb 2023 02:17:22 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Feb 2023 11:10:39 +0100
-Message-Id: <20230224101039.1445129-1-fontaine.fabrice@gmail.com>
+Date: Fri, 24 Feb 2023 11:17:20 +0100
+Message-Id: <20230224101720.1458102-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=b9KcCPRhyyDjbqjfb4xPL2qBrYXfa2qexKXBfA8Oqdg=;
- b=gfdSrDaxteP8EkOV8wK4OpgOlNwPNzRedSjBrTSBywSUisvmRZVuDcHBG6JF0UFN6d
- k4aijR2XDncf6XoxZdP+Oyh1pN/XWPLdeuaJBJ+mGjPPnWDIpZTeUQkSdqwbidg+WWl6
- 1G06ySvGEPrNbE5jy2Eg9O+XqXwmkMkKNhERrqR2e2fIhrOGOQpIhya8qZFZ4vkhYSnN
- 3HdLZCowtC7wjQHBJ6ERkmCTkVGiRUHsXAycoOPUTSz5X2CaCpwJFQX4M88g3CJ1FlIg
- cIecOJG6BWzh+d2xxuaUZVWENIbLdJLkvUsEaIOvxJ6h8+nh0X4LUnJkX3t1E3mgEPcy
- MaLw==
+ bh=+Rz1xhDpNPBAhxDfutdb496bReiI3xnoPWDUgQlIfY8=;
+ b=eekIF0FqnaZinNtzzU1rPr01aCpGnshisEVTiFz8ZfqnO0On3AThaSErFOUxhWihTz
+ SgcTDLXlUtXKIV6a6aRVT7kovSE6YuT4R3KC/4dFYLRlQxyabDT596ntDSj2HHGW9lYS
+ Th//PNXS6WyxRgDcXkpToD6i1tLSJI1flTvrMVq6hR6NlQC9VACS+JWm/+O+RUm+4xy6
+ 3R5RUGZLnehNUyvoI+FoiWCbewtgcr89oASyCi3q8hEOnHTVHjRY3EFosOrAr71zCtqL
+ 47EKwwtqhS+5+2pyVUpkAUn0WlbeAh9H3TFa0auZMItcMCxiV6loRCgJsegtFX4rnUAE
+ SI3g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=gfdSrDax
-Subject: [Buildroot] [PATCH 1/1] package/libblockdev: needs locale
+ header.a=rsa-sha256 header.s=20210112 header.b=eekIF0Fq
+Subject: [Buildroot] [PATCH 1/1] package/xscreensaver: add linux-pam
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,67 +94,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Marek Belisko <marek.belisko@open-nandra.com>
+Cc: Simon Dawson <spdawson@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-locale_t is unconditionally used since version 1.5 and
-https://github.com/storaged-project/libblockdev/commit/4ed6f0b3a46fc77554dab661c22150829aa75966
-resulting in the following build failure since the addition of the
-package in commit 0c52826291d1884db0f8f35130216065fbc7b574:
-
-module.c:33:37: error: unknown type name 'locale_t'
-   33 | static char *strerror_l(int errnum, locale_t locale UNUSED)
-      |                                     ^~~~~~~~
-
 Fixes:
- - http://autobuild.buildroot.org/results/ede9eb1f13d56c77005cc448416fb2efa9d16ff0
+ - https://bugs.buildroot.org/show_bug.cgi?id=15316
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libblockdev/Config.in | 6 ++++--
- package/udisks/Config.in      | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/xscreensaver/xscreensaver.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 4389fd794c..4f98621bd8 100644
---- a/package/libblockdev/Config.in
-+++ b/package/libblockdev/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBBLOCKDEV
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_KMOD
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
-@@ -66,7 +67,8 @@ config BR2_PACKAGE_LIBBLOCKDEV_SWAP
- 
+diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+index 6cc7e8febe..dc5f8b7e1e 100644
+--- a/package/xscreensaver/xscreensaver.mk
++++ b/package/xscreensaver/xscreensaver.mk
+@@ -42,6 +42,13 @@ else
+ XSCREENSAVER_CONF_OPTS += --with-png=no
  endif
  
--comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
-+comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library, locale"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_HAS_UDEV || BR2_STATIC_LIBS || \
--		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-index 253d5cdc6b..b1d02a31b2 100644
---- a/package/udisks/Config.in
-+++ b/package/udisks/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_UDISKS
- 	bool "udisks"
--	depends on BR2_ENABLE_LOCALE # parted
-+	depends on BR2_ENABLE_LOCALE # libblockdev, parted
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # polkit -> C++17
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # polkit
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++XSCREENSAVER_CONF_OPTS += --with-pam=yes
++XSCREENSAVER_DEPENDENCIES += linux-pam
++else
++XSCREENSAVER_CONF_OPTS += --with-pam=no
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ XSCREENSAVER_CONF_OPTS += --with-systemd=yes
+ XSCREENSAVER_DEPENDENCIES += systemd
 -- 
 2.39.1
 
