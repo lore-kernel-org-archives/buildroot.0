@@ -4,82 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8703C61DA3
-	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 11:21:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5212CC61DA3
+	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 11:43:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2259460FD2;
-	Fri, 24 Feb 2023 11:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2259460FD2
+	by smtp3.osuosl.org (Postfix) with ESMTP id E048660FBA;
+	Fri, 24 Feb 2023 11:43:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E048660FBA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DZDv36YhQYRG; Fri, 24 Feb 2023 11:21:52 +0000 (UTC)
+	with ESMTP id dHlf-mQQvHo4; Fri, 24 Feb 2023 11:43:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CB6A60F5C;
-	Fri, 24 Feb 2023 11:21:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CB6A60F5C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BD4AA1BF36B
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 11:21:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C02860FA0;
+	Fri, 24 Feb 2023 11:43:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C02860FA0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A3CE1BF36B
+ for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 11:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 935D18195C
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 11:21:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 935D18195C
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7EA760FA0
+ for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 11:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7EA760FA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rBK3tiuHCGKZ for <buildroot@lists.busybox.net>;
- Fri, 24 Feb 2023 11:21:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oI10AszA0UV4 for <buildroot@lists.busybox.net>;
+ Fri, 24 Feb 2023 11:43:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 820C781422
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
- [IPv6:2607:f8b0:4864:20::102a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 820C781422
- for <buildroot@buildroot.org>; Fri, 24 Feb 2023 11:21:48 +0000 (UTC)
-Received: by mail-pj1-x102a.google.com with SMTP id
- cp7-20020a17090afb8700b0023756229427so2572043pjb.1
- for <buildroot@buildroot.org>; Fri, 24 Feb 2023 03:21:48 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87C9260F83
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 87C9260F83
+ for <buildroot@buildroot.org>; Fri, 24 Feb 2023 11:43:25 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id p26so11196814wmc.4
+ for <buildroot@buildroot.org>; Fri, 24 Feb 2023 03:43:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=iTtk7EeBg92lT0RQScY6V/ocpVoyoYGUxLXhCtC3ZlA=;
- b=vdOVUEJkODW2Iu604dqfdgR3a42UebfmHRQnNnj1K233jiqeY8YAVuG/T08ut8D8A8
- cq1ZNJEhiqufJFFaHj35cYgMErBp43TfZOsdcczwjwJc9JPOeS8p8w838xTsWyjKuIgl
- Iopemc/N9s1t/UbaUfXQ16na4QhfFjjda3rQwDZO50KjCE9Vq/P/zlz4AVU94ByEXvKo
- XA+EOHBcQBKhoIr5wK4LK4EyGmYRH0oAcGqubTO2HS5u3xOlSWkqvDMWgqLZXfhW4HXN
- rLaMdIXeYumPc/z1ijGDH1zelm5RV/Fbf2DF6v/v1EiKjMFFo1fA26QQfVX8L86ULwmG
- tFXg==
-X-Gm-Message-State: AO0yUKUJpQGkJH2LV8yKGPCLf2rMCTBBKSL81GwzAiJwaRvCoBEMphV8
- B8IBazlNvj4rZu+qiPj5EvXBkDhwAFshbVApoF4FqGS9WwY=
-X-Google-Smtp-Source: AK7set+GnkVIdXUhD1XXt7R9kRPxVrX8OBzyGheHdvKP7yldrR+nMjQRvMQp0KFF+is1KmN5gKpAetAw2azmXgmCtnU=
-X-Received: by 2002:a17:902:6f17:b0:19c:9035:7864 with SMTP id
- w23-20020a1709026f1700b0019c90357864mr655397plk.5.1677237707778; Fri, 24 Feb
- 2023 03:21:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20230220093336.77462-1-fontaine.fabrice@gmail.com>
- <20230220214423.1a42a0e5@windsurf>
-In-Reply-To: <20230220214423.1a42a0e5@windsurf>
+ bh=miZwfDGw9tHw2vv1KS7OtdJRX+jWymbFnAKt09FYbAY=;
+ b=S6+ZmBWV+orp2WsO/IpMN/UUUaAMtiEYKKZZi/YbN9grxPTB3BmLf7FEpsof3PUqNL
+ fXfnnuSniBaF/p8gzlmQ3Q1vr7lnCH4jlpuSyAixXxl//ZLWpWEJLQfirKBn/HxsAOaE
+ DO2Zonh07KQ5h5WCtzIi8mD6N8cG58Kc2isI6K2HNJm35yUjJMqHRVkWgR0k7lrxo4fJ
+ 6jd/OWkNlviam7p+2hPmp7GsSkd10KqvEhroDSfKcfYwKsm/B5DcHIDsg4Z00SA9fPAF
+ H0CBxAYO/YlwBTn2PLMFba+/AxQpK5kA4zCvpPgAhr8J6YXeQYVPwP6yf1q6xMXOZMM1
+ WcQw==
+X-Gm-Message-State: AO0yUKU6cXe5VL9eGsRBkCX08L7XEXmL7/79jsSNynLRhKNyj2CUQEX1
+ 6QNEB3AWThKuayUVkY32jPjIAF9S+qk=
+X-Google-Smtp-Source: AK7set9wOCttH8xhMjhkZuuvlkzlevgE+oFYlkTmdzEdMiV5ZPBpYy2gx4DTdZmz94yUHg76q9cstQ==
+X-Received: by 2002:a05:600c:13d4:b0:3eb:29fe:70df with SMTP id
+ e20-20020a05600c13d400b003eb29fe70dfmr544428wmg.35.1677239002871; 
+ Fri, 24 Feb 2023 03:43:22 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ j23-20020a05600c1c1700b003c6bbe910fdsm2618873wms.9.2023.02.24.03.43.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 24 Feb 2023 03:43:22 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Feb 2023 12:21:36 +0100
-Message-ID: <CAPi7W83JXfQ2azAbruds6sZ9U-Up=2MgxVzx+KMOuFsRGrFGug@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Fri, 24 Feb 2023 12:43:20 +0100
+Message-Id: <20230224114320.2152346-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=iTtk7EeBg92lT0RQScY6V/ocpVoyoYGUxLXhCtC3ZlA=;
- b=ZcuUroxFAoMPH1p5k7s9VIUKleh2QrQrzAJlgpw2aNfNtoviX/yCshyy9Q6Kak3HLu
- kGDFktCg4/G3Hh3uR7mUw/YLbUo2vshBp1+G6eq9Pchy2yMMIIPkKGGRJSj3FFqsxzNP
- Qy3n+PXNz6U7Udfz1RpZq1TAqBy6LJ9+qrDOoyUwakTZhpIoYub77He66N4El47BsscE
- rhC/1vqXT37qY+J53gRKGkkI+UX0EJfMlxS06t/yEJ57UWltnVn9hVN7tsjMOLkRu+8e
- bQApt4dXGdXQcXkfXHSx8JYziqbZDyb/obkb/D4YYChAhLMUrznoISYHS3pMRFsvnEHb
- UCuw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=miZwfDGw9tHw2vv1KS7OtdJRX+jWymbFnAKt09FYbAY=;
+ b=Upoz+z0wvow84xFctjjibY8CG4xqA7tz/piV/W4DAcrxQhkApoFLdhGp2tTFmG2NY5
+ 5SXY2tDe9MoMT8UH1h01m2Uit6rKdNuPjtoUWIEKPFAmDYimC+IJKjXtWtl1xTyv4N32
+ jVym8oZlLR79PXeKM6XF3jc9McCgyVZ6TysgXdXgqI38fy8A44/UxXFuJDfwVEgpGtt2
+ 5638E0A4FlYy2kLktCABuvNMAyQKVrSiKXxP8+ahrGVBx6kCXZEiZhTStMNltyHf4wsP
+ izHX9QdCgnfgF5aZ1U3RqH8xg6C8GiBhrVsckP3Aq8osp7jtfdtUxRsO8HXXxHyOYY+O
+ hhBQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZcuUroxF
-Subject: Re: [Buildroot] [PATCH 1/1] package/zabbix: fix libcurl build
+ header.a=rsa-sha256 header.s=20210112 header.b=Upoz+z0w
+Subject: [Buildroot] [PATCH 1/1] package/zabbix: fix build with libressl >=
+ 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,172 +94,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexey Lukyanchuk <skif@skif-web.ru>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8037706230963721083=="
+Cc: Alexey Lukyanchuk <skif@skif-web.ru>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8037706230963721083==
-Content-Type: multipart/alternative; boundary="000000000000c6b0f405f57055c3"
+Fix the following build failure with libressl >= 3.5.0 raised since bump
+to version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 
---000000000000c6b0f405f57055c3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+tls.c:113:17: error: static declaration of 'OPENSSL_cleanup' follows non-static declaration
+  113 | static void     OPENSSL_cleanup(void)
+      |                 ^~~~~~~~~~~~~~~
+In file included from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/bio.h:69,
+                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/evp.h:67,
+                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/hmac.h:67,
+                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:150,
+                 from ../../../include/zbxcomms.h:65,
+                 from tls.c:20:
+/home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/crypto.h:565:6: note: previous declaration of 'OPENSSL_cleanup' with type 'void(void)'
+  565 | void OPENSSL_cleanup(void);
+      |      ^~~~~~~~~~~~~~~
+In file included from tls.c:20:
+tls.c: In function 'zbx_log_ciphersuites':
+../../../include/zbxcomms.h:222:75: error: invalid use of incomplete typedef 'SSL_CTX' {aka 'struct ssl_ctx_st'}
+  222 | #       define SSL_CTX_get_ciphers(ciphers)                     ((ciphers)->cipher_list)
+      |                                                                           ^~
+tls.c:1415:31: note: in expansion of macro 'SSL_CTX_get_ciphers'
+ 1415 |                 cipher_list = SSL_CTX_get_ciphers(ciphers);
+      |                               ^~~~~~~~~~~~~~~~~~~
 
-Hello,
+Fixes:
+ - http://autobuild.buildroot.org/results/acdfcb17b39d438ccf5e4621707a10f60577d233
 
-Le lun. 20 f=C3=A9vr. 2023 =C3=A0 21:44, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> a =C3=A9crit :
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-fix-build-with-libressl-3.5.0.patch  | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
 
-> Hello Fabrice,
->
-> On Mon, 20 Feb 2023 10:33:36 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Fix the following libcurl build failure:
-> >
-> > In file included from
-> /tmp/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/inclu=
-de/curl/curl.h:3195,
-> >                  from ../../../../include/sysinc.h:384,
-> >                  from ../../../../include/common.h:23,
-> >                  from simple.c:20:
-> > simple.c: In function 'check_https':
-> > simple.c:167:65: error: invalid use of void expression
-> >   167 |         if (CURLE_OK !=3D (err =3D curl_easy_setopt(easyhandle,=
- opt
-> =3D CURLOPT_USERAGENT, "Zabbix " ZABBIX_VERSION)) ||
-> >       |                                                                =
- ^
-> >
-> > Fixes:
-> >  -
-> http://autobuild.buildroot.org/results/053a62e9969046a7f8a0e1890c24d2bfb0=
-99ae42
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  ...se-parentheses-to-ensure-compilation.patch | 65 +++++++++++++++++++
-> >  1 file changed, 65 insertions(+)
-> >  create mode 100644
-> package/zabbix/0002-Use-parentheses-to-ensure-compilation.patch
->
-> This was reported to curl upstream in
-> https://github.com/curl/curl/issues/10148, and apparently fixed in curl
-> by
->
-> https://github.com/curl/curl/commit/e2aed004302e51cfa5b6ce8c8ab65ef92aa83=
-196
-> .
->
-> So it apparently was considered a bug in curl, so perhaps it should be
-> fixed in curl rather than in zabbix?
->
-
-Indeed, I'll set this patch as not applicable as the build failure is not
-raised since commit 14ca6b5fdb6a5e0fa99b04461240772d93076b2e
-
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Best Regards,
-
-Fabrice
-
---000000000000c6b0f405f57055c3
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hello,<br></div><br><div class=3D"gmail_q=
-uote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0lun. 20 f=C3=A9vr. 2023=
- =C3=A0=C2=A021:44, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni=
-@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=C2=A0:<br><=
-/div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bo=
-rder-left:1px solid rgb(204,204,204);padding-left:1ex">Hello Fabrice,<br>
-<br>
-On Mon, 20 Feb 2023 10:33:36 +0100<br>
-Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gmail.com" target=
-=3D"_blank">fontaine.fabrice@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; Fix the following libcurl build failure:<br>
-&gt; <br>
-&gt; In file included from /tmp/instance-1/output-1/host/s390x-buildroot-li=
-nux-gnu/sysroot/usr/include/curl/curl.h:3195,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 from ../=
-../../../include/sysinc.h:384,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 from ../=
-../../../include/common.h:23,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 from sim=
-ple.c:20:<br>
-&gt; simple.c: In function &#39;check_https&#39;:<br>
-&gt; simple.c:167:65: error: invalid use of void expression<br>
-&gt;=C2=A0 =C2=A0167 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (CURLE_OK !=3D (=
-err =3D curl_easy_setopt(easyhandle, opt =3D CURLOPT_USERAGENT, &quot;Zabbi=
-x &quot; ZABBIX_VERSION)) ||<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0^<br>
-&gt; <br>
-&gt; Fixes:<br>
-&gt;=C2=A0 - <a href=3D"http://autobuild.buildroot.org/results/053a62e99690=
-46a7f8a0e1890c24d2bfb099ae42" rel=3D"noreferrer" target=3D"_blank">http://a=
-utobuild.buildroot.org/results/053a62e9969046a7f8a0e1890c24d2bfb099ae42</a>=
-<br>
-&gt; <br>
-&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
-@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 ...se-parentheses-to-ensure-compilation.patch | 65 +++++++++++++=
-++++++<br>
-&gt;=C2=A0 1 file changed, 65 insertions(+)<br>
-&gt;=C2=A0 create mode 100644 package/zabbix/0002-Use-parentheses-to-ensure=
--compilation.patch<br>
-<br>
-This was reported to curl upstream in<br>
-<a href=3D"https://github.com/curl/curl/issues/10148" rel=3D"noreferrer" ta=
-rget=3D"_blank">https://github.com/curl/curl/issues/10148</a>, and apparent=
-ly fixed in curl<br>
-by<br>
-<a href=3D"https://github.com/curl/curl/commit/e2aed004302e51cfa5b6ce8c8ab6=
-5ef92aa83196" rel=3D"noreferrer" target=3D"_blank">https://github.com/curl/=
-curl/commit/e2aed004302e51cfa5b6ce8c8ab65ef92aa83196</a>.<br>
-<br>
-So it apparently was considered a bug in curl, so perhaps it should be<br>
-fixed in curl rather than in zabbix?<br></blockquote><div><br></div><div>In=
-deed, I&#39;ll set this patch as not applicable as the build failure is not=
- raised since commit 14ca6b5fdb6a5e0fa99b04461240772d93076b2e</div><div>=C2=
-=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
-x;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-Best regards,<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, CTO, Bootlin<br>
-Embedded Linux and Kernel engineering<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a></blockquote><div>Best Regards,</div><div><br></div><div>F=
-abrice <br></div></div></div>
-
---000000000000c6b0f405f57055c3--
-
---===============8037706230963721083==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch b/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
+new file mode 100644
+index 0000000000..7e32ad5745
+--- /dev/null
++++ b/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
+@@ -0,0 +1,71 @@
++From 5c8511384f1d41f9c2a131604d5cb2dbc1c0aec9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 24 Feb 2023 12:23:56 +0100
++Subject: [PATCH] fix build with libressl >= 3.5.0
++
++Fix the following build failure with libressl >= 3.5.0:
++
++tls.c:113:17: error: static declaration of 'OPENSSL_cleanup' follows non-static declaration
++  113 | static void     OPENSSL_cleanup(void)
++      |                 ^~~~~~~~~~~~~~~
++In file included from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/bio.h:69,
++                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/evp.h:67,
++                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/hmac.h:67,
++                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:150,
++                 from ../../../include/zbxcomms.h:65,
++                 from tls.c:20:
++/home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/crypto.h:565:6: note: previous declaration of 'OPENSSL_cleanup' with type 'void(void)'
++  565 | void OPENSSL_cleanup(void);
++      |      ^~~~~~~~~~~~~~~
++In file included from tls.c:20:
++tls.c: In function 'zbx_log_ciphersuites':
++../../../include/zbxcomms.h:222:75: error: invalid use of incomplete typedef 'SSL_CTX' {aka 'struct ssl_ctx_st'}
++  222 | #       define SSL_CTX_get_ciphers(ciphers)                     ((ciphers)->cipher_list)
++      |                                                                           ^~
++tls.c:1415:31: note: in expansion of macro 'SSL_CTX_get_ciphers'
++ 1415 |                 cipher_list = SSL_CTX_get_ciphers(ciphers);
++      |                               ^~~~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/acdfcb17b39d438ccf5e4621707a10f60577d233
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent (no feedback on first patch)]
++---
++ include/zbxcomms.h      | 3 ++-
++ src/libs/zbxcomms/tls.c | 5 +++--
++ 2 files changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/include/zbxcomms.h b/include/zbxcomms.h
++index e7d74dbd0f..d6efa358fe 100644
++--- a/include/zbxcomms.h
+++++ b/include/zbxcomms.h
++@@ -253,7 +253,8 @@ int	zbx_telnet_execute(ZBX_SOCKET socket_fd, const char *command, AGENT_RESULT *
++ /* TLS BLOCK */
++ #if defined(HAVE_GNUTLS) || defined(HAVE_OPENSSL)
++ 
++-#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
+++#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || \
+++	defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3050000fL
++ #	if !defined(LIBRESSL_VERSION_NUMBER)
++ #		define OPENSSL_INIT_LOAD_SSL_STRINGS			0
++ #		define OPENSSL_INIT_LOAD_CRYPTO_STRINGS		0
++diff --git a/src/libs/zbxcomms/tls.c b/src/libs/zbxcomms/tls.c
++index 54ab0a6ef4..bd4075b3e4 100644
++--- a/src/libs/zbxcomms/tls.c
+++++ b/src/libs/zbxcomms/tls.c
++@@ -30,8 +30,9 @@
++ #include "zbxstr.h"
++ #include "zbxtime.h"
++ 
++-#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
++-/* for OpenSSL 1.0.1/1.0.2 (before 1.1.0) or LibreSSL */
+++#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || \
+++	defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x300000fL
+++/* for OpenSSL 1.0.1/1.0.2 (before 1.1.0) or LibreSSL (before 3.5.0) */
++ 
++ /* mutexes for multi-threaded OpenSSL (see "man 3ssl threads" and example in crypto/threads/mttest.c) */
++ 
++-- 
++2.39.1
++
+-- 
+2.39.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8037706230963721083==--
