@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8005DC64ED8
-	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 07:36:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41AFAC61DA3
+	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 07:40:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EEAD60E96;
-	Fri, 24 Feb 2023 07:36:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EEAD60E96
+	by smtp3.osuosl.org (Postfix) with ESMTP id D806260E78;
+	Fri, 24 Feb 2023 07:40:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D806260E78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id egpHwS_hVDYk; Fri, 24 Feb 2023 07:36:44 +0000 (UTC)
+	with ESMTP id Hc4qaVruc9Be; Fri, 24 Feb 2023 07:40:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40ECA60EC2;
-	Fri, 24 Feb 2023 07:36:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40ECA60EC2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BA5DC1BF2A4
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 07:36:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 169F560E61;
+	Fri, 24 Feb 2023 07:40:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 169F560E61
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 56B251BF2A4
+ for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 07:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 93D4A81DFB
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 07:36:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93D4A81DFB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3035340272
+ for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 07:37:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3035340272
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xmGM4xDg3DQX for <buildroot@lists.busybox.net>;
- Fri, 24 Feb 2023 07:36:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hekdFnFKC5NM for <buildroot@lists.busybox.net>;
+ Fri, 24 Feb 2023 07:37:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B839081B7B
- for <buildroot@buildroot.org>; Fri, 24 Feb 2023 07:36:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B839081B7B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FACC400C4
+ for <buildroot@buildroot.org>; Fri, 24 Feb 2023 07:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FACC400C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A805686A03; Fri, 24 Feb 2023 07:36:09 +0000 (UTC)
+ id 4F3A386A0B; Fri, 24 Feb 2023 07:37:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Feb 2023 08:35:36 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 421f58cfa996a27d85b01775521b3c52125de264
-X-Git-Newrev: 3c4fb99b80ae2925e04676cfc9ecffd0c35c430c
+Date: Fri, 24 Feb 2023 08:35:16 +0100
+X-Git-Refname: refs/heads/2022.11.x
+X-Git-Oldrev: bc12f089b6f102b97497c287fa44e2ce5707639e
+X-Git-Newrev: 626cd6827cb2ac8caee295350195fe282121807f
 X-Patchwork-Hint: ignore
-Message-Id: <20230224073609.A805686A03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] utils/test-pkg: proper
+Message-Id: <20230224073716.4F3A386A0B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x] utils/test-pkg: proper
  output on host without jq installed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,15 +58,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4122456330415122410=="
+Content-Type: multipart/mixed; boundary="===============2457125410479252107=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4122456330415122410==
+--===============2457125410479252107==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c4fb99b80ae2925e04676cfc9ecffd0c35c430c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=626cd6827cb2ac8caee295350195fe282121807f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
 On host without jq installed, test-pkg's output is as following:
 
@@ -111,7 +111,7 @@ index 4ebfd9af66..e7f5464817 100755
          make O="${dir}" host-jq >> "${dir}/logfile" 2>&1
          JQ="${dir}/host/bin/jq"
 
---===============4122456330415122410==
+--===============2457125410479252107==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -122,4 +122,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4122456330415122410==--
+--===============2457125410479252107==--
