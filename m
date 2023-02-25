@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7A8FC64EC7
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 20:53:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C4CBC64EC7
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 20:54:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1366D40156;
-	Sat, 25 Feb 2023 20:53:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1366D40156
+	by smtp2.osuosl.org (Postfix) with ESMTP id EAA8B40BB8;
+	Sat, 25 Feb 2023 20:54:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAA8B40BB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j4cDBwSpK8sS; Sat, 25 Feb 2023 20:53:49 +0000 (UTC)
+	with ESMTP id QA3xjZObVSrR; Sat, 25 Feb 2023 20:54:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 268F840BB4;
-	Sat, 25 Feb 2023 20:53:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 268F840BB4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4DD371BF860
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B51640BBF;
+	Sat, 25 Feb 2023 20:54:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B51640BBF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 683831BF865
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 20:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28B4180C9C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 429FB402C2
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 20:53:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28B4180C9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 429FB402C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 13ne-3r8wLk1 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ySwiCFIiPKZb for <buildroot@lists.busybox.net>;
  Sat, 25 Feb 2023 20:53:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4714F80C0B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3FBC3402A6
  for <buildroot@buildroot.org>; Sat, 25 Feb 2023 20:53:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4714F80C0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FBC3402A6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35EAA86AE0; Sat, 25 Feb 2023 20:53:33 +0000 (UTC)
+ id 2B25586AE8; Sat, 25 Feb 2023 20:53:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 21:53:06 +0100
+Date: Sat, 25 Feb 2023 21:49:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6ec2a9d4383b3370da39d70805b7c7854cefeded
-X-Git-Newrev: cc5a6c4af7e7809fccdb72b7140b33dacbbd1a94
+X-Git-Oldrev: 7e608885a2df51ba77378f210f4c0e8cb59d5b8b
+X-Git-Newrev: 6ec2a9d4383b3370da39d70805b7c7854cefeded
 X-Patchwork-Hint: ignore
-Message-Id: <20230225205333.35EAA86AE0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-numpy: needs C++
+Message-Id: <20230225205333.2B25586AE8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lirc-tools: fix python build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,92 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc5a6c4af7e7809fccdb72b7140b33dacbbd1a94
+commit: https://git.buildroot.net/buildroot/commit/?id=6ec2a9d4383b3370da39d70805b7c7854cefeded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-C++ is mandatory since at least version 1.23.0 and
-https://github.com/numpy/numpy/commit/c91a7d0c5691c9d78bd75284777fda73f225155d
-resulting in the following build failure since bump to version 1.23.4 in
-commit 32d8e23b977a5bba1f23e3821709c6aa9ff3bc55:
+Fix the following build failure raised since bump to version 0.10.2 in
+commit 58cc3977e83487bdaa1df232cf7adf6383d49cd7:
 
-RuntimeError: Broken toolchain: cannot link a simple C++ program. note: A compiler with support for C++11 language features is required.
+In file included from /home/thomas/autobuild/instance-3/output-1/per-package/lirc-tools/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/python3.11/Python.h:38,
+                 from lirc/_client.c:1:
+/home/thomas/autobuild/instance-3/output-1/per-package/lirc-tools/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/include/python3.11/pyport.h:601:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+  601 | #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+      |  ^~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/2d048d9b669ad60f37eeb2162b0a4f9fb425be1e
+ - http://autobuild.buildroot.org/results/85359d3f678b49e46821a1c10da5f14edfb5e6d0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/piglit/Config.in       | 6 ++++--
- package/python-numpy/Config.in | 6 ++++--
- package/python-zlmdb/Config.in | 6 ++++--
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ package/lirc-tools/lirc-tools.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/piglit/Config.in b/package/piglit/Config.in
-index 736fd95d71..5e957a555a 100644
---- a/package/piglit/Config.in
-+++ b/package/piglit/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_PIGLIT
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
-+	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBPNG
-@@ -31,5 +32,6 @@ config BR2_PACKAGE_PIGLIT
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index 5263330741..a3ad6bd5a0 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -48,7 +48,9 @@ endif
  
- 	  https://piglit.freedesktop.org
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ LIRC_TOOLS_DEPENDENCIES += python3 host-python-setuptools
+-LIRC_TOOLS_MAKE_ENV += SETUPTOOLS_ENV='$(PKG_PYTHON_SETUPTOOLS_ENV)'
++LIRC_TOOLS_MAKE_ENV += \
++	CC="$(TARGET_CC)" \
++	SETUPTOOLS_ENV='$(PKG_PYTHON_SETUPTOOLS_ENV)'
+ endif
  
--comment "piglit needs glibc or musl"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+comment "piglit needs a glibc or musl toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index a65164d9d5..132c3f7a82 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- config BR2_PACKAGE_PYTHON_NUMPY
- 	bool "python-numpy"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	# python-numpy needs fenv.h which is not provided by uclibc
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	help
-@@ -27,6 +28,7 @@ config BR2_PACKAGE_PYTHON_NUMPY
- 
- 	  http://www.numpy.org/
- 
--comment "python-numpy needs glibc or musl"
-+comment "python-numpy needs a glibc or musl toolchain w/ C++"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-diff --git a/package/python-zlmdb/Config.in b/package/python-zlmdb/Config.in
-index ac4ee05442..8eba2d7946 100644
---- a/package/python-zlmdb/Config.in
-+++ b/package/python-zlmdb/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_ZLMDB
- 	bool "python-zlmdb"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
-+	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_PYTHON_CBOR2 # runtime
- 	select BR2_PACKAGE_PYTHON_CFFI # runtime
-@@ -17,6 +18,7 @@ config BR2_PACKAGE_PYTHON_ZLMDB
- 
- 	  https://github.com/crossbario/zlmdb
- 
--comment "python-zlmdb needs glibc or musl"
-+comment "python-zlmdb needs a glibc or musl toolchain w/ C++"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+ define LIRC_TOOLS_INSTALL_INIT_SYSV
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
