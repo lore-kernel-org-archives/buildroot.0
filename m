@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47A5CC7EE2D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:39:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DC85C64EC7
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:40:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB0F3405F7;
-	Sat, 25 Feb 2023 09:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB0F3405F7
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA90740B8A;
+	Sat, 25 Feb 2023 09:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA90740B8A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3g_SflN5YpiK; Sat, 25 Feb 2023 09:39:53 +0000 (UTC)
+	with ESMTP id 450D_j55d0wM; Sat, 25 Feb 2023 09:40:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36E0540914;
-	Sat, 25 Feb 2023 09:39:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36E0540914
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 26FD91BF5DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF976408DC;
+	Sat, 25 Feb 2023 09:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF976408DC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E9B8D1BF860
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 020E641655
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 020E641655
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92DFF81E68
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:39:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92DFF81E68
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nb0Xc3uf__QB for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 09:39:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JYWhO47VClAS for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDCFA41634
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC58B81E70
  for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDCFA41634
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC58B81E70
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C90AC8690E; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
+ id BB06786922; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 10:37:39 +0100
+Date: Sat, 25 Feb 2023 10:37:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 656aec42d96f1286b4acb3ad0e9c84073db3c6b8
-X-Git-Newrev: b5d310772d71f547146684673c7113f208a31b5f
+X-Git-Oldrev: 45e2aa588d7d10941032c1661b9cf1e6c52b2680
+X-Git-Newrev: 656aec42d96f1286b4acb3ad0e9c84073db3c6b8
 X-Patchwork-Hint: ignore
-Message-Id: <20230225093924.C90AC8690E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-gmmlib: needs threads
+Message-Id: <20230225093924.BB06786922@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hawktracer: bump to
+ 3c22b3908912e2ec727fd2ddc5dbfe7464e6b4a5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,61 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5d310772d71f547146684673c7113f208a31b5f
+commit: https://git.buildroot.net/buildroot/commit/?id=656aec42d96f1286b4acb3ad0e9c84073db3c6b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-threads are mandatory since version 19.1.1 and
-https://github.com/intel/gmmlib/commit/9e4aa143fb7e7e87332fcb7c9871040ff4a1a1da
-resulting in the following build failure since commit
-cd206d9b808a322a00294b4caad203a892ed4c92:
+This bump will fix the following build failure with gcc >= 12:
 
-CMake Error at /home/thomas/autobuild/instance-2/output-1/host/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
-  Could NOT find Threads (missing: Threads_FOUND)
+/tmp/instance-8/output-1/build/hawktracer-2ec19d71923344148928ef45fce549eda67030a4/hawktracer.cpp: In function 'HT_Thread* ht_thread_create(ht_thread_callback_t, void*)':
+/tmp/instance-8/output-1/build/hawktracer-2ec19d71923344148928ef45fce549eda67030a4/hawktracer.cpp:1006:28: error: no matching function for call to 'operator new(sizetype, std::thread*)'
+ 1006 |     new(&th->th) HT_Thread();
+      |                            ^
+
+https://github.com/amzn/hawktracer/compare/e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8...2ec19d71923344148928ef45fce549eda67030a4
 
 Fixes:
- - http://autobuild.buildroot.org/results/c1120932e8c212820b239ee8cd4a057623a73376
+ - http://autobuild.buildroot.org/results/d18a1b2ee6cdcb289567ae90b2d836844427b5f6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/intel-gmmlib/Config.in      | 6 ++++--
- package/intel-mediadriver/Config.in | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/hawktracer/hawktracer.hash | 2 +-
+ package/hawktracer/hawktracer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-gmmlib/Config.in b/package/intel-gmmlib/Config.in
-index b6f93f7416..a3d0d2610b 100644
---- a/package/intel-gmmlib/Config.in
-+++ b/package/intel-gmmlib/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_INTEL_GMMLIB
- 	depends on BR2_x86_64
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  The Intel(R) Graphics Memory Management Library provides
- 	  device specific and buffer management for the Intel(R)
-@@ -11,5 +12,6 @@ config BR2_PACKAGE_INTEL_GMMLIB
+diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
+index 47a8b35b6b..29d00e29ec 100644
+--- a/package/hawktracer/hawktracer.hash
++++ b/package/hawktracer/hawktracer.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  a48e26082fd644222d4a20ecfd5a34700865cf572d41b7eac5b0c8242fef9c5f  hawktracer-2ec19d71923344148928ef45fce549eda67030a4.tar.gz
++sha256  099f76d5be18ad5d714fded0c6f889f588986cdde2b31f2c0058413698a5f35c  hawktracer-3c22b3908912e2ec727fd2ddc5dbfe7464e6b4a5.tar.gz
+ sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
+diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
+index fd635e350d..462d073755 100644
+--- a/package/hawktracer/hawktracer.mk
++++ b/package/hawktracer/hawktracer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/intel/gmmlib
- 
--comment "intel-gmmlib needs a toolchain w/ dynamic library, C++"
--	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
-+comment "intel-gmmlib needs a toolchain w/ dynamic library, C++, threads"
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/intel-mediadriver/Config.in b/package/intel-mediadriver/Config.in
-index ad56590008..537e4abd2f 100644
---- a/package/intel-mediadriver/Config.in
-+++ b/package/intel-mediadriver/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_INTEL_MEDIADRIVER
- 	depends on !BR2_STATIC_LIBS # mesa3d, libva
- 	depends on BR2_INSTALL_LIBSTDCPP # intel-gmmlib, mesa3d
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # intel-gmmlib, libva
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mesa3d
- 	select BR2_PACKAGE_INTEL_GMMLIB
- 	select BR2_PACKAGE_LIBPCIACCESS
+-HAWKTRACER_VERSION = 2ec19d71923344148928ef45fce549eda67030a4
++HAWKTRACER_VERSION = 3c22b3908912e2ec727fd2ddc5dbfe7464e6b4a5
+ HAWKTRACER_SITE = $(call github,amzn,hawktracer,$(HAWKTRACER_VERSION))
+ HAWKTRACER_LICENSE = MIT
+ HAWKTRACER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
