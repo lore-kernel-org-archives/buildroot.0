@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 836F2C64EC7
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 21:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BCF8C7EE23
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 21:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14E8B40BB4;
-	Sat, 25 Feb 2023 21:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14E8B40BB4
+	by smtp2.osuosl.org (Postfix) with ESMTP id AFDBE40BB1;
+	Sat, 25 Feb 2023 21:03:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFDBE40BB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VKy5vetfVH_r; Sat, 25 Feb 2023 21:03:22 +0000 (UTC)
+	with ESMTP id l_GSQzkGXS9o; Sat, 25 Feb 2023 21:03:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45CE840BD6;
-	Sat, 25 Feb 2023 21:03:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45CE840BD6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 007DC40BD6;
+	Sat, 25 Feb 2023 21:03:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 007DC40BD6
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2B22A1BF3EE
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 21:02:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F08951BF3EE
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 21:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EAD7A4016C
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 21:02:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAD7A4016C
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB11540BA4
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 21:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB11540BA4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id smfmyL5gCgPh for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 21:02:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D13D540156
+ with ESMTP id wuBktVPnGNCq for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 21:02:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66D1A40156
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D13D540156
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 21:02:47 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 66D1A40156
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 21:02:51 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7578D40004;
- Sat, 25 Feb 2023 21:02:44 +0000 (UTC)
-Date: Sat, 25 Feb 2023 22:02:42 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id 3F16540005;
+ Sat, 25 Feb 2023 21:02:49 +0000 (UTC)
+Date: Sat, 25 Feb 2023 22:02:47 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230225220242.2761cbe6@windsurf>
-In-Reply-To: <20230225144904.3033289-1-fontaine.fabrice@gmail.com>
-References: <20230225144904.3033289-1-fontaine.fabrice@gmail.com>
+Message-ID: <20230225220247.4bdfa321@windsurf>
+In-Reply-To: <20230225160123.264914-1-fontaine.fabrice@gmail.com>
+References: <20230225160123.264914-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1677358965;
+ d=bootlin.com; s=gm1; t=1677358969;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=eZjRQhMDR8XQY4gNJv4jxO3lCHf4b92xEF7lsvaRxvw=;
- b=htAYMs4LxvfUBS1VxWyylCeRIrOPzQqrRiRlrlhOunubWGIn7MRr1LB6rj0Xm+Gf+SQIfa
- w6NLNxn9wBYW+WVS3A3pkWPyzCTmYtehWwljY2X/GpPYmFcqcML2Yg4xV0Z8DLq9i+TF7O
- kM3A7NsPkCC2iIykKj3AsfaX2ABMsprYamwdQ/rTaFvpjT5i8uXeElmwjueuFMaA/N78Iw
- V8mVMss9uZXSxGTJqKAmiILTWP7mfp5z/AqEu66tooSBf0EvkI9o19dWgdA6HWJx6b0fG0
- vuFdNmu5D9EMJYSw7y6ucu71jDtD5B1WBc7+Z0/SNcUwmanXcotJaOc8eF3Z5g==
+ bh=0B54WQHWa1OuMyW2iE8OA8ixJBS9CekVbxU7X3Me4EE=;
+ b=EIicvJg2ZYb+/cPxlSzNQhs6flAnxczijwhRgJ9v04xyqU5KWsSLuNDz+8ws8NQXN73W4r
+ uevTKQg3pyE0M5KPEhf+Ne9TEQYFZJa2lG+YDZhEQuXwbANL+Iaci9Gcq4teprZVh61aKl
+ 7nrNSj2cICxQ6VVuoSpGLuuEtixxkVGq2gshCh2+1NITXgZudIjybki20/a6fjkyvIx7Ny
+ 9hipm5/oKPbjPZTA79wmTltpZJr5IooJjh/jyUSR4RvEpwGqnphxHXdbwibM78pbB16baq
+ 8UAVvkm1XB1YrgvuKHH1k7XwmM+ciPiTLZXw2qyiP0x0VjplIg48vebp2Br9kg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=htAYMs4L
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-numpy: needs C++
+ header.s=gm1 header.b=EIicvJg2
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: add lpc32xxcdl
+ handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +78,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 25 Feb 2023 15:49:04 +0100
+On Sat, 25 Feb 2023 17:01:23 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> C++ is mandatory since at least version 1.23.0 and
-> https://github.com/numpy/numpy/commit/c91a7d0c5691c9d78bd75284777fda73f225155d
-> resulting in the following build failure since bump to version 1.23.4 in
-> commit 32d8e23b977a5bba1f23e3821709c6aa9ff3bc55:
+> Fix the following build failure raised since the addition of the package
+> in commit 20695936ad63f602662bc4c6124a26312c46ff52:
 > 
-> RuntimeError: Broken toolchain: cannot link a simple C++ program. note: A compiler with support for C++11 language features is required.
+> make[2]: *** /tmp/instance-0/output-1/build/lpc32xxcdl-2.11/csps/lpc32xx/bsps//source: No such file or directory.  Stop.
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/2d048d9b669ad60f37eeb2162b0a4f9fb425be1e
+>  - http://autobuild.buildroot.org/results/72c9a4080318b1b247ca3517c95c689dff1068d2
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/piglit/Config.in       | 6 ++++--
->  package/python-numpy/Config.in | 6 ++++--
->  package/python-zlmdb/Config.in | 6 ++++--
->  3 files changed, 12 insertions(+), 6 deletions(-)
+>  utils/genrandconfig | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 Applied to master, thanks.
 
