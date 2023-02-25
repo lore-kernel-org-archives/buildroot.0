@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF185C6FA8E
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 17:02:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A2FCC6FA8E
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 17:28:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 536934189D;
-	Sat, 25 Feb 2023 17:02:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 536934189D
+	by smtp3.osuosl.org (Postfix) with ESMTP id AECD960ABF;
+	Sat, 25 Feb 2023 17:28:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AECD960ABF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1ksx1bPCYYBa; Sat, 25 Feb 2023 17:02:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id h2l-NtN1L8Hw; Sat, 25 Feb 2023 17:28:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17779418A3;
-	Sat, 25 Feb 2023 17:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17779418A3
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3BAF60A92;
+	Sat, 25 Feb 2023 17:28:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3BAF60A92
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4AE041BF3A4
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 17:02:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 793451BF3FD
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 17:28:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31B7160E13
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 17:02:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31B7160E13
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6019E60A92
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 17:28:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6019E60A92
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZURNQbvopLhU for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 17:02:38 +0000 (UTC)
+ with ESMTP id hWDa9YJ20Kgi for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 17:28:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B16DE60B04
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B16DE60B04
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 17:02:37 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id l1so2178501wry.10
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:02:37 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 209EF608F5
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 209EF608F5
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 17:28:12 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id p26so1733697wmc.4
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:28:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=TEVNFhmzoUT/tgHhwJcgknhjD1fknk2nz7KFOY8tsc4=;
- b=BXqC2KNFI4DzMRlOLD568okNRuhmu2jwa+5y+mkidPu00XIMXwKOfCdtxAraUKNJn8
- ghHKqcwxuBC7nSDRMCS3NjzU9Cqjx/qb4WujiZIVBHVr6fD8oLXBfuIhdGUmpwgS2GVL
- B7sE28Nu3nZKr8fLmxKA7OM7aewscgAcbv5h36KUZC2N23Qo9iGGr6Mw4vPXiYVdG5YN
- brepzAA816cZS9NpNy+CtVMEFLVlRatfD2KdmQfSvo+xV/CZqWyoCFW7NljvnGxukSdf
- Abfwe/wv/XSb8BLbeR7UTQ7cMAhu/JXvvUVM35Bkd0x00LJXYZPXTlpmP64IuNEbSHjF
- PH6A==
-X-Gm-Message-State: AO0yUKWV0c0MOdnHxGGBJ+/jhgRM+4ZEF4XytYz59qmTSvOLZ3eQiQqP
- emL+Q/E9cyjUCQ2iip6gzHmY0BNuEi4=
-X-Google-Smtp-Source: AK7set9Vm5voHF2JRPJaQ89XQCuOp/UWOXBAHqoUh0LYxsJu+clwbtVgZc1r948i1eS6EMDQ/OTuow==
-X-Received: by 2002:a05:6000:1049:b0:2c7:6bb:fb7a with SMTP id
- c9-20020a056000104900b002c706bbfb7amr13093009wrx.54.1677344554801; 
- Sat, 25 Feb 2023 09:02:34 -0800 (PST)
+ bh=/junB87D3niReBKfhM0c3o45R6kD7w5uhBkhDVWVkJw=;
+ b=Cg4fkk2CkkzoUBriegDyyXgBcwhXLzsHzK84YorwOY3mI3uHAPqGNHIvpQ5H33xR6q
+ 1dQG5UsxWYW+5+/jSgzQWmvpvmQwNIQLIhvLdY7GprrxTV/Do1qfs0gMNlURjbr1weqv
+ XilDTNBypVepEz3JcqJ/HAmxWiiKIdJWSVS3rBXA7KQUZi5P8gskGGCWkg2+asRZbqpH
+ 9qEJLQaFANj8AAHpKRKS0FTLSOM6d9tHm9ccaVhB9eslmgMGmkoaNlV0+qe4EjzHgQ4Y
+ iDm1gA95Cl3GL8iMPioxHT1L7E+AV1eXQSPHY+FoldV9BFj98cxQoJeNconN2jYAIvHW
+ n3Zg==
+X-Gm-Message-State: AO0yUKW6N4C/FF5PeRATlg54sB8tE9xBCcg+sZh9GlbF44S/RKHR4xrt
+ 6DAfwdDwaZXR1zQZ5FHeCehIy2EkOIk=
+X-Google-Smtp-Source: AK7set+TdAuIaCs4zK68NIgp6jh+PGDV4fLHPM2qqlC2DxlIlQpcGRWj1AAoZbr1ykQom6eyf3sQHg==
+X-Received: by 2002:a05:600c:a694:b0:3dc:18de:b20d with SMTP id
+ ip20-20020a05600ca69400b003dc18deb20dmr16711973wmb.33.1677346089957; 
+ Sat, 25 Feb 2023 09:28:09 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- k24-20020a05600c0b5800b003e00c453447sm6542662wmr.48.2023.02.25.09.02.33
+ q8-20020a1ce908000000b003e70a7c1b73sm3184952wmc.16.2023.02.25.09.28.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Feb 2023 09:02:34 -0800 (PST)
+ Sat, 25 Feb 2023 09:28:09 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 18:02:29 +0100
-Message-Id: <20230225170229.358936-1-fontaine.fabrice@gmail.com>
+Date: Sat, 25 Feb 2023 18:28:06 +0100
+Message-Id: <20230225172806.9444-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TEVNFhmzoUT/tgHhwJcgknhjD1fknk2nz7KFOY8tsc4=;
- b=WwlS8SZDtUyR+E3geqqxC3uyl1NoMMxmkf13aOWFFoCVZ/Yavb6NoLYe/T8SH/1EPm
- ABnNRaojKD2u6imu0iJsoUZa/UsLtIHh+wV9wAomrmhQN9MB+/c9J9I6harNoQ3CtdyM
- mFs9HN1tLZO2JIH0hH5ex3jIN9sYVYw8U+hQ2NqYlMlHrSyEM/iuJgWsksIvJSF2RBCr
- otLiKSrRK6cy+Fr0+Tngwq+Otb2HcqkeLzy0evA6QsytGvBQVOL/g/XlyUjc0UpHfNwy
- goCFnTkc8JNH2f7VwQQ5Fwbhx/uJsrTBoiU6HcxqqrUMOhe3rSfOie5i9aBsmUDxeYHf
- dHbw==
+ bh=/junB87D3niReBKfhM0c3o45R6kD7w5uhBkhDVWVkJw=;
+ b=QqSit/6U0OcjMokpL47wZuBrHkMVj8/4T27QtpozJgLtHCdFJn7gO7PlHC2rRzAC20
+ DOxnEJfDNP36J4pY951qsfrCOiXiUOEjk/Ny36EOLqTYWxByLuN0IoAOnps7T5z36ZMw
+ NXZyLmZTZsuNqXAVEYm3xvZnDzT3YCmFWY9DdyPpwPfoxiAVx8+uw+ie+yHfjeh0VTzG
+ R4yjypZxfAD0jqt2wTmeJ3l0yEy1JSNEGGa+LxdR2nt5h/LNqPxpGssRnuMajJst4h7V
+ zti/In51iNqH3d+fgza12eOqkdFmGsOh4SXsOI0pJK/WE4Ypi2orKxmC8mH1b+8DJ05w
+ CenQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=WwlS8SZD
-Subject: [Buildroot] [PATCH 1/1] linux: fix CIP RT kernel on microblaze
+ header.a=rsa-sha256 header.s=20210112 header.b=QqSit/6U
+Subject: [Buildroot] [PATCH 1/1] package/pistache: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,89 +99,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with CIP RT kernel on microblaze raised
-since bump to version 5.10.83-cip1-rt1 in commit
-b5778d7b76c098010a4abc339938f2694e8cf57f and
-https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/commit/?id=32ac92b5a39e2ef91308929bf5ed0804094b4183:
+Fix the following libressl build failure which is probably raised since
+the addition of the package in commit
+65d891efc2fb069f9cf707f47302776f7076b80c:
 
-arch/microblaze/mm/init.c:71:2: error: #endif without #if
-   71 | #endif /* CONFIG_HIGHMEM */
-      |  ^~~~~
+../src/server/listener.cc: In member function 'void Pistache::Tcp::Listener::setupSSLAuth(const std::string&, const std::string&, int (*)(int, void*))':
+../src/server/listener.cc:582:29: error: 'SSL_verify_cb' was not declared in this scope; did you mean 'RSA_verify'?
+  582 |                            (SSL_verify_cb)cb
+      |                             ^~~~~~~~~~~~~
+      |                             RSA_verify
 
 Fixes:
- - http://autobuild.buildroot.org/results/27291870cf7539d26e45c45f34322d24a6dbca33
+ - http://autobuild.buildroot.org/results/066fc078980e5216f38411eee455088e15fa1101
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-arch-microblaze-mm-init.c-fix-build.patch | 37 +++++++++++++++++++
- linux/linux.mk                                |  3 +-
- 2 files changed, 39 insertions(+), 1 deletion(-)
- create mode 100644 linux/cip-rt/0001-arch-microblaze-mm-init.c-fix-build.patch
+ ...erver-listener.cc-fix-libressl-build.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch
 
-diff --git a/linux/cip-rt/0001-arch-microblaze-mm-init.c-fix-build.patch b/linux/cip-rt/0001-arch-microblaze-mm-init.c-fix-build.patch
+diff --git a/package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch b/package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch
 new file mode 100644
-index 0000000000..4760d9e4fb
+index 0000000000..f2fe2183ae
 --- /dev/null
-+++ b/linux/cip-rt/0001-arch-microblaze-mm-init.c-fix-build.patch
-@@ -0,0 +1,37 @@
-+From 1fc03e1fdc8bb606d1c95e9fa557a9e5f6df17ec Mon Sep 17 00:00:00 2001
++++ b/package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch
+@@ -0,0 +1,38 @@
++From 656bff21c1d20b25058da9dbc27d28ad2ac7ae6e Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 25 Feb 2023 17:26:56 +0100
-+Subject: [PATCH] arch/microblaze/mm/init.c: fix build
++Date: Sat, 25 Feb 2023 18:09:39 +0100
++Subject: [PATCH] src/server/listener.cc: fix libressl build
 +
-+Fix the following build failure on microblaze raised since
-+https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/commit/arch/microblaze/mm/init.c?h=v5.10.168-cip27-rt11&id=32ac92b5a39e2ef91308929bf5ed0804094b4183:
++Fix the following libressl build failure:
 +
-+arch/microblaze/mm/init.c:71:2: error: #endif without #if
-+   71 | #endif /* CONFIG_HIGHMEM */
-+      |  ^~~~~
++../src/server/listener.cc: In member function 'void Pistache::Tcp::Listener::setupSSLAuth(const std::string&, const std::string&, int (*)(int, void*))':
++../src/server/listener.cc:582:29: error: 'SSL_verify_cb' was not declared in this scope; did you mean 'RSA_verify'?
++  582 |                            (SSL_verify_cb)cb
++      |                             ^~~~~~~~~~~~~
++      |                             RSA_verify
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/27291870cf7539d26e45c45f34322d24a6dbca33
++ - http://autobuild.buildroot.org/results/066fc078980e5216f38411eee455088e15fa1101
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to
-+Sebastian Andrzej Siewior <bigeasy@linutronix.de>]
++[Upstream status: https://github.com/pistacheio/pistache/pull/1124]
 +---
-+ arch/microblaze/mm/init.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/server/listener.cc | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/arch/microblaze/mm/init.c b/arch/microblaze/mm/init.c
-+index 1f4b5b34e600..a444778e59de 100644
-+--- a/arch/microblaze/mm/init.c
-++++ b/arch/microblaze/mm/init.c
-+@@ -49,6 +49,7 @@ unsigned long lowmem_size;
-+ EXPORT_SYMBOL(min_low_pfn);
-+ EXPORT_SYMBOL(max_low_pfn);
-+ 
-++#ifdef CONFIG_HIGHMEM
-+ static void __init highmem_init(void)
-+ {
-+ 	pr_debug("%x\n", (u32)PKMAP_BASE);
++diff --git a/src/server/listener.cc b/src/server/listener.cc
++index 38d2661..c09cb36 100644
++--- a/src/server/listener.cc
+++++ b/src/server/listener.cc
++@@ -609,7 +609,7 @@ namespace Pistache::Tcp
++         SSL_CTX_set_verify(GetSSLContext(ssl_ctx_),
++                            SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT | SSL_VERIFY_CLIENT_ONCE,
++ /* Callback type did change in 1.0.1 */
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
++                            (int (*)(int, X509_STORE_CTX*))cb
++ #else
++                            (SSL_verify_cb)cb
 +-- 
 +2.39.1
 +
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7645b5f507..f3fdc40328 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -33,6 +33,7 @@ LINUX_SITE_METHOD = svn
- else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y)
- LINUX_SOURCE = linux-cip-$(LINUX_VERSION).tar.gz
- LINUX_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
-+LINUX_PATCHES += linux/cip-rt/0001-arch-microblaze-mm-init.c-fix-build.patch
- else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
- # Since 4.12-rc1, -rc kernels are generated from cgit. This also works for
- # older -rc kernels.
-@@ -50,7 +51,7 @@ ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_VERSION),y)
- BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
- endif
- 
--LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-+LINUX_PATCHES += $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- # We have no way to know the hashes for user-supplied patches.
- BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
 -- 
 2.39.1
 
