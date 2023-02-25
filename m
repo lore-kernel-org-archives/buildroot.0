@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 214A0C6FA8E
-	for <buildroot@archiver.kernel.org>; Fri, 24 Feb 2023 22:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6749CC64EC7
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 16:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D62C821CA;
-	Fri, 24 Feb 2023 22:00:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D62C821CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1BBF41477;
+	Sat, 25 Feb 2023 16:30:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1BBF41477
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T9Ukg2_436OZ; Fri, 24 Feb 2023 22:00:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vsZ3KHGgB_MG; Sat, 25 Feb 2023 16:30:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1B50820A8;
-	Fri, 24 Feb 2023 22:00:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1B50820A8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 550061BF574
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 22:00:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 946084151F;
+	Sat, 25 Feb 2023 16:30:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 946084151F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 96F811BF3A4
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 16:30:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E3FB61217
- for <buildroot@lists.busybox.net>; Fri, 24 Feb 2023 22:00:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E3FB61217
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E37440393
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 16:30:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E37440393
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oimlefHmOXbW for <buildroot@lists.busybox.net>;
- Fri, 24 Feb 2023 22:00:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rAvzbhlM1iy9 for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 16:30:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C640610E4
- for <buildroot@uclibc.org>; Fri, 24 Feb 2023 22:00:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C640610E4
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAE77400FE
+ for <buildroot@uclibc.org>; Sat, 25 Feb 2023 16:30:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAE77400FE
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 4A2EA86A19; Fri, 24 Feb 2023 22:00:19 +0000 (UTC)
+ id 98D32865FD; Sat, 25 Feb 2023 16:30:49 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 24 Feb 2023 22:00:19 +0000
+Date: Sat, 25 Feb 2023 16:30:48 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
+X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02.8
+X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: contact@jookia.org
+X-Bugzilla-Who: hydrosaure@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15181-163-o1O1GIOZhd@https.bugs.busybox.net/>
-In-Reply-To: <bug-15181-163@https.bugs.busybox.net/>
-References: <bug-15181-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-15356-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15181] Building libcurl fails due to faulty
- package definition
+Subject: [Buildroot] [Bug 15356] New: package gobject-introspection-1.72.0
+ fails to build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,30 +79,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15181
+https://bugs.busybox.net/show_bug.cgi?id=15356
 
---- Comment #2 from Jookia <contact@jookia.org> ---
-My friend Xogium hit this issue this month and after a few debugging sessions
-we tracked this down. Here's what I've found:
+            Bug ID: 15356
+           Summary: package gobject-introspection-1.72.0 fails to build
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: hydrosaure@gmail.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-- Arch Linux's host toolchain now sets runpath instead of rpath
-- libcurl sets LD_LIBRARY_PATH to /lib:/usr/lib
-- Buildroot pkgconf and Arch Linux pkgconf versions line up
-- Arch Linux pkgconf library is installed to /usr/lib/libpkgconf.so
-- Buildroot pkgconf uses the host libpkgconf.so due to LD_LIBRARY_PATH
-- this is respected because rpath does not override it
-- The Buildroot pkg-conf script sets LIBPATH to build/host/bin/../sysroot/...
-and SYSROOT to build/host/sysroot
-- pkgconf 1.8 silently ignores LIBPATH if it's outside sysroot
-- pkgconf 1.8 does not normalize paths
-- pkgconf reverted LIBPATH to the one in the host's libpkg.so, /lib and
-/usr/lib
-- curl build tries to find openssl but can't
+Hello,
 
-Two fixes are needed:
+When building with target architecture "x86_64" and setting an architecture
+variant as anything other than "x86_64" ie. "haswell" or "broadwell", package
+"gobject-introspection" fails to build and ends erroring out with messages
+like:
 
-- libcurl build should not set LD_LIBRARY_PATH
-- the pkg-config wrapper should use normalized paths
+qemu: uncaught target signal 4 (Illegal instruction) - core dumped
+Illegal instruction (core dumped)
+
+Many examples of this error can be found on the buildbot at
+http://autobuild.buildroot.org/?arch=x86_64&reason=gobject-introspection-1.72.0&step=50&start=0
+and checking out endlog data.
+
+When building with target architecture "x86_64" and architecture variant 
+"x86_64" it completes correctly.
+
+Could it be there is some confusion between host and target for the wrapper
+commands?
 
 -- 
 You are receiving this mail because:
