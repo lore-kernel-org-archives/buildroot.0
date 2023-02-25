@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ABB8C64EC7
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA842C7EE2D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E550A40586;
-	Sat, 25 Feb 2023 09:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E550A40586
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E63140914;
+	Sat, 25 Feb 2023 09:39:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E63140914
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x583or7_8klc; Sat, 25 Feb 2023 09:39:28 +0000 (UTC)
+	with ESMTP id 7hjDywdkMDsa; Sat, 25 Feb 2023 09:39:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2FA2B400EC;
-	Sat, 25 Feb 2023 09:39:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FA2B400EC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8DF121BF5DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96C2E4070F;
+	Sat, 25 Feb 2023 09:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96C2E4070F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A0BBC1BF860
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:39:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75677400EC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79AB281E77
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75677400EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79AB281E77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rJqO5dtsWqos for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xP-eqOwReiJ4 for <buildroot@lists.busybox.net>;
  Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2A8640017
+ by smtp1.osuosl.org (Postfix) with ESMTP id B900D81E68
  for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A8640017
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B900D81E68
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF2198691D; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
+ id A2EE586911; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 10:37:19 +0100
+Date: Sat, 25 Feb 2023 10:37:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: edc6350d427bdd47552a276d80c6ad055add86af
-X-Git-Newrev: 45e2aa588d7d10941032c1661b9cf1e6c52b2680
+X-Git-Oldrev: 7edb4a6a4db7d864c6c1560f3fdc1ef4fbd7f0fd
+X-Git-Newrev: edc6350d427bdd47552a276d80c6ad055add86af
 X-Patchwork-Hint: ignore
-Message-Id: <20230225093924.AF2198691D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: fix build with -Ofast
+Message-Id: <20230225093924.A2EE586911@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hawktracer: update URL in Config.in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45e2aa588d7d10941032c1661b9cf1e6c52b2680
+commit: https://git.buildroot.net/buildroot/commit/?id=edc6350d427bdd47552a276d80c6ad055add86af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update -Ofast workaround as suggested by Yann E. Morin to avoid the
-following build failure raised since bump to version 252.4 in commit
-a2c823d1f548d5a0120d27d6c000603192360f7b and
-https://github.com/systemd/systemd/commit/60f97fee2d2f948c8e8963ea8ff767008cb93cae:
-
-../output-1/build/systemd-252.4/meson.build:397:8: ERROR: Problem encountered: -Ofast, -ffast-math, or -ffinite-math-only is specified in c_args.
-
-Fixes:
- - http://autobuild.buildroot.org/results/8f41c4984b645851724e554c3162b83bc312bee7
+Current website is down:
+https://github.com/amzn/hawktracer/issues/87
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/systemd.mk | 2 +-
+ package/hawktracer/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index cce9162f6d..63467171ed 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -100,7 +100,7 @@ SYSTEMD_CONF_OPTS += \
+diff --git a/package/hawktracer/Config.in b/package/hawktracer/Config.in
+index 7648707404..bee9c27b7d 100644
+--- a/package/hawktracer/Config.in
++++ b/package/hawktracer/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_HAWKTRACER
+ 	  profiling tool built in Amazon Video for getting performance
+ 	  metrics from low-end devices.
  
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
- ifeq ($(BR2_OPTIMIZE_FAST),y)
--SYSTEMD_CFLAGS += -O3
-+SYSTEMD_CFLAGS += -O3 -fno-finite-math-only
- endif
+-	  https://www.hawktracer.org/
++	  https://hawktracer.github.io/
  
- ifeq ($(BR2_nios2),y)
+ if BR2_PACKAGE_HAWKTRACER
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
