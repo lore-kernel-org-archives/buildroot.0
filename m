@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35923C64EC7
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE1ECC64EC7
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D75DA40B8A;
-	Sat, 25 Feb 2023 09:42:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D75DA40B8A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7959640C47;
+	Sat, 25 Feb 2023 09:42:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7959640C47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8nwQx98VTJqQ; Sat, 25 Feb 2023 09:42:11 +0000 (UTC)
+	with ESMTP id bETLtN8rI10J; Sat, 25 Feb 2023 09:42:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1374440B15;
-	Sat, 25 Feb 2023 09:42:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1374440B15
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7E7171BF5DF
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:40:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A46D240B8A;
+	Sat, 25 Feb 2023 09:42:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A46D240B8A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 397151BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58B7740B82
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:40:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58B7740B82
+ by smtp4.osuosl.org (Postfix) with ESMTP id 20B4341673
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20B4341673
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BIr1eH1Qn9kd for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 09:40:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dw0QL1fqHmdm for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 09:40:45 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 511244090E
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 511244090E
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:40:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC23541626
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC23541626
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:40:44 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5FC6FE0009;
- Sat, 25 Feb 2023 09:40:30 +0000 (UTC)
-Date: Sat, 25 Feb 2023 10:40:29 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id 48CA260002;
+ Sat, 25 Feb 2023 09:40:41 +0000 (UTC)
+Date: Sat, 25 Feb 2023 10:40:40 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230225104029.7ace5a7e@windsurf>
-In-Reply-To: <20230224165753.64394-1-fontaine.fabrice@gmail.com>
-References: <20230224165753.64394-1-fontaine.fabrice@gmail.com>
+Message-ID: <20230225104040.2aaf653b@windsurf>
+In-Reply-To: <20230225092227.9308-1-fontaine.fabrice@gmail.com>
+References: <20230225092227.9308-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1677318030;
+ d=bootlin.com; s=gm1; t=1677318041;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=jPtUPS2USNaE2woCWprNaIhVXHVs4Fk1/oHOxgdt2qk=;
- b=d4oxmOQit8OG4n/d/FbYte2pQbXWKDKIVUPd8udqMLmZQsqZZPR/YXWKonFc4TbGTbQzKA
- jBR52S7XFbMU4PqLeTX1YExaptRzhGowGqH47pHH0d2Tg+B6NrS3LlCyNb14SomR5UCSNe
- R/xKrZBIvZOoQ1+ZySAukmViZQj4BTJ1QVEyT1EjCsas7iyTJ1+TDlDzYZe/jGH//wy9bj
- UNXB6KFKXsm853k2H3OChWb5uR7tS+xX3gMa9MT9ZugGDTZNojiEIZJ9o03SHDdRda2Q99
- 1cfYBri6exyNQ0CmW7paZORf4G77W2mG/k+yIL9tOG6l1Nczz8wYzRLvHbhEiQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=EX494P8cYXg4Svh7eq6j4R3ie6g2r9QkfKXPRWw2k60=;
+ b=TIPD0IT/gTEp5LZMZCBvZDepbX7DX8eGvrePP2yZJmSpsmssoOHKPZ8pSBdPJe4jGWvgYP
+ YVwm4lDz0SPE7Nbq1CjBRd53iO3hhW3tcL/tbOwRIRIt+E0wtkf2E6MMQKxG4YPI2fIjcA
+ 3fn37LrU3MErkXCMei/5W1+2TLMlCRTgJJkBxaqbTayxsL0biLteFErSJP238eM6Fjpp9N
+ 80vL99q36AgJ2pdimjqZKx6u9bq972Helqm48EU3yLObfPCBE+cfytLg4ZXZmlLnc8FxbX
+ Qm/YHYrr3QGxFmSNLfFJ+PijksAfuc34+fwwlLSErExDeYmX2sAp6pTRbp62Hw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=d4oxmOQi
-Subject: Re: [Buildroot] [PATCH 1/1] package/ntpsec: fix CPE ID version
+ header.s=gm1 header.b=TIPD0IT/
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: add
+ ti-k3-r5-loader handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,18 +84,21 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 24 Feb 2023 17:57:53 +0100
+On Sat, 25 Feb 2023 10:22:27 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> CPE ID is wrong since the addition of the package in commit
-> 27b8d0ba8c4004819e092fb81c0f64f284b3aa4a, the correct CPE ID is
-> cpe:2.3:a:ntpsec:ntpsec:1.2.2:*:*:*:*:*:*:*, not
-> cpe:2.3:a:ntpsec:ntpsec:1.2:2:*:*:*:*:*:*
+> Fix the following build failure raised since the addition of the package
+> in commit 0189bcb47c7733c36fcbcb88fbf26f57958db576:
+> 
+> make[2]: *** No rule to make target '_defconfig'.  Stop.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d7449b2b2f2349af672bfeee832b89a223a7d9cc
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/ntpsec/ntpsec.mk | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
+>  utils/genrandconfig | 5 +++++
+>  1 file changed, 5 insertions(+)
 
 Applied to master, thanks.
 
