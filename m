@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EC67C64EC7
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA0A0C7EE2D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:35:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96D8E40586;
-	Sat, 25 Feb 2023 09:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96D8E40586
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7065740586;
+	Sat, 25 Feb 2023 09:35:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7065740586
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ipKkUv_qWi6I; Sat, 25 Feb 2023 09:22:39 +0000 (UTC)
+	with ESMTP id 98dvf6IqQJKJ; Sat, 25 Feb 2023 09:35:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CF7A1400EC;
-	Sat, 25 Feb 2023 09:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF7A1400EC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 72C391BF5DF
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:22:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BB26400EC;
+	Sat, 25 Feb 2023 09:35:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BB26400EC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0479E1BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 581D6410EC
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 581D6410EC
+ by smtp3.osuosl.org (Postfix) with ESMTP id D176760B30
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:35:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D176760B30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qHJmE9MQol9t for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 09:22:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FNpdOfnjBPX2 for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 09:35:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41783410B7
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 41783410B7
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:22:32 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- l2-20020a05600c1d0200b003e1f6dff952so3921721wms.1
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 01:22:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60AB560B1C
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 60AB560B1C
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:35:34 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id j3so1294343wms.2
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 01:35:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=0S2HK2LMtef4s3j9ttmP6j8hrsJgJ9vLVQGaCJeeP2Y=;
- b=aTK19bVwfa3hbHzSdvmHEP9w3fBFKUMsiGL37b8iUNNQRuiUFFzqVasreJMubOR7Dd
- v+PG7tL88OmyWXKT55mlODBbpliGPMcxl0e8rtHSi58DBRwHtQ3ONrSgpO/imG7I81Wv
- 4Gm7p+s472aALN7bRXAZpDIRDRSHQEFN/0QmHPzVwEURa0v9Rt2GkNES0OKIFAJjBRyh
- 9M/XO0Y2NRFcwY5okT44HOKeG6U/dceqT5BXIZNopJRbTEmkuBXJZElGdm0a6wpSL8IZ
- as8uwekjnWXcCtKlDcH96PDySYVvEOc/dhtim1bP46cLZQ07KVFLGckgOVMP0HgjE0mt
- rk3A==
-X-Gm-Message-State: AO0yUKV8arLQS51xOp3cKlx7wZAml4NELQ6JmQls9L0efbS1iI2mJ79v
- /F17R585WUscGSwC5LWcy32C3MyYNSo=
-X-Google-Smtp-Source: AK7set+OGQfjRuM4nc4ZlbqtsSHf4lgZww1gC+ajYp3GNxAOdZpM+l4YBT0Z25xBvLPBni5XovxSZA==
-X-Received: by 2002:a05:600c:319a:b0:3db:5f1:53a5 with SMTP id
- s26-20020a05600c319a00b003db05f153a5mr14699376wmp.20.1677316949864; 
- Sat, 25 Feb 2023 01:22:29 -0800 (PST)
+ bh=h2gi/cbWr3E3unBFoU3HljBndaSjEv9HoWMMn9+d45U=;
+ b=PBc3b0/DcIHImb9qFCWlLcHTd1uv7ZVnF1nqWI8xhWOeZUwIUuHEErNKUsavTwNhmH
+ t+Q30ecwx3OzBiXlOLpIf1AL0viLIcHVAlNQrvvOWL6PUn8aITVSgeTRIIuXFXh2P7wa
+ FEkoMMtIZTinrZF2XHBq3fQauSWgxTkXgvcpEtHIueF6V0X3/bAk4SHZXoJpaz8l5VMC
+ A35nj2ljBf4qySjyWGFcjrDAFAk9Xkqx8SHR9ludNuJEtg149VBHRhc859iNZW72G+LT
+ hCN3X7ai0gHg2SLUfefnH3pIPTnfI4VZA8LAm9oJHr3rOc9U+QCNBz7uRl1K1z+AFwqN
+ Jb/g==
+X-Gm-Message-State: AO0yUKWslIidNubY9cNtMVpIUH2nFYvg+GJSqVSvvl+/2DpD5bRyqsU5
+ W5KVPg6mxfmOjp/Mh9Gvj79j8zGlpHQ=
+X-Google-Smtp-Source: AK7set9t8ysYQNxWDai8Kq7WFUMc4xbN2KHbXLy9lLjpOi0ce3Rxw/O+SHyYrM5oOZ2yOqrNKnrfVA==
+X-Received: by 2002:a05:600c:4f16:b0:3eb:2e32:72c3 with SMTP id
+ l22-20020a05600c4f1600b003eb2e3272c3mr2418387wmq.22.1677317732015; 
+ Sat, 25 Feb 2023 01:35:32 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- p15-20020a7bcdef000000b003e200d3b2d1sm1902328wmj.38.2023.02.25.01.22.29
+ d24-20020a1c7318000000b003dc522dd25esm1931204wmb.30.2023.02.25.01.35.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Feb 2023 01:22:29 -0800 (PST)
+ Sat, 25 Feb 2023 01:35:31 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 10:22:27 +0100
-Message-Id: <20230225092227.9308-1-fontaine.fabrice@gmail.com>
+Date: Sat, 25 Feb 2023 10:35:27 +0100
+Message-Id: <20230225093527.16587-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0S2HK2LMtef4s3j9ttmP6j8hrsJgJ9vLVQGaCJeeP2Y=;
- b=dtvsgd6fDcgM9rUJ1R3luc9vAw6AZKols2B0qh4P82A7YHuZq4mOR44AkWLpFtZaEr
- NhiFRfoUqa7aAWJDXesm2A3wW6VajGsO97KAqOWiFndaXuYQ7qEcPfAkFMiDAD7XiWL0
- 9Pk0t9VWf8lGmrjEHG1bjca9Lh1vX/7bCrSXXrRuDLxLTosV1GYNo/l7uIQMzMQQd90H
- sdQrN+pNipNhmDhyRYx5Ukd1B9BiaFulY/7OgIsocj37AMMLeRQY8CH4JDU6Wr6QeVEe
- GahzKAqVSeeNN99C5h/NLUoyuCqaYsIjWK2tjHFjgsAXbhhCLN0v/wn7jn52n1ZVXKfR
- wjdQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=h2gi/cbWr3E3unBFoU3HljBndaSjEv9HoWMMn9+d45U=;
+ b=Kx4imHukZGRa1YmLPVaB+fVtg0jaVB6EY+AFSBJyqgypvdD1MQLfxK+o4u/yub2mZs
+ isEbKyWgMjrrOT/qw+xVAq8T4LVFJxMa7jt/0e+YIw8/OvvjK3R/JZAuEKCYdjXSiY2/
+ 0w3iOP5vyRYckAx6+Z3lxs7d9QnlQTpNznLKU8OrkMK8TU64rFZ8Q+ylJhXKVvRGGdh5
+ wsRN3dD+WILInutslIwVx1lyBrJefDU+rjDMYqc7Spt8KfuYeaswCNfOzxwuabnXeebt
+ u69X+mD7Y1aWRn7ZqgAb8+2Ds3vUem4eWVqiWRNBqC6lgwhyr7bKqzrdAYnKoqrIh7KT
+ V8zQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=dtvsgd6f
-Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: add ti-k3-r5-loader
- handling
+ header.a=rsa-sha256 header.s=20210112 header.b=Kx4imHuk
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: add host-pkgconf
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,41 +94,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since the addition of the package
-in commit 0189bcb47c7733c36fcbcb88fbf26f57958db576:
+host-pkgconf is mandatory to find lz4 and zstd resulting in the
+following build failure since commit
+9cd2e6e090449f9d2f371d24152580c038892f3d:
 
-make[2]: *** No rule to make target '_defconfig'.  Stop.
+configure: error: in `/home/autobuild/autobuild/instance-5/output-1/build/postgresql-15.2':
+configure: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+Alternatively, you may set the environment variables LZ4_CFLAGS
+and LZ4_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
 Fixes:
- - http://autobuild.buildroot.org/results/d7449b2b2f2349af672bfeee832b89a223a7d9cc
+ - http://autobuild.buildroot.org/results/8744277ebe9910635ef8fe290c8ba4eee420b538
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- utils/genrandconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/postgresql/postgresql.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index d192c5b324..64b9be69db 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -518,6 +518,11 @@ def fixup_config(sysinfo, configfile):
-        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
-         return False
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 1e9e4b83df..f087c0c964 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -92,14 +92,14 @@ POSTGRESQL_CONF_OPTS += --without-libxml
+ endif
  
-+    if 'BR2_TARGET_TI_K3_R5_LOADER=y\n' in configlines and \
-+       'BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG=y\n' in configlines and \
-+       'BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG=""\n' in configlines:
-+        return False
-+
-     if 'BR2_TARGET_UBOOT=y\n' in configlines and \
-        'BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y\n' in configlines and \
-        'BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y\n' in configlines and \
+ ifeq ($(BR2_PACKAGE_ZSTD),y)
+-POSTGRESQL_DEPENDENCIES += zstd
++POSTGRESQL_DEPENDENCIES += host-pkgconf zstd
+ POSTGRESQL_CONF_OPTS += --with-zstd
+ else
+ POSTGRESQL_CONF_OPTS += --without-zstd
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LZ4),y)
+-POSTGRESQL_DEPENDENCIES += lz4
++POSTGRESQL_DEPENDENCIES += host-pkgconf lz4
+ POSTGRESQL_CONF_OPTS += --with-lz4
+ else
+ POSTGRESQL_CONF_OPTS += --without-lz4
 -- 
 2.39.1
 
