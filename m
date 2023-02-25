@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D23D4C7EE2D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62CFDC7EE2D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8280140913;
-	Sat, 25 Feb 2023 09:50:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8280140913
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1740C4070F;
+	Sat, 25 Feb 2023 09:50:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1740C4070F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WYNTuk8oUdYj; Sat, 25 Feb 2023 09:50:04 +0000 (UTC)
+	with ESMTP id zPges4_a-_xO; Sat, 25 Feb 2023 09:50:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF0624070F;
-	Sat, 25 Feb 2023 09:50:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF0624070F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A31361BF5DF
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:50:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D37B40B71;
+	Sat, 25 Feb 2023 09:50:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D37B40B71
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 14D3B1BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D6CC81EE3
+ by smtp4.osuosl.org (Postfix) with ESMTP id E350E416BC
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:50:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D6CC81EE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E350E416BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EJyVaRE7nZae for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cjOOTjRieJ1H for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 09:50:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4A3781EBC
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2D8C4168C
  for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4A3781EBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2D8C4168C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FA9986A88; Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
+ id CFAFA86A88; Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 10:41:18 +0100
+Date: Sat, 25 Feb 2023 10:49:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5215f56e5bed387575b35de65b78d815b96ba6f3
-X-Git-Newrev: 7243e9394c53c7e0e6e10c3d149a2afa999635ab
+X-Git-Oldrev: 4a99d6611f0de6b1844cdbdc81d0ff25949c2b16
+X-Git-Newrev: 333580b68037ef756fa637bbfc49f34f1ad5e0ea
 X-Patchwork-Hint: ignore
-Message-Id: <20230225095001.9FA9986A88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xtables-addons: replace
- XTABLES_ADDONS_DISABLE_GEOIP_HELPERS
+Message-Id: <20230225095001.CFAFA86A88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-g2d: drop
+ BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,64 +59,98 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8776427179058463786=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7243e9394c53c7e0e6e10c3d149a2afa999635ab
+--===============8776427179058463786==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=333580b68037ef756fa637bbfc49f34f1ad5e0ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Replace XTABLES_ADDONS_DISABLE_GEOIP_HELPERS by
-XTABLES_ADDONS_REMOVE_GEOIP_HELPERS to avoid the following build failure
-raised since bump to version 3.22 in commit
-53f2999edfa5e67923d4d8a102c15fa3200e089c:
+Arm and aarch64 packages don't contain examples anymore so drop the
+config option to install them to prevent build failure when selected:
 
-make[3]: *** No rule to make target '/xt_geoip_query', needed by 'all-am'.  Stop.
+>>> imx-gpu-g2d 6.4.3.p4.4-arm Installing to target
+mkdir -p /home/sszy/br-test-pkg/bootlin-armv7-glibc/target/usr/share/examples/
+cp -a /home/sszy/br-test-pkg/bootlin-armv7-glibc/build/imx-gpu-g2d-6.4.3.p4.4-arm/gpu-demos/opt/* /home/sszy/br-test-pkg/bootlin-armv7-glibc/target/usr/share/examples/
+cp: cannot stat '/home/sszy/br-test-pkg/bootlin-armv7-glibc/build/imx-gpu-g2d-6.4.3.p4.4-arm/gpu-demos/opt/*': No such file or directory
+make: *** [package/pkg-generic.mk:384: /home/sszy/br-test-pkg/bootlin-armv7-glibc/build/imx-gpu-g2d-6.4.3.p4.4-arm/.stamp_target_installed] Error 1
 
-Fixes:
- - http://autobuild.buildroot.org/results/f2d596b510f027b94a6b1fad10c363922c50cbec
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes: b84557b588b3 ("package/freescale-imx/imx-gpu-g2d: bump version to 6.4.3.p4.4")
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xtables-addons/xtables-addons.mk | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ Config.in.legacy                                 | 6 ++++++
+ package/freescale-imx/imx-gpu-g2d/Config.in      | 9 ---------
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk | 8 --------
+ 3 files changed, 6 insertions(+), 17 deletions(-)
 
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index 77dcfd741c..e794538956 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -16,12 +16,6 @@ XTABLES_ADDONS_CONF_OPTS = \
- 	--with-xtables="$(STAGING_DIR)/usr" \
- 	--with-xtlibdir="/usr/lib/xtables"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7f69462f2e..af1d8cc1dc 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
--# geoip helpers need perl with modules and unzip so disable
--define XTABLES_ADDONS_DISABLE_GEOIP_HELPERS
--	$(SED) 's/ geoip//' $(@D)/Makefile.in
--endef
--XTABLES_ADDONS_POST_PATCH_HOOKS += XTABLES_ADDONS_DISABLE_GEOIP_HELPERS
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
++	bool "imx-gpu-g2d examples removed"
++	select BR2_LEGACY
++	help
++	  The examples are not provided by NXP anymore.
++
+ config BR2_KERNEL_HEADERS_6_0
+ 	bool "kernel headers version 6.0.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/freescale-imx/imx-gpu-g2d/Config.in b/package/freescale-imx/imx-gpu-g2d/Config.in
+index aeca087f86..c143b17c47 100644
+--- a/package/freescale-imx/imx-gpu-g2d/Config.in
++++ b/package/freescale-imx/imx-gpu-g2d/Config.in
+@@ -18,12 +18,3 @@ config BR2_PACKAGE_IMX_GPU_G2D
+ 
+ 	  This library is provided by NXP as-is and doesn't have an
+ 	  upstream.
 -
- define XTABLES_ADDONS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS)
- endef
-@@ -30,6 +24,15 @@ define XTABLES_ADDONS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) DESTDIR="$(TARGET_DIR)" install
+-if BR2_PACKAGE_IMX_GPU_G2D
+-
+-config BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
+-	bool "install examples"
+-	help
+-	  Copy the Vivante G2D examples to the target.
+-
+-endif
+diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+index d94da24d8f..42a1fe70cf 100644
+--- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
++++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+@@ -26,15 +26,7 @@ define IMX_GPU_G2D_INSTALL_STAGING_CMDS
+ 	cp -a $(@D)/g2d/usr/* $(STAGING_DIR)/usr
  endef
  
-+# geoip helpers need perl with modules and unzip so remove them
-+define XTABLES_ADDONS_REMOVE_GEOIP_HELPERS
-+	$(RM) $(TARGET_DIR)/usr/bin/xt_geoip*
-+	$(RM) $(TARGET_DIR)/usr/libexec/xtables-addons/xt_asn*
-+	$(RM) $(TARGET_DIR)/usr/libexec/xtables-addons/xt_geoip*
-+endef
-+
-+XTABLES_ADDONS_POST_INSTALL_TARGET_HOOKS += XTABLES_ADDONS_REMOVE_GEOIP_HELPERS
-+
- define XTABLES_ADDONS_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
+-ifeq ($(BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES),y)
+-define IMX_GPU_G2D_INSTALL_EXAMPLES
+-	mkdir -p $(TARGET_DIR)/usr/share/examples/
+-	cp -a $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
+-endef
+-endif
+-
+ define IMX_GPU_G2D_INSTALL_TARGET_CMDS
+-	$(IMX_GPU_G2D_INSTALL_EXAMPLES)
+ 	cp -a $(@D)/g2d/usr/lib $(TARGET_DIR)/usr
+ endef
+ 
+
+--===============8776427179058463786==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8776427179058463786==--
