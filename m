@@ -1,66 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D078EC7EE23
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 21:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBA9DC64EC7
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 22:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84AB840BA3;
-	Sat, 25 Feb 2023 21:04:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84AB840BA3
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED70E416E9;
+	Sat, 25 Feb 2023 22:50:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED70E416E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qFyEyA8hNBlM; Sat, 25 Feb 2023 21:04:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ongx139FU9GJ; Sat, 25 Feb 2023 22:50:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C275840BE0;
-	Sat, 25 Feb 2023 21:04:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C275840BE0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 461C41BF3EE
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 21:04:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 153B9416E5;
+	Sat, 25 Feb 2023 22:50:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 153B9416E5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4581F1BF275
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 22:50:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F11E60BE3
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 21:04:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F11E60BE3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EFD081D19
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 22:50:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EFD081D19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uIRYN9M0Uz2q for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 21:04:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DE1260750
-Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9DE1260750
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 21:04:01 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.66.151])
- by Aruba Outgoing Smtp  with ESMTPSA
- id W1i1p5FcZEYuOW1i2pyBVL; Sat, 25 Feb 2023 22:03:58 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xb_cfo82sZ8l for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 22:50:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF51681D2D
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF51681D2D
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 22:50:36 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ l7-20020a05600c4f0700b003e79fa98ce1so1702093wmq.2
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 14:50:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=F/Y+GThqvmHM+6buDuxrrAwg9No7uemAr3L07mP1Oek=;
+ b=764cZvXfZWfcXtP1Ol3cjENRO0FGkU+eJ8cMJHyRymnQTrJLP6H0X19J700tOSMIvd
+ eFqM8NGSHCALkViquAPnWgyMPwOmtPsIXgCTc2t021vVqnDMr/qsa3VjMDIwT79n/MeQ
+ i5t5Xdd+ze89ZGBx3/R3knTTLCjVlAkCLQUKUQk9MRBWNCOOn/NXf6Dp6g8ON52iamDs
+ TOczTSTL5Aid/piuaASwvmyelDUG9nggxEpAvlM5pKVVaYx2rNmeFeNyAlale5owQTii
+ NR7nHZQZjupLAmcCkuN5mG7qwB5iJAR7g00pxc4Q5Cy4l6cHgeAghejUAAqujKZsiTZm
+ IcBQ==
+X-Gm-Message-State: AO0yUKUs9nv6O/JpNFantpUVYLhA20GyUSfKHOrByjmp/IYzMdHLdccY
+ rsEO9iRoJOJsLwmSoQRzmyQR95Nwb3k=
+X-Google-Smtp-Source: AK7set9hOlVoue1Jx1SREzpQ8dwNP7ifoqeTwxd75v3DbI4q7ZeBRrU9bSmrB5nqR3lDdBldAwVzbA==
+X-Received: by 2002:a05:600c:16c7:b0:3ea:25b9:c518 with SMTP id
+ l7-20020a05600c16c700b003ea25b9c518mr9350939wmn.5.1677365434357; 
+ Sat, 25 Feb 2023 14:50:34 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ z23-20020a1c4c17000000b003e2066a6339sm3859989wmf.5.2023.02.25.14.50.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 25 Feb 2023 14:50:33 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 22:03:57 +0100
-Message-Id: <20230225210357.1449825-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 25 Feb 2023 23:50:31 +0100
+Message-Id: <20230225225031.9260-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfJYCRe9Q5a+L/4sY2zl3OTmy/4q7UInM9J5CZZ39U60emohsY9mY8qiaAKdP0KyoDe1W/SOEL496buunx2ZWb3jSeRLjFqWmKZW6ki7ieCpaIkcJt8K3
- 6Vzd8Wtgn6P89YTabXj8JxPsn/fxBC7tmvXsMYekpKBtXJYVJ4SjmAec5OCFNG+Lu55yX567MQMo1Ok7A7FYb8H7P2jn+gfqGSG7nkNyFMNrL/6/5dhXPF8Z
- pKBnQdCCmgoWumQAsmet2G1Hq9TGad4lw1Qzy2PUngA9AHbSC/Z4DYqNTFwzfFn9
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1677359038; bh=yf59jR/0cSogGH10okUVV2HQThPvXe1a72OmTaTsYxI=;
- h=From:To:Subject:Date:MIME-Version;
- b=WJzhr6rN+Oe10loAERI918CM9KhMny/IvCCdK7l31ey7oWBw0Da0QO8bUifPHHSdM
- VzgsO8qJrHdpqAu/XAWUlDivgtS4ujcS+kdsj9DqKyZzZmt63Xy6tEW0RVSYn/BZiM
- MAg35AIZBb6bvgpArbcG5USsZGW6yiVMpT+seWdpNGDzIE3PzQVUoJALRMpE4mCN3e
- zktg7jHnUvfOiL0M/5iIBYEiWhGuhvedF3N+DW+MXrEs9TZ8ppOl/59424J6oTNV61
- NWlhJ83G8+/dN6HVCiouPGENoyAB9GihM0LhoZXGXAwZUTH4K/o21zrE6gd+aCk8w1
- d2eVvRM1oIeCw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=WJzhr6rN
-Subject: [Buildroot] [PATCH] package/rtl8723bu: fix module installation
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=F/Y+GThqvmHM+6buDuxrrAwg9No7uemAr3L07mP1Oek=;
+ b=bPLFaAVrYT8ybqnq4Na1B7YjSU9ZhabX2Qykhs/7sVYqSEA7Exf/fvYvxyZ5bTU/pz
+ K2SGts32YiVIjQqM0rjTD8fAwfjU8hPL9pFRdxahO122RZDhx2L4PnELfV5uifrR5clP
+ SFSs2B8ALPiJcpmYB9t3kNGL9Ftt9wqy/d+ZtNFsXr0/w+DC/7jvzYHIn0ZcVHu58TFL
+ f74kENo3XABpObQC214oTuthSCRJYT6RbDuv8bgRiIuaz6gtQXy6TsZqL17JhG6/zGDa
+ lDkicqybjqKNzHTlrJcoN6xO6pmM7hCZbDKUOjcczaQQLgqXBp2yhLshlfqzM0RskmXv
+ r/dw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=bPLFaAVr
+Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: add
+ boot-wrapper-aarch64 handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,45 +95,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-At the moment module is build but not installed to target/. To fix this
-let's bump package to 2023-02-18 version on master branch to fix module
-installation.
+Fix the following build failure raised since the addition of the package
+in commit 7689b72e00fd4d8c017880004e83a1c79144ab7b:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+configure: error: Could not find DTB file: /home/autobuild/autobuild/instance-9/output-1/build/linux-6.1.9/arch/arm64/boot/dts/.dtb
+
+Fixes:
+ - http://autobuild.buildroot.org/results/44287ccc8cc9767704642919e6d928d1f57b436d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rtl8723bu/rtl8723bu.hash | 2 +-
- package/rtl8723bu/rtl8723bu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/genrandconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/rtl8723bu/rtl8723bu.hash b/package/rtl8723bu/rtl8723bu.hash
-index 6a28c34773..bc3b8fc727 100644
---- a/package/rtl8723bu/rtl8723bu.hash
-+++ b/package/rtl8723bu/rtl8723bu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  21372b654886c6d100f46636d7807428698bd618e00db1b8b49cfc3037e46d10  rtl8723bu-f1dbe1c8ccc2c5b2cbeb84da6b9f0e547a84a255.tar.gz
-+sha256  d0db523f256795d8f3284fa2ec03855f231747ede8337e878bc096325b965654  rtl8723bu-92c19318cb54ef96c2cfb4a22b2c98eb512812d8.tar.gz
-diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
-index af1ac9454e..ad9bb9a462 100644
---- a/package/rtl8723bu/rtl8723bu.mk
-+++ b/package/rtl8723bu/rtl8723bu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index a3d98119c7..ca465547d8 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -487,6 +487,10 @@ def fixup_config(sysinfo, configfile):
+        'BR2_TARGET_BAREBOX_BOARD_DEFCONFIG=""\n' in configlines:
+         return False
  
--RTL8723BU_VERSION = f1dbe1c8ccc2c5b2cbeb84da6b9f0e547a84a255
-+RTL8723BU_VERSION = 92c19318cb54ef96c2cfb4a22b2c98eb512812d8
- RTL8723BU_SITE = $(call github,lwfinger,rtl8723bu,$(RTL8723BU_VERSION))
- RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
- 
++    if 'BR2_TARGET_BOOT_WRAPPER_AARCH64=y\n' in configlines and \
++       'BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS=""\n' in configlines:
++        return False
++
+     if 'BR2_TARGET_LPC32XXCDL=y\n' in configlines and \
+        'BR2_TARGET_LPC32XXCDL_BOARDNAME=""\n' in configlines:
+         return False
 -- 
-2.34.1
+2.39.1
 
 _______________________________________________
 buildroot mailing list
