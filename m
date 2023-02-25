@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5313EC7EE2D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:40:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22825C64EC7
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0173340914;
-	Sat, 25 Feb 2023 09:40:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0173340914
+	by smtp2.osuosl.org (Postfix) with ESMTP id C018D40BA6;
+	Sat, 25 Feb 2023 09:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C018D40BA6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8f_EywsER7X4; Sat, 25 Feb 2023 09:40:43 +0000 (UTC)
+	with ESMTP id T-fzBwfw56UI; Sat, 25 Feb 2023 09:40:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A64A40B15;
-	Sat, 25 Feb 2023 09:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A64A40B15
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 061A01BF5DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id C70F140914;
+	Sat, 25 Feb 2023 09:40:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C70F140914
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 92AC61BF5DF
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:39:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C220F81E70
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C220F81E70
+ by smtp4.osuosl.org (Postfix) with ESMTP id 69E7241634
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:39:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69E7241634
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FTyUDeGyXnAc for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 09:39:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oLvdVKbFTAZ0 for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0CA6F81E71
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CA6F81E71
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEF3441626
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEF3441626
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF1B486922; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
+ id 95C5F8690E; Sat, 25 Feb 2023 09:39:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 10:39:12 +0100
+Date: Sat, 25 Feb 2023 10:37:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 02b6af266340638d154257bf2634ccc13d47ec69
-X-Git-Newrev: 5215f56e5bed387575b35de65b78d815b96ba6f3
+X-Git-Oldrev: 9b911c8e8fe52914c1578b846914d7399450067b
+X-Git-Newrev: 7edb4a6a4db7d864c6c1560f3fdc1ef4fbd7f0fd
 X-Patchwork-Hint: ignore
-Message-Id: <20230225093924.EF1B486922@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/postgresql: add host-pkgconf
- dependency
+Message-Id: <20230225093924.95C5F8690E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zabbix: fix build with libressl >=
+ 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,52 +64,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5215f56e5bed387575b35de65b78d815b96ba6f3
+commit: https://git.buildroot.net/buildroot/commit/?id=7edb4a6a4db7d864c6c1560f3fdc1ef4fbd7f0fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-pkgconf is mandatory to find lz4 and zstd resulting in the
-following build failure since commit
-9cd2e6e090449f9d2f371d24152580c038892f3d:
+Fix the following build failure with libressl >= 3.5.0 raised since bump
+to version 3.5.2 in commit 8b216927db080b38fdbf1f8b025b6f90a89d4bc2:
 
-configure: error: in `/home/autobuild/autobuild/instance-5/output-1/build/postgresql-15.2':
-configure: error: The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables LZ4_CFLAGS
-and LZ4_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
+tls.c:113:17: error: static declaration of 'OPENSSL_cleanup' follows non-static declaration
+  113 | static void     OPENSSL_cleanup(void)
+      |                 ^~~~~~~~~~~~~~~
+In file included from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/bio.h:69,
+                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/evp.h:67,
+                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/hmac.h:67,
+                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:150,
+                 from ../../../include/zbxcomms.h:65,
+                 from tls.c:20:
+/home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/crypto.h:565:6: note: previous declaration of 'OPENSSL_cleanup' with type 'void(void)'
+  565 | void OPENSSL_cleanup(void);
+      |      ^~~~~~~~~~~~~~~
+In file included from tls.c:20:
+tls.c: In function 'zbx_log_ciphersuites':
+../../../include/zbxcomms.h:222:75: error: invalid use of incomplete typedef 'SSL_CTX' {aka 'struct ssl_ctx_st'}
+  222 | #       define SSL_CTX_get_ciphers(ciphers)                     ((ciphers)->cipher_list)
+      |                                                                           ^~
+tls.c:1415:31: note: in expansion of macro 'SSL_CTX_get_ciphers'
+ 1415 |                 cipher_list = SSL_CTX_get_ciphers(ciphers);
+      |                               ^~~~~~~~~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/8744277ebe9910635ef8fe290c8ba4eee420b538
+ - http://autobuild.buildroot.org/results/acdfcb17b39d438ccf5e4621707a10f60577d233
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/postgresql/postgresql.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../0002-fix-build-with-libressl-3.5.0.patch       | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 5e3601cb46..a2aed9a2eb 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -92,14 +92,14 @@ POSTGRESQL_CONF_OPTS += --without-libxml
- endif
- 
- ifeq ($(BR2_PACKAGE_ZSTD),y)
--POSTGRESQL_DEPENDENCIES += zstd
-+POSTGRESQL_DEPENDENCIES += host-pkgconf zstd
- POSTGRESQL_CONF_OPTS += --with-zstd
- else
- POSTGRESQL_CONF_OPTS += --without-zstd
- endif
- 
- ifeq ($(BR2_PACKAGE_LZ4),y)
--POSTGRESQL_DEPENDENCIES += lz4
-+POSTGRESQL_DEPENDENCIES += host-pkgconf lz4
- POSTGRESQL_CONF_OPTS += --with-lz4
- else
- POSTGRESQL_CONF_OPTS += --without-lz4
+diff --git a/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch b/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
+new file mode 100644
+index 0000000000..7e32ad5745
+--- /dev/null
++++ b/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
+@@ -0,0 +1,71 @@
++From 5c8511384f1d41f9c2a131604d5cb2dbc1c0aec9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 24 Feb 2023 12:23:56 +0100
++Subject: [PATCH] fix build with libressl >= 3.5.0
++
++Fix the following build failure with libressl >= 3.5.0:
++
++tls.c:113:17: error: static declaration of 'OPENSSL_cleanup' follows non-static declaration
++  113 | static void     OPENSSL_cleanup(void)
++      |                 ^~~~~~~~~~~~~~~
++In file included from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/bio.h:69,
++                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/evp.h:67,
++                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/hmac.h:67,
++                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:150,
++                 from ../../../include/zbxcomms.h:65,
++                 from tls.c:20:
++/home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/crypto.h:565:6: note: previous declaration of 'OPENSSL_cleanup' with type 'void(void)'
++  565 | void OPENSSL_cleanup(void);
++      |      ^~~~~~~~~~~~~~~
++In file included from tls.c:20:
++tls.c: In function 'zbx_log_ciphersuites':
++../../../include/zbxcomms.h:222:75: error: invalid use of incomplete typedef 'SSL_CTX' {aka 'struct ssl_ctx_st'}
++  222 | #       define SSL_CTX_get_ciphers(ciphers)                     ((ciphers)->cipher_list)
++      |                                                                           ^~
++tls.c:1415:31: note: in expansion of macro 'SSL_CTX_get_ciphers'
++ 1415 |                 cipher_list = SSL_CTX_get_ciphers(ciphers);
++      |                               ^~~~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/acdfcb17b39d438ccf5e4621707a10f60577d233
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent (no feedback on first patch)]
++---
++ include/zbxcomms.h      | 3 ++-
++ src/libs/zbxcomms/tls.c | 5 +++--
++ 2 files changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/include/zbxcomms.h b/include/zbxcomms.h
++index e7d74dbd0f..d6efa358fe 100644
++--- a/include/zbxcomms.h
+++++ b/include/zbxcomms.h
++@@ -253,7 +253,8 @@ int	zbx_telnet_execute(ZBX_SOCKET socket_fd, const char *command, AGENT_RESULT *
++ /* TLS BLOCK */
++ #if defined(HAVE_GNUTLS) || defined(HAVE_OPENSSL)
++ 
++-#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
+++#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || \
+++	defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3050000fL
++ #	if !defined(LIBRESSL_VERSION_NUMBER)
++ #		define OPENSSL_INIT_LOAD_SSL_STRINGS			0
++ #		define OPENSSL_INIT_LOAD_CRYPTO_STRINGS		0
++diff --git a/src/libs/zbxcomms/tls.c b/src/libs/zbxcomms/tls.c
++index 54ab0a6ef4..bd4075b3e4 100644
++--- a/src/libs/zbxcomms/tls.c
+++++ b/src/libs/zbxcomms/tls.c
++@@ -30,8 +30,9 @@
++ #include "zbxstr.h"
++ #include "zbxtime.h"
++ 
++-#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
++-/* for OpenSSL 1.0.1/1.0.2 (before 1.1.0) or LibreSSL */
+++#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || \
+++	defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x300000fL
+++/* for OpenSSL 1.0.1/1.0.2 (before 1.1.0) or LibreSSL (before 3.5.0) */
++ 
++ /* mutexes for multi-threaded OpenSSL (see "man 3ssl threads" and example in crypto/threads/mttest.c) */
++ 
++-- 
++2.39.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
