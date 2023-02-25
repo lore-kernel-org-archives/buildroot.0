@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62CFDC7EE2D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6329C7EE2E
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:50:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1740C4070F;
-	Sat, 25 Feb 2023 09:50:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1740C4070F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E29040913;
+	Sat, 25 Feb 2023 09:50:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E29040913
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zPges4_a-_xO; Sat, 25 Feb 2023 09:50:17 +0000 (UTC)
+	with ESMTP id oDLllVBURYLf; Sat, 25 Feb 2023 09:50:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D37B40B71;
-	Sat, 25 Feb 2023 09:50:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D37B40B71
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 14D3B1BF5DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3C8B40B8D;
+	Sat, 25 Feb 2023 09:50:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3C8B40B8D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D0C641BF5DF
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E350E416BC
+ by smtp1.osuosl.org (Postfix) with ESMTP id A887381EBC
  for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:50:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E350E416BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A887381EBC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cjOOTjRieJ1H for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 09:50:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Oyhd5RPp0W4W for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2D8C4168C
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA3FA81ED4
  for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2D8C4168C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA3FA81ED4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFAFA86A88; Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
+ id B7CDE86A8C; Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 25 Feb 2023 10:49:52 +0100
+Date: Sat, 25 Feb 2023 10:43:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a99d6611f0de6b1844cdbdc81d0ff25949c2b16
-X-Git-Newrev: 333580b68037ef756fa637bbfc49f34f1ad5e0ea
+X-Git-Oldrev: c8985cf50cca852cc5cc840a605e01713e758d40
+X-Git-Newrev: a6b4217312815379a7c52bf5d53752dbe0838645
 X-Patchwork-Hint: ignore
-Message-Id: <20230225095001.CFAFA86A88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-g2d: drop
- BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
+Message-Id: <20230225095001.B7CDE86A8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libblockdev: needs locale
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,98 +58,69 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8776427179058463786=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8776427179058463786==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=333580b68037ef756fa637bbfc49f34f1ad5e0ea
+commit: https://git.buildroot.net/buildroot/commit/?id=a6b4217312815379a7c52bf5d53752dbe0838645
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Arm and aarch64 packages don't contain examples anymore so drop the
-config option to install them to prevent build failure when selected:
+locale_t is unconditionally used since version 1.5 and
+https://github.com/storaged-project/libblockdev/commit/4ed6f0b3a46fc77554dab661c22150829aa75966
+resulting in the following build failure since the addition of the
+package in commit 0c52826291d1884db0f8f35130216065fbc7b574:
 
->>> imx-gpu-g2d 6.4.3.p4.4-arm Installing to target
-mkdir -p /home/sszy/br-test-pkg/bootlin-armv7-glibc/target/usr/share/examples/
-cp -a /home/sszy/br-test-pkg/bootlin-armv7-glibc/build/imx-gpu-g2d-6.4.3.p4.4-arm/gpu-demos/opt/* /home/sszy/br-test-pkg/bootlin-armv7-glibc/target/usr/share/examples/
-cp: cannot stat '/home/sszy/br-test-pkg/bootlin-armv7-glibc/build/imx-gpu-g2d-6.4.3.p4.4-arm/gpu-demos/opt/*': No such file or directory
-make: *** [package/pkg-generic.mk:384: /home/sszy/br-test-pkg/bootlin-armv7-glibc/build/imx-gpu-g2d-6.4.3.p4.4-arm/.stamp_target_installed] Error 1
+module.c:33:37: error: unknown type name 'locale_t'
+   33 | static char *strerror_l(int errnum, locale_t locale UNUSED)
+      |                                     ^~~~~~~~
 
-Fixes: b84557b588b3 ("package/freescale-imx/imx-gpu-g2d: bump version to 6.4.3.p4.4")
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/ede9eb1f13d56c77005cc448416fb2efa9d16ff0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                                 | 6 ++++++
- package/freescale-imx/imx-gpu-g2d/Config.in      | 9 ---------
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk | 8 --------
- 3 files changed, 6 insertions(+), 17 deletions(-)
+ package/libblockdev/Config.in | 6 ++++--
+ package/udisks/Config.in      | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7f69462f2e..af1d8cc1dc 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+index 4389fd794c..4f98621bd8 100644
+--- a/package/libblockdev/Config.in
++++ b/package/libblockdev/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBBLOCKDEV
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+@@ -66,7 +67,8 @@ config BR2_PACKAGE_LIBBLOCKDEV_SWAP
  
- comment "Legacy options removed in 2023.02"
+ endif
  
-+config BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
-+	bool "imx-gpu-g2d examples removed"
-+	select BR2_LEGACY
-+	help
-+	  The examples are not provided by NXP anymore.
-+
- config BR2_KERNEL_HEADERS_6_0
- 	bool "kernel headers version 6.0.x are no longer supported"
- 	select BR2_LEGACY
-diff --git a/package/freescale-imx/imx-gpu-g2d/Config.in b/package/freescale-imx/imx-gpu-g2d/Config.in
-index aeca087f86..c143b17c47 100644
---- a/package/freescale-imx/imx-gpu-g2d/Config.in
-+++ b/package/freescale-imx/imx-gpu-g2d/Config.in
-@@ -18,12 +18,3 @@ config BR2_PACKAGE_IMX_GPU_G2D
- 
- 	  This library is provided by NXP as-is and doesn't have an
- 	  upstream.
--
--if BR2_PACKAGE_IMX_GPU_G2D
--
--config BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
--	bool "install examples"
--	help
--	  Copy the Vivante G2D examples to the target.
--
--endif
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index d94da24d8f..42a1fe70cf 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -26,15 +26,7 @@ define IMX_GPU_G2D_INSTALL_STAGING_CMDS
- 	cp -a $(@D)/g2d/usr/* $(STAGING_DIR)/usr
- endef
- 
--ifeq ($(BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES),y)
--define IMX_GPU_G2D_INSTALL_EXAMPLES
--	mkdir -p $(TARGET_DIR)/usr/share/examples/
--	cp -a $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
--endef
--endif
--
- define IMX_GPU_G2D_INSTALL_TARGET_CMDS
--	$(IMX_GPU_G2D_INSTALL_EXAMPLES)
- 	cp -a $(@D)/g2d/usr/lib $(TARGET_DIR)/usr
- endef
- 
-
---===============8776427179058463786==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
++comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library, locale"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_HAS_UDEV || BR2_STATIC_LIBS || \
+-		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_ENABLE_LOCALE
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index 253d5cdc6b..b1d02a31b2 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_UDISKS
+ 	bool "udisks"
+-	depends on BR2_ENABLE_LOCALE # parted
++	depends on BR2_ENABLE_LOCALE # libblockdev, parted
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # polkit -> C++17
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # polkit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8776427179058463786==--
