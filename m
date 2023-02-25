@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A654C7EE2D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D23D4C7EE2D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Feb 2023 09:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DB4D408F8;
-	Sat, 25 Feb 2023 09:49:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB4D408F8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8280140913;
+	Sat, 25 Feb 2023 09:50:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8280140913
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oe3MVPlzaUJU; Sat, 25 Feb 2023 09:49:33 +0000 (UTC)
+	with ESMTP id WYNTuk8oUdYj; Sat, 25 Feb 2023 09:50:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 493534070F;
-	Sat, 25 Feb 2023 09:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 493534070F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A4431BF5DF
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:49:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF0624070F;
+	Sat, 25 Feb 2023 09:50:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF0624070F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A31361BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:50:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E81A5409DB
- for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:49:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E81A5409DB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D6CC81EE3
+ for <buildroot@lists.busybox.net>; Sat, 25 Feb 2023 09:50:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D6CC81EE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zNdmkqxYAWB7 for <buildroot@lists.busybox.net>;
- Sat, 25 Feb 2023 09:49:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E148409A4
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9E148409A4
- for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:49:28 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EED54E0006;
- Sat, 25 Feb 2023 09:49:26 +0000 (UTC)
-Date: Sat, 25 Feb 2023 10:49:26 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230225104926.28b9bb48@windsurf>
-In-Reply-To: <20230224105148.1780818-1-fontaine.fabrice@gmail.com>
-References: <20230224105148.1780818-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1677318567;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=NgPN0T61mTRqzBHxJLN1XWIOY0f1qX4jPoFLVts5uWk=;
- b=KVJ9RsH+AltezG0LZiZbokkLJgg0XUf3o7pKh+fYPcrMCfkpj3NVoGDYqRIRmkEbRU3A3I
- NNTVYdCqhWaBAsXgzyoT6Vwamnuws24KqEWyemxsGtl3z3/xjqKXiab30A0zuF+vmQ/ot8
- nB2knNzUDwDEyNkE7roZuNZ5vxriXeyZBpBfN/+MPuVjdjWnwUUYym2hmL6wjAPaaIeqpA
- KLvZCoNGdq+ke+BuZhbAdyVHt4kB338dJld+ZkXy1JHWtVgFwA4QZKPt7SN7CpEUbu/gvm
- 80M9Wutua/tBuHqgxcqrslL/V/IOkym4BEkfR5ABg34Az6OSyeZE5Rh+mZaD6w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KVJ9RsH+
-Subject: Re: [Buildroot] [PATCH 1/1] package/ntpsec: fix build without
- stack-protector
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EJyVaRE7nZae for <buildroot@lists.busybox.net>;
+ Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B4A3781EBC
+ for <buildroot@buildroot.org>; Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4A3781EBC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9FA9986A88; Sat, 25 Feb 2023 09:50:01 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 25 Feb 2023 10:41:18 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5215f56e5bed387575b35de65b78d815b96ba6f3
+X-Git-Newrev: 7243e9394c53c7e0e6e10c3d149a2afa999635ab
+X-Patchwork-Hint: ignore
+Message-Id: <20230225095001.9FA9986A88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xtables-addons: replace
+ XTABLES_ADDONS_DISABLE_GEOIP_HELPERS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,45 +58,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 24 Feb 2023 11:51:48 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7243e9394c53c7e0e6e10c3d149a2afa999635ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure without stack-protector raised since the
-> addition of the package in commit
-> 27b8d0ba8c4004819e092fb81c0f64f284b3aa4a:
-> 
-> Checking for library ssp                 : not found
-> Checking for library ssp_nonshared       : not found
-> Checking if C compiler supports -fstack-protector-all : yes
-> 
-> [...]
-> 
-> The configuration failed
-> (complete log in /home/autobuild/autobuild/instance-2/output-1/build/ntpsec-1_2_2/build/config.log)
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f38abc6b7f8464836231192cfe078a5b27319a8a
->  - http://autobuild.buildroot.org/results/62be818e2f2eac07b4a2de6f4a8898cc4cc05b1f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...pt-fix-build-without-stack-protector.patch | 50 +++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100644 package/ntpsec/0002-wscript-fix-build-without-stack-protector.patch
+Replace XTABLES_ADDONS_DISABLE_GEOIP_HELPERS by
+XTABLES_ADDONS_REMOVE_GEOIP_HELPERS to avoid the following build failure
+raised since bump to version 3.22 in commit
+53f2999edfa5e67923d4d8a102c15fa3200e089c:
 
-Applied to master, thanks.
+make[3]: *** No rule to make target '/xt_geoip_query', needed by 'all-am'.  Stop.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/f2d596b510f027b94a6b1fad10c363922c50cbec
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xtables-addons/xtables-addons.mk | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 77dcfd741c..e794538956 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -16,12 +16,6 @@ XTABLES_ADDONS_CONF_OPTS = \
+ 	--with-xtables="$(STAGING_DIR)/usr" \
+ 	--with-xtlibdir="/usr/lib/xtables"
+ 
+-# geoip helpers need perl with modules and unzip so disable
+-define XTABLES_ADDONS_DISABLE_GEOIP_HELPERS
+-	$(SED) 's/ geoip//' $(@D)/Makefile.in
+-endef
+-XTABLES_ADDONS_POST_PATCH_HOOKS += XTABLES_ADDONS_DISABLE_GEOIP_HELPERS
+-
+ define XTABLES_ADDONS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS)
+ endef
+@@ -30,6 +24,15 @@ define XTABLES_ADDONS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) DESTDIR="$(TARGET_DIR)" install
+ endef
+ 
++# geoip helpers need perl with modules and unzip so remove them
++define XTABLES_ADDONS_REMOVE_GEOIP_HELPERS
++	$(RM) $(TARGET_DIR)/usr/bin/xt_geoip*
++	$(RM) $(TARGET_DIR)/usr/libexec/xtables-addons/xt_asn*
++	$(RM) $(TARGET_DIR)/usr/libexec/xtables-addons/xt_geoip*
++endef
++
++XTABLES_ADDONS_POST_INSTALL_TARGET_HOOKS += XTABLES_ADDONS_REMOVE_GEOIP_HELPERS
++
+ define XTABLES_ADDONS_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
