@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05699C6FA8E
-	for <buildroot@archiver.kernel.org>; Sun, 26 Feb 2023 17:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 490E2C64ED6
+	for <buildroot@archiver.kernel.org>; Sun, 26 Feb 2023 17:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C2C9403E7;
-	Sun, 26 Feb 2023 17:44:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C2C9403E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id E25DF40B42;
+	Sun, 26 Feb 2023 17:45:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E25DF40B42
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cqoG3IPML0ru; Sun, 26 Feb 2023 17:44:47 +0000 (UTC)
+	with ESMTP id EZhSazsFI83A; Sun, 26 Feb 2023 17:45:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABF9940547;
-	Sun, 26 Feb 2023 17:44:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABF9940547
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2BA80408B6;
+	Sun, 26 Feb 2023 17:45:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BA80408B6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7475C1BF59B
- for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 17:44:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DA8E1BF59B
+ for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 17:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E5C360E76
- for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 17:44:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E5C360E76
+ by smtp3.osuosl.org (Postfix) with ESMTP id 147FE60E78
+ for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 17:45:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 147FE60E78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YqjJVHznODmT for <buildroot@lists.busybox.net>;
- Sun, 26 Feb 2023 17:44:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CF0E60E6F
- for <buildroot@buildroot.org>; Sun, 26 Feb 2023 17:44:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CF0E60E6F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A33786A91; Sun, 26 Feb 2023 17:44:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 26 Feb 2023 18:44:32 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0b9dda434f9b0fa48c817fe29f949fea0abc53ac
-X-Git-Newrev: a34ac4453553a5d86b91e038db3acf0e7eb6931f
-X-Patchwork-Hint: ignore
-Message-Id: <20230226174443.1A33786A91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uccp420wlan: drop package
+ with ESMTP id wH9xpXgtXTME for <buildroot@lists.busybox.net>;
+ Sun, 26 Feb 2023 17:45:02 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BC4E60E6F
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9BC4E60E6F
+ for <buildroot@buildroot.org>; Sun, 26 Feb 2023 17:45:01 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 067F31BF204;
+ Sun, 26 Feb 2023 17:44:57 +0000 (UTC)
+Date: Sun, 26 Feb 2023 18:44:56 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230226184456.550cc7dc@windsurf>
+In-Reply-To: <20230226172328.114504-1-fontaine.fabrice@gmail.com>
+References: <20230226172328.114504-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1677433498;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=CbMGTDiunEzj2NEXVUgHBKyGRJofDhUfRqlE6BM+HZM=;
+ b=j3MCQVz4nAk8NS2y7rSH/exPWEbeIV+wSwQqyTAjRjpT+koglubwWFSD/YW3ztHJmK4+OV
+ u/zwzQSGn0NAbQTNKqUsxJ2ZMSHLxsxL0MazPDdG8CLDqjCplmMamHrnw/ecmfrjfNP+9L
+ MJhoLcwWmgWkaFK0/K3yvNkIJK/kSpKKytodenTKlfaH3q0b0elOEMekNO+PZl20HVuWxg
+ To+5KYAIW7Oe1CtNzLRtZ10iVT3R6wZGiSO0DQOdlGuqurvl0h3q73aAsLetM7tk+mD2hZ
+ Tqe5hW8RpPoZm89KJ69urwUGv17yECzgkm8x2c/kSLpJnilwx27/LUI+zgM18A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=j3MCQVz4
+Subject: Re: [Buildroot] [PATCH v2,1/1] package/uccp420wlan: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,145 +77,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7296523095794931060=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7296523095794931060==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a34ac4453553a5d86b91e038db3acf0e7eb6931f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-uccp420wlan is not maintained anymore (no commit since 2017) and fails
-to build with any "recent" kernel (e.g. >= 4.7 which includes
-https://github.com/torvalds/linux/commit/57fbcce37be7c1d2622b56587c10ade00e96afa3
-or
-https://github.com/torvalds/linux/commit/8552a434b6a05cc38006733afe6a239ad4d600a2):
-
-/home/thomas/autobuild/instance-1/output-1/build/uccp420wlan-6.9.1/./src/tx.c: In function ‘uccp420wlan_tx_free_buff_req’:
-/home/thomas/autobuild/instance-1/output-1/build/uccp420wlan-6.9.1/./src/tx.c:1142:49: error: ‘IEEE80211_BAND_2GHZ’ undeclared (first use in this function); did you mean ‘IEEE80211_CHAN_2GHZ’?
- 1142 |                                 if (ets_band == IEEE80211_BAND_2GHZ)
-      |                                                 ^~~~~~~~~~~~~~~~~~~
-      |                                                 IEEE80211_CHAN_2GHZ
-
-[...]
-
-/home/thomas/autobuild/instance-1/output-1/build/uccp420wlan-6.9.1/./src/core.c:428:29: error: implicit declaration of function ‘ieee80211_csa_is_complete’; did you mean ‘ieee80211_scan_completed’? [-Werror=implicit-function-declaration]
-  428 |                         if (ieee80211_csa_is_complete(uvif->vif))
-      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
-      |                             ieee80211_scan_completed
-
-Fixes:
- - http://autobuild.buildroot.org/results/7cd7151e390b8f7a0df3e647fe4cd5d6319a830b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in.legacy                     |  7 +++++++
- package/Config.in                    |  1 -
- package/uccp420wlan/Config.in        | 16 ----------------
- package/uccp420wlan/uccp420wlan.hash |  4 ----
- package/uccp420wlan/uccp420wlan.mk   | 18 ------------------
- 5 files changed, 7 insertions(+), 39 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index af1d8cc1dc..381e1e3a8c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_UCCP420WLAN
-+	bool "uccp420wlan removed"
-+	select BR2_LEGACY
-+	help
-+	  The uccp420wlan package is unmaintained and doesn't build
-+	  with any "recent" kernel (e.g. >= 4.7).
-+
- config BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
- 	bool "imx-gpu-g2d examples removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 6c5238a9b0..3ace25c665 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -621,7 +621,6 @@ endmenu
- 	source "package/triggerhappy/Config.in"
- 	source "package/uboot-tools/Config.in"
- 	source "package/ubus/Config.in"
--	source "package/uccp420wlan/Config.in"
- 	source "package/udev/Config.in"
- 	source "package/udev-gentoo-scripts/Config.in"
- 	source "package/udisks/Config.in"
-diff --git a/package/uccp420wlan/Config.in b/package/uccp420wlan/Config.in
-deleted file mode 100644
-index ef6a9db865..0000000000
---- a/package/uccp420wlan/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_UCCP420WLAN
--	bool "uccp420wlan"
--	depends on BR2_LINUX_KERNEL
--	help
--	  SoftMAC (mac80211) based WiFi driver for Imagination's
--	  Explorer RPU uccp420. This supports Dual Band WiFi with
--	  2.4GHz - 2x2 b/g/n 40MHz, 5GHz - 2x2 a/n/11ac 80MHz modes
--
--	  Used in creator ci40 board.
--
--	  This module needs a Linux kernel >= v4.2.
--
--	  https://github.com/CreatorDev/uccp420wlan
--
--comment "uccp420wlan needs a Linux kernel >= 4.2 to be built"
--	depends on !BR2_LINUX_KERNEL
-diff --git a/package/uccp420wlan/uccp420wlan.hash b/package/uccp420wlan/uccp420wlan.hash
-deleted file mode 100644
-index 905fa4299d..0000000000
---- a/package/uccp420wlan/uccp420wlan.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# locally computed hash
--sha256  1d4de62fc842dbab739708cf0d9ebce270fcdf63c1c13ac676cbc253acdaa3bb  uccp420wlan-6.9.1.tar.gz
--sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
--sha256  9ac431585fddfe624b08cf7464876a5e96061047ff26a9e926da3d89d21a2a73  firmware/LICENSE.imagination
-diff --git a/package/uccp420wlan/uccp420wlan.mk b/package/uccp420wlan/uccp420wlan.mk
-deleted file mode 100644
-index 7256b92774..0000000000
---- a/package/uccp420wlan/uccp420wlan.mk
-+++ /dev/null
-@@ -1,18 +0,0 @@
--################################################################################
--#
--# uccp420wlan
--#
--################################################################################
--
--UCCP420WLAN_VERSION = 6.9.1
--UCCP420WLAN_SITE = $(call github,CreatorDev,uccp420wlan,v$(UCCP420WLAN_VERSION))
--UCCP420WLAN_LICENSE = GPL-2.0 (kernel module), proprietary (firmware blob)
--UCCP420WLAN_LICENSE_FILES = COPYING firmware/LICENSE.imagination
--
--define UCCP420WLAN_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/lib/firmware/img/uccp420wlan
--	cp $(@D)/firmware/*.ldr $(TARGET_DIR)/lib/firmware/img/uccp420wlan
--endef
--
--$(eval $(kernel-module))
--$(eval $(generic-package))
-
---===============7296523095794931060==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7296523095794931060==--
+T24gU3VuLCAyNiBGZWIgMjAyMyAxODoyMzoyOCArMDEwMApGYWJyaWNlIEZvbnRhaW5lIDxmb250
+YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IHVjY3A0MjB3bGFuIGlzIG5vdCBtYWlu
+dGFpbmVkIGFueW1vcmUgKG5vIGNvbW1pdCBzaW5jZSAyMDE3KSBhbmQgZmFpbHMKPiB0byBidWls
+ZCB3aXRoIGFueSAicmVjZW50IiBrZXJuZWwgKGUuZy4gPj0gNC43IHdoaWNoIGluY2x1ZGVzCj4g
+aHR0cHM6Ly9naXRodWIuY29tL3RvcnZhbGRzL2xpbnV4L2NvbW1pdC81N2ZiY2NlMzdiZTdjMWQy
+NjIyYjU2NTg3YzEwYWRlMDBlOTZhZmEzCj4gb3IKPiBodHRwczovL2dpdGh1Yi5jb20vdG9ydmFs
+ZHMvbGludXgvY29tbWl0Lzg1NTJhNDM0YjZhMDVjYzM4MDA2NzMzYWZlNmEyMzlhZDRkNjAwYTIp
+Ogo+IAo+IC9ob21lL3Rob21hcy9hdXRvYnVpbGQvaW5zdGFuY2UtMS9vdXRwdXQtMS9idWlsZC91
+Y2NwNDIwd2xhbi02LjkuMS8uL3NyYy90eC5jOiBJbiBmdW5jdGlvbiDigJh1Y2NwNDIwd2xhbl90
+eF9mcmVlX2J1ZmZfcmVx4oCZOgo+IC9ob21lL3Rob21hcy9hdXRvYnVpbGQvaW5zdGFuY2UtMS9v
+dXRwdXQtMS9idWlsZC91Y2NwNDIwd2xhbi02LjkuMS8uL3NyYy90eC5jOjExNDI6NDk6IGVycm9y
+OiDigJhJRUVFODAyMTFfQkFORF8yR0ha4oCZIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlz
+IGZ1bmN0aW9uKTsgZGlkIHlvdSBtZWFuIOKAmElFRUU4MDIxMV9DSEFOXzJHSFrigJk/Cj4gIDEx
+NDIgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmIChldHNfYmFuZCA9PSBJRUVF
+ODAyMTFfQkFORF8yR0haKQo+ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fgo+ICAgICAgIHwgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSUVFRTgwMjExX0NIQU5fMkdI
+Wgo+IAo+IFsuLi5dCj4gCj4gL2hvbWUvdGhvbWFzL2F1dG9idWlsZC9pbnN0YW5jZS0xL291dHB1
+dC0xL2J1aWxkL3VjY3A0MjB3bGFuLTYuOS4xLy4vc3JjL2NvcmUuYzo0Mjg6Mjk6IGVycm9yOiBp
+bXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJhpZWVlODAyMTFfY3NhX2lzX2NvbXBs
+ZXRl4oCZOyBkaWQgeW91IG1lYW4g4oCYaWVlZTgwMjExX3NjYW5fY29tcGxldGVk4oCZPyBbLVdl
+cnJvcj1pbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0KPiAgIDQyOCB8ICAgICAgICAgICAg
+ICAgICAgICAgICAgIGlmIChpZWVlODAyMTFfY3NhX2lzX2NvbXBsZXRlKHV2aWYtPnZpZikpCj4g
+ICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+
+fn5+fgo+ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGllZWU4MDIxMV9zY2Fu
+X2NvbXBsZXRlZAo+IAo+IEZpeGVzOgo+ICAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9y
+Zy9yZXN1bHRzLzdjZDcxNTFlMzkwYjhmN2EwZGYzZTY0N2ZlNGNkNWQ2MzE5YTgzMGIKPiAKPiBT
+aWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNv
+bT4KPiAtLS0KPiBDaGFuZ2VzIHYxIC0+IHYyOgo+ICAtIFVwZGF0ZSBwYWNrYWdlL0NvbmZpZy5p
+bgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9u
+aSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0
+cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
