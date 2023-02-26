@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7891EC64ED6
-	for <buildroot@archiver.kernel.org>; Sun, 26 Feb 2023 17:43:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05699C6FA8E
+	for <buildroot@archiver.kernel.org>; Sun, 26 Feb 2023 17:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E725B408B6;
-	Sun, 26 Feb 2023 17:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E725B408B6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C2C9403E7;
+	Sun, 26 Feb 2023 17:44:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C2C9403E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QBHTEVjjJH_u; Sun, 26 Feb 2023 17:43:44 +0000 (UTC)
+	with ESMTP id cqoG3IPML0ru; Sun, 26 Feb 2023 17:44:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BD7E40547;
-	Sun, 26 Feb 2023 17:43:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BD7E40547
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABF9940547;
+	Sun, 26 Feb 2023 17:44:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABF9940547
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DA4771BF59B
- for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 17:43:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7475C1BF59B
+ for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 17:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFF3C60E76
- for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 17:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFF3C60E76
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E5C360E76
+ for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 17:44:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E5C360E76
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9hhcvIVesX-m for <buildroot@lists.busybox.net>;
- Sun, 26 Feb 2023 17:43:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA51260E6F
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EA51260E6F
- for <buildroot@buildroot.org>; Sun, 26 Feb 2023 17:43:37 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 68478FF803;
- Sun, 26 Feb 2023 17:43:34 +0000 (UTC)
-Date: Sun, 26 Feb 2023 18:43:32 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230226184332.39c3a9b2@windsurf>
-In-Reply-To: <20230225170229.358936-1-fontaine.fabrice@gmail.com>
-References: <20230225170229.358936-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1677433414;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wbRlo7eF5LRO6Fs4GfoWipXSCXuIdM7/savzEpWDk24=;
- b=XwPKVaLK6d7QtbMl1cHm7xCqffFYHTxryEmXj/hLnavtXhUHeCIWf49Hg3xQoBbigvFaG0
- NlKP6Tr0MbBQOoNph0/E615Wr4ShB1rOhRZSHk4jLtW54HhPBC8cPBxzk8RLx+PpgUIgWy
- +j/sXVjZ3U1CEJFcMpfoiR2n9d9PxLOovApcLE9ShYDStBOjmz+XkXLU9t3iWoRzARCHq2
- QYCCj37EfaxNeHYPV+jNIAhCs5/YNppuVKlyirJ5NY/rgwQurvjlEFU1Acp4Ap8gVnximw
- u1lL1emuzWKtNhWQaZ89XmOft1XPKTqfzltWnCEXsqrqZw7FrssvnlJCSbU6wg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XwPKVaLK
-Subject: Re: [Buildroot] [PATCH 1/1] linux: fix CIP RT kernel on microblaze
+ with ESMTP id YqjJVHznODmT for <buildroot@lists.busybox.net>;
+ Sun, 26 Feb 2023 17:44:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2CF0E60E6F
+ for <buildroot@buildroot.org>; Sun, 26 Feb 2023 17:44:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CF0E60E6F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1A33786A91; Sun, 26 Feb 2023 17:44:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 26 Feb 2023 18:44:32 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0b9dda434f9b0fa48c817fe29f949fea0abc53ac
+X-Git-Newrev: a34ac4453553a5d86b91e038db3acf0e7eb6931f
+X-Patchwork-Hint: ignore
+Message-Id: <20230226174443.1A33786A91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uccp420wlan: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,36 +57,145 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7296523095794931060=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 25 Feb 2023 18:02:29 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+--===============7296523095794931060==
+Content-Type: text/plain
 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 7645b5f507..f3fdc40328 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -33,6 +33,7 @@ LINUX_SITE_METHOD = svn
->  else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION),y)
->  LINUX_SOURCE = linux-cip-$(LINUX_VERSION).tar.gz
->  LINUX_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
-> +LINUX_PATCHES += linux/cip-rt/0001-arch-microblaze-mm-init.c-fix-build.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=a34ac4453553a5d86b91e038db3acf0e7eb6931f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Why not put the patch in linux/5.10.162-cip24-rt10/ directly? This way
-it would automatically be applied, with the need to tweak LINUX_PATCHES.
+uccp420wlan is not maintained anymore (no commit since 2017) and fails
+to build with any "recent" kernel (e.g. >= 4.7 which includes
+https://github.com/torvalds/linux/commit/57fbcce37be7c1d2622b56587c10ade00e96afa3
+or
+https://github.com/torvalds/linux/commit/8552a434b6a05cc38006733afe6a239ad4d600a2):
 
-Best regards,
+/home/thomas/autobuild/instance-1/output-1/build/uccp420wlan-6.9.1/./src/tx.c: In function ‘uccp420wlan_tx_free_buff_req’:
+/home/thomas/autobuild/instance-1/output-1/build/uccp420wlan-6.9.1/./src/tx.c:1142:49: error: ‘IEEE80211_BAND_2GHZ’ undeclared (first use in this function); did you mean ‘IEEE80211_CHAN_2GHZ’?
+ 1142 |                                 if (ets_band == IEEE80211_BAND_2GHZ)
+      |                                                 ^~~~~~~~~~~~~~~~~~~
+      |                                                 IEEE80211_CHAN_2GHZ
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+[...]
+
+/home/thomas/autobuild/instance-1/output-1/build/uccp420wlan-6.9.1/./src/core.c:428:29: error: implicit declaration of function ‘ieee80211_csa_is_complete’; did you mean ‘ieee80211_scan_completed’? [-Werror=implicit-function-declaration]
+  428 |                         if (ieee80211_csa_is_complete(uvif->vif))
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                             ieee80211_scan_completed
+
+Fixes:
+ - http://autobuild.buildroot.org/results/7cd7151e390b8f7a0df3e647fe4cd5d6319a830b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy                     |  7 +++++++
+ package/Config.in                    |  1 -
+ package/uccp420wlan/Config.in        | 16 ----------------
+ package/uccp420wlan/uccp420wlan.hash |  4 ----
+ package/uccp420wlan/uccp420wlan.mk   | 18 ------------------
+ 5 files changed, 7 insertions(+), 39 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index af1d8cc1dc..381e1e3a8c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2023.02"
+ 
++config BR2_PACKAGE_UCCP420WLAN
++	bool "uccp420wlan removed"
++	select BR2_LEGACY
++	help
++	  The uccp420wlan package is unmaintained and doesn't build
++	  with any "recent" kernel (e.g. >= 4.7).
++
+ config BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
+ 	bool "imx-gpu-g2d examples removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 6c5238a9b0..3ace25c665 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -621,7 +621,6 @@ endmenu
+ 	source "package/triggerhappy/Config.in"
+ 	source "package/uboot-tools/Config.in"
+ 	source "package/ubus/Config.in"
+-	source "package/uccp420wlan/Config.in"
+ 	source "package/udev/Config.in"
+ 	source "package/udev-gentoo-scripts/Config.in"
+ 	source "package/udisks/Config.in"
+diff --git a/package/uccp420wlan/Config.in b/package/uccp420wlan/Config.in
+deleted file mode 100644
+index ef6a9db865..0000000000
+--- a/package/uccp420wlan/Config.in
++++ /dev/null
+@@ -1,16 +0,0 @@
+-config BR2_PACKAGE_UCCP420WLAN
+-	bool "uccp420wlan"
+-	depends on BR2_LINUX_KERNEL
+-	help
+-	  SoftMAC (mac80211) based WiFi driver for Imagination's
+-	  Explorer RPU uccp420. This supports Dual Band WiFi with
+-	  2.4GHz - 2x2 b/g/n 40MHz, 5GHz - 2x2 a/n/11ac 80MHz modes
+-
+-	  Used in creator ci40 board.
+-
+-	  This module needs a Linux kernel >= v4.2.
+-
+-	  https://github.com/CreatorDev/uccp420wlan
+-
+-comment "uccp420wlan needs a Linux kernel >= 4.2 to be built"
+-	depends on !BR2_LINUX_KERNEL
+diff --git a/package/uccp420wlan/uccp420wlan.hash b/package/uccp420wlan/uccp420wlan.hash
+deleted file mode 100644
+index 905fa4299d..0000000000
+--- a/package/uccp420wlan/uccp420wlan.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# locally computed hash
+-sha256  1d4de62fc842dbab739708cf0d9ebce270fcdf63c1c13ac676cbc253acdaa3bb  uccp420wlan-6.9.1.tar.gz
+-sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
+-sha256  9ac431585fddfe624b08cf7464876a5e96061047ff26a9e926da3d89d21a2a73  firmware/LICENSE.imagination
+diff --git a/package/uccp420wlan/uccp420wlan.mk b/package/uccp420wlan/uccp420wlan.mk
+deleted file mode 100644
+index 7256b92774..0000000000
+--- a/package/uccp420wlan/uccp420wlan.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# uccp420wlan
+-#
+-################################################################################
+-
+-UCCP420WLAN_VERSION = 6.9.1
+-UCCP420WLAN_SITE = $(call github,CreatorDev,uccp420wlan,v$(UCCP420WLAN_VERSION))
+-UCCP420WLAN_LICENSE = GPL-2.0 (kernel module), proprietary (firmware blob)
+-UCCP420WLAN_LICENSE_FILES = COPYING firmware/LICENSE.imagination
+-
+-define UCCP420WLAN_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/lib/firmware/img/uccp420wlan
+-	cp $(@D)/firmware/*.ldr $(TARGET_DIR)/lib/firmware/img/uccp420wlan
+-endef
+-
+-$(eval $(kernel-module))
+-$(eval $(generic-package))
+
+--===============7296523095794931060==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7296523095794931060==--
