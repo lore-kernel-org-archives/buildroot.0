@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E21EC6FA8E
-	for <buildroot@archiver.kernel.org>; Sun, 26 Feb 2023 13:34:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11B32C64ED6
+	for <buildroot@archiver.kernel.org>; Sun, 26 Feb 2023 13:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC18F81312;
-	Sun, 26 Feb 2023 13:34:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC18F81312
+	by smtp1.osuosl.org (Postfix) with ESMTP id A77D8813E3;
+	Sun, 26 Feb 2023 13:39:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A77D8813E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iFMvqHBlgu3k; Sun, 26 Feb 2023 13:34:14 +0000 (UTC)
+	with ESMTP id LEhndPmrQ8eC; Sun, 26 Feb 2023 13:39:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC9B581306;
-	Sun, 26 Feb 2023 13:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC9B581306
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 44E7F1BF361
- for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 13:34:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D700F813DE;
+	Sun, 26 Feb 2023 13:39:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D700F813DE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 13E571BF361
+ for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 13:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C6FA40550
- for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 13:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C6FA40550
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA847408F4
+ for <buildroot@lists.busybox.net>; Sun, 26 Feb 2023 13:39:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA847408F4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3_MNs-2ws3Hh for <buildroot@lists.busybox.net>;
- Sun, 26 Feb 2023 13:34:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pL2yQR4E6Z2w for <buildroot@lists.busybox.net>;
+ Sun, 26 Feb 2023 13:39:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E96D640547
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E96D640547
- for <buildroot@buildroot.org>; Sun, 26 Feb 2023 13:34:10 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- ay29-20020a05600c1e1d00b003e9f4c2b623so5387580wmb.3
- for <buildroot@buildroot.org>; Sun, 26 Feb 2023 05:34:10 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46636408EF
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 46636408EF
+ for <buildroot@buildroot.org>; Sun, 26 Feb 2023 13:39:51 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ fm20-20020a05600c0c1400b003ead37e6588so5378396wmb.5
+ for <buildroot@buildroot.org>; Sun, 26 Feb 2023 05:39:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pddMFwCCD2M2OyMdjw5rcXlgRELmZ9gXqn4zmr7mHZ4=;
- b=KDxjRgRl3asYHIvSuMzhzupZBHKbiqtvKkS7n/+na6jc01SwTFoDqufWrfdtEOAThF
- nEZ9tmWpZRRhNNtpwklAtq1kwSRT7bShLLQM/sS0BlKKYl/7NTnWF0jU7WS3uAP9uHgQ
- Z4SHMu8c7GwLKWIGPtgU039NEhyp532N8Tv/AsexFTzlcsJqRMr/5uYhtr38wmcji/ho
- U+pyEFVh3dafPbqZf5q0FxHyQsI4kk2kc1v69Y8rgseEjrIJi1XvAjBmsKCwSj0Hs5gy
- e0hoTkTKcYjRbT4KHeb1OFuOt2RgRPbmLtC2fJbq4bGGC6uDkve86x6mi4wDIGL9xoFl
- y/Tg==
-X-Gm-Message-State: AO0yUKVRPNNXrgDZ08HFavMrETOPzNU+gr6V2ApYHvssuNwHq9YbkEL3
- t6u/NCmXkuerhLlEH1cVQE82LVDFs8M=
-X-Google-Smtp-Source: AK7set+b0KULF+KC9Og8zSYBm88ps0bG1qrHPQvkVPtZ6dgx782KhF9uCOj1IISORRzLxdHGTIzYKA==
-X-Received: by 2002:a05:600c:3197:b0:3dd:af7a:53db with SMTP id
- s23-20020a05600c319700b003ddaf7a53dbmr16824039wmp.11.1677418448711; 
- Sun, 26 Feb 2023 05:34:08 -0800 (PST)
+ bh=pBhzquhrULcPwniOnT0bdF9gu88y0kOUQI/JBTHUBJg=;
+ b=soNYkb+Yb49jnkQodLquHEEggnHlUsOqnhaEb8orVwAQDbXV6IujBM3rIvqEMtWr0o
+ Jt/hhEyIG+VWXMcmeuGJCxYklbD3rgJLU2OJFnR483Ul8zyqE24R3foYYqZz+iNUzCON
+ c6TnA9eQNn6L1Od9uhGqFViynYs/Bokq9yLt9fN5RlDJ/gvBrHkrl9FQ0CrNmdHnUxxT
+ zHbjpKytq/V7KEIUZV2vFMNjhQauU2ZptTFdXD5iU086xj6UOGYg4aGd45lk4H34+iNi
+ d7OhFRCKqO7n1bi7fQwHodqBjHHxOPjS/Tzzcxo1WA6pLGzoxo/bwGYdKlMNXIqiiBSG
+ K/XA==
+X-Gm-Message-State: AO0yUKUG9ntqzbQB6YOdVWTKbkWuz/u03KSX4rgE23/9CcexwuseUMm2
+ j+cxtjttagmkfoLwecJBt8dfo9BAnMQ=
+X-Google-Smtp-Source: AK7set/SB7Fqslou+a9xc/BPz2PjpCUQRqp5IM1G0lE3Ixvij6G8AqI5SPALwpw2rgBu/Od/JHi7Vw==
+X-Received: by 2002:a05:600c:3b1b:b0:3df:eda1:439c with SMTP id
+ m27-20020a05600c3b1b00b003dfeda1439cmr4357698wms.11.1677418788914; 
+ Sun, 26 Feb 2023 05:39:48 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- bd12-20020a05600c1f0c00b003e0015c8618sm9551985wmb.6.2023.02.26.05.34.05
+ bi22-20020a05600c3d9600b003dc42d48defsm5894980wmb.6.2023.02.26.05.39.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Feb 2023 05:34:07 -0800 (PST)
+ Sun, 26 Feb 2023 05:39:48 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Feb 2023 14:33:57 +0100
-Message-Id: <20230226133357.97330-1-fontaine.fabrice@gmail.com>
+Date: Sun, 26 Feb 2023 14:39:46 +0100
+Message-Id: <20230226133946.102275-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pddMFwCCD2M2OyMdjw5rcXlgRELmZ9gXqn4zmr7mHZ4=;
- b=YoMoXF1QKRfg491UEf96jO61QlCeWwBYeK+UseQSE3NtShGx4+KIiBoi3LOpd3zf0K
- 1Y/elUdccSuWYeSBA5OLButNKe2e2+MTh29uVKiEPiHzCaXJJee05pciRxN/44v0wc6j
- bG8Z5oh0RCp8erhmqd3KPeBoSIsmE+XpXb44jeBYi70NZUSUVJECEAtGWORHHwI65oyv
- MMwPcibzgR35Ji1a6QJjhG7mfFuOv4NcBvB21zcuu6sxHCMERHqgSD+bx/qMHNK0jeje
- hIsY6AWEALJjelp9VO+LPtnjqsdwaeulhGRs/4cTLbxqxYnFj/nP3q94a8nsPtQzwGL+
- n6Jg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=pBhzquhrULcPwniOnT0bdF9gu88y0kOUQI/JBTHUBJg=;
+ b=pivBrM6GtfVw6S+6FTDi+GluWsHYYYncRqvvPl3Mm3uNNHuMmRI2e2wcx/TrPBtlaC
+ dTzYPP/9HYOr/p/zrYEiJR6xD4My0E4d7NbS/ASx4o9A6IKTGmqgnOjcTGD5qnS6WMgu
+ 8yuwMLoRqENGn0mzNSS9c7HCY7Mq+ZrSdM03+PYmJw9afO5bsP3q9zeNA0iHt8ucuZPM
+ AkvJvdkwAzv9dEwm8v9MeQtDH9bz26WcfuL8aKIATo5nAJMGqUfEGKyEHX9P1DG1XidC
+ 9kL4JmSGOgI5PseRNYwQGcii5wXaEKp6ne98MaBOk9HnbzO8m7/V2aipN/7erG/DcWjn
+ x8FA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=YoMoXF1Q
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: security bump to version
- 2.6.9
+ header.a=rsa-sha256 header.s=20210112 header.b=pivBrM6G
+Subject: [Buildroot] [PATCH 1/1] package/tiff: fix CVE-2022-48281
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,42 +100,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-25725
-
-https://www.mail-archive.com/haproxy@formilux.org/msg43229.html
-https://www.mail-archive.com/haproxy@formilux.org/msg43224.html
+processCropSelections in tools/tiffcrop.c in LibTIFF through 4.5.0 has a
+heap-based buffer overflow (e.g., "WRITE of size 307203") via a crafted
+TIFF image.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...rect-simple-copy-paste-error-Fix-488.patch | 28 +++++++++++++++++++
+ package/tiff/tiff.mk                          |  3 ++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 2cd8ff1806..f5540ee44a 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.5.tar.gz.sha256
--sha256  ce9e19ebfcdd43e51af8a6090f1df8d512d972ddf742fa648a643bbb19056605  haproxy-2.6.5.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.9.tar.gz.sha256
-+sha256  f01a1c5f465dc1b5cd175d0b28b98beb4dfe82b5b5b63ddcc68d1df433641701  haproxy-2.6.9.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 35b1770d38..2c54e1c2c3 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch b/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
+new file mode 100644
+index 0000000000..73c0d10ffc
+--- /dev/null
++++ b/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
+@@ -0,0 +1,28 @@
++From 97d65859bc29ee334012e9c73022d8a8e55ed586 Mon Sep 17 00:00:00 2001
++From: Su Laus <sulau@freenet.de>
++Date: Sat, 21 Jan 2023 15:58:10 +0000
++Subject: [PATCH] tiffcrop: Correct simple copy paste error. Fix #488.
++
++[Retrieved from:
++https://gitlab.com/libtiff/libtiff/-/commit/97d65859bc29ee334012e9c73022d8a8e55ed586]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tools/tiffcrop.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tools/tiffcrop.c b/tools/tiffcrop.c
++index 14fa18da..7db69883 100644
++--- a/tools/tiffcrop.c
+++++ b/tools/tiffcrop.c
++@@ -8591,7 +8591,7 @@ static int processCropSelections(struct image_data *image,
++                     cropsize + NUM_BUFF_OVERSIZE_BYTES);
++             else
++             {
++-                prev_cropsize = seg_buffs[0].size;
+++                prev_cropsize = seg_buffs[i].size;
++                 if (prev_cropsize < cropsize)
++                 {
++                     next_buff = _TIFFrealloc(
++-- 
++GitLab
++
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index e7de51ea1e..f9754a4b49 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -12,6 +12,9 @@ TIFF_CPE_ID_VENDOR = libtiff
+ TIFF_CPE_ID_PRODUCT = libtiff
+ TIFF_INSTALL_STAGING = YES
  
- HAPROXY_VERSION_MAJOR = 2.6
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).9
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
++# 0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
++TIFF_IGNORE_CVES += CVE-2022-48281
++
+ # webp has a (optional) dependency on tiff, so we can't have webp
+ # support in tiff, or that would create a circular dependency.
+ TIFF_CONF_OPTS = \
 -- 
 2.39.1
 
