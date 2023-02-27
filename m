@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 802CCC64ED6
-	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 14:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBB77C64ED8
+	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 14:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38A8F61064;
-	Mon, 27 Feb 2023 14:59:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38A8F61064
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0E4061093;
+	Mon, 27 Feb 2023 14:59:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0E4061093
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aUygPZiCud1W; Mon, 27 Feb 2023 14:59:12 +0000 (UTC)
+	with ESMTP id TYM1DxbACbI7; Mon, 27 Feb 2023 14:59:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5244261037;
-	Mon, 27 Feb 2023 14:59:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5244261037
+	by smtp3.osuosl.org (Postfix) with ESMTP id D273C6108D;
+	Mon, 27 Feb 2023 14:59:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D273C6108D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 96DC41BF2A2
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 14:58:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A6E141BF2A2
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 14:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFB5540A20
+ by smtp2.osuosl.org (Postfix) with ESMTP id E204840A2A
  for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 14:58:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFB5540A20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E204840A2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bMYb8xToIO8o for <buildroot@lists.busybox.net>;
+ with ESMTP id iCKinRZGP2q9 for <buildroot@lists.busybox.net>;
  Mon, 27 Feb 2023 14:58:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F19F440420
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC35C402F4
  for <buildroot@buildroot.org>; Mon, 27 Feb 2023 14:58:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F19F440420
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC35C402F4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED1EE86BF1; Mon, 27 Feb 2023 14:58:00 +0000 (UTC)
+ id CB35186BF4; Mon, 27 Feb 2023 14:58:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Feb 2023 15:47:41 +0100
+Date: Mon, 27 Feb 2023 15:44:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d7ae47f0c68607a90e6a65cbfff5bfb3007b019d
-X-Git-Newrev: 441b859a1e3a5b2a6bbbc8990f67c33913aa2385
+X-Git-Oldrev: a86d44a3eb009d3deb5b558f7ccb0870eb877c6a
+X-Git-Newrev: af9e64f120dc6a060e98bb0915c8b6b34d644896
 X-Patchwork-Hint: ignore
-Message-Id: <20230227145800.ED1EE86BF1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/proxychains-ng: set -fPIC
+Message-Id: <20230227145800.CB35186BF4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/haproxy: security bump to version
+ 2.6.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=441b859a1e3a5b2a6bbbc8990f67c33913aa2385
+commit: https://git.buildroot.net/buildroot/commit/?id=af9e64f120dc6a060e98bb0915c8b6b34d644896
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Set -fPIC to avoid the following build failure with some architectures
-such as mips or aarch64 raised since bump to version 4.14 in commit
-35953d1e61aa8581be09c9dca39365955b10590e and
-https://github.com/rofl0r/proxychains-ng/commit/35a674bdbc294730429a1007c9e7ce01e65b49b5:
+Fix CVE-2023-25725
 
-checking what's the option to use in linker to set library name ...
-cannot find an option to set library name
-
-Fixes:
- - http://autobuild.buildroot.org/results/8ed1481e29321ed3da40251f700cb3bd66f62c94
- - http://autobuild.buildroot.org/results/fd01df6eb9a37257894740d44a33eece9123355a
+https://www.mail-archive.com/haproxy@formilux.org/msg43229.html
+https://www.mail-archive.com/haproxy@formilux.org/msg43224.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/proxychains-ng/proxychains-ng.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
-index c4d487c7db..beb8909088 100644
---- a/package/proxychains-ng/proxychains-ng.mk
-+++ b/package/proxychains-ng/proxychains-ng.mk
-@@ -13,7 +13,8 @@ PROXYCHAINS_NG_CPE_ID_VENDOR = proxychains-ng_project
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 2cd8ff1806..f5540ee44a 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.5.tar.gz.sha256
+-sha256  ce9e19ebfcdd43e51af8a6090f1df8d512d972ddf742fa648a643bbb19056605  haproxy-2.6.5.tar.gz
++# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.9.tar.gz.sha256
++sha256  f01a1c5f465dc1b5cd175d0b28b98beb4dfe82b5b5b63ddcc68d1df433641701  haproxy-2.6.9.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index c37508f63b..012c1dfdb6 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- define PROXYCHAINS_NG_CONFIGURE_CMDS
- 	cd $(@D) && \
--	$(TARGET_CONFIGURE_OPTS) ./configure --prefix=/usr --sysconfdir=/etc
-+	$(TARGET_CONFIGURE_OPTS) CPPFLAGS="$(TARGET_CPPFLAGS) -fPIC" \
-+		./configure --prefix=/usr --sysconfdir=/etc
- endef
- 
- define PROXYCHAINS_NG_BUILD_CMDS
+ HAPROXY_VERSION_MAJOR = 2.6
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).9
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
