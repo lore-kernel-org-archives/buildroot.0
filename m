@@ -1,93 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F34FEC64ED6
-	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 10:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D241C64ED8
+	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 10:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99D5781959;
-	Mon, 27 Feb 2023 10:40:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99D5781959
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lO-r4WSxeJ8X; Mon, 27 Feb 2023 10:40:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D42E481E0D;
-	Mon, 27 Feb 2023 10:40:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D42E481E0D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 601331BF25F
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:40:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3AFEF40977
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:40:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AFEF40977
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD766408B0;
+	Mon, 27 Feb 2023 10:58:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD766408B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YsUOgyGoPz9V for <buildroot@lists.busybox.net>;
- Mon, 27 Feb 2023 10:40:10 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nE1yFcfPABDj; Mon, 27 Feb 2023 10:58:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AA8B408C9;
+	Mon, 27 Feb 2023 10:58:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AA8B408C9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 282E91BF25F
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:58:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01B7E60BDB
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:58:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01B7E60BDB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7HZSFqUNs-yl for <buildroot@lists.busybox.net>;
+ Mon, 27 Feb 2023 10:58:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E3AD4098F
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0E3AD4098F
- for <buildroot@buildroot.org>; Mon, 27 Feb 2023 10:40:09 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id bv17so5679673wrb.5
- for <buildroot@buildroot.org>; Mon, 27 Feb 2023 02:40:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9074F60BB0
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9074F60BB0
+ for <buildroot@buildroot.org>; Mon, 27 Feb 2023 10:58:48 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ o11-20020a05600c4fcb00b003eb33ea29a8so3048127wmq.1
+ for <buildroot@buildroot.org>; Mon, 27 Feb 2023 02:58:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=zOZRytoWff018qc3DgyWy0Zv4jvCF0OaRC8LWH449/0=;
- b=LIuPX6oTgLbBSf2ySDzaIm3RwQLVqBjWLLpidiJeC5jdEH0UMCMLDPcKhcNboT6jPD
- q6SGOTa7E2kWFg75AuzZZoVAOV4K1GAh5AWf8CB2GXrVcOtS0hE0e4igQ7aKXHQ1v/8+
- 3YR2UE/8h9l7FPD8qYMhkAKGcGr6ljWU16vsk6In2ndC3GYKBguCLpogy3Y8vzw+xm+0
- eKZjnZs6QAFj99R7/CY6j0pt645xGC4Rc5v7uz0CKO2cY3FY9D+pte9THOIxPeFuHzYh
- jYWoNkGswobofBp2Ws7v8Naj9ghrItCuJjhkrZV6kMfVYlw0BhZp5rgO0GPX2ZtYNXsb
- jFnw==
-X-Gm-Message-State: AO0yUKUian2ZRYoDM3QtB7DIgI89AMdQGgUy6HjM4uLiv0PaWCaF5gUc
- IqsiyB1PGje+or9fx40jeMqFS3w1Lo2+55sQ
-X-Google-Smtp-Source: AK7set/hAZK/lCI7FeBJZvPEOFd7y56iUg1uirQZqihuz4M9Y1H72qBz7LGTS1nSphK59LPk1AuaUA==
-X-Received: by 2002:adf:dfd0:0:b0:2c5:54a7:3646 with SMTP id
- q16-20020adfdfd0000000b002c554a73646mr18961380wrn.5.1677494407661; 
- Mon, 27 Feb 2023 02:40:07 -0800 (PST)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Qj+OQi8J1U1RtiJWV6dOBCaHmcczpObPUqc48QF7O9M=;
+ b=W3iASpfnSneC5BJ3rqsMf5f0sa/BtQmWD+iAWAwyCsR94g52ok1jYruOcTry/zOOMU
+ wwzO9b1dLo+DGY+yeH6aUWl5FqOQLUoAEs0WRSEQrb3c6PNVEAbLH1EIFbQ7ks8cW6Kq
+ 6DgyEuKRz3ihZzypUiT++M3TFdRaymj56ZYwhPOU7qQ2cK5KnNjEhoanhgU/Nl3YC1Uk
+ AvYWaOsoI/tXH9Z4ucD37eeo3uycDhqEz7E+Ez3arpiz3XwdOwDWudryVnDscqoIQZ09
+ FY/D4ZMeycjANQYepVrPb6YXPCQcVHieh3VAZS4Xa6lxxKmV4CT6/uoWTU052C8u/ZLi
+ HUxg==
+X-Gm-Message-State: AO0yUKUCHMzhy8h1R21A/mUc1yjTevq+5NUP+Lwotoo4XFpb1H7cEO5K
+ /iunxjSwlnuR5jfiPG0rEey3EocsS8/chbTJ
+X-Google-Smtp-Source: AK7set9aJVckcZkHMGurr95KVhCjZES6YQrQLVroj43bQnC5w9xvJGU4CmKtbZuWBqlC5mi+Pz7fNA==
+X-Received: by 2002:a05:600c:358f:b0:3eb:3104:efef with SMTP id
+ p15-20020a05600c358f00b003eb3104efefmr5561620wmq.31.1677495526381; 
+ Mon, 27 Feb 2023 02:58:46 -0800 (PST)
 Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
  [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- fm26-20020a05600c0c1a00b003e6dcd562a6sm8964937wmb.28.2023.02.27.02.40.07
+ l1-20020a1ced01000000b003ea57808179sm12055048wmh.38.2023.02.27.02.58.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Feb 2023 02:40:07 -0800 (PST)
+ Mon, 27 Feb 2023 02:58:46 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Feb 2023 11:39:56 +0100
-Message-Id: <20230227103956.128236-3-thomas.devoogdt@barco.com>
+Date: Mon, 27 Feb 2023 11:58:34 +0100
+Message-Id: <20230227105838.358916-1-thomas.devoogdt@barco.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230227103956.128236-1-thomas.devoogdt@barco.com>
-References: <20230224111509.2434694-3-thomas.devoogdt@barco.com>
- <20230227103956.128236-1-thomas.devoogdt@barco.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=zOZRytoWff018qc3DgyWy0Zv4jvCF0OaRC8LWH449/0=;
- b=dp9VkziMIUH0apqu42V++w537ow7ETpVp7pfeoNfj4uU9ZJVZzkwR8R2skBVseJ/QW
- 94B39PzlHdINcYu2Po+uNl+LYgxojHUpTAAbVZ+63ucF8YZD9QuV9LUko2qlb/Kmhy16
- 1aLo1vi6piNyf86hCQzJO3tj5lBhs1F4vvMEIlIg1nSgUUc5VuS5yQz8M8JgaScUwgbT
- sCv0QmPKO8o4+OLbBGghgq7lSVLpnxhUZJGFBGCrzMpxkPOzDNJ6UKk27nW3uFLOy/Ke
- YSmKlYW6H79uZAdTTWoSxvlMlWxC1QLIkq1yY0byNWm5ItTari721aA17F9U5W/vrH4B
- b77g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=Qj+OQi8J1U1RtiJWV6dOBCaHmcczpObPUqc48QF7O9M=;
+ b=U/5eGk+Zg861y5F5mhRDE/FfNOfvx4tgIRyxUxeDdW59yNPRv77KOTnx9RFUjMD6Pw
+ a+AaprIUFdRTJRjts4lOStqzScd+N5q6/wB0+sTeeWyLRAj6NuAIjY/b4pycB6V4dKPY
+ gqRiQ4KtfopvhB1EVLc4VD+1lpOSO8MinL3T3kRhhVEsTGYI93FinBngtILNw63Cuy8K
+ I4gDg0/Lhmymjg2s8Fe7i/2WUZ4QioO5ouXr8bkK2ZnVNo3DUAoMz0hZSCIoc9FfBxGu
+ GlepXNNGCEKmkSiWjJOL3gFbeqiY8tJZjZ/BjafguFeyadpbc8/OEQZ3qw+lCKWcqA33
+ tLKQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=dp9VkziM
-Subject: [Buildroot] [PATCH v2 3/3] package/wpewebkit: use the CMAKE_NINJA
- flag
+ header.a=rsa-sha256 header.s=20210112 header.b=U/5eGk+Z
+Subject: [Buildroot] [PATCH v5 1/5] package/at-spi2-core: bump to version
+ 2.47.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,76 +96,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Daniel Lang <d.lang@abatec.at>, Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Replaces:
+From: Daniel Lang <d.lang@abatec.at>
 
-commit 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
-Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Thu Feb 9 18:07:06 2023 +0100
+https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_47_1/NEWS
 
-    package/wpewebkit: Build with ninja
+- X11 is now optional.
+- libxml2 is no longer optional.
+- atk and at-spi2-atk have been merged into at-spi2-core.
+- atk introspection option added.
 
-    Wpewebkit needs cmake >= 3.20 when building with the make backend since
-    wpewebkit 3.8.0.
-
-    Cmake 3.20 is above our minimal version in
-    support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
-    with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
-
-    https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
- package/wpewebkit/wpewebkit.mk | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+v3:
+ - rebased on https://patchwork.ozlabs.org/project/buildroot/list/?series=336254
+ - needed to fix the webkitgtk 2.38.5 compilation
+   (https://patchwork.ozlabs.org/project/buildroot/patch/20230220090923.2155635-2-thomas.devoogdt@barco.com/)
+v5: rebased + grouped patches
+---
+ package/at-spi2-core/Config.in         |  8 ++------
+ package/at-spi2-core/at-spi2-core.hash |  4 ++--
+ package/at-spi2-core/at-spi2-core.mk   | 20 +++++++++++++++++---
+ 3 files changed, 21 insertions(+), 11 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 48e5c2f8cd..c1b5dee121 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -14,6 +14,7 @@ WPEWEBKIT_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
- WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
-+WPEWEBKIT_CMAKE_NINJA = YES
- WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby \
- 	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
- 	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
-@@ -103,23 +104,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+diff --git a/package/at-spi2-core/Config.in b/package/at-spi2-core/Config.in
+index f56c5b93c4..1f6c421777 100644
+--- a/package/at-spi2-core/Config.in
++++ b/package/at-spi2-core/Config.in
+@@ -1,12 +1,12 @@
+ config BR2_PACKAGE_AT_SPI2_CORE
+ 	bool "at-spi2-core"
+-	depends on BR2_PACKAGE_XORG7 # xlib-libxtst
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_XLIB_LIBXTST if BR2_PACKAGE_XORG7 # optionally for X11
+ 	help
+ 	  The At-Spi2 Core package is a part of the GNOME
+ 	  Accessibility Project. It provides a Service Provider
+@@ -19,7 +19,3 @@ config BR2_PACKAGE_AT_SPI2_CORE
+ comment "at-spi2-core needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "at-spi2-core depends on X.org"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_PACKAGE_XORG7
+diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+index 764e4c3661..4531bf396c 100644
+--- a/package/at-spi2-core/at-spi2-core.hash
++++ b/package/at-spi2-core/at-spi2-core.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/at-spi2-core/2.36/at-spi2-core-2.36.0.sha256sum
+-sha256  88da57de0a7e3c60bc341a974a80fdba091612db3547c410d6deab039ca5c05a  at-spi2-core-2.36.0.tar.xz
++# From https://download.gnome.org/sources/at-spi2-core/2.47/at-spi2-core-2.47.1.sha256sum
++sha256  c6ba7c160434edebf09d2936933569c936f6ec972301766f2bdac5a4d418153c  at-spi2-core-2.47.1.tar.xz
  
--# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
--# above our minimal version in
--# support/dependencies/check-host-cmake.mk, so use the ninja backend:
--# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
--WPEWEBKIT_CONF_OPTS += -GNinja
--WPEWEBKIT_DEPENDENCIES += host-ninja
--
--define WPEWEBKIT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
--endef
--
--define WPEWEBKIT_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
--endef
--
--define WPEWEBKIT_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
--endef
--
- $(eval $(cmake-package))
+ # locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+index f0b019c0ed..e98e779884 100644
+--- a/package/at-spi2-core/at-spi2-core.mk
++++ b/package/at-spi2-core/at-spi2-core.mk
+@@ -4,17 +4,31 @@
+ #
+ ################################################################################
+ 
+-AT_SPI2_CORE_VERSION_MAJOR = 2.36
+-AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
++AT_SPI2_CORE_VERSION_MAJOR = 2.47
++AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).1
+ AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+ AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+ AT_SPI2_CORE_LICENSE = LGPL-2.1+
+ AT_SPI2_CORE_LICENSE_FILES = COPYING
+ AT_SPI2_CORE_INSTALL_STAGING = YES
+-AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst \
++AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 libxml2 \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ AT_SPI2_CORE_CONF_OPTS = -Ddbus_daemon=/usr/bin/dbus-daemon
+ 
++ifeq ($(BR2_PACKAGE_XORG7),y)
++AT_SPI2_CORE_CONF_OPTS += -Dx11=enabled
++AT_SPI2_CORE_DEPENDENCIES += xlib_libXtst
++else
++AT_SPI2_CORE_CONF_OPTS += -Dx11=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++AT_SPI2_CORE_CONF_OPTS += -Dintrospection=enabled
++AT_SPI2_CORE_DEPENDENCIES += gobject-introspection
++else
++AT_SPI2_CORE_CONF_OPTS += -Dintrospection=disabled
++endif
++
+ AT_SPI2_CORE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ $(eval $(meson-package))
 -- 
 2.39.2
 
