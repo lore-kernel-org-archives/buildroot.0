@@ -4,131 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1A57C64ED8
-	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 08:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CE58C7EE2E
+	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 10:40:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65082812FE;
-	Mon, 27 Feb 2023 08:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65082812FE
+	by smtp1.osuosl.org (Postfix) with ESMTP id F061281E0A;
+	Mon, 27 Feb 2023 10:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F061281E0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aOjm3XE_1hnx; Mon, 27 Feb 2023 08:47:47 +0000 (UTC)
+	with ESMTP id hpb-krowSSq5; Mon, 27 Feb 2023 10:40:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77A7181251;
-	Mon, 27 Feb 2023 08:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77A7181251
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F54881E1B;
+	Mon, 27 Feb 2023 10:40:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F54881E1B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 11EA41BF36C
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 08:46:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 51E0E1BF25F
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C96DB81DE9
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 08:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C96DB81DE9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37EC681959
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:40:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37EC681959
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NtYm-6a6yqEF for <buildroot@lists.busybox.net>;
- Mon, 27 Feb 2023 08:46:28 +0000 (UTC)
+ with ESMTP id 3kjPNzLiG9kt for <buildroot@lists.busybox.net>;
+ Mon, 27 Feb 2023 10:40:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8272381B0A
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com
- (mail-db3eur04on0616.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe0c::616])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8272381B0A
- for <buildroot@buildroot.org>; Mon, 27 Feb 2023 08:46:28 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k+EHRoaFQGcYEnhcLqn7V399t+pWQRznai0CMdqIx3zYZr6Ug6cMHbnJlgEaP3urXjVCtYH9cn9sPf2LX9+yc9bgK3xyJpUzopNfJxAsmePQcGGyUKAFG8py8GFd+erRIUdfrDRyeSrDuPivOI9ESpIHBG3BExhkzpS20dG+uafxbfI5ybnMOsHGXHoC0oCGnkgpU8aJMPDiY74QPEq2txFNlTWDUi1T4n86bA9VjIaCvYZZ3d3eeal+RgJLZkD9eX4zqeik+LvjpERmZa3fmO15VOqDjbp7tfhZFVyN8JW1WN9TT/f+9Zm2ON5aIxgF6fYou8n99K59X6DxBSh5ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+5zjp1DWZrs4+KYQp+krKUkim3kh87FWv7UaYmbUafY=;
- b=CKwLeEUJo8unACMZfR42Qayotm6FyvBFWui1y61hF/Ee+9eyzktkn+slk4g7uerlsBIPhgU54kuVHpbStSF4sudMBwvP52WE7RBICfI+oRy5rM3O8PI8ksLGjPRWKkulQrul/FtaPXdeN8vdrDYQj0ydeLi35Sd1nQqL+C7S7PtYRvTact2XAZ+UroGOpiqeqi8eSPjiXA4zB+CM2nc0pPpdTqjvsr7BFFkpQ6rEheEV2gPzbnBhDu3CkPeZeLHW4IIH0PRR9j1hHvGuC0Ho2hxFg8kUIhqBEQ+gEQbwoPVIgXZKTMrriLSRZDGIFdn7BN2AtZYHnpajcQZivr1WCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
- dkim=pass header.d=abatec.at; arc=none
-Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
- by DB8P190MB0778.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:125::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Mon, 27 Feb
- 2023 08:46:25 +0000
-Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
- ([fe80::154e:a633:142d:bb0f]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
- ([fe80::154e:a633:142d:bb0f%4]) with mapi id 15.20.6134.027; Mon, 27 Feb 2023
- 08:46:25 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 3/3] linux: bump _KERNEL_LATEST_VERSION to 6.2
-Thread-Index: AQHZSofSCXCRtZ0u30yXJTHPUvxd6Q==
-Date: Mon, 27 Feb 2023 08:46:25 +0000
-Message-ID: <VI1P190MB04936D7377E09CA3A3AA93A49FAF9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1P190MB0493:EE_|DB8P190MB0778:EE_
-x-ms-office365-filtering-correlation-id: 2a27052b-c260-4749-8eaa-08db189f1c02
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6fLOEo/EDl7XZfffhMDJdAUlU0SpIFU5klERXG4eWBzRnqwq5ytuMxtrZSElPiXkWmhvvnmK5sTY1bqhoOgMgtx6qfQjGX9RqUeFHQScOcOyf1Ceaz5B5fF4Ct3Vn+rtHBjRLfpyS1pLfW9rnq5IvAHyPR6aol15ajOx6XeeZcu813khoaiblcsOhTIcHkXGW6jFXmZKvQzsuzNit7hH9Vox1nvV+jdbGvWT0F69WpS9V98DjDcC6MJd85AKyi+/SZYrf0NZMro02cjTC3PjE+7vnMZ1RWgU2O9Ihf5b2P5b3i7mj6RnSkhMV8OVkoJpX58jSTAJBwNsjfBoDW7CpY3HJqWEYVLjzFW/CLkWI4J8vn32JGVrAr2QICAxxJvyxHa5gOYnor9jo+b9HRR61bWMGtZknTnM0tO/ck8f0fbaoMjApKtr2Kaq+ykWyMV7jsibXDZFny16AhINtLg8+9fkAs8uBCGRmtZ+ZZwwdRAIMPcSLJwkiWAKTS8qUDKhBCX8h0Ps1p4Y/1yWdpzF2L9/YhN0Qytrg6rZ5hIsvIzWyKSPzP77nrU7zIzohtUgpp3VOLgu2hJXi0fgwS68kAXyJnt1KhxxvN9OOaQJita2n+s8AIv1GYUrikRgQH30S/4rFDQZMuUIS8YoQFdEhZYTvP83jKso0M7v8FVkP3BV1popFc1mtwvwDXB4Sfw5u39wtOOLAKHb23XRlWmCCA==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230025)(4636009)(396003)(376002)(366004)(346002)(136003)(39840400004)(451199018)(33656002)(316002)(478600001)(71200400001)(5660300002)(52536014)(2906002)(8936002)(7696005)(66476007)(66446008)(64756008)(66946007)(66556008)(76116006)(8676002)(4744005)(6916009)(41300700001)(122000001)(55016003)(86362001)(38100700002)(9686003)(186003)(26005)(6506007)(83380400001)(38070700005);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?duQTlFoj0BYvEL2//6CxGmeQwwgVncI8edCGO1R46PsRcJDeUqzGNdwNtH?=
- =?iso-8859-1?Q?RcrkdHxNlFpziCYKRcNfFsTKcHxg1wqiaEsmEosrBGeHGDCC48TbppAbWX?=
- =?iso-8859-1?Q?h+ED1qJUUywY/1VTSqiL8EkBTAaHF0A9l9a0IWUb+tYXqNyxwnarKfAjwV?=
- =?iso-8859-1?Q?eS9fqfQ/+W45lgt585j16eLF8yA8Ul5L/TqmJO3qe9200HJ/0XArflNRBy?=
- =?iso-8859-1?Q?iMjNeNKPC4U0Co91K++EnbVSX3RXcLZMxVHiNoOYWsO7prjiSgq4iaTFUs?=
- =?iso-8859-1?Q?CLc8KMflSJDTm3/09M5wthMk/K/CbEUrETWikwYB1s52ZQy+joJnoDDAiJ?=
- =?iso-8859-1?Q?zlnHSnulMeaTQ7nggp6kJwqF1DbNcn9fpoGgvYiHp7YF3/+2Un9xOswfJi?=
- =?iso-8859-1?Q?IP0cZIfoHiYtj8oLzu2fNKR8/ODyifLyPOlUHGAhLTJkgz0SWK1HnxBDEj?=
- =?iso-8859-1?Q?sqqU4I9vBdqIScTRbwTNfNNB1MEccWcQPWTnKDEtyGEXDHvXuOM0nC6lb5?=
- =?iso-8859-1?Q?X+4Nkzz0JomAvfbxXShNCGanfSaWT5rtaZ3v8em4mQDTXoIHgrX2od8xQF?=
- =?iso-8859-1?Q?YfoSz/Xjk8ZB5aB/SmwRUquoONtnsUFPYzUfO5xK+l8SMKiO3+WwQu4bXj?=
- =?iso-8859-1?Q?AJkXbRUD26g9gdx6E5nAX3R2tuwarqxmjBRZYyoMLF9WnzXnqCdQl1MfC4?=
- =?iso-8859-1?Q?QEv4kGW5DVQrEZTccLmu1YG//0YTEHpo3f8+yW1ExPfBYGRgFMO0Ypa0ow?=
- =?iso-8859-1?Q?7+t+Jt7MORGz0WRfyju9z0AdgupETwygqGcadwhRhLTAEcJ4Ga8neHeLH2?=
- =?iso-8859-1?Q?dPsRgJBeSVJf3qoKOHGylmL7F+tyAIi4qwmjMxp+ni18bN7RMf/03wK8Uj?=
- =?iso-8859-1?Q?CYskosP9JDqnhAHWMfR2VzeZO/entAdyStIhcTcmgAwr2Py9xHpf5KLuTe?=
- =?iso-8859-1?Q?PCnz2OoNTlc3/JwlQyeqkCvrdCGL9FaqzBPuOYZ7G6UsORGeAraKULtCFd?=
- =?iso-8859-1?Q?VXP/wXyQ0Y9YDvZjh2QQ9ILjuh0NbcO3/dhDEBeh53530Fny8AQLyU7a0E?=
- =?iso-8859-1?Q?d9meCSOzxzcBcxGdWmm17vn/73rq8LYXMpttd+sIimTfM9QMzT0K/D0IXo?=
- =?iso-8859-1?Q?UNw3FhO9BJubqLgOfU1b5P1r3+oVvgVLCuJ/iigeXoVAJPmVXcGR/4JP7e?=
- =?iso-8859-1?Q?zz1KTIGWO5VNODQCNHc/G9+yaI+qk6mm2bfcm4PTisVafDTXY9eZoWunGP?=
- =?iso-8859-1?Q?HokMQkhyYe1QnMWgKnqntXnPpZtY1k2gcQvGlexkLne901eRW/wuODEuRp?=
- =?iso-8859-1?Q?S0AkOY7uNsdJ3cXDb33nDmKgA5Zqk0dOcQOl5Aw0CkeFBXfJY2S3/P3ltI?=
- =?iso-8859-1?Q?AXFrxsCnUI3HewzOgzaTXYcS6uXY6CBgRA++n8ZsFGzDlVlCKvddnq0MJj?=
- =?iso-8859-1?Q?lU0XGF62PPbpeZ0Q88CAuWB8wbFE3nM2TBwy/9SVCKzJF4/1+8Jpk9VPjL?=
- =?iso-8859-1?Q?Uz/URorfpMEZN+hWSHd2Vsw1fXzvbmmWOQ7HQKEf05J5dyYgh82YNviQJA?=
- =?iso-8859-1?Q?n35CwHP78jBjhJGscxZ6Pjd5c0mUKsXj1jYvmM5rav/OA78FtzByc54r0d?=
- =?iso-8859-1?Q?/ns/zTovmWTag=3D?=
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9F15818C0
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C9F15818C0
+ for <buildroot@buildroot.org>; Mon, 27 Feb 2023 10:40:06 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id p26so3900682wmc.4
+ for <buildroot@buildroot.org>; Mon, 27 Feb 2023 02:40:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=vQwnMfE31WVpgJGUqZmABHRGaxKSNuFM658Nq9DFjsM=;
+ b=aTGFEBnqDP6W4WJ/7u3VLGy0bL/PKLPiv+ffa/6YhzhHYbOqXQmWCiChh8wnXlYsFS
+ PtznY6daY0JFgllanTm/YhW26CwSgnqXeSphLV6NdB9LiMFhG5kwZy7BZiHM7Hfn5ujw
+ 9Doh0WJCsTnuz3oFZTSYbaBIHSBirIsgzl5M8e9NV+z1tomAknfaNOFDfzKgTXzQCAgO
+ R6U+TBuoXmzkyF49+q8YunAgv+SosLxYXgLFBRw5UiDfbnhUi+x1XWG8gEXBIeoT2hgT
+ SY5JZphuEV5dNh1pLZZ1OQDZQB3IqKUgoH3b8jAQxkUlDwKwQ2z0PPf2xsC0V0NRTQdO
+ 2/AQ==
+X-Gm-Message-State: AO0yUKUvihpJLnXJgVtcOnSJw1kHlZC2Km+8DVyf2uFTMGyvq8L30abY
+ smXx++JEcwZelj91VUibyMQjn35n0nQaRZQ1
+X-Google-Smtp-Source: AK7set+WpToddv1hFnn8jtmanI51YgueJEdb4p+PqEx0rC/duCuBu/nLsALtG/D2tKZlx1gIEv5Y8w==
+X-Received: by 2002:a1c:4c07:0:b0:3eb:1432:a78c with SMTP id
+ z7-20020a1c4c07000000b003eb1432a78cmr7898910wmf.37.1677494404512; 
+ Mon, 27 Feb 2023 02:40:04 -0800 (PST)
+Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
+ [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
+ fm26-20020a05600c0c1a00b003e6dcd562a6sm8964937wmb.28.2023.02.27.02.40.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 27 Feb 2023 02:40:04 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+To: buildroot@buildroot.org
+Date: Mon, 27 Feb 2023 11:39:54 +0100
+Message-Id: <20230227103956.128236-1-thomas.devoogdt@barco.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230224111509.2434694-3-thomas.devoogdt@barco.com>
+References: <20230224111509.2434694-3-thomas.devoogdt@barco.com>
 MIME-Version: 1.0
-X-OriginatorOrg: abatec.at
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a27052b-c260-4749-8eaa-08db189f1c02
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Feb 2023 08:46:25.1697 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: A11FIURpsIZOM/440G7xdYyfMOkDd3cQSuza4BX8nMPJ+r+P28hr/q+c555C3VUzyMj10ZGTNgkMmHJKrQ/ehg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P190MB0778
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=abatec.at; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+5zjp1DWZrs4+KYQp+krKUkim3kh87FWv7UaYmbUafY=;
- b=zg7ttWzX/xjEMvZdhXGA2t0RYfsvHwJiUPfSV+Pd6nB9E3HQZVhKJbvBU9KpsC9TZb0+8NSEVCcmF2nKUDDvTWMfCtQGVZ5UAFO8NLrSdY+Id/xJMyOxS9Ux5JWlfWQGAn0UKtekku5ttD8XJQJNdd4lSC20L80EhypjBKKafyo=
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=vQwnMfE31WVpgJGUqZmABHRGaxKSNuFM658Nq9DFjsM=;
+ b=OjJcpSZzvbpWr5wn7KVvae3aOQrH1UeMUDjn84F/K44u2Vj9XoqyOP5eres6cicdfb
+ bVlOh3hLSoJf2KQrC+4gBeEgOIltAs581msJKCtcyLti0n4bsSFar+R/PzNSVRj9ji6k
+ k1Rd+D+qjFiC2cxpS9zksA8lxqxiCTPTovWFH62rcwnB+QHrko7pHa0bjjbZzt6iYd3v
+ 8DRzcS+dq8Y7KxtoxpEjkTlOVjhqDyMRn1XjtoxMv7kpzR5qskDgHtZUHAvZswCb54Nh
+ B+KcMHHyFVKfttA1wwkOReGOnGwTquo/dczRmG9JQCtFp9WfWD5X5L0+XJwLUknwcmGg
+ nKJw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=zg7ttWzX
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH 3/3] linux: bump _KERNEL_LATEST_VERSION to 6.2
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=OjJcpSZz
+Subject: [Buildroot] [PATCH v2 1/3] pkg-cmake: add option to select the
+ Ninja generator
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -140,44 +98,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Lang Daniel via buildroot <buildroot@buildroot.org>
-Reply-To: Lang Daniel <d.lang@abatec.at>
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Adrian Perez de Castro <aperez@igalia.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
----
- linux/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+E.g. Commit 16e5c92ff5fd2b44a1126bd7d7538c68ce838213 can now be replaced by:
+WEBKITGTK_CMAKE_NINJA = YES
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5cbef197ab..495fc48997 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,8 +28,8 @@ choice
- 	prompt "Kernel version"
+Packages that are selecting Ninja (or overtime another generator),
+should also use the _BUILD_{ENV,OPTS} variables iso the _MAKE variables.
+
+No _INSTALL{,_STAGING,_TARGET}_OPTS used so far:
+
+    $ grep '_INSTALL_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
+    $ grep '_INSTALL_STAGING_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
+    $ grep '_INSTALL_TARGET_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
+
+The _MAKE_{ENV,OPTS} are translated to _BUILD_{ENV,OPTS}:
+
+    $ grep '_MAKE_ENV =' $(grep -rl "cmake-package" package/*/*.mk)
+
+> package/netopeer2/netopeer2.mk:NETOPEER2_MAKE_ENV = \
+> package/racehound/racehound.mk:RACEHOUND_MAKE_ENV = $(LINUX_MAKE_FLAGS)
+
+    $ grep '_MAKE_OPTS =' $(grep -rl "cmake-package" package/*/*.mk)
+
+> package/mariadb/mariadb.mk:HOST_MARIADB_MAKE_OPTS = import_executables
+> package/zeek/zeek.mk:HOST_ZEEK_MAKE_OPTS = binpac bifcl
+
+Only "musepack" seems to overwrite MAKE to enforce -j1, so replace it:
+
+    $ grep '_MAKE =' $(grep -rl "cmake-package" package/*/*.mk)
+
+> package/musepack/musepack.mk:MUSEPACK_MAKE = $(MAKE1)
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+v2: made generator use more generic, other generators can now easily be added if required
+---
+ package/musepack/musepack.mk   |  2 +-
+ package/netopeer2/netopeer2.mk |  2 +-
+ package/pkg-cmake.mk           | 26 ++++++++++++++------------
+ package/racehound/racehound.mk |  2 +-
+ 4 files changed, 17 insertions(+), 15 deletions(-)
+
+diff --git a/package/musepack/musepack.mk b/package/musepack/musepack.mk
+index fc66c684a5..d4dd08df36 100644
+--- a/package/musepack/musepack.mk
++++ b/package/musepack/musepack.mk
+@@ -9,7 +9,7 @@ MUSEPACK_SITE = http://files.musepack.net/source
+ MUSEPACK_SOURCE = musepack_src_$(MUSEPACK_VERSION).tar.gz
+ MUSEPACK_DEPENDENCIES = libcuefile libreplaygain
+ MUSEPACK_INSTALL_STAGING = YES
+-MUSEPACK_MAKE = $(MAKE1)
++MUSEPACK_BUILD_OPTS = -j1
+ MUSEPACK_LICENSE = BSD-3-Clause (*mpcdec), LGPL-2.1+ (*mpcenc)
+ MUSEPACK_LICENSE_FILES = libmpcdec/COPYING libmpcenc/quant.c
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (6.1)"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	bool "Latest version (6.2)"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_2 if BR2_KERNEL_HEADERS_AS_KERNEL
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index 47fcd31acd..2ebb23eccd 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
+@@ -24,7 +24,7 @@ NETOPEER2_CONF_OPTS = \
+ # affected mutualy.
+ NETOPEER2_SYSREPO_SHM_PREFIX = sr_buildroot$(subst /,_,$(CONFIG_DIR))_netopeer2
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (5.10.162-cip24)"
-@@ -128,7 +128,7 @@ endif
+-NETOPEER2_MAKE_ENV = \
++NETOPEER2_BUILD_ENV = \
+ 	SYSREPOCTL_EXECUTABLE=$(HOST_DIR)/bin/sysrepoctl \
+ 	SYSREPO_SHM_PREFIX=$(NETOPEER2_SYSREPO_SHM_PREFIX)
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.1.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.2.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 8c375779cb..205a93db5f 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -51,11 +51,6 @@ endif
+ 
+ define inner-cmake-package
+ 
+-$(2)_MAKE			?= $$(MAKE)
+-$(2)_INSTALL_OPTS		?= install
+-$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
+-$(2)_INSTALL_TARGET_OPTS	?= DESTDIR=$$(TARGET_DIR) install/fast
+-
+ $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+ 
+ 
+@@ -65,6 +60,13 @@ else
+ $(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
+ endif
+ 
++ifeq ($$($(3)_CMAKE_NINJA),YES)
++$(2)_DEPENDENCIES += host-ninja
++$(2)_GENERATOR			= "Ninja"
++else
++$(2)_GENERATOR			= "Unix Makefiles"
++endif
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file. And take care of the differences between host and target
+@@ -88,7 +90,7 @@ define $(2)_CONFIGURE_CMDS
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+-		-G"Unix Makefiles" \
++		-G$$($$(PKG)_GENERATOR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_INSTALL_RUNSTATEDIR="/run" \
+@@ -119,7 +121,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+ 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+-		-G"Unix Makefiles" \
++		-G$$($$(PKG)_GENERATOR) \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+ 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+@@ -166,11 +168,11 @@ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
+ ifndef $(2)_BUILD_CMDS
+ ifeq ($(4),target)
+ define $(2)_BUILD_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) $$(BUILD_OPTS) $$($$(PKG)_BUILD_OPTS)
+ endef
+ else
+ define $(2)_BUILD_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) $$(BUILD_OPTS) $$($$(PKG)_BUILD_OPTS)
+ endef
+ endif
+ endif
+@@ -181,7 +183,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_OPTS)
+ endef
+ endif
+ 
+@@ -191,7 +193,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(STAGING_DIR) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_STAGING_OPTS)
+ endef
+ endif
+ 
+@@ -201,7 +203,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(TARGET_DIR) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_TARGET_OPTS)
+ endef
+ endif
+ 
+diff --git a/package/racehound/racehound.mk b/package/racehound/racehound.mk
+index 6499e166d8..f63bb233f6 100644
+--- a/package/racehound/racehound.mk
++++ b/package/racehound/racehound.mk
+@@ -22,6 +22,6 @@ RACEHOUND_CONF_OPTS += \
+ 	-DKBUILD_VERSION_STRING=$(LINUX_VERSION_PROBED)
+ 
+ # cross compile environment for linux kernel module
+-RACEHOUND_MAKE_ENV = $(LINUX_MAKE_FLAGS)
++RACEHOUND_BUILD_ENV = $(LINUX_MAKE_FLAGS)
+ 
+ $(eval $(cmake-package))
 -- 
-2.25.1
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
