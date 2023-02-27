@@ -4,69 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 595A7C64ED6
-	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 10:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D16CC7EE30
+	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 10:59:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F34924154A;
-	Mon, 27 Feb 2023 10:59:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F34924154A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0717A414FA;
+	Mon, 27 Feb 2023 10:59:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0717A414FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8JfCX3DODWWi; Mon, 27 Feb 2023 10:59:20 +0000 (UTC)
+	with ESMTP id bo4tuunFPhOt; Mon, 27 Feb 2023 10:59:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F11AA415F0;
-	Mon, 27 Feb 2023 10:59:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F11AA415F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADB8541607;
+	Mon, 27 Feb 2023 10:59:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADB8541607
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AA3531BF25F
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:58:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 704251BF25F
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 91243410D3
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:58:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91243410D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A105410D3
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 10:58:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A105410D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BJClmnXx0zz8 for <buildroot@lists.busybox.net>;
- Mon, 27 Feb 2023 10:58:55 +0000 (UTC)
+ with ESMTP id SQl-UEbhssfS for <buildroot@lists.busybox.net>;
+ Mon, 27 Feb 2023 10:58:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4153408C9
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D4153408C9
- for <buildroot@buildroot.org>; Mon, 27 Feb 2023 10:58:54 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- j19-20020a05600c191300b003eb3e1eb0caso2169170wmq.1
- for <buildroot@buildroot.org>; Mon, 27 Feb 2023 02:58:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E41BD408C9
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E41BD408C9
+ for <buildroot@buildroot.org>; Mon, 27 Feb 2023 10:58:56 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id q16so5752375wrw.2
+ for <buildroot@buildroot.org>; Mon, 27 Feb 2023 02:58:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=LPA7I/SXRYZrtecYzZBmJcBIm49qYesqYthDvhOvC50=;
- b=SAYZfzc2fj9pUbi78U5qGmbDejvDrwIjxpSZYGDzFKO3TIMK1X19JebJDEVmlYYUCT
- 865GflTG7dYsj0eOVYq9u+txBw3fK+ZZeUgyUMGlJ567xk1GNmknwvlZ4RaA/eCpqZub
- Z1tIvx2RvrWA9R1+S77VKNYds3yDmICv7mOHFuByIzR5zcXOo1Ij/eNYkvw7/JH3DJOc
- km7mleDDO+WmsefVlqXxw7ihBAEknxmz2fjqfri62lKZOGMYwUQ3qxBnQX24UN2xZYPR
- 5fzeeg06FLO17QSjsaGuU39HoltrFM5xTQoPIPuerUjbaJEcEuIetK4AbnK54MENeEkH
- zR5A==
-X-Gm-Message-State: AO0yUKVqTH9EL4JKb0EuRZHOBSvbp1Ul5KXHmaTzIXvoZSkzFS2T2Yf1
- fFLu8vTHTLNtuJTzraYUWQgA0+181G3LYOMf
-X-Google-Smtp-Source: AK7set/RHXlrDZVRIl//jkYWkqTwkT0OgJuI4Jgbl5usaNxuOIazDFoVhqRjK4m7keki8Yc9VN0yUQ==
-X-Received: by 2002:a05:600c:990:b0:3eb:2f3b:4478 with SMTP id
- w16-20020a05600c099000b003eb2f3b4478mr5709656wmp.15.1677495532641; 
- Mon, 27 Feb 2023 02:58:52 -0800 (PST)
+ bh=5O1x8TJex/u2xPPHJw+D2nO+ELwyMaeFoEkgly3I8tA=;
+ b=L0qw9JUSD/BzAWknjU7DpzVpthFTZ3VjHiwS0AWbS6b+SQe8bUdKwOpK7+PotoF/Hl
+ /RQz8oPJBZObIp1qLLNm8/j6T08aL08v2NwTmS6HAgJPTMp6WJkfJmCW0WEUswqrR+a+
+ dYCHCK557Htv6G2Sp06K2zNY3FPMFIpf6EPeZBHAU0z30C2O9YYUJ7svVyPOyvzLGwyp
+ XdYIR/XZ1SpCd/UTBv0OrAp5XnlJJ6+4/oOUT8jd2KgGDXcVDxKhqnOsfS2nUbr7v104
+ skc/hM6vjHHkXi0M+9yxge6GGApVwWJbHZWGvoYpzqiHZgaOiulI8lF7GLN5V5JIHrWY
+ +qbw==
+X-Gm-Message-State: AO0yUKXa+2DBy3B+tb8uKV/BvIizjLgAUKHOgbLev+nWbcURTd0rBeNd
+ u4CMpU8FJaO+LULH20036YUHGA1WrSx8///b
+X-Google-Smtp-Source: AK7set9Tc0FUrmBsQYJl0uC+GQdkb84wcLRxlkWIMmkGolY0XpwvJbtMlHLpMQl4kviEEsBne6nHHA==
+X-Received: by 2002:a5d:4e8d:0:b0:2c7:daa:1c56 with SMTP id
+ e13-20020a5d4e8d000000b002c70daa1c56mr14202354wru.4.1677495534792; 
+ Mon, 27 Feb 2023 02:58:54 -0800 (PST)
 Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
  [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- l1-20020a1ced01000000b003ea57808179sm12055048wmh.38.2023.02.27.02.58.52
+ l1-20020a1ced01000000b003ea57808179sm12055048wmh.38.2023.02.27.02.58.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Feb 2023 02:58:52 -0800 (PST)
+ Mon, 27 Feb 2023 02:58:54 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Feb 2023 11:58:36 +0100
-Message-Id: <20230227105838.358916-3-thomas.devoogdt@barco.com>
+Date: Mon, 27 Feb 2023 11:58:37 +0100
+Message-Id: <20230227105838.358916-4-thomas.devoogdt@barco.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230227105838.358916-1-thomas.devoogdt@barco.com>
 References: <20230227105838.358916-1-thomas.devoogdt@barco.com>
@@ -76,17 +75,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=LPA7I/SXRYZrtecYzZBmJcBIm49qYesqYthDvhOvC50=;
- b=SttM0YtALUlCncZlWDlGQE5MdFr7Q4lraANVcb/yYNDRLYnJ7LK0C8DqfNkRDEpaDH
- xijW/8qcZRmqMjAWuqS49Lu8dUiqAL9hCe8dLhaSMvwIJDWxpq4yCi9d9dG0+el2LjBS
- 1ceB+xjxdBqFUhK/mbbvU+GFXEHmfB9jj7Dy6+JHr1COWsYDXPXOAX/pnXCPTxmi4p3a
- X5w8zEf8iICeNYXzXNk0B8gEkYdoSq7EHjOEF1akOUcdehgz5F9r5Xo/jrabSBZax4kC
- 6/DBnHHv5Re+WdA+XhzQ5ux51X1+SruElncc2VT16OTtMcK08/8IARkjBj9MDR2kUCAR
- 7F9g==
+ bh=5O1x8TJex/u2xPPHJw+D2nO+ELwyMaeFoEkgly3I8tA=;
+ b=M0XJf6dVEG9YV0ba1wXbSME3xrKPieKfXl0m9XhPCHHhSOR0QHr4MIG7JNnPQrZc6M
+ VfwQoz9rJ9h/lKFEN+kyPB7rEH0ZOoOlZtbOf0bcKT/gx7pu9Cv+W5YQvIz6s2BfRvpN
+ 80YUsGYJy5AMPkOmqsg4B+4Yigc5ioCFRgmNRRVCQPxtrH4LdlMIpcTYtEfKaW2MdbjU
+ KeF2fFZZvg07U+iMavPtTaUcSdLxm0NhHM8Co3UUIVn+Esz8J+qle4Pk7YcmSBRuy11c
+ ZcZVxYJAkJn0tyOFGC2Uw4TpCpff6YtDwNs5dOyus7jyn/86qWQo92C/NVF2iNjSrR3h
+ n0tg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=SttM0YtA
-Subject: [Buildroot] [PATCH v5 3/5] package/atk: remove package
+ header.a=rsa-sha256 header.s=20210112 header.b=M0XJf6dV
+Subject: [Buildroot] [PATCH v5 4/5] package/libgtk3: re-enable atk-bridge
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,248 +97,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Lang <d.lang@abatec.at>, Thomas Devoogdt <thomas.devoogdt@barco.com>,
+Cc: Thomas Devoogdt <thomas.devoogdt@barco.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Daniel Lang <d.lang@abatec.at>
+The at-spi2-core and at-spi2-atk were merged, and are now built by default,
+so this patch is no longer required.
 
-atk has been merged into at-spi2-core with version 2.45.1.
-
-https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/AT_SPI2_CORE_2_45_1/NEWS
-https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/78
-
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
-v3:
- - rebased on https://patchwork.ozlabs.org/project/buildroot/list/?series=336254
- - needed to fix the webkitgtk 2.38.5 compilation
-   (https://patchwork.ozlabs.org/project/buildroot/patch/20230220090923.2155635-2-thomas.devoogdt@barco.com/)
-v5: rebased + grouped patches
+v5: added re-enable atk-bridge patch to the package/at-spi2-core: bump to version 2.47.1 group
 ---
- Config.in.legacy             |  7 +++++++
- package/Config.in            |  1 -
- package/atk/Config.in        | 14 --------------
- package/atk/atk.hash         |  5 -----
- package/atk/atk.mk           | 25 -------------------------
- package/atkmm/Config.in      |  8 ++++----
- package/atkmm/atkmm.mk       |  2 +-
- package/libglade/Config.in   |  2 +-
- package/libglade/libglade.mk |  2 +-
- package/libgtk2/Config.in    |  2 +-
- package/libgtk2/libgtk2.mk   |  2 +-
- package/libgtk3/Config.in    |  2 +-
- package/libgtk3/libgtk3.mk   |  2 +-
- 13 files changed, 18 insertions(+), 56 deletions(-)
- delete mode 100644 package/atk/Config.in
- delete mode 100644 package/atk/atk.hash
- delete mode 100644 package/atk/atk.mk
+ package/libgtk3/0001-disable-atk-bridge.patch | 41 -------------------
+ 1 file changed, 41 deletions(-)
+ delete mode 100644 package/libgtk3/0001-disable-atk-bridge.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b303677d3f..2d3b1d41ea 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2023.02"
- 
-+config BR2_PACKAGE_ATK
-+	bool "atk removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_AT_SPI2_CORE
-+	help
-+	  atk is now part of at-spi2-core.
-+
- config BR2_PACKAGE_AT_SPI2_ATK
-         bool "at-spi2-atk removed"
-         select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 42173fa2b1..3891f5abdd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1553,7 +1553,6 @@ endmenu
- menu "Graphics"
- 	source "package/assimp/Config.in"
- 	source "package/at-spi2-core/Config.in"
--	source "package/atk/Config.in"
- 	source "package/atkmm/Config.in"
- 	source "package/bayer2rgb-neon/Config.in"
- 	source "package/bullet/Config.in"
-diff --git a/package/atk/Config.in b/package/atk/Config.in
+diff --git a/package/libgtk3/0001-disable-atk-bridge.patch b/package/libgtk3/0001-disable-atk-bridge.patch
 deleted file mode 100644
-index d9371b879b..0000000000
---- a/package/atk/Config.in
+index f3e9bff2ba..0000000000
+--- a/package/libgtk3/0001-disable-atk-bridge.patch
 +++ /dev/null
-@@ -1,14 +0,0 @@
--config BR2_PACKAGE_ATK
--	bool "atk"
--	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
--	depends on BR2_USE_MMU # glib2
--	select BR2_PACKAGE_LIBGLIB2
--	help
--	  The ATK accessibility toolkit, needed to build GTK+-2.x.
+@@ -1,41 +0,0 @@
+-Remove atk-bridge support.
 -
--	  https://gitlab.gnome.org/GNOME/atk
+-atk-bridge doesn't seem useful for now in Buildroot and requires to
+-add two new packages just for it: at-spi2-core and at-spi2-atk.
 -
--comment "atk needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/atk/atk.hash b/package/atk/atk.hash
-deleted file mode 100644
-index d8cd69ff1f..0000000000
---- a/package/atk/atk.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# From http://ftp.gnome.org/pub/gnome/sources/atk/2.38/atk-2.38.0.sha256sum
--sha256  ac4de2a4ef4bd5665052952fe169657e65e895c5057dffb3c2a810f6191a0c36  atk-2.38.0.tar.xz
+-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 -
--# Hash for license file
--sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-deleted file mode 100644
-index 2820fb486d..0000000000
---- a/package/atk/atk.mk
-+++ /dev/null
-@@ -1,25 +0,0 @@
--################################################################################
--#
--# atk
--#
--################################################################################
+---- a/gtk/a11y/gtkaccessibility.c
+-+++ b/gtk/a11y/gtkaccessibility.c
+-@@ -37,10 +37,6 @@
+- #include <gtk/gtktogglebutton.h>
+- #include <gtk/gtkaccessible.h>
 -
--ATK_VERSION_MAJOR = 2.38
--ATK_VERSION = $(ATK_VERSION_MAJOR).0
--ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
--ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
--ATK_LICENSE = LGPL-2.0+
--ATK_LICENSE_FILES = COPYING
--ATK_INSTALL_STAGING = YES
--ATK_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
+--#ifdef GDK_WINDOWING_X11
+--#include <atk-bridge.h>
+--#endif
+--
+- static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
+-                                          guint                  n_param_values,
+-                                          const GValue          *param_values,
+-@@ -988,9 +984,5 @@ _gtk_accessibility_init (void)
+-   _gtk_accessibility_override_atk_util ();
+-   do_window_event_initialization ();
 -
--ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--ATK_CONF_OPTS += -Dintrospection=true
--ATK_DEPENDENCIES += gobject-introspection
--else
--ATK_CONF_OPTS += -Dintrospection=false
--endif
--
--ATK_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
--
--$(eval $(meson-package))
-diff --git a/package/atkmm/Config.in b/package/atkmm/Config.in
-index aa58f8d593..f6f2ca8fc2 100644
---- a/package/atkmm/Config.in
-+++ b/package/atkmm/Config.in
-@@ -2,10 +2,10 @@ config BR2_PACKAGE_ATKMM
- 	bool "atkmm"
- 	depends on BR2_INSTALL_LIBSTDCPP # glibmm
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libsigc
--	depends on BR2_TOOLCHAIN_HAS_THREADS # atk/glibmm -> libglib2
--	depends on BR2_USE_MMU # atk/glibmm -> libglib2
--	depends on BR2_USE_WCHAR # atk/glibmm -> libglib2
--	select BR2_PACKAGE_ATK
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
-+	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
-+	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_GLIBMM
- 	select BR2_PACKAGE_LIBSIGC
- 
-diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
-index 7ceb87b047..da763c8386 100644
---- a/package/atkmm/atkmm.mk
-+++ b/package/atkmm/atkmm.mk
-@@ -11,6 +11,6 @@ ATKMM_SITE = https://download.gnome.org/sources/atkmm/$(ATKMM_VERSION_MAJOR)
- ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- ATKMM_LICENSE_FILES = COPYING COPYING.tools
- ATKMM_INSTALL_STAGING = YES
--ATKMM_DEPENDENCIES = atk glibmm libsigc host-pkgconf
-+ATKMM_DEPENDENCIES = at-spi2-core glibmm libsigc host-pkgconf
- 
- $(eval $(meson-package))
-diff --git a/package/libglade/Config.in b/package/libglade/Config.in
-index c97c9becd2..8d0d26f159 100644
---- a/package/libglade/Config.in
-+++ b/package/libglade/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBGLADE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_LIBXML2
- 	help
- 	  Libglade allows you to load glade interface files in a program
-diff --git a/package/libglade/libglade.mk b/package/libglade/libglade.mk
-index 21aed60605..af73d8bd00 100644
---- a/package/libglade/libglade.mk
-+++ b/package/libglade/libglade.mk
-@@ -9,7 +9,7 @@ LIBGLADE_VERSION = $(LIBGLADE_VERSION_MAJOR).4
- LIBGLADE_SOURCE = libglade-$(LIBGLADE_VERSION).tar.bz2
- LIBGLADE_SITE = https://download.gnome.org/sources/libglade/$(LIBGLADE_VERSION_MAJOR)
- LIBGLADE_INSTALL_STAGING = YES
--LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 atk libxml2
-+LIBGLADE_DEPENDENCIES = host-pkgconf libglib2 libgtk2 at-spi2-core libxml2
- LIBGLADE_LICENSE = LGPL-2.0+
- LIBGLADE_LICENSE_FILES = COPYING
- 
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index c75c37fb63..f2888b2f51 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBGTK2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
- 	select BR2_PACKAGE_CAIRO_PDF
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 859925e8d3..608c263e4d 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -23,7 +23,7 @@ LIBGTK2_CONF_ENV = \
- 
- LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
- 
--LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango atk \
-+LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango at-spi2-core \
- 	gdk-pixbuf $(TARGET_NLS_DEPENDENCIES)
- 
- LIBGTK2_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index 82ca68d2da..34b8d49eb3 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_LIBGTK3
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		BR2_PACKAGE_HAS_LIBGL
--	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
- 	select BR2_PACKAGE_CAIRO_PDF
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 283c129cef..2821c7eb52 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -14,7 +14,7 @@ LIBGTK3_CPE_ID_VENDOR = gnome
- LIBGTK3_CPE_ID_PRODUCT = gtk
- LIBGTK3_INSTALL_STAGING = YES
- 
--LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango \
-+LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 at-spi2-core libglib2 cairo pango \
- 	gdk-pixbuf libepoxy $(TARGET_NLS_DEPENDENCIES)
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+--#ifdef GDK_WINDOWING_X11
+--  atk_bridge_adaptor_init (NULL, NULL);
+--#endif
+--
+-   atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
+- }
+---- a/meson.build
+-+++ b/meson.build
+-@@ -564,7 +564,7 @@ if x11_enabled
+-   xfixes_dep     = dependency('xfixes', required: false)
+-   xcomposite_dep = dependency('xcomposite', required: false)
+-   fontconfig_dep = dependency('fontconfig', fallback: ['fontconfig', 'fontconfig_dep'])
+--  atkbridge_dep  = dependency('atk-bridge-2.0', version: at_spi2_atk_req)
+-+  atkbridge_dep  = dependency('atk-bridge-2.0', version: at_spi2_atk_req, required: false)
+- 
+-   backend_immodules += ['xim']
+- 
 -- 
 2.39.2
 
