@@ -4,47 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9236C64ED6
-	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 15:37:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 346E4C64ED6
+	for <buildroot@archiver.kernel.org>; Mon, 27 Feb 2023 15:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 551FD60EA7;
-	Mon, 27 Feb 2023 15:37:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 551FD60EA7
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC7A16104D;
+	Mon, 27 Feb 2023 15:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC7A16104D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KK18epMi5Vhd; Mon, 27 Feb 2023 15:37:51 +0000 (UTC)
+	with ESMTP id blFAHU5BtX2b; Mon, 27 Feb 2023 15:38:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 906A2600B3;
-	Mon, 27 Feb 2023 15:37:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 906A2600B3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 34CDA1BF31B
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 15:37:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 003D560736;
+	Mon, 27 Feb 2023 15:38:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 003D560736
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B134C1BF31B
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 15:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CDC640278
- for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 15:37:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CDC640278
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B3EB61047
+ for <buildroot@lists.busybox.net>; Mon, 27 Feb 2023 15:38:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B3EB61047
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RhBlMS8auJKS for <buildroot@lists.busybox.net>;
- Mon, 27 Feb 2023 15:37:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 49DBD4013D
- for <buildroot@buildroot.org>; Mon, 27 Feb 2023 15:37:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49DBD4013D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F3A586C1D; Mon, 27 Feb 2023 15:37:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mpZtD4GWFfgK for <buildroot@lists.busybox.net>;
+ Mon, 27 Feb 2023 15:38:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6FBA60736
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B6FBA60736
+ for <buildroot@buildroot.org>; Mon, 27 Feb 2023 15:38:08 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D5E3FC0016;
+ Mon, 27 Feb 2023 15:38:06 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pWfZl-009HXu-Vy; Mon, 27 Feb 2023 16:38:05 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 27 Feb 2023 16:36:46 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3c4fb99b80ae2925e04676cfc9ecffd0c35c430c
-X-Git-Newrev: 35ddf2f7707d33c8272fddeb2a0fae5647ed8426
-X-Patchwork-Hint: ignore
-Message-Id: <20230227153748.2F3A586C1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/sudo: fix
+To: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+References: <20220718215158.C299083CCF@busybox.osuosl.org>
+ <ab86d540-9c27-43fc-0d37-2d5b0bca072e@othermo.de>
+Date: Mon, 27 Feb 2023 16:38:05 +0100
+In-Reply-To: <ab86d540-9c27-43fc-0d37-2d5b0bca072e@othermo.de> (Marcus
+ Hoffmann's message of "Mon, 27 Feb 2023 15:25:06 +0100")
+Message-ID: <87356rm84i.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit] package/sudo: fix
  SUDO_ENABLE_SUDO_GROUP_RULE following version bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,47 +65,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35ddf2f7707d33c8272fddeb2a0fae5647ed8426
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-Since the version bump of sudo to v1.9.11p2 in commit 9b7f8da96b, the
-sed magic in SUDO_ENABLE_SUDO_GROUP_RULE no longer does its job, due
-to a slight change in the example sudoers file provided by upstream
-sudo.
-
-This commit fixes the regexp to match the new sudoers file.
-
-Fixes bug #14891 (https://bugs.busybox.net/show_bug.cgi?id=14891)
-
-Reported-by: Matthias Hardt <mhardt@berlinux-solutions.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 079fccdee5a2a10fc8275094512b8423548ea147)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sudo/sudo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 8bf1ce5e9c..c4eaafa6b1 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -82,7 +82,7 @@ define SUDO_USERS
- endef
- 
- define SUDO_ENABLE_SUDO_GROUP_RULE
--	$(SED) '/^# \%sudo\tALL=(ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
-+	$(SED) '/^# \%sudo\tALL=(ALL:ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
- endef
- SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
- 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIk1hcmN1cyIgPT0gTWFyY3VzIEhvZmZtYW5uIDxtYXJjdXMuaG9mZm1hbm5Ab3RoZXJt
+by5kZT4gd3JpdGVzOgoKID4gSGkgUGV0ZXIsCiA+IHRoZSBuZWVkcyB0byBiZSBiYWNrcG9ydGVk
+IHRvIDIwMjIuMTEueCBhbmQgMjAyMi4wMi54CgpUaGlzIGlzIGEgY29tbWl0IGZyb20gSnVseSAy
+MDIyLCBzbyBpdCBpcyBhbHJlYWR5IGluIDIwMjIuMTEueCAoYW5kCjIwMjIuMDgueCk6CgpnaXQg
+YnJhbmNoIC0tY29udGFpbnMgMDc5ZmNjZGVlNWEyYTEwZmM4Mjc1MDk0NTEyYjg0MjM1NDhlYTE0
+N3xncmVwICcyMDIyXC4nCiAgMjAyMi4wOC54CiAgMjAyMi4xMS54CgpCdXQgaXQgd2FzIGluZGVl
+ZCBtaXNzZWQgZnJvbSAyMDIyLjAyLng6CgpnaXQgc2hvcnRsb2cgMjAyMi4wMi4uMjAyMi4wMi54
+IC0tIHBhY2thZ2Uvc3VkbwpGYWJyaWNlIEZvbnRhaW5lICgyKToKICAgICAgcGFja2FnZS9zdWRv
+OiBmaXggQ1ZFLTIwMjItNDM5OTUKICAgICAgcGFja2FnZS9zdWRvOiBidW1wIHRvIHZlcnNpb24g
+MS45LjExcDIKCkZyYW5jb2lzIFBlcnJhZCAoMSk6CiAgICAgIHBhY2thZ2Uvc3VkbzogYnVtcCB0
+byB2ZXJzaW9uIDEuOS4xMnAxCgpOdW5vIEdvbsOnYWx2ZXMgKDIpOgogICAgICBwYWNrYWdlcy9z
+dWRvOiBleHBsaWNpdGx5IHNldCB3aXRoLXR6ZGlyCiAgICAgIHBhY2thZ2VzL3N1ZG86IGV4cGxp
+Y2l0bHkgc2V0IGVuYWJsZS10bXBmaWxlcy5kCgpZYWlyIEJlbi1BdnJhaGFtICgxKToKICAgICAg
+cGFja2FnZS9zdWRvOiBzZWN1cml0eSBidW1wIHRvIHZlcnNpb24gMS45LjEycDIKClNvIEkgaGF2
+ZSBjaGVycnktcGlja2VkIGl0IG5vdywgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJk
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
+ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
