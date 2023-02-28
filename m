@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A88E8C64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:47:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC1D4C64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E6BC60AE2;
-	Tue, 28 Feb 2023 20:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E6BC60AE2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EC58611BD;
+	Tue, 28 Feb 2023 20:57:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EC58611BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7teqFUKN5140; Tue, 28 Feb 2023 20:47:44 +0000 (UTC)
+	with ESMTP id rAjLS6Qa3KDl; Tue, 28 Feb 2023 20:57:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8538960AAF;
-	Tue, 28 Feb 2023 20:47:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8538960AAF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A77431BF293
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:47:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA50160AF2;
+	Tue, 28 Feb 2023 20:57:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA50160AF2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AE5D1BF293
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:57:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8ED48400C8
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:47:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8ED48400C8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E997403C7
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:57:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E997403C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SiZ3ZkbOK8f4 for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 20:47:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X1LRyh9GkER4 for <buildroot@lists.busybox.net>;
+ Tue, 28 Feb 2023 20:57:02 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D707400FC
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3D707400FC
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 20:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 187CB402BC
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 187CB402BC
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 20:57:01 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D4C36100009;
- Tue, 28 Feb 2023 20:47:37 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0621A60003;
+ Tue, 28 Feb 2023 20:56:59 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1pX6sq-00BN4g-Px; Tue, 28 Feb 2023 21:47:36 +0100
+ id 1pX71v-00BNsT-4u; Tue, 28 Feb 2023 21:56:59 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20230210231402.BA856852D1@busybox.osuosl.org>
-Date: Tue, 28 Feb 2023 21:47:36 +0100
-In-Reply-To: <20230210231402.BA856852D1@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sat, 11 Feb 2023 00:11:29 +0100")
-Message-ID: <87h6v5h5zr.fsf@dell.be.48ers.dk>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20230211183142.397167-1-bernd.kuhls@t-online.de>
+Date: Tue, 28 Feb 2023 21:56:59 +0100
+In-Reply-To: <20230211183142.397167-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 11 Feb 2023 19:31:42 +0100")
+Message-ID: <87cz5th5k4.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/nodejs: add patch to adjust
- default NodeJS search path
+Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
+ security bump version to 21.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,29 +70,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > commit:
- > https://git.buildroot.net/buildroot/commit/?id=0de216f95fc28c57cc430f39f011d5f88ead083b
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Release notes:
+ > https://lists.x.org/archives/xorg-announce/2023-February/003321.html
 
- > By default, NodeJS searches global modules in /usr/lib/node, but NPM
- > installs them in /usr/lib/node_modules/. Therefore by default, if one
- > installs modules with BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL, they are
- > not accessible by NodeJS, unless by passing a
- > NODE_PATH=/usr/lib/node_modules/ variable. Since this is not obvious,
- > and it's nicer when things work out of the box, we simply patch NodeJS
- > to look for modules at the right place.
+ > Fixes CVE-2023-0494:
+ > https://lists.x.org/archives/xorg-announce/2023-February/003320.html
 
- > See
- > https://stackoverflow.com/questions/15636367/nodejs-require-a-global-module-package
- > for some discussions on this topic.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Reviewed-by: Romain Naour <romain.naour@smile.fr>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2022.11.x, thanks.
+Committed to 2022.11.x and 2022.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
