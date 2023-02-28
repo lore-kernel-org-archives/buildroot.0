@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 220BEC64ED6
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:37:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02DCEC64ED6
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2126611A7;
-	Tue, 28 Feb 2023 15:37:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2126611A7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98D84611D0;
+	Tue, 28 Feb 2023 15:37:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98D84611D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K9cHHxBJ_MKx; Tue, 28 Feb 2023 15:37:40 +0000 (UTC)
+	with ESMTP id zr48Zl9l6Doz; Tue, 28 Feb 2023 15:37:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1258261166;
-	Tue, 28 Feb 2023 15:37:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1258261166
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 613B31BF2AA
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:36:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1516611C9;
+	Tue, 28 Feb 2023 15:37:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1516611C9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 475A41BF2AA
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C39E41900
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F4F661171
  for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:36:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C39E41900
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F4F661171
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SNabqznn9sET for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I6fuNNPVHFZd for <buildroot@lists.busybox.net>;
  Tue, 28 Feb 2023 15:36:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34F3F418EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F0676117B
  for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:36:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34F3F418EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F0676117B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2175586CCB; Tue, 28 Feb 2023 15:36:29 +0000 (UTC)
+ id 2F57186CCC; Tue, 28 Feb 2023 15:36:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 16:33:08 +0100
+Date: Tue, 28 Feb 2023 16:33:13 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f21a9f61c59bf1110b051fcbc73f3dcd9bea32ea
-X-Git-Newrev: 4070181b570640876d1966015cac22757ab50e7e
+X-Git-Oldrev: 4070181b570640876d1966015cac22757ab50e7e
+X-Git-Newrev: 3430a8c853cce5cab1c7bb7a9975fd494b3e1ee8
 X-Patchwork-Hint: ignore
-Message-Id: <20230228153629.2175586CCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/wolfssl: disable
- broken asm implementations on 32-bit Arm
+Message-Id: <20230228153629.2F57186CCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/wolfssl: handle
+ ARM Thumb situation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4070181b570640876d1966015cac22757ab50e7e
+commit: https://git.buildroot.net/buildroot/commit/?id=3430a8c853cce5cab1c7bb7a9975fd494b3e1ee8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-wolfSSL has ARMv8-A assembly implementations of some functions for
-both A64 and A32 ISAs.  However, some of the A32 versions use r11,
-which is usually not allowed:
+By default on ARM32, wolfssl uses assembly instructions that are not
+supported on Thumb (original Thumb, not Thumb 2), causing a build
+failure:
 
-wolfcrypt/src/port/arm/armv8-aes.c: In function 'wc_AesCbcEncrypt':
-wolfcrypt/src/port/arm/armv8-aes.c:3303:5: error: fp cannot be used in 'asm' here
- 3303 |     }
-      |     ^
+/tmp/ccgn33X7.s:299: Error: selected processor does not support `umlal r4,r5,r10,ip' in Thumb mode
+/tmp/ccgn33X7.s:386: Error: instruction not supported in Thumb16 mode -- `adds r4,r4,r6'
+/tmp/ccgn33X7.s:387: Error: unshifted register required -- `adc r3,r3,#0'
+/tmp/ccgn33X7.s:395: Error: instruction not supported in Thumb16 mode -- `adds r4,r4,r6'
 
-That can be fixed by adding the compiler flag -fomit-frame-pointer,
-but then there is another failure:
-
-/tmp/ccV19DQV.s: Assembler messages:
-/tmp/ccV19DQV.s:248: Error: first transfer register must be even -- `ldrd r11,r10,[r14,#4*14]'
-make[3]: *** [Makefile:5858: wolfcrypt/src/port/arm/src_libwolfssl_la-armv8-chacha.lo] Error 1
-
-This is definitely not a valid instruction in A32, which suggests that
-this code isn't being tested at all upstream.  So disable it here.
+Fix that by passing --with-arm-target=thumb, which tells wolfssl to
+use a different set of assembly routines.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/502/502a2b217845eb290c1961d4740b032462f8ae53/
+  http://autobuild.buildroot.net/results/907/907a5967439c3157c426023b0be1e613092d7bfe/
 
-Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 36b8c9494b56b877fea62f17926f747c7c7bfb8d)
+(cherry picked from commit f79a9c775ff0a59027f274a237d98b5f8d31c022)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/wolfssl.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/wolfssl/wolfssl.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index cd3acd9411..f415e11bb5 100644
+index f415e11bb5..8f6cba56ec 100644
 --- a/package/wolfssl/wolfssl.mk
 +++ b/package/wolfssl/wolfssl.mk
-@@ -33,14 +33,12 @@ WOLFSSL_CONF_OPTS += --disable-sslv3
- endif
- 
- # enable ARMv8 hardware acceleration
--ifeq ($(BR2_ARM_CPU_ARMV8A),y)
-+ifeq ($(BR2_aarch64),y)
- WOLFSSL_CONF_OPTS += --enable-armasm
- # the flag -mstrict-align is needed to prevent build errors caused by
- # some inline assembly in parts of the AES structure using the "m"
- # constraint
--ifeq ($(BR2_aarch64),y)
- WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
--endif
- else
+@@ -43,4 +43,8 @@ else
  WOLFSSL_CONF_OPTS += --disable-armasm
  endif
+ 
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++WOLFSSL_CONF_OPTS += --with-arm-target=thumb
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
