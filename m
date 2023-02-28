@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 694A8C64EC7
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C1FAC64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 15:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 110BA6113B;
-	Tue, 28 Feb 2023 15:54:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 110BA6113B
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEB48611B8;
+	Tue, 28 Feb 2023 15:55:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEB48611B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RPbf1fbsb6I8; Tue, 28 Feb 2023 15:54:58 +0000 (UTC)
+	with ESMTP id N7QY5yd7wZTx; Tue, 28 Feb 2023 15:55:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 522FC61186;
-	Tue, 28 Feb 2023 15:54:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 522FC61186
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 827B31BF95D
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5BF8611BA;
+	Tue, 28 Feb 2023 15:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5BF8611BA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 85D211BF969
  for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B6EA403ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5EBE440BB9
  for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 15:53:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B6EA403ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EBE440BB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CC4t5IVJM_RE for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vWEeKKVVgdKb for <buildroot@lists.busybox.net>;
  Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F77D402E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A1F5401D5
  for <buildroot@buildroot.org>; Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F77D402E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A1F5401D5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48B3D86CE8; Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
+ id 7899086CE8; Tue, 28 Feb 2023 15:53:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 16:46:51 +0100
+Date: Tue, 28 Feb 2023 16:52:23 +0100
 X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 348b2e25df76b9a603639dc9a99c03442ab673e1
-X-Git-Newrev: 10ae94b6bbfac57c23508129b942f052f0797dce
+X-Git-Oldrev: d62b7f7f91ca6fa1bd761fca183a17131ceef751
+X-Git-Newrev: 004660e84fa30d8fa033015f452b6ad807622afc
 X-Patchwork-Hint: ignore
-Message-Id: <20230228155307.48B3D86CE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] package/xz: bump to
- version 5.2.10
+Message-Id: <20230228155307.7899086CE8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.11.x]
+ support/dependencies/dependencies.sh: ensure git is >= 2.0.0 for vendoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10ae94b6bbfac57c23508129b942f052f0797dce
+commit: https://git.buildroot.net/buildroot/commit/?id=004660e84fa30d8fa033015f452b6ad807622afc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+The go vendoring fails on CentOS 7 (which uses git 1.8.3.1) with errors
+related to shallow clones:
+
+make docker-compose-source
+..
+go: downloading github.com/matttproud/golang_protobuf_extensions v1.0.4
+github.com/docker/compose/v2/pkg/mocks imports
+        github.com/theupdateframework/notary/client imports
+        github.com/docker/go/canonical/json: github.com/docker/go@v1.5.1-1.0.20160303222718-d30aec9fd63c: invalid pseudo-version: git fetch --unshallow -f origin in /home/jacmet/source/buildroot-mirror/output/host/share/go-path/pkg/mod/cache/vcs/48fbd2dfabec81f4c93170677bfc89087d4bec07a2d08f6ca5ce3d17962677ee: exit status 128:
+        fatal: git fetch-pack: expected shallow list
+make[1]: *** [/home/jacmet/source/buildroot-mirror/output/build/docker-compose-2.15.1/.stamp_downloaded] Error 1
+
+It works with git 2.0.0 (released May 2014, included in Debian 8), so check
+for >= 2.0.0 with logic similar to the GNU patch version check.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit be3a6bf2e7130b084ec4ed65274ff7c4bf67510c)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f229564c36ec64c1f1292b7281ae0bd33840d7a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xz/xz.hash | 3 ++-
- package/xz/xz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ support/dependencies/dependencies.sh | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index 3aa68791fd..1153e02b4d 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,5 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256  b65f1d0c2708e57716f4dd2216989a73847ac6fdb4168ffceb155767e22b834b  xz-5.2.7.tar.bz2
-+# https://tukaani.org/xz/xz-5.2.10.tar.bz2.sig
-+sha256  01b71df61521d9da698ce3c33148bff06a131628ff037398c09482f3a26e5408  xz-5.2.10.tar.bz2
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 3822f0ca0e..89ed3c9df9 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -183,6 +183,16 @@ for prog in perl tar wget cpio unzip rsync bc cmp find xargs ${DL_TOOLS} ; do
+ 			echo "  xargs is usually part of the findutils package in your distribution"
+ 		fi
+ 	fi
++
++	# we need git >= 2.0.0 for shallow clones / vendoring
++	if test $prog = "git" ; then
++		GIT_VERSION="$(git --version | sed -n 's/^git version \(.*\)/\1/p')"
++		GIT_MAJOR="$(echo "${GIT_VERSION}" | cut -d . -f 1)"
++		if [ "${GIT_MAJOR}" -lt 2 ]; then
++			echo "You have git '${GIT_VERSION}' installed. Git >= 2.0.0 is required"
++			exit 1
++		fi
++	fi
+ done
  
- # Hash for license files
- sha256  bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c  COPYING
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 004eea94b2..0120d23b85 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XZ_VERSION = 5.2.7
-+XZ_VERSION = 5.2.10
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = https://tukaani.org/xz
- XZ_INSTALL_STAGING = YES
+ if test "${missing_progs}" = "yes" ; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
