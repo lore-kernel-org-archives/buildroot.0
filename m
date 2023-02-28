@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92FE6C64EC4
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF5C4C64EC7
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FBD8600BA;
-	Tue, 28 Feb 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FBD8600BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90593611BF;
+	Tue, 28 Feb 2023 20:13:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90593611BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P--7N38g1pKB; Tue, 28 Feb 2023 20:13:31 +0000 (UTC)
+	with ESMTP id tjoZRh9YDxFc; Tue, 28 Feb 2023 20:13:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20E35607DE;
-	Tue, 28 Feb 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20E35607DE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DBFC11BF293
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:10:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4238611BE;
+	Tue, 28 Feb 2023 20:13:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4238611BE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 05AA61BF870
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:10:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3877418A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D4F9605D6
  for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3877418A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D4F9605D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nqw0yZb2nC8L for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a8wU_xYMVju8 for <buildroot@lists.busybox.net>;
  Tue, 28 Feb 2023 20:10:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35D7A418A5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 500F060AED
  for <buildroot@buildroot.org>; Tue, 28 Feb 2023 20:10:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35D7A418A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 500F060AED
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 214B686D8D; Tue, 28 Feb 2023 20:10:56 +0000 (UTC)
+ id 3EC8386D8F; Tue, 28 Feb 2023 20:10:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 18:35:32 +0100
+Date: Tue, 28 Feb 2023 18:36:10 +0100
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 5934348516e1c72fd5ab4f1a91c7503e67c3d079
-X-Git-Newrev: 08c10193ec536ddd10d32dbcfc67f91f3d75951c
+X-Git-Oldrev: 4dfc6797e845678fff52bd7f2f16a2ce7f0af68f
+X-Git-Newrev: 5048dfff7c72660d9e7fc934713ed43849fb6c4e
 X-Patchwork-Hint: ignore
-Message-Id: <20230228201056.214B686D8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/wpewebkit: bump
- to version 2.38.0
+Message-Id: <20230228201056.3EC8386D8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/wpewebkit: Build
+ with ninja
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,171 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08c10193ec536ddd10d32dbcfc67f91f3d75951c
+commit: https://git.buildroot.net/buildroot/commit/?id=5048dfff7c72660d9e7fc934713ed43849fb6c4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Update to a new major release which brings in improvements and a few
-new features. Release notes:
+Wpewebkit needs cmake >= 3.20 when building with the make backend since
+wpewebkit 3.8.0.
 
-  https://wpewebkit.org/release/wpewebkit-2.38.0.html
+Cmake 3.20 is above our minimal version in
+support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
+with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
 
-This release also includes security fixes for CVE-2022-32886,
-CVE-2022-32891, and CVE-2022-32912. Accompanying security advisory:
+https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
 
-  https://wpewebkit.org/security/WSA-2022-0009.html
-
-Both building documentation and support for gobject-introspection have
-been added in this release. Version 2.38.0 also introduces a new WebRTC
-implementation based on GstWebRTC. Options for them are explicitly left
-disabled to keep the configuration as it was, and may be enabled in
-follow-up patches. Lastly, the SILENCE_CROSS_COMPILATION_NOTICES option
-removed because it no longer exists.
-
-The patch that fixes the build on 32-bit ARM targets is also updated
-for the 2.38 release series.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 917f05975f9c60eca92988ea9974de55a9e91e44)
+(cherry picked from commit 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...NEON.cpp-fails-to-build-NEON-fast-path-se.patch | 30 ++++++++++++++++------
- package/wpewebkit/wpewebkit.hash                   |  8 +++---
- package/wpewebkit/wpewebkit.mk                     |  8 +++---
- 3 files changed, 31 insertions(+), 15 deletions(-)
+ package/wpewebkit/wpewebkit.mk | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-index b61909b2ac..ea1676abb6 100644
---- a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-+++ b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-@@ -1,4 +1,4 @@
--From 59c9e3a4aeb4753be97b3817d106816d9a4ebe73 Mon Sep 17 00:00:00 2001
-+From da159b0150cba0e5e5251e4cc6a090440f73cb7c Mon Sep 17 00:00:00 2001
- From: Adrian Perez de Castro <aperez@igalia.com>
- Date: Thu, 2 Jun 2022 11:19:06 +0300
- Subject: [PATCH] FELightningNEON.cpp fails to build, NEON fast path seems
-@@ -35,15 +35,28 @@ left for a follow-up fix.
- Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
- [Upstream status: https://bugs.webkit.org/show_bug.cgi?id=241182]
- ---
-+ Source/WebCore/Sources.txt                    |  1 +
-  .../cpu/arm/filters/FELightingNEON.cpp        |  4 +-
-- .../graphics/cpu/arm/filters/FELightingNEON.h | 52 +++++++++----------
-+ .../graphics/cpu/arm/filters/FELightingNEON.h | 54 +++++++++----------
-  .../graphics/filters/DistantLightSource.h     |  4 ++
-  .../platform/graphics/filters/FELighting.h    |  7 ---
-  .../graphics/filters/PointLightSource.h       |  4 ++
-  .../graphics/filters/SpotLightSource.h        |  4 ++
-  .../software/FELightingSoftwareApplier.h      | 16 ++++++
-- 7 files changed, 56 insertions(+), 35 deletions(-)
-+ 8 files changed, 58 insertions(+), 36 deletions(-)
- 
-+diff --git a/Source/WebCore/Sources.txt b/Source/WebCore/Sources.txt
-+index 8ce3510fe1a8..efd56bcb8746 100644
-+--- a/Source/WebCore/Sources.txt
-++++ b/Source/WebCore/Sources.txt
-+@@ -2136,6 +2136,7 @@ platform/graphics/WebMResourceClient.cpp
-+ platform/graphics/WOFFFileFormat.cpp
-+ platform/graphics/WidthIterator.cpp
-+ platform/graphics/cpu/arm/filters/FEBlendNeonApplier.cpp
-++platform/graphics/cpu/arm/filters/FELightingNEON.cpp
-+ platform/graphics/displaylists/DisplayList.cpp
-+ platform/graphics/displaylists/DisplayListDrawingContext.cpp
-+ platform/graphics/displaylists/DisplayListItems.cpp
- diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
- index f6ff8c20a5a8..42a97ffc5372 100644
- --- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
-@@ -67,7 +80,7 @@ index f6ff8c20a5a8..42a97ffc5372 100644
-      // Calling a powf function from the assembly code would require to save
-      // and reload a lot of NEON registers. Since the base is in range [0..1]
- diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
--index b17c603d40d3..e4629cda0b7c 100644
-+index b17c603d40d3..c6d17f573eca 100644
- --- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
- +++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
- @@ -24,14 +24,15 @@
-@@ -98,9 +111,10 @@ index b17c603d40d3..e4629cda0b7c 100644
-  {
- -    alignas(16) FELightingFloatArgumentsForNeon floatArguments;
- -    FELightingPaintingDataForNeon neonData = {
-+-        data.pixels->data(),
- +    WebCore::FELightingFloatArgumentsForNeon alignas(16) floatArguments;
- +    WebCore::FELightingPaintingDataForNeon neonData = {
--         data.pixels->data(),
-++        data.pixels->bytes(),
-          1,
- -        data.widthDecreasedByOne - 1,
- -        data.heightDecreasedByOne - 1,
-@@ -244,7 +258,7 @@ index 0c073bc13f8c..e0db00545c17 100644
-      float m_surfaceScale;
-      float m_diffuseConstant;
- diff --git a/Source/WebCore/platform/graphics/filters/PointLightSource.h b/Source/WebCore/platform/graphics/filters/PointLightSource.h
--index 5c9c7fb783e6..e53aa012ac1c 100644
-+index 126b3b2350f6..d906db21aa9c 100644
- --- a/Source/WebCore/platform/graphics/filters/PointLightSource.h
- +++ b/Source/WebCore/platform/graphics/filters/PointLightSource.h
- @@ -26,6 +26,10 @@
-@@ -259,7 +273,7 @@ index 5c9c7fb783e6..e53aa012ac1c 100644
-  
-  class PointLightSource : public LightSource {
- diff --git a/Source/WebCore/platform/graphics/filters/SpotLightSource.h b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
--index 04e331ec4ec0..763c8d400b00 100644
-+index 641b205f986d..64380d9b6eb8 100644
- --- a/Source/WebCore/platform/graphics/filters/SpotLightSource.h
- +++ b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
- @@ -26,6 +26,10 @@
-@@ -274,7 +288,7 @@ index 04e331ec4ec0..763c8d400b00 100644
-  
-  class SpotLightSource : public LightSource {
- diff --git a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
--index 3875b0a4b5de..6d3864aafb9a 100644
-+index c974d92115ff..e2896660cfbd 100644
- --- a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
- +++ b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
- @@ -36,6 +36,7 @@
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 9c8beecf2e..5dd64b34b7 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.36.8.tar.xz.sums
--md5  939dc646bb6652fde9a5b6512c17fc58  wpewebkit-2.36.8.tar.xz
--sha1  f45936c578f7dcfbb6064e87da6c098efe093e68  wpewebkit-2.36.8.tar.xz
--sha256  8d42a349c910b2d0961b8d34fecef29cec3d21e3af5977346c90026692dc75eb  wpewebkit-2.36.8.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.38.0.tar.xz.sums
-+md5  e0e6b98c86351c39e41da475afc50780  wpewebkit-2.38.0.tar.xz
-+sha1  66e6dd1c285a21ce50370fb4d60332838d801663  wpewebkit-2.38.0.tar.xz
-+sha256  e653e12eca63e6371c06d4cd9efcd5492db67f7d9ef324fd5d8668b1151e72b2  wpewebkit-2.38.0.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
 diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 0ff8204519..001c701ee9 100644
+index 54f37fd702..b9c2fef395 100644
 --- a/package/wpewebkit/wpewebkit.mk
 +++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -103,4 +103,23 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
+ WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
+ endif
  
--WPEWEBKIT_VERSION = 2.36.8
-+WPEWEBKIT_VERSION = 2.38.0
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
-@@ -22,9 +22,11 @@ WPEWEBKIT_CONF_OPTS = \
- 	-DPORT=WPE \
- 	-DENABLE_ACCESSIBILITY=OFF \
- 	-DENABLE_API_TESTS=OFF \
-+	-DENABLE_DOCUMENTATION=OFF \
-+	-DENABLE_INTROSPECTION=OFF \
- 	-DENABLE_MINIBROWSER=OFF \
--	-DUSE_SOUP2=ON \
--	-DSILENCE_CROSS_COMPILATION_NOTICES=ON
-+	-DENABLE_WEB_RTC=OFF \
-+	-DUSE_SOUP2=ON
- 
- ifeq ($(BR2_PACKAGE_WPEWEBKIT_SANDBOX),y)
- WPEWEBKIT_CONF_OPTS += \
++# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
++# above our minimal version in
++# support/dependencies/check-host-cmake.mk, so use the ninja backend:
++# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
++WPEWEBKIT_CONF_OPTS += -GNinja
++WPEWEBKIT_DEPENDENCIES += host-ninja
++
++define WPEWEBKIT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
++endef
++
++define WPEWEBKIT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
++endef
++
++define WPEWEBKIT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
++endef
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
