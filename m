@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52D3DC64EC7
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:12:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73EEAC64EC4
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 20:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D90F06076C;
-	Tue, 28 Feb 2023 20:12:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D90F06076C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1583360A6D;
+	Tue, 28 Feb 2023 20:12:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1583360A6D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ITiajiIqz0SG; Tue, 28 Feb 2023 20:12:29 +0000 (UTC)
+	with ESMTP id vC7p5WBWbTYV; Tue, 28 Feb 2023 20:12:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D00FD60792;
-	Tue, 28 Feb 2023 20:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D00FD60792
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 11E9D1BF293
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:10:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E7EE6076C;
+	Tue, 28 Feb 2023 20:12:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E7EE6076C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EFE111BF293
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:10:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFFC860AA5
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFFC860AA5
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8FDA813DB
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 20:10:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8FDA813DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g0NFoXZg1zam for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 20:10:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4508960ACF
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 20:10:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4508960ACF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BA3A86D91; Tue, 28 Feb 2023 20:10:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mPJw7QS_hDtT for <buildroot@lists.busybox.net>;
+ Tue, 28 Feb 2023 20:10:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A65ED8138D
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A65ED8138D
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 20:10:47 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 878A2E0012;
+ Tue, 28 Feb 2023 20:10:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pX6J9-00BIW4-Ke; Tue, 28 Feb 2023 21:10:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 18:35:52 +0100
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 08c10193ec536ddd10d32dbcfc67f91f3d75951c
-X-Git-Newrev: 7a5776f1a89e6e6e5fb833116f97af8bccc509a9
-X-Patchwork-Hint: ignore
-Message-Id: <20230228201056.2BA3A86D91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/wpewebkit:
- security bump to version 2.38.3
+References: <20230209170707.4066903-1-peter@korsgaard.com>
+ <20230209170707.4066903-2-peter@korsgaard.com>
+Date: Tue, 28 Feb 2023 21:10:43 +0100
+In-Reply-To: <20230209170707.4066903-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 9 Feb 2023 18:07:06 +0100")
+Message-ID: <874jr5im9o.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 2/2] package/wpewebkit: Build with ninja
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,72 +64,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a5776f1a89e6e6e5fb833116f97af8bccc509a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Bugfix release, with security fixes for CVE-2022-42852, CVE-2022-42856,
-CVE-2022-42867, CVE-2022-46691, CVE-2022-46692, CVE-2022-46698,
-CVE-2022-46699, CVE-2022-46700, CVE-2022-42823, and CVE-2022-42799.
+ > Wpewebkit needs cmake >= 3.20 when building with the make backend since
+ > wpewebkit 3.8.0.
 
-Release notes:
+ > Cmake 3.20 is above our minimal version in
+ > support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
+ > with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
 
-  https://wpewebkit.org/release/wpewebkit-2.38.3.html
-  https://wpewebkit.org/release/wpewebkit-2.38.2.html
-  https://wpewebkit.org/release/wpewebkit-2.38.1.html
+ > https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
 
-Accompanying security advisories:
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-  https://wpewebkit.org/security/WSA-2022-0011.html
-  https://wpewebkit.org/security/WSA-2022-0010.html
+Committed to 2022.11.x and 2022.02.x, thanks.
 
-Additionally, the update brings in important bug fixes for the
-Bubblewrap sandbox support, scrolling in certain web sites, multimedia
-playback, and build fixes.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d8bbc215f5b6c978e9506927675181bbda06567f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 5dd64b34b7..ccd928b3df 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.38.0.tar.xz.sums
--md5  e0e6b98c86351c39e41da475afc50780  wpewebkit-2.38.0.tar.xz
--sha1  66e6dd1c285a21ce50370fb4d60332838d801663  wpewebkit-2.38.0.tar.xz
--sha256  e653e12eca63e6371c06d4cd9efcd5492db67f7d9ef324fd5d8668b1151e72b2  wpewebkit-2.38.0.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.38.3.tar.xz.sums
-+md5  60f79ff8dc68280f756963af23b67d6d  wpewebkit-2.38.3.tar.xz
-+sha1  de15119a0dc29776d3a11fca1df4238b471f960f  wpewebkit-2.38.3.tar.xz
-+sha256  1dd9075eec7253a1b0d038a73f92ddbb9174394e6a7527ec07b4464fa6290498  wpewebkit-2.38.3.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 001c701ee9..b2bbc0301b 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.38.0
-+WPEWEBKIT_VERSION = 2.38.3
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
