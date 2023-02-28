@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7E77C64EC7
-	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 16:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE120C64ED6
+	for <buildroot@archiver.kernel.org>; Tue, 28 Feb 2023 16:19:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 665C280FB1;
-	Tue, 28 Feb 2023 16:18:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 665C280FB1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 979A48129D;
+	Tue, 28 Feb 2023 16:19:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 979A48129D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0O_tgE_FWIig; Tue, 28 Feb 2023 16:18:49 +0000 (UTC)
+	with ESMTP id edUNE-cGvlzy; Tue, 28 Feb 2023 16:19:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A55D38204F;
-	Tue, 28 Feb 2023 16:18:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A55D38204F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CA7B51BF5A8
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 16:17:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0085D8203D;
+	Tue, 28 Feb 2023 16:19:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0085D8203D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 372241BF5A8
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 16:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9023D40BC6
- for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 16:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9023D40BC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F18C41900
+ for <buildroot@lists.busybox.net>; Tue, 28 Feb 2023 16:19:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F18C41900
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ubbYFtunxksI for <buildroot@lists.busybox.net>;
- Tue, 28 Feb 2023 16:16:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF32A40BCF
- for <buildroot@buildroot.org>; Tue, 28 Feb 2023 16:16:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF32A40BCF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FC4786D45; Tue, 28 Feb 2023 16:16:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DFYHosvuRt0V for <buildroot@lists.busybox.net>;
+ Tue, 28 Feb 2023 16:18:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97F29418E7
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 97F29418E7
+ for <buildroot@buildroot.org>; Tue, 28 Feb 2023 16:18:58 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 192D8FF802;
+ Tue, 28 Feb 2023 16:18:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1pX2go-009u7T-QW; Tue, 28 Feb 2023 17:18:54 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 28 Feb 2023 17:13:52 +0100
-X-Git-Refname: refs/heads/2022.11.x
-X-Git-Oldrev: 76f2ec3f3dff67bdf4c89eb541d09ad964808f67
-X-Git-Newrev: 80a82c28962ed243801f98bf23bf99f155b053e8
-X-Patchwork-Hint: ignore
-Message-Id: <20230228161658.9FC4786D45@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.11.x] boot/afboot-stm32:
- disable stack-protector
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20221213211313.735422-1-giulio.benetti@benettiengineering.com>
+ <20230208202816.3089d72d@windsurf>
+Date: Tue, 28 Feb 2023 17:18:54 +0100
+In-Reply-To: <20230208202816.3089d72d@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Wed, 8 Feb 2023 20:28:16 +0100")
+Message-ID: <87cz5tix01.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/rtl8723ds: change CFLAGS approach
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,76 +64,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80a82c28962ed243801f98bf23bf99f155b053e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.11.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Disable stack-protector to avoid the following build failure:
+ > On Tue, 13 Dec 2022 22:13:13 +0100
+ > Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld -T stm32f429.lds --gc-sections -o stm32f469i-disco.elf stm32f469i-disco.o gpio.o mpu.o qspi.o start_kernel.o usart-f4.o
-/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.o: in function `main':
-stm32f469i-disco.c:(.text.startup.main+0x3b0): undefined reference to `__stack_chk_guard'
-/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.c:(.text.startup.main+0x4c0): undefined reference to `__stack_chk_fail'
-/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.c:(.text.startup.main+0x4ec): undefined reference to `__stack_chk_guard'
+ >> Instead of undefine endiannes CFLAGS let's change approach.
+ >> Let's disable the CONFIG_PLATFORM_I386_PC that is set to y by default
+ >> involving the endianness to be set to little. This way we can set the
+ >> CFLAGS according to architecture with some default define like:
+ >> -DCONFIG_IOCTL_CFG80211
+ >> -DRTW_USE_CFG80211_STA_EVENT
+ >> -Wno-error
+ >> 
+ >> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+ >> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ >> ---
+ >> package/rtl8723ds/rtl8723ds.mk | 9 +++++----
+ >> 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Fixes:
- - http://autobuild.buildroot.org/results/fa6ffab24c3998f21034ab24e8d2852cacde08c1
+ > Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c33a133704166d602090b0b0d394aa9428e6acd4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0003-Makefile-disable-stack-protector.patch    | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+Committed to 2022.11.x, thanks.
 
-diff --git a/boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch b/boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch
-new file mode 100644
-index 0000000000..27a81b45d5
---- /dev/null
-+++ b/boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch
-@@ -0,0 +1,36 @@
-+From d65b07d6fe438e760fdbc33a8e42650a27d5b417 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 31 Dec 2022 11:09:38 +0100
-+Subject: [PATCH] Makefile: disable stack-protector
-+
-+Disable stack-protector to avoid the following build failure:
-+
-+/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld -T stm32f429.lds --gc-sections -o stm32f469i-disco.elf stm32f469i-disco.o gpio.o mpu.o qspi.o start_kernel.o usart-f4.o
-+/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.o: in function `main':
-+stm32f469i-disco.c:(.text.startup.main+0x3b0): undefined reference to `__stack_chk_guard'
-+/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.c:(.text.startup.main+0x4c0): undefined reference to `__stack_chk_fail'
-+/home/autobuild/autobuild/instance-14/output-1/host/bin/arm-buildroot-linux-gnueabi-ld: stm32f469i-disco.c:(.text.startup.main+0x4ec): undefined reference to `__stack_chk_guard'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fa6ffab24c3998f21034ab24e8d2852cacde08c1
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile b/Makefile
-+index 8f42be1..8da7a25 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -14,6 +14,7 @@ CFLAGS := -mthumb -mcpu=cortex-m4
-+ CFLAGS += -ffunction-sections -fdata-sections
-+ CFLAGS += -Os -std=gnu99 -Wall
-+ CFLAGS += -fno-builtin
-++CFLAGS += -fno-stack-protector
-+ LINKERFLAGS := --gc-sections
-+ 
-+ obj-y += gpio.o mpu.o qspi.o start_kernel.o
-+-- 
-+2.35.1
-+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
